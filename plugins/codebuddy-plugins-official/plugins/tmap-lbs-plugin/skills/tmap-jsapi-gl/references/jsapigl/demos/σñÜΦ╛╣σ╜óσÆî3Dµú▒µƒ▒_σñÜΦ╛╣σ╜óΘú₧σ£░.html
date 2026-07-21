@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>多边形飞地</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="mapContainer"></div>
+</body>
+
+</html>
+<script>
+    function initMap() {
+        var center = new TMap.LatLng(40.035004,116.216400);//设置中心点坐标
+        //初始化地图
+        var map = new TMap.Map('mapContainer', {
+            center: center,
+            zoom: 16
+        });
+        var path = [
+            [ //多边形的位置信息
+                [
+                    new TMap.LatLng(40.035246,116.216367),
+                    new TMap.LatLng(40.034733,116.216539),
+                    new TMap.LatLng(40.034774,116.217440),
+                    new TMap.LatLng(40.034819,116.217987),
+                    new TMap.LatLng(40.034852,116.218315),
+                    new TMap.LatLng(40.035328,116.218197),
+                    new TMap.LatLng(40.035271,116.217295)
+                ],//roll
+                [
+                    new TMap.LatLng(40.034942,116.216695),
+                    new TMap.LatLng(40.034823,116.216711),
+                    new TMap.LatLng(40.034844,116.217279),
+                    new TMap.LatLng(40.034971,116.217247)
+                ]//hole
+            ], [
+                [
+                    new TMap.LatLng(40.035599,116.215204),
+                    new TMap.LatLng(40.035082,116.215429),
+                    new TMap.LatLng(40.035246,116.216341),
+                    new TMap.LatLng(40.035731,116.216094)
+                ]
+            ],
+            [
+                [
+                    new TMap.LatLng(40.034675,116.215627),
+                    new TMap.LatLng(40.034199,116.215686),
+                    new TMap.LatLng(40.034277,116.216620),
+                    new TMap.LatLng(40.034770,116.216539)
+                ]
+
+            ]
+        ];
+        //初始化polygon
+        var polygon = new TMap.MultiPolygon({
+            id: 'polygon-layer', //图层id
+            map: map, //显示多边形图层的底图
+            styles: { //多边形的相关样式
+                'polygon': new TMap.PolygonStyle({
+                    'color': 'rgba(0,125,255,0.7)', //面填充色
+                    'showBorder': false, //是否显示拔起面的边线
+                    'borderColor': '#00FFFF' //边线颜色
+                })
+            },
+            geometries: [
+                {
+                    'id': 'polygon', //多边形图形数据的标志信息
+                    'styleId': 'polygon', //样式id
+                    'paths': path, //多边形的位置信息
+                    'properties': { //多边形的属性数据
+                        'title': 'polygon'
+                    }
+                }
+            ]
+        });
+    }
+</script>

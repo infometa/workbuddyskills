@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>地图平滑变化至指定状态</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+	html,
+	body {
+		height: 100%;
+		margin: 0px;
+		padding: 0px;
+        overflow: hidden;
+	}
+
+	#container {
+        position: relative;
+		width: 100%;
+		height: 100%;
+	}
+	#set-EaseTo{
+		position: absolute;
+		z-index: 9999;
+		left:20px;
+		top:10px;
+	}
+</style>
+
+<body>
+<div id="container"></div>
+<input type="button" id="set-EaseTo" onclick="easeTo()" value="easeTo">
+<script>
+	var center = new TMap.LatLng(39.907093, 116.396875);//设置中心点坐标
+	//初始化地图
+	var map = new TMap.Map("container", {
+		center: center,
+	  zoom:15,
+	});
+	function easeTo() {
+		map.easeTo({zoom:17,rotation:90},{duration: 2000});//平滑缩放,旋转到指定级别
+	}
+
+</script>
+</body>
+
+</html>

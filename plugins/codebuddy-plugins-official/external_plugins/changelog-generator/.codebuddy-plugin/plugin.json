@@ -1,0 +1,5 @@
+{
+  "name": "changelog-generator",
+  "description": "自动从 git 提交历史生成面向用户的变更日志，将技术性的提交记录转换为易于理解的发布说明",
+  "license": "未声明"
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "long_manuscript.r7_claim_evidence_fixtures.v1",
+  "evidenceClass": "deterministic_contract_fixture",
+  "claimsHostRuntimeObserved": false,
+  "claimsNaturalTraffic": false,
+  "claimEvidenceMaps": [
+    {
+      "schemaVersion": "long_manuscript.claim_evidence_map.v1",
+      "mapId": "claim-map-r7-001",
+      "projectId": "project-r7-whitepaper-001",
+      "revisionId": "revision-r7-001",
+      "artifactDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "scope": {
+        "scopeType": "chapter",
+        "scopeId": "chapter-2",
+        "knownAnchorIds": ["chapter-2", "paragraph-2-3"]
+      },
+      "sourceAssets": [
+        {
+          "sourceAssetId": "source-policy-placeholder-001",
+          "originDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+          "evidenceStrength": "needs_verification",
+          "availability": "available"
+        }
+      ],
+      "claims": [
+        {
+          "claimId": "claim-current-policy-001",
+          "statement": "The current policy wording still requires primary-source verification.",
+          "chapterOrAnchorId": "paragraph-2-3",
+          "claimState": "unverified",
+          "critical": true,
+          "sourceAssetIds": ["source-policy-placeholder-001"],
+          "coverageStatus": "partial",
+          "freshness": {
+            "mode": "verification_required",
+            "status": "pending_verification",
+            "asOf": "2026-07-17T00:00:00+08:00"
+          },
+          "deliveryEligibility": "requires_human_review"
+        }
+      ],
+      "externalWritePerformed": false,
+      "deliveryClaim": "draft_or_review_only",
+      "humanApprovalClaimed": false,
+      "evidenceBoundary": {
+        "factTruthProven": false,
+        "sourceLicenseProven": false,
+        "currentnessProven": false,
+        "humanApprovalObserved": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "plugins": [
+    {
+      "name": "oh-my-codebuddy",
+      "displayName": "Oh My CodeBuddy Plugin",
+      "description": "Complete OMC (Oh My CodeBuddy) plugin with agents, commands, skills, hooks, tools, and MCP servers. Extracted from codebuddy-marketplace for CodeBuddy plugin system.",
+      "version": "1.0.0",
+      "author": {
+        "name": "CodeBuddy Team",
+        "url": "https://cnb.cool/codebuddy"
+      },
+      "repository": {
+        "url": "https://cnb.cool/codebuddy/marketplace",
+        "type": "git"
+      },
+      "license": "MIT",
+      "compatibility": {
+        "codebuddy": ">=1.0.0",
+        "claude-code": ">=1.0.0"
+      },
+      "resources": {
+        "agents": [
+          {
+            "name": "oracle",
+            "file": "agents/oracle.md",
+            "description": "Architecture, code review, strategic advice"
+          },
+          {
+            "name": "librarian",
+            "file": "agents/librarian.md",
+            "description": "Docs lookup, GitHub research, implementation examples"
+          },
+          {
+            "name": "explore",
+            "file": "agents/explore.md",
+            "description": "Fast codebase pattern discovery"
+          },
+          {
+            "name": "frontend-ui-ux-engineer",
+            "file": "agents/frontend-ui-ux-engineer.md",
+            "description": "Beautiful UI design and implementation"
+          },
+          {
+            "name": "document-writer",
+            "file": "agents/document-writer.md",
+            "description": "Technical writing expert"
+          },
+          {
+            "name": "multimodal-looker",
+            "file": "agents/multimodal-looker.md",
+            "description": "PDF/image analysis"
+          },
+          {
+            "name": "gh-repo-research",
+            "file": "agents/gh-repo-research.md",
+            "description": "Clone GitHub repository, analyze codebase, and generate comprehensive technical documentation"
+          }
+        ],
+        "commands": [
+          {
+            "name": "init-deep",
+            "file": "commands/init-deep.md",
+            "description": "Initialize hierarchical AGENTS.md knowledge base"
+          },
+          {
+            "name": "ralph-loop",
+            "file": "commands/ralph-loop.md",
+            "description": "Start self-referential dev loop until completion"
+          },
+          {
+            "name": "cancel-ralph",
+            "file": "commands/cancel-ralph.md",
+            "description": "Cancel active Ralph Loop"
+          },
+          {
+            "name": "refactor",
+            "file": "commands/refactor.md",
+            "description": "Intelligent refactoring with LSP + AST-grep"
+          },
+          {
+            "name": "init-research",
+            "file": "commands/init-research.md",
+            "description": "Initialize research documentation with TODO markers for external research needs"
+          },
+          {
+            "name": "ralph-loop-research",
+            "file": "commands/ralph-loop-research.md",
+            "description": "Deep research loop that processes all TODO: RESEARCH HERE markers, performs external research, and generates professional wiki-format content"
+          },
+          {
+            "name": "ralph-loop-wiki",
+            "file": "commands/ralph-loop-wiki.md",
+            "description": "Generate comprehensive technical wiki from PRD, research findings, and codebase analysis following wiki_template.md format"
+          }
+        ],
+        "skills": [
+          {
+            "name": "playwright",
+            "file": "skills/playwright/SKILL.md",
+            "description": "Browser automation, web scraping, testing"
+          },
+          {
+            "name": "browser",
+            "file": "skills/browser/SKILL.md",
+            "description": "Browser automation tasks using Chrome DevTools Protocol (CDP)"
+          },
+          {
+            "name": "codex",
+            "file": "skills/codex/SKILL.md",
+            "description": "Execute Codex CLI for code analysis, refactoring, and automated code changes"
+          },
+          {
+            "name": "deep-research",
+            "file": "skills/deep-research/SKILL.md",
+            "description": "Complete research workflow system for codebase analysis, deep external research, and comprehensive technical wiki generation"
+          },
+          {
+            "name": "gemini",
+            "file": "skills/gemini/SKILL.md",
+            "description": "Execute Gemini CLI for AI-powered code analysis and generation"
+          },
+          {
+            "name": "omc",
+            "file": "skills/omc/SKILL.md",
+            "description": "Multi-agent orchestration for code analysis, bug investigation, fix planning, and implementation"
+          },
+          {
+            "name": "product-requirements",
+            "file": "skills/product-requirements/SKILL.md",
+            "description": "Interactive Product Owner skill for requirements gathering, analysis, and PRD generation"
+          },
+          {
+            "name": "prototype-prompt-generator",
+            "file": "skills/prototype-prompt-generator/SKILL.md",
+            "description": "Generate detailed, structured prompts for creating UI/UX prototypes"
+          },
+          {
+            "name": "skill-install",
+            "file": "skills/skill-install/SKILL.md",
+            "description": "Install CodeBuddy skills from GitHub repositories with automated security scanning"
+          },
+          {
+            "name": "test-cases",
+            "file": "skills/test-cases/SKILL.md",
+            "description": "Generate comprehensive test cases from PRD documents or user requirements"
+          }
+        ],
+        "mcps": [
+          {
+            "name": "context7",
+            "description": "Official documentation lookup",
+            "config": "mcp/.mcp.json"
+          },
+          {
+            "name": "grep_app",
+            "description": "Ultra-fast GitHub code search",
+            "config": "mcp/.mcp.json"
+          }
+        ]
+      },
+      "installation": {
+        "targetDirectory": "~/.codebuddy",
+        "instructions": "Copy oh-my-codebuddy directory to ~/.codebuddy/plugins/oh-my-codebuddy"
+      },
+      "keywords": [
+        "codebuddy",
+        "claude-code",
+        "ai-agents",
+        "automation",
+        "productivity",
+        "oh-my-codebuddy",
+        "omc"
+      ]
+    }
+  ]
+}

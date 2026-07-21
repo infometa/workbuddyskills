@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>区域高亮</title>
+  </head>
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=service"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <body onload="initMap()">
+    <div id="container"></div>
+  </body>
+  <script>
+    var map;
+    var district;
+    function initMap() {
+      // 初始化地图
+      map = new TMap.Map('container', {
+        // Map文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/docIndexMap
+        zoom: 9,
+        center: new TMap.LatLng(40.15739276079734, 116.43926381582764), // 设置地图中心点坐标
+        pitch: 20, // 俯仰度
+        rotation: 0, // 旋转角度，
+        mapStyleId: 'style1',
+        baseMap: [
+          { type: 'vector', features: ['base'] },
+          {
+            type: 'traffic',
+            opacity: 1,
+          },
+        ],
+        renderOptions: {
+          enableBloom: true, // 是否启用泛光效果 注：为true才会有效果
+        },
+      });
+      highlight();
+    }
+
+    function highlight() {
+      // 服务类库文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocService
+      district = new TMap.service.District({
+        // 新建一个行政区划类
+        polygon: 2, // 返回行政区划边界的类型
+      });
+      // 关键字搜索行政区划，110000 = 北京行政区划代码
+      district.search({ keyword: 110000 }).then((result) => {
+        if (!result && !result.result) return;
+
+        // 获取省市区列表及其边界信息
+        var paths = result.result[0][0].polygon;
+
+        map.enableAreaHighlight({
+          paths: paths,
+          highlightColor: 'rgba(0,0,0,0)', // 高亮颜色
+          shadeColor: 'rgba(4,8,14,1)', // 其余阴影部分
+        });
+        // MultiPolyline文档地址：https://lbs.qq.com/javascript_gl/doc/multiPolylineOptions.html
+        new TMap.MultiPolyline({
+          map: map,
+          styles: {
+            polyline: new TMap.PolylineStyle({
+              color: '#017cf7', // 线条填充色，
+              width: 8,
+              lineCap: 'round',
+              enableBloom: true, // 是否启用泛光  注：为true才会有效果
+            }),
+          },
+          geometries: [
+            {
+              styleId: 'polyline', // 样式id
+              paths: paths,
+            },
+          ],
+        });
+      });
+    }
+  </script>
+</html>

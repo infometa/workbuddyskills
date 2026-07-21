@@ -1,0 +1,18 @@
+{
+  "name": "agents-blockchain-web3",
+  "version": "1.0.0",
+  "description": "Specialized agents for blockchain development, smart contracts, and Web3 applications",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "blockchain-web3",
+    "blockchain-developer",
+    "hyperledger-fabric-developer"
+  ]
+}

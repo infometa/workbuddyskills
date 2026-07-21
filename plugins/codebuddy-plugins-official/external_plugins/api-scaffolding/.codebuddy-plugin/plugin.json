@@ -1,0 +1,11 @@
+{
+  "name": "api-scaffolding",
+  "description": "REST 和 GraphQL API 脚手架、框架选择、后端架构设计与 API 生成",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

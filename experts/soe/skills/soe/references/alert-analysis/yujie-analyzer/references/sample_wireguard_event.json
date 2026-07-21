@@ -1,0 +1,57 @@
+{
+  "_note": "御界 WireGuard 告警 L0 输出样例 (脱敏). 来源: soc日志/event/esSearch_20260706145614.xlsx",
+  "_说明": "这是 L0 解析器 (soc-alert-pipeline) 的输出, L1 (yujie-analyzer) 消费此结构",
+  "parsed": {
+    "src_ip": "10.0.0.4",
+    "src_port": 51820,
+    "dst_ip": "172.16.114.118",
+    "dst_port": 51820,
+    "real_attacker_ip": "123.103.18.70",
+    "real_victim_ip": "172.16.114.119",
+    "ip_discrepancy": true,
+    "protocol": "udp",
+    "app_proto": "failed",
+    "rule_id": "2017001",
+    "rule_name": "WireGuard隧道通信",
+    "category": "Tunneling",
+    "subcategory": "VPN",
+    "score": 85.0,
+    "attack_result": "attempt",
+    "encapsulation": {
+      "gre": {
+        "src": "192.168.233.1",
+        "dst": "192.168.233.2",
+        "vpcid": 66700
+      }
+    },
+    "src_mac": "00:0a:f7:12:34:56",
+    "dst_mac": "00:0a:f7:65:43:21",
+    "asset_ip": "172.16.114.119",
+    "event_timestamp_raw": "2026-07-06 14:30:22",
+    "event_timestamp": "2026-07-06T14:30:22",
+    "alert": {
+      "signature_id": 2017001,
+      "gid": 1,
+      "rule_type": "alert",
+      "signature": "WireGuard tunnel detected"
+    }
+  },
+  "parse_status": "ok",
+  "parse_errors": [],
+  "parser_version": "0.1.0",
+  "row": 0,
+  "source_file": "esSearch_20260706145614.xlsx",
+  "product": "yujie",
+  "ocsf": {
+    "event_id": "e_20260706143022_xxx",
+    "event_name": "WireGuard隧道通信",
+    "event_timestamp": "2026-07-06T14:30:22+08:00",
+    "severity": "high",
+    "confidence": "85",
+    "category": "Tunneling",
+    "subcategory": "VPN",
+    "logsource_subtype": "yujie",
+    "data_type": "Network Connection",
+    "data_subtype": "VPN"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "xiaoe-cloud-cli": {
+      "type": "streamableHttp",
+      "url": "https://agent.xiaoe-tech.com/mcp",
+      "timeout": 60000
+    }
+  }
+}

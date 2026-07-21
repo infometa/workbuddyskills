@@ -1,0 +1,14 @@
+{
+  "name": "rust-analyzer-lsp",
+  "version": "1.0.0",
+  "description": "Rust 语言服务器，提供代码智能和分析功能",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "rust",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

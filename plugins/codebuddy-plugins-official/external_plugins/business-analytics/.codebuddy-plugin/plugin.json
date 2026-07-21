@@ -1,0 +1,11 @@
+{
+  "name": "business-analytics",
+  "description": "业务指标分析、KPI 跟踪、财务报告和数据驱动的决策制定",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

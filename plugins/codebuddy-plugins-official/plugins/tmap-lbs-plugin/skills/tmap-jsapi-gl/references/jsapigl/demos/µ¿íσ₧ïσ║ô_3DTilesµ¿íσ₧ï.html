@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3DTiles模型</title>
+</head>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+    #container {
+      width: 100%;
+      height: 100%;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=model"></script>
+    <script type="text/javascript">
+        let center = new TMap.LatLng(35.09260704247744, 111.06575713601103);
+
+        // 初始化地图
+        var map = new TMap.Map("container", {
+            rotation: 349.4, //设置地图旋转角度
+            pitch: 57.5, //设置俯仰角度（0~45）
+            zoom: 20,
+            center: center, //设置地图中心点坐标
+            baseMap: {
+                type: "vector",
+                features: ["base", "building3d"], // 隐藏矢量文字
+            },
+        });
+
+        let Tileset3D = new TMap.model.Tileset3D(
+            {
+                id: 'Tileset3DLayer',
+                url: 'https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/3dTilesGCJ02/tileset.json',
+                map,
+                offset: [0, 0, 0],
+                mask: [
+                    new TMap.LatLng(35.09043722089289, 111.07136274422078),
+                    new TMap.LatLng(35.09037943278917, 111.06080724240826),
+                    new TMap.LatLng(35.10124876283047, 111.06080603927808),
+                    new TMap.LatLng(35.10125914410558, 111.07145236890074),
+                ],
+            }
+        );
+
+
+    </script>
+</body>
+
+</html>

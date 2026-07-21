@@ -1,0 +1,15 @@
+{
+  "name": "csharp-lsp",
+  "version": "1.0.0",
+  "description": "C# 语言服务器，提供代码智能提示和诊断",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "csharp",
+    "dotnet",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

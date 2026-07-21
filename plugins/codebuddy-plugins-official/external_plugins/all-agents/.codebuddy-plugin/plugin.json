@@ -1,0 +1,17 @@
+{
+  "name": "all-agents",
+  "version": "1.0.0",
+  "description": "Complete collection of 117 specialized AI agents across 11 categories",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "all",
+    "bundle"
+  ]
+}

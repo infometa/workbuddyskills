@@ -1,0 +1,9 @@
+{
+  "name": "hookify",
+  "description": "通过分析对话模式或显式指令轻松创建自定义钩子，防止不希望的行为。使用简单的 Markdown 文件定义规则。",
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "未声明"
+}

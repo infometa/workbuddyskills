@@ -1,0 +1,9 @@
+{
+  "name": "frontend-design",
+  "description": "创建独特的生产级前端界面,具有高设计质量。生成富有创意、精致的代码,避免千篇一律的AI审美。",
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "MIT"
+}

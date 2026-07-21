@@ -1,0 +1,656 @@
+# 归一化配置
+normalization:
+  # 目标Excel字段定义
+  target_fields:
+    - "漏洞名称"
+    - "漏洞ID"
+    - "漏洞类型"
+    - "漏洞描述"
+    - "修复建议"
+    - "影响资产"
+    - "风险域名/IP"
+    - "风险端口"
+    - "发现时间"
+    - "扫描工具"
+    - "CVE编号"
+    - "CNVD编号"
+    - "CNNVD编号"
+    - "CNCVE编号"
+    - "CVSS评分"
+    - "风险等级"
+  
+  # Sheet页配置
+  sheet_config:
+    # 默认处理的sheet页名称（如果未指定，则处理所有sheet页）
+    default_sheets: ["Sheet1", "漏洞列表", "扫描结果"]
+    # 是否处理所有sheet页（如果为true，则忽略default_sheets配置）
+    process_all_sheets: false
+  
+  # 解析工具配置
+  parsers:
+    # Excel到Excel解析器
+    excel_to_excel:
+      file_extensions: [".xlsx", "xls", ".xls", "csv"]
+      tools:
+        - qianxin_secvss_parser
+        - nsfocus_rsas_excel_parser
+        - generic_excel_parser
+        - specific_excel_parser
+        - sxf_parser
+        - xuanjing_parser
+        - dengbao_parser
+
+      # 工具1: 通用Excel解析器
+      generic_excel_parser:
+        features: ["vulname", "severity", "description"]
+        # features 值所在 sheetname，如果为None 则默认为第一个sheet页
+        sheet_name: "Sheet1"
+        # 指定要处理的sheet页（如果为空，则使用全局配置）
+        sheets: []
+        map:
+          vulname: "漏洞名称"
+          severity: "漏洞等级"
+          description: "漏洞描述"
+          recommendation: "修复建议"
+          asset: "影响资产"
+          discovery_time: "发现时间"
+          tool: "扫描工具"
+          cve: "CVE编号"
+          cvss: "CVSS评分"
+          risk_level: "风险等级"
+      
+      # 工具2: 特定格式Excel解析器
+      specific_excel_parser:
+        features: ["vulname_desc", "risk_level_detail"]
+        # features 值所在 sheetname，如果为None 则默认为第一个sheet页
+        sheet_name: "Sheet1"
+        # 指定要处理的sheet页（如果为空，则使用全局配置）
+        sheets: ["漏洞详情", "扫描报告"]
+        map:
+          vulname_desc: "漏洞名称"
+          risk_level_detail: "风险等级"
+          impact_analysis: "漏洞描述"
+          remediation_guide: "修复建议"
+          target_assets: "影响资产"
+          scan_date: "发现时间"
+          scanner_type: "扫描工具"
+          cve_id: "CVE编号"
+          cvss_score: "CVSS评分"
+          severity_level: "漏洞等级"
+      
+      # 工具3: 深信服报告解析器
+      sxf_parser:
+        features: ["漏洞名称", "SFID编号"] # 用来识别此报告格式的特征列
+        sheet_name: "漏洞详情" # 指定要处理的sheet页
+        map:
+          # 源文件列名: 目标标准字段名
+          "漏洞名称": "漏洞名称"
+          "漏洞类型": "漏洞类型"
+          "风险等级": "漏洞等级"
+          "风险描述": "漏洞描述"
+          "解决方案": "修复建议"
+          "产品": "影响资产"        # <-- 已按您的要求更新
+          "主机/域名": "风险域名/IP"
+          "风险端口": "风险端口"
+          "CVE编号": "CVE编号"
+          "CNVD编号": "CNVD编号"
+          "CNNVD编号": "CNNVD编号"
+          "风险等级": "风险等级"
+
+      
+      # 工具4: 悬镜报告解析器
+      xuanjing_parser:
+        features: ["XMIRROR编号", "影响组件数"] # 用来识别此报告格式的特征列
+        sheet_name: "检出漏洞信息" # 指定要处理的sheet页
+        map:
+          # 源文件列名: 目标标准字段名
+          "漏洞名称": "漏洞名称"
+          "漏洞类型": "漏洞类型"
+          "风险等级": "漏洞等级"
+          "漏洞描述": "漏洞描述"
+          "修复建议": "修复建议"
+          "影响组件": "影响资产"
+          "检出时间": "发现时间"
+          "CVE编号": "CVE编号"
+          "CVSS3": "CVSS评分"
+          "风险等级": "风险等级"
+      
+      # 工具5: 等保报告解析器
+      dengbao_parser:
+        features: ["危险程度", "影响IP", "出现次数"] # 用来识别此报告格式的特征列
+        sheet_name: "sheet1" # 指定要处理的sheet页
+        map:
+          # 源文件列名: 目标标准字段名
+          "漏洞名称": "漏洞名称"
+          "服务分类": "漏洞类型"
+          "影响IP": "风险域名/IP"
+          "CVEID": "CVE编号"
+          "危险程度": "风险等级"
+      
+      # 工具6: 奇安信网神SecVSS报告解析器
+      qianxin_secvss_parser:
+        features: ["SFID编号", "漏洞编号"] # 用来识别此报告格式的特征列
+        sheet_name: "漏洞详情" # 指定要处理的sheet页
+        map:
+          # 源文件列名: 目标标准字段名
+          "漏洞名称": "漏洞名称"
+          "漏洞类型": "漏洞类型"
+          "风险等级": "风险等级"
+          "CVSS评分": "CVSS评分"
+          "风险描述": "漏洞描述"
+          "解决方案": "修复建议"
+          "产品": "影响资产"
+          "主机/域名": "风险域名/IP"
+          "风险端口": "风险端口"
+          "CVE编号": "CVE编号"
+          "CNVD编号": "CNVD编号"
+          "CNNVD编号": "CNNVD编号"
+          "发现时间": "发现时间"
+          "SFID编号": "漏洞ID"
+        default_values:
+          scanner_name: "网神SecVSS3600"
+      
+      # 工具7: 绿盟RSAS Excel报告解析器
+      nsfocus_rsas_excel_parser:
+        features: ["漏洞名称", "主机IP", "CVSS评分", "服务"] # 用来识别此报告格式的特征列
+        sheet_name: "漏洞列表" # 指定要处理的sheet页
+        map:
+          # 源文件列名: 目标标准字段名
+          "漏洞名称": "漏洞名称"
+          "漏洞类型": "漏洞类型"
+          "风险等级": "风险等级"
+          "漏洞描述": "漏洞描述"
+          "修复建议": "修复建议"
+          "影响资产": "影响资产"
+          "主机IP": "风险域名/IP"
+          "端口": "风险端口"
+          "CVE编号": "CVE编号"
+          "CNVD编号": "CNVD编号"
+          "CNNVD编号": "CNNVD编号"
+          "CVSS评分": "CVSS评分"
+          "发现时间": "发现时间"
+          "服务": "漏洞类型"
+          "协议": "漏洞类型"
+        default_values:
+          scanner_name: "绿盟RSAS"
+
+
+    # HTML到Excel解析器
+    html_to_excel:
+      file_extensions: [".html", ".htm"]
+      tools:
+        - lv_meng_04_vuln_info_parser
+        - lv_meng_host_html_parser
+        - lv_meng_domain_html_parser
+        - lv_meng_web_vuln_html_parser
+        - mingjian_html_parser
+        - venus_tianjing_html_parser
+        - huaun_lingdong_html_parser
+      
+      # 工具1: 绿盟主机报表解析器
+      lv_meng_host_html_parser:
+        features: ["主机报表"] # 识别特征
+        parsing_method: "window_data" # 解析方法：使用window.data
+        
+        # 数据提取路径配置
+        data_path:
+          - { "key": "categories" } # 首先进入categories列表
+          - { "find_in_list": { "key": "title", "value": "漏洞信息" } } # 在categories列表中找到title为'漏洞信息'的项
+          - { "key": "children", "index": 0 } # 取children列表的第1个元素（漏洞概况）
+          - { "key": "data" }
+          - { "key": "vul_info" }
+          - { "key": "vul_items" } # 最终得到漏洞列表
+          
+        # 字段映射
+        map:
+          "i18n_name": "漏洞名称"
+          "i18n_description": "漏洞描述"
+          "i18n_solution": "修复建议"
+          "vul_level": "风险等级"
+          "cve_id": "CVE编号"
+          "cnnvd": "CNNVD编号"
+          "cnvd": "CNVD编号"
+          "cvss": "CVSS评分"
+          "date_found": "发现时间"
+          "host_ip": "风险域名/IP"
+          "port": "风险端口"
+          "service": "漏洞类型"
+      
+      # 工具2: 绿盟站点报表解析器
+      lv_meng_domain_html_parser:
+        features: ["站点报表"] # 识别特征：title包含"站点报表"
+        parsing_method: "html_table" # 解析方法：HTML表格解析
+        extraction_config:
+          - selector: "div#title3_2 + div table.report_table tr:has(img.ico.plus)" # 选择包含漏洞标题的行
+            detail_selector: "+ tr.more.hide" # 详细信息在紧邻的兄弟元素中
+            fields:
+              vuln_name_raw: "td" # 原始漏洞名称，从主选择器中提取
+              detailed_description: "td .report_table.plumb tr:has(th:-soup-contains('详细描述')) td"
+              solution: "td .report_table.plumb tr:has(th:-soup-contains('解决办法')) td"
+              verification_method: "td .report_table.plumb tr:has(th:-soup-contains('验证方法')) td"
+              threat_score: "td .report_table.plumb tr:has(th:-soup-contains('威胁分值')) td"
+              discovery_date: "td .report_table.plumb tr:has(th:-soup-contains('发现日期')) td"
+              cvss_score: "td .report_table.plumb tr:has(th:-soup-contains('CVSS评分')) td"
+              risk_domain_ip: "td .report_table.plumb tr:has(th:-soup-contains('URL')) td"
+        map:
+          vuln_name_raw: "漏洞名称"
+          detailed_description: "漏洞描述"
+          solution: "修复建议"
+          verification_method: "验证方法"
+          threat_score: "风险等级"
+          discovery_date: "发现时间"
+          cvss_score: "CVSS评分"
+          risk_domain_ip: "风险域名/IP"
+      
+      # 工具3: 绿盟Web应用漏洞解析器
+      lv_meng_web_vuln_html_parser:
+        features: ["站点报表"] # 识别特征：title包含"站点报表"
+        parsing_method: "html_table" # 解析方法：HTML表格解析
+        extraction_config:
+          - selector: "div#title3_1 + div table.report_table tr:has(img.ico.plus)" # 选择包含漏洞标题的行
+            detail_selector: "+ tr.more.hide" # 详细信息在紧邻的兄弟元素中
+            fields:
+              vuln_name_raw: "td" # 原始漏洞名称，从主选择器中提取
+              risk_domain_ip: "td .report_table.plumb tr:has(th:-soup-contains('URL')) td"
+        map:
+          vuln_name_raw: "漏洞名称"
+          risk_domain_ip: "风险域名/IP"
+      
+      # 工具4: 明鉴WEB扫描器解析器
+      mingjian_html_parser:
+        features: ["明鉴漏洞扫描系统"] # 识别特征
+        parsing_method: "html_table" # 解析方法：HTML表格解析
+        extraction_config:
+          - selector: "div.box-context div.refer-block details" # 选择每个漏洞详情块
+            fields:
+              # 漏洞名称（去除风险等级标签）
+              vuln_name: "summary div.val-title"
+              # 风险等级（从CSS class获取）
+              risk_level: "summary div.val-title div.level-line"
+              # 表格字段
+              description: "div.info-warp table tr:has(th:-soup-contains('漏洞描述')) td"
+              # 合并影响主机和影响端口的提取
+              affected_info_raw: "div.info-warp table tr:has(th:-soup-contains('影响主机')) td, div.info-warp table tr:has(th:-soup-contains('影响端口')) td"
+              solution: "div.info-warp table tr:has(th:-soup-contains('修复建议')) td"
+              cvss_score: "div.info-warp table tr:has(th:-soup-contains('CVSS评分')) td"
+              discovery_date: "div.info-warp table tr:has(th:-soup-contains('发现日期')) td"
+              cve_id: "div.info-warp table tr:has(th:-soup-contains('CVE编号')) td"
+              cnnvd_id: "div.info-warp table tr:has(th:-soup-contains('CNNVD编号')) td"
+              cnvd_id: "div.info-warp table tr:has(th:-soup-contains('CNVD编号')) td"
+              cncve_id: "div.info-warp table tr:has(th:-soup-contains('CNCVE编号')) td"
+        
+        # 风险等级映射（CSS class到中文等级）
+        risk_level_mapping:
+          emergency: "紧急"
+          high: "高危"
+          medium: "中危"
+          low: "低危"
+          info: "信息"
+          safe: "安全"
+        
+        # 字段映射
+        map:
+          vuln_name: "漏洞名称"
+          description: "漏洞描述"
+          affected_info_raw: "影响资产" # 将合并后的原始影响信息映射到影响资产
+          solution: "修复建议"
+          cvss_score: "CVSS评分"
+          discovery_date: "发现时间"
+          cve_id: "CVE编号"
+          cnnvd_id: "CNNVD编号"
+          cnvd_id: "CNVD编号"
+          cncve_id: "CNCVE编号"
+          risk_level: "风险等级"
+        
+        # 派生字段映射（从处理后的数据生成）
+        derived_fields:
+          # 从affected_host字段处理后生成的字段
+          extracted_ips: "风险域名/IP"
+          extracted_ports: "风险端口"
+          scanner_name: "扫描工具" # 固定值：明鉴WEB扫描器
+        
+        # 默认值配置
+        default_values:
+          scanner_name: "明鉴WEB扫描器"
+          
+        # 数据清洗规则
+        data_cleaning:
+          # 去除空值和无效数据
+          remove_empty: true
+          # 去除重复记录
+          remove_duplicates: true
+          # 标准化日期格式
+          standardize_dates: true
+          # 验证IP地址格式
+          validate_ip_addresses: true
+        
+        # 特殊处理规则
+        processing_rules:
+          # 漏洞名称处理：去除风险等级标签，保留纯文本
+          vuln_name:
+            - action: "extract_text_only" # 只提取文本，忽略子元素
+            - action: "trim_whitespace" # 去除首尾空白
+          
+          # 风险等级处理：从CSS class提取
+          risk_level:
+            - action: "extract_class" # 提取CSS class名称
+              prefix: "level-line " # 提取 "level-line " 后面的类名
+            - action: "map_value" # 使用risk_level_mapping进行映射
+          
+          # 漏洞ID处理：从id属性提取
+          vuln_id:
+            - action: "extract_id_attribute" # 提取id属性值
+            - action: "remove_hash_prefix" # 去除#前缀
+          
+          # 影响信息处理：解析IP:端口格式
+          affected_info_raw:
+            - action: "split_ip_port" # 分离IP和端口，生成风险域名/IP和风险端口字段
+            - action: "extract_unique_ips" # 提取唯一IP地址
+            - separator: "," # 多个主机的分隔符
+            - ip_port_separator: ":" # IP和端口的分隔符
+          
+          # 日期格式化
+          discovery_date:
+            - action: "parse_datetime" # 解析日期时间
+            - action: "format_date" # 格式化为标准日期格式
+            - format: "YYYY-MM-DD HH:mm:ss"
+          
+          # CVSS评分验证
+          cvss_score:
+            - action: "validate_numeric" # 验证数值格式
+            - action: "format_decimal" # 格式化小数位
+            - decimal_places: 1
+
+      # 工具6: 启明星辰天镜HTML报告解析器
+      venus_tianjing_html_parser:
+        features: ["天镜脆弱性扫描与管理系统"] # 识别特征
+        parsing_method: "html_table" # 解析方法：HTML表格解析
+        extraction_config:
+          - selector: "table.data tbody tr" # 选择漏洞列表表格行
+            fields:
+              vuln_name: "td:nth-child(2)" # 漏洞名称
+              vuln_type: "td:nth-child(3)" # 漏洞类型
+              risk_level_raw: "td:nth-child(4)" # 风险等级（含span标签）
+              cvss_score: "td:nth-child(5)" # CVSS评分
+              host_ip: "td:nth-child(6)" # IP地址
+              port: "td:nth-child(7)" # 端口
+              cve_id: "td:nth-child(8)" # CVE编号
+              cnnvd_id: "td:nth-child(9)" # CNNVD编号
+              description_short: "td:nth-child(10)" # 漏洞描述（简略）
+              solution_short: "td:nth-child(11)" # 修复建议（简略）
+              discovery_date: "td:nth-child(12)" # 发现时间
+        
+        # 风险等级映射（CSS class到中文等级）
+        risk_level_mapping:
+          level-紧急: "紧急"
+          level-高危: "高危"
+          level-中危: "中危"
+          level-低危: "低危"
+          level-信息: "信息"
+        
+        # 字段映射
+        map:
+          vuln_name: "漏洞名称"
+          vuln_type: "漏洞类型"
+          risk_level_raw: "风险等级"
+          cvss_score: "CVSS评分"
+          host_ip: "风险域名/IP"
+          port: "风险端口"
+          cve_id: "CVE编号"
+          cnnvd_id: "CNNVD编号"
+          description_short: "漏洞描述"
+          solution_short: "修复建议"
+          discovery_date: "发现时间"
+        
+        # 默认值配置
+        default_values:
+          scanner_name: "天镜脆弱性扫描与管理系统"
+        
+        # 数据清洗规则
+        data_cleaning:
+          remove_empty: true
+          remove_duplicates: true
+          standardize_dates: true
+          validate_ip_addresses: true
+        
+        # 特殊处理规则
+        processing_rules:
+          # 风险等级处理：提取文本去除span标签
+          risk_level_raw:
+            - action: "extract_text_only"
+            - action: "trim_whitespace"
+          # CVSS评分处理
+          cvss_score:
+            - action: "validate_numeric"
+            - action: "format_decimal"
+            - decimal_places: 1
+          # 日期格式化
+          discovery_date:
+            - action: "parse_datetime"
+            - action: "format_date"
+            - format: "YYYY-MM-DD HH:mm:ss"
+
+      # 工具7: 华云安灵洞HTML报告解析器
+      huaun_lingdong_html_parser:
+        features: ["灵洞 Ai.Vul"] # 识别特征
+        parsing_method: "html_table" # 解析方法：HTML表格解析（卡片式布局中的table）
+        extraction_config:
+          - selector: "div.vuln-card" # 选择每个漏洞卡片
+            fields:
+              vuln_name: "span.vuln-name" # 漏洞名称
+              risk_level_raw: "span.vuln-level" # 风险等级（含CSS class）
+              # 卡片内表格字段
+              vuln_type: "table.vuln-detail tr:nth-child(1) td" # 漏洞类型
+              cvss_score: "table.vuln-detail tr:nth-child(2) td" # CVSS评分
+              affected_asset: "table.vuln-detail tr:nth-child(3) td" # 影响资产
+              host_port_raw: "table.vuln-detail tr:nth-child(4) td" # 目标地址（IP:端口）
+              cve_id: "table.vuln-detail tr:nth-child(5) td" # CVE编号
+              cnvd_id: "table.vuln-detail tr:nth-child(6) td" # CNVD编号
+              discovery_date: "table.vuln-detail tr:nth-child(7) td" # 发现时间
+              # 描述和修复建议
+              description: "div.vuln-section:nth-of-type(1) p" # 漏洞描述
+              solution: "div.vuln-section:nth-of-type(2) p" # 修复建议
+        
+        # 风险等级映射（CSS class到中文等级）
+        risk_level_mapping:
+          level-critical: "紧急"
+          level-high: "高危"
+          level-medium: "中危"
+          level-low: "低危"
+          level-info: "信息"
+        
+        # 字段映射
+        map:
+          vuln_name: "漏洞名称"
+          risk_level_raw: "风险等级"
+          vuln_type: "漏洞类型"
+          cvss_score: "CVSS评分"
+          affected_asset: "影响资产"
+          host_port_raw: "风险域名/IP"
+          cve_id: "CVE编号"
+          cnvd_id: "CNVD编号"
+          discovery_date: "发现时间"
+          description: "漏洞描述"
+          solution: "修复建议"
+        
+        # 派生字段
+        derived_fields:
+          extracted_ips: "风险域名/IP" # 从 host_port_raw 提取IP
+          extracted_ports: "风险端口" # 从 host_port_raw 提取端口
+          scanner_name: "扫描工具"
+        
+        # 默认值配置
+        default_values:
+          scanner_name: "灵洞 Ai.Vul"
+        
+        # 数据清洗规则
+        data_cleaning:
+          remove_empty: true
+          remove_duplicates: true
+          standardize_dates: true
+          validate_ip_addresses: true
+        
+        # 特殊处理规则
+        processing_rules:
+          # 风险等级处理：提取文本
+          risk_level_raw:
+            - action: "extract_text_only"
+            - action: "trim_whitespace"
+          # 目标地址处理：分离IP和端口
+          host_port_raw:
+            - action: "split_ip_port"
+            - separator: ":"
+          # CVSS评分
+          cvss_score:
+            - action: "validate_numeric"
+            - action: "format_decimal"
+            - decimal_places: 1
+          # 日期格式化
+          discovery_date:
+            - action: "parse_datetime"
+            - action: "format_date"
+            - format: "YYYY-MM-DD HH:mm:ss"
+        
+      # 工具5: 绿盟04漏洞信息解析器
+      lv_meng_04_vuln_info_parser:
+        features: ["vulns_info"] # 识别特征
+        parsing_method: "window_data" # 解析方法：使用window.data
+        
+        # 数据提取路径配置 (支持多个备选路径)
+        # 注意：当前HTML文件结构为综述报表格式
+        data_paths:
+          # 路径1: 综述报表-漏洞分布 (漏洞信息 -> 漏洞分布 -> vulns_info -> vuln_distribution -> vuln_list)
+          # 这是当前文件的实际结构
+          - 
+            - { "key": "categories" }
+            - { "find_in_list": { "key": "title", "value": "漏洞信息" } }
+            - { "key": "children", "index": 0 }
+            - { "key": "data" }
+            - { "key": "vulns_info" }
+            - { "key": "vuln_distribution" }
+            - { "key": "vuln_list" }
+          # 路径2: 详细报表 (04漏洞信息 -> vulns_info -> vuln_list) - 备选路径
+          # 适用于其他可能的报表格式
+          - 
+            - { "key": "categories" }
+            - { "find_in_list": { "key": "title", "value": "漏洞信息" } }
+            - { "key": "children", "index": 0 }
+            - { "key": "data" }
+            - { "key": "vulns_info" }
+            - { "key": "vuln_list" }
+          
+        # 字段映射
+        map:
+          "i18n_name": "漏洞名称"
+          "i18n_description": "漏洞描述"
+          "i18n_solution": "修复建议"
+          "vuln_level": "风险等级"
+          "cve_id": "CVE编号"
+          "cnnvd": "CNNVD编号"
+          "cnvd": "CNVD编号"
+          "cvss": "CVSS评分"
+          "date_found": "发现时间"
+          "target": "风险域名/IP"
+          "target_ip": "风险域名/IP"
+          "risk_level": "风险等级"
+        
+    # 其他格式到Excel解析器
+    other_to_excel:
+      file_extensions: [".json", ".xml"]
+      tools:
+        - xray_json_parser
+        - dongjian_json_parser
+        - json_parser
+        - xml_parser
+      # 工具1: JSON格式解析器
+      json_parser:
+        features: ["vulnerability_name", "severity_level"]
+        file_extensions: [".json"]
+        map:
+          vulnerability_name: "漏洞名称"
+          severity_level: "漏洞等级"
+          vulnerability_description: "漏洞描述"
+          remediation: "修复建议"
+          affected_assets: "影响资产"
+          detected_at: "发现时间"
+          scanner: "扫描工具"
+          cve_id: "CVE编号"
+          cvss: "CVSS评分"
+          risk: "风险等级"
+      
+      # 工具2: XML格式解析器
+      xml_parser:
+        features: ["vuln-name", "severity"]
+        file_extensions: [".xml"]
+        map:
+          vuln-name: "漏洞名称"
+          severity: "漏洞等级"
+          description: "漏洞描述"
+          solution: "修复建议"
+          host: "影响资产"
+          timestamp: "发现时间"
+          scanner-name: "扫描工具"
+          cve: "CVE编号"
+          cvss-base: "CVSS评分"
+          risk: "风险等级"
+      
+      # 工具3: 长亭xray社区版JSON解析器（NDJSON格式）
+      xray_json_parser:
+        features: ["plugin", "detail"] # xray特征字段
+        file_extensions: [".json"]
+        format: "ndjson" # 每行一条JSON记录
+        map:
+          plugin: "漏洞类型" # xray的plugin对应漏洞类型
+          url: "风险域名/IP" # URL含IP和端口
+          detail.payload: "漏洞描述" # payload作为描述的一部分
+          detail.addr: "风险域名/IP" # IP:端口
+          detail.param.key: "漏洞ID" # 参数key作为标识
+          create_time: "发现时间" # Unix时间戳
+        # 风险等级映射（xray plugin -> 标准等级）
+        risk_level_from_plugin:
+          "java/rce": "紧急"
+          "sql-injection": "高危"
+          "unauth": "高危"
+          "xss": "中危"
+          "openssl/overflow": "高危"
+          "generic": "低危"
+        # 特殊字段处理
+        processing_rules:
+          create_time:
+            - action: "timestamp_to_datetime" # Unix时间戳转日期时间
+            - format: "YYYY-MM-DD HH:mm:ss"
+          detail.addr:
+            - action: "split_ip_port" # 分离IP和端口
+          url:
+            - action: "extract_host_port" # 从URL提取host和port
+        # 默认值
+        default_values:
+          scanner_name: "xray"
+      
+      # 工具4: 长亭洞鉴企业版JSON解析器
+      dongjian_json_parser:
+        features: ["report_info", "vulnerabilities"] # 洞鉴特征字段
+        file_extensions: [".json"]
+        format: "structured" # 结构化JSON
+        # 漏洞列表路径
+        data_path:
+          - { "key": "vulnerabilities" }
+        map:
+          name: "漏洞名称"
+          type: "漏洞类型"
+          severity: "风险等级"
+          cvss_score: "CVSS评分"
+          description: "漏洞描述"
+          solution: "修复建议"
+          affected_asset: "影响资产"
+          host: "风险域名/IP"
+          port: "风险端口"
+          url: "风险域名/IP"
+          cve_id: "CVE编号"
+          cnvd_id: "CNVD编号"
+          cnnvd_id: "CNNVD编号"
+          id: "漏洞ID"
+          discovered_at: "发现时间"
+        # 默认值
+        default_values:
+          scanner_name: "洞鉴(X-Ray)企业版"

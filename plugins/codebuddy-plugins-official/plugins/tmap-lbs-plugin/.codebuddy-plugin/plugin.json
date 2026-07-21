@@ -1,0 +1,22 @@
+{
+  "name": "tmap-lbs-plugin",
+  "version": "1.0.0",
+  "description": "腾讯地图位置服务开发插件，提供 JavaScript GL 地图开发指南和 Web 服务 API（POI搜索、路径规划、旅游规划、轨迹可视化等）能力。",
+  "author": {
+    "name": "Tencent Map LBS"
+  },
+  "homepage": "https://lbs.qq.com/",
+  "keywords": [
+    "tmap",
+    "tencent-map",
+    "lbs",
+    "jsapi-gl",
+    "webservice",
+    "poi",
+    "geocoding",
+    "route-planning",
+    "visualization",
+    "地图"
+  ],
+  "category": "开发工具"
+}

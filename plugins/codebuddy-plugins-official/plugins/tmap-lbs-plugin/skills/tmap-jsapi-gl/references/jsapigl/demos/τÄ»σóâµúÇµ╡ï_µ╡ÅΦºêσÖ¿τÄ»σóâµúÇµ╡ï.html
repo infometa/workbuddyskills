@@ -1,0 +1,115 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>浏览器环境检测</title>
+    <script charset="utf-8"
+        src="https://map.qq.com/api/gljs?libraries=tools&v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+</head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow-y: scroll;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+
+    .table-container {
+        height: 85vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+</style>
+
+<body>
+    <h1>环境信息展示</h1>
+    <div class="table-container">
+        <table id="envTable">
+            <thead>
+                <tr>
+                    <th>属性</th>
+                    <th>值</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        var env = {
+            '移动设备': TMap.Browser.isMobileDevice,
+            '当前系统平台': TMap.Browser.platform,
+            '是否运行window设备': TMap.Browser.isWindowsDevice,
+            '是否运行在iOS设备': TMap.Browser.isIosDevice,
+            '是否为触摸设备': TMap.Browser.isTouchDevice,
+            '是否iPad': TMap.Browser.isIPad,
+            '是否Phone': TMap.Browser.isIPhone,
+            '是否安卓设备': TMap.Browser.isAndroidDevice,
+            '是否Chrome浏览器': TMap.Browser.isChrome,
+            '是否火狐浏览器': TMap.Browser.isFirefox,
+            '是否Safari浏览器': TMap.Browser.isSafari,
+            '是否Edge浏览器': TMap.Browser.isEdge,
+            '是否微信': TMap.Browser.isWeChat,
+            '是否为微信小程序': TMap.Browser.isMiniProgram,
+            '是否运行在微信小程序移动端': TMap.Browser.isMiniProgramMobile,
+            '是否为高清屏': TMap.Browser.isRetinaDevice,
+            '是否webkit浏览器': TMap.Browser.isWebkit,
+            '运行环境是否支持canvas': TMap.Browser.isSupportCanvas,
+            '运行环境是否支持webgl': TMap.Browser.isSupportWebGL,
+            '运行环境是否支持webgl 2.0': TMap.Browser.isSupportWebGL2,
+            '当前浏览器的userAgent信息': TMap.Browser.userAgent,
+        };
+
+        function populateTable(env) {
+            var tbody = document.querySelector('#envTable tbody');
+            for (var key in env) {
+                if (env.hasOwnProperty(key)) {
+                    var row = document.createElement('tr');
+                    var cellKey = document.createElement('td');
+                    var cellValue = document.createElement('td');
+                    cellKey.textContent = key;
+                    cellValue.textContent = env[key];
+                    row.appendChild(cellKey);
+                    row.appendChild(cellValue);
+                    tbody.appendChild(row);
+                }
+            }
+        }
+
+        // 填充表格
+        populateTable(env);
+    </script>
+</body>
+
+</html>

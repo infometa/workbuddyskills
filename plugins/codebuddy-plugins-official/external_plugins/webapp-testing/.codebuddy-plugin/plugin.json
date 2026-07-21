@@ -1,0 +1,5 @@
+{
+  "name": "webapp-testing",
+  "description": "使用 Playwright 测试本地 Web 应用，支持验证前端功能、调试 UI 行为和捕获浏览器截图。",
+  "license": "Apache-2.0"
+}

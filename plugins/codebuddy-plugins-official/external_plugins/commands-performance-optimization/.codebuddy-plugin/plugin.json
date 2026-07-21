@@ -1,0 +1,22 @@
+{
+  "name": "commands-performance-optimization",
+  "version": "1.0.0",
+  "description": "Commands for optimizing build, bundle size, and performance",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "performance-optimization",
+    "implement-caching-strategy",
+    "optimize-build",
+    "optimize-bundle-size",
+    "performance-audit",
+    "setup-cdn-optimization",
+    "system-behavior-simulator"
+  ]
+}

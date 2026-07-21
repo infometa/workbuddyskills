@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文本标记样式自定义</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #buttonContainer {
+        position: absolute;
+        left: 30px;
+        top: 30px;
+        z-index: 9999;
+    }
+
+    #buttonContainer input {
+        background: #fff;
+        padding: 10px;
+        width: 120xp;
+        outline-style: none;
+        margin-right: 10px;
+        border-radius: 10px;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="buttonContainer">
+        <input type="button" onclick="setStyle('styleOne')" value="设置样式1">
+        <input type="button" onclick="setStyle('styleTwo')" value="设置样式2">
+    </div>
+    <div id="mapContainer"></div>
+</body>
+
+</html>
+<script>
+    var map = null;
+    var label = null;
+    function initMap() {
+        var center = new TMap.LatLng(40.040074, 116.273519);//设置中心点坐标
+        //初始化地图
+        map = new TMap.Map('mapContainer', {
+            center: center,
+            zoom: 18
+        });
+        //初始化label
+        label = new TMap.MultiLabel({
+            id: 'label-layer',
+            map: map,
+            styles: {
+                'label': new TMap.LabelStyle({
+                    'color': '#333', //颜色属性
+                    'size': 20, //文字大小属性
+                    'offset': { x: 0, y: 0 }, //文字偏移属性单位为像素
+                    'angle': 0, //文字旋转属性
+                    'alignment': 'center', //文字水平对齐属性
+                    'verticalAlignment': 'middle' //文字垂直对齐属性
+                })
+            },
+            geometries: [{
+                'id': 'label', //点图形数据的标志信息
+                'styleId': 'label', //样式id
+                'position': center, //标注点位置
+                'content': '腾讯北京总部', //标注文本
+                'properties': { //标注点的属性数据
+                    'title': 'label'
+                }
+            }]
+        });
+    }
+    function setStyle(type) {
+        switch (type) {
+            case 'styleOne':
+                label.setStyles({
+                    'label': new TMap.LabelStyle({
+                        'color': '#333',
+                        'size': 20,
+                        'offset': { x: 0, y: 0 },
+                        'angle': 0,
+                        'alignment': 'center',
+                        'verticalAlignment': 'middle'
+                    })
+                });
+                break;
+            case 'styleTwo':
+                label.setStyles({
+                    'label': new TMap.LabelStyle({
+                        'color': '#FF0000',
+                        'size': 16,
+                        'offset': { x: 2, y: 10 },
+                        'angle': 45,
+                        'alignment': 'left',
+                        'verticalAlignment': 'top'
+                    })
+                });
+                break;
+            default: ;
+        }
+    }
+</script>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>标记跨图层碰撞</title>
+    </head>
+    <script
+        charset="utf-8"
+        src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"
+    ></script>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <body>
+        <div id="container"></div>
+        <script type="text/javascript">
+            var center = new TMap.LatLng(39.98210863924864, 116.31310899739151);
+            var centerHeight = new TMap.LatLng(39.98210863924864, 116.31310899739151, 134);
+
+            // 初始化地图
+            var map = new TMap.Map('container', {
+                zoom: 17, // 设置地图缩放
+                center: new TMap.LatLng(39.98210863924864, 116.31310899739151), // 设置地图中心点坐标，
+                pitch: 0, // 俯仰度
+                rotation: 0 // 旋转角度
+            });
+
+            // MultiMarker文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocMarker
+            var marker = new TMap.MultiMarker({
+                map: map,
+                styles: {
+                    // 点标记样式
+                    marker: new TMap.MarkerStyle({
+                        width: 20, // 样式宽
+                        height: 30, // 样式高
+                        anchor: { x: 10, y: 30 } // 描点位置
+                    })
+                },
+                zIndex: 10,
+                collisionOptions: {
+                    sameSource: true,
+                    crossSource: true,
+                    vectorBaseMapSource: true
+                },
+                geometries: [
+                    // 点标记数据数组
+                    {
+                        // 标记位置(纬度，经度，高度)
+                        position: center,
+                        id: 'marker',
+                        rank: 20
+                    },
+                    {
+                        // 标记位置(纬度，经度，高度)
+                        position: new TMap.LatLng(39.98116386328488, 116.31517290860688),
+                        rank: 20
+                    }
+                ]
+            });
+
+            var label = new TMap.MultiLabel({
+                id: 'label-layer',
+                map: map,
+                styles: {
+                    label: new TMap.LabelStyle({
+                        color: '#3777FF', // 颜色属性
+                        size: 20, // 文字大小属性
+                        offset: { x: 0, y: 0 }, // 文字偏移属性单位为像素
+                        angle: 0, // 文字旋转属性
+                        alignment: 'center', // 文字水平对齐属性
+                        verticalAlignment: 'middle' // 文字垂直对齐属性
+                    })
+                },
+                collisionOptions: {
+                    sameSource: true,
+                    crossSource: true,
+                    vectorBaseMapSource: true
+                },
+                zIndex: 1,
+                geometries: [
+                    {
+                        id: 'label', // 点图形数据的标志信息
+                        styleId: 'label', // 样式id
+                        position: new TMap.LatLng(39.981566421647344, 116.31369332548206), // 标注点位置
+                        content: 'label图层优先级低', // 标注文本
+                        rank: 30
+                    },
+                ]
+            });
+
+            map.rotateTo(272,{duration: 5000})
+        </script>
+    </body>
+</html>

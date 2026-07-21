@@ -1,0 +1,28 @@
+{
+  "name": "commands-version-control-git",
+  "version": "1.0.0",
+  "description": "Commands for Git operations, commits, and PRs",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "version-control-git",
+    "bug-fix",
+    "commit",
+    "commit-fast",
+    "create-pr",
+    "create-pull-request",
+    "create-worktrees",
+    "fix-github-issue",
+    "fix-issue",
+    "fix-pr",
+    "husky",
+    "pr-review",
+    "update-branch-name"
+  ]
+}

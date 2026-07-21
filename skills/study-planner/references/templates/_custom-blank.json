@@ -1,0 +1,54 @@
+{
+  "id": "custom-blank",
+  "name": "【自定义模板】用户从零创建",
+  "description": "通用空白模板，AI 会基于此结构 + 学习方法论自动填充内容",
+  "applicable_to": ["任何不在内置模板中的学习目标"],
+  "default_duration_days": 30,
+  "total_phases": 3,
+  "is_blank_template": true,
+
+  "_instructions_for_ai": [
+    "当用户的目标不匹配任何内置模板（kaoyan/ielts-toefl/final-exam/gre-gmat/teacher-civilservice/cfa-pmp/skill-learning/reading），使用此空白模板",
+    "AI 必须基于 references/methodology/ 的 4 大方法论 + 用户输入的 5 字段，动态推导阶段和每日任务",
+    "AI 应主动询问用户：'我没找到完全匹配的模板，要不要基于你的目标特点定制一个？请告诉我：1) 这个目标主要靠什么验证（考试 / 项目 / 输出）2) 有没有现成教材资源 3) 重不重视复盘'",
+    "生成完毕后，应询问用户是否将此次定制保存为永久自定义模板（写入 references/templates/custom/<user-defined-id>.json）"
+  ],
+
+  "phase_templates": [
+    {
+      "phase": 1,
+      "name": "【AI 填充】基础阶段",
+      "duration_ratio": 0.3,
+      "description": "AI 根据目标特点推导：词汇/概念/基础打底",
+      "weekly_pattern_template": "AI 应根据：1) 目标类型 2) 每日时长 3) 薄弱项，参考最相似的内置模板生成"
+    },
+    {
+      "phase": 2,
+      "name": "【AI 填充】强化阶段",
+      "duration_ratio": 0.45,
+      "description": "技巧 / 项目 / 限时训练",
+      "weekly_pattern_template": "AI 填充"
+    },
+    {
+      "phase": 3,
+      "name": "【AI 填充】冲刺/输出阶段",
+      "duration_ratio": 0.25,
+      "description": "模考 / 交付 / 心态调整",
+      "weekly_pattern_template": "AI 填充"
+    }
+  ],
+
+  "methodology_injection": {
+    "ebbinghaus": "auto",
+    "pomodoro": "auto",
+    "pareto": "auto",
+    "feynman": "auto",
+    "description": "AI 根据目标类型自动选择适用的方法论，例如：技能学习强化费曼，应试学习强化艾宾浩斯+二八"
+  },
+
+  "special_notes": [
+    "AI 必须输出 special_notes 字段，提醒用户该目标的常见坑",
+    "生成后询问是否保存为永久自定义模板",
+    "如果用户保存，写入 references/templates/custom/ 目录"
+  ]
+}

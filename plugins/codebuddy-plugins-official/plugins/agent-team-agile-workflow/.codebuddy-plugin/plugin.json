@@ -1,0 +1,14 @@
+{
+  "name": "agent-team-agile-workflow",
+  "description": "完整的 BMAD 敏捷工作流插件，包含角色化代理（PO、架构师、SM、开发、QA）和交互式审批流程",
+  "author": {
+    "name": "CodeBuddy Team",
+    "url": "https://cnb.cool/codebuddy"
+  },
+  "repository": "https://cnb.cool/codebuddy/marketplace",
+  "homepage": {
+    "url": "https://cnb.cool/codebuddy/marketplace",
+    "type": "git"
+  },
+  "license": "MIT"
+}

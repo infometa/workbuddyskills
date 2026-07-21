@@ -1,0 +1,20 @@
+{
+  "name": "agent-sdk-dev",
+  "description": "CodeBuddy Agent SDK Development Plugin - Create and verify CodeBuddy Agent SDK applications",
+  "version": "1.0.0",
+  "author": {
+    "name": "CodeBuddy Team",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "codebuddy",
+    "agent-sdk",
+    "ai-agent",
+    "development",
+    "tencent"
+  ],
+  "sdk": {
+    "typescript": "@tencent-ai/agent-sdk",
+    "python": "codebuddy-agent-sdk"
+  }
+}

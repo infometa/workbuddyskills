@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>编辑几何图形</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?libraries=tools&v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 80%;
+		position: relative;
+    }
+	#toolControl {
+		position: absolute;
+		top: 10px;
+		left: 0px;
+		right: 0px;
+		margin: auto;
+		width: 126px;
+		z-index: 1001;
+	}
+	.toolItem {
+		width: 30px;
+		height: 30px;
+		float: left;
+		margin: 1px;
+		padding: 4px;
+		border-radius: 3px;
+		background-size: 30px 30px;
+		background-position: 4px 4px;
+		background-repeat: no-repeat;
+		box-shadow: 0 1px 2px 0 #E4E7EF;
+		background-color: #ffffff;
+		border: 1px solid #ffffff;
+	}
+	.toolItem:hover {
+		border-color: #789CFF;
+	}
+	.active {
+		border-color: #D5DFF2;
+		background-color: #D5DFF2;
+	}
+
+	#delete {
+		background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/delete.png');
+	}
+	#split {
+		background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/split.png');
+	}
+	#union {
+		background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/union.png');
+	}
+</style>
+
+<body onload="initMap()">
+	<div id="container"></div>
+	<div id="toolControl">
+		<div class="toolItem" id="delete" onclick="editor.delete();" title="删除"></div>
+		<div class="toolItem" id="split" onclick="editor.split();" title="拆分"></div>
+		<div class="toolItem" id="union" onclick="editor.union();" title="合并"></div>
+	</div>
+	<div>
+		单选：鼠标左键点击图形<br/>
+		多选：按下ctrl键后点击多个图形<br/>
+		删除：选中图形后按下delete键或点击删除按钮可删除图形<br/>
+		编辑：选中图形后出现编辑点，拖动编辑点可移动顶点位置，双击实心编辑点可删除顶点<br/>
+		拆分：选中单个多边形后可绘制拆分线，拆分线绘制完成后自动进行拆分<br/>
+		合并：选中多个相邻多边形后可进行合并，飞地形式的多边形不支持合并<br/>
+		中断：按下esc键可中断当前操作，点选的图形将取消选中，编辑过程将中断
+	</div>
+	<script type="text/javascript">
+		var map, editor;
+
+        function initMap() {
+            // 初始化地图
+            map = new TMap.Map("container", {
+                zoom: 17, // 设置地图缩放级别
+                center: new TMap.LatLng(40.04019000341765, 116.27446815226199) // 设置地图中心点坐标
+			});
+
+			var simplePath = [
+				new TMap.LatLng(40.04051164600918, 116.27488518619089),
+				new TMap.LatLng(40.040943635857445, 116.27804611629756),
+				new TMap.LatLng(40.03951759379146, 116.2783762087081),
+				new TMap.LatLng(40.03891287066983, 116.2752049655744)
+			];
+			var holeyPath = [
+				[
+					new TMap.LatLng(40.0415122389407, 116.27144427159294),
+					new TMap.LatLng(40.03854281391625, 116.27218697924695),
+					new TMap.LatLng(40.03891287066983, 116.2752049655744),
+					new TMap.LatLng(40.04191838125587, 116.27460372613496)
+				],
+				[
+					new TMap.LatLng(40.04108804322408, 116.27230486920075),
+					new TMap.LatLng(40.039472465232336, 116.27267032855252),
+					new TMap.LatLng(40.03972518377873, 116.2748159283218),
+					new TMap.LatLng(40.04137685760844, 116.2744386798397)
+				]
+			];
+			
+			// 初始化几何图形及编辑器
+			editor = new TMap.tools.GeometryEditor({
+				map, // 编辑器绑定的地图对象
+				overlayList: [ // 可编辑图层
+					{
+						overlay: new TMap.MultiPolygon({
+							map,
+							styles: {
+								highlight: new TMap.PolygonStyle({
+									color: 'rgba(255, 255, 0, 0.6)'
+								})
+							},
+							geometries: [
+								{
+									paths: simplePath
+								},
+								{
+									paths: holeyPath
+								},
+							]
+						}),
+						id: 'polygon',
+						selectedStyleId: 'highlight'
+					}
+				],
+				actionMode: TMap.tools.constants.EDITOR_ACTION.INTERACT, // 编辑器的工作模式
+				activeOverlayId: 'polygon', // 激活图层
+				selectable: true, // 开启点选功能
+				snappable: true // 开启吸附
+			});
+
+			// 监听删除、修改、拆分、合并完成事件
+			let evtList = ['delete', 'adjust', 'split', 'union'];
+			evtList.forEach(evtName => {
+				editor.on(evtName + '_complete', evtResult => {
+					console.log(evtName, evtResult);
+				});
+			});
+
+			// 监听拆分失败事件，获取拆分失败原因
+			editor.on('split_fail', (res) => { 
+				alert(res.message);
+			});
+			// 监听合并失败事件，获取合并失败原因
+			editor.on('union_fail', (res) => { 
+				alert(res.message);
+			});
+		}
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>同时加载2个地图</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #containerOne {
+        width: 100%;
+        height: 45%;
+       
+    }
+    #containerTwo {
+        width: 100%;
+        height: 45%;
+    }
+    p{
+        margin: 0;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="containerOne"></div>
+    <p>地图一</p>
+    <div id="containerTwo"></div>
+    <p>地图二</p>
+    <script>
+        function initMap() {
+            //初始化地图一
+            var mapOne = new TMap.Map("containerOne", {
+                pitch:45,
+                center: new TMap.LatLng(39.984104, 116.307503)
+            });
+            //初始化地图二
+            var mapTwo = new TMap.Map("containerTwo", {
+                center: new TMap.LatLng(39.984104, 116.307503)
+            });
+        }
+
+    </script>
+</body>
+
+</html>

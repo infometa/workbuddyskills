@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "repomix": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "repomix@latest",
+        "--mcp"
+      ]
+    }
+  }
+}

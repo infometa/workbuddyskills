@@ -1,0 +1,21 @@
+{
+  "name": "weapon",
+  "display": "Weapon",
+  "default_id": "default_pistol",
+  "fields": [
+    { "key": "id",              "type": "StringName", "default": "&\"\"",                "group": "Identity" },
+    { "key": "display_name",    "type": "String",     "default": "\"Pistol\"",           "group": "Identity" },
+    { "key": "description",     "type": "String",     "default": "\"\"", "multiline": true, "group": "Identity" },
+    { "key": "bullet_speed",    "type": "float",      "default": 20.0, "range": [1, 200, 0.1],    "group": "Projectile", "doc": "Bullet speed in m/s." },
+    { "key": "bullet_lifetime", "type": "float",      "default": 5.0,  "range": [0.1, 30, 0.1],   "group": "Projectile", "doc": "Bullet auto-explode after this many seconds." },
+    { "key": "damage",          "type": "int",        "default": 1,    "range": [0, 9999, 1],     "group": "Combat" },
+    { "key": "fire_rate",       "type": "float",      "default": 0.2,  "range": [0.05, 10, 0.01], "group": "Combat", "doc": "Seconds between shots." },
+    { "key": "shoot_trauma",    "type": "float",      "default": 0.35, "range": [0, 2, 0.01],     "group": "Feedback" },
+    { "key": "hit_trauma",      "type": "float",      "default": 0.75, "range": [0, 2, 0.01],     "group": "Feedback" }
+  ],
+  "validators": [
+    "bullet_speed > 0",
+    "bullet_lifetime > 0",
+    "fire_rate > 0"
+  ]
+}

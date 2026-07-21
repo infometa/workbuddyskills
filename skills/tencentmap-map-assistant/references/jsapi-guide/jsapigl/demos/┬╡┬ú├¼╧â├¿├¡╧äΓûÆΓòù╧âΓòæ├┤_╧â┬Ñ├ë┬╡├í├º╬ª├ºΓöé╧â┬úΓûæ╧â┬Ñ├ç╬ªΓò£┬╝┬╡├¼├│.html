@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>坐标至地址转换</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=您的key"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #panel {
+        position: absolute;
+        background: #FFF;
+        width:350px;
+        padding: 20px;
+        z-index: 9999;
+        top: 30px;
+        left: 30px;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div id="panel">
+      <p>请在右侧示例代码第10行填入您的key，并执行查看运行结果（key可在控制台应用管理中自行创建）</p>
+        <p><label>经纬度</label><input id='location' type="text" value='39.982915, 116.307015' ><input id="convert" type="button" class="btn" value="转换为地址" onclick="convert()" /></p>
+        <p><label>地址</label><input id='address' type='text' disabled value='' /></p>
+    </div>
+</body>
+
+<script type="text/javascript">
+var map = new TMap.Map('container', {
+  zoom: 14,
+  center: new TMap.LatLng(39.986785, 116.301012),
+});
+var geocoder = new TMap.service.Geocoder(); // 新建一个正逆地址解析类
+var markers = new TMap.MultiMarker({
+  map: map,
+  geometries: [],
+});
+
+function convert() {
+  markers.setGeometries([]);
+  var input = document.getElementById('location').value.split(',');
+  var location = new TMap.LatLng(Number(input[0]), Number(input[1]));
+  map.setCenter(location);
+  markers.updateGeometries([
+    {
+      id: 'main', // 点标注数据数组
+      position: location,
+    },
+  ]);
+  geocoder
+    .getAddress({ location: location }) // 将给定的坐标位置转换为地址
+    .then((result) => {
+      document.getElementById('address').value = result.result.address;
+      // 显示搜索到的地址
+    });
+}
+</script>
+</html>

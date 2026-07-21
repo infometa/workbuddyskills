@@ -1,0 +1,11 @@
+{
+  "name": "context-management",
+  "description": "上下文持久化、恢复和长期对话管理",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>折线样式自定义</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #buttonContainer {
+        position: absolute;
+        left: 30px;
+        top: 30px;
+        z-index: 9999;
+    }
+
+    #buttonContainer input {
+        background: #fff;
+        padding: 10px;
+        width: 120xp;
+        outline-style: none;
+        margin-right: 10px;
+        border-radius: 10px;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="buttonContainer">
+        <input type="button" onclick="setStyle('styleOne')" value="设置样式1">
+        <input type="button" onclick="setStyle('styleTwo')" value="设置样式2">
+    </div>
+    <div id="mapContainer"></div>
+</body>
+
+</html>
+<script>
+    var map = null;
+    var polyline = null;
+    function initMap() {
+        var center = new TMap.LatLng(40.040452,116.273486);//设置中心点坐标
+        //初始化地图
+        map = new TMap.Map('mapContainer', {
+            center: center,
+            zoom: 16
+        });
+        polyline = new TMap.MultiPolyline({
+            id: 'polyline-layer',
+            map: map,
+            styles: {
+                'polyline': new TMap.PolylineStyle({
+                    'color': '#00FF00', //线填充色
+                    'width': 4, //折线宽度
+                    'borderWidth': 5, //边线宽度
+                    'borderColor': 'rgba(0,125,255,0.5)', //边线颜色
+                    'lineCap': 'round' //线端头方式
+                }),
+
+            },
+            geometries: [
+                {
+                    'id': 'polyline', //折线图形数据的标志信息
+                    'styleId': 'polyline', //样式id
+                    'paths': [new TMap.LatLng(40.038540, 116.272389), new TMap.LatLng(40.038844, 116.275210), new TMap.LatLng(40.041407, 116.274738)], //折线的位置信息
+                    'properties': { //折线的属性数据
+                        'title': 'customStyle'
+                    }
+                },
+            ]
+        });
+    }
+    function setStyle(type) {
+        switch (type) {
+            case 'styleOne':
+                polyline.setStyles({
+                    'polyline': new TMap.PolylineStyle({
+                        'color': '#00FF00', //线填充色
+                        'width': 6, //折线宽度
+                        'borderWidth': 5, //边线宽度
+                        'borderColor': 'rgba(0,125,255,0.5)', //边线颜色
+                        'lineCap': 'round' //线端头方式
+                    })
+                });
+                break;
+            case 'styleTwo':
+                polyline.setStyles({
+                    'polyline': new TMap.PolylineStyle({
+                        'color': 'rgba(255,0,0,0.3)', //线填充色
+                        'width': 10,//折线宽度
+                        'borderWidth': 4, //边线宽度
+                        'borderColor': '#999', //边线颜色
+                        'lineCap': 'square' //线端头方式
+                    })
+                });
+                break;
+            default: ;
+        }
+    }
+</script>

@@ -1,0 +1,188 @@
+# high-focus-sinks.yaml — 聚焦模式规则定义
+# 引用方: verifier.py focus-filter（加载 FOCUS_BLACKLIST）
+#         focus-mode.md（按需 Read 白名单定义）
+#
+# 高危聚焦模式：仅关注可直接远程造成命令执行(RCE)和大量信息泄漏的风险。
+# 重点是”远程“和”直接利用“。
+#
+# 版本：1.0
+
+description: >
+  聚焦模式（--focus high）规则定义。
+  白名单/黑名单决定哪些风险类型在聚焦模式下保留或排除。
+  不在任何列表中的类型 → 保留（宁可放过，不可误杀）。
+
+# ============================================================================
+# 确定性过滤黑名单
+# ============================================================================
+# 以下风险类型在聚焦模式下由 verifier.py focus-filter 确定性排除。
+# 分类基于 risk-type-taxonomy.yaml 中已有的 severity_default 和危害描述。
+
+focus_blacklist:
+
+  user_interaction:
+    label: "需用户交互（非直接远程利用）"
+    types:
+      - xss
+      - csrf
+      - open-redirect
+      - clickjacking
+
+  indirect_exploit:
+    label: "间接利用 / 需链式组合（不可直接入侵）"
+    types:
+      - ssrf
+      - path-traversal
+      - xxe
+      - file-upload
+      - ldap-injection
+      - crlf-injection
+      - second-order-injection
+
+  auth_context_required:
+    label: "需认证 + 特定上下文"
+    types:
+      - idor
+      - access-control
+      - mass-assignment
+      - session-fixation
+      - credential-enumeration
+
+  denial_of_service:
+    label: "DoS 类（不造成入侵/数据泄漏）"
+    types:
+      - denial-of-service
+      - redos
+      - xml-bomb
+      - zip-bomb
+      - resource-exhaustion
+
+  clue_level:
+    label: "线索级（无法直接利用）"
+    types:
+      - information-leak
+      - insecure-config
+      - weak-crypto
+      - missing-security-headers
+      - csv-injection
+      - weak-password-hash
+      - missing-security-audit
+      - brute-force-unprotected
+      - missing-lockfile
+      - insecure-cookie
+      - jwt-weak-key
+      - jwt-algorithm-confusion
+      - log-injection
+      - predictable-reset-token
+      - sensitive-data-logging
+      - endpoint-exposure
+      - plaintext-password
+
+  client_local:
+    label: "前端 / 客户端本地攻击面（不可远程触发）"
+    types:
+      - prototype-pollution
+      - postmessage-origin-bypass
+      - dom-clobbering
+      - websocket-hijacking
+      - cors-misconfiguration
+      - client-side-bypass
+      - insecure-localstorage
+      - exported-component
+      - insecure-webview
+      - electron-node-integration
+      - electron-disabled-websecurity
+      - electron-shell-command-injection
+      - electron-ipc-no-validation
+      - electron-remote-content
+      - electron-preload-overexposure
+      - unsigned-auto-update
+      - protocol-handler-hijack
+      - cleartext-traffic
+      - debuggable-backup-enabled
+      - screen-data-leak
+      - weak-root-jailbreak-detection
+      - improper-cert-validation
+      - insecure-mobile-storage
+      - intent-redirection
+
+  business_logic:
+    label: "业务逻辑（非直接利用，需特定上下文）"
+    types:
+      - race-condition
+      - business-logic
+      - missing-idempotency
+      - data-isolation-failure
+      - missing-audit-log
+      - callback-trust
+      - transaction-integrity
+      - input-boundary
+      - rate-limit-missing
+      - state-machine-violation
+
+  supply_chain_low:
+    label: "依赖/配置低风险"
+    types:
+      - dependency-confusion
+      - typosquatting
+      - insecure-dependency-source
+
+  cloud_low:
+    label: "低风险云配置"
+    types:
+      - serverless-no-auth
+      - cloud-db-exposed
+      - iam-overprivilege
+      - cloud-imds
+
+  ai_agent_low:
+    label: "AI Agent 低风险"
+    types:
+      - system-prompt-leak
+      - vector-store-poisoning
+
+  ghost_bits:
+    label: "Ghost Bits 截断（需链式利用）"
+    types:
+      - ghost-bits-truncation
+
+  android_local:
+    label: "Android 本地调试/备份配置"
+    types:
+      - debuggable-backup-enabled
+
+# ============================================================================
+# 组合漏洞线索类型
+# ============================================================================
+# 以下 Sink 在聚焦模式下不独立输出 finding，
+# 但若与高危 Sink 同文件/同调用链，则作为 comboClue 附加输出。
+
+combo_clue_types:
+  description: >
+    聚焦模式下，当以下类型的 Sink 与高危 Sink 出现在同一代码上下文时，
+    作为组合攻击线索附加输出。
+
+  types:
+    - slug: ssrf
+      label: "SSRF 指向内网服务"
+      elevate_scenario: "SSRF 可达云 IMDS + 硬编码 AK/SK → 云资源接管"
+
+    - slug: path-traversal
+      label: "路径穿越到敏感文件"
+      elevate_scenario: "路径穿越可达 /etc/passwd/SSH key/Web目录 → 权限提升"
+
+    - slug: access-control
+      label: "认证缺失端点 + 高危操作"
+      elevate_scenario: "零鉴权端点调用高危 Sink（SQL/命令/反序列化）→ 未授权入侵"
+
+    - slug: file-upload
+      label: "不安全文件上传 + 路径穿越"
+      elevate_scenario: "上传路径可控 + 可写入Web目录/覆盖关键配置 → Webshell"
+
+    - slug: information-leak
+      label: "信息泄露辅助攻击链"
+      elevate_scenario: "堆栈/配置泄露暴露密钥/端点 → 辅助认证绕过或提权"
+
+    - slug: hardcoded-secret
+      label: "硬编码凭证 + SSRF"
+      elevate_scenario: "硬编码 AK/SK + SSRF 可达云 IMDS → 云资源临时凭证获取"

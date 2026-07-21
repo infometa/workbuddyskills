@@ -1,0 +1,31 @@
+{
+  "name": "superpowers-chrome",
+  "version": "1.6.1",
+  "description": "超轻量级 Chrome DevTools Protocol MCP 服务器，支持自动捕获。通过 Chrome DevTools Protocol 实现直接浏览器控制，零依赖，API 简单易用。",
+  "author": {
+    "name": "Jesse Vincent",
+    "email": "jesse@fsck.com"
+  },
+  "homepage": "https://github.com/obra/superpowers-chrome",
+  "repository": "https://github.com/obra/superpowers-chrome",
+  "license": "MIT",
+  "keywords": [
+    "chrome",
+    "browser",
+    "automation",
+    "devtools",
+    "cdp",
+    "websocket"
+  ],
+  "agents": [
+    "./agents/browser-user.md"
+  ],
+  "mcpServers": {
+    "chrome": {
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/mcp/dist/index.js"
+      ]
+    }
+  }
+}

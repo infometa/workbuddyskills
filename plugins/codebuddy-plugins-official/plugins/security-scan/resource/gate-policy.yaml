@@ -1,0 +1,47 @@
+# gate-policy.yaml — 弱门禁策略配置
+# 引用方: scripts/gate_evaluator.py、references/workflows/post-audit.md
+#
+# 门禁模式:
+#   warn   — 仅告警，不阻断任何操作（默认）
+#   strict — 门禁不通过时 gate-result.json 状态为 soft-block（仍不强制阻断）
+
+gate_mode: "warn"
+
+# ─── 门禁规则 ───────────────────────────────────────────────
+# 任一规则不通过 → 门禁状态降级为 warn 或 soft-block（取决于 gate_mode）
+
+rules:
+
+  # 规则 1: 高危/严重漏洞数量阈值
+  high_severity_threshold:
+    enabled: true
+    description: "严重+高危漏洞总数超过阈值则门禁不通过"
+    max_count: 0
+    include_critical: true
+    include_high: true
+
+  # 规则 2: 高置信度漏洞阈值
+  high_confidence_threshold:
+    enabled: true
+    description: "高置信度(>=阈值)漏洞数量超过限制则门禁不通过"
+    min_confidence: 90
+    max_count: 0
+
+  # 规则 3: 总漏洞数阈值
+  total_issues_threshold:
+    enabled: false
+    description: "漏洞总数超过阈值则门禁不通过"
+    max_count: 20
+
+  # 规则 4: 修复率阈值（需要历史数据，Phase 1 默认关闭）
+  fix_rate_threshold:
+    enabled: false
+    description: "修复率低于阈值则门禁不通过（需要 fix-report.json）"
+    min_rate: 0.8
+
+# ─── 告警消息模板 ─────────────────────────────────────────────
+messages:
+  gate_pass: "门禁通过：本次扫描结果符合安全策略要求。"
+  gate_warn: "门禁告警：发现 {violation_count} 项安全策略违规，建议在推送前修复。"
+  gate_soft_block: "门禁未通过：发现 {violation_count} 项严重安全策略违规，强烈建议修复后再推送。"
+  push_reminder: "本项目最近一次安全扫描存在未修复的门禁告警（{gate_status}），建议执行增量扫描或修复后再推送。"

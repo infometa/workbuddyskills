@@ -1,0 +1,174 @@
+{
+  "name": "paper-topic-selection",
+  "version": "7.0.0",
+  "description": "One-stop thesis topic selection expert team built on Wanfang Data academic resources: literature search, topic discovery, novelty evaluation, title generation, and domain reports.",
+  "author": {
+    "name": "WorkBuddy Product Team",
+    "email": "support@workbuddy.cn"
+  },
+  "agents": [
+    "./agents/huangfu-evaluation.md",
+    "./agents/ouyang-literature.md",
+    "./agents/shangguan-topic.md",
+    "./agents/situ-inspiration.md",
+    "./agents/taishi-report.md",
+    "./agents/xiahou-title.md",
+    "./agents/zhuge-consultant.md"
+  ],
+  "expertType": "team",
+  "agentName": "zhuge-consultant",
+  "teamInfo": {
+    "leadAgent": "zhuge-consultant",
+    "memberAgents": [
+      "huangfu-evaluation",
+      "ouyang-literature",
+      "shangguan-topic",
+      "situ-inspiration",
+      "taishi-report",
+      "xiahou-title"
+    ]
+  },
+  "displayName": {
+    "en": "Paper Topic Selection Expert Team (WANFANG TOPIC)",
+    "zh": "选题专家团队（WANFANG TOPIC）"
+  },
+  "profession": {
+    "en": "Paper Topic Selection Expert Team (WANFANG TOPIC)",
+    "zh": "选题专家团队（WANFANG TOPIC）"
+  },
+  "displayDescription": {
+    "en": "Helps with thesis topic selection: search literature, recommend 3-5 directions, evaluate novelty, generate titles, produce domain reports. Just tell me your field to start.",
+    "zh": "帮你做论文选题：检索文献、推荐方向、评估新颖性、生成标题、出领域报告。说学科方向即可。"
+  },
+  "avatar": "avatars/team.jpg",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "搜 XX 方向的论文",
+    "en": "Search papers in XX field"
+  },
+  "plugin": "paper-topic-selection",
+  "tags": [
+    {
+      "en": "Literature Deep Reading",
+      "zh": "文献精读"
+    },
+    {
+      "en": "Topic Discovery",
+      "zh": "选题发现"
+    },
+    {
+      "en": "Topic Evaluation",
+      "zh": "定题评测"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Search papers in XX field",
+      "zh": "搜 XX 方向的论文"
+    },
+    {
+      "en": "Recommend some XX topics",
+      "zh": "帮我推荐几个 XX 方向选题"
+    },
+    {
+      "en": "Check if this topic works",
+      "zh": "评估一下这个题目行不行"
+    }
+  ],
+  "skills": [
+    "./skills/wanfang-search"
+  ],
+  "members": [
+    {
+      "id": "huangfu-evaluation",
+      "profession": {
+        "en": "Topic Evaluator",
+        "zh": "选题评估师"
+      },
+      "avatar": "avatars/huangfu-evaluation.jpg",
+      "role": "member",
+      "displayName": {
+        "en": "Huang",
+        "zh": "皇甫评度"
+      }
+    },
+    {
+      "id": "ouyang-literature",
+      "profession": {
+        "en": "Literature Scout",
+        "zh": "文献侦察员"
+      },
+      "avatar": "avatars/ouyang-literature.jpg",
+      "role": "member",
+      "displayName": {
+        "en": "Ou",
+        "zh": "欧阳搜文"
+      }
+    },
+    {
+      "id": "shangguan-topic",
+      "profession": {
+        "en": "Topic Strategist",
+        "zh": "选题策略师"
+      },
+      "avatar": "avatars/shangguan-topic.jpg",
+      "role": "member",
+      "displayName": {
+        "en": "Shang",
+        "zh": "上官选道"
+      }
+    },
+    {
+      "id": "situ-inspiration",
+      "profession": {
+        "en": "Trend Analyst",
+        "zh": "趋势分析师"
+      },
+      "avatar": "avatars/situ-inspiration.jpg",
+      "role": "member",
+      "displayName": {
+        "en": "Si",
+        "zh": "司徒启思"
+      }
+    },
+    {
+      "id": "taishi-report",
+      "profession": {
+        "en": "Domain Analyst",
+        "zh": "领域分析师"
+      },
+      "avatar": "avatars/taishi-report.jpg",
+      "role": "member",
+      "displayName": {
+        "en": "Tai",
+        "zh": "太史撰域"
+      }
+    },
+    {
+      "id": "xiahou-title",
+      "profession": {
+        "en": "Title Generator",
+        "zh": "标题生成师"
+      },
+      "avatar": "avatars/xiahou-title.jpg",
+      "role": "member",
+      "displayName": {
+        "en": "Xia",
+        "zh": "夏侯拟言"
+      }
+    },
+    {
+      "id": "zhuge-consultant",
+      "profession": {
+        "en": "Chief Topic Advisor",
+        "zh": "选题参谋长"
+      },
+      "avatar": "avatars/zhuge-consultant.jpg",
+      "role": "lead",
+      "displayName": {
+        "en": "Zhu",
+        "zh": "诸葛谋之"
+      }
+    }
+  ]
+}

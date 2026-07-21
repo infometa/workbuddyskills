@@ -1,0 +1,138 @@
+<!-- 最后更新：2026-05-10 | 说明：通用流程不保存固定答案，优先动态查询 join.qq.com 官方公告 -->
+
+# 高频问题动态检索规则
+
+> 本文件不保存固定流程答案。通用流程/制度类问题必须优先通过 `scripts/fetch_recruit_info.py flow` 动态查询腾讯校园招聘官网公告栏目，并基于提问时间与公告发布时间选择依据；涉及个人投递进度、个人流程节点、材料/签约/录用状态等具体个人流程信息时，引导同学登录 `join.qq.com` 并咨询校招官网 offer 鹅智能体。
+
+## 通用流程动态检索
+
+适用问题包括但不限于：招聘对象、投递时间、投递规则、简历修改、测评、笔试、面试通知、面试安排、应聘进展、青云计划流程、内推/伯乐码、材料提交、录用/签约/毁约、转正等。
+
+处理步骤：
+
+1. 不查 MCP，不凭训练数据或记忆中的固定 FAQ 直接作答。
+2. 获取当前提问时间，优先使用用户消息时间；没有明确时间时使用当前系统时间。
+3. 运行动态公告匹配：
+
+```bash
+python scripts/fetch_recruit_info.py flow "<用户原问题>" --question-time "<YYYY-MM-DD HH:MM:SS>" --top-k 3
+```
+
+4. 根据返回的 `selected_notices` 作答：
+   - 优先采用 `match_score` 最高的公告。
+   - 必须参考 `publish_time`，说明依据来自对应公告及发布时间。
+   - 如果多个公告都相关，优先使用不晚于提问时间、发布时间更近、且内容更匹配的公告；必要时合并说明差异。
+   - 只基于公告 `excerpt` 或按需进一步调用 `notice <id>` 获取的正文回答，不补充公告未覆盖的规则。
+5. 如果公告未覆盖、接口失败、结果低相关，或用户问的是个人流程/个人状态，统一引导 `join.qq.com` 校招官网 offer 鹅智能体。
+
+推荐回答结构：
+
+```text
+我查了 join.qq.com 官方公告，与你问题最相关的是《公告标题》（发布时间：YYYY-MM-DD）。
+
+按公告口径：
+- 要点 1
+- 要点 2
+
+如果你问的是自己的投递进度、流程节点或材料/签约/录用状态，建议登录 join.qq.com，通过校招官网 offer 鹅智能体确认个人口径。
+```
+
+## 招聘动态与公告
+
+**Q：腾讯校招什么时候开始 / 最近有什么公告？**
+
+```bash
+python scripts/fetch_recruit_info.py latest
+```
+
+如需公告全文：
+
+```bash
+python scripts/fetch_recruit_info.py notice <公告 id>
+```
+
+回答时只总结关键字段，不要把 JSON 原样贴给同学。
+
+## 岗位/JD 类
+
+**Q：有什么岗位在招？**
+
+如果用户没有提供关键词、方向、城市、招聘类型、BG 或简历背景等筛选条件，必须先全量抓取：
+
+```bash
+python scripts/fetch_recruit_jds.py all --max-pages 50 --page-size 100
+```
+
+如果用户已经提供明确筛选条件，再搜索；搜索“青云”等招聘标签时，脚本会在官网标题搜索基础上补充全量岗位的 `recruit_label`、`project_name` 等字段本地匹配，避免漏召回：
+
+```bash
+python scripts/fetch_recruit_jds.py search --keyword <关键词> --page-size 10
+```
+
+如用户提供简历/背景：
+
+```bash
+python scripts/fetch_recruit_jds.py match "<简历或背景文本>"
+```
+
+输出要求：
+
+- 只列出 3-5 个与同学简历/背景最符合的真实校招岗位。
+- 岗位名称、招聘部门、工作地、投递链接必须来自官网脚本或可选 JD MCP 的真实返回。
+- 如涉及学校层级、院校标签或学历背景，只能中性说明客观关系；不得对学校或学生做优劣、档次、含金量等价值评判。
+- 不出现评分、分数、匹配度百分比、排名算法等内容。
+- 结尾可询问是否需要查看某个岗位的完整 JD。
+
+**Q：XX 岗位的 JD 是什么 / 要求高吗？**
+
+```bash
+python scripts/fetch_recruit_jds.py search --keyword "XX"
+python scripts/fetch_recruit_jds.py detail <post_id>
+```
+
+返回时拆解为：硬性条件 / 软性素质 / 加分项 / 简历侧重 / 面试准备。
+
+## 组织架构/BG/部门介绍
+
+**Q：某个 BG/部门是做什么的？某 BG 下有哪些部门？**
+
+```bash
+python scripts/fetch_recruit_jds.py orgs
+python scripts/fetch_recruit_jds.py department --keyword <部门或关键词>
+python scripts/fetch_recruit_jds.py department --bg <BG关键词>
+```
+
+回答时只基于官网组织架构接口返回的 `bg_name`、`department_name`、`introduction` 总结，不凭经验补部门职责；无命中时引导用户查看 `https://join.qq.com/about.html`。
+
+## 个人流程与个人状态
+
+以下问题不使用公告摘要代答：
+
+- 我的流程到哪一步了？
+- 为什么我还没收到通知？
+- 我的测评/面试/签约/材料状态是否正常？
+- 我个人还能不能改岗位、改课题、改部门？
+- 我的 offer、录用或签约状态是什么？
+
+统一话术：
+
+```text
+这类属于你的个人流程信息，我不能根据通用公告替你判断。建议登录 join.qq.com，通过校招官网 offer 鹅智能体咨询确认；我可以继续帮你准备简历、岗位匹配或面试。
+```
+
+## 防诈骗与内推
+
+当用户贴出疑似招聘帖、聊天记录、账号名，或提到收费实习/内推、保 offer、内部名额、绿色通道、免笔试、1v1 陪跑、训练营、私信加微信、伪装避雷引流时，先运行：
+
+```bash
+python scripts/fraud_checker.py "<用户提供的可疑文本>"
+python scripts/fraud_checker.py "<用户提供的可疑文本>" --account "<账号名>"
+```
+
+回答时按脚本返回的 `risk_level`、`risk_type`、`matched_signals` 和 `suggested_response` 总结，不直接粘贴长 JSON。付费类可明确说「可按求职诈骗处理」；其他风险用「高度疑似」「建议警惕」。
+
+```text
+腾讯校招和实习招聘全流程 0 收费，唯一投递入口是 join.qq.com。官方内推/伯乐码不收费，正常内推仍需走完整评估流程。任何收费实习、收费内推、保过、内部名额、绿色通道、免笔试免面试、付费培训都需要警惕。
+```
+
+具体内推流程如需确认，也优先走动态公告检索；涉及个人状态时引导校招官网 offer 鹅智能体。

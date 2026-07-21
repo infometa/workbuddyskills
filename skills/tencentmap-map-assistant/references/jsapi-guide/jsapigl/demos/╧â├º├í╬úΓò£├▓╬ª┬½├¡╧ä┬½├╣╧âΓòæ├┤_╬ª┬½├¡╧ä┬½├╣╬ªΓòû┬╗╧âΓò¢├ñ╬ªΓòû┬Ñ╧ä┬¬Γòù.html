@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>计算路径距离</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=geometry"></script>
+<style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    #info {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      bottom: 60px;
+      height: 80px;
+      width: 400px;
+      background-color: #fff;
+      border-radius: 10px;
+      font-size: 18px;
+      line-height: 80px;
+      text-align: center;
+    }
+</style>
+
+<body onload="initMap()">
+	<div id="container"></div>
+	<div id="info"></div>
+	<script type="text/javascript">
+      var map;
+
+      function initMap() {
+        var center = new TMap.LatLng(40.02288398281758, 116.28905901239955);//设置中心点坐标
+        //初始化地图
+        map = new TMap.Map('container', {
+          center: center,
+          zoom: 14,
+        });
+
+        var tencent = new TMap.LatLng(40.040452, 116.273486);
+        var oldSummerPalace = new TMap.LatLng(40.006540, 116.303695);
+
+        var path = [tencent, oldSummerPalace];
+        var polylineLayer = new TMap.MultiPolyline({
+          id: 'polyline-layer', //图层唯一标识
+          map: map,//绘制到目标地图
+          //折线数据定义
+          geometries: [
+            {
+              id: 'line',
+              paths: path
+            }
+          ]
+        });
+
+        // 计算路径的实际距离
+        var distance = TMap.geometry.computeDistance(path);
+        var infoDom = document.getElementById('info');
+        infoDom.innerText = `腾讯北京总部到圆明园的直线距离为${distance.toFixed(2)}米`;
+      }
+	</script>
+</body>
+
+</html>

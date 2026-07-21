@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>地图显示比例设置</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+			height: 100%;
+			margin: 0px;
+			padding: 0px;
+			position: relative;
+            overflow: hidden;
+    }
+
+    #container {
+            position: relative;
+			width: 100%;
+			height: 100%;
+    }
+    #btn {
+			position: absolute;
+      		top: 30px;
+      		left: 30px;
+			z-index: 1001;
+			padding: 6px 8px;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+		<input type="button" id="btn" onclick="changeScale()" value="设置显示比例为2">
+		<script type="text/javascript">
+			var map, scale = 1;
+
+			function initMap() {
+				var center = new TMap.LatLng(39.984104, 116.307503);
+				//初始化地图
+				map = new TMap.Map("container", {
+                    zoom:12,//设置地图缩放级别
+                    center: center,//设置地图中心点坐标
+				});
+
+				map.on('scale_changed', (e) => {
+					console.log(e);
+				});
+			}
+			
+			// 改变地图显示比例
+			function changeScale() {
+				var btn = document.getElementById('btn');
+				btn.value = `设置显示比例为${scale}`;
+				if (scale === 1) {
+					scale = 2;
+				} else {
+					scale = 1;
+				}
+				map.setScale(scale);
+			}
+    </script>
+</body>
+
+</html>

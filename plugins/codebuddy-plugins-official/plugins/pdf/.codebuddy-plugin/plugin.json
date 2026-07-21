@@ -1,0 +1,8 @@
+{
+  "name": "pdf",
+  "description": "全面的 PDF 处理工具包，支持提取文本和表格、创建新 PDF、合并/拆分文档、表单填写、加密解密、OCR 扫描等功能",
+  "version": "1.0.0",
+  "repository": "https://github.com/anthropics/skills",
+  "homepage": "https://github.com/anthropics/skills",
+  "license": "Proprietary"
+}

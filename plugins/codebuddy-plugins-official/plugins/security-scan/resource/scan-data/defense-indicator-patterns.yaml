@@ -1,0 +1,133 @@
+# D5: 防御指标检测模式表
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 检测已知的防御模式，输出为 defenseIndicators 供验证阶段防御检查使用
+#
+# === 知识版本管理 ===
+# version: 2.0.0
+# last_updated: "2026-04-29"
+# update_strategy: semi_auto
+# changelog:
+#   - "2.0.0 (2026-04-29): 优化防御模式检测"
+#   - "1.0.0 (2026-03-01): 初始版本"
+
+defense_types:
+  - type: 参数化查询
+    tech_stack: ["*"]
+    patterns:
+      - 'PreparedStatement'
+      - 'cursor\.execute\(.*%s'
+      - 'db\.QueryRow\(.*\?'
+
+  - type: 白名单验证
+    tech_stack: ["*"]
+    patterns:
+      - 'allowList'
+      - 'whitelist'
+      - 'ALLOWED_'
+      - 'valid_values'
+
+  - type: 编码/转义
+    tech_stack: ["*"]
+    patterns:
+      - 'HtmlUtils\.htmlEscape'
+      - 'encodeURIComponent'
+      - 'html\.escape'
+
+  - type: CSRF 令牌
+    tech_stack: ["*"]
+    patterns:
+      - 'csrf_token'
+      - '_token'
+      - 'X-CSRF-Token'
+
+  - type: 密码安全哈希
+    tech_stack: ["*"]
+    patterns:
+      - 'BCryptPasswordEncoder'
+      - 'bcrypt\.hashpw'
+      - 'bcrypt\.hash'
+      - 'argon2\.hash'
+      - 'Pbkdf2PasswordEncoder'
+      - 'make_password'
+      - 'generate_password_hash'
+      - 'password_hash.*PASSWORD_BCRYPT'
+
+  - type: Session 重新生成
+    tech_stack: ["*"]
+    patterns:
+      - 'request\.changeSessionId'
+      - 'session\.invalidate'
+      - 'session\.regenerate'
+      - 'request\.session\.cycle_key'
+      - 'session_regenerate_id'
+
+  - type: JWT 安全配置
+    tech_stack: ["*"]
+    patterns:
+      - 'setSigningKey'
+      - 'algorithms.*RS256'
+      - 'tokenBlacklist'
+      - 'revokedTokens'
+
+  - type: 速率限制
+    tech_stack: ["*"]
+    patterns:
+      - 'rateLimit'
+      - 'rateLimiter'
+      - 'throttle'
+      - '@RateLimit'
+      - 'express-rate-limit'
+      - 'bucket4j'
+
+  - type: 日志安全
+    tech_stack: ["*"]
+    patterns:
+      - 'mask\('
+      - 'desensitize\('
+      - 'redact\('
+      - 'StringEscapeUtils\.escapeJava'
+
+  - type: XML 安全解析
+    tech_stack: ["*"]
+    patterns:
+      - 'disallow-doctype-decl'
+      - 'defusedxml'
+      - 'setExpandEntityReferences.*false'
+      - 'FEATURE_SECURE_PROCESSING'
+
+  - type: PostMessage 来源验证
+    tech_stack: ["javascript", "typescript"]
+    patterns:
+      - 'event\.origin\s*==='
+      - 'allowedOrigins\.includes'
+
+  - type: Unicode 归一化
+    tech_stack: ["java-*"]
+    patterns:
+      - 'Normalizer\.normalize\('
+      - 'java\.text\.Normalizer'
+      - 'NFC|NFKC|NFD|NFKD'
+      - 'StandardCharsets\.UTF_8'
+      - '\.getBytes\s*\(\s*StandardCharsets'
+      - '\.getBytes\s*\(\s*"UTF-8"\s*\)'
+    note: "Ghost Bits 防御：对输入做 Unicode 归一化或指定安全编码，防止 char→byte 截断还原攻击载荷"
+
+  - type: ASCII 字符集限制
+    tech_stack: ["java-*"]
+    patterns:
+      - 'CharMatcher\.ascii\(\)'
+      - '[\w]+\s*[<>]=?\s*0x7[fF]'
+      - 'isASCII|isAscii'
+      - 'StringUtils\.isAsciiPrintable'
+    note: "Ghost Bits 防御：限制输入为 ASCII 安全字符集，从源头阻止高位 Unicode 字符进入处理链"
+
+  - type: 依赖锁定
+    tech_stack: ["*"]
+    patterns:
+      - 'package-lock\.json'
+      - 'yarn\.lock'
+      - 'pnpm-lock\.yaml'
+      - 'poetry\.lock'
+      - 'go\.sum'
+
+

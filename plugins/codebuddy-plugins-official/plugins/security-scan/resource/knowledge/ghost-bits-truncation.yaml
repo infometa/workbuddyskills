@@ -1,0 +1,288 @@
+# Ghost Bits 类型截断漏洞检测知识
+# 引用方: vuln-scan / red-team
+# 加载策略: conditional (Java 技术栈)
+# 背景: Black Hat Asia 2026 披露，Java char(16bit)→byte(8bit) 高位静默截断缺陷
+
+applies_to: ["java"]
+
+# ============================================================================
+# 1. 漏洞原理
+# ============================================================================
+#
+# Java char 是 16 位 Unicode (U+0000 ~ U+FFFF)，byte 仅 8 位 (0x00 ~ 0xFF)。
+# 执行 char→byte 转换时高 8 位被直接丢弃，不抛异常也不告警。
+# 攻击者构造"低 8 位 = 危险 ASCII 字符"的 Unicode 字符绕过 WAF/IDS 特征匹配，
+# 后端 Java 组件执行截断后还原出原始攻击载荷。
+#
+# 示例:
+#   char ch = '\u0127';  // Unicode 字符 ħ   → 高 8 位 = 0x01, 低 8 位 = 0x27
+#   byte b = (byte) ch;  // b = 0x27 = ASCII 单引号 '  → SQL 注入载荷还原
+
+# ============================================================================
+# 2. 四种危险代码模式 (Sink)
+# ============================================================================
+
+dangerous_patterns:
+  - id: explicit_cast
+    pattern: '(byte) ch'
+    description: "强制类型转换，高 8 位直接丢弃"
+    sink_type: ghost-bits-truncation
+    grep_probe: '\(byte\)\s*\w+'
+    severity: high
+    example_unsafe: |
+      char ch = input.charAt(i);
+      byte b = (byte) ch;  // 高位丢弃
+    example_safe: |
+      // 安全: 校验字符范围或使用 getBytes(StandardCharsets.UTF_8)
+      if (ch > 0x7F) throw new IllegalArgumentException("Non-ASCII char");
+      byte b = (byte) ch;
+
+  - id: bitmask_0xff
+    pattern: 'ch & 0xFF'
+    description: "位运算掩码，仅保留低 8 位，等效于强制截断"
+    sink_type: ghost-bits-truncation
+    grep_probe: '\w+\s*&\s*0[xX]?[fF]{2}\b'
+    severity: high
+    example_unsafe: |
+      int low = ch & 0xFF;  // 高位被掩码清零
+    example_safe: |
+      // 安全: 使用完整 Unicode 编码
+      byte[] bytes = String.valueOf(ch).getBytes(StandardCharsets.UTF_8);
+
+  - id: baos_write
+    pattern: 'ByteArrayOutputStream.write(ch)'
+    description: "write(int) 仅写入低 8 位，高位被丢弃"
+    sink_type: ghost-bits-truncation
+    grep_probe: 'ByteArrayOutputStream.*write\s*\(\s*\w+\s*\)'
+    severity: high
+    example_unsafe: |
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      for (char ch : str.toCharArray()) {
+          baos.write(ch);  // 仅写低 8 位
+      }
+    example_safe: |
+      // 安全: 使用 Writer 或指定编码
+      baos.write(str.getBytes(StandardCharsets.UTF_8));
+
+  - id: dataoutputstream_writebytes
+    pattern: 'DataOutputStream.writeBytes()'
+    description: "逐字符遍历字符串，每个 char 截断为 byte 写入"
+    sink_type: ghost-bits-truncation
+    grep_probe: 'DataOutputStream.*writeBytes\s*\('
+    severity: high
+    example_unsafe: |
+      DataOutputStream dos = new DataOutputStream(out);
+      dos.writeBytes(userInput);  // 每个 char 的高 8 位被丢弃
+    example_safe: |
+      // 安全: 使用 writeUTF 或手动指定编码
+      dos.write(userInput.getBytes(StandardCharsets.UTF_8));
+
+# ============================================================================
+# 3. 受影响组件 (已知存在 Ghost Bits 截断行为)
+# ============================================================================
+
+affected_components:
+  - name: Apache Commons BCEL
+    affected_method: "Utility.encode()"
+    attack_type: "反序列化 RCE WAF 绕过"
+    note: "BCEL 字节码编码路径存在 char→byte 截断"
+
+  - name: Jackson Databind
+    affected_method: "CharTypes.charToHex() — ch & 255"
+    attack_type: "SQL 注入 WAF 绕过"
+
+  - name: Fastjson
+    affected_method: '\\u / \\x 转义解析'
+    attack_type: "反序列化 RCE WAF 绕过"
+
+  - name: Apache Tomcat
+    affected_method: "RFC2231Utility 文件名解析"
+    attack_type: "文件上传绕过（伪装 .jsp 后缀）"
+
+  - name: Spring Framework
+    affected_method: "URL 解码路径"
+    attack_type: "路径穿越 + 安全路径校验绕过"
+
+  - name: Eclipse Jetty
+    affected_method: "URL 解码"
+    attack_type: "CRLF 注入 / HTTP 响应拆分"
+
+  - name: Undertow / Vert.x
+    affected_method: "URL 解码"
+    attack_type: "访问控制绕过"
+
+  - name: Angus Mail (Jakarta Mail)
+    affected_method: "SMTP 协议写入"
+    attack_type: "SMTP 注入 / 邮件劫持"
+
+  - name: Apache HttpClient (<= 4.5.9)
+    affected_method: "HTTP 请求头写入"
+    attack_type: "HTTP 请求走私 (CRLF Ghost Bits)"
+
+  - name: Lettuce (Redis Client)
+    affected_method: "Redis 协议写入"
+    attack_type: "Redis 命令注入"
+
+  - name: Jodd
+    affected_method: "路径处理"
+    attack_type: "路径穿越"
+
+  - name: XMLWriter
+    affected_method: "XML 标签输出"
+    attack_type: "XML 标签注入 / 文档篡改"
+
+# ============================================================================
+# 4. Ghost Bits 可绕过防护的攻击载荷映射表
+# ============================================================================
+
+payload_mapping:
+  - ascii_char: "'"
+    ascii_hex: "0x27"
+    ghost_char: "ħ"
+    ghost_codepoint: "U+0127"
+    attack_type: "SQL 注入"
+
+  - ascii_char: '"'
+    ascii_hex: "0x22"
+    ghost_char: "Ģ"
+    ghost_codepoint: "U+0122"
+    attack_type: "SQL 注入 / HTML 属性注入"
+
+  - ascii_char: "<"
+    ascii_hex: "0x3C"
+    ghost_char: "Ļ"
+    ghost_codepoint: "U+013C"
+    attack_type: "XSS / XML 注入"
+
+  - ascii_char: ">"
+    ascii_hex: "0x3E"
+    ghost_char: "ľ"
+    ghost_codepoint: "U+013E"
+    attack_type: "XSS / XML 注入"
+
+  - ascii_char: "\\r"
+    ascii_hex: "0x0D"
+    ghost_char: "U+010D / U+020D / ..."
+    ghost_codepoint: "低 8 位 = 0x0D 的任意 Unicode"
+    attack_type: "CRLF 注入 / HTTP 请求走私"
+
+  - ascii_char: "\\n"
+    ascii_hex: "0x0A"
+    ghost_char: "U+010A / U+020A / ..."
+    ghost_codepoint: "低 8 位 = 0x0A 的任意 Unicode"
+    attack_type: "CRLF 注入 / SMTP 注入"
+
+  - ascii_char: "/"
+    ascii_hex: "0x2F"
+    ghost_char: "į"
+    ghost_codepoint: "U+012F"
+    attack_type: "路径穿越"
+
+  - ascii_char: "."
+    ascii_hex: "0x2E"
+    ghost_char: "Į"
+    ghost_codepoint: "U+012E"
+    attack_type: "路径穿越 (../ → Į.Į./)"
+
+# ============================================================================
+# 5. 攻击链推理规则 (供 Agent 链式分析使用)
+# ============================================================================
+
+attack_chain_rules:
+  - rule: "ghost_bits_to_sqli"
+    description: "Ghost Bits 编码 → char→byte 截断 → 单引号还原 → SQL 注入"
+    preconditions:
+      - "存在 char→byte 截断代码模式（4 种之一）"
+      - "截断后的数据流入 SQL 拼接 Sink"
+    severity: critical
+
+  - rule: "ghost_bits_to_rce"
+    description: "Ghost Bits 编码 → BCEL/Fastjson 截断 → 反序列化 RCE"
+    preconditions:
+      - "使用受影响组件（BCEL / Fastjson）"
+      - "输入经过组件内部的截断路径"
+    severity: critical
+
+  - rule: "ghost_bits_to_path_traversal"
+    description: "Ghost Bits 编码 → URL 解码截断 → ../路径穿越"
+    preconditions:
+      - "使用 Spring / Jetty / Undertow 等受影响的 URL 解码"
+      - "解码后路径直接用于文件操作"
+    severity: high
+
+  - rule: "ghost_bits_to_crlf"
+    description: "Ghost Bits 编码 → \\r\\n 还原 → HTTP 响应拆分 / SMTP 注入 / 请求走私"
+    preconditions:
+      - "存在 char→byte 截断或使用受影响 HTTP/Mail 组件"
+      - "截断后数据进入 HTTP 头写入或 SMTP 协议"
+    severity: high
+
+  - rule: "ghost_bits_to_file_upload"
+    description: "Ghost Bits 编码 → Tomcat RFC2231 文件名截断 → Webshell 上传"
+    preconditions:
+      - "使用 Tomcat 文件上传"
+      - "RFC2231Utility 处理文件名"
+    severity: critical
+
+# ============================================================================
+# 6. 防御检查清单 (defense checklist)
+# ============================================================================
+
+defense_checklist:
+  - id: def_normalize
+    check: "输入处理前是否执行 Unicode 归一化"
+    safe_patterns:
+      - 'Normalizer.normalize(input, Normalizer.Form.NFC)'
+      - 'Normalizer.normalize(input, Normalizer.Form.NFKC)'
+    description: "在任何安全决策前对输入做 NFC/NFKC 归一化"
+
+  - id: def_charset_explicit
+    check: "String↔byte 转换是否显式指定 UTF-8 编码"
+    safe_patterns:
+      - '.getBytes(StandardCharsets.UTF_8)'
+      - '.getBytes("UTF-8")'
+      - 'new String(bytes, StandardCharsets.UTF_8)'
+      - 'new String(bytes, "UTF-8")'
+    description: "避免使用无参 getBytes() / new String(bytes)，防止平台默认编码导致截断"
+
+  - id: def_ascii_range
+    check: "输入是否限制为 ASCII 安全字符集"
+    safe_patterns:
+      - 'CharMatcher.ascii()'
+      - 'StringUtils.isAsciiPrintable'
+      - 'ch <= 0x7F'
+      - 'ch < 128'
+    description: "对安全敏感输入（文件名、HTTP 头值、SQL 参数）拒绝非 ASCII 字符"
+
+  - id: def_avoid_cast
+    check: "是否避免使用 char→byte 直接转换"
+    unsafe_patterns:
+      - '(byte) ch'
+      - 'ch & 0xFF'
+      - 'DataOutputStream.writeBytes()'
+      - 'ByteArrayOutputStream.write(ch)'
+    description: "使用 Writer / OutputStreamWriter / getBytes(UTF-8) 代替直接截断"
+
+# ============================================================================
+# 7. 检测策略 (detection strategy)
+# ============================================================================
+
+detection_strategy:
+  fast: |
+    Grep sink-patterns.yaml 中 "Ghost Bits 类型截断" 模式（6 条正则）。
+    命中后 Read Sink 上下文 +-30 行，执行三判：
+      1. isReachableFromSource: 用户输入（request/query/input）是否直达截断点？
+      2. isUndefended: 是否有 ASCII 范围校验/Unicode 归一化/显式 UTF-8 编码？
+      3. isAttackerReachable: 截断点是否在 Controller/API handler 调用链上？
+  light: |
+    同 Fast 检测逻辑，额外检查：
+      - 是否使用受影响组件（affected_components 列表中的 12+ 组件）
+      - 截断后数据是否流入二次 Sink（SQL/HTTP/文件路径/SMTP 等）
+      - 是否存在防御检查清单中的安全模式（Normalizer/getBytes(UTF-8)/ASCII 校验）
+  deep: |
+    vuln-scan 完整数据流追踪：
+      Source: HTTP 参数 / 文件上传文件名 / URL 路径 / HTTP 头值
+      Propagation: 字符串操作 / 编解码路径 / 受影响组件内部方法
+      Sink: char→byte 截断点 → 二次 Sink（SQL 拼接/命令执行/文件操作/HTTP 头写入）
+      + attack_chain_rules 链式推理（ghost_bits_to_sqli / ghost_bits_to_rce 等 5 条链）
+      + LSP incomingCalls 反向追踪 1-2 层

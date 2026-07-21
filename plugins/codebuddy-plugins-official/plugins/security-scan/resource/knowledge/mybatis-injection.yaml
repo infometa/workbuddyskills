@@ -1,0 +1,58 @@
+# MyBatis SQL 注入专项规则
+# 适用条件：侦察检测到 Java + MyBatis 技术栈
+#
+# 使用须知：本文件为参考资料，辅助识别 MyBatis 特有的 SQL 注入模式。
+# Agent 的安全分析能力不受限于此文件列出的风险类型——应基于代码实际行为推理，
+# 发现未列出的风险时正常报告，不做知识对账。
+
+framework: mybatis
+applies_to: ["java"]
+
+# MyBatis 特有的危险模式
+dangerous_patterns:
+  # ${} 直接拼接（可造成大量数据泄漏）
+  - pattern: "${...}"
+    description: "MyBatis ${}直接将参数拼接到SQL中，不进行转义"
+    severity: high
+    sink_type: sql-injection
+    grep_probe: "\\$\\{[^}]+\\}"
+    file_types: ["*.xml", "*.java"]
+
+  # @Select 注解中的 ${} 
+  - pattern: "@Select with ${}"
+    description: "@Select注解中使用${}拼接"
+    severity: high
+    grep_probe: "@Select.*\\$\\{"
+    file_types: ["*.java"]
+
+  # 动态SQL中的不安全用法
+  - pattern: "unsafe <if> test"
+    description: "<if>条件拼接用户输入到SQL"
+    severity: medium
+    grep_probe: "<if\\s+test=.*>.*\\$\\{"
+    file_types: ["*.xml"]
+
+# 安全模式（不应标记）
+safe_patterns:
+  # #{} 参数化绑定
+  - pattern: "#{...}"
+    description: "MyBatis #{}使用PreparedStatement参数绑定，安全"
+    is_defense: true
+
+  # <where> / <set> 标签
+  - pattern: "<where>/<set> tags"
+    description: "MyBatis动态SQL标签，自动处理条件拼接"
+    is_defense: true
+
+# 常见误报场景
+false_positive_indicators:
+  - "${tableName}" 用于分表且值来自枚举/常量
+  - "${orderBy}" 但经过白名单校验
+  - XML注释中的示例代码
+
+# 修复建议
+remediation:
+  primary: "将 ${param} 替换为 #{param}，使用参数化绑定"
+  for_dynamic_table: "使用白名单校验表名，不使用${}传递"
+  for_order_by: "使用白名单校验排序字段，或使用<choose>标签限定"
+  for_like: "使用 CONCAT('%', #{param}, '%') 替代 '%${param}%'"

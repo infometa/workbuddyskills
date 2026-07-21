@@ -1,0 +1,112 @@
+---
+# Plugin Finder Configuration
+# Copy this file to ~/.codebuddy/.local.md and customize
+
+# Auto Recommendation Settings
+auto_recommend: true
+recommendation_threshold: medium  # high, medium, low
+show_install_count: true
+
+# Preferred Marketplaces
+# Plugins from these marketplaces will be prioritized in search results
+preferred_marketplaces:
+  - codebuddy-plugins-official
+  - claude-plugins-official
+
+# Comparison Settings
+comparison_output_format: markdown  # markdown, json, html
+
+# Preferred Plugins (optional)
+# These plugins will be prioritized in multi-run comparisons
+preferred_plugins:
+  - code-review@claude-plugins-official
+  - security-guidance@claude-plugins-official
+---
+
+# Plugin Finder User Configuration
+
+## Configuration Options
+
+### auto_recommend
+- **Type**: Boolean
+- **Default**: `true`
+- **Description**: Enable automatic plugin recommendations when CodeBuddy detects you might need a plugin
+
+### recommendation_threshold
+- **Type**: String (`high`, `medium`, `low`)
+- **Default**: `medium`
+- **Description**: How strict the matching should be
+  - `high`: Only recommend plugins with very strong relevance (score ≥ 50)
+  - `medium`: Recommend plugins with good relevance (score ≥ 40)
+  - `low`: Recommend plugins with moderate relevance (score ≥ 30)
+
+### show_install_count
+- **Type**: Boolean
+- **Default**: `true`
+- **Description**: Display plugin installation counts in recommendations (if available)
+
+### preferred_marketplaces
+- **Type**: Array of strings
+- **Default**: All marketplaces
+- **Description**: Prioritize plugins from these marketplaces in search results
+
+### comparison_output_format
+- **Type**: String (`markdown`, `json`, `html`)
+- **Default**: `markdown`
+- **Description**: Output format for multi-plugin comparison reports
+
+### preferred_plugins
+- **Type**: Array of strings (format: `plugin-name@marketplace-name`)
+- **Default**: None
+- **Description**: Plugins to prioritize in multi-run comparisons
+
+## Examples
+
+### Conservative Configuration
+Only recommend highly relevant plugins, no auto-recommendations:
+```yaml
+---
+auto_recommend: false
+recommendation_threshold: high
+preferred_marketplaces:
+  - claude-plugins-official
+---
+```
+
+### Aggressive Configuration
+Auto-recommend frequently, show all possible matches:
+```yaml
+---
+auto_recommend: true
+recommendation_threshold: low
+show_install_count: true
+---
+```
+
+### Focused Configuration
+Only use specific marketplaces and plugins:
+```yaml
+---
+auto_recommend: true
+recommendation_threshold: medium
+preferred_marketplaces:
+  - codebuddy-plugins-official
+preferred_plugins:
+  - plugin-dev@claude-plugins-official
+  - code-review@claude-plugins-official
+---
+```
+
+## Usage
+
+1. Copy this file to `~/.codebuddy/.local.md`
+2. Customize the settings according to your preferences
+3. Save the file
+4. Settings will be applied automatically (no restart needed)
+
+## Notes
+
+- If no configuration file exists, plugin-finder uses default settings
+- Settings are user-specific and don't affect other users
+- Configuration is loaded at the start of each plugin-finder operation
+- Invalid settings will fall back to defaults with a warning

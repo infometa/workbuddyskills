@@ -1,0 +1,9 @@
+{
+  "name": "lucide-icons",
+  "description": "搜索、下载和自定义 Lucide 图标（1000+ 精美 SVG 图标），支持生成 React 组件",
+  "license": "MIT",
+  "author": {
+    "name": "lichao@CodeBuddy Team"
+  },
+  "homepage": "https://github.com/lucide-icons/lucide"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "julia-development",
+  "description": "现代 Julia 开发工具，支持 Julia 1.10+ 版本、包管理、科学计算、高性能数值代码和生产环境最佳实践",
+  "author": {
+    "name": "Community Contribution",
+    "url": "https://github.com/exAClior"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>区域图数据转geojson数据</title>
+</head>
+
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization,vector"></script>
+<script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/areaClick.js"></script>
+
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    .btnContainer {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        z-index: 10000;
+    }
+
+    .btnContainer button {
+        padding: 10px 14px;
+        box-sizing: border-box;
+        border: none;
+        background-color: #3876ff;
+        border-radius: 2px;
+        color: #fff;
+        font-size: 14px;
+        line-height: 14px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div class="btnContainer">
+        <button class="btn1" id="toGeojson" onclick="areaToGeojsonLayer()">转为geojson数据渲染</button>
+    </div>
+    <script>
+        var center = new TMap.LatLng(40.046014541872594, 116.28684997558594);
+        //初始化地图
+        var map = new TMap.Map("container", {
+            zoom: 15, //设置地图缩放级别
+            center, // 设置地图中心点坐标
+        });
+
+        var paths = [];
+        areaDatas.forEach((item, index) => {
+            if (index % 3 === 1) {
+                paths.push({
+                    path: item, //设置区域边界线经纬度点串
+                    styleId: 'style1' //设置区域样式id
+                })
+            } else if (index % 3 === 2) {
+                paths.push({
+                    path: item, //设置区域边界线经纬度点串
+                    styleId: 'style2' //设置区域样式id
+                })
+            } else {
+                paths.push({
+                    path: item, //设置区域边界线经纬度点串
+                    styleId: 'style3' //设置区域样式id
+                })
+            }
+        })
+
+        var area = new TMap.visualization.Area({
+            styles: { //设置区域图样式
+                style1: {
+                    strokeWidth: 2,
+                    fillColor: `rgba(56,124,234,${0.4})`, //设置区域填充颜色
+                    strokeColor: '#6799EA',
+                }
+            },
+            selectOptions: { //设置拾取配置
+                action: 'hover',
+                style: {
+                    fillColor: 'rgba(28,213,255,0.6)', //设置区域填充颜色
+                    strokeColor: '#fff', //设置区域边线颜色
+                    strokeWidth: 1, //区域边线宽度
+                    strokeDashArray: [0, 0] //边线虚线展示方式
+                },
+                enableHighlight: false,
+            }
+        }).setData(paths).addTo(map);
+
+        // AreaData转换为Geojson数据格式
+        function areaDataToGeojson(areaData) {
+            // 区域图坐标转geojson坐标
+            function areaCoord2JsonCoord(path) {
+                let coords = [];
+                if (Array.isArray(path[0])) {
+                    path.forEach(p => {
+                        coords.push(areaCoord2JsonCoord(p));
+                    });
+                } else {
+                    for (let i = 0; i < path.length; i += 2) {
+                        coords.push([path[i + 1], path[i]]);
+                    }
+                }
+                return coords;
+            }
+
+            // 各area转回feature
+            const features = [];
+            areaData.forEach(area => {
+                const paths = Array.isArray(area.path[0]) ? area.path : [area.path];
+                const coordinates = paths.map(path => areaCoord2JsonCoord(path));
+                features.push({
+                    type: 'Feature',
+                    properties: area.properties,
+                    geometry: {
+                        coordinates,
+                        type: "MultiPolygon",
+                    }
+                });
+            });
+
+            return {
+                type: "FeatureCollection",
+                features
+            }
+        }
+
+        function areaToGeojsonLayer() {
+            const geojsonData = areaDataToGeojson(area.getData());
+            // 清空area图层数据
+            area.setData([]);
+            // 使用GeoJSONLayer渲染
+            // 文档：https://lbs.qq.com/webApi/javascriptGL/glDoc/glVectorDataLayer
+            var geoLayer = new TMap.vector.GeoJSONLayer({
+                map: map,
+                data: geojsonData,
+                polygonStyle: new TMap.PolygonStyle({
+                    'showBorder': true, //是否显示边线
+                    'borderColor': '#fff', //边线颜色
+                    'borderWidth': 1 //边线宽度
+                })
+            });
+        }
+    </script>
+</body>
+
+</html>

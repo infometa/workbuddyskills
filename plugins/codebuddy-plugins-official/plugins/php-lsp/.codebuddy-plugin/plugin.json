@@ -1,0 +1,14 @@
+{
+  "name": "php-lsp",
+  "version": "1.0.0",
+  "description": "PHP 语言服务器（Intelephense），提供代码智能和诊断",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "php",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

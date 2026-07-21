@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>设置/获取地图视角</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    #info{
+        position: absolute;
+        background: #FFF;
+        width:300px;
+        height: 60px;
+        padding: 20px;
+        z-index: 9999;
+        top: 30px;
+        left: 30px;
+    }
+    #set-pitch{
+        position: absolute;
+        left:20px;
+        top:10px;
+
+    }
+    #set-rotate{
+        position: absolute;
+        left:110px;
+        top:10px;
+
+    }
+    p{
+        margin: 0;
+        
+    }
+    #pitch-info{
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div id="info">
+        <input type="button" id="set-pitch" onclick="setPitch()" value="setPitch">
+        <input type="button" id="set-rotate" onclick="setRotate()" value="setRotate">
+        <p id="pitch-info">当前地图俯仰角度为: 10</p>
+        <p id="rotate-info">当前地图旋转角度为: 20</p>
+    </div>
+    <script>
+        var pitchInfo = document.getElementById("pitch-info");
+        var rotateInfo = document.getElementById("rotate-info");
+        var txt = document.getElementById("txt");
+        var center = new TMap.LatLng(39.984104, 116.307503);//设置中心点坐标
+        //初始化地图
+        var map = new TMap.Map("container", {
+            rotation: 20,//设置地图旋转角度
+            pitch:10, //设置地图俯仰角度
+            center: center
+        });
+
+        //监听地图旋转事件
+        map.on("rotate",function(){
+            var rotation = map.getRotation(); //获取地图旋转角度
+            rotateInfo.innerHTML = "当前地图旋转角度为: " + parseInt(rotation);
+        })
+            
+        //监听地图俯仰角度变化事件
+        map.on("pitch",function(){
+            var pitch = map.getPitch(); //获取地图旋转角度
+            pitchInfo.innerHTML = "当前地图俯仰角度为: " + parseInt(pitch);
+        })
+
+        function setRotate() {            
+            map.setRotation(90);//设置地图旋转角度
+        }
+
+        function setPitch() {
+            map.setPitch(30);//设置地图俯仰角度
+        }
+    </script>
+</body>
+
+</html>

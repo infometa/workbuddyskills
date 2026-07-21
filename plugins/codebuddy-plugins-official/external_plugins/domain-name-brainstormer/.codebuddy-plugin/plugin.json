@@ -1,0 +1,5 @@
+{
+  "name": "domain-name-brainstormer",
+  "description": "为项目生成创意域名并检查多个顶级域名（包括 .com、.io、.dev 和 .ai 等）的可用性",
+  "license": "未声明"
+}

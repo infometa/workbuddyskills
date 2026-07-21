@@ -1,0 +1,25 @@
+# 忽略规则配置
+# 定义不需要审计的文件、函数或代码模式
+
+ignore:
+  # 忽略的文件路径（支持 glob 模式）
+  files:
+    - "**/test/**"
+    - "**/mock/**"
+    - "**/*_test.go"
+    - "**/*_test.py"
+    - "**/*.test.js"
+  
+  # 忽略的函数名（这些函数中的代码不报告风险）
+  functions:
+    # - "testHelper"
+    # - "mockFunction"
+  
+  # 忽略的代码注释标记
+  # 在代码中添加 @nosec 注释可跳过审计
+  # 示例：
+  #   // @nosec - 已人工确认安全
+  #   result := db.Query(sql)
+  annotations:
+    - "@nosec"
+    - "@security-ignore"

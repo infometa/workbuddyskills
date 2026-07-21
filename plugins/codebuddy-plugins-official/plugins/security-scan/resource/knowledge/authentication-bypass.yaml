@@ -1,0 +1,234 @@
+# ============================================================================
+# 鉴权缺失/绕过风险检测 — 参考数据 (Authentication Bypass Detection Data)
+# ============================================================================
+# 纯数据文件：置信度评估公式、模式引用、关键指标。
+# 推理逻辑由 agent 自身完成，本文件仅提供辅助数据。
+# ============================================================================
+
+# ============================================================================
+# 一、置信度评估标准
+# ============================================================================
+
+confidence_evaluation:
+
+  scoring_criteria: |
+    【满分 100 分的评估维度】
+    
+    1. 调用链完整性（最高 40 分）
+       - 完整追踪了入口到执行的调用链：40 分
+       - 追踪了主要调用链，部分节点不确定：25 分
+       - 仅分析了入口层或部分代码：10 分
+       - 无法确认调用链：0 分
+    
+    2. 鉴权缺失确认（最高 30 分）
+       - 确认每个检查点都没有鉴权：30 分
+       - 大部分检查点没有鉴权，个别不确定：20 分
+       - 有部分鉴权，但可能被绕过：10 分
+       - 不确定是否有隐式鉴权：0 分
+    
+    3. 利用可行性（最高 20 分）
+       - 能构造出具体的 PoC：20 分
+       - 理论上可利用，未验证：12 分
+       - 需要特定条件才能利用：5 分
+       - 不确定是否可利用：0 分
+    
+    4. 影响严重性（最高 10 分）
+       - 可执行高危操作（删除/修改/管理）：10 分
+       - 可执行中危操作（读取敏感数据）：6 分
+       - 仅能执行低危操作：3 分
+       - 影响不明确：0 分
+
+  confidence_levels:
+    high: "总分 90-100（可触发自动修复）"
+    medium: "总分 60-89（建议人工确认）"
+    low: "总分 30-59（需要更多上下文）"
+    skip: "总分 < 30（不报告）"
+
+  high_confidence_gate: |
+    要达到 90 分以上，必须满足以下条件之一：
+    
+    方式一：完整调用链证明
+    1. 完整追踪了从网络层入口到最终执行的全部代码
+    2. 检查了框架的安全配置（如 Spring Security、Django middleware）
+    3. 确认没有网络层的鉴权措施（如 API Gateway、WAF）
+    4. 调用链每层都确认无鉴权
+    
+    方式二：可伪造来源 + 严重影响
+    1. 跳过鉴权的判断依据明显可伪造（如 HTTP Header）
+    2. 跳过鉴权后可执行高危操作（删除/修改/管理）
+    3. 没有其他补偿控制措施
+    
+    方式三：可运行的 PoC 证明
+    1. 能够提供具体的攻击请求示例
+    2. 攻击路径清晰可验证
+
+# ============================================================================
+# 二、五类鉴权风险的关键指标
+# ============================================================================
+
+risk_indicators:
+
+  no_authentication:
+    description: "API 到执行全链路无鉴权检查"
+    entry_layer:
+      - "没有鉴权注解/装饰器"
+      - "没有鉴权中间件"
+      - "直接路由到业务逻辑"
+    call_chain:
+      - "没有获取当前用户身份"
+      - "没有 session/token 验证"
+      - "参数直接传递到下层"
+    data_layer:
+      - "直接使用请求参数操作数据"
+      - "没有资源归属验证"
+      - "没有权限检查"
+
+  flawed_authentication:
+    description: "鉴权逻辑存在绕过可能"
+    incomplete_check:
+      - "验证身份但不验证权限"
+      - "验证权限但不验证资源归属"
+      - "读权限和写权限混用"
+    client_controllable:
+      - "从请求参数获取角色/权限信息"
+      - "依赖客户端传递的用户ID"
+      - "使用可预测的权限标识"
+    logic_flaws:
+      - "先执行后检查"
+      - "条件判断可绕过"
+      - "异常处理不当导致权限泄露"
+
+  trusted_source_bypass:
+    description: "基于请求来源跳过鉴权"
+    source_checks:
+      - "IsCloudOARequest"
+      - "isInternalIP"
+      - "isTrustedSource"
+      - "X-Forwarded-For"
+      - "X-Real-IP"
+      - "X-Internal-Token"
+      - "User-Agent 判断"
+      - "Referer 判断"
+    skip_auth_patterns:
+      - "set_need_auth(false)"
+      - "set_need_auth_freq(false"
+      - "skipAuth = true"
+      - "bypassAuth"
+      - "noAuthRequired"
+
+  hardcoded_backdoor_credential:
+    description: "硬编码凭据可直接绕过鉴权"
+    password_patterns:
+      - 'password == "'
+      - 'password.equals("'
+      - 'pwd == "'
+      - 'secret == "'
+    token_patterns:
+      - 'token == "'
+      - 'apiKey == "'
+      - 'X-API-Key") == "'
+      - 'X-Internal-Token") == "'
+      - 'Authorization") == "Bearer '
+    bypass_patterns:
+      - "X-Debug"
+      - "X-Skip-Auth"
+      - "X-Bypass"
+      - "DISABLE_AUTH"
+      - "NO_AUTH"
+
+  authorization_bypass:
+    description: "已登录用户越权操作"
+    detectable_patterns:
+      - "资源ID直接查询不验证归属"
+      - "敏感操作缺少权限检查"
+      - "/admin/ 路径无管理员验证"
+    detection_limitations:
+      - "权限检查可能在中间件/拦截器中统一处理"
+      - "权限检查可能在框架层面配置"
+      - "业务上该接口本身就是公开的"
+
+# ============================================================================
+# 三、模式参考（辅助快速定位）
+# ============================================================================
+
+pattern_reference:
+
+  entry_points:
+    python:
+      - "def application(environ"
+      - "@app.route"
+      - "@api.route"
+      - "class.*View"
+      - "def dispatch"
+    java:
+      - "@RestController"
+      - "@Controller"
+      - "@RequestMapping"
+      - "@GetMapping"
+      - "@PostMapping"
+      - "doGet("
+      - "doPost("
+    go:
+      - "func.*Handler"
+      - "r.GET("
+      - "r.POST("
+      - "http.HandleFunc"
+    cpp:
+      - "OnHttpRequest"
+      - "HandleRequest"
+      - "ProcessRequest"
+
+  auth_indicators:
+    present:
+      - "@RequiresAuthentication"
+      - "@Secured"
+      - "@PreAuthorize"
+      - "@login_required"
+      - "@auth_required"
+      - "checkSession"
+      - "validateToken"
+      - "getCurrentUser"
+      - "AuthMiddleware"
+      - "requiresAuth"
+    absent_warning:
+      - "# no auth"
+      - "// no auth"
+      - "skip auth"
+      - "without auth"
+      - "do not need auth"
+
+  skip_auth_patterns:
+    - "set_need_auth(false)"
+    - "set_need_auth_freq(false"
+    - "skipAuthentication"
+    - "bypassAuth"
+    - "noAuthRequired"
+    - "IsCloudOARequest"
+    - "isInternalIP"
+    - "isTrustedSource"
+    - "isInternalRequest"
+
+  sensitive_operations:
+    data_modification:
+      - "delete"
+      - "remove"
+      - "update"
+      - "modify"
+      - "create"
+      - "insert"
+    admin_operations:
+      - "admin"
+      - "manage"
+      - "config"
+      - "setting"
+      - "freeze"
+      - "unfreeze"
+      - "ban"
+      - "unban"
+    resource_operations:
+      - "quota"
+      - "instance"
+      - "user"
+      - "account"
+      - "permission"
+      - "role"

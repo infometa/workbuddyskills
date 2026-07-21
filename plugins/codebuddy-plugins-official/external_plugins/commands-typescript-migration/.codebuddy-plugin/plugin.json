@@ -1,0 +1,17 @@
+{
+  "name": "commands-typescript-migration",
+  "version": "1.0.0",
+  "description": "Commands for migrating JavaScript projects to TypeScript",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "typescript-migration",
+    "migrate-to-typescript"
+  ]
+}

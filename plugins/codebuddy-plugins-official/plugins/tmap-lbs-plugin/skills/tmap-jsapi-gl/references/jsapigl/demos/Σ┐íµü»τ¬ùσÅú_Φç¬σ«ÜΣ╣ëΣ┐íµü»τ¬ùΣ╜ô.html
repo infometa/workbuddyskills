@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CustomInfoWindow</title>
+  <meta charset='utf-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <script src='https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77'></script>
+  <style>
+    * {
+      padding: 0px;
+      margin: 0px;
+      overflow: hidden;
+    }
+
+    #mapContainer {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+    .info_card {
+      display: inline-block;
+      margin: 50px auto;
+      position: absolute;
+      width: 200px;
+      height:100px;
+      background-color: #c7c9c8;
+      border: 5px solid #ffffff;
+      color: #000000;
+    }
+    .info_card .title{
+      width: 100%;
+      height:40px;
+      background-color: #000000;
+      color: #ffffff;
+    }
+
+    .title span.title_name{
+      position: relative;
+      top: 7px;
+      left: 10px;
+      font-size: 18px;
+    }
+
+
+    .info_card .title .close_img{
+      position: absolute;
+      top:10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      background-color: #ffffff;
+    }
+    .info_card .title .close_img .min {
+      width: 0;
+      height: 0;
+      font-size:0; 
+      overflow:hidden;
+      position:absolute;
+      border-width:10px; 
+    }
+
+    .info_card .title .close_img .top_img {
+      border-style:solid dashed dashed; 
+        border-color:#000000 transparent transparent transparent;
+        top:-2px;
+    }
+
+    .info_card .title .close_img .right_img {
+      border-style:solid dashed dashed; 
+        border-color:transparent #000000 transparent transparent;
+        left:2px;
+    }
+
+    .info_card .title .close_img .bottom_img{
+      border-style:solid dashed dashed; 
+        border-color:transparent transparent #000000 transparent;
+        top:2px;
+    }
+
+    .info_card .title .close_img .left_img{
+      border-style:solid dashed dashed; 
+        border-color:transparent transparent transparent #000000;
+        left:-2px;
+    }
+    
+    .info_card span.cancle{
+      width:0;
+      height:0;
+      font-size:0;
+      overflow:hidden;
+      position:absolute;
+    }
+
+    .info_card span.bot{
+        border-width:20px; 
+        border-style:solid dashed dashed; 
+        border-color:#ffffff transparent transparent;
+        left:80px; 
+        bottom:-40px;
+    }
+    .info_card span.top{
+        border-width:20px; 
+        border-style:solid dashed dashed; 
+        border-color:#c7c9c8 transparent transparent; 
+        left:80px; 
+        bottom:-33px;
+    }
+    .info_card .content{
+      margin-top: 10px;
+            margin-left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id='mapContainer'></div>
+  <script>
+    window.onload = init;
+    var map;
+    var infoWindow;
+    var marker;
+    var rightClicked = false;
+    function closeInfoWindow() {
+      infoWindow.close();
+    }
+    function openInfoWindow() {
+      infoWindow.open();
+    }
+    function init() {
+      map = new TMap.Map('mapContainer', {
+        zoom: 16,
+        pitch: 30,
+        rotation: 10,
+        center: new TMap.LatLng(40.040422, 116.273521),
+      });
+    
+      marker = new TMap.MultiMarker({
+        id: 'marker-layer', // 图层id
+        map: map,
+        styles: {
+          // 点标注的相关样式
+          marker: new TMap.MarkerStyle({
+            width: 25,
+            height: 35,
+            anchor: { x: 16, y: 32 },
+            src:
+              'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png',
+          }),
+        },
+        geometries: [
+          {
+            // 点标注数据数组
+            id: 'demo',
+            styleId: 'marker',
+            position: new TMap.LatLng(40.040422, 116.273521),
+          },
+        ],
+      });
+      marker.on('click', openInfoWindow);
+      infoWindow = new TMap.InfoWindow({
+        map: map,
+        enableCustom: true,
+        position: new TMap.LatLng(40.040422, 116.273521),
+        offset: { y: -70, x: -5 },
+        content:
+          '<div class="info_card"><div class="title"><span class="title_name">腾讯北京总部大楼</span><div class="close_img" onclick="closeInfoWindow()"><span class="min top_img"></span><span class="min right_img"></span><span class="min bottom_img"></span><span class="min left_img"></span></div></div><div align="left" class="content">点击右键变更内容</div><span class="cancle bot"></span><span class="cancle top"></span></div>',
+      });
+      map.on('rightclick', function () {
+        // infoWindow的内容可以动态更新
+        rightClicked = !rightClicked;
+        if (rightClicked) {
+          infoWindow.setContent(
+            '<div class="info_card"><div class="title"><span class="title_name">腾讯北京总部大楼</span><div class="close_img" onclick="closeInfoWindow()"><span class="min top_img"></span><span class="min right_img"></span><span class="min bottom_img"></span><span class="min left_img"></span></div></div><div align="left" class="content">Tencent Beijing <br /> 点击右键变更内容</div><span class="cancle bot"></span><span class="cancle top"></span></div>'
+          );
+        } else {
+          infoWindow.setContent(
+            '<div class="info_card"><div class="title"><span class="title_name">腾讯北京总部大楼</span><div class="close_img" onclick="closeInfoWindow()"><span class="min top_img"></span><span class="min right_img"></span><span class="min bottom_img"></span><span class="min left_img"></span></div></div><div align="left" class="content">点击右键变更内容</div><span class="cancle bot"></span><span class="cancle top"></span></div>'
+          );
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

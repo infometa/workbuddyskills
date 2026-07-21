@@ -1,0 +1,15 @@
+{
+  "name": "scientific-skills",
+  "description": "K-Dense 团队创建的 139 个即用型 Claude 科学技能综合集合。将 Claude 转变为您的 AI 研究助手，能够执行跨生物学、化学和医学等领域的复杂多步骤科学工作流程。",
+  "author": {
+    "name": "K-Dense Inc.",
+    "email": "contact@k-dense.ai",
+    "url": "https://github.com/K-Dense-AI",
+    "type": "organization"
+  },
+  "homepage": {
+    "url": "https://k-dense.ai",
+    "type": "official"
+  },
+  "license": "MIT"
+}

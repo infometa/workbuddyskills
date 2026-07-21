@@ -1,0 +1,11 @@
+{
+  "name": "security-compliance",
+  "description": "SOC2、HIPAA 和 GDPR 合规性验证、密钥扫描、合规性检查清单和监管文档",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

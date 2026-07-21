@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>测量工具</title>
+  </head>
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?libraries=tools&v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    #container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .toolControl {
+      width: 100px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1001;
+    }
+
+    .toolControl div {
+      width: 60px;
+      height: 30px;
+      line-height: 30px;
+      font-size: 18px;
+      padding: 4px;
+      border-radius: 3px;
+      text-align: center;
+      margin: 2px;
+      cursor: pointer;
+    }
+
+    .toolControl .active {
+      background-color: #548efd;
+      color: #fff;
+    }
+
+    .toolControl .inactive {
+      background-color: #ffffff;
+    }
+
+    #distance,
+    #area {
+      width: 160px;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+  </style>
+
+  <body onload="initMap()">
+    <div id="container"></div>
+    <div class="toolControl">
+      <div onclick="enable(true)" id="enable" class="active">启用</div>
+      <div onclick="enable(false)" id="disable" class="inactive">禁用</div>
+      <div onclick="measure('distance')" id="distance" class="inactive">点击这里开始距离测量</div>
+      <div onclick="measure('area')" id="area" class="inactive">点击这里开始面积测量</div>
+    </div>
+    <script type="text/javascript">
+      var map; // 地图
+      var measureTool; // 测量工具
+      var enableButton = document.getElementById('enable'); // 启用
+      var disableButton = document.getElementById('disable'); // 禁用
+      var distanceButton = document.getElementById('distance'); // 距离测量
+      var areaButton = document.getElementById('area'); // 面积测量
+
+      function initMap() {
+        // 初始化地图
+        map = new TMap.Map('container', {
+          zoom: 12, // 设置地图缩放级别
+          center: new TMap.LatLng(39.984104, 116.307503), // 设置地图中心点坐标
+        });
+
+        // 创建测量工具
+
+        measureTool = new TMap.tools.MeasureTool({
+          // TMap.tools.MeasureTool文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocEditor#5F
+          map: map,
+        });
+      }
+      function measure(type) {
+        if (disableButton.className === 'active') {
+          // 禁用的情况下提示并return
+          alert('请启用测量工具');
+          return;
+        }
+        enableButton.className = 'active';
+
+        // 区分距离或面积测量
+        switch (type) {
+          case 'distance':
+            // 距离测量
+            distanceButton.className = 'active';
+            distanceButton.innerText = '点击这里测量结束';
+            measureTool.measureDistance().then(() => {
+              enableButton.className = 'active';
+              distanceButton.className = 'inactive';
+              distanceButton.innerText = '点击这里开始距离测量';
+            });
+            break;
+          case 'area':
+            // 面积测量
+            areaButton.className = 'active';
+            areaButton.innerText = '点击这里测量结束';
+            measureTool.measureArea().then(() => {
+              enableButton.className = 'active';
+              areaButton.className = 'inactive';
+              areaButton.innerText = '点击这里开始面积测量';
+            });
+            break;
+        }
+      }
+
+      function enable(on) {
+        if (on) {
+          measureTool.enable();
+          enableButton.className = 'active';
+          disableButton.className = 'inactive';
+        } else {
+          // 禁用重置样式
+          measureTool.disable();
+          enableButton.className = 'inactive';
+          disableButton.className = 'active';
+          distanceButton.className = 'inactive';
+          areaButton.className = 'inactive';
+        }
+      }
+    </script>
+  </body>
+</html>

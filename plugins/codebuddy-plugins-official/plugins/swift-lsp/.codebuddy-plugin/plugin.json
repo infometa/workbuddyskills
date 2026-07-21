@@ -1,0 +1,14 @@
+{
+  "name": "swift-lsp",
+  "version": "1.0.0",
+  "description": "Swift 语言服务器（SourceKit-LSP），提供代码智能支持",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "swift",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

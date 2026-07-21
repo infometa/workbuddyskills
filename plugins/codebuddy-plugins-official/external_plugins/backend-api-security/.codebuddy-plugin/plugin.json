@@ -1,0 +1,11 @@
+{
+  "name": "backend-api-security",
+  "description": "API 安全加固、身份验证实现、授权模式、速率限制和输入验证",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

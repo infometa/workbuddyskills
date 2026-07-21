@@ -1,0 +1,96 @@
+# 用户自定义术语库模板
+#
+# 优先级最高（高于内置 ml-venues / nlp-venues / cv-venues / ir-data-venues / general-cs-terms）。
+#
+# 用法：
+#   1. 复制此文件为 user-glossary.yaml（同目录）
+#   2. 按下方格式填写
+#   3. 在 Preflight P2 选择"3 = 内置 + 自定义合并"
+#   4. Skill 自动加载并应用
+#
+# 格式说明：
+#   - direction: en2zh / zh2en（决定下方 mappings 的 source 和 target 方向）
+#   - mappings: 术语映射（source → target）
+#   - keep_original: 保留原文不翻译的专有名词列表
+#   - tone_overrides: 风格覆盖（视/不视为顶会风格 word choice）
+
+direction: en2zh
+
+# 术语映射
+mappings:
+  # 自定义领域术语（举例：经济学 + 物理 + 生物 + CV 子领域）
+  - source: differentiable rendering
+    target: 可微渲染
+    note: 计算机图形学 + 深度学习交叉术语
+  - source: gauge equivariance
+    target: 规范等变性
+    note: 物理对称性 + 几何深度学习
+  - source: structured prediction
+    target: 结构化预测
+  - source: feature pyramid network
+    target: 特征金字塔网络
+    aliases:
+      - FPN
+  - source: backbone
+    target: 骨干网络
+    override_builtin: false  # 与内置 ml-venues.md 一致；显式标记不冲突
+
+  # 用户自定义模型 / 项目名（保留原文）
+  # 通过 keep_original 列表，无需在 mappings 中
+
+# 保留原文不翻译的专有名词
+keep_original:
+  # 用户的项目 / 系统名
+  - MyAwesomeModel
+  - PaperRobot
+  - CodeBuddy
+  # 数据集
+  - SuperBigBench-2026
+  - InternalEvalSet
+
+# 风格覆盖（仅 Step 3 雅化阶段生效）
+tone_overrides:
+  # 不要简化（即使在内置 word-choice-table.md 中标记为 "simplify"）
+  preserve_words:
+    - utilize  # 例：用户特别偏好 utilize 在某些固定表达中
+  # 强制简化（额外加到内置规则上）
+  force_simplify:
+    - leverage: use
+    - showcase: show
+    - delve into: examine
+
+# 章节风格偏好（覆盖内置 section-conventions.md）
+section_overrides:
+  abstract:
+    max_words: 200  # 用户偏好更短摘要
+    avoid_first_person: false  # 允许"We propose..."
+  introduction:
+    paragraphs_target: 4  # 用户期望 4 段而非 5 段
+
+# 目标会议（用于加载对应内置 venue glossary）
+target_venue:
+  domain: ml  # ml | nlp | cv | ir | none
+  conference: NeurIPS  # 可选：具体会议名（用于风格细调）
+  year: 2026
+
+# 翻译方向偏好
+translation_preferences:
+  # 是否在专业术语首次出现时附加原文括号注释
+  # 例：transformer → 变换器（Transformer）
+  inline_original_first_occurrence: true
+  # 是否将括号注释只在第一次出现时加（true）还是每次都加（false）
+  bracket_only_first_time: true
+  # 数字格式
+  number_format: keep_original  # keep_original | localize_separator | unify_decimal
+  # 引用编号
+  citation_style: latex  # latex | numbered | author-year
+
+# 自检阈值
+self_check_thresholds:
+  step1_success_min: 0.95
+  step2_success_min: 0.95
+  step3_success_min: 0.90
+  formula_preservation_required: 1.0  # 必须 100%
+  citation_preservation_required: 1.0  # 必须 100%
+  number_preservation_required: 1.0    # 必须 100%
+  terminology_consistency_min: 0.95

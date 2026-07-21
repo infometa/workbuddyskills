@@ -1,0 +1,19 @@
+{
+  "name": "nextjs-expert",
+  "version": "1.0.0",
+  "description": "Next.js development expertise with skills for App Router, Server Components, Route Handlers, Server Actions, and authentication patterns",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "nextjs",
+    "react",
+    "app-router",
+    "server-components",
+    "vercel",
+    "skills"
+  ]
+}

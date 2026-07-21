@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>点击地图拾取POI</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    #mapContainer {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+
+<body onload="init()">
+  <div id='mapContainer'></div>
+  <script>
+    var map;
+
+    function init() {
+
+      var drawContainer = document.getElementById('mapContainer');
+
+      var center = new TMap.LatLng(39.953416, 116.380945);
+
+      map = new TMap.Map(drawContainer, {
+        zoom: 13,
+        pitch: 40,
+        center: center
+      });
+
+      // 创建信息窗
+      let info = new TMap.InfoWindow({
+        map,
+        position: map.getCenter()
+      }).close();
+      map.on('click', (evt) => {
+        // 获取click事件返回的poi信息
+        let poi = evt.poi;
+        if (poi) {
+          // 拾取到POI
+          info.setContent(poi.name).setPosition(poi.latLng).open();
+        } else {
+          // 没有拾取到POI
+          info.close();
+        }
+      });
+
+    }
+  </script>
+</body>
+
+</html>

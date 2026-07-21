@@ -1,0 +1,5 @@
+{
+  "name": "developer-growth-analysis",
+  "description": "分析你最近的 Claude Code 聊天历史，识别编码模式、发现开发能力缺口和需要改进的领域，从 HackerNews 精选相关学习资源，并自动将个性化成长报告发送到你的 Slack 私信。",
+  "license": "未声明"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "requirements-driven-workflow",
+  "description": "需求驱动开发工作流，包含 90% 质量门控的实用功能实现流程",
+  "author": {
+    "name": "CodeBuddy Team",
+    "url": "https://cnb.cool/codebuddy"
+  },
+  "repository": "https://cnb.cool/codebuddy/marketplace",
+  "homepage": {
+    "url": "https://cnb.cool/codebuddy/marketplace",
+    "type": "git"
+  },
+  "license": "MIT"
+}

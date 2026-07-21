@@ -1,0 +1,14 @@
+{
+  "name": "pyright-lsp",
+  "version": "1.0.0",
+  "description": "Python 语言服务器（Pyright），提供类型检查和代码智能提示",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "python",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

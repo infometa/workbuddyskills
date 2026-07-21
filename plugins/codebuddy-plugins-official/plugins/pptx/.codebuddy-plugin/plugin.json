@@ -1,0 +1,12 @@
+{
+  "name": "pptx",
+  "description": "PowerPoint 演示文稿创建、编辑和分析技能。支持创建新演示文稿、修改内容、处理布局、添加注释或演讲者备注等操作",
+  "description_en": "Use this skill any time a .pptx file is involved — creating slide decks, reading/parsing presentations, editing existing files, combining or splitting slides, working with templates, layouts, speaker notes, or comments.",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "repository": "https://github.com/anthropics/skills",
+  "homepage": "https://github.com/anthropics/skills",
+  "license": "Proprietary"
+}

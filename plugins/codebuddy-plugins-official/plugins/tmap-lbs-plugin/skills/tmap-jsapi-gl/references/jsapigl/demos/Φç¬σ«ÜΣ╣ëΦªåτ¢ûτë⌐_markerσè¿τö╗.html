@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Marker跳动</title>
+</head>
+<script charset="utf-8"
+	src="https://map.qq.com/api/gljs?libraries=tools&v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+	html,
+	body {
+		height: 100%;
+		margin: 0px;
+		padding: 0px;
+        overflow: hidden;
+	}
+
+	#container {
+        position: relative;
+		width: 100%;
+		height: 90%;
+	}
+
+	#information {
+		margin: 5px;
+	}
+
+	/* marker跳动的动画 */
+	.markerBounce {
+		animation: bounce 0.5s infinite ease-in-out alternate;
+	}
+
+	/* marker飞入的动画 */
+	.markerFlash {
+		animation: flash 0.5s ease-in 1 normal forwards;
+	}
+
+	/* 跳动的动画 */
+	@keyframes bounce {
+		0% {
+			transform: translate(0, 0);
+		}
+
+		100% {
+			transform: translate(0, -50px);
+		}
+	}
+
+	/* 飞入的动画 */
+	@keyframes flash {
+		0% {
+			transform: translate(0, -200px);
+		}
+
+		100% {
+			transform: translate(0, 0);
+		}
+	}
+</style>
+
+<body onload="initMap()">
+	<div id="container"></div>
+	<div id="information">使用DOMoverlay实现跳动的Marker和飞入的Marker。2秒后，会有Marker飞入。</div>
+	<script>
+		//自定义DOM覆盖物 - 继承DOMOverlay
+		function myMarker(options) {
+			let mydom;
+			TMap.DOMOverlay.call(this, options);
+		}
+		myMarker.prototype = new TMap.DOMOverlay();
+
+		// 初始化
+		myMarker.prototype.onInit = function (options) {
+			this.position = options.position;
+			this.type = options.type; // 当前marker的类型，是跳动或飞入
+		}
+
+		// 创建
+		myMarker.prototype.createDOM = function () {
+			mydom = document.createElement('img');  // 新建一个img的dom
+			mydom.src = 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png';
+			mydom.style.cssText = [
+				'position: absolute;',
+				'top:  0px;',
+				'left: 0px;'
+			].join('');
+			switch (this.type) {
+				case 'bounce':
+					mydom.setAttribute('class', 'markerBounce');  // 给新建的dom添加marker类，添加跳动效果
+					break;
+				case 'flash':
+					mydom.setAttribute('class', 'markerFlash');		// 给新建的dom添加marker类，添加飞入效果
+					break;
+			}
+			return mydom;
+		}
+
+		// 更新DOM元素，在地图移动/缩放后执行
+		myMarker.prototype.updateDOM = function () {
+			if (!this.map) {
+				return;
+			}
+			let pixel = this.map.projectToContainer(this.position); // 经纬度坐标转容器像素坐标
+			let left = pixel.getX() - this.dom.clientWidth / 2 + 'px';
+			let top = pixel.getY() - this.dom.clientHeight + 'px';
+			// 使用top/left将DOM元素定位到指定位置
+			this.dom.style.top = top;
+			this.dom.style.left = left;
+		}
+
+		var map, markerBounce;
+		function initMap() {
+			// 初始化地图
+			map = new TMap.Map("container", {
+				zoom: 12, // 设置地图缩放级别
+				center: new TMap.LatLng(39.984104, 116.307503) // 设置地图中心点坐标
+			});
+
+			// 创建跳动的marker
+			markerBounce = new myMarker({
+				map,
+				position: new TMap.LatLng(39.96030543872138, 116.25809083213608),
+				type: 'bounce'
+			});
+
+			setTimeout(() => {
+				// 创建飞入的marker
+				var markerFlash = new myMarker({
+					map,
+					position: new TMap.LatLng(39.96030543872138, 116.35809083213608),
+					type: 'flash'
+				});
+			}, 2000);
+		}
+	</script>
+</body>
+</html>

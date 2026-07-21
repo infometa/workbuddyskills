@@ -1,0 +1,15 @@
+{
+  "name": "clangd-lsp",
+  "version": "1.0.0",
+  "description": "C/C++ 语言服务器(clangd)，提供代码智能提示",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "c",
+    "cpp",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

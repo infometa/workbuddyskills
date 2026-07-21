@@ -1,0 +1,623 @@
+[
+  {
+    "id": 4,
+    "unified_id": 100,
+    "name": "文档处理",
+    "icon": "documentation",
+    "mode": "working",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "document-skills",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我下载腾讯2025中期报告完整财报 PDF，从 PDF 中提取财务数据，创建一个 Excel 财务模型（包含公式和格式），然后制作一份演示文稿（使用 Ocean Gradient 配色），最后生成一份包含完整分析的 Word 报告（带目录和页眉页脚）",
+      "帮我把【上传的 Markdown 文件】转换成排版精美的 PDF 文档，要求：自定义封面页（标题 + 作者 + 日期）、自动生成目录、代码块带语法高亮、表格有交替行底色、页脚显示页码。",
+      "帮我从这 3 份竞品分析 PDF 中提取核心信息，整理成一份 Excel 竞品对比矩阵（功能维度 × 竞品），并生成一份 Word 竞品分析报告，包含：市场定位对比、功能差异分析、优劣势总结、建议行动项。",
+      "帮我基于【上传的项目周报 Excel】，自动生成一份 Word 格式的项目状态报告，包含：项目概况仪表板（进度百分比、风险等级、里程碑状态）、本周完成事项、下周计划、风险与阻塞项、资源需求，使用专业的项目报告模板排版。"
+    ],
+    "promptTitles": [
+      "财报分析全流程",
+      "MD转PDF文档",
+      "竞品对比分析",
+      "项目周报转Word"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 28,
+    "unified_id": 101,
+    "name": "金融服务",
+    "icon": "financial-services",
+    "mode": "working",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "financial-analysis",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 1,
+        "name": "investment-banking",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 2,
+        "name": "equity-research",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 3,
+        "name": "private-equity",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 4,
+        "name": "wealth-management",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 5,
+        "name": "lseg",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 6,
+        "name": "spglobal",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我做一个 Snowflake (SNOW) 的可比公司分析，重点关注云数据平台赛道的同业公司，包含 EV/Revenue、EV/GP、Rule of 40 等关键指标。",
+      "构建一个完整的 DCF 模型，考虑 AI 芯片需求的 Bear/Base/Bull 三种情景，Base case 假设未来 5 年营收 CAGR 25%，输出包含 WACC 敏感性分析和终值敏感性分析的 Excel。",
+      "分析 Meta (META) 最新一季度财报，重点关注：广告收入 vs 街头预期、Reality Labs 亏损趋势、AI 投资回报 (Capex guidance)、用户增长和 engagement 数据，输出一份 8-10 页的 Earnings Update Report，含图表。",
+      "我们正在准备出售 \"DataFlow Analytics\"（企业数据平台，ARR $200M），请按以下步骤帮我准备全套材料：1. 先做一个可比公司对标分析确定估值区间 2. 用 DCF 和 LBO 验证估值 3. 准备匿名 one-pager teaser 4. 撰写完整的 CIM 5. 整理潜在买家名单",
+      "为客户 \"张先生\" 制定综合理财规划：45 岁，已婚，2 个孩子（10 岁、14 岁），家庭年收入 $800K，流动资产 $5M，目标：55 岁提前退休、两个孩子的大学教育基金、遗产规划，风险偏好：中等偏保守。请覆盖退休规划、教育规划、税务优化和遗产安排。"
+    ],
+    "promptTitles": [
+      "可比公司分析",
+      "DCF估值模型",
+      "Meta财报分析",
+      "并购出售材料",
+      "个人理财规划"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 8,
+    "unified_id": 102,
+    "name": "数据分析及可视化",
+    "icon": "data-visualization",
+    "mode": "working",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "data",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 1,
+        "name": "document-skills",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我基于 UCI 的 Online Retail.xlsx（电商逐行订单明细），据做一次“电商业务健康度 + 用户价值”完整分析。\r\r目标： \r1) 构建数据字典：字段含义、数据粒度、潜在主键、时间字段、金额字段、国家字段；指出你对业务含义的推断（并标注不确定点） \r2) 数据质量审计： \r- 缺失率/异常值（Quantity、UnitPrice 的极端值、负数、取消单 InvoiceNo 以 C 开头等） \r- 重复记录、异常国家/时间分布 \r- 输出“清洗规则清单”（每条规则：原因、影响面、可回滚策略） \r3) 核心指标看板（按 月）： \r- GMV（剔除取消单）、订单数、客单价、活跃购买用户数、复购率、退款/取消率 \r- 用 plotly 生成交互图（趋势 + 分布 + Top 国家/商品） \r4) 用户分群与 LTV： \r- RFM 分群（含参数选择依据） \r- 简化版 LTV（按 cohort：首购月 -> 后续月贡献） \r5) 异常检测： \r- 识别 GMV/订单数异常波动（给出异常日期、可能原因假设、验证方法） \r6) 结论与动作： \r- 输出 5 条可执行建议（每条建议：预期收益指标、验证实验设计、风险点） \r\r交付物： \r- 一份结构化报告（Executive summary + 关键图表 + 结论） \r\r数据下载链接：\rhttps://archive.ics.uci.edu/static/public/352/online+retail.zip",
+      "帮我基于 USDA ERS 的县级失业率与家庭收入 Excel（2000–2023），做一个“宏观就业景气 + 区域分化”的完整分析报告。\r\r请按以下步骤输出： \r1) 数据探索：字段字典、缺失率、时间跨度、county/state 标识字段的可用性与一致性检查 \r2) 指标构建： \r- 失业率：同比、环比、3 年移动平均 \r- 家庭收入：实际值 vs 同比增速（如无 CPI 数据先给名义分析，并注明局限） \r- 区域分化：州内分位差、全国基尼/泰尔（能算就算） \r3) 识别“异常县”： \r- 失业率在 2020–2021 的冲击幅度 Top N \r- 2022–2023 恢复最慢 Top N（定义你自己的“恢复指标”，并解释） \r4) 可视化（plotly）： \r- 全国趋势 + 分位带 \r- 州级/县级热力图（如果缺地理边界就先做 TopN 表 + 条形图） \r5) 输出政策/商业含义的结论（5 条） \r\r下载地址：\rhttps://www.ers.usda.gov/media/5494/unemployment-and-median-household-income-for-the-united-states-states-and-counties-2000-23.xlsx?v=67259",
+      "根据USDA ERS 的县级贫困估计（2023）Excel。请你做一次\"贫困水平分布 + 异常县诊断 + 与失业/收入的联动假设\"分析。 要求： 1) 字段解释与口径确认：哪些是估计值、哪些是比率、是否有置信区间/样本量字段（有就利用） 2) 分布分析：全国分布、州内分布（Top/Bottom 州、州内离群县） 3) 异常诊断：找出\"贫困率高但失业率不高\"的县（需要你定义阈值/方法），列出 Top 20，并给出可能原因假设与验证数据建议 4) 输出一个\"最小可用仪表板\"设计： - 4 个 KPI 卡 - 3 张图（趋势若只有 2023 则用对比/分布/相关性） - 1 张 TopN 明细表 5) 给出把它升级成多年的数据管道时，你建议的表结构（事实表/维度表）与 ETL 步骤 数据下载地址：https://www.ers.usda.gov/media/5493/poverty-estimates-for-the-united-states-states-and-counties-2023.xlsx?v=78848",
+      "帮我基于世界银行 World Development Indicators 数据（可联网获取），做一次「全球人均 GDP 与人类发展指数（HDI）相关性分析」，覆盖 2000–2023 年。\r\r要求：\r1) 数据获取与清洗：从世界银行 API 或 UNDP 数据源获取人均 GDP（PPP）和 HDI 数据，处理缺失国家/年份，说明数据覆盖率\r2) 交互式散点图：X 轴人均 GDP（对数刻度）、Y 轴 HDI、按洲着色（亚洲/欧洲/非洲/美洲/大洋洲）、气泡大小表示人口规模，悬停显示国家名和具体数值\r3) 时间滑块动画：可拖动查看 2000–2023 每年的全球分布变化\r4) 趋势线分析：Top 10 进步最快国家和 Bottom 10 停滞/倒退国家的 HDI 趋势折线对比\r5) 相关性量化：计算不同收入组（低/中低/中高/高收入）的 GDP-HDI 相关系数，分析「收入越高 HDI 边际递减」现象\r6) 输出 3 条政策建议：基于数据发现，针对不同发展阶段国家的发展策略建议",
+      "帮我基于联合国人口司数据（可联网获取），做一次「全球人口结构变迁」可视化分析，覆盖 1950–2100（含预测）。\r\r要求：\r1) 数据获取：从 UN Population Division 获取各国人口年龄结构、生育率、城市化率数据，说明数据来源和预测方法论\r2) 人口金字塔动画：每 10 年一帧（1950/1960/.../2050/2100），中国/印度/美国/日本四国并排对比，展示从「金字塔型」到「倒金字塔型」的结构性转变\r3) 老龄化率趋势折线：65 岁以上人口占比，按国家分组，标注关键转折点（如日本 2005 超老龄化、中国预计 2035 进入深度老龄化）\r4) 生育率 vs 城市化率散点图：分析两者相关性，按发展水平分组着色，标注异常国家（如以色列高收入但高生育率）\r5) 人口红利窗口期标注：定义「劳动年龄人口占比 > 65%」为红利期，在时间轴上标注各国的窗口开启和关闭时间\r6) 区域人口增长贡献瀑布图：展示 2024–2050 全球新增人口中，各大洲/区域的贡献份额"
+    ],
+    "promptTitles": [
+      "电商用户价值分析",
+      "就业景气分析",
+      "县级贫困分析",
+      "GDP与HDI分析",
+      "全球人口结构分析"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 2,
+    "unified_id": 103,
+    "name": "深度研究",
+    "icon": "deep-research",
+    "mode": "working",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "deep-research",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "请研究2026年全球表现最优的10个AI模型，对比分析它们在编码、多模态等关键能力上的表现，并总结各自的技术特点和优势场景。",
+      "分析 AI Coding 行业的商业模式演变，从 2023 年到现在，找出关键转折点和驱动因素。",
+      "研究非洲草原猎豹种群的生存困境与保护现状。",
+      "研究近十年国际金价的走势变化、关键影响因素及未来趋势，分析地缘政治、货币政策、通胀等因素对金价的影响。"
+    ],
+    "promptTitles": [
+      "顶尖AI模型对比",
+      "AI编程商业模式",
+      "猎豹保护研究",
+      "国际金价研究"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 26,
+    "unified_id": 104,
+    "name": "视频生成",
+    "icon": "video-generation",
+    "mode": "working",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "remotion-video-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "expert": {
+      "id": "ex_HwSX2ZgPg1EG",
+      "name": "动画画",
+      "profession": "视频生成专家"
+    },
+    "insertSceneTag": false,
+    "prompts": [
+      "做一条 20 秒的全球 Top 10 大模型榜单视频（1080x1920，30fps）。\r数据来源为 openrouter。\r要求：\r- 每个条目 1.5–2s，条形进度条从 0 动画到 value 对应比例\r- 排名变化要平滑（不要跳动），数字要计数动画\r- 背景干净、字体统一、配色克制（最多 2 个主色）\r- 片头 2s：标题 + 数据来源（小字）\r- 片尾 2s：总结一句洞察",
+      "帮我生成一条 OpenClaw 的介绍视频",
+      "做一条 20 秒的「一周 AI 新闻速递」视频（1920x1080，30fps）。\r内容为本周 5 条 AI 领域重要新闻，需联网获取真实新闻。\r要求：\r- 片头 2s：「AI Weekly」标题 + 本周日期范围，标题从上方弹入（spring 效果）\r- 每条新闻 3s：标题从左侧滑入，来源和日期小字从底部淡入，右侧配一个与主题相关的 emoji 或图标放大入场\r- 新闻之间用竖向时间线串联，时间线节点亮起做过渡动画\r- 片尾 2s：「关注获取更多」CTA 文字 + 呼吸动画\r- 背景纯深色，文字白色，新闻标题用亮色（如 #00D4FF）高亮关键词\r- 整体节奏紧凑，信息密度高",
+      "做一条 30 秒的编程语言流行度十年变化视频（1920x1080，30fps）。\r数据来源为 TIOBE 或 GitHub Octoverse，需联网获取真实数据。\r要求：\r- 用动态条形图（bar chart race）展示 2015–2025 年 Top 10 编程语言的排名变化\r- 每年停留 2.5s，条形从当前位置平滑滑动到新位置（不要跳切）\r- 条形颜色对应各语言官方品牌色（Python 蓝黄、JavaScript 黄、Rust 橙等）\r- 条形末端显示语言名称 + 实时分数计数动画\r- 右上角年份数字用翻页效果切换\r- 片头 2s：标题「Programming Language Trends」+ 数据来源（小字）\r- 片尾 2s：定格最终排名 + 一句趋势总结（如「Python 连续 N 年霸榜」）\r- 背景深色渐变（#0D1117 → #161B22），字体白色，整体风格类似 GitHub 暗色主题"
+    ],
+    "promptTitles": [
+      "大模型榜单视频",
+      "Claw介绍视频",
+      "AI新闻速递视频",
+      "编程语言趋势视频"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 0,
+    "unified_id": 105,
+    "name": "幻灯片",
+    "icon": "slides-creation",
+    "mode": "working",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ppt-implement",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "请生成一个AI人工智能发展历程的ppt",
+      "请生成一个AI Agent 2026年发展趋势的ppt",
+      "请使用简约风生成一个CodeBuddy 2025年的年终总结的ppt",
+      "请生成一个关于介绍西游记的ppt",
+      "做一个popmart发展史ppt，每一页都要有一个ip"
+    ],
+    "promptTitles": [
+      "AI发展历程PPT",
+      "AI趋势PPT",
+      "年终总结PPT",
+      "西游记介绍PPT",
+      "泡泡玛特PPT"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 10,
+    "unified_id": 106,
+    "name": "产品管理",
+    "icon": "product-management",
+    "mode": "working",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "product-management",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 1,
+        "name": "document-skills",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "我需要为我们的 B2B SaaS 产品编写一个完整的 PRD，功能是\"团队协作白板\"。\r\r背景：\r- 目标用户：产品团队、设计团队、远程团队\r- 问题：现有工具（Miro、FigJam）太复杂，我们的用户需要更简单、集成在产品内的协作方式\r- 我们有 5 次用户访谈的笔记，用户提到：\r  - \"切换工具太麻烦，希望在一个地方完成所有工作\"\r  - \"Miro 功能太多，我们只需要基础的便签和连线\"\r  - \"实时协作很重要，但不需要视频/音频\"\r  - \"希望能直接链接到我们产品中的其他对象（任务、文档）\"\r  - \"移动端支持不重要，主要在桌面端用\"\r\r约束条件：\r- 技术：必须与现有的实时同步架构兼容\r- 时间：Q2 发布 MVP，Q3 完整版本\r- 团队：1 个前端工程师 + 1 个后端工程师，全职 3 个月\r- 竞品：比 Miro 简单，比 Google Jamboard 功能更丰富\r\r成功指标：\r- 每周至少 30% 的活跃团队使用白板功能\r- 白板会话平均时长 > 15 分钟（说明有深度使用）\r- 从其他协作工具（Miro 等）迁移过来的团队 > 20%\r\r请帮我生成一个完整的 PRD，包括：\r- 问题陈述和目标/非目标\r- 用户故事（按产品团队、设计团队、远程团队分组）\r- 需求（MVP vs 未来）\r- 成功指标（领先和滞后指标）\r- 技术考虑和依赖\r- 开放问题（工程、设计、法律、数据）",
+      "我需要重排 Q2 产品路线图的优先级。以下是当前的 5 个路线图项目：\r\r1. **移动端离线模式** \r- 描述：支持无网络时查看和编辑数据，重新联网后同步 \r- 当前状态：未开始 \r- 估算工时：8 周（2 名工程师） \r- 请求来源：20% 的用户在客户调研中提到 \r\r2. **高级权限管理** \r- 描述：基于角色的访问控制（RBAC），支持自定义角色 \r- 当前状态：未开始 \r- 估算工时：6 周（2 名工程师） \r- 请求来源：5 个企业客户明确要求，是成交的阻塞因素 \r\r3. **数据可视化仪表板** \r- 描述：内置图表库，用户可创建自定义仪表板 \r- 当前状态：未开始 \r- 估算工时：10 周（1 前端 + 1 后端） \r- 请求来源：产品愿景中的战略功能，但用户需求不紧急 \r\r4. **API 速率限制优化** \r- 描述：提升 API 性能，支持更高的并发请求 \r- 当前状态：设计中 \r- 估算工时：4 周（1 名后端工程师） \r- 请求来源：技术债务，影响 15% 的大客户 \r\r5. **Slack 集成（双向同步）** \r- 描述：从 Slack 创建任务，任务更新推送到 Slack \r- 当前状态：未开始 \r- 估算工时：5 周（1 名后端工程师） \r- 请求来源：10 个客户请求，其中 2 个是付费意愿强的潜在客户 \r\r现在的变化： \r- 上周销售团队反馈，有 3 个大客户（总 ARR $180K）因为没有 RBAC 而推迟签约 \r- 我们的北极星指标是 ARR 增长，企业客户是主要增长来源 \r- 工程团队容量：10 周时间，3 名工程师 \r\r请帮我： \r1. 使用 RICE 框架为每个项目打分（Reach、Impact、Confidence、Effort） \r2. 根据 RICE 分数和当前战略（ARR 增长）重排优先级 \r3. 生成重排后的路线图，说明什么进 Q2，什么推迟到 Q3 \r4. 草拟一份给工程团队的更新，解释为什么优先级改变了",
+      "我们计划做一个新功能「AI 自动生成周报」，帮我做一份完整的竞品分析报告。\r\r需要分析 5 个竞品：Notion AI、Coda AI、ClickUp AI、Monday.com AI、Linear。\r\r输出：\r- 功能对比矩阵（维度：自动生成能力、数据源集成、自定义模板、协作功能、定价）\r- 用户评价汇总（从 G2、ProductHunt 等来源收集正面/负面反馈）\r- 各产品的差异化策略分析\r- 我们的机会点：哪些需求竞品没满足好？\r- 推荐差异化方向（附理由和验证建议）",
+      "帮我编写一份季度产品 OKR（Q3）。\r\r背景：\r- 我们是一个 B2B 协作工具\r- Q2 实现了 ARR $2M，企业客户 150 家，NPS 42\r- 董事会要求 Q3 重点突破：企业客户数翻倍、NPS 提升到 50+\r\r输出：\r- 3 个 Objective + 每个下面 3-4 个 Key Result（遵循 SMART 原则）\r- 每个 KR 的负责团队和关键举措\r- 风险因素和缓解方案\r- OKR 之间的依赖关系说明"
+    ],
+    "promptTitles": [
+      "撰写PRD",
+      "路线图优先级",
+      "竞品分析报告",
+      "季度产品OKR"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 15,
+    "unified_id": 107,
+    "name": "日常开发",
+    "icon": "daily-development",
+    "mode": "coding",
+    "plugins": [],
+    "prompts": [
+      "帮我给当前项目添加一个新功能：【功能描述】。",
+      "帮我重构这段代码，提升可读性和可维护性。",
+      "帮我修复这个 Bug：【Bug 描述】。",
+      "帮我优化这个功能的性能，当前问题是【性能问题描述】。",
+      "帮我给这个模块添加单元测试，覆盖核心逻辑。",
+      "帮我排查这个报错：【错误信息】，找出原因并修复。"
+    ],
+    "promptTitles": [
+      "新增功能开发",
+      "代码重构优化",
+      "修复Bug",
+      "性能优化",
+      "补充单元测试",
+      "排查报错修复"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 16,
+    "unified_id": 108,
+    "name": "网站开发",
+    "icon": "website-development",
+    "mode": "coding",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "modern-webapp",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我开发一个企业官网，公司名称是【公司名称】，主营业务是【业务描述】。要求：包含首页、关于我们、产品服务、联系我们页面，风格简约大气。",
+      "帮我开发一个后台管理系统，用于管理【管理内容】。要求：包含登录页、数据看板、列表管理、表单编辑功能，支持响应式布局。",
+      "帮我开发一个个人博客网站，博客主题是【博客主题】。要求：包含文章列表、文章详情、标签分类、关于页面，支持 Markdown 渲染。",
+      "帮我开发一个电商网站首页，售卖【商品类型】。要求：包含轮播图、商品分类、热门商品展示、促销活动区域。"
+    ],
+    "promptTitles": [
+      "企业官网开发",
+      "后台管理系统",
+      "个人博客网站",
+      "电商首页开发"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 17,
+    "unified_id": 109,
+    "name": "Agent 应用",
+    "icon": "agent-apps",
+    "mode": "coding",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "codebuddy-chat-web",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 1,
+        "name": "agent-sdk-dev",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "使用 CodeBuddy SDK 帮我创建一个 Agent Web 应用，用途是【请描述 Agent 用途】。（请使用 skill codebuddy-chat-web）",
+      "使用 CodeBuddy SDK 帮我初始化一个聊天应用，功能是【请描述聊天功能】。（请使用 skill codebuddy-chat-web）",
+      "使用 CodeBuddy SDK 帮我创建一个客户端 Agent Web 应用，实现【请描述项目功能】。（请使用 skill codebuddy-chat-web，创建一个 web 然后用 electron 封装，并要保证能使用 web 浏览器开发）",
+      "使用 CodeBuddy SDK 帮我创建一个「智能客服 Agent」Web 应用，要求：支持多轮对话、FAQ 知识库检索、自动识别用户意图（退款/查询订单/技术支持）、无法解决时自动转人工、对话历史持久化存储、管理后台可查看对话记录和满意度统计（请使用 skill codebuddy-chat-web）"
+    ],
+    "promptTitles": [
+      "Agent应用开发",
+      "聊天应用初始化",
+      "客户端Agent应用",
+      "智能客服Agent"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 18,
+    "unified_id": 110,
+    "name": "Skill 开发",
+    "icon": "skill-development",
+    "mode": "coding",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "skill-creator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我创建一个 Skill，功能是【请描述 Skill 功能】。要求：定义清晰的触发词和执行逻辑。",
+      "帮我开发一个文件处理 Skill，能够【请描述文件处理能力，如批量重命名、格式转换等】。",
+      "帮我开发一个代码生成 Skill，根据【请描述输入，如数据库表结构、API 定义等】自动生成代码。",
+      "帮我开发一个自动化 Skill，实现【请描述自动化任务，如定时备份、批量部署等】。"
+    ],
+    "promptTitles": [
+      "创建Skill",
+      "文件处理Skill",
+      "代码生成Skill",
+      "自动化Skill"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 22,
+    "unified_id": 111,
+    "name": "CI/CD",
+    "icon": "ci-cd",
+    "mode": "coding",
+    "plugins": [],
+    "prompts": [
+      "分析当前项目架构，帮我编写 GitHub Actions 工作流，实现自动构建、测试和部署。",
+      "分析当前项目架构，帮我编写 Dockerfile，优化镜像大小，支持多阶段构建。",
+      "分析当前项目架构，帮我编写 Kubernetes Helm Chart，包含 Deployment、Service 和 ConfigMap。"
+    ],
+    "promptTitles": [
+      "GitHub流水线",
+      "Docker镜像构建",
+      "K8s部署配置"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 24,
+    "unified_id": 112,
+    "name": "文档",
+    "icon": "documentation-tools",
+    "mode": "coding",
+    "plugins": [],
+    "prompts": [
+      "分析当前项目的 API 接口，生成 OpenAPI v3 spec，包含完整的接口描述和示例。",
+      "分析当前项目，帮我完善 README 文档，添加安装步骤、使用示例和贡献指南。",
+      "分析当前项目架构，帮我创建系统架构图和设计文档，说明核心模块和数据流。"
+    ],
+    "promptTitles": [
+      "API文档生成",
+      "完善README",
+      "架构设计文档"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 30,
+    "unified_id": 113,
+    "name": "网站设计",
+    "icon": "web",
+    "mode": "design",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ardot-design-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "设计一个赛博朋克风格的个人作品集网站。主色调为纯黑背景 + 霓虹粉（#FF2E93）和霓虹青（#00F0FF），标题带故障艺术（Glitch）动效。首屏是一个大大的「> HELLO_WORLD」打字机效果，下方用网格卡片展示 6 个项目，鼠标悬停时卡片边框发出霓虹辉光，整体氛围像《银翼杀手 2049》。",
+      "设计一个球鞋文化介绍网站页面，包含 Hero 区、经典鞋款演变时间线、街头文化故事、标志性联名合作，风格潮酷有态度。",
+      "设计一个创意设计网站页面，从Neo-Brutalism设计师角度，结合粗野主义的硬边与饱和糖果色块、粗描边、平移阴影。视觉设计理念：粗线框、大圆角或硬角色块，饱和粉/黄/蓝/绿，字体粗黑/等宽；阴影明显偏移。可用贴纸/手绘元素增添俏皮感，保持版面区分清晰。材质与质感：实心填充、噪点/条纹背景、贴纸/涂鸦符号；阴影短但位移明确，边框 2-4px。避免过度玻璃与渐变。整体氛围：张扬、俏皮但有秩序，像彩色积木构成的界面。"
+    ],
+    "promptTitles": [
+      "赛博朋克作品集",
+      "球鞋文化网站",
+      "粗野主义网站"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 31,
+    "unified_id": 114,
+    "name": "移动端App",
+    "icon": "phone",
+    "mode": "design",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ardot-design-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "设计一个健身App，为健身追踪 App 设计完整的用户注册流程和运动数据看板页面，支持图表展示每日运动数据",
+      "参考小红书的设计风格，帮我设计一个内容社区 App 的发现页，包含瀑布流卡片和搜索筛选功能",
+      "设计一款面向年轻人的城市打卡社交 App「CityGo」，风格要大胆、鲜艳、有 Y2K 复古未来感。主色是荧光绿 + 电光紫 + 亮黄，大量使用粗体无衬线字体和不规则贴纸元素。首页是一张城市地图，上面散落着用户拍摄的打卡点气泡，点击气泡弹出九宫格照片墙。发布界面支持给照片加手绘涂鸦、贴纸、故障艺术滤镜，按钮都是大圆角胶囊形状，带点击后弹跳动效，整体像一本数字版的涂鸦贴纸册"
+    ],
+    "promptTitles": [
+      "健身App设计",
+      "内容社区发现页",
+      "Y2K社交App"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 32,
+    "unified_id": 115,
+    "name": "设计系统",
+    "icon": "paint",
+    "mode": "design",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ardot-design-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我建立一套完整的 Design System，包含颜色体系、字体层级、间距规则和基础组件规范文档",
+      "参考 Ant Design 风格，为我的后台管理系统设计一套组件库规范，包含按钮、表单、表格和弹窗组件",
+      "为移动端 App 创建一套 Design Token 体系，支持明暗主题切换，输出颜色、圆角和阴影的完整变量表"
+    ],
+    "promptTitles": [
+      "完整设计系统",
+      "后台组件库规范",
+      "Token体系搭建"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 33,
+    "unified_id": 116,
+    "name": "Web App",
+    "icon": "tools",
+    "mode": "design",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ardot-design-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "设计一个项目管理 WebApp 的完整界面，包含仪表盘总览、任务看板、团队成员管理和项目设置页面，风格参考 Linear，简洁高效",
+      "设计一款简历制作 Web App「Resume.io」，风格简洁高效、所见即所得。采用左右分屏布局：左侧是表单编辑区（个人信息、教育、工作经历、技能等折叠面板），右侧是实时预览的 A4 纸张效果简历（带真实阴影）。顶部可切换 6 种模板风格（极简黑白、商务蓝、设计师彩色、学术衬线等），右上角有「下载 PDF」「分享链接」按钮。编辑时右侧预览实时同步，修改的字段会短暂高亮提示。整体让用户在 10 分钟内做出一份高质量简历",
+      "设计一个 SaaS 数据分析平台的 WebApp 界面，包含数据源连接、可视化图表编辑器、报表生成和权限管理模块，配色专业商务"
+    ],
+    "promptTitles": [
+      "项目管理WebApp",
+      "简历制作WebApp",
+      "数据分析平台"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 34,
+    "unified_id": 117,
+    "name": "PPT设计",
+    "icon": "slide",
+    "mode": "design",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ardot-design-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我生成一组中式武侠开放世界探索游戏的发布会幻灯片设计稿，包含6个主要页面，排版布局要大，方便现场大屏播放，大胆的使用SVG装饰幻灯片，页面元素要丰富精致，展示游戏的美术设计，UI设计，内容丰富等等要素, 需要生成图片的地方采用”ai“模式",
+      "制作一个我的世界介绍6页ppt,要有炫酷丰富的像素风格的排版，像素主题设计风格",
+      "制作一份硕士论文答辩 PPT，共 10 页，风格严谨学术。主色调采用深藏青（#0F172A）作为标题色，正文炭灰（#334155），关键发现用学术红（#B91C1C）标注，背景保持纯白。页面结构为：封面、研究背景与意义、文献综述、研究问题与假设、研究方法、实验设计、数据分析、主要结论、研究局限与展望、致谢。图表使用经典黑白灰配色，不使用渐变。每页右上角标注章节编号便于答辩委员快速定位。字体中文使用宋体，英文使用 Times New Roman。页脚放置学校 Logo、姓名、学号、日期。整体克制专业，突出研究的学术价值",
+      "制作一份 Web3 NFT 项目的精简路演 PPT，共 9 页，风格是'赛博朋克 × Y2K 未来复古'。采用纯黑（#000000）底色，主色是刺眼的酸性荧光绿（#C6FF00）和电子品红（#FF006E）双色撞色，辅助色为金属银（#C0C0C0）。封面使用 ASCII 字符艺术拼出项目名，背景是网格透视线延伸至消失点营造赛博空间感。标题字符随机偏移、色散成 RGB 三色错位。内页布局打破常规网格，文字以 45 度斜切的色块承载，数据使用七段数码管字体展示像老式计算器。路线图页使用地铁线路图样式，节点是六边形带发光描边。团队页每个成员用 3D 低多边形头像占位框（标注'Pixel Avatar'），名字下方是钱包地址缩写。页脚滚动文字条显示'//TRANSMITTING DATA//'循环。整体反叛、粗粝、有互联网地下文化气质。",
+      "制作一份 Omakase 日料品牌连锁招商 PPT，共 10 页，风格是'侘寂美学 × 极致留白'。采用米白和纸色（#F5F0E8）为主背景，关键位置点缀墨黑（#1A1A1A）和朱砂红（#B8292E）。整份 PPT 留白占据画面 70% 以上，文字稀疏克制，单页常常只有一行字加一枚印章式标识。封面仅在左下角印一枚手写毛笔字'鮨'（朱砂红），右上角一行竖排小字标注品牌名，其余全是空白。标题使用假名和汉字混排的日式书法体，正文使用极细的等线字体。分隔线全部替换为手绘水墨笔触。数据页打破常规图表，用俳句式短句呈现关键数字，比如'一期一会 / 八席 / 三十六道'纵向排列。招商政策页用和风卷轴样式展开，从右至左阅读。图片占位框采用日式方形印章样式和不规则墨渍形状（标注'料理图'、'主厨肖像'）。整体宁静、克制、充满禅意，传递品牌调性高于信息量",
+      "制作一份 AI 硬件产品发布会 PPT，共 10 页，风格是'极简未来主义 × Dieter Rams 致敬'。采用纯净的亮灰白（#F5F5F7）作为主背景，文字使用近黑（#1D1D1F），唯一强调色是产品的标志性亮橙（#FF5C1A）仅用于关键数据。整份 PPT 遵循'少即是多'原则，每页最多 7 个字作为标题，正文全部小于 20 字。封面只有产品名三个字母'ORB'居中显示，字号占据屏幕高度的 1/3，下方是一行小字'2026 - 04 - 15'。产品展示页采用完全居中的单一元素构图，产品图占位框是画面正中的正圆（标注'产品 Hero Shot'），四周是大量呼吸般的留白，底部一行小字标注产品型号。参数对比页使用极细的 1px 分隔线将画面分成等比网格，每格只有一个数字和一个词（如'12h'与'续航'）。整体冷静、高级、充满呼吸感，让产品本身成为唯一主角"
+    ],
+    "promptTitles": [
+      "武侠游戏发布会",
+      "像素风介绍PPT",
+      "论文答辩PPT",
+      "NFT路演PPT",
+      "日料招商PPT",
+      "AI硬件发布PPT"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 35,
+    "unified_id": 118,
+    "name": "交互原型",
+    "icon": "mouse",
+    "mode": "design",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ardot-design-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我设计一个任务管理工具的交互原型，包含看板视图和列表视图的切换，以及任务拖拽排序功能",
+      "设计一款个人健康数据 Dashboard，采用极简医学风，主背景淡青白（#F0F7F7），强调色使用科技蓝（#0EA5E9）和活力绿（#22C55E）表示健康指标正向。顶部是今日概览卡片，包含步数、心率、睡眠、卡路里四个圆形进度环。下方是周趋势折线图和月历打卡视图，支持切换。卡片统一白色带浅蓝边框，圆角 12px。字体使用清晰的无衬线体，数据大字体突出显示。整体清新可信，强调数据的清晰呈现",
+      "设计一个数据可视化大屏的交互原型，支持时间范围筛选、图表下钻和全屏展示模式切换"
+    ],
+    "promptTitles": [
+      "任务管理原型",
+      "健康数据看板",
+      "数据大屏原型"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 36,
+    "unified_id": 119,
+    "name": "品牌设计",
+    "icon": "mouse",
+    "mode": "design",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ardot-design-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我设计一个科技风格的品牌 Logo，主色调为深蓝，适用于 AI 产品，要求简洁有辨识度，同时提供标准色值和使用规范",
+      "为我的咖啡品牌设计一整套视觉识别系统，包含 Logo、色板、字体规范和名片样式，风格要温暖文艺",
+      "参考 Apple 和 Stripe 的设计风格，为我的 SaaS 产品设计品牌标识，包含主 Logo、图标版本和品牌色板"
+    ],
+    "promptTitles": [
+      "科技品牌Logo",
+      "咖啡品牌VI",
+      "SaaS品牌标识"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 37,
+    "unified_id": 120,
+    "name": "图标&插画",
+    "icon": "mouse",
+    "mode": "design",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ardot-design-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我设计一组 24 个线性风格的通用图标，适用于后台管理系统，包含首页、用户、设置、数据等常用场景",
+      "为儿童教育 App 设计一组可爱风格的插画图标，共 12 个场景，涵盖阅读、数学、音乐和科学主题",
+      "设计一组扁平化风格的金融类图标，包含支付、账单、钱包、转账和理财等 16 个场景，配色统一"
+    ],
+    "promptTitles": [
+      "后台线性图标",
+      "儿童教育插画",
+      "扁平金融图标"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 38,
+    "unified_id": 121,
+    "name": "视觉海报",
+    "icon": "mouse",
+    "mode": "design",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "ardot-design-generator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "帮我设计一张产品发布会的宣传海报，主题是 AI 创新，尺寸 1080x1920，需要突出发布日期和产品亮点",
+      "为双十一大促设计一组电商 Banner，共 3 张不同尺寸，风格统一，突出折扣信息和限时抢购氛围",
+      "设计一张科技峰会的活动海报，需要突出三位演讲嘉宾头像、活动时间地点和报名二维码"
+    ],
+    "promptTitles": [
+      "产品发布海报",
+      "双十一Banner",
+      "科技峰会海报"
+    ],
+    "target": "all"
+  }
+]

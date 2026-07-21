@@ -1,0 +1,18 @@
+{
+  "name": "repomix-explorer",
+  "description": "在 CodeBuddy Code 中使用 Repomix 能力探索和分析仓库结构",
+  "version": "1.1.0",
+  "author": {
+    "name": "yamadashy"
+  },
+  "homepage": "https://repomix.com/docs/guide/claude-code-plugins",
+  "repository": "https://github.com/yamadashy/repomix",
+  "keywords": [
+    "repomix",
+    "agent",
+    "repository-analysis",
+    "code-exploration",
+    "ai"
+  ],
+  "license": "MIT"
+}

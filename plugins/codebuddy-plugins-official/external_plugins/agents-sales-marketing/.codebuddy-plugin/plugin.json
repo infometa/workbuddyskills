@@ -1,0 +1,22 @@
+{
+  "name": "agents-sales-marketing",
+  "version": "1.0.0",
+  "description": "Agents for content marketing, customer support, and sales automation",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "sales-marketing",
+    "content-marketer",
+    "customer-support",
+    "risk-manager",
+    "sales-automator",
+    "social-media-clip-creator",
+    "social-media-copywriter"
+  ]
+}

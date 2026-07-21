@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>信息窗口实现拖动</title>
+</head>
+
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .info_card {
+        display: inline-block;
+        margin: 50px auto;
+        position: absolute;
+        width: 200px;
+        height: 100px;
+        background-color: #c7c9c8;
+        border: 5px solid #ffffff;
+        color: #000000;
+        /* 禁止文字选中 */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .info_card .title {
+        width: 100%;
+        height: 40px;
+        background-color: #000000;
+        color: #ffffff;
+    }
+
+    .title span.title_name {
+        position: relative;
+        top: 7px;
+        left: 10px;
+        font-size: 18px;
+    }
+
+
+    .info_card .title .close_img {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        background-color: #ffffff;
+    }
+
+    .info_card .title .close_img .min {
+        width: 0;
+        height: 0;
+        font-size: 0;
+        overflow: hidden;
+        position: absolute;
+        border-width: 10px;
+    }
+
+    .info_card .title .close_img .top_img {
+        border-style: solid dashed dashed;
+        border-color: #000000 transparent transparent transparent;
+        top: -2px;
+    }
+
+    .info_card .title .close_img .right_img {
+        border-style: solid dashed dashed;
+        border-color: transparent #000000 transparent transparent;
+        left: 2px;
+    }
+
+    .info_card .title .close_img .bottom_img {
+        border-style: solid dashed dashed;
+        border-color: transparent transparent #000000 transparent;
+        top: 2px;
+    }
+
+    .info_card .title .close_img .left_img {
+        border-style: solid dashed dashed;
+        border-color: transparent transparent transparent #000000;
+        left: -2px;
+    }
+
+    .info_card span.cancle {
+        width: 0;
+        height: 0;
+        font-size: 0;
+        overflow: hidden;
+        position: absolute;
+    }
+
+    .info_card span.bot {
+        border-width: 20px;
+        border-style: solid dashed dashed;
+        border-color: #ffffff transparent transparent;
+        left: 80px;
+        bottom: -40px;
+    }
+
+    .info_card span.top {
+        border-width: 20px;
+        border-style: solid dashed dashed;
+        border-color: #c7c9c8 transparent transparent;
+        left: 80px;
+        bottom: -33px;
+    }
+
+    .info_card .content {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+    <script>
+        var infoWindow;
+        function closeInfoWindow() {
+            infoWindow.close();
+        }
+        function initMap() {
+            //初始化地图
+            var map = new TMap.Map("container", {
+                center: new TMap.LatLng(40.040422, 116.273521)
+            });
+
+            //初始化infoWindow
+            infoWindow = new TMap.InfoWindow({
+                map: map,
+                enableCustom: true,
+                position: new TMap.LatLng(40.040422, 116.273521),
+                content: '<div id="info_card" class="info_card"><div class="title"><span class="title_name">可拖动信息窗口</span><div class="close_img" onclick="closeInfoWindow()"><span class="min top_img"></span><span class="min right_img"></span><span class="min bottom_img"></span><span class="min left_img"></span></div></div><div align="left" class="content">请拖动我～</div><span class="cancle bot"></span><span class="cancle top"></span></div>',
+            });
+
+            const infoCard = document.getElementById('info_card');
+            let isDragging = false;
+            let offset = {
+                x: 0,
+                y: 0
+            }
+            // 鼠标拖动事件
+            infoCard.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+                isDragging = true;
+                // 优化拖动平滑：计算鼠标与DOM中心的偏移量
+                const rect = infoCard.getBoundingClientRect();
+                const rectX = rect.left + rect.width / 2;
+                const rectY = rect.top + rect.height / 2;
+                offset.x = rectX - e.clientX;
+                offset.y = rectY - e.clientY;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                e.stopPropagation();
+                if (isDragging) {
+                    // 计算拖动时的经纬度坐标（补偿计算的偏移量）
+                    const p = new TMap.Point(e.clientX + offset.x, e.clientY + offset.y);
+                    const latLng = map.unprojectFromContainer(p);
+                    infoWindow.setPosition(latLng);
+                }
+            });
+
+            document.addEventListener('mouseup', (e) => {
+                e.stopPropagation();
+                isDragging = false;
+            });
+
+            // 触屏拖动事件
+            infoCard.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+                isDragging = true;
+                // 优化拖动平滑：计算触摸点与DOM中心的偏移量
+                const touch = e.touches[0];
+                const rect = infoCard.getBoundingClientRect();
+                const rectX = rect.left + rect.width / 2;
+                const rectY = rect.top + rect.height / 2;
+                offset.x = rectX - touch.clientX;
+                offset.y = rectY - touch.clientY;
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                e.stopPropagation();
+                if (isDragging) {
+                    const touch = e.touches[0];
+                    // 计算拖动时的经纬度坐标（补偿计算的偏移量）
+                    const p = new TMap.Point(touch.clientX + offset.x, touch.clientY + offset.y);
+                    const latLng = map.unprojectFromContainer(p);
+                    infoWindow.setPosition(latLng);
+                }
+            });
+
+            document.addEventListener('touchend', (e) => {
+                e.stopPropagation();
+                isDragging = false;
+            });
+        }
+    </script>
+</body>
+
+</html>

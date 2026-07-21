@@ -1,0 +1,26 @@
+{
+  "name": "commands-documentation-changelogs",
+  "version": "1.0.0",
+  "description": "Commands for generating documentation and managing changelogs",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "documentation-changelogs",
+    "add-to-changelog",
+    "create-architecture-documentation",
+    "create-docs",
+    "create-onboarding-guide",
+    "docs",
+    "explain-issue-fix",
+    "load-llms-txt",
+    "migration-guide",
+    "troubleshooting-guide",
+    "update-docs"
+  ]
+}

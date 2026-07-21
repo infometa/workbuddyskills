@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<script>{{HTML2CANVAS_INLINE}}</script>
+<style>
+  :root{
+    --brand: {{BRAND_COLOR}};
+    --brand-soft: {{BRAND_SOFT}};
+    --brand-deep: {{BRAND_DEEP}};
+    --ink:#1a1f29; --sub:#6b7585; --line:#eef1f6; --bg:#eef1f6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+  body{background:var(--bg);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+       display:flex;justify-content:center;padding:18px 0;color:var(--ink);}
+  #poster{width:390px;background:#fff;border-radius:20px;overflow:hidden;
+          box-shadow:0 12px 44px rgba(20,40,80,.14);}
+
+  /* ===== 名片头（专业名片布局）===== */
+  .card{padding:20px 18px 16px;background:linear-gradient(155deg,var(--brand-soft),#ffffff 78%);
+        border-bottom:1px solid var(--line);}
+  /* 头像 + 中间信息列 + 二维码，三栏垂直居中（二维码自然居中偏下，更协调） */
+  .card-top{display:flex;align-items:center;gap:13px;}
+  .avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;flex-shrink:0;
+          background:var(--brand);display:flex;align-items:center;justify-content:center;
+          color:#fff;font-size:22px;font-weight:600;
+          border:2px solid #fff;box-shadow:0 2px 8px rgba(20,40,80,.12);}
+  .who{flex:1;min-width:0;}
+  .name-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .name{font-size:20px;font-weight:800;letter-spacing:1px;color:var(--ink);}
+  .title{font-size:11px;color:var(--brand);font-weight:600;
+         background:#fff;padding:2px 8px;border-radius:6px;border:1px solid var(--line);}
+  .company{font-size:12px;color:var(--sub);margin-top:3px;letter-spacing:.3px;}
+  .qr{width:64px;height:64px;border-radius:9px;object-fit:cover;flex-shrink:0;
+      background:#fff;padding:3px;border:1px solid var(--line);
+      box-shadow:0 2px 8px rgba(20,40,80,.08);
+      display:flex;align-items:center;justify-content:center;
+      color:#b7c0cf;font-size:9px;text-align:center;line-height:1.3;}
+  /* 联系方式：紧跟公司竖排（与贺卡版名片条一致） */
+  .contact{margin-top:8px;display:flex;flex-direction:column;gap:4px;}
+  .contact .c-row{display:flex;align-items:center;font-size:12.5px;color:#4a525f;}
+  .contact .c-row .lbl{color:var(--brand);font-weight:600;width:58px;flex-shrink:0;
+           display:flex;align-items:center;gap:4px;}
+  .filing-line{margin-top:11px;font-size:11px;color:var(--sub);
+           background:var(--brand-soft);border-radius:7px;padding:6px 10px;
+           display:flex;align-items:center;gap:5px;}
+  .filing-line b{color:var(--brand-deep);font-weight:600;}
+
+  /* ===== 简报刊头 ===== */
+  .masthead{background:linear-gradient(135deg,var(--brand),var(--brand-deep));color:#fff;
+            padding:16px 18px 15px;position:relative;}
+  .mh-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .column{font-size:13px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:6px;}
+  .issue{font-size:11px;opacity:.85;font-weight:500;}
+  .recipient{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;
+             background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+             padding:3px 10px;border-radius:14px;margin-bottom:9px;}
+  .mh-title{font-size:21px;font-weight:800;line-height:1.4;letter-spacing:.3px;}
+  /* 新鲜度徽标 */
+  .freshness{display:inline-flex;align-items:center;gap:5px;margin-top:11px;
+             background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
+             padding:5px 11px;border-radius:20px;font-size:12px;font-weight:600;
+             backdrop-filter:blur(4px);}
+  .freshness .dot{width:7px;height:7px;border-radius:50%;background:#7CFFB2;
+                  box-shadow:0 0 6px #7CFFB2;}
+
+  /* ===== 正文 ===== */
+  .body{padding:16px 18px 6px;}
+  .lead{font-size:13.5px;line-height:1.9;color:#3a4150;background:var(--brand-soft);
+        border-radius:12px;padding:14px;margin-bottom:18px;}
+
+  .section{margin-bottom:18px;}
+  .sec-head{display:flex;align-items:center;gap:7px;margin-bottom:11px;}
+  .sec-bar{width:4px;height:15px;border-radius:3px;background:var(--brand);}
+  .sec-name{font-size:15px;font-weight:700;}
+
+  .item{background:#fbfcfe;border:1px solid var(--line);border-radius:12px;
+        padding:13px 14px;margin-bottom:11px;}
+  .item-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;}
+  .item-no{flex-shrink:0;width:20px;height:20px;border-radius:6px;background:var(--brand);
+           color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;
+           justify-content:center;margin-top:1px;}
+  .item-title{font-size:14.5px;font-weight:700;line-height:1.5;}
+  .row{display:flex;gap:7px;font-size:12.5px;line-height:1.7;color:#4a525f;margin-bottom:4px;}
+  .row .lbl{flex-shrink:0;font-weight:600;color:var(--brand-deep);
+            background:var(--brand-soft);padding:0 7px;border-radius:5px;height:fit-content;
+            font-size:11px;line-height:1.7;}
+  .row .val{flex:1;}
+  .src{display:inline-block;margin-top:6px;font-size:10.5px;color:#8b94a5;
+       background:#f0f2f6;padding:2px 8px;border-radius:5px;}
+
+  /* 节日问候特化 */
+  .greeting{text-align:center;padding:14px 4px;}
+  .greeting .festival{font-size:28px;font-weight:800;color:var(--brand);margin-bottom:16px;letter-spacing:3px;}
+  .greeting p{font-size:15px;line-height:2.05;color:#3a4150;}
+
+  /* ===== 本期小结 ===== */
+  .summary{margin:4px 0 0;background:linear-gradient(135deg,var(--brand-soft),#fff);
+           border-radius:12px;padding:13px 14px;border:1px dashed var(--brand);}
+  .summary .s-title{font-size:13px;font-weight:700;color:var(--brand-deep);margin-bottom:6px;
+           display:flex;align-items:center;gap:6px;}
+  .summary p{font-size:12.5px;line-height:1.8;color:#4a525f;}
+
+  /* ===== 底部 ===== */
+  .foot{padding:14px 18px 18px;border-top:1px solid var(--line);background:#fbfcfe;margin-top:14px;}
+  .foot .filing{font-size:11px;color:var(--sub);margin-bottom:5px;}
+  .foot .gen{font-size:11px;color:var(--brand);font-weight:600;margin-bottom:7px;}
+  .foot .disclaimer{font-size:10px;color:#aeb6c4;line-height:1.6;}
+
+  /* ===== 导出按钮 ===== */
+  #export-btn{position:fixed;right:16px;bottom:22px;z-index:99;
+    background:var(--brand);color:#fff;border:none;border-radius:24px;
+    padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;
+    box-shadow:0 6px 20px rgba(38,104,235,.4);font-family:inherit;}
+  #export-btn:active{transform:scale(.96);}
+  /* 导出结果浮层（手机长按保存） */
+  #save-mask{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.88);
+    display:none;flex-direction:column;align-items:center;
+    padding:18px 14px;overflow:auto;-webkit-overflow-scrolling:touch;}
+  #save-mask .tip{color:#fff;font-size:14px;font-weight:600;text-align:center;
+    margin:6px 0 14px;line-height:1.6;font-family:-apple-system,"PingFang SC",sans-serif;}
+  #save-mask .tip small{display:block;color:rgba(255,255,255,.7);font-weight:400;
+    font-size:12px;margin-top:4px;}
+  #save-mask img{width:100%;max-width:360px;border-radius:12px;
+    box-shadow:0 8px 30px rgba(0,0,0,.5);}
+  #save-mask .close{margin:16px 0 8px;color:#fff;border:1px solid rgba(255,255,255,.5);
+    background:transparent;border-radius:22px;padding:9px 22px;font-size:14px;cursor:pointer;
+    font-family:inherit;}
+</style>
+</head>
+<body>
+  <div id="poster">
+    <!-- 名片头 -->
+    <div class="card">
+      <div class="card-top">
+        {{AVATAR_HTML}}
+        <div class="who">
+          <div class="name-row">
+            <span class="name">{{NAME}}</span>
+            {{TITLE_HTML}}
+          </div>
+          <div class="company">{{COMPANY}}</div>
+          <div class="contact">{{CONTACT_HTML}}</div>
+        </div>
+        {{QR_HTML}}
+      </div>
+      {{FILING_LINE_HTML}}
+    </div>
+
+    <!-- 简报刊头 -->
+    <div class="masthead">
+      <div class="mh-top">
+        <div class="column">📋 {{COLUMN}}</div>
+        <div class="issue">{{ISSUE}}</div>
+      </div>
+      {{RECIPIENT_HTML}}
+      <div class="mh-title">{{HEADLINE}}</div>
+      <div class="freshness"><span class="dot"></span>{{GEN_DATE}} {{FRESH_TAG}}</div>
+    </div>
+
+    <!-- 正文 -->
+    <div class="body">
+      {{LEAD_HTML}}
+      {{CONTENT_HTML}}
+      {{SUMMARY_HTML}}
+    </div>
+
+    <!-- 底部 -->
+    <div class="foot">
+      <div class="gen">🗓 本简报生成于 {{GEN_DATE}}，内容时效以生成日期为准</div>
+      <div class="disclaimer">本资料仅供医疗卫生专业人士参考，不作为患者用药指导。</div>
+    </div>
+  </div>
+
+  <button id="export-btn" onclick="exportImage()">📥 导出长图</button>
+
+  <!-- 导出结果浮层 -->
+  <div id="save-mask">
+    <div class="tip" id="save-tip"></div>
+    <img id="save-img" alt="长图">
+    <button class="close" onclick="closeMask()">关闭</button>
+  </div>
+
+  <script>
+    function isMobile(){return /Android|iPhone|iPad|iPod|HarmonyOS|Mobile/i.test(navigator.userAgent);}
+    function closeMask(){document.getElementById('save-mask').style.display='none';}
+    function exportImage(){
+      var btn=document.getElementById('export-btn');
+      btn.textContent='生成中…';btn.disabled=true;
+      var node=document.getElementById('poster');
+      var bg=getComputedStyle(node).backgroundColor||'#ffffff';
+      html2canvas(node,{scale:3,useCORS:true,backgroundColor:bg}).then(function(canvas){
+        var dataUrl=canvas.toDataURL('image/png');
+        if(isMobile()){
+          // 手机：显示图片，长按保存到相册
+          document.getElementById('save-img').src=dataUrl;
+          document.getElementById('save-tip').innerHTML='长按下方图片，选择"存储图像/保存到相册"<small>保存后即可转发给医生</small>';
+          document.getElementById('save-mask').style.display='flex';
+        }else{
+          // 桌面：直接下载
+          var link=document.createElement('a');
+          link.download='{{FILE_BASENAME}}.png';link.href=dataUrl;link.click();
+        }
+        btn.textContent='📥 导出长图';btn.disabled=false;
+      }).catch(function(e){ alert('导出失败：'+e); btn.textContent='📥 导出长图';btn.disabled=false; });
+    }
+  </script>
+</body>
+</html>

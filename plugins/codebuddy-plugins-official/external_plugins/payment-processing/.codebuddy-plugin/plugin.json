@@ -1,0 +1,11 @@
+{
+  "name": "payment-processing",
+  "description": "支付网关集成,包含 Stripe 和 PayPal,实现结账流程、订阅计费和 PCI 合规性",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

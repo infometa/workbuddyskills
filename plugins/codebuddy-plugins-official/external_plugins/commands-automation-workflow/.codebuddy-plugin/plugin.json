@@ -1,0 +1,17 @@
+{
+  "name": "commands-automation-workflow",
+  "version": "1.0.0",
+  "description": "Commands for automating repetitive tasks and workflows",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "automation-workflow",
+    "act"
+  ]
+}

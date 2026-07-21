@@ -1,0 +1,5 @@
+{
+  "name": "theme-factory",
+  "description": "为演示文稿、文档、报告和 HTML 落地页等制品应用专业的字体和配色主题，提供 10 套预设主题方案。",
+  "license": "Apache-2.0"
+}

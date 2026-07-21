@@ -1,0 +1,86 @@
+{
+  "name": "fin-research-expert",
+  "version": "0.14.7",
+  "description": "A WorkBuddy equity research expert that combines a governed MCP Gateway connector, safe skill routing, and reusable playbook outputs for public-market research.",
+  "author": {
+    "name": "LingYue Tech",
+    "email": "ops@lingyue.example"
+  },
+  "agents": [
+    "./agents/fin-research-expert.md"
+  ],
+  "skills": [
+    "./skills/fin-mcp-gateway",
+    "./skills/layer1-doc-search",
+    "./skills/layer1-fin-data",
+    "./skills/layer1-fin-graph",
+    "./skills/layer1-same-boat",
+    "./skills/layer2-announcement-brief",
+    "./skills/layer2-evidence-ledger",
+    "./skills/layer2-html-research-playbook",
+    "./skills/layer2-industry-brief",
+    "./skills/layer2-policy-event-brief",
+    "./skills/layer2-research-digest",
+    "./skills/layer2-research-red-team",
+    "./skills/layer2-research-visuals",
+    "./skills/layer2-stock-brief",
+    "./skills/layer2-stock-narrative-valuation",
+    "./skills/layer2-transmission-chain-builder",
+    "./skills/layer3-event-interpretation",
+    "./skills/layer3-industry-windvane"
+  ],
+  "dependencies": {
+    "connectors": [
+      "tongzhou-fin-research"
+    ]
+  },
+  "expertType": "agent",
+  "agentName": "fin-research-expert",
+  "displayName": {
+    "en": "Tongzhou Equity Research Expert",
+    "zh": "同舟股市投研专家"
+  },
+  "profession": {
+    "en": "Equity Research Analyst",
+    "zh": "股市投研分析师"
+  },
+  "displayDescription": {
+    "en": "Connects Tongzhou public-market evidence into reusable stock, sector, event, and report playbook briefs.",
+    "zh": "连接同舟公开投研能力，稳定生成个股、行业、事件与研报的证据化简报和可复核投研案例页面"
+  },
+  "avatar": "avatars/expert-v2.png",
+  "categoryId": "08-FinanceInvestment",
+  "defaultInitPrompt": {
+    "en": "Create an event factor interpretation page for CATL and improving power-battery demand.",
+    "zh": "围绕宁德时代和动力电池需求改善，生成一页事件因子解读"
+  },
+  "plugin": "fin-research-expert",
+  "tags": [
+    {
+      "en": "Event Factors",
+      "zh": "事件解读"
+    },
+    {
+      "en": "Factor Attribution",
+      "zh": "因子归因"
+    },
+    {
+      "en": "Long/Short Signal",
+      "zh": "行业多空"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Create an event factor interpretation page for CATL and improving power-battery demand.",
+      "zh": "围绕宁德时代和动力电池需求改善，生成一页事件因子解读"
+    },
+    {
+      "en": "Create an industry long/short signal dashboard for the new-energy vehicle chain, split by short, mid, and long horizons.",
+      "zh": "围绕新能源车链，生成一页行业多空风向标，拆成短期、中期和长期"
+    },
+    {
+      "en": "Turn a recent sector move into a factor attribution, value-chain transmission, and historical similar-event return page.",
+      "zh": "把行业/板块最近异动拆成影响因子、产业链传导和历史相似事件走势"
+    }
+  ]
+}

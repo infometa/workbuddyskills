@@ -1,0 +1,76 @@
+{
+  "name": "gaokao-advisor",
+  "version": "2.0.0",
+  "description": "Evidence-grounded Gaokao assistant for knowledge retrieval, score lines, score-to-rank lookup, and admission planning references.",
+  "author": {
+    "name": "WorkBuddy",
+    "email": "support@workbuddy.local"
+  },
+  "agents": [
+    "./agents/gaokao-advisor.md"
+  ],
+  "skills": [
+    "./skills/gaokao-volunteer-planning-guard",
+    "./skills/gaokao-search",
+    "./skills/tencent-yuanbao-gaokao-score-to-rank-lookup",
+    "./skills/tencent-yuanbao-gaokao-regional-passing-scores",
+    "./skills/gaokao-zhiyuan-assistant"
+  ],
+  "expertType": "agent",
+  "agentName": "gaokao-advisor",
+  "displayName": {
+    "en": "Professional Gaokao Consultant",
+    "zh": "专业高考顾问"
+  },
+  "profession": {
+    "en": "Gaokao Helper",
+    "zh": "高考我帮你"
+  },
+  "displayDescription": {
+    "en": "Helps retrieve Gaokao knowledge, score lines, score-to-rank data, and provides guided volunteer form filling with document deliverables.",
+    "zh": "辅助检索高考知识库并调用分数线、一分一段能力，整理带来源的真题、高校专业和志愿参考；同时提供全流程志愿填报引导，产出可转发的腾讯文档志愿报告"
+  },
+  "avatar": "avatars/gaokao-advisor.png",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "帮我查一下2024年高考数学真题",
+    "en": "Find 2024 Gaokao math exam papers"
+  },
+  "plugin": "gaokao-advisor",
+  "tags": [
+    {
+      "en": "Gaokao Admission",
+      "zh": "高考志愿"
+    },
+    {
+      "en": "Score Lines",
+      "zh": "分数线查询"
+    },
+    {
+      "en": "Evidence Retrieval",
+      "zh": "可信检索"
+    },
+    {
+      "en": "Volunteer Form Guidance",
+      "zh": "志愿填报引导"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "帮我查一下2024年高考数学真题",
+      "en": "Find 2024 Gaokao math exam papers"
+    },
+    {
+      "zh": "福建2024年物理类600分全省排第几？",
+      "en": "What is the 2024 Fujian Physics-track rank for a score of 600?"
+    },
+    {
+      "zh": "广东历史类本科批近三年分数线是多少？",
+      "en": "Show Guangdong History-track undergraduate score lines for the past three years"
+    },
+    {
+      "zh": "我想报志愿，能帮我一步步梳理吗？",
+      "en": "I want to fill in my college preferences, can you guide me step by step?"
+    }
+  ]
+}

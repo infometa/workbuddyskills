@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "(?i)(tapd|需求|story|stories|缺陷|bug|任务|task|迭代|iteration|sprint|工时|effort|需求分类|category|发布计划|release|自定义字段|custom_field|工作项|workitem|优先级|priority|处理人|owner|业务价值|business_value|wiki.*搜索|搜索.*wiki|查找.*wiki|wiki.*search|search.*wiki|知识库.*搜索|搜索.*知识库|查询.*wiki|wiki.*内容)",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "用户的请求涉及 TAPD 平台相关操作。请使用 tapd-openapi 技能来查询和调用 TAPD API。如果涉及 Wiki 搜索，请使用 scripts/search_wiki.py 先同步再搜索。"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,924 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://lexiangla.com/schemas/yunzhi-block-schema.json",
+    "title": "云知 Block JSON Schema",
+    "description": "云知在线文档 Block 类型的完整 JSON Schema 定义",
+    "version": "1.0.0",
+    "definitions": {
+        "CommonBlock": {
+            "type": "object",
+            "properties": {
+                "block_id": {
+                    "type": "string",
+                    "description": "创建嵌套块时指定临时 ID；创建简单块时可留空"
+                },
+                "block_type": {
+                    "type": "string",
+                    "enum": [
+                        "p",
+                        "h1",
+                        "h2",
+                        "h3",
+                        "h4",
+                        "h5",
+                        "bulleted_list",
+                        "numbered_list",
+                        "code",
+                        "divider",
+                        "callout",
+                        "toggle",
+                        "task",
+                        "column_list",
+                        "column",
+                        "table",
+                        "table_cell",
+                        "mermaid",
+                        "plantuml",
+                        "image",
+                        "video",
+                        "attachment"
+                    ],
+                    "description": "块类型枚举值"
+                },
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "子块的临时 ID 列表（仅容器类块使用）"
+                },
+                "parent_id": {
+                    "type": "string",
+                    "description": "父块 ID（响应中返回，创建时无需指定）"
+                }
+            },
+            "required": [
+                "block_type"
+            ]
+        },
+        "Text": {
+            "description": "文本内容，适用于：text, heading1-heading5, bulleted, numbered, code, toggle",
+            "type": "object",
+            "properties": {
+                "elements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/TextElement"
+                    }
+                },
+                "style": {
+                    "$ref": "#/definitions/BlockStyle"
+                }
+            }
+        },
+        "TextElement": {
+            "type": "object",
+            "oneOf": [
+                {
+                    "properties": {
+                        "text_run": {
+                            "$ref": "#/definitions/TextRun"
+                        }
+                    },
+                    "required": [
+                        "text_run"
+                    ]
+                },
+                {
+                    "properties": {
+                        "mention_staff": {
+                            "type": "object",
+                            "properties": {
+                                "staff_id": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "staff_id"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "mention_staff"
+                    ]
+                },
+                {
+                    "properties": {
+                        "mention_entry": {
+                            "type": "object",
+                            "properties": {
+                                "entry_id": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "entry_id"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "mention_entry"
+                    ]
+                },
+                {
+                    "properties": {
+                        "mention_date": {
+                            "type": "object",
+                            "properties": {
+                                "date": {
+                                    "type": "string",
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                                },
+                                "time": {
+                                    "type": "string",
+                                    "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+                                }
+                            },
+                            "required": [
+                                "date",
+                                "time"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "mention_date"
+                    ]
+                }
+            ]
+        },
+        "TextRun": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "text_style": {
+                    "$ref": "#/definitions/TextStyle"
+                }
+            },
+            "required": [
+                "content"
+            ]
+        },
+        "TextStyle": {
+            "type": "object",
+            "properties": {
+                "bold": {
+                    "type": "boolean"
+                },
+                "italic": {
+                    "type": "boolean"
+                },
+                "underline": {
+                    "type": "boolean"
+                },
+                "strikethrough": {
+                    "type": "boolean"
+                },
+                "inline_code": {
+                    "type": "boolean"
+                },
+                "text_color": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "background_color": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "link": {
+                    "type": "string",
+                    "format": "uri"
+                }
+            }
+        },
+        "BlockStyle": {
+            "type": "object",
+            "properties": {
+                "align": {
+                    "enum": [
+                        "left",
+                        "center",
+                        "right"
+                    ]
+                },
+                "background_color": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "wrap": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "Paragraph": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "p"
+                        },
+                        "text": {
+                            "$ref": "#/definitions/Text"
+                        }
+                    },
+                    "required": [
+                        "text"
+                    ]
+                }
+            ]
+        },
+        "Heading": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "enum": [
+                                "h1",
+                                "h2",
+                                "h3",
+                                "h4",
+                                "h5"
+                            ]
+                        },
+                        "heading1": {
+                            "$ref": "#/definitions/Text"
+                        },
+                        "heading2": {
+                            "$ref": "#/definitions/Text"
+                        },
+                        "heading3": {
+                            "$ref": "#/definitions/Text"
+                        },
+                        "heading4": {
+                            "$ref": "#/definitions/Text"
+                        },
+                        "heading5": {
+                            "$ref": "#/definitions/Text"
+                        }
+                    }
+                }
+            ]
+        },
+        "BulletedList": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "bulleted_list"
+                        },
+                        "bulleted": {
+                            "$ref": "#/definitions/Text"
+                        }
+                    },
+                    "required": [
+                        "bulleted"
+                    ]
+                }
+            ]
+        },
+        "NumberedList": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "numbered_list"
+                        },
+                        "numbered": {
+                            "$ref": "#/definitions/Text"
+                        }
+                    },
+                    "required": [
+                        "numbered"
+                    ]
+                }
+            ]
+        },
+        "CodeBlock": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "code"
+                        },
+                        "code": {
+                            "$ref": "#/definitions/Text"
+                        }
+                    },
+                    "required": [
+                        "code"
+                    ]
+                }
+            ]
+        },
+        "Divider": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "divider"
+                        },
+                        "divider": {
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "divider"
+                    ]
+                }
+            ]
+        },
+        "Callout": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "callout"
+                        },
+                        "callout": {
+                            "type": "object",
+                            "properties": {
+                                "icon": {
+                                    "type": "string",
+                                    "description": "Emoji Unicode，如 1f680 = 🚀"
+                                },
+                                "color": {
+                                    "type": "string",
+                                    "pattern": "^#[0-9A-Fa-f]{6}$",
+                                    "description": "背景色 Hex 值"
+                                }
+                            },
+                            "required": [
+                                "icon",
+                                "color"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "callout"
+                    ]
+                }
+            ]
+        },
+        "Toggle": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "toggle"
+                        },
+                        "toggle": {
+                            "$ref": "#/definitions/Text"
+                        }
+                    },
+                    "required": [
+                        "toggle"
+                    ]
+                }
+            ]
+        },
+        "Task": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "task"
+                        },
+                        "task": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "done": {
+                                    "type": "boolean"
+                                },
+                                "due_at": {
+                                    "type": "object",
+                                    "properties": {
+                                        "date": {
+                                            "type": "string",
+                                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                                        },
+                                        "time": {
+                                            "type": "string",
+                                            "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+                                        }
+                                    },
+                                    "required": [
+                                        "date",
+                                        "time"
+                                    ]
+                                },
+                                "assignees": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "staff_id": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "staff_id"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "name"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "task"
+                    ]
+                }
+            ]
+        },
+        "ColumnList": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "column_list"
+                        },
+                        "column_list": {
+                            "type": "object",
+                            "properties": {
+                                "column_size": {
+                                    "type": "number",
+                                    "minimum": 1
+                                }
+                            },
+                            "required": [
+                                "column_size"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "column_list"
+                    ]
+                }
+            ]
+        },
+        "Column": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "column"
+                        },
+                        "column": {
+                            "type": "object",
+                            "properties": {
+                                "width_ratio": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                }
+                            },
+                            "required": [
+                                "width_ratio"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "column"
+                    ]
+                }
+            ]
+        },
+        "Table": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "table"
+                        },
+                        "table": {
+                            "type": "object",
+                            "properties": {
+                                "row_size": {
+                                    "type": "number",
+                                    "minimum": 1
+                                },
+                                "column_size": {
+                                    "type": "number",
+                                    "minimum": 1
+                                },
+                                "column_width": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "number",
+                                        "minimum": 0
+                                    }
+                                },
+                                "header_row": {
+                                    "type": "boolean"
+                                },
+                                "header_column": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "required": [
+                                "row_size",
+                                "column_size"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "table"
+                    ]
+                }
+            ]
+        },
+        "TableCell": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "table_cell"
+                        },
+                        "table_cell": {
+                            "type": "object",
+                            "properties": {
+                                "background_color": {
+                                    "type": "string",
+                                    "pattern": "^#[0-9A-Fa-f]{6}$"
+                                },
+                                "align": {
+                                    "enum": [
+                                        "left",
+                                        "center",
+                                        "right"
+                                    ]
+                                },
+                                "vertical_align": {
+                                    "enum": [
+                                        "top",
+                                        "middle",
+                                        "bottom"
+                                    ]
+                                },
+                                "row_span": {
+                                    "type": "number",
+                                    "minimum": 1
+                                },
+                                "col_span": {
+                                    "type": "number",
+                                    "minimum": 1
+                                }
+                            }
+                        }
+                    },
+                    "required": [
+                        "table_cell"
+                    ]
+                }
+            ]
+        },
+        "Mermaid": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "mermaid"
+                        },
+                        "mermaid": {
+                            "type": "object",
+                            "properties": {
+                                "content": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "content"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "mermaid"
+                    ]
+                }
+            ]
+        },
+        "PlantUML": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "plantuml"
+                        },
+                        "plantuml": {
+                            "type": "object",
+                            "properties": {
+                                "content": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "content"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "plantuml"
+                    ]
+                }
+            ]
+        },
+        "Image": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "image"
+                        },
+                        "image": {
+                            "type": "object",
+                            "properties": {
+                                "file_id": {
+                                    "type": "string"
+                                },
+                                "width": {
+                                    "type": "number",
+                                    "minimum": 0
+                                },
+                                "height": {
+                                    "type": "number",
+                                    "minimum": 0
+                                },
+                                "align": {
+                                    "enum": [
+                                        "left",
+                                        "center",
+                                        "right"
+                                    ]
+                                },
+                                "caption": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "file_id"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "image"
+                    ]
+                }
+            ]
+        },
+        "Video": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "video"
+                        },
+                        "video": {
+                            "type": "object",
+                            "properties": {
+                                "file_id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "width": {
+                                    "type": "number",
+                                    "minimum": 0
+                                },
+                                "height": {
+                                    "type": "number",
+                                    "minimum": 0
+                                },
+                                "align": {
+                                    "enum": [
+                                        "left",
+                                        "center",
+                                        "right"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "file_id"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "video"
+                    ]
+                }
+            ]
+        },
+        "Attachment": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CommonBlock"
+                },
+                {
+                    "properties": {
+                        "block_type": {
+                            "const": "attachment"
+                        },
+                        "attachment": {
+                            "type": "object",
+                            "properties": {
+                                "file_id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "view_type": {
+                                    "enum": [
+                                        "text",
+                                        "card",
+                                        "preview"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "file_id"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "attachment"
+                    ]
+                }
+            ]
+        },
+        "Block": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/Paragraph"
+                },
+                {
+                    "$ref": "#/definitions/Heading"
+                },
+                {
+                    "$ref": "#/definitions/BulletedList"
+                },
+                {
+                    "$ref": "#/definitions/NumberedList"
+                },
+                {
+                    "$ref": "#/definitions/CodeBlock"
+                },
+                {
+                    "$ref": "#/definitions/Divider"
+                },
+                {
+                    "$ref": "#/definitions/Callout"
+                },
+                {
+                    "$ref": "#/definitions/Toggle"
+                },
+                {
+                    "$ref": "#/definitions/Task"
+                },
+                {
+                    "$ref": "#/definitions/ColumnList"
+                },
+                {
+                    "$ref": "#/definitions/Column"
+                },
+                {
+                    "$ref": "#/definitions/Table"
+                },
+                {
+                    "$ref": "#/definitions/TableCell"
+                },
+                {
+                    "$ref": "#/definitions/Mermaid"
+                },
+                {
+                    "$ref": "#/definitions/PlantUML"
+                },
+                {
+                    "$ref": "#/definitions/Image"
+                },
+                {
+                    "$ref": "#/definitions/Video"
+                },
+                {
+                    "$ref": "#/definitions/Attachment"
+                }
+            ]
+        }
+    },
+    "anyOf": [
+        {
+            "$ref": "#/definitions/Paragraph"
+        },
+        {
+            "$ref": "#/definitions/Heading"
+        },
+        {
+            "$ref": "#/definitions/BulletedList"
+        },
+        {
+            "$ref": "#/definitions/NumberedList"
+        },
+        {
+            "$ref": "#/definitions/CodeBlock"
+        },
+        {
+            "$ref": "#/definitions/Divider"
+        },
+        {
+            "$ref": "#/definitions/Callout"
+        },
+        {
+            "$ref": "#/definitions/Toggle"
+        },
+        {
+            "$ref": "#/definitions/Task"
+        },
+        {
+            "$ref": "#/definitions/ColumnList"
+        },
+        {
+            "$ref": "#/definitions/Column"
+        },
+        {
+            "$ref": "#/definitions/Table"
+        },
+        {
+            "$ref": "#/definitions/TableCell"
+        },
+        {
+            "$ref": "#/definitions/Mermaid"
+        },
+        {
+            "$ref": "#/definitions/PlantUML"
+        },
+        {
+            "$ref": "#/definitions/Image"
+        },
+        {
+            "$ref": "#/definitions/Video"
+        },
+        {
+            "$ref": "#/definitions/Attachment"
+        }
+    ]
+}

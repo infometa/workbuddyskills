@@ -1,0 +1,12 @@
+{
+  "name": "supabase",
+  "description": "Supabase MCP 集成，用于数据库操作、身份验证、存储和实时订阅。管理您的 Supabase 项目，运行 SQL 查询，并直接与后端交互。",
+  "author": {
+    "name": "Supabase"
+  },
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "未声明"
+}

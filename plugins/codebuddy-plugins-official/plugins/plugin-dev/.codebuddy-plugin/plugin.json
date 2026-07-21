@@ -1,0 +1,9 @@
+{
+  "name": "plugin-dev",
+  "description": "用于开发 CodeBuddy Code 插件的综合工具包。包含 7 个专家技能,涵盖钩子、MCP 集成、命令、代理和最佳实践。支持 AI 辅助的插件创建和验证。",
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "未声明"
+}

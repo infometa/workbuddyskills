@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__TITLE__ · 小红书</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#f5f5f5;color:#333;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ========== 整体容器（参考小红书官网：左侧填满，右侧滚动到底贴互动栏） ========== */
+.xhs-page{display:flex;justify-content:center;align-items:flex-start;padding:24px 16px;min-height:100vh}
+.xhs-card{display:flex;width:1040px;max-width:100%;height:calc(100vh - 48px);max-height:920px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.06);position:relative}
+
+/* ========== 左侧图片区（黑色背景 + contain 完整显示，参考小红书图片浏览） ========== */
+.xhs-gallery{position:relative;width:520px;flex-shrink:0;background:#000;display:flex;flex-direction:column;height:100%}
+
+/* 桌面端：opacity 切换（保留原视觉） */
+.xhs-slides{position:relative;flex:1;overflow:hidden;min-height:0;background:#000}
+.xhs-slide{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:0;background:#000;opacity:0;visibility:hidden;transition:opacity .3s}
+.xhs-slide.xhs-slide-active{opacity:1;visibility:visible}
+.xhs-slide img{width:100%;height:100%;object-fit:contain;display:block;-webkit-user-drag:none;user-select:none;-webkit-user-select:none;pointer-events:none}
+
+/* 移动端：CSS scroll-snap 原生横向滚动（最稳定，微信/iOS/Android 全兼容） */
+@media (max-width: 960px) {
+  .xhs-slides{
+    display:flex;
+    flex-direction:row;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .xhs-slides::-webkit-scrollbar{display:none}
+  .xhs-slide{
+    position:relative;
+    top:auto;left:auto;right:auto;bottom:auto;
+    flex:0 0 100%;
+    width:100%;
+    opacity:1 !important;
+    visibility:visible !important;
+    scroll-snap-align:center;
+    scroll-snap-stop:always;
+  }
+}
+.xhs-img-caption{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));color:rgba(255,255,255,.95);padding:24px 20px 16px;font-size:12px;text-align:center;line-height:1.5;pointer-events:auto}
+.xhs-img-caption a{color:#fff;text-decoration:underline;text-underline-offset:2px}
+
+/* 翻页箭头（移动端始终显示，更易点） */
+.xhs-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.4);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:0;transition:opacity .2s;z-index:5;-webkit-tap-highlight-color:transparent}
+.xhs-gallery:hover .xhs-nav{opacity:1}
+.xhs-nav:hover{background:rgba(0,0,0,.6)}
+.xhs-nav-prev{left:16px}
+.xhs-nav-next{right:16px}
+@media (hover:none){
+  .xhs-nav{opacity:.7}
+  .xhs-nav:active{background:rgba(0,0,0,.7)}
+}
+
+/* 右上角 N/M 计数 */
+.xhs-counter{position:absolute;top:14px;right:14px;background:rgba(0,0,0,.5);color:#fff;font-size:12px;padding:3px 10px;border-radius:12px;z-index:3}
+
+/* 圆点指示（漂浮在图片底部之上） */
+.xhs-dots{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:5px;z-index:3}
+.xhs-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.6);cursor:pointer;transition:all .2s}
+.xhs-dot.active{background:#ff2442;width:14px;border-radius:3px}
+
+/* ========== 右侧内容栏（高度对齐左侧，滚动到底贴互动栏） ========== */
+.xhs-content{flex:1;display:flex;flex-direction:column;min-width:0;height:100%}
+
+/* 作者栏 */
+.xhs-author{display:flex;align-items:center;padding:16px 24px;border-bottom:1px solid #f0f0f0;flex-shrink:0}
+.xhs-author-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff6b6b,#feca57);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;margin-right:12px;flex-shrink:0}
+.xhs-author-info{flex:1;min-width:0}
+.xhs-author-name{font-size:15px;font-weight:600;color:#333;margin-bottom:2px}
+.xhs-author-tag{font-size:12px;color:#999}
+.xhs-follow-btn{background:#ff2442;color:#fff;border:none;padding:8px 22px;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;flex-shrink:0;transition:background .2s}
+.xhs-follow-btn:hover{background:#e51e3a}
+
+/* 正文区（滚动） */
+.xhs-body-scroll{flex:1;overflow-y:auto;padding:16px 24px 20px;min-height:0}
+.xhs-body-scroll::-webkit-scrollbar{width:6px}
+.xhs-body-scroll::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:3px}
+.xhs-body-scroll::-webkit-scrollbar-thumb:hover{background:#bbb}
+
+.xhs-title{font-size:18px;font-weight:700;color:#222;line-height:1.4;margin-bottom:10px}
+.xhs-quote{font-size:14px;color:#333;line-height:1.85;margin-bottom:14px}
+
+.xhs-body p{font-size:14px;color:#333;line-height:1.85;margin:10px 0;word-break:break-word}
+.xhs-h2{font-size:16px;font-weight:700;color:#222;margin:20px 0 10px;padding:0;border:none}
+.xhs-list{list-style:none;padding:0;margin:8px 0}
+.xhs-list li{font-size:14px;color:#333;line-height:1.85;margin:6px 0;padding-left:0}
+.xhs-list li::before{content:""}
+.xhs-body strong{color:#222;font-weight:700}
+.xhs-body a{color:#3a6cf2;text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
+.xhs-body a:hover{border-bottom-color:#3a6cf2}
+
+.xhs-tags{margin:20px 0 8px;display:flex;flex-wrap:wrap;gap:6px}
+.xhs-tag{display:inline-block;color:#3a6cf2;font-size:13px;text-decoration:none;padding:2px 0}
+.xhs-tag:hover{text-decoration:underline}
+
+.xhs-time-loc{font-size:12px;color:#bbb;margin-top:12px;padding-bottom:14px;border-bottom:1px solid #f0f0f0}
+
+/* 评论区 */
+.xhs-comments-head{font-size:13px;color:#999;padding:14px 0 8px}
+.xhs-comment{padding:10px 0}
+.xhs-comment-row{display:flex;gap:10px}
+.xhs-avatar{width:36px;height:36px;border-radius:50%;background:#f0e6ff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.xhs-avatar-author{background:linear-gradient(135deg,#ff6b6b,#feca57)}
+.xhs-comment-body{flex:1;min-width:0}
+.xhs-comment-meta{font-size:13px;color:#888;margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.xhs-comment-name{font-weight:500}
+.xhs-author-badge{background:#fff0e6;color:#ff7a45;font-size:11px;padding:1px 6px;border-radius:3px;font-weight:500}
+.xhs-comment-text{font-size:14px;color:#333;line-height:1.6}
+.xhs-comment-actions{display:flex;gap:14px;align-items:center;margin-top:6px;font-size:12px;color:#999}
+.xhs-comment-time{flex-shrink:0}
+.xhs-comment-action{cursor:pointer}
+.xhs-comment-action:hover{color:#ff2442}
+.xhs-comment-reply{margin-top:10px;background:#fafafa;border-radius:8px;padding:10px 12px}
+.xhs-comment-expand{font-size:13px;color:#3a6cf2;cursor:pointer;margin-top:6px}
+
+.xhs-end{text-align:center;color:#bbb;font-size:13px;letter-spacing:8px;padding:20px 0 8px;margin-top:8px}
+
+/* 底部互动栏：固定在右侧底部 */
+.xhs-bottom-bar{flex-shrink:0;background:#fff;border-top:1px solid #f0f0f0;padding:12px 24px;display:flex;align-items:center;gap:12px}
+.xhs-input-wrap{flex:1;background:#f5f5f5;border-radius:24px;padding:8px 16px;display:flex;align-items:center;gap:8px}
+.xhs-input-avatar{width:24px;height:24px;border-radius:50%;background:#ffd166;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.xhs-input-placeholder{color:#aaa;font-size:13px;flex:1}
+.xhs-action-group{display:flex;align-items:center;gap:16px;font-size:13px;color:#666}
+.xhs-action{display:flex;align-items:center;gap:4px;cursor:pointer}
+.xhs-action:hover{color:#ff2442}
+.xhs-action-ico{font-size:18px}
+
+/* 响应式 */
+@media (max-width: 960px) {
+  .xhs-page{padding:0;align-items:stretch}
+  .xhs-card{flex-direction:column;width:100%;height:auto;max-height:none;border-radius:0}
+  .xhs-gallery{width:100%;height:auto;aspect-ratio:1/1}
+  .xhs-content{height:auto}
+  .xhs-body-scroll{overflow-y:visible}
+  .xhs-bottom-bar{position:sticky;bottom:0;z-index:5}
+  /* 移动端隐藏底部圆点指示器（保留右上角 N/M 计数和左右翻页箭头作为位置反馈） */
+  .xhs-dots{display:none !important}
+  /* 翻页箭头在移动端做得更显眼一点（替代指示器的位置反馈作用） */
+  .xhs-nav{opacity:.8;width:32px;height:32px;font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<div class="xhs-page">
+  <article class="xhs-card">
+
+    <!-- 左侧图片轮播 -->
+    <div class="xhs-gallery">
+      <div class="xhs-counter"><span id="xhsCurIdx">1</span>/__TOTAL__</div>
+      <div class="xhs-slides" id="xhsSlides">
+__SLIDES__
+      </div>
+      <button class="xhs-nav xhs-nav-prev" onclick="xhsPrev()">‹</button>
+      <button class="xhs-nav xhs-nav-next" onclick="xhsNext()">›</button>
+      <div class="xhs-dots" id="xhsDots">
+__DOTS__
+      </div>
+    </div>
+
+    <!-- 右侧内容栏 -->
+    <div class="xhs-content">
+
+      <!-- 作者栏 -->
+      <div class="xhs-author">
+        <div class="xhs-author-avatar">__AUTHOR_EMOJI__</div>
+        <div class="xhs-author-info">
+          <div class="xhs-author-name">__AUTHOR_NAME__</div>
+          <div class="xhs-author-tag">__AUTHOR_TAG__</div>
+        </div>
+        <button class="xhs-follow-btn">关注</button>
+      </div>
+
+      <!-- 滚动正文 -->
+      <div class="xhs-body-scroll">
+        <div class="xhs-title">__TITLE__</div>
+__QUOTE_BLOCK__
+        <div class="xhs-body">
+__BODY__
+        </div>
+
+        <div class="xhs-tags">
+__TAGS__
+        </div>
+
+        <div class="xhs-time-loc">__POST_TIME_LOC__</div>
+
+        <!-- 评论 -->
+        __COMMENTS_HEAD__
+__COMMENTS__
+
+        <div class="xhs-end">— THE END —</div>
+      </div>
+
+      <!-- 底部互动栏 -->
+      <div class="xhs-bottom-bar">
+        <div class="xhs-input-wrap">
+          <div class="xhs-input-avatar">😊</div>
+          <div class="xhs-input-placeholder">说点什么…</div>
+        </div>
+        <div class="xhs-action-group">
+          <div class="xhs-action"><span class="xhs-action-ico">♡</span><span>__LIKES__</span></div>
+          <div class="xhs-action"><span class="xhs-action-ico">⭐</span><span>__COLLECTS__</span></div>
+          <div class="xhs-action"><span class="xhs-action-ico">💬</span><span>__COMMENT_COUNT__</span></div>
+          <div class="xhs-action"><span class="xhs-action-ico">↗</span></div>
+        </div>
+      </div>
+
+    </div>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  const slidesEl = document.getElementById('xhsSlides');
+  const slides = Array.from(document.querySelectorAll('.xhs-slide'));
+  const dots = Array.from(document.querySelectorAll('.xhs-dot'));
+  const curIdxEl = document.getElementById('xhsCurIdx');
+  const total = slides.length;
+  let curIdx = 0;
+
+  const mq = window.matchMedia('(max-width: 960px)');
+  function isMobileMode(){ return mq.matches; }
+
+  function updateIndicators(idx){
+    if (total === 0) return;
+    idx = ((idx % total) + total) % total;
+    if (idx === curIdx) return;
+    curIdx = idx;
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    if (curIdxEl) curIdxEl.textContent = (idx + 1);
+  }
+
+  function showSlide(idx) {
+    if (total === 0) return;
+    idx = ((idx % total) + total) % total;
+    if (isMobileMode()) {
+      if (slidesEl) {
+        slidesEl.scrollTo({ left: slidesEl.clientWidth * idx, behavior: 'smooth' });
+      }
+    } else {
+      slides.forEach((s, i) => s.classList.toggle('xhs-slide-active', i === idx));
+    }
+    updateIndicators(idx);
+  }
+  function xhsPrev() { showSlide(curIdx - 1); }
+  function xhsNext() { showSlide(curIdx + 1); }
+  window.xhsPrev = xhsPrev;
+  window.xhsNext = xhsNext;
+
+  if (!isMobileMode() && slides.length) {
+    slides[0].classList.add('xhs-slide-active');
+  }
+
+  // 圆点点击
+  dots.forEach(d => d.addEventListener('click', e => {
+    e.stopPropagation();
+    showSlide(parseInt(e.currentTarget.dataset.idx));
+  }));
+
+  // 翻页按钮
+  function bindNav(selector, fn){
+    const el = document.querySelector(selector);
+    if(!el) return;
+    el.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); fn(); });
+  }
+  bindNav('.xhs-nav-prev', xhsPrev);
+  bindNav('.xhs-nav-next', xhsNext);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') xhsPrev();
+    if (e.key === 'ArrowRight') xhsNext();
+  });
+
+  /* ============================================================
+     移动端指示器同步：双路 + IntersectionObserver 兜底
+     ============================================================
+     问题：微信 webview 的 scroll 事件节流非常激进，scrollLeft
+     在快速滑动时取到的值经常与视觉位置不一致；scrollend 在
+     微信里也几乎不触发。所以我们用 IntersectionObserver 直接
+     观察"哪张 slide 进入了容器视口" —— 这个是浏览器内部计算的
+     真实视觉状态，绝对可靠。
+  ============================================================ */
+  if (slidesEl && total > 0) {
+
+    // 方案 A：IntersectionObserver（核心方案，几乎所有现代浏览器支持）
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (!isMobileMode()) return;
+        // 找出可见比例最大的 slide
+        let bestIdx = curIdx;
+        let bestRatio = 0;
+        entries.forEach(entry => {
+          const idx = slides.indexOf(entry.target);
+          if (idx === -1) return;
+          if (entry.isIntersecting && entry.intersectionRatio > bestRatio) {
+            bestRatio = entry.intersectionRatio;
+            bestIdx = idx;
+          }
+        });
+        if (bestRatio > 0.5) {
+          updateIndicators(bestIdx);
+        }
+      }, {
+        root: slidesEl,
+        threshold: [0, 0.25, 0.5, 0.75, 1.0],
+      });
+      slides.forEach(s => io.observe(s));
+    }
+
+    // 方案 B：scroll 事件 + rAF（双保险，IntersectionObserver 不可用时兜底）
+    let rafId = null;
+    function syncFromScroll(){
+      if (!isMobileMode()) return;
+      const w = slidesEl.clientWidth;
+      if (w <= 0) return;
+      const idx = Math.max(0, Math.min(total - 1, Math.round(slidesEl.scrollLeft / w)));
+      updateIndicators(idx);
+    }
+    slidesEl.addEventListener('scroll', () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        syncFromScroll();
+      });
+    }, {passive:true});
+
+    // 方案 C：touchend / scrollend 兜底（惯性滚动结束）
+    slidesEl.addEventListener('touchend', () => {
+      setTimeout(syncFromScroll, 80);
+      setTimeout(syncFromScroll, 250);
+      setTimeout(syncFromScroll, 500);
+    }, {passive:true});
+    slidesEl.addEventListener('scrollend', syncFromScroll, {passive:true});
+
+    // 移动端：初始位置归零
+    if (isMobileMode()) {
+      requestAnimationFrame(() => { slidesEl.scrollLeft = 0; });
+    }
+  }
+
+  // 视口尺寸变化时复位
+  function onMqChange(){
+    if (isMobileMode()) {
+      slides.forEach(s => s.classList.remove('xhs-slide-active'));
+      if (slidesEl) {
+        requestAnimationFrame(() => {
+          slidesEl.scrollLeft = slidesEl.clientWidth * curIdx;
+        });
+      }
+    } else {
+      slides.forEach((s, i) => s.classList.toggle('xhs-slide-active', i === curIdx));
+    }
+  }
+  if (mq.addEventListener) mq.addEventListener('change', onMqChange);
+  else if (mq.addListener) mq.addListener(onMqChange);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "comprehensive-review",
+  "description": "多维度代码分析,覆盖架构、安全性和最佳实践",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,37 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=18"
+    },
+    "init": {
+        "darwin": "npm install -g @cloudbase/cli@latest",
+        "linux": "npm install -g @cloudbase/cli@latest",
+        "win32": "npm install -g @cloudbase/cli@latest"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "tcb --version",
+            "linux": "tcb --version",
+            "win32": "tcb.cmd --version"
+        },
+        "minVersion": "3.6.3"
+    },
+    "auth": {
+        "darwin": "tcb login --flow web --yes",
+        "linux": "tcb login --flow web --yes",
+        "win32": "tcb.cmd login --flow web --yes"
+    },
+    "unAuth": {
+        "darwin": "tcb logout",
+        "linux": "tcb logout",
+        "win32": "tcb.cmd logout"
+    },
+    "status": {
+        "darwin": "tcb env list",
+        "linux": "tcb env list",
+        "win32": "tcb.cmd env list"
+    },
+    "authWaitForExit": true,
+    "authSuppressBrowser": true,
+    "authUrlDomain": "tcb.cloud.tencent.com"
+}

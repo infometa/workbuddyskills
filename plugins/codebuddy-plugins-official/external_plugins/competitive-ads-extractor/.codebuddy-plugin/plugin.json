@@ -1,0 +1,5 @@
+{
+  "name": "competitive-ads-extractor",
+  "description": "从广告库中提取并分析竞争对手的广告,以了解能够引起共鸣的营销信息和创意方法。",
+  "license": "未声明"
+}

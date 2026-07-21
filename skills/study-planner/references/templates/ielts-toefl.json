@@ -1,0 +1,99 @@
+{
+  "id": "ielts-toefl",
+  "name": "雅思/托福备考计划",
+  "description": "适用于雅思/托福目标分冲刺，按当前水平分段设计",
+  "applicable_to": ["雅思 IELTS", "托福 TOEFL", "多邻国 Duolingo"],
+  "default_duration_days": 60,
+  "total_phases": 3,
+
+  "score_bridge_templates": [
+    {
+      "from": "5.0",
+      "to": "5.5",
+      "focus": ["词汇量提升", "基础语法巩固", "各科题型熟悉"],
+      "daily_workload": "1.5h/day"
+    },
+    {
+      "from": "5.5",
+      "to": "6.0",
+      "focus": ["技巧提升", "弱项突破（写作/口语）", "高频场景词汇"],
+      "daily_workload": "2h/day"
+    },
+    {
+      "from": "6.0",
+      "to": "6.5",
+      "focus": ["精读精听", "口语流畅度", "写作逻辑框架"],
+      "daily_workload": "2.5h/day"
+    },
+    {
+      "from": "6.5",
+      "to": "7.0",
+      "focus": ["高分词汇", "复杂句式", "地道表达", "限时模考"],
+      "daily_workload": "3h/day"
+    }
+  ],
+
+  "phase_templates": [
+    {
+      "phase": 1,
+      "name": "基础巩固",
+      "duration_ratio": 0.3,
+      "description": "词汇积累 + 题型熟悉 + 薄弱项诊断",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["听力 Section 1 精听", "词汇 50 个", "阅读 1 篇"] },
+        { "day": "Tue", "tasks": ["口语 P1 练习", "词汇 50 个", "写作句式 5 句"] },
+        { "day": "Wed", "tasks": ["听力 Section 2-3 精听", "阅读 1 篇", "语法专项"] },
+        { "day": "Thu", "tasks": ["口语 P2 卡片 1 个", "词汇 50 个", "写作大作文 1 篇"] },
+        { "day": "Fri", "tasks": ["听力套题 1 套", "阅读套题 1 套", "复盘"] },
+        { "day": "Sat", "tasks": ["全科模考", "口语模拟", "写作批改"] },
+        { "day": "Sun", "tasks": ["错题回顾", "薄弱项专项", "休息/轻度复习"] }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "强化突破",
+      "duration_ratio": 0.45,
+      "description": "技巧提升 + 弱项专项 + 限时训练",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["听力精听 + 同义替换总结", "口语 P3 练习", "阅读定位词"] },
+        { "day": "Tue", "tasks": ["写作小作文专项", "口语 P2 练习", "听力地图题"] },
+        { "day": "Wed", "tasks": ["阅读套题 + 精读分析", "词汇高频 100", "写作大作文"] },
+        { "day": "Thu", "tasks": ["听力 Section 4 学术听力", "口语流利度训练", "阅读判断题"] },
+        { "day": "Fri", "tasks": ["全科限时练习", "薄弱项突破", "复盘"] },
+        { "day": "Sat", "tasks": ["全科模考", "口语模拟", "写作批改"] },
+        { "day": "Sun", "tasks": ["艾宾浩斯复现本周错题", "薄弱项专项", "下周计划"] }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "冲刺模考",
+      "duration_ratio": 0.25,
+      "description": "全真模考 + 查漏补缺 + 考试状态调整",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["全科模考（严格计时）", "错题分析"] },
+        { "day": "Tue", "tasks": ["口语模拟全套", "写作批改", "听力精听"] },
+        { "day": "Wed", "tasks": ["阅读限时训练", "词汇最后一轮", "作文模板背诵"] },
+        { "day": "Thu", "tasks": ["全科模考", "弱项最后补强"] },
+        { "day": "Fri", "tasks": ["口语话题过一遍", "写作预测题 1 篇", "轻量复习"] },
+        { "day": "Sat", "tasks": ["最后一套全科模考", "心态调整"] },
+        { "day": "Sun", "tasks": ["翻看错题本", "准备考试用品", "早睡"] }
+      ]
+    }
+  ],
+
+  "methodology_injection": {
+    "ebbinghaus": true,
+    "pomodoro": true,
+    "pareto": true,
+    "feynman": true,
+    "description": "雅思听说读写都必须用艾宾浩斯复现，阅读优先高频同义替换，写作用费曼法练逻辑"
+  },
+
+  "special_notes": [
+    "听力：S1/S4 填词是高频得分点，优先保证",
+    "阅读：先看题再读文，定位词技巧是核心",
+    "写作：大作文逻辑 > 词汇，小作文格式 > 语法",
+    "口语：P2 准备好素材故事库，P3 用费曼法组织答案",
+    "每天必须背单词，不能断超过 2 天"
+  ]
+}

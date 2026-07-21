@@ -1,0 +1,36 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=14"
+    },
+    "init": {
+        "darwin": "npm install -g @tencentcloud/tmeet",
+        "linux": "npm install -g @tencentcloud/tmeet",
+        "win32": "npm install -g @tencentcloud/tmeet"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "tmeet --version",
+            "linux": "tmeet --version",
+            "win32": "tmeet.cmd --version"
+        },
+        "minVersion": "1.0.11"
+    },
+    "auth": {
+        "darwin": "tmeet auth login --no-browser",
+        "linux": "tmeet auth login --no-browser",
+        "win32": "tmeet.cmd auth login --no-browser"
+    },
+    "unAuth": {
+        "darwin": "tmeet auth logout",
+        "linux": "tmeet auth logout",
+        "win32": "tmeet.cmd auth logout"
+    },
+    "status": {
+        "darwin": "tmeet auth status",
+        "linux": "tmeet auth status",
+        "win32": "tmeet.cmd auth status"
+    },
+    "statusMatch": "Logged in",
+    "authUrlDomain": "meeting.tencent.com"
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "yunzhi-doc-theme/v1",
+  "name": "默认主题",
+  "description": "适用于技术文档、功能说明、开发指南等",
+  "version": "1.0.0",
+
+  "callout": {
+    "primary": {
+      "color": "#E3F2FD",
+      "icon": "1f680",
+      "usage": "开篇引导、核心价值、重要说明"
+    },
+    "tip": {
+      "color": "#FFF3E0",
+      "icon": "1f4a1",
+      "usage": "提示信息、注意事项、小技巧"
+    },
+    "success": {
+      "color": "#E8F5E9",
+      "icon": "2705",
+      "usage": "成功、完成、总结确认"
+    },
+    "warning": {
+      "color": "#FFF8E1",
+      "icon": "26a0",
+      "usage": "警告、风险提示"
+    },
+    "error": {
+      "color": "#FFEBEE",
+      "icon": "274c",
+      "usage": "错误、禁止、危险操作"
+    },
+    "info": {
+      "color": "#E8EAF6",
+      "icon": "2139",
+      "usage": "补充说明、背景信息"
+    }
+  },
+
+  "table": {
+    "header": {
+      "background_color": "#F5F5F5",
+      "text_style": {
+        "bold": true
+      }
+    },
+    "cell": {
+      "success": {"background_color": "#E8F5E9"},
+      "warning": {"background_color": "#FFF8E1"},
+      "error": {"background_color": "#FFEBEE"},
+      "highlight": {"background_color": "#E3F2FD"},
+      "neutral": {"background_color": "#FAFAFA"}
+    },
+    "default_column_width": [300, 400],
+    "compare_table": {
+      "column_width": [400, 550],
+      "left_header": "传统方式",
+      "right_header": "新方案"
+    }
+  },
+
+  "text": {
+    "emphasis": {
+      "keyword": {"bold": true},
+      "important": {"bold": true, "underline": true},
+      "highlight": {"bold": true, "background_color": "#FFF59D"}
+    },
+    "code": {"inline_code": true}
+  },
+
+  "code_block": {
+    "default_language": "go",
+    "wrap": false
+  },
+
+  "structure": {
+    "use_divider_between_sections": true,
+    "callout_at_start": true,
+    "callout_at_end": true
+  },
+
+  "semantic_mapping": {
+    "markdown_to_callout": {
+      "> 核心": "primary",
+      "> 重要": "primary",
+      "> 提示": "tip",
+      "> 建议": "tip",
+      "> 注意": "warning",
+      "> 警告": "warning",
+      "> 成功": "success",
+      "> 完成": "success",
+      "> 错误": "error",
+      "> 危险": "error",
+      "> 信息": "info",
+      "> ": "primary"
+    },
+    "table_cell_keywords": {
+      "success": ["完成", "成功", "推荐", "支持", "是", "✓", "✅"],
+      "error": ["失败", "不支持", "否", "✗", "❌", "危险"],
+      "warning": ["注意", "警告", "待定", "可选"]
+    }
+  }
+}

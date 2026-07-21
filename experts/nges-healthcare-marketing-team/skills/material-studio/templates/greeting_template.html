@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<script>{{HTML2CANVAS_INLINE}}</script>
+<style>
+  :root{
+    --brand: {{BRAND_COLOR}};
+    --brand-soft: {{BRAND_SOFT}};
+    --brand-deep: {{BRAND_DEEP}};
+    --fest-a: {{FEST_A}};
+    --fest-b: {{FEST_B}};
+    --gold: {{FEST_GOLD}};
+    --ink:#1a1f29; --sub:#6b7585; --line:#eef1f6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+  body{background:#eef1f6;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+       display:flex;justify-content:center;padding:18px 0;color:var(--ink);}
+  #poster{width:390px;background:#fff;border-radius:20px;overflow:hidden;
+          box-shadow:0 12px 44px rgba(20,40,80,.16);}
+
+  /* ===== 节日氛围主视觉（精简）===== */
+  .scene{position:relative;height:188px;overflow:hidden;
+         background:linear-gradient(170deg,var(--fest-a),var(--fest-b));}
+  /* 圆月/装饰光晕 */
+  .moon{position:absolute;top:26px;right:34px;width:60px;height:60px;border-radius:50%;
+        background:radial-gradient(circle at 38% 38%,#fff,var(--gold) 70%,rgba(255,255,255,0) 100%);
+        box-shadow:0 0 34px 8px rgba(255,225,160,.5);}
+  .moon::after{content:"";position:absolute;inset:0;border-radius:50%;
+        background:radial-gradient(circle at 65% 30%,rgba(255,255,255,.5),transparent 45%);}
+  .cake{position:absolute;top:24px;right:30px;font-size:54px;line-height:1;
+        filter:drop-shadow(0 4px 12px rgba(0,0,0,.25));}
+  .decor-svg{position:absolute;top:14px;right:14px;width:100px;height:100px;z-index:2;
+        filter:drop-shadow(0 2px 10px rgba(0,0,0,.2));}
+  .halo{position:absolute;border-radius:50%;background:rgba(255,255,255,.06);}
+  .halo.h1{width:220px;height:220px;top:-70px;right:-60px;}
+  .halo.h2{width:140px;height:140px;top:-10px;right:0px;background:rgba(255,255,255,.05);}
+  /* 底部山影 */
+  .hills{position:absolute;left:0;right:0;bottom:0;height:56px;
+         background:radial-gradient(120% 100% at 30% 100%, rgba(0,0,0,.2), transparent 70%);}
+
+  .scene-inner{position:relative;z-index:3;height:100%;display:flex;flex-direction:column;
+        align-items:center;justify-content:center;padding:18px 22px;text-align:center;}
+  .fest-tag{font-size:12px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:3px;
+        margin-bottom:9px;}
+  .fest{font-size:34px;font-weight:900;letter-spacing:6px;
+        color:var(--gold);text-shadow:0 2px 14px rgba(0,0,0,.3),0 1px 2px rgba(0,0,0,.25);}
+  .fest-sub{margin-top:10px;font-size:12px;color:rgba(255,255,255,.8);letter-spacing:2px;}
+
+  /* ===== 祝福语 ===== */
+  .wishes{padding:22px 30px 20px;text-align:center;}
+  .wishes .salut{font-size:16px;font-weight:700;color:var(--brand-deep);margin-bottom:14px;text-align:left;}
+  .wishes p{font-size:14.5px;line-height:2.1;color:#3a4150;}
+  .seal{display:inline-block;margin-top:20px;font-size:12px;color:var(--sub);}
+  .seal b{color:var(--brand);font-weight:600;}
+
+  /* ===== 精简名片条 ===== */
+  .mini-card{margin:0 18px 16px;background:var(--brand-soft);border-radius:14px;
+        padding:13px 14px;}
+  .mc-row{display:flex;align-items:center;gap:12px;}
+  .mc-filing{margin-top:9px;font-size:11px;color:var(--sub);text-align:center;}
+  .mc-filing b{color:var(--brand-deep);font-weight:600;}
+  .mc-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;
+        background:var(--brand);display:flex;align-items:center;justify-content:center;
+        color:#fff;font-size:17px;font-weight:600;border:2px solid #fff;}
+  .mc-who{flex:1;min-width:0;}
+  .mc-name{font-size:15px;font-weight:700;}
+  .mc-company{font-size:11.5px;color:var(--sub);margin-top:2px;}
+  .mc-contact{font-size:11px;color:var(--sub);margin-top:4px;display:flex;
+        flex-direction:column;gap:2px;}
+  .mc-contact .c-row{display:flex;align-items:center;gap:4px;}
+  .mc-qr{width:50px;height:50px;border-radius:8px;object-fit:cover;flex-shrink:0;
+        background:#fff;padding:3px;border:1px solid rgba(255,255,255,.6);
+        display:flex;align-items:center;justify-content:center;color:#b7c0cf;
+        font-size:8px;text-align:center;line-height:1.2;}
+
+  /* ===== 底部 ===== */
+  .foot{padding:12px 18px 16px;border-top:1px solid var(--line);background:#fbfcfe;text-align:center;}
+  .foot .filing{font-size:10.5px;color:var(--sub);margin-bottom:5px;}
+  .foot .disclaimer{font-size:10px;color:#aeb6c4;line-height:1.6;}
+
+  /* ===== 导出按钮 ===== */
+  #export-btn{position:fixed;right:16px;bottom:22px;z-index:99;
+    background:var(--brand);color:#fff;border:none;border-radius:24px;
+    padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;
+    box-shadow:0 6px 20px rgba(38,104,235,.4);font-family:inherit;}
+  #export-btn:active{transform:scale(.96);}
+  #save-mask{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.88);
+    display:none;flex-direction:column;align-items:center;
+    padding:18px 14px;overflow:auto;-webkit-overflow-scrolling:touch;}
+  #save-mask .tip{color:#fff;font-size:14px;font-weight:600;text-align:center;
+    margin:6px 0 14px;line-height:1.6;font-family:-apple-system,"PingFang SC",sans-serif;}
+  #save-mask .tip small{display:block;color:rgba(255,255,255,.7);font-weight:400;
+    font-size:12px;margin-top:4px;}
+  #save-mask img{width:100%;max-width:360px;border-radius:12px;
+    box-shadow:0 8px 30px rgba(0,0,0,.5);}
+  #save-mask .close{margin:16px 0 8px;color:#fff;border:1px solid rgba(255,255,255,.5);
+    background:transparent;border-radius:22px;padding:9px 22px;font-size:14px;cursor:pointer;
+    font-family:inherit;}
+</style>
+</head>
+<body>
+  <div id="poster">
+    <!-- 节日主视觉 -->
+    <div class="scene">
+      <div class="halo h1"></div>
+      <div class="halo h2"></div>
+      {{DECOR_HTML}}
+      <div class="hills"></div>
+      <div class="scene-inner">
+        <div class="fest-tag">{{RECIPIENT_LINE}}</div>
+        <div class="fest">{{FESTIVAL}}</div>
+        <div class="fest-sub">{{FEST_DATE}}</div>
+      </div>
+    </div>
+
+    <!-- 祝福语 -->
+    <div class="wishes">
+      {{WISHES_HTML}}
+      <div class="seal">—— <b>{{NAME}}</b>　{{COMPANY}}</div>
+    </div>
+
+    <!-- 精简名片条 -->
+    <div class="mini-card">
+      <div class="mc-row">
+        {{MC_AVATAR}}
+        <div class="mc-who">
+          <div class="mc-name">{{NAME}}</div>
+          <div class="mc-company">{{COMPANY}}</div>
+          <div class="mc-contact">{{MC_CONTACT}}</div>
+        </div>
+        {{MC_QR}}
+      </div>
+      {{MC_FILING}}
+    </div>
+
+    <!-- 底部 -->
+    <div class="foot">
+      <div class="disclaimer">本资料仅供医疗卫生专业人士参考。</div>
+    </div>
+  </div>
+
+  <button id="export-btn" onclick="exportImage()">📥 导出长图</button>
+
+  <div id="save-mask">
+    <div class="tip" id="save-tip"></div>
+    <img id="save-img" alt="长图">
+    <button class="close" onclick="closeMask()">关闭</button>
+  </div>
+
+  <script>
+    function isMobile(){return /Android|iPhone|iPad|iPod|HarmonyOS|Mobile/i.test(navigator.userAgent);}
+    function closeMask(){document.getElementById('save-mask').style.display='none';}
+    function exportImage(){
+      var btn=document.getElementById('export-btn');
+      btn.textContent='生成中…';btn.disabled=true;
+      var node=document.getElementById('poster');
+      var bg=getComputedStyle(node).backgroundColor||'#ffffff';
+      html2canvas(node,{scale:3,useCORS:true,backgroundColor:bg}).then(function(canvas){
+        var dataUrl=canvas.toDataURL('image/png');
+        if(isMobile()){
+          document.getElementById('save-img').src=dataUrl;
+          document.getElementById('save-tip').innerHTML='长按下方图片，选择"存储图像/保存到相册"<small>保存后即可转发给医生</small>';
+          document.getElementById('save-mask').style.display='flex';
+        }else{
+          var link=document.createElement('a');
+          link.download='{{FILE_BASENAME}}.png';link.href=dataUrl;link.click();
+        }
+        btn.textContent='📥 导出长图';btn.disabled=false;
+      }).catch(function(e){ alert('导出失败：'+e); btn.textContent='📥 导出长图';btn.disabled=false; });
+    }
+  </script>
+</body>
+</html>

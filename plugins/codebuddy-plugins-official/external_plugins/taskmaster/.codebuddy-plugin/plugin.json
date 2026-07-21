@@ -1,0 +1,21 @@
+{
+  "name": "taskmaster",
+  "description": "Claude Code 插件 - 基于AI的任务管理系统，提供命令、代理和 MCP 集成",
+  "author": {
+    "name": "Hamster",
+    "url": "https://github.com/eyaltoledano/claude-task-master"
+  },
+  "homepage": "https://github.com/eyaltoledano/claude-task-master#readme",
+  "repository": "https://github.com/eyaltoledano/claude-task-master",
+  "license": "MIT WITH Commons-Clause",
+  "keywords": [
+    "task-management",
+    "ai",
+    "workflow",
+    "orchestration",
+    "automation",
+    "mcp",
+    "development",
+    "productivity"
+  ]
+}

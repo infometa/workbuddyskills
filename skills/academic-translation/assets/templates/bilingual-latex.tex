@@ -1,0 +1,135 @@
+% ───────────────────────────────────────────────────────────
+% Bilingual LaTeX Template for academic-translation
+%
+% 用法：
+%   xelatex bilingual.tex   # 必须用 xelatex 以支持 xeCJK
+%
+% 字体：
+%   英文：Latin Modern (LaTeX 默认)
+%   中文：STSong（macOS 自带） / SimSun（Windows） / Noto Serif CJK SC（Linux）
+%
+% 契约：bilingual_tex 输出契约 + xeCJK 中文支持
+% ───────────────────────────────────────────────────────────
+
+\documentclass[11pt,a4paper]{article}
+
+% 中文支持（xeCJK）
+\usepackage{xeCJK}
+% 多平台字体 fallback：依次尝试
+\IfFontExistsTF{STSong}{
+  \setCJKmainfont{STSong}
+}{
+  \IfFontExistsTF{SimSun}{
+    \setCJKmainfont{SimSun}
+  }{
+    \setCJKmainfont{Noto Serif CJK SC}
+  }
+}
+
+% 双栏并行（paracol）
+\usepackage{paracol}
+\setlength{\columnsep}{1.5em}
+\setlength{\columnseprule}{0.4pt}
+
+% 数学
+\usepackage{amsmath, amssymb, amsthm}
+
+% 引用 / 链接
+\usepackage[backend=bibtex]{biblatex}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+
+% 页面
+\usepackage[margin=2cm]{geometry}
+
+% 图 / 表
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+% 元数据
+\title{{Paper Title (English)} \\ {论文标题（中文）}}
+\author{Translated by academic-translation Skill}
+\date{\today}
+
+% Bibliography file（用户提供）
+% \addbibresource{references.bib}
+
+\begin{document}
+\maketitle
+
+% ───────────────────── Abstract / 摘要 ─────────────────────
+\begin{paracol}{2}
+\section*{Abstract}
+We propose a novel method that achieves state-of-the-art on
+ImageNet \cite{deng2009imagenet}, with $\mathbf{x}_t$ defined as
+\begin{equation}
+  \mathbf{x}_t = f(\mathbf{x}_{t-1}; \theta).
+\end{equation}
+Extensive experiments demonstrate ...
+
+\switchcolumn
+
+\section*{摘要}
+我们提出一种新颖的方法，在 ImageNet \cite{deng2009imagenet}
+上取得最先进的表现，其中 $\mathbf{x}_t$ 定义为
+\begin{equation}
+  \mathbf{x}_t = f(\mathbf{x}_{t-1}; \theta).
+\end{equation}
+大量实验表明……
+\end{paracol}
+
+% ───────────────────── §1 Introduction / 引言 ─────────────────────
+\begin{paracol}{2}
+\section{Introduction}
+Deep learning has achieved remarkable success
+\cite{lecun2015deep}, including image recognition,
+machine translation, and natural language understanding.
+
+% 段落 §1-p2
+However, despite these advances, several challenges remain:
+\begin{itemize}
+  \item Challenge A: ...
+  \item Challenge B: ...
+\end{itemize}
+
+\switchcolumn
+
+\section{引言}
+深度学习已在图像识别、机器翻译和自然语言理解等多个领域取得显著成功
+\cite{lecun2015deep}。
+
+% 段落 §1-p2
+然而，尽管这些进展可观，仍存在若干挑战：
+\begin{itemize}
+  \item 挑战 A：……
+  \item 挑战 B：……
+\end{itemize}
+\end{paracol}
+
+% ───────────────────── §2 Related Work / 相关工作 ─────────────────────
+% 按相同 paracol 模式继续
+
+% ───────────────────── References / 参考文献 ─────────────────────
+% \printbibliography
+
+\end{document}
+
+% ───────────────────────────────────────────────────────────
+% 模板使用说明：
+%
+% 1. 替换 {Paper Title} 为实际标题
+% 2. 用 academic-translation 输出的 English 段落填左栏
+% 3. 用 step3_polished 输出的 Chinese 段落填右栏
+% 4. **MUST**：所有 \cite{}、\ref{}、$...$、\eqref{} 在左右栏一字不差
+% 5. 编译：xelatex bilingual.tex
+%
+% 字体不存在时的降级：
+% - 如果三个 CJK 字体都不存在，编译会失败。可改用：
+%   \setCJKmainfont{Songti SC}  (macOS)
+%   \setCJKmainfont{Noto Sans CJK SC}  (任何平台)
+%
+% Docker 编译（无本地 xelatex 时）：
+% docker run --rm -v $PWD:/work -w /work \
+%   ghcr.1ms.run/xu-cheng/texlive-debian:20260101 \
+%   xelatex bilingual.tex
+% ───────────────────────────────────────────────────────────

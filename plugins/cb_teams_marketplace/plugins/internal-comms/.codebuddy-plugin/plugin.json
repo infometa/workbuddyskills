@@ -1,0 +1,17 @@
+{
+  "name": "internal-comms",
+  "version": "1.0.0",
+  "description": "A set of resources to help write internal communications using company-preferred formats (status reports, 3P updates, newsletters, FAQs, incident reports, etc.)",
+  "author": {
+    "name": "CodeBuddy Teams",
+    "email": ""
+  },
+  "homepage": {
+    "url": "",
+    "type": "github"
+  },
+  "license": "",
+  "skills": [
+    "./skills/internal-comms"
+  ]
+}

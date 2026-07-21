@@ -1,0 +1,104 @@
+{
+  "id": "gre-gmat",
+  "name": "GRE/GMAT 备考计划",
+  "description": "适用于 GRE / GMAT 等英语类标准化考试，可由雅思托福衍生",
+  "applicable_to": ["GRE", "GMAT", "Duolingo English Test"],
+  "default_duration_days": 90,
+  "total_phases": 3,
+  "derived_from": "ielts-toefl",
+
+  "score_bridge_templates": [
+    {
+      "exam": "GRE",
+      "from": "300",
+      "to": "320",
+      "focus": ["核心 3000 词", "Verbal 填空", "Quant 速算"],
+      "daily_workload": "2.5h/day"
+    },
+    {
+      "exam": "GRE",
+      "from": "320",
+      "to": "330+",
+      "focus": ["阅读 LR/RC 高难度", "AW 写作框架", "限时模考"],
+      "daily_workload": "3h/day"
+    },
+    {
+      "exam": "GMAT",
+      "from": "600",
+      "to": "700",
+      "focus": ["SC 句子改错", "CR 逻辑", "DS 数据充分性"],
+      "daily_workload": "2.5h/day"
+    },
+    {
+      "exam": "GMAT",
+      "from": "700",
+      "to": "750+",
+      "focus": ["IR 综合推理", "高难度 RC", "时间分配训练"],
+      "daily_workload": "3h/day"
+    }
+  ],
+
+  "phase_templates": [
+    {
+      "phase": 1,
+      "name": "词汇与基础",
+      "duration_ratio": 0.35,
+      "description": "核心词汇 + 题型熟悉 + 基础解题逻辑",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["核心词汇 100 个", "Verbal 填空 10 题", "Quant 基础 10 题"] },
+        { "day": "Tue", "tasks": ["阅读 1 篇精读", "词汇复现", "数学公式整理"] },
+        { "day": "Wed", "tasks": ["逻辑/SC 专项 15 题", "词汇 100 个", "错题本"] },
+        { "day": "Thu", "tasks": ["写作 Issue/Argument 1 篇", "阅读 1 篇", "词汇复现"] },
+        { "day": "Fri", "tasks": ["Verbal 套题", "Quant 套题", "复盘"] },
+        { "day": "Sat", "tasks": ["全科限时练习", "错题分析"] },
+        { "day": "Sun", "tasks": ["艾宾浩斯复现", "薄弱项专项", "下周计划"] }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "技巧强化",
+      "duration_ratio": 0.4,
+      "description": "解题技巧 + 弱项突破 + 限时训练",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["阅读长难句精析", "SC/CR 高难题", "数学陷阱题"] },
+        { "day": "Tue", "tasks": ["写作 1 篇 + 批改", "Verbal 限时", "词汇收尾"] },
+        { "day": "Wed", "tasks": ["阅读 2 篇限时", "逻辑链分析", "数学综合"] },
+        { "day": "Thu", "tasks": ["IR/AW 专项", "错题二刷", "节奏训练"] },
+        { "day": "Fri", "tasks": ["Verbal 全套限时", "Quant 全套限时", "时间分配"] },
+        { "day": "Sat", "tasks": ["全真模考", "错题分析"] },
+        { "day": "Sun", "tasks": ["复盘 + 弱项强化", "心态调整"] }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "冲刺模考",
+      "duration_ratio": 0.25,
+      "description": "全真模考 + 时间管理 + 考前调整",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["全真模考", "错题深度分析"] },
+        { "day": "Tue", "tasks": ["写作模板内化", "Verbal 限时"] },
+        { "day": "Wed", "tasks": ["阅读 + 逻辑限时", "数学查漏"] },
+        { "day": "Thu", "tasks": ["全真模考", "心态调整"] },
+        { "day": "Fri", "tasks": ["错题最后过", "考前轻量练习"] },
+        { "day": "Sat", "tasks": ["最后模考", "考点准备"] },
+        { "day": "Sun", "tasks": ["休息 + 准备考试用品", "早睡"] }
+      ]
+    }
+  ],
+
+  "methodology_injection": {
+    "ebbinghaus": true,
+    "pomodoro": true,
+    "pareto": true,
+    "feynman": true,
+    "description": "GRE 词汇必须艾宾浩斯，Verbal 抓 SC+RC 二八重点，写作用费曼法练框架"
+  },
+
+  "special_notes": [
+    "GRE 词汇是天花板，每天必背不能断超过 1 天",
+    "Verbal 中 SC 性价比最高（套路最强）",
+    "Quant 不要纠结超难题，保证基础题全对",
+    "AW 写作模板提前 2 周内化完毕",
+    "考前 3 天减量，主要保持手感和心态"
+  ]
+}

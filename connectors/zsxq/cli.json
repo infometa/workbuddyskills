@@ -1,0 +1,37 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=18"
+    },
+    "init": {
+        "darwin": "npm install -g zsxq-cli",
+        "linux": "npm install -g zsxq-cli",
+        "win32": "npm install -g zsxq-cli"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "zsxq-cli --version",
+            "linux": "zsxq-cli --version",
+            "win32": "zsxq-cli.cmd --version"
+        },
+        "minVersion": "0.4.9"
+    },
+    "auth": {
+        "darwin": "zsxq-cli auth login --no-wait",
+        "linux": "zsxq-cli auth login --no-wait",
+        "win32": "zsxq-cli.cmd auth login --no-wait"
+    },
+    "unAuth": {
+        "darwin": "zsxq-cli auth logout",
+        "linux": "zsxq-cli auth logout",
+        "win32": "zsxq-cli.cmd auth logout"
+    },
+    "status": {
+        "darwin": "zsxq-cli auth status",
+        "linux": "zsxq-cli auth status",
+        "win32": "zsxq-cli.cmd auth status"
+    },
+    "authUrlDomain": "garden.zsxq.com",
+    "authSuppressBrowser": true,
+    "statusMatch": "Logged in as"
+}

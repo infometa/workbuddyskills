@@ -1,0 +1,12 @@
+{
+  "name": "doc-coauthoring",
+  "description": "引导用户通过结构化工作流协作撰写文档。适用于编写文档、提案、技术规格、决策文档等结构化内容，帮助高效传递上下文、迭代优化内容并验证文档的可读性。",
+  "description_en": "Guide users through a structured workflow for co-authoring documentation. Use when user wants to write documentation, proposals, technical specs, decision docs, or similar structured content.",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "repository": "https://github.com/anthropics/skills",
+  "homepage": "https://github.com/anthropics/skills",
+  "license": "Apache-2.0"
+}

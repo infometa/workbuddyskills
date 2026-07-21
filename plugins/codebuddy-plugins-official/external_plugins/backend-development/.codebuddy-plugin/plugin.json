@@ -1,0 +1,11 @@
+{
+  "name": "backend-development",
+  "description": "后端 API 设计、GraphQL 架构、Temporal 工作流编排及测试驱动的后端开发",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义栅格图层</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body>
+    <div id="mapContainer"></div>
+    <script>
+        var center = new TMap.LatLng(26.870355,100.239704);//设置中心点坐标
+        //初始化地图
+        var map = new TMap.Map('mapContainer', {
+            center: center,
+            zoom: 15,
+			maxZoom:16
+        });
+        //初始化imageTileLayer
+        var imageTileLayer = new TMap.ImageTileLayer({
+            getTileUrl: function (x, y, z) {
+				//拼接瓦片URL
+				var url='https://3gimg.qq.com/visual/lbs_gl_demo/image_tiles_layers/' + z + '/' + x + '_' + y +'.png' ;
+                return url;
+            },
+            tileSize: 256,	//瓦片像素尺寸
+            minZoom: 14,	//显示自定义瓦片的最小级别
+            maxZoom: 16,	//显示自定义瓦片的最大级别
+            visible: true,	//是否可见
+            zIndex: 5000,	//层级高度（z轴）
+            opacity: 0.95,	//图层透明度：1不透明，0为全透明
+            map: map,		//设置图层显示到哪个地图实例中
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "javascript-typescript",
+  "description": "JavaScript 和 TypeScript 开发，支持 ES6+、Node.js、React 及现代 Web 框架",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

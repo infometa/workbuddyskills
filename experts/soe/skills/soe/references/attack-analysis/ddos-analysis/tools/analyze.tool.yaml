@@ -1,0 +1,110 @@
+name: ddos-analysis
+description: |
+  通用 DDoS 攻击流量分析工具（分析逻辑厂商无关；防护建议章节绑定腾讯云 DDoS 高防产品文档）。
+
+  分析本地 PCAP/CAP 抓包文件，识别 DDoS 攻击类型、统计攻击特征、生成安全分析报告。
+
+  支持的攻击类型：
+  - SYN Flood
+  - UDP Flood
+  - DNS Amplification
+  - HTTP Flood
+  - ICMP Flood
+
+  输出内容：
+  - 攻击类型识别
+  - 攻击源地理分布
+  - 流量统计分析
+  - 风险评估报告
+  - ECharts 可视化图表数据
+  - 报告末尾的针对性防护建议（由 AI 通过 web_fetch 实时查阅腾讯云 DDoS 高防产品文档后，针对所检测攻击类型给出腾讯云高防的配置建议）
+
+  注意：本工具只接受本地 PCAP/CAP 文件的绝对路径作为输入。用户给出的相对路径或附件，
+  需由调用本工具的 LLM 在传参前自行解析为绝对路径。
+
+parameters:
+  type: object
+  properties:
+    pcap_file:
+      type: string
+      description: "本地 PCAP/CAP 文件绝对路径（相对路径需由调用方先解析为绝对路径）"
+    output_format:
+      type: string
+      description: "输出格式：markdown, json, html"
+      default: "markdown"
+    detailed:
+      type: boolean
+      description: "是否生成详细本地分析报告（包含攻击特征分析和 ECharts 图表数据；AI 在报告末尾追加一段基于腾讯云 DDoS 高防产品文档的针对性配置建议）"
+      default: true
+  required:
+    - pcap_file
+
+script: |
+  #!/usr/bin/env python3
+  """DDOS攻击流量分析工具"""
+  import sys
+  import os
+  import json
+  
+  def main():
+      # 获取参数
+      if len(sys.argv) < 2:
+          print("❌ Error: Missing pcap_file parameter", file=sys.stderr)
+          print("Usage: ddos-analysis <pcap_file> [output_format] [detailed]", file=sys.stderr)
+          sys.exit(1)
+      
+      pcap_file = sys.argv[1]
+      output_format = sys.argv[2] if len(sys.argv) > 2 else "markdown"
+      detailed = sys.argv[3].lower() == "true" if len(sys.argv) > 3 else True
+      
+      # 获取脚本目录
+      skill_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+      scripts_dir = os.path.join(skill_dir, "scripts")
+      analysis_script = os.path.join(scripts_dir, "ddos_attack_analysis.py")
+      
+      # 检查分析脚本是否存在
+      if not os.path.exists(analysis_script):
+          print(f"❌ Error: Analysis script not found: {analysis_script}", file=sys.stderr)
+          sys.exit(1)
+      
+      # 检查输入文件
+      if not pcap_file.startswith("http"):
+          if not os.path.exists(pcap_file):
+              print(f"❌ Error: PCAP file not found: {pcap_file}", file=sys.stderr)
+              sys.exit(1)
+      
+      # 调用分析脚本
+      import subprocess
+      
+      cmd = [
+          "python3",
+          analysis_script,
+          pcap_file,
+          "--format", output_format
+      ]
+      
+      if detailed:
+          cmd.append("--detailed")
+      
+      print(f"🔍 Analyzing DDOS attack traffic: {pcap_file}")
+      print(f"📊 Output format: {output_format}")
+      print(f"📋 Detailed report: {detailed}")
+      print()
+      
+      try:
+          result = subprocess.run(cmd, capture_output=True, text=True, cwd=scripts_dir)
+          
+          if result.returncode == 0:
+              print(result.stdout)
+              sys.exit(0)
+          else:
+              print(f"❌ Analysis failed:", file=sys.stderr)
+              print(result.stderr, file=sys.stderr)
+              sys.exit(1)
+              
+      except Exception as e:
+          print(f"❌ Error running analysis: {e}", file=sys.stderr)
+          sys.exit(1)
+  
+  if __name__ == "__main__":
+      main()

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>GLCustomLayer-全国行政区划图</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=model"></script>
+<script src="https://mapapi.qq.com/web/jsapiGL/three-155/three@0.155.js"></script>
+<script src="https://lbs.gtimg.com/visual/lbs_component/v/jquery-1.11.0.min.js"></script>
+<script src="https://mapapi.qq.com/web/visualization/demo-asset/styleMap.js"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+    #info{
+        display: none;
+        position: absolute;
+        left: 150px;
+        top: 110px;
+        background: #fff;
+        border-radius: 5px;
+        padding: 10px;
+        opacity: 0.8;
+    }
+
+    .demo-title {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      z-index: 1;
+    }
+
+    h1 {
+      margin: 0;
+      color: #ACB3BB;
+    }
+
+    h3 {
+      font-weight: normal;
+      margin-top: 5px;
+      color: #8E939D;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div id="info"></div>
+    <div class="demo-title">
+        <h1>自定义GL图层—全国行政区划图</h1>
+    </div>
+    <script>
+        const styles = {
+            //设置区域图样式
+            styel1: {
+                fillColor: "#7DF4FF", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+            styel2: {
+                fillColor: "#17D5DC", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+            styel3: {
+                fillColor: "#0EB2E7", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+            styel4: {
+                fillColor: "#0896EF", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+            styel5: {
+                fillColor: "#017CF7", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+        };
+        // 初始化地图
+        var map = new TMap.Map('container', {
+            center: new TMap.LatLng(33.36060741272668, 107.84272611116683), //设置地图中心坐标
+            zoom: 5.7, //地图进行缩放,
+            pitch: 53,
+            // mapStyleId: "style1", //个性化样式
+            baseMap: {
+                //设置底图样式
+                type: "vector", //设置底图为矢量底图
+                features: [
+                    //设置矢量底图要素类型
+                    "base",
+                    "point",
+                ],
+            },
+        });
+
+        let renderer, camera, scene, group, raycaster;
+        let mapCamera; // 地图相机
+        var glCustomLayer = new TMap.GLCustomLayer(
+            {
+                id: 'glCustomLayer',
+                map,
+                keepFps: false, // 是否保持恒定帧率渲染,当渲染存在动画时设置为true
+                // visible: false,
+                init: (gl) => {
+                    initThree(gl);
+                    createJsonMap(); // 构建全国区域行政图
+                    initEvent(); // 注册点击事件
+                    
+                    // 需将构建的Three相关项返回
+                    return { renderer, camera, scene, group };
+                },
+                render: () => {
+                    renderer.render(scene, camera);
+                }
+            }
+        );
+
+        function initThree(gl) {
+            renderer = new THREE.WebGLRenderer({
+                context: gl,
+                antialias: true
+            });
+            renderer.autoClear = false;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            mapCamera = map.getCamera(); // 获取地图相机
+            const { fovy, view, near, far, distance } = mapCamera;
+            const aspect = (view.right - view.left) / (view.top - view.bottom);
+            camera = new THREE.PerspectiveCamera(fovy, aspect, near, far); // 创建threejs中的相机
+            camera.position.z = distance;
+            scene = new THREE.Scene()
+            group = new THREE.Group(); // 涉及内部坐标转换，所有新增THREE.Object3D需添加入group
+            scene.add(group);
+
+            raycaster = new THREE.Raycaster();
+
+        }
+
+        function createJsonMap() {
+            $.ajax({
+                url: "https://apis.map.qq.com/ws/district/v1/getchildren?key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&output=jsonp&get_polygon=2&max_offset=3000", // 请求地址+参数
+                type: "GET", //get请求
+                dataType: "JSONP", //指定服务器返回的数据类型
+                success: function (res) {
+                    var list = [];
+                    list = res.result[0]; // 省份列表
+                    list.forEach((item, index) => {
+                        const styleId = styleMap[item.id]; //数据所有的id值
+                        const itemStyle = styles[styleId];
+                        item.polygon.forEach((polygonPoints) => {
+                            let path = [];
+                            for (let i = 0; i < polygonPoints.length; i += 2) {
+                                const position = new TMap.LatLng(polygonPoints[i + 1], polygonPoints[i])
+                                path.push(map.glLatLngToPosition(position));
+                            }
+
+                            let linePoints = [];
+                            let shapePoints = [];
+                            path.forEach((p, index) => {
+                                linePoints.push(new THREE.Vector3(p.x, p.y, p.z + 500000.1));
+                                shapePoints.push(new THREE.Vector3(p.x, p.y, p.z));
+                            })
+                            // 轮廓
+                            const lineMaterial = new THREE.LineBasicMaterial({ color: itemStyle.strokeColor, linewidth: 1 })
+                            const linGeometry = new THREE.BufferGeometry().setFromPoints(linePoints);
+                            const line = new THREE.LineLoop(linGeometry, lineMaterial)
+                            group.add(line);
+                            // 填充形状
+                            const shape = new THREE.Shape(shapePoints);
+                            const extrudeSettings = {
+                                depth: 500000,
+                                bevelEnabled: false
+                            };
+                            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings)
+                            const material = new THREE.MeshBasicMaterial({ color: itemStyle.fillColor, transparent: true, opacity: 0.6 })
+                            var mesh = new THREE.Mesh(geometry, material);
+                            mesh.defaultMaterial = material;
+                            mesh.name = item.name;
+                            group.add(mesh);
+                        });
+                    });
+                }
+            });
+        }
+
+        // 选中物体的材质
+        let selectedMaterial = new THREE.MeshBasicMaterial({ color: '#FF7F50', transparent: true, opacity: 0.65 })
+        //  注册THREE拾取事件
+        let lastItem = null; // 上个选中的物体
+        var infoDom = document.getElementById('info');
+        function initEvent() {
+            map.on('click', (evt) => {
+                if (lastItem) {
+                    lastItem.material = lastItem.defaultMaterial; // 恢复默认材质
+                    infoDom.style.display = '';
+                }
+                const { x, y } = evt.point;
+                const { width, height } = mapCamera.resolution;
+                const mouse = new THREE.Vector2((x / width * 2) - 1, 1 - (y / height * 2));
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(group.children, true);
+                // if(intersects.length > 0) console.log('点击了'+ intersects[0].object.name, intersects)
+                if (intersects.length > 0) {
+                    const item = intersects[0].object;
+                    item.material = selectedMaterial; // 更变点击物体材质
+                    lastItem = item;
+                    // 展示选中信息
+                    infoDom.style.display = 'block';
+                    infoDom.innerHTML = '当前选中： '+item.name;
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

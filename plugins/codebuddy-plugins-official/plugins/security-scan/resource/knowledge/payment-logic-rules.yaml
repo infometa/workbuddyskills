@@ -1,0 +1,45 @@
+# ============================================================================
+# 支付逻辑审计 — 参考数据 (Payment Logic Audit Data)
+# ============================================================================
+# 纯数据文件：支付相关反模式、Grep 关键词。
+# 推理逻辑由 agent 自身完成，本文件仅提供辅助数据。
+# ============================================================================
+
+known_anti_patterns:
+
+  - slug: "price-tampering"
+    name: "价格篡改"
+    grep_keywords: "price|amount|total"
+    context: "在请求参数中"
+    risk: "客户端控制价格，服务端未重新计算"
+
+  - slug: "coupon-stacking"
+    name: "优惠券叠加"
+    grep_keywords: "coupon|discount|promo"
+    risk: "多张优惠券同时使用，无互斥限制"
+
+  - slug: "refund-abuse"
+    name: "退款滥用"
+    grep_keywords: "refund|chargeback"
+    risk: "重复/超额退款，未检查原始订单状态"
+
+  - slug: "post-payment-modification"
+    name: "付款后金额修改"
+    grep_keywords: "updateOrder|modifyPrice"
+    risk: "支付后修改订单金额"
+
+# ============================================================================
+# 输出级别规则
+# ============================================================================
+
+output_rules:
+
+  formal_finding:
+    condition: "Grep 命中 + Read 确认服务端缺少对应校验逻辑"
+    severity: "medium 或 high（按影响评估）"
+
+  suspect:
+    condition: "仅 Grep 命中，未深入确认"
+    severity: "info"
+    human_review_required: true
+    risk_type: "payment-logic-suspect"

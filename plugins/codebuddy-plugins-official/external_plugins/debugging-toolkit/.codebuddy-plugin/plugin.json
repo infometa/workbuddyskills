@@ -1,0 +1,11 @@
+{
+  "name": "debugging-toolkit",
+  "description": "交互式调试、开发者体验优化和智能调试工作流",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

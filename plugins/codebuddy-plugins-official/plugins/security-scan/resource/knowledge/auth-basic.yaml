@@ -1,0 +1,63 @@
+# ==========================================================================
+# 鉴权/越权风险初步检测 (Authentication & Authorization Basic Detection)
+# ==========================================================================
+# 从 default-rules.yaml § security_analysis_approach.authentication_authorization_basic 拆分
+# 基础审计会检测以下迹象，若发现则建议加载完整的鉴权规则进行深入分析
+# 详细检测逻辑在 authentication-bypass-rules.yaml（按需加载以减少 token 消耗）
+# ==========================================================================
+
+authentication_authorization_basic:
+  
+  description: |
+    基础审计时，对以下迹象保持警觉，发现任一迹象时标记为"需要鉴权深度审计"：
+  
+  trigger_signals:
+    # 信号1：API入口缺少鉴权装饰器/注解
+    missing_auth_annotation: |
+      【触发信号】API 入口没有鉴权注解/装饰器
+      - Java: 没有 @PreAuthorize, @Secured, @RequiresPermission, @RequiresAuthentication
+      - Python: 没有 @login_required, @permission_required, @auth.require
+      - Go: 路由定义没有 AuthMiddleware
+      
+    # 信号2：敏感路径无保护
+    sensitive_path_unprotected: |
+      【触发信号】敏感路径没有权限保护
+      - /admin/*, /api/admin/*, /manage/* 路径
+      - 包含 delete, remove, update, create 的接口
+      - 涉及用户管理、配置管理、资源操作的接口
+      
+    # 信号3：跳过鉴权的条件判断
+    auth_bypass_condition: |
+      【触发信号】发现跳过鉴权的条件判断
+      - IsCloudOARequest(), isInternalIP(), isTrustedSource()
+      - 检查 X-Forwarded-For, X-Real-IP, User-Agent 后跳过验证
+      - set_need_auth(false), skipAuthentication, bypassAuth
+      
+    # 信号4：资源访问无归属检查
+    missing_ownership_check: |
+      【触发信号】资源访问仅依赖前端传入的 ID
+      - 直接用 request 参数中的 ID 查询资源，无 user_id 关联
+      - orderRepository.findById(orderId) 不验证订单归属
+      - 管理接口不验证当前用户角色
+    
+    # 信号5：硬编码后门凭据
+    hardcoded_backdoor_credential: |
+      【触发信号】发现硬编码凭据用于鉴权判断
+      - password == "xxx", token == "xxx" 等字符串比较
+      - 硬编码的 API Key、Secret、Token
+      - X-Debug-Mode, X-Skip-Auth, DISABLE_AUTH 等后门开关
+      - 包含 admin, test, debug, bypass, internal 等关键词的凭据值
+      - 配置项有硬编码默认值（如 @Value("${password:DefaultPass123}")）
+
+  action_on_trigger: |
+    【发现上述信号后的处理】
+    1. 在报告中标记：发现鉴权风险迹象，需要深入分析
+    2. 建议加载 knowledge/authentication-bypass.yaml 进行完整的调用链分析
+    3. 如果是 diff 模式且变更代码涉及 API 入口，自动加载鉴权规则
+  
+  key_questions:
+    - "敏感操作前是否有权限检查？"
+    - "资源访问是否验证了归属关系？"
+    - "管理员接口是否验证了角色？"
+    - "是否存在跳过鉴权的条件判断？"
+    - "是否存在硬编码的凭据可以直接通过鉴权？"

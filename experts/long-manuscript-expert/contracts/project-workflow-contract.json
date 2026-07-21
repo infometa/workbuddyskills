@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "long_manuscript.project_workflow_contract.v1",
+  "projectSchemaRef": "schemas/manuscript-project-v1.schema.json",
+  "identityRef": "contracts/canonical-identity-contract.json#/identity",
+  "persistentObjects": [
+    "ManuscriptProject",
+    "SourceAsset",
+    "OutlineNode",
+    "ConstraintLedger",
+    "DecisionLog",
+    "DraftArtifact",
+    "Revision",
+    "QualityReport",
+    "DeliveryReceipt"
+  ],
+  "savePolicy": {
+    "expectedRevisionRequired": true,
+    "singleRevisionIncrementRequired": true,
+    "mutationIdRequired": true,
+    "duplicateMutationRecognized": true,
+    "duplicateMutationReapplied": false,
+    "duplicateMutationStatus": "idempotent_replay",
+    "originalResultPersistenceOwner": "host_runtime",
+    "crossPackageVersionWriteRejected": true
+  },
+  "recoveryPolicy": {
+    "checkpointFields": ["checkpointId", "projectId", "packageVersion", "revision", "stateDigest", "lastStable", "createdAt"],
+    "digestAlgorithm": "sha256_canonical_json",
+    "digestMismatch": "fail_closed",
+    "lastStableCheckpointPreserved": true,
+    "silentRepairForbidden": true
+  },
+  "contextWindowPolicy": {
+    "layers": ["projectSummary", "chapterSummaries", "currentWorkingSet"],
+    "explicitIncludeExcludeRequired": true,
+    "sourceConstraintsPrecedeFreeCompletion": true,
+    "silentFullContextInjectionForbidden": true,
+    "overflowStrategies": ["compress_then_retrieve", "request_human_scope"]
+  },
+  "executionControl": {
+    "retryAttemptsAndTimeoutRequired": true,
+    "stopConditionsRequired": true,
+    "rollbackCheckpointRequired": true,
+    "exhaustionAction": "stop_and_escalate_to_human",
+    "humanOwnerRequired": true
+  },
+  "rollbackPolicy": {
+    "restoreAsCopyOnly": true,
+    "currentStatePreserved": true,
+    "humanApprovalRequiredBeforeApply": true,
+    "crossPackageVersionRollbackForbidden": true
+  },
+  "mutationPolicy": {
+    "allowedTypes": ["local_rewrite", "outline_change", "constraint_update"],
+    "explicitTargetIdsRequired": true,
+    "touchedIdsMustBeSubsetOfTargets": true,
+    "boundedImpactAnalysisRequired": true,
+    "wildcardImpactForbidden": true,
+    "sourceArtifactOverwriteForbidden": true
+  },
+  "humanLockPolicy": {
+    "humanOwned": true,
+    "automaticUnlockForbidden": true,
+    "roleSwitchUnlockForbidden": true,
+    "retryUnlockForbidden": true,
+    "trustedApprovalReceiptRequired": true,
+    "packageSelfReportedReceiptRejected": true,
+    "externalReceiptVerifierRequired": true,
+    "defaultWithoutVerifier": "fail_closed"
+  },
+  "cannotProve": [
+    "host filesystem persistence",
+    "host restart recovery",
+    "cross-session state loading without an authorized host test"
+  ]
+}

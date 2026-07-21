@@ -1,0 +1,11 @@
+{
+  "name": "machine-learning-ops",
+  "description": "完整的 MLOps 工具包，配备 ML 工程、MLOps 基础设施和数据科学专业代理。构建生产 ML 流水线、实验跟踪、模型注册和自动化训练/部署工作流。",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "UNKNOWN"
+}

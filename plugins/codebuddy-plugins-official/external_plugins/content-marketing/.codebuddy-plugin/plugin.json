@@ -1,0 +1,11 @@
+{
+  "name": "content-marketing",
+  "description": "内容营销策略、网络调研和信息综合处理的营销运营工具",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

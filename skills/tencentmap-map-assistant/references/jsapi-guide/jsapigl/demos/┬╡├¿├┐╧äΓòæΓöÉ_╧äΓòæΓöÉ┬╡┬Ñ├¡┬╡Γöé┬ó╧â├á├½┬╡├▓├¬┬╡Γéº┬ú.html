@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>线条泛光效果</title>
+  </head>
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77" ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <body onload="initMap()">
+    <div id="container"></div>
+  </body>
+  <script>
+    function initMap() {
+      // 初始化地图
+      var map = new TMap.Map('container', {
+        // Map文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/docIndexMap
+        zoom: 16, // 地图缩放
+        center: new TMap.LatLng(40.047014719415365, 116.28359172117393), // 设置中心点,
+        mapStyleId: 'style2', // 地图个性化样式
+        renderOptions: {
+          enableBloom: true, // 是否启用泛光效果 注：为true才会有效果
+        },
+        baseMap: {
+          type: 'vector',
+          features: ['base', 'building3d'], // 隐藏矢量文字
+        },
+      });
+
+      var polyline = new TMap.MultiPolyline({
+        // MultiPolyline文档地址：https://lbs.qq.com/javascript_gl/doc/multiPolylineOptions.html
+        map: map,
+        styles: {
+          polyline: new TMap.PolylineStyle({
+            color: '#FFF0F5', // 线条填充色，
+            width: 13,
+            lineCap: 'round',
+            enableBloom: true, // 是否启用泛光  注：为true才会有效果
+          }),
+        },
+        geometries: [
+          {
+            styleId: 'polyline', // 样式id
+            paths: [
+              // 折线的位置信息
+              new TMap.LatLng(40.043684622817985, 116.28659936102349),
+              new TMap.LatLng(40.04979603261721, 116.2851305372144),
+              new TMap.LatLng(40.04901987016222, 116.28048618532625),
+              new TMap.LatLng(40.04295271447675, 116.28181142728783),
+              new TMap.LatLng(40.04367058295327, 116.28660618192646),
+            ],
+          },
+        ],
+      });
+    }
+  </script>
+</html>

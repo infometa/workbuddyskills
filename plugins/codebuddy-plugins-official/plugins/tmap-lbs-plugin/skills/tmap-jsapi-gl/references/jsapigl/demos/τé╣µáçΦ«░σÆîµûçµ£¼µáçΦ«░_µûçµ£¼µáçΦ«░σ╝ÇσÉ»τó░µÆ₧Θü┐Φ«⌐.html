@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>文本标记开启碰撞避让</title>
+</head>
+<script charset="utf-8"
+        src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+	html,
+	body {
+		height: 100%;
+		margin: 0px;
+		padding: 0px;
+        overflow: hidden;
+	}
+
+	#mapContainer {
+        position: relative;
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+<body>
+<div id="mapContainer"></div>
+<script>
+	var center = new TMap.LatLng(40.040074, 116.273519);//设置中心点坐标
+	var centerLabel2 = new TMap.LatLng(40.040074, 116.243519);//设置中心点坐标
+	//初始化地图
+	var map = new TMap.Map('mapContainer', {
+			center: center,
+			rotation: 30,
+			zoom: 12
+	});
+	//初始化label
+	var label = new TMap.MultiLabel({
+		id: 'label-layer',
+		map: map,
+		collisionOptions: {
+          sameSource: true,
+        }, //开启图层内部的文本标注碰撞
+		styles: {
+				'label': new TMap.LabelStyle({
+				'color': '#3777FF', //颜色属性
+				'size': 20, //文字大小属性
+				'offset': { x: 0, y: 0 }, //文字偏移属性单位为像素
+				'angle': 0, //文字旋转属性
+				'alignment': 'center', //文字水平对齐属性
+				'verticalAlignment': 'middle' //文字垂直对齐属性
+			})
+		},
+		geometries: [
+			{
+				'id': 'label', //点图形数据的标志信息
+				'styleId': 'label', //样式id
+				'position': center, //标注点位置
+				'content': '腾讯北京总部', //标注文本
+				'properties': { //标注点的属性数据
+					'title': 'label'
+				},
+				rank:10 //文本碰撞时的优先级，值越大优先级越高
+			},
+			{
+				'id': 'labe2', //点图形数据的标志信息
+				'styleId': 'label', //样式id
+				'position': centerLabel2, //标注点位置
+				'content': '腾讯北京总部(低优先级)', //标注文本
+				'properties': { //标注点的属性数据
+					'title': 'labe2'
+				},
+				rank:1 //文本碰撞时的优先级，值越大优先级越高
+			}
+		]
+	});
+  map.rotateTo(0,{duration: 5000})
+</script>
+</body>
+
+</html>

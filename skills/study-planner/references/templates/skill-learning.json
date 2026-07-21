@@ -1,0 +1,94 @@
+{
+  "id": "skill-learning",
+  "name": "技能学习计划（编程/语言/工具等）",
+  "description": "适用于学习一项可通过项目验证的技能（如 React/Python/Rust/英语口语/PS）",
+  "applicable_to": ["编程语言", "前端框架", "数据分析", "设计工具", "外语口语", "乐器入门"],
+  "default_duration_days": 60,
+  "total_phases": 3,
+
+  "skill_categories": [
+    {
+      "category": "编程类",
+      "examples": ["Python", "React", "Rust", "Go"],
+      "validation": "完成 1-2 个项目并部署上线",
+      "key_resources": ["官方文档", "MOOC", "GitHub 优秀项目"]
+    },
+    {
+      "category": "工具类",
+      "examples": ["Figma", "Photoshop", "Excel 高级", "Blender"],
+      "validation": "完成 5+ 作品集",
+      "key_resources": ["官方教程", "B 站优秀课程", "案例临摹"]
+    },
+    {
+      "category": "外语口语类",
+      "examples": ["英语口语", "日语会话", "西语入门"],
+      "validation": "能进行 30 分钟流畅日常交流",
+      "key_resources": ["每日跟读", "Tandem/HelloTalk", "原版剧"]
+    }
+  ],
+
+  "phase_templates": [
+    {
+      "phase": 1,
+      "name": "入门掌握（语法 / 基础）",
+      "duration_ratio": 0.3,
+      "description": "建立心智模型，掌握核心语法 / 基础操作",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["官方教程 1 章", "动手敲示例代码"] },
+        { "day": "Tue", "tasks": ["看视频补充", "官方文档对照"] },
+        { "day": "Wed", "tasks": ["小练习 1 个", "概念笔记"] },
+        { "day": "Thu", "tasks": ["教程 1 章", "对比相似概念"] },
+        { "day": "Fri", "tasks": ["综合小练习", "本周笔记整理"] },
+        { "day": "Sat", "tasks": ["完成入门级小项目（Hello World+）", "GitHub 提交"] },
+        { "day": "Sun", "tasks": ["艾宾浩斯复现", "费曼法讲解给自己听"] }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "进阶应用（项目驱动）",
+      "duration_ratio": 0.45,
+      "description": "通过项目应用知识，遇到问题查文档 / 看源码",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["项目设计 / 拆解 epic", "技术调研"] },
+        { "day": "Tue", "tasks": ["写代码 1h", "遇到问题记录"] },
+        { "day": "Wed", "tasks": ["写代码 1h", "查阅最佳实践"] },
+        { "day": "Thu", "tasks": ["写代码 1h", "重构 / 优化"] },
+        { "day": "Fri", "tasks": ["阶段性提交", "代码 review"] },
+        { "day": "Sat", "tasks": ["看优秀开源项目源码", "对比改进"] },
+        { "day": "Sun", "tasks": ["写技术博客 1 篇 / 复盘", "下周规划"] }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "实战巩固（输出 / 部署）",
+      "duration_ratio": 0.25,
+      "description": "完整项目交付 + 输出能传播的成果",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["完善项目核心功能", "测试"] },
+        { "day": "Tue", "tasks": ["UI/UX 打磨", "文档撰写"] },
+        { "day": "Wed", "tasks": ["部署上线 / 发布", "性能优化"] },
+        { "day": "Thu", "tasks": ["写技术文章 / 分享", "GitHub README"] },
+        { "day": "Fri", "tasks": ["二次迭代 / 收集反馈", "BUG 修复"] },
+        { "day": "Sat", "tasks": ["完整交付", "总结成长"] },
+        { "day": "Sun", "tasks": ["休息 + 规划下一个技能", "归档资料"] }
+      ]
+    }
+  ],
+
+  "methodology_injection": {
+    "ebbinghaus": false,
+    "pomodoro": true,
+    "pareto": true,
+    "feynman": true,
+    "description": "技能学习核心是费曼法（输出倒逼输入），二八抓核心 API，番茄钟防止学习过劳"
+  },
+
+  "special_notes": [
+    "技能 ≠ 知识：必须通过项目验证，不要只看教程",
+    "至少要完成 1 个能上线 / 能展示的作品",
+    "卡住超过 30 分钟立即查文档 / 提问，不要硬磕",
+    "每周写 1 篇技术博客 / 复盘，加速内化",
+    "定期 GitHub 提交，建立可见的学习轨迹",
+    "学完不用就会忘：建议立即用在工作 / 副业中"
+  ]
+}

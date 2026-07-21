@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{EXAM_LEVEL}} 作文批改报告</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --brand: #2563eb;
+      --brand-soft: #dbeafe;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --excellent: #16a34a;
+      --good: #2563eb;
+      --warn: #f59e0b;
+      --danger: #dc2626;
+      --tip: #64748b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 32px 20px 80px; }
+    header.hero {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 32px 28px;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
+    .score-circle {
+      position: relative;
+      width: 148px; height: 148px;
+      border-radius: 50%;
+      background: conic-gradient(#fff 0deg, #fff {{SCORE_CIRCLE_ANGLE}}deg, rgba(255,255,255,0.25) {{SCORE_CIRCLE_ANGLE}}deg 360deg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .score-circle::after {
+      content: "";
+      position: absolute; inset: 10px;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      border-radius: 50%;
+    }
+    .score-circle .score-inner {
+      position: relative; z-index: 1; text-align: center; color: #fff;
+    }
+    .score-inner .big { font-size: 40px; font-weight: 700; line-height: 1; }
+    .score-inner .sub { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+    .hero-info { flex: 1; min-width: 0; }
+    .hero-info h1 { margin: 0 0 8px; font-size: 22px; }
+    .hero-info .meta { opacity: 0.9; font-size: 14px; margin-bottom: 12px; }
+    .hero-info .band-name {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      padding: 4px 12px; border-radius: 999px; font-size: 13px;
+    }
+    .hero-info .converted {
+      margin-top: 10px; font-size: 14px;
+      background: rgba(255,255,255,0.12);
+      padding: 6px 14px; border-radius: 8px; display: inline-block;
+    }
+
+    section.card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 26px;
+      margin-top: 20px;
+    }
+    section.card h2 {
+      margin: 0 0 14px;
+      font-size: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--brand-soft);
+      color: var(--brand);
+    }
+    section.card h3 {
+      font-size: 15px;
+      margin: 16px 0 8px;
+    }
+
+    .rubric-quote {
+      background: var(--brand-soft);
+      border-left: 4px solid var(--brand);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #1e3a8a;
+    }
+    .rubric-source { color: var(--muted); font-size: 12px; margin-top: 6px; }
+
+    .dim-row {
+      display: flex; gap: 16px; padding: 10px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .dim-row:last-child { border-bottom: none; }
+    .dim-name {
+      flex: 0 0 110px; font-weight: 600; color: var(--brand);
+    }
+    .dim-text { flex: 1; color: var(--text); }
+
+    .boundary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .boundary-grid > div {
+      background: #fafafa; border: 1px solid var(--border);
+      padding: 12px 14px; border-radius: 8px;
+    }
+    .boundary-grid h4 { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+
+    .intra-pill {
+      display: inline-block;
+      padding: 4px 12px; border-radius: 999px;
+      background: var(--brand-soft); color: var(--brand);
+      font-weight: 600;
+    }
+
+    .issue-list { list-style: none; padding: 0; margin: 0; }
+    .issue {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+    .issue .loc { font-weight: 600; margin-bottom: 6px; }
+    .issue .orig, .issue .sug { font-size: 14px; margin: 4px 0; }
+    .issue code {
+      background: #fff; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid var(--border); font-family: Menlo, Consolas, monospace;
+    }
+    .issue .reason { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+    .sev { display: flex; align-items: center; gap: 8px; }
+    .sev::before {
+      content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    }
+    .sev-critical::before { background: var(--danger); }
+    .sev-warning::before { background: var(--warn); }
+    .sev-tip::before { background: var(--tip); }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 12px; color: #fff; margin-right: 8px;
+    }
+    .tag-critical { background: var(--danger); }
+    .tag-warning { background: var(--warn); }
+    .tag-tip { background: var(--tip); }
+    .tag-minor { background: var(--tip); }
+
+    .upgrade-list, .rationale {
+      padding-left: 20px;
+    }
+    .upgrade-list li, .rationale li {
+      margin-bottom: 8px;
+    }
+    .rationale .ev { padding-left: 18px; margin: 6px 0; color: var(--muted); font-size: 13px; }
+    .rationale .ref { color: var(--brand); font-size: 13px; margin-top: 4px; }
+
+    .deduction-list { padding-left: 20px; }
+    .deduction-list li { color: var(--danger); margin-bottom: 6px; }
+
+    /* v1.2 新增：Directions 照搬检测 */
+    .dcc-risk { padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; font-weight: 600; }
+    .dcc-risk-none     { background: #dcfce7; color: #166534; }
+    .dcc-risk-tip      { background: #fef3c7; color: #92400e; }
+    .dcc-risk-warning  { background: #ffedd5; color: #9a3412; }
+    .dcc-risk-critical { background: #fee2e2; color: #991b1b; }
+    .dcc-list { list-style: none; padding: 0; margin: 0; }
+    .dcc-item {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 12px; margin-bottom: 8px; background: #fafafa;
+    }
+    .dcc-sev-critical { border-left: 4px solid var(--danger); }
+    .dcc-sev-warning  { border-left: 4px solid var(--warn); }
+    .dcc-sev-tip      { border-left: 4px solid var(--tip); }
+    .dcc-head { margin-bottom: 6px; }
+    .dcc-body { font-size: 14px; margin: 3px 0; }
+    .dcc-body code { background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); font-family: Menlo, Consolas, monospace; }
+    .dcc-note { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .dcc-deduction { color: var(--danger); margin-top: 10px; }
+
+    /* v1.2 新增：词汇升档 */
+    .vocab-hint { color: var(--muted); font-size: 13px; }
+    .vocab-table {
+      width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px;
+    }
+    .vocab-table th, .vocab-table td {
+      border: 1px solid var(--border); padding: 8px 10px; text-align: left;
+    }
+    .vocab-table th { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+    .vocab-table code { background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); font-family: Menlo, Consolas, monospace; }
+    .tier-from { color: var(--muted); }
+    .tier-to   { color: var(--excellent); font-weight: 600; }
+
+    /* v1.6.1 新增：Calibration 状态横幅 */
+    .calib-banner {
+      border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;
+      border-left: 4px solid;
+    }
+    .calib-banner .calib-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .calib-banner .calib-note  { font-size: 13px; line-height: 1.6; }
+    .calib-banner.calib-normal { background: #dcfce7; color: #166534; border-color: #16a34a; }
+    .calib-banner.calib-warn   { background: #fef3c7; color: #92400e; border-color: #f59e0b; }
+    .calib-banner.calib-danger { background: #fee2e2; color: #991b1b; border-color: #dc2626; }
+
+    /* v1.6.1 新增：Postgrad1B 三段论诊断 */
+    .para-diag-list { list-style: none; padding: 0; margin: 0; }
+    .para-item {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 14px; margin-bottom: 10px; background: #fafafa;
+      border-left: 4px solid var(--border);
+    }
+    .para-item.para-excellent { border-left-color: var(--excellent); }
+    .para-item.para-warn      { border-left-color: var(--warn); }
+    .para-item.para-danger    { border-left-color: var(--danger); }
+    .para-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .para-q { font-size: 12px; padding: 2px 10px; border-radius: 999px; }
+    .para-q-excellent { background: #dcfce7; color: #166534; }
+    .para-q-warn      { background: #fef3c7; color: #92400e; }
+    .para-q-danger    { background: #fee2e2; color: #991b1b; }
+    .para-comment { font-size: 14px; color: var(--text); }
+    .para-evidence { font-size: 13px; color: var(--muted); margin-top: 6px; }
+    .para-evidence code {
+      background: #fff; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid var(--border); font-family: Menlo, Consolas, monospace;
+    }
+    .dialectical-ok, .dialectical-miss {
+      margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 14px;
+    }
+    .dialectical-ok   { background: #dcfce7; color: #166534; }
+    .dialectical-miss { background: #fee2e2; color: #991b1b; }
+
+    /* v1.6.1 新增：letter_category 专属检查 */
+    .letter-cat-head { margin-bottom: 10px; font-size: 15px; }
+    .letter-conf {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      background: var(--brand-soft); color: var(--brand);
+      font-size: 12px; margin-left: 8px;
+    }
+    .letter-check { list-style: none; padding: 0; margin: 0 0 10px; }
+    .letter-check li { padding: 6px 0; font-size: 14px; }
+    .lc-ok     { color: #166534; }
+    .lc-warn   { color: #92400e; }
+    .lc-danger { color: #991b1b; }
+    .letter-elem-table {
+      width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px;
+    }
+    .letter-elem-table th, .letter-elem-table td {
+      border: 1px solid var(--border); padding: 8px 10px; text-align: left;
+    }
+    .letter-elem-table th { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+    .letter-pitfalls {
+      margin-top: 12px; padding: 10px 14px; border-radius: 8px;
+      background: #fef3c7; color: #92400e; font-size: 14px;
+    }
+    .letter-pitfalls ul { margin: 6px 0 0; padding-left: 20px; }
+
+    /* v1.6.1 新增：chart_subtype_specific */
+    .chart-sub-head { margin-bottom: 10px; font-size: 15px; }
+    .chart-metric, .chart-line {
+      padding: 8px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 14px;
+      border-left: 3px solid transparent;
+    }
+    .chart-ok     { background: #dcfce7; color: #166534; border-left-color: #16a34a; }
+    .chart-warn   { background: #fef3c7; color: #92400e; border-left-color: #f59e0b; }
+    .chart-danger { background: #fee2e2; color: #991b1b; border-left-color: #dc2626; }
+    .chart-metric small { color: var(--muted); font-weight: normal; margin-left: 8px; }
+    .chart-errs {
+      background: #fee2e2; color: #991b1b; padding: 10px 14px;
+      border-radius: 8px; margin-bottom: 8px; font-size: 14px;
+    }
+    .chart-errs ul { margin: 6px 0 0; padding-left: 20px; }
+    .chart-errs code {
+      background: #fff; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid var(--border); font-family: Menlo, Consolas, monospace;
+    }
+
+    /* v1.7.0 新增：SVG 图表化（进度条 + 雷达图） */
+    .svg-progress { vertical-align: middle; margin: 0 6px; }
+    .chart-metric .svg-progress { margin-left: 8px; }
+    .chart-note { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+    .letter-elem-gauge {
+      margin: 0 0 10px; padding: 8px 14px;
+      background: var(--brand-soft); border-radius: 8px;
+      display: flex; align-items: center; gap: 12px; font-size: 14px;
+    }
+    .para-radar-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      margin: 0 0 16px; padding: 12px; background: #f9fafb; border-radius: 8px;
+    }
+    .svg-radar { margin-bottom: 8px; }
+    .radar-legend { font-size: 12px; color: var(--muted); }
+    .radar-legend .lg-good { color: #166534; }
+    .radar-legend .lg-fair { color: #92400e; }
+    .radar-legend .lg-poor { color: #991b1b; }
+
+    /* 考研专有语域标签 */
+    .exam-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      background: #fce7f3; color: #9d174d; font-size: 12px; font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .essay-box {
+      background: #fafafa; border: 1px solid var(--border);
+      padding: 14px 16px; border-radius: 8px;
+      white-space: pre-wrap; font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.8;
+    }
+    .prompt-box {
+      background: var(--brand-soft); color: #1e3a8a;
+      padding: 10px 14px; border-radius: 8px; font-size: 14px;
+    }
+
+    .empty { color: var(--muted); font-style: italic; }
+    footer {
+      text-align: center; color: var(--muted); font-size: 12px;
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="hero">
+      <div class="score-circle">
+        <div class="score-inner">
+          <div class="big">{{FINAL_SCORE}}</div>
+          <div class="sub">/ {{SCORE_MAX}} 分</div>
+        </div>
+      </div>
+      <div class="hero-info">
+        <h1>{{EXAM_LEVEL}} 作文批改报告<span class="exam-badge">{{TASK_SUBTYPE}}</span></h1>
+        <div class="meta">批改时间：{{REVIEWED_AT}} · {{WORD_COUNT_SUMMARY}}</div>
+        <span class="band-name">{{BAND_NAME}}（档内调整 {{INTRA_DELTA}}）</span>
+        <div class="converted">{{CONVERTED_SCORE_HINT}}</div>
+      </div>
+    </header>
+
+    <!-- 目录导航（在 hero banner 下方） -->
+    <nav id="toc" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 24px;margin-top:20px;">
+      <div style="font-weight:700;font-size:15px;color:var(--brand);margin-bottom:10px;">📋 目录</div>
+      <ol style="margin:0;padding-left:20px;line-height:2;font-size:14px;">
+        <li><a href="#sec-band-desc" style="color:var(--brand);text-decoration:none;">档次描述</a></li>
+        <li><a href="#sec-dim-diag" style="color:var(--brand);text-decoration:none;">定档依据</a></li>
+        <li><a href="#sec-score-judge" style="color:var(--brand);text-decoration:none;">分数判定</a></li>
+        <li><a href="#sec-deductions" style="color:var(--brand);text-decoration:none;">扣分明细</a></li>
+        <li><a href="#sec-feedback" style="color:var(--brand);text-decoration:none;">问题与建议（问题分析 · 升级建议）</a></li>
+        <li><a href="#sec-appendix" style="color:var(--brand);text-decoration:none;">附录：评分标准 · 证据链 · 原文</a></li>
+      </ol>
+    </nav>
+
+    <!-- v1.6.1 新增：Calibration 状态横幅（正常时隐藏） -->
+    <section class="card" {{CALIB_BLOCK_STYLE}}>
+      <h2>0. 校准集状态（评分置信度）</h2>
+{{CALIB_BANNER_HTML}}
+    </section>
+
+    <section class="card" id="sec-band-desc">
+      <h2>1. 档次描述</h2>
+      <div class="rubric-quote">「{{BAND_OFFICIAL_TEXT}}」</div>
+      <div class="rubric-source">来源：{{BAND_SOURCE}}</div>
+    </section>
+
+    <section class="card" id="sec-dim-diag">
+      <h2>{{DIMENSIONS_TITLE}}</h2>
+{{DIMENSIONS_HTML}}
+    </section>
+
+    <!-- v1.2 新增：考研 A 节专有 —— Directions 原句照搬检测 -->
+    <section class="card" {{POSTGRAD_BLOCK_STYLE}}>
+      <h2>考研 A 节专有 · Directions 原句照搬检测</h2>
+      <p class="vocab-hint">依据《考研英语 A 节阅卷规则》：连续 8 词及以上与 Directions 一致将视为"机械照搬"，按严重程度扣 0.5-2 分。</p>
+{{DIRECTIONS_COPY_HTML}}
+    </section>
+
+    <!-- v1.6.1 新增：letter_category 专属检查（Postgrad A 节 letter） -->
+    <section class="card" {{LETTER_CAT_BLOCK_STYLE}}>
+      <h2>考研 A 节专有 · letter_category 专属要素检查</h2>
+      <p class="vocab-hint">依据 <code>references/letter-categories.md</code>：10 类信件的开头套语、必备要素、语域均有独立硬要求。</p>
+{{LETTER_CAT_HTML}}
+    </section>
+
+    <!-- v1.6.1 新增：Postgrad1B 三段论诊断 -->
+    <section class="card" {{PARA_DIAG_BLOCK_STYLE}}>
+      <h2>考研英一 B 节专有 · 三段论段落诊断（cartoon_standard）</h2>
+      <p class="vocab-hint">依据 <code>references/postgrad1b-paragraph-rubric.md</code>：英一 B 节近 20 年真题均为"漫画 + 议论"，三段分工为描述 → 阐释 → 评论/对策。2022+ 鼓励辩证 discursive 写作。</p>
+{{PARA_DIAG_HTML}}
+    </section>
+
+    <!-- v1.6.1 新增：chart_subtype_specific（Postgrad2B / CET chart 题） -->
+    <section class="card" {{CHART_SUB_BLOCK_STYLE}}>
+      <h2>图表题专有 · chart_subtype 数据与趋势检查</h2>
+      <p class="vocab-hint">依据 <code>references/chart-verbs.md</code>：7 类图表各有专属描述动词与硬约束。</p>
+{{CHART_SUB_HTML}}
+    </section>
+
+    <section class="card" id="sec-score-judge">
+      <h2>3. 分数判定</h2>
+      <div class="boundary-grid">
+        <div>
+          <h4>与高一档的差距</h4>
+          <p>{{COMPARED_HIGHER}}</p>
+        </div>
+        <div>
+          <h4>与低一档相比的优势</h4>
+          <p>{{COMPARED_LOWER}}</p>
+        </div>
+      </div>
+      <h3>档内 ±1 调节：<span class="intra-pill">{{INTRA_DELTA}}</span></h3>
+      <p>{{INTRA_REASON}}</p>
+    </section>
+
+    <section class="card" id="sec-deductions">
+      <h2>4. 扣分明细</h2>
+{{DEDUCTIONS_HTML}}
+    </section>
+
+    <section class="card" id="sec-feedback">
+      <h2>5. 问题与建议</h2>
+
+      <h3 style="margin-top:0;">5.1 问题分析</h3>
+      <p style="color:var(--muted);font-size:13px;margin:0 0 12px;">每条问题已标注类型与严重程度。「问题说明」列详述具体问题，「建议」列标明操作类型（改写 / 增加 / 替换 / 删除）并给出具体示例。词汇问题已整合至本表末尾。</p>
+{{ISSUES_HTML}}
+
+      <h3>5.2 升级建议</h3>
+      <p style="color:var(--muted);font-size:13px;margin:0 0 12px;">针对上方问题，以下是你接下来可以立即执行的操作步骤，帮助你从当前档次升至目标档次。</p>
+{{UPGRADE_HTML}}
+    </section>
+
+    <section class="card" id="sec-appendix">
+      <h2>附录</h2>
+
+      <h3>A. 本次适用评分标准</h3>
+      <p style="color:var(--muted);font-size:13px;margin:0 0 10px;">{{RUBRIC_SOURCE_NOTE}}</p>
+{{RUBRIC_TABLE_HTML}}
+
+      <h3 style="margin-top:24px;">B. 判定证据链（可追溯性）</h3>
+      <p style="color:var(--muted);font-size:13px;margin:0 0 10px;">以下为每一步定档决策的推理依据，对应官方评分标准原文，供核查参考。</p>
+{{RATIONALE_HTML}}
+
+      <h3 style="margin-top:24px;">C. 题目</h3>
+      <div class="prompt-box">{{PROMPT_TEXT}}</div>
+      <h3>D. 作文原文</h3>
+      <div class="essay-box">{{ESSAY_TEXT}}</div>
+    </section>
+    <footer>
+      由 <strong>english-exam-writing-reviewer</strong> Skill 生成 ·
+      对齐《全国大学英语四、六级考试大纲 2016 修订版》+《全国硕士研究生招生考试英语一/二考试大纲》<br>
+      AI 批改与人工阅卷仍有误差，结果仅供学习参考。
+    </footer>
+  </div>
+</body>
+</html>

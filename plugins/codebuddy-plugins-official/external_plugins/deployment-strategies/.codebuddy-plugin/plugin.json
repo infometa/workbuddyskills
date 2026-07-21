@@ -1,0 +1,11 @@
+{
+  "name": "deployment-strategies",
+  "description": "部署模式、回滚自动化和基础设施模板",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

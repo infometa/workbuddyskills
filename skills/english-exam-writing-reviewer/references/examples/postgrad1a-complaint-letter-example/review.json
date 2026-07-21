@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "exam_level": "Postgrad1A",
+    "task_subtype": "letter",
+    "letter_category": "complaint",
+    "reviewed_at": "2026-04-22T18:00:00Z",
+    "reviewer_version": "english-exam-writing-reviewer v1.7.0"
+  },
+  "prompt": "Write a letter of about 100 words to the customer service manager of an online bookstore to complain about a book you have recently received, explain the problem and propose a solution. Use \"Li Ming\" instead of your real name. (10 points)",
+  "essay": "Dear Manager,\n\nI am writing to lodge a formal complaint regarding the copy of \"Principles of Macroeconomics\" (Order No. 20240815-AX237) that I received from your online bookstore on 15 August 2024. The cover was badly dented and approximately 30 pages showed clear water damage, rendering the textbook barely usable for my upcoming semester.\n\nGiven the book was purchased at 198 RMB and listed as \"new\", I hope you may either arrange a full refund or dispatch a prompt replacement at your own cost. Considering that term begins on 2 September, an early response would be much appreciated.\n\nI look forward to a prompt resolution of this matter.\n\nYours sincerely,\nLi Ming",
+  "word_count": {
+    "effective": 108,
+    "requirement_min": 90,
+    "requirement_max": 110,
+    "within_range": true,
+    "penalty_triggered": false
+  },
+  "band": 4,
+  "raw_score": 7,
+  "final_score": 7,
+  "converted_score": 7,
+  "calibration_status": "normal",
+  "calibration_note": null,
+  "band_description": {
+    "official_text": "较好地完成了试题规定的任务。包含所有内容要点；能够运用较丰富的语法结构和词汇；基本没有或仅有个别语言错误。",
+    "source": "2025 考研英语一大纲 A 节 第四档 7–8 分"
+  },
+  "boundary_decision": {
+    "compared_with_higher": "缺 academic tier 词（如 `redress / rectification`）；语气坚定但未使用倒装强调；诉求段可加让步（如 `Whilst I appreciate the logistical challenges...`）",
+    "compared_with_lower": "投诉五要素齐全 + 订单号 + 数量化损失（30 页/198 RMB）+ 双诉求（退款 OR 换货）+ formal 语域 + 署名合规"
+  },
+  "intra_band_adjustment": {
+    "delta": 0,
+    "reason": "档内中位 7 分——complaint 必备要素齐全且精确，但未展现第五档的 academic 词汇密度"
+  },
+  "dimension_diagnosis": {
+    "task_completion": "complaint 五要素齐全：投诉主体（Macroeconomics 一书）+ 损害事实（封面凹陷 + 30 页水损）+ 订单定位（Order No. 20240815-AX237）+ 双诉求（退款/换货）+ 截止时间（9 月 2 日开学）。",
+    "grammar_lexis": "非限定定语从句（that I received from your online bookstore）+ 现在分词状语（rendering the textbook barely usable）+ high-tier 词（lodge / dispatch / resolution）",
+    "accuracy": "无可识别错误",
+    "cohesion": "Given... / Considering that... / look forward 衔接自然",
+    "format_register": {
+      "format": "称呼 / 正文 / 客套 / 署名齐全",
+      "register": "formal（坚定但克制，无 angry 情绪用语）",
+      "signature_compliance": "✅ 使用 Li Ming（题目指定），无真名泄露",
+      "category_specific_check": {
+        "opening_phrase_ok": true,
+        "tone_ok": true,
+        "required_elements": [
+          { "name": "投诉事实（事件+时间+损失）", "present": true, "evidence": "封面凹陷 + 30 页水损 + 198 RMB" },
+          { "name": "订单号等定位信息", "present": true, "evidence": "Order No. 20240815-AX237" },
+          { "name": "具体诉求（含补救方案）", "present": true, "evidence": "full refund 或 prompt replacement" },
+          { "name": "期待回复", "present": true, "evidence": "look forward to a prompt resolution" }
+        ],
+        "category_pitfalls": []
+      }
+    }
+  },
+  "directions_copy_check": {
+    "applicable": true,
+    "overall_risk": "none",
+    "segments": []
+  },
+  "errors": [
+    {
+      "severity": "tip",
+      "type": "lexical",
+      "location": "¶2 末",
+      "original": "an early response would be much appreciated",
+      "correction": "your earliest attention to this matter would be much appreciated",
+      "rationale": "academic tier 替换，可冲击第五档"
+    }
+  ],
+  "vocabulary_upgrades": [
+    { "original": "rendering the textbook barely usable", "tier_before": "high", "suggestion": "rendering the textbook all but unusable", "tier_after": "academic" },
+    { "original": "arrange a full refund", "tier_before": "mid", "suggestion": "issue a full refund without delay", "tier_after": "high" }
+  ],
+  "rationale_trace": [
+    {
+      "step": "Step 1",
+      "claim": "词数核算",
+      "evidence": ["effective=108", "requirement 90-110", "within_range=true"],
+      "rubric_ref": "考研 A 节字数扣分规则"
+    },
+    {
+      "step": "Step 2",
+      "claim": "letter_category 识别为 complaint",
+      "evidence": ["Directions 含 'complain about'", "essay 含 'lodge a formal complaint'"],
+      "rubric_ref": "letter-categories.md §complaint"
+    },
+    {
+      "step": "Step 3",
+      "claim": "complaint 硬门槛全通过",
+      "evidence": ["tone_ok=true（formal 坚定但克制）", "required_elements 4/4 全覆盖", "category_pitfalls 空数组"],
+      "rubric_ref": "letter-categories.md §complaint Required Elements"
+    },
+    {
+      "step": "Step 4",
+      "claim": "官方 rubric 比对 → 第四档",
+      "evidence": ["包含所有要点", "较丰富语法结构与词汇", "基本无错"],
+      "rubric_ref": "2025 考研英一大纲 A 节 第四档 7-8 分"
+    },
+    {
+      "step": "Step 5",
+      "claim": "档内定位中位 7 分",
+      "evidence": ["complaint 要素齐全", "未达第五档 academic 密度（如 redress / rectification）"],
+      "rubric_ref": "boundary-rubric.md §考研 A 节档内微调"
+    }
+  ],
+  "final_feedback": "这封投诉信是 complaint 类别的优秀示范：订单号、损失数量（30 页、198 RMB）、双诉求（退款 OR 换货）、截止时间（9 月 2 日）全部精确到位；`lodge a formal complaint / dispatch a prompt replacement` 等 high-tier 搭配使用得当；语气坚定但不 emotional——这正是 complaint 信第四档的标准姿态。若要冲击第五档 8 分，建议在诉求段加一句让步转折，例如 `Whilst I appreciate the logistical challenges of transit, the extent of the damage leaves me no option but to seek redress`——既展现 academic 词汇（redress），又保持了克制语气。"
+}

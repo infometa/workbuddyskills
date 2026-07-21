@@ -1,0 +1,5 @@
+{
+  "_note": "御界 WireGuard 告警 raw_log 样例 (脱敏). 来源: soc日志/event/esSearch_20260706145614.xlsx. 真实数据已做 IP/MAC 脱敏但保留结构.",
+  "_structure": "外层是 {\"raw\": \"<内层 JSON 字符串>\"}, 内层才是真正的告警载荷",
+  "raw": "{\"rule\":2017001,\"rule_name\":\"WireGuard隧道通信\",\"proto\":\"udp\",\"src_ip\":\"10.0.0.4\",\"src_port\":51820,\"dst_ip\":\"172.16.114.118\",\"dst_port\":51820,\"create_time\":\"2026-07-06 14:30:22\",\"category\":\"Tunneling\",\"subcategory\":\"VPN\",\"ext\":{\"attacker_ip\":\"123.103.18.70\",\"victim_ip\":\"172.16.114.119\",\"src_mac\":\"00:0a:f7:12:34:56\",\"dst_mac\":\"00:0a:f7:65:43:21\",\"app_proto\":\"failed\",\"score\":\"85.000000\",\"attack_result\":\"attempt\",\"raw_packet_hex\":\"4500005000004000402f06000a10270b0a1001a8d4d7b37c00000000000000000000a000a00\",\"flow\":{\"bytes_toserver\":192,\"bytes_toclient\":0,\"pkts_toserver\":1,\"pkts_toclient\":0,\"start\":\"2026-07-06T14:30:22\",\"end\":\"2026-07-06T14:30:22\"},\"gre\":{\"src\":\"192.168.233.1\",\"dst\":\"192.168.233.2\",\"vpcid\":66700},\"alert\":{\"signature_id\":2017001,\"gid\":1,\"rule_type\":\"alert\",\"signature\":\"WireGuard tunnel detected\"}}}"
+}

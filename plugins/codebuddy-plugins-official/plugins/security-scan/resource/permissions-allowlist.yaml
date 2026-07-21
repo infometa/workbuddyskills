@@ -1,0 +1,247 @@
+# ============================================================
+# 安全扫描插件 — 权限白名单配置参考
+# ============================================================
+#
+# 用途：记录插件运行过程中需要自动授权的所有工具调用模式。
+#       编排器在扫描初始化阶段检测用户的 .codebuddy/settings.json，
+#       如果缺失这些权限白名单，应引导用户配置以避免频繁手动授权。
+#       如果已有白名单但条目与本文件不一致，应引导增量更新。
+#
+# 配置位置（优先级从高到低）：
+#   1. 命令行参数（临时覆盖）
+#   2. 项目 .codebuddy/settings.local.json（个人，不提交 Git）
+#   3. 项目 .codebuddy/settings.json（团队共享）— 编排器自动配置的目标路径
+#   4. 用户 ~/.codebuddy/settings.json（全局，所有项目生效）— 需用户手动配置
+#
+# ⚠️ denyWrite 限制：
+#   settings.json 在 denyWrite 中保护了自身，插件无法直接写入用户级
+#   (~/.codebuddy/settings.json) 配置。项目级 .codebuddy/settings.json
+#   可通过编排器自动配置写入。
+#
+# 编排器自动配置：
+#   - 用户选择「自动配置」→ 写入项目 .codebuddy/settings.json（方案 3）
+#   - 用户选择「跳过」→ 不写入，用户可稍后手动编辑任意级别配置
+#
+# 变更检测：
+#   - 不使用版本号，通过比对权限条目内容判断是否需要更新
+#   - 插件升级后若新增白名单条目，编排器通过条目比对检测到差异，
+#     引导用户增量更新（仅追加缺失条目，保留用户已有的自定义配置）
+#
+# 建议：
+#   - 团队项目 → 自动配置（项目级，可提交 Git 共享）
+#   - 个人开发者 → 自动配置后，可手动复制到 ~/.codebuddy/settings.json 实现全局生效
+#
+# ============================================================
+
+# 白名单版本号（与 plugin.json version 同步，用于增量更新检测）
+allowlist_version: "3.2.0"
+
+# ---- 需要授权的工具（默认每次调用都弹出确认） ----
+#
+#   Bash    — 执行 Shell 命令（index_db.py、merge_findings.py 等）
+#   Write   — 覆盖已有文件（Agent JSON 输出、报告等）
+#   CreateFile — 创建新文件（首次生成 JSON 输出、报告等）
+#   Edit    — 编辑现有文件（内联修复）
+#   MultiEdit — 批量编辑文件（内联修复）
+#   WebSearch — 网络搜索（CVE 情报增强）
+#
+# ---- 不需要授权的工具 ----
+#
+#   Read, Grep, Glob, LSP, Task, AskUserQuestion
+
+# ============================================================
+# permissions.allow — 自动放行规则
+# ============================================================
+# 语法：ToolName(glob_pattern)
+# - 通配符 * 匹配任意字符（含路径分隔符）
+# - 匹配时为前缀匹配
+
+permissions_allow:
+  # ============================================================
+  # 插件 Python 脚本（封闭集合，12 个脚本）
+  # ============================================================
+  - "Bash(python3 *index_db.py*)"           # SQLite 索引库（init/write/query/memory-sync/update-findings）
+  - "Bash(python3 *ts_parser.py*)"           # AST 解析引擎（check/setup/persist/refine-sinks/cached-query + 4 个遗留子命令）
+  - "Bash(python3 *merge_findings.py*)"      # 扫描结果合并（merge-scan/merge-verify）
+  - "Bash(python3 *verifier.py*)"            # 确定性验证 + 智能分级（stage1）
+  - "Bash(python3 *generate_report.py*)"     # HTML 报告生成
+  - "Bash(python3 *checkpoint_verify.py*)"   # Agent 产物完整性校验
+  - "Bash(python3 *check_permissions.py*)"   # 权限白名单预检查
+  # report_upload.py 已迁移到 Stop Hook，不再需要 Bash 白名单
+  - "Bash(python3 *lsp_setup.py*)"           # LSP 环境检测与 setupSteps 生成
+  - "Bash(python3 *pattern_grep.py*)"        # Sink 模式 Grep 扫描（批量模式匹配）
+  - "Bash(python3 *orchestration_helper.py*)"  # 编排辅助（check-phase-gate/should-launch-agent/detect-framework 等 6 个子命令）
+
+  # ============================================================
+  # Git 只读操作（5 个子命令）
+  # ============================================================
+  - "Bash(git diff*)"                        # 变更文件列表
+  - "Bash(git ls-files*)"                    # 源文件枚举
+  - "Bash(git log*)"                         # 提交历史查询
+  - "Bash(git status*)"                      # 工作区状态
+  - "Bash(git rev-parse*)"                   # 仓库元信息
+
+  # ============================================================
+  # 辅助工具（初始化 + 枚举 + 读取 + 查看 + 查找 + 报告预览）
+  # ============================================================
+  - "Bash(mkdir -p *.codebuddy/security-scan/runs*)"   # 创建输出目录（兼容绝对路径）
+  - "Bash(date *)"                           # 时间戳
+  - "Bash(wc *)"                             # 行数统计
+  - "Bash(sort *)"                           # 排序
+  - "Bash(cat *.codebuddy/security-scan/runs/*)"       # 读取产物（兼容绝对路径）
+  - "Bash(cd * && cat *)"                    # 带目录切换的 cat（含 heredoc 写入临时文件）
+  - "Bash(head *)"                           # 文件头
+  - "Bash(tail *)"                           # 文件尾
+  - "Bash(find . -name*)"                    # 文件查找
+  - "Bash(find . -type*)"                    # 按类型查找
+  - "Bash(cd * && find *)"                   # 带目录切换的文件查找
+  - "Bash(open *.codebuddy/security-scan/runs/*)"      # 打开 HTML 报告（兼容绝对路径）
+
+  # ============================================================
+  # 目录列表查看
+  # ============================================================
+  - "Bash(ls *)"                             # 目录列表查看（验证产物文件、查看输出目录结构）
+
+  # ============================================================
+  # 带环境变量前缀的 Python 脚本调用
+  # ============================================================
+  - "Bash(export CODEBUDDY_PLUGIN_ROOT*)"    # Agent 子任务需显式 export 环境变量后调用插件脚本
+
+  # ============================================================
+  # 内联 Python / 带目录切换的 Python 调用
+  # ============================================================
+  - "Bash(python3 -c *)"                     # 内联 Python（JSON 解析、SQLite 查询、文件枚举等）
+  - "Bash(cd * && python3 *)"                # 带目录切换的所有 python3 调用（脚本 + 内联 -c）
+
+  # ============================================================
+  # SQLite 数据库查询（项目索引 DB 读取）
+  # ============================================================
+  - "Bash(sqlite3 *)"                        # SQLite 直接查询（.tables/.schema/SELECT 等）
+  - "Bash(cd * && sqlite3 *)"               # 带目录切换的 SQLite 查询
+
+  # ============================================================
+  # 延时等待（Agent 子任务轮询 / 等待上游完成）
+  # ============================================================
+  - "Bash(sleep *)"                          # sleep N && 后接任意命令（Agent 子任务等待后执行查询/检查）
+
+  # ============================================================
+  # 回显验证
+  # ============================================================
+  - "Bash(echo *)"                           # 简单状态确认、产物验证完成提示
+
+  # ============================================================
+  # Write：扫描输出目录（覆盖已有文件）
+  # ============================================================
+  - "Write(*.codebuddy/security-scan/runs*)"          # 所有扫描产物（JSON/HTML/DB）— 相对路径
+
+# ============================================================
+# permissions.deny — 强制拦截规则（安全护栏）
+# ============================================================
+
+permissions_deny:
+  - "Bash(rm -rf /)"                         # 防止根目录删除
+  - "Bash(git push --force*)"               # 防止强制推送
+  - "Read(./.env)"                           # 保护环境变量文件
+  - "Read(./.env.*)"                         # 保护环境变量文件
+
+# ============================================================
+# 仍需手动授权的操作（不建议加入白名单）
+# ============================================================
+#
+# 以下操作具有破坏性或涉及网络请求，保留手动确认：
+#
+#   Edit(src/*)       — 内联修复修改项目源代码，用户应逐一确认
+#   MultiEdit(src/*)  — 同上
+#   WebSearch(*)      — CVE 情报增强涉及网络请求
+#   WebFetch(*)       — 暂未使用
+#
+# ============================================================
+
+# ============================================================
+# settings.json 完整示例（可直接复制到配置文件）
+# ============================================================
+#
+# {
+#   "permissions": {
+#     "allow": [
+#       "Bash(python3 *index_db.py*)",
+#       "Bash(python3 *ts_parser.py*)",
+#       "Bash(python3 *merge_findings.py*)",
+#       "Bash(python3 *generate_report.py*)",
+#       "Bash(python3 *checkpoint_verify.py*)",
+#       "Bash(python3 *check_permissions.py*)",
+#       "Bash(python3 *verifier.py*)",
+#       "Bash(python3 *lsp_setup.py*)",
+#       "Bash(python3 *pattern_grep.py*)",
+#       "Bash(python3 *orchestration_helper.py*)",
+#
+#       "Bash(git diff*)",
+#       "Bash(git ls-files*)",
+#       "Bash(git log*)",
+#       "Bash(git status*)",
+#       "Bash(git rev-parse*)",
+#       "Bash(mkdir -p *.codebuddy/security-scan/runs*)",
+#       "Bash(date *)",
+#       "Bash(wc *)",
+#       "Bash(sort *)",
+#       "Bash(cat *.codebuddy/security-scan/runs/*)",
+#       "Bash(cd * && cat *)",
+#       "Bash(head *)",
+#       "Bash(tail *)",
+#       "Bash(find . -name*)",
+#       "Bash(find . -type*)",
+#       "Bash(cd * && find *)",
+#       "Bash(open *.codebuddy/security-scan/runs/*)",
+#       "Bash(ls *)",
+#       "Bash(export CODEBUDDY_PLUGIN_ROOT*)",
+#       "Bash(python3 -c *)",
+#       "Bash(cd * && python3 *)",
+#       "Bash(sqlite3 *)",
+#       "Bash(cd * && sqlite3 *)",
+#       "Bash(sleep *)",
+#       "Bash(echo *)",
+#       "Write(.codebuddy/security-scan/runs/*)",
+#       "Write(*/.codebuddy/security-scan/runs/*)",
+#       "Write(/*/.codebuddy/security-scan/runs/*)",
+#       "CreateFile(.codebuddy/security-scan/runs/*)",
+#       "CreateFile(*/.codebuddy/security-scan/runs/*)",
+#       "CreateFile(/*/.codebuddy/security-scan/runs/*)"
+#     ],
+#     "deny": [
+#       "Bash(rm -rf /)",
+#       "Bash(git push --force*)",
+#       "Read(./.env)",
+#       "Read(./.env.*)"
+#     ],
+#   }
+#  }
+#
+# ============================================================
+
+# ============================================================
+# 效果预估
+# ============================================================
+#
+# 白名单条目：37 条 Bash + 3 条 Write + 3 条 CreateFile = 43 条
+#
+# 配置前（一次 Deep 扫描约 100-120 次需授权的调用）：
+#   - PYTHON_SCRIPT 调用 ~45 次 → 全部需要手动确认
+#   - ENV_PYTHON_SCRIPT 调用 ~15 次 → 全部需要手动确认
+#   - PYTHON_INLINE 调用 ~10 次 → 全部需要手动确认
+#   - GIT_READONLY 调用 ~5 次 → 全部需要手动确认
+#   - SCAN_INIT/FILE_ENUM/DIR_LIST/其他 ~15 次 → 全部需要手动确认
+#   - Write 输出文件 ~15 次 → 全部需要手动确认
+#
+# 配置后：
+#   - 上述 12 个模板的所有调用全部自动通过
+#   - 仅 Edit/MultiEdit（修复）~5 次 + WebSearch ~3 次 需手动确认
+#   - 合计约 8 次手动授权（减少 ~93%+）
+#
+# 关键改进：
+#   - 覆盖 Agent 子任务需 export 环境变量的场景（模板 10）
+#   - 覆盖轻量数据处理的 python3 -c 内联调用（模板 11）
+#   - 覆盖目录列表查看 ls 命令（模板 9）
+#   - 覆盖简单回显验证 echo 命令（模板 12）
+#   - 所有调用可预测，不会出现白名单外的意外变体
+#
+# ============================================================

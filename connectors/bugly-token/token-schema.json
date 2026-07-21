@@ -1,0 +1,21 @@
+{
+    "title": "Bugly 质量概览 MCP 对接配置",
+    "title_en": "Bugly Quality Overview MCP Configuration",
+    "description": "连接您的 Bugly 账号，用于查看产品的崩溃率、ANR 率、FOOM（OOM）率与启动耗时等质量概览。Token 仅存储在本机 ~/.workbuddy 下，不会上传云端。",
+    "description_en": "Connect your Bugly account to view product quality overview such as crash rate, ANR rate, FOOM (OOM) rate, and startup latency. Token are stored locally in ~/.workbuddy only and are never uploaded to the cloud.",
+    "docUrl": "https://bugly.tds.qq.com/v2/user/token",
+    "docLabel": "如何获取 Bugly Access Token？",
+    "docLabel_en": "How to get Bugly Access Token?",
+    "fields": [
+        {
+            "key": "BUGLY_ACCESS_TOKEN",
+            "label": "密钥",
+            "placeholder": "在 Bugly 控制台 → 右上角头像 → 个人令牌→ 复制密钥",
+            "placeholder_en": "In Bugly Console -> top-right avatar -> Personal Tokens -> copy the key",
+            "type": "password",
+            "required": true,
+            "description": "用于访问 Bugly OpenAPI 的个人访问令牌，将以 Authorization: Bearer 形式注入请求头。",
+            "description_en": "Personal access token for Bugly OpenAPI, injected into the request header as Authorization: Bearer."
+        }
+    ]
+}

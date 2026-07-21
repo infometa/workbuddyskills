@@ -1,0 +1,11 @@
+{
+  "name": "seo-technical-optimization",
+  "description": "技术SEO优化,包括元标签、关键词、结构和精选摘要",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

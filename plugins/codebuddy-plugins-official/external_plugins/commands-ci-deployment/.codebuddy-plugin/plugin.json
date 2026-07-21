@@ -1,0 +1,27 @@
+{
+  "name": "commands-ci-deployment",
+  "version": "1.0.0",
+  "description": "Commands for CI/CD setup, containerization, and deployment automation",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "ci-deployment",
+    "add-changelog",
+    "changelog-demo-command",
+    "ci-setup",
+    "containerize-application",
+    "hotfix-deploy",
+    "prepare-release",
+    "release",
+    "rollback-deploy",
+    "run-ci",
+    "setup-automated-releases",
+    "setup-kubernetes-deployment"
+  ]
+}

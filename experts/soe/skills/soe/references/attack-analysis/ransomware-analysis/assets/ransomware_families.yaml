@@ -1,0 +1,289 @@
+# 勒索家族特征库
+# 维护说明：新增家族时需补充 extensions/note_filenames/note_keywords 至少 2 项
+
+version: "1.0"
+last_updated: "2025-07"
+
+families:
+  # ============ LockBit ============
+  - name: "LockBit"
+    aliases: ["LockBit 3.0", "LockBit Black", "LockBit Green", "ABCD"]
+    first_seen: "2019-09"
+    status: "active"
+    origin: "Russia-linked (RaaS)"
+    description: "LockBit 是最活跃的 RaaS 勒索家族之一，以高加密速度和自动化横向传播著称。"
+    extensions:
+      - ".lockbit"
+      - ".lockbit3"
+      - ".abcd"
+    note_filenames:
+      - "Restore-My-Files.txt"
+      - "lockbit_readme.txt"
+    note_keywords:
+      - "LockBit"
+      - "lockbitsupp"
+      - "restore your files"
+      - "unique ID"
+      - "crypto currency"
+    intrusion_vectors:
+      - "RDP brute force"
+      - "Phishing email"
+      - "Exploit public application"
+      - "Drive-by compromise"
+    lateral_movement:
+      - "SMB share encryption"
+      - "Group Policy propagation"
+      - "PsExec / WMI remote execution"
+    known_iocs:
+      tor_onion: []
+      btc_address: []
+
+  # ============ BlackCat / ALPHV ============
+  - name: "BlackCat"
+    aliases: ["ALPHV", "Noberus", "AlphaVM"]
+    first_seen: "2021-11"
+    status: "active"
+    origin: "Russia-linked (RaaS)"
+    description: "BlackCat/ALPHV 是基于 Rust 开发的跨平台勒索软件，支持 Windows/Linux 加密。"
+    extensions:
+      - ".blackcat"
+      - ".alphv"
+      - ".alphvv"
+    note_filenames:
+      - "RECOVER-FILES.txt"
+      - "readme.txt"
+    note_keywords:
+      - "BlackCat"
+      - "ALPHV"
+      - "your data has been stolen"
+      - "double extortion"
+      - "we have downloaded"
+    intrusion_vectors:
+      - "Exploit public application"
+      - "Compromised credentials"
+      - "Phishing email"
+      - "Third-party compromise"
+    lateral_movement:
+      - "PsExec"
+      - "Cobalt Strike"
+      - "Mimikatz credential dumping"
+    known_iocs: {}
+
+  # ============ Phobos ============
+  - name: "Phobos"
+    aliases: ["DevicData", "Faust", "Elking", "Eight"]
+    first_seen: "2019-01"
+    status: "active"
+    origin: "China-linked operators"
+    description: "Phobos 长期活跃，主要针对中小企业，常通过 RDP 暴破入侵。"
+    extensions:
+      - ".phobos"
+      - ".faust"
+      - ".devicdata"
+      - ".elking"
+      - ".eight"
+    note_filenames:
+      - "info.txt"
+      - "info.hta"
+      - "Files_encrypted.txt"
+    note_keywords:
+      - "Phobos"
+      - "write to us"
+      - "your files are encrypted"
+      - "decrypt"
+    intrusion_vectors:
+      - "RDP brute force"
+      - "RDP vulnerability"
+      - "Phishing email"
+    lateral_movement:
+      - "SMB share"
+      - "RDP lateral movement"
+    known_iocs: {}
+
+  # ============ Akira ============
+  - name: "Akira"
+    aliases: ["Akira Linux"]
+    first_seen: "2023-03"
+    status: "active"
+    origin: "Former Conti members"
+    description: "Akira 由前 Conti 成员组建，针对企业网络，常利用 Cisco AnyConnect 漏洞。"
+    extensions:
+      - ".akira"
+    note_filenames:
+      - "akira_readme.txt"
+    note_keywords:
+      - "Akira"
+      - "we're back"
+      - "we have also downloaded"
+      - "negotiate"
+    intrusion_vectors:
+      - "Exploit public application (Cisco AnyConnect)"
+      - "Compromised VPN credentials"
+      - "Phishing email"
+    lateral_movement:
+      - "PsExec"
+      - "Cobalt Strike"
+    known_iocs: {}
+
+  # ============ STOP/Djvu ============
+  - name: "STOP"
+    aliases: ["Djvu", "STOP/Djvu"]
+    first_seen: "2018-02"
+    status: "active"
+    origin: "Unknown"
+    description: "STOP/Djvu 主要通过软件破解/广告软件分发，针对个人用户，扩展名变体极多。"
+    extensions:
+      - ".djvu"
+      - ".djvuu"
+      - ".udjvu"
+      - ".uudjvu"
+      - ".djvur"
+      - ".stop"
+      - ".rooe"
+      - ".grovas"
+      - ".moresa"
+    note_filenames:
+      - "_readme.txt"
+      - "_openme.txt"
+    note_keywords:
+      - "STOP"
+      - "Djvu"
+      - "gorentos@bitmessage.ch"
+      - "restorealldata@firemail.cc"
+    intrusion_vectors:
+      - "Software crack / keygen"
+      - "Adware bundle"
+      - "Phishing email"
+    lateral_movement: []
+    known_iocs:
+      email:
+        - "gorentos@bitmessage.ch"
+        - "restorealldata@firemail.cc"
+
+  # ============ Conti ============
+  - name: "Conti"
+    aliases: ["Conti v3"]
+    first_seen: "2020-05"
+    status: "disbanded (2022, leaked source code)"
+    origin: "Russia-linked (Wizard Spider)"
+    description: "Conti 已解散但源码泄露，衍生多个家族。以快速横向移动和双重勒索著称。"
+    extensions:
+      - ".conti"
+    note_filenames:
+      - "readme.txt"
+      - "CONTI_README.txt"
+    note_keywords:
+      - "Conti"
+      - "your data has been encrypted"
+      - "we have downloaded"
+    intrusion_vectors:
+      - "Phishing email (BazarLoader/TrickBot)"
+      - "Exploit public application"
+      - "RDP compromise"
+    lateral_movement:
+      - "Cobalt Strike"
+      - "PsExec"
+      - "WMI"
+    known_iocs: {}
+
+  # ============ Royal / BlackSuit ============
+  - name: "Royal"
+    aliases: ["BlackSuit"]
+    first_seen: "2022-09"
+    status: "active"
+    origin: "Former Conti members"
+    description: "Royal/BlackSuit 由前 Conti 成员组建，部分加密以加快速度。"
+    extensions:
+      - ".royal"
+      - ".royal_x"
+      - ".blacksuit"
+    note_filenames:
+      - "readme.txt"
+      - "Royal_Readme.txt"
+    note_keywords:
+      - "Royal"
+      - "BlackSuit"
+      - "your systems have been compromised"
+    intrusion_vectors:
+      - "Exploit public application"
+      - "Compromised credentials"
+      - "Phishing email"
+    lateral_movement:
+      - "Cobalt Strike"
+      - "PsExec"
+    known_iocs: {}
+
+  # ============ Play ============
+  - name: "Play"
+    aliases: ["PlayCrypt"]
+    first_seen: "2022-06"
+    status: "active"
+    origin: "Unknown"
+    description: "Play 勒索软件以短文件名和简洁勒索信著称，常利用 ProxyShell 漏洞。"
+    extensions:
+      - ".play"
+    note_filenames:
+      - "Readme.txt"
+      - "play_readme.txt"
+    note_keywords:
+      - "Play"
+      - "your data has been stolen"
+      - "we will publish"
+    intrusion_vectors:
+      - "Exploit public application (Exchange ProxyShell/ProxyNotShell)"
+      - "Compromised credentials"
+    lateral_movement:
+      - "Cobalt Strike"
+      - "PowerShell"
+    known_iocs: {}
+
+  # ============ BianLian ============
+  - name: "BianLian"
+    aliases: []
+    first_seen: "2022-08"
+    status: "active (data extortion focused)"
+    origin: "Unknown"
+    description: "BianLian 逐渐转向纯数据勒索，使用 Go 语言开发，常利用 SonicWall 漏洞。"
+    extensions:
+      - ".bianlian"
+    note_filenames:
+      - "look at this.txt"
+      - "readme.txt"
+    note_keywords:
+      - "BianLian"
+      - "your data has been downloaded"
+      - "we will sell"
+    intrusion_vectors:
+      - "Exploit public application (SonicWall)"
+      - "Compromised credentials"
+      - "Phishing email"
+    lateral_movement:
+      - "PowerShell"
+      - "Cobalt Strike"
+    known_iocs: {}
+
+  # ============ Rhysida ============
+  - name: "Rhysida"
+    aliases: []
+    first_seen: "2023-05"
+    status: "active"
+    origin: "Unknown"
+    description: "Rhysida 以数据勒索为主，针对教育和医疗行业，利用 Cobalt Strike 横向移动。"
+    extensions:
+      - ".rhysida"
+      - ".locked"
+    note_filenames:
+      - "CriticalBreachDetected.pdf"
+      - "Readme.txt"
+    note_keywords:
+      - "Rhysida"
+      - "we have compromised"
+      - "your data will be published"
+    intrusion_vectors:
+      - "Phishing email"
+      - "Exploit public application"
+      - "Compromised credentials"
+    lateral_movement:
+      - "Cobalt Strike"
+      - "PowerShell"
+    known_iocs: {}

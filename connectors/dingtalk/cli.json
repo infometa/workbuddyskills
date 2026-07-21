@@ -1,0 +1,41 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=16"
+    },
+    "init": {
+        "darwin": "npm install -g dingtalk-workspace-cli",
+        "linux": "npm install -g dingtalk-workspace-cli",
+        "win32": "npm install -g dingtalk-workspace-cli"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "dws --version",
+            "linux": "dws --version",
+            "win32": "dws.cmd --version"
+        },
+        "minVersion": "1.0.52"
+    },
+    "auth": {
+        "darwin": "dws auth login -y",
+        "linux": "dws auth login -y",
+        "win32": "dws.cmd auth login -y"
+    },
+    "unAuth": {
+        "darwin": "dws auth reset",
+        "linux": "dws auth reset",
+        "win32": "dws.cmd auth reset"
+    },
+    "status": {
+        "darwin": "dws auth status",
+        "linux": "dws auth status",
+        "win32": "dws.cmd auth status"
+    },
+    "statusMatch": "\"authenticated\"\\s*:\\s*true",
+    "statusMatchJson": {
+        "authenticated": "true"
+    },
+    "authUrlDomain": "login.dingtalk.com",
+    "authSuppressBrowser": true,
+    "authWaitForExit": true
+}

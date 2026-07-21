@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>区域图使用编辑器</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization,tools"></script>
+<script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/areaClick.js"></script>
+
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 80%;
+        position: relative;
+    }
+
+    #toolControl {
+        position: absolute;
+        top: 10px;
+        left: 0px;
+        right: 0px;
+        margin: auto;
+        width: 126px;
+        z-index: 1001;
+    }
+
+    .toolItem {
+        width: 30px;
+        height: 30px;
+        float: left;
+        margin: 1px;
+        padding: 4px;
+        border-radius: 3px;
+        background-size: 30px 30px;
+        background-position: 4px 4px;
+        background-repeat: no-repeat;
+        box-shadow: 0 1px 2px 0 #E4E7EF;
+        background-color: #ffffff;
+        border: 1px solid #ffffff;
+    }
+
+    .toolItem:hover {
+        border-color: #789CFF;
+    }
+
+    .active {
+        border-color: #D5DFF2;
+        background-color: #D5DFF2;
+    }
+
+    #delete {
+        background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/delete.png');
+    }
+
+    #split {
+        background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/split.png');
+    }
+
+    #union {
+        background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/union.png');
+    }
+
+    .btnContainer {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        z-index: 10000;
+    }
+
+    .btnContainer button {
+        padding: 10px 14px;
+        box-sizing: border-box;
+        border: none;
+        background-color: #3876ff;
+        border-radius: 2px;
+        color: #fff;
+        font-size: 14px;
+        line-height: 14px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div class="btnContainer">
+        <button class="btn1" id="editButton" onclick="onOffEditor()">开启编辑</button>
+        <button class="btn2" id="modeButton" onclick="changeMode()">切换绘制模式</button>
+    </div>
+    <div id="toolControl">
+        <div class="toolItem" id="delete" onclick="editor.delete();" title="删除"></div>
+        <div class="toolItem" id="split" onclick="editor.split();" title="拆分"></div>
+        <div class="toolItem" id="union" onclick="editor.union();" title="合并"></div>
+    </div>
+    <div>
+        点击左上角按钮开启编辑<br />
+        单选：鼠标左键点击图形<br />
+        多选：按下ctrl键后点击多个图形<br />
+        删除：选中图形后按下delete键或点击删除按钮可删除图形<br />
+        编辑：选中图形后出现编辑点，拖动编辑点可移动顶点位置，双击实心编辑点可删除顶点<br />
+        拆分：选中单个多边形后可绘制拆分线，拆分线绘制完成后自动进行拆分<br />
+        合并：选中多个相邻多边形后可进行合并，飞地形式的多边形不支持合并<br />
+        中断：按下esc键可中断当前操作，点选的图形将取消选中，编辑过程将中断
+    </div>
+    </div>
+    <script>
+        // 制作可用于编辑的Area图层
+        class MultiPolygonWithArea extends TMap.MultiPolygon {
+            constructor(options) {
+                super(options);
+                this.createdGeometries = []; // 已经由area转换创建的geometries
+                const { areaLayer } = options;
+                this.initAreaLayer(areaLayer);
+            }
+
+            // 创建可编辑的Area图层
+            initAreaLayer(areaLayer) {
+                this.preHandleAreaData(areaLayer.getData());
+                this._areaLayer = areaLayer;
+
+                // _areaLayer绑定click监听，点击area时，对应的area转变为polygon
+                this.bindAreaEditorClickEvent = this.areaEditorClickEvent.bind(this)
+                this._areaLayer.on('click', this.bindAreaEditorClickEvent);
+            }
+
+            areaEditorClickEvent(e) {
+                if (e.detail.area) {
+                    const area = e.detail.area;
+                    // 如果polygon已经存在该id的geometry，则不添加
+                    if (this.createdGeometries.some(obj => obj.id === area.properties._aid)) return;
+                    const path = area.path;
+                    const polygonPath = convertNumberToLatLng(path);
+                    // 创建用于editor的polygon
+                    const createdGeometry = {
+                        id: area.properties._aid,
+                        paths: polygonPath,
+                        styleId: area.styleId,
+                        properties: area.properties
+                    }
+                    this.add([createdGeometry]);
+                    this.createdGeometries.push(createdGeometry);
+                    // 触发click事件，让editor选中
+                    this.emit('click', { geometry: createdGeometry });
+                }
+            }
+
+            // 获取编辑后的AreaData
+            finishEdit() {
+                // 被编辑过的area的数据索引
+                const editedIds = this.createdGeometries.map(geo => geo.id);
+                this.setAreaData(editedIds);
+            }
+
+            // 删除区域
+            deleteArea(geometries) {
+                // 要被删除的area的id
+                const removedIds = geometries.map(geo => geo.id).concat(this.createdGeometries.map(geo => geo.id));
+                this.setAreaData(removedIds, true);
+                this.createdGeometries = [];
+                this.setGeometries([]);
+            }
+
+            // 设置区域数据
+            setAreaData(editedIds, needPreHandle = false) {
+                // 数据过滤editedIds的area
+                const areaData = this._areaLayer.getData().filter((_, index) => !editedIds.includes(index));
+                this.geometries.forEach(geometry => {
+                    const { paths } = geometry;
+                    const polygonPath = paths;
+                    const areaPath = convertLatLngToNumber(polygonPath)
+                    areaData.push({
+                        path: areaPath,
+                        properties: geometry.properties,
+                        styleId: geometry.styleId,
+                    });
+                });
+
+                // 删除的情况需要重新赋值_aid;(处理拆分后删除其中一部分，另一部分Area无aid的情况)
+                if (needPreHandle) {
+                    this.preHandleAreaData(areaData);
+                }
+                this._areaLayer.setData(areaData);
+            }
+
+            /**
+             * 给每条data数据添加_aid，即其在data数组中的索引
+             * @param {*} data 
+             */
+            preHandleAreaData(data) {
+                // 每个data数据添加_aid属性
+                data.forEach((area, index) => {
+                    area.properties = {
+                        ...area.properties,
+                        _aid: index
+                    };
+                });
+            }
+
+            clear() {
+                this._areaLayer.off('click', this.bindAreaEditorClickEvent);
+                this.createdGeometries = [];
+                this.setGeometries([]);
+            }
+        }
+
+        /**
+         * 数组中的数字转换为LatLng,area path 转 polygon paths
+         */
+        function convertNumberToLatLng(paths) {
+            const polygonPath = [];
+            if (Array.isArray(paths[0])) { // 如果数组中包含多条数组，则递归处理
+                paths.forEach(path => {
+                    polygonPath.push(convertNumberToLatLng(path));
+                });
+            } else {
+                for (let i = 0; i < paths.length; i += 2) {
+                    polygonPath.push(new TMap.LatLng(paths[i], paths[i + 1]));
+                }
+            }
+            return polygonPath;
+        }
+
+        /**
+         * 数组中的LatLng转换为数字,polygon paths 转 area path
+         */
+        function convertLatLngToNumber(paths) {
+            const areaPath = [];
+            if (Array.isArray(paths[0])) { // 如果数组中包含多条数组，则递归处理
+                paths.forEach(path => {
+                    areaPath.push(convertLatLngToNumber(path));
+                });
+            } else {
+                for (let i = 0; i < paths.length; i++) {
+                    areaPath.push(paths[i].lat, paths[i].lng);
+                }
+            }
+            return areaPath;
+        }
+
+        /**
+         * 从paths数组中解析出线段数据
+         * @param {LatLng[] | LatLng[][] | LatLng[][][]} path
+         * @returns {Segment[]}
+         */
+        function getSegmentsFromPath(path) {
+            if (isSimple(path)) {
+                // LatLng[]
+                const segments = [];
+                const { length } = path;
+                for (let index = 0; index < length; index++) {
+                    let segment;
+                    if (index < length - 1) {
+                        segment = [path[index], path[index + 1]];
+                    } else {
+                        if (path[index].equals(path[0])) {
+                            continue;
+                        }
+                        segment = [path[index], path[0]];
+                    }
+
+                    segments.push(segment);
+                }
+                return segments;
+            } else {
+                // LatLng[][] | LatLng[][][]
+                return path.map(p => {
+                    return getSegmentsFromPath(p);
+                }).flat();
+            }
+        }
+
+        /**
+         * 检查是否是简单多边形，没有飞地且不带洞
+         * @param {LatLng[]} simplePolygon
+         */
+        function isSimple(simplePolygon) {
+            return simplePolygon.length >= 3
+                && Number.isFinite(simplePolygon[0].lat) && Number.isFinite(simplePolygon[0].lng);
+        }
+    </script>
+
+    <script>
+        var center = new TMap.LatLng(40.046014541872594, 116.28684997558594);
+        var map = new TMap.Map("container", {
+            zoom: 15, //设置地图缩放级别
+            center: center, //设置地图中心点坐标
+        });
+        var paths = [];
+        areaDatas.forEach((item, index) => {
+            if (index % 3 === 1) {
+                paths.push({
+                    path: item, //设置区域边界线经纬度点串
+                    styleId: 'style1' //设置区域样式id
+                })
+            } else if (index % 3 === 2) {
+                paths.push({
+                    path: item, //设置区域边界线经纬度点串
+                    styleId: 'style2' //设置区域样式id
+                })
+            } else {
+                paths.push({
+                    path: item, //设置区域边界线经纬度点串
+                    styleId: 'style3' //设置区域样式id
+                })
+            }
+        })
+
+        // 创建Area图层
+        var areaLayer = new TMap.visualization.Area({
+            styles: { //设置区域图样式
+                style1: setStyles(0.8),
+                style2: setStyles(0.5),
+                style3: setStyles(0.2),
+            },
+            selectOptions: { //设置拾取配置
+                action: 'hover',
+                style: {
+                    fillColor: 'rgba(28,213,255,0.6)', //设置区域填充颜色
+                    strokeColor: '#fff', //设置区域边线颜色
+                    strokeWidth: 1, //区域边线宽度
+                    strokeDashArray: [0, 0] //边线虚线展示方式
+                },
+                enableHighlight: false,
+            }
+        }).setData(paths).addTo(map);
+
+        var isEditorOn = false;
+        var polygonWithArea;
+        var editor;
+
+        // button 
+        const editButton = document.getElementById("editButton");
+        const toolControl = document.getElementById("toolControl");
+        const modeButton = document.getElementById("modeButton");
+        var isDrawMode = false; // 是否为绘制模式
+        // 初始状态编辑相关按钮隐藏
+        modeButton.style.display = "none";
+        toolControl.style.display = "none";
+
+        // 开关编辑器
+        function onOffEditor() {
+            if (!isEditorOn) {
+                isEditorOn = true;
+                createAreaEditor();
+
+                editButton.textContent = "关闭编辑";
+                modeButton.style.display = "";
+                toolControl.style.display = "";
+            } else {
+                isEditorOn = false;
+                finishAreaEditor();
+
+                // 编辑器恢复编辑状态
+                editor && editor.setActionMode(TMap.tools.constants.EDITOR_ACTION.INTERACT);
+                isDrawMode = false;
+                // UI调整
+                editButton.textContent = "开启编辑";
+                modeButton.textContent = "切换绘制模式";
+                modeButton.style.display = "none"; // 模式按钮隐藏
+                toolControl.style.display = "none"; // 工具按钮隐藏
+            }
+        }
+
+        // 创建Area编辑器
+        function createAreaEditor() {
+            // area接口改用MultiPolygonWithArea以兼容于编辑器
+            if (!polygonWithArea) {
+                polygonWithArea = new MultiPolygonWithArea({
+                    map,
+                    areaLayer: areaLayer, // 传入创建的area图层
+                    styles: { // 被编辑器选中时高亮显示的样式
+                        highlight: new TMap.PolygonStyle({
+                            color: 'rgba(255, 255, 0, 0.6)'
+                        })
+                    }
+                })
+            } else {
+                polygonWithArea.initAreaLayer(areaLayer);
+            }
+
+            if (!editor) {
+                // 初始化几何图形及编辑器
+                editor = new TMap.tools.GeometryEditor({
+                    map, // 编辑器绑定的地图对象
+                    overlayList: [ // 可编辑图层
+                        {
+                            overlay: polygonWithArea,
+                            id: 'polygon',
+                            selectedStyleId: 'highlight'
+                        }
+                    ],
+                    actionMode: TMap.tools.constants.EDITOR_ACTION.INTERACT, // 编辑器的工作模式
+                    activeOverlayId: 'polygon', // 激活图层
+                    selectable: true, // 开启点选功能
+                    selectedStyleId: 'highlight', // 选中时高亮显示
+                });
+
+                // 添加area的删除事件
+                editor.on('delete_complete', (geometries) => {
+                    polygonWithArea.deleteArea(geometries);
+                })
+            } else {
+                // 编辑器已存在，则启用
+                editor.enable();
+            }
+
+        }
+
+        // 完成Area的编辑
+        function finishAreaEditor() {
+            // 禁用编辑器
+            editor && editor.disable();
+            // 获取编辑结果
+            polygonWithArea && polygonWithArea.finishEdit();
+            // 清除polygonWithArea图层数据
+            polygonWithArea && polygonWithArea.clear();
+        }
+
+        // 切换编辑模式
+        function changeMode() {
+            if (!isDrawMode) {
+                editor && editor.setActionMode(TMap.tools.constants.EDITOR_ACTION.DRAW);
+                isDrawMode = true;
+                toolControl.style.display = 'none';
+                modeButton.textContent = "切换编辑模式";
+            } else {
+                editor && editor.setActionMode(TMap.tools.constants.EDITOR_ACTION.INTERACT);
+                isDrawMode = false;
+                toolControl.style.display = '';
+                modeButton.textContent = "切换绘制模式";
+            }
+
+        }
+
+        //设置style样式工厂函数
+        function setStyles(opacity) {
+            return {
+                fillColor: `rgba(56,124,234,${opacity})`, //设置区域填充颜色
+                strokeColor: '#6799EA', //设置区域边线颜色
+            }
+        }
+    </script>
+</body>
+
+</html>

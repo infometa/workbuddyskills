@@ -1,0 +1,344 @@
+# Sink 风险优先级排序策略
+# 引用方：agents/vuln-scan.md（步骤 1 完成后按需 Read）
+#
+# 步骤 1 发现 Sink 后，按本表排序，高优先级 Sink 优先进入步骤 2 追踪。
+# 预算耗尽时未分析的 Sink 标记 analysisDepth: "queued"，供续扫使用。
+#
+# 版本：2.1
+# 更新说明：新增 projectType 条件触发机制 + Ghost Bits Sink 优先级
+#          v2.1 新增 ai_agent_severity / sandbox_severity（仅 Light 阶段 1.5 命中
+#          对应 scenarios 时追加；Fast/Deep 忽略 _load_condition 字段，行为不变）
+
+# ============================================================================
+# 加载规则总表（v2.1）
+# ============================================================================
+# severity_levels             —— 所有 projectType / 所有 scan_level 默认加载
+# ghost_bits_severity         —— tech_stack contains java-*  时加载（不限 scan_level）
+# ai_agent_severity           —— scenarios contains ai_agent_app 时加载（仅 Light 阶段 1.5）
+# sandbox_severity            —— scenarios contains sandbox_runtime 时加载（仅 Light 阶段 1.5）
+# mobile_severity             —— scenarios contains mobile_app 时加载（仅 Light 阶段 1.5）
+# desktop_severity            —— scenarios contains desktop_app 时加载（仅 Light 阶段 1.5）
+#
+# 备注：scenarios 字段由 orchestration_helper.py detect-project-type 仅在 Light
+#      模式下输出；Fast/Deep 不消费该字段，原有 web_default 行为保持不变。
+
+# ============================================================================
+# 项目类型条件触发规则
+# ============================================================================
+# projectType 由 orchestration_helper.py detect-project-type 检测
+# 编排器将 projectType 传递给 Agent，Agent 按以下规则加载优先级表
+#
+# projectType 优先级加载规则：
+#   web    → 加载 web_* 优先级
+
+# ============================================================================
+# Web 项目 Sink 优先级（所有 projectType 均加载）
+# ============================================================================
+
+severity_levels:
+
+  S1_critical:
+    label: "必须分析"
+    severity_level: 1
+    description: "可直接造成入侵或云资源越权（RCE / 远程代码执行 / 云产品鉴权缺失 / 沙箱逃逸 / Agent 工具无约束）"
+    sink_types:
+      - "command-injection"
+      - "code-execution"
+      - "insecure-deserialization"
+      - "expression-injection"
+      - "jndi-injection"
+      - "ssti"
+      - "cos-sts-missing"             # Light 模式优先：用户可控 COS/万象对象 Key + 缺失 STS 最小权限会直接造成云资源越权
+      - "unconstrained-tool-execution"  # Agent 直接执行 LLM 选择的工具，无 allowed_tools/审批
+      - "code-eval-on-untrusted-input"  # 用户输入到 eval/exec/Function/SpEL/Groovy（跨语言）
+      - "nodejs-vm-bypass"              # Node vm 暴露 process.binding / require / 原型链逃逸
+      - "python-sandbox-bypass"         # Python exec/eval + __subclasses__ 链逃逸
+      - "container-escape"              # privileged / hostPath / docker.sock / CAP_SYS_ADMIN
+      - "vm-escape"                     # 虚拟机/hypervisor 逃逸
+    # 条件追加（Java 项目）
+    conditional_sink_types:
+      - condition: "tech_stack contains java-*"
+        types:
+          - "ghost-bits-truncation"     # Ghost Bits char→byte 截断 → WAF 绕过 → RCE/SQLi
+    boost_conditions:
+      - condition: "无认证入口可达"
+        boost: "+1 level"
+      - condition: "多 Agent 交叉确认"
+        boost: "+0.5 level"
+
+  S2_high:
+    label: "优先分析"
+    severity_level: 2
+    description: "可直接入侵或造成大量数据泄漏"
+    sink_types:
+      - "sql-injection"
+      - "nosql-injection"
+      - "auth-bypass"
+      - "hardcoded-secret"
+      - "malicious-package"
+      - "tool-abuse"                    # Agent 工具具备危险副作用（shell/sql/http/fs）但参数无约束
+      - "agent-output-trust"            # LLM 输出未校验直入 sink
+      - "prompt-injection"              # 不可信输入直接拼入 system_prompt
+      - "mcp-server-trust"              # MCP server command 含 ${} / 第三方 spawn / 无 manifest 校验
+      - "model-secret-leak"             # OPENAI_API_KEY / DASHSCOPE_API_KEY 硬编码
+      - "seccomp-bypass"                # seccomp Unconfined 或允许 ptrace/keyctl
+      - "wasi-escape"                   # WASI preopen("/") / inherit_stdio
+
+  S3_medium:
+    label: "标准分析"
+    severity_level: 3
+    description: "需要上下文或链式利用，不可直接入侵/大量泄漏"
+    sink_types:
+      - "ssrf"
+      - "path-traversal"
+      - "xxe"
+      - "ldap-injection"
+      - "access-control"
+      - "plaintext-password"
+      - "jwt-algorithm-confusion"
+      - "xss"
+      - "csrf"
+      - "idor"
+      - "file-upload"
+      - "open-redirect"
+      - "crlf-injection"
+      - "mass-assignment"
+      - "prototype-pollution"
+      - "session-fixation"
+      - "insecure-cookie"
+      - "jwt-weak-key"
+      - "log-injection"
+      - "postmessage-origin-bypass"
+      - "websocket-hijacking"
+      - "cors-misconfiguration"
+      - "redos"
+      - "xml-bomb"
+      - "dependency-confusion"
+      - "system-prompt-leak"            # system_prompt 含凭证或被 raw 回显
+      - "vector-store-poisoning"        # 向量库写入接口未鉴权 / 无内容审核
+      - "improper-cert-validation"      # TrustManager 空实现 / 信任所有证书 / Pinning 缺失
+      - "insecure-mobile-storage"       # SharedPreferences/NSUserDefaults 明文凭证
+      - "intent-redirection"            # Intent 重定向 / 深链接劫持
+      - "electron-preload-overexposure" # preload 向渲染进程暴露危险能力
+      - "protocol-handler-hijack"       # 自定义协议参数未校验用于跳转/命令拼接
+      # ── 客户端类（本地利用、不可远程触发、不构成服务端命令执行，severity 封顶 medium）──
+      - "exported-component"            # Android exported 组件无权限保护（本地攻击面）
+      - "insecure-webview"              # WebView JS Bridge 暴露（限本地 WebView 上下文）
+      - "electron-node-integration"     # nodeIntegration/contextIsolation 不安全（本地执行上下文）
+      - "electron-disabled-websecurity" # webSecurity:false / allowRunningInsecureContent（本地）
+      - "electron-shell-command-injection"  # shell.openExternal/openPath 本地协议/程序调起
+      - "electron-ipc-no-validation"    # ipcMain 信任 renderer（本地进程间越权）
+      - "electron-remote-content"       # loadURL 远程内容 + 高权限配置（利用链落本地）
+      - "unsigned-auto-update"          # 更新链路无签名/哈希校验（需劫持更新源的本地利用前提）
+
+  S4_low:
+    label: "预算充裕时分析"
+    severity_level: 4
+    description: "信息泄露 / 配置问题 / 辅助性风险"
+    sink_types:
+      - "information-leak"
+      - "insecure-config"
+      - "weak-crypto"
+      - "missing-security-headers"
+      - "denial-of-service"
+      - "csv-injection"
+      - "weak-password-hash"
+      - "sensitive-data-logging"
+      - "missing-security-audit"
+      - "brute-force-unprotected"
+      - "client-side-bypass"
+      - "resource-exhaustion"
+      - "missing-lockfile"
+      - "cleartext-traffic"             # 明文流量 / ATS 关闭
+      - "debuggable-backup-enabled"     # android:debuggable / allowBackup
+      - "screen-data-leak"              # 截屏/剪贴板/键盘缓存泄露
+      - "weak-root-jailbreak-detection" # Root/越狱/反调试纵深防御缺失
+
+# ============================================================================
+# Ghost Bits Sink 优先级（仅 Java 项目加载）
+# ============================================================================
+
+ghost_bits_severity:
+  _load_condition: "tech_stack contains java-*"
+
+  GS1_critical:
+    label: "Ghost Bits 必须分析"
+    severity_level: 1
+    description: "Ghost Bits char→byte 截断 + WAF 绕过 → 已知组件 RCE/SQLi"
+    sink_types:
+      - "ghost-bits-rce"               # Ghost Bits → BCEL/Fastjson → 反序列化 RCE
+      - "ghost-bits-file-upload"       # Ghost Bits → Tomcat RFC2231 → Webshell 上传
+
+  GS2_high:
+    label: "Ghost Bits 优先分析"
+    severity_level: 2
+    description: "Ghost Bits 截断 → 注入/穿越（需链式利用）"
+    sink_types:
+      - "ghost-bits-sqli"              # Ghost Bits → char→byte → 单引号还原 → SQL 注入
+      - "ghost-bits-path-traversal"    # Ghost Bits → URL 解码截断 → 路径穿越
+      - "ghost-bits-crlf"             # Ghost Bits → CR/LF 还原 → HTTP 响应拆分/SMTP 注入
+
+# ============================================================================
+# Hybrid 项目合并排序规则
+# ============================================================================
+
+hybrid_merge_rules:
+  description: "当 projectType == 'hybrid' 时，Web 和 Ghost Bits 优先级合并"
+  strategy: "interleave_by_severity"
+  rules:
+    # severity_level 相同时的排序规则（在同一级别内交替排列）：
+    - "同级别内 Web S1 + Ghost Bits GS1 合并为 S1（全部必须分析）"
+    - "同级别内 Web S2 + Ghost Bits GS2 合并为 S2（全部优先分析）"
+    - "同级别内 Web S3 合并为 S3（全部标准分析）"
+    # 同一级别内按以下信号排序
+    - "无认证入口可达 > 认证后可达 > 内部可达"
+    - "多 Agent 交叉确认 > 仅模式匹配发现"
+    - "用户直接输入可控 > 间接输入"
+
+# ============================================================================
+# AI Agent Sink 优先级（仅 Light 阶段 1.5 命中场景 ai_agent_app 时加载）
+# ============================================================================
+
+ai_agent_severity:
+  _load_condition: "scenarios contains ai_agent_app"
+  _scan_level: ["light"]   # Fast/Deep 忽略本段，行为不变
+
+  AS1_critical:
+    label: "Agent 必须分析"
+    severity_level: 1
+    description: "Agent 工具调用无约束 / LLM 输出直入代码执行 sink"
+    sink_types:
+      - "unconstrained-tool-execution"
+      - "agent-output-trust"
+
+  AS2_high:
+    label: "Agent 优先分析"
+    severity_level: 2
+    description: "提示词注入 / 工具滥用 / MCP 信任 / 模型凭证泄露"
+    sink_types:
+      - "prompt-injection"
+      - "tool-abuse"
+      - "mcp-server-trust"
+      - "model-secret-leak"
+
+  AS3_medium:
+    label: "Agent 标准分析"
+    severity_level: 3
+    description: "系统提示泄露 / 向量库投毒（需上下文链式利用）"
+    sink_types:
+      - "system-prompt-leak"
+      - "vector-store-poisoning"
+
+# ============================================================================
+# 沙箱逃逸 Sink 优先级（仅 Light 阶段 1.5 命中场景 sandbox_runtime 时加载）
+# ============================================================================
+
+sandbox_severity:
+  _load_condition: "scenarios contains sandbox_runtime"
+  _scan_level: ["light"]   # Fast/Deep 忽略本段，行为不变
+
+  SE1_critical:
+    label: "沙箱必须分析"
+    severity_level: 1
+    description: "沙箱原语逃逸 / 用户输入直入代码执行 / 容器/虚拟机逃逸"
+    sink_types:
+      - "code-eval-on-untrusted-input"
+      - "nodejs-vm-bypass"
+      - "python-sandbox-bypass"
+      - "container-escape"
+      - "vm-escape"
+
+  SE2_high:
+    label: "沙箱优先分析"
+    severity_level: 2
+    description: "seccomp/AppArmor 绕过 / WASI 逃逸"
+    sink_types:
+      - "seccomp-bypass"
+      - "wasi-escape"
+
+# ============================================================================
+# 移动客户端 Sink 优先级（仅 Light 阶段 1.5 命中场景 mobile_app 时加载）
+# ============================================================================
+
+mobile_severity:
+  _load_condition: "scenarios contains mobile_app"
+  _scan_level: ["light"]   # Fast/Deep 忽略本段，行为不变
+
+  MB1_priority:
+    label: "移动端优先分析（finding severity 封顶 medium）"
+    severity_level: 2
+    description: "组件暴露 / WebView JS Bridge 暴露——此处为检测优先级排序，属本地攻击面、不可远程利用，finding severity 封顶 medium"
+    sink_types:
+      - "exported-component"
+      - "insecure-webview"
+
+  MB2_medium:
+    label: "移动端标准分析"
+    severity_level: 3
+    description: "证书校验缺失 / 本地明文存储 / Intent 重定向（需上下文或链式利用）"
+    sink_types:
+      - "improper-cert-validation"
+      - "insecure-mobile-storage"
+      - "intent-redirection"
+
+  MB3_low:
+    label: "移动端预算充裕时分析"
+    severity_level: 4
+    description: "明文流量 / 调试备份配置 / 截屏剪贴板泄露 / Root 检测缺失（配置与纵深防御）"
+    sink_types:
+      - "cleartext-traffic"
+      - "debuggable-backup-enabled"
+      - "screen-data-leak"
+      - "weak-root-jailbreak-detection"
+
+# ============================================================================
+# 桌面/Electron Sink 优先级（仅 Light 阶段 1.5 命中场景 desktop_app 时加载）
+# ============================================================================
+
+desktop_severity:
+  _load_condition: "scenarios contains desktop_app"
+  _scan_level: ["light"]   # Fast/Deep 忽略本段，行为不变
+
+  DT1_priority:
+    label: "桌面端优先分析（finding severity 封顶 medium）"
+    severity_level: 1
+    description: "Electron 渲染进程 Node 集成开启——此处为检测优先级排序（优先发现），但属本地执行上下文、不可远程触发，finding severity 封顶 medium"
+    sink_types:
+      - "electron-node-integration"
+
+  DT2_secondary:
+    label: "桌面端次优先分析（finding severity 封顶 medium）"
+    severity_level: 2
+    description: "shell 接口本地协议/程序调起 / 安全开关关闭 / IPC 无校验 / 加载远程内容 / 更新未验签——均为本地利用，finding severity 封顶 medium"
+    sink_types:
+      - "electron-shell-command-injection"
+      - "electron-disabled-websecurity"
+      - "electron-ipc-no-validation"
+      - "electron-remote-content"
+      - "unsigned-auto-update"
+
+  DT3_medium:
+    label: "桌面端标准分析"
+    severity_level: 3
+    description: "preload 过度暴露 / 自定义协议处理器劫持（需上下文链式利用）"
+    sink_types:
+      - "electron-preload-overexposure"
+      - "protocol-handler-hijack"
+
+# ============================================================================
+# 排序规则（步骤 1 完成后执行）
+# ============================================================================
+
+# 1. 根据 projectType 加载对应的优先级表
+# 2. 按 severity_level 分组（S1 > S2 > S3 > S4）
+# 3. 同 severity_level 内按以下信号排序：
+#    a. 无认证端点可达 > 认证后可达 > 内部可达
+#    b. 多 Agent 交叉确认 > 仅模式匹配发现
+#    c. 用户直接输入可控 > 间接输入
+# 4. hybrid 项目按 hybrid_merge_rules 合并 Web + Ghost Bits Sink
+# 5. 步骤 2 按排序后的列表顺序处理
+
+# 预算耗尽处理：
+# - 已分析 Sink: analysisDepth = "full"
+# - 分析中断 Sink: analysisDepth = "partial"，记录已完成步骤
+# - 未开始 Sink: analysisDepth = "queued"，记录到 earlyTermination.pendingSinks[]

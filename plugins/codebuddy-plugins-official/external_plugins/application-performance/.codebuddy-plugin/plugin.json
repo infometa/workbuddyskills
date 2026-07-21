@@ -1,0 +1,11 @@
+{
+  "name": "application-performance",
+  "description": "应用性能工程专家代理，用于应用优化、可观测性和可扩展系统性能。包括 OpenTelemetry、分布式追踪、负载测试、多层缓存、Core Web Vitals 和全面的性能监控。",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "UNKNOWN"
+}

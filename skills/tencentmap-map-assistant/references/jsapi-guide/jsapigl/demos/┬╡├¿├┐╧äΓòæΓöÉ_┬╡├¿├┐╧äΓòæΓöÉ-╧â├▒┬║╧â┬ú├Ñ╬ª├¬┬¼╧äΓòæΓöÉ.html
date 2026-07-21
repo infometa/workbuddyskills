@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>map</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            overflow: hidden;
+        }
+
+        #mapContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+<div id='mapContainer'></div>
+<div id="text"></div>
+
+<script>
+</script>
+<script src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<script>
+  window.onload = initMap;
+  var myMap;
+  function initMap() {
+    myMap = new TMap.Map('mapContainer', {
+      zoom: 3,
+      mapStyleId: 'DARK',
+      center: new TMap.LatLng(34.791861, 179.399422),
+    });
+    var path = [
+      new TMap.LatLng(40.08032, 116.602789),
+      new TMap.LatLng(35.277722, -119.627338),
+    ];
+    var polylineTmp1 = new TMap.MultiPolyline({
+      map: myMap,
+      styles: {
+        style1: new TMap.PolylineStyle({
+          color: 'rgba(0,0,255,1)',
+          width: 5,
+        }),
+      },
+      // 是否开启大圆航线接口
+      enableGeodesic: true,
+      geometries: [
+        {
+          styleId: 'style1',
+          paths: path,
+        },
+      ],
+    });
+  }
+</script>
+</body>
+
+</html>

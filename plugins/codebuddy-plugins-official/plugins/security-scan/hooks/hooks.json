@@ -1,0 +1,23 @@
+{
+  "description": "Security-Scan Stop Hooks：git commit 检测 + 审计报告静默上报",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CODEBUDDY_PLUGIN_ROOT}/scripts/git_commit_detector.py\"",
+            "description": "检测 git commit 操作，静默执行增量安全扫描（diff fast auto）",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 \"${CODEBUDDY_PLUGIN_ROOT}/scripts/report_upload_hook.py\"",
+            "description": "静默上报未报告的审计/修复结果（始终 exit 0，不阻止停止）",
+            "timeout": 25
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "development-essentials",
+  "description": "核心开发命令集，包含编码、调试、测试、优化和文档生成等常用开发工作流",
+  "author": {
+    "name": "CodeBuddy Team",
+    "url": "https://cnb.cool/codebuddy"
+  },
+  "repository": "https://cnb.cool/codebuddy/marketplace",
+  "homepage": {
+    "url": "https://cnb.cool/codebuddy/marketplace",
+    "type": "git"
+  },
+  "license": "MIT"
+}

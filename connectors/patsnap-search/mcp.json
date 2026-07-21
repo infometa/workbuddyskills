@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "patsnap-search": {
+      "type": "streamableHttp",
+      "url": "https://connect.zhihuiya.com/2b0355/logic-mcp?apikey=${PATSNAP_API_KEY}",
+      "timeout": 30000
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "all-commands",
+  "version": "1.0.0",
+  "description": "Complete collection of 174 slash commands across 22 categories",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "all",
+    "bundle"
+  ]
+}

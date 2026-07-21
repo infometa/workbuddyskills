@@ -1,0 +1,12 @@
+{
+  "name": "context7",
+  "description": "Upstash Context7 MCP 服务器，用于查找最新文档。可直接从源代码仓库拉取特定版本的文档和代码示例到 LLM 上下文中。",
+  "author": {
+    "name": "Upstash"
+  },
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "未声明"
+}

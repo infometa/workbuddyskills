@@ -1,0 +1,191 @@
+# D7: 会话与 Cookie 安全模式表
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 检测会话管理、Cookie 配置和 JWT 实现中的安全缺陷
+
+# ============================================================================
+# 一、Session 固定攻击检测
+# ============================================================================
+
+session_fixation:
+  description: "登录成功后未重新生成 Session ID，攻击者可预设 Session ID 实现劫持"
+
+  vulnerable_patterns:
+    java:
+      - pattern: 'session\.setAttribute\("user'
+        absence_check: 'request\.changeSessionId\(\)|session\.invalidate\(\)'
+        note: "登录逻辑设置用户属性但未重新生成 Session"
+      - pattern: 'HttpSession\s+session\s*=\s*request\.getSession\(\)'
+        context: "登录成功分支中获取 session 但未 invalidate 旧 session"
+    python:
+      - pattern: 'session\[.user.\]\s*='
+        absence_check: 'session\.regenerate|request\.session\.cycle_key|session\.clear'
+        note: "Django/Flask 登录后未循环 session key"
+      - pattern: 'login_user\('
+        absence_check: 'session\.regenerate'
+        note: "Flask-Login 默认不刷新 session ID"
+    nodejs:
+      - pattern: 'req\.session\.\w+\s*='
+        absence_check: 'req\.session\.regenerate|req\.session\.destroy'
+        note: "Express session 登录后未调用 regenerate"
+    php:
+      - pattern: '\$_SESSION\[.user.\]\s*='
+        absence_check: 'session_regenerate_id\s*\(\s*true\s*\)'
+        note: "PHP 登录后未调用 session_regenerate_id(true)"
+
+  safe_patterns:
+    - 'request\.changeSessionId\(\)'        # Java Servlet 3.1+
+    - 'session\.invalidate\(\)'             # Java 先销毁再创建
+    - 'request\.session\.cycle_key\(\)'     # Django
+    - 'session\.regenerate'                 # Express / Flask
+    - 'session_regenerate_id\(true\)'       # PHP
+
+# ============================================================================
+# 二、Cookie 安全属性检测
+# ============================================================================
+
+cookie_security:
+  description: "检测 Cookie 安全属性配置缺陷"
+
+  insecure_patterns:
+    - category: SameSite 缺失或不安全
+      patterns:
+        - 'SameSite\s*[:=]\s*None'
+        - 'sameSite\s*[:=]\s*[''"]none[''"]'
+        - 'samesite\s*=\s*none'
+      note: "SameSite=None 必须搭配 Secure 属性，否则 CSRF 风险"
+      absence_check: "未设置 SameSite 属性的 Set-Cookie"
+
+    - category: Secure 属性缺失
+      patterns:
+        - 'cookie.*secure\s*[:=]\s*false'
+        - 'Set-Cookie:(?!.*[Ss]ecure)'
+        - 'new\s+Cookie\((?!.*\.setSecure\(true\))'
+      note: "认证相关 Cookie 缺少 Secure 属性，可在 HTTP 下被窃取"
+
+    - category: HttpOnly 属性缺失
+      patterns:
+        - 'cookie.*httpOnly\s*[:=]\s*false'
+        - 'httponly\s*[:=]\s*false'
+        - 'Set-Cookie:(?!.*[Hh]ttp[Oo]nly)'
+      note: "认证相关 Cookie 缺少 HttpOnly 属性，可被 XSS 窃取"
+
+    - category: Cookie 过期时间过长
+      patterns:
+        - 'maxAge\s*[:=]\s*\d{8,}'           # > 115 天（毫秒）
+        - 'max-age\s*=\s*\d{8,}'
+        - 'expires\s*[:=].*20[3-9]\d'         # 过期日期过于遥远
+        - 'setMaxAge\(\s*Integer\.MAX_VALUE'
+      note: "认证 Cookie 有效期过长增加被盗用风险"
+
+    - category: Cookie 路径范围过大
+      patterns:
+        - 'path\s*[:=]\s*[''"]\/[''"]'
+      note: "敏感 Cookie 的 path=/ 可被同域下所有页面访问"
+      context: "仅当 Cookie 包含认证信息时标记"
+
+# ============================================================================
+# 三、Session 超时与失效检测
+# ============================================================================
+
+session_timeout:
+  description: "检测 Session 超时和失效策略缺陷"
+
+  patterns:
+    - category: Session 超时时间过长
+      patterns:
+        - 'session-timeout\s*[:=]\s*(\d{3,})'       # > 99 分钟
+        - 'maxInactiveInterval\s*[:=]\s*(\d{5,})'   # > 9999 秒
+        - 'SESSION_COOKIE_AGE\s*=\s*(\d{7,})'       # Django > 999999 秒
+        - 'session\.cookie_lifetime\s*=\s*(\d{7,})'  # PHP
+      note: "会话超时时间设置过长，增加被劫持风险"
+
+    - category: 退出登录未销毁 Session
+      grep_keywords: "logout|signout|sign_out|logoff"
+      absence_check: 'session\.invalidate|session\.destroy|session\.clear|session_destroy|logout_user'
+      note: "退出逻辑未销毁服务端 Session"
+
+    - category: 并发会话未限制
+      patterns:
+        - 'maximumSessions\s*[:=]\s*-1'
+        - 'maxSessionsPreventsLogin\s*[:=]\s*false'
+      note: "允许无限并发会话，账户被盗后无法强制下线"
+
+# ============================================================================
+# 四、JWT 安全审计
+# ============================================================================
+
+jwt_security:
+  description: "检测 JWT 实现中的常见安全缺陷"
+
+  vulnerable_patterns:
+    - category: 算法降级攻击（alg:none）
+      patterns:
+        - '"alg"\s*:\s*"none"'
+        - 'algorithms\s*[:=]\s*\[.*"none"'
+        - 'algorithm\s*[:=]\s*[''"]none[''"]'
+        - 'setAllowedClockSkewSeconds\s*\(\s*\d{4,}'
+      note: "允许 none 算法可伪造任意 JWT"
+
+    - category: 对称密钥弱/硬编码
+      patterns:
+        - 'secretKey\s*[:=]\s*[''"][^''"]{1,16}[''"]'   # 密钥过短
+        - 'secret\s*[:=]\s*[''"]secret[''"]'
+        - 'jwt\.secret\s*[:=]\s*[''"][^''"]+[''"]'
+        - 'SIGNING_KEY\s*=\s*[''"][^''"]+[''"]'
+        - 'SigningKey\s*\(\s*[''"][^''"]+[''"]'
+      note: "JWT 签名密钥硬编码或过短，可被暴力破解"
+
+    - category: 未验证签名
+      patterns:
+        - 'decode\(.*verify\s*[:=]\s*false'
+        - 'parse\(.*\.getBody\(\)'
+        - 'jwt\.decode\(.*options.*verify.*false'
+        - 'Jwts\.parser\(\)(?!.*\.setSigningKey)'
+      note: "JWT 解码时跳过签名验证"
+
+    - category: Token 不过期
+      patterns:
+        - 'setExpiration\s*\(\s*null'
+        - 'expiresIn\s*[:=]\s*[''"]0[''"]'
+        - 'exp.*None'
+      absence_check: 'setExpiration|expiresIn|exp'
+      note: "JWT 未设置过期时间或过期时间为 0"
+
+    - category: 缺少 Token 吊销机制
+      grep_keywords: "jwt|JsonWebToken|accessToken"
+      absence_check: 'blacklist|revoke|invalidate|tokenBlacklist|revokedTokens'
+      note: "无 Token 黑名单/吊销机制，泄露后无法失效"
+      context: "仅在确认使用 JWT 作为会话管理时标记"
+
+    - category: 算法混淆攻击（RS→HS）
+      patterns:
+        - 'algorithms\s*[:=]\s*\[.*"HS256".*"RS256"'
+        - 'verify\(.*algorithm\s*[:=]\s*token\.header'
+      note: "同时接受 HS256 和 RS256，攻击者可用公钥作 HMAC 密钥伪造 Token"
+
+  safe_patterns:
+    - 'setSigningKey.*\.getBytes'
+    - 'verify\s*[:=]\s*true'
+    - 'algorithms\s*[:=]\s*\[\s*[''"]RS256[''"]'
+    - 'tokenBlacklist'
+    - 'revokedTokens'
+
+# ============================================================================
+# 五、判定补充规则
+# ============================================================================
+
+pattern_judgment_supplements:
+  - type: Session 固定
+    condition: "登录成功处理逻辑中设置了用户身份到 session，但未调用 regenerate/invalidate/cycle_key"
+    action: "创建 session-fixation finding"
+    severity: "medium"
+
+  - type: JWT 弱密钥
+    condition: "JWT 签名密钥长度 < 32 字符或为常见弱密钥（secret、password、key、123456）"
+    action: "创建 jwt-weak-key finding"
+    severity: "medium"
+
+  - type: Cookie 不安全
+    condition: "认证相关 Cookie 缺少 Secure + HttpOnly + SameSite 任一属性"
+    action: "创建 insecure-cookie finding"
+    severity: "low"

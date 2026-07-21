@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3D热力切换散点</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization">
+    </script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .btnContainer {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      z-index: 10000;
+    }
+
+    .btnContainer button {
+      padding: 10px 14px;
+      box-sizing: border-box;
+      border: none;
+      background-color: #3876ff;
+      border-radius: 2px;
+      color: #fff;
+      font-size: 14px;
+      line-height: 14px;
+      margin-bottom: 10px;
+    }
+
+</style>
+
+<body>
+    <div id="container"></div>
+
+    <div class="btnContainer">
+        <button class="btn1" onclick="update()">更改散点样式配置</button>
+        <button class="btn2" onclick="onOff()">开关散点图切换</button>
+    </div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/heat.js"></script>
+    <script>
+        var center = new TMap.LatLng(39.909897147274364, 116.39756310116866);
+        var map = new TMap.Map("container", {
+            zoom: 12,//设置地图缩放级别
+            pitch: 45, // 设置地图俯仰角
+            center: center,//设置地图中心点坐标
+            mapStyleId: "style4",//个性化样式
+            baseMap: {
+                type: "vector",
+                features: ["base", "building3d"], // 隐藏矢量文字
+            },
+        });
+        
+        // HeatDotOptions文档地址 https://lbs.qq.com/webApi/visualizationApi/visualizationDoc/visualizationDocHeat#4
+        var heatLayer = new TMap.visualization.Heat({
+            gradientColor: new TMap.GradientColor({
+                stops: {
+                    0.1: 'rgba(50,48,118,1)',
+                    0.2: 'rgba(127,60,255,1)',
+                    0.4: 'rgba(166,53,219,1)',
+                    0.6: 'rgba(254,64,95,1)',
+                    0.8: 'rgba(255,98,4,1)',
+                    1: 'rgba(236,220,79,1)',
+                }
+            }),
+            // max: 10, // 热力最强阈值
+            min: 0, // 热力最弱阈值
+            max: 110, // 热力最强阈值
+            height: 90, // 峰值高度
+            radius: 30, // 最大辐射半径
+            // 自动切换散点图设置
+            enableHeatDot: true,
+            enableAggregation: false,
+            heatDotOptions: {
+                radius: 15, // 散点半径
+                minZoom: 9, // 散点最小缩放级别
+                maxZoom: 20, // 散点最大缩放基本
+                opacity: 1.0, // 散点透明度
+                strokeColor: 'rgba(255,255,255, 0.6)', // 散点描边颜色
+                strokeWidth: 3, // 散点描边宽度
+                fadeArray: [12, 18], // 展现切换动画的层级，默认为[14,16], 表示在zoom 12级时，热力图开始淡出（透明度减少），散点图开始淡入，至18级时淡入淡出结束；
+            }
+        }).addTo(map)
+            .setData(heatData);//设置数据
+
+        // 更改散点配置
+        function update() {
+            heatLayer.setHeatDotOptions({
+                radius: 15,
+                minZoom: 11,
+                maxZoom: 20,
+                opacity: 1.0,
+                fillColors: ['#F4A49E', '#EE7B91', '#E85285', '#BE408C', '#942D93', '#6A1B9A', '#56167D', '#42105F'].reverse(), // 散点颜色
+                strokeColor: '#FFF',
+                strokeWidth: 2,
+                fadeArray: [14, 16], // 在zoom 14级时，热力图开始淡出（透明度减少），散点图开始淡入，至16级时淡入淡出结束；
+            });
+        }
+
+        // 开关散点图切换
+        function onOff() {
+            heatLayer.setHeatDotEnable(! heatLayer.getHeatDotEnable());
+        }
+    </script>
+</body>
+
+</html>

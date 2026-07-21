@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "baidu-netdisk": {
+      "type": "sse",
+      "url": "https://mcp-pan.baidu.com/sse"
+    }
+  }
+}

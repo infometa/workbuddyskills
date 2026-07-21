@@ -1,0 +1,11 @@
+{
+  "name": "seo-analysis-monitoring",
+  "description": "SEO 内容新鲜度分析、关键词竞食检测和权威建设",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

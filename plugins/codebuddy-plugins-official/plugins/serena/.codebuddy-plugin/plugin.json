@@ -1,0 +1,10 @@
+{
+  "name": "serena",
+  "description": "语义代码分析 MCP 服务器，通过语言服务器协议集成提供智能代码理解、重构建议和代码库导航功能。",
+  "description_en": "Semantic code analysis MCP server providing intelligent code understanding, refactoring suggestions, and codebase navigation through language server protocol integration.",
+  "author": {
+    "name": "Oraios"
+  },
+  "homepage": "https://github.com/anthropics/claude-plugins-public/tree/main/external_plugins/serena",
+  "license": "未声明"
+}

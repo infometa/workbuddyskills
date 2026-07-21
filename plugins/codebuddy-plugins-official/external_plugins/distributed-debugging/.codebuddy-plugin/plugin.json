@@ -1,0 +1,11 @@
+{
+  "name": "distributed-debugging",
+  "description": "分布式系统追踪与微服务调试工具",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

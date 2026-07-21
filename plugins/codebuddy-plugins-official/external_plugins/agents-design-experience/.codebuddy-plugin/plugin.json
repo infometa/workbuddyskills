@@ -1,0 +1,18 @@
+{
+  "name": "agents-design-experience",
+  "version": "1.0.0",
+  "description": "Agents for UI/UX design, accessibility, and user experience optimization",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "design-experience",
+    "accessibility-specialist",
+    "ui-ux-designer"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "investment-banking",
+  "version": "1.0.0",
+  "description": "Investment banking productivity tools: client and market insights, deck creation, financial analysis, and transaction management",
+  "description_zh": "投资银行生产力工具，支持 CIM 撰写、并购模型、买方名单、交易追踪、流程函和 Pitch Deck 制作。",
+  "author": {
+    "name": "CodeBuddy Teams"
+  },
+  "homepage": "",
+  "license": "",
+  "skills": [
+    "./skills/buyer-list",
+    "./skills/cim-builder",
+    "./skills/datapack-builder",
+    "./skills/deal-tracker",
+    "./skills/merger-model",
+    "./skills/pitch-deck",
+    "./skills/process-letter",
+    "./skills/strip-profile",
+    "./skills/teaser"
+  ]
+}

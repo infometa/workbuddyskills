@@ -1,0 +1,10 @@
+{
+  "name": "startup-business-analyst",
+  "description": "面向初创企业的综合业务分析工具，提供市场规模分析（TAM/SAM/SOM）、财务建模、团队规划和战略研究功能",
+  "author": {
+    "name": "Seth Hobson",
+    "email": "seth@major7apps.com"
+  },
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

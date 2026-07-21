@@ -1,0 +1,38 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "init": {
+    "darwin": "npm install -g @aweray/awesun-cli@latest",
+    "linux": "npm install -g @aweray/awesun-cli@latest",
+    "win32": "npm install -g @aweray/awesun-cli@latest"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "awesun-cli --version",
+      "linux": "awesun-cli --version",
+      "win32": "awesun-cli --version"
+    },
+    "minVersion": "1.0.1",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  },
+  "auth": {
+    "darwin": "awesun-cli login --qrcode --url",
+    "linux": "awesun-cli login --qrcode --url",
+    "win32": "awesun-cli login --qrcode --url"
+  },
+  "unAuth": {
+    "darwin": "awesun-cli logout --clean",
+    "linux": "awesun-cli logout --clean",
+    "win32": "awesun-cli logout --clean"
+  },
+  "status": {
+    "darwin": "awesun-cli login status",
+    "linux": "awesun-cli login status",
+    "win32": "awesun-cli login status"
+  },
+  "statusMatch": "Logged in as",
+  "authUrlDomain": "cc.sunlogin.oray.com",
+  "authWaitForExit": true
+}

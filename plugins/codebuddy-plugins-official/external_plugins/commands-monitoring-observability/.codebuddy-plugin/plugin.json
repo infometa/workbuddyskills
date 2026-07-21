@@ -1,0 +1,18 @@
+{
+  "name": "commands-monitoring-observability",
+  "version": "1.0.0",
+  "description": "Commands for setting up monitoring and observability",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "monitoring-observability",
+    "add-performance-monitoring",
+    "setup-monitoring-observability"
+  ]
+}

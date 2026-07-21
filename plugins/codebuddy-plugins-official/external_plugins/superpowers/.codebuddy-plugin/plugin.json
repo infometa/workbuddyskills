@@ -1,0 +1,20 @@
+{
+  "name": "superpowers",
+  "description": "Claude Code 核心技能库：包含测试驱动开发、系统化调试、协作模式和经过验证的技术方法",
+  "version": "4.0.3",
+  "author": {
+    "name": "Jesse Vincent",
+    "email": "jesse@fsck.com"
+  },
+  "homepage": "https://github.com/obra/superpowers",
+  "repository": "https://github.com/obra/superpowers",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "tdd",
+    "debugging",
+    "collaboration",
+    "best-practices",
+    "workflows"
+  ]
+}

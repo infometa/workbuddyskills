@@ -1,0 +1,24 @@
+{
+    "mcpServers": {
+        "weisheng-scrm": {
+            "type": "stdio",
+            "timeout": 120000,
+            "command": "npx",
+            "args": [
+                "--registry=https://registry.npmmirror.com",
+                "-y",
+                "mcp-server-weisheng-scrm@latest"
+            ],
+            "runtime": {
+                "type": "node",
+                "version": ">=18"
+            },
+            "env": {
+                "SCRM_APP_KEY": "",
+                "SCRM_BASE_URL": "https://open.wshoto.com",
+                "npm_config_registry": "https://registry.npmmirror.com"
+            },
+            "disabled": false
+        }
+    }
+}

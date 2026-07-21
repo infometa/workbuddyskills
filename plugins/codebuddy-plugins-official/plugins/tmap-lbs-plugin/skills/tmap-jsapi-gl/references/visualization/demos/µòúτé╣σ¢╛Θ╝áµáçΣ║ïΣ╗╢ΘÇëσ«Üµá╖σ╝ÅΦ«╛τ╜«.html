@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>散点图鼠标事件选定样式设置</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/Dot.js"></script>
+    <script>
+        function initMap() {
+            var center = new TMap.LatLng(39.984104, 116.307503);
+            //初始化地图
+            var map = new TMap.Map("container", {
+                zoom: 8,//设置地图缩放级别
+                center: center,//设置地图中心点坐标
+                mapStyleId: "style4" ,//个性化样式
+               baseMap: {
+            		type: "vector",
+            		features: ["base", "building3d"], // 隐藏矢量文字
+          		},
+            });
+            //初始化散点图并添加至map图层
+            new TMap.visualization.Dot({
+                faceTo: "screen",//散点固定的朝向
+                selectOptions: { //拾取配置
+                    action: 'hover', //拾取动作
+                    style: {                
+                            type: "circle", //圆形样式
+                            fillColor: "#1CD5FF", //填充颜色
+                            radius: 5 //原型半径
+                    },
+                    enableHighlight: false //是否使用高亮效果
+                }
+            })
+	          .addTo(map)
+	          .setData(pointData);//设置数据
+        }
+    </script>
+</body>
+
+</html>

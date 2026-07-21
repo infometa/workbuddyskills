@@ -1,0 +1,23 @@
+{
+  "name": "obsidian-skills",
+  "version": "1.0.0",
+  "description": "Skills for working with Obsidian files - Markdown, Bases, and Canvas formats",
+  "author": {
+    "name": "kepano",
+    "url": "https://github.com/kepano/obsidian-skills"
+  },
+  "repository": "https://github.com/kepano/obsidian-skills",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "obsidian",
+    "obsidian-markdown",
+    "obsidian-bases",
+    "json-canvas",
+    "wikilinks",
+    "callouts",
+    "embeds",
+    "canvas",
+    "bases"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "skill_name": "resume-assistant",
+  "schema_version": "1.0.0",
+  "purpose": "Router 触发率回归测试集 (D10.2)。每条 query 标 should_trigger 期望，跑 description-optimizer §路径 A 子 Agent 评测时统计 true_trigger_rate。",
+  "generated_at": "2026-04-29T09:35:00Z",
+  "generated_by": "skill-assistant.diagnose.iteration-2",
+  "queries": [
+    { "id": 1, "query": "帮我写一份简历", "should_trigger": true, "category": "generate-zh-natural" },
+    { "id": 2, "query": "我要写一份针对字节 AI Infra 岗的简历", "should_trigger": true, "category": "tailor-zh-natural" },
+    { "id": 3, "query": "按这个 JD 改我的简历", "should_trigger": true, "category": "tailor-zh-explicit" },
+    { "id": 4, "query": "帮我把简历改得更匹配腾讯 PM 这个岗位", "should_trigger": true, "category": "tailor-zh-natural" },
+    { "id": 5, "query": "简历润色一下", "should_trigger": true, "category": "rewrite-zh-natural" },
+    { "id": 6, "query": "我的简历投这个岗位能打几分？", "should_trigger": true, "category": "score-zh-natural" },
+    { "id": 7, "query": "对比一下我这两个版本的简历", "should_trigger": true, "category": "diff-zh-natural" },
+    { "id": 8, "query": "帮我把字节版的简历导出成 PDF", "should_trigger": true, "category": "export-zh-natural" },
+    { "id": 9, "query": "第 2 条改得太虚，再改一下", "should_trigger": true, "category": "refine-zh-natural" },
+    { "id": 10, "query": "把我的中文简历做一份英文版投新加坡 Fintech", "should_trigger": true, "category": "tailor-bilingual-zh" },
+    { "id": 11, "query": "tailor my resume to this Bytedance JD", "should_trigger": true, "category": "tailor-en-explicit" },
+    { "id": 12, "query": "polish my resume", "should_trigger": true, "category": "rewrite-en-natural" },
+    { "id": 13, "query": "make a bilingual version of my resume", "should_trigger": true, "category": "bilingual-en" },
+    { "id": 14, "query": "这个 QPS 50% 数字是哪来的？", "should_trigger": true, "category": "provenance-audit-zh" },
+    { "id": 15, "query": "@my-resume.pdf 帮我改一版", "should_trigger": true, "category": "pdf-input-zh" },
+    { "id": 16, "query": "把'参与 XX 项目'改得更资深", "should_trigger": true, "category": "refine-light-anti-hallucination" },
+    { "id": 17, "query": "求职跟踪管理", "should_trigger": false, "category": "negative-out-of-scope-tracking" },
+    { "id": 18, "query": "帮我做一份花哨的视觉简历", "should_trigger": false, "category": "negative-out-of-scope-visual" },
+    { "id": 19, "query": "把这个英文文档翻译成中文", "should_trigger": false, "category": "negative-translation-task" },
+    { "id": 20, "query": "OCR 这张简历照片", "should_trigger": false, "category": "negative-ocr-task" },
+    { "id": 21, "query": "模拟面试一下", "should_trigger": false, "category": "negative-mock-interview" },
+    { "id": 22, "query": "今天天气怎么样", "should_trigger": false, "category": "negative-irrelevant" },
+    { "id": 23, "query": "帮我写代码", "should_trigger": false, "category": "negative-coding-task" },
+    { "id": 24, "query": "你是谁？", "should_trigger": false, "category": "negative-meta-question" }
+  ],
+  "summary": {
+    "total": 24,
+    "should_trigger_true": 16,
+    "should_trigger_false": 8,
+    "categories_zh": 12,
+    "categories_en": 4,
+    "negative_for_disambiguation": 8
+  },
+  "next_steps": [
+    "用 skill-assistant description-optimizer §路径 A 子 Agent 跑 24 条 query 实测 true_trigger_rate（不加载 skill vs 加载后是否被路由）",
+    "目标 true_trigger_rate ≥ 0.85 (positive 召回) + ≤ 0.15 (negative 误触发率)",
+    "若不达标 → 走 §路径 B CLI 新进程保真模式跑 60/40 split 5 轮选优"
+  ]
+}

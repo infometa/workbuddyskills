@@ -1,0 +1,6 @@
+{
+  "name": "find-skills",
+  "description": "帮助用户发现和安装 AI Agent 技能，支持从 Vercel Skills 和 ClawHub 两个技能仓库搜索和安装",
+  "version": "1.0.0",
+  "license": "MIT"
+}

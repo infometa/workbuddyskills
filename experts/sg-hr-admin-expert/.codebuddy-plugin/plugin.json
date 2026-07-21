@@ -1,0 +1,70 @@
+{
+  "name": "sg-hr-admin-expert",
+  "version": "1.0.0",
+  "description": "Singapore HR & Admin expert — recruitment, work passes (EP/SP/WP), payroll, CPF, employment law, office leasing, and HR compliance for enterprises in Singapore",
+  "author": {
+    "name": "WorkBuddy",
+    "email": "support@workbuddy.ai"
+  },
+  "agents": ["./agents/sg-hr-admin-expert.md"],
+  "skills": ["./skills/sg-hr-data-sync"],
+
+  "expertType": "agent",
+  "dependencies": {
+    "mcpServers": {
+      "singstat": {
+        "type": "http",
+        "url": "https://chatwithsandra.singstat.gov.sg/mcp",
+        "x-workbuddy": {
+          "displayName": {
+            "zh": "新加坡统计局 (SingStat)",
+            "en": "Singapore Department of Statistics (SingStat)"
+          },
+          "description": {
+            "zh": "连接后可查询 2,500+ 新加坡官方统计数据集，涵盖劳动力、就业、失业率、薪资水平、人口结构、行业分类等。本专家依赖此 MCP 获取结构化统计数据。无需认证。",
+            "en": "Access 2,500+ Singapore official statistical datasets covering labour, employment, unemployment, wages, demographics and industry classifications. This expert relies on SingStat for structured data. No auth required."
+          },
+          "icon": "./avatars/singstat.svg",
+          "auth": { "type": "none" }
+        }
+      }
+    }
+  },
+  "agentName": "sg-hr-admin-expert",
+
+  "displayName": {
+    "en": "Sg HR & Admin",
+    "zh": "Sg HR & Admin"
+  },
+  "profession": {
+    "en": "Singapore HR & Admin Expert",
+    "zh": "新加坡人力行政专家"
+  },
+  "displayDescription": {
+    "en": "Expert in Singapore recruitment, employment contracts, compensation & benefits, work passes, CPF, office leasing, admin processes and employee management.",
+    "zh": "精通新加坡当地招聘、劳动合同、薪酬福利、签证工签、社保、办公场地、行政流程和员工管理等内容。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "14-GlobalDevelopment",
+  "defaultInitPrompt": {
+    "zh": "一家新加坡企业计划在当地招聘一名高级软件工程师，薪资标准应该如何设置？",
+    "en": "A Singapore company plans to hire a senior software engineer locally. How should the salary be structured?"
+  },
+  "plugin": "sg-hr-admin-expert",
+  "tags": [
+    { "en": "HR & Recruitment", "zh": "人力招聘" },
+    { "en": "Admin & Compliance", "zh": "行政流程" },
+    { "en": "Compensation & Benefits", "zh": "薪酬福利" }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "一家新加坡企业计划在当地招聘一名高级软件工程师，薪资标准应该如何设置？"
+    },
+    {
+      "zh": "新加坡办公室租赁有哪些需要注意的地方？"
+    },
+    {
+      "zh": "新加坡员工离职的行政流程是什么？"
+    }
+  ]
+}

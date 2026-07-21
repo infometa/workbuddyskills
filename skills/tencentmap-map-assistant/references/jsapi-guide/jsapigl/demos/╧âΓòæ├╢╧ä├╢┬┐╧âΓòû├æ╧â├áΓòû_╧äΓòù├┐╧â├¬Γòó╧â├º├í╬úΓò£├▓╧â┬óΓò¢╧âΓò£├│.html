@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>绘制几何图形</title>
+  </head>
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?libraries=tools&v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    #container {
+      width: 100%;
+      height: 80%;
+    }
+
+    #toolControl {
+      position: absolute;
+      top: 10px;
+      left: 0px;
+      right: 0px;
+      margin: auto;
+      width: 252px;
+      z-index: 1001;
+    }
+
+    .toolItem {
+      width: 30px;
+      height: 30px;
+      float: left;
+      margin: 1px;
+      padding: 4px;
+      border-radius: 3px;
+      background-size: 30px 30px;
+      background-position: 4px 4px;
+      background-repeat: no-repeat;
+      box-shadow: 0 1px 2px 0 #e4e7ef;
+      background-color: #ffffff;
+      border: 1px solid #ffffff;
+    }
+
+    .toolItem:hover {
+      border-color: #789cff;
+    }
+
+    .active {
+      border-color: #d5dff2;
+      background-color: #d5dff2;
+    }
+
+    #marker {
+      background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/marker_editor.png');
+    }
+
+    #polyline {
+      background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/polyline.png');
+    }
+
+    #polygon {
+      background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/polygon.png');
+    }
+
+    #circle {
+      background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/circle.png');
+    }
+
+    #rectangle {
+      background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/rectangle.png');
+    }
+
+    #ellipse {
+      background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/ellipse.png');
+    }
+  </style>
+
+  <body onload="initMap()">
+    <div id="container"></div>
+    <div id="toolControl">
+      <div class="toolItem active" id="marker" title="点标记"></div>
+      <div class="toolItem" id="polyline" title="折线"></div>
+      <div class="toolItem" id="polygon" title="多边形"></div>
+      <div class="toolItem" id="circle" title="圆形"></div>
+      <div class="toolItem" id="rectangle" title="矩形"></div>
+      <div class="toolItem" id="ellipse" title="椭圆"></div>
+    </div>
+    <div>
+      绘制：鼠标左键点击及移动即可绘制图形
+      <br />
+      结束绘制：鼠标左键双击即可结束绘制折线、多边形会自动闭合；圆形、矩形、椭圆单击即可结束
+      <br />
+      中断：绘制过程中按下esc键可中断该过程
+      <br />
+      撤销：使用ctrl+z或鼠标右键可以在绘制线和多边形时撤销上个绘制点
+    </div>
+    <script type="text/javascript">
+      var map; // 地图
+      var editor; // 编辑器
+      var activeType = 'marker'; // 激活的图形编辑类型
+
+      // 切换激活图层
+      document.getElementById('toolControl').addEventListener('click', (e) => {
+        var id = e.target.id;
+        if (id !== 'toolControl') {
+          document.getElementById(activeType).className = 'toolItem';
+          document.getElementById(id).className = 'toolItem active';
+          activeType = id;
+
+          editor.setActiveOverlay(id);
+        }
+      });
+
+      function initMap() {
+        // 初始化地图
+        map = new TMap.Map('container', {
+          zoom: 12, // 设置地图缩放级别
+          center: new TMap.LatLng(39.984104, 116.307503), // 设置地图中心点坐标
+        });
+
+        // 初始化几何图形及编辑器
+        var marker = new TMap.MultiMarker({
+          map: map,
+        });
+        var polyline = new TMap.MultiPolyline({
+          map: map,
+        });
+        var polygon = new TMap.MultiPolygon({
+          map: map,
+        });
+        var circle = new TMap.MultiCircle({
+          map: map,
+        });
+        var rectangle = new TMap.MultiRectangle({
+          map: map,
+        });
+        var ellipse = new TMap.MultiEllipse({
+          map: map,
+        });
+        editor = new TMap.tools.GeometryEditor({
+          // TMap.tools.GeometryEditor 文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocEditor
+          map: map, // 编辑器绑定的地图对象
+          overlayList: [
+            // 可编辑图层 文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocEditor#4
+            {
+              overlay: marker,
+              id: 'marker',
+            },
+            {
+              overlay: polyline,
+              id: 'polyline',
+            },
+            {
+              overlay: polygon,
+              id: 'polygon',
+            },
+            {
+              overlay: circle,
+              id: 'circle',
+            },
+            {
+              overlay: rectangle,
+              id: 'rectangle',
+            },
+            {
+              overlay: ellipse,
+              id: 'ellipse',
+            },
+          ],
+          actionMode: TMap.tools.constants.EDITOR_ACTION.DRAW, // 编辑器的工作模式
+          activeOverlayId: 'marker', // 激活图层
+          snappable: true, // 开启吸附
+        });
+        // 监听绘制结束事件，获取绘制几何图形
+        editor.on('draw_complete', (geometry) => {
+          // 判断当前处于编辑状态的图层id是否是overlayList中id为rectangle（矩形）图层
+          // 判断当前处于编辑状态的图层id是否是overlayList中id为rectangle（矩形）图层
+          var id = geometry.id;
+          if (editor.getActiveOverlay().id === 'rectangle') {
+            // 获取矩形顶点坐标
+            var geo = rectangle.geometries.filter(function (item) {
+              return item.id === id;
+            });
+            console.log('绘制的矩形定位的坐标：', geo[0].paths);
+          }
+
+          if (editor.getActiveOverlay().id === 'polygon') {
+            // 获取多边形顶点坐标
+            var geo = polygon.geometries.filter(function (item) {
+              return item.id === id;
+            });
+            console.log('绘制的多边形坐标：', geo[0].paths);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

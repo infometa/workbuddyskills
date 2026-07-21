@@ -1,0 +1,11 @@
+{
+  "name": "code-simplifier",
+  "description": "专注于简化代码以提升清晰度、一致性和可维护性的智能代理,在保留完整功能的前提下优化代码结构。主要关注最近修改的代码。",
+  "description_en": "Agent that simplifies and refines code for clarity, consistency, and maintainability while preserving functionality. Focuses on recently modified code.",
+  "version": "1.0.0",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "homepage": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-simplifier"
+}

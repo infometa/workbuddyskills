@@ -1,0 +1,42 @@
+{
+  "name": "all-skills",
+  "version": "1.0.0",
+  "description": "Complete collection of 29 Claude Code skills for document processing, development, business productivity, and creative tasks",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "all",
+    "bundle",
+    "artifacts-builder",
+    "brand-guidelines",
+    "canvas-design",
+    "changelog-generator",
+    "competitive-ads-extractor",
+    "content-research-writer",
+    "developer-growth-analysis",
+    "document-skills",
+    "domain-name-brainstormer",
+    "file-organizer",
+    "image-enhancer",
+    "internal-comms",
+    "invoice-organizer",
+    "lead-research-assistant",
+    "mcp-builder",
+    "meeting-insights-analyzer",
+    "raffle-winner-picker",
+    "skill-creator",
+    "skill-share",
+    "slack-gif-creator",
+    "theme-factory",
+    "video-downloader",
+    "webapp-testing",
+    "obsidian-markdown",
+    "obsidian-bases",
+    "json-canvas"
+  ]
+}

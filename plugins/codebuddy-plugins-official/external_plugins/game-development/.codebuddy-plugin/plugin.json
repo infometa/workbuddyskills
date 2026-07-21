@@ -1,0 +1,11 @@
+{
+  "name": "game-development",
+  "description": "Unity游戏开发与C#脚本编程，Minecraft服务器插件开发（支持Bukkit/Spigot API）",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

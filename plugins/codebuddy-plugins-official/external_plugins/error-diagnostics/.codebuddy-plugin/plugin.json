@@ -1,0 +1,11 @@
+{
+  "name": "error-diagnostics",
+  "description": "错误追踪、根因分析及生产系统智能调试",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

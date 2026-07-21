@@ -1,0 +1,81 @@
+# Go Web 框架安全专项规则
+# 适用条件：侦察检测到 Go + Gin/Echo/Fiber
+#
+# 使用须知：本文件为参考资料，辅助识别 Go Web 框架特有的 Sink/防御模式。
+# Agent 的安全分析能力不受限于此文件列出的风险类型——应基于代码实际行为推理，
+# 发现未列出的风险时正常报告，不做知识对账。
+
+framework: go-web
+applies_to: ["go"]
+
+# Go 特有的 Sink 模式
+sink_patterns:
+  database:
+    - pattern: "fmt.Sprintf SQL"
+      sink_type: sql-injection
+      severity: high
+      grep_probe: "fmt\\.Sprintf.*SELECT|fmt\\.Sprintf.*INSERT|fmt\\.Sprintf.*UPDATE|fmt\\.Sprintf.*DELETE"
+      description: "Go fmt.Sprintf拼接SQL（可造成大量数据泄漏）"
+    - pattern: "string concat SQL"
+      sink_type: sql-injection
+      severity: high
+      grep_probe: "db\\.(Query|Exec|QueryRow)\\(.*\\+"
+      description: "Go database/sql字符串拼接SQL（可造成大量数据泄漏）"
+
+  command:
+    - pattern: "exec.Command with user input"
+      sink_type: command-injection
+      severity: critical
+      grep_probe: "exec\\.Command\\(|exec\\.CommandContext\\("
+      description: "Go os/exec命令执行"
+    - pattern: "os.StartProcess"
+      sink_type: command-injection
+      severity: critical
+      grep_probe: "os\\.StartProcess\\("
+
+  network:
+    - pattern: "http.Get with user URL"
+      sink_type: ssrf
+      severity: medium
+      grep_probe: "http\\.Get\\(|http\\.Post\\(|http\\.NewRequest\\("
+      description: "Go net/http发起用户控制的请求"
+
+  template:
+    - pattern: "template.HTML(user_input)"
+      sink_type: xss
+      severity: medium
+      grep_probe: "template\\.HTML\\(|template\\.JS\\(|template\\.CSS\\("
+      description: "Go html/template标记为安全类型绕过转义"
+
+# Go 框架防御
+framework_defenses:
+  gin:
+    - defense: "Gin c.Query/c.Param input binding"
+      effectiveness: "无防注入效果 — 仅提取参数"
+      confidence_impact: 0
+    - defense: "Gin HTML template auto-escape"
+      effectiveness: "有效 — html/template默认转义"
+      confidence_impact: -15
+
+  echo:
+    - defense: "Echo validator middleware"
+      effectiveness: "部分有效 — 校验格式不防注入"
+      confidence_impact: -5
+
+# Go 特有的安全模式
+safe_patterns:
+  - pattern: "database/sql parameterized"
+    description: "db.Query(sql, args...) 使用占位符参数化"
+    is_defense: true
+  - pattern: "GORM parameterized"
+    description: "gorm .Where('x = ?', val) 自动参数化"
+    is_defense: true
+  - pattern: "sqlx named queries"
+    description: "sqlx.NamedExec 命名参数绑定"
+    is_defense: true
+
+# Go 特有的误报场景
+false_positive_indicators:
+  - "exec.Command 参数来自硬编码常量"
+  - "http.Get URL 来自配置文件而非用户输入"
+  - "template.HTML 参数来自服务端渲染的安全内容"

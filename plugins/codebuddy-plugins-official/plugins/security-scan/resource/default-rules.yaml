@@ -1,0 +1,77 @@
+# default-rules.yaml -- 核心审计逻辑索引
+# 各类型的详细参考数据文件索引。Agent 按需 Read 与自身任务相关的文件。
+
+# --- 参考数据文件目录 ---
+# resource/risk-type-taxonomy.yaml            -- 标准风险类型分类表（slug + 中文名称映射）
+# resource/knowledge/ssrf.yaml                -- SSRF 绕过技术参考数据
+# resource/knowledge/auth-basic.yaml          -- 鉴权/越权基础检测模式
+# resource/knowledge/authentication-bypass.yaml -- 鉴权风险置信度评估与模式引用
+# resource/custom/sanitizers.yaml                -- 用户自定义安全函数
+# resource/custom/sinks.yaml                     -- 用户自定义危险函数
+# resource/custom/sources.yaml                   -- 用户自定义输入源
+# resource/knowledge/actuator-exposure.yaml     -- Actuator/管理端点暴露检测模式
+# resource/custom/ignore-patterns.yaml           -- 用户自定义忽略规则
+# resource/knowledge/session-cookie-patterns.yaml  -- 会话/Cookie/JWT 安全模式
+# resource/knowledge/password-security-patterns.yaml -- 密码存储/策略/重置安全模式
+# resource/knowledge/log-security-patterns.yaml     -- 日志注入/脱敏/审计安全模式
+# resource/knowledge/dos-patterns.yaml              -- ReDoS/解析炸弹/资源耗尽 DoS 模式
+# resource/knowledge/frontend-security-patterns.yaml -- PostMessage/WebSocket/CORS/DOM 前端安全模式
+# resource/knowledge/supply-chain-patterns.yaml     -- 依赖混淆/恶意包/Typosquatting 供应链模式
+
+# ============================================================================
+# 漏洞链推理
+# ============================================================================
+# 当同一文件或调用链中存在多个不同类型的漏洞时，需要通过 AI 推理判断
+# 它们是否可以组合为更严重的攻击链。
+#
+# 判定标准：
+# - 组合后的攻击影响显著大于单个漏洞
+# - 攻击路径在技术上可行（不仅理论上可能）
+# - 至少两个漏洞经过验证（非幻觉）
+
+# ============================================================================
+# 模式参考库（辅助快速定位）
+# ============================================================================
+# 以下模式帮助快速定位可能的问题点，真正的分析依赖 agent 的推理能力。
+
+pattern_reference:
+
+  sources_by_language:
+    java:
+      - "request.getParameter"
+      - "request.getHeader"
+      - "@RequestParam"
+      - "@PathVariable"
+      - "@RequestBody"
+    go:
+      - "r.URL.Query"
+      - "r.FormValue"
+      - "c.Query"
+      - "c.Param"
+    python:
+      - "request.args"
+      - "request.form"
+      - "request.json"
+    javascript:
+      - "req.query"
+      - "req.body"
+      - "req.params"
+
+  dangerous_operations:
+    sql:
+      - "execute"
+      - "query"
+      - "createStatement"
+    command:
+      - "exec"
+      - "system"
+      - "popen"
+      - "subprocess"
+    file:
+      - "open"
+      - "readFile"
+      - "writeFile"
+    network:
+      - "http.Get"
+      - "requests.get"
+      - "fetch"

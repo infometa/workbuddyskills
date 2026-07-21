@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "long_manuscript.expert_team_handoff.v1",
+  "receiptId": "handoff-receipt-writer-reviewer-001",
+  "receiptDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "fromRole": "writer",
+  "toRole": "reviewer",
+  "projectId": "project-example-manuscript-001",
+  "projectRevision": 3,
+  "artifacts": [
+    {
+      "artifactId": "draft-chapter-2-v1",
+      "ownerRole": "writer",
+      "writeScope": "draft_artifact",
+      "digest": "3333333333333333333333333333333333333333333333333333333333333333"
+    }
+  ],
+  "versionDiffRef": "project-example-manuscript-001@2..3",
+  "mergeOwner": "human_owner",
+  "mergeState": "pending_human_merge",
+  "evidenceBoundary": {
+    "completed": ["chapter_2_draft_created"],
+    "pendingReview": ["fact_qualifiers", "source_coverage", "locked_constraint_check"],
+    "cannotProve": ["human_content_approval", "external_fact_verification"]
+  },
+  "finalApprovalClaimed": false
+}

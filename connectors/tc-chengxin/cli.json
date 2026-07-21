@@ -1,0 +1,39 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "env": {
+    "TC_CONNECTOR_HOME": "$HOME/.workbuddy/connectors-marketplace/connectors/tc-chengxin"
+  },
+  "init": {
+    "darwin": "npm install -g \"$TC_CONNECTOR_HOME/cli/tc-chengxin-cli.tgz\"",
+    "linux": "npm install -g \"$TC_CONNECTOR_HOME/cli/tc-chengxin-cli.tgz\"",
+    "win32": "npm install -g \"%TC_CONNECTOR_HOME%\\cli\\tc-chengxin-cli.tgz\""
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "tc-chengxin --version",
+      "linux": "tc-chengxin --version",
+      "win32": "tc-chengxin.cmd --version"
+    },
+    "minVersion": "1.0.3"
+  },
+  "auth": {
+    "darwin": "tc-chengxin auth login --no-wait",
+    "linux": "tc-chengxin auth login --no-wait",
+    "win32": "tc-chengxin.cmd auth login --no-wait"
+  },
+  "unAuth": {
+    "darwin": "tc-chengxin auth logout",
+    "linux": "tc-chengxin auth logout",
+    "win32": "tc-chengxin.cmd auth logout"
+  },
+  "status": {
+    "darwin": "tc-chengxin auth status",
+    "linux": "tc-chengxin auth status",
+    "win32": "tc-chengxin.cmd auth status"
+  },
+  "statusMatch": "Logged in",
+  "authUrlDomain": "m.ly.com"
+}

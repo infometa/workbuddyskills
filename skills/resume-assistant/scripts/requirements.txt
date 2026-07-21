@@ -1,0 +1,11 @@
+# resume-assistant · Python 依赖（v1.0.0）
+# 仅 PDF 提取需要；非 PDF 输入路径下全部可选。
+# 安装：pip3 install -r scripts/requirements.txt
+
+pdfplumber>=0.11.0,<0.12     # 文本层 PDF 提取（首选）
+PyMuPDF>=1.24.0,<2.0          # 备用 PDF 提取（铁律 #14 降级链一级）
+
+# 系统依赖（不通过 pip 装，README 中说明）：
+# - pandoc >= 3.0       （export_pdf.sh 必需）
+# - wkhtmltopdf >= 0.12.6（export_pdf.sh 默认引擎；可降级到 tectonic / chrome --headless）
+# - pdftotext >= 4.04   （pdfplumber 失败时备选；poppler-utils 自带）

@@ -1,0 +1,21 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "case \"${OS:-}\" in Windows_NT*) exit 0;; esac; bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/session-start.sh\"",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CODEBUDDY_PLUGIN_ROOT}/hooks/session-start.ps1\"",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}

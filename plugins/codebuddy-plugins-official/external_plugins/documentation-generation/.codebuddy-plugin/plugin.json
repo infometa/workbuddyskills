@@ -1,0 +1,11 @@
+{
+  "name": "documentation-generation",
+  "description": "OpenAPI规范生成、Mermaid图表创建、教程编写、API参考文档",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

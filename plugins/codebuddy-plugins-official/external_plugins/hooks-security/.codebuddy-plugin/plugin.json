@@ -1,0 +1,19 @@
+{
+  "name": "hooks-security",
+  "version": "1.0.0",
+  "description": "Security Hooks - Event-driven automation hooks",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "hooks",
+    "automation",
+    "security",
+    "file-protection",
+    "file-protection-hook",
+    "security-scanner"
+  ]
+}

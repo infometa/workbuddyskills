@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "long_manuscript.project.v1",
+  "identity": {
+    "productId": "long-manuscript-expert",
+    "serviceProductId": "workbuddy_long_manuscript_expert",
+    "packageName": "long-manuscript-expert",
+    "packageVersion": "26.7.18"
+  },
+  "projectId": "project-example-manuscript-001",
+  "revision": 3,
+  "language": "zh-Hans",
+  "status": "drafting",
+  "goal": {
+    "documentArchetype": "whitepaper_report",
+    "targetAudience": "executive_decision",
+    "targetDeliverables": ["manuscript", "executive_summary"],
+    "owner": "human_owner"
+  },
+  "contextPlan": {
+    "projectSummary": "面向决策者的研究白皮书；第一章已批准，第二章需要补齐外部数字的来源锚点。",
+    "chapterSummaries": [
+      {
+        "outlineNodeId": "outline-chapter-1",
+        "summary": "已界定问题与材料边界，全部结论受用户材料和人工锁约束。"
+      },
+      {
+        "outlineNodeId": "outline-chapter-2",
+        "summary": "正在区分已证事实与待核实主张。"
+      }
+    ],
+    "currentWorkingSet": {
+      "includedSourceAssetIds": ["source-user-notes-001"],
+      "excludedSourceAssetIds": [],
+      "activeOutlineNodeIds": ["outline-chapter-2"],
+      "selectionReason": "只加载当前章节所需用户材料和锁定约束。",
+      "stopCondition": "第二章事实锚点与待核实清单均已交付。"
+    },
+    "overflowPolicy": {
+      "strategy": "compress_then_retrieve",
+      "sourceConstraintsPrecedeFreeCompletion": true,
+      "silentFullContextInjectionForbidden": true
+    }
+  },
+  "executionControl": {
+    "retryBudget": {
+      "maxAttempts": 2,
+      "timeoutMs": 120000
+    },
+    "stopConditions": [
+      "acceptance_criteria_met",
+      "retry_budget_exhausted",
+      "human_lock_or_high_risk_detected"
+    ],
+    "rollbackCheckpointRequired": true,
+    "exhaustionAction": "stop_and_escalate_to_human",
+    "humanOwner": "human_owner"
+  },
+  "sourceAssets": [
+    {
+      "sourceAssetId": "source-user-notes-001",
+      "contentDigest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "provenanceType": "user_provided",
+      "licenseStatus": "user_attested",
+      "sensitivity": "internal",
+      "summary": "用户提供的研究提纲与访谈摘要",
+      "sourceTitle": "User-provided research outline and interview summary",
+      "sourceLocator": "user://explicit-selection/source-user-notes-001",
+      "retrievedAt": "2026-07-17T11:26:00+08:00",
+      "claim": "Provides the user's working problem framing and interview notes.",
+      "evidenceStrength": "user_attested",
+      "clientUseStatus": "needs_verification",
+      "citationAnchors": ["note-1", "note-2"]
+    }
+  ],
+  "outlineNodes": [
+    {
+      "outlineNodeId": "outline-chapter-1",
+      "parentId": null,
+      "title": "问题与背景",
+      "status": "approved",
+      "acceptanceCriteria": ["界定问题", "引用用户材料"],
+      "sourceAssetIds": ["source-user-notes-001"]
+    },
+    {
+      "outlineNodeId": "outline-chapter-2",
+      "parentId": null,
+      "title": "证据与分析",
+      "status": "drafting",
+      "acceptanceCriteria": ["区分已证事实与待核实主张"],
+      "sourceAssetIds": ["source-user-notes-001"]
+    }
+  ],
+  "constraintLedger": {
+    "facts": [
+      {
+        "constraintId": "fact-001",
+        "value": "所有外部数字在发布前必须复核",
+        "sourceAssetIds": ["source-user-notes-001"],
+        "locked": true
+      }
+    ],
+    "terms": [
+      { "constraintId": "term-001", "value": "统一使用 长周期内容资产操作台", "locked": true }
+    ],
+    "entities": [
+      { "constraintId": "entity-001", "value": "示例组织不得替换为真实客户名", "locked": true }
+    ],
+    "voice": [
+      { "constraintId": "voice-001", "value": "克制 专业 可核验", "locked": false }
+    ],
+    "structure": [
+      { "constraintId": "structure-001", "value": "先结论后证据", "locked": true }
+    ],
+    "forbidden": [
+      { "constraintId": "forbidden-001", "value": "不得把推断写成已核实事实", "locked": true }
+    ],
+    "humanLocks": [
+      {
+        "lockId": "human-lock-chapter-1",
+        "targetType": "draftArtifact",
+        "targetId": "draft-chapter-1-v2",
+        "lockedBy": "human",
+        "reason": "第一章已由人工批准",
+        "approvalReceiptRequired": true
+      }
+    ]
+  },
+  "decisionLog": [
+    {
+      "decisionId": "decision-001",
+      "decision": "保留两章结构",
+      "reason": "便于先完成可验证首稿",
+      "decidedBy": "human_owner",
+      "affectedIds": ["outline-chapter-1", "outline-chapter-2"]
+    }
+  ],
+  "draftArtifacts": [
+    {
+      "artifactId": "draft-chapter-1-v2",
+      "outlineNodeId": "outline-chapter-1",
+      "revision": 2,
+      "parentArtifactId": null,
+      "contentDigest": "2222222222222222222222222222222222222222222222222222222222222222",
+      "generationSource": "assistant_revision",
+      "approved": true
+    },
+    {
+      "artifactId": "draft-chapter-2-v1",
+      "outlineNodeId": "outline-chapter-2",
+      "revision": 1,
+      "parentArtifactId": null,
+      "contentDigest": "3333333333333333333333333333333333333333333333333333333333333333",
+      "generationSource": "assistant_draft",
+      "approved": false
+    }
+  ],
+  "qualityReports": [
+    {
+      "qualityReportId": "quality-report-001",
+      "artifactIds": ["draft-chapter-1-v2", "draft-chapter-2-v1"],
+      "remainingRisks": ["第二章外部数字待核实"],
+      "approvedByHuman": false
+    }
+  ],
+  "deliveryReceipts": [
+    {
+      "deliveryReceiptId": "delivery-receipt-draft-001",
+      "artifactIds": ["draft-chapter-1-v2"],
+      "deliveryTarget": "internal_review",
+      "approvalState": "partial_human_approval"
+    }
+  ],
+  "mutationLog": [],
+  "pendingActions": [
+    {
+      "actionId": "action-verify-chapter-2-numbers",
+      "owner": "human_reviewer",
+      "status": "pending"
+    }
+  ]
+}

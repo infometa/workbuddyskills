@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简单折线</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="mapContainer"></div>
+</body>
+
+</html>
+<script>
+    function initMap() {
+		//初始化地图
+		var map = new TMap.Map('mapContainer', {
+			center: new TMap.LatLng(40.040452,116.273486),//地图显示中心点
+			zoom:16	//缩放级别
+		});
+
+		//创建 MultiPolyline
+		var polylineLayer = new TMap.MultiPolyline({
+			id: 'polyline-layer', //图层唯一标识
+			map: map,//绘制到目标地图
+			//折线样式定义
+			styles: {
+				'style_blue': new TMap.PolylineStyle({
+					'color': '#3777FF', //线填充色
+					'width': 6, //折线宽度
+					'borderWidth': 5, //边线宽度
+					'borderColor': '#FFF', //边线颜色
+					'lineCap': 'butt' //线端头方式
+				}),
+				'style_red': new TMap.PolylineStyle({
+					'color': '#CC0000', //线填充色
+					'width': 6, //折线宽度
+					'borderWidth': 5, //边线宽度
+					'borderColor': '#CCC', //边线颜色
+					'lineCap': 'round' //线端头方式
+				})
+			},
+			//折线数据定义
+			geometries: [
+				{//第1条线
+					'id': 'pl_1',//折线唯一标识，删除时使用
+					'styleId': 'style_blue',//绑定样式名
+					'paths': [new TMap.LatLng(40.038540, 116.272389), new TMap.LatLng(40.038844, 116.275210), new TMap.LatLng(40.041407, 116.274738)]
+				},
+				{//第2条线
+					'id': 'pl_2',	
+					'styleId': 'style_red',
+					'paths': [new TMap.LatLng(40.039492,116.271893), new TMap.LatLng(40.041562,116.271421), new TMap.LatLng(40.041957,116.274211)]
+				}
+			]
+		});
+    }
+</script>

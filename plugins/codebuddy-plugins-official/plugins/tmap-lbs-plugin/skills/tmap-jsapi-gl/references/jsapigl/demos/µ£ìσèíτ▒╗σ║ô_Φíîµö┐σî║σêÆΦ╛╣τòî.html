@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>行政区划边界</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=您的key"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #panel {
+        position: absolute;
+        background: #FFF;
+        width:350px;
+        padding: 20px;
+        z-index: 9999;
+        top: 30px;
+        left: 30px;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div id="panel">
+      <p>请在右侧示例代码第10行填入您的key，并执行查看运行结果（key可在控制台应用管理中自行创建）</p>
+        <p><input id='adcode' type="text" placeholder='请输入行政区adcode（默认为110105）' size='30'><input id="findBorder" type="button" class="btn" value="找边界" onclick="findBorder()" /></p>
+        <p id="errorMsg"></p>
+    </div>
+</body>
+
+<script type="text/javascript">
+var map = new TMap.Map('container', {
+  zoom: 8,
+  center: new TMap.LatLng(40, 116),
+});
+var district = new TMap.service.District({
+  // 新建一个行政区划类
+  polygon: 1, // 返回行政区划边界的类型
+});
+var polygons = new TMap.MultiPolygon({
+  map: map,
+  geometries: [],
+});
+function findBorder() {
+  polygons.remove(polygons.getGeometries().map((item) => item.id));
+  var keyword = document.getElementById('adcode').value;
+  district
+    .search({ keyword: keyword || '110105' })
+    .then((result) => {
+      // 搜索行政区划信息
+      result.result.forEach((level) => {
+        level.forEach((place) => {
+          var bounds = [];
+          var newGeometries = place.polygon.map((polygon, index) => {
+            bounds.push(fitBounds(polygon)); // 计算能完整呈现行政区边界的最小矩形范围
+            return {
+              id: `${place.id}_${index}`,
+              paths: polygon, // 将得到的行政区划边界用多边形标注在地图上
+            };
+          });
+          bounds = bounds.reduce((a, b) => {
+            return fitBounds([
+              a.getNorthEast(),
+              a.getSouthWest(),
+              b.getNorthEast(),
+              b.getSouthWest(),
+            ]);
+          }); // 若一行政区有多个多边形边界，应计算能包含所有多边形边界的范围。
+          polygons.updateGeometries(newGeometries);
+          map.fitBounds(bounds);
+        });
+      });
+    })
+    .catch((error) => {
+      document.getElementById(
+        'errorMsg'
+      ).innerText = `错误：${error.status}, ${error.message}`;
+    });
+}
+function fitBounds(latLngList) {
+  // 由多边形顶点坐标数组计算能完整呈现该多边形的最小矩形范围
+  if (latLngList.length === 0) {
+    return null;
+  }
+  var boundsN = latLngList[0].getLat();
+  var boundsS = boundsN;
+  var boundsW = latLngList[0].getLng();
+  var boundsE = boundsW;
+  latLngList.forEach((point) => {
+    point.getLat() > boundsN && (boundsN = point.getLat());
+    point.getLat() < boundsS && (boundsS = point.getLat());
+    point.getLng() > boundsE && (boundsE = point.getLng());
+    point.getLng() < boundsW && (boundsW = point.getLng());
+  });
+  return new TMap.LatLngBounds(
+    new TMap.LatLng(boundsS, boundsW),
+    new TMap.LatLng(boundsN, boundsE)
+  );
+}
+findBorder();
+</script>
+
+</html>

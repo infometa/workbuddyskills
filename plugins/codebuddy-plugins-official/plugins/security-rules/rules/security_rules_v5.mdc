@@ -1,0 +1,96 @@
+---
+description: Security Vulnerability Protection Rules for AI Code Generation
+globs: **/*
+alwaysApply: true
+enabled: true
+---
+
+# Security Rules for AI Code Generation V5
+
+## GOLDEN RULES
+- Treat ALL external input as HOSTILE
+- Validate at EVERY trust boundary. When in doubt, REJECT
+- NEVER use eval/dynamic code execution with user data
+- NEVER hardcode secrets or provide default credentials
+
+## RULE 1: SQL Injection (CWE-89)
+- 100% parameterized queries. NEVER concatenate user input into SQL
+- Dynamic ORDER BY/GROUP BY: MUST whitelist before use
+- ORM raw queries follow same rules as raw SQL
+
+## RULE 2: Command Injection (CWE-78, CWE-77)
+- NEVER spawn shell with user data. NEVER concat into command strings
+- Use argv form: subprocess.run([cmd, args]), execFile, ProcessBuilder
+- Reject inputs with shell metacharacters: ` $ ; | & < > \ \n \r`
+
+## RULE 3: Path Traversal & Zip Slip (CWE-22)
+- Base dir: fixed in code/config, NEVER from user input
+- Join with path API, never string concatenation
+- Normalize and boundary check via prefix on absolute paths
+- Reject filenames with .., /, \, NUL, drive letters
+- Zip extraction: validate each entry, reject symlinks
+
+## RULE 4: SSRF (CWE-918)
+1. Scheme allowlist (http/https only)
+2. Extract host and port, reject non-standard ports
+3. DNS-resolve and validate ALL IPs against blocklist
+4. Pin validated IP for connection (prevent DNS rebinding)
+5. Disable automatic redirects, manually validate each redirect
+
+## RULE 5: Authentication & Secrets (CWE-285, 287, 321, 639, 798, 862)
+- Every non-public endpoint MUST verify identity AND ownership
+- Passwords: hash with bcrypt/argon2/scrypt/PBKDF2
+- Secrets: read from env, fail-fast if missing, NO defaults
+- JWT: explicit algorithm allowlist, verify exp/iss/aud
+- Admin ops: require role check + CSRF protection
+
+## RULE 6: Cryptography & Randomness (CWE-327, 338, 330)
+- Symmetric: AES-GCM/ChaCha20-Poly1305 with random IV
+- Hashing: SHA-256+ for security, MD5/SHA-1 only for non-security
+- Random: cryptographic RNG (secrets, crypto.randomBytes, SecureRandom)
+
+## RULE 7: Deserialization
+- BANNED: pickle, ObjectInputStream, unserialize, gob on untrusted input
+- REQUIRED: json with concrete DTO classes, schema validation
+- Never deserialize into Object/interface{}/map[string]interface{}
+
+## RULE 8: XSS & Output Encoding (CWE-79)
+- Use context-aware auto-escaping templates
+- Server-side sanitizer for HTML fragments (DOMPurify, OWASP sanitizer)
+- Set Content-Type and security headers (X-Content-Type-Options, CSP)
+
+## RULE 9: Open Redirect & CORS (CWE-601)
+- Redirect targets: same-origin or static allowlist only
+- CORS: never reflect arbitrary Origin with credentials
+
+## RULE 10: File Upload
+1. Extension allowlist
+2. MIME/magic-byte validation
+3. Size and request-count caps
+4. Server-side UUID filename
+5. Non-executable storage outside web root
+6. Reject double extensions, NUL bytes
+
+## RULE 11: Headless Browser / Sandbox
+- NEVER disable sandbox security flags
+- Combine with SSRF protection for all requests
+
+## RULE 12: Logging & Errors
+- NEVER log secrets/PII/full tokens
+- Return generic errors to client, full details to server logs
+
+## SELF-CHECK BEFORE EMITTING CODE
+1. SQL parameterized? Dynamic IDs whitelisted?
+2. Subprocess argv form? Input validated?
+3. Path base fixed? Normalized? Boundary checked?
+4. SSRF scheme allowlist + IP validation + pinned connection?
+5. Auth required? Ownership checked? No demo creds?
+6. Crypto strong hashes? Random IV? CSPRNG?
+7. Deserialization into concrete types?
+8. XSS auto-escape on? No unsafe HTML?
+9. Redirect origin allowlist?
+10. Upload extension + MIME validation?
+11. Sandbox enabled? Requests validated?
+12. Secrets redacted from logs?
+
+If any answer is "no", FIX before responding.

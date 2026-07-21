@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>叠加自定义网格</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body>
+    <div id="mapContainer"></div>
+    <script>
+        var center = new TMap.LatLng(31.71982285502907, 113.5575212744742);//设置中心点坐标
+        //初始化地图
+        var map = new TMap.Map('mapContainer', {
+            center: center,
+            zoom: 5,
+        });
+
+        // 瓦片画布
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 256;
+        canvas.height = 256;
+
+        //初始化imageTileLayer
+        var imageTileLayer = new TMap.ImageTileLayer({
+            getTileUrl: function (x, y, z) {
+                // 在左上角绘制坐标
+                ctx.font = '16px Arial';
+                ctx.fillStyle = 'black';
+                const textX = 10;
+                const textY = 20;
+                ctx.fillText(`(${x}, ${y}, ${z})`, textX, textY);
+
+                // 绘制中间透明的图案
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.0)';
+                ctx.fillRect(2, 2, 254, 254);
+
+                // 绘制四周描边
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(1, 1, 255, 255);
+
+                // 返回包含绘制图案的dataURL
+                const dataURL = canvas.toDataURL();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return dataURL;
+            },
+            tileSize: 256,	//瓦片像素尺寸
+            minZoom: 1,	//显示自定义瓦片的最小级别
+            maxZoom: 20,	//显示自定义瓦片的最大级别
+            visible: true,	//是否可见
+            zIndex: 5000,	//层级高度（z轴）
+            opacity: 0.95,	//图层透明度：1不透明，0为全透明
+            map: map,		//设置图层显示到哪个地图实例中
+        });
+    </script>
+</body>
+
+</html>

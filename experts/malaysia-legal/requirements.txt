@@ -1,0 +1,5 @@
+# Malaysia Legal Compliance Expert — 核心依赖
+# 安装: pip install -r requirements.txt
+duckdb>=0.9.0   # duckdb_query.py: DuckDB 离线 SQL 查询引擎（同时被 data_verifier.py 间接依赖）
+# ref_text_search.py: 仅依赖标准库 (re, json, pathlib)
+# data_verifier.py: 仅依赖标准库 (subprocess, json, re)，通过子进程调用 duckdb_query.py 和 ref_text_search.py

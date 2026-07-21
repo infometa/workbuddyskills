@@ -1,0 +1,239 @@
+# D10: 拒绝服务 (DoS) 检测模式表
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 检测 ReDoS、解析炸弹、资源耗尽、无限循环/递归等拒绝服务风险
+
+# ============================================================================
+# 一、ReDoS（正则表达式拒绝服务）
+# ============================================================================
+
+redos:
+  description: "正则表达式包含灾难性回溯模式，恶意输入可导致 CPU 耗尽"
+
+  dangerous_regex_patterns:
+    description: "包含嵌套量词、重叠字符类等回溯陷阱的正则表达式"
+    patterns:
+      # 嵌套量词：(a+)+ 、(a*)*、(a|a)+
+      - '\(\[?[^)]*[+*]\s*\)[+*]'
+      - '\(\w+\|?\w+\)[+*]'
+      # 重叠交替：(a|a|ab)*
+      - '\(\w\|\w\)[+*]'
+    note: "需结合正则表达式内容分析，非单纯 Grep 可判定"
+
+  vulnerable_code_patterns:
+    java:
+      - pattern: 'Pattern\.(compile|matches)\s*\('
+        context: "提取正则表达式内容，分析是否包含嵌套量词"
+      - pattern: '\.matches\s*\(\s*[''"][^''"]*[+*][^''"]*[+*]'
+        note: "直接在 matches() 中使用含嵌套量词的正则"
+      - pattern: '\.replaceAll\s*\(\s*[''"][^''"]*[+*]'
+        note: "replaceAll 第一个参数是正则，可能有 ReDoS"
+    python:
+      - pattern: 're\.(match|search|findall|sub)\s*\('
+        context: "提取正则表达式内容，分析是否包含嵌套量词"
+    javascript:
+      - pattern: 'new\s+RegExp\s*\('
+        context: "动态构建正则表达式，可能注入恶意模式"
+      - pattern: '\/[^\/]*[+*][^\/]*[+*][^\/]*\/'
+        note: "字面量正则含嵌套量词"
+    go:
+      - pattern: 'regexp\.(Compile|MustCompile|Match)\s*\('
+        context: "提取正则表达式内容分析"
+
+  user_controlled_regex:
+    description: "用户输入直接用作正则表达式，可构造恶意模式"
+    patterns:
+      - 'Pattern\.compile\s*\(\s*request\.'
+      - 're\.compile\s*\(\s*request\.'
+      - 'new\s+RegExp\s*\(\s*req\.'
+      - 'regexp\.Compile\s*\(\s*r\.'
+    severity: "medium"
+    note: "用户可控正则表达式存在 ReDoS 风险"
+
+# ============================================================================
+# 二、XML 解析炸弹（Billion Laughs / XXE DoS）
+# ============================================================================
+
+xml_bomb:
+  description: "XML 实体递归展开可导致内存/CPU 耗尽"
+
+  vulnerable_patterns:
+    java:
+      - pattern: 'DocumentBuilderFactory\.newInstance\(\)'
+        absence_check: 'setFeature.*disallow-doctype-decl.*true|setExpandEntityReferences\(false\)'
+        note: "XML 解析器未禁用 DOCTYPE 声明"
+      - pattern: 'SAXParserFactory\.newInstance\(\)'
+        absence_check: 'setFeature.*disallow-doctype-decl'
+      - pattern: 'XMLInputFactory\.newInstance\(\)'
+        absence_check: 'setProperty.*IS_SUPPORTING_EXTERNAL_ENTITIES.*false'
+    python:
+      - pattern: 'xml\.etree\.ElementTree\.parse\('
+        note: "Python 标准库 XML 解析默认不防御实体炸弹"
+      - pattern: 'minidom\.parseString\('
+        note: "同上"
+      - pattern: 'lxml\.etree\.parse\('
+        absence_check: 'resolve_entities\s*=\s*False'
+    javascript:
+      - pattern: 'xml2js\.parseString\('
+        note: "需确认是否限制实体展开"
+      - pattern: 'DOMParser\(\)\.parseFromString\('
+    go:
+      - pattern: 'xml\.NewDecoder\('
+        absence_check: 'Strict\s*=\s*true'
+
+  safe_patterns:
+    - 'disallow-doctype-decl.*true'
+    - 'defusedxml'                        # Python defusedxml 安全库
+    - 'setExpandEntityReferences\(false\)'
+    - 'XMLConstants\.FEATURE_SECURE_PROCESSING'
+
+# ============================================================================
+# 三、JSON 解析炸弹
+# ============================================================================
+
+json_bomb:
+  description: "深度嵌套或超大 JSON 可导致解析器栈溢出/内存耗尽"
+
+  vulnerable_patterns:
+    - category: 无深度/大小限制的 JSON 解析
+      patterns:
+        - 'objectMapper\.readValue\s*\(\s*request'
+        - 'JSON\.parse\s*\(\s*req\.body'
+        - 'json\.loads\s*\(\s*request'
+        - 'gson\.fromJson\s*\(\s*request'
+      absence_check: 'maxDepth|maxStringLength|maxSize|ContentLength|bodyParser.*limit'
+      note: "JSON 解析无深度/大小限制，可被嵌套 JSON 炸弹耗尽资源"
+
+    - category: 请求体大小无限制
+      patterns:
+        - 'bodyParser\.json\(\)'                    # Express 默认无限制
+        - '@RequestBody(?!.*@Size)'                 # Spring 无大小注解
+      absence_check: 'limit|maxBodySize|MAX_CONTENT_LENGTH|DATA_UPLOAD_MAX_MEMORY_SIZE'
+      note: "未配置请求体大小限制"
+
+# ============================================================================
+# 四、资源耗尽型 DoS
+# ============================================================================
+
+resource_exhaustion:
+  description: "检测可被滥用导致服务器资源耗尽的代码模式"
+
+  patterns:
+    - category: 无限制的文件上传
+      patterns:
+        - 'MultipartFile'
+        - 'multer\(\)'
+        - 'move_uploaded_file\('
+      absence_check: 'maxFileSize|fileSizeLimit|MAX_UPLOAD_SIZE|limits.*fileSize'
+      note: "文件上传无大小限制，可上传超大文件耗尽磁盘/内存"
+
+    - category: 无限制的列表查询
+      patterns:
+        - 'findAll\(\)'
+        - 'SELECT\s+\*\s+FROM(?!.*LIMIT)'
+        - '\.find\(\{\}\)'                         # MongoDB 全量查询
+      absence_check: 'limit|pageSize|maxResults|setMaxResults|LIMIT'
+      note: "查询无分页/限制，可返回海量数据耗尽内存"
+
+    - category: 图片/文件处理 DoS
+      patterns:
+        - 'BufferedImage\s*\(\s*width'
+        - 'getScaledInstance\s*\('
+        - 'ImageIO\.write\('
+        - 'Image\.open\(.*\.resize\('
+        - 'sharp\(\)\.resize\('
+      absence_check: 'maxWidth|maxHeight|MAX_IMAGE_SIZE|width\s*>\s*\d{4}|height\s*>\s*\d{4}'
+      note: "图片处理参数无上限约束，可构造超大图片耗尽内存"
+
+    - category: 压缩包 DoS（Zip Bomb）
+      patterns:
+        - 'ZipInputStream'
+        - 'ZipFile\('
+        - 'zipfile\.ZipFile\('
+        - 'unzip\('
+        - 'tar\.extractall\('
+        - 'gunzip\('
+      absence_check: 'totalSize|maxEntries|MAX_UNCOMPRESSED|ratio'
+      note: "解压缩未限制展开后大小/条目数量，存在 Zip 炸弹风险"
+
+    - category: 外部请求无超时
+      patterns:
+        - 'requests\.(get|post)\('
+        - 'http\.Get\('
+        - 'fetch\('
+        - 'axios\.\w+\('
+        - 'RestTemplate'
+        - 'WebClient'
+        - 'HttpURLConnection'
+      absence_check: 'timeout|connectTimeout|readTimeout|socketTimeout|AbortSignal\.timeout'
+      note: "外部 HTTP 请求无超时设置，可被慢速响应阻塞线程"
+
+# ============================================================================
+# 五、无限循环/递归检测
+# ============================================================================
+
+infinite_loop_recursion:
+  description: "用户可控参数影响循环/递归终止条件"
+
+  patterns:
+    - category: 用户控制循环次数
+      patterns:
+        - 'for\s*\(.*;\s*\w+\s*<\s*request\.'
+        - 'range\s*\(\s*int\s*\(\s*request\.'
+        - 'for\s+i\s*:=\s*0;\s*i\s*<\s*\w+;\s*i\+\+'
+      absence_check: 'maxIterations|MAX_LOOP|limit|cap'
+      note: "循环次数由用户输入控制且无上限"
+
+    - category: 递归深度无限制
+      patterns:
+        - 'def\s+\w+\(.*\):\s*\n.*\1\('          # Python 自递归
+        - 'function\s+\w+\(.*\)\s*\{[^}]*\1\('    # JS 自递归
+      context: "递归函数处理用户输入数据（如树形/嵌套结构）"
+      note: "递归处理用户数据无深度限制，可导致栈溢出"
+
+# ============================================================================
+# 六、速率限制缺失
+# ============================================================================
+
+rate_limiting:
+  description: "关键接口缺少速率限制/请求频率控制"
+
+  high_risk_endpoints:
+    - type: "登录接口"
+      grep_keywords: "login|signin|authenticate"
+    - type: "注册接口"
+      grep_keywords: "register|signup|createAccount"
+    - type: "短信/邮件验证码"
+      grep_keywords: "sendSms|sendCode|sendEmail|verificationCode"
+    - type: "密码重置"
+      grep_keywords: "forgotPassword|resetPassword"
+    - type: "数据导出"
+      grep_keywords: "export|download|dump"
+    - type: "搜索接口"
+      grep_keywords: "search|query|find"
+
+  absence_check: 'rateLimit|rateLimiter|throttle|@RateLimit|bucket4j|guava.*RateLimiter|express-rate-limit|slowapi|tollbooth'
+
+# ============================================================================
+# 七、判定补充规则
+# ============================================================================
+
+pattern_judgment_supplements:
+  - type: ReDoS
+    condition: "用户可控输入经过包含嵌套量词/重叠字符类的正则表达式匹配"
+    action: "创建 redos finding"
+    severity: "high"
+
+  - type: XML 解析炸弹
+    condition: "XML 解析器未禁用 DOCTYPE/外部实体，且接受用户上传的 XML"
+    action: "创建 xml-bomb finding"
+    severity: "high"
+
+  - type: 资源耗尽
+    condition: "用户可控参数直接决定资源分配量（内存/磁盘/CPU），且无上限约束"
+    action: "创建 resource-exhaustion finding"
+    severity: "medium"
+
+  - type: Zip 炸弹
+    condition: "解压缩用户上传的压缩文件，且未限制展开后总大小/条目数"
+    action: "创建 zip-bomb finding"
+    severity: "high"

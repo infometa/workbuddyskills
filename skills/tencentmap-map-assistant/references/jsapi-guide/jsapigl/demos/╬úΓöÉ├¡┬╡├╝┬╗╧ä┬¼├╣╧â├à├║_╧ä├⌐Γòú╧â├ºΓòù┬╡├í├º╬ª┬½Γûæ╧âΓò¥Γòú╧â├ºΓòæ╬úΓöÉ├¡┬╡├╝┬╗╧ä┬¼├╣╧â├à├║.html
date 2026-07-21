@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>点击标记弹出信息窗口</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+    <script>
+        function initMap() {
+            var center = new TMap.LatLng(39.984104, 116.307503);//设置中心点坐标
+            //初始化地图
+            var map = new TMap.Map("container", {
+                center: center
+            });
+
+            //初始marker
+            var marker = new TMap.MultiMarker({
+                id: 'marker-layer',
+                map: map,
+                styles: {
+                    "marker": new TMap.MarkerStyle({
+                        "width": 24,
+                        "height": 35,
+                        "anchor": { x: 12, y: 35 },
+                        "src": 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png'
+                    })
+                },
+                geometries: [{
+                    "id": 'demo1',
+                    "styleId": 'marker',
+                    "position": new TMap.LatLng(39.984104, 116.307503),
+                    "properties": {
+                        "title": "marker"
+                    }
+                }, {
+                    "id": 'demo2',
+                    "styleId": 'marker',
+                    "position": new TMap.LatLng(39.974104, 116.347503),
+                    "properties": {
+                        "title": "marker"
+                    },
+
+                }]
+            });
+            //初始化infoWindow
+            var infoWindow = new TMap.InfoWindow({
+                map: map,
+                position: new TMap.LatLng(39.984104, 116.307503),
+                offset: { x: 0, y: -32 } //设置信息窗相对position偏移像素
+            });
+            infoWindow.close();//初始关闭信息窗关闭
+            //监听标注点击事件
+            marker.on("click", function (evt) {
+                //设置infoWindow
+                infoWindow.open(); //打开信息窗
+                infoWindow.setPosition(evt.geometry.position);//设置信息窗位置
+                infoWindow.setContent(evt.geometry.position.toString());//设置信息窗内容
+            })
+        }
+    </script>
+</body>
+
+</html>

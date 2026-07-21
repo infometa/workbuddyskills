@@ -1,0 +1,22 @@
+{
+  "name": "enemy",
+  "display": "Enemy",
+  "default_id": "red_robot",
+  "fields": [
+    { "key": "id",                       "type": "StringName", "default": "&\"\"",    "group": "Identity" },
+    { "key": "display_name",             "type": "String",     "default": "\"Enemy\"", "group": "Identity" },
+    { "key": "max_health",               "type": "int",        "default": 5,    "range": [1, 999, 1],   "group": "Combat" },
+    { "key": "shoot_wait",               "type": "float",      "default": 6.0,  "range": [0.1, 30, 0.1], "group": "Combat", "doc": "Cooldown between shots (seconds)." },
+    { "key": "aim_prepare_time",         "type": "float",      "default": 0.5,  "range": [0, 10, 0.1],   "group": "Combat" },
+    { "key": "aim_time",                 "type": "float",      "default": 1.0,  "range": [0, 10, 0.1],   "group": "Combat" },
+    { "key": "player_aim_tolerance_deg", "type": "float",      "default": 15.0, "range": [1, 90, 0.5],   "group": "Combat", "doc": "Player must be within this angle (deg) to trigger shoot." },
+    { "key": "laser_max_range",          "type": "float",      "default": 1000.0, "range": [10, 5000, 10], "group": "Combat" },
+    { "key": "laser_hit_trauma",         "type": "float",      "default": 13.0, "range": [0, 20, 0.1],   "group": "Damage" },
+    { "key": "damage",                   "type": "int",        "default": 1,    "range": [0, 9999, 1],   "group": "Damage" },
+    { "key": "corpse_despawn_delay",     "type": "float",      "default": 10.0, "range": [0, 60, 0.5],   "group": "Lifecycle" }
+  ],
+  "validators": [
+    "max_health > 0",
+    "shoot_wait > 0"
+  ]
+}

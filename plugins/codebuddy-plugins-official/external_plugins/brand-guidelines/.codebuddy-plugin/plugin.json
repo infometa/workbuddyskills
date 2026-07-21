@@ -1,0 +1,5 @@
+{
+  "name": "brand-guidelines",
+  "description": "将 Anthropic 官方品牌配色和排版应用于工件，确保视觉识别和专业设计标准的一致性。",
+  "license": "Apache-2.0"
+}

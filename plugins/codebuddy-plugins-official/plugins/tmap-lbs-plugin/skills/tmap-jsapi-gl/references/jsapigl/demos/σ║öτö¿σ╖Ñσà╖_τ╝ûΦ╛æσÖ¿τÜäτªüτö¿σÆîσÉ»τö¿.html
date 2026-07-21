@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>编辑器的禁用和启用</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?libraries=tools&v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 80%;
+		position: relative;
+    }
+	#toolControl {
+		position: absolute;
+		top: 10px;
+		left: 0px;
+		right: 0px;
+		margin: auto;
+		width: 120px;
+		text-align: center;
+		z-index: 1001;
+	}
+</style>
+
+<body onload="initMap()">
+	<div id="container"></div>
+	<div id="toolControl">
+		<button onclick="editor.enable();">启用</button>
+		<button onclick="editor.disable();">禁用</button>
+	</div>
+	<div>
+		编辑器启用后地图进入2D视图模式，无法调整俯仰角及旋转角度<br/>
+		编辑器禁用后地图恢复原状，无法进行绘制和交互。
+	</div>
+	<script type="text/javascript">
+		var map, editor;
+
+        function initMap() {
+            // 初始化地图
+            map = new TMap.Map("container", {
+                zoom: 17, // 设置地图缩放级别
+                center: new TMap.LatLng(40.04019000341765, 116.27446815226199) // 设置地图中心点坐标
+			});
+
+			var simplePath = [
+				new TMap.LatLng(40.04051164600918, 116.27488518619089),
+				new TMap.LatLng(40.040943635857445, 116.27804611629756),
+				new TMap.LatLng(40.03951759379146, 116.2783762087081),
+				new TMap.LatLng(40.03891287066983, 116.2752049655744)
+			];
+
+			// 初始化几何图形及编辑器
+			editor = new TMap.tools.GeometryEditor({
+				map, // 编辑器绑定的地图对象
+				overlayList: [ // 可编辑图层
+					{
+						overlay: new TMap.MultiPolygon({
+							map,
+							styles: {
+								highlight: new TMap.PolygonStyle({
+									color: 'rgba(255, 255, 0, 0.6)'
+								})
+							},
+							geometries: [
+								{
+									paths: simplePath
+								}
+							]
+						}),
+						id: 'polygon',
+						selectedStyleId: 'highlight'
+					}
+				],
+				actionMode: TMap.tools.constants.EDITOR_ACTION.INTERACT, // 编辑器的工作模式
+				activeOverlayId: 'polygon', // 激活图层
+				selectable: true, // 开启点选功能
+				snappable: true // 开启吸附
+			});
+		}
+    </script>
+</body>
+
+</html>

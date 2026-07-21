@@ -1,0 +1,14 @@
+{
+  "name": "jdtls-lsp",
+  "version": "1.0.0",
+  "description": "Java 语言服务器（Eclipse JDT.LS），提供代码智能和重构功能",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "java",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

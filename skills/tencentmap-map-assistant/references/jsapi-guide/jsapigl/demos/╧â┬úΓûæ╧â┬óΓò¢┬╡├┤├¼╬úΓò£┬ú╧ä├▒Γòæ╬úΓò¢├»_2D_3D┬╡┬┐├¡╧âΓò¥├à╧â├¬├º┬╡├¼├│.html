@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2D/3D模式切换</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    input {
+      position: absolute;
+      top: 30px;
+      z-index: 9999;
+    }
+    #btn-2d {
+      left: 20px;
+    }
+    #btn-3d {
+      left: 80px;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <input type="button" id="btn-2d" onclick="change2D()" value="切换2D">
+    <input type="button" id="btn-3d" onclick="change3D()" value="切换3D">
+    <script type="text/javascript">
+            var center = new TMap.LatLng(39.984104, 116.307503);
+            //初始化地图
+            var map = new TMap.Map("container", {
+                zoom:12,//设置地图缩放级别
+                center: center//设置地图中心点坐标
+            });
+            
+            function change2D() {
+              map.setViewMode('2D');
+            }
+
+            function change3D() {
+              map.setViewMode('3D');
+              map.setPitch(70);
+            }
+    </script>
+</body>
+
+</html>

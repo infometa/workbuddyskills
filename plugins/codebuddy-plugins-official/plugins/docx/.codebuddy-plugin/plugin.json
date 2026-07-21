@@ -1,0 +1,12 @@
+{
+  "name": "docx",
+  "description": "全面的 Word 文档创建、编辑和分析工具，支持修订跟踪、评论、格式保留和文本提取。用于处理专业 Word 文档(.docx)",
+  "description_en": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Supports tracked changes, comments, formatting preservation and text extraction.",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "repository": "https://github.com/anthropics/skills",
+  "homepage": "https://github.com/anthropics/skills",
+  "license": "Proprietary"
+}

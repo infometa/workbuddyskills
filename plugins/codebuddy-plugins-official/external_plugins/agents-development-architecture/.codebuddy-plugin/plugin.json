@@ -1,0 +1,27 @@
+{
+  "name": "agents-development-architecture",
+  "version": "1.0.0",
+  "description": "Expert agents for software architecture, backend development, and system design",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "development-architecture",
+    "backend-architect",
+    "directus-developer",
+    "drupal-developer",
+    "frontend-developer",
+    "graphql-architect",
+    "ios-developer",
+    "laravel-vue-developer",
+    "mobile-developer",
+    "nextjs-app-router-developer",
+    "react-performance-optimization",
+    "wordpress-developer"
+  ]
+}

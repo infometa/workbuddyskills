@@ -1,0 +1,383 @@
+{
+  "_example_meta": {
+    "scenario": "120 天考研冲刺，目标 985 计算机，二战考生",
+    "highlights": [
+      "四阶段：基础回顾(20d) / 强化训练(60d) / 真题突破(30d) / 冲刺押题(10d)",
+      "数学权重最高（薄弱项），工作日 60min 强制独占",
+      "专业课用费曼法：每章节学完必输出脑图 / 讲给自己听",
+      "政治压缩到最后 30 天，避免战线过长",
+      "英语长线低强度：每天 30min 真题阅读 + 20min 单词",
+      "示例只截取 4 天关键节点（首日/D7复盘/阶段切换日/模考日）"
+    ],
+    "use_when": "用户目标是考研/考博/法考/医师执业等长周期高强度备考"
+  },
+  "id": "plan-20260301-kaoyan-985cs",
+  "version": 1,
+  "meta": {
+    "title": "考研冲刺 985 计算机",
+    "goal": "总分 380+，数学一 130+，专业课 408 130+",
+    "deadline": "2026-12-22",
+    "current_level": "二战，去年总分 340，数学 105、英一 65、政治 70、408 100",
+    "daily_budget": {
+      "weekday": 360,
+      "weekend": 480
+    },
+    "weak_points": [
+      "数学一线代证明题",
+      "408 操作系统调度算法",
+      "英语长难句翻译"
+    ],
+    "resources": [
+      "李永乐复习全书",
+      "王道四件套",
+      "肖四肖八",
+      "黄皮书"
+    ],
+    "methodology": [
+      "ebbinghaus",
+      "pomodoro",
+      "feynman",
+      "pareto"
+    ],
+    "template_origin": "kaoyan"
+  },
+  "stages": [
+    {
+      "id": "stage-1",
+      "name": "基础回顾（20天）",
+      "duration_days": 20,
+      "goals": [
+        "数学：高数 + 线代教材通读，重点章节做题",
+        "英语：完成核心词汇第 1 轮（5500 词）",
+        "专业课：王道数据结构第 1 遍精读 + 笔记",
+        "暂不开政治"
+      ]
+    },
+    {
+      "id": "stage-2",
+      "name": "强化训练（60天）",
+      "duration_days": 60,
+      "goals": [
+        "数学：880 题 + 660 题二刷，错题本必须建",
+        "英语：近 10 年真题阅读精做（每天 1 篇）",
+        "专业课：4 门强化课 + 课后题全做",
+        "政治开课：徐涛强化 + 1000 题"
+      ]
+    },
+    {
+      "id": "stage-3",
+      "name": "真题突破（30天）",
+      "duration_days": 30,
+      "goals": [
+        "数学：近 20 年真题限时模考",
+        "英语：作文模板背诵 + 完整真题模考",
+        "408：专业课真题 + 408 模拟卷",
+        "政治：肖四肖八精做"
+      ]
+    },
+    {
+      "id": "stage-4",
+      "name": "冲刺押题（10天）",
+      "duration_days": 10,
+      "goals": [
+        "肖四大题全背",
+        "数学错题本三刷",
+        "英语作文 5 篇默写",
+        "408 高频考点速记",
+        "考前 3 天降低强度，调整状态"
+      ]
+    }
+  ],
+  "daily_tasks": [
+    {
+      "date": "2026-03-01",
+      "stage_id": "stage-1",
+      "tasks": [
+        {
+          "id": "t-001",
+          "title": "数学：高数第 1 章 函数与极限 通读 (part 1/2)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "resource": "李永乐复习全书 P1-30",
+          "checkable": true,
+          "methodology_tip": "艾宾浩斯：错题第 1/3/7 天复现，能 1 分钟讲明白才算过"
+        },
+        {
+          "id": "t-001-p2",
+          "title": "数学：高数第 1 章 函数与极限 通读 (part 2/2)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "resource": "李永乐复习全书 P1-30",
+          "checkable": true,
+          "methodology_tip": "艾宾浩斯：错题第 1/3/7 天复现，能 1 分钟讲明白才算过"
+        },
+        {
+          "id": "t-002",
+          "title": "英语：核心词汇 List 1（100 词）",
+          "duration_min": 40,
+          "category": "vocabulary",
+          "priority": "high",
+          "methodology_tip": "艾宾浩斯：3-2 / 3-4 / 3-8 复现",
+          "checkable": true
+        },
+        {
+          "id": "t-003",
+          "title": "408：王道数据结构 ch1 绪论 (part 1/2)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "methodology_tip": "费曼：学完合上书自己讲一遍核心概念",
+          "checkable": true
+        },
+        {
+          "id": "t-003-p2",
+          "title": "408：王道数据结构 ch1 绪论 (part 2/2)",
+          "duration_min": 15,
+          "category": "review",
+          "priority": "high",
+          "methodology_tip": "费曼：学完合上书自己讲一遍核心概念",
+          "checkable": true
+        },
+        {
+          "id": "t-004",
+          "title": "英语：长难句精析 ×3 句",
+          "duration_min": 30,
+          "category": "grammar",
+          "priority": "medium",
+          "resource": "田静长难句",
+          "checkable": true,
+          "methodology_tip": "番茄：单次 ≤45min，错题立刻造 3 个新例句"
+        },
+        {
+          "id": "t-005",
+          "title": "数学：第 1 章课后例题独立做 ×10 题 (part 1/2)",
+          "duration_min": 45,
+          "category": "exam",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "限时模考：严格计时，做完立即对答案，错题 24h 内复盘"
+        },
+        {
+          "id": "t-005-p2",
+          "title": "数学：第 1 章课后例题独立做 ×10 题 (part 2/2)",
+          "duration_min": 15,
+          "category": "exam",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "限时模考：严格计时，做完立即对答案，错题 24h 内复盘"
+        }
+      ]
+    },
+    {
+      "date": "2026-03-07",
+      "stage_id": "stage-1",
+      "tasks": [
+        {
+          "id": "t-040",
+          "title": "Week 1 全面复盘 (part 1/3)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "methodology_tip": "周日 review：错题归类、本周完成率、下周计划微调；脑图输出 408 已学章节",
+          "checkable": true
+        },
+        {
+          "id": "t-040-p2",
+          "title": "Week 1 全面复盘 (part 2/3)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "methodology_tip": "周日 review：错题归类、本周完成率、下周计划微调；脑图输出 408 已学章节",
+          "checkable": true
+        },
+        {
+          "id": "t-040-p3",
+          "title": "Week 1 全面复盘 (part 3/3)",
+          "duration_min": 30,
+          "category": "review",
+          "priority": "high",
+          "methodology_tip": "周日 review：错题归类、本周完成率、下周计划微调；脑图输出 408 已学章节",
+          "checkable": true
+        },
+        {
+          "id": "t-041",
+          "title": "数学：本周错题集中重做 (part 1/2)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "艾宾浩斯：错题第 1/3/7 天复现，能 1 分钟讲明白才算过"
+        },
+        {
+          "id": "t-041-p2",
+          "title": "数学：本周错题集中重做 (part 2/2)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "艾宾浩斯：错题第 1/3/7 天复现，能 1 分钟讲明白才算过"
+        },
+        {
+          "id": "t-042",
+          "title": "英语：单词本周累计复现",
+          "duration_min": 30,
+          "category": "vocabulary",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "艾宾浩斯：1/3/7/15 天复现 5 次后进入长期记忆"
+        }
+      ]
+    },
+    {
+      "date": "2026-03-21",
+      "stage_id": "stage-2",
+      "tasks": [
+        {
+          "id": "t-100",
+          "title": "🎯 进入强化阶段：自我评估 + 目标校准 (part 1/2)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "methodology_tip": "阶段切换日：用费曼法对自己讲一遍 stage-1 所有大概念，发现卡顿即薄弱项",
+          "checkable": true
+        },
+        {
+          "id": "t-100-p2",
+          "title": "🎯 进入强化阶段：自我评估 + 目标校准 (part 2/2)",
+          "duration_min": 15,
+          "category": "review",
+          "priority": "high",
+          "methodology_tip": "阶段切换日：用费曼法对自己讲一遍 stage-1 所有大概念，发现卡顿即薄弱项",
+          "checkable": true
+        },
+        {
+          "id": "t-101",
+          "title": "数学：880 题第 1 章（25 题） (part 1/3)",
+          "duration_min": 45,
+          "category": "exam",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "限时模考：严格计时，做完立即对答案，错题 24h 内复盘"
+        },
+        {
+          "id": "t-101-p2",
+          "title": "数学：880 题第 1 章（25 题） (part 2/3)",
+          "duration_min": 45,
+          "category": "exam",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "限时模考：严格计时，做完立即对答案，错题 24h 内复盘"
+        },
+        {
+          "id": "t-101-p3",
+          "title": "数学：880 题第 1 章（25 题） (part 3/3)",
+          "duration_min": 30,
+          "category": "exam",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "限时模考：严格计时，做完立即对答案，错题 24h 内复盘"
+        },
+        {
+          "id": "t-102",
+          "title": "英语：2015 真题阅读 Text 1 精做 (part 1/2)",
+          "duration_min": 45,
+          "category": "reading",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "帕累托：高频题型优先（判断/填空），20% 考点拿 80% 分"
+        },
+        {
+          "id": "t-102-p2",
+          "title": "英语：2015 真题阅读 Text 1 精做 (part 2/2)",
+          "duration_min": 5,
+          "category": "reading",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "帕累托：高频题型优先（判断/填空），20% 考点拿 80% 分"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "stage_id": "stage-3",
+      "tasks": [
+        {
+          "id": "t-300",
+          "title": "📝 数学一 全真模考（2020 真题） (part 1/4)",
+          "duration_min": 45,
+          "category": "exam",
+          "priority": "high",
+          "methodology_tip": "严格 8:30-11:30 计时，按真实考场流程",
+          "checkable": true
+        },
+        {
+          "id": "t-300-p2",
+          "title": "📝 数学一 全真模考（2020 真题） (part 2/4)",
+          "duration_min": 45,
+          "category": "exam",
+          "priority": "high",
+          "methodology_tip": "严格 8:30-11:30 计时，按真实考场流程",
+          "checkable": true
+        },
+        {
+          "id": "t-300-p3",
+          "title": "📝 数学一 全真模考（2020 真题） (part 3/4)",
+          "duration_min": 45,
+          "category": "exam",
+          "priority": "high",
+          "methodology_tip": "严格 8:30-11:30 计时，按真实考场流程",
+          "checkable": true
+        },
+        {
+          "id": "t-300-p4",
+          "title": "📝 数学一 全真模考（2020 真题） (part 4/4)",
+          "duration_min": 45,
+          "category": "exam",
+          "priority": "high",
+          "methodology_tip": "严格 8:30-11:30 计时，按真实考场流程",
+          "checkable": true
+        },
+        {
+          "id": "t-301",
+          "title": "模考即时分析 + 错题归档 (part 1/2)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "艾宾浩斯：错题第 1/3/7 天复现，能 1 分钟讲明白才算过"
+        },
+        {
+          "id": "t-301-p2",
+          "title": "模考即时分析 + 错题归档 (part 2/2)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "艾宾浩斯：错题第 1/3/7 天复现，能 1 分钟讲明白才算过"
+        },
+        {
+          "id": "t-302",
+          "title": "晚间：政治选择题 80 道 (part 1/2)",
+          "duration_min": 45,
+          "category": "exam",
+          "priority": "medium",
+          "resource": "肖八卷一",
+          "checkable": true,
+          "methodology_tip": "限时模考：严格计时，做完立即对答案，错题 24h 内复盘"
+        },
+        {
+          "id": "t-302-p2",
+          "title": "晚间：政治选择题 80 道 (part 2/2)",
+          "duration_min": 15,
+          "category": "exam",
+          "priority": "medium",
+          "resource": "肖八卷一",
+          "checkable": true,
+          "methodology_tip": "限时模考：严格计时，做完立即对答案，错题 24h 内复盘"
+        }
+      ]
+    }
+  ]
+}

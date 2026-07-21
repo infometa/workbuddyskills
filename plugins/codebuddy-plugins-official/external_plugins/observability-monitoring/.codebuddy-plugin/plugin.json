@@ -1,0 +1,11 @@
+{
+  "name": "observability-monitoring",
+  "description": "指标收集、日志基础设施、分布式追踪、SLO 实施和监控仪表板",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

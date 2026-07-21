@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>散点动画</title>
+  </head>
+  <script
+    charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"
+  ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+    #container {
+      width: 100%;
+      height: 100%;
+    }
+    #name {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+        font-size: 12px;
+        color:#ffffff;
+      }
+  </style>
+  <body onload="initMap()">
+    <div id="container"></div>
+    <div id="name">深圳市交通事故上报预警</div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/shenzhen_trafficAccident.js"></script>
+    <script>
+      function initMap() {
+        //初始化地图
+        var map = new TMap.Map("container", {
+          zoom: 11.5, //设置地图缩放级别
+          center: new TMap.LatLng(22.638653072216666, 114.0831825194266), //设置地图中心点坐标
+          mapStyleId: "style4", //个性化样式20
+          baseMap: {
+            type: "vector",
+            features: ["base", "building3d"], // 隐藏矢量文字
+          },
+          renderOptions: {
+            enableBloom: true, // 泛光
+          },
+        });
+
+        //初始化散点图并添加至map图层
+        var dot = new TMap.visualization.Dot({
+          faceTo: "map", //散点固定的朝向
+          styles: {
+            style1: {
+              fillColor: "#FFCA1F",
+              radius: 1,
+            },
+            style2: {
+              fillColor: "#C72A18",
+              radius: 2,
+            },
+          },
+          enableBloom: true, // 泛光
+        })
+          .addTo(map)
+          dot.setData(docAnimationData);
+
+        //初始化散点图并添加至map图层
+        var dotAnimation = new TMap.visualization.Dot({
+          faceTo: "map", //散点固定的朝向
+          styles: {
+            style1: {
+              type: "circle", //圆形样式
+              fillColor: "rgba(255,202,31,0.3)",
+              radius: 3,
+            },
+            style2: {
+              type: "circle", //圆形样式
+              fillColor: "rgba(204,42,24,0.3)",
+              radius: 10,
+            },
+          },
+          processAnimation: {
+            animationType: "radiated", //动画类型
+          },
+        })
+          .addTo(map)
+          dotAnimation.setData(docAnimationData); //添加数据
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>添加动态gif图</title>
+  </head>
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+    }
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <body onload="initMap()">
+    <div id="container"></div>
+    <script>
+      var map;
+      var unit = 'px';
+      function initMap() {
+        // 初始化地图
+        map = new TMap.Map('container', {
+          zoom: 12, // 设置地图缩放级别
+          center: new TMap.LatLng(39.96030543872138, 116.25809083213608), // 设置地图中心点坐标
+          pitch: 40, // 俯仰度，
+        });
+        var flameList = [
+          new Flame({
+            map,
+            position: new TMap.LatLng(39.96030543872138, 116.25809083213608), // 动态图放置位置
+            url: 'https://mapapi.qq.com/web/visualization/demo-asset/flame.gif', // 路径
+            width: 80, // 宽度
+            height: 240, // 高度
+          }),
+        ];
+      }
+
+      function Flame(options) {
+        // DOMOverlay文档地址: https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocDomOverlay
+        TMap.DOMOverlay.call(this, options);
+      }
+      Flame.prototype = new TMap.DOMOverlay();
+
+      // 初始化
+      Flame.prototype.onInit = function (options) {
+        this.position = options.position;
+        this.url = options.url;
+        this.width = options.width || 20;
+        this.height = options.height || 20;
+      };
+
+      // 创建DOM元素，返回一个DOMElement，使用this.dom可以获取到这个元素
+      Flame.prototype.createDOM = function () {
+        var img = document.createElement('img');
+        img.style.height = this.height + unit;
+        img.style.width = this.width + unit;
+        img.src = this.url;
+        return img;
+      };
+      // 更新DOM元素。在地图上移动/缩放后执行
+      Flame.prototype.updateDOM = function () {
+        if (!this.map) {
+          return;
+        }
+        // 经纬度坐标转转容器像素坐标
+        var pixel = this.map.projectToContainer(this.position);
+        // 使图中心点对齐经纬度坐标点
+        var width = this.dom.clientWidth / 2;
+        var left = pixel.getX() - width + unit;
+        var top = pixel.getY() - this.dom.clientHeight + unit;
+        this.dom.style.transform = `translate(${left}, ${top})`;
+      };
+      window.Flame = Flame;
+    </script>
+  </body>
+</html>

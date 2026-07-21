@@ -1,0 +1,18 @@
+{
+  "name": "ppt-writer",
+  "version": "1.0.0",
+  "description": "AI驱动的PPT创作助手，支持智能内容生成、多格式导出和专业模板",
+  "author": {
+    "name": "CodeBuddy Team",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "ppt",
+    "presentation",
+    "slides",
+    "powerpoint",
+    "content-generation",
+    "design"
+  ],
+  "license": "MIT"
+}

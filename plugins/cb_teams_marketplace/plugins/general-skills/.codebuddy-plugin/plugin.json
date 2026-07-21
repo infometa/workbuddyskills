@@ -1,0 +1,14 @@
+{
+  "name": "general-skills",
+  "description": "A collection of general-purpose skills including document conversion, skill discovery, UI/UX design, and frontend development capabilities",
+  "version": "1.0.0",
+  "author": {
+    "name": "CodeBuddy Teams"
+  },
+  "skills": [
+    "./skills/markitdown",
+    "./skills/find-skills",
+    "./skills/ui-ux-pro-max",
+    "./skills/frontend-design"
+  ]
+}

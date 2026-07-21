@@ -1,0 +1,11 @@
+{
+  "name": "multi-platform-apps",
+  "description": "跨平台应用开发,协调 Web、iOS、Android 和桌面端的实现",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,124 @@
+{
+  "_source_primary": "https://sso.agc.gov.sg/Act/EmA1968",
+  "_note": "以下法定假期数字来自 Employment Act (Cap. 91)。来源URL由用户投喂。具体法条编号未逐条验证，不得引用为确定条款号。",
+  "_source_verified_fields": [
+    "annual_leave",
+    "paid_sick_leave",
+    "maternity_leave",
+    "paternity_leave",
+    "childcare_leave",
+    "retirement_age"
+  ],
+  "_unverified_fields": [
+    "part_iv_classification: 来自用户修正指令，未绑定EA具体条款"
+  ],
+  "annual_leave": {
+    "yr1": 7,
+    "yr2": 8,
+    "yr3": 9,
+    "yr4": 10,
+    "yr5": 11,
+    "yr6": 12,
+    "yr7": 13,
+    "yr8_plus": 14
+  },
+  "paid_sick_leave": {
+    "outpatient_max": 14,
+    "hospitalization_max": 60,
+    "relationship": "60天住院病假已包含14天门诊病假——不是14+60=74天。员工在calendar year内先后使用门诊和住院病假时，总额以60天为上限",
+    "require": "需雇主认可医生证明",
+    "forbidden": [
+      "门诊14天+住院60天",
+      "14+60共74天"
+    ]
+  },
+  "maternity_leave": {
+    "weeks": 16,
+    "government_paid": "前8周GPML（Government-Paid Maternity Leave）",
+    "employer_paid": "后8周",
+    "condition": "新加坡公民子女"
+  },
+  "paternity_leave": {
+    "weeks": 4,
+    "government_paid": "GPPL（Government-Paid Paternity Leave）",
+    "condition": "新加坡公民子女"
+  },
+  "shared_parental_leave": {
+    "_source": "https://www.mom.gov.sg/employment-practices/leave/shared-parental-leave",
+    "_note": "用户投喂验证数据",
+    "tiers": [
+      {
+        "child_event_between": "2025-04-01 ~ 2026-03-31",
+        "weeks": 6
+      },
+      {
+        "child_event_from": "2026-04-01",
+        "weeks": 10
+      }
+    ],
+    "shared_by": "符合资格的父母共享",
+    "usage_window": "子女出生后12个月内使用"
+  },
+  "childcare_leave": {
+    "days_per_year": 6,
+    "condition": "7岁以下新加坡公民子女，政府支付前3天"
+  },
+  "retirement_age": {
+    "_data_source": "Retirement and Re-employment Act，训练记忆",
+    "statutory": 64,
+    "re_employment": 69,
+    "year": 2026
+  },
+  "public_holiday": {
+    "_data_source": "用户修正指令 — PH规则由用户提供官方正确规则后嵌入",
+    "primary_gate": "Employment Act coverage（非Part IV applicability）",
+    "judgment_chain": [
+      "Employment Act Coverage → Public Holiday Entitlement",
+      "Holiday falls on Working Day / Non-Working Day / Rest Day",
+      "Employee Required to Work?",
+      "Applicable Holiday Payment or Day-Off Treatment",
+      "Normal Hours Exceeded?",
+      "Overtime Interaction if Applicable"
+    ],
+    "payment_bases": {
+      "paid_public_holiday": "Gross rate of pay（月薪员工holiday pay已含在monthly gross rate中）",
+      "additional_pay_for_working_on_ph": "Basic rate of pay（额外一天）",
+      "ph_non_working_day": "Another day off 或 extra day's salary at gross rate",
+      "ph_on_rest_day": "Following working day为paid public holiday",
+      "overtime_on_ph": "另行判断overtime pay"
+    },
+    "separation_from_part_iv": {
+      "overtime_primary_gate": "Part IV applicability",
+      "rest_day_primary_gate": "Part IV applicability",
+      "ph_primary_gate": "EA coverage and PH framework"
+    },
+    "forbidden": [
+      "Part IV覆盖员工适用OT、Rest Day和PH法定规则",
+      "PH工作按Gross Rate计算（需先识别具体支付项目再确定basis）",
+      "将OT/Rest Day/PH统一归入Part IV计算体系"
+    ]
+  },
+  "part_iv_classification": {
+    "_data_source": "用户修正指令 — Part IV分类规则由用户提供官方正确规则后嵌入",
+    "judgment_chain": [
+      "Employee Actual Duties → Workman or Non-workman",
+      "Manager or Executive Status",
+      "Monthly Basic Salary → Part IV Applicability"
+    ],
+    "thresholds": {
+      "workman": "Monthly basic salary不超过S$4,500时进入Part IV覆盖判断",
+      "non_workman": "Monthly basic salary不超过S$2,600时进入Part IV覆盖判断"
+    },
+    "manager_or_executive": {
+      "part_iv_coverage": "不受Part IV关于hours of work/overtime/rest day的规则覆盖",
+      "determination": "根据实际工作职责判断，不能只看职位名称。考虑executive/supervisory functions、招聘/纪律/解雇/绩效/奖励决策权、专业性职责"
+    },
+    "forbidden": [
+      "使用PME作为Part IV法定三分类",
+      "PME = 不受Part IV保护（作为固定规则）",
+      "仅根据Job Title判断Manager or Executive"
+    ]
+  },
+  "_verified": true,
+  "_last_verified": "2026-07-09"
+}

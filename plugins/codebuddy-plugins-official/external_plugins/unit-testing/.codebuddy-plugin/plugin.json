@@ -1,0 +1,11 @@
+{
+  "name": "unit-testing",
+  "description": "Python 和 JavaScript 的单元测试与集成测试自动化，支持调试功能",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>驾车路线规划</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=您的key&libraries=service"></script>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    #panel {
+        position: absolute;
+        background: #FFF;
+        width:350px;
+        padding: 20px;
+        z-index: 9999;
+        top: 30px;
+        left: 30px;
+    }
+</style>
+
+<script>
+var map;
+function initMap() {
+  map = new TMap.Map('mapContainer', {
+    center: new TMap.LatLng(39.990619, 116.321277),
+    zoom: 14,
+  });
+  var startPosition = new TMap.LatLng(39.984039, 116.307630307503); // 路线规划起点
+  var endPosition = new TMap.LatLng(39.977263, 116.337063); // 路线规划终点
+  var marker = new TMap.MultiMarker({
+    // 创造MultiMarker显示起终点标记
+    id: 'marker-layer',
+    map: map,
+    styles: {
+      start: new TMap.MarkerStyle({
+        width: 25,
+        height: 35,
+        anchor: { x: 16, y: 32 },
+        src: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/start.png',
+      }),
+      end: new TMap.MarkerStyle({
+        width: 25,
+        height: 35,
+        anchor: { x: 16, y: 32 },
+        src: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/end.png',
+      }),
+    },
+    geometries: [
+      {
+        id: 'start',
+        styleId: 'start',
+        position: startPosition,
+      },
+      {
+        id: 'end',
+        styleId: 'end',
+        position: endPosition,
+      },
+    ],
+  });
+
+  var driving = new TMap.service.Driving({
+    // 新建一个驾车路线规划类
+    mp: false, // 是否返回多方案
+    policy: 'PICKUP,NAV_POINT_FIRST', // 规划策略
+  });
+  driving.search({ from: startPosition, to: endPosition }).then((result) => {
+    // 搜索路径
+    result.result.routes[0].steps.forEach((step, index) => {
+      document.getElementById('instruction').innerHTML += `<p>${index + 1}. ${
+        step.instruction
+      }</p>`;
+      // 展示路线引导
+    });
+    displayPolyline(result.result.routes[0].polyline); // 绘制路径折线
+  });
+}
+
+function displayPolyline(pl) {
+  // 创建 MultiPolyline显示路径折线
+  var polylineLayer = new TMap.MultiPolyline({
+    id: 'polyline-layer',
+    map: map,
+    styles: {
+      style_blue: new TMap.PolylineStyle({
+        color: '#3777FF',
+        width: 8,
+        borderWidth: 5,
+        borderColor: '#FFF',
+        lineCap: 'round',
+      }),
+    },
+    geometries: [
+      {
+        id: 'pl_1',
+        styleId: 'style_blue',
+        paths: pl,
+      },
+    ],
+  });
+}
+</script>
+
+<body onload="initMap()">
+    <div id="mapContainer"></div>
+    <div id="panel">
+      <p>请在右侧示例代码第10行填入您的key，并执行查看运行结果（key可在控制台应用管理中自行创建）</p>
+      <h4>驾车路线规划</h4><div id="instruction"></div></div>
+</body>
+
+</html>

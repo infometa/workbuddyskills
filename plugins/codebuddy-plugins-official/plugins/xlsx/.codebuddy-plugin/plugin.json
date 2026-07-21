@@ -1,0 +1,12 @@
+{
+  "name": "xlsx",
+  "description": "全面的电子表格创建、编辑和分析工具，支持公式、格式化、数据分析和可视化。适用于 .xlsx、.xlsm、.csv、.tsv 等表格文件的处理",
+  "description_en": "Use this skill any time a spreadsheet file is the primary input or output — opening, reading, editing, creating .xlsx/.xlsm/.csv/.tsv files, computing formulas, formatting, charting, and cleaning messy data.",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "repository": "https://github.com/anthropics/skills",
+  "homepage": "https://github.com/anthropics/skills",
+  "license": "Proprietary"
+}

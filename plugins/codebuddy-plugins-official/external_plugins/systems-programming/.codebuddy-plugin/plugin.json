@@ -1,0 +1,11 @@
+{
+  "name": "systems-programming",
+  "description": "使用 Rust、Go、C 和 C++ 进行系统编程，适用于性能关键和底层开发",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

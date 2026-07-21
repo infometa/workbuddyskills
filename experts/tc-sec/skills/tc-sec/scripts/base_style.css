@@ -1,0 +1,65 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f7fa;color:#2c3e50;line-height:1.6;padding:20px;overflow-wrap:break-word}
+/* 全局兜底：任何被 html() 注入的媒体/预格式块都不许撑破容器 */
+img,svg,video,iframe,pre{max-width:100%}
+pre{overflow-x:auto;overflow-wrap:anywhere;word-break:break-word}
+.container{max-width:1100px;margin:0 auto;overflow-wrap:break-word;min-width:0}
+.header{background:linear-gradient(135deg,#1a237e,#0d47a1);color:#fff;padding:32px;border-radius:12px;margin-bottom:24px;overflow-wrap:break-word}
+.header h1{font-size:28px;margin-bottom:8px;overflow-wrap:anywhere}
+.header .meta{opacity:0.85;font-size:14px}
+.header .meta+.meta{margin-top:4px}
+/* 防御性兜底：若 body 内未闭合块级标签被浏览器卷进 .header，强制其用深色可读文字，
+   避免继承 .header 的 color:#fff 变成白底白字。直接子代 h1/meta 仍走上面的白字规则。 */
+.header>div:not(.meta),.header>section,.header>table,.header>p,.header>ul,.header>ol,.header>blockquote{color:#2c3e50;background:#fff;padding:12px;border-radius:6px;margin-top:8px}
+.summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;min-width:0}
+.card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);min-width:0;overflow-wrap:break-word}
+.card .label{font-size:14px;color:#697374;margin-bottom:6px}
+.card .value{font-size:32px;font-weight:700;overflow-wrap:anywhere}
+.card .sub{font-size:14px;color:#697374;margin-top:4px}
+.critical{color:#c0392b}
+.high{color:#a55a18}
+.medium{color:#96600b}
+.low{color:#1c7d45}
+.info{color:#2473a6}
+.section{background:#fff;border-radius:10px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);min-width:0;overflow-wrap:break-word}
+.section h2{font-size:20px;color:#1a237e;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e8eaf6;overflow-wrap:anywhere}
+.section h3{font-size:16px;color:#283593;margin:16px 0 10px;overflow-wrap:anywhere}
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;min-width:0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;table-layout:auto}
+th{background:#e8eaf6;color:#283593;padding:10px 12px;text-align:left;font-weight:600;overflow-wrap:anywhere}
+td{padding:10px 12px;border-bottom:1px solid #f0f0f0;overflow-wrap:anywhere;word-break:break-word}
+tr:hover{background:#f8f9ff}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:14px;font-weight:600}
+.badge-critical{background:#fdecea;color:#c0392b}
+.badge-high{background:#fef5e7;color:#a55a18}
+.badge-medium{background:#fef9e7;color:#96600b}
+.badge-low{background:#eafaf1;color:#1c7d45}
+.badge-info{background:#eaf2f8;color:#2473a6}
+.alert-box{border-left:4px solid #e74c3c;background:#fdf0ef;padding:12px 16px;margin:10px 0;border-radius:0 4px 4px 0;overflow-wrap:break-word;min-width:0;font-size:14px}
+.alert-box.warn{border-left-color:#f39c12;background:#fefcf5}
+.alert-box.info{border-left-color:#3498db;background:#f0f7fb}
+ol,ul{padding-left:1.5em;list-style-position:inside}
+.alert-box ul,.alert-box ol,.finding ul,.finding ol{padding-left:1.5em;list-style-position:inside}
+.finding{margin:8px 0;padding:8px 12px;background:#f8f9ff;border-radius:0 6px 6px 0;border-left:3px solid #5c6bc0;overflow-wrap:break-word;min-width:0;font-size:14px}
+.finding.crit{border-left-color:#e74c3c;background:#fdf0ef}
+.score-gauge{display:flex;align-items:center;gap:16px}
+.score-circle{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700}
+.score-red{background:#fdecea;border:4px solid #e74c3c;color:#c0392b}
+.score-orange{background:#fef5e7;border:4px solid #e67e22;color:#e67e22}
+.score-green{background:#eafaf1;border:4px solid #27ae60;color:#27ae60}
+.event-msg{font-family:'SF Mono',Monaco,monospace;font-size:13px;color:#555;word-break:break-all;display:inline-block;max-width:100%;overflow-wrap:anywhere;line-height:1.5;background:#f4f5f7;padding:2px 6px;border-radius:3px}
+.footer{text-align:center;color:#697374;font-size:14px;padding:24px 0;line-height:2}
+.note{background:#fff9c4;padding:12px 16px;border-radius:6px;margin:12px 0;font-size:14px;color:#6d4c00;overflow-wrap:anywhere;word-break:break-word}
+/* 窄屏适配：小宽度下收紧内边距、字号，卡片由 auto-fit 自动降列。表格靠 overflow-wrap 折行不撑破。 */
+@media (max-width:480px){
+  body{padding:10px}
+  .header{padding:18px;border-radius:8px}
+  .header h1{font-size:20px}
+  .section{padding:14px;border-radius:8px}
+  .section h2{font-size:17px}
+  .card{padding:14px}
+  .card .value{font-size:26px}
+  th,td{padding:7px 8px}
+  table{font-size:13px}
+  .event-msg{font-size:12px}
+}

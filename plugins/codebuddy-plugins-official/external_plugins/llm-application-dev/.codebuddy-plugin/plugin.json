@@ -1,0 +1,11 @@
+{
+  "name": "llm-application-dev",
+  "description": "构建生产就绪的 LLM 应用、高级 RAG 系统和智能代理。包括向量搜索、多模态 AI、代理编排、提示工程和企业 AI 集成，以及全面的 AI 开发工作流。",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "UNKNOWN"
+}

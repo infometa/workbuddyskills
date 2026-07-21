@@ -1,0 +1,956 @@
+# ==========================================================================
+# 腾讯云安全检测模式 (Tencent Cloud Security Patterns)
+# ==========================================================================
+# 引用方: logic-scan (C7.6 云安全) / vuln-scan (SSRF→IMDS) / red-team
+# 用途: 检测腾讯云环境下的安全配置缺陷、凭证泄露、策略过宽等问题
+# ==========================================================================
+
+# ============================================================================
+# 一、CAM（访问管理）策略检测
+# ============================================================================
+# 腾讯云 CAM 对应 AWS IAM，使用 JSON 策略语法
+# 文档：https://cloud.tencent.com/document/product/598
+
+cam_policy_audit:
+  description: "检测 CAM 策略中的过度授权和危险配置"
+
+  overprivilege_patterns:
+    - category: 全量权限授予
+      patterns:
+        - '"action"\s*:\s*"\*"'                       # 所有操作权限
+        - '"resource"\s*:\s*"\*"'                      # 所有资源权限
+        - '"action"\s*:\s*\[\s*"\*"\s*\]'              # 数组形式的全量权限
+        - '"resource"\s*:\s*\[\s*"\*"\s*\]'
+      severity: high
+      note: "CAM 策略授予了 Action:* 或 Resource:*，违反最小权限原则"
+
+    - category: 高危服务全量授权
+      patterns:
+        - '"action"\s*:\s*"cam:\*"'                    # CAM 全部操作（可提权）
+        - '"action"\s*:\s*"cvm:\*"'                    # CVM 全部操作
+        - '"action"\s*:\s*"cos:\*"'                    # COS 全部操作
+        - '"action"\s*:\s*"cdb:\*"'                    # CDB（MySQL）全部操作
+        - '"action"\s*:\s*"vpc:\*"'                    # VPC 全部操作
+        - '"action"\s*:\s*"cfs:\*"'                    # CFS 文件存储全部操作
+        - '"action"\s*:\s*"scf:\*"'                    # SCF 云函数全部操作
+        - '"action"\s*:\s*"tke:\*"'                    # TKE 容器服务全部操作
+        - '"action"\s*:\s*"tat:\*"'                    # TAT 自动化助手（可远程执行命令）
+      severity: medium
+      note: "对单个高危服务授予全量权限，建议细化到具体 API"
+
+    - category: 危险操作未限制
+      patterns:
+        - '"action"\s*:\s*"cam:CreatePolicy"'          # 可创建新策略（提权风险）
+        - '"action"\s*:\s*"cam:AttachUserPolicy"'      # 可绑定策略到用户
+        - '"action"\s*:\s*"cam:CreateRole"'             # 可创建角色
+        - '"action"\s*:\s*"cam:PassRole"'               # 可传递角色（角色链式提权）
+        - '"action"\s*:\s*"tat:InvokeCommand"'          # 可远程执行命令
+        - '"action"\s*:\s*"tat:RunCommand"'             # 可远程运行命令
+        - '"action"\s*:\s*"scf:Invoke"'                 # 可调用云函数
+      severity: high
+      note: "这些 CAM 操作可导致权限提升或远程代码执行"
+
+  policy_condition_check:
+    description: "检查策略是否缺少条件约束"
+    missing_conditions:
+      - absence_of: '"condition"'
+        with_action: '"effect"\s*:\s*"allow"'
+        note: "allow 策略未设置 condition 约束（IP/MFA/时间），任意来源可调用"
+      - absence_of: '"qcs::cam::uin/'
+        note: "未限定操作主体（principal），可能被非预期账号使用"
+
+  arn_patterns:
+    description: "腾讯云资源 ARN 格式检测"
+    format: "qcs::<service>::uin/<ownerUin>:<resourceType>/<resourceId>"
+    examples:
+      - 'qcs::cos:.*:uid/\d+:.*'                      # COS 资源
+      - 'qcs::cvm:.*:instance/ins-\w+'                # CVM 实例
+      - 'qcs::cam::uin/\d+:roleName/\w+'              # CAM 角色
+
+# ============================================================================
+# 二、COS（对象存储）安全检测
+# ============================================================================
+
+cos_security:
+  description: "检测腾讯云 COS 存储桶的安全配置缺陷"
+
+  public_access_patterns:
+    - category: Bucket ACL 公开
+      patterns:
+        - 'put_bucket_acl.*public-read'
+        - 'PutBucketACL.*public-read'
+        - '"x-cos-acl"\s*:\s*"public-read"'
+        - '"x-cos-acl"\s*:\s*"public-read-write"'
+        - 'ACL\s*[:=]\s*[''"]public-read[''"]'
+        - 'ACL\s*[:=]\s*[''"]public-read-write[''"]'
+      severity: high
+      note: "COS Bucket ACL 设置为公开读/公开读写"
+
+    - category: Bucket Policy 公开
+      patterns:
+        - '"principal"\s*:\s*"\*"'                      # 允许任意主体访问
+        - '"principal"\s*:\s*\{\s*"qcs"\s*:\s*\[\s*"\*"'
+      severity: high
+      note: "COS Bucket Policy 允许任意主体（principal:*）访问"
+
+    - category: CORS 配置过宽
+      patterns:
+        - '"AllowedOrigin"\s*:\s*\[\s*"\*"'
+        - 'AllowedOrigins.*\*'
+      severity: medium
+      note: "COS CORS 允许任意来源，可能导致跨域数据泄露"
+
+  cos_url_patterns:
+    description: "COS 存储桶 URL 识别"
+    patterns:
+      - '\.cos\.[a-z0-9-]+\.myqcloud\.com'            # 标准域名
+      - 'cos\.[a-z0-9-]+\.myqcloud\.com/[^\s]+'       # 带路径
+      - '\.file\.myqcloud\.com'                        # 老版域名（仍有使用）
+      - '\.cosgz\.myqcloud\.com'                       # 老版区域域名
+      - '\.costj\.myqcloud\.com'
+      - '\.cossh\.myqcloud\.com'
+    note: "发现 COS URL 后需进一步检查 ACL/Policy 配置"
+
+  presigned_url_risk:
+    description: "预签名 URL 安全检查"
+    patterns:
+      - 'get_presigned_url.*expiration\s*[:=]\s*\d{6,}'     # 超长有效期（>= 100000 秒）
+      - 'getPresignedUrl.*Expires\s*[:=]\s*\d{6,}'
+      - 'generatePresignedUrl.*expiration'
+    note: "COS 预签名 URL 有效期过长，可能导致持久化未授权访问"
+
+  # ──────────────────────────────────────────────────────────────────
+  # STS 临时密钥【策略本身过宽】检测（与 sts_authorization_check 正交）
+  # ──────────────────────────────────────────────────────────────────
+  # 来源：《COS 临时密钥通用检测规则》。
+  # 区别：
+  #   - sts_authorization_check 关注「业务接口是否走 STS 路径」（缺 STS = 漏洞）
+  #   - 本规则关注「服务端确实在签发 STS，但下发的临时策略 Policy 过宽」
+  #     即 GetCredential / GetFederationToken / AssumeRole 构造的 CredentialPolicy
+  #     中 Resource 写成 * 或桶级通配 `.../{bucket}/*`，且 Action 含写/删/桶级高危，
+  #     一旦该临时密钥泄露或被恶意客户端获取，可覆盖/删除桶内任意文件、改桶配置。
+  # 引用方：logic-scan C7.6 云安全 / red-team。
+  # risk_type 注册：risk-type-taxonomy.yaml > cloud_security > cos-sts-policy-overprivilege
+  sts_temp_policy_overprivilege_check:
+    description: "服务端签发 COS 临时密钥时，临时策略 Resource 通配 + Action 含写/高危操作，违反最小权限"
+    risk_type: "COS 临时密钥策略过宽"
+    severity: high
+    cloud_product: ["COS", "数据万象 CI", "STS"]
+    # 行/语句级判定：定位 CredentialPolicy / Statement 的 Resource 与 Action 构造点
+    branch_level_required: false
+    detection_logic:
+      trigger_when_all:
+        - "代码在服务端构造 STS 临时凭证策略：调用 qcloud-cos-sts-sdk 的 GetCredential / CredentialOptions / CredentialPolicy / CredentialPolicyStatement，或直接 AssumeRole/GetFederationToken 并自行拼 policy JSON（含 effect/action/resource 字段）"
+        - "该 Statement 的 Effect 为 allow"
+        - "Resource 命中 wildcard_resource_patterns（resource=* 或收敛到桶级 `.../{bucket}/*` 而非具体对象/用户前缀）"
+        - "Action 命中 high_risk_actions（写类 PutObject/PostObject，或桶级高危 PutBucketACL/DeleteBucket/... ，或全量 cos:* / *）"
+      defense_required_any:
+        - "Resource 绑定到对象级或用户/业务前缀：`qcs::cos:<region>:uid/<appid>:<bucket>/<userId-or-prefix>/*` 且前缀由服务端可信派生（非用户原样拼接）"
+        - "用户可控的对象 Key/前缀在拼入 Resource 前经过白名单/正则校验，且显式拒绝 `*`、`?` 等通配符与 `..` 路径穿越"
+        - "Action 收敛到读类（GetObject）或与业务严格匹配的最小集合，不含桶级高危操作"
+        - "策略带 condition 约束（如 cos:prefix、ip、有效期 DurationSeconds 较短）进一步限制范围"
+      report_when: "服务端确实在签发 STS 临时密钥，且某条 allow Statement 的 Resource 通配 + Action 含写/删/桶级高危/全量，且对用户可控的 Key/前缀未做通配符过滤与归属收敛"
+
+    # ── 场景一：任意文件覆盖（高危）────────────────────────────────
+    # 规则：effect=allow AND action 含 PutObject/PostObject AND resource=* 或桶级通配
+    arbitrary_object_overwrite:
+      severity: high
+      note: "临时密钥可覆盖桶内任意文件：Resource 为 * 或 `.../{bucket}/*` 且 Action 含 PutObject/PostObject"
+      action_patterns:
+        - 'name/cos:PutObject'
+        - 'name/cos:PostObject'
+      # Resource 通配判定：整桶级 * 结尾（而非收敛到 用户前缀/具体对象）
+      wildcard_resource_patterns:
+        - '^\*$'                                                         # resource 整串就是 *
+        - '"?resource"?\s*[:=]\s*\[?\s*["'']\*["'']'                      # resource = "*"
+        # 桶级通配：qcs::cos:ap-<region>:uid/<appid>:prefix//<appid>/<bucket>/*
+        - '^qcs::cos:ap-[a-z]+:uid/\d+:prefix//\d+/(?:[-\w]+/)*\*$'
+        # 修正式（兼容 uid/appid:bucket/* 与 prefix//appid/ 两种 ARN 写法）
+        - 'uid/[0-9]+:[a-z0-9\-]+/\*'
+        - 'uid/[0-9]+:prefix//[0-9]+/.*\*'
+        - 'uid/[0-9]+:\*'
+
+    # ── 场景一（收敛）：仅目录级通配（中/低）──────────────────────
+    directory_level_overwrite:
+      severity: medium
+      note: "Resource 收敛到目录级 `.../{bucket}/目录/*` + PutObject，影响面限于该目录"
+      action_patterns:
+        - 'name/cos:PutObject'
+      resource_patterns:
+        - 'uid/\d+:prefix//\d+/[-\w]+/(?:[-\w]+/)+\*'      # 至少一层桶名 + 一层目录后再 *
+
+    # ── 场景二（紧急）：允许所有云产品 / COS 全量 action ───────────
+    full_action_grant:
+      severity: critical
+      note: "临时密钥授予 action=* 或 cos:*，等价于该桶/账号下 COS 全权限"
+      action_patterns:
+        - '"?action"?\s*[:=]\s*\[?\s*["'']\*["'']'                       # action = "*"
+        - 'name/cos:\*'                                                   # name/cos:*
+        - '"?action"?\s*[:=]\s*\[?\s*["'']cos:\*["'']'
+
+    # ── 场景二（高危）：桶级 / 对象级高危 action + 宽 resource ──────
+    high_risk_action_grant:
+      severity: high
+      note: "临时密钥含桶级高危或对象删除/改 ACL 类 action，且 Resource 通配，可改桶配置或删数据"
+      # 文档列出的高危 action 全集
+      high_risk_actions:
+        - 'GetBucket'
+        - 'GetBucketObjectVersions'
+        - 'PutBucketACL'
+        - 'PutBucketPolicy'
+        - 'PutBucketTagging'
+        - 'PutBucketCORS'
+        - 'PutBucketLifecycle'
+        - 'PutBucketReferer'
+        - 'PutBucketDomain'
+        - 'PutBucketOrigin'
+        - 'PutBucketAccelerate'
+        - 'PutBucketInventory'
+        - 'PostBucketInventory'
+        - 'PutBucketVersioning'
+        - 'PutBucketReplication'
+        - 'PutBucketIntelligentTiering'
+        - 'DeleteBucket'
+        - 'DeleteBucketTagging'
+        - 'DeleteBucketCORS'
+        - 'DeleteBucketLifecycle'
+        - 'DeleteBucketDomain'
+        - 'DeleteBucketOrigin'
+        - 'DeleteBucketInventory'
+        - 'DeleteBucketReplication'
+        - 'DeleteBucketPolicy'
+        - 'DeleteBucketReferer'
+        - 'PostBucketLoggingQuery'
+        - 'DeleteObjectTagging'
+        - 'PutObjectACL'
+        - 'DeleteObject'
+        - 'DeleteMultipleObjects'
+        - 'DeleteBucketEncryption'
+      # 上述 action 需与下列宽 resource 之一同时出现才判 high
+      wildcard_resource_patterns:
+        - '"?resource"?\s*[:=]\s*\[?\s*["'']\*["'']'
+        - '^qcs::cos:ap-[a-z]+:uid/\d+:prefix//\d+/(?:[-\w]+/)*\*$'
+
+    # ── SDK / 代码侧定位信号（识别"服务端正在签发临时密钥"的构造点）──
+    sts_issue_signals:
+      # 命中任一 → 当前文件存在服务端 STS 策略构造，需检查 Resource/Action 宽窄
+      policy_build_keywords:
+        - 'CredentialOptions'
+        - 'CredentialPolicy'
+        - 'CredentialPolicyStatement'
+        - 'GetCredential'
+        - 'GetFederationToken'
+        - 'AssumeRole'
+        - 'qcloud-cos-sts'
+        - 'buildStatement'
+        - 'buildResource'
+      # 用户可控对象 Key 流入 Resource 构造（与上面关键字同文件/同函数 → 风险升高）
+      user_controlled_key_into_resource:
+        - '\b(key|Key|cosKey|fileId|fileName|filePath|path|prefix)\b.*(request|req\.|ctx\.|params|query|body|form|@RequestParam|@PathVariable|GetFileId)'
+        - '(buildResource|Resource\s*[:=])[\s\S]{0,120}\b(key|cosKey|fileId|prefix)\b'
+
+    false_positive_reduction:
+      - "Resource 已收敛到用户/业务前缀（`.../<appid>/<userId>/*` 且 userId 由服务端可信派生）且 Action 为读类时不报"
+      - "临时策略带 cos:prefix / ip / 短有效期 condition 且与对象归属一致时降级或不报"
+      - "仅离线运维脚本、固定内部 Key、不面向用户且不下发给客户端的临时密钥可降级"
+      - "Resource 为具体对象（结尾非 *，如 `.../test.txt`）时按文档为低风险，前期可忽略"
+      - "测试/示例目录（test_/example_/tools/）下的策略构造不报"
+
+  sts_authorization_check:
+    description: "COS/数据万象面向用户接口的 STS 临时授权检查"
+    risk_type: "COS/万象 STS 鉴权缺失"
+    severity: high
+    cloud_product: ["COS", "数据万象 CI"]
+    # branch_level_required=true：判定 STS 防御缺失时，必须以 sink 所在的
+    # if/switch 分支（fast 模式用 ±15 行近似，deep 模式用 ast_functions 范围）
+    # 而非整个函数为单位。仅在函数其它分支出现 STS 关键字不足以反驳该分支的缺失。
+    branch_level_required: true
+    detection_logic:
+      trigger_when_all:
+        - "代码调用 COS/CI 对象操作：putObject/uploadFile/sliceUploadFile/getObject/deleteObject/ciProcess/imageMogr2/ImageProcess/getSignedUrl 等；或构造 logic.cam.sigAndAuth / X-CI-SIGN / GenerateCiKey 等 coscgi→万象内部转发链路"
+        - "所在函数是面向用户的 HTTP/RPC 接口，或对象 Key 来自 request/query/body/path/form/DTO 参数，或已由 coscgi 账号鉴权后继续转发给万象处理"
+        - "Key、fileName、filePath、path、prefix、objectKey 等对象 Key 由用户补充或拼接；或转发链路只携带 uin/ownerUin/ownerAppid/user_info 等账号身份"
+      defense_required_any:
+        - "服务端调用 STS AssumeRole/GetFederationToken 或 qcloud-cos-sts-sdk 生成 tmpSecretId/tmpSecretKey/sessionToken"
+        - "返回/使用 x-cos-security-token、XCosSecurityToken、SessionToken、TmpSecretId、TmpSecretKey 等临时凭证字段；coscgi/CAM 转发场景必须在当前 mode/分支中把 q-token 传给 CAM/万象"
+        - "临时策略 Resource 绑定到 qcs::cos:<region>:uid/<appid>:<bucket>/<userId-or-business-prefix>/*，并限制 action 与有效期"
+        - "后端完全生成对象 Key，且对用户可控部分做白名单、路径归一化、目录穿越拦截与业务归属校验"
+      report_when: "触发条件全部满足，且上下文未发现任一 STS/临时策略/对象 Key 收敛防御；若只做内部签名校验（如 X-CI-SIGN/GenerateCiKey）+ 账号鉴权（uin/ownerUin/ownerAppid），未覆盖临时密钥分支，也应报告"
+    positive_patterns:
+      cos_ci_operations:
+        - '(putObject|uploadFile|sliceUploadFile|deleteObject|deleteMultipleObject|getObject|headObject|getObjectUrl|getSignedUrl|ciProcess|imageMogr2|ImageProcess)\s*\('
+        - '(COSClient|CosS3Client|COS\(|cos\.CosConfig|cos\.NewClient|cos-js-sdk|cos-nodejs-sdk-v5|cos-python-sdk-v5|cos-go-sdk-v5|cos-sdk-v5)'
+        - '(cos\.[a-z0-9-]+\.myqcloud\.com|\.file\.myqcloud\.com|ci\.[a-z0-9-]+\.myqcloud\.com)'
+      internal_forwarding:
+        - '(logic\.cam\.sigAndAuth|ModeOnlyAuth|ownerUin|ownerAppid|q-token|HTTP_X_CI_SECURITY_TOKEN|HTTP_X_COS_SECURITY_TOKEN)'
+        - '(X-CI-SIGN|GenerateCiKey|CIArgs|user_info|coscgi|CosCgi|CI_S3_|pic_process|imageMogr2)'
+      user_controlled_key:
+        - '\b(Key|key|objectKey|cosKey|fileKey|fileName|filename|filePath|path|prefix)\b.*(request|req\.|ctx\.|params|query|body|form|@RequestParam|@PathVariable)'
+        - '(request|req\.|ctx\.|params|query|body|form|@RequestParam|@PathVariable).*\b(Key|key|objectKey|cosKey|fileKey|fileName|filename|filePath|path|prefix)\b'
+    defense_patterns:
+      - '(AssumeRole|GetFederationToken|GetSessionToken|qcloud-cos-sts|STS|TmpSecretId|TmpSecretKey|SessionToken|XCosSecurityToken|x-cos-security-token)'
+      - '(CredentialProvider|BasicSessionCredentials|COSCredentialsProvider|SessionCredential|temporary\s+credential)'
+      - 'qcs::cos:.*:prefix/|qcs::cos:.*\$\{.*(user|uid|uin|tenant|openId|account)'
+      - 'interface_param\[["'']q-token["'']\].*(ModeOnlyAuth|OnlyAuth)|ModeOnlyAuth[\s\S]{0,800}interface_param\[["'']q-token["'']\]'
+    negative_patterns:
+      - '(X-CI-SIGN|GenerateCiKey).*\b(path|fileid|uri|REQUEST_URI)\b'
+      - 'ModeOnlyAuth[\s\S]{0,600}(uin|ownerUin|ownerAppid)[\s\S]{0,600}(resource|qcs::cos)'
+      - 'interface_param\[["'']q-token["'']\].*(ModeAuthSign|ModeOnlySign)'
+    false_positive_reduction:
+      - "仅后台定时任务、离线脚本、内部固定 Key 且不面向用户时不报"
+      - "只读取公开素材且无用户可控 Key 时不报"
+      - "同文件或同调用链存在 STS 临时凭证与按用户/业务前缀收敛的 policy 时不报；只有 permanent SecretId/SecretKey 不算 STS 防御"
+      - "若 `q-token` 只在 `ModeAuthSign/ModeOnlySign` 分支设置，而云上处理或内部转发链路使用 `ModeOnlyAuth` 仅做账号鉴权，应继续报告"
+      - "样例：`qcloud_pic_cgi/plugins/cam_auth/cam_interface.cpp` 中 `logic.cam.sigAndAuth` 的 OnlyAuth 分支只传 `uin/ownerUin/ownerAppid/resource`，不等价于 STS 鉴权"
+
+    # ────────────────────────────────────────────────────────────
+    # 共享信号库：供 pattern_grep.py grep-cloud-resource-flow 与
+    # scan-mode-light.md / scan-mode-fast.md 提示词共同消费。
+    # 修改这里即同步影响三模式检测口径。
+    # ────────────────────────────────────────────────────────────
+    controllable_signals:
+      # sink 关键参数命名集合：参数名落在此集合 → 视为"对象资源描述符"
+      param_names:
+        - 'key'
+        - 'Key'
+        - 'objectKey'
+        - 'cosKey'
+        - 'fileKey'
+        - 'fileName'
+        - 'filename'
+        - 'filePath'
+        - 'filepath'
+        - 'path'
+        - 'prefix'
+        - 'bucket'
+        - 'resource'
+        - 'fileid'
+        - 'file_id'
+        - 'srcUri'
+        - 'destUri'
+      # 外部输入来源标记：与 param_names 同窗口出现 → 视为可控
+      source_markers:
+        - 'HTTP_'
+        - 'REQUEST_'
+        - 'QUERY_STRING'
+        - 'PATH_INFO'
+        - 'parser_cgi_param'
+        - 'http_get_env'
+        - 'getParameter'
+        - 'getHeader'
+        - 'req\.'
+        - 'ctx\.'
+        - 'query\.'
+        - 'body\.'
+        - 'params\.'
+        - '@RequestParam'
+        - '@PathVariable'
+        - '@RequestBody'
+    sts_signals:
+      # 防御关键字：分支内引用任一 → 视为已防御
+      defense_keywords:
+        - 'q-token'
+        - 'q_token'
+        - 'x-cos-security-token'
+        - 'XCosSecurityToken'
+        - 'X_COS_SECURITY_TOKEN'
+        - 'X_CI_SECURITY_TOKEN'
+        - 'AssumeRole'
+        - 'GetFederationToken'
+        - 'GetSessionToken'
+        - 'qcloud-cos-sts'
+        - 'TmpSecretId'
+        - 'TmpSecretKey'
+        - 'SessionToken'
+        - 'sessionToken'
+        - 'CredentialProvider'
+        - 'BasicSessionCredentials'
+      # 配置族正则：分支前后/同文件出现完整族消费 → 视为已防御
+      defense_config_families:
+        - 'cam_tmp_token_auth\.'
+        - 'sts\.'
+        - 'tmp_token\.'
+        - 'temp[_-]?credential'
+        - 'federation_token\.'
+      # Resource scope 收敛模式：临时策略按用户/业务前缀绑定
+      resource_scope_patterns:
+        - 'qcs::cos:[^"'']*:prefix/'
+        - 'qcs::cos:[^"'']*\$\{[^}]*(user|uid|uin|tenant|openId|account|business)'
+        - 'qcs::cos:[^"'']*/(uid|uin|tenant|openId|business)/'
+
+  auth_element_completeness_check:
+    description: "签名材料完整性检查：识别签名仅绑定 time+key+path，而身份/资源字段（ownerUin/sub_uin/ownerAppid/Host/bucket/region）从 X-COS-CI-ARGS / base64(protobuf) / 自定义 header 事后解析的高危模式。"
+    risk_type: "认证要素缺失"
+    severity: high
+    cloud_product: ["COS", "数据万象 CI", "CAM", "自研签名网关"]
+    # branch_level_required=true：与 STS 检查一致，以 sink 所在 if/switch 分支为单位判定。
+    branch_level_required: true
+    detection_logic:
+      trigger_when_all:
+        - "代码定义/调用签名校验函数：CalcSign / GenSign / verifySign / checkSign / sign() / HmacSha256 / MD5Hex / EVP_DigestSign 等；或对自定义 header（X-COS-CI-ARGS / X-CI-SIGN / X-Auth-Sign / Authorization）做哈希/HMAC 校验"
+        - "签名材料（被哈希/HMAC 的 string-to-sign）仅由 time/timestamp/expire/key/path/uri/method 等组合，且未包含任何身份/资源字段（ownerUin/sub_uin/ownerAppid/uin/appid/Host/bucket/region/SecretId）"
+        - "下游 sink（COS/CI/CAM 转发：putObject/getObject/ciProcess/sigAndAuth/X-CI-SIGN/转 myqcloud.com/coscgi）使用了未参与签名的身份或资源字段写入 URL/Host/Header（典型：从 X-COS-CI-ARGS base64 解出 ownerUin、ownerAppid、Host 后直接拼到 cos.<region>.myqcloud.com 或 X-Cos-Owner-Uin header）"
+        - "上述身份/资源字段直接来源于 HTTP 入口（HTTP_/REQUEST_/req./header/getHeader/parser_cgi_param）或上游 base64+protobuf 解析（base64_decode/Base64Decode/ParseFromArray/protobuf::Message::ParseFromString）"
+      defense_required_any:
+        - "string-to-sign 中显式追加 ownerUin / sub_uin / ownerAppid / Host / bucket / region 等身份与资源字段"
+        - "签名头与身份字段绑定校验（如 verify(sign, headers['X-Cos-Owner-Uin'], ...)）"
+        - "服务端在签名验证之前重写 Host / ownerUin 为受信任来源（基于会话 token / STS 凭证派生）"
+        - "调用方完整使用 STS 临时凭证（与 sts_authorization_check 重叠时由 dedup 规则收敛，本规则不再独立报告）"
+      report_when: "前述四条触发条件全部满足，且分支内未发现身份/资源字段加入签名材料；即使函数其它分支或同文件其它位置出现了完整签名，当前分支未引用即继续报告"
+    positive_patterns:
+      signature_funcs:
+        - '(CalcSign|GenSign|GenerateSign|MakeSign|verifySign|checkSign|VerifySignature|signRequest|signString|SignV[123]|HmacSha256|HmacSHA1|HmacMD5|MD5Hex|md5\s*\(|EVP_DigestSign|EVP_DigestVerify)'
+        - '\b(stringToSign|string_to_sign|signedString|signSource|signMaterial|payloadToSign)\b'
+      identity_field_consumption:
+        - '\b(ownerUin|owner_uin|sub_uin|subUin|ownerAppid|owner_appid|appId|appid|uin)\b\s*[=:]\s*'
+        - '(X[-_]?COS[-_]?CI[-_]?ARGS|X[-_]?CI[-_]?ARGS|X[-_]?Cos[-_]?Owner[-_]?Uin|X[-_]?Cos[-_]?Sub[-_]?Uin)'
+        - '(base64_decode|Base64Decode|absl::Base64Unescape)[\s\S]{0,300}(ParseFromArray|ParseFromString|::ParseFrom|protobuf)'
+      sink_after_extraction:
+        - 'cos\.[a-z0-9-]+\.myqcloud\.com|\.file\.myqcloud\.com|ci\.[a-z0-9-]+\.myqcloud\.com'
+        - 'set_header\s*\(\s*[\"\'']Host[\"\'']'
+        - 'AddHeader\s*\(\s*[\"\'']X[-_]?Cos[-_]?Owner[-_]?Uin'
+    defense_patterns:
+      # 「身份字段被纳入签名材料」的标志
+      - '(stringToSign|string_to_sign|signSource|signMaterial)[\s\S]{0,200}(ownerUin|owner_uin|ownerAppid|owner_appid|sub_uin|Host|bucket|region)'
+      - '(append|push_back|operator<<|\+=|fmt\.Sprintf|sprintf|format!?)[\s\S]{0,80}\b(ownerUin|ownerAppid|sub_uin|Host|bucket|region)\b[\s\S]{0,200}(Sign|Hmac|MD5|SHA256|Digest)'
+      - 'verify(Sign|Signature)\s*\([^)]*(ownerUin|ownerAppid|sub_uin|Host)'
+    negative_patterns:
+      # 「身份字段从 base64/protobuf 事后解析」 + 「未进入签名」 的反例
+      - '(ParseFromArray|ParseFromString)[\s\S]{0,400}(ownerUin|owner_uin|ownerAppid|sub_uin|Host)[\s\S]{0,200}(set_header|AddHeader|append.*url|myqcloud\.com)'
+      - '(X[-_]?COS[-_]?CI[-_]?ARGS|X[-_]?CI[-_]?ARGS)[\s\S]{0,400}(base64_decode|Base64Decode)[\s\S]{0,400}(ownerUin|ownerAppid|sub_uin|Host)'
+    false_positive_reduction:
+      - "签名材料确实包含 ownerUin/ownerAppid/Host/bucket/region 之一时不报"
+      - "身份字段仅用于日志/打点/metrics，未被写入下游 URL/Header 时不报"
+      - "Sink 仅出现在测试/示例/工具脚本（test_/example_/tools/）时不报"
+      - "调用方全程使用 STS 凭证 + 资源 scope 收敛时（与 sts_authorization_check 重叠）由 dedup 规则收敛"
+
+    # ────────────────────────────────────────────────────────────
+    # 共享信号库：供 pattern_grep.py grep-cloud-resource-flow（扩展列）
+    # 与 scan-mode-light/fast/deep + logic-scan C3.6 共同消费。
+    # ────────────────────────────────────────────────────────────
+    auth_element_signals:
+      # 出现即可作为「签名材料」候选的字符串构造关键字
+      signed_material_keywords:
+        - 'stringToSign'
+        - 'string_to_sign'
+        - 'signedString'
+        - 'signSource'
+        - 'signMaterial'
+        - 'payloadToSign'
+        - 'sign_src'
+        - 'toSign'
+      # 这些字段必须出现在签名材料中；缺失即触发本规则
+      required_identity_fields:
+        - 'ownerUin'
+        - 'owner_uin'
+        - 'sub_uin'
+        - 'subUin'
+        - 'ownerAppid'
+        - 'owner_appid'
+        - 'appId'
+        - 'appid'
+        - 'Host'
+        - 'host_header'
+        - 'bucket'
+        - 'region'
+      # 签名/校验函数关键字（用于定位 sink 所在分支或所在函数）
+      # 说明：使用「函数级宽窗口」（auth_element_signature_scan_radius，默认 60）扫描；
+      #       既覆盖高层 API（CalcSign 等），也覆盖低层散列原语（md5/sha1/hmac）+
+      #       COS/CI 域内常见命名 token，避免在 *::md5(plainText...) 这类函数级
+      #       签名原语场景下漏报。
+      signature_func_keywords:
+        - 'CalcSign'
+        - 'GenSign'
+        - 'GenerateSign'
+        - 'MakeSign'
+        - 'signRequest'
+        - 'verifySign'
+        - 'checkSign'
+        - 'VerifySignature'
+        - 'HmacSha256'
+        - 'HmacSHA1'
+        - 'HmacMD5'
+        - 'MD5Hex'
+        - 'EVP_DigestSign'
+        - 'EVP_DigestVerify'
+        # ── 低层散列原语（典型自研签名实现） ─────────────────────────
+        - 'Util::md5'
+        - 'Util::sha1'
+        - 'Util::sha256'
+        - 'Util::hmac'
+        - '\bmd5\s*\('
+        - '\bsha1\s*\('
+        - '\bsha256\s*\('
+        - '\bhmac\s*\('
+        - 'MD5_Init'
+        - 'MD5_Update'
+        - 'MD5_Final'
+        - 'SHA1_Init'
+        - 'SHA256_Init'
+        - 'HMAC_Init'
+        # ── COS / CI 自研签名领域 token（出现即视为「签名/校验」上下文） ─
+        - 'plainMd5'
+        - 'authMd5'
+        - 'plainText.append'
+        - 'XCosCiKey'
+        - 'X-COS-CI-KEY'
+        - 'cosCiKey'
+        - 'CI_KEY'
+        - 'inner_key'
+        - 'authPathInfo'
+        - 'authTime'
+      # 身份字段的「事后解析」来源；与 required_identity_fields 同窗口出现 → 视为可控且未签名
+      request_header_sources:
+        - 'X-COS-CI-ARGS'
+        - 'X_COS_CI_ARGS'
+        - 'X-CI-ARGS'
+        - 'X-Cos-Owner-Uin'
+        - 'X-Cos-Sub-Uin'
+        - 'base64_decode'
+        - 'Base64Decode'
+        - 'absl::Base64Unescape'
+        - 'ParseFromArray'
+        - 'ParseFromString'
+        - 'getHeader'
+        - 'parser_cgi_param'
+        - 'http_get_env'
+      # 防御关键字：若分支内出现，则视为「身份字段已被签名」防御已就位
+      defense_keywords:
+        - 'append.*Host'
+        - 'append.*ownerUin'
+        - 'stringToSign.*ownerUin'
+        - 'stringToSign.*Host'
+        - 'sign_src.*owner'
+        - 'verifySign.*Host'
+        - 'HmacSha256.*ownerUin'
+      # 配置族：辅助参考，非分支级判定依据
+      defense_config_families:
+        - 'sign_v[123]_with_identity'
+        - 'cos_sign_full_material'
+        - 'auth_full_binding'
+
+# ============================================================================
+# 三、IMDS / 元数据服务检测
+# ============================================================================
+
+tencent_imds:
+  description: "腾讯云 CVM 元数据服务（IMDS）检测"
+
+  endpoints:
+    - url: "http://metadata.tencentyun.com/latest/meta-data/"
+      description: "腾讯云 CVM 元数据入口"
+    - url: "http://metadata.tencentyun.com/latest/meta-data/cam/security-credentials/"
+      description: "腾讯云临时凭证（CAM 角色）— 最高危"
+    - url: "http://metadata.tencentyun.com/latest/meta-data/instance-id"
+      description: "实例 ID"
+    - url: "http://metadata.tencentyun.com/latest/meta-data/placement/region"
+      description: "实例所在区域"
+    - url: "http://metadata.tencentyun.com/latest/meta-data/network/interfaces/"
+      description: "网络接口信息"
+    - url: "http://metadata.tencentyun.com/latest/user-data"
+      description: "用户自定义数据（可能含初始化脚本/密钥）"
+
+  detection_patterns:
+    - 'metadata\.tencentyun\.com'
+    - 'metadata\.tencentyun\.com/latest/meta-data/cam/security-credentials'
+
+  ssrf_impact: |
+    若 SSRF 可达腾讯云 IMDS（metadata.tencentyun.com），攻击者可：
+    1. 获取 CVM 绑定的 CAM 角色临时凭证（SecretId + SecretKey + Token）
+    2. 利用临时凭证调用腾讯云 API（COS/CDB/CVM 等），权限取决于角色策略
+    3. 获取 user-data 中的初始化脚本，可能含硬编码密钥或 Bootstrap 逻辑
+    severity: critical（SSRF + IMDS = 云凭证泄露）
+
+# ============================================================================
+# 四、CVM（云服务器）安全组检测
+# ============================================================================
+
+cvm_security_group:
+  description: "检测安全组规则中的过度开放"
+
+  dangerous_patterns:
+    - category: 入站规则全开放
+      patterns:
+        - '"CidrBlock"\s*:\s*"0\.0\.0\.0/0"'
+        - '"Ipv6CidrBlock"\s*:\s*"::/0"'
+        - 'cidr_block\s*[:=]\s*[''"]0\.0\.0\.0/0[''"]'
+      severity: high
+      note: "安全组入站规则对 0.0.0.0/0 开放"
+
+    - category: 高危端口对外暴露
+      grep_patterns:
+        - '"PortRange"\s*:\s*"22".*"CidrBlock"\s*:\s*"0\.0\.0\.0/0"'      # SSH
+        - '"PortRange"\s*:\s*"3389".*"CidrBlock"\s*:\s*"0\.0\.0\.0/0"'    # RDP
+        - '"PortRange"\s*:\s*"3306".*"CidrBlock"\s*:\s*"0\.0\.0\.0/0"'    # MySQL
+        - '"PortRange"\s*:\s*"6379".*"CidrBlock"\s*:\s*"0\.0\.0\.0/0"'    # Redis
+        - '"PortRange"\s*:\s*"27017".*"CidrBlock"\s*:\s*"0\.0\.0\.0/0"'   # MongoDB
+        - '"PortRange"\s*:\s*"9200".*"CidrBlock"\s*:\s*"0\.0\.0\.0/0"'    # Elasticsearch
+      severity: critical
+      note: "高危端口（SSH/RDP/DB）对公网开放"
+
+    - category: 全端口开放
+      patterns:
+        - '"PortRange"\s*:\s*"ALL"'
+        - '"PortRange"\s*:\s*"1-65535"'
+      severity: high
+      note: "安全组规则开放全部端口"
+
+# ============================================================================
+# 五、SCF（云函数）安全检测
+# ============================================================================
+
+scf_security:
+  description: "检测腾讯云 SCF 云函数的安全配置"
+
+  patterns:
+    - category: 云函数无认证触发
+      patterns:
+        - '"isIntegratedResponse"\s*:\s*true'
+        - '"authType"\s*:\s*"NONE"'                    # API 网关触发器无认证
+        - '"enableCORS"\s*:\s*true'
+      severity: medium
+      note: "SCF 云函数通过 API 网关触发且未配置认证"
+
+    - category: 环境变量含密钥
+      patterns:
+        - 'Environment.*Variables.*[Ss]ecret'
+        - 'Environment.*Variables.*[Pp]assword'
+        - 'Environment.*Variables.*AKID'
+      severity: high
+      note: "SCF 环境变量中硬编码了敏感凭证"
+
+    - category: VPC 配置缺失
+      absence_of: '"VpcConfig"'
+      note: "SCF 未配置 VPC，运行在公共网络环境中"
+
+# ============================================================================
+# 六、TKE（容器服务）安全检测
+# ============================================================================
+
+tke_security:
+  description: "检测 TKE 容器集群的安全配置"
+
+  patterns:
+    - category: API Server 公网暴露
+      patterns:
+        - '"ClusterExternalEndpoint"\s*:\s*"https?://'
+        - '"ClusterIntranet"\s*:\s*false'
+      severity: high
+      note: "TKE API Server 暴露在公网"
+
+    - category: 特权容器
+      patterns:
+        - '"privileged"\s*:\s*true'
+        - 'securityContext.*privileged.*true'
+      severity: high
+      note: "Pod 以特权模式运行（适用于所有 K8s 环境，TKE 同样适用）"
+
+    - category: ServiceAccount Token 自动挂载
+      absence_of: 'automountServiceAccountToken\s*:\s*false'
+      note: "未禁用 ServiceAccount Token 自动挂载，容器被入侵后可通过 Token 调用 K8s API"
+
+# ============================================================================
+# 七、CDB（云数据库 MySQL）安全检测
+# ============================================================================
+
+cdb_security:
+  description: "检测腾讯云 CDB 数据库的安全配置"
+
+  patterns:
+    - category: 公网访问已开启
+      patterns:
+        - '"WanStatus"\s*:\s*1'
+        - '"WanDomain"\s*:\s*"[^"]*\.sql\.tencentcdb\.com"'
+      severity: high
+      note: "CDB 实例开启了公网访问"
+
+    - category: 数据库连接串泄露
+      patterns:
+        - '\.sql\.tencentcdb\.com'
+        - 'cdb-\w+\.gz\.tencentcdb\.com'
+        - 'cdb-\w+\.bj\.tencentcdb\.com'
+        - 'cdb-\w+\.sh\.tencentcdb\.com'
+      severity: medium
+      note: "代码中硬编码了腾讯云 CDB 连接地址"
+
+# ============================================================================
+# 八、腾讯云凭证检测（补充）
+# ============================================================================
+
+credential_patterns:
+  description: "腾讯云 API 凭证泄露检测"
+
+  patterns:
+    - category: SecretId（AK）
+      patterns:
+        - 'AKID[0-9A-Za-z]{13,20}'
+      severity: critical
+      note: "腾讯云 SecretId 硬编码（前缀 AKID）"
+
+    - category: SecretKey 赋值
+      patterns:
+        - '[Ss]ecret[Kk]ey\s*[:=]\s*[''"][0-9A-Za-z]{32,}[''"]'
+        - 'TENCENTCLOUD_SECRET_KEY\s*[:=]\s*[''"][^''"]+[''"]'
+        - 'SecretKey\s*[:=]\s*[''"][0-9A-Za-z]{32,}[''"]'
+      severity: critical
+      note: "腾讯云 SecretKey 硬编码"
+
+    - category: 临时凭证 Token
+      patterns:
+        - 'TENCENTCLOUD_TOKEN\s*[:=]\s*[''"][^''"]+[''"]'
+        - '[Ss]ession[Tt]oken\s*[:=]\s*[''"][A-Za-z0-9+/=]{50,}[''"]'
+      severity: high
+      note: "腾讯云临时凭证 Token 硬编码"
+
+    - category: SDK 凭证初始化
+      patterns:
+        - 'Credential\s*\(\s*[''"]AKID'                # Python/Go SDK
+        - 'new\s+Credential\s*\(\s*"AKID'             # Java SDK
+        - 'tencentcloud.*Credential.*AKID'
+      severity: critical
+      note: "腾讯云 SDK 直接使用硬编码凭证初始化"
+
+  exclusion_rules:
+    - description: 环境变量引用
+      patterns:
+        - 'os\.environ.*TENCENTCLOUD'
+        - 'process\.env\.TENCENTCLOUD'
+        - 'System\.getenv.*TENCENTCLOUD'
+    - description: 配置占位符
+      values: ['your-secret-key-here', 'xxx', 'placeholder', 'AKID_EXAMPLE']
+
+# ============================================================================
+# 八、凭据/Endpoint 配置消费层空值校验缺失
+# ============================================================================
+# 与 sts_authorization_check（"COS/CI 面向用户接口缺 STS 防御"）正交：
+#   - sts_authorization_check 关注 sink 防御缺失（业务接口未走临时凭据路径）
+#   - cloud_credential_config_check 关注配置消费层的空值/占位符校验缺失
+#     即外部配置（ini/yaml/env/configmap/secret/参数中心）中关键 endpoint 与凭据
+#     字段被代码直接读取后未做非空判断，一旦部署期未覆盖会导致：
+#       a) HMAC/签名计算退化为可猜测/常量签名（跨租户重放）
+#       b) HTTP Host 头/URL 拼出空值，请求被中间代理路由到非预期后端
+#       c) 鉴权后端地址为空 → 鉴权静默失败/被误判通过（fail-open）
+#       d) STS AssumeRole 请求拼出无效 endpoint，凭据获取异常被吞导致降级
+#
+# 本规则按"语义角色"识别字段，不绑定特定项目的字段名或配置宏，适用于：
+#   - C/C++（任意 Config 单例 / 宏 / map 访问）
+#   - Go（viper / cfg / os.Getenv）
+#   - Java（@Value / Environment / System.getProperty）
+#   - Python（os.environ / settings / pydantic BaseSettings）
+#   - Node.js（process.env / config / nconf）
+# 引用方：red-team Q2（异常路径/隐式降级）/ logic-scan C7.6 云安全
+# CWE-1188（不安全初始默认）/ CWE-453（错误初始化）/ CWE-665（不正确初始化）
+
+cloud_credential_config_check:
+  description: "云服务凭据/Endpoint 配置项被消费前缺少空值与占位符校验，导致部署期遗漏静默退化"
+  risk_type: "Insecure default config / missing credential validation"
+  severity: medium      # 与显式降级开关或 HMAC 退化链式时升 high
+  cloud_product: ["*"]  # 通用，覆盖腾讯云/AWS/GCP/Azure/私有云
+  branch_level_required: false   # 配置消费点为行级判定
+
+  detection_logic:
+    trigger_when_all:
+      - "代码通过通用配置访问 API（见 config_access_patterns）读取一个字段名命中 sensitive_role_keywords 的配置项"
+      - "读取后未经任何非空/占位符校验，直接用于 sensitive_consumers 中的下游用途"
+    defense_required_any:
+      - "调用前后 ±20 行存在空值检查并 return/throw/continue/exit（见 defense_patterns）"
+      - "存在 placeholder/默认值黑名单校验（见 placeholder_blacklist）"
+      - "启动期 fail-fast 校验（main/Init/Bootstrap/PostConstruct 阶段断言非空，缺失则进程退出）"
+      - "框架层统一约束：@NotEmpty / @ConfigRequired / Validator / pydantic Field(min_length>0) 等装饰器/约束"
+    report_when: "配置键命中 sensitive_role_keywords，下游用途命中 sensitive_consumers，且消费上下文无任一 defense"
+
+  # ────────────────────────────────────────────────────────────
+  # 1) 语义角色：按字段命名识别"敏感配置"，不绑定项目专有键名
+  # ────────────────────────────────────────────────────────────
+  sensitive_role_keywords:
+    auth_endpoint:
+      description: "鉴权/授权后端地址（CAM/IAM/Auth Service）"
+      patterns:
+        # 单词形式：auth.host / cam.host / iam.endpoint
+        - '\b(auth|cam|iam|sso|oauth|oidc|rbac|authz)[._-]?(host|endpoint|url|uri|server|addr|address)\b'
+        # 组合形式：cam_auth.host / iam_auth_url / sso_oauth.endpoint
+        - '\b(auth|cam|iam|sso|oauth|oidc|rbac|authz)[._-]?(auth|cam|iam|service|api)?[._-]?(host|endpoint|url|uri|server|addr|address)\b'
+        # 后缀形式：xxx_auth_host / xxx-cam-endpoint（任意前缀 + auth/cam/... + endpoint 词）
+        - '[\w]*[._-](auth|cam|iam|sso|oauth|oidc|authz)[._-](host|endpoint|url|uri|server|addr|address)\b'
+    federation_endpoint:
+      description: "STS/AssumeRole/联合身份服务地址"
+      patterns:
+        # 允许版本/区域后缀：sts_host_v3 / sts_endpoint_cn / federation_url_v2
+        - '\b(sts|assume[._-]?role|federation|federated)[._-]?(host|endpoint|url|uri|server|port)([._-](v\d+|cn|intl|prod|dev))?\b'
+        - '\b(security[._-]?token[._-]?service)\b'
+    storage_endpoint:
+      description: "对象存储/COS/S3/OSS/Blob 服务端点（仅在用作签名/转发目标时敏感）"
+      patterns:
+        - '\b(cos|s3|oss|blob|gcs|minio)[._-]?(host|endpoint|url|region|domain)([._-](v\d+|cn|intl))?\b'
+    permanent_credentials:
+      description: "长期凭据：SecretId/AccessKey/SecretKey/SignKey 等"
+      patterns:
+        # 用 (?:^|[\W_]) 替代 \b，避免 _ 被视为单词内部导致漏匹配（如 role_secret_id）
+        - '(?:^|[^A-Za-z0-9])(secret[._-]?id|access[._-]?key[._-]?id|client[._-]?id)\b'
+        - '(?:^|[^A-Za-z0-9])(secret[._-]?key|access[._-]?secret|client[._-]?secret|api[._-]?secret|app[._-]?secret)\b'
+        - '(?:^|[^A-Za-z0-9])(sign[._-]?key|hmac[._-]?key|signing[._-]?key|business[._-]?secret|tmp[._-]?secret[._-]?(id|key))\b'
+        # 短缩写需要更严格上下文（避免 ak/sk 误匹配普通变量名）
+        - '\b(AK|SK|AKI|AKID)\b'
+    role_assumption:
+      description: "角色扮演相关：role_name/role_arn/session_name/duration"
+      patterns:
+        - '\b(role[._-]?(name|arn|session[._-]?name|duration[._-]?seconds))\b'
+    callback_target:
+      description: "回调/Webhook URL（空值时可能被默认路由到外部）"
+      patterns:
+        - '\b(callback|webhook|notify)[._-]?(url|host|endpoint)\b'
+
+  # ────────────────────────────────────────────────────────────
+  # 2) 通用配置访问 API：跨语言识别"读取配置"动作
+  # ────────────────────────────────────────────────────────────
+  config_access_patterns:
+    cpp:
+      # 任意 *_CONFIG[...] / *_CONFIG(...) / Config::get / ConfigInstance().Get / Singleton<Config>::Instance()->Get
+      # 形式 1：*_CONFIG["literal"]
+      - '\b[A-Z][A-Z_]*_CONFIG\s*\[\s*["'']'
+      # 形式 2：*_CONFIG(variable, "literal") 或 *_CONFIG(literal, ...) — 多参带 section/key
+      - '\b[A-Z][A-Z_]*_CONFIG\s*\(\s*[\w"'']'
+      - '\b[A-Za-z_][A-Za-z0-9_]*Config(Instance|Manager|Singleton)?\s*\(\s*\)\s*[->\.](Get|Read|Lookup)'
+      - '\bConfig::(Get|Lookup|Read)\s*\('
+    go:
+      - '\bviper\.(GetString|GetInt|Get)\s*\('
+      - '\bos\.Getenv\s*\('
+      - '\b(cfg|conf|config)\.(Get(String|Int)?|Lookup)\s*\('
+    java:
+      - '@Value\s*\(\s*["'']\$\{'
+      - '\b(env|environment)\.(getProperty|getRequired)'
+      - '\bSystem\.(getenv|getProperty)\s*\('
+      - '\b@ConfigurationProperties'
+    python:
+      - '\bos\.environ\s*[\[\.]\s*get|\bos\.environ\['
+      - '\bos\.getenv\s*\('
+      - '\bsettings\.[A-Z][A-Z0-9_]+'
+      - '\b(config|cfg|conf)\.(get|getstr|getint)\s*\('
+    nodejs:
+      - '\bprocess\.env\.[A-Z]'
+      - '\b(config|nconf|convict)\.get\s*\('
+    rust:
+      - '\bstd::env::var\s*\('
+      - '\b(config|cfg)\.(get|get_str)\s*\('
+
+  # ────────────────────────────────────────────────────────────
+  # 3) 敏感下游用途：读出后必须经校验才能流入这些 sink
+  # ────────────────────────────────────────────────────────────
+  sensitive_consumers:
+    network_request:
+      description: "拼入 URL / 设置为 Host 头 / 作为 HTTP 请求目标"
+      patterns:
+        - '(_host|_endpoint|_uri|_url|_addr)\s*='
+        - '\b(AddHeader|set_header|Header\.Set|setRequestHeader|setHeader)\s*\(\s*["'']Host["'']'
+        - '\b(http|https)://["''\s]*\+|\bfmt\.Sprintf\([^)]*https?://'
+    signing_input:
+      description: "作为 HMAC/签名密钥或签名材料输入"
+      patterns:
+        - '\b(HMAC|hmac|hmac_sha\d+|Hmac|Mac\.getInstance)\s*\([^)]*\b(secret|key)\b'
+        - '\b(sign|Sign|MakeSign|GenSign|computeSignature)\s*\([^)]*\b(secret|key|business_secret)\b'
+        - '\b(md5|sha\d+)\s*\([^)]*\+\s*\b(secret|key)\b'
+    sdk_client_init:
+      description: "传入 SDK 客户端构造，缺失时 SDK 内部默认值或 panic 难以审计"
+      patterns:
+        - '\bnew\s+(Credential|Credentials|BasicCredentials|SessionCredentials)\s*\('
+        - '\b(NewClient|new_client|create_client)\s*\([^)]*\b(secret|key|token|endpoint)\b'
+    sts_request_field:
+      description: "塞入 AssumeRole/GetFederationToken 请求字段"
+      patterns:
+        - '\bparams\[\s*["''](RoleArn|RoleSessionName|DurationSeconds|RoleName)["'']\]'
+
+  # ────────────────────────────────────────────────────────────
+  # 4) 防御信号：以下任一出现在 ±20 行窗口即视为已防御
+  # ────────────────────────────────────────────────────────────
+  defense_patterns:
+    null_or_empty_check:
+      - '\.empty\(\)\s*\)\s*(return|throw|continue|exit|abort|return\s+\w+)'
+      - '\b(IsEmpty|isBlank|isEmpty|str_isempty)\s*\([^)]+\)\s*\)\s*(return|throw)'
+      - '(strlen|len|size)\s*\([^)]+\)\s*(==\s*0|<\s*1|<=\s*0)'
+      - '\b(nil|NULL|None|null|undefined)\s*(==|!=|===|!==)\s*\w+'
+      - 'len\s*\(\s*\w+\s*\)\s*==\s*0'
+    fail_fast_init:
+      - '(assert|require|MUST|panic|log\.Fatal|throw\s+new|raise\s+\w+Error)\s*\([^)]*\.(empty|isEmpty|isBlank)'
+      - '@(NotEmpty|NotBlank|NotNull|Required|ConfigRequired)'
+      - 'pydantic.*Field\s*\([^)]*min_length\s*=\s*[1-9]'
+    placeholder_blacklist:
+      values:
+        - 'your-secret-key-here'
+        - 'your-access-key'
+        - 'placeholder'
+        - 'CHANGEME'
+        - 'CHANGE_ME'
+        - 'TODO'
+        - 'FIXME'
+        - 'AKID_EXAMPLE'
+        - 'AKIDxxxxxxx'
+        - 'example'
+        - 'demo'
+        - 'test-key'
+
+  # ────────────────────────────────────────────────────────────
+  # 5) 反模式实例（语义级，不绑定具体项目）
+  # ────────────────────────────────────────────────────────────
+  anti_pattern_examples:
+    - id: AP-1
+      title: "构造函数中直接读 endpoint/secret 赋值给成员"
+      pseudo: |
+        Class::Class() {
+            _host = CONFIG["sts.host"];        // 命中 sensitive_role_keywords.federation_endpoint
+            _secret_key = CONFIG("account", "role_secret_key");  // 命中 permanent_credentials
+            _port = atoi(CONFIG["sts.port"].c_str());
+            // ❌ 全程无空值校验，部署期 .ini 留空 → endpoint/secret 全为空
+        }
+      detection_signal: "config_access + sensitive_role_keywords + 紧邻成员赋值，±20 行无 defense"
+
+    - id: AP-2
+      title: "读出后立即写入 HTTP Host 头/URL"
+      pseudo: |
+        request.AddHeader("Host", CONFIG["auth.host"]);   // 空值 → 请求被中间代理乱路由
+      detection_signal: "auth_endpoint 关键字 + AddHeader/Host 同行"
+
+    - id: AP-3
+      title: "签名计算输入直接来自配置且无校验"
+      pseudo: |
+        sign = hmac_sha1(CONFIG["business_secret"], payload);  // 空 secret → 攻击者可预测/重放
+      detection_signal: "permanent_credentials 关键字 + HMAC/sign 同表达式"
+
+    - id: AP-4
+      title: "SDK Credential 构造参数来源未校验"
+      pseudo: |
+        client := NewClient(viper.GetString("ak"), viper.GetString("sk"))  // 空凭据 → SDK 走匿名/默认凭据链
+      detection_signal: "permanent_credentials 关键字 + NewClient/Credential 调用"
+
+  # ────────────────────────────────────────────────────────────
+  # 6) 严重度放大：与其他缺陷叠加时升级
+  # ────────────────────────────────────────────────────────────
+  severity_amplification:
+    rules:
+      - "+ 显式降级开关（auth.enable=='false' 等） → high（认证彻底失效）"
+      - "+ 签名密钥为空导致 HMAC 退化为常量签名 → high（跨租户/跨账号重放）"
+      - "+ Host 头空值且下游有内部信任 → high（SSRF 元数据 / 走错后端）"
+      - "+ STS 凭据为空触发 SDK 匿名凭据链回退 → high（特权静默扩大）"
+      - "+ 同时存在 fail-open 错误处理 → 缺陷不可观测，severity +1"
+
+  # ────────────────────────────────────────────────────────────
+  # 7) 误报抑制
+  # ────────────────────────────────────────────────────────────
+  false_positive_reduction:
+    - "测试目录 / fixtures / examples / mock 下的占位空值不报"
+    - "DEBUG/开发模式分支显式接受空值（if !prod && key.empty()）不报"
+    - "字段虽命中关键字但实际仅用于日志/metric label，不流入 sensitive_consumers，不报"
+    - "框架层有统一非空校验装饰器（@NotEmpty / pydantic 约束 / @ConfigurationProperties + JSR-303）覆盖该字段，可豁免"
+    - "外部配置中心强制契约（如 Apollo/Nacos schema 校验）已在启动期失败时进程退出，可豁免"
+    - "字段值在编译期被 const 注入（非运行时配置）不报"
+
+  # ────────────────────────────────────────────────────────────
+  # 8) 报告字段建议（标准化输出，便于跨项目聚合统计）
+  # ────────────────────────────────────────────────────────────
+  reporting_schema:
+    required_fields:
+      - "config_key（命中的字段名）"
+      - "semantic_role（auth_endpoint / federation_endpoint / permanent_credentials / ...）"
+      - "consumer_type（network_request / signing_input / sdk_client_init / sts_request_field）"
+      - "consume_location（file:line）"
+      - "missing_defense（null_check / fail_fast / placeholder_blacklist 中缺失哪些）"
+      - "amplifier（如检出叠加缺陷，列出 amplification 规则）"

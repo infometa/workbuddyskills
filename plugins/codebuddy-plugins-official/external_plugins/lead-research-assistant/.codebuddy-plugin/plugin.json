@@ -1,0 +1,5 @@
+{
+  "name": "lead-research-assistant",
+  "description": "通过分析您的产品、搜索目标公司并提供可行的联系策略，识别和筛选高质量潜在客户。",
+  "license": "未声明"
+}

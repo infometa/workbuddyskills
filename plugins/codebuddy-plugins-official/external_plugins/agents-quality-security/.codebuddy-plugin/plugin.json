@@ -1,0 +1,31 @@
+{
+  "name": "agents-quality-security",
+  "version": "1.0.0",
+  "description": "Agents for code review, security audits, debugging, and quality assurance",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "quality-security",
+    "api-security-audit",
+    "architect-review",
+    "code-reviewer",
+    "command-expert",
+    "debugger",
+    "dx-optimizer",
+    "error-detective",
+    "incident-responder",
+    "mcp-security-auditor",
+    "mcp-server-architect",
+    "mcp-testing-engineer",
+    "performance-engineer",
+    "review-agent",
+    "security-auditor",
+    "test-automator"
+  ]
+}

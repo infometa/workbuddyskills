@@ -1,0 +1,14 @@
+{
+  "name": "lua-lsp",
+  "version": "1.0.0",
+  "description": "为 Lua 语言提供代码智能和诊断的语言服务器",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "lua",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

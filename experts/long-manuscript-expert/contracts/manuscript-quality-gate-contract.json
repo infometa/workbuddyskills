@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "long_manuscript.manuscript_quality_gate_contract.v1",
+  "contractId": "long-manuscript-quality-gate",
+  "nativeOnly": true,
+  "runtimeDependencyRequired": false,
+  "enforcementTopology": {
+    "repositoryValidatorModule": "lib/manuscript-quality-gate.mjs",
+    "repositorySupportingModules": ["lib/manuscript-quality-evidence-alignment.mjs"],
+    "validatorScope": "workspace_root_review_only",
+    "validatorIncludedInProductZip": false,
+    "schemaIsNotAnExecutableValidator": true,
+    "hostExecutionProven": false,
+    "crossFieldEqualityEnforcement": "repository_validator_only"
+  },
+  "qualityReportSchemaRef": "schemas/manuscript-quality-report-v1.schema.json",
+  "claimEvidenceContractRef": "contracts/claim-evidence-coverage-contract.json",
+  "requirementTraceabilityRequired": true,
+  "requirementAnchorsMustBelongToQualityScope": true,
+  "qualityScopeAnchorsMustBelongToClaimEvidenceMapKnownAnchors": true,
+  "revisionArtifactBindingRequired": true,
+  "outcomes": ["pass", "weak_pass", "fail"],
+  "passRequires": ["four_green_gates", "covered_critical_requirements", "critical_claims_supported_and_freshness_not_applicable", "each_score_at_least_12", "total_score_at_least_60"],
+  "qualityAssessmentIsFinalApproval": false,
+  "externalWriteForbidden": true,
+  "cannotProve": [
+    "semantic quality",
+    "fact truth",
+    "source license",
+    "human approval"
+  ]
+}

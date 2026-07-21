@@ -1,0 +1,23 @@
+{
+  "name": "claude-hud",
+  "description": "Real-time statusline HUD for Claude Code - displays context usage, tool activity, agent tracking, and todo progress",
+  "version": "1.0.0",
+  "author": {
+    "name": "Build With Claude",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "homepage": "https://buildwithclaude.com",
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "hud",
+    "monitoring",
+    "statusline",
+    "context",
+    "tools",
+    "agents",
+    "todos",
+    "claude-code"
+  ],
+  "commands": "${CLAUDE_PLUGIN_ROOT}/commands"
+}

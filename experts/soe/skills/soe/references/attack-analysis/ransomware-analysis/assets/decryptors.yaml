@@ -1,0 +1,51 @@
+# 解密工具库
+# 记录已知的勒索病毒解密工具
+
+version: "1.0"
+last_updated: "2025-07"
+
+decryptors:
+  - name: "Rakhni Decryptor (Kaspersky)"
+    families: ["Rakhni", "Agent.iih", "Aura", "Autoit", "Pletok", "Rotor", "Lamer", "Cryptokluchen", "Cryakl", "Democry", "Fonix"]
+    source: "Kaspersky"
+    url: "https://noransom.kaspersky.com/"
+    notes: "支持多个早期勒索家族的解密"
+
+  - name: "STOP/Djvu Decryptor (Emsisoft)"
+    families: ["STOP"]
+    source: "Emsisoft + NoMoreRansom"
+    url: "https://www.emsisoft.com/ransomware-decryption-tools/stop-djvu"
+    notes: "仅能解密使用离线密钥加密的文件，在线密钥加密的文件无法解密"
+
+  - name: "Conti Decryptor (InterviewingAlan)"
+    families: ["Conti"]
+    source: "InterviewingAlan (leaked builder)"
+    url: "见 NoMoreRansom"
+    notes: "基于泄露的 Conti 构建器生成，仅对部分变体有效"
+
+  - name: "Akira Decryptor (Avast)"
+    families: ["Akira"]
+    source: "Avast"
+    url: "https://www.avast.com/ransomware-decryption-tools"
+    notes: "仅对部分 Akira 变体（使用特定密钥）有效"
+
+  - name: "BianLian Decryptor (Avast)"
+    families: ["BianLian"]
+    source: "Avast"
+    url: "https://www.avast.com/ransomware-decryption-tools"
+    notes: "BianLian 转向纯数据勒索后，加密器已较少使用"
+
+  - name: "Trend Micro Ransomware Decryptor"
+    families: ["Generic"]
+    source: "Trend Micro"
+    url: "https://www.trendmicro.com/en_us/analysisF/ransomware.html"
+    notes: "通用解密工具集合，支持多种家族"
+
+# 无已知解密工具的活跃家族（2025）
+no_decryptor_available:
+  - "LockBit"
+  - "BlackCat/ALPHV"
+  - "Phobos"
+  - "Royal/BlackSuit"
+  - "Play"
+  - "Rhysida"

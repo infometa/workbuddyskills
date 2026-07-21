@@ -1,0 +1,21 @@
+{
+  "name": "payload",
+  "version": "0.0.1",
+  "description": "为 Payload 开发提供全面指导的 Claude Code 技能，包含 TypeScript 模式、字段配置、钩子、访问控制和 API 示例。",
+  "author": {
+    "name": "Payload",
+    "email": "info@payloadcms.com",
+    "url": "https://payloadcms.com"
+  },
+  "homepage": "https://github.com/payloadcms/payload",
+  "repository": "https://github.com/payloadcms/payload",
+  "license": "MIT",
+  "keywords": [
+    "payload",
+    "cms",
+    "payload-cms",
+    "nextjs",
+    "typescript",
+    "headless-cms"
+  ]
+}

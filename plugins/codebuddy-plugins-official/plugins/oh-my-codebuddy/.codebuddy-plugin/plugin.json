@@ -1,0 +1,14 @@
+{
+  "name": "oh-my-codebuddy",
+  "description": "完整的 OMC (Oh My CodeBuddy) 插件，包含 agents、commands、skills、hooks、tools 和 MCP servers。提供多代理编排、深度研究、代码分析等功能。",
+  "author": {
+    "name": "CodeBuddy Team",
+    "url": "https://cnb.cool/codebuddy"
+  },
+  "repository": "https://cnb.cool/codebuddy/marketplace",
+  "homepage": {
+    "url": "https://cnb.cool/codebuddy/marketplace",
+    "type": "git"
+  },
+  "license": "MIT"
+}

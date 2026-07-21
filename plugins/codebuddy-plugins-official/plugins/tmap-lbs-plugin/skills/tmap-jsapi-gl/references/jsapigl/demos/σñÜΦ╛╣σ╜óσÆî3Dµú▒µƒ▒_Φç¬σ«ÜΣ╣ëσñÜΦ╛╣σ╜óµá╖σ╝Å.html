@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义多边形样式</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #buttonContainer {
+        position: absolute;
+        left: 30px;
+        top: 30px;
+        z-index: 9999;
+    }
+
+    #buttonContainer input {
+        background: #fff;
+        padding: 10px;
+        width: 120xp;
+        outline-style: none;
+        margin-right: 10px;
+        border-radius: 10px;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="buttonContainer">
+        <input type="button" onclick="setStyle('styleOne')" value="设置样式1">
+        <input type="button" onclick="setStyle('styleTwo')" value="设置样式2">
+    </div>
+    <div id="mapContainer"></div>
+</body>
+
+</html>
+<script>
+    var map = null;
+    var polygon = null;
+    function initMap() {
+      var center = new TMap.LatLng(40.040452, 116.273486); // 设置中心点坐标
+      // 初始化地图
+      map = new TMap.Map('mapContainer', {
+        center: center,
+        zoom: 16,
+      });
+      var path = [
+        // 多边形的位置信息
+        new TMap.LatLng(40.041117253378246, 116.2722415837743),
+        new TMap.LatLng(40.03942536171407, 116.2726277820093),
+        new TMap.LatLng(40.03970460886076, 116.27483769345417),
+        new TMap.LatLng(40.041404706498625, 116.27443003983899),
+      ];
+      // 初始化polygon
+      polygon = new TMap.MultiPolygon({
+        id: 'polygon-layer', // 图层id
+        map: map, // 显示多边形图层的底图
+        styles: {
+          // 多边形的相关样式
+          polygon: new TMap.PolygonStyle({
+            color: 'rgba(0,125,255,0.5)', // 面填充色
+            showBorder: false, // 是否显示拔起面的边线
+            // 'borderWidth':20,
+            borderColor: '#FF0000', // 边线颜色
+          }),
+        },
+        geometries: [
+          {
+            id: 'polygon', // 多边形图形数据的标志信息
+            styleId: 'polygon', // 样式id
+            paths: path, // 多边形的位置信息
+            properties: {
+              // 多边形的属性数据
+              title: 'polygon',
+            },
+          },
+        ],
+      });
+    }
+    function setStyle(type) {
+      switch (type) {
+        case 'styleOne':
+          polygon.setStyles({
+            polygon: new TMap.PolygonStyle({
+              color: 'rgba(0,125,255,0.5)',
+              showBorder: false,
+              borderColor: '#999',
+            }),
+          });
+          break;
+        case 'styleTwo':
+          polygon.setStyles({
+            polygon: new TMap.PolygonStyle({
+              color: '#FF00FF',
+              showBorder: false,
+              borderColor: 'rgba(0,255,0,0.4)',
+            }),
+          });
+          break;
+        default:
+      }
+    }
+</script>

@@ -1,0 +1,33 @@
+{
+  "name": "commands-project-task-management",
+  "version": "1.0.0",
+  "description": "Commands for task management and project tracking",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "project-task-management",
+    "add-package",
+    "create-command",
+    "create-feature",
+    "create-jtbd",
+    "create-prd",
+    "create-prp",
+    "init-project",
+    "milestone-tracker",
+    "pac-configure",
+    "pac-create-epic",
+    "pac-create-ticket",
+    "pac-update-status",
+    "pac-validate",
+    "project-health-check",
+    "project-timeline-simulator",
+    "project-to-linear",
+    "todo"
+  ]
+}

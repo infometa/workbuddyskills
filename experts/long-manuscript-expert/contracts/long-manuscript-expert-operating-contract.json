@@ -1,0 +1,994 @@
+{
+  "schemaVersion": "1.0",
+  "lebaoConsentBoundary": {
+    "contractRef": "contracts/lebao-consent-contract.json",
+    "schemaRef": "schemas/lebao-consent-v1.schema.json",
+    "fixtureRef": "fixtures/behavior/r8-lebao-consent-scenarios.json",
+    "automaticContinuedUseIntent": "record_only",
+    "noValidExplicitConsentDecision": "deny_offer_claim_steering_profile_write",
+    "validPackageConsentDecision": "record_only_pending_service_verification",
+    "protectedActionAllowedByPackage": false,
+    "externalWriteAllowed": false,
+    "serviceEnforcementObserved": false
+  },
+  "canonicalClosedLoop": {
+    "contractRef": "contracts/closed-loop-state-contract.json",
+    "schemaRef": "schemas/closed-loop-state-record-v1.schema.json",
+    "fixtureRef": "fixtures/behavior/r8-closed-loop-state-scenarios.json",
+    "transitionAuthority": "canonical_contract_only",
+    "hostExecutionProven": false,
+    "listingVerified": false,
+    "sameBindingRuntimeVerified": false,
+    "serviceVerifierObserved": false,
+    "closedLoopVerifiedClaimed": false
+  },
+  "taskCapabilityRouting": {
+    "contractRef": "contracts/task-capability-routing-contract.json",
+    "schemaRef": "schemas/task-capability-route-v1.schema.json",
+    "fixtureRef": "fixtures/behavior/r8-task-capability-routing-scenarios.json",
+    "routeBy": ["taskClass", "requiredCapabilities"],
+    "namedModelOrProviderAllowed": false,
+    "externalCapabilityRequiresHostReceipt": true,
+    "hostExecutionProven": false
+  },
+  "routeTrustChain": {
+    "contractRef": "contracts/route-trust-chain-contract.json",
+    "schemaRef": "schemas/route-trust-chain-v1.schema.json",
+    "fixtureRef": "fixtures/behavior/r8-h2-route-trust-chain-scenarios.json",
+    "routeProfileConflictDecision": "fail_closed_zero_credit",
+    "externalGateStatus": "blocked_external"
+  },
+  "trustedAttributionProjection": {
+    "contractRef": "contracts/trusted-attribution-projection-contract.json",
+    "schemaRef": "schemas/trusted-attribution-projection-v3.schema.json",
+    "fixtureRef": "fixtures/behavior/r8-h2-attribution-trust-scenarios.json",
+    "trustedSourceLabelAloneAccepted": false,
+    "externalGateStatus": "blocked_external"
+  },
+  "lebaoClaimProtocolV2": {
+    "contractRef": "contracts/lebao-claim-protocol-v2-contract.json",
+    "schemaRef": "schemas/lebao-claim-protocol-v2.schema.json",
+    "fixtureRef": "fixtures/behavior/r8-h2-lebao-claim-protocol-v2-scenarios.json",
+    "requiredSignedFieldCount": 32,
+    "packageDecision": "record_only_pending_service_verification",
+    "externalGateStatus": "blocked_external"
+  },
+  "releaseControlEvidence": {
+    "contractRef": "contracts/release-control-evidence-contract.json",
+    "schemaRef": "schemas/release-control-evidence-v2.schema.json",
+    "fixtureRef": "fixtures/behavior/r8-h2-release-control-scenarios.json",
+    "privilegedExecutorIncluded": false,
+    "externalGateStatus": "blocked_external"
+  },
+  "contractId": "long-manuscript-expert-operating-contract",
+  "displayNameZh": "长文档手稿专家",
+  "displayNameEn": "Long Manuscript Expert",
+  "packageName": "long-manuscript-expert",
+  "version": "26.7.18",
+  "releaseTarget": {
+    "targetVersion": "26.7.18",
+    "preparedAt": "2026-07-17T22:30:00+08:00",
+    "previousListedPackageSnapshotVersion": "26.7.5",
+    "sourceHistoryStatus": "source_history_unavailable_official_install_snapshot_seed",
+    "candidateSurface": "review_package",
+    "listedRuntimeReverifyRequired": true,
+    "naturalProductCreditRequiresStrictListedRows": true
+  },
+  "distributionSurface": {
+    "target": "workbuddy_expert_center",
+    "targetMarketplace": "experts",
+    "targetDisplayNameZh": "长文档手稿专家",
+    "submissionArtifactBoundary": "Test runs, review gates, audit outputs, and process orchestration evidence are external to the upload artifact."
+  },
+  "pluginManifestPolicy": {
+    "standardFieldOnly": true,
+    "codebuddyWorkbuddyParityRequired": true,
+    "manualDualWriteForbidden": true,
+    "canonicalSource": ".codebuddy-plugin/plugin.json",
+    "generatedMirror": ".workbuddy-plugin/plugin.json",
+    "stageGeneration": "tools/build-review-package.mjs reads the canonical plugin manifest and injects the WorkBuddy mirror into the deterministic in-memory product ZIP before validation and writing; no mutable stage directory is created.",
+    "extendedRuntimeContractsLiveIn": [
+      "contracts/execution-topology-contract.json",
+      "contracts/long-manuscript-expert-operating-contract.json",
+      "contracts/no-connector-action-contract.json",
+      "contracts/manuscript-quality-gate-contract.json",
+      "contracts/claim-evidence-coverage-contract.json",
+      "contracts/closed-loop-state-contract.json",
+      "contracts/task-capability-routing-contract.json",
+      "contracts/route-trust-chain-contract.json",
+      "contracts/trusted-attribution-projection-contract.json",
+      "contracts/lebao-claim-protocol-v2-contract.json",
+      "contracts/release-control-evidence-contract.json",
+      "contracts/service-side-closure-report.schema.json",
+      "scene-pack.json",
+      "ship-manifest.json"
+    ],
+    "reviewRationale": "plugin.json is intentionally limited to WorkBuddy standard display and loading fields; route signatures, service closure, lebao receipt, and intelligent-ops contracts live in dedicated package contracts."
+  },
+  "executionTopology": {
+    "contractRef": "contracts/execution-topology-contract.json",
+    "packageRuntimeMode": "declarative_contract_and_agent_instruction",
+    "repositoryValidatorRoot": "lib",
+    "repositoryValidatorsIncludedInProductZip": false,
+    "schemasAreStructuralContractsNotExecutors": true,
+    "hostExecutionObserved": false,
+    "externalHostReceiptRequiredForRuntimeClaim": true
+  },
+  "hostCompatibility": {
+    "supportedHosts": [
+      {
+        "hostType": "WORKBUDDY",
+        "channel": "workbuddy_cn",
+        "productTrack": "domestic",
+        "primaryLanguage": "zh"
+      },
+      {
+        "hostType": "WORKBUDDY_AI",
+        "channel": "workbuddy_ai",
+        "productTrack": "international",
+        "primaryLanguage": "en"
+      }
+    ],
+    "responseLanguagePolicy": {
+      "defaultByHostType": {
+        "WORKBUDDY": "zh-Hans",
+        "WORKBUDDY_AI": "en"
+      },
+      "userInputLanguagePriority": true,
+      "mirrorExplicitUserLanguage": true,
+      "chineseWhenPromptContainsChinese": true,
+      "englishWhenPromptIsPrimarilyEnglish": true,
+      "defaultWhenUserLanguageAmbiguousByHostType": {
+        "WORKBUDDY": "zh-Hans",
+        "WORKBUDDY_AI": "en"
+      },
+      "bilingualOnlyOnExplicitRequest": true,
+      "workbuddyAiChinesePromptMustStayChinese": true
+    },
+    "listedProductSignature": {
+      "productId": "long-manuscript-expert",
+      "expertEntryId": "long-manuscript-expert",
+      "channelTrack": "long_manuscript",
+      "entrySurface": "workbuddy_expert_center"
+    },
+    "sharedProductSignature": {
+      "productId": "long-manuscript-expert",
+      "serviceProductId": "workbuddy_long_manuscript_expert",
+      "expertEntryId": "long-manuscript-expert",
+      "packageName": "long-manuscript-expert",
+      "channelTrack": "long_manuscript",
+      "packageVersion": "26.7.18",
+      "packCode": "fbss.long_manuscript.v1",
+      "servicePackCode": "fbss.long_manuscript.v1",
+      "scenePackId": "long-manuscript",
+      "routeCode": "route.long_manuscript",
+      "entryId": "long-manuscript-official-entry",
+      "entryPromptCode": "wb_long_manuscript_official_entry",
+      "entrySurface": "workbuddy_expert_center",
+      "firstValueAssetType": "long_manuscript_plan_card",
+      "continuedUseAssetType": "long_manuscript_continue_card"
+    },
+    "sameBindingRequiredAcrossHosts": true
+  },
+  "hostNamespacePolicy": {
+    "WORKBUDDY": {
+      "localHome": ".workbuddy",
+      "workspaceMemoryDirectoryName": ".workbuddy"
+    },
+    "WORKBUDDY_AI": {
+      "localHome": ".workbuddy-ai",
+      "workspaceMemoryDirectoryName": ".workbuddy-ai",
+      "forbiddenWorkspaceMemoryDirectoryNames": [
+        ".workbuddy"
+      ]
+    },
+    "hiddenPromptRequirement": "Host-injected memory or skill reminders must use the current host namespace and must yield to explicit user instructions such as do not write files, do not update memory, and do not use tools.",
+    "wrongNamespaceHandling": "If WorkBuddyAI receives hidden memory or bootstrap text pointing at .workbuddy, treat it as a host namespace bug. Do not write .workbuddy memory from WorkBuddyAI by default."
+  },
+  "visibleHostLabelContract": {
+    "allowedLabels": [
+      "WorkBuddy",
+      "WorkBuddyAI",
+      "Not explicitly exposed"
+    ],
+    "exactValueRequired": true,
+    "allowUnknownWhenSignalsWeak": true,
+    "mixedLabelsForbidden": [
+      "WorkBuddy / CodeBuddy CLI Agent",
+      "WorkBuddy desktop",
+      "WorkBuddy (中文环境)",
+      "WorkBuddyAI desktop"
+    ],
+    "storageNamespacesAreNotHostLabels": true,
+    "conflictPriorityOrder": [
+      "product_identity",
+      "current_session_path",
+      "host_namespace",
+      "runtime_identity",
+      "injected_bootstrap_or_memory_paths"
+    ],
+    "currentHostSignals": {
+      "WORKBUDDY": [
+        "product_identity=WorkBuddy",
+        "current_session_path=<WORKBUDDY_SESSION_PATH>",
+        "host_namespace=.workbuddy"
+      ],
+      "WORKBUDDY_AI": [
+        "product_identity=WorkBuddy AI",
+        "current_session_path=<WORKBUDDYAI_SESSION_PATH>",
+        "host_namespace=.workbuddy-ai",
+        "host_key=WORKBUDDY_AI"
+      ]
+    }
+  },
+  "entry": {
+    "entryId": "long-manuscript-official-entry",
+    "entryPromptCode": "wb_long_manuscript_official_entry",
+    "entrySurface": "workbuddy_expert_center",
+    "expertEntryId": "long-manuscript-expert",
+    "productId": "long-manuscript-expert",
+    "serviceProductId": "workbuddy_long_manuscript_expert",
+    "packageName": "long-manuscript-expert",
+    "packageVersion": "26.7.18",
+    "channelTrack": "long_manuscript",
+    "intentFamily": "writing",
+    "profileSegment": "creator",
+    "assetType": "long_manuscript_plan_card",
+    "continuedUseAssetType": "long_manuscript_continue_card",
+    "packCode": "fbss.long_manuscript.v1",
+    "servicePackCode": "fbss.long_manuscript.v1",
+    "scenePackId": "long-manuscript",
+    "routeCode": "route.long_manuscript"
+  },
+  "routeSignaturePolicy": {
+    "requiredFields": [
+      "entryId",
+      "entryPromptCode",
+      "entrySurface",
+      "expertEntryId",
+      "productId",
+      "serviceProductId",
+      "packageName",
+      "packageVersion",
+      "channelTrack",
+      "packCode",
+      "servicePackCode",
+      "scenePackId",
+      "routeCode",
+      "firstValueAssetType",
+      "continuedUseAssetType"
+    ],
+    "forwardedOrSkippedReceiptRequired": true,
+    "manualRewriteForbidden": true,
+    "sameBindingPreserveFields": [
+      "anonymousUserCodeHash",
+      "serverBindingId",
+      "chainFingerprint"
+    ]
+  },
+  "operatingModes": [
+    {
+      "mode": "independent_expert",
+      "entrySurface": "workbuddy_expert_center",
+      "description": "Deliver long-manuscript planning, chapter mapping, and sample opening as a standalone expert."
+    },
+    {
+      "mode": "self_contained_no_connector",
+      "entrySurface": "workbuddy_expert_center",
+      "description": "Treat the package itself as the primary execution surface. Do not assume any connector, MCP tool, or service-side runtime is present before first value is delivered.",
+      "workspaceWriteRequiresExplicitUserRequest": true,
+      "planModeBeforeFirstValueAllowed": false,
+      "defaultFirstValueSurface": "chat_response_only",
+      "preferredContinuationBranches": [
+        "continue_chapter",
+        "revise_structure",
+        "de_ai_polish",
+        "format_export",
+        "rewrite_localize",
+        "organize_materials",
+        "repurpose_channels",
+        "distribution_plan",
+        "summary_pack",
+        "visual_brief",
+        "save_handoff"
+      ]
+    }
+  ],
+  "supportedSceneTemplates": [
+    "novel_fiction",
+    "academic_monograph",
+    "whitepaper_report",
+    "manual_handbook",
+    "official_document",
+    "social_content_article",
+    "commercial_marketing_copy",
+    "exam_essay",
+    "generic_longform"
+  ],
+  "templateFacility": {
+    "version": "1.0.0",
+    "assetRoot": "templates",
+    "dimensionCatalog": "templates/scenario-dimensions.json",
+    "moduleLibrary": "templates/module-library.json",
+    "sceneBlueprintCatalog": "templates/scene-blueprints.json",
+    "representativeScenarioCatalog": "templates/representative-scenarios.json",
+    "networkEvolutionPolicy": "templates/network-evolution-policy.json",
+    "classificationFlow": [
+      "document_archetype",
+      "source_maturity",
+      "delivery_stage",
+      "reader_and_use_context",
+      "evidence_and_compliance_mode",
+      "post_draft_lane"
+    ],
+    "composeFromModules": true,
+    "offlineFirst": true
+  },
+  "projectWorkflow": {
+    "contractRef": "contracts/project-workflow-contract.json",
+    "schemaRef": "schemas/manuscript-project-v1.schema.json",
+    "exampleRef": "examples/manuscript-project-v1.json",
+    "checkpointDigestRequired": true,
+    "humanLocksSurviveRetryAndRoleChange": true,
+    "hostPersistenceClaimed": false
+  },
+  "expertTeam": {
+    "roleCatalogRef": "templates/expert-team-roles.json",
+    "handoffExampleRef": "examples/expert-team-handoff.json",
+    "roleWriteOwnershipContractRef": "contracts/continued-use-governance-contract.json",
+    "singleMergeOwnerRequired": true,
+    "singleWriteOwnerPerArtifactRequired": true,
+    "humanFinalApprovalRequired": true
+  },
+  "supportedEvidenceModes": [
+    "offline_required",
+    "network_optional_after_first_value",
+    "network_required_for_claim_upgrade_only"
+  ],
+  "workflowStages": [
+    "intake",
+    "first_value",
+    "expand",
+    "revise",
+    "review",
+    "finish",
+    "repurpose",
+    "distribute"
+  ],
+  "writingLanes": [
+    "outline",
+    "expand",
+    "revise",
+    "review",
+    "finish"
+  ],
+  "postDraftLanes": [
+    "continue_chapter",
+    "revise_structure",
+    "format_export",
+    "de_ai_polish",
+    "rewrite_localize",
+    "organize_materials",
+    "repurpose_channels",
+    "distribution_plan",
+    "summary_pack",
+    "visual_brief",
+    "save_handoff"
+  ],
+  "independentPostDraftLanes": {
+    "catalogRef": "templates/post-draft-lanes.json",
+    "resultSchemaRef": "schemas/post-draft-result-v1.schema.json",
+    "laneIds": [
+      "format_export",
+      "de_ai_polish",
+      "rewrite_localize",
+      "organize_materials",
+      "repurpose_channels",
+      "distribution_plan",
+      "visual_brief"
+    ],
+    "sourceArtifactImmutable": true,
+    "externalPublishForbidden": true
+  },
+  "firstValueContract": {
+    "requiredUserVisibleDeliverables": [
+      "manuscript_judgement_card",
+      "scene_template_match",
+      "chapter_route_map",
+      "sample_opening",
+      "revision_risk_list",
+      "material_activation_signals",
+      "quality_quick_summary",
+      "continuation_progress_card",
+      "next_session_resume_prompt",
+      "finishing_lane_options",
+      "personalized_next_best_action",
+      "healthy_return_prompt"
+    ],
+    "requiredMetadataDeliverables": [
+      "service_coordination_hints",
+      "value_event",
+      "personalization_profile",
+      "ops_board",
+      "delivery_taskboard",
+      "lebao_unlock_progress_ladder"
+    ],
+    "conditionalUserVisibleDeliverables": {
+      "project_template_activation_hints": {
+        "triggerStages": [
+          "finish",
+          "repurpose",
+          "distribute"
+        ],
+        "triggerContext": {
+          "field": "projectTemplate",
+          "operator": "equals",
+          "value": "content-operations"
+        }
+      },
+      "content_operations_handoff": {
+        "triggerStages": [
+          "finish",
+          "repurpose",
+          "distribute"
+        ],
+        "triggerContext": {
+          "field": "contentOperations",
+          "operator": "equals",
+          "value": true
+        }
+      }
+    },
+    "hostActionEnvelopeSchemaRef": "schemas/host-action-envelope-v2.schema.json",
+    "firstValueArtifactContractRef": "contracts/first-value-artifact-contract.json",
+    "explicitWriteIntentRequired": true,
+    "defaultWriteIntent": "unrequested",
+    "actualPersistenceOutsideR1": true,
+    "materialActivationMinimumSignals": 2,
+    "minimumChapterRows": 5,
+    "templateFacilityAvailableInPackage": true
+  },
+  "continuedUseContract": {
+    "governanceContractRef": "contracts/continued-use-governance-contract.json",
+    "cardSchemaRef": "schemas/continued-use-card-v1.schema.json",
+    "fixtureRef": "fixtures/behavior/r8-continued-use-governance-scenarios.json",
+    "cardType": "long_manuscript_continue_card",
+    "nextActionCount": {"min": 2, "max": 3},
+    "openItemsFieldRequired": true,
+    "resumeScope": "user_copyable_current_response",
+    "persistenceUpgradeRequiresHostReceipt": true,
+    "preferredContinuationBranches": [
+      "continue_chapter",
+      "revise_structure",
+      "de_ai_polish",
+      "format_export",
+      "rewrite_localize",
+      "organize_materials",
+      "repurpose_channels",
+      "distribution_plan",
+      "summary_pack",
+      "visual_brief",
+      "save_handoff"
+    ],
+    "projectTemplateActivationHintsRequired": true,
+    "contentOperationsHandoffRequiredForRepurpose": true,
+    "healthyContinuationLoopRequired": true,
+    "serviceReadableMetadataFields": [
+      "valueEvent",
+      "personalizationProfile",
+      "opsBoard",
+      "deliveryTaskboard",
+      "lebaoUnlockBoundary"
+    ]
+  },
+  "submissionTrustMaterials": {
+    "requiredPackageDocs": [
+      "README.md",
+      "PRIVACY.md",
+      "SECURITY.md",
+      "TERMS.md",
+      "references/README.md",
+      "references/quality/quality-check.md"
+    ],
+    "packageExcludesProcessEvidence": true,
+    "externalValidationEvidenceCarrier": "repo-side reports and submission notes outside the upload artifact",
+    "officialListingStillRequiredForCompletion": true,
+    "stagePrimaryExcludedRootDocs": [
+      "SUPPORT.md",
+      "TESTING.md"
+    ],
+    "stagePrimaryExcludedProcessAssets": [
+      "root_support_doc",
+      "root_testing_doc",
+      "review_process_orchestration_contract"
+    ]
+  },
+  "qualityGateProfile": {
+    "layers": [
+      "S",
+      "P",
+      "C",
+      "B",
+      "G"
+    ],
+    "deliveryClaimRequiresG": true,
+    "qualityGateContractRef": "contracts/manuscript-quality-gate-contract.json",
+    "qualityReportSchemaRef": "schemas/manuscript-quality-report-v1.schema.json",
+    "claimEvidenceContractRef": "contracts/claim-evidence-coverage-contract.json",
+    "claimEvidenceMapSchemaRef": "schemas/claim-evidence-map-v1.schema.json",
+    "repositoryValidationOnly": true,
+    "semanticQualityProven": false,
+    "factTruthProven": false,
+    "humanFinalApprovalObserved": false
+  },
+  "trustworthyCompletionLoop": {
+    "qualityGateContractRef": "contracts/manuscript-quality-gate-contract.json",
+    "qualityReportSchemaRef": "schemas/manuscript-quality-report-v1.schema.json",
+    "claimEvidenceContractRef": "contracts/claim-evidence-coverage-contract.json",
+    "claimEvidenceMapSchemaRef": "schemas/claim-evidence-map-v1.schema.json",
+    "alignmentRule": "project revision and artifact digest must match; unresolved critical claims block pass",
+    "finalSemanticQualityClaimed": false,
+    "factTruthClaimed": false,
+    "sourceLicenseClaimed": false,
+    "humanFinalApprovalObserved": false,
+    "externalWritePerformed": false
+  },
+  "externalObservationBoundary": {
+    "connectorAssumedAvailable": false,
+    "compatibleToolSurface": false,
+    "packageCapabilityDependsOnConnector": false,
+    "naturalClosureClaimAllowed": false,
+    "mayObserve": [
+      "host_emitted_tool_trace",
+      "anonymous_binding_fields",
+      "service_side_credit_rows",
+      "benefit_state_events"
+    ],
+    "mustKeepSeparate": [
+      "self-contained package capability",
+      "local equivalent verification",
+      "external service observation",
+      "official listing or post-listing behavior"
+    ]
+  },
+  "serviceSideRules": {
+    "closureReportSchema": "contracts/service-side-closure-report.schema.json",
+    "sameBindingRequired": true,
+    "probeRowsDiagnosticOnly": true,
+    "noAutomaticProductCreditClaim": true,
+    "frontstageEquivalentOnly": true,
+    "hostDirectiveReceiptRequired": true,
+    "hostDirectiveReceiptEventType": "host_directive_receipt",
+    "requiredServiceReadableFields": [
+      "valueEvent",
+      "personalizationProfile",
+      "opsBoard",
+      "deliveryTaskboard",
+      "lebaoReceiptStrictFieldGroup"
+    ]
+  },
+  "identityBoundary": {
+    "mode": "anonymous_first_delayed_identify",
+    "anonymousBindingFields": [
+      "anonymousUserCodeHash",
+      "serverBindingId",
+      "chainFingerprint"
+    ],
+    "hostIdentityFields": [
+      "entryId",
+      "entryPromptCode",
+      "entrySurface",
+      "expertEntryId",
+      "productId",
+      "channelTrack",
+      "skillId",
+      "assetType",
+      "intentFamily",
+      "profileSegment",
+      "requestSource"
+    ],
+    "stableIdentityWriteNotBefore": "continued_use_completed"
+  },
+  "benefitUnlockPolicy": {
+    "benefitStateFields": [
+      "benefitSource",
+      "creditsState",
+      "claimState",
+      "lebaoPackId"
+    ],
+    "gateCheckedEventType": "entitlement_gate_checked",
+    "balanceSeenEventType": "credits_balance_seen",
+    "unlockEventType": "continued_use_completed",
+    "unlockNotBefore": "continued_use_completed",
+    "claimTool": "lebao_claim",
+    "paymentClosureAllowed": false,
+    "requiredReceiptFieldGroups": [
+      "identity",
+      "routeSignature",
+      "benefitState",
+      "sameBindingEvidence",
+      "hostActionEnvelope"
+    ],
+    "lebaoReceiptStrictFieldGroups": {
+      "antiForgery": [
+        "claimNonce",
+        "claimIssuedAt",
+        "claimExpiresAt",
+        "claimSignature",
+        "idempotencyKey"
+      ],
+      "sameBindingIdentity": [
+        "anonymousUserCodeHash",
+        "serverBindingId",
+        "chainFingerprint",
+        "sameBindingEvidenceStatus"
+      ],
+      "claimUnlockPayload": [
+        "claimObserved",
+        "unlockObserved",
+        "claimState",
+        "lebaoPackId"
+      ],
+      "hostGateProof": [
+        "hostDirectiveReceiptEventType",
+        "routeSignatureForwardedOrSkippedReceipt",
+        "hostActionEnvelope"
+      ],
+      "steeringCohortBinding": [
+        "intentFamily",
+        "profileSegment",
+        "deidentifiedCohortKey"
+      ]
+    },
+    "rawIdentifierForbidden": true,
+    "strictReceiptRequiredBeforeClaimPromotion": true,
+    "recordOnlyFieldsWhenReceiptMissing": [
+      "claimObserved",
+      "unlockObserved",
+      "claimNonce",
+      "claimSignature",
+      "idempotencyKey"
+    ]
+  },
+  "intelligentOpsExperienceContract": {
+    "componentCatalog": "templates/intelligent-ops-habit-components.json",
+    "examplePayload": "examples/intelligent-ops-habit-loop.json",
+    "workflowReference": "references/workflows/intelligent-ops-habit-loop.md",
+    "experienceGoal": "healthy_high_frequency_continuation",
+    "serviceReadableFields": [
+      "valueEvent",
+      "personalizationProfile",
+      "opsBoard",
+      "deliveryTaskboard",
+      "lebaoUnlockBoundary"
+    ],
+    "userVisibleDefault": [
+      "continuation_progress_card",
+      "personalized_next_best_action",
+      "healthy_return_prompt"
+    ],
+    "metadataOnlyByDefault": [
+      "valueEvent",
+      "personalizationProfile",
+      "opsBoard",
+      "deliveryTaskboard",
+      "lebaoUnlockBoundary"
+    ],
+    "packageOnlyNoHostUpgradeRequired": true,
+    "creditBoundary": "metadata helps service traction but cannot prove natural product credit without strict listed-runtime same-binding rows"
+  },
+  "healthyHabitLoopPolicy": {
+    "preferredLabel": "healthy_continuation_loop",
+    "measurementContractRef": "contracts/continued-use-governance-contract.json",
+    "measurementFixtureRef": "fixtures/behavior/r8-continued-use-governance-scenarios.json",
+    "measurementDecisionUse": "quality_guardrail_not_engagement_target",
+    "naturalTrafficClaimAllowedFromFixture": false,
+    "allowedPatterns": [
+      "progress_summary",
+      "single_next_best_action",
+      "two_or_three_user_controlled_options",
+      "resume_prompt",
+      "transparent_lebao_eligibility_boundary"
+    ],
+    "forbiddenPatterns": [
+      "guilt_streak",
+      "false_scarcity",
+      "hidden_or_irreversible_claim",
+      "claim_or_unlock_without_receipt",
+      "payment_closure_from_benefit_state",
+      "dark_pattern_personalization",
+      "pressure_to_continue_after_user_stops"
+    ],
+    "userControlRequired": true,
+    "optOutAllowed": true,
+    "unlockNotBefore": "continued_use_completed",
+    "paymentClosureAllowed": false
+  },
+  "evolutionClosedLoop": {
+    "stateMachine": {
+      "canonicalContractRef": "contracts/closed-loop-state-contract.json",
+      "transitionAuthority": "canonical_contract_only",
+      "legacyStatesRole": "service_attribution_observations_only",
+      "states": [
+        "first_value_completed",
+        "same_binding_followthrough_ready",
+        "host_directive_receipt_seen",
+        "continued_use_completed",
+        "lebao_receipt_eligible",
+        "natural_same_binding_credit"
+      ],
+      "creditState": "natural_same_binding_credit",
+      "contentOnlyAnswerCannotAdvanceState": true
+    },
+    "stages": [
+      {
+        "stageId": "benefit_signal",
+        "sourceFields": [
+          "benefitSource",
+          "creditsState",
+          "claimState",
+          "lebaoPackId"
+        ],
+        "eventTypes": [
+          "entitlement_gate_checked",
+          "credits_balance_seen",
+          "continued_use_completed"
+        ],
+        "boundary": "continued_use_or_entitlement_signal_only"
+      },
+      {
+        "stageId": "intent_aggregation",
+        "sourceFields": [
+          "intentFamily",
+          "profileSegment",
+          "requestSource",
+          "semanticSource"
+        ],
+        "fallbackRule": "low_confidence_requires_fallback"
+      },
+      {
+        "stageId": "scene_recognition",
+        "sourceFields": [
+          "entryId",
+          "entryPromptCode",
+          "scenePackId",
+          "assetType",
+          "scenarioFocus"
+        ],
+        "resolver": "template_facility_plus_scene_pack_signature"
+      },
+      {
+        "stageId": "strategy_dispatch",
+        "sourceFields": [
+          "hostActionEnvelope",
+          "serviceCoordinationHints",
+          "nextActionToolArguments",
+          "followthroughContract"
+        ],
+        "defaultMode": "offline_first"
+      },
+      {
+        "stageId": "service_readable_value_event",
+        "sourceFields": [
+          "valueEvent",
+          "routeSignature",
+          "sameBinding",
+          "currentMilestone",
+          "nextTool",
+          "stopCondition"
+        ],
+        "boundary": "metadata_only_product_credit_not_claimed"
+      },
+      {
+        "stageId": "personalized_continuation",
+        "sourceFields": [
+          "personalizationProfile",
+          "preferredNextBranches",
+          "deidentifiedCohortKey",
+          "deliveryTaskboard"
+        ],
+        "boundary": "deidentified_profile_strategy_only_not_product_credit"
+      },
+      {
+        "stageId": "ops_board_governance",
+        "sourceFields": [
+          "opsBoard",
+          "cannotProve",
+          "currentBlocker",
+          "nextOwnerAction"
+        ],
+        "boundary": "record_only_until_strict_same_binding_receipt"
+      }
+    ],
+    "feedbackSignals": [
+      "first_value_completed",
+      "same_binding_followthrough_ready",
+      "continued_use_completed",
+      "lebao_receipt_eligible",
+      "host_directive_receipt",
+      "entitlement_gate_checked",
+      "credits_balance_seen"
+    ],
+    "upgradePolicy": {
+      "packageHostServiceSeparationRequired": true,
+      "officialEntryProofSeparateFromLocalEquivalent": true,
+      "strongSignatureNaturalRowsPreferredForPostReleaseEvolution": true,
+      "routeSignatureForwardedOrSkippedReceiptRequired": true,
+      "lebaoReceiptStrictFieldGroupRequired": true,
+      "healthyHabitLoopGateRequired": true,
+      "serviceReadableMetadataMustStayRecordOnlyBeforeStrictReceipt": true
+    }
+  },
+  "officialEntryTruthTaxonomy": {
+    "states": [
+      "cache_only",
+      "official_catalog",
+      "official_runtime_observed",
+      "official_runtime_followthrough_observed",
+      "natural_same_binding_credit"
+    ],
+    "productCreditRequiresState": "natural_same_binding_credit",
+    "cacheOnlyCannotProveOfficialEntry": true
+  },
+  "intentAggregationPolicy": {
+    "primaryIntentFamily": "writing",
+    "primaryProfileSegment": "creator",
+    "lowConfidenceRequiresFallback": true
+  },
+  "projectTemplateCompatibility": {
+    "workbuddyProjectTemplates": [
+      {
+        "templateId": "content-operations",
+        "connectorIds": [
+          "tdocs-app",
+          "notion"
+        ],
+        "skillIds": [
+          "skill_2053081490234478592",
+          "skill_2053081498548994048",
+          "skill_2053082894098632704",
+          "skill_2053082421296758784",
+          "skill_2053082097175687168"
+        ],
+        "expertIds": [
+          "ex_54wQJnvLntjd",
+          "ex_nQs4rsKUgK67",
+          "ex_nchiDpT84L9o",
+          "ex_fCXVIhFkOfnh",
+          "ex_FbY5nlWTqDod"
+        ],
+        "contextFields": [
+          "workbuddyProjectId",
+          "workbuddyProjectTemplate"
+        ],
+        "projectSelectionIsProductCredit": false
+      }
+    ]
+  },
+  "noConnectorInteraction": {
+    "contract": "contracts/no-connector-action-contract.json",
+    "connectorRequired": false,
+    "firstValueRequired": true,
+    "actionEnvelopeRequired": true,
+    "routeSignatureRequired": true,
+    "evidenceBoundaryRequired": true,
+    "hostActionEnvelopeFidelityRequired": true,
+    "userVisibleActionEnvelopeDefault": false,
+    "hostMetadataChannelPreferred": true,
+    "visibleActionEnvelopeRequiresExplicitDebugRequest": true,
+    "defaultSideEffectClass": "read_only",
+    "defaultApprovalState": "not_required",
+    "workspaceWriteRequiresExplicitUserRequest": true,
+    "planModeBeforeFirstValueAllowed": false,
+    "defaultFirstValueSurface": "chat_response_only",
+    "forbiddenImplicitActions": [
+      "auto_create_task",
+      "auto_write_plan_file",
+      "auto_scan_workspace_without_user_material_path",
+      "auto_write_memory",
+      "auto_create_workspace_memory",
+      "auto_write_cross_host_memory",
+      "use_workbuddy_namespace_in_workbuddy_ai",
+      "auto_use_file_or_shell_tools_before_first_value",
+      "wait_for_permission_without_user_visible_first_value"
+    ]
+  },
+  "networkEnhancementPolicy": {
+    "defaultMode": "offline_first",
+    "mustRemainUsableWithoutNetwork": true,
+    "networkRequiredOnlyWhen": [
+      "user_explicitly_requests_current_or_external_facts",
+      "citation_safe_academic_or_whitepaper_work_requires_verification",
+      "official_document_or_policy_content_depends_on_current_rules",
+      "localization_or_market_rewrite_needs_country_specific_context"
+    ],
+    "networkDeferredWhen": [
+      "first_value_can_be_delivered_from_user_materials_only",
+      "task_is_structure_planning_or_chapter_expansion",
+      "task_is_de_ai_polish_or_format_export",
+      "user_forbids_external_tools_or_browsing"
+    ],
+    "sourcePolicy": {
+      "preferPrimarySources": true,
+      "labelUserMaterialVsDialogueVsExternal": true,
+      "doNotReplaceUserVisibleFirstValueWithResearchPlan": true
+    }
+  },
+  "deliverables": [
+    "manuscript_judgement_card",
+    "scene_template_match",
+    "chapter_route_map",
+    "sample_opening",
+    "revision_risk_list",
+    "material_activation_signals",
+    "quality_quick_summary",
+    "service_coordination_hints",
+    "continuation_progress_card",
+    "next_session_resume_prompt",
+    "finishing_lane_options",
+    "project_template_activation_hints",
+    "content_operations_handoff",
+    "value_event",
+    "personalization_profile",
+    "ops_board",
+    "delivery_taskboard",
+    "lebao_unlock_progress_ladder",
+    "personalized_next_best_action",
+    "healthy_return_prompt"
+  ],
+  "acceptanceGateDefinitions": [
+    {
+      "gateId": "package_contract_gate",
+      "requiredLayer": "review_package",
+      "passCondition": "package files, deterministic stage, and review zip structure are aligned"
+    },
+    {
+      "gateId": "official_entry_structure_gate",
+      "requiredLayer": "package_structure",
+      "passCondition": "canonical and mirrored manifests, agent metadata, skills, references, fixtures, and product-only boundaries pass the official-entry static gate"
+    },
+    {
+      "gateId": "legacy_source_independence_gate",
+      "requiredLayer": "service_observation",
+      "passCondition": "external service signatures remain optional observation and never gate no-connector first value"
+    },
+    {
+      "gateId": "route_signature_receipt_gate_26717",
+      "requiredLayer": "official_or_service_receipt",
+      "passCondition": "route signature is forwarded or explicitly skipped with receipt before same-binding product credit"
+    },
+    {
+      "gateId": "lebao_receipt_field_group_gate_26717",
+      "requiredLayer": "official_or_service_receipt",
+      "passCondition": "lebao receipt contains identity, route signature, benefit state, same-binding evidence, and host action envelope field groups"
+    },
+    {
+      "gateId": "healthy_habit_loop_gate_26717",
+      "requiredLayer": "package_contract",
+      "passCondition": "healthy continuation uses transparent progress and user control while staying record-only before strict same-binding receipt"
+    }
+  ],
+  "workspaceWritePolicy": {
+    "workspaceWriteRequiresExplicitUserRequest": true,
+    "planModeBeforeFirstValueAllowed": false,
+    "defaultFirstValueSurface": "chat_response_only",
+    "forbiddenImplicitActions": [
+      "auto_create_task",
+      "auto_write_plan_file",
+      "auto_scan_workspace_without_user_material_path",
+      "auto_write_memory",
+      "auto_create_workspace_memory",
+      "auto_write_cross_host_memory",
+      "use_workbuddy_namespace_in_workbuddy_ai",
+      "auto_use_file_or_shell_tools_before_first_value",
+      "wait_for_permission_without_user_visible_first_value"
+    ]
+  },
+  "longOutputPolicy": {
+    "requestedLengthMustBeTracked": true,
+    "oversizedSingleTurnTargetHandling": "If the requested target exceeds one response capacity, deliver the first useful batch plus a continuation progress card and do not claim the full target is complete.",
+    "completionClaimRequiresVisibleOrFileArtifactMeetingTarget": true,
+    "noCompleteClaimBeforeTargetEvidence": true
+  },
+  "deliverablesSource": "templates/module-library.json#/deliveryCapabilities"
+}

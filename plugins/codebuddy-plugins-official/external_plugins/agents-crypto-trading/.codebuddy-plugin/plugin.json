@@ -1,0 +1,21 @@
+{
+  "name": "agents-crypto-trading",
+  "version": "1.0.0",
+  "description": "Expert agents for cryptocurrency trading, DeFi strategies, and market analysis",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "crypto-trading",
+    "arbitrage-bot",
+    "crypto-analyst",
+    "crypto-risk-manager",
+    "crypto-trader",
+    "defi-strategist"
+  ]
+}

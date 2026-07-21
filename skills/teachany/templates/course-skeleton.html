@@ -1,0 +1,289 @@
+<!doctype html>
+<!--
+================================================================
+TeachAny v7.12 标准化课件骨架（Standard Calls First）
+================================================================
+用法：复制本文件为 community/<course-id>/index.html，只替换 {{PLACEHOLDER}}。
+原则：能用标准模块声明式调用的，一律不手写实现。
+
+必填占位符：
+  {{COURSE_ID}}              课件 ID，必须等于 manifest.course_id
+  {{TITLE}}                  课件标题
+  {{SUBJECT}}                学科 ID：math / physics / chemistry / biology / history / geography / chinese / english / info-tech
+  {{STAGE_GRADE}}            学段年级：elementary-5 / middle-8 / high-10
+  {{GRADE}}                  数字年级：1-12
+  {{STAGE}}                  elementary / middle / high
+  {{NODE_ID}}                知识树 node_id；free_mode 时仍建议填写语义 ID
+  {{DOMAIN}}                 领域名
+  {{PREREQ_COURSE_IDS}}      前置课件 ID，逗号分隔
+  {{NEXT_COURSE_ID}}         后续课件 ID，可为空
+  {{COURSE_VERSION}}         课件版本，如 0.1.0
+  {{TEACHANY_VERSION}}       skill 版本，如 7.12.0
+  {{LESSON_TYPE}}            new-concept / review / experiment / special-topic / inquiry-project
+  {{HERO_QUESTION}}          ABT 后的核心驱动问题
+  {{HERO_IMAGE_ALT}}         Hero 知识结构图 alt
+  {{HERO_FIGCAPTION}}        Hero 知识结构图说明
+  {{AUDIO_PLAYLIST_JSON}}    teachany-audio-player 标准播放列表 JSON 数组
+  {{PROBLEM_ANCHOR_CHOICES}} 2-3 个 <button class="choice" data-anchor-choice="...">...</button>
+  {{LEARNING_OBJECTIVES}}    3-5 个 <li>...</li>
+  {{CONTENT_SECTIONS}}       主体教学 sections，从 templates/content-section-templates.html 选择片段填充；至少含前测、核心模块、Canvas/SVG 互动、后测、小结
+  {{OPTIONAL_MAP_HEAD}}      历史/地理地图才填 Leaflet + teachany-historical-map CSS；其他课留空
+  {{OPTIONAL_MAP_TAIL}}      历史/地理地图才填 teachany-historical-map JS；其他课留空
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>{{TITLE}}</title>
+<meta name="description" content="{{DESCRIPTION}}">
+
+<!-- TeachAny routing meta：与 manifest-template.json 保持单一事实源 -->
+<meta name="course-id" content="{{COURSE_ID}}">
+<meta name="course-title" content="{{TITLE}}">
+<meta name="course-subject" content="{{SUBJECT}}">
+<meta name="course-grade" content="{{STAGE_GRADE}}">
+<meta name="course-prereqs" content="{{PREREQ_COURSE_IDS}}">
+<meta name="course-next" content="{{NEXT_COURSE_ID}}">
+<meta name="course-version" content="{{COURSE_VERSION}}">
+<meta name="teachany-version" content="{{TEACHANY_VERSION}}">
+<meta name="teachany-node" content="{{NODE_ID}}">
+<meta name="teachany-subject" content="{{SUBJECT}}">
+<meta name="teachany-grade" content="{{GRADE}}">
+<meta name="teachany-stage" content="{{STAGE}}">
+<meta name="teachany-domain" content="{{DOMAIN}}">
+<meta name="teachany-prerequisites" content="{{PREREQUISITE_NAMES}}">
+<meta name="teachany-lesson-type" content="{{LESSON_TYPE}}">
+<meta name="teachany-free-mode" content="{{FREE_MODE}}">
+
+<!-- 标准五件套 + 音频播放器：固定调用，不手写替代实现 -->
+<link rel="stylesheet" href="../../scripts/ai-tutor.css">
+<link rel="stylesheet" href="../../scripts/teachany-tutor-card.css">
+<link rel="stylesheet" href="../../scripts/teachany-tts-narrator.css">
+<link rel="stylesheet" href="../../scripts/teachany-section-hints.css">
+<link rel="stylesheet" href="../../scripts/teachany-knowledge-graph.css">
+<link rel="stylesheet" href="../../scripts/teachany-audio-player.css">
+{{OPTIONAL_MAP_HEAD}}
+
+<style>
+:root {
+  --bg: #07111f;
+  --panel: #101d32;
+  --card: #14233a;
+  --line: #25415f;
+  --text: #eef6ff;
+  --muted: #9fb4cc;
+  --brand: #38bdf8;
+  --brand-2: #a78bfa;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; max-width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+body {
+  padding-top: var(--safe-top);
+  padding-bottom: calc(18px + var(--safe-bottom));
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Source Han Sans SC", system-ui, sans-serif;
+  line-height: 1.7;
+  font-size: 16px;
+}
+a { color: #7dd3fc; }
+button, a, input, select, textarea { min-height: 44px; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+.teachany-brand-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(7, 17, 31, .92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(148, 163, 184, .18);
+}
+.brand-logo { display: flex; align-items: center; gap: 8px; color: #f8fafc; text-decoration: none; font-weight: 800; }
+.brand-mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #07111f; font-weight: 900; }
+.brand-right { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.brand-link { text-decoration: none; }
+.brand-version { color: #cbd5e1; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: rgba(255,255,255,.08); padding: 4px 8px; border-radius: 999px; }
+.brand-skill-version { color: #94a3b8; }
+.hero {
+  padding: 64px 20px 38px;
+  text-align: center;
+  background: radial-gradient(circle at 20% 0%, rgba(56,189,248,.22), transparent 36%), radial-gradient(circle at 80% 10%, rgba(167,139,250,.18), transparent 34%);
+}
+h1 { font-size: clamp(28px, 6vw, 52px); line-height: 1.15; margin: 0 auto 16px; max-width: 960px; }
+.subtitle { color: var(--muted); font-size: clamp(16px, 2.8vw, 20px); max-width: 860px; margin: 0 auto; }
+.section { max-width: 1080px; margin: 0 auto; padding: 36px 20px; }
+.card { background: linear-gradient(180deg, rgba(20,35,58,.96), rgba(13,27,47,.96)); border: 1px solid rgba(148,163,184,.18); border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+.grid, .objectives { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.choice { width: 100%; text-align: left; border: 1px solid rgba(56,189,248,.24); border-radius: 14px; background: rgba(56,189,248,.08); color: var(--text); padding: 14px 16px; cursor: pointer; }
+.choice.selected { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(56,189,248,.18); }
+input, textarea { width: 100%; border-radius: 12px; border: 1px solid var(--line); background: #0b1628; color: var(--text); padding: 12px 14px; font-size: 16px; }
+.phase-tag { display: inline-flex; align-items: center; gap: 6px; color: #bae6fd; background: rgba(56,189,248,.12); border: 1px solid rgba(56,189,248,.25); border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.ta-standard-figure { margin: 24px auto 0; max-width: 980px; }
+.ta-standard-figure img { display: block; width: 100%; border-radius: 18px; border: 1px solid rgba(148,163,184,.18); background: #0b1628; }
+.ta-standard-figure figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; text-align: center; }
+.canvas-wrap { overflow: auto; background: #081426; border: 1px solid rgba(148,163,184,.18); border-radius: 16px; padding: 12px; }
+.result { padding: 14px; border-radius: 12px; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25); }
+.warn { background: rgba(245,158,11,.1); border-color: rgba(245,158,11,.28); }
+@media (max-width: 600px) {
+  .teachany-brand-bar { padding: 8px 12px; }
+  .brand-name { display: none; }
+  .brand-right { gap: 8px; font-size: 12px; }
+  .hero { padding: 42px 16px 28px; }
+  .section { padding: 26px 16px; }
+  .grid, .objectives { grid-template-columns: 1fr !important; }
+  .card { padding: 18px; border-radius: 16px; }
+  h2 { font-size: 22px; }
+  canvas.wide-canvas { min-width: 560px; }
+}
+</style>
+</head>
+<body>
+<div class="teachany-brand-bar">
+  <a class="brand-logo" href="https://weponusa.github.io/teachany/" aria-label="TeachAny Gallery">
+    <img src="https://weponusa.github.io/teachany-courseware/assets/teachany-logo.png" alt="TeachAny" style="width:26px;height:26px;border-radius:7px;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-grid'"><span class="brand-mark" style="display:none">T</span><span class="brand-name">TeachAny</span>
+  </a>
+  <div class="brand-right">
+    <a class="brand-link" href="https://weponusa.github.io/teachany/">Gallery</a>
+    <span class="brand-version">v<span id="course-version-display">{{COURSE_VERSION}}</span><span class="brand-skill-version"> · skill v<span id="skill-version-display">{{TEACHANY_VERSION}}</span></span></span>
+  </div>
+</div>
+
+<header class="hero" id="hero" data-tts="hero" data-tsh="开场 - 先用一个真实问题建立学习动机">
+  <h1>{{TITLE}}</h1>
+  <p class="subtitle">{{HERO_QUESTION}}</p>
+</header>
+
+<section class="section" id="hero-infographic" data-tsh="知识结构主图 - 先看完整学习地图">
+  <figure class="ta-standard-figure">
+    <img class="hero-cover-img" src="./assets/{{COURSE_ID}}-hero.png" onerror="this.src='./assets/hero-infographic.svg'" alt="{{HERO_IMAGE_ALT}}">
+    <figcaption>{{HERO_FIGCAPTION}}</figcaption>
+  </figure>
+</section>
+
+<!-- 音频播放列表只作为配置存在，不再集中渲染成一个“音频模块”。
+     学生通过底部连续播放条和各 section 的滚动同步使用音频，避免打断教学主线。 -->
+<div id="audio-config" data-teachany-audio hidden>
+  <script type="application/json" data-teachany-audio-playlist>
+{{AUDIO_PLAYLIST_JSON}}
+  </script>
+</div>
+
+<section id="problem-anchor" class="section" data-tts="problem-anchor" data-tsh="问题锚点 - 先确定你今天想解决的问题">
+  <div class="card">
+    <span class="phase-tag">Problem Anchor</span>
+    <h2>今天的课件可以帮你解决什么问题？</h2>
+    <p style="color:var(--muted)">先选一个你关心的问题。后面的例子、提示和 AI 学伴都会围绕这个问题来帮你推进。</p>
+    <div class="grid" id="problem-anchor-choices">
+{{PROBLEM_ANCHOR_CHOICES}}
+    </div>
+    <label style="display:block;margin-top:18px;color:var(--muted)">我有自己的问题
+      <input id="learner-question-input" placeholder="把你卡住的问题写在这里">
+    </label>
+    <p id="anchor-feedback" class="result warn" style="margin-top:14px">选择或输入后，本课会围绕你的问题展开。</p>
+  </div>
+</section>
+
+<section id="objectives" class="section" data-tts="objectives" data-tsh="学习目标 - 明确这节课结束时能做到什么">
+  <div class="card">
+    <span class="phase-tag">Learning Objectives</span>
+    <h2>学习目标</h2>
+    <ul class="objectives">
+{{LEARNING_OBJECTIVES}}
+    </ul>
+  </div>
+</section>
+
+{{CONTENT_SECTIONS}}
+
+<section class="section" id="knowledge-graph" data-tts="knowledge-graph" data-tsh="知识图谱 - 查看前置、后续与同域知识">
+  <div class="card">
+    <span class="phase-tag">Knowledge Graph</span>
+    <h2>知识图谱</h2>
+    <p style="color:var(--muted)">本节点的前置、后续和同域知识由标准知识图谱模块自动渲染。不要手写图谱节点。</p>
+    <div data-teachany-kg="{{NODE_ID}}">
+      <canvas class="tkg-fallback-canvas" width="720" height="120" aria-label="知识图谱互动画布占位" style="display:block;width:100%;max-height:140px;border-radius:12px;"></canvas>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="teachany-ai-tutor-card" data-tts="ai-tutor" data-tsh="AI 学伴 - 先诊断卡点，再给最小提示">
+  <div data-teachany-tutor-card></div>
+</section>
+
+<script>
+window.__TEACHANY_LEARNER_QUESTION__ = '';
+window.__TEACHANY_TUTOR_CONFIG__ = {
+  courseId: '{{COURSE_ID}}',
+  courseTitle: '{{TITLE}}',
+  subject: '{{SUBJECT}}',
+  grade: '{{GRADE}}',
+  nodeId: '{{NODE_ID}}',
+  lessonType: '{{LESSON_TYPE}}',
+  getLearnerQuestion: () => window.__TEACHANY_LEARNER_QUESTION__ || '',
+  getContext: () => {
+    const current = document.querySelector('section.current-section') || (location.hash ? document.querySelector(location.hash) : null);
+    return (current || document.body).innerText.slice(0, 3000);
+  }
+};
+
+function setTeachAnyLearnerQuestion(question) {
+  window.__TEACHANY_LEARNER_QUESTION__ = question || '';
+  const feedback = document.getElementById('anchor-feedback');
+  if (feedback) feedback.textContent = question ? `你的问题：${question}` : '选择或输入后，本课会围绕你的问题展开。';
+}
+
+document.querySelectorAll('[data-anchor-choice]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-anchor-choice]').forEach((item) => item.classList.remove('selected'));
+    btn.classList.add('selected');
+    setTeachAnyLearnerQuestion(btn.getAttribute('data-anchor-choice') || btn.textContent.trim());
+  });
+});
+document.getElementById('learner-question-input')?.addEventListener('input', (event) => {
+  setTeachAnyLearnerQuestion(event.target.value.trim());
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const courseVersion = document.querySelector('meta[name="course-version"]')?.content;
+  const skillVersion = document.querySelector('meta[name="teachany-version"]')?.content;
+  if (courseVersion) document.getElementById('course-version-display').textContent = courseVersion;
+  if (skillVersion) document.getElementById('skill-version-display').textContent = skillVersion.replace(/^v/, '');
+});
+
+if (location.hostname === 'localhost' || location.search.includes('debug')) {
+  const checks = [
+    ['course-id meta', () => !!document.querySelector('meta[name="course-id"]')?.content],
+    ['viewport-fit', () => document.querySelector('meta[name="viewport"]')?.content.includes('viewport-fit=cover')],
+    ['brand bar', () => !!document.querySelector('.teachany-brand-bar')],
+    ['problem anchor', () => !!document.getElementById('problem-anchor')],
+    ['audio playlist', () => !!document.querySelector('[data-teachany-audio-playlist]')],
+    ['AI tutor card', () => !!document.querySelector('[data-teachany-tutor-card]')],
+    ['knowledge graph API', () => !!document.querySelector('[data-teachany-kg]')],
+    ['standard module links', () => ['ai-tutor.css','teachany-tutor-card.css','teachany-tts-narrator.css','teachany-section-hints.css','teachany-knowledge-graph.css','teachany-audio-player.css'].every((name) => document.documentElement.innerHTML.includes(name))],
+    ['standard module scripts', () => ['ai-tutor.js','teachany-tutor-card.js','teachany-tts-narrator.js','teachany-section-hints.js','teachany-knowledge-graph.js','teachany-audio-player.js'].every((name) => document.documentElement.innerHTML.includes(name))]
+  ];
+  checks.forEach(([name, fn]) => {
+    const ok = Boolean(fn());
+    console[ok ? 'log' : 'warn'](`[TeachAny self-check] ${ok ? 'PASS' : 'MISSING'} ${name}`);
+  });
+}
+</script>
+
+<!-- 标准模块脚本：固定调用，不手写替代实现 -->
+<script src="../../scripts/ai-tutor.js"></script>
+<script src="../../scripts/teachany-tutor-card.js" defer></script>
+<script src="../../scripts/teachany-tts-narrator.js" data-tts-disabled="true" defer></script>
+<script src="../../scripts/teachany-section-hints.js" defer></script>
+<script src="../../scripts/teachany-knowledge-graph.js" defer></script>
+<script src="../../scripts/teachany-audio-player.js?v=bar-only-20260513" defer></script>
+{{OPTIONAL_MAP_TAIL}}
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>polygonGeoJSON</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=vector"></script>
+<script charset="utf-8" src="https://mapapi.qq.com/web/jsapi/jsapi-gl/assets/polygonGeoJSON.js"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body>
+<div id="container"></div>
+<script>
+  var center = new TMap.LatLng(39.984104, 116.307503);//设置中心点坐标
+  //初始化地图
+  var map = new TMap.Map("container", {
+    center: center,
+    zoom: 9
+  });
+  new TMap.vector.GeoJSONLayer({
+    map: map,
+    data: polygonGeoJSON,
+    polygonStyle: new TMap.PolygonStyle({
+      'color': '#3777FF', //面填充色
+      'showBorder': true, //是否显示边线
+      'borderColor': '#fff', //边线颜色
+      'borderWidth': 1 //边线宽度
+    }),
+  });
+</script>
+</body>
+
+</html>

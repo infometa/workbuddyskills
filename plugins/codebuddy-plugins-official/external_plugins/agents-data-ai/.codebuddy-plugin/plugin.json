@@ -1,0 +1,27 @@
+{
+  "name": "agents-data-ai",
+  "version": "1.0.0",
+  "description": "Agents for data engineering, machine learning, and AI development",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "data-ai",
+    "ai-engineer",
+    "context-manager",
+    "data-engineer",
+    "data-scientist",
+    "hackathon-ai-strategist",
+    "llms-maintainer",
+    "ml-engineer",
+    "mlops-engineer",
+    "prompt-engineer",
+    "search-specialist",
+    "task-decomposition-expert"
+  ]
+}

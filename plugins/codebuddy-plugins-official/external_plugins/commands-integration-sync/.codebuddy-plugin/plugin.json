@@ -1,0 +1,28 @@
+{
+  "name": "commands-integration-sync",
+  "version": "1.0.0",
+  "description": "Commands for integrating with external services and syncing data",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "integration-sync",
+    "bidirectional-sync",
+    "bulk-import-issues",
+    "cross-reference-manager",
+    "issue-to-linear-task",
+    "linear-task-to-issue",
+    "sync-automation-setup",
+    "sync-conflict-resolver",
+    "sync-issues-to-linear",
+    "sync-linear-to-issues",
+    "sync-pr-to-task",
+    "sync-status",
+    "task-from-pr"
+  ]
+}

@@ -1,0 +1,1520 @@
+[
+  {
+    "field": "targeting",
+    "type": "struct",
+    "label": "定向详细设置",
+    "category": "一、定向设置（targeting）",
+    "description": "存放所有定向条件"
+  },
+  {
+    "field": "targeting.geo_location",
+    "type": "struct",
+    "label": "地理位置定向",
+    "category": "一、定向设置（targeting）",
+    "description": "regions、business_districts、custom_locations 不能同时为空"
+  },
+  {
+    "field": "targeting.geo_location.location_types",
+    "type": "enum[]",
+    "label": "地点类型",
+    "category": "一、定向设置（targeting）",
+    "description": "微信流量仅能选 LIVE_IN；商圈/自定义地理位置仅可选 VISITED_IN、LIVE_IN"
+  },
+  {
+    "field": "targeting.geo_location.regions",
+    "type": "integer[]",
+    "label": "省市区县列表",
+    "category": "一、定向设置（targeting）",
+    "description": "通过 targeting_tags/get 获取"
+  },
+  {
+    "field": "targeting.geo_location.business_districts",
+    "type": "integer[]",
+    "label": "商圈 ID 列表",
+    "category": "一、定向设置（targeting）",
+    "description": "通过 targeting_tags/get 获取"
+  },
+  {
+    "field": "targeting.geo_location.custom_locations",
+    "type": "struct[]",
+    "label": "自定义地理位置列表",
+    "category": "一、定向设置（targeting）",
+    "description": "使用火星系坐标"
+  },
+  {
+    "field": "targeting.geo_location.custom_locations[].longitude",
+    "type": "float64",
+    "label": "经度",
+    "category": "一、定向设置（targeting）",
+    "description": "单位度"
+  },
+  {
+    "field": "targeting.geo_location.custom_locations[].latitude",
+    "type": "float64",
+    "label": "纬度",
+    "category": "一、定向设置（targeting）",
+    "description": "单位度"
+  },
+  {
+    "field": "targeting.geo_location.custom_locations[].radius",
+    "type": "integer",
+    "label": "半径",
+    "category": "一、定向设置（targeting）",
+    "description": "单位米"
+  },
+  {
+    "field": "targeting.geo_location_auto_audience",
+    "type": "boolean",
+    "label": "是否使用地域优选",
+    "category": "一、定向设置（targeting）"
+  },
+  {
+    "field": "targeting.gender",
+    "type": "enum[]",
+    "label": "性别定向",
+    "category": "一、定向设置（targeting）",
+    "description": "仅单选"
+  },
+  {
+    "field": "targeting.age",
+    "type": "struct[]",
+    "label": "年龄定向",
+    "category": "一、定向设置（targeting）",
+    "description": "范围 18~66，步长不小于 4，66 代表 66 岁及以上"
+  },
+  {
+    "field": "targeting.age[].min",
+    "type": "integer",
+    "label": "年龄下限",
+    "category": "一、定向设置（targeting）"
+  },
+  {
+    "field": "targeting.age[].max",
+    "type": "integer",
+    "label": "年龄上限",
+    "category": "一、定向设置（targeting）"
+  },
+  {
+    "field": "targeting.education",
+    "type": "enum[]",
+    "label": "用户学历",
+    "category": "一、定向设置（targeting）",
+    "description": "即将下线，部分行业灰度"
+  },
+  {
+    "field": "targeting.app_install_status",
+    "type": "enum[]",
+    "label": "应用安装状态",
+    "category": "一、定向设置（targeting）",
+    "description": "仅推广目标为 ANDROID、IOS 时使用"
+  },
+  {
+    "field": "targeting.marital_status",
+    "type": "enum[]",
+    "label": "婚恋状态",
+    "category": "一、定向设置（targeting）",
+    "description": "即将下线，部分行业灰度"
+  },
+  {
+    "field": "targeting.excluded_converted_audience",
+    "type": "struct",
+    "label": "排除已转化人群行为定向",
+    "category": "一、定向设置（targeting）"
+  },
+  {
+    "field": "targeting.excluded_converted_audience.excluded_dimension",
+    "type": "enum",
+    "label": "排除已转化人群数据维度",
+    "category": "一、定向设置（targeting）"
+  },
+  {
+    "field": "targeting.excluded_converted_audience.conversion_behavior_list",
+    "type": "enum[]",
+    "label": "转化行为",
+    "category": "一、定向设置（targeting）",
+    "description": "枚举值同广告优化目标类型"
+  },
+  {
+    "field": "targeting.excluded_converted_audience.excluded_day",
+    "type": "enum",
+    "label": "排除天数",
+    "category": "一、定向设置（targeting）"
+  },
+  {
+    "field": "targeting.custom_audience",
+    "type": "integer[]",
+    "label": "定向用户群",
+    "category": "一、定向设置（targeting）",
+    "description": "通过创建人群接口创建，与 excluded_custom_audience 之和不超过 200"
+  },
+  {
+    "field": "targeting.excluded_custom_audience",
+    "type": "integer[]",
+    "label": "排除用户群",
+    "category": "一、定向设置（targeting）",
+    "description": "通过创建人群接口创建，与 custom_audience 之和不超过 200"
+  },
+  {
+    "field": "targeting.device_brand_model",
+    "type": "struct",
+    "label": "设备品牌型号定向",
+    "category": "一、定向设置（targeting）",
+    "description": "即将下线，部分行业灰度"
+  },
+  {
+    "field": "targeting.device_brand_model.included_list",
+    "type": "integer[]",
+    "label": "设备品牌型号定向列表",
+    "category": "一、定向设置（targeting）",
+    "description": "通过 targeting_tags/get 获取"
+  },
+  {
+    "field": "targeting.device_brand_model.excluded_list",
+    "type": "integer[]",
+    "label": "排除设备品牌型号列表",
+    "category": "一、定向设置（targeting）",
+    "description": "不能与 included_list 同时使用"
+  },
+  {
+    "field": "targeting.user_os",
+    "type": "enum[]",
+    "label": "操作系统定向",
+    "category": "一、定向设置（targeting）",
+    "description": "即将下线，部分行业灰度"
+  },
+  {
+    "field": "targeting.network_type",
+    "type": "enum[]",
+    "label": "联网方式定向",
+    "category": "一、定向设置（targeting）",
+    "description": "即将下线，部分行业灰度"
+  },
+  {
+    "field": "targeting.device_price",
+    "type": "enum[]",
+    "label": "设备价格定向",
+    "category": "一、定向设置（targeting）",
+    "description": "即将下线，部分行业灰度"
+  },
+  {
+    "field": "targeting.wechat_ad_behavior",
+    "type": "struct",
+    "label": "微信广告行为定向",
+    "category": "一、定向设置（targeting）",
+    "description": "仅投放微信广告时有效"
+  },
+  {
+    "field": "targeting.wechat_ad_behavior.actions",
+    "type": "enum[]",
+    "label": "微信再营销类型（包含）",
+    "category": "一、定向设置（targeting）",
+    "description": "关注公众号/已安装应用/领取卡券等"
+  },
+  {
+    "field": "targeting.wechat_ad_behavior.excluded_actions",
+    "type": "enum[]",
+    "label": "微信再营销类型（排除）",
+    "category": "一、定向设置（targeting）"
+  },
+  {
+    "field": "targeting.wechat_ad_behavior.corp_id",
+    "type": "string[]",
+    "label": "企业微信 corp_id 列表",
+    "category": "一、定向设置（targeting）",
+    "description": "选择已添加过企业微信时必填"
+  },
+  {
+    "field": "targeting.game_consumption_level",
+    "type": "enum[]",
+    "label": "游戏消费能力",
+    "category": "一、定向设置（targeting）",
+    "description": "即将下线，部分行业灰度"
+  },
+  {
+    "field": "targeting.excluded_os",
+    "type": "enum[]",
+    "label": "排除操作系统定向",
+    "category": "一、定向设置（targeting）",
+    "description": "ANDROID_PURE_MODE 仅支持安卓载体"
+  },
+  {
+    "field": "adgroup_id",
+    "type": "int64",
+    "label": "广告 ID",
+    "category": "二、广告基本信息"
+  },
+  {
+    "field": "adgroup_name",
+    "type": "string",
+    "label": "广告名称",
+    "category": "二、广告基本信息",
+    "description": "同账号下不重复，最大 60 等宽字符"
+  },
+  {
+    "field": "targeting_translation",
+    "type": "string",
+    "label": "已选择定向条件描述",
+    "category": "二、广告基本信息"
+  },
+  {
+    "field": "configured_status",
+    "type": "enum",
+    "label": "客户设置的状态",
+    "category": "二、广告基本信息",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "created_time",
+    "type": "integer",
+    "label": "创建时间",
+    "category": "二、广告基本信息",
+    "description": "时间戳"
+  },
+  {
+    "field": "last_modified_time",
+    "type": "integer",
+    "label": "最后修改时间",
+    "category": "二、广告基本信息",
+    "description": "时间戳"
+  },
+  {
+    "field": "is_deleted",
+    "type": "boolean",
+    "label": "是否已删除",
+    "category": "二、广告基本信息",
+    "description": "true: 是, false: 否"
+  },
+  {
+    "field": "system_status",
+    "type": "enum",
+    "label": "广告系统状态",
+    "category": "二、广告基本信息"
+  },
+  {
+    "field": "data_model_version",
+    "type": "integer",
+    "label": "数据版本号",
+    "category": "二、广告基本信息"
+  },
+  {
+    "field": "marketing_goal",
+    "type": "enum",
+    "label": "营销目的类型",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_sub_goal",
+    "type": "enum",
+    "label": "二级营销目的类型",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_carrier_type",
+    "type": "enum",
+    "label": "营销载体类型",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_carrier_detail",
+    "type": "struct",
+    "label": "营销载体详情",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_carrier_detail.marketing_carrier_id",
+    "type": "string",
+    "label": "营销载体 ID",
+    "category": "三、营销配置",
+    "description": "如安卓/iOS 应用 ID、小游戏 ID"
+  },
+  {
+    "field": "marketing_carrier_detail.marketing_sub_carrier_id",
+    "type": "string",
+    "label": "二级营销载体 ID",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_carrier_detail.marketing_carrier_name",
+    "type": "string",
+    "label": "营销载体名称",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_type",
+    "type": "enum",
+    "label": "推广产品类型",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_detail",
+    "type": "struct",
+    "label": "营销对象详情",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_detail.marketing_target_detail_id",
+    "type": "string",
+    "label": "推广内容资产详情 ID",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_detail.marketing_target_sub_detail_id",
+    "type": "string",
+    "label": "二级推广内容资产详情 ID",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_detail.marketing_target_id",
+    "type": "integer",
+    "label": "营销对象 ID",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_scene",
+    "type": "enum",
+    "label": "营销目标",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_asset_id",
+    "type": "integer",
+    "label": "产品 ID",
+    "category": "三、营销配置",
+    "description": "与 marketing_asset_outer_spec 不能同时使用"
+  },
+  {
+    "field": "promoted_asset_type",
+    "type": "enum",
+    "label": "推广内容类型",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_asset_outer_spec",
+    "type": "struct",
+    "label": "产品外部 ID 数据",
+    "category": "三、营销配置",
+    "description": "特定推广产品类型必须使用"
+  },
+  {
+    "field": "marketing_asset_outer_spec.marketing_target_type",
+    "type": "enum",
+    "label": "推广产品类型",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_asset_outer_spec.marketing_asset_outer_id",
+    "type": "string",
+    "label": "推广产品外部 ID",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_asset_outer_spec.marketing_asset_outer_sub_id",
+    "type": "string",
+    "label": "推广产品外部子 ID",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_asset_outer_spec.marketing_asset_outer_name",
+    "type": "string",
+    "label": "推广产品外部名称",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_asset_outer_spec.poi_list",
+    "type": "string[]",
+    "label": "门店 ID 列表",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_ext",
+    "type": "struct",
+    "label": "营销对象扩展数据",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_ext.marketing_target_name",
+    "type": "string",
+    "label": "营销对象名称",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_ext.category_name1",
+    "type": "string",
+    "label": "一级品类",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_ext.category_name2",
+    "type": "string",
+    "label": "二级品类",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_ext.category_name3",
+    "type": "string",
+    "label": "三级品类",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_attachment",
+    "type": "struct",
+    "label": "营销对象附加信息",
+    "category": "三、营销配置"
+  },
+  {
+    "field": "marketing_target_attachment.android_channel_id",
+    "type": "string",
+    "label": "安卓应用渠道包 ID",
+    "category": "三、营销配置",
+    "description": "格式 \"xx;yy\""
+  },
+  {
+    "field": "begin_date",
+    "type": "string",
+    "label": "开始投放日期",
+    "category": "四、投放时间与预算",
+    "description": "格式 YYYY-MM-DD"
+  },
+  {
+    "field": "end_date",
+    "type": "string",
+    "label": "结束投放日期",
+    "category": "四、投放时间与预算",
+    "description": "格式 YYYY-MM-DD，微信流量更新需至少 6h 后"
+  },
+  {
+    "field": "first_day_begin_time",
+    "type": "string",
+    "label": "首日开始投放时间",
+    "category": "四、投放时间与预算",
+    "description": "格式 HH:ii:ss，ADX 不可填写"
+  },
+  {
+    "field": "time_series",
+    "type": "string",
+    "label": "投放时间段",
+    "category": "四、投放时间与预算",
+    "description": "48×7 位字符串，0/1 表示半小时粒度"
+  },
+  {
+    "field": "daily_budget",
+    "type": "integer",
+    "label": "日预算",
+    "category": "四、投放时间与预算",
+    "description": "单位分，0 表示不限，范围 5000~400000000"
+  },
+  {
+    "field": "bid_amount",
+    "type": "integer",
+    "label": "广告出价",
+    "category": "五、出价与优化",
+    "description": "单位分"
+  },
+  {
+    "field": "optimization_goal",
+    "type": "enum",
+    "label": "广告优化目标类型",
+    "category": "五、出价与优化"
+  },
+  {
+    "field": "bid_mode",
+    "type": "enum",
+    "label": "出价方式",
+    "category": "五、出价与优化",
+    "description": "ADX 仅支持 CPC、CPM"
+  },
+  {
+    "field": "bid_scene",
+    "type": "enum",
+    "label": "出价场景",
+    "category": "五、出价与优化",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "smart_bid_type",
+    "type": "enum",
+    "label": "出价类型",
+    "category": "五、出价与优化",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "smart_cost_cap",
+    "type": "integer",
+    "label": "自动出价成本上限",
+    "category": "五、出价与优化",
+    "description": "单位分，ADX 不可填写"
+  },
+  {
+    "field": "conversion_id",
+    "type": "integer",
+    "label": "转化 ID",
+    "category": "五、出价与优化",
+    "description": "设置后不可修改，灰度开放中"
+  },
+  {
+    "field": "conversion_name",
+    "type": "string",
+    "label": "转化名称",
+    "category": "五、出价与优化"
+  },
+  {
+    "field": "deep_conversion_spec",
+    "type": "struct",
+    "label": "oCPA 深度优化内容",
+    "category": "六、深度优化",
+    "description": "不传或传空视为无限制"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_type",
+    "type": "enum",
+    "label": "深度优化价值配置",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_behavior_spec",
+    "type": "struct",
+    "label": "深度优化转化行为配置",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_behavior_spec.goal",
+    "type": "enum",
+    "label": "优化转化行为目标",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_behavior_spec.bid_amount",
+    "type": "integer",
+    "label": "深度优化行为出价",
+    "category": "六、深度优化",
+    "description": "单位分"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_worth_spec",
+    "type": "struct",
+    "label": "深度优化 ROI 配置",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_worth_spec.goal",
+    "type": "enum",
+    "label": "优化 ROI 目标",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_worth_spec.expected_roi",
+    "type": "float",
+    "label": "期望 ROI",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_worth_advanced_spec",
+    "type": "struct",
+    "label": "强化优化 ROI 配置",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_worth_advanced_spec.goal",
+    "type": "enum",
+    "label": "优化 ROI 目标",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_worth_advanced_spec.expected_roi",
+    "type": "float",
+    "label": "期望 ROI",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_behavior_advanced_spec",
+    "type": "struct",
+    "label": "深度辅助优化 OG 配置",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_behavior_advanced_spec.goal",
+    "type": "enum",
+    "label": "深度辅助优化 OG 目标",
+    "category": "六、深度优化"
+  },
+  {
+    "field": "deep_conversion_spec.deep_conversion_behavior_advanced_spec.bid_amount",
+    "type": "integer",
+    "label": "深度辅助优化 OG 出价",
+    "category": "六、深度优化",
+    "description": "单位分"
+  },
+  {
+    "field": "deep_conversion_behavior_bid",
+    "type": "integer",
+    "label": "深度优化行为出价",
+    "category": "六、深度优化",
+    "description": "单位分，使用转化 ID 时直接传"
+  },
+  {
+    "field": "deep_conversion_worth_rate",
+    "type": "float",
+    "label": "深度优化价值出价",
+    "category": "六、深度优化",
+    "description": "比值，使用转化 ID 时直接传"
+  },
+  {
+    "field": "deep_conversion_worth_advanced_rate",
+    "type": "float",
+    "label": "强化优化价值期望 ROI",
+    "category": "六、深度优化",
+    "description": "灰度开放中，使用转化 ID 时直接传"
+  },
+  {
+    "field": "deep_conversion_behavior_advanced_bid",
+    "type": "integer",
+    "label": "深度辅助优化 OG 出价",
+    "category": "六、深度优化",
+    "description": "单位分，使用转化 ID 时直接传"
+  },
+  {
+    "field": "deep_optimization_type",
+    "type": "enum",
+    "label": "深度优化策略类型",
+    "category": "六、深度优化",
+    "description": "仅微信版位可设置"
+  },
+  {
+    "field": "og_completion_type",
+    "type": "enum",
+    "label": "达成类型",
+    "category": "六、深度优化",
+    "description": "双目标（下单+下单 ROI）中使用"
+  },
+  {
+    "field": "auto_acquisition_enabled",
+    "type": "boolean",
+    "label": "一键起量开关",
+    "category": "七、一键起量"
+  },
+  {
+    "field": "auto_acquisition_budget",
+    "type": "integer",
+    "label": "一键起量预算",
+    "category": "七、一键起量",
+    "description": "单位分"
+  },
+  {
+    "field": "auto_acquisition_status",
+    "type": "enum",
+    "label": "一键起量状态",
+    "category": "七、一键起量",
+    "description": "表示当前起量阶段"
+  },
+  {
+    "field": "automatic_site_enabled",
+    "type": "boolean",
+    "label": "智能版位功能开关",
+    "category": "八、版位与场景定向",
+    "description": "建议使用"
+  },
+  {
+    "field": "site_set",
+    "type": "enum[]",
+    "label": "投放站点集合",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "priority_site_set",
+    "type": "enum[]",
+    "label": "优先投放站点集合",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "enable_breakthrough_siteset",
+    "type": "boolean",
+    "label": "版位突破开关",
+    "category": "八、版位与场景定向",
+    "description": "朋友圈广告可扩展到公众号与小程序"
+  },
+  {
+    "field": "enable_steady_exploration",
+    "type": "boolean",
+    "label": "稳步探索更多版位",
+    "category": "八、版位与场景定向",
+    "description": "选择特定版位时"
+  },
+  {
+    "field": "scene_spec",
+    "type": "struct",
+    "label": "场景定向",
+    "category": "八、版位与场景定向",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "scene_spec.mobile_union",
+    "type": "enum[]",
+    "label": "移动联盟场景定向",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "scene_spec.exclude_mobile_union",
+    "type": "enum[]",
+    "label": "移动联盟场景屏蔽",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "scene_spec.union_position_package",
+    "type": "integer[]",
+    "label": "定投联盟流量包列表",
+    "category": "八、版位与场景定向",
+    "description": "最多 5 个，关联广告位不超过 10000"
+  },
+  {
+    "field": "scene_spec.exclude_union_position_package",
+    "type": "integer[]",
+    "label": "屏蔽联盟流量包列表",
+    "category": "八、版位与场景定向",
+    "description": "最多 5 个"
+  },
+  {
+    "field": "scene_spec.tencent_news",
+    "type": "enum[]",
+    "label": "腾讯新闻场景定向",
+    "category": "八、版位与场景定向",
+    "description": "灰度开放"
+  },
+  {
+    "field": "scene_spec.display_scene",
+    "type": "enum[]",
+    "label": "广告展示场景",
+    "category": "八、版位与场景定向",
+    "description": "移动联盟流量"
+  },
+  {
+    "field": "scene_spec.wechat_scene",
+    "type": "struct",
+    "label": "微信场景定向",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "scene_spec.wechat_scene.official_account_media_category",
+    "type": "integer[]",
+    "label": "公众号媒体类型",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "scene_spec.wechat_scene.mini_program_and_mini_game",
+    "type": "integer[]",
+    "label": "小程序小游戏流量类型",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "scene_spec.wechat_scene.pay_scene",
+    "type": "integer[]",
+    "label": "订单详情页消费场景",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "scene_spec.wechat_position",
+    "type": "integer[]",
+    "label": "微信公众号与小程序定投",
+    "category": "八、版位与场景定向",
+    "description": "不允许修改"
+  },
+  {
+    "field": "scene_spec.mobile_union_category",
+    "type": "integer[]",
+    "label": "腾讯广告联盟媒体类型",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "scene_spec.qbsearch_scene",
+    "type": "enum[]",
+    "label": "QQ 浏览器/应用宝场景",
+    "category": "八、版位与场景定向",
+    "description": "SITE_SET_QBSEARCH 版位"
+  },
+  {
+    "field": "scene_spec.wechat_channels_scene",
+    "type": "integer[]",
+    "label": "微信视频号定投",
+    "category": "八、版位与场景定向"
+  },
+  {
+    "field": "scene_spec.pc_scene",
+    "type": "enum[]",
+    "label": "PC 端定投",
+    "category": "八、版位与场景定向",
+    "description": "SITE_SET_PCQQ 版位"
+  },
+  {
+    "field": "scene_spec.wechat_search_scene",
+    "type": "enum[]",
+    "label": "搜一搜流量场景",
+    "category": "八、版位与场景定向",
+    "description": "SITE_SET_WECHAT 版位"
+  },
+  {
+    "field": "flow_optimization_enabled",
+    "type": "boolean",
+    "label": "自动流量优选（已废弃）",
+    "category": "八、版位与场景定向",
+    "description": "仅联盟版位"
+  },
+  {
+    "field": "auto_derived_creative_enabled",
+    "type": "boolean",
+    "label": "创意增强 MAX 开关",
+    "category": "九、创意相关",
+    "description": "AI 生成高潜力素材"
+  },
+  {
+    "field": "auto_derived_creative_preference",
+    "type": "struct",
+    "label": "创意增强 MAX 偏好设置",
+    "category": "九、创意相关"
+  },
+  {
+    "field": "auto_derived_creative_preference.auto_derived_creative_method_type_list",
+    "type": "enum[]",
+    "label": "偏好设置列表",
+    "category": "九、创意相关"
+  },
+  {
+    "field": "auto_derived_landing_page_switch",
+    "type": "boolean",
+    "label": "自动衍生落地页开关",
+    "category": "九、创意相关"
+  },
+  {
+    "field": "user_action_sets",
+    "type": "struct[]",
+    "label": "用户行为数据源",
+    "category": "十、转化与数据源"
+  },
+  {
+    "field": "user_action_sets[].type",
+    "type": "enum",
+    "label": "数据源类型",
+    "category": "十、转化与数据源"
+  },
+  {
+    "field": "user_action_sets[].id",
+    "type": "integer",
+    "label": "数据源 ID",
+    "category": "十、转化与数据源"
+  },
+  {
+    "field": "user_action_sets[].data_source_id",
+    "type": "integer",
+    "label": "DN 数据源 ID",
+    "category": "十、转化与数据源"
+  },
+  {
+    "field": "search_expand_targeting_switch",
+    "type": "enum",
+    "label": "搜索定向拓展开关",
+    "category": "十一、搜索定向",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "search_expansion_switch",
+    "type": "enum",
+    "label": "搜索扩量开关",
+    "category": "十一、搜索定向",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "negative_word_cnt",
+    "type": "struct",
+    "label": "否定词个数",
+    "category": "十一、搜索定向"
+  },
+  {
+    "field": "negative_word_cnt.exact_negative_word_cnt",
+    "type": "number",
+    "label": "精确否定词个数",
+    "category": "十一、搜索定向"
+  },
+  {
+    "field": "negative_word_cnt.phrase_negative_word_cnt",
+    "type": "number",
+    "label": "短语否定词个数",
+    "category": "十一、搜索定向"
+  },
+  {
+    "field": "mpa_spec",
+    "type": "struct",
+    "label": "动态商品广告属性",
+    "category": "十二、动态广告",
+    "description": "动态商品广告时必填"
+  },
+  {
+    "field": "mpa_spec.recommend_method_ids",
+    "type": "integer[]",
+    "label": "商品推荐方式",
+    "category": "十二、动态广告",
+    "description": "确保父节点相同"
+  },
+  {
+    "field": "mpa_spec.product_catalog_id",
+    "type": "string",
+    "label": "商品库 ID",
+    "category": "十二、动态广告"
+  },
+  {
+    "field": "mpa_spec.product_series_id",
+    "type": "string",
+    "label": "商品集合 ID",
+    "category": "十二、动态广告"
+  },
+  {
+    "field": "dca_spec",
+    "type": "struct",
+    "label": "动态内容广告属性",
+    "category": "十二、动态广告",
+    "description": "仅动态内容广告可设置"
+  },
+  {
+    "field": "dca_spec.recommend_method_ids",
+    "type": "integer[]",
+    "label": "优选方式",
+    "category": "十二、动态广告",
+    "description": "目前仅支持单个，如 RTA 优选（95）"
+  },
+  {
+    "field": "dca_spec.set_id",
+    "type": "string",
+    "label": "素材集合 ID",
+    "category": "十二、动态广告"
+  },
+  {
+    "field": "additional_product_spec",
+    "type": "struct",
+    "label": "附加商品属性",
+    "category": "十二、动态广告",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "additional_product_spec.product_catalog_id",
+    "type": "string",
+    "label": "商品库 ID",
+    "category": "十二、动态广告"
+  },
+  {
+    "field": "additional_product_spec.product_outer_id",
+    "type": "string",
+    "label": "商品 ID",
+    "category": "十二、动态广告"
+  },
+  {
+    "field": "exploration_strategy",
+    "type": "enum",
+    "label": "探索策略",
+    "category": "十三、其他",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "ecom_pkam_switch",
+    "type": "enum",
+    "label": "一方人群跑量加强开关",
+    "category": "十三、其他",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "forward_link_assist",
+    "type": "enum",
+    "label": "助攻行为目标",
+    "category": "十三、其他",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "cost_constraint_scene",
+    "type": "enum",
+    "label": "成本控制场景",
+    "category": "十三、其他"
+  },
+  {
+    "field": "custom_cost_cap",
+    "type": "integer",
+    "label": "用户输入成本上限",
+    "category": "十三、其他",
+    "description": "范围 0-20000 元"
+  },
+  {
+    "field": "custom_cost_roi_cap",
+    "type": "float",
+    "label": "控制成本的期望 ROI",
+    "category": "十三、其他"
+  },
+  {
+    "field": "short_play_pay_type",
+    "type": "enum",
+    "label": "售卖方式类型",
+    "category": "十三、其他",
+    "description": "部分行业灰度"
+  },
+  {
+    "field": "sell_strategy_id",
+    "type": "integer",
+    "label": "售卖策略 ID",
+    "category": "十三、其他",
+    "description": "付费类型时必填"
+  },
+  {
+    "field": "material_package_id",
+    "type": "integer",
+    "label": "素材标签 ID",
+    "category": "十三、其他",
+    "description": "ADX 不可填写"
+  },
+  {
+    "field": "aoi_optimization_strategy",
+    "type": "struct",
+    "label": "高价值范围探索",
+    "category": "十三、其他",
+    "description": "灰度开放"
+  },
+  {
+    "field": "aoi_optimization_strategy.aoi_optimization_strategy_enabled",
+    "type": "boolean",
+    "label": "高价值范围探索开关",
+    "category": "十三、其他"
+  },
+  {
+    "field": "aoi_optimization_strategy.aoi_id_list",
+    "type": "integer[]",
+    "label": "AOI ID 列表",
+    "category": "十三、其他"
+  },
+  {
+    "field": "cost_guarantee_status",
+    "type": "enum",
+    "label": "成本保障状态",
+    "category": "十三、其他"
+  },
+  {
+    "field": "cost_guarantee_money",
+    "type": "integer",
+    "label": "成本保障赔付金额",
+    "category": "十三、其他",
+    "description": "单位分"
+  },
+  {
+    "field": "live_recommend_strategy_enabled",
+    "type": "boolean",
+    "label": "直播种草人群探索",
+    "category": "十三、其他",
+    "description": "灰度开放"
+  },
+  {
+    "field": "adx_realtime_type",
+    "type": "enum",
+    "label": "ADX 素材实时回复类型",
+    "category": "十三、其他"
+  },
+  {
+    "field": "smart_targeting_status",
+    "type": "enum",
+    "label": "广告智能定向状态",
+    "category": "十三、其他"
+  },
+  {
+    "field": "smart_delivery_platform",
+    "type": "enum",
+    "label": "行业智投平台类型",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "smart_delivery_scene",
+    "type": "enum",
+    "label": "智投投放场景",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "smart_delivery_scene_spec",
+    "type": "struct",
+    "label": "场景化投放信息",
+    "category": "十五、智投项目专有",
+    "description": "含投放目标、转化 ID 列表等"
+  },
+  {
+    "field": "smart_delivery_aigc_option",
+    "type": "enum",
+    "label": "智投 AIGC 选项",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "smart_delivery_auto_creative",
+    "type": "struct",
+    "label": "智投自动创意信息",
+    "category": "十五、智投项目专有",
+    "description": "含是否开启、供给策略、组件等"
+  },
+  {
+    "field": "smart_delivery_history_comp_reused_creative",
+    "type": "struct",
+    "label": "智投 全库智选 选项",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "smart_delivery_aigc_creative",
+    "type": "struct",
+    "label": "智投 AIGC 创意配置",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "smart_delivery_live_boost",
+    "type": "enum",
+    "label": "直播加热",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "project_ability_list",
+    "type": "array",
+    "label": "场景化投放原子能力列表",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "project_ability_spec",
+    "type": "struct",
+    "label": "场景化投放原子能力",
+    "category": "十五、智投项目专有",
+    "description": "含营销表达、优化出价"
+  },
+  {
+    "field": "boost_source_project_id",
+    "type": "int64",
+    "label": "加热源项目 ID",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "flow_lock_status",
+    "type": "enum",
+    "label": "锁量状态",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "expected_roi_mix_factor",
+    "type": "float64",
+    "label": "混变系数",
+    "category": "十五、智投项目专有",
+    "description": "范围 0.0001~9999.9999"
+  },
+  {
+    "field": "smart_coupon_mode",
+    "type": "enum",
+    "label": "小店智券开关",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "audience_model_bid_adjustment",
+    "type": "struct",
+    "label": "后效建模优化功能",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "incubation_optimization_goal",
+    "type": "enum",
+    "label": "孵化优化目标",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "completed_time",
+    "type": "integer",
+    "label": "广告总限额到达时间戳",
+    "category": "十五、智投项目专有",
+    "description": "unix 秒级"
+  },
+  {
+    "field": "smart_delivery_period_switch",
+    "type": "enum",
+    "label": "周期达成",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "smart_delivery_period_budget",
+    "type": "integer",
+    "label": "周期预算",
+    "category": "十五、智投项目专有",
+    "description": "单位分，0 表示不限"
+  },
+  {
+    "field": "smart_delivery_period_days",
+    "type": "enum",
+    "label": "周期天数",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "smart_delivery_period_continue",
+    "type": "enum",
+    "label": "周期续投",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "smart_delivery_period_begin_date",
+    "type": "string",
+    "label": "周期开始日期",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "smart_delivery_period_end_date",
+    "type": "string",
+    "label": "周期结束日期",
+    "category": "十五、智投项目专有"
+  },
+  {
+    "field": "adgroup.status",
+    "type": "enum",
+    "label": "广告状态",
+    "category": "十六、报表广告维度属性（adgroup.*）",
+    "description": "报表接口返回，含 adgroup. 前缀"
+  },
+  {
+    "field": "adgroup.status_cn",
+    "type": "string",
+    "label": "广告状态中文",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.adgroup_status",
+    "type": "enum",
+    "label": "广告投放状态",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.system_status_cn",
+    "type": "string",
+    "label": "系统状态中文",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.system_status_tips",
+    "type": "string",
+    "label": "系统状态提示",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.optimization_goal_cn",
+    "type": "string",
+    "label": "优化目标中文",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.marketing_goal_cn",
+    "type": "string",
+    "label": "营销目的中文",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.marketing_target_type_cn",
+    "type": "string",
+    "label": "营销目标类型中文",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.marketing_carrier_type_cn",
+    "type": "string",
+    "label": "营销载体类型中文",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.promoted_object_type",
+    "type": "enum",
+    "label": "推广目标类型",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.promoted_object_type_cn",
+    "type": "string",
+    "label": "推广目标类型中文",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.total_budget",
+    "type": "integer",
+    "label": "总预算",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.billing_event",
+    "type": "enum",
+    "label": "计费事件",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.buying_type",
+    "type": "enum",
+    "label": "购买类型",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.site_set_cn",
+    "type": "string",
+    "label": "版位中文",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.smart_bid_type_cn",
+    "type": "string",
+    "label": "出价方式中文",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.joint_budget_rule_id",
+    "type": "integer",
+    "label": "联合预算规则 ID",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.dynamic_creative_id",
+    "type": "integer",
+    "label": "动态创意 ID",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.placement_group_id",
+    "type": "integer",
+    "label": "版位组 ID",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.display_id",
+    "type": "integer",
+    "label": "展示 ID",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.adgroup_operation",
+    "type": "struct",
+    "label": "广告操作信息",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.ad_count",
+    "type": "integer",
+    "label": "广告数量",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.date_set",
+    "type": "struct",
+    "label": "日期设置",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.dynamic_ad_type",
+    "type": "enum",
+    "label": "动态广告类型",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.dynamic_ad_type_text",
+    "type": "string",
+    "label": "动态广告类型文本",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.dynamic_creative_status_info",
+    "type": "struct",
+    "label": "动态创意状态信息",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.adcreative_preview_list",
+    "type": "array",
+    "label": "创意预览列表",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.created_by_industry_platform",
+    "type": "boolean",
+    "label": "行业平台创建标识",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.ad_created_source",
+    "type": "enum",
+    "label": "广告创建来源",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.search_intelligent_extension",
+    "type": "struct",
+    "label": "搜索智能拓展",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.live_video_mode",
+    "type": "enum",
+    "label": "直播视频模式",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "adgroup.live_video_sub_mode",
+    "type": "enum",
+    "label": "直播视频子模式",
+    "category": "十六、报表广告维度属性（adgroup.*）"
+  },
+  {
+    "field": "page_info",
+    "type": "struct",
+    "label": "分页配置",
+    "category": "十七、分页"
+  },
+  {
+    "field": "page_info.page",
+    "type": "integer",
+    "label": "搜索页码",
+    "category": "十七、分页",
+    "description": "默认 1"
+  },
+  {
+    "field": "page_info.page_size",
+    "type": "integer",
+    "label": "每页条数",
+    "category": "十七、分页",
+    "description": "默认 10"
+  },
+  {
+    "field": "page_info.total_number",
+    "type": "integer",
+    "label": "总条数",
+    "category": "十七、分页"
+  },
+  {
+    "field": "page_info.total_page",
+    "type": "integer",
+    "label": "总页数",
+    "category": "十七、分页"
+  },
+  {
+    "field": "cursor_page_info",
+    "type": "struct",
+    "label": "游标分页信息",
+    "category": "十七、分页"
+  },
+  {
+    "field": "cursor_page_info.page_size",
+    "type": "integer",
+    "label": "每页条数",
+    "category": "十七、分页",
+    "description": "默认 10"
+  },
+  {
+    "field": "cursor_page_info.total_number",
+    "type": "integer",
+    "label": "总条数",
+    "category": "十七、分页"
+  },
+  {
+    "field": "cursor_page_info.next_cursor",
+    "type": "string",
+    "label": "下一页游标",
+    "category": "十七、分页",
+    "description": "为空则无下一页"
+  },
+  {
+    "field": "cursor_page_info.previous_cursor",
+    "type": "string",
+    "label": "上一页游标",
+    "category": "十七、分页",
+    "description": "为空则无上一页"
+  }
+]

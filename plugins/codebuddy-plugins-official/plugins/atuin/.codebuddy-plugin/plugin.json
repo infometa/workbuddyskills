@@ -1,0 +1,11 @@
+{
+  "name": "atuin",
+  "version": "1.1.0",
+  "description": "自动拦截 AI 的高危操作，自动阻止 AI 使用有漏洞的组件。腾讯玄武实验室出品。让 AI 编程更安全。",
+  "author": {
+    "name": "Tencent Xuanwu Lab",
+    "email": "xlab@tencent.com"
+  },
+  "homepage": "https://xlab.tencent.com/",
+  "hooks": "hooks/hooks.json"
+}

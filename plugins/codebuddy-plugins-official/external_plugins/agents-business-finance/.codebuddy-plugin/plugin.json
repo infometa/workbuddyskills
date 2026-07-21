@@ -1,0 +1,20 @@
+{
+  "name": "agents-business-finance",
+  "version": "1.0.0",
+  "description": "Agents for business analysis, financial modeling, and KPI tracking",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "business-finance",
+    "business-analyst",
+    "legal-advisor",
+    "payment-integration",
+    "quant-analyst"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "agents-infrastructure-operations",
+  "version": "1.0.0",
+  "description": "Agents for cloud infrastructure, DevOps, and database operations",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "infrastructure-operations",
+    "cloud-architect",
+    "database-admin",
+    "database-optimization",
+    "database-optimizer",
+    "deployment-engineer",
+    "devops-troubleshooter",
+    "network-engineer",
+    "terraform-specialist"
+  ]
+}

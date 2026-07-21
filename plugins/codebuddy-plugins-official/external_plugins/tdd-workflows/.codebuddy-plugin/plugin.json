@@ -1,0 +1,11 @@
+{
+  "name": "tdd-workflows",
+  "description": "测试驱动开发方法论,提供红-绿-重构循环和代码审查",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

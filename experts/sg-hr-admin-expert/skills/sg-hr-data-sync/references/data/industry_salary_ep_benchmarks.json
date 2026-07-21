@@ -1,0 +1,29 @@
+{
+  "_description": "行业岗位薪资 — MOM OWS 2025方法论替代记忆估算",
+  "_sources": {
+    "ows_2025": "https://stats.mom.gov.sg/Pages/Occupational-Wages-Tables2025.aspx",
+    "table4_xlsx": "https://stats.mom.gov.sg/iMAS_Tables1/Wages/Wages_2025/mrsd_2025Wages_table4.xlsx",
+    "occ_ind_list": "https://stats.mom.gov.sg/iMAS_Tables1/Wages/Wages_2025/mrsd_2025Wages_Occ_Ind_List.xlsx",
+    "hays": "https://www.hays.com.sg/salary-guide",
+    "robert_half": "https://www.roberthalf.com/sg/en/insights/salary-guide"
+  },
+  "ows_data": {
+    "release": "2026-06-30",
+    "coverage": "500+ occupations",
+    "dimensions": "Occupation x Industry",
+    "metrics": "median, 25th, 75th percentile; monthly basic + gross (excl bonuses)",
+    "target_industries": {
+      "tech": "Info & Comms",
+      "finance": "Financial & Insurance",
+      "mfg": "Manufacturing",
+      "logistics": "Transport & Storage"
+    }
+  },
+  "_audit_note": [
+    "SWE S$5.5K-12K, AI Eng S$8K-18K, Compliance Mgr S$8K-15K — 所有记忆区间已删除",
+    "Agent须从MOM OWS Table 4按Occ x Industry直接查询"
+  ],
+  "_verified": false,
+  "_last_verified": "2026-07-09",
+  "_verification_note": "部分数据来自训练记忆估算或商业报告摘要区间。引用时须通过WebFetch当前官方页面确认。"
+}

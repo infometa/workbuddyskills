@@ -1,0 +1,11 @@
+{
+  "name": "hr-legal-compliance",
+  "description": "人力资源政策文档、法律合规模板（GDPR/SOC2/HIPAA）、雇佣合同及监管文件",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

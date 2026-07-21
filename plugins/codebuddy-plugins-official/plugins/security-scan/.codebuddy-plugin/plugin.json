@@ -1,0 +1,20 @@
+﻿{
+  "name": "security-scan",
+  "version": "3.5.13",
+  "description": "腾讯云鼎实验室出品，专业的代码安全审计插件。支持 Fast（极速扫描）、Light（快速扫描）和 Deep（深度扫描）三种模式。基于 SQLite 语义索引 + 5 Agent 专业化架构，5维深度验证保障结果可信。全链路 --auto 无人值守模式 + POC 多维差异验证 + 安全门禁与 Git Hook 自动化。",
+  "keywords": ["security", "code-review", "vulnerability", "audit", "deterministic-verification"],
+  "category": "security",
+  "features": [
+    "三档扫描模式 — Fast（极速，Hook 场景纪律化执行）/ Light（快速，Grep 增量扫描）/ Deep（深度，多 Agent 语义追踪），按场景选择",
+    "语义索引 — indexer 构建 SQLite 语义数据库，审计 Agent 按需查询",
+    "双引擎检测 — Grep 模式匹配实现广覆盖，LSP 语义追踪实现跨文件数据流精确分析",
+    "专业化 Agent — vuln-scan（漏洞类）+ logic-scan（业务逻辑类）+ red-team（0day线索），各司其职深度审计",
+    "混合验证 — 脚本硬约束 + LLM verifier Agent 深度验证，兼顾效率与深度",
+    "量化置信度 — 三维度独立评分（攻击链可达性 + 防御措施 + 数据源可控性），高置信度门控驱动自动修复",
+    "长期记忆 — 跨扫描复用历史 Sink、防御模式和 findings，加速增量审计",
+    "审计质量保障 — 盲区识别与漏报检查，确保审计全面性"
+  ],
+  "agents": "./agents/",
+  "commands": "./commands/",
+  "hooks": "hooks/hooks.json"
+}

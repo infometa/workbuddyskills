@@ -1,0 +1,34 @@
+{
+  "name": "commands-code-analysis-testing",
+  "version": "1.0.0",
+  "description": "Commands for code review, testing, and analysis",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "code-analysis-testing",
+    "add-mutation-testing",
+    "add-property-based-testing",
+    "check",
+    "clean",
+    "code_analysis",
+    "e2e-setup",
+    "generate-test-cases",
+    "generate-tests",
+    "optimize",
+    "repro-issue",
+    "setup-comprehensive-testing",
+    "setup-load-testing",
+    "setup-visual-testing",
+    "tdd",
+    "test-changelog-automation",
+    "test-coverage",
+    "testing_plan_integration",
+    "write-tests"
+  ]
+}

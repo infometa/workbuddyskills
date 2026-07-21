@@ -1,0 +1,184 @@
+/* resume-assistant · ATS-safe 主题
+ * v0.3.2 默认主题 · 设计目标：ATS 通过率 100% · 视觉干净 · 单列
+ * 严格遵循 references/ats-rules.md §1 全部硬约束
+ */
+
+@page {
+    size: A4;
+    margin: 15mm 18mm;
+}
+
+body {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.45;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+}
+
+/* ── 标题层级（ATS 关键词命中关键）─────────────── */
+h1 {
+    font-size: 20pt;
+    font-weight: 700;
+    margin: 0 0 4pt 0;
+    color: #000;
+    letter-spacing: -0.3pt;
+}
+
+h1 + p {
+    /* 第一行联系信息（电话 / 邮箱 / LinkedIn）*/
+    font-size: 9.5pt;
+    color: #555;
+    margin: 0 0 14pt 0;
+}
+
+h2 {
+    font-size: 12pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6pt;
+    margin: 16pt 0 6pt 0;
+    padding-bottom: 3pt;
+    border-bottom: 1pt solid #999;
+    color: #000;
+    page-break-after: avoid;
+}
+
+h3 {
+    font-size: 11pt;
+    font-weight: 600;
+    margin: 8pt 0 2pt 0;
+    color: #000;
+    page-break-after: avoid;
+}
+
+h4 {
+    font-size: 10.5pt;
+    font-weight: 600;
+    margin: 6pt 0 1pt 0;
+    color: #2a2a2a;
+    page-break-after: avoid;
+}
+
+/* ── 段落与列表 ─────────────────────────────── */
+p {
+    margin: 4pt 0;
+    text-align: left;
+    orphans: 3;
+    widows: 3;
+}
+
+ul, ol {
+    margin: 4pt 0 6pt 0;
+    padding-left: 18pt;
+}
+
+li {
+    margin: 2pt 0;
+    line-height: 1.45;
+    text-align: left;
+}
+
+li::marker {
+    color: #555;
+}
+
+/* ── 强调 ────────────────────────────────────── */
+strong, b {
+    font-weight: 600;
+    color: #000;
+}
+
+em, i {
+    font-style: italic;
+    color: #444;
+}
+
+/* ── 链接（ATS 友好：保持文本可读）─────────── */
+a {
+    color: #1a1a1a;
+    text-decoration: underline;
+    text-decoration-thickness: 0.5pt;
+    text-underline-offset: 2pt;
+}
+
+/* ── 代码 / 引用（ATS 不优先解析，但保留渲染）─── */
+code {
+    font-family: "Menlo", "Monaco", "Courier New", monospace;
+    font-size: 9.5pt;
+    background: #f4f4f4;
+    padding: 1pt 3pt;
+    border-radius: 1pt;
+}
+
+pre {
+    background: #f4f4f4;
+    padding: 6pt 8pt;
+    overflow-x: auto;
+    font-size: 9pt;
+}
+
+blockquote {
+    margin: 6pt 0;
+    padding-left: 8pt;
+    border-left: 2pt solid #ccc;
+    color: #555;
+}
+
+/* ── 水平线（节间分隔）─────────────────────── */
+hr {
+    border: none;
+    border-top: 0.5pt solid #ddd;
+    margin: 12pt 0;
+}
+
+/* ── 表格（ATS 不友好，但用户可能用于「技能矩阵」）─── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0;
+    font-size: 10pt;
+}
+
+th, td {
+    border: 0.5pt solid #ccc;
+    padding: 3pt 6pt;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background: #f4f4f4;
+    font-weight: 600;
+}
+
+/* ── 打印优化 ─────────────────────────────── */
+@media print {
+    body {
+        font-size: 10pt;
+    }
+
+    h2 {
+        page-break-after: avoid;
+    }
+
+    li, p {
+        page-break-inside: avoid;
+    }
+
+    a {
+        color: #1a1a1a !important;
+    }
+
+    /* 隐藏 markdown 注释行（preflight 元数据等）*/
+    /* 由 pandoc 默认处理 */
+}
+
+/* ── ATS 硬约束：明令禁止的样式（注释保留作维护参考）───
+ * NEVER float / position absolute → ATS 解析按文档流
+ * NEVER multi-column → ATS 按从左到右一行扫
+ * NEVER background-image / inline svg → 解析丢失
+ * NEVER 自定义 web font （pandoc --self-contained 不嵌时退化为系统字）
+ */

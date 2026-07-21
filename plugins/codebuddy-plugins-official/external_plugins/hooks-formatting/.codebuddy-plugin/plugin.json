@@ -1,0 +1,18 @@
+{
+  "name": "hooks-formatting",
+  "version": "1.0.0",
+  "description": "Formatting Hooks - Event-driven automation hooks",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "hooks",
+    "automation",
+    "formatting",
+    "format-javascript-files",
+    "format-python-files"
+  ]
+}

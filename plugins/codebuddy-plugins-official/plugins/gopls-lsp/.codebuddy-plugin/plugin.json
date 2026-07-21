@@ -1,0 +1,15 @@
+{
+  "name": "gopls-lsp",
+  "version": "1.0.0",
+  "description": "Go 语言服务器，提供代码智能提示和重构功能",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "go",
+    "golang",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

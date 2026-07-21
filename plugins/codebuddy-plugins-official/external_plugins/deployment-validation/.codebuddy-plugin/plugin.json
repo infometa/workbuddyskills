@@ -1,0 +1,11 @@
+{
+  "name": "deployment-validation",
+  "description": "部署前检查、配置验证和部署就绪性评估",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,6 @@
+{
+  "supabase": {
+    "type": "http",
+    "url": "https://mcp.supabase.com/mcp"
+  }
+}

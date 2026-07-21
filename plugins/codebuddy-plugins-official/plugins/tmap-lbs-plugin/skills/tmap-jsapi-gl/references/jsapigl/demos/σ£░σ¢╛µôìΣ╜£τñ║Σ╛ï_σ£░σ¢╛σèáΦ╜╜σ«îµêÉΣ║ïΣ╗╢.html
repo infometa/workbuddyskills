@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>地图加载完成事件</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #tip {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        background: #FFF;
+        color: #666;
+        width: 200px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 3px;
+        padding-left: 5px;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+    <div id="tip">地图正在加载中......</div>
+    <script>
+        function initMap() {
+            //初始化地图
+            var map = new TMap.Map("container", {
+                center: new TMap.LatLng(39.984104, 116.307503)
+            });
+            //监听地图瓦片加载完成事件
+            map.on("tilesloaded", function () {
+                document.getElementById("tip").innerHTML = "地图瓦片已加载完成"
+            })
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "long_manuscript.docx_delivery_contract.v1",
+  "contractId": "long-manuscript-docx-delivery",
+  "nativeOnly": true,
+  "runtimeDependencyRequired": false,
+  "enforcementTopology": {
+    "repositoryValidatorModule": "lib/docx-delivery-contract.mjs",
+    "validatorScope": "workspace_root_review_only",
+    "validatorIncludedInProductZip": false,
+    "schemaIsNotAnExecutableValidator": true,
+    "hostExecutionProven": false,
+    "crossFieldEqualityEnforcement": "repository_validator_only"
+  },
+  "planSchemaRef": "schemas/docx-delivery-plan-v1.schema.json",
+  "explicitExportIntentRequired": true,
+  "sourceImmutable": true,
+  "newCopyOnly": true,
+  "hostReceiptRequiredForMachineValidation": true,
+  "visualQaRequired": true,
+  "humanConfirmationRequired": true,
+  "externalDeliveryClaimForbiddenWithoutReceipt": true
+}

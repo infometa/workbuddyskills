@@ -1,0 +1,39 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=20"
+    },
+    "init": {
+        "darwin": "npm install -g tencentads-cli@latest",
+        "linux": "npm install -g tencentads-cli@latest",
+        "win32": "npm install -g tencentads-cli@latest"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "tencentads --version",
+            "linux": "tencentads --version",
+            "win32": "tencentads.cmd --version"
+        },
+        "minVersion": "1.1.5"
+    },
+    "auth": {
+        "darwin": "tencentads auth login",
+        "linux": "tencentads auth login",
+        "win32": "tencentads.cmd auth login"
+    },
+    "unAuth": {
+        "darwin": "tencentads auth logout --force",
+        "linux": "tencentads auth logout --force",
+        "win32": "tencentads.cmd auth logout --force"
+    },
+    "status": {
+        "darwin": "tencentads auth status",
+        "linux": "tencentads auth status",
+        "win32": "tencentads.cmd auth status"
+    },
+    "statusMatchJson": {
+        "status": "active"
+    },
+    "authUrlDomain": "ad.qq.com",
+    "authWaitForExit": true
+}

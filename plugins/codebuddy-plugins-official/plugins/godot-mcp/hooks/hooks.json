@@ -1,0 +1,45 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"const fs=require('fs');const p=require('path');const pluginRoot=process.env.CODEBUDDY_PLUGIN_ROOT||process.env.CLAUDE_PLUGIN_ROOT;const dataDir=process.env.CODEBUDDY_PLUGIN_DATA||process.env.CLAUDE_PLUGIN_DATA;const serverDir=p.join(pluginRoot,'server');const srcPkg=p.join(serverDir,'package.json');const dstPkg=p.join(dataDir,'package.json');if(!fs.existsSync(dataDir)){fs.mkdirSync(dataDir,{recursive:true})};if(!fs.existsSync(dstPkg)||fs.readFileSync(srcPkg,'utf8')!==fs.readFileSync(dstPkg,'utf8')){console.log('Installing MCP server dependencies...');require('child_process').execSync('npm install --prefix '+serverDir,{stdio:'inherit'});require('child_process').execSync('npm run build --prefix '+serverDir,{stdio:'inherit'});fs.copyFileSync(srcPkg,dstPkg);console.log('MCP server ready.')}\""
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/check_godot_tools.js\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|create_file|replace_string_in_file|MultiEdit|multi_replace_string_in_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/guards/block_manual_godot_writes.js\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "检查刚才被写入或编辑的文件路径（tool_input.file_path 或 tool_input.path）。如果该文件是 .gd 后缀的 GDScript 文件或 .tscn 场景文件，则调用 MCP 工具 get_editor_output(filter: 'errors', lines: 50) 检查是否有编译错误（4.23 重构后场景保存由 build_godot_scene 内部完成，不再有独立的 operate_scene/save 工具）；如果发现错误，再用 get_script_errors 取详情并直接修复，不要让用户手动去 Godot 查看日志。如果不是 .gd 或 .tscn 文件，则不输出任何提示。"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+# Python Web 框架安全专项规则
+# 适用条件：侦察检测到 Python + Flask/Django/FastAPI
+#
+# 使用须知：本文件为参考资料，辅助识别 Python Web 框架特有的 Sink/防御模式。
+# Agent 的安全分析能力不受限于此文件列出的风险类型——应基于代码实际行为推理，
+# 发现未列出的风险时正常报告，不做知识对账。
+
+framework: python-web
+applies_to: ["python"]
+
+# 框架特有的 Sink 模式
+sink_patterns:
+  flask:
+    - pattern: "render_template_string(user_input)"
+      sink_type: ssti
+      severity: critical
+      grep_probe: "render_template_string\\("
+      description: "Flask SSTI，用户输入直接传入模板引擎"
+    - pattern: "send_file(user_path)"
+      sink_type: path-traversal
+      severity: medium
+      grep_probe: "send_file\\(|send_from_directory\\("
+      description: "Flask文件下载路径穿越"
+    - pattern: "app.run(debug=True)"
+      sink_type: debug-mode
+      severity: medium
+      grep_probe: "app\\.run.*debug\\s*=\\s*True"
+      description: "Flask生产环境开启debug模式"
+
+  django:
+    - pattern: "raw SQL"
+      sink_type: sql-injection
+      severity: high
+      grep_probe: "\\.raw\\(|\\.extra\\(|RawSQL\\(|cursor\\.execute\\("
+      description: "Django ORM绕过，直接执行原始SQL（可造成大量数据泄漏）"
+    - pattern: "mark_safe(user_input)"
+      sink_type: xss
+      severity: medium
+      grep_probe: "mark_safe\\("
+      description: "Django标记用户输入为安全HTML"
+    - pattern: "|safe filter"
+      sink_type: xss
+      severity: medium
+      grep_probe: "\\|\\s*safe"
+      file_types: ["*.html"]
+      description: "Django模板中使用safe过滤器"
+
+  fastapi:
+    - pattern: "Response(content=user_input)"
+      sink_type: xss
+      severity: medium
+      grep_probe: "HTMLResponse\\(|Response\\(.*content="
+      description: "FastAPI直接返回用户输入的HTML"
+
+# 框架自动防御（应降低置信度）
+framework_defenses:
+  django:
+    - defense: "Django ORM .filter()/.get()/.exclude()"
+      effectiveness: "有效 — 自动参数化"
+      confidence_impact: -20
+    - defense: "Django CSRF middleware"
+      effectiveness: "有效 — 默认开启"
+      confidence_impact: -15
+    - defense: "Django模板自动转义"
+      effectiveness: "有效 — 默认开启，除非使用|safe"
+      confidence_impact: -15
+  
+  flask:
+    - defense: "Jinja2自动转义"
+      effectiveness: "有效 — render_template默认转义"
+      confidence_impact: -15
+    - defense: "Flask-WTF CSRF"
+      effectiveness: "有效 — 需要手动配置"
+      check: "grep Flask-WTF requirements"
+
+# Python 特有的危险函数
+dangerous_builtins:
+  - pattern: "eval(user_input)"
+    sink_type: code-execution
+    severity: critical
+    grep_probe: "eval\\("
+  - pattern: "pickle.loads(user_input)"
+    sink_type: deserialization
+    severity: critical
+    grep_probe: "pickle\\.loads?\\("
+  - pattern: "yaml.load(data)"
+    sink_type: deserialization
+    severity: medium
+    grep_probe: "yaml\\.load\\("
+    safe_alternative: "yaml.safe_load()"
+  - pattern: "subprocess with shell=True"
+    sink_type: command-injection
+    severity: critical
+    grep_probe: "subprocess\\.\\w+\\(.*shell\\s*=\\s*True"

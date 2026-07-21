@@ -1,0 +1,9 @@
+{
+  "name": "security-guidance",
+  "description": "安全提醒钩子，在编辑文件时警告潜在的安全问题，包括命令注入、XSS 和不安全的代码模式",
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "UNKNOWN"
+}

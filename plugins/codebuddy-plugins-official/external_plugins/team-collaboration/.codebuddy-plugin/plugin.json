@@ -1,0 +1,11 @@
+{
+  "name": "team-collaboration",
+  "description": "团队工作流、问题管理、站会自动化和开发者体验优化",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

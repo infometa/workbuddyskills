@@ -1,0 +1,53 @@
+{
+  "name": "indonesia-digital-law-expert",
+  "version": "1.0.0",
+  "description": "Senior Indonesian digital economy & AI compliance legal counsel for cross-border SaaS and data privacy",
+  "author": {
+    "name": "Cindy",
+    "email": "cindy@workbuddy.local"
+  },
+  "agents": ["./agents/indonesia-digital-law-expert.md"],
+
+  "expertType": "agent",
+  "agentName": "indonesia-digital-law-expert",
+
+  "displayName": {
+    "en": "Indo Law",
+    "zh": "印尼法务合规专家"
+  },
+  "profession": {
+    "en": "Indonesian Digital Law & Compliance Expert",
+    "zh": "印尼法务合规专家"
+  },
+  "displayDescription": {
+    "en": "Focused on foreign investment, data compliance & commercial transactions—streamlines business registration, financial regulation & IP protection for cross-border SaaS and AI.",
+    "zh": "聚焦外商投资、数据合规与商业交易，打通营商审批、金融监管与知识产权保护链路，赋能跨境SaaS与AI等新兴赛道全流程印尼法务保障。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "14-GlobalDevelopment",
+  "defaultInitPrompt": {
+    "zh": "我们是AI产品公司，想在印尼提供大语言模型服务。需要关注哪些合规要求？注册、数据本地化、内容审核分别怎么做？",
+    "en": "We're an AI company planning to offer LLM services in Indonesia. What compliance requirements apply? How do registration, data localization, and content moderation work?"
+  },
+  "plugin": "indonesia-digital-law-expert",
+  "dependencies": {
+    "connectors": [
+      {
+        "id": "pasal-id",
+        "name": { "en": "PASAL-ID Indonesian Legal Search", "zh": "PASAL-ID 印尼法规检索" },
+        "description": { "en": "Search Indonesian laws, court decisions and legal context via PASAL-ID MCP", "zh": "通过 PASAL-ID MCP 搜索印尼法规原文、法院判决与法律上下文" },
+        "required": false
+      }
+    ]
+  },
+  "tags": [
+    { "en": "Market Entry Registration", "zh": "准入注册" },
+    { "en": "Data Compliance", "zh": "数据合规" },
+    { "en": "Regulatory Coordination", "zh": "审批协同" }
+  ],
+  "quickPrompts": [
+    { "en": "We're an AI company planning to offer LLM services in Indonesia. What compliance requirements apply? How do registration, data localization, and content moderation work?", "zh": "我们是AI产品公司，想在印尼提供大语言模型服务。需要关注哪些合规要求？注册、数据本地化、内容审核分别怎么做？" },
+    { "en": "Our product is a foreign SaaS (AI writing tool) entering Indonesia. Provide a full compliance checklist and timeline.", "zh": "我司产品是境外 SaaS（AI写作工具），准备进入印尼市场，请给出全流程合规清单与时间表。" },
+    { "en": "Our servers are in Singapore. Under Indonesian law, can user data be transferred cross-border? What's the legal basis and process?", "zh": "我们的服务器在新加坡，依据印尼法律用户数据能否跨境传输？法律依据与步骤是什么？" }
+  ]
+}

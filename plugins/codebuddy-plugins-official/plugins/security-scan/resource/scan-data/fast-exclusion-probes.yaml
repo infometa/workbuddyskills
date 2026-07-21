@@ -1,0 +1,74 @@
+# Fast Exclusion Grep 探针列表
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 在 Sink 发现之前并行执行 Grep 探针。0-hit 的维度直接跳过，不进入 LSP 追踪。
+#
+# === 知识版本管理 ===
+# version: 2.0.0
+# last_updated: "2026-04-29"
+# update_strategy: semi_auto
+# changelog:
+#   - "2.0.0 (2026-04-29): 优化探针检测机制"
+#   - "1.0.0 (2026-03-01): 初始版本"
+
+probes:
+  - dimension: 反序列化
+    pattern: 'ObjectInputStream|readObject|XMLDecoder|pickle\.loads?|yaml\.load[^s]'
+    file_types: ['*.java', '*.py', '*.go', '*.js', '*.ts']
+    zero_hit_action: SKIP
+
+  - dimension: 模板注入
+    pattern: 'render_template_string|Velocity\.evaluate|freemarker|Thymeleaf'
+    file_types: ['*.java', '*.py', '*.html']
+    zero_hit_action: SKIP
+
+  - dimension: JNDI 注入
+    pattern: 'InitialContext|\.lookup\('
+    file_types: ['*.java']
+    zero_hit_action: SKIP
+
+  - dimension: 表达式注入
+    pattern: 'SpelExpressionParser|Ognl\.getValue|ELProcessor'
+    file_types: ['*.java']
+    zero_hit_action: SKIP
+
+  - dimension: 命令执行
+    pattern: 'Runtime\.getRuntime|ProcessBuilder|os\.system|os\.popen|subprocess\.\w+|child_process\.(exec|spawn)|exec\.Command'
+    file_types: ['*.java', '*.py', '*.go', '*.js', '*.ts']
+    zero_hit_action: SKIP
+
+  - dimension: 代码执行
+    pattern: 'eval\(|exec\(|new\s+Function\('
+    file_types: ['*.js', '*.ts', '*.py']
+    zero_hit_action: SKIP
+
+  - dimension: NoSQL 注入
+    pattern: '\$where|\$regex|\$ne.*req\.|collection\.find|\.aggregate\('
+    file_types: ['*.js', '*.ts', '*.py', '*.java']
+    zero_hit_action: SKIP
+
+  - dimension: LDAP 注入
+    pattern: 'DirContext\.search|ldap_search|SearchControls|LdapTemplate'
+    file_types: ['*.java', '*.py']
+    zero_hit_action: SKIP
+
+  - dimension: 原型链污染
+    pattern: '__proto__|constructor\.prototype|Object\.assign.*req\.|_.merge|deepMerge'
+    file_types: ['*.js', '*.ts']
+    zero_hit_action: SKIP
+
+  - dimension: Mass Assignment
+    pattern: '@ModelAttribute'
+    file_types: ['*.java']
+    zero_hit_action: SKIP
+
+
+
+always_execute:
+  description: "以下维度始终执行，不参与 Fast Exclusion"
+  dimensions:
+    - SQL 注入
+    - XSS
+    - SSRF
+    - 文件操作
+    - 认证/授权
+    - CRLF 注入

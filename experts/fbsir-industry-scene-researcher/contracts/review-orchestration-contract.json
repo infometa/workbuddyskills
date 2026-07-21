@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0",
+  "contractId": "industry-scene-researcher-review-orchestration",
+  "packageName": "fbsir-industry-scene-researcher",
+  "packageVersion": "2.3.0",
+  "reviewPackage": {
+    "buildCommand": "npm.cmd run package:workbuddy:industry-scene-researcher",
+    "gateCommand": "npm.cmd run gate:workbuddy:industry-scene-researcher",
+    "noConnectorRehearsalCommand": "npm.cmd run rehearse:workbuddy:industry-scene-researcher:no-connector",
+    "reviewZipPath": "dist/review/fbsir-industry-scene-researcher/fbsir-industry-scene-researcher-submission-r2.zip",
+    "frozenPriorSubmissionZipPath": "dist/review/fbsir-industry-scene-researcher/archive/fbsir-industry-scene-researcher-submission-r1.zip",
+    "packageReportPath": "reports/fbsir-industry-scene-researcher-package-latest.json",
+    "reviewGatePath": "reports/fbsir-industry-scene-researcher-review-gate-latest.json",
+    "noConnectorRehearsalReportPath": "reports/fbsir-industry-scene-researcher-no-connector-rehearsal-latest.json"
+  },
+  "localEquivalentInstall": {
+    "workbuddyCommand": "npm.cmd run install:workbuddy:industry-scene-researcher:my-experts",
+    "workbuddyAiCommand": "npm.cmd run install:workbuddy-ai:industry-scene-researcher:my-experts",
+    "integrityCommand": "npm.cmd run report:workbuddy:industry-scene-researcher:local-install-integrity",
+    "hostMatrixCommand": "npm.cmd run report:workbuddy:industry-scene-researcher:my-experts-host-matrix",
+    "hostSurfaceProbeCommand": "npm.cmd run report:workbuddy:industry-scene-researcher:host-surface-probe",
+    "integrityReportPath": "reports/industry-scene-researcher-local-install-integrity-latest.json",
+    "hostMatrixReportPath": "reports/industry-scene-researcher-my-experts-host-matrix-latest.json",
+    "hostSurfaceProbePath": "reports/industry-scene-researcher-host-surface-probe-latest.json",
+    "targetMarketplace": "my-experts",
+    "targetHomes": {
+      "WORKBUDDY": ".workbuddy",
+      "WORKBUDDY_AI": ".workbuddy-ai"
+    }
+  },
+  "officialEntryBoundary": {
+    "officialListingStillRequiredForCompletion": true,
+    "localEquivalentPassDoesNotProveOfficialListing": true,
+    "officialMarketplaceRemainsAuthoritative": "experts",
+    "localEquivalentMarketplaceRemainsTestOnly": "my-experts",
+    "officialEntryReverifyRequiredAfterListing": true
+  },
+  "localEquivalentBiasGuard": {
+    "targetMarketplaceForRuntimeTruth": "experts",
+    "targetDistributionSurfaceForRuntimeTruth": "workbuddy_expert_center",
+    "localEquivalentMarketplace": "my-experts",
+    "localEquivalentEntrySurface": "my_expert",
+    "localEquivalentEvidenceLabel": "test_state_only",
+    "forbiddenOverclaims": [
+      "my_experts_visibility_means_official_listing",
+      "my_experts_followthrough_means_official_runtime_truth",
+      "my_experts_credit_means_natural_product_credit",
+      "my_experts_install_means_official_surface_replacement"
+    ]
+  },
+  "contractAlignmentChecks": {
+    "requiredContractPaths": [
+      "contracts/first-value-contract.json",
+      "contracts/no-connector-action-contract.json",
+      "contracts/connector-decoupling-gate.json",
+      "contracts/service-closure-gate.json",
+      "contracts/service-observability-contract.json",
+      "contracts/service-side-closure-report.schema.json"
+    ],
+    "requiredMetadataPaths": [
+      "scene-pack.json",
+      "ship-manifest.json",
+      "marketplace-entry.json"
+    ],
+    "requiredGateIds": [
+      "connector_decoupling_gate",
+      "service_closure_gate",
+      "service_observability_gate",
+      "highest_value_gap_evidence_gate",
+      "scenario_micro_slice_gate"
+    ]
+  },
+  "workflows": {
+    "package": [
+      "npm.cmd run package:workbuddy:industry-scene-researcher",
+      "npm.cmd run rehearse:workbuddy:industry-scene-researcher:no-connector",
+      "npm.cmd run gate:workbuddy:industry-scene-researcher"
+    ],
+    "verify": [
+      "npm.cmd run package:workbuddy:industry-scene-researcher",
+      "npm.cmd run rehearse:workbuddy:industry-scene-researcher:no-connector",
+      "npm.cmd run gate:workbuddy:industry-scene-researcher"
+    ]
+  }
+}

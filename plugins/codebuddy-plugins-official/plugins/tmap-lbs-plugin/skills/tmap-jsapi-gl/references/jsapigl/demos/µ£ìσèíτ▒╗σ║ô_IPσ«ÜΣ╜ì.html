@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IP定位</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=您的key"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #panel {
+        position: absolute;
+        background: #FFF;
+        width:350px;
+        padding: 20px;
+        z-index: 9999;
+        top: 30px;
+        left: 30px;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div id="panel">
+      <p>请在右侧示例代码第10行填入您的key，并执行查看运行结果（key可在控制台应用管理中自行创建）</p>
+        <p><input type='text' id='ipInput' placeholder="输入IP地址(默认为请求端的IP)" size='30'/><input type='button' id='locate' value='搜索所在位置' onclick='locate()' /></p>
+        <p id="ipLocationResult"></p>
+    </div>
+</body>
+
+
+<script type="text/javascript">
+var map = new TMap.Map('container', {
+  zoom: 14,
+  center: new TMap.LatLng(40.0402718, 116.2735831),
+});
+var ipLocation = new TMap.service.IPLocation(); // 新建一个IP定位类
+var markers = new TMap.MultiMarker({
+  map: map,
+  geometries: [],
+});
+function locate() {
+  var ipInput = document.getElementById('ipInput').value;
+  var params = ipInput ? { ip: ipInput } : {};
+  ipLocation
+    .locate(params)
+    .then((result2) => {
+      // 未给定ip地址则默认使用请求端的ip
+      var { result } = result2;
+      markers.updateGeometries([
+        {
+          id: 'main',
+          position: result.location, // 将所得位置绘制在地图上
+        },
+      ]);
+      map.setCenter(result.location);
+      document.getElementById(
+        'ipLocationResult'
+      ).innerText = `您的IP/您输入的IP所在位置：${result.ad_info.nation}，${result.ad_info.province}`;
+    })
+    .catch((error) => {
+      document.getElementById(
+        'ipLocationResult'
+      ).innerText = `错误：${error.status}，${error.message}`;
+    });
+}
+locate();
+</script>
+</html>

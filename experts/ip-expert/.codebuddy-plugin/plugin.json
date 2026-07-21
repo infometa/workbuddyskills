@@ -1,0 +1,77 @@
+{
+  "name": "ip-expert",
+  "version": "1.0.0",
+  "description": "An end-to-end Chinese intellectual-property expert covering copyright, patent, trademark, trade secret and domain matters. It clarifies intent, routes the request to the right IP scenario, guides retrieval across authoritative and specialised IP databases, runs infringement / validity / FTO / registrability analysis, and delivers scenario-adapted drafting and strategy outputs with statutory grounding, registration-number anchoring and effectiveness verification.",
+  "author": {
+    "name": "WorkBuddy User",
+    "email": "expert@workbuddy.local"
+  },
+  "agents": [
+    "./agents/ip-expert.md"
+  ],
+  "skills": [
+    "./skills/ip-scenario-router",
+    "./skills/ip-intake",
+    "./skills/ip-legal-research",
+    "./skills/ip-analysis-engine",
+    "./skills/ip-drafting-engine",
+    "./skills/ip-output-formatter",
+    "./skills/ip-verification-workbench"
+  ],
+  "dependencies": {
+    "connectors": [
+      "pkulaw",
+      "qcc-company"
+    ]
+  },
+  "expertType": "agent",
+  "agentName": "ip-expert",
+  "displayName": {
+    "en": "Quan",
+    "zh": "权知明"
+  },
+  "profession": {
+    "en": "Intellectual Property Expert",
+    "zh": "知识产权专家"
+  },
+  "displayDescription": {
+    "en": "An end-to-end IP expert across copyright, patent, trademark, trade secret and domains: it routes scenarios, guides IP-database retrieval, runs infringement / FTO / validity analysis, and delivers grounded drafting and strategy with verification.",
+    "zh": "覆盖著作权、专利、商标、商业秘密与域名，指引专业库检索，做侵权/FTO/确权分析并输出可落地策略。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "11-SecurityCompliance",
+  "defaultInitPrompt": {
+    "zh": "我公司自主研发了一款App，想全面梳理一下涉及的知识产权保护，包括软件著作权、商标、专利怎么布局，请帮我规划一套整体的知识产权保护方案。",
+    "en": "My company independently developed an App and I want to comprehensively plan its IP protection—software copyright, trademark and patent layout. Please help me design an overall IP protection strategy."
+  },
+  "plugin": "ip-expert",
+  "tags": [
+    {
+      "en": "Patent / Trademark / Copyright",
+      "zh": "专利商标著作权"
+    },
+    {
+      "en": "Infringement & FTO Analysis",
+      "zh": "侵权与FTO分析"
+    },
+    {
+      "en": "IP Strategy & Protection",
+      "zh": "知产战略与维权"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "My company independently developed an App and I want to comprehensively plan its IP protection—software copyright, trademark and patent layout. Please help me design an overall IP protection strategy.",
+      "zh": "我公司自主研发了一款App，想全面梳理一下涉及的知识产权保护，包括软件著作权、商标、专利怎么布局，请帮我规划一套整体的知识产权保护方案。"
+    },
+    {
+      "en": "We are about to launch a new product. Please help me run a patent freedom-to-operate (FTO) analysis to check the infringement risk before market entry.",
+      "zh": "我们有一款新产品即将上市，想在投产前做一次专利侵权风险排查（FTO分析），评估一下有没有侵犯他人专利的风险。"
+    },
+    {
+      "en": "A competitor is selling products with a trademark very similar to ours. Please help me assess whether it constitutes trademark infringement and what rights-protection strategy we should take.",
+      "zh": "有一家同行在卖跟我们商标很像的产品，请帮我判断是否构成商标侵权，以及我方应该采取什么维权策略。"
+    }
+  ],
+  "sharedBy": "howeli"
+}

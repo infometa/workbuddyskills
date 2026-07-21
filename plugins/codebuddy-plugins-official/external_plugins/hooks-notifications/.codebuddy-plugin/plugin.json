@@ -1,0 +1,26 @@
+{
+  "name": "hooks-notifications",
+  "version": "1.0.0",
+  "description": "Notification Hooks - Event-driven automation hooks",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "hooks",
+    "automation",
+    "notifications",
+    "discord-detailed-notifications",
+    "discord-error-notifications",
+    "discord-notifications",
+    "notify-before-bash",
+    "simple-notifications",
+    "slack-detailed-notifications",
+    "slack-error-notifications",
+    "telegram-detailed-notifications",
+    "telegram-error-notifications",
+    "telegram-notifications"
+  ]
+}

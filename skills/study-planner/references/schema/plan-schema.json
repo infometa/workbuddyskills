@@ -1,0 +1,195 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "学习计划结构",
+  "description": "study-planner 生成的结构化学习计划 JSON Schema",
+  "type": "object",
+  "required": ["id", "version", "meta", "stages", "daily_tasks"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^plan-\\d{8}-[a-z0-9-]+$",
+      "description": "计划唯一 ID，格式：plan-YYYYMMDD-slug"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "计划版本号，用于追踪修改历史"
+    },
+    "meta": {
+      "type": "object",
+      "required": ["title", "goal", "deadline", "current_level", "daily_budget"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "计划名称"
+        },
+        "goal": {
+          "type": "string",
+          "description": "目标描述，如「雅思总分 6.5，小分 6.0+」"
+        },
+        "deadline": {
+          "type": "string",
+          "format": "date",
+          "description": "截止日期 YYYY-MM-DD"
+        },
+        "current_level": {
+          "type": "string",
+          "description": "当前水平，如「雅思 5.5」"
+        },
+        "daily_budget": {
+          "type": "object",
+          "required": ["weekday", "weekend"],
+          "properties": {
+            "weekday": {
+              "type": "integer",
+              "description": "工作日每日可用分钟数"
+            },
+            "weekend": {
+              "type": "integer",
+              "description": "周末每日可用分钟数"
+            }
+          }
+        },
+        "weak_points": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "薄弱项列表"
+        },
+        "resources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "已有资源/资料"
+        },
+        "methodology": {
+          "type": "array",
+          "items": {
+            "enum": ["ebbinghaus", "pomodoro", "pareto", "feynman"]
+          },
+          "description": "采用的学习方法论"
+        },
+        "template_origin": {
+          "type": "string",
+          "description": "来源模板 ID"
+        },
+        "time_granularity": {
+          "type": "string",
+          "enum": ["monthly", "daily", "hourly", "minutely"],
+          "default": "daily",
+          "description": "时间精度：monthly=按月视图 / daily=按天（默认） / hourly=按小时排程 / minutely=按分钟（番茄钟）"
+        }
+      }
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "duration_days", "goals"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^stage-\\d+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "阶段名称，如「基础巩固」「强化提升」「冲刺突破」"
+          },
+          "duration_days": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "goals": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "本阶段目标"
+          }
+        }
+      }
+    },
+    "daily_tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "stage_id", "tasks"],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "日期 YYYY-MM-DD"
+          },
+          "stage_id": {
+            "type": "string",
+            "description": "所属阶段 ID"
+          },
+          "tasks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "title", "duration_min", "category", "checkable", "methodology_tip"],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^t-\\d{3}$"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "任务标题"
+                },
+                "duration_min": {
+                  "type": "integer",
+                  "minimum": 5,
+                  "maximum": 45,
+                  "description": "预计耗时（分钟）。NEVER 4：单任务 ≤45 min，超过必须用 add-task 自动拆成多段子任务"
+                },
+                "category": {
+                  "type": "string",
+                  "enum": [
+                    "listening", "reading", "writing", "speaking",
+                    "vocabulary", "grammar", "review", "exam", "output", "rest"
+                  ],
+                  "description": "任务类别"
+                },
+                "checkable": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "是否可打卡"
+                },
+                "resource": {
+                  "type": "string",
+                  "description": "推荐资料"
+                },
+                "methodology_tip": {
+                  "type": "string",
+                  "description": "学习方法论提示（如艾宾浩斯复现点）"
+                },
+                "priority": {
+                  "type": "string",
+                  "enum": ["high", "medium", "low"],
+                  "default": "medium"
+                },
+                "start_hour": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 23,
+                  "description": "开始小时（0-23），用于 hourly/minutely 粒度"
+                },
+                "start_minute": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 59,
+                  "description": "开始分钟（0-59），用于 minutely 粒度"
+                },
+                "pomodoro_split": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "是否按番茄钟拆分（25+5），minutely 粒度自动开启"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

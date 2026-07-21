@@ -1,0 +1,9 @@
+{
+  "name": "ralph-loop",
+  "description": "用于迭代开发的交互式自引用AI循环，实现Ralph Wiggum技术。Claude重复执行同一任务，查看之前的工作，直到完成为止。",
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "未声明"
+}

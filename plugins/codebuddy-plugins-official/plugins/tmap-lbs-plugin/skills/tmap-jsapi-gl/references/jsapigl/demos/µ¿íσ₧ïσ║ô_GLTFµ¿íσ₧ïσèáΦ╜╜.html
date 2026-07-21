@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>GLTF模型加载</title>
+  </head>
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=geometry,model"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <body>
+    <div id="container"></div>
+    <script>
+      var center = new TMap.LatLng(39.994104, 116.307503); // 设置中心点坐标
+      // 初始化地图
+      var map = new TMap.Map('container', {
+        center: center,
+        zoom: 19,
+        pitch: 50,
+        rotation: -20,
+      });
+      var model = new TMap.model.GLTFModel({
+        // GLTFModel文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/glModel
+        url: 'https://mapapi.qq.com/web/visualization/demo-asset/airplane.glb',
+        map: map,
+        id: 'model',
+        position: new TMap.LatLng(39.994104, 116.307503, 100),
+        rotation: [0, -90, 0], // 模型XYZ三轴上的旋转角度
+        scale: [20, 20, 30], // 模型在XYZ三轴上的缩放比例
+      });
+      // model资源加载完成回调
+      model.on('loaded', () => {
+        console.log('模型加载成功');
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "full-stack-orchestration",
+  "description": "编排全栈功能开发，配备测试自动化、性能工程、安全审计和部署的专业代理。支持 CI/CD 流水线、GitOps 工作流、可观测性和渐进式交付策略。",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "UNKNOWN"
+}

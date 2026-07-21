@@ -1,0 +1,18 @@
+{
+  "name": "deep-research",
+  "description": "Deep research plugin that enables comprehensive web research, information synthesis, and knowledge discovery. Supports multi-source research, fact verification, and structured report generation.",
+  "version": "1.0.0",
+  "author": {
+    "name": "CodeBuddy Teams"
+  },
+  "license": "MIT",
+  "skills": [
+    "./skills/wechat-article-search"
+  ],
+  "agents": [
+    "./agents/research-subagent.md"
+  ],
+  "rules": [
+    "./rules/deep_research.md"
+  ]
+}

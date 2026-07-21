@@ -1,0 +1,29 @@
+{
+  "name": "mcp-servers-docker",
+  "version": "1.0.0",
+  "description": "Docker-based MCP servers from the official Docker MCP registry - includes 199+ verified servers",
+  "author": {
+    "name": "Docker Inc. & BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "docker",
+    "servers",
+    "integrations",
+    "utilities",
+    "ai-task-management",
+    "cloud-infrastructure",
+    "api-development",
+    "browser-automation",
+    "web-search",
+    "database",
+    "productivity",
+    "developer-tools",
+    "file-system",
+    "email-integration",
+    "media-generation"
+  ]
+}

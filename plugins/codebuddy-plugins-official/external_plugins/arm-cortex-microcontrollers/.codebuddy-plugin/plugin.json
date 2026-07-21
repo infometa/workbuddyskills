@@ -1,0 +1,11 @@
+{
+  "name": "arm-cortex-microcontrollers",
+  "description": "面向 Teensy、STM32、nRF52 和 SAMD 的 ARM Cortex-M 固件开发，提供外设驱动和内存安全模式",
+  "author": {
+    "name": "Ryan Snodgrass",
+    "url": "https://github.com/rsnodgrass"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

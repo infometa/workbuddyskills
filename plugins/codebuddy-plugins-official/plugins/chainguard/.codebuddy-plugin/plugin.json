@@ -1,0 +1,9 @@
+{
+  "name": "chainguard",
+  "version": "1.1.3",
+  "description": "AI 编程供应链安全防护，自动拦截依赖安装操作进行安全审计，检测漏洞组件、License 合规及 SBOM 白名单。",
+  "author": {
+    "name": "腾讯云鼎实验室"
+  },
+  "hooks": "hooks/hooks.json"
+}

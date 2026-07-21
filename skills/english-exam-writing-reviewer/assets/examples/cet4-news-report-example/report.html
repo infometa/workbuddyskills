@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CET4 作文批改报告</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --brand: #2563eb;
+      --brand-soft: #dbeafe;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --excellent: #16a34a;
+      --good: #2563eb;
+      --warn: #f59e0b;
+      --danger: #dc2626;
+      --tip: #64748b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 32px 20px 80px; }
+    header.hero {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 32px 28px;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .score-circle {
+      position: relative;
+      width: 148px; height: 148px;
+      border-radius: 50%;
+      background: conic-gradient(#fff 0deg, #fff 264deg, rgba(255,255,255,0.25) 264deg 360deg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .score-circle::after {
+      content: "";
+      position: absolute; inset: 10px;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      border-radius: 50%;
+    }
+    .score-circle .score-inner {
+      position: relative; z-index: 1; text-align: center; color: #fff;
+    }
+    .score-inner .big { font-size: 40px; font-weight: 700; line-height: 1; }
+    .score-inner .sub { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+    .hero-info h1 { margin: 0 0 8px; font-size: 22px; }
+    .hero-info .meta { opacity: 0.9; font-size: 14px; margin-bottom: 12px; }
+    .hero-info .band-name {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      padding: 4px 12px; border-radius: 999px; font-size: 13px;
+    }
+    .hero-info .converted {
+      margin-top: 10px; font-size: 14px;
+      background: rgba(255,255,255,0.12);
+      padding: 6px 14px; border-radius: 8px; display: inline-block;
+    }
+
+    section.card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 26px;
+      margin-top: 20px;
+    }
+    section.card h2 {
+      margin: 0 0 14px;
+      font-size: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--brand-soft);
+      color: var(--brand);
+    }
+    section.card h3 {
+      font-size: 15px;
+      margin: 16px 0 8px;
+    }
+
+    .rubric-quote {
+      background: var(--brand-soft);
+      border-left: 4px solid var(--brand);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #1e3a8a;
+    }
+    .rubric-source { color: var(--muted); font-size: 12px; margin-top: 6px; }
+
+    .dim-row {
+      display: flex; gap: 16px; padding: 10px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .dim-row:last-child { border-bottom: none; }
+    .dim-name {
+      flex: 0 0 110px; font-weight: 600; color: var(--brand);
+    }
+    .dim-text { flex: 1; color: var(--text); }
+
+    .boundary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .boundary-grid > div {
+      background: #fafafa; border: 1px solid var(--border);
+      padding: 12px 14px; border-radius: 8px;
+    }
+    .boundary-grid h4 { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+
+    .intra-pill {
+      display: inline-block;
+      padding: 4px 12px; border-radius: 999px;
+      background: var(--brand-soft); color: var(--brand);
+      font-weight: 600;
+    }
+
+    .issue-list { list-style: none; padding: 0; margin: 0; }
+    .issue {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+    .issue .loc { font-weight: 600; margin-bottom: 6px; }
+    .issue .orig, .issue .sug { font-size: 14px; margin: 4px 0; }
+    .issue code {
+      background: #fff; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid var(--border); font-family: Menlo, Consolas, monospace;
+    }
+    .issue .reason { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+    .sev { display: flex; align-items: center; gap: 8px; }
+    .sev::before {
+      content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    }
+    .sev-critical::before { background: var(--danger); }
+    .sev-warning::before { background: var(--warn); }
+    .sev-tip::before { background: var(--tip); }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 12px; color: #fff; margin-right: 8px;
+    }
+    .tag-critical { background: var(--danger); }
+    .tag-warning { background: var(--warn); }
+    .tag-tip { background: var(--tip); }
+
+    .upgrade-list, .rationale {
+      padding-left: 20px;
+    }
+    .upgrade-list li, .rationale li {
+      margin-bottom: 8px;
+    }
+    .rationale .ev { padding-left: 18px; margin: 6px 0; color: var(--muted); font-size: 13px; }
+    .rationale .ref { color: var(--brand); font-size: 13px; margin-top: 4px; }
+
+    .deduction-list { padding-left: 20px; }
+    .deduction-list li { color: var(--danger); margin-bottom: 6px; }
+
+    /* v1.2 新增：Directions 照搬检测 */
+    .dcc-risk { padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; font-weight: 600; }
+    .dcc-risk-none     { background: #dcfce7; color: #166534; }
+    .dcc-risk-tip      { background: #fef3c7; color: #92400e; }
+    .dcc-risk-warning  { background: #ffedd5; color: #9a3412; }
+    .dcc-risk-critical { background: #fee2e2; color: #991b1b; }
+    .dcc-list { list-style: none; padding: 0; margin: 0; }
+    .dcc-item {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 12px; margin-bottom: 8px; background: #fafafa;
+    }
+    .dcc-sev-critical { border-left: 4px solid var(--danger); }
+    .dcc-sev-warning  { border-left: 4px solid var(--warn); }
+    .dcc-sev-tip      { border-left: 4px solid var(--tip); }
+    .dcc-head { margin-bottom: 6px; }
+    .dcc-body { font-size: 14px; margin: 3px 0; }
+    .dcc-body code { background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); font-family: Menlo, Consolas, monospace; }
+    .dcc-note { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .dcc-deduction { color: var(--danger); margin-top: 10px; }
+
+    /* v1.2 新增：词汇升档 */
+    .vocab-hint { color: var(--muted); font-size: 13px; }
+    .vocab-table {
+      width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px;
+    }
+    .vocab-table th, .vocab-table td {
+      border: 1px solid var(--border); padding: 8px 10px; text-align: left;
+    }
+    .vocab-table th { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+    .vocab-table code { background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); font-family: Menlo, Consolas, monospace; }
+    .tier-from { color: var(--muted); }
+    .tier-to   { color: var(--excellent); font-weight: 600; }
+
+    /* v1.6.1 新增：Calibration 状态横幅 */
+    .calib-banner {
+      border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;
+      border-left: 4px solid;
+    }
+    .calib-banner .calib-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .calib-banner .calib-note  { font-size: 13px; line-height: 1.6; }
+    .calib-banner.calib-normal { background: #dcfce7; color: #166534; border-color: #16a34a; }
+    .calib-banner.calib-warn   { background: #fef3c7; color: #92400e; border-color: #f59e0b; }
+    .calib-banner.calib-danger { background: #fee2e2; color: #991b1b; border-color: #dc2626; }
+
+    /* v1.6.1 新增：Postgrad1B 三段论诊断 */
+    .para-diag-list { list-style: none; padding: 0; margin: 0; }
+    .para-item {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 14px; margin-bottom: 10px; background: #fafafa;
+      border-left: 4px solid var(--border);
+    }
+    .para-item.para-excellent { border-left-color: var(--excellent); }
+    .para-item.para-warn      { border-left-color: var(--warn); }
+    .para-item.para-danger    { border-left-color: var(--danger); }
+    .para-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .para-q { font-size: 12px; padding: 2px 10px; border-radius: 999px; }
+    .para-q-excellent { background: #dcfce7; color: #166534; }
+    .para-q-warn      { background: #fef3c7; color: #92400e; }
+    .para-q-danger    { background: #fee2e2; color: #991b1b; }
+    .para-comment { font-size: 14px; color: var(--text); }
+    .para-evidence { font-size: 13px; color: var(--muted); margin-top: 6px; }
+    .para-evidence code {
+      background: #fff; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid var(--border); font-family: Menlo, Consolas, monospace;
+    }
+    .dialectical-ok, .dialectical-miss {
+      margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 14px;
+    }
+    .dialectical-ok   { background: #dcfce7; color: #166534; }
+    .dialectical-miss { background: #fee2e2; color: #991b1b; }
+
+    /* v1.6.1 新增：letter_category 专属检查 */
+    .letter-cat-head { margin-bottom: 10px; font-size: 15px; }
+    .letter-conf {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      background: var(--brand-soft); color: var(--brand);
+      font-size: 12px; margin-left: 8px;
+    }
+    .letter-check { list-style: none; padding: 0; margin: 0 0 10px; }
+    .letter-check li { padding: 6px 0; font-size: 14px; }
+    .lc-ok     { color: #166534; }
+    .lc-warn   { color: #92400e; }
+    .lc-danger { color: #991b1b; }
+    .letter-elem-table {
+      width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px;
+    }
+    .letter-elem-table th, .letter-elem-table td {
+      border: 1px solid var(--border); padding: 8px 10px; text-align: left;
+    }
+    .letter-elem-table th { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+    .letter-pitfalls {
+      margin-top: 12px; padding: 10px 14px; border-radius: 8px;
+      background: #fef3c7; color: #92400e; font-size: 14px;
+    }
+    .letter-pitfalls ul { margin: 6px 0 0; padding-left: 20px; }
+
+    /* v1.6.1 新增：chart_subtype_specific */
+    .chart-sub-head { margin-bottom: 10px; font-size: 15px; }
+    .chart-metric, .chart-line {
+      padding: 8px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 14px;
+      border-left: 3px solid transparent;
+    }
+    .chart-ok     { background: #dcfce7; color: #166534; border-left-color: #16a34a; }
+    .chart-warn   { background: #fef3c7; color: #92400e; border-left-color: #f59e0b; }
+    .chart-danger { background: #fee2e2; color: #991b1b; border-left-color: #dc2626; }
+    .chart-metric small { color: var(--muted); font-weight: normal; margin-left: 8px; }
+    .chart-errs {
+      background: #fee2e2; color: #991b1b; padding: 10px 14px;
+      border-radius: 8px; margin-bottom: 8px; font-size: 14px;
+    }
+    .chart-errs ul { margin: 6px 0 0; padding-left: 20px; }
+    .chart-errs code {
+      background: #fff; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid var(--border); font-family: Menlo, Consolas, monospace;
+    }
+
+    /* v1.7.0 新增：SVG 图表化（进度条 + 雷达图） */
+    .svg-progress { vertical-align: middle; margin: 0 6px; }
+    .chart-metric .svg-progress { margin-left: 8px; }
+    .chart-note { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+    .letter-elem-gauge {
+      margin: 0 0 10px; padding: 8px 14px;
+      background: var(--brand-soft); border-radius: 8px;
+      display: flex; align-items: center; gap: 12px; font-size: 14px;
+    }
+    .para-radar-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      margin: 0 0 16px; padding: 12px; background: #f9fafb; border-radius: 8px;
+    }
+    .svg-radar { margin-bottom: 8px; }
+    .radar-legend { font-size: 12px; color: var(--muted); }
+    .radar-legend .lg-good { color: #166534; }
+    .radar-legend .lg-fair { color: #92400e; }
+    .radar-legend .lg-poor { color: #991b1b; }
+
+    /* 考研专有语域标签 */
+    .exam-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      background: #fce7f3; color: #9d174d; font-size: 12px; font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .essay-box {
+      background: #fafafa; border: 1px solid var(--border);
+      padding: 14px 16px; border-radius: 8px;
+      white-space: pre-wrap; font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.8;
+    }
+    .prompt-box {
+      background: var(--brand-soft); color: #1e3a8a;
+      padding: 10px 14px; border-radius: 8px; font-size: 14px;
+    }
+
+    .empty { color: var(--muted); font-style: italic; }
+    footer {
+      text-align: center; color: var(--muted); font-size: 12px;
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="hero">
+      <div class="score-circle">
+        <div class="score-inner">
+          <div class="big">11</div>
+          <div class="sub">/ 15 分</div>
+        </div>
+      </div>
+      <div class="hero-info">
+        <h1>CET4 作文批改报告<span class="exam-badge">news_report</span></h1>
+        <div class="meta">批改时间：2026-04-22T18:00:00Z · 有效字数 <strong>162</strong> / 要求 120-180（达标）</div>
+        <span class="band-name">11 分档（第四档）（档内调整 +0）</span>
+        <div class="converted">78 / 106.5（报告分换算）</div>
+      </div>
+    </header>
+
+    <!-- v1.6.1 新增：Calibration 状态横幅（正常时隐藏） -->
+    <section class="card" style="display:none">
+      <h2>0. 校准集状态（评分置信度）</h2>
+
+    </section>
+
+    <section class="card">
+      <h2>1. 档次判定（官方描述符）</h2>
+      <div class="rubric-quote">「切题。表达思想清楚，文字通顺，连贯性较好。虽有少量语言错误，但不影响理解。」</div>
+      <div class="rubric-source">来源：CET4 官方 rubric 第四档 9–11 分</div>
+    </section>
+
+    <section class="card">
+      <h2>2. 隐含维度诊断（仅供参考，不计独立分）</h2>
+        <p class="empty">无诊断数据</p>
+    </section>
+
+    <!-- v1.2 新增：考研 A 节专有 —— Directions 原句照搬检测 -->
+    <section class="card" style="display:none">
+      <h2>考研 A 节专有 · Directions 原句照搬检测</h2>
+      <p class="vocab-hint">依据《考研英语 A 节阅卷规则》：连续 8 词及以上与 Directions 一致将视为"机械照搬"，按严重程度扣 0.5-2 分。</p>
+        <p class="empty">该考试/题型不适用 Directions 照搬检测</p>
+    </section>
+
+    <!-- v1.6.1 新增：letter_category 专属检查（Postgrad A 节 letter） -->
+    <section class="card" style="display:none">
+      <h2>考研 A 节专有 · letter_category 专属要素检查</h2>
+      <p class="vocab-hint">依据 <code>references/letter-categories.md</code>：10 类信件的开头套语、必备要素、语域均有独立硬要求。</p>
+
+    </section>
+
+    <!-- v1.6.1 新增：Postgrad1B 三段论诊断 -->
+    <section class="card" style="display:none">
+      <h2>考研英一 B 节专有 · 三段论段落诊断（cartoon_standard）</h2>
+      <p class="vocab-hint">依据 <code>references/postgrad1b-paragraph-rubric.md</code>：英一 B 节近 20 年真题均为"漫画 + 议论"，三段分工为描述 → 阐释 → 评论/对策。2022+ 鼓励辩证 discursive 写作。</p>
+
+    </section>
+
+    <!-- v1.6.1 新增：chart_subtype_specific（Postgrad2B / CET chart 题） -->
+    <section class="card" style="display:none">
+      <h2>图表题专有 · chart_subtype 数据与趋势检查</h2>
+      <p class="vocab-hint">依据 <code>references/chart-verbs.md</code>：7 类图表各有专属描述动词与硬约束。</p>
+
+    </section>
+
+    <section class="card">
+      <h2>3. 档次边界判定</h2>
+      <div class="boundary-grid">
+        <div>
+          <h4>与高一档的差距</h4>
+          <p>缺 academic tier 词汇（如 `epitomize / collective endeavour`）；归因段仅一句，未展开到多维</p>
+        </div>
+        <div>
+          <h4>与低一档相比的优势</h4>
+          <p>news_report 五要素齐全（时间/地点/组织者/参与者/影响）；无第一人称、无主观评价；结尾展望自然</p>
+        </div>
+      </div>
+      <h3>档内 ±1 调节：<span class="intra-pill">+0</span></h3>
+      <p>档内取中位 11 分——结构完整、数据精确，但语言丰富度仅达第四档下沿</p>
+    </section>
+
+    <section class="card">
+      <h2>4. 扣分明细</h2>
+        <p class="empty">无扣分项</p>
+    </section>
+
+    <section class="card">
+      <h2>5. 错误清单</h2>
+        <p class="empty">本文未发现错误 🎉</p>
+    </section>
+
+    <section class="card">
+      <h2>6. 升档路径</h2>
+
+    </section>
+
+    <!-- v1.2 新增：词汇升档建议（CET + 考研通用，基于 writing-vocabulary.md 四层库） -->
+    <section class="card">
+      <h2>6.1 词汇升档建议（Low → Mid → High → Academic）</h2>
+        <p class="vocab-hint">以下是基于目标档次自动检出的可升级词汇（至多 5 条），请结合语境选择是否替换。</p>
+        <table class="vocab-table">
+          <thead><tr><th>位置</th><th>原词</th><th>升级建议</th><th>层级跃迁</th><th>说明</th></tr></thead>
+          <tbody>
+          <tr><td></td><td><code>successfully held</code></td><td><code>ran smoothly</code></td><td><span class="tier-from"></span> → <span class="tier-to"></span></td><td></td></tr>
+          <tr><td></td><td><code>free juice and biscuits were provided</code></td><td><code>complimentary refreshments were on hand</code></td><td><span class="tier-from"></span> → <span class="tier-to"></span></td><td></td></tr>
+          <tr><td></td><td><code>growing social responsibility</code></td><td><code>burgeoning civic awareness</code></td><td><span class="tier-from"></span> → <span class="tier-to"></span></td><td></td></tr>
+          </tbody>
+        </table>
+    </section>
+
+    <section class="card">
+      <h2>7. 判定证据链（可追溯性）</h2>
+        <ul class="rationale">
+          <li><strong>[Step 1] 词数核算</strong><ul class="ev"><li>effective=162</li><li>requirement 120-180</li><li>within_range=true</li></ul><div class="ref">依据：CET4 字数扣分规则</div></li>
+          <li><strong>[Step 2] task_subtype 识别为 news_report</strong><ul class="ev"><li>Directions 含 &#x27;write a news report&#x27;</li><li>CET4 2023 后高频子类</li></ul><div class="ref">依据：task-subtypes.md §CET.news_report</div></li>
+          <li><strong>[Step 3] news_report 硬门槛全通过</strong><ul class="ev"><li>first_person_used=false</li><li>subjective_evaluation_present=false</li><li>5W 齐全</li><li>含直接引述</li></ul><div class="ref">依据：task-subtypes.md §news_report 硬门槛</div></li>
+          <li><strong>[Step 4] 官方 rubric 比对 → 第四档</strong><ul class="ev"><li>切题</li><li>表达清楚</li><li>连贯性较好</li><li>少量语言错误不影响理解</li></ul><div class="ref">依据：CET4 官方 rubric 第四档 9-11 分</div></li>
+          <li><strong>[Step 5] 档内定位中位 11 分</strong><ul class="ev"><li>结构完整</li><li>缺 academic tier 密度</li><li>未达第五档</li></ul><div class="ref">依据：boundary-rubric.md §档内微调</div></li>
+        </ul>
+    </section>
+
+    <section class="card">
+      <h2>附录：题目 & 作文原文</h2>
+      <h3>题目</h3>
+      <div class="prompt-box">Write a news report to your campus newspaper on a campus blood donation event that took place last weekend. You should include the time, place, organizer, participants and its significance. 120–180 words.</div>
+      <h3>作文</h3>
+      <div class="essay-box">Last Saturday morning, a campus-wide blood donation event was successfully held on the square in front of the library at Nankai University. Co-organized by the Red Cross Society and the Student Union, the activity attracted more than 400 undergraduates, postgraduates and faculty members within four hours.
+
+According to Zhang Wei, the chief coordinator, the donated blood will be transferred to Tianjin Municipal Blood Center and used for emergency medical rescue in the coming weeks. Many participants reported that the pre-registration and on-site health check were efficient, and free juice and biscuits were provided afterwards.
+
+The event demonstrates growing social responsibility among young students and also alleviates the seasonal blood shortage that local hospitals typically face in summer. Further donation sessions are scheduled for next month, which, according to the organizers, will be extended to neighbouring campuses.</div>
+    </section>
+
+    <footer>
+      由 <strong>english-exam-writing-reviewer</strong> Skill 生成 ·
+      对齐《全国大学英语四、六级考试大纲 2016 修订版》+《全国硕士研究生招生考试英语一/二考试大纲》<br>
+      AI 批改与人工阅卷仍有误差，结果仅供学习参考。
+    </footer>
+  </div>
+</body>
+</html>

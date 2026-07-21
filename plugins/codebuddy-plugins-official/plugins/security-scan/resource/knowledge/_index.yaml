@@ -1,0 +1,189 @@
+# knowledge 索引文件
+# Agent 可一次 Read 此索引，根据技术栈和场景精准选择需要加载的知识文件。
+# load_strategy: always = 扫描流程总是加载 | conditional = 按需加载
+#
+# === 知识更新机制 ===
+# 工具: ${CODEBUDDY_PLUGIN_ROOT}/scripts/knowledge_updater.py
+# 用法:
+#   check-freshness  — 检查哪些知识文件已过期（距上次更新超过 threshold）
+#   suggest-updates  — 为过期文件生成候选更新建议（含 WebSearch 查询模板）
+#   apply-update     — 将审核通过的更新合并到知识文件（自动更新版本号）
+#   show-versions    — 显示所有知识文件的版本/更新日期
+#
+# update_strategy 类别:
+#   semi_auto = 脚本生成候选更新 + 人工审核后合并（推荐）
+#   manual    = 纯人工维护（不频繁变化的知识）
+#   static    = 不需要更新（稳定的参考数据）
+
+# ============================================================================
+# 安全漏洞知识（漏洞类型 + 检测模式 + 安全/不安全写法）
+# ============================================================================
+
+vulnerability_knowledge:
+  - file: session-cookie-patterns.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]
+    description: 会话/Cookie/JWT 安全检测模式（Session 固定、SameSite、JWT 审计）
+    lines: 172
+    inline_candidate: false
+
+  - file: password-security-patterns.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]
+    description: 密码存储/策略/重置流程安全检测模式
+    lines: 165
+    inline_candidate: false
+
+  - file: log-security-patterns.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]
+    description: 日志注入/敏感数据脱敏/安全事件审计检测模式
+    lines: 148
+    inline_candidate: false
+
+  - file: dos-patterns.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]
+    description: ReDoS/XML解析炸弹/资源耗尽/Zip炸弹 DoS 检测模式
+    lines: 190
+    inline_candidate: false
+
+  - file: frontend-security-patterns.yaml
+    load_strategy: conditional
+    tech_stack: ["javascript", "typescript", "nodejs-*"]
+    description: PostMessage/DOM Clobbering/WebSocket/CORS/客户端绕过检测模式
+    lines: 178
+    inline_candidate: false
+
+  - file: supply-chain-patterns.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]
+    description: 依赖混淆/恶意包/Typosquatting/废弃依赖 供应链安全检测模式
+    lines: 166
+    inline_candidate: false
+
+  - file: ssrf.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]  # 存在 SSRF 攻击面时加载
+    description: SSRF 绕过技术参考数据
+    lines: 23
+    inline_candidate: true  # 小文件，可内联
+
+  - file: auth-basic.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]  # 通用鉴权检测
+    description: 鉴权/越权基础检测模式
+    lines: 64
+    inline_candidate: false
+
+  - file: ghost-bits-truncation.yaml
+    load_strategy: conditional
+    tech_stack: ["java-*"]
+    description: Java Ghost Bits 类型截断漏洞检测（char→byte 高位截断导致 WAF 绕过，覆盖 4 种危险代码模式、12+ 受影响组件、攻击链推理规则、防御检查清单）
+    lines: 210
+    inline_candidate: false
+
+  - file: tencent-cloud-security.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]  # 使用云服务时加载（含通用凭据/Endpoint 配置消费检查，跨云通用）
+    description: 云安全检测模式（CAM 策略/COS 与 STS 鉴权/凭据 Endpoint 配置消费层空值校验[语义角色，跨语言跨云通用]/数据万象/IMDS 元数据/CVM 安全组/SCF 云函数/TKE 容器/CDB 数据库）
+    lines: 657
+    inline_candidate: false
+
+  - file: ai-agent-security.yaml
+    load_strategy: conditional
+    tech_stack: ["python-*", "nodejs-*", "*"]
+    description: AI Agent 安全检测模式（提示词注入/工具执行/系统提示泄露/MCP 信任/Agent 输出 sink）— 场景 ai_agent_app 触发（仅 Light）
+    inline_candidate: false
+
+  - file: sandbox-escape-patterns.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]
+    description: 沙箱逃逸检测模式（Node vm/Python eval/容器/seccomp/WASI/通用 eval）— 场景 sandbox_runtime 触发（仅 Light）
+    inline_candidate: false
+
+  - file: mobile-security-patterns.yaml
+    load_strategy: conditional
+    tech_stack: ["android-*", "ios-*", "react-native", "flutter"]
+    description: 移动客户端安全检测模式（组件暴露/WebView JS Bridge/证书校验缺失/本地明文存储/Intent 重定向/明文流量，对标 OWASP MASVS）— 场景 mobile_app 触发（仅 Light）
+    inline_candidate: false
+
+  - file: desktop-security-patterns.yaml
+    load_strategy: conditional
+    tech_stack: ["electron", "nodejs-*"]
+    description: 桌面/Electron 客户端安全检测模式（Node 集成/上下文隔离/webSecurity/IPC 无校验/shell 命令注入/远程内容/preload 暴露/自动更新验签，对标 Electron Security Checklist）— 场景 desktop_app 触发（仅 Light）
+    inline_candidate: false
+
+
+# ============================================================================
+# 框架专属知识（特定框架/技术栈的 Sink、防御、绕过技术）
+# ============================================================================
+
+framework_knowledge:
+  - file: spring-security.yaml
+    load_strategy: conditional
+    tech_stack: ["java-spring"]
+    description: Spring Security 配置模式
+    lines: 96
+    inline_candidate: false
+
+  - file: mybatis-injection.yaml
+    load_strategy: conditional
+    tech_stack: ["java-mybatis"]
+    description: MyBatis 注入模式（${} vs #{}）
+    lines: 59
+    inline_candidate: false
+
+  - file: actuator-exposure.yaml
+    load_strategy: conditional
+    tech_stack: ["java-spring"]
+    description: Actuator/管理端点暴露检测模式
+    lines: 321
+    inline_candidate: false  # 大文件，务必按需 Read
+
+  - file: nodejs-web.yaml
+    load_strategy: conditional
+    tech_stack: ["nodejs-express", "nodejs-koa", "nodejs-nestjs"]
+    description: Node.js Web 安全模式
+    lines: 96
+    inline_candidate: false
+
+  - file: python-web.yaml
+    load_strategy: conditional
+    tech_stack: ["python-flask", "python-django", "python-fastapi"]
+    description: Python Web 安全模式
+    lines: 95
+    inline_candidate: false
+
+  - file: go-web.yaml
+    load_strategy: conditional
+    tech_stack: ["go-gin", "go-echo", "go-fiber"]
+    description: Go Web 安全模式
+    lines: 82
+    inline_candidate: false
+
+# ============================================================================
+# 业务逻辑审计知识（鉴权绕过、业务反模式、支付逻辑）
+# ============================================================================
+
+logic_audit_knowledge:
+  - file: authentication-bypass.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]
+    description: 鉴权风险置信度评估与模式引用
+    lines: 120
+    inline_candidate: false
+
+  - file: business-logic-rules.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]
+    description: 业务逻辑缺陷规则（已知反模式 + 推理维度）
+    lines: 150
+    inline_candidate: false
+
+  - file: payment-logic-rules.yaml
+    load_strategy: conditional
+    tech_stack: ["*"]
+    description: 支付逻辑审计规则（支付反模式列表）
+    lines: 100
+    inline_candidate: false

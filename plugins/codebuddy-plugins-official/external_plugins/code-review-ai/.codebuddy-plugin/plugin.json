@@ -1,0 +1,11 @@
+{
+  "name": "code-review-ai",
+  "description": "AI 驱动的架构审查和代码质量分析",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

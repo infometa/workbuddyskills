@@ -1,0 +1,145 @@
+# ============================================================================
+# 反幻觉强制执行规则 (Anti-Hallucination Enforcement Rules)
+# ============================================================================
+# 核心原则：宁可漏报一个漏洞，也不误报一个不存在的漏洞。
+# 架构：3 层（证据强制 → 知识隔离+反确认偏误 → 门禁+合约）
+
+anti_hallucination:
+
+  # ==========================================================================
+  # 第一层：证据强制规则（Evidence Mandates）
+  # ==========================================================================
+
+  evidence_mandates:
+
+    # --- 字段级验证（violation = reject_finding） ---
+
+    file_existence:
+      enforcement: mandatory
+      violation_action: reject_finding
+      rule: "filePath 必须通过 Glob/Read 验证存在。禁止推测路径。"
+
+    code_authenticity:
+      enforcement: mandatory
+      violation_action: reject_finding
+      rule: "riskCode 必须来自 Read 输出，逐字匹配（允许截取，不允许修改）。禁止从 LLM 记忆补全。"
+
+    line_number_accuracy:
+      enforcement: mandatory
+      violation_action: reject_finding
+      rule: "lineNumber 必须 >= 1 且 <= 文件总行数，且指向 riskCode 所在行。"
+
+    call_chain_verification:
+      enforcement: mandatory
+      violation_action: downgrade_confidence
+      rules:
+        - "attackChain 每个节点（source/propagation/sink）必须有工具调用证据"
+        - "LSP 追踪需记录具体操作；不可用时标注 traceMethod: 'Grep+Read'"
+        - "必须符合 references/contracts/output-schemas.md 的 attackChain 模式合约"
+
+    # --- 必需输出字段 ---
+
+    mandatory_fields:
+      - { field: "filePath",             validation: "Glob/Read 验证存在" }
+      - { field: "lineNumber",           validation: "在文件行数范围内" }
+      - { field: "riskCode",             validation: "来自 Read 输出" }
+      - { field: "verificationStatus",   validation: "verified|unverified|false_positive|challenged" }
+      - { field: "auditedBy",            validation: "实际参与审计的 agent 列表" }
+
+    # --- 间接数据流宽松规则 ---
+
+    indirect_dataflow:
+      description: "对数据库/缓存/MQ 中转的间接数据流（二阶注入等），允许推理衔接"
+      conditions:
+        - "写入端和读出端均有 Read/Grep 工具证据"
+        - "中间存储介质明确（数据库表/缓存键/MQ topic）"
+        - "读出端代码确认未对数据重新校验"
+      allowed:
+        - "推断写入端数据在中间存储中保持原值"
+        - "基于 LSP 补偿策略（Ref: references/techniques/lsp-compensation.md > 补偿策略总览）衔接跨服务链路"
+      constraints:
+        - "traceMethod 设为 'Grep+Read'"
+        - "attackChain.propagation 中标注存储中转点"
+        - "置信度上限 80（链路含推断环节）"
+
+    # --- 证据链要求 ---
+
+    evidence_trail:
+      required:
+        - "文件读取记录（哪次 Read 确认文件存在）"
+        - "代码来源（riskCode 来自哪次 Read）"
+        - "追踪方法（LSP 操作或 Grep 模式）"
+        - "防护搜索（搜索了哪些模式，结果如何）"
+
+    # --- 证据链整理（verifier.py chain-verify） ---
+
+    verifiability:
+      enforcement: mandatory
+      rules:
+        - "confirmed/escalated finding 必须含完整 verifiability 结构"
+        - "attackPathNarrative 从 Source 到 Sink 完整叙述"
+        - "evidenceRefs 每项含 file/line/snippet（来自 Read）"
+        - "defenseSearchRecord 记录所有防护搜索及结果"
+      gate: "confidence >= 80 必须有完整 verifiability；缺失则降至 79。verifiabilityLevel = requires_runtime 上限 85。"
+
+  # ==========================================================================
+  # 第二层：知识隔离 + 反确认偏误
+  # ==========================================================================
+
+  knowledge_isolation_and_anti_bias:
+
+    knowledge_isolation:
+      rule: "LLM 内部知识 ≠ 当前项目事实。必须在项目代码中找到具体漏洞实例。"
+      prohibited:
+        - "基于项目类型推断漏洞（'Spring Boot 项目所以有 XXX'）"
+        - "基于依赖存在推断使用（'依赖了 fastjson 所以有反序列化风险'）"
+        - "基于框架经验推断配置（'Spring Boot 默认开启 XXX'）"
+        - "基于常见模式推断代码（'Controller 通常调用 XXX 方法'）"
+        - "Grep 到关键词 ≠ 漏洞（可能在注释/字符串/测试中）"
+
+    anti_confirmation_bias:
+      rule: "发现可疑 Sink 后，必须同时搜索否定证据（防护措施）。"
+      mandatory_checks:
+        - "参数化查询（PreparedStatement, #{}, %s, ?）"
+        - "白名单/输入校验（allowList, validate, isValid）"
+        - "全局过滤器/拦截器（Filter, Interceptor, Middleware）"
+        - "框架 ORM 自动参数化（JPA, Hibernate, MyBatis #{}, Django ORM, SQLAlchemy）"
+        - "配置 profile 区分（application-dev.yml vs application-prod.yml）"
+
+  # ==========================================================================
+  # 第三层：门禁规则 + Agent 合约
+  # ==========================================================================
+
+  gate_rules_and_contract:
+
+    pre_report_gate:
+      checks:
+        - { name: "文件存在性",       action: "Glob 确认 filePath",                  on_fail: "reject" }
+        - { name: "行号范围",         action: "确认 lineNumber 在文件范围内",          on_fail: "reject" }
+        - { name: "代码片段",         action: "Read 比对 riskCode",                   on_fail: "downgrade -20" }
+        - { name: "攻击链完整性",     action: "检查 source+sink+schema 合约",         on_fail: "降级为 unverified" }
+        - { name: "防护搜索完成性",   action: "检查 high/critical 的防护搜索记录",     on_fail: "降级为 unverified" }
+        - { name: "证据链完整性",     action: "检查 confirmed/escalated 的 verifiability", on_fail: "confidence→79, unverified" }
+
+    high_confidence_gate:
+      description: "置信度 >= 90 的额外门禁，全部通过才允许"
+      checks:
+        - "verificationStatus = verified"
+        - "challengeVerdict = confirmed | escalated"
+        - "完整 attackChain（source + sink）"
+        - "traceMethod 已记录（LSP | Grep+Read）"
+        - "至少一个 defenseCheck 记录"
+
+    agent_contract:
+      description: "每个 agent 启动时注入的合约条款（简化版）"
+      clauses:
+        - "filePath 必须通过 Read/Glob 验证。禁止推测。"
+        - "riskCode 必须来自 Read 输出。禁止凭记忆编写。"
+        - "lineNumber 必须指向 riskCode 实际所在行。"
+        - "确认漏洞前必须搜索防护措施并记录搜索过程。"
+        - "LLM 安全知识 ≠ 项目事实。必须在代码中找到实例。"
+        - "宁可漏报也不误报。不确定时标 unverified。"
+      violations:
+        - { clause: "文件/代码/行号验证", action: "finding 被移除" }
+        - { clause: "防护搜索义务",       action: "confidence -20" }
+        - { clause: "知识库隔离",         action: "降级为 unverified" }

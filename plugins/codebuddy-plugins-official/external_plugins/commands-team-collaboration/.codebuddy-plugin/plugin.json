@@ -1,0 +1,28 @@
+{
+  "name": "commands-team-collaboration",
+  "version": "1.0.0",
+  "description": "Commands for team workflows, PR reviews, and collaboration",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "team-collaboration",
+    "architecture-review",
+    "decision-quality-analyzer",
+    "dependency-mapper",
+    "estimate-assistant",
+    "issue-triage",
+    "memory-spring-cleaning",
+    "migration-assistant",
+    "retrospective-analyzer",
+    "session-learning-capture",
+    "sprint-planning",
+    "standup-report",
+    "team-workload-balancer"
+  ]
+}

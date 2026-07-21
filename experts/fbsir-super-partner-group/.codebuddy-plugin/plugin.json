@@ -1,0 +1,392 @@
+{
+  "name": "fbsir-super-partner-group",
+  "version": "26.7.8",
+  "bundleVersion": "26.7.8",
+  "planningTargetVersion": "26.7.8",
+  "description": "Super Partner expert team delivering AI+OPC operating diagnosis cards and one next step.",
+  "author": {
+    "name": "FBSir",
+    "email": "unique@u3w.com"
+  },
+  "license": "MIT",
+  "agents": [
+    "./agents/fbsir-super-partner-lead.md",
+    "./agents/strategy-partner-laosun.md",
+    "./agents/ops-partner-laozhu.md",
+    "./agents/growth-partner-laosha.md",
+    "./agents/product-partner-xiaobai.md"
+  ],
+  "skills": [
+    "./skills/super-partner-core"
+  ],
+  "expertType": "team",
+  "agentName": "fbsir-super-partner-lead",
+  "teamInfo": {
+    "leadAgent": "fbsir-super-partner-lead",
+    "memberAgents": [
+      "strategy-partner-laosun",
+      "ops-partner-laozhu",
+      "growth-partner-laosha",
+      "product-partner-xiaobai"
+    ]
+  },
+  "memberPresentationMode": "role_surface",
+  "runtimeContract": {
+    "schema": "fbsir-super-partner-runtime-contract/v2",
+    "version": "26.7.8",
+    "requiredStatusFields": [
+      "expert_loaded",
+      "lead_agent",
+      "team_mode",
+      "member_id",
+      "capability_id",
+      "unlock_state",
+      "connectorCallTrace",
+      "versionAlignment",
+      "degradeReason",
+      "sourceLayer",
+      "stageGateStatus",
+      "hostNamespace",
+      "productCreditPromotionAllowed"
+    ],
+    "optionalStatusFields": [
+      "aiOpcDiagnosisCard",
+      "sceneDiscovery",
+      "continuationProgressCard",
+      "contentAssetAction",
+      "serviceForwardFields",
+      "runtimeContractSource"
+    ],
+    "teamModeValues": [
+      "first_value_card",
+      "lean_diagnosis",
+      "single_member",
+      "multi_member_workshop",
+      "genius_partner_draft"
+    ],
+    "unlockStates": [
+      "locked",
+      "preview",
+      "unlocked",
+      "expired"
+    ]
+  },
+  "capabilityClusters": [
+    {
+      "capabilityClusterId": "C1",
+      "memberId": "fbsir-super-partner-lead",
+      "summary": "统筹调度与状态管理"
+    },
+    {
+      "capabilityClusterId": "C2",
+      "memberId": "strategy-partner-laosun",
+      "summary": "战略机会判断"
+    },
+    {
+      "capabilityClusterId": "C3",
+      "memberId": "ops-partner-laozhu",
+      "summary": "组织运营推进"
+    },
+    {
+      "capabilityClusterId": "C4",
+      "memberId": "growth-partner-laosha",
+      "summary": "增长与商业化"
+    },
+    {
+      "capabilityClusterId": "C5",
+      "memberId": "product-partner-xiaobai",
+      "summary": "产品与智能化"
+    },
+    {
+      "capabilityClusterId": "C6",
+      "memberId": "product-partner-xiaobai",
+      "summary": "天才合伙人工厂"
+    }
+  ],
+  "displayName": {
+    "en": "Super Partner",
+    "zh": "超级合伙人"
+  },
+  "profession": {
+    "en": "Super Partner",
+    "zh": "超级合伙人"
+  },
+  "displayDescription": {
+    "en": "An AI+OPC operating partner team that coordinates strategy, operations, growth, and AI pilots into one diagnosis card and next step.",
+    "zh": "以AI+OPC智能化运营为底座，统筹战略、运营、增长与AI试点，输出诊断卡和下一步。"
+  },
+  "avatar": "avatars/fbsir-super-partner-team.png",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "请以福帮手超级合伙人的身份，围绕组织OPC、价值OPC、资本OPC，判断我当前最该补的经营场景，并给我一张 AI+OPC 经营诊断卡和唯一下一步。",
+    "en": "Act as the FBSir super partner team. Around organization OPC, value OPC, and capital OPC, identify the operating scenario I should improve first and give me one AI+OPC diagnosis card with one next step."
+  },
+  "plugin": "fbsir-super-partner-group",
+  "tags": [
+    {
+      "en": "Super Partner",
+      "zh": "超级合伙人"
+    },
+    {
+      "en": "Business Ops",
+      "zh": "经营协同"
+    },
+    {
+      "en": "AI Delivery",
+      "zh": "智能化交付"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "请以福帮手超级合伙人的身份，围绕组织OPC、价值OPC、资本OPC，判断我当前最该补的经营场景，并给我一张 AI+OPC 经营诊断卡和唯一下一步。",
+      "en": "Act as the FBSir super partner team. Around organization OPC, value OPC, and capital OPC, identify the operating scenario I should improve first and give me one AI+OPC diagnosis card with one next step."
+    },
+    {
+      "zh": "我做留学研学服务，想用 WorkBuddy + 视频号 + 企业微信提升客户全周期价值。请先给一个家庭决策场景、内容传播动作和企微承接任务。",
+      "en": "I run a study-tour and overseas-education service and want to use WorkBuddy, Video Account, and WeCom to improve full-cycle client value. Start with one family-decision scenario, one content action, and one WeCom handoff task."
+    },
+    {
+      "zh": "我刚解锁或看到一个能力包。请判断它该接到哪个经营动作，只给一张能力继续卡，不把安装、乐包或探针当成自然闭环证明。",
+      "en": "I just unlocked or saw a capability pack. Decide which operating action it should connect to and give me one capability continuation card; do not treat installation, Lebao, or probes as natural closure proof."
+    }
+  ],
+  "entryMatrix": [
+    {
+      "entryId": "company-next-step",
+      "entryPromptCode": "wb_sp_company_next_step",
+      "entrySurface": "primary_entry",
+      "scenePackId": "general",
+      "assetType": "strategy-decision-card",
+      "zh": "公司下一步",
+      "firstDeliverable": "方向判断卡 + 唯一下一步"
+    },
+    {
+      "entryId": "ai-opc3-diagnosis",
+      "entryPromptCode": "wb_sp_ai_opc3_diagnosis",
+      "entrySurface": "primary_entry",
+      "scenePackId": "enterprise-diagnosis",
+      "assetType": "ai-opc3-operating-diagnosis-card",
+      "zh": "AI+OPC经营诊断",
+      "firstDeliverable": "AI+OPC3 经营诊断卡 + 单一行动"
+    },
+    {
+      "entryId": "study-tour-family-decision",
+      "entryPromptCode": "wb_sp_study_tour_family_decision",
+      "entrySurface": "sample_entry",
+      "scenePackId": "study-tour",
+      "assetType": "family-decision-growth-card",
+      "zh": "留学研学样板",
+      "firstDeliverable": "家庭决策场景卡 + 视频号脚本 + 企微承接摘要"
+    },
+    {
+      "entryId": "ops-rhythm",
+      "entryPromptCode": "wb_sp_ops_rhythm",
+      "entrySurface": "primary_entry",
+      "scenePackId": "enterprise-diagnosis",
+      "assetType": "operations-rhythm-card",
+      "zh": "组织运营",
+      "firstDeliverable": "执行堵点卡 + 推进行动"
+    },
+    {
+      "entryId": "growth-commercial",
+      "entryPromptCode": "wb_sp_growth_commercial",
+      "entrySurface": "primary_entry",
+      "scenePackId": "enterprise-diagnosis",
+      "assetType": "growth-commercial-card",
+      "zh": "增长商业化",
+      "firstDeliverable": "增长漏斗卡 + 首个卖点"
+    },
+    {
+      "entryId": "ai-pilot",
+      "entryPromptCode": "wb_sp_ai_pilot",
+      "entrySurface": "primary_entry",
+      "scenePackId": "general",
+      "assetType": "ai-pilot-card",
+      "zh": "AI 试点",
+      "firstDeliverable": "AI 试点卡 + 七天验证动作"
+    },
+    {
+      "entryId": "genius-partner-draft",
+      "entryPromptCode": "wb_sp_genius_partner_draft",
+      "entrySurface": "extended_entry",
+      "scenePackId": "general",
+      "assetType": "genius-partner-draft-card",
+      "zh": "天才合伙人草案",
+      "firstDeliverable": "行业合伙人草案"
+    },
+    {
+      "entryId": "lebao-activation",
+      "entryPromptCode": "wb_sp_lebao_activation",
+      "entrySurface": "extended_entry",
+      "scenePackId": "general",
+      "assetType": "lebao-unlock-card",
+      "zh": "乐包激活",
+      "firstDeliverable": "能力解锁卡 + 继续行动"
+    }
+  ],
+  "runtimeModes": [
+    {
+      "id": "first_value_card",
+      "zh": "首次价值卡",
+      "trigger": "cold_start_or_short_problem"
+    },
+    {
+      "id": "lean_diagnosis",
+      "zh": "精简诊断",
+      "trigger": "clear_problem_but_not_workshop"
+    },
+    {
+      "id": "single_member",
+      "zh": "单成员深度处理",
+      "trigger": "single_cluster_problem"
+    },
+    {
+      "id": "multi_member_workshop",
+      "zh": "多成员协同工作坊",
+      "trigger": "explicit_complex_problem"
+    },
+    {
+      "id": "genius_partner_draft",
+      "zh": "天才合伙人草案",
+      "trigger": "industry_or_long_term_specialization"
+    }
+  ],
+  "members": [
+    {
+      "id": "fbsir-super-partner-lead",
+      "displayName": {
+        "en": "Tang Dingpan",
+        "zh": "唐定盘"
+      },
+      "profession": {
+        "en": "Chief Orchestrator",
+        "zh": "调度与收口合伙人"
+      },
+      "avatar": "avatars/fbsir-super-partner-team-lead.png",
+      "role": "lead",
+      "primaryCapabilityClusterId": "C1",
+      "adjacentCapabilityClusterIds": [
+        "C2",
+        "C3"
+      ],
+      "foundationTraitIds": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+      ]
+    },
+    {
+      "id": "strategy-partner-laosun",
+      "displayName": {
+        "en": "Sun Dingshi",
+        "zh": "孙定势"
+      },
+      "profession": {
+        "en": "Strategy And Opportunity Partner",
+        "zh": "战略与机会合伙人"
+      },
+      "avatar": "avatars/strategy-partner-laosun.png",
+      "role": "member",
+      "primaryCapabilityClusterId": "C2",
+      "adjacentCapabilityClusterIds": [
+        "C1",
+        "C4"
+      ],
+      "foundationTraitIds": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+      ]
+    },
+    {
+      "id": "ops-partner-laozhu",
+      "displayName": {
+        "en": "Zhu Chengshi",
+        "zh": "朱成事"
+      },
+      "profession": {
+        "en": "Organization And Operations Partner",
+        "zh": "组织与运营合伙人"
+      },
+      "avatar": "avatars/ops-partner-laozhu.png",
+      "role": "member",
+      "primaryCapabilityClusterId": "C3",
+      "adjacentCapabilityClusterIds": [
+        "C1",
+        "C5"
+      ],
+      "foundationTraitIds": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+      ]
+    },
+    {
+      "id": "growth-partner-laosha",
+      "displayName": {
+        "en": "Sha Chengdan",
+        "zh": "沙成单"
+      },
+      "profession": {
+        "en": "Growth And Commercialization Partner",
+        "zh": "增长与商业化合伙人"
+      },
+      "avatar": "avatars/growth-partner-laosha.png",
+      "role": "member",
+      "primaryCapabilityClusterId": "C4",
+      "adjacentCapabilityClusterIds": [
+        "C1",
+        "C2"
+      ],
+      "foundationTraitIds": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+      ]
+    },
+    {
+      "id": "product-partner-xiaobai",
+      "displayName": {
+        "en": "Bai Zhixing",
+        "zh": "白智行"
+      },
+      "profession": {
+        "en": "Product And Intelligence Partner",
+        "zh": "产品与智能化合伙人"
+      },
+      "avatar": "avatars/product-partner-xiaobai.png",
+      "role": "member",
+      "primaryCapabilityClusterId": "C5",
+      "adjacentCapabilityClusterIds": [
+        "C1",
+        "C3",
+        "C6"
+      ],
+      "foundationTraitIds": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+      ]
+    }
+  ]
+}

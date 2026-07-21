@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>信息窗口偏移设置</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #buttonContainer {
+        position: absolute;
+        left: 30px;
+        top: 30px;
+        z-index: 9999;
+    }
+
+    #buttonContainer input {
+        background: #fff;
+        padding: 10px;
+        width: 120xp;
+        outline-style: none;
+        margin-right: 10px;
+        border-radius: 10px;
+    }
+</style>
+
+<body onload="init()">
+    <div id="buttonContainer">
+        <input type="button" onclick="setOffset('offset')" value="设置偏移">
+        <input type="button" onclick="setOffset('origin')" value="清除偏移">
+    </div>
+    <div id="mapContainer"></div>
+    <script>
+        var map = null;
+        var marker = null;
+        var infoWindow = null;
+        var center = null;
+        function init() {
+            center = new TMap.LatLng(40.040074, 116.273519);//设置中心点坐标
+            //初始化地图
+            map = new TMap.Map('mapContainer', {
+                center: center,
+                zoom: 17
+            });
+            //初始marker
+            marker = new TMap.MultiMarker({
+                id: 'marker-layer',
+                map: map,
+                styles: {
+                    "marker": new TMap.MarkerStyle({
+                        "width": 25,
+                        "height": 35,
+                        "anchor": { x: 16, y: 32 },
+                        "src": 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png'
+                    })
+                },
+                geometries: [{
+                    "id": 'marker',
+                    "styleId": 'marker',
+                    "position": new TMap.LatLng(40.040074, 116.273519),
+                    "properties": {
+                        "title": "marker"
+                    }
+
+                }]
+            });
+            //设置infoWindow
+            infoWindowOne = new TMap.InfoWindow({
+                map: map,
+                position: center,
+                zIndex: 10, //信息窗的z-index值
+                offset: { x: 0, y: 0 }, //无偏移
+                content: '无偏移的infoWindow'
+            });
+            infoWindowTwo = new TMap.InfoWindow({
+                map: map,
+                position: center,
+                zIndex: 10, //信息窗的z-index值
+                offset: { x: -3, y: -35 }, //向上偏移35像素坐标，向左偏移3像素坐标
+                content: '左上方偏移的infoWindow'
+            });
+            infoWindowTwo.setMap(null);
+        }
+        function setOffset(type) {
+            switch (type) {
+                case 'offset':
+                    infoWindowTwo.setMap(map);
+                    infoWindowOne.setMap(null);
+                    break;
+                case 'origin':
+                    infoWindowTwo.setMap(null);
+                    infoWindowOne.setMap(map);
+                    break;
+                default: ;
+            }
+        }
+    </script>
+</body>
+
+</html>

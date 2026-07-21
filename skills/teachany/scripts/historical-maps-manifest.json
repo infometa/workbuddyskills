@@ -1,0 +1,343 @@
+{
+  "examples/imperial-unification": {
+    "title": "秦汉统一多民族国家",
+    "scope": "china",
+    "center": [34, 108], "zoom": 4, "fitBounds": [[18, 72], [52, 140]],
+    "eras": [
+      { "id": "qin", "label": "秦 (前221)", "file": "qin-dynasty.geojson", "fill": "#6366f1", "stroke": "#4f46e5",
+        "desc": "<span class=\"thm-year-tag\">前221</span><strong>秦统一六国</strong>：废分封、行郡县，书同文车同轨，统一度量衡。中央集权帝制诞生。",
+        "cities": [[34.27,108.95,"咸阳","Xianyang","秦都"],[30.66,104.07,"成都","Chengdu","蜀郡，都江堰"],[34.75,113.66,"荥阳","Xingyang","敖仓粮储"]] },
+      { "id": "han-west", "label": "西汉 (前202)", "file": "west-han-dynasty.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">前202-9</span><strong>汉承秦制</strong>：文景之治→武帝盛世。张骞凿空西域，独尊儒术，丝路开通。",
+        "cities": [[34.34,108.94,"长安","Chang'an","西汉都城"],[43.83,87.62,"西域都护府","Xiyu","前60设立"],[34.75,113.66,"洛阳","Luoyang","东汉都城"]] },
+      { "id": "han-east", "label": "东汉 (25)", "file": "east-han-dynasty.geojson", "fill": "#10b981", "stroke": "#059669",
+        "desc": "<span class=\"thm-year-tag\">25-220</span><strong>光武中兴</strong>：定都洛阳。班超经营西域，佛教东传，造纸改良。",
+        "cities": [[34.75,113.66,"洛阳","Luoyang","东汉都"],[36.07,103.83,"姑臧","Guzang","凉州丝路枢纽"]] }
+    ],
+    "overlays": [
+      { "id": "capitals", "label": "🏛️ 古都陪都", "file": "capitals-extended.geojson",
+        "style": { "color": "#a855f7", "radius": 4 }, "visible": true },
+      { "id": "rivers", "label": "🌊 黄河故道", "file": "rivers-historical.geojson",
+        "style": { "color": "#0ea5e9", "weight": 3 }, "visible": false },
+      { "id": "passes", "label": "🏯 秦汉关隘", "file": "passes-ancient.geojson",
+        "style": { "color": "#dc2626", "radius": 5 }, "visible": false }
+    ]
+  },
+  "examples/history-sanguo-sui-tang": {
+    "title": "三国两晋南北朝至隋唐",
+    "scope": "china",
+    "center": [33, 110], "zoom": 4, "fitBounds": [[18, 72], [52, 140]],
+    "eras": [
+      { "id": "sanguo", "label": "三国 (220)", "file": "three-kingdoms.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">220-280</span><strong>魏蜀吴鼎立</strong>：官渡、赤壁、夷陵三大战役。九品中正，士族崛起。",
+        "cities": [[36.08,114.50,"邺","Ye","曹魏都"],[30.66,104.07,"成都","Chengdu","蜀汉都"],[32.06,118.79,"建业","Jianye","东吴都"]] },
+      { "id": "nanbei", "label": "南北朝 (420)", "file": "northern-southern.geojson", "fill": "#8b5cf6", "stroke": "#7c3aed",
+        "desc": "<span class=\"thm-year-tag\">420-589</span><strong>民族大融合</strong>：北魏孝文帝汉化改革；南朝经济重心南移。",
+        "cities": [[39.93,116.40,"平城","Pingcheng","北魏早期都"],[34.75,113.66,"洛阳","Luoyang","孝文帝迁都"],[32.06,118.79,"建康","Jiankang","南朝都"]] },
+      { "id": "sui", "label": "隋 (581)", "file": "sui-dynasty.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">581-618</span><strong>再度统一</strong>：大运河开凿、科举制创立。",
+        "cities": [[34.34,108.94,"大兴","Daxing","隋都"],[34.75,113.66,"洛阳","Luoyang","东都运河中枢"],[32.39,119.41,"江都","Jiangdu","今扬州"]] },
+      { "id": "tang", "label": "唐 (618)", "file": "tang-dynasty.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">618-907</span><strong>盛世气象</strong>：贞观、开元。三省六部，两税法。长安百万国际大都市。",
+        "cities": [[34.34,108.94,"长安","Chang'an","国际大都市"],[34.75,113.66,"洛阳","Luoyang","武周神都"],[23.13,113.26,"广州","Guangzhou","海上丝路"],[29.88,121.55,"明州","Mingzhou","今宁波"]] }
+    ]
+  },
+  "examples/hist-classical-civilization": {
+    "title": "古典文明：希腊与罗马",
+    "scope": "world",
+    "center": [40, 22], "zoom": 4, "fitBounds": [[30, -10], [50, 45]],
+    "eras": [
+      { "id": "bce-500", "label": "前500 希腊城邦", "file": "bce-500.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">前500</span><strong>希腊城邦黄金期</strong>：雅典民主与斯巴达军事国家并立；希波战争凝聚希腊认同。",
+        "cities": [[37.98,23.73,"雅典","Athens","民主政治发源"],[37.08,22.43,"斯巴达","Sparta","军事城邦"],[37.64,21.63,"奥林匹亚","Olympia","奥运发祥"]] },
+      { "id": "bce-323", "label": "前323 亚历山大", "file": "bce-323-alexander.geojson", "fill": "#8b5cf6", "stroke": "#7c3aed",
+        "desc": "<span class=\"thm-year-tag\">前323</span><strong>亚历山大帝国</strong>：马其顿征服希腊、波斯、印度西北，开启希腊化时代。",
+        "cities": [[40.64,22.94,"佩拉","Pella","马其顿首都"],[31.20,29.92,"亚历山大里亚","Alexandria","希腊化文化中心"],[33.50,44.40,"巴比伦","Babylon","亚历山大逝世地"]] },
+      { "id": "bce-200", "label": "前200 罗马共和", "file": "bce-200.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">前200</span><strong>罗马崛起</strong>：布匿战争击败迦太基，地中海霸权初成。",
+        "cities": [[41.90,12.50,"罗马","Rome","共和国"],[36.85,10.33,"迦太基","Carthage","即将覆灭"],[37.98,23.73,"雅典","Athens","希腊重镇"]] },
+      { "id": "ce-200", "label": "200 罗马盛世", "file": "ce-200.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">约200</span><strong>五贤帝时代</strong>：罗马帝国极盛，横跨欧亚非三洲。",
+        "cities": [[41.90,12.50,"罗马","Rome","帝国首都"],[51.51,-0.13,"伦迪尼乌姆","Londinium","不列颠行省"],[33.51,36.30,"大马士革","Damascus","东方行省"]] }
+    ]
+  },
+  "examples/history-industrial-revolution": {
+    "title": "工业革命（全球视野）",
+    "scope": "world",
+    "center": [45, 5], "zoom": 4, "fitBounds": [[25, -15], [60, 50]],
+    "eras": [
+      { "id": "ce-1700", "label": "1700 前夜", "file": "ce-1700.geojson", "fill": "#94a3b8", "stroke": "#64748b",
+        "desc": "<span class=\"thm-year-tag\">1700</span><strong>工业革命前夜</strong>：手工工场普及，圈地运动释放劳动力，殖民扩张积累资本。",
+        "cities": [[51.51,-0.13,"伦敦","London","金融中心"],[53.48,-2.24,"曼彻斯特","Manchester","棉纺萌芽"],[48.86,2.35,"巴黎","Paris","大陆文化中心"]] },
+      { "id": "ce-1815", "label": "1815 鼎盛", "file": "ce-1815-vienna.geojson", "fill": "#6366f1", "stroke": "#4f46e5",
+        "desc": "<span class=\"thm-year-tag\">1815</span><strong>第一次工业革命</strong>：瓦特蒸汽机、珍妮机、史蒂文森火车，生产力飞跃。",
+        "cities": [[51.51,-0.13,"伦敦","London","世界工厂首都"],[53.48,-2.24,"曼彻斯特","Manchester","棉都"],[55.86,-4.25,"格拉斯哥","Glasgow","造船与机械"]] },
+      { "id": "ce-1880", "label": "1880 二次革命", "file": "ce-1880.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">约1880</span><strong>第二次工业革命</strong>：电力、内燃机、化工、钢铁——德美后来居上。",
+        "cities": [[52.52,13.40,"柏林","Berlin","德国电气心脏"],[40.71,-74.01,"纽约","New York","美国金融中心"],[41.88,-87.63,"芝加哥","Chicago","美国钢铁铁路中心"],[35.68,139.69,"东京","Tokyo","明治维新后的日本"]] },
+      { "id": "ce-1914", "label": "1914 一战前夜", "file": "ce-1914-wwi.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">1914</span><strong>列强瓜分世界</strong>：欧洲工业化国家走向战争边缘。",
+        "cities": [[51.51,-0.13,"伦敦","London","大英帝国"],[52.52,13.40,"柏林","Berlin","德意志帝国"],[48.86,2.35,"巴黎","Paris","法兰西共和国"]] }
+    ]
+  },
+  "examples/geo-monsoon": {
+    "title": "全球季风系统",
+    "scope": "world",
+    "center": [20, 100], "zoom": 3, "fitBounds": [[-30, 40], [50, 160]],
+    "eras": [
+      { "id": "asia-summer", "label": "亚洲夏季风", "file": "ce-2000.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">6-9月</span><strong>亚洲夏季风</strong>：印度洋、太平洋暖湿气流北上，东亚 / 南亚降雨高峰。",
+        "cities": [[19.08,72.88,"孟买","Mumbai","西南季风首冲地"],[22.54,114.06,"深圳","Shenzhen","东南季风核心区"],[35.68,139.69,"东京","Tokyo","梅雨台风带"]] }
+    ]
+  },
+  "community/history-medieval-europe": { "skip": true, "reason": "该课件已自有同等质量的 Leaflet 实现，不覆盖" },
+  "community/history-ww2": {
+    "title": "第二次世界大战",
+    "scope": "world",
+    "center": [40, 20], "zoom": 3, "fitBounds": [[20, -20], [65, 60]],
+    "eras": [
+      { "id": "ce-1914", "label": "1914 一战", "file": "ce-1914-wwi.geojson", "fill": "#94a3b8", "stroke": "#64748b",
+        "desc": "<span class=\"thm-year-tag\">1914-1918</span><strong>一战与凡尔赛体系</strong>：德意日法西斯兴起埋下二战伏笔。",
+        "cities": [[52.52,13.40,"柏林","Berlin","德意志帝国"],[48.86,2.35,"巴黎","Paris","法兰西"],[51.51,-0.13,"伦敦","London","大英"]] },
+      { "id": "ce-1945", "label": "1945 二战终", "file": "ce-1945-wwii.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">1939-1945</span><strong>反法西斯胜利</strong>：联合国成立，冷战两极格局形成。",
+        "cities": [[52.52,13.40,"柏林","Berlin","1945.5 攻陷"],[55.76,37.62,"莫斯科","Moscow","苏联反攻"],[38.91,-77.04,"华盛顿","Washington","盟军领袖"],[35.68,139.69,"东京","Tokyo","1945.8 投降"],[39.90,116.40,"北京","Beijing","中国战区"]] }
+    ]
+  },
+  "examples/hist-m-silk-road": {
+    "title": "丝绸之路路线图",
+    "scope": "china",
+    "center": [38, 80], "zoom": 4, "fitBounds": [[15, 20], [55, 130]],
+    "eras": [
+      { "id": "west-han", "label": "西汉（丝路开通）", "file": "west-han-dynasty.geojson", "fill": "#3b82f6", "stroke": "#2563eb",
+        "desc": "<span class=\"thm-year-tag\">前138-前60</span><strong>张骞凿空西域</strong>：汉武帝派张骞出使，13 年艰辛归来。前 60 年设西域都护府。",
+        "cities": [[34.26,108.94,"长安","Chang'an","丝路起点"],[40.14,94.66,"敦煌","Dunhuang","河西咽喉"],[39.47,75.99,"疏勒","Shule","今喀什"],[41.90,12.50,"大秦","Rome","西端终点"]] },
+      { "id": "east-han", "label": "东汉（班超经营）", "file": "east-han-dynasty.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">73-102</span><strong>班超经营西域 30 年</strong>：甘英出使大秦，扩展中国对西方的认知。",
+        "cities": [[34.75,113.66,"洛阳","Luoyang","东汉都城"],[40.14,94.66,"敦煌","Dunhuang","河西西端"],[34.64,50.88,"安息","Parthia","中转枢纽"]] },
+      { "id": "tang", "label": "唐代（陆海并举）", "file": "tang-dynasty.geojson", "fill": "#10b981", "stroke": "#059669",
+        "desc": "<span class=\"thm-year-tag\">618-907</span><strong>唐代丝路鼎盛</strong>：陆海并行，长安胡商云集，广州蕃坊设立。",
+        "cities": [[34.34,108.94,"长安","Chang'an","国际大都市"],[23.13,113.26,"广州","Guangzhou","海上丝路最大港"],[41.01,28.98,"君士坦丁堡","Constantinople","拜占庭枢纽"]] }
+    ],
+    "overlays": [
+      { "id": "silk", "label": "🐪 丝绸之路", "file": "silk-road.geojson",
+        "style": { "color": "#f59e0b", "weight": 3, "dashArray": "6 4" }, "visible": true },
+      { "id": "passes", "label": "🏯 古关隘", "file": "passes-ancient.geojson",
+        "style": { "color": "#dc2626", "radius": 5 }, "visible": false },
+      { "id": "capitals", "label": "🏛️ 古都陪都", "file": "capitals-extended.geojson",
+        "style": { "color": "#a855f7", "radius": 4 }, "visible": false }
+    ]
+  },
+  "community/hist-m-mongol-empire": {
+    "title": "蒙古帝国与元朝",
+    "scope": "world",
+    "center": [45, 95], "zoom": 3, "fitBounds": [[15, 30], [60, 140]],
+    "eras": [
+      { "id": "ce-1200", "label": "1200 崛起", "file": "ce-1200-mongol-rise.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">1206</span><strong>成吉思汗统一蒙古</strong>：铁木真尊号成吉思汗，开始对外扩张。",
+        "cities": [[47.92,106.92,"和林","Karakorum","蒙古帝国首都"]] },
+      { "id": "ce-1300", "label": "1300 极盛", "file": "ce-1300-mongol-peak.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">约1300</span><strong>四大汗国</strong>：元朝、察合台、钦察、伊儿汗国横跨欧亚，丝路畅通。",
+        "cities": [[39.90,116.40,"大都","Khanbaliq","元朝首都（今北京）"],[47.92,106.92,"和林","Karakorum","旧都"],[51.51,71.43,"萨莱","Sarai","钦察汗国都"],[36.19,58.12,"大不里士","Tabriz","伊儿汗国都"]] }
+    ],
+    "overlays": [
+      { "id": "silk", "label": "🐪 蒙元丝路", "file": "silk-road.geojson",
+        "style": { "color": "#f59e0b", "weight": 3, "dashArray": "6 4" }, "visible": true }
+    ]
+  },
+  "community/hist-m-anti-japan-war": {
+    "title": "抗日战争 1931-1945",
+    "scope": "china",
+    "center": [34, 110], "zoom": 4, "fitBounds": [[18, 75], [55, 140]],
+    "eras": [
+      { "id": "qing", "label": "1931 前夜", "file": "qing-dynasty.geojson", "fill": "#94a3b8", "stroke": "#64748b",
+        "desc": "<span class=\"thm-year-tag\">1900-1931</span><strong>从九一八看起</strong>：日俄战争后日本吞并东北，民族危亡。",
+        "cities": [[41.80,123.43,"沈阳","Shenyang","1931 九一八事变地"],[39.90,116.40,"北平","Beiping","伪华北"],[30.59,114.30,"武汉","Wuhan","1938 会战"]] },
+      { "id": "ce-1945", "label": "1945 胜利", "file": "ce-1945-wwii.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">1945.8.15</span><strong>抗战胜利</strong>：日本无条件投降，台湾光复。",
+        "cities": [[29.56,106.56,"重庆","Chongqing","战时陪都"],[39.90,116.40,"北平","Beiping","1945 光复"],[31.23,121.47,"上海","Shanghai","沦陷区"],[25.03,121.57,"台北","Taipei","台湾光复"]] }
+    ],
+    "overlays": [
+      { "id": "passes", "label": "🏯 长城关隘", "file": "passes-ancient.geojson",
+        "style": { "color": "#dc2626", "radius": 5 }, "visible": true }
+    ]
+  },
+  "community/hist-m-liberation-war": {
+    "title": "解放战争 1946-1949",
+    "scope": "china",
+    "center": [34, 110], "zoom": 4, "fitBounds": [[18, 75], [55, 140]],
+    "eras": [
+      { "id": "qing", "label": "1946 全面内战", "file": "qing-dynasty.geojson", "fill": "#94a3b8", "stroke": "#64748b",
+        "desc": "<span class=\"thm-year-tag\">1946</span><strong>全面内战爆发</strong>：国共调停失败，共军转战陕北。",
+        "cities": [[36.59,109.49,"延安","Yan'an","中共战时首都"],[29.56,106.56,"重庆","Chongqing","国民政府"],[32.06,118.79,"南京","Nanjing","国民政府首都"]] },
+      { "id": "ce-1945", "label": "1949 解放", "file": "ce-1945-wwii.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">1949.10</span><strong>三大战役完胜</strong>：辽沈、淮海、平津战役。10.1 开国大典。",
+        "cities": [[39.90,116.40,"北平","Beiping","解放，即将改名北京"],[32.06,118.79,"南京","Nanjing","4.23 解放"],[31.23,121.47,"上海","Shanghai","5.27 解放"]] }
+    ]
+  },
+  "community/hist-m-may-fourth-movement": {
+    "title": "五四运动（1919）",
+    "scope": "china",
+    "center": [34, 110], "zoom": 4, "fitBounds": [[22, 100], [45, 130]],
+    "eras": [
+      { "id": "qing", "label": "1919 五四", "file": "qing-dynasty.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">1919.5.4</span><strong>新青年救国</strong>：巴黎和会激起义愤，北京学生游行，运动波及全国。",
+        "cities": [[39.90,116.40,"北京","Beijing","天安门广场运动起点"],[31.23,121.47,"上海","Shanghai","6月工人罢工"],[30.59,114.30,"武汉","Wuhan","学生响应"],[32.06,118.79,"南京","Nanjing","学生呼应"]] }
+    ]
+  },
+  "community/hist-m-china-reform-opening": {
+    "title": "改革开放",
+    "scope": "china",
+    "center": [30, 115], "zoom": 4, "fitBounds": [[18, 75], [55, 140]],
+    "eras": [
+      { "id": "ce-2000", "label": "改革开放", "file": "ce-2000.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">1978</span><strong>改革开放</strong>：安徽小岗村包产到户、深圳珠海等四经济特区、十四个沿海开放城市。",
+        "cities": [[22.54,114.06,"深圳","Shenzhen","第一经济特区"],[22.27,113.58,"珠海","Zhuhai","经济特区"],[24.48,118.09,"厦门","Xiamen","经济特区"],[32.06,118.79,"上海","Shanghai","浦东开发"],[39.90,116.40,"北京","Beijing","政策中心"]] }
+    ]
+  },
+  "community/hist-m-ming-qing-economy": {
+    "title": "明清经济与对外关系",
+    "scope": "china",
+    "center": [32, 115], "zoom": 4, "fitBounds": [[18, 75], [55, 140]],
+    "eras": [
+      { "id": "ming", "label": "明 (1368)", "file": "ming-dynasty.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">1368-1644</span><strong>明代经济</strong>：一条鞭法、郑和下西洋、海禁与倭寇。",
+        "cities": [[32.06,118.79,"南京","Nanjing","明初都城"],[39.90,116.40,"北京","Beijing","永乐迁都"],[29.88,121.55,"宁波","Ningbo","市舶司"],[23.13,113.26,"广州","Guangzhou","对外贸易"]] },
+      { "id": "qing", "label": "清 (1636)", "file": "qing-dynasty.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">1636-1912</span><strong>清代盛世</strong>：康雍乾盛世，闭关锁国，广州一口通商。",
+        "cities": [[39.90,116.40,"北京","Beijing","清都"],[23.13,113.26,"广州","Guangzhou","一口通商"],[43.83,87.62,"乌鲁木齐","Urumqi","乾隆平定准噶尔后"]] }
+    ],
+    "overlays": [
+      { "id": "rivers", "label": "🌊 京杭大运河", "file": "rivers-historical.geojson",
+        "style": { "color": "#0284c7", "weight": 3 }, "visible": true },
+      { "id": "silk", "label": "🚢 海上丝路", "file": "silk-road.geojson",
+        "style": { "color": "#0891b2", "weight": 3, "dashArray": "6 4" }, "visible": false }
+    ]
+  },
+  "community/hist-m-sui-tang-ruling": {
+    "title": "隋唐制度与盛世",
+    "scope": "china",
+    "center": [33, 110], "zoom": 4, "fitBounds": [[18, 72], [52, 140]],
+    "eras": [
+      { "id": "sui", "label": "隋 (581)", "file": "sui-dynasty.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">581-618</span><strong>大运河与科举</strong>：科举制、三省六部制创立。大运河贯通南北。",
+        "cities": [[34.34,108.94,"大兴","Daxing","隋都"],[34.75,113.66,"洛阳","Luoyang","东都"],[32.39,119.41,"江都","Jiangdu","今扬州"]] },
+      { "id": "tang", "label": "唐 (618)", "file": "tang-dynasty.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">618-907</span><strong>盛唐气象</strong>：贞观、开元盛世。三省六部、两税法、科举完备。",
+        "cities": [[34.34,108.94,"长安","Chang'an","国际都市"],[34.75,113.66,"洛阳","Luoyang","武周神都"],[23.13,113.26,"广州","Guangzhou","海上丝路"]] }
+    ]
+  },
+  "community/hist-m-song-technology": {
+    "title": "宋代科技与社会生活",
+    "scope": "china",
+    "center": [33, 115], "zoom": 4, "fitBounds": [[20, 95], [45, 130]],
+    "eras": [
+      { "id": "north-song", "label": "北宋 (960)", "file": "north-song-dynasty.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">960-1127</span><strong>北宋科技</strong>：毕昇活字印刷、沈括《梦溪笔谈》、指南针、火药应用于军事。",
+        "cities": [[34.80,114.35,"汴京","Bianjing","北宋都城，今开封"],[30.66,104.07,"成都","Chengdu","交子诞生"],[29.87,121.55,"明州","Mingzhou","今宁波海外贸易"]] },
+      { "id": "south-song", "label": "南宋 (1127)", "file": "south-song-dynasty.geojson", "fill": "#8b5cf6", "stroke": "#7c3aed",
+        "desc": "<span class=\"thm-year-tag\">1127-1279</span><strong>南宋繁华</strong>：经济重心南移，海上丝路鼎盛。",
+        "cities": [[30.27,120.16,"临安","Lin'an","南宋都城，今杭州"],[24.48,118.09,"泉州","Quanzhou","最大海港"],[23.13,113.26,"广州","Guangzhou","外贸"]] }
+    ]
+  },
+  "community/hist-sui-tang-ming-qing-political": {
+    "title": "隋唐至明清政治制度演变",
+    "scope": "china",
+    "center": [33, 110], "zoom": 4, "fitBounds": [[18, 75], [55, 140]],
+    "eras": [
+      { "id": "tang", "label": "唐 三省六部", "file": "tang-dynasty.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">618-907</span><strong>三省六部制</strong>：中书省决策、门下省审议、尚书省执行。科举选官。",
+        "cities": [[34.34,108.94,"长安","Chang'an","唐都"],[34.75,113.66,"洛阳","Luoyang","东都"]] },
+      { "id": "north-song", "label": "宋 加强集权", "file": "north-song-dynasty.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">960-1127</span><strong>杯酒释兵权</strong>：重文轻武，二府三司，中央集权强化。",
+        "cities": [[34.80,114.35,"汴京","Bianjing","宋都"]] },
+      { "id": "ming", "label": "明 废丞相", "file": "ming-dynasty.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">1368</span><strong>朱元璋废丞相</strong>：权分六部，皇权专制达新高；内阁制逐渐形成。",
+        "cities": [[32.06,118.79,"南京","Nanjing","明初都"],[39.90,116.40,"北京","Beijing","永乐迁都"]] },
+      { "id": "qing", "label": "清 军机处", "file": "qing-dynasty.geojson", "fill": "#8b5cf6", "stroke": "#7c3aed",
+        "desc": "<span class=\"thm-year-tag\">1729</span><strong>军机处设立</strong>：皇权专制顶峰。文字狱盛行。",
+        "cities": [[39.90,116.40,"北京","Beijing","清都"]] }
+    ]
+  },
+  "community/hist-h-song-yuan-ming-qing-h": {
+    "title": "宋元明清（高中）",
+    "scope": "china",
+    "center": [33, 110], "zoom": 4, "fitBounds": [[18, 75], [55, 140]],
+    "eras": [
+      { "id": "north-song", "label": "北宋", "file": "north-song-dynasty.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">960-1127</span><strong>北宋</strong>：王安石变法，经济文化鼎盛。",
+        "cities": [[34.80,114.35,"汴京","Bianjing","北宋都"]] },
+      { "id": "yuan", "label": "元 (1271)", "file": "yuan-dynasty.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">1271-1368</span><strong>元朝统一</strong>：行省制度开创，多民族帝国。",
+        "cities": [[39.90,116.40,"大都","Dadu","元都"],[30.27,120.16,"杭州","Hangzhou","江南重镇"]] },
+      { "id": "ming", "label": "明 (1368)", "file": "ming-dynasty.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">1368-1644</span><strong>明朝</strong>：郑和下西洋、倭寇海禁、宦官专权。",
+        "cities": [[32.06,118.79,"南京","Nanjing","明初都"],[39.90,116.40,"北京","Beijing","永乐迁都"]] },
+      { "id": "qing", "label": "清 (1636)", "file": "qing-dynasty.geojson", "fill": "#8b5cf6", "stroke": "#7c3aed",
+        "desc": "<span class=\"thm-year-tag\">1636-1912</span><strong>清朝</strong>：康雍乾盛世转衰，鸦片战争开启近代。",
+        "cities": [[39.90,116.40,"北京","Beijing","清都"],[23.13,113.26,"广州","Guangzhou","一口通商"]] }
+    ]
+  },
+  "community/hist-m-english-revolution": {
+    "title": "英国资产阶级革命",
+    "scope": "world",
+    "center": [52, -2], "zoom": 5, "fitBounds": [[49, -10], [59, 5]],
+    "eras": [
+      { "id": "ce-1600", "label": "1600 前夜", "file": "ce-1600.geojson", "fill": "#94a3b8", "stroke": "#64748b",
+        "desc": "<span class=\"thm-year-tag\">约1600</span><strong>斯图亚特王朝</strong>：詹姆斯一世君权神授引发议会对立。",
+        "cities": [[51.51,-0.13,"伦敦","London","议会所在"],[52.20,0.12,"剑桥","Cambridge","清教运动中心"]] },
+      { "id": "ce-1700", "label": "1700 光荣革命后", "file": "ce-1700.geojson", "fill": "#6366f1", "stroke": "#4f46e5",
+        "desc": "<span class=\"thm-year-tag\">1688</span><strong>光荣革命</strong>：《权利法案》奠定君主立宪制。",
+        "cities": [[51.51,-0.13,"伦敦","London","新议会中心"]] }
+    ]
+  },
+  "community/hist-m-scientific-revolution": {
+    "title": "欧洲科学革命与启蒙运动",
+    "scope": "world",
+    "center": [48, 10], "zoom": 4, "fitBounds": [[35, -10], [60, 30]],
+    "eras": [
+      { "id": "ce-1600", "label": "1600 科学革命", "file": "ce-1600.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">16-17世纪</span><strong>科学革命</strong>：哥白尼、伽利略、牛顿。实验科学方法确立。",
+        "cities": [[52.23,21.01,"托伦","Torun","哥白尼故乡"],[43.77,11.25,"佛罗伦萨","Florence","伽利略"],[52.20,0.12,"剑桥","Cambridge","牛顿"]] },
+      { "id": "ce-1700", "label": "1700 启蒙", "file": "ce-1700.geojson", "fill": "#f59e0b", "stroke": "#d97706",
+        "desc": "<span class=\"thm-year-tag\">18世纪</span><strong>启蒙运动</strong>：伏尔泰、卢梭、孟德斯鸠，理性至上。",
+        "cities": [[48.86,2.35,"巴黎","Paris","启蒙中心"],[51.51,-0.13,"伦敦","London","洛克、休谟"],[52.52,13.40,"柏林","Berlin","康德"]] }
+    ]
+  },
+  "community/hist-m-decolonization": {
+    "title": "亚非拉民族解放运动",
+    "scope": "world",
+    "center": [10, 30], "zoom": 3, "fitBounds": [[-35, -20], [50, 130]],
+    "eras": [
+      { "id": "ce-1945", "label": "1945 战后", "file": "ce-1945-wwii.geojson", "fill": "#94a3b8", "stroke": "#64748b",
+        "desc": "<span class=\"thm-year-tag\">1945</span><strong>战后殖民体系动摇</strong>：民族意识觉醒。",
+        "cities": [[28.61,77.21,"新德里","New Delhi","1947 独立"],[30.06,31.25,"开罗","Cairo","1952 革命"],[-6.17,106.83,"雅加达","Jakarta","1945 独立"]] },
+      { "id": "ce-2000", "label": "1960s 解殖", "file": "ce-2000.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">1960</span><strong>非洲独立年</strong>：17 个非洲国家独立，殖民体系瓦解。",
+        "cities": [[6.52,3.38,"拉各斯","Lagos","尼日利亚 1960"],[-4.27,15.27,"金沙萨","Kinshasa","刚果 1960"],[14.69,-17.44,"达喀尔","Dakar","塞内加尔 1960"]] }
+    ]
+  },
+  "community/hist-m-united-nations": {
+    "title": "联合国与战后国际秩序",
+    "scope": "world",
+    "center": [40, 0], "zoom": 3, "fitBounds": [[15, -80], [60, 140]],
+    "eras": [
+      { "id": "ce-1945", "label": "1945 成立", "file": "ce-1945-wwii.geojson", "fill": "#0ea5e9", "stroke": "#0284c7",
+        "desc": "<span class=\"thm-year-tag\">1945.10.24</span><strong>联合国成立</strong>：51 个创始会员国，总部纽约。",
+        "cities": [[40.75,-73.97,"纽约","New York","联合国总部"],[37.78,-122.42,"旧金山","San Francisco","《联合国宪章》签署地"],[46.20,6.14,"日内瓦","Geneva","欧洲办事处"]] },
+      { "id": "ce-2000", "label": "今日", "file": "ce-2000.geojson", "fill": "#10b981", "stroke": "#059669",
+        "desc": "<span class=\"thm-year-tag\">现今</span><strong>193 个会员国</strong>：安理会 5 常、人权理事会、世卫、教科文组织。",
+        "cities": [[40.75,-73.97,"纽约","New York","总部"],[46.20,6.14,"日内瓦","Geneva","人权办"],[48.21,16.37,"维也纳","Vienna","国际原子能机构"],[39.90,116.40,"北京","Beijing","常任理事国"]] }
+    ]
+  },
+  "community/hist-m-ww2-asia-pacific": {
+    "title": "二战亚太战场",
+    "scope": "world",
+    "center": [20, 130], "zoom": 3, "fitBounds": [[-20, 90], [55, 180]],
+    "eras": [
+      { "id": "ce-1945", "label": "1945 终战", "file": "ce-1945-wwii.geojson", "fill": "#ef4444", "stroke": "#dc2626",
+        "desc": "<span class=\"thm-year-tag\">1941-1945</span><strong>亚太战场</strong>：太平洋战争，中途岛转折，广岛长崎原爆。",
+        "cities": [[35.68,139.69,"东京","Tokyo","轴心国核心"],[21.31,-157.86,"珍珠港","Pearl Harbor","1941.12.7"],[28.35,-177.38,"中途岛","Midway","1942.6 转折"],[29.56,106.56,"重庆","Chongqing","中国战时首都"],[34.40,132.46,"广岛","Hiroshima","1945.8.6 原爆"]] }
+    ]
+  }
+}

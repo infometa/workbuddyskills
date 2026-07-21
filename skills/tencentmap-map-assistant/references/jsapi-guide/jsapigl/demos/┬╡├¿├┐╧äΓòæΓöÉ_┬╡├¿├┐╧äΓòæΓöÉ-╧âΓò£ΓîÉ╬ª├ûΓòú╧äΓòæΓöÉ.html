@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>彩虹线</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+</style>
+
+<body onload="initMap()">
+	<div id="container"></div>
+	<script type="text/javascript">
+      var map;
+      var paths = [
+        new TMap.LatLng(40.04151962242275, 116.27143444767171),
+        new TMap.LatLng(40.041798843759516, 116.27350477237314),
+        new TMap.LatLng(40.041950772690726, 116.2745721158808),
+        new TMap.LatLng(40.040443787455565, 116.27490465511983),
+        new TMap.LatLng(40.03896140705949, 116.27522646715988),
+        new TMap.LatLng(40.03910484067877, 116.27616723536175),
+        new TMap.LatLng(40.039495821815954, 116.27838901039286),
+      ];
+
+      function initMap() {
+        var center = new TMap.LatLng(40.040452, 116.274586);
+        //初始化地图
+        map = new TMap.Map("container", {
+          zoom: 17,//设置地图缩放级别
+          center: center,//设置地图中心点坐标
+        });
+
+        var polylineLayer = new TMap.MultiPolyline({
+          map: map, // 绘制到目标地图
+          // 折线样式定义
+          styles: {
+            'style_blue': new TMap.PolylineStyle({
+              color: '#3777FF', //线填充色
+              width: 10, //折线宽度
+              borderWidth: 0, //边线宽度
+              showArrow: true,
+              arrowOptions: {
+                space: 70
+              },
+              lineCap: 'round',
+            }),
+          },
+          geometries: [{
+            styleId: 'style_blue',
+            rainbowPaths: [ // 彩虹线数组
+              {
+                path: [paths[0], paths[1]],
+                color: 'rgba(0, 180, 0, 1)',
+              },
+              {
+                path: [paths[1], paths[2]],
+                color: 'rgba(255, 0, 0, 1)',
+              },
+              {
+                path: [paths[2], paths[3]],
+                color: 'rgba(204,153, 0, 1)',
+              },
+              {
+                path: [paths[3], paths[4]],
+                color: 'rgba(255, 0, 0, 1)',
+              },
+              {
+                path: [paths[4], paths[5]],
+                color: 'rgba(204,153, 0, 1)',
+              },
+              {
+                path: [paths[5], paths[6]],
+                color: 'rgba(0, 180, 0, 1)',
+              },
+            ],
+          }],
+        });
+      }
+	</script>
+</body>
+
+</html>

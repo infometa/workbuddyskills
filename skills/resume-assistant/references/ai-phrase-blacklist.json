@@ -1,0 +1,150 @@
+{
+  "_meta": {
+    "schema_version": "0.3",
+    "skill": "resume-assistant",
+    "note": "AI 文风黑名单（中英双语）。人类可读说明文档见 ai-phrase-blacklist.md；本 JSON 是 scripts/audit_ai_flavor.py 的数据源。",
+    "updated_at": "2026-04-24",
+    "dimension": "provenance 第三维度：防 AI 味（前两维：不编造事实 / 合法改写）"
+  },
+
+  "severity_thresholds": {
+    "_note": "命中次数 → 级别映射",
+    "info_max": 2,
+    "warn_max": 5,
+    "error_from": 6
+  },
+
+  "english": {
+    "_note": "来源：srbhr/Resume-Matcher apps/backend/app/prompts/refinement.py AI_PHRASE_BLACKLIST",
+
+    "overused_verbs": {
+      "spearheaded":      {"replacement": "led",              "category": "verb"},
+      "orchestrated":     {"replacement": "coordinated",      "category": "verb"},
+      "championed":       {"replacement": "advocated for",    "category": "verb"},
+      "synergized":       {"replacement": "collaborated",     "category": "verb"},
+      "leveraged":        {"replacement": "used",             "category": "verb"},
+      "revolutionized":   {"replacement": "transformed",      "category": "verb"},
+      "pioneered":        {"replacement": "introduced",       "category": "verb"},
+      "catalyzed":        {"replacement": "initiated",        "category": "verb"},
+      "operationalized":  {"replacement": "implemented",      "category": "verb"},
+      "architected":      {"replacement": "designed",         "category": "verb"},
+      "envisioned":       {"replacement": "planned",          "category": "verb"},
+      "effectuated":      {"replacement": "achieved",         "category": "verb"},
+      "endeavored":       {"replacement": "worked to",        "category": "verb"},
+      "facilitated":      {"replacement": "helped",           "category": "verb"},
+      "utilized":         {"replacement": "used",             "category": "verb"}
+    },
+
+    "corporate_buzzwords": {
+      "synergy":          {"replacement": null, "category": "buzzword"},
+      "synergies":        {"replacement": null, "category": "buzzword"},
+      "paradigm":         {"replacement": null, "category": "buzzword"},
+      "paradigm shift":   {"replacement": null, "category": "buzzword"},
+      "best-in-class":    {"replacement": null, "category": "buzzword"},
+      "world-class":      {"replacement": null, "category": "buzzword"},
+      "cutting-edge":     {"replacement": "advanced",  "category": "buzzword"},
+      "bleeding-edge":    {"replacement": "advanced",  "category": "buzzword"},
+      "game-changer":     {"replacement": null, "category": "buzzword"},
+      "game-changing":    {"replacement": null, "category": "buzzword"},
+      "disruptive":       {"replacement": null, "category": "buzzword"},
+      "disruptor":        {"replacement": null, "category": "buzzword"},
+      "holistic":         {"replacement": "complete",  "category": "buzzword"},
+      "actionable":       {"replacement": null, "category": "buzzword"},
+      "impactful":        {"replacement": "effective", "category": "buzzword"},
+      "proactive":        {"replacement": null, "category": "buzzword"},
+      "proactively":      {"replacement": null, "category": "buzzword"},
+      "deliverables":     {"replacement": "results",   "category": "buzzword"},
+      "bandwidth":        {"replacement": null, "category": "buzzword"},
+      "circle back":      {"replacement": "follow up", "category": "buzzword"},
+      "deep dive":        {"replacement": null, "category": "buzzword"},
+      "move the needle":  {"replacement": null, "category": "buzzword"},
+      "low-hanging fruit":{"replacement": null, "category": "buzzword"},
+      "touch base":       {"replacement": "meet",      "category": "buzzword"},
+      "value-add":        {"replacement": null, "category": "buzzword"}
+    },
+
+    "filler_phrases": {
+      "in order to":             {"replacement": "to",        "category": "filler"},
+      "for the purpose of":      {"replacement": "to",        "category": "filler"},
+      "with a view to":          {"replacement": "to",        "category": "filler"},
+      "at the end of the day":   {"replacement": "",          "category": "filler"},
+      "moving forward":          {"replacement": "",          "category": "filler"},
+      "going forward":           {"replacement": "",          "category": "filler"},
+      "on a daily basis":        {"replacement": "daily",     "category": "filler"},
+      "on a regular basis":      {"replacement": "regularly", "category": "filler"},
+      "in a timely manner":      {"replacement": "on time",   "category": "filler"},
+      "at this point in time":   {"replacement": "now",       "category": "filler"},
+      "due to the fact that":    {"replacement": "because",   "category": "filler"},
+      "in the event that":       {"replacement": "if",        "category": "filler"},
+      "in light of the fact that": {"replacement": "because", "category": "filler"}
+    },
+
+    "context_sensitive": {
+      "_note": "以下词在特定技术语境是合法术语；仅当同句里出现 ≥2 个才报 WARN",
+      "items": ["stakeholder", "robust", "scalable"]
+    },
+
+    "punctuation_signals": {
+      "\u2014":       {"replacement": "-",  "category": "punct", "reason": "em-dash AI 大量使用，人类简历少用"},
+      "--":           {"replacement": "-",  "category": "punct", "reason": "em-dash 变体"}
+    }
+  },
+
+  "chinese": {
+    "_note": "本 Skill v0.3 基于国内招聘语境新增",
+
+    "buzzword_verbs": {
+      "赋能":     {"replacement": "帮助",       "category": "verb", "reason": "大厂黑话，具体讲帮助对方做到什么"},
+      "打造":     {"replacement": "搭建",       "category": "verb", "reason": "简历更常用 搭建/做出/开发"},
+      "夯实":     {"replacement": "巩固",       "category": "verb"},
+      "沉淀":     {"replacement": "积累",       "category": "verb", "reason": "能说具体就说具体，如整理成 SOP"},
+      "拉通":     {"replacement": "协调",       "category": "verb"},
+      "对齐":     {"replacement": "达成共识",   "category": "verb", "reason": "非技术语境（技术语境允许）"}
+    },
+
+    "buzzword_nouns": {
+      "抓手":     {"replacement": "切入点",     "category": "noun"},
+      "闭环":     {"replacement": "完整流程",   "category": "noun"},
+      "心智":     {"replacement": "用户认知",   "category": "noun"},
+      "颗粒度":   {"replacement": "精细程度",   "category": "noun"},
+      "组合拳":   {"replacement": "一整套方案", "category": "noun"},
+      "壁垒":     {"replacement": "优势",       "category": "noun"},
+      "势能":     {"replacement": "动能",       "category": "noun"},
+      "体感":     {"replacement": "体验",       "category": "noun"},
+      "生态":     {"replacement": null,         "category": "noun", "reason": "如指合作伙伴/用户网络，建议具体描述"}
+    },
+
+    "empty_phrases": {
+      "互联网下半场":  {"replacement": "",                 "category": "cliche"},
+      "降本增效":      {"replacement": "优化成本并提高效率","category": "cliche", "reason": "建议拆开讲具体的成本和效率"},
+      "全链路":        {"replacement": "端到端",           "category": "cliche"},
+      "可持续发展":    {"replacement": "",                 "category": "cliche", "reason": "建议讲具体目标"},
+      "结果导向":      {"replacement": "",                 "category": "cliche", "reason": "每条 bullet 都应是结果导向，不必自称"},
+      "高效完成":      {"replacement": "",                 "category": "cliche", "reason": "缺量化，建议补数字"}
+    },
+
+    "diversity_limits": {
+      "_note": "即使不在黑名单，同词高频也要报 WARN",
+      "负责":  {"max_per_resume": 4, "suggestions": ["主导", "推动", "主持", "设计", "搭建", "交付"]},
+      "优化":  {"max_per_resume": 3, "suggestions": ["改进", "重构", "提升", "调优"]},
+      "参与":  {"max_per_resume": 2, "suggestions": ["协助", "支持"], "note": "多于 2 次要反问用户是不是真的只是参与"}
+    }
+  },
+
+  "whitelist": {
+    "_note": "以下词虽然像套话，但在技术语境合法，不报警",
+    "english_technical": [
+      "scalable", "microservices", "distributed", "high-availability",
+      "stakeholder"
+    ],
+    "english_star_xyz_required": [
+      "improved", "reduced", "increased", "achieved", "delivered", "led", "designed"
+    ],
+    "chinese_technical": [
+      "分布式", "高可用", "微服务", "对齐"
+    ],
+    "industry_metrics": [
+      "CTR", "GMV", "DAU", "MAU", "ROI", "SLA", "QPS", "P99"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "customer-sales-automation",
+  "description": "客户支持工作流自动化、销售管道管理、邮件营销活动及客户关系管理系统集成",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>动态设置弧线图参数</title>
+</head>
+<script charset="utf-8"
+  src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"></script>
+<style type="text/css">
+  html,
+  body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  #container {
+    width: 100%;
+    height: 100%;
+  }
+
+  #curAddBtn {
+    position: absolute;
+    left: 50px;
+    top: 50px;
+    z-index: 1001;
+  }
+
+  #curDecBtn {
+    position: absolute;
+    left: 150px;
+    top: 50px;
+    z-index: 1001;
+  }
+
+  #aniSwitchBtn {
+    position: absolute;
+    left: 50px;
+    top: 90px;
+    z-index: 1001;
+  }
+
+</style>
+
+<body onload="initMap()">
+  <div id="container">
+    <button id="curAddBtn">增加曲度</button>
+    <button id="curDecBtn">减小曲度</button>
+    <button id="aniSwitchBtn">改变动画总时长与高亮时长</button>
+  </div>
+  <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/arc.js"></script>
+  <script>
+    function initMap() {
+      var center = new TMap.LatLng(37.80787, 112.269029);
+      var data = arcData;
+      var curAddBtn = document.getElementById('curAddBtn');
+      var curDecBtn = document.getElementById('curDecBtn');
+      var aniSwitchBtn = document.getElementById('aniSwitchBtn');
+
+      //初始化地图
+      var map = new TMap.Map("container", {
+        zoom: 5,//设置地图缩放级别
+        pitch: 30,
+        center: center,//设置地图中心点坐标
+        mapStyleId: "style4", //个性化样式
+         baseMap: {
+            		type: "vector",
+            		features: ["base", "building3d"], // 隐藏矢量文字
+          		},
+      });
+      //初始化弧线图并添加至map图层
+      var arc = new TMap.visualization.Arc({
+        animatable: true,
+        mode: 'vertical' // 弧线平面与地平面垂直
+      })
+      .addTo(map)
+      .setData(data);//设置数据
+
+      curAddBtn.addEventListener('click', () => {
+        var curvature = arc.getCurvature() + 0.1;
+        if(curvature <= 1) {  // 曲度最大不能超过1
+          arc.setCurvature(curvature);  // 调用参数访问器，设置弧线图的曲度
+        }
+      });
+
+      curDecBtn.addEventListener('click', () => {
+        var curvature = arc.getCurvature() - 0.1;
+        if(curvature > 0) {   // 曲度最小不能低于0
+          arc.setCurvature(curvature);  // 调用参数访问器，设置弧线图的曲度
+        }
+      });
+
+      aniSwitchBtn.addEventListener('click', () => {
+        var highlight = arc.getHighlightDuration() + 5000;  // 给高亮时间增加5s
+        var animDuration = arc.getAnimDuration() + 10000;   // 给动画总时间增加10s
+         arc.setAnimDuration(animDuration);
+        arc.setHighlightDuration(highlight);  // 调用参数访问器进行设置
+       
+      })
+    }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>开关编辑器键盘事件</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?libraries=tools&v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 80%;
+        position: relative;
+    }
+
+    .btnContainer {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btnContainer button {
+        padding: 10px 14px;
+        box-sizing: border-box;
+        border: none;
+        background-color: #3876ff;
+        border-radius: 2px;
+        color: #fff;
+        font-size: 14px;
+        line-height: 14px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+    <div class="btnContainer">
+        <button id="btn1" onclick="enableKeyBoard('Delete')">关闭默认的Delete事件</button>
+        <button id="btn2" onclick="enableKeyBoard('Ctrl')">关闭默认的Ctrl事件</button>
+        <button id="btn3" onclick="enableKeyBoard('Esc')">关闭默认的Esc事件</button>
+    </div>
+    <div>
+        单选：鼠标左键点击图形<br />
+        多选：按下ctrl键后点击多个图形， 禁用后将无法通过Ctrl键多选<br />
+        删除：选中图形后按下delete键可删除图形，禁用后将无法通过delete键删除<br />
+        中断：按下esc键可中断当前操作，点选的图形将取消选中，编辑过程将中断，禁用后将无法通过esc键中断
+    </div>
+    <script type="text/javascript">
+        var map, editor;
+        const btn1 = document.getElementById('btn1')
+        const btn2 = document.getElementById('btn2')
+        const btn3 = document.getElementById('btn3')
+        function enableKeyBoard(target) {
+          	// 文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocEditor
+            if (target === 'Delete' || target === 'Ctrl' || target === 'Esc') {
+                let flag = !editor[`getKeyboard${target}Enable`]();
+                editor[`setKeyboard${target}Enable`](flag);
+
+                // 更新按钮文字
+                const btnMap = {
+                    'Delete': btn1,
+                    'Ctrl': btn2,
+                    'Esc': btn3
+                };
+                btnMap[target].innerText = flag ?
+                    `关闭默认的${target}事件` :
+                    `开启默认的${target}事件`;
+            }
+        }
+        function initMap() {
+            // 初始化地图
+            map = new TMap.Map("container", {
+                zoom: 16, // 设置地图缩放级别
+                center: new TMap.LatLng(40.04162653200161, 116.27402993329179) // 设置地图中心点坐标
+            });
+
+            const polygonGeometries = [
+                {
+                    "paths": [
+                        new TMap.LatLng(40.041516, 116.271655),
+                        new TMap.LatLng(40.044479, 116.271063),
+                        new TMap.LatLng(40.045154, 116.275173),
+                        new TMap.LatLng(40.045127, 116.275351),
+                        new TMap.LatLng(40.045061, 116.275474),
+                        new TMap.LatLng(40.044007, 116.276271),
+                        new TMap.LatLng(40.043876, 116.276264),
+                        new TMap.LatLng(40.043774, 116.276204),
+                        new TMap.LatLng(40.043697, 116.276093),
+                        new TMap.LatLng(40.043411, 116.274514),
+                        new TMap.LatLng(40.043373, 116.274436),
+                        new TMap.LatLng(40.043313, 116.274408),
+                        new TMap.LatLng(40.042697, 116.274427),
+                        new TMap.LatLng(40.042122, 116.27462),
+                        new TMap.LatLng(40.04204, 116.274607),
+                        new TMap.LatLng(40.042001, 116.274544),
+                        new TMap.LatLng(40.041516, 116.271655),
+                    ],
+                },
+                {
+                    "paths": [
+                        new TMap.LatLng(40.043774, 116.276204),
+                        new TMap.LatLng(40.043824, 116.276332),
+                        new TMap.LatLng(40.04382, 116.27648),
+                        new TMap.LatLng(40.043489, 116.277156),
+                        new TMap.LatLng(40.043233, 116.277385),
+                        new TMap.LatLng(40.042953, 116.277482),
+                        new TMap.LatLng(40.04255, 116.277556),
+                        new TMap.LatLng(40.042484, 116.277524),
+                        new TMap.LatLng(40.042454, 116.277449),
+                        new TMap.LatLng(40.042051, 116.274762),
+                        new TMap.LatLng(40.042063, 116.274677),
+                        new TMap.LatLng(40.042122, 116.27462),
+                        new TMap.LatLng(40.042697, 116.274427),
+                        new TMap.LatLng(40.043313, 116.274408),
+                        new TMap.LatLng(40.043373, 116.274436),
+                        new TMap.LatLng(40.043411, 116.274514),
+                        new TMap.LatLng(40.043697, 116.276093),
+                        new TMap.LatLng(40.043774, 116.276204),
+                    ],
+                },
+                {
+                    "paths": [
+                        new TMap.LatLng(40.041904, 116.274781),
+                        new TMap.LatLng(40.041939, 116.274843),
+                        new TMap.LatLng(40.04233, 116.27752),
+                        new TMap.LatLng(40.04231, 116.277595),
+                        new TMap.LatLng(40.042262, 116.277644),
+                        new TMap.LatLng(40.041085, 116.277896),
+                        new TMap.LatLng(40.041028, 116.277879),
+                        new TMap.LatLng(40.040999, 116.277816),
+                        new TMap.LatLng(40.040641, 116.275151),
+                        new TMap.LatLng(40.040655, 116.275076),
+                        new TMap.LatLng(40.040701, 116.275027),
+                        new TMap.LatLng(40.041847, 116.274757),
+                        new TMap.LatLng(40.041904, 116.274781),
+                    ],
+                },
+                {
+                    "paths": [
+                        new TMap.LatLng(40.041231, 116.271712),
+                        new TMap.LatLng(40.0413, 116.271761),
+                        new TMap.LatLng(40.041347, 116.271869),
+                        new TMap.LatLng(40.041821, 116.27429),
+                        new TMap.LatLng(40.041793, 116.274441),
+                        new TMap.LatLng(40.041701, 116.274535),
+                        new TMap.LatLng(40.040443, 116.274853),
+                        new TMap.LatLng(40.040906, 116.27805),
+                        new TMap.LatLng(40.039506, 116.278362),
+                        new TMap.LatLng(40.03863, 116.272593),
+                        new TMap.LatLng(40.03869, 116.27238),
+                        new TMap.LatLng(40.038957, 116.272167),
+                        new TMap.LatLng(40.041231, 116.271712),
+                    ],
+                }]
+                // 初始化几何图形及编辑器
+            editor = new TMap.tools.GeometryEditor({
+                map, // 编辑器绑定的地图对象
+                overlayList: [ // 可编辑图层
+                    {
+                        overlay: new TMap.MultiPolygon({
+                            map,
+                            styles: {
+                                highlight: new TMap.PolygonStyle({
+                                    color: 'rgba(255, 255, 0, 0.6)'
+                                })
+                            },
+                            geometries: polygonGeometries
+                        }),
+                        id: 'polygon',
+                        selectedStyleId: 'highlight'
+                    }
+                ],
+                actionMode: TMap.tools.constants.EDITOR_ACTION.INTERACT, // 编辑器的工作模式
+                activeOverlayId: 'polygon', // 激活图层
+                selectable: true, // 开启点选功能
+                snappable: true // 开启吸附
+            });
+        }
+    </script>
+</body>
+
+</html>

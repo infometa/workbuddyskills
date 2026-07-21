@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "long_manuscript.r2_anchored_revision_scenarios.v1",
+  "evidenceBoundary": "deterministic_contract_behavior_only",
+  "scenarios": [
+    {
+      "fixtureId": "r2_scoped_revision",
+      "revision": {
+        "schemaVersion": "long_manuscript.anchored_revision.v1",
+        "revisionId": "revision-001",
+        "sourceArtifactDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "sourceImmutable": true,
+        "scope": {"anchorKind":"paragraph","userConfirmed":true},
+        "anchors": [{"anchorId":"paragraph-2","locator":"paragraph:2","beforeDigest":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","selected":true}],
+        "changes": [{"changeId":"change-1","anchorId":"paragraph-2","operation":"replace","beforeDigest":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","proposedText":"A bounded replacement paragraph."}],
+        "changeBudget": {"maxChanges":1},
+        "impact": {"outsideScopeChangeCount":0,"sourceOverwriteAttempted":false},
+        "locks": [{"lockId":"lock-1","anchorId":"paragraph-2","resolution":"preserved"}],
+        "rollback": {"ready":true,"restoreSourceDigest":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+        "deliveryClaim": "prepared_not_delivered",
+        "externalWritePerformed": false
+      }
+    },
+    {
+      "fixtureId": "r2_contract_legal_review",
+      "highRiskBrief": {
+        "schemaVersion":"long_manuscript.high_risk_vertical_brief.v1",
+        "verticalId":"contract_legal",
+        "evidenceGaps":[{"gapId":"authority-gap","description":"The governing text and jurisdiction context are not yet verified."}],
+        "claims":[{"claimId":"issue-1","statement":"The draft contains a clause that needs qualified review.","verificationState":"unverified","sourceRef":null}],
+        "humanReview":{"required":true,"status":"pending"},
+        "adviceClass":"analysis_not_legal_advice",
+        "externalSubmissionAttempted":false,
+        "externalWritePerformed":false,
+        "deliveryClaim":"prepared_not_delivered"
+      }
+    },
+    {
+      "fixtureId": "r2_ecommerce_operations_review",
+      "highRiskBrief": {
+        "schemaVersion":"long_manuscript.high_risk_vertical_brief.v1",
+        "verticalId":"ecommerce_operations",
+        "evidenceGaps":[{"gapId":"platform-rule-gap","description":"The applicable platform rule version must be checked by an owner."}],
+        "claims":[{"claimId":"issue-2","statement":"The proposed operation needs a current platform-rule check.","verificationState":"unverified","sourceRef":null}],
+        "humanReview":{"required":true,"status":"pending"},
+        "adviceClass":"analysis_not_legal_advice",
+        "externalSubmissionAttempted":false,
+        "externalWritePerformed":false,
+        "deliveryClaim":"prepared_not_delivered"
+      }
+    }
+  ]
+}

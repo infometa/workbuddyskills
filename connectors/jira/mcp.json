@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "jira": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "atlassian-jira-mcp-server"
+      ],
+      "env": {
+        "ATLASSIAN_SITE_NAME": "${JIRA_BASE_URL}",
+        "ATLASSIAN_USER_EMAIL": "${JIRA_USERNAME}",
+        "ATLASSIAN_API_TOKEN": "${JIRA_API_TOKEN}"
+      }
+    }
+  }
+}

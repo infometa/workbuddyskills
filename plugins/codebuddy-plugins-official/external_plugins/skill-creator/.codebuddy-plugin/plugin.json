@@ -1,0 +1,5 @@
+{
+  "name": "skill-creator",
+  "description": "提供创建高效 Claude 技能的指南,通过专业知识、工作流程和工具集成来扩展 AI 助手的能力",
+  "license": "Apache-2.0"
+}

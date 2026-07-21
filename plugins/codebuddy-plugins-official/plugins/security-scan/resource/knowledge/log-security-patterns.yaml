@@ -1,0 +1,174 @@
+# D9: 日志与监控安全模式表
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 检测日志注入、敏感数据日志脱敏缺失、安全监控/审计缺失
+
+# ============================================================================
+# 一、日志注入检测
+# ============================================================================
+
+log_injection:
+  description: "用户输入未净化直接写入日志，可伪造日志条目（CRLF）或触发日志框架漏洞"
+
+  vulnerable_patterns:
+    java:
+      - pattern: 'log\.(info|warn|error|debug)\s*\(.*request\.getParameter'
+        note: "请求参数直接写入日志"
+      - pattern: 'log\.(info|warn|error|debug)\s*\(.*\+\s*\w+\)'
+        note: "字符串拼接写入日志（需确认变量来源为用户输入）"
+      - pattern: 'logger\.(info|warn|error|debug)\s*\(.*getHeader\('
+        note: "HTTP 头值直接写入日志"
+      - pattern: 'log\.(info|warn|error|debug)\s*\(\s*"[^"]*"\s*\+\s*username'
+        note: "用户名等身份信息拼接进日志"
+    python:
+      - pattern: 'logging\.(info|warning|error|debug)\s*\(.*request\.'
+        note: "请求对象属性直接写入日志"
+      - pattern: 'logger\.(info|warning|error|debug)\s*\(.*f".*\{'
+        note: "f-string 格式化用户输入到日志"
+      - pattern: 'print\s*\(.*request\.'
+        note: "print 输出请求数据（生产环境不安全）"
+    javascript:
+      - pattern: 'console\.(log|warn|error)\s*\(.*req\.(body|query|params)'
+        note: "请求参数直接 console 输出"
+      - pattern: 'logger\.(info|warn|error)\s*\(.*req\.'
+        note: "请求数据直接写入结构化日志"
+    go:
+      - pattern: 'log\.(Print|Printf|Println)\s*\(.*r\.(URL|Form|Header)'
+        note: "请求数据直接写入日志"
+      - pattern: 'zap\.\w+\(.*r\.(URL|Form|Header)'
+        note: "请求数据写入 zap 日志"
+
+  attack_vectors:
+    - name: "CRLF 日志伪造"
+      description: "注入换行符伪造日志条目，误导安全审计"
+      payload_example: 'username=admin%0a[INFO] Login successful for admin'
+    - name: "日志框架 RCE"
+      description: "某些日志框架（如 Log4j）可通过注入触发 JNDI 查找"
+      cross_ref: "resource/scan-data/cve-quick-lookup.yaml → log4j-core"
+
+  safe_patterns:
+    - 'log\.\w+\(\s*"[^"]*"\s*,\s*\w+'     # 参数化日志（SLF4J 占位符 {}）
+    - 'replace\s*\(\s*[''"]\\n|\\r'          # 移除换行符
+    - 'StringEscapeUtils\.escapeJava'        # Apache Commons 转义
+    - 'sanitize.*log'                        # 自定义日志净化函数
+
+# ============================================================================
+# 二、敏感数据日志脱敏缺失
+# ============================================================================
+
+sensitive_data_logging:
+  description: "密码、Token、身份证、银行卡等敏感数据未脱敏直接写入日志"
+
+  vulnerable_patterns:
+    - category: 密码写入日志
+      patterns:
+        - 'log\.\w+\(.*password'
+        - 'logger\.\w+\(.*password'
+        - 'console\.\w+\(.*password'
+        - 'print\(.*password'
+      note: "密码（含明文或哈希）写入日志"
+
+    - category: Token/密钥写入日志
+      patterns:
+        - 'log\.\w+\(.*[Tt]oken'
+        - 'log\.\w+\(.*[Ss]ecret'
+        - 'log\.\w+\(.*[Aa]pi[Kk]ey'
+        - 'log\.\w+\(.*[Aa]uthorization'
+        - 'logger\.\w+\(.*Bearer'
+      note: "认证凭证写入日志"
+
+    - category: 个人身份信息 (PII) 写入日志
+      patterns:
+        - 'log\.\w+\(.*身份证|idCard|ssn|socialSecurity'
+        - 'log\.\w+\(.*银行卡|bankCard|creditCard|cardNumber'
+        - 'log\.\w+\(.*手机号|phone|mobile'
+        - 'log\.\w+\(.*邮箱|email'
+      note: "PII 数据未脱敏写入日志，违反隐私合规要求"
+
+    - category: 请求/响应体整体记录
+      patterns:
+        - 'log\.\w+\(.*requestBody'
+        - 'log\.\w+\(.*responseBody'
+        - 'log\.\w+\(.*toString\(\)'
+        - 'log\.\w+\(.*JSON\.stringify\(req\.body'
+        - 'log\.\w+\(.*objectMapper\.writeValueAsString'
+      note: "整体记录请求/响应体可能包含敏感字段"
+
+  safe_patterns:
+    - 'mask\('                    # 脱敏函数
+    - 'desensitize\('             # 脱敏函数
+    - 'redact\('                  # 编辑函数
+    - '\*\*\*'                    # 星号替换
+    - 'FILTERED'                  # 过滤标记
+    - '@JsonIgnore'               # Jackson 序列化忽略
+    - '@ToString\.Exclude'        # Lombok 排除
+
+# ============================================================================
+# 三、安全事件监控缺失
+# ============================================================================
+
+security_monitoring:
+  description: "关键安全事件缺少日志记录或告警机制"
+
+  required_audit_events:
+    - event: "认证失败"
+      grep_keywords: "login|authenticate|signin"
+      expected_log: "记录失败的用户名、IP、时间"
+      absence_severity: "high"
+
+    - event: "认证成功"
+      grep_keywords: "login|authenticate|signin"
+      expected_log: "记录成功登录的用户、IP、时间"
+      absence_severity: "medium"
+
+    - event: "权限变更"
+      grep_keywords: "setRole|updatePermission|grantAccess|addAdmin"
+      expected_log: "记录操作者、目标用户、变更前后权限"
+      absence_severity: "high"
+
+    - event: "密码修改/重置"
+      grep_keywords: "changePassword|resetPassword|updatePassword"
+      expected_log: "记录操作者、目标用户、时间"
+      absence_severity: "medium"
+
+    - event: "敏感数据导出"
+      grep_keywords: "export|download|dump|backup"
+      expected_log: "记录导出者、数据范围、时间"
+      absence_severity: "high"
+
+    - event: "资源删除"
+      grep_keywords: "delete|remove|destroy|purge"
+      expected_log: "记录删除者、资源ID、时间"
+      absence_severity: "medium"
+
+    - event: "配置变更"
+      grep_keywords: "updateConfig|setConfig|updateSetting"
+      expected_log: "记录变更者、变更项、变更前后值"
+      absence_severity: "medium"
+
+  monitoring_absence_check:
+    description: "检查项目级别是否缺少安全监控基础设施"
+    indicators:
+      - absence_of: 'alertManager|PagerDuty|Sentry|CloudWatch.*Alarm|Prometheus.*alert'
+        note: "无告警系统集成"
+      - absence_of: 'securityAudit|auditLog|AuditTrail|audit_log'
+        note: "无专门的安全审计日志模块"
+
+# ============================================================================
+# 四、判定补充规则
+# ============================================================================
+
+pattern_judgment_supplements:
+  - type: 日志注入
+    condition: "用户可控输入通过字符串拼接直接写入日志，且未做换行符过滤或使用参数化日志"
+    action: "创建 log-injection finding"
+    severity: "low"
+
+  - type: 敏感数据日志泄露
+    condition: "密码、Token、个人身份信息等敏感数据未脱敏写入日志"
+    action: "创建 sensitive-data-logging finding"
+    severity: "medium"
+
+  - type: 安全事件审计缺失
+    condition: "认证失败/权限变更/敏感操作等关键安全事件缺少审计日志"
+    action: "创建 missing-security-audit finding"
+    severity: "low"

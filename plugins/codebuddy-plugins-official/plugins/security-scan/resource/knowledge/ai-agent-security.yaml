@@ -1,0 +1,226 @@
+# ==========================================================================
+# AI Agent 安全检测模式 (AI Agent Security Patterns)
+# ==========================================================================
+# 引用方: light-inline (场景 ai_agent_app 触发) / logic-scan (C7) / red-team
+# 用途: 检测 LLM/Agent 应用的提示词注入、工具滥用、系统提示泄露、MCP 信任、
+#       Agent 输出未校验等风险
+# 触发: scenarios contains "ai_agent_app"（Light 阶段 1.5）
+# ==========================================================================
+
+# ============================================================================
+# 一、提示词注入信号 (prompt_injection_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: prompt-injection / system-prompt-leak
+
+prompt_injection_signals:
+  description: "用户/工具/检索结果未经边界标记直接拼入 prompt 导致注入"
+
+  controllable_signals:
+    description: "Source 信号：进入 prompt 的不可信输入"
+    untrusted_sources:
+      - 'request\.(args|json|form|values|data|body|query|params)'  # web 入口
+      - 'flask\.request\.'
+      - 'fastapi.*\bDepends\('
+      - 'req\.body\.'                                             # express
+      - 'ctx\.request\.body'
+      - 'WebBaseLoader\('                                         # langchain web 抓取
+      - 'PlaywrightURLLoader\('
+      - 'AsyncHtmlLoader\('
+      - 'SeleniumURLLoader\('
+      - 'RetrievalQA\.from_chain_type'                            # RAG 输出
+      - 'similarity_search\('                                     # 向量检索结果
+      - 'Chroma\.from_documents'
+      - 'requests\.get\([^)]+\)\.text'                            # 远程内容
+      - 'urllib\.request\.urlopen'
+      - 'fetch\([^)]+\)\.text\(\)'
+    note: "凡进入 prompt 模板的上述 source 均视为不可信"
+
+  prompt_construction:
+    description: "Sink 信号：构造 prompt / messages 的位置"
+    patterns:
+      - 'PromptTemplate\(\s*template\s*=\s*f?["\']'
+      - 'ChatPromptTemplate\.from_messages'
+      - 'SystemMessage\('
+      - 'HumanMessage\('
+      - 'SystemMessagePromptTemplate'
+      - 'messages\s*=\s*\[\s*\{\s*["\']role["\']\s*:\s*["\']system["\']'
+      - 'system\s*=\s*f["\']'                                     # anthropic.messages.create(system=f"...")
+      - 'openai\.ChatCompletion\.create'
+      - 'client\.chat\.completions\.create'
+      - 'anthropic\.messages\.create'
+      - '\.invoke\(\s*\{[^}]*\}\s*\)'                             # langchain runnable.invoke
+      - 'AgentExecutor\.from_agent_and_tools'
+
+  defense_keywords:
+    description: "存在以下任一即视为已防御（降低 finding 严重级别）"
+    patterns:
+      - 'prompt_guard'
+      - 'sanitize_prompt'
+      - 'guardrails'
+      - 'output_parser\.parse_with_retry'
+      - 'PromptInjectionDetector'
+      - 'rebuff'
+      - 'llm_guard'
+      - 'prompt-shield'
+      - '<\|user_input_start\|>.*<\|user_input_end\|>'            # 边界标记
+      - 'XML_DELIMITER'
+
+# ============================================================================
+# 二、工具执行信号 (tool_execution_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: tool-abuse / unconstrained-tool-execution
+
+tool_execution_signals:
+  description: "Agent 工具具备危险副作用且未约束"
+
+  dangerous_tool_names:
+    description: "工具名/函数名命中即视为危险副作用"
+    patterns:
+      - 'shell_exec'
+      - 'run_python'
+      - 'python_repl'
+      - 'PythonREPLTool'
+      - 'sql_execute'
+      - 'sql_query'
+      - 'SQLDatabaseTool'
+      - 'http_get'
+      - 'http_post'
+      - 'requests_tool'
+      - 'fs_write'
+      - 'write_file'
+      - 'WriteFileTool'
+      - 'shell_tool'
+      - 'BashProcess'
+      - 'bash_tool'
+      - 'send_email'
+      - 'transfer_funds'
+      - 'create_invoice'
+
+  registration_patterns:
+    description: "工具注册到 Agent 的位置"
+    patterns:
+      - 'tools\s*=\s*\['
+      - '@tool\b'
+      - '@tool\('
+      - '\.bind_tools\('
+      - 'AgentExecutor\('
+      - 'create_react_agent'
+      - 'create_openai_functions_agent'
+      - 'create_tool_calling_agent'
+      - 'initialize_agent\('
+      - 'StructuredTool\.from_function'
+      - 'Tool\.from_function'
+
+  defense_keywords:
+    description: "存在以下任一即视为已约束（HumanInputRun / 白名单 / 审批）"
+    patterns:
+      - 'allowed_tools'
+      - 'HumanInputRun'
+      - 'tool_approval_required'
+      - 'human_in_the_loop'
+      - 'requires_approval\s*=\s*True'
+      - 'tool_choice\s*=\s*["\']auto["\']'                        # 仍弱，但记录
+      - 'rate_limit'
+      - 'max_iterations\s*=\s*\d'                                 # AgentExecutor 限步
+
+# ============================================================================
+# 三、系统提示词泄露信号 (system_prompt_leak_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: system-prompt-leak
+
+system_prompt_leak_signals:
+  description: "系统提示嵌入凭证/内部文档，或 raw prompt 回显"
+
+  hardcoded_secret_in_prompt:
+    description: "system_prompt 字面量含密钥/凭证"
+    patterns:
+      - 'sk-[A-Za-z0-9]{20,}'                                     # OpenAI / 通用
+      - 'AKID[A-Za-z0-9]{16,}'                                    # 腾讯云 SecretId
+      - 'AKIA[0-9A-Z]{16}'                                        # AWS
+      - 'xoxb-[0-9A-Za-z-]{20,}'                                  # Slack bot
+      - 'ghp_[A-Za-z0-9]{30,}'                                    # GitHub PAT
+      - 'eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.'             # JWT-shape 字符串
+
+  internal_doc_leak:
+    description: "system_prompt 嵌入内部文档/角色策略，且接口被无鉴权回显"
+    patterns:
+      - '"内部文档|"运营策略|"安全策略|"风控规则'
+      - 'INTERNAL_POLICY'
+      - 'CONFIDENTIAL_PROMPT'
+
+  defense_keywords:
+    patterns:
+      - 'redact_secrets'
+      - 'PromptHasher'
+      - 'DO_NOT_REVEAL_SYSTEM_PROMPT'                             # 仅记录，不算硬防御
+
+# ============================================================================
+# 四、MCP 信任信号 (mcp_trust_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: mcp-server-trust
+
+mcp_trust_signals:
+  description: "MCP server 来源不可信或 tool manifest 无校验"
+
+  untrusted_server:
+    description: "Server 启动参数含用户可控值或第三方 spawn"
+    patterns:
+      - 'StdioServerParameters\([^)]*command\s*=\s*[^)]*\$\{'      # ${VAR} 注入
+      - 'StdioServerParameters\([^)]*command\s*=\s*[^)]*\+\s*'     # 字符串拼接
+      - 'spawn\([^)]*\$\{'                                         # nodejs spawn
+      - 'mcp\.connect\(\s*url\s*=\s*[^)]*request\.'
+      - 'Client\([^)]*remote_url\s*=\s*[^)]*input'
+
+  defense_keywords:
+    patterns:
+      - 'mcp_signature'
+      - 'verify_tool_manifest'
+      - 'allowlist_servers'
+      - 'verify_server_certificate'
+      - 'tool_manifest_hash'
+
+# ============================================================================
+# 五、Agent 输出 sink 信号 (agent_output_sink_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: agent-output-trust / vector-store-poisoning
+
+agent_output_sink_signals:
+  description: "LLM 输出直接进入危险 sink（exec/eval/innerHTML/SQL/HTTP）"
+
+  dangerous_sinks:
+    description: "Sink 模式：LLM 输出走入下面 API"
+    patterns:
+      - '\beval\('
+      - '\bexec\('
+      - '\bcompile\('
+      - 'subprocess\.(run|Popen|call|check_output)'
+      - 'os\.system\('
+      - 'innerHTML\s*='
+      - 'document\.write\('
+      - 'cursor\.execute\(\s*f["\']'                              # f-string SQL
+      - 'cursor\.execute\(\s*["\'][^"\']*\+'                       # SQL 拼接
+      - 'db\.query\(\s*`'                                         # 模板字符串拼接
+      - 'requests\.(get|post|put|delete)\([^)]*llm_output'
+      - 'fetch\([^)]*\bresponse\.content'
+      - 'BashProcess\.run'
+
+  flow_patterns:
+    description: "LLM 输出 → sink 的常见数据流形态（行内可识别）"
+    patterns:
+      - '(response|completion|answer|result|output|text)\s*=\s*.*\.(invoke|complete|chat|run)\([^)]*\)'
+      - '(response|completion|answer)\s*=\s*openai\.'
+      - '(response|completion|answer)\s*=\s*client\.chat\.'
+      - '(response|completion|answer)\s*=\s*anthropic\.'
+
+  defense_keywords:
+    description: "走过结构化解析/校验视为防御"
+    patterns:
+      - 'pydantic'
+      - 'BaseModel'
+      - 'jsonschema\.validate'
+      - 'StructuredOutputParser'
+      - 'PydanticOutputParser'
+      - 'safe_eval'
+      - 'ast\.literal_eval'
+      - 'output_parser\.parse'
+      - 'json\.loads\(.*\)\s*#\s*after_validation'                # 注释提示

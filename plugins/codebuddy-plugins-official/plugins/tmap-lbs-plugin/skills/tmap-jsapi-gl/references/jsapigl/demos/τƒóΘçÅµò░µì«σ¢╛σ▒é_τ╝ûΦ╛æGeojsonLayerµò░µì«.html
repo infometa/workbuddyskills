@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>编辑GeojsonLayer数据</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=vector,tools"></script>
+<script charset="utf-8" src="https://mapapi.qq.com/web/jsapi/jsapi-gl/assets/geojson-demo.js"></script>
+
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 80%;
+        position: relative;
+    }
+
+    #toolControl {
+        position: absolute;
+        top: 10px;
+        left: 0px;
+        right: 0px;
+        margin: auto;
+        width: 126px;
+        z-index: 1001;
+    }
+
+    .toolItem {
+        width: 30px;
+        height: 30px;
+        float: left;
+        margin: 1px;
+        padding: 4px;
+        border-radius: 3px;
+        background-size: 30px 30px;
+        background-position: 4px 4px;
+        background-repeat: no-repeat;
+        box-shadow: 0 1px 2px 0 #E4E7EF;
+        background-color: #ffffff;
+        border: 1px solid #ffffff;
+    }
+
+    .toolItem:hover {
+        border-color: #789CFF;
+    }
+
+    .active {
+        border-color: #D5DFF2;
+        background-color: #D5DFF2;
+    }
+
+    #delete {
+        background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/delete.png');
+    }
+
+    #split {
+        background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/split.png');
+    }
+
+    #union {
+        background-image: url('https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/union.png');
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div id="toolControl">
+        <div class="toolItem" id="delete" onclick="editor.delete();" title="删除"></div>
+        <div class="toolItem" id="split" onclick="editor.split();" title="拆分"></div>
+        <div class="toolItem" id="union" onclick="editor.union();" title="合并"></div>
+    </div>
+    <div>
+        单选：鼠标左键点击图形<br />
+        多选：按下ctrl键后点击多个图形<br />
+        删除：选中图形后按下delete键或点击删除按钮可删除图形<br />
+        编辑：选中图形后出现编辑点，拖动编辑点可移动顶点位置，双击实心编辑点可删除顶点<br />
+        拆分：选中单个多边形后可绘制拆分线，拆分线绘制完成后自动进行拆分<br />
+        合并：选中多个相邻多边形后可进行合并，飞地形式的多边形不支持合并<br />
+        中断：按下esc键可中断当前操作，点选的图形将取消选中，编辑过程将中断
+    </div>
+    <script>
+
+        var center = new TMap.LatLng(40.13659649977259, 116.51136018387479);
+        //初始化地图
+        var map = new TMap.Map("container", {
+            zoom: 9, // 设置地图缩放级别
+            center, // 设置地图中心点坐标
+        });
+        var geoLayer = new TMap.vector.GeoJSONLayer({
+            map: map,
+            data: geojsonData,
+            polygonStyle: new TMap.PolygonStyle({
+                'showBorder': true, //是否显示边线
+                'borderColor': '#fff', //边线颜色
+                'borderWidth': 1 //边线宽度
+            })
+        });
+
+        // 获取geojson生成的polygon图层
+        var polygonLayer = geoLayer.getGeometryOverlay('polygon');
+        polygonLayer.setStyles({
+            highlight: new TMap.PolygonStyle({
+                color: 'rgba(255, 255, 0, 0.6)'
+            })
+        },
+        );
+
+        // 初始化几何图形及编辑器
+        var editor = new TMap.tools.GeometryEditor({
+            map, // 编辑器绑定的地图对象
+            overlayList: [ // 可编辑图层
+                {
+                    overlay: polygonLayer,
+                    id: 'polygon',
+                    selectedStyleId: 'highlight'
+                }
+            ],
+            actionMode: TMap.tools.constants.EDITOR_ACTION.INTERACT, // 编辑器的工作模式
+          	modifierShapeMode: TMap.tools.constants.MODIFIER_SHAPE_MODE.GL, // 大数据量下的编辑点使用GL绘制模式编辑性能更佳
+            activeOverlayId: 'polygon', // 激活图层
+            selectable: true, // 开启点选功能
+        });
+
+        // 监听删除、修改、拆分、合并完成事件
+        let evtList = ['delete', 'adjust', 'split', 'union'];
+        evtList.forEach(evtName => {
+            editor.on(evtName + '_complete', evtResult => {
+                console.log(evtName, evtResult);
+            });
+        });
+
+        // 监听拆分失败事件，获取拆分失败原因
+        editor.on('split_fail', (res) => {
+            alert(res.message);
+        });
+        // 监听合并失败事件，获取合并失败原因
+        editor.on('union_fail', (res) => {
+            alert(res.message);
+        });
+    </script>
+</body>
+
+</html>

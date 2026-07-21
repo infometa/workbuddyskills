@@ -1,0 +1,383 @@
+{
+  "schemaVersion": "long_manuscript.r8_continued_use_governance_scenarios.v1",
+  "evidenceBoundary": "deterministic_contract_behavior_only",
+  "continuedUseCardScenarios": [
+    {
+      "fixtureId": "r8_continued_use_card_valid",
+      "expectedValid": true,
+      "card": {
+        "schemaVersion": "long_manuscript.continued_use_card.v1",
+        "cardType": "long_manuscript_continue_card",
+        "cardId": "continue-card-whitepaper-002",
+        "progressId": "progress-whitepaper-001",
+        "deliverySurface": "chat_response",
+        "deliveryState": "visible_in_current_response",
+        "currentStage": "continued_use_ready",
+        "completedNow": [
+          {
+            "artifactId": "chapter-2-section-2",
+            "artifactKind": "draft_section",
+            "summary": "已完成第二章第二节的可见增量草稿，并保留来源待核验标记。",
+            "visibleRef": "current_response#chapter-2-section-2",
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "incrementalArtifact": {
+          "artifactId": "chapter-2-section-2",
+          "artifactKind": "draft_section",
+          "summary": "第二章第二节增量草稿已在当前回复中交付。",
+          "visibleRef": "current_response#chapter-2-section-2",
+          "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "deliveryState": "visible_in_current_response"
+        },
+        "openItems": [
+          {
+            "itemId": "chapter-2-source-coverage",
+            "type": "unverified",
+            "summary": "第二章中的行业规模数字仍需用户在当前会话补充来源或接受保留待核验标记。",
+            "status": "pending_verification",
+            "nextActionId": "add_current_context"
+          }
+        ],
+        "nextVisibleArtifact": {
+          "artifactId": "chapter-3-section-1",
+          "artifactKind": "draft_section",
+          "actionId": "continue_chapter_3",
+          "title": "第三章第一节增量草稿",
+          "expectedVisibleOutcome": "在下一次回复中交付第三章第一节正文和更新后的续用卡。"
+        },
+        "recommendedNextAction": "continue_chapter_3",
+        "nextActions": [
+          {
+            "actionId": "continue_chapter_3",
+            "label": "继续第三章第一节",
+            "expectedVisibleArtifactId": "chapter-3-section-1",
+            "requiresExternalWrite": false
+          },
+          {
+            "actionId": "review_increment",
+            "label": "先审阅本轮增量",
+            "expectedVisibleArtifactId": "chapter-2-review-notes",
+            "requiresExternalWrite": false
+          },
+          {
+            "actionId": "add_current_context",
+            "label": "补充当前会话材料后再续写",
+            "expectedVisibleArtifactId": "chapter-3-context-map",
+            "requiresExternalWrite": false
+          }
+        ],
+        "resumeCommand": {
+          "command": "继续：使用进度卡 progress-whitepaper-001，续写第三章第一节，并在当前回复中更新续用卡。",
+          "scope": "user_copyable_current_response",
+          "progressId": "progress-whitepaper-001",
+          "actionId": "continue_chapter_3",
+          "assumesCrossSessionMemory": false
+        },
+        "exitOption": {
+          "actionId": "stop_for_now",
+          "label": "先停在这里；需要时复制续写口令回来继续",
+          "pressureFree": true,
+          "penaltyClaimed": false,
+          "requiresExternalWrite": false
+        },
+        "writeIntent": {
+          "kind": "unrequested",
+          "authorizationState": "not_applicable",
+          "target": null,
+          "executionAttempted": false,
+          "externalWritePerformed": false,
+          "persistenceClaim": "not_persisted"
+        },
+        "persistenceBoundary": {
+          "scope": "current_response_only",
+          "persistenceClaim": "not_persisted",
+          "externalWritePerformed": false,
+          "crossSessionMemoryClaimed": false,
+          "hostReceiptRequiredForUpgrade": true
+        },
+        "evidenceBoundary": {
+          "evidenceClass": "deterministic_contract_fixture",
+          "hostExecutionObserved": false,
+          "continuedUseReceiptObserved": false,
+          "sameBindingObserved": false,
+          "naturalTrafficObserved": false,
+          "productCreditClaimed": false,
+          "humanApprovalClaimed": false
+        }
+      }
+    }
+  ],
+  "roleWriteOwnershipScenarios": [
+    {
+      "fixtureId": "r8_single_writer_review_handoff",
+      "expectedValid": true,
+      "scenario": {
+        "schemaVersion": "long_manuscript.role_write_ownership_scenario.v1",
+        "scenarioId": "single-writer-review-handoff",
+        "singleWriteOwnerRequired": true,
+        "mergeOwner": "human_owner",
+        "conflictResolution": "block_and_escalate_to_human_merge_owner",
+        "silentMutationAllowed": false,
+        "finalApprovalClaimed": false,
+        "externalWritePerformed": false,
+        "artifacts": [
+          {
+            "artifactId": "chapter-2-draft-v2",
+            "writeScope": "draft_artifact",
+            "writeOwnerRole": "writer"
+          }
+        ],
+        "assignments": [
+          {
+            "assignmentId": "writer-primary",
+            "roleId": "writer",
+            "mode": "write",
+            "targetArtifactId": "chapter-2-draft-v2"
+          },
+          {
+            "assignmentId": "reviewer-check",
+            "roleId": "reviewer",
+            "mode": "review",
+            "targetArtifactId": "chapter-2-draft-v2"
+          }
+        ]
+      }
+    },
+    {
+      "fixtureId": "r8_dual_writer_conflict",
+      "expectedValid": false,
+      "scenario": {
+        "schemaVersion": "long_manuscript.role_write_ownership_scenario.v1",
+        "scenarioId": "dual-writer-conflict",
+        "singleWriteOwnerRequired": true,
+        "mergeOwner": "human_owner",
+        "conflictResolution": "block_and_escalate_to_human_merge_owner",
+        "silentMutationAllowed": false,
+        "finalApprovalClaimed": false,
+        "externalWritePerformed": false,
+        "artifacts": [
+          {
+            "artifactId": "chapter-2-draft-v2",
+            "writeScope": "draft_artifact",
+            "writeOwnerRole": "writer"
+          }
+        ],
+        "assignments": [
+          {
+            "assignmentId": "writer-primary",
+            "roleId": "writer",
+            "mode": "write",
+            "targetArtifactId": "chapter-2-draft-v2"
+          },
+          {
+            "assignmentId": "writer-shadow",
+            "roleId": "writer",
+            "mode": "write",
+            "targetArtifactId": "chapter-2-draft-v2"
+          }
+        ]
+      }
+    },
+    {
+      "fixtureId": "r8_reviewer_write_overreach",
+      "expectedValid": false,
+      "scenario": {
+        "schemaVersion": "long_manuscript.role_write_ownership_scenario.v1",
+        "scenarioId": "reviewer-write-overreach",
+        "singleWriteOwnerRequired": true,
+        "mergeOwner": "human_owner",
+        "conflictResolution": "block_and_escalate_to_human_merge_owner",
+        "silentMutationAllowed": false,
+        "finalApprovalClaimed": false,
+        "externalWritePerformed": false,
+        "artifacts": [
+          {
+            "artifactId": "chapter-2-draft-v2",
+            "writeScope": "draft_artifact",
+            "writeOwnerRole": "writer"
+          }
+        ],
+        "assignments": [
+          {
+            "assignmentId": "reviewer-overreach",
+            "roleId": "reviewer",
+            "mode": "write",
+            "targetArtifactId": "chapter-2-draft-v2"
+          }
+        ]
+      }
+    }
+  ],
+  "healthyContinuationMeasurementScenarios": [
+    {
+      "fixtureId": "r8_deidentified_healthy_continuation_window",
+      "expectedValid": true,
+      "measurement": {
+        "schemaVersion": "long_manuscript.healthy_continuation_measurement.v1",
+        "measurementId": "healthy-continuation-contract-window-001",
+        "evidenceClass": "deterministic_contract_fixture",
+        "sampleSemantics": "synthetic_fixture_counts_not_production_observations",
+        "decisionUse": "quality_guardrail_not_engagement_target",
+        "timeWindow": {
+          "startedAt": "2026-07-17T09:00:00+08:00",
+          "endedAt": "2026-07-17T10:00:00+08:00",
+          "timeZone": "Asia/Shanghai"
+        },
+        "dimensions": {
+          "documentKind": "whitepaper_report",
+          "hasFileAtFirstTurn": false,
+          "userCohort": "deidentified_contract_fixture",
+          "hostType": "WORKBUDDY",
+          "packageVersion": "26.7.18",
+          "channel": "workbuddy_cn",
+          "evidenceLayer": "contract_fixture"
+        },
+        "deidentification": {
+          "rawIdentifiersIncluded": false,
+          "stableUserIdsIncluded": false,
+          "minimumCohortAggregationApplied": true,
+          "aggregationKey": "documentKind+inputBranch+packageVersion+channel"
+        },
+        "claims": {
+          "naturalTrafficObserved": false,
+          "causalImpactClaimed": false,
+          "hostExecutionObserved": false,
+          "productCreditClaimed": false
+        },
+        "metrics": [
+          {
+            "metricId": "incremental_artifact_delivery_rate",
+            "numerator": 8,
+            "denominator": 10,
+            "observedRate": 0.8,
+            "denominatorDefinition": "synthetic continuation requests with a declared visible target",
+            "timeWindowRef": "measurement_window",
+            "evidenceClass": "deterministic_contract_fixture",
+            "guardrailStatus": "pass"
+          },
+          {
+            "metricId": "recovery_success_rate",
+            "numerator": 7,
+            "denominator": 8,
+            "observedRate": 0.875,
+            "denominatorDefinition": "synthetic resume attempts with a user-supplied continuation card",
+            "timeWindowRef": "measurement_window",
+            "evidenceClass": "deterministic_contract_fixture",
+            "guardrailStatus": "pass"
+          },
+          {
+            "metricId": "duplicate_content_rate",
+            "numerator": 0,
+            "denominator": 10,
+            "observedRate": 0,
+            "denominatorDefinition": "synthetic incremental artifacts compared with visible prior content",
+            "timeWindowRef": "measurement_window",
+            "evidenceClass": "deterministic_contract_fixture",
+            "guardrailStatus": "pass"
+          },
+          {
+            "metricId": "unresolved_fact_item_rate",
+            "numerator": 2,
+            "denominator": 10,
+            "observedRate": 0.2,
+            "denominatorDefinition": "synthetic fact-sensitive cards with visible unresolved fact items",
+            "timeWindowRef": "measurement_window",
+            "evidenceClass": "deterministic_contract_fixture",
+            "guardrailStatus": "pass"
+          },
+          {
+            "metricId": "user_initiated_continue_rate",
+            "numerator": 6,
+            "denominator": 10,
+            "observedRate": 0.6,
+            "denominatorDefinition": "synthetic cards where the user explicitly selected continue",
+            "timeWindowRef": "measurement_window",
+            "evidenceClass": "deterministic_contract_fixture",
+            "guardrailStatus": "pass"
+          },
+          {
+            "metricId": "pressure_free_exit_availability_rate",
+            "numerator": 10,
+            "denominator": 10,
+            "observedRate": 1,
+            "denominatorDefinition": "synthetic continued-use cards evaluated for an exit option",
+            "timeWindowRef": "measurement_window",
+            "evidenceClass": "deterministic_contract_fixture",
+            "guardrailStatus": "pass"
+          },
+          {
+            "metricId": "false_persistence_claim_rate",
+            "numerator": 0,
+            "denominator": 10,
+            "observedRate": 0,
+            "denominatorDefinition": "synthetic continued-use cards evaluated for persistence claims",
+            "timeWindowRef": "measurement_window",
+            "evidenceClass": "deterministic_contract_fixture",
+            "guardrailStatus": "pass"
+          },
+          {
+            "metricId": "role_conflict_block_rate",
+            "numerator": 2,
+            "denominator": 2,
+            "observedRate": 1,
+            "denominatorDefinition": "synthetic dual-writer or reviewer-overreach conflict fixtures",
+            "timeWindowRef": "measurement_window",
+            "evidenceClass": "deterministic_contract_fixture",
+            "guardrailStatus": "pass"
+          }
+        ]
+      }
+    },
+    {
+      "fixtureId": "r8_raw_identifier_rejected",
+      "expectedValid": false,
+      "measurement": {
+        "schemaVersion": "long_manuscript.healthy_continuation_measurement.v1",
+        "measurementId": "healthy-continuation-raw-id-rejected",
+        "evidenceClass": "deterministic_contract_fixture",
+        "sampleSemantics": "synthetic_fixture_counts_not_production_observations",
+        "decisionUse": "quality_guardrail_not_engagement_target",
+        "timeWindow": {"startedAt": "2026-07-17T09:00:00+08:00", "endedAt": "2026-07-17T10:00:00+08:00", "timeZone": "Asia/Shanghai"},
+        "dimensions": {"documentKind": "whitepaper_report", "hasFileAtFirstTurn": false, "userCohort": "deidentified_contract_fixture", "hostType": "WORKBUDDY", "packageVersion": "26.7.18", "channel": "workbuddy_cn", "evidenceLayer": "contract_fixture"},
+        "deidentification": {"rawIdentifiersIncluded": false, "stableUserIdsIncluded": false, "minimumCohortAggregationApplied": true, "aggregationKey": "documentKind+packageVersion", "rawUserIdentifier": "fixture-user-001"},
+        "claims": {"naturalTrafficObserved": false, "causalImpactClaimed": false, "hostExecutionObserved": false, "productCreditClaimed": false},
+        "metrics": [
+          {"metricId": "incremental_artifact_delivery_rate", "numerator": 8, "denominator": 10, "observedRate": 0.8, "denominatorDefinition": "synthetic continuation requests", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "recovery_success_rate", "numerator": 7, "denominator": 8, "observedRate": 0.875, "denominatorDefinition": "synthetic resume attempts", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "duplicate_content_rate", "numerator": 0, "denominator": 10, "observedRate": 0, "denominatorDefinition": "synthetic duplicate checks", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "unresolved_fact_item_rate", "numerator": 2, "denominator": 10, "observedRate": 0.2, "denominatorDefinition": "synthetic fact-sensitive cards", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "user_initiated_continue_rate", "numerator": 6, "denominator": 10, "observedRate": 0.6, "denominatorDefinition": "synthetic explicit continue choices", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "pressure_free_exit_availability_rate", "numerator": 10, "denominator": 10, "observedRate": 1, "denominatorDefinition": "synthetic cards evaluated for exit", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "false_persistence_claim_rate", "numerator": 0, "denominator": 10, "observedRate": 0, "denominatorDefinition": "synthetic cards evaluated for persistence", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "role_conflict_block_rate", "numerator": 2, "denominator": 2, "observedRate": 1, "denominatorDefinition": "synthetic conflict fixtures", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"}
+        ]
+      }
+    },
+    {
+      "fixtureId": "r8_natural_traffic_claim_rejected",
+      "expectedValid": false,
+      "measurement": {
+        "schemaVersion": "long_manuscript.healthy_continuation_measurement.v1",
+        "measurementId": "healthy-continuation-traffic-claim-rejected",
+        "evidenceClass": "deterministic_contract_fixture",
+        "sampleSemantics": "synthetic_fixture_counts_not_production_observations",
+        "decisionUse": "quality_guardrail_not_engagement_target",
+        "timeWindow": {"startedAt": "2026-07-17T09:00:00+08:00", "endedAt": "2026-07-17T10:00:00+08:00", "timeZone": "Asia/Shanghai"},
+        "dimensions": {"documentKind": "whitepaper_report", "hasFileAtFirstTurn": false, "userCohort": "deidentified_contract_fixture", "hostType": "WORKBUDDY", "packageVersion": "26.7.18", "channel": "workbuddy_cn", "evidenceLayer": "contract_fixture"},
+        "deidentification": {"rawIdentifiersIncluded": false, "stableUserIdsIncluded": false, "minimumCohortAggregationApplied": true, "aggregationKey": "documentKind+packageVersion"},
+        "claims": {"naturalTrafficObserved": true, "causalImpactClaimed": false, "hostExecutionObserved": false, "productCreditClaimed": false},
+        "metrics": [
+          {"metricId": "incremental_artifact_delivery_rate", "numerator": 8, "denominator": 10, "observedRate": 0.8, "denominatorDefinition": "synthetic continuation requests", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "recovery_success_rate", "numerator": 7, "denominator": 8, "observedRate": 0.875, "denominatorDefinition": "synthetic resume attempts", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "duplicate_content_rate", "numerator": 0, "denominator": 10, "observedRate": 0, "denominatorDefinition": "synthetic duplicate checks", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "unresolved_fact_item_rate", "numerator": 2, "denominator": 10, "observedRate": 0.2, "denominatorDefinition": "synthetic fact-sensitive cards", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "user_initiated_continue_rate", "numerator": 6, "denominator": 10, "observedRate": 0.6, "denominatorDefinition": "synthetic explicit continue choices", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "pressure_free_exit_availability_rate", "numerator": 10, "denominator": 10, "observedRate": 1, "denominatorDefinition": "synthetic cards evaluated for exit", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "false_persistence_claim_rate", "numerator": 0, "denominator": 10, "observedRate": 0, "denominatorDefinition": "synthetic cards evaluated for persistence", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"},
+          {"metricId": "role_conflict_block_rate", "numerator": 2, "denominator": 2, "observedRate": 1, "denominatorDefinition": "synthetic conflict fixtures", "timeWindowRef": "measurement_window", "evidenceClass": "deterministic_contract_fixture", "guardrailStatus": "pass"}
+        ]
+      }
+    }
+  ]
+}

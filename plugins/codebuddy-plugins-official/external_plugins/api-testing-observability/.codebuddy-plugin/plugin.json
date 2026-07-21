@@ -1,0 +1,11 @@
+{
+  "name": "api-testing-observability",
+  "description": "API 测试自动化、请求模拟、OpenAPI 文档生成、可观测性配置与监控",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

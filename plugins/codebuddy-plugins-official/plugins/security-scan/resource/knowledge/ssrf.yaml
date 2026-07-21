@@ -1,0 +1,27 @@
+# ==========================================================================
+# SSRF 绕过技术参考数据 (SSRF Bypass Techniques Reference)
+# ==========================================================================
+# 纯数据文件：供 agent 在分析 SSRF 时查阅已知绕过手段。
+# ==========================================================================
+
+ssrf_bypass_techniques:
+  - technique: "DNS 重绑定"
+    description: "首次 DNS 解析返回允许的 IP，二次解析返回内网 IP"
+  - technique: "URL 解析差异"
+    description: "不同库/语言对 URL 解析方式不同（scheme、authority、path 分割）"
+  - technique: "重定向链"
+    description: "先访问白名单域名，通过 302 跳转到内网目标"
+  - technique: "IPv6 映射"
+    description: "::1 = 127.0.0.1; ::ffff:127.0.0.1; [::1]"
+  - technique: "十进制/八进制 IP"
+    description: "2130706433 = 127.0.0.1; 0177.0.0.1; 0x7f.0.0.1"
+
+common_targets:
+  - "http://169.254.169.254/latest/meta-data/ (AWS 元数据)"
+  - "http://metadata.tencentyun.com/latest/meta-data/ (腾讯云 CVM 元数据)"
+  - "http://metadata.tencentyun.com/latest/meta-data/cam/security-credentials/ (腾讯云临时凭证)"
+  - "http://100.100.100.200/latest/meta-data/ (阿里云 ECS 元数据)"
+  - "http://metadata.google.internal/computeMetadata/v1/ (GCP 元数据)"
+  - "http://169.254.169.254/metadata/v1/ (Azure 元数据)"
+  - "http://127.0.0.1:<port>/ (本地服务)"
+  - "http://internal-service/ (内网服务)"

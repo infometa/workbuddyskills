@@ -1,0 +1,29 @@
+{
+  "skill_name": "nges-data-360",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我是地区经理，帮我看看本月我团队的拜访量怎么样，哪个代表拜访最多？",
+      "expected_output": "用 GetStaffUserInfo 判断角色（district_manager/DSM），明确返回数据由行权限自动限定为团队、无需手写 belong_territory；GetObjectsByNames 确认 visit_item 字段；查询 visit_item 用 actual_date 本月秒级区间 + status=2，_group_by owner、_order_by cnt desc 做排名；GraphqlQuery 执行后给出团队总量与各成员 Top 排名，并将 owner(uin) 映射为姓名解读。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "统计一下我们大区上个月各类会议的数量和总费用，哪类会议花钱最多",
+      "expected_output": "识别为会议(events_meeting)分析，行权限自动限定为大区可见范围；GetObjectsByNames 确认 meeting_type_id/real_cost/meeting_stime 字段；按 meeting_type_id 分组 _count + _sum(real_cost)，上月秒级时间区间过滤，按费用降序；输出时将 meeting_type_id 映射为中文(科室会/城市会等)、real_cost ÷100 转元，并提示可能的脏枚举值，指出花费最高的类型。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "最近7天小程序的用户活跃度如何？日活趋势和最热门的页面给我看看",
+      "expected_output": "识别为用户行为(user_behavior_details)分析；GetObjectsByNames 确认字段，注意本表用 create_time 作行为时间(无 behavior_time)、来源用 source、内容用 target_content_id(无 page)；按天 _distinct_count(user_id) 做 DAU 趋势 + 按 source/target_content_id 的 PV/UV Top 排名，带最近7天时间范围；behavior_type/source 按枚举表翻译，输出趋势与热门解读。",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "我想分析下我自己这个季度拜访覆盖了多少个医生",
+      "expected_output": "Rep 场景，行权限自动只返回本人数据，通常无需加 owner 过滤(若用户强调'我自己'可加 owner:$_uin 收窄)；查询 visit_item 用 _distinct_count(hcp_id) 计算去重医生数，actual_date 季度秒级区间 + status=2 过滤，输出覆盖医生数。",
+      "files": []
+    }
+  ]
+}

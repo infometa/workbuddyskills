@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>地图导出为图片</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+      }
+      #container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+      }
+      button {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        z-index: 9999;
+        padding: 10px 14px;
+        box-sizing: border-box;
+        border: none;
+        border-radius: 2px;
+        color: #fff;
+        font-size: 14px;
+        line-height: 14px;
+        transition: .3s;
+      }
+      .disabled {
+        background-color: #979595;
+      }
+      .enable {
+        background-color: #3876ff;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="screenshot()" disabled="disabled" id="export" class="disabled">
+      点击导出地图截图
+    </button>
+
+    <div id="container"></div>
+    <script src="https://mapapi.qq.com/web/jsapi/jsapi-gl/js/dom-to-image.min.js"></script>
+    <!-- dom-to-image 官方地址：https://github.com/tsayen/dom-to-image -->
+    <script src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+    <script>
+      var map = new TMap.Map('container', {
+        rotation: 20, // 设置地图旋转角度
+        pitch: 30, // 设置俯仰角度（0~45）
+        zoom: 17, // 设置地图缩放级别
+        center: new TMap.LatLng(39.984104, 116.307503), // 设置地图中心点坐标
+        baseMap: [
+          { type: 'vector' }, // 设置矢量底图
+        ],
+        renderOptions: {
+          // renderOptions文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/docIndexMap#10
+          preserveDrawingBuffer: true, // 保留地图的渲染缓冲 默认false
+        },
+      });
+      function screenshot() {
+        // 截图操作
+        var node = document.getElementById('container');
+        domtoimage
+          .toPng(node)
+          .then(function (dataUrl) {
+            // 导出图片
+            var link = document.createElement('a');
+            link.download = 'image.png';
+            link.href = dataUrl;
+            link.click();
+          })
+          .catch(function (error) {
+            console.error('domtoimage 出现问题! ', error);
+          });
+      }
+
+      map.on('tilesloaded', function () {
+        // 当地图容器中可见的瓦片加载完后会触发此事件。
+        var button = document.querySelector('#export');
+        button.disabled = false;
+        button.className = 'enable';
+      });
+    </script>
+  </body>
+</html>

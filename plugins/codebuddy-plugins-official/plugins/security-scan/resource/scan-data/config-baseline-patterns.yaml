@@ -1,0 +1,61 @@
+# D3: 配置安全基线模式表
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 扫描配置文件中六个类别的不安全默认值
+
+categories:
+  - name: 认证配置
+    patterns:
+      - '"alg"\s*:\s*"none"'
+      - 'secure\s*[:=]\s*false'
+      - 'httpOnly\s*[:=]\s*false'
+      - 'minLength\s*[:=]\s*[1-5][^0-9]'
+      - 'authentication\.enabled\s*[:=]\s*false'
+      - 'admin/admin'
+      - 'root/root'
+      - 'SameSite\s*[:=]\s*None'
+      - 'sameSite\s*[:=]\s*[''"]none[''"]'
+      - 'session-timeout\s*[:=]\s*(\d{3,})'
+      - 'maximumSessions\s*[:=]\s*-1'
+
+  - name: 加密配置
+    patterns:
+      - 'MessageDigest\.getInstance\s*\(\s*["'']MD5["'']\)'
+      - 'hashlib\.md5'
+      - 'SHA1'
+      - 'DES'
+      - 'RC4'
+      - 'AES/ECB'
+      - 'Cipher.getInstance("AES")'
+      - 'SecretKeySpec\s*\(\s*"[^"]+"\s*\.getBytes'
+
+  - name: 安全配置
+    patterns:
+      - 'DEBUG\s*=\s*True'
+      - 'management\.endpoints\.web\.exposure\.include\s*=\s*\*'
+      - 'Access-Control-Allow-Origin:\s*\*'
+      - 'server\.error\.include-stacktrace\s*=\s*always'
+      - 'autoindex\s+on'
+
+  - name: API 文档暴露
+    patterns:
+      - 'springdoc\.api-docs\.enabled\s*=\s*true'
+      - 'springdoc\.swagger-ui\.enabled\s*=\s*true'
+      - 'knife4j\.enable\s*=\s*true'
+      - 'graphql\.playground\.enabled\s*=\s*true'
+      - 'graphiql\.enabled\s*=\s*true'
+
+  - name: 中间件安全
+    patterns:
+      - 'spring\.redis\.password\s*=\s*$'  # 空密码
+      - 'redis://localhost'  # 无认证
+      - 'mongodb://localhost'  # 无认证
+      - 'guest/guest'  # RabbitMQ 默认值
+
+  - name: 前端安全头
+    patterns:
+      - 'X-Frame-Options:\s*ALLOWALL'
+      - 'frame-ancestors\s+\*'
+    missing_headers:
+      - Content-Security-Policy
+      - X-Frame-Options  # Clickjacking
+      - X-Content-Type-Options

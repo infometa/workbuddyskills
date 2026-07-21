@@ -1,0 +1,21 @@
+{
+  "name": "lseg",
+  "version": "1.0.0",
+  "description": "Price bonds, analyze yield curves, evaluate FX carry trades, value options, and build macro dashboards using LSEG financial data and analytics.",
+  "description_zh": "LSEG 金融数据与分析工具，支持债券分析、外汇套利、宏观利率监控、期权波动率分析和掉期曲线策略。",
+  "author": {
+    "name": "LSEG"
+  },
+  "homepage": "",
+  "license": "",
+  "skills": [
+    "./skills/bond-futures-basis",
+    "./skills/bond-relative-value",
+    "./skills/equity-research",
+    "./skills/fixed-income-portfolio",
+    "./skills/fx-carry-trade",
+    "./skills/macro-rates-monitor",
+    "./skills/option-vol-analysis",
+    "./skills/swap-curve-strategy"
+  ]
+}

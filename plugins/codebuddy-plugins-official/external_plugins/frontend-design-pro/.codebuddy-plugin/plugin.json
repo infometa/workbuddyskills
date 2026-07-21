@@ -1,0 +1,22 @@
+{
+  "name": "frontend-design-pro",
+  "version": "1.0.0",
+  "description": "Advanced frontend design plugin with interactive wizard, trend research, moodboard creation, color/typography selection, and browser-based inspiration analysis",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "frontend",
+    "design",
+    "ui-ux",
+    "tailwind",
+    "colors",
+    "typography",
+    "accessibility",
+    "moodboard",
+    "skills"
+  ]
+}

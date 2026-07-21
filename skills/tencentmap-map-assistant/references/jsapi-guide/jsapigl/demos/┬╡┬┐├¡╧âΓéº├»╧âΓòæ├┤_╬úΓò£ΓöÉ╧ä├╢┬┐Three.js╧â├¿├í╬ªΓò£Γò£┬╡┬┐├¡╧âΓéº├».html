@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>GLCustomLayer-加载gltf模型</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=model"></script>
+<script src="https://mapapi.qq.com/web/jsapiGL/three-138/three@0.138.js"></script>
+<script src="https://mapapi.qq.com/web/jsapiGL/three-138/GLTFLoader.js"></script>
+
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div id="info"></div>
+    <script>
+        const styles = {
+            //设置区域图样式
+            styel1: {
+                fillColor: "#7DF4FF", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+            styel2: {
+                fillColor: "#17D5DC", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+            styel3: {
+                fillColor: "#0EB2E7", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+            styel4: {
+                fillColor: "#0896EF", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+            styel5: {
+                fillColor: "#017CF7", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+            },
+        };
+        const center = new TMap.LatLng(39.994104, 116.307503);
+        // 初始化地图
+        var map = new TMap.Map('container', {
+            center: center,
+            zoom: 19,
+            pitch: 50,
+            rotation: -20,
+      });
+
+        const coord = map.glLatLngToPosition(center);
+
+        let renderer, camera, scene, group, raycaster;
+        let mapCamera; // 地图相机
+        var glCustomLayer = new TMap.GLCustomLayer(
+            {
+                id: 'glCustomLayer',
+                map,
+                keepFps: false, // 是否保持恒定帧率渲染,当渲染存在动画时设置为true
+                // visible: false,
+                init: (gl) => {
+                    initThree(gl);
+                    loadGltf(); // 加载gltf模型
+
+                    // 需将构建的Three相关项返回
+                    return { renderer, camera, scene, group };
+                },
+                render: () => {
+                    renderer.render(scene, camera);
+                }
+            }
+        );
+
+        function initThree(gl) {
+            renderer = new THREE.WebGLRenderer({
+                context: gl,
+                antialias: true
+            });
+            renderer.autoClear = false;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            mapCamera = map.getCamera(); // 获取地图相机
+            const { fovy, view, near, far, distance } = mapCamera;
+            const aspect = (view.right - view.left) / (view.top - view.bottom);
+            camera = new THREE.PerspectiveCamera(fovy, aspect, near, far); // 创建threejs中的相机
+            camera.position.z = distance;
+            scene = new THREE.Scene()
+            group = new THREE.Group(); // 涉及内部坐标转换，所有新增THREE.Object3D需添加入group
+
+            // 添加环境光
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+            group.add(ambientLight);
+
+            scene.add(group);
+
+            raycaster = new THREE.Raycaster();
+
+        }
+
+        function degreeToRadian(deg) {
+            return deg * (Math.PI / 180);
+        };
+
+        function loadGltf() {
+            loader = new THREE.GLTFLoader();
+            loader.load('https://mapapi.qq.com/web/visualization/demo-asset/airplane.glb', function (gltf) {
+                gltf.scene.scale.set(20, 20, 30); // 模型在XYZ三轴上的缩放比例
+                gltf.scene.position.set(coord.x, coord.y, coord.z);
+                const rotation = [0,-90,0]; // 模型XYZ三轴上的旋转角度
+                const euler = rotation.map((angle, index) => {
+                    return !!index ? degreeToRadian(angle) : degreeToRadian(angle + 90);
+                });
+                gltf.scene.rotation.set(...euler);
+                group.add(gltf.scene);
+            }, undefined, function (error) {
+                console.error(error);
+            });
+        }
+    </script>
+</body>
+
+</html>

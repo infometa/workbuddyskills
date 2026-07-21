@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>区域图鼠标双击事件</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization,geometry"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+
+    #info {
+        display: none;
+        position: absolute;
+        left: 30px;
+        top: 30px;
+        background: #fff;
+        border-radius: 5px;
+        padding: 10px;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+    <div id="info">
+
+    </div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/areaClick.js"></script>
+    <script>
+        var map;
+        function initMap() {
+            var info = document.getElementById("info");
+            var center = new TMap.LatLng(40.046014541872594, 116.28684997558594);
+
+            //初始化地图
+            map = new TMap.Map("container", {
+                zoom: 15, //设置地图缩放级别
+                center: center, //设置地图中心点坐标
+                doubleClickZoom: false, // 禁用双击地图放大
+                mapStyleId: "style4", //个性化样式
+                baseMap: { //设置底图样式
+                    type: 'vector', //设置底图为矢量底图
+                    features: [ //设置矢量底图要素类型
+                        'base',
+                        'point'
+                    ]
+                },
+            });
+
+            var paths = [];
+            areaDatas.forEach((item, index) => {
+                if (index % 3 === 1) {
+                    paths.push({
+                        path: item, //设置区域边界线经纬度点串
+                        styleId: 'style1' //设置区域样式id
+                    })
+                } else if (index % 3 === 2) {
+                    paths.push({
+                        path: item, //设置区域边界线经纬度点串
+                        styleId: 'style2' //设置区域样式id
+                    })
+                } else {
+                    paths.push({
+                        path: item, //设置区域边界线经纬度点串
+                        styleId: 'style3' //设置区域样式id
+                    })
+                }
+            })
+
+            var area = new TMap.visualization.Area({
+                styles: { //设置区域图样式
+                    style1: setStyles(0.8),
+                    style2: setStyles(0.5),
+                    style3: setStyles(0.2),
+                },
+            }).setData(paths).addTo(map);
+
+            // 模拟双击事件
+            let clickCount = 0;
+            let clickTimeout;
+            const delay = 220; // 定义两次点击之间的最大时间间隔，单位为毫秒
+            area.on('click', function (e) {
+                if (!e.detail.area) return;
+                clickCount++;
+                const area = e.detail.area;
+                if (clickCount === 1) {
+                    clickTimeout = setTimeout(function () {
+                        if (clickCount === 1) {
+                            // 单击事件
+                            console.log('Single click', e);
+                        } else {
+                            // 双击事件
+                            console.log('Double click', e);
+                            dbClickEvent(area);
+                        }
+                        clickCount = 0;
+                    }, delay);
+                } else if (clickCount === 2) {
+                    clearTimeout(clickTimeout);
+                    // 双击事件
+                    console.log('Double click', e);
+                    dbClickEvent(area);
+                    clickCount = 0;
+                }
+            });
+        }
+
+        // 双击时移动至对应区域
+        function dbClickEvent(area) {
+            const path = area.path;
+            const polygonPath = convertNumberToLatLng(path);
+            const pointArray = flattenArray(polygonPath);
+            map.fitBounds(TMap.geometry.computeBoundingRectangle(pointArray));
+        }
+
+        //设置style样式工厂函数
+        function setStyles(opacity) {
+            return {
+                fillColor: `rgba(56,124,234,${opacity})`, //设置区域填充颜色
+                strokeColor: '#6799EA', //设置区域边线颜色
+            }
+        }
+
+        // 数组中的数字转换为LatLng
+        function convertNumberToLatLng(paths) {
+            const polygonPath = [];
+            if (Array.isArray(paths[0])) {
+                paths.forEach(path => {
+                    polygonPath.push(convertNumberToLatLng(path));
+                });
+            } else {
+                for (let i = 0; i < paths.length; i += 2) {
+                    polygonPath.push(new TMap.LatLng(paths[i], paths[i + 1]));
+                }
+            }
+            return polygonPath;
+        }
+
+        // 多维数组展开
+        function flattenArray(arr) {
+            return arr.reduce(function (flat, toFlatten) {
+                return flat.concat(Array.isArray(toFlatten) ? flattenArray(toFlatten) : toFlatten);
+            }, []);
+        }
+    </script>
+</body>
+
+</html>

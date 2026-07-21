@@ -1,0 +1,295 @@
+{
+  "_example_meta": {
+    "scenario": "60 天从零学 React，目标做出一个完整 Todo 应用并上线",
+    "highlights": [
+      "三阶段：入门基础(15d) / 进阶进阶(30d) / 项目实战(15d)",
+      "技能学习类型：弱化「考试」、强化「output」（写代码、写博客）",
+      "费曼法是核心：每个概念学完必须写博客或录讲解视频",
+      "番茄钟：每个任务标注 25min × N 番茄数",
+      "项目阶段每天交付一个可运行 commit，逼自己写真实代码",
+      "周末双倍时间用来啃硬骨头（hooks 原理、性能优化）"
+    ],
+    "use_when": "用户目标是学一门技术 / 框架 / 工具，需要边学边练，有可演示产出"
+  },
+  "id": "plan-20260401-react-from-zero",
+  "version": 1,
+  "meta": {
+    "title": "60 天从零学 React",
+    "goal": "能独立开发完整 React + TypeScript 应用，掌握 Hooks、状态管理、性能优化",
+    "deadline": "2026-05-30",
+    "current_level": "JS 基础熟练（ES6+），写过 jQuery 项目，零 React 经验",
+    "daily_budget": {
+      "weekday": 90,
+      "weekend": 240
+    },
+    "weak_points": [
+      "函数式编程思维",
+      "TypeScript 泛型",
+      "状态管理选型"
+    ],
+    "resources": [
+      "React 官方文档（中文）",
+      "Beta docs",
+      "Kent C. Dodds 博客",
+      "Epic React 课程"
+    ],
+    "methodology": [
+      "pomodoro",
+      "feynman",
+      "pareto"
+    ],
+    "template_origin": "skill-learning"
+  },
+  "stages": [
+    {
+      "id": "stage-1",
+      "name": "入门基础（15天）",
+      "duration_days": 15,
+      "goals": [
+        "理解 JSX、组件、props、state、事件",
+        "掌握核心 Hooks：useState / useEffect / useRef",
+        "熟悉 Vite + React + TS 工程",
+        "完成 3 个小练习：计数器 / 表单 / Todo"
+      ]
+    },
+    {
+      "id": "stage-2",
+      "name": "进阶强化（30天）",
+      "duration_days": 30,
+      "goals": [
+        "深入 Hooks：useMemo / useCallback / useReducer / useContext / 自定义 Hook",
+        "状态管理：对比 Context / Zustand / Redux Toolkit，选 1 深入",
+        "路由：React Router v6 完整使用",
+        "异步：SWR / TanStack Query 二选一",
+        "性能：理解 reconciliation、memo、key 原理"
+      ]
+    },
+    {
+      "id": "stage-3",
+      "name": "项目实战（15天）",
+      "duration_days": 15,
+      "goals": [
+        "完成进阶 Todo 应用：分类 / 标签 / 拖拽 / 持久化 / 数据同步",
+        "100% TypeScript 严格模式",
+        "Vercel 上线 + 写 README + 写 1 篇技术博客",
+        "代码 review 自己 1 次（按生产标准）"
+      ]
+    }
+  ],
+  "daily_tasks": [
+    {
+      "date": "2026-04-01",
+      "stage_id": "stage-1",
+      "tasks": [
+        {
+          "id": "t-001",
+          "title": "搭建 Vite + React + TS 工程，跑通 Hello World",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "resource": "vitejs.dev 官方模板",
+          "checkable": true,
+          "methodology_tip": "费曼法：不写就不算学过——产出可以是文章/代码/讲解视频"
+        },
+        {
+          "id": "t-002",
+          "title": "通读 React Beta Docs：Describing the UI",
+          "duration_min": 45,
+          "category": "reading",
+          "priority": "high",
+          "resource": "https://react.dev/learn",
+          "methodology_tip": "番茄钟 1-2 个，读完用费曼法对自己讲一遍 JSX 和 React 的关系",
+          "checkable": true
+        }
+      ]
+    },
+    {
+      "date": "2026-04-02",
+      "stage_id": "stage-1",
+      "tasks": [
+        {
+          "id": "t-003",
+          "title": "动手：写计数器组件（useState）",
+          "duration_min": 40,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "番茄钟 ×2，必须自己敲，不复制",
+          "checkable": true
+        },
+        {
+          "id": "t-004",
+          "title": "通读 Adding Interactivity 章节 (part 1/2)",
+          "duration_min": 45,
+          "category": "reading",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "帕累托：高频题型优先（判断/填空），20% 考点拿 80% 分"
+        },
+        {
+          "id": "t-004-p2",
+          "title": "通读 Adding Interactivity 章节 (part 2/2)",
+          "duration_min": 5,
+          "category": "reading",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "帕累托：高频题型优先（判断/填空），20% 考点拿 80% 分"
+        }
+      ]
+    },
+    {
+      "date": "2026-04-15",
+      "stage_id": "stage-2",
+      "tasks": [
+        {
+          "id": "t-100",
+          "title": "🎯 进入进阶阶段：写一篇博客「我学完 React 基础的 5 个发现」 (part 1/2)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "费曼法：能写出来才说明懂了。发到任意平台逼自己。",
+          "checkable": true
+        },
+        {
+          "id": "t-100-p2",
+          "title": "🎯 进入进阶阶段：写一篇博客「我学完 React 基础的 5 个发现」 (part 2/2)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "费曼法：能写出来才说明懂了。发到任意平台逼自己。",
+          "checkable": true
+        },
+        {
+          "id": "t-101",
+          "title": "useMemo / useCallback 深入：什么时候真的需要？ (part 1/2)",
+          "duration_min": 45,
+          "category": "reading",
+          "priority": "high",
+          "resource": "Kent C. Dodds: When to useMemo and useCallback",
+          "checkable": true,
+          "methodology_tip": "帕累托：高频题型优先（判断/填空），20% 考点拿 80% 分"
+        },
+        {
+          "id": "t-101-p2",
+          "title": "useMemo / useCallback 深入：什么时候真的需要？ (part 2/2)",
+          "duration_min": 15,
+          "category": "reading",
+          "priority": "high",
+          "resource": "Kent C. Dodds: When to useMemo and useCallback",
+          "checkable": true,
+          "methodology_tip": "帕累托：高频题型优先（判断/填空），20% 考点拿 80% 分"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-16",
+      "stage_id": "stage-3",
+      "tasks": [
+        {
+          "id": "t-300",
+          "title": "🚀 项目 Day 1：仓库初始化 + 基础布局 commit (part 1/3)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "每天必须有 1 个可运行的 git commit，没有就算欠债",
+          "checkable": true
+        },
+        {
+          "id": "t-300-p2",
+          "title": "🚀 项目 Day 1：仓库初始化 + 基础布局 commit (part 2/3)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "每天必须有 1 个可运行的 git commit，没有就算欠债",
+          "checkable": true
+        },
+        {
+          "id": "t-300-p3",
+          "title": "🚀 项目 Day 1：仓库初始化 + 基础布局 commit (part 3/3)",
+          "duration_min": 30,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "每天必须有 1 个可运行的 git commit，没有就算欠债",
+          "checkable": true
+        },
+        {
+          "id": "t-301",
+          "title": "设计 TypeScript 数据模型 + 单元测试 (part 1/2)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "费曼法：不写就不算学过——产出可以是文章/代码/讲解视频"
+        },
+        {
+          "id": "t-301-p2",
+          "title": "设计 TypeScript 数据模型 + 单元测试 (part 2/2)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "费曼法：不写就不算学过——产出可以是文章/代码/讲解视频"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-30",
+      "stage_id": "stage-3",
+      "tasks": [
+        {
+          "id": "t-400",
+          "title": "🎉 项目交付：Vercel 部署 + README + 博客 (part 1/4)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "完赛日：把项目链接发给 3 个朋友，记录他们的 5 条反馈",
+          "checkable": true
+        },
+        {
+          "id": "t-400-p2",
+          "title": "🎉 项目交付：Vercel 部署 + README + 博客 (part 2/4)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "完赛日：把项目链接发给 3 个朋友，记录他们的 5 条反馈",
+          "checkable": true
+        },
+        {
+          "id": "t-400-p3",
+          "title": "🎉 项目交付：Vercel 部署 + README + 博客 (part 3/4)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "完赛日：把项目链接发给 3 个朋友，记录他们的 5 条反馈",
+          "checkable": true
+        },
+        {
+          "id": "t-400-p4",
+          "title": "🎉 项目交付：Vercel 部署 + README + 博客 (part 4/4)",
+          "duration_min": 45,
+          "category": "output",
+          "priority": "high",
+          "methodology_tip": "完赛日：把项目链接发给 3 个朋友，记录他们的 5 条反馈",
+          "checkable": true
+        },
+        {
+          "id": "t-401",
+          "title": "60 天总复盘：写学习心得 + 下阶段方向 (part 1/2)",
+          "duration_min": 45,
+          "category": "review",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "艾宾浩斯：错题第 1/3/7 天复现，能 1 分钟讲明白才算过"
+        },
+        {
+          "id": "t-401-p2",
+          "title": "60 天总复盘：写学习心得 + 下阶段方向 (part 2/2)",
+          "duration_min": 15,
+          "category": "review",
+          "priority": "high",
+          "checkable": true,
+          "methodology_tip": "艾宾浩斯：错题第 1/3/7 天复现，能 1 分钟讲明白才算过"
+        }
+      ]
+    }
+  ]
+}

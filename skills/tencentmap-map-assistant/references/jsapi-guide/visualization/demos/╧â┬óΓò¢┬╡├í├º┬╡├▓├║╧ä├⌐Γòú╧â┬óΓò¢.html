@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>图标散点图</title>
+  </head>
+  <script
+    charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"
+  ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+    #container {
+      width: 100%;
+      height: 100%;
+    }
+    #name {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+        font-size: 12px;
+        color:#ffffff;
+      }
+  </style>
+  <body onload="initMap()">
+    <div id="container"></div>
+    <div id="name">北京市交通事件概况</div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/beijing_trafficTime.js"></script>
+    <script>
+      function initMap() {
+        //初始化地图
+        var map = new TMap.Map("container", {
+          zoom: 11.2, //设置地图缩放级别
+          center: new TMap.LatLng(39.94777457424578, 116.40822675986203), //设置地图中心点坐标
+          mapStyleId: "style4", //个性化样式
+          baseMap: {
+            type: "vector",
+            features: ["base", "building3d"], // 隐藏矢量文字
+          },
+        });
+        
+        //初始化散点图并添加至map图层
+        var dot = new TMap.visualization.Dot({
+          styles: {
+            accident: setStyles("accident"),
+            construction: setStyles("construction"),
+            inspect: setStyles("inspect"),
+            other: setStyles("other"),
+          },
+        })
+          .addTo(map)
+          dot.setData(dotImgData); //设置数据
+
+        function setStyles(name) {
+          return {
+            type: "image", //设置图片
+            width: 20, //宽度
+            height: 20, //高度
+            anchor: { x: 10, y: 10 }, //图片锚点位置
+            src: `https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/${name}.png`, //图片样式属性
+          };
+        }
+      }
+    </script>
+  </body>
+</html>

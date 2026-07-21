@@ -1,0 +1,120 @@
+{
+  "id": "final-exam",
+  "name": "期末考试冲刺计划",
+  "description": "适用于大学/高中期末考前突击，2-4 周通用",
+  "applicable_to": ["大学期末考试", "高中期末考试", "月考/周测", "课程论文答辩"],
+  "default_duration_days": 14,
+
+  "phase_templates": [
+    {
+      "phase": 1,
+      "name": "摸底诊断",
+      "duration_days_base": 2,
+      "description": "确定考试范围、自身水平、重点章节",
+      "tasks": [
+        {
+          "action": "获取考试信息",
+          "details": ["考试范围（章节/题型/分值）", "考试时间", "是否有往年题"]
+        },
+        {
+          "action": "自我诊断",
+          "details": ["哪些章节已经掌握", "哪些章节完全不懂", "哪些章节似懂非懂"]
+        },
+        {
+          "action": "制定作战地图",
+          "details": ["按分值权重分配复习时间", "标记重点章节（高频考点）", "确定放弃区域（低频/超纲）"]
+        }
+      ],
+      "daily_budget_ratio": 0.3
+    },
+    {
+      "phase": 2,
+      "name": "地毯式复习",
+      "duration_days_base": "总天数-4",
+      "description": "逐章过知识点，配合习题检验",
+      "strategy": "二八法则 + 费曼输出",
+      "task_patterns": [
+        {
+          "category": "通读",
+          "duration_min": 45,
+          "instruction": "看教材/PPT，划重点，不懂的做标记"
+        },
+        {
+          "category": "整理",
+          "duration_min": 30,
+          "instruction": "整理笔记/思维导图，用自己的话写"
+        },
+        {
+          "category": "练习",
+          "duration_min": 30,
+          "instruction": "做课后题/章节习题，错题标注"
+        },
+        {
+          "category": "复盘",
+          "duration_min": 15,
+          "instruction": "今日学了什么？卡在哪里？明天重点？"
+        }
+      ],
+      "daily_budget_ratio": 0.5
+    },
+    {
+      "phase": 3,
+      "name": "考前突击",
+      "duration_days_base": 2,
+      "description": "真题演练 + 错题回顾 + 重点背诵",
+      "tasks": [
+        {
+          "action": "全真模拟",
+          "details": ["限时做 1-2 套真题/模拟题", "完全模拟考试环境", "打分评估"]
+        },
+        {
+          "action": "错题本速过",
+          "details": ["只看错题和标注的模糊点", "确保每个错题都能讲出来", "不纠缠偏题怪题"]
+        },
+        {
+          "action": "押题预测",
+          "details": ["分析往年高频考点", "准备万能答题模板", "背诵重点公式/概念"]
+        }
+      ],
+      "daily_budget_ratio": 0.2
+    }
+  ],
+
+  "multi_subject_strategy": {
+    "description": "多科目同时备考时的优先级分配",
+    "rules": [
+      "按学分/分值权重分配时间（学分高 = 时间多）",
+      "优先复习「能快速提分」的科目（如数学大题套路）",
+      "同类科目穿插复习（文理交替避免疲劳）",
+      "每科每天至少接触一次（保持熟悉度）"
+    ]
+  },
+
+  "methodology_injection": {
+    "ebbinghaus": true,
+    "pomodoro": true,
+    "pareto": true,
+    "feynman": true,
+    "description": "期末核心是艾宾浩斯复现（防止边学边忘）+ 二八法则（放弃低频考点）"
+  },
+
+  "special_notes": [
+    "时间再紧也要做 1 套全真模拟，找到考场节奏",
+    "「似懂非懂」的章节优先解决，这类最容易被考到",
+    "遇到难题不纠缠，先保证基础分不丢",
+    "最后一天不学新东西，只看错题和重点公式",
+    "多科目时：早起复习最难的，午后复习需要记忆的"
+  ],
+
+  "daily_template": {
+    "start": "09:00",
+    "structure": [
+      { "slot": "上午", "duration": "2.5h", "recommended": "高难度/计算类科目" },
+      { "slot": "午休", "duration": "1.5h" },
+      { "slot": "下午", "duration": "2.5h", "recommended": "记忆类/文字类科目" },
+      { "slot": "晚上", "duration": "2h", "recommended": "做题/复盘/查漏" }
+    ],
+    "max_consecutive_days": 7,
+    "rest_day_required_after": "每连续学习 6 天，至少休息半天"
+  }
+}

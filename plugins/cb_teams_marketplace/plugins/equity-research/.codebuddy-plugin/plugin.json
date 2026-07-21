@@ -1,0 +1,22 @@
+{
+  "name": "equity-research",
+  "version": "1.0.0",
+  "description": "Equity research tools: earnings analysis, initiating coverage reports, and research workflows",
+  "description_zh": "股票研究工具，支持财报分析、首次覆盖报告、盘前预览、晨会纪要、选股筛选和投资论点追踪。",
+  "author": {
+    "name": "CodeBuddy Teams"
+  },
+  "homepage": "",
+  "license": "",
+  "skills": [
+    "./skills/catalyst-calendar",
+    "./skills/earnings-analysis",
+    "./skills/earnings-preview",
+    "./skills/idea-generation",
+    "./skills/initiating-coverage",
+    "./skills/model-update",
+    "./skills/morning-note",
+    "./skills/sector-overview",
+    "./skills/thesis-tracker"
+  ]
+}

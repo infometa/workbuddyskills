@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>自定义点聚合功能</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    #mapContainer {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
+    .clusterBubble {
+      border-radius: 50%;
+      color: #fff;
+      font-weight: 500;
+      text-align: center;
+      opacity: 0.88;
+      background-image: linear-gradient(139deg, #4294FF 0%, #295BFF 100%);
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.20);
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+  </style>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+
+<body onload="init()">
+<div id='mapContainer'></div>
+<script>
+  var map;
+  var ClusterBubbleClick;
+
+  function init() {
+
+    var drawContainer = document.getElementById('mapContainer');
+
+    var center = new TMap.LatLng(39.953416, 116.380945);
+
+    map = new TMap.Map('mapContainer', {
+      zoom: 11,
+      pitch: 40,
+      center: center
+    });
+
+    // 创建点聚合
+    var markerCluster = new TMap.MarkerCluster({
+      id: 'cluster',
+      map: map,
+      enableDefaultStyle: false, // 关闭默认样式
+      minimumClusterSize: 3,
+      geometries: [{ // 点数组
+        position: new TMap.LatLng(39.953416, 116.480945)
+      },
+        {
+          position: new TMap.LatLng(39.984104, 116.407503)
+        },
+        {
+          position: new TMap.LatLng(39.908802, 116.497502)
+        },
+        {
+          position: new TMap.LatLng(40.040417, 116.373514)
+        },
+        {
+          position: new TMap.LatLng(39.953416, 116.380945)
+        },
+        {
+          position: new TMap.LatLng(39.984104, 116.307503)
+        },
+        {
+          position: new TMap.LatLng(39.908802, 116.397502)
+        },
+        {
+          position: new TMap.LatLng(40.040417, 116.273514)
+        },
+      ],
+      zoomOnClick: true,
+      gridSize: 60,
+      averageCenter: false
+    });
+
+    var clusterBubbleList = [];
+    var markerGeometries = [];
+    var marker = null;
+
+    // 监听聚合簇变化
+    markerCluster.on('cluster_changed', function (e) {
+      // 销毁旧聚合簇生成的覆盖物
+      if (clusterBubbleList.length) {
+        clusterBubbleList.forEach(function (item) {
+          item.destroy();
+        })
+        clusterBubbleList = [];
+      }
+      markerGeometries = [];
+
+      // 根据新的聚合簇数组生成新的覆盖物和点标记图层
+      var clusters = markerCluster.getClusters();
+      clusters.forEach(function (item) {
+        if (item.geometries.length > 1) {
+          let clusterBubble = new ClusterBubble({
+            map,
+            position: item.center,
+            content: item.geometries.length,
+          });
+          clusterBubble.on('click', () => {
+            map.fitBounds(item.bounds);
+          });
+          clusterBubbleList.push(clusterBubble);
+        } else {
+          markerGeometries.push({
+            position: item.center
+          });
+        }
+      });
+
+      if (marker) {
+        // 已创建过点标记图层，直接更新数据
+        marker.setGeometries(markerGeometries);
+      } else {
+        // 创建点标记图层
+        marker = new TMap.MultiMarker({
+          map,
+          styles: {
+            default: new TMap.MarkerStyle({
+              'width': 34,
+              'height': 42,
+              'anchor': {
+                x: 17,
+                y: 21,
+              },
+              'src': 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/marker_blue.png',
+            }),
+          },
+          geometries: markerGeometries
+        });
+      }
+    });
+  }
+
+  // 以下代码为基于DOMOverlay实现聚合点气泡
+  function ClusterBubble(options) {
+    TMap.DOMOverlay.call(this, options);
+  }
+
+  ClusterBubble.prototype = new TMap.DOMOverlay();
+
+  ClusterBubble.prototype.onInit = function (options) {
+    this.content = options.content;
+    this.position = options.position;
+  };
+  
+  // 销毁时需要删除监听器
+  ClusterBubble.prototype.onDestroy = function() {
+  	this.dom.removeEventListener('click', this.onClick);
+    this.removeAllListeners();
+  };
+
+  ClusterBubble.prototype.onClick = function() {
+    this.emit('click');
+  };
+
+  // 创建气泡DOM元素
+  ClusterBubble.prototype.createDOM = function () {
+    var dom = document.createElement('div');
+    dom.classList.add('clusterBubble');
+    dom.innerText = this.content;
+    dom.style.cssText = [
+      'width: ' + (40 + parseInt(this.content) * 2) + 'px;',
+      'height: ' + (40 + parseInt(this.content) * 2) + 'px;',
+      'line-height: ' + (40 + parseInt(this.content) * 2) + 'px;',
+    ].join(' ');
+      
+    // 监听点击事件，实现zoomOnClick
+    this.onClick = this.onClick.bind(this);
+    // pc端注册click事件，移动端注册touchend事件
+    dom.addEventListener('click', this.onClick);
+    return dom;
+  };
+
+  ClusterBubble.prototype.updateDOM = function () {
+    if (!this.map) {
+      return;
+    }
+    // 经纬度坐标转容器像素坐标
+    let pixel = this.map.projectToContainer(this.position);
+
+    // 使文本框中心点对齐经纬度坐标点
+    let left = pixel.getX() - this.dom.clientWidth / 2 + 'px';
+    let top = pixel.getY() - this.dom.clientHeight / 2 + 'px';
+    this.dom.style.transform = `translate(${left}, ${top})`;
+
+    this.emit('dom_updated');
+  };
+
+  window.ClusterBubble = ClusterBubble;
+</script>
+</body>
+
+</html>

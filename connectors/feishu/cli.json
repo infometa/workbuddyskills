@@ -1,0 +1,57 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=18"
+    },
+    "init": {
+        "darwin": "npm install -g @larksuite/cli",
+        "linux": "npm install -g @larksuite/cli",
+        "win32": "npm install -g @larksuite/cli"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "lark-cli --version",
+            "linux": "lark-cli --version",
+            "win32": "lark-cli.cmd --version"
+        },
+        "minVersion": "1.0.72"
+    },
+    "auth": [
+        {
+            "command": {
+                "darwin": "lark-cli config init --new --lang en",
+                "linux": "lark-cli config init --new --lang en",
+                "win32": "lark-cli.cmd config init --new --lang en"
+            },
+            "skipIf": {
+                "darwin": "lark-cli config show",
+                "linux": "lark-cli config show",
+                "win32": "lark-cli.cmd config show"
+            },
+            "authWaitForExit": true,
+            "authUrlDomain": "open.feishu.cn"
+        },
+        {
+            "command": {
+                "darwin": "lark-cli auth login --recommend",
+                "linux": "lark-cli auth login --recommend",
+                "win32": "lark-cli.cmd auth login --recommend"
+            },
+            "authWaitForExit": true,
+            "authUrlDomain": "accounts.feishu.cn"
+        }
+    ],
+    "unAuth": {
+        "darwin": "lark-cli auth logout",
+        "linux": "lark-cli auth logout",
+        "win32": "lark-cli.cmd auth logout"
+    },
+    "status": {
+        "darwin": "lark-cli auth status",
+        "linux": "lark-cli auth status",
+        "win32": "lark-cli.cmd auth status"
+    },
+    "statusMatchJson": {
+        "identity": "user"
+    }
+}

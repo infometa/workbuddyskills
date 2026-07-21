@@ -1,0 +1,12 @@
+{
+  "name": "gitlab",
+  "description": "GitLab DevOps 平台集成。管理代码仓库、合并请求、CI/CD 流水线、问题和 Wiki。全面访问 GitLab 的 DevOps 生命周期工具。",
+  "author": {
+    "name": "GitLab"
+  },
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "未声明"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "magicai-hub",
+  "version": "1.0.0",
+  "description": "Godot 4.x 游戏开发 AI 技能工具包。提供 GDScript 代码生成、数据驱动配置、场景/资源文件格式解析、资产路径修复、无头验证、工具函数库等专业能力，帮助 AI 更高效地协助 Godot 项目开发。",
+  "author": {
+    "name": "MagicAI",
+    "url": "https://magicdawn.tencent.com/"
+  },
+  "license": "MIT",
+  "keywords": [
+    "godot",
+    "gdscript",
+    "game-development",
+    "godot4",
+    "tscn",
+    "tres",
+    "data-driven",
+    "codebuddy"
+  ],
+  "category": "游戏开发",
+  "skills": [
+    "./skills/gdscript-codegen",
+    "./skills/godot-asset-path-surgery",
+    "./skills/godot-data-driven-config",
+    "./skills/godot-headless-verify",
+    "./skills/godot-tres-format",
+    "./skills/godot-tscn-format",
+    "./skills/godot-utils",
+    "./skills/safe-file-operations"
+  ]
+}

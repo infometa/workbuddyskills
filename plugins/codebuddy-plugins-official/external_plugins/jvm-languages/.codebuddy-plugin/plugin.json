@@ -1,0 +1,11 @@
+{
+  "name": "jvm-languages",
+  "description": "JVM 语言开发，包括 Java、Scala 和 C#，涵盖企业级模式和框架",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

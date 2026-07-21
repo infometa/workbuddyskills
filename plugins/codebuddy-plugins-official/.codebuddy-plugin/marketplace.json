@@ -1,0 +1,2020 @@
+{
+  "name": "codebuddy-plugins-official",
+  "description": "CodeBuddy 官方插件市场",
+  "owner": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "plugins": [
+    {
+      "name": "atuin",
+      "description": "腾讯玄武实验室安全插件",
+      "version": "1.1.0",
+      "source": "./plugins/atuin"
+    },
+    {
+      "name": "find-skills",
+      "description": "帮助用户发现和安装 AI Agent 技能，支持从 Vercel Skills 和 ClawHub 两个技能仓库搜索和安装",
+      "version": "1.0.0",
+      "source": "./plugins/find-skills",
+      "license": "MIT"
+    },
+    {
+      "name": "godot-mcp",
+      "description": "Godot 4 MCP 集成插件，通过 AI 对话直接操作 Godot Editor。支持场景管理、节点操作、脚本编辑、项目运行等功能。",
+      "description_en": "Godot 4 game development MCP integration. Enables AI to directly control the Godot Editor via MCP protocol for node creation, scene management, script editing, and full-stack game development assistance.",
+      "version": "1.0.1",
+      "source": "./plugins/godot-mcp",
+      "category": "game-development",
+      "author": {
+        "name": "anengyuki",
+        "url": "https://github.com/anengyuki/Godot-mcp"
+      },
+      "homepage": "https://github.com/anengyuki/Godot-mcp",
+      "repository": "https://github.com/anengyuki/Godot-mcp",
+      "license": "MIT"
+    },
+    {
+      "name": "magicai-hub",
+      "description": "Godot 4.x 游戏开发 AI 技能工具包。提供 GDScript 代码生成、数据驱动配置、场景/资源文件格式解析、资产路径修复、无头验证、工具函数库等专业能力，帮助 AI 更高效地协助 Godot 项目开发。",
+      "version": "1.0.0",
+      "source": "./plugins/magicai-hub",
+      "category": "游戏开发",
+      "author": {
+        "name": "MagicAI",
+        "url": "https://magicdawn.tencent.com/"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "skills-security-check",
+      "description": "腾讯云鼎实验室出品，Skill安全审查工具。对用户指定的skill.md文件及其配套的文档、程序、脚本等进行全面安全审计，确保引用安全",
+      "source": "./plugins/skills-security-check",
+      "version": "1.0.0",
+      "author": {
+        "name": "jaydenggao",
+        "url": "https://cnb.cool/jaydenggao"
+      },
+      "homepage": "https://cnb.cool/jaydenggao/marketplace",
+      "repository": "https://cnb.cool/jaydenggao/marketplace"
+    },
+    {
+      "name": "accessibility-compliance",
+      "description": "WCAG 无障碍审计、合规性验证、屏幕阅读器 UI 测试、键盘导航和包容性设计",
+      "source": "./external_plugins/accessibility-compliance",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "agent-browser",
+      "description": "基于 Vercel agent-browser CLI 的浏览器自动化插件。首次使用时自动安装，让 CodeBuddy 能够进行网页交互、截图、表单填写等浏览器操作。",
+      "description_en": "Browser automation plugin using Vercel's agent-browser CLI. Auto-installs on first use and teaches CodeBuddy to use agent-browser for web interactions.",
+      "version": "1.3.0",
+      "category": "自动化",
+      "source": "./plugins/agent-browser",
+      "author": {
+        "name": "Laurent Zhou"
+      },
+      "homepage": "https://github.com/vercel-labs/agent-browser",
+      "license": "MIT"
+    },
+    {
+      "name": "agent-orchestration",
+      "description": "多智能体系统优化、智能体改进工作流和上下文管理",
+      "source": "./external_plugins/agent-orchestration",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "agent-sdk-dev",
+      "description": "用于创建和验证 CodeBuddy Agent SDK 应用程序的综合插件，支持 Python 和 TypeScript。包含 /new-sdk-app 命令用于项目脚手架，以及验证代理用于检查最佳实践。",
+      "description_en": "A comprehensive plugin for creating and verifying CodeBuddy Agent SDK applications in Python and TypeScript. Includes /new-sdk-app command for scaffolding projects and verifier agents for checking best practices.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Anthropic",
+        "email": "support@anthropic.com"
+      },
+      "source": "./plugins/agent-sdk-dev",
+      "category": "development",
+      "homepage": "https://github.com/anthropics/claude-plugins-public/tree/main/plugins/agent-sdk-dev"
+    },
+    {
+      "name": "agent-team-agile-workflow",
+      "description": "完整的 BMAD 敏捷工作流插件，包含角色化代理（PO、架构师、SM、开发、QA）和交互式审批流程",
+      "version": "1.0.0",
+      "source": "./plugins/agent-team-agile-workflow",
+      "category": "development",
+      "author": {
+        "name": "CodeBuddy Team",
+        "url": "https://cnb.cool/codebuddy"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "agents-blockchain-web3",
+      "source": "./external_plugins/agents-blockchain-web3",
+      "description": "Specialized agents for blockchain development, smart contracts, and Web3 applications",
+      "license": "MIT"
+    },
+    {
+      "name": "agents-business-finance",
+      "source": "./external_plugins/agents-business-finance",
+      "description": "Agents for business analysis, financial modeling, and KPI tracking",
+      "license": "MIT"
+    },
+    {
+      "name": "agents-crypto-trading",
+      "source": "./external_plugins/agents-crypto-trading",
+      "description": "Expert agents for cryptocurrency trading, DeFi strategies, and market analysis",
+      "license": "未声明"
+    },
+    {
+      "name": "agents-data-ai",
+      "source": "./external_plugins/agents-data-ai",
+      "description": "Agents for data engineering, machine learning, and AI development",
+      "license": "MIT"
+    },
+    {
+      "name": "algorithmic-art",
+      "description": "使用 p5.js 创建算法艺术，支持种子随机性和交互式参数探索。适用于生成艺术、流场、粒子系统等代码艺术创作。",
+      "description_en": "Creating algorithmic art using p5.js with seeded randomness and interactive parameter exploration.",
+      "source": "./plugins/algorithmic-art",
+      "homepage": "https://github.com/anthropics/skills",
+      "repository": "https://github.com/anthropics/skills",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "doc-coauthoring",
+      "description": "引导用户通过结构化工作流协作撰写文档。适用于编写文档、提案、技术规格、决策文档等结构化内容。",
+      "description_en": "Guide users through a structured workflow for co-authoring documentation. Use when user wants to write documentation, proposals, technical specs, decision docs, or similar structured content.",
+      "source": "./plugins/doc-coauthoring",
+      "homepage": "https://github.com/anthropics/skills",
+      "repository": "https://github.com/anthropics/skills",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "frontend-design",
+      "description": "创建独特的生产级前端界面,具有高设计质量。生成富有创意、精致的代码,避免千篇一律的AI审美。",
+      "source": "./plugins/frontend-design"
+    },
+    {
+      "name": "agents-design-experience",
+      "source": "./external_plugins/agents-design-experience",
+      "description": "Agents for UI/UX design, accessibility, and user experience optimization",
+      "license": "MIT"
+    },
+    {
+      "name": "agents-development-architecture",
+      "source": "./external_plugins/agents-development-architecture",
+      "description": "Expert agents for software architecture, backend development, and system design",
+      "license": "MIT"
+    },
+    {
+      "name": "agents-infrastructure-operations",
+      "source": "./external_plugins/agents-infrastructure-operations",
+      "description": "Agents for cloud infrastructure, DevOps, and database operations",
+      "license": "MIT"
+    },
+    {
+      "name": "agents-language-specialists",
+      "source": "./external_plugins/agents-language-specialists",
+      "description": "Expert agents for specific programming languages (Python, Go, Rust, etc.)",
+      "license": "MIT"
+    },
+    {
+      "name": "agents-quality-security",
+      "source": "./external_plugins/agents-quality-security",
+      "description": "Agents for code review, security audits, debugging, and quality assurance",
+      "license": "MIT"
+    },
+    {
+      "name": "agents-sales-marketing",
+      "source": "./external_plugins/agents-sales-marketing",
+      "description": "Agents for content marketing, customer support, and sales automation",
+      "license": "MIT"
+    },
+    {
+      "name": "agents-specialized-domains",
+      "source": "./external_plugins/agents-specialized-domains",
+      "description": "Domain-specific expert agents for research, documentation, and specialized tasks",
+      "license": "MIT"
+    },
+    {
+      "name": "all-agents",
+      "source": "./external_plugins/all-agents",
+      "description": "Complete collection of 117 specialized AI agents across 11 categories",
+      "license": "MIT"
+    },
+    {
+      "name": "all-commands",
+      "source": "./external_plugins/all-commands",
+      "description": "Complete collection of 174 slash commands across 22 categories",
+      "license": "MIT"
+    },
+    {
+      "name": "all-hooks",
+      "source": "./external_plugins/all-hooks",
+      "description": "Complete collection of 28 automation hooks for event-driven workflows",
+      "license": "未声明"
+    },
+    {
+      "name": "all-skills",
+      "source": "./external_plugins/all-skills",
+      "description": "Complete collection of 26 Claude Code skills for document processing, development, business productivity, and creative tasks",
+      "license": "MIT"
+    },
+    {
+      "name": "api-scaffolding",
+      "description": "REST 和 GraphQL API 脚手架、框架选择、后端架构设计与 API 生成",
+      "source": "./external_plugins/api-scaffolding",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "api-testing-observability",
+      "description": "API 测试自动化、请求模拟、OpenAPI 文档生成、可观测性配置与监控",
+      "source": "./external_plugins/api-testing-observability",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "application-performance",
+      "description": "Expert performance engineering agents for application optimization, observability, and scalable system performance. Includes OpenTelemetry, distributed tracing, load testing, multi-tier caching, Core Web Vitals, and comprehensive performance monitoring.",
+      "source": "./external_plugins/application-performance",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "arm-cortex-microcontrollers",
+      "description": "面向 Teensy、STM32、nRF52 和 SAMD 的 ARM Cortex-M 固件开发，提供外设驱动和内存安全模式",
+      "source": "./external_plugins/arm-cortex-microcontrollers",
+      "version": "1.2.0",
+      "author": {
+        "name": "Ryan Snodgrass",
+        "url": "https://github.com/rsnodgrass"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "backend-api-security",
+      "description": "API 安全加固、身份验证实现、授权模式、速率限制和输入验证",
+      "source": "./external_plugins/backend-api-security",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "backend-development",
+      "description": "后端 API 设计、GraphQL 架构、Temporal 工作流编排及测试驱动的后端开发",
+      "source": "./external_plugins/backend-development",
+      "version": "1.2.4",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "blockchain-web3",
+      "description": "使用 Solidity 进行智能合约开发、DeFi 协议实现、NFT 平台和 Web3 应用架构",
+      "source": "./external_plugins/blockchain-web3",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "brand-guidelines",
+      "description": "将 Anthropic 官方品牌配色和排版应用于工件，确保视觉识别和专业设计标准的一致性。",
+      "source": "./external_plugins/brand-guidelines",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "business-analytics",
+      "description": "业务指标分析、KPI 跟踪、财务报告和数据驱动的决策制定",
+      "source": "./external_plugins/business-analytics",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "c4-architecture",
+      "description": "全面的 C4 架构文档工作流,采用自底向上的代码分析、组件合成、容器映射和上下文图生成",
+      "source": "./external_plugins/c4-architecture",
+      "version": "1.0.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "canvas-design",
+      "description": "使用设计哲学和美学原则创建精美的视觉艺术作品，支持生成海报、设计稿和静态艺术品的 PNG 和 PDF 文档。",
+      "source": "./external_plugins/canvas-design",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "changelog-generator",
+      "description": "自动从 git 提交历史生成面向用户的变更日志，将技术性的提交记录转换为易于理解的发布说明",
+      "source": "./external_plugins/changelog-generator",
+      "license": "未声明"
+    },
+    {
+      "name": "chainguard",
+      "version": "1.1.3",
+      "description": "腾讯云鼎实验室出品，AI 编程供应链安全防护，自动拦截依赖安装操作进行安全审计，检测漏洞组件、License 合规及 SBOM 白名单。",
+      "source": "./plugins/chainguard/"
+    },
+    {
+      "name": "cicd-automation",
+      "description": "CI/CD 流水线配置、GitHub Actions/GitLab CI 工作流设置及自动化部署流水线编排",
+      "source": "./external_plugins/cicd-automation",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "clangd-lsp",
+      "description": "C/C++ Language Server,为 CodeBuddy 提供代码智能、重构和分析功能。",
+      "source": "./plugins/clangd-lsp"
+    },
+    {
+      "name": "claude-hud",
+      "source": "./external_plugins/claude-hud",
+      "description": "Real-time statusline HUD for Claude Code - displays context usage, tool activity, agent tracking, and todo progress",
+      "license": "MIT"
+    },
+     {
+      "name": "cloudbase",
+      "source": "./plugins/cloudbase",
+      "version": "1.0.0",
+      "description": "CloudBase AI 开发插件，提供 Web、小程序、云函数、CloudRun、数据库（NoSQL/MySQL）、云存储、AI 模型、UI 设计等全栈开发能力。",
+      "author": {
+        "name": "CloudBase Team"
+      },
+      "homepage": {
+        "url": "https://github.com/TencentCloudBase/cloudbase-ai-toolkit",
+        "type": "github"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "cloud-infrastructure",
+      "description": "云架构设计（AWS/Azure/GCP），Kubernetes 集群配置，Terraform 基础设施即代码，混合云网络，以及多云成本优化",
+      "source": "./external_plugins/cloud-infrastructure",
+      "version": "1.2.2",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "code-documentation",
+      "description": "文档生成、代码解释和技术写作，支持自动化文档生成和教程创建",
+      "source": "./external_plugins/code-documentation",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "code-refactoring",
+      "description": "代码清理、重构自动化和技术债务管理,支持上下文恢复",
+      "source": "./external_plugins/code-refactoring",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "code-review-ai",
+      "description": "AI 驱动的架构审查和代码质量分析",
+      "source": "./external_plugins/code-review-ai",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "code-simplifier",
+      "description": "专注于简化代码以提升清晰度、一致性和可维护性的智能代理,在保留完整功能的前提下优化代码结构。主要关注最近修改的代码。",
+      "description_en": "Agent that simplifies and refines code for clarity, consistency, and maintainability while preserving functionality. Focuses on recently modified code.",
+      "version": "1.0.0",
+      "source": "./plugins/code-simplifier",
+      "category": "productivity",
+      "homepage": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-simplifier"
+    },
+    {
+      "name": "codebase-cleanup",
+      "description": "技术债务削减、依赖更新和代码重构自动化",
+      "source": "./external_plugins/codebase-cleanup",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "codebuddy-md-management",
+      "description": "用于维护和改进 CODEBUDDY.md 文件的工具 - 审核质量、捕获会话学习内容，并保持项目记忆最新。",
+      "description_en": "Tools to maintain and improve CODEBUDDY.md files - audit quality, capture session learnings, and keep project memory current.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "source": "./plugins/codebuddy-md-management",
+      "homepage": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-md-management",
+      "license": "未声明"
+    },
+    {
+      "name": "commands-api-development",
+      "source": "./external_plugins/commands-api-development",
+      "description": "Commands for designing and documenting REST and GraphQL APIs",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-automation-workflow",
+      "source": "./external_plugins/commands-automation-workflow",
+      "description": "Commands for automating repetitive tasks and workflows",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-ci-deployment",
+      "source": "./external_plugins/commands-ci-deployment",
+      "description": "Commands for CI/CD setup, containerization, and deployment automation",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-code-analysis-testing",
+      "source": "./external_plugins/commands-code-analysis-testing",
+      "description": "Commands for code review, testing, and analysis",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-context-loading-priming",
+      "source": "./external_plugins/commands-context-loading-priming",
+      "description": "Commands for loading context and priming Claude for specific tasks",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-database-operations",
+      "source": "./external_plugins/commands-database-operations",
+      "description": "Commands for database schema design, migrations, and optimization",
+      "license": "未声明"
+    },
+    {
+      "name": "commands-documentation-changelogs",
+      "source": "./external_plugins/commands-documentation-changelogs",
+      "description": "Commands for generating documentation and managing changelogs",
+      "license": "未声明"
+    },
+    {
+      "name": "commands-framework-svelte",
+      "source": "./external_plugins/commands-framework-svelte",
+      "description": "Specialized commands for Svelte and SvelteKit development",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-game-development",
+      "source": "./external_plugins/commands-game-development",
+      "description": "Commands for game development workflows",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-integration-sync",
+      "source": "./external_plugins/commands-integration-sync",
+      "description": "Commands for integrating with external services and syncing data",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-miscellaneous",
+      "source": "./external_plugins/commands-miscellaneous",
+      "description": "General-purpose utility commands",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-monitoring-observability",
+      "source": "./external_plugins/commands-monitoring-observability",
+      "description": "Commands for setting up monitoring and observability",
+      "license": "未声明"
+    },
+    {
+      "name": "commands-performance-optimization",
+      "source": "./external_plugins/commands-performance-optimization",
+      "description": "Commands for optimizing build, bundle size, and performance",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-project-setup",
+      "source": "./external_plugins/commands-project-setup",
+      "description": "Commands for initializing and setting up new projects",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-project-task-management",
+      "source": "./external_plugins/commands-project-task-management",
+      "description": "Commands for task management and project tracking",
+      "license": "未声明"
+    },
+    {
+      "name": "commands-security-audit",
+      "source": "./external_plugins/commands-security-audit",
+      "description": "Commands for security auditing and vulnerability scanning",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-simulation-modeling",
+      "source": "./external_plugins/commands-simulation-modeling",
+      "description": "Commands for scenario simulation and decision modeling",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-team-collaboration",
+      "source": "./external_plugins/commands-team-collaboration",
+      "description": "Commands for team workflows, PR reviews, and collaboration",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-typescript-migration",
+      "source": "./external_plugins/commands-typescript-migration",
+      "description": "Commands for migrating JavaScript projects to TypeScript",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-utilities-debugging",
+      "source": "./external_plugins/commands-utilities-debugging",
+      "description": "General debugging and utility commands",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-version-control-git",
+      "source": "./external_plugins/commands-version-control-git",
+      "description": "Commands for Git operations, commits, and PRs",
+      "license": "MIT"
+    },
+    {
+      "name": "commands-workflow-orchestration",
+      "source": "./external_plugins/commands-workflow-orchestration",
+      "description": "Commands for orchestrating complex workflows",
+      "license": "MIT"
+    },
+    {
+      "name": "commit-commands",
+      "description": "高效 Git 工作流命令,简化暂存、提交和推送流程。",
+      "source": "./plugins/commit-commands"
+    },
+    {
+      "name": "competitive-ads-extractor",
+      "description": "从广告库中提取并分析竞争对手的广告,以了解能够引起共鸣的营销信息和创意方法。",
+      "source": "./external_plugins/competitive-ads-extractor",
+      "license": "未声明"
+    },
+    {
+      "name": "comprehensive-review",
+      "description": "多维度代码分析,覆盖架构、安全性和最佳实践",
+      "source": "./external_plugins/comprehensive-review",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "conductor",
+      "description": "上下文驱动开发插件，将 Claude Code 转变为项目管理工具，采用结构化工作流：上下文 → 规格与计划 → 实施",
+      "source": "./external_plugins/conductor",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "email": "seth@major7apps.com"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "content-marketing",
+      "description": "内容营销策略、网络调研和信息综合处理的营销运营工具",
+      "source": "./external_plugins/content-marketing",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "content-research-writer",
+      "description": "协助撰写高质量内容，包括研究调查、添加引用、改进开篇、提供逐节反馈等功能。",
+      "source": "./external_plugins/content-research-writer",
+      "license": "未声明"
+    },
+    {
+      "name": "context-management",
+      "description": "上下文持久化、恢复和长期对话管理",
+      "source": "./external_plugins/context-management",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "context7",
+      "description": "通过 MCP 集成查询任何编程库的最新文档和代码示例。",
+      "source": "./plugins/context7"
+    },
+    {
+      "name": "csharp-lsp",
+      "description": "C# Language Server,为 CodeBuddy 提供代码智能、重构和分析功能。",
+      "source": "./plugins/csharp-lsp"
+    },
+    {
+      "name": "customer-sales-automation",
+      "description": "客户支持工作流自动化、销售管道管理、邮件营销活动及客户关系管理系统集成",
+      "source": "./external_plugins/customer-sales-automation",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "data-engineering",
+      "description": "ETL管道构建、数据仓库设计、批处理工作流和数据驱动的功能开发",
+      "source": "./external_plugins/data-engineering",
+      "version": "1.2.2",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "data-validation-suite",
+      "description": "模式验证、数据质量监控、流式验证管道以及后端API的输入验证",
+      "source": "./external_plugins/data-validation-suite",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "database-cloud-optimization",
+      "description": "数据库查询优化、云成本优化和可扩展性改进",
+      "source": "./external_plugins/database-cloud-optimization",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "database-design",
+      "description": "生产系统的数据库架构设计、模式设计和 SQL 优化",
+      "source": "./external_plugins/database-design",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "database-migrations",
+      "description": "数据库迁移自动化、可观测性和跨数据库迁移策略",
+      "source": "./external_plugins/database-migrations",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "debugging-toolkit",
+      "description": "交互式调试、开发者体验优化和智能调试工作流",
+      "source": "./external_plugins/debugging-toolkit",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "dependency-management",
+      "description": "依赖审计、版本管理和安全漏洞扫描",
+      "source": "./external_plugins/dependency-management",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "deployment-strategies",
+      "description": "部署模式、回滚自动化和基础设施模板",
+      "source": "./external_plugins/deployment-strategies",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "deployment-validation",
+      "description": "部署前检查、配置验证和部署就绪性评估",
+      "source": "./external_plugins/deployment-validation",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "developer-essentials",
+      "description": "包含 Git 工作流、SQL 优化、错误处理、代码审查、端到端测试、身份认证、调试和 Monorepo 管理的核心开发技能集",
+      "source": "./external_plugins/developer-essentials",
+      "version": "1.0.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "developer-growth-analysis",
+      "description": "分析你最近的 Claude Code 聊天历史，识别编码模式、发现开发能力缺口和需要改进的领域，从 HackerNews 精选相关学习资源，并自动将个性化成长报告发送到你的 Slack 私信。",
+      "source": "./external_plugins/developer-growth-analysis",
+      "license": "未声明"
+    },
+    {
+      "name": "development-essentials",
+      "description": "核心开发命令集，包含编码、调试、测试、优化和文档生成等常用开发工作流",
+      "version": "1.0.0",
+      "source": "./plugins/development-essentials",
+      "category": "development",
+      "author": {
+        "name": "CodeBuddy Team",
+        "url": "https://cnb.cool/codebuddy"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "distributed-debugging",
+      "description": "分布式系统追踪与微服务调试工具",
+      "source": "./external_plugins/distributed-debugging",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "documentation-generation",
+      "description": "OpenAPI规范生成、Mermaid图表创建、教程编写、API参考文档",
+      "source": "./external_plugins/documentation-generation",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "docx",
+      "description": "全面的 Word 文档创建、编辑和分析工具，支持修订跟踪、评论、格式保留和文本提取。用于处理专业 Word 文档(.docx)",
+      "description_en": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Supports tracked changes, comments, formatting preservation and text extraction.",
+      "source": "./plugins/docx",
+      "homepage": "https://github.com/anthropics/skills",
+      "repository": "https://github.com/anthropics/skills",
+      "license": "Proprietary"
+    },
+    {
+      "name": "domain-name-brainstormer",
+      "description": "为项目生成创意域名并检查多个顶级域名（包括 .com、.io、.dev 和 .ai 等）的可用性",
+      "source": "./external_plugins/domain-name-brainstormer",
+      "license": "未声明"
+    },
+    {
+      "name": "error-debugging",
+      "description": "错误分析、堆栈追踪调试和多智能体问题诊断",
+      "source": "./external_plugins/error-debugging",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "error-diagnostics",
+      "description": "错误追踪、根因分析及生产系统智能调试",
+      "source": "./external_plugins/error-diagnostics",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "feature-dev",
+      "description": "全面的功能开发工作流，配备专门的智能体用于代码库探索、架构设计和质量审查",
+      "source": "./plugins/feature-dev"
+    },
+    {
+      "name": "firebase",
+      "description": "Firebase MCP 服务器,用于管理 Firestore 数据。",
+      "source": "./plugins/firebase"
+    },
+    {
+      "name": "framework-migration",
+      "description": "框架升级、迁移规划与架构转型工作流",
+      "source": "./external_plugins/framework-migration",
+      "version": "1.2.2",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "frontend-design-pro",
+      "source": "./external_plugins/frontend-design-pro",
+      "description": "Advanced frontend design plugin with interactive wizard, trend research, moodboard creation, browser-based inspiration analysis, color/typography selection, and WCAG accessibility",
+      "license": "未声明"
+    },
+    {
+      "name": "frontend-mobile-development",
+      "description": "跨平台前端 UI 开发和移动应用实现",
+      "source": "./external_plugins/frontend-mobile-development",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "frontend-mobile-security",
+      "description": "Specialized security agents for frontend and mobile development. Includes XSS vulnerability scanning, secure coding practices, WebView security, mobile authentication, and modern React/Next.js development with security focus.",
+      "source": "./external_plugins/frontend-mobile-security",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "full-stack-orchestration",
+      "description": "Orchestrate full-stack feature development with specialized agents for test automation, performance engineering, security auditing, and deployment. Supports CI/CD pipelines, GitOps workflows, observability, and progressive delivery strategies.",
+      "source": "./external_plugins/full-stack-orchestration",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "functional-programming",
+      "description": "Expert agents for functional programming languages including Haskell and Elixir. Provides advanced type systems, pure functional design, OTP patterns, concurrency, fault-tolerant distributed systems, and high-reliability software development.",
+      "source": "./external_plugins/functional-programming",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "game-development",
+      "description": "Unity游戏开发与C#脚本编程，Minecraft服务器插件开发（支持Bukkit/Spigot API）",
+      "source": "./external_plugins/game-development",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "git-pr-workflows",
+      "description": "Git 工作流自动化、拉取请求增强和团队入职流程",
+      "source": "./external_plugins/git-pr-workflows",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "github",
+      "description": "GitHub MCP 服务器,用于管理仓库、问题、PR、搜索等功能。",
+      "source": "./plugins/github"
+    },
+    {
+      "name": "gitlab",
+      "description": "GitLab MCP 服务器,用于管理项目、问题、合并请求等。",
+      "source": "./plugins/gitlab"
+    },
+    {
+      "name": "gopls-lsp",
+      "description": "Go Language Server,为 CodeBuddy 提供代码智能、重构和分析功能。",
+      "source": "./plugins/gopls-lsp"
+    },
+    {
+      "name": "hookify",
+      "description": "创建和管理自定义钩子,自动化你的工作流程。",
+      "source": "./plugins/hookify"
+    },
+    {
+      "name": "hot-skills",
+      "description": "精选热门 AI Agent 技能合集，汇集社区高下载量技能于一处。",
+      "description_en": "A curated collection of popular AI agent skills bundled together for easy installation.",
+      "source": "./plugins/hot-skills",
+      "author": {
+        "name": "CodeBuddy"
+      },
+      "repository": "https://github.com/CodeBuddy/marketplace",
+      "license": "MIT",
+      "keywords": ["skills", "ai", "agent", "productivity"],
+      "category": "productivity"
+    },
+    {
+      "name": "hooks-automation",
+      "source": "./external_plugins/hooks-automation",
+      "description": "Automation Hooks - Event-driven automation hooks",
+      "license": "MIT"
+    },
+    {
+      "name": "hooks-development",
+      "source": "./external_plugins/hooks-development",
+      "description": "Development Hooks - Event-driven automation hooks",
+      "license": "MIT"
+    },
+    {
+      "name": "hooks-formatting",
+      "source": "./external_plugins/hooks-formatting",
+      "description": "Formatting Hooks - Event-driven automation hooks",
+      "license": "未声明"
+    },
+    {
+      "name": "hooks-git",
+      "source": "./external_plugins/hooks-git",
+      "description": "Git Hooks - Event-driven automation hooks",
+      "license": "MIT"
+    },
+    {
+      "name": "hooks-notifications",
+      "source": "./external_plugins/hooks-notifications",
+      "description": "Notification Hooks - Event-driven automation hooks",
+      "license": "未声明"
+    },
+    {
+      "name": "hooks-performance",
+      "source": "./external_plugins/hooks-performance",
+      "description": "Performance Hooks - Event-driven automation hooks",
+      "license": "MIT"
+    },
+    {
+      "name": "hooks-security",
+      "source": "./external_plugins/hooks-security",
+      "description": "Security Hooks - Event-driven automation hooks",
+      "license": "MIT"
+    },
+    {
+      "name": "hooks-testing",
+      "source": "./external_plugins/hooks-testing",
+      "description": "Testing Hooks - Event-driven automation hooks",
+      "license": "未声明"
+    },
+    {
+      "name": "hr-legal-compliance",
+      "description": "人力资源政策文档、法律合规模板（GDPR/SOC2/HIPAA）、雇佣合同及监管文件",
+      "source": "./external_plugins/hr-legal-compliance",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "image-enhancer",
+      "description": "通过提升分辨率、锐度和清晰度来改善图像和截图质量，适用于专业演示文稿和文档制作。",
+      "source": "./external_plugins/image-enhancer",
+      "license": "未声明"
+    },
+    {
+      "name": "incident-response",
+      "description": "生产事故管理、分级处理工作流和自动化事故解决方案",
+      "source": "./external_plugins/incident-response",
+      "version": "1.2.2",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "internal-comms",
+      "description": "帮助撰写内部沟通文档，包括三要素更新（进展/计划/问题）、公司通讯、常见问题解答、状态报告和项目更新，遵循公司特定格式规范。",
+      "source": "./external_plugins/internal-comms",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "interview",
+      "source": "./external_plugins/interview",
+      "description": "Interview command for fleshing out big feature plans and specifications",
+      "license": "MIT"
+    },
+    {
+      "name": "invoice-organizer",
+      "description": "发票整理工具",
+      "source": "./external_plugins/invoice-organizer"
+    },
+    {
+      "name": "javascript-typescript",
+      "description": "JavaScript 和 TypeScript 开发，支持 ES6+、Node.js、React 及现代 Web 框架",
+      "source": "./external_plugins/javascript-typescript",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "jdtls-lsp",
+      "description": "Java Language Server,为 CodeBuddy 提供代码智能、重构和分析功能。",
+      "source": "./plugins/jdtls-lsp"
+    },
+    {
+      "name": "julia-development",
+      "description": "现代 Julia 开发工具，支持 Julia 1.10+ 版本、包管理、科学计算、高性能数值代码和生产环境最佳实践",
+      "source": "./external_plugins/julia-development",
+      "version": "1.0.0",
+      "author": {
+        "name": "Community Contribution",
+        "url": "https://github.com/exAClior"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "jvm-languages",
+      "description": "JVM 语言开发，包括 Java、Scala 和 C#，涵盖企业级模式和框架",
+      "source": "./external_plugins/jvm-languages",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "kubernetes-operations",
+      "description": "Kubernetes 清单生成、网络配置、安全策略、可观测性配置、GitOps 工作流和自动扩缩容",
+      "source": "./external_plugins/kubernetes-operations",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "lead-research-assistant",
+      "description": "通过分析您的产品、搜索目标公司并提供可行的联系策略，识别和筛选高质量潜在客户。",
+      "source": "./external_plugins/lead-research-assistant",
+      "license": "未声明"
+    },
+    {
+      "name": "lexiang-knowledge",
+      "description": "乐享知识库, 企业协同知识库，提供获取文档内容与元数据、搜索文档内容、查询知识库与目录结构、创建/编辑/移动文档、管理标签与评论、上传文件及维护附件等知识库操作能力。",
+      "description_en": "Enterprise knowledge base plugin for Lexiang platform. Provides document content retrieval, metadata search, knowledge base structure query, document creation/editing/moving, tag and comment management, file upload and attachment maintenance.",
+      "source": "./plugins/lexiang-knowledge-plugins",
+      "author": {
+        "name": "mistcheng",
+        "url": "https://github.com/tencent-lexiang"
+      },
+      "repository": "https://github.com/tencent-lexiang/plugins",
+      "homepage": "https://github.com/tencent-lexiang/plugins",
+      "license": "未声明"
+    },
+    {
+      "name": "llm-application-dev",
+      "description": "Build production-ready LLM applications, advanced RAG systems, and intelligent agents. Includes vector search, multimodal AI, agent orchestration, prompt engineering, and enterprise AI integrations with comprehensive AI development workflows.",
+      "source": "./external_plugins/llm-application-dev",
+      "version": "1.2.2",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "lua-lsp",
+      "description": "Lua Language Server,为 CodeBuddy 提供代码智能、重构和分析功能。",
+      "source": "./plugins/lua-lsp"
+    },
+    {
+      "name": "lucide-icons",
+      "description": "搜索、下载和自定义 Lucide 图标（1000+ 精美 SVG 图标），支持生成 React 组件",
+      "source": "./plugins/lucide-icons",
+      "license": "MIT",
+      "homepage": "https://github.com/lucide-icons/lucide",
+      "author": {
+        "name": "CodeBuddy Team"
+      }
+    },
+    {
+      "name": "machine-learning-ops",
+      "description": "Complete MLOps toolkit with specialized agents for ML engineering, MLOps infrastructure, and data science. Build production ML pipelines, experiment tracking, model registries, and automated training/deployment workflows.",
+      "source": "./external_plugins/machine-learning-ops",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "mcp-builder",
+      "description": "指导创建高质量的 MCP（模型上下文协议）服务器,用于将外部 API 和服务与大语言模型集成,支持 Python 和 TypeScript 开发",
+      "source": "./external_plugins/mcp-builder",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "mcp-servers-docker",
+      "source": "./external_plugins/mcp-servers-docker",
+      "description": "Docker-based MCP servers from the official Docker MCP registry - includes 199+ verified servers",
+      "license": "MIT"
+    },
+    {
+      "name": "meeting-insights-analyzer",
+      "description": "分析会议记录以揭示行为模式，包括冲突回避、发言比例、填充词使用和领导风格。",
+      "source": "./external_plugins/meeting-insights-analyzer",
+      "license": "未声明"
+    },
+    {
+      "name": "multi-platform-apps",
+      "description": "跨平台应用开发,协调 Web、iOS、Android 和桌面端的实现",
+      "source": "./external_plugins/multi-platform-apps",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "nextjs-expert",
+      "source": "./external_plugins/nextjs-expert",
+      "description": "Next.js development expertise with skills for App Router, Server Components, Route Handlers, Server Actions, and authentication patterns",
+      "license": "未声明"
+    },
+    {
+      "name": "observability-monitoring",
+      "description": "指标收集、日志基础设施、分布式追踪、SLO 实施和监控仪表板",
+      "source": "./external_plugins/observability-monitoring",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "obsidian-skills",
+      "source": "./external_plugins/obsidian-skills",
+      "description": "Skills for working with Obsidian files including Markdown with wikilinks/embeds/callouts, Bases for database views, and Canvas for visual diagrams",
+      "license": "未声明"
+    },
+    {
+      "name": "oh-my-codebuddy",
+      "description": "完整的 OMC (Oh My CodeBuddy) 插件，包含 agents、commands、skills、hooks、tools 和 MCP servers。提供多代理编排、深度研究、代码分析等功能。",
+      "version": "1.0.0",
+      "source": "./plugins/oh-my-codebuddy",
+      "category": "productivity",
+      "author": {
+        "name": "CodeBuddy Team",
+        "url": "https://cnb.cool/codebuddy"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "payload",
+      "description": "为 Payload 开发提供全面指导的 Claude Code 技能，包含 TypeScript 模式、字段配置、钩子、访问控制和 API 示例。",
+      "source": "./external_plugins/payload",
+      "version": "0.0.1",
+      "author": {
+        "name": "Payload",
+        "email": "info@payloadcms.com"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "payment-processing",
+      "description": "支付网关集成,包含 Stripe 和 PayPal,实现结账流程、订阅计费和 PCI 合规性",
+      "source": "./external_plugins/payment-processing",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "pdf",
+      "description": "全面的 PDF 处理工具包，支持提取文本和表格、创建新 PDF、合并/拆分文档、表单填写、加密解密、OCR 扫描等功能",
+      "description_en": "Use this skill whenever the user wants to do anything with PDF files — reading, extracting, combining, splitting, rotating, watermarking, creating, filling forms, encrypting/decrypting, and OCR.",
+      "source": "./plugins/pdf",
+      "homepage": "https://github.com/anthropics/skills",
+      "repository": "https://github.com/anthropics/skills",
+      "license": "Proprietary"
+    },
+    {
+      "name": "performance-testing-review",
+      "description": "性能分析、测试覆盖率审查和 AI 驱动的代码质量评估",
+      "source": "./external_plugins/performance-testing-review",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "php-lsp",
+      "description": "PHP 语言服务器（Intelephense），提供代码智能和诊断",
+      "version": "1.0.0",
+      "source": "./plugins/php-lsp",
+      "lspServers": {
+        "intelephense": {
+          "command": "intelephense",
+          "args": [
+            "--stdio"
+          ],
+          "extensionToLanguage": {
+            ".php": "php"
+          }
+        }
+      }
+    },
+    {
+      "name": "playwright-cli",
+      "description": "基于 Playwright 的 CLI 浏览器自动化工具，专为编程代理优化。通过命令行控制浏览器进行网页导航、元素交互、表单填写、截图、网络拦截和会话管理，比 MCP 方案更节省 Token。",
+      "description_en": "CLI-based browser automation tool built on Playwright, optimized for coding agents. Control browsers via command line for web navigation, element interaction, form filling, screenshots, network interception and session management. More token-efficient than MCP approach.",
+      "version": "0.1.0",
+      "source": "./plugins/playwright-cli",
+      "category": "testing",
+      "author": {
+        "name": "Microsoft Corporation"
+      },
+      "homepage": "https://playwright.dev",
+      "repository": "https://github.com/microsoft/playwright-cli",
+      "license": "Apache-2.0",
+      "keywords": [
+        "browser",
+        "automation",
+        "testing",
+        "playwright",
+        "web",
+        "cli"
+      ]
+    },
+    {
+      "name": "plugin-dev",
+      "description": "用于开发 CodeBuddy Code 插件的综合工具包。包含 7 个专家技能，涵盖钩子、MCP 集成、命令、代理和最佳实践。支持 AI 辅助的插件创建和验证。",
+      "source": "./plugins/plugin-dev",
+      "license": "未声明"
+    },
+    {
+      "name": "plugin-finder",
+      "description": "智能插件发现和管理助手 - 支持智能搜索、多插件并行对比、多插件协同工作流（sequence-run）、插件信息详解、许愿新插件等功能",
+      "version": "0.2.0",
+      "category": "效率",
+      "source": "./plugins/plugin-finder"
+    },
+    {
+      "name": "ppt-writer",
+      "description": "AI驱动的PPT创作助手，支持智能内容生成、多格式导出和专业模板",
+      "version": "1.0.0",
+      "category": "效率",
+      "source": "./plugins/ppt-writer",
+      "author": {
+        "name": "CodeBuddy Team",
+        "email": "codebuddy@tencent.com"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "pptx",
+      "description": "PowerPoint 演示文稿创建、编辑和分析技能。支持创建新演示文稿、修改内容、处理布局、添加注释或演讲者备注等操作",
+      "description_en": "Use this skill any time a .pptx file is involved — creating slide decks, reading/parsing presentations, editing existing files, combining or splitting slides, working with templates, layouts, speaker notes, or comments.",
+      "source": "./plugins/pptx",
+      "homepage": "https://github.com/anthropics/skills",
+      "repository": "https://github.com/anthropics/skills",
+      "license": "Proprietary"
+    },
+    {
+      "name": "pr-review-toolkit",
+      "description": "全面的 PR 审查代理工具集,专注于代码注释、测试覆盖、错误处理、类型设计、代码质量和代码简化",
+      "source": "./plugins/pr-review-toolkit"
+    },
+    {
+      "name": "pyright-lsp",
+      "description": "Python 语言服务器（Pyright），提供类型检查和代码智能提示",
+      "version": "1.0.0",
+      "source": "./plugins/pyright-lsp",
+      "lspServers": {
+        "pyright": {
+          "command": "pyright-langserver",
+          "args": [
+            "--stdio"
+          ],
+          "extensionToLanguage": {
+            ".py": "python",
+            ".pyi": "python"
+          }
+        }
+      }
+    },
+    {
+      "name": "python-development",
+      "description": "现代 Python 开发工具，支持 Python 3.12+、Django、FastAPI、异步编程模式及生产环境最佳实践",
+      "source": "./external_plugins/python-development",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "quantitative-trading",
+      "description": "量化分析、算法交易策略、金融建模、投资组合风险管理和回测",
+      "source": "./external_plugins/quantitative-trading",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "raffle-winner-picker",
+      "description": "从列表、电子表格或 Google Sheets 中随机选择获奖者，用于抽奖和比赛，采用密码学安全的随机性确保公平。",
+      "source": "./external_plugins/raffle-winner-picker",
+      "license": "未声明"
+    },
+    {
+      "name": "ralph-loop",
+      "description": "用于迭代开发的交互式自引用AI循环，实现Ralph Wiggum技术。Claude重复执行同一任务，查看之前的工作，直到完成为止。",
+      "source": "./plugins/ralph-loop",
+      "license": "未声明"
+    },
+    {
+      "name": "repomix-commands",
+      "description": "用于快速执行 Repomix 操作的斜杠命令。通过 /pack-local 和 /pack-remote 等简单命令打包本地和远程代码仓库。",
+      "source": "./external_plugins/repomix-commands",
+      "license": "MIT"
+    },
+    {
+      "name": "repomix-explorer",
+      "description": "在 CodeBuddy Code 中使用 Repomix 能力探索和分析仓库结构",
+      "source": "./external_plugins/repomix-explorer",
+      "license": "未声明"
+    },
+    {
+      "name": "repomix-mcp",
+      "description": "Repomix MCP 服务器，用于 AI 驱动的代码库分析。打包本地/远程仓库，搜索输出内容，读取文件并内置安全扫描。这是在 Claude Code 中启用所有 Repomix 功能的基础插件。",
+      "source": "./external_plugins/repomix-mcp",
+      "license": "MIT"
+    },
+    {
+      "name": "requirements-driven-workflow",
+      "description": "需求驱动开发工作流，包含 90% 质量门控的实用功能实现流程",
+      "version": "1.0.0",
+      "source": "./plugins/requirements-driven-workflow",
+      "category": "development",
+      "author": {
+        "name": "CodeBuddy Team",
+        "url": "https://cnb.cool/codebuddy"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "rust-analyzer-lsp",
+      "description": "Rust 语言服务器，提供代码智能和分析功能",
+      "version": "1.0.0",
+      "source": "./plugins/rust-analyzer-lsp",
+      "lspServers": {
+        "rust-analyzer": {
+          "command": "rust-analyzer",
+          "extensionToLanguage": {
+            ".rs": "rust"
+          }
+        }
+      }
+    },
+    {
+      "name": "scientific-skills",
+      "description": "A comprehensive collection of 139 ready-to-use scientific skills for CodeBuddy, created by the K-Dense team. Transform CodeBuddy into your AI research assistant capable of executing complex multi-step scientific workflows across biology, chemistry, medicine, and beyond.",
+      "source": "./external_plugins/scientific-skills",
+      "license": "MIT"
+    },
+    {
+      "name": "security-scan",
+      "description": "腾讯云鼎实验室出品，专业的代码安全审计插件。支持 Fast（极速扫描）、Light（快速扫描）和 Deep（深度扫描）三种模式。基于 SQLite 语义索引 + 5 Agent 专业化架构，5维深度验证保障结果可信。全链路 --auto 无人值守模式 + POC 多维差异验证 + 安全门禁与 Git Hook 自动化。",
+      "version": "3.5.13",
+      "source": "./plugins/security-scan",
+      "author": {
+        "name": "CSIGCodeSec",
+        "url": "https://git.woa.com/CSIGCodeSec/marketplace-yd-test"
+      },
+      "category": "security",
+      "keywords": ["security", "code-review", "vulnerability", "audit", "deterministic-verification"]
+    },
+    {
+      "name": "security-rules",
+      "description": "腾讯云鼎实验室出品，将安全专家经验融入代码生成过程，实时对常见漏洞的防护规则和安全函数约束，让 AI直接生成安全代码，从源头保障代码安全质量。",
+      "version": "2.1.0",
+      "source": "./plugins/security-rules"
+    },
+    {
+      "name": "security-compliance",
+      "description": "SOC2、HIPAA 和 GDPR 合规性验证、密钥扫描、合规性检查清单和监管文档",
+      "source": "./external_plugins/security-compliance",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "security-guidance",
+      "description": "安全提醒钩子，在编辑文件时警告潜在的安全问题，包括命令注入、XSS 和不安全的代码模式",
+      "source": "./plugins/security-guidance"
+    },
+    {
+      "name": "seo-analysis-monitoring",
+      "description": "SEO 内容新鲜度分析、关键词竞食检测和权威建设",
+      "source": "./external_plugins/seo-analysis-monitoring",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "seo-content-creation",
+      "description": "SEO 内容创作、规划与质量审计工具，支持 E-E-A-T 优化",
+      "source": "./external_plugins/seo-content-creation",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "seo-technical-optimization",
+      "description": "技术SEO优化,包括元标签、关键词、结构和精选摘要",
+      "source": "./external_plugins/seo-technical-optimization",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "serena",
+      "description": "语义代码分析 MCP 服务器，通过语言服务器协议集成提供智能代码理解、重构建议和代码库导航功能。",
+      "description_en": "Semantic code analysis MCP server providing intelligent code understanding, refactoring suggestions, and codebase navigation through language server protocol integration.",
+      "category": "development",
+      "source": "./plugins/serena",
+      "homepage": "https://github.com/anthropics/claude-plugins-public/tree/main/external_plugins/serena",
+      "tags": [
+        "community-managed"
+      ],
+      "license": "未声明"
+    },
+    {
+      "name": "shell-scripting",
+      "description": "生产级 Bash 脚本编写，包含防御性编程、POSIX 合规性和全面测试",
+      "source": "./external_plugins/shell-scripting",
+      "version": "1.2.1",
+      "author": {
+        "name": "Ryan Snodgrass",
+        "url": "https://github.com/rsnodgrass"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "skill-creator",
+      "description": "提供创建高效 Claude 技能的指南,通过专业知识、工作流程和工具集成来扩展 AI 助手的能力",
+      "source": "./external_plugins/skill-creator",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "slack-gif-creator",
+      "description": "创建针对 Slack 优化的动画 GIF,提供文件大小约束验证和可组合的动画基元。",
+      "source": "./external_plugins/slack-gif-creator",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "startup-business-analyst",
+      "description": "面向初创企业的综合业务分析工具，提供市场规模分析（TAM/SAM/SOM）、财务建模、团队规划和战略研究功能",
+      "source": "./external_plugins/startup-business-analyst",
+      "version": "1.0.3",
+      "author": {
+        "name": "Seth Hobson",
+        "email": "seth@major7apps.com"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "license": "未声明"
+    },
+    {
+      "name": "supabase",
+      "description": "Supabase MCP 集成，用于数据库操作、身份验证、存储和实时订阅。管理您的 Supabase 项目，运行 SQL 查询，并直接与后端交互。",
+      "source": "./plugins/supabase"
+    },
+    {
+      "name": "superpowers",
+      "description": "Claude Code 核心技能库：包含测试驱动开发、系统化调试、协作模式和经过验证的技术方法",
+      "source": "./external_plugins/superpowers",
+      "version": "4.0.3",
+      "author": {
+        "name": "Jesse Vincent",
+        "email": "jesse@fsck.com"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "superpowers-chrome",
+      "description": "超轻量级 Chrome DevTools Protocol MCP 服务器，支持自动捕获。通过 Chrome DevTools Protocol 实现直接浏览器控制，零依赖，API 简单易用。",
+      "source": "./external_plugins/superpowers-chrome",
+      "version": "1.6.2",
+      "author": {
+        "name": "Jesse Vincent",
+        "email": "jesse@fsck.com"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "swift-lsp",
+      "description": "Swift 语言服务器（SourceKit-LSP），提供代码智能支持",
+      "version": "1.0.0",
+      "source": "./plugins/swift-lsp",
+      "lspServers": {
+        "sourcekit-lsp": {
+          "command": "sourcekit-lsp",
+          "extensionToLanguage": {
+            ".swift": "swift"
+          }
+        }
+      }
+    },
+    {
+      "name": "systems-programming",
+      "description": "使用 Rust、Go、C 和 C++ 进行系统编程，适用于性能关键和底层开发",
+      "source": "./external_plugins/systems-programming",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "tailored-resume-generator",
+      "description": "分析职位描述并生成量身定制的简历，突出相关经验、技能和成就，最大化面试机会。",
+      "source": "./external_plugins/tailored-resume-generator",
+      "license": "未声明"
+    },
+    {
+      "name": "taskmaster",
+      "description": "Claude Code 插件 - 基于AI的任务管理系统，提供命令、代理和 MCP 集成",
+      "source": "./external_plugins/taskmaster",
+      "author": {
+        "name": "Hamster"
+      },
+      "homepage": "https://github.com/eyaltoledano/claude-task-master",
+      "repository": "https://github.com/eyaltoledano/claude-task-master",
+      "license": "MIT WITH Commons-Clause"
+    },
+    {
+      "name": "tdd-workflows",
+      "description": "测试驱动开发方法论,提供红-绿-重构循环和代码审查",
+      "source": "./external_plugins/tdd-workflows",
+      "version": "1.2.1",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "team-collaboration",
+      "description": "团队工作流、问题管理、站会自动化和开发者体验优化",
+      "source": "./external_plugins/team-collaboration",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "template-skill",
+      "description": "一个演示如何创建新 Claude 技能的结构和格式的模板技能",
+      "source": "./external_plugins/template-skill",
+      "license": "未声明"
+    },
+    {
+      "name": "tencent-docs",
+      "description": "腾讯文档插件，提供完整的腾讯文档操作能力，包括创建各类在线文档、查询搜索文档、管理空间节点、读取编辑智能表和智能文档。",
+      "version": "1.0.6",
+      "source": "./plugins/tencent-docs",
+      "author": {
+        "name": "Tencent Docs"
+      },
+      "homepage": "https://docs.qq.com/home",
+      "category": "效率"
+    },
+    {
+      "name": "theme-factory",
+      "description": "为演示文稿、文档、报告和 HTML 落地页等制品应用专业的字体和配色主题，提供 10 套预设主题方案。",
+      "source": "./external_plugins/theme-factory",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "tmap-lbs-plugin",
+      "description": "腾讯地图位置服务开发插件，提供 JavaScript GL 地图开发指南和 Web 服务 API（POI搜索、路径规划、旅游规划、轨迹可视化等）能力。",
+      "version": "1.0.0",
+      "source": "./plugins/tmap-lbs-plugin",
+      "author": {
+        "name": "Tencent Map LBS"
+      },
+      "homepage": "https://lbs.qq.com/",
+      "category": "开发工具"
+    },
+    {
+      "name": "typescript-lsp",
+      "description": "TypeScript/JavaScript 语言服务器，提供增强的代码智能功能",
+      "version": "1.0.0",
+      "source": "./plugins/typescript-lsp",
+      "lspServers": {
+        "typescript": {
+          "command": "typescript-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "extensionToLanguage": {
+            ".ts": "typescript",
+            ".tsx": "typescriptreact",
+            ".js": "javascript",
+            ".jsx": "javascriptreact",
+            ".mts": "typescript",
+            ".cts": "typescript",
+            ".mjs": "javascript",
+            ".cjs": "javascript"
+          }
+        }
+      }
+    },
+    {
+      "name": "ui-ux-pro-max-skill",
+      "description": "AI-powered UI/UX design system generator with 100+ industry-specific reasoning rules, 57 UI styles, and intelligent design recommendations",
+      "category": "设计",
+      "source": "./external_plugins/ui-ux-pro-max-skill"
+    },
+    {
+      "name": "unit-testing",
+      "description": "Python 和 JavaScript 的单元测试与集成测试自动化，支持调试功能",
+      "source": "./external_plugins/unit-testing",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "video-downloader",
+      "description": "从 YouTube 和其他平台下载视频，支持离线观看、编辑或存档，提供多种格式和画质选项。",
+      "source": "./external_plugins/video-downloader",
+      "license": "未声明"
+    },
+    {
+      "name": "web-artifacts-builder",
+      "description": "使用现代前端技术（React、Tailwind CSS、shadcn/ui）创建复杂多组件 HTML 工件的工具套件。适用于需要状态管理、路由或 shadcn/ui 组件的复杂工件。",
+      "description_en": "Suite of tools for creating elaborate, multi-component HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui).",
+      "source": "./plugins/web-artifacts-builder",
+      "homepage": "https://github.com/anthropics/skills",
+      "repository": "https://github.com/anthropics/skills",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "web-scripting",
+      "description": "使用 PHP 和 Ruby 进行 Web 脚本开发，支持 Web 应用、CMS 开发和后端服务",
+      "source": "./external_plugins/web-scripting",
+      "version": "1.2.0",
+      "author": {
+        "name": "Seth Hobson",
+        "url": "https://github.com/wshobson"
+      },
+      "homepage": "https://github.com/wshobson/agents",
+      "repository": "https://github.com/wshobson/agents",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "webapp-testing",
+      "description": "使用 Playwright 测试本地 Web 应用，支持验证前端功能、调试 UI 行为和捕获浏览器截图。",
+      "source": "./external_plugins/webapp-testing",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "weixin-minigame-helper",
+      "description": "微信小游戏AI调试、预览、运行、真机测试上传发布微信小游戏",
+      "description_en": "AI-debug, Preview, real-device test and publish WeChat Mini Games",
+      "source": "./plugins/weixin-minigame-helper",
+      "version": "0.1.4",
+      "category": "development",
+      "author": {
+        "name": "weixin-minigame-helper",
+        "url": "https://git.woa.com/weadmin/ai-minigame-engine"
+      },
+      "homepage": "https://git.woa.com/weadmin/ai-minigame-engine",
+      "repository": "https://git.woa.com/weadmin/ai-minigame-engine.git",
+      "license": "MIT"
+    },
+    {
+      "name": "xlsx",
+      "description": "全面的电子表格创建、编辑和分析工具，支持公式、格式化、数据分析和可视化。适用于 .xlsx、.xlsm、.csv、.tsv 等表格文件的处理",
+      "description_en": "Use this skill any time a spreadsheet file is the primary input or output — opening, reading, editing, creating .xlsx/.xlsm/.csv/.tsv files, computing formulas, formatting, charting, and cleaning messy data.",
+      "source": "./plugins/xlsx",
+      "homepage": "https://github.com/anthropics/skills",
+      "repository": "https://github.com/anthropics/skills",
+      "license": "Proprietary"
+    },
+    {
+      "name": "testbuddy",
+      "description": "测试用例生成插件",
+      "version": "1.6.7",
+      "source": "./plugins/testbuddy"
+    }
+  ]
+}

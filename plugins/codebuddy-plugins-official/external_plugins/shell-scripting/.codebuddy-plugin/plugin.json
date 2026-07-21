@@ -1,0 +1,11 @@
+{
+  "name": "shell-scripting",
+  "description": "生产级 Bash 脚本编写，包含防御性编程、POSIX 合规性和全面测试",
+  "author": {
+    "name": "Ryan Snodgrass",
+    "url": "https://github.com/rsnodgrass"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

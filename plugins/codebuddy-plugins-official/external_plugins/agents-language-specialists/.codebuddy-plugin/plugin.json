@@ -1,0 +1,28 @@
+{
+  "name": "agents-language-specialists",
+  "version": "1.0.0",
+  "description": "Expert agents for specific programming languages (Python, Go, Rust, etc.)",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "subagents",
+    "language-specialists",
+    "c-developer",
+    "cpp-engineer",
+    "golang-expert",
+    "java-developer",
+    "javascript-developer",
+    "php-developer",
+    "python-expert",
+    "rails-expert",
+    "ruby-expert",
+    "rust-expert",
+    "sql-expert",
+    "typescript-expert"
+  ]
+}

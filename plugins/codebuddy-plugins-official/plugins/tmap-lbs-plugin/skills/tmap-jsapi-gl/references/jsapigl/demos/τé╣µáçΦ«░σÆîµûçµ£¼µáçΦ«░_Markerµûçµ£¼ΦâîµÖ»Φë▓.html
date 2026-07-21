@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>设置Marker文本背景</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .btnContainer {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        z-index: 10000;
+    }
+
+    .btnContainer button {
+        padding: 10px 14px;
+        box-sizing: border-box;
+        border: none;
+        background-color: #3876ff;
+        border-radius: 2px;
+        color: #fff;
+        font-size: 14px;
+        line-height: 14px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<body>
+    <div class="btnContainer">
+        <button class="btn1">Marker背景样式1</button>
+        <button class="btn2">Marker背景样式2</button>
+    </div>
+    <div id="mapContainer"></div>
+    <script>
+        var center = new TMap.LatLng(40.040074, 116.273519); // 设置中心点坐标
+        var centerHeight = new TMap.LatLng(40.040074, 116.273519, 100); // 带高度的坐标
+        // 初始化地图
+        var map = new TMap.Map('mapContainer', {
+            center: center,
+            zoom: 17,
+        });
+        // 初始化Marker
+        var marker = new TMap.MultiMarker({
+            id: 'marker-layer',
+            map: map,
+            styles: {
+                marker: new TMap.MarkerStyle({
+                    offset:{x:0, y:40},
+                    color:'#3876ff',
+                    backgroundColor: 'rgba(204, 134, 108,0.6)',
+                    backgroundBorderColor: 'rgba(227, 200, 171,1.0)',
+                    backgroundBorderRadius: 20,
+                    backgroundBorderWidth: 4,
+                    padding:'5px 15px'
+                }),
+            },
+            geometries: [
+                {
+                    id: 'marker', // 点图形数据的标志信息
+                    styleId: 'marker', // 样式id
+                    position: center, // 标注点位置
+                    content: '腾讯北京总部', // 标注文本
+                    properties: {
+                        // 标注点的属性数据
+                        title: 'marker',
+                    },
+                },
+            ],
+        });
+        document.querySelector('button.btn1').onclick = function () {
+            marker.setStyles({
+                'marker': new TMap.MarkerStyle({
+                    offset:{x:0, y:40}, // 标注点文本文字基于direction方位的偏移量
+                    color:'#3876ff', // 字体颜色
+                    backgroundColor: 'rgba(204, 134, 108,0.6)', // 文本背景颜色
+                    backgroundBorderColor: 'rgba(227, 200, 171,1.0)', // 文本背景框边线颜色
+                    backgroundBorderRadius: 20, // 文本背景框圆角
+                    backgroundBorderWidth: 4, // 文字背景框边线宽度
+                    padding:'5px 15px', // 标注点文字背景框内边距，单位为像素，属性支持接受1～2个值，规则符合css规范
+                })
+            });
+        };
+        document.querySelector('button.btn2').onclick = function () {
+            marker.setStyles({
+                'marker': new TMap.MarkerStyle({
+                    width: 30, // 标注点图片的宽度
+                    height: 40, // 标注点图片的高度
+                    color:'#FFFFFF',
+                    offset:{x:0, y:40}, 
+                    "src": 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png',
+                    size: 16,
+                    backgroundColor: '#68b8ec',
+                    backgroundWidth: 120, // 标注点文本背景的宽度
+                    backgroundHeight: 30, // 标注点文本背景的高度
+                    backgroundBorderColor: '#3470a1', // 文字背景框边线颜色
+                    backgroundBorderRadius: 5,
+                    backgroundBorderWidth: 4,
+                })
+            });
+        };
+    </script>
+</body>
+
+</html>

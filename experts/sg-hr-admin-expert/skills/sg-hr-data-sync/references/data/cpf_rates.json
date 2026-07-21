@@ -1,0 +1,121 @@
+{
+  "source": "https://www.cpf.gov.sg/employer/employer-obligations/how-much-cpf-contributions-to-pay",
+  "applicable_from": "2026-01-01",
+  "ow_ceiling": 8000,
+  "aw_ceiling_note": "Additional Wage Ceiling = $102,000 - Total Ordinary Wages subject to CPF",
+  "rates_total": {
+    "55 and below": {
+      "employer": 17.0,
+      "employee": 20.0,
+      "total": 37.0
+    },
+    "Above 55 to 60": {
+      "employer": 16.0,
+      "employee": 18.0,
+      "total": 34.0
+    },
+    "Above 60 to 65": {
+      "employer": 12.5,
+      "employee": 12.5,
+      "total": 25.0
+    },
+    "Above 65 to 70": {
+      "employer": 9.0,
+      "employee": 7.5,
+      "total": 16.5
+    },
+    "Above 70": {
+      "employer": 7.5,
+      "employee": 5.0,
+      "total": 12.5
+    }
+  },
+  "account_allocation_55_below": {
+    "OA": 23.0,
+    "SA": 6.0,
+    "MA": 8.0
+  },
+  "next_change": {
+    "date": "2027-01-01",
+    "summary": "加强年长员工退休储蓄，费率上调"
+  },
+  "cpf_critical_rules": {
+    "_note": "来自 CPF Board 官方FAQ的高频错误规则。必须严格区分。",
+    "wages_definition": "CPF Act 下 Wages = 货币薪酬，包括奖金。来源: cpf.gov.sg/employer/employer-obligations/what-payments-attract-cpf-contributions",
+    "ow_definition": "须同时满足两个条件：①该月雇佣专属 ②次月14日前支付。来源同上",
+    "aw_formula": "AW Ceiling = $102,000 - 年度CPF应缴OW总额（每个雇主每个日历年）",
+    "compensation_in_lieu_of_notice": {
+      "cpf_payable": false,
+      "rule": "CPF NOT payable on compensation in lieu of notice。但员工最后工作日前工资仍需缴CPF。若雇主要求员工支付代通知金并决定从应发工资中抵扣，工资在抵扣前仍需缴CPF。",
+      "source": "https://www.cpf.gov.sg/service/article/are-cpf-contributions-payable-on-compensation-in-lieu-of-notice"
+    },
+    "leave_encashment": {
+      "cpf_payable": true,
+      "rule": "CPF IS payable on cash payment for encashment of leave。",
+      "source": "https://www.cpf.gov.sg/service/article/are-cpf-contributions-payable-on-encashment-of-leave"
+    },
+    "non_wages": [
+      "Termination/retrenchment benefits (非服务对价)",
+      "Genuine reimbursement for official purpose (不超过实际支出的官方费用报销)",
+      "Benefit in kind (非现金福利)"
+    ],
+    "allowance_reimbursement_classification": {
+      "_note": "Payment名称不是CPF分类标准。必须根据payment nature判断。",
+      "judgment_chain": [
+        "Payment → Wage or Genuine Official-Purpose Reimbursement?",
+        "If Reimbursement: CPF Wages = No (需满足official-purpose + 不超过实际支出条件)",
+        "If Wage: OW Conditions Satisfied? → Yes=OW, No=AW"
+      ],
+      "ow_conditions": [
+        "Wage is wholly or exclusively in respect of employment during that month",
+        "Wage for that month is payable by 14th of the following month"
+      ],
+      "key_principles": [
+        "Cash allowance 及其他增加工资的monetary payment → 可能属于wages并吸引CPF",
+        "Genuine reimbursement for official purpose → 报销金额不超实际支出时不属wages",
+        "Payment Label（如Transport Allowance/Meal Allowance/Communication Allowance/Housing Allowance）不直接确定OW或AW",
+        "企业要求津贴具有岗位业务理由 → 属于Internal Control或Compensation Policy，不是CPF Board判断OW/AW的法定标准"
+      ],
+      "forbidden": [
+        "Allowance → CPF Wages → OW（跳过Reimbursement判定和OW条件测试）",
+        "固定津贴属于OW（跳过两项OW条件）",
+        "因名称含Allowance直接确定OW/AW分类",
+        "以'是否有业务理由'替代CPF wage classification rule"
+      ]
+    },
+    "final_salary_timing": {
+      "_note": "离职最终工资支付时限——primary deadline为last day，3 working days为fallback",
+      "resignation_served_notice": "Last day of employment",
+      "resignation_without_notice": "Within 7 days after last day of employment",
+      "employer_termination": {
+        "primary": "Last day of employment",
+        "fallback": "Within 3 working days after termination date (if not possible on last day)"
+      },
+      "misconduct_dismissal": {
+        "primary": "Last day of employment",
+        "fallback": "Within 3 working days after dismissal date (if not possible on last day)"
+      },
+      "forbidden": [
+        "Misconduct: 3 working days（把fallback写成primary）",
+        "Termination: 3 working days（把fallback写成primary）",
+        "雇主解雇员工后3个工作日内支付工资（省略last day primary）"
+      ]
+    },
+    "sdl": {
+      "rate": "0.25% of monthly total wages",
+      "min_per_employee_monthly": 2,
+      "max_per_employee_monthly": 11.25,
+      "applicability": "所有在新加坡工作的员工（含foreign employees），非'在册即缴'",
+      "not_applicable_to": "Working overseas的员工，不因受雇于新加坡公司而自动缴纳",
+      "judgment_chain": "Employee → Working in Singapore? → Yes: apply SDL rules; No: do not automatically impose SDL",
+      "forbidden": [
+        "SDL适用于所有在册员工",
+        "所有公司员工包括外籍都缴SDL",
+        "以'在employee register'替代'working in Singapore'判断"
+      ],
+      "source": "https://www.cpf.gov.sg/employer/employer-obligations/skills-development-levy"
+    }
+  },
+  "_verified": true,
+  "_last_verified": "2026-07-09"
+}

@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "long_manuscript.trusted_attribution_projection_contract.v1",
+  "purpose": "Fail-closed structural binding of server-verified ACK context to six-dimensional attribution, with lossless v3 forwarding.",
+  "ackEvidencePolicy": {
+    "schemaVersion": "long_manuscript.server_verified_ack_evidence.v1",
+    "verifiedMustEqual": true,
+    "cryptographicallyVerifiedMustEqual": true,
+    "verificationSourceMustEqual": "server_dispatch_ack_hmac",
+    "challengeFinalization": {
+      "statusMustEqual": "finalized",
+      "consumeOnceMustEqual": true,
+      "issuedAtRequired": true,
+      "expiresAtRequired": true,
+      "finalizedAtRequired": true,
+      "verifiedAtRequired": true,
+      "canonicalUtcMillisecondsRequired": true,
+      "maximumTtlSeconds": 900,
+      "consumeLedgerReceiptIdRequired": true,
+      "consumeLedgerReceiptDigestRequired": true,
+      "localPackageCanProveFreshnessOrReplayConsumption": false
+    },
+    "expectedContextFields": [
+      "productId",
+      "serviceProductId",
+      "expertEntryId",
+      "packageName",
+      "packageVersion",
+      "channelTrack",
+      "hostType",
+      "hostKeyScope",
+      "packageDigest",
+      "runtimeContractDigest",
+      "routeProfileDigest",
+      "listingReceiptId",
+      "listingReceiptDigest",
+      "productSignatureDigest",
+      "actionArgumentsDigest",
+      "challengeNonceDigest",
+      "routeSignedAckHopDigest",
+      "serverBindingId",
+      "chainFingerprint",
+      "coveredEventId",
+      "challengeId",
+      "ackId"
+    ],
+    "exactContextMatchRequired": true,
+    "currentCanonicalTupleMatchRequired": true,
+    "expectedContextAuthority": "service_verified_route_trust_chain",
+    "callerSuppliedExpectedContextTrusted": false,
+    "routeSignedAckHopDigestMustReferenceValidatedFiveHopChain": true,
+    "listingReceiptAndActionArgumentsMustMatchValidatedFiveHopChain": true,
+    "eventIdMustEqualCoveredEventId": true,
+    "verifiedDimensionContextBindings": {
+      "product": "productId",
+      "version": "packageVersion",
+      "channel": "channelTrack",
+      "terminal": "hostType"
+    },
+    "sourceLabelAloneIsTrusted": false,
+    "unboundLabelFailureCode": "trusted_label_unbound",
+    "contextMismatchFailureCode": "verified_ack_context_mismatch",
+    "invalidEvidenceFailureCode": "verified_ack_evidence_invalid"
+  },
+  "attributionPolicy": {
+    "dimensions": [
+      "product",
+      "version",
+      "channel",
+      "terminal",
+      "intent",
+      "mode"
+    ],
+    "dimensionFields": [
+      "value",
+      "source",
+      "sources",
+      "status",
+      "trusted",
+      "conflict"
+    ],
+    "statuses": [
+      "trusted",
+      "untrusted",
+      "missing",
+      "conflict"
+    ],
+    "defaultValuesAllowed": false,
+    "missingFailureCode": "attribution_dimension_missing",
+    "untrustedFailureCode": "attribution_dimension_untrusted",
+    "conflictFailureCode": "attribution_dimension_conflict",
+    "invalidCandidateFailureCode": "attribution_candidates_invalid",
+    "invalidProjectionInputFailureCode": "attribution_projection_input_invalid",
+    "allNonTrustedStatesProductCreditEligible": false,
+    "candidateMapMayAddDimensions": false,
+    "sourceSetUsesUniqueCodeUnitOrdering": true
+  },
+  "failurePrecedence": [
+    "route_trust_failure",
+    "trusted_label_unbound_or_ack_failure",
+    "candidate_shape_failure",
+    "dimension_conflict",
+    "dimension_missing",
+    "dimension_untrusted"
+  ],
+  "projectionPolicy": {
+    "schemaVersion": "long_manuscript.trusted_attribution_projection.v3",
+    "projectionAuthority": "main_thread_trust_projection",
+    "forwardTargets": [
+      "worker",
+      "queue",
+      "ledger",
+      "report"
+    ],
+    "workerMayRecomputeFromCandidates": false,
+    "forwardingRequiresExactV3Shape": true,
+    "forwardingMustDeepCopy": true,
+    "boundContextRequiredForTrustedFields": true,
+    "projectionDigestAlgorithm": "sha256",
+    "projectionDigestSerialization": "canonical_json_code_unit_order_v1",
+    "projectionDigestRecomputedAtEveryForwardBoundary": true,
+    "projectionDigestAuthenticatesService": false,
+    "preserveFieldTrust": true,
+    "preserveRouteConflict": true,
+    "preserveFailureCode": true,
+    "preserveProductCreditEligibility": true
+  },
+  "externalEvidenceBoundary": {
+    "ackAuthenticityProvenByPackage": false,
+    "challengeFreshnessProvenByPackage": false,
+    "replayConsumptionProvenByPackage": false,
+    "projectionDigestAuthenticatesService": false,
+    "externalVerifierRequired": true,
+    "localProjectionMayPromoteProductCredit": false,
+    "externalGateStatus": "blocked_external",
+    "structurallyBoundLocalDecision": "external_verification_required",
+    "failureDecision": "fail_closed"
+  },
+  "enforcementTopology": {
+    "repositoryValidatorModule": "lib/trusted-attribution-projection.mjs",
+    "validatorIncludedInProductZip": false,
+    "productPackageContainsDeclarativeContract": true,
+    "serviceMustImplementEquivalentOrStricterChecks": true
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "exam_level": "CET4",
+    "task_subtype": "news_report",
+    "reviewed_at": "2026-04-22T18:00:00Z",
+    "reviewer_version": "english-exam-writing-reviewer v1.7.0"
+  },
+  "prompt": "Write a news report to your campus newspaper on a campus blood donation event that took place last weekend. You should include the time, place, organizer, participants and its significance. 120–180 words.",
+  "essay": "Last Saturday morning, a campus-wide blood donation event was successfully held on the square in front of the library at Nankai University. Co-organized by the Red Cross Society and the Student Union, the activity attracted more than 400 undergraduates, postgraduates and faculty members within four hours.\n\nAccording to Zhang Wei, the chief coordinator, the donated blood will be transferred to Tianjin Municipal Blood Center and used for emergency medical rescue in the coming weeks. Many participants reported that the pre-registration and on-site health check were efficient, and free juice and biscuits were provided afterwards.\n\nThe event demonstrates growing social responsibility among young students and also alleviates the seasonal blood shortage that local hospitals typically face in summer. Further donation sessions are scheduled for next month, which, according to the organizers, will be extended to neighbouring campuses.",
+  "word_count": {
+    "effective": 162,
+    "requirement_min": 120,
+    "requirement_max": 180,
+    "within_range": true,
+    "penalty_triggered": false
+  },
+  "band": 11,
+  "raw_score": 11,
+  "final_score": 11,
+  "converted_score": 78,
+  "calibration_status": "normal",
+  "calibration_note": null,
+  "band_description": {
+    "official_text": "切题。表达思想清楚，文字通顺，连贯性较好。虽有少量语言错误，但不影响理解。",
+    "source": "CET4 官方 rubric 第四档 9–11 分"
+  },
+  "boundary_decision": {
+    "compared_with_higher": "缺 academic tier 词汇（如 `epitomize / collective endeavour`）；归因段仅一句，未展开到多维",
+    "compared_with_lower": "news_report 五要素齐全（时间/地点/组织者/参与者/影响）；无第一人称、无主观评价；结尾展望自然"
+  },
+  "intra_band_adjustment": {
+    "delta": 0,
+    "reason": "档内取中位 11 分——结构完整、数据精确，但语言丰富度仅达第四档下沿"
+  },
+  "dimension_diagnosis": {
+    "task_completion": "news_report 五要素全覆盖：时间（Last Saturday morning）/ 地点（square in front of the library at Nankai University）/ 组织者（Red Cross Society + Student Union）/ 参与者（400+ 人）/ 意义（社会责任 + 缓解血荒）。无第一人称，无主观评价——news_report 正面示范。",
+    "grammar_lexis": "过去分词作状语（Co-organized by...）、非限定定语从句（which... will be extended）、mid-tier 词（alleviates / seasonal / coordinator / significance）。",
+    "accuracy": "无可识别错误。",
+    "cohesion": "时间（Last Saturday morning / in the coming weeks / next month）+ 引述链（According to... / reported that）衔接自然。",
+    "format_register": {
+      "format": "倒金字塔：导语（时间+地点+事件）→ 细节（组织者+参与者+数据）→ 意义与展望；符合 news_report 体例",
+      "register": "formal / third-person objective",
+      "signature_compliance": "N/A",
+      "category_specific_check": null
+    }
+  },
+  "news_report_check": {
+    "first_person_used": false,
+    "subjective_evaluation_present": false,
+    "five_w_coverage": {
+      "when": "Last Saturday morning",
+      "where": "square in front of the library at Nankai University",
+      "who": "400+ undergraduates, postgraduates and faculty",
+      "what": "campus-wide blood donation event",
+      "why_significance": "growing social responsibility + alleviates seasonal blood shortage"
+    },
+    "quote_or_attribution_present": true
+  },
+  "directions_copy_check": {
+    "applicable": false,
+    "overall_risk": "none",
+    "segments": []
+  },
+  "errors": [
+    {
+      "severity": "tip",
+      "type": "lexical",
+      "location": "¶3 首",
+      "original": "demonstrates growing social responsibility",
+      "correction": "epitomizes a burgeoning sense of social responsibility",
+      "rationale": "academic tier 替换，可从 11 分上探 13 分"
+    }
+  ],
+  "vocabulary_upgrades": [
+    { "original": "successfully held", "tier_before": "mid", "suggestion": "ran smoothly", "tier_after": "high" },
+    { "original": "free juice and biscuits were provided", "tier_before": "mid", "suggestion": "complimentary refreshments were on hand", "tier_after": "high" },
+    { "original": "growing social responsibility", "tier_before": "mid", "suggestion": "burgeoning civic awareness", "tier_after": "academic" }
+  ],
+  "rationale_trace": [
+    {
+      "step": "Step 1",
+      "claim": "词数核算",
+      "evidence": ["effective=162", "requirement 120-180", "within_range=true"],
+      "rubric_ref": "CET4 字数扣分规则"
+    },
+    {
+      "step": "Step 2",
+      "claim": "task_subtype 识别为 news_report",
+      "evidence": ["Directions 含 'write a news report'", "CET4 2023 后高频子类"],
+      "rubric_ref": "task-subtypes.md §CET.news_report"
+    },
+    {
+      "step": "Step 3",
+      "claim": "news_report 硬门槛全通过",
+      "evidence": ["first_person_used=false", "subjective_evaluation_present=false", "5W 齐全", "含直接引述"],
+      "rubric_ref": "task-subtypes.md §news_report 硬门槛"
+    },
+    {
+      "step": "Step 4",
+      "claim": "官方 rubric 比对 → 第四档",
+      "evidence": ["切题", "表达清楚", "连贯性较好", "少量语言错误不影响理解"],
+      "rubric_ref": "CET4 官方 rubric 第四档 9-11 分"
+    },
+    {
+      "step": "Step 5",
+      "claim": "档内定位中位 11 分",
+      "evidence": ["结构完整", "缺 academic tier 密度", "未达第五档"],
+      "rubric_ref": "boundary-rubric.md §档内微调"
+    }
+  ],
+  "final_feedback": "这篇新闻报道五要素齐全，时间/地点/组织者/参与者/意义均精确；全文未出现 I/we 和主观评价，符合 CET4 news_report 的核心规范，是第四档（9-11 分）标准表现。若能将 `demonstrates growing social responsibility` 升级为 `epitomizes a burgeoning sense of civic responsibility` 等 academic tier 表达，配合一句多维归因（如『不仅反映青年学生对社会的担当，也折射出学校社团治理的成熟』），有望冲击第五档 13 分。"
+}

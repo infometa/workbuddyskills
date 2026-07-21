@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<script>{{HTML2CANVAS_INLINE}}</script>
+<style>
+  :root{
+    --brand: {{BRAND_COLOR}};
+    --brand-soft: {{BRAND_SOFT}};
+    --brand-deep: {{BRAND_DEEP}};
+    --ink:#1a1f29; --sub:#6b7585; --line:#eef1f6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+  body{background:#eef1f6;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+       display:flex;justify-content:center;padding:24px 0;color:var(--ink);}
+  #poster{width:360px;background:#fff;overflow:hidden;
+          box-shadow:0 12px 44px rgba(20,40,80,.16);}
+
+  /* 顶部品牌头部 */
+  .head{background:linear-gradient(135deg,var(--brand),var(--brand-deep));
+        height:96px;position:relative;}
+  .head .halo{position:absolute;border-radius:50%;background:rgba(255,255,255,.08);}
+  .head .halo.a{width:180px;height:180px;top:-80px;right:-50px;}
+  .head .halo.b{width:110px;height:110px;top:10px;left:-30px;background:rgba(255,255,255,.05);}
+
+  /* 头像（跨头部与正文） */
+  .avatar-wrap{display:flex;justify-content:center;margin-top:-46px;position:relative;z-index:2;}
+  .avatar{width:92px;height:92px;border-radius:50%;object-fit:cover;
+          background:var(--brand);display:flex;align-items:center;justify-content:center;
+          color:#fff;font-size:34px;font-weight:600;
+          border:4px solid #fff;box-shadow:0 4px 16px rgba(20,40,80,.18);}
+
+  /* 姓名 / 公司 */
+  .id{text-align:center;padding:12px 24px 4px;}
+  .name{font-size:24px;font-weight:800;letter-spacing:2px;}
+  .title-tag{display:inline-block;margin-top:7px;font-size:12px;color:var(--brand);
+        font-weight:600;background:var(--brand-soft);padding:3px 12px;border-radius:2px;}
+  .company{font-size:13px;color:var(--sub);margin-top:9px;letter-spacing:.5px;}
+
+  /* 联系方式 */
+  .contact{margin:16px 30px 0;display:flex;flex-direction:column;gap:9px;}
+  .contact .c-row{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#3a4150;}
+  .contact .c-row .ico{width:26px;height:26px;border-radius:2px;background:var(--brand-soft);
+        display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+
+  /* 二维码 */
+  .qr-area{display:flex;flex-direction:column;align-items:center;margin:20px 0 6px;}
+  .qr{width:130px;height:130px;border-radius:2px;object-fit:cover;
+      background:#fff;padding:6px;border:1px solid var(--line);
+      box-shadow:0 4px 16px rgba(20,40,80,.1);
+      display:flex;align-items:center;justify-content:center;
+      color:#b7c0cf;font-size:11px;text-align:center;line-height:1.4;}
+  .qr-tip{margin-top:9px;font-size:12px;color:var(--sub);}
+
+  /* 底部 */
+  .foot{margin-top:18px;padding:13px 24px 18px;border-top:1px solid var(--line);
+        background:#fbfcfe;text-align:center;}
+  .foot .filing{font-size:11px;color:var(--sub);}
+  .foot .filing b{color:var(--brand-deep);font-weight:600;}
+  .foot .disclaimer{font-size:10px;color:#aeb6c4;margin-top:5px;line-height:1.6;}
+
+  /* 导出按钮 + 浮层 */
+  #export-btn{position:fixed;right:16px;bottom:22px;z-index:99;
+    background:var(--brand);color:#fff;border:none;border-radius:24px;
+    padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;
+    box-shadow:0 6px 20px rgba(38,104,235,.4);font-family:inherit;}
+  #export-btn:active{transform:scale(.96);}
+  #save-mask{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.88);
+    display:none;flex-direction:column;align-items:center;
+    padding:18px 14px;overflow:auto;-webkit-overflow-scrolling:touch;}
+  #save-mask .tip{color:#fff;font-size:14px;font-weight:600;text-align:center;
+    margin:6px 0 14px;line-height:1.6;}
+  #save-mask .tip small{display:block;color:rgba(255,255,255,.7);font-weight:400;
+    font-size:12px;margin-top:4px;}
+  #save-mask img{width:100%;max-width:340px;border-radius:12px;
+    box-shadow:0 8px 30px rgba(0,0,0,.5);}
+  #save-mask .close{margin:16px 0 8px;color:#fff;border:1px solid rgba(255,255,255,.5);
+    background:transparent;border-radius:22px;padding:9px 22px;font-size:14px;cursor:pointer;
+    font-family:inherit;}
+</style>
+</head>
+<body>
+  <div id="poster">
+    <div class="head">
+      <div class="halo a"></div>
+      <div class="halo b"></div>
+    </div>
+
+    <div class="avatar-wrap">{{AVATAR_HTML}}</div>
+
+    <div class="id">
+      <div class="name">{{NAME}}</div>
+      {{TITLE_TAG}}
+      <div class="company">{{COMPANY}}</div>
+    </div>
+
+    <div class="contact">{{CONTACT_HTML}}</div>
+
+    <div class="qr-area">
+      {{QR_HTML}}
+      <div class="qr-tip">微信扫码 · 与我联系</div>
+    </div>
+
+    <div class="foot">
+      <div class="filing">医药代表备案号：<b>{{FILING_NO}}</b></div>
+      <div class="disclaimer">本名片仅供医疗卫生专业交流使用。</div>
+    </div>
+  </div>
+
+  <button id="export-btn" onclick="exportImage()">📥 导出名片</button>
+  <div id="save-mask">
+    <div class="tip" id="save-tip"></div>
+    <img id="save-img" alt="名片">
+    <button class="close" onclick="closeMask()">关闭</button>
+  </div>
+
+  <script>
+    function isMobile(){return /Android|iPhone|iPad|iPod|HarmonyOS|Mobile/i.test(navigator.userAgent);}
+    function closeMask(){document.getElementById('save-mask').style.display='none';}
+    function exportImage(){
+      var btn=document.getElementById('export-btn');
+      btn.textContent='生成中…';btn.disabled=true;
+      var node=document.getElementById('poster');
+      var bg=getComputedStyle(node).backgroundColor||'#ffffff';
+      html2canvas(node,{scale:3,useCORS:true,backgroundColor:bg}).then(function(canvas){
+        var dataUrl=canvas.toDataURL('image/png');
+        if(isMobile()){
+          document.getElementById('save-img').src=dataUrl;
+          document.getElementById('save-tip').innerHTML='长按下方名片，选择"存储图像/保存到相册"<small>保存后可放到签名、朋友圈等场景</small>';
+          document.getElementById('save-mask').style.display='flex';
+        }else{
+          var link=document.createElement('a');
+          link.download='{{FILE_BASENAME}}.png';link.href=dataUrl;link.click();
+        }
+        btn.textContent='📥 导出名片';btn.disabled=false;
+      }).catch(function(e){ alert('导出失败：'+e); btn.textContent='📥 导出名片';btn.disabled=false; });
+    }
+  </script>
+</body>
+</html>

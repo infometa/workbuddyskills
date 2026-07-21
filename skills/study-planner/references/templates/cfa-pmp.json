@@ -1,0 +1,111 @@
+{
+  "id": "cfa-pmp",
+  "name": "CFA / PMP / 软考等职业认证",
+  "description": "适用于职业资格考试，特点：知识量大、题型固定、有明确教材",
+  "applicable_to": ["CFA", "PMP", "软考（高项/中项）", "ACCA", "FRM", "CPA"],
+  "default_duration_days": 120,
+  "total_phases": 3,
+
+  "exam_subtypes": [
+    {
+      "type": "CFA Level 1",
+      "topic_weights": {
+        "Ethics": 0.15,
+        "Quantitative Methods": 0.10,
+        "Economics": 0.10,
+        "Financial Reporting": 0.15,
+        "Corporate Issuers": 0.10,
+        "Equity Investments": 0.11,
+        "Fixed Income": 0.11,
+        "Derivatives": 0.06,
+        "Alternative Investments": 0.06,
+        "Portfolio Management": 0.06
+      },
+      "study_hours": 300
+    },
+    {
+      "type": "PMP",
+      "topic_weights": {
+        "People": 0.42,
+        "Process": 0.50,
+        "Business Environment": 0.08
+      },
+      "study_hours": 100
+    },
+    {
+      "type": "软考高项",
+      "topic_weights": {
+        "信息技术基础": 0.20,
+        "项目管理": 0.45,
+        "项目管理论文": 0.20,
+        "案例分析": 0.15
+      },
+      "study_hours": 150
+    }
+  ],
+
+  "phase_templates": [
+    {
+      "phase": 1,
+      "name": "通读教材",
+      "duration_ratio": 0.45,
+      "description": "完整通读教材 + 章节练习 + 笔记体系",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["教材 30 页", "章节笔记", "课后题 10 道"] },
+        { "day": "Tue", "tasks": ["教材 30 页", "公式/概念梳理"] },
+        { "day": "Wed", "tasks": ["教材 30 页 + 视频补充", "练习"] },
+        { "day": "Thu", "tasks": ["复盘本周章节", "易错点整理"] },
+        { "day": "Fri", "tasks": ["教材 30 页", "概念图绘制"] },
+        { "day": "Sat", "tasks": ["章节测试", "弱章节补强"] },
+        { "day": "Sun", "tasks": ["艾宾浩斯复现", "本周总结"] }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "刷题强化",
+      "duration_ratio": 0.35,
+      "description": "题库轮刷 + 错题精研 + 模拟考试",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["章节题 50 道", "错题分析"] },
+        { "day": "Tue", "tasks": ["综合题 30 道", "易错点二刷"] },
+        { "day": "Wed", "tasks": ["重点章节精刷", "解题套路总结"] },
+        { "day": "Thu", "tasks": ["综合题 30 道", "答题速度训练"] },
+        { "day": "Fri", "tasks": ["弱项章节专项", "公式/流程图复习"] },
+        { "day": "Sat", "tasks": ["全真模拟 1 套", "错题深度分析"] },
+        { "day": "Sun", "tasks": ["错题本三刷", "下周计划"] }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "冲刺模考",
+      "duration_ratio": 0.20,
+      "description": "高频考点 + 全真模考 + 论文/案例练习",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["历年真题模考", "高频考点回顾"] },
+        { "day": "Tue", "tasks": ["论文/案例分析（如适用）", "模板内化"] },
+        { "day": "Wed", "tasks": ["错题最后一轮", "笔记重读"] },
+        { "day": "Thu", "tasks": ["全真模考", "时间分配"] },
+        { "day": "Fri", "tasks": ["弱项最后补强", "心态调整"] },
+        { "day": "Sat", "tasks": ["模拟最后一套", "考前准备"] },
+        { "day": "Sun", "tasks": ["休息 + 轻量复习", "早睡"] }
+      ]
+    }
+  ],
+
+  "methodology_injection": {
+    "ebbinghaus": true,
+    "pomodoro": true,
+    "pareto": true,
+    "feynman": true,
+    "description": "职业认证知识点多必须艾宾浩斯，二八法则抓高频考点，CFA/PMP 论文用费曼法内化框架"
+  },
+
+  "special_notes": [
+    "CFA 道德是必考且占比高，必须吃透",
+    "PMP 题目以场景判断为主，记忆 ITTO 不如理解流程",
+    "软考论文必须背 3-5 篇范文，套自己项目",
+    "教材至少通读 2 遍，第 2 遍速度可加快",
+    "错题本是最高 ROI 资产，要反复刷",
+    "考前 2 周不刷新题，只做错题和模考"
+  ]
+}

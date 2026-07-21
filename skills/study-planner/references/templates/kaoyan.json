@@ -1,0 +1,253 @@
+{
+  "id": "kaoyan",
+  "name": "考研备考计划",
+  "display_name": "考研备考（政治+英语+数学+专业课）",
+  "description": "适用于考研（政治/英语/数学/专业课）全周期备考，含详细时间分配、资料推荐、每周任务",
+  "applicable_to": ["研究生入学考试", "保研面试准备", "考研加试"],
+  "default_duration_days": 240,
+  "total_phases": 4,
+
+  "exam_info": {
+    "name": "全国硕士研究生入学考试",
+    "subjects": ["政治", "英语", "数学", "专业课"],
+    "subject_weights": {
+      "politics": 100,
+      "english": 100,
+      "math": 150,
+      "professional": 150
+    },
+    "total_score": 500,
+    "target_score": {
+      "politics": 65,
+      "english": 70,
+      "math": 120,
+      "professional": 120,
+      "total": 375
+    }
+  },
+
+  "phase_templates": [
+    {
+      "phase": 1,
+      "name": "基础夯实",
+      "duration_ratio": 0.15,
+      "date_range": "5.9-7.10",
+      "description": "教材精读，理解基本概念，打牢基础",
+      "daily_weight": {
+        "politics": 0.1,
+        "english": 0.3,
+        "math": 0.4,
+        "professional": 0.2
+      },
+      "weekly_templates": [
+        {
+          "week": 1,
+          "focus": "高数第一章 + 英语词汇 List 1-7 + 数据结构第一章",
+          "tasks": {
+            "math": ["高数1.1-1.3 函数、极限、连续（教材精读）", "高数1.1-1.3 课后题"],
+            "english": ["词汇 List 1-7（每天100词）", "语法长难句（基础版）"],
+            "professional": ["数据结构1.1-1.3 教材精读", "数据结构第一章思维导图"]
+          }
+        },
+        {
+          "week": 2,
+          "focus": "高数第二章 + 英语词汇 List 8-14 + 数据结构第二章",
+          "tasks": {
+            "math": ["高数2.1-2.5 导数与微分（教材精读）", "高数2.1-2.5 课后题"],
+            "english": ["词汇 List 8-14（每天100词）", "语法长难句（基础版）", "阅读1篇/天"],
+            "professional": ["数据结构2.1-2.3 教材精读", "顺序表+链表代码实现"]
+          }
+        }
+      ],
+      "book_recommendations": {
+        "math": ["同济《高等数学》（第七版）", "同济《线性代数》（第六版）"],
+        "english": ["红宝书考研英语词汇", "墨墨背单词 APP"],
+        "professional": ["严蔚敏《数据结构（C语言版）》"]
+      }
+    },
+    {
+      "phase": 2,
+      "name": "强化提升",
+      "duration_ratio": 0.45,
+      "date_range": "7.11-9.20",
+      "description": "专题突破，大量刷题，强化弱项",
+      "daily_weight": {
+        "politics": 0.2,
+        "english": 0.25,
+        "math": 0.3,
+        "professional": 0.25
+      },
+      "task_patterns": [
+        { "category": "politics", "name": "政治选择题专项（肖秀荣1000题）", "duration_min": 30 },
+        { "category": "english", "name": "阅读精读 + 长难句（英语一真题）", "duration_min": 45 },
+        { "category": "math", "name": "题型分类训练（李永乐复习全书+660题）", "duration_min": 60 },
+        { "category": "professional", "name": "专业课笔记整理（王道四科）", "duration_min": 45 }
+      ],
+      "book_recommendations": {
+        "politics": ["肖秀荣《精讲精练》", "肖秀荣《1000题》"],
+        "math": ["李永乐《复习全书》", "李永乐《基础660题》"],
+        "english": ["张剑黄皮书（英语一2010-2018）"],
+        "professional": ["王道《数据结构》", "王道《计算机组成原理》", "王道《操作系统》", "王道《计算机网络》"]
+      }
+    },
+    {
+      "phase": 3,
+      "name": "真题实战",
+      "duration_ratio": 0.25,
+      "date_range": "9.21-11.10",
+      "description": "真题为主，查漏补缺，模拟考试",
+      "daily_weight": {
+        "politics": 0.25,
+        "english": 0.2,
+        "math": 0.25,
+        "professional": 0.3
+      },
+      "task_patterns": [
+        { "category": "politics", "name": "真题选择题限时做（近10年）", "duration_min": 30 },
+        { "category": "english", "name": "英语二真题精读（2010-2025）", "duration_min": 45 },
+        { "category": "math", "name": "数学真题套卷模拟（近15年）", "duration_min": 90 },
+        { "category": "professional", "name": "912历年真题分析 + 背诵", "duration_min": 60 }
+      ],
+      "book_recommendations": {
+        "politics": ["肖秀荣《真题详解》"],
+        "math": ["李永乐《历年真题全解》"],
+        "english": ["张剑黄皮书（英语二）"],
+        "professional": ["912历年真题（王道论坛/淘宝）"]
+      }
+    },
+    {
+      "phase": 4,
+      "name": "冲刺押题",
+      "duration_ratio": 0.15,
+      "date_range": "11.11-12.20",
+      "description": "模拟考试强度，回归重点，疯狂背诵",
+      "daily_weight": {
+        "politics": 0.35,
+        "english": 0.2,
+        "math": 0.2,
+        "professional": 0.25
+      },
+      "task_patterns": [
+        { "category": "politics", "name": "肖八肖四选择题 + 分析题背诵", "duration_min": 45 },
+        { "category": "english", "name": "作文模板背诵 + 全真模拟", "duration_min": 30 },
+        { "category": "math", "name": "错题回顾 + 模拟题（李永乐6套卷）", "duration_min": 45 },
+        { "category": "professional", "name": "912重点背诵 + 模拟题", "duration_min": 60 }
+      ],
+      "book_recommendations": {
+        "politics": ["肖秀荣《冲刺8套卷》（肖八）", "肖秀荣《终极预测4套卷》（肖四）"],
+        "math": ["李永乐《6套卷》", "张宇《8套卷》"],
+        "english": ["王江涛《考研英语高分写作》"],
+        "professional": ["912错题本", "912重点笔记"]
+      }
+    }
+  ],
+
+  "methodology_injection": {
+    "ebbinghaus": true,
+    "pareto": true,
+    "feynman": true,
+    "pomodoro": true,
+    "description": "考研必须用遗忘曲线对抗大量记忆，用二八法则优先政治高频考点，每周日留输出时间（费曼），单次任务≤45分钟（番茄）"
+  },
+
+  "special_notes": [
+    "数学每天必须保持手感，不能断超过3天",
+    "政治冲刺阶段时间投入翻倍（11-12月）",
+    "专业课真题价值最高，优先做目标院校真题",
+    "最后2周建议全真模拟，找考场状态（上午8:30-11:30，下午14:00-17:00）",
+    "英语词汇每天背，贯穿始终",
+    "每周日留30分钟复习本周内容（艾宾浩斯：D-7）"
+  ],
+
+  "milestones": [
+    {
+      "date": "2026-07-10",
+      "phase": 1,
+      "name": "基础阶段结束",
+      "acceptance_criteria": [
+        "高数教材题做完，理解基本概念",
+        "英语词汇List 1-30过一遍（认识词义）",
+        "数据结构教材精读完成，能写出基本操作代码"
+      ]
+    },
+    {
+      "date": "2026-09-20",
+      "phase": 2,
+      "name": "强化阶段结束",
+      "acceptance_criteria": [
+        "数学660题正确率70%+",
+        "英语阅读错≤5个/篇",
+        "王道四科刷题完成80%"
+      ]
+    },
+    {
+      "date": "2026-11-10",
+      "phase": 3,
+      "name": "真题阶段结束",
+      "acceptance_criteria": [
+        "数学真题≥100分/套",
+        "英语二真题≥70分/套",
+        "912真题≥100分/套"
+      ]
+    },
+    {
+      "date": "2026-12-10",
+      "phase": 4,
+      "name": "冲刺模拟结束",
+      "acceptance_criteria": [
+        "全真模拟≥350分（按2026分数线）",
+        "肖四分析题全部背诵完成",
+        "英语作文模板背诵完成"
+      ]
+    }
+  ],
+
+  "daily_schedule_templates": {
+    "weekday": {
+      "total_hours": 2,
+      "slots": [
+        { "time": "19:00-20:00", "subject": "math", "task": "主攻科目（轮换）", "duration": 1 },
+        { "time": "20:00-20:10", "subject": "break", "task": "休息", "duration": 0.17 },
+        { "time": "20:10-21:00", "subject": "english", "task": "辅助科目（轮换）", "duration": 0.83 }
+      ],
+      "rotation": ["math-english", "professional-politics", "math-english", "professional-politics", "math-english"]
+    },
+    "weekend": {
+      "total_hours": 8,
+      "morning": {
+        "time": "8:00-12:00",
+        "slots": [
+          { "time": "8:00-10:00", "subject": "math", "task": "专题训练", "duration": 2 },
+          { "time": "10:00-10:15", "subject": "break", "task": "休息", "duration": 0.25 },
+          { "time": "10:15-12:00", "subject": "professional", "task": "专业课学习", "duration": 1.75 }
+        ]
+      },
+      "afternoon": {
+        "time": "14:00-18:00",
+        "slots": [
+          { "time": "14:00-16:00", "subject": "english", "task": "精读/真题", "duration": 2 },
+          { "time": "16:00-16:15", "subject": "break", "task": "休息", "duration": 0.25 },
+          { "time": "16:15-18:00", "subject": "politics", "task": "选择题/背诵（后期加）", "duration": 1.75 }
+        ]
+      },
+      "evening": {
+        "time": "19:00-21:00",
+        "slots": [
+          { "time": "19:00-21:00", "subject": "review", "task": "复习当天内容 + 整理笔记 + 制定下周计划", "duration": 2 }
+        ]
+      }
+    }
+  },
+
+  "references": {
+    "exam_info": "references/exam-info/kaoyan-2026.md",
+    "book_recommendations": {
+      "math": "references/book-recommendations/kaoyan-math.md",
+      "english": "references/book-recommendations/kaoyan-english.md",
+      "politics": "references/book-recommendations/kaoyan-politics.md",
+      "professional": "references/book-recommendations/kaoyan-professional.md"
+    },
+    "weekly_templates": "references/weekly-templates/kaoyan-week-{N}.md",
+    "daily_cards": "references/daily-cards/kaoyan-day-{N}.md"
+  }
+}

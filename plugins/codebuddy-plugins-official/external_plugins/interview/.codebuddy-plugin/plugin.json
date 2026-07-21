@@ -1,0 +1,18 @@
+{
+  "name": "interview",
+  "version": "1.0.0",
+  "description": "Interview command for fleshing out big feature plans and specifications",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "interview",
+    "planning",
+    "specification"
+  ]
+}

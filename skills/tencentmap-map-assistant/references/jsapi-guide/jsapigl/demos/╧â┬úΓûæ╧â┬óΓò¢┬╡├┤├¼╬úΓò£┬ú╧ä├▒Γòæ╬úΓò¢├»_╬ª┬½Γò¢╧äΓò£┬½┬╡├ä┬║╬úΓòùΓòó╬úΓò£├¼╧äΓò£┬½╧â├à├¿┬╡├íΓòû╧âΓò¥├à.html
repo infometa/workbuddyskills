@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>地图控件设置</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        position: relative;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+    input[type="button"] {
+        position: absolute;
+        z-index: 1001;
+        width: 160px;
+        padding: 6px 0;
+        font-size: 14px;
+    }
+    #btn-position-default {
+        top: 30px;
+        left: 30px;
+    }
+    #btn-position-right-bottom {
+        top: 30px;
+        left: 200px;
+    }
+  	#btn-remove {
+      	top: 80px;
+      	left: 30px;
+  	}
+  	#btn-add {
+        top: 80px;
+        left: 200px;
+  	}
+  	#btn-add-class {
+      	top: 130px;
+      	left: 30px;
+  	}
+  	#btn-remove-class {
+      	top: 130px;
+      	left: 200px;
+  	}
+    #btn-display-zoom-number {
+      	top: 180px;
+      	left: 30px;
+    }
+    #btn-hide-zoom-number {
+      	top: 180px;
+      	left: 200px;
+  	}
+    .control .tmap-zoom-control{
+      	background-color:#F2F2F2;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+		<input type="button" id="btn-position-default" onclick="setPosition('topRight')" value="缩放控件设为右上角">
+		<input type="button" id="btn-position-right-bottom" onclick="setPosition('bottomRight')" value="缩放控件设为右下角">
+		<input type="button" id="btn-remove" onclick="removeControl()" value="移除缩放控件">
+		<input type="button" id="btn-add" onclick="addControl()" value="添加缩放控件">
+		<input type="button" id="btn-add-class" onclick="setClassName('control')" value="缩放控件背景变灰">
+		<input type="button" id="btn-remove-class" onclick="setClassName('')" value="缩放控件恢复默认">
+        <input type="button" id="btn-display-zoom-number" onclick="displayZoomNumber()" value="缩放控件显示缩放级别">
+        <input type="button" id="btn-hide-zoom-number" onclick="hideZoomNumber()" value="缩放控件不显示缩放级别">
+		<script type="text/javascript">
+			var map, control;
+
+			function initMap() {
+				var center = new TMap.LatLng(39.984104, 116.307503);
+				//初始化地图
+				map = new TMap.Map("container", {
+						zoom: 12,//设置地图缩放级别
+						center: center,//设置地图中心点坐标
+				});
+
+				// 获取缩放控件实例
+				control = map.getControl(TMap.constants.DEFAULT_CONTROL_ID.ZOOM);
+
+				// 监听控件添加和移除事件
+				map.on('control_added', (e) => {
+					console.log(e);
+				});
+				map.on('control_removed', (e) => {
+					console.log(e);
+				});
+			}
+			
+			// 设置控件位置
+			function setPosition(position) {
+				if (!control) {
+					return;
+				}
+				switch(position) {
+					case 'topRight':
+						control.setPosition(TMap.constants.CONTROL_POSITION.TOP_RIGHT);
+						break;
+					case 'bottomRight':
+						control.setPosition(TMap.constants.CONTROL_POSITION.BOTTOM_RIGHT);
+						break;
+				}
+			}
+
+			// 移除缩放控件
+			function removeControl() {
+				if (!map.getControl(TMap.constants.DEFAULT_CONTROL_ID.ZOOM)) { // 如果map上不存在该控件则直接返回
+					return;
+				}
+				map.removeControl(TMap.constants.DEFAULT_CONTROL_ID.ZOOM);
+			}
+
+			// 把存储的缩放控件添加到地图上
+			function addControl() {
+				map.addControl(control);
+			}
+
+			// 为缩放控件添加class，控制样式
+			function setClassName(name) {
+				if (!control) {
+					return;
+				}
+				control.setClassName(name);
+			}
+            
+            // 缩放控件显示缩放级别
+            function displayZoomNumber() {
+              control.setNumVisible(true);
+            }
+
+            // 缩放控件不显示缩放级别
+            function hideZoomNumber() {
+              control.setNumVisible(false);
+            }
+    </script>
+</body>
+
+</html>

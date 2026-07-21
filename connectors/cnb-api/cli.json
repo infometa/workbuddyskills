@@ -1,0 +1,45 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=22"
+    },
+    "init": {
+        "darwin": "npm install -g @cnbcool/cnb-cli",
+        "linux": "npm install -g @cnbcool/cnb-cli",
+        "win32": "npm install -g @cnbcool/cnb-cli"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "cnb -v",
+            "linux": "cnb -v",
+            "win32": "cnb.cmd -v"
+        },
+        "minVersion": "1.10.10"
+    },
+    "auth": {
+        "darwin": "cnb login",
+        "linux": "cnb login",
+        "win32": "cnb.cmd login"
+    },
+    "unAuth": {
+        "darwin": "cnb logout",
+        "linux": "cnb logout",
+        "win32": "cnb.cmd logout"
+    },
+    "status": {
+        "darwin": "cnb status",
+        "linux": "cnb status",
+        "win32": "cnb.cmd status"
+    },
+    "statusMatch": "已登录",
+    "authUrlDomain": "cnb.cool",
+    "authWaitForExit": true,
+    "authSuppressBrowser": true,
+    "authDeviceFlow": {
+        "uriPattern": "(https?://[^\\s]*/oauth2/device[^\\s]*)",
+        "codePattern": "user_code=([^&\\s]+)",
+        "defaultExpiresInSeconds": 300,
+        "codeEmbeddedInUri": true
+    },
+    "userProvidedData": []
+}

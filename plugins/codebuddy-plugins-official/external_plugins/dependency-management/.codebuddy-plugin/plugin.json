@@ -1,0 +1,11 @@
+{
+  "name": "dependency-management",
+  "description": "依赖审计、版本管理和安全漏洞扫描",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "frontend-mobile-security",
+  "description": "前端和移动开发专业安全代理。包括 XSS 漏洞扫描、安全编码实践、WebView 安全、移动认证，以及专注安全的现代 React/Next.js 开发。",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "UNKNOWN"
+}

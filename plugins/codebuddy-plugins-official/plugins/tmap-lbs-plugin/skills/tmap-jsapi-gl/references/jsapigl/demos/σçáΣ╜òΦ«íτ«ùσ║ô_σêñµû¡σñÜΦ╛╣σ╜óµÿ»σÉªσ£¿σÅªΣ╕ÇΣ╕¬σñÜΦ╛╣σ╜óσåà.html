@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>判断多边形是否在另一个多边形内</title>
+</head>
+<script charset="utf-8"
+  src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=geometry"></script>
+<style type="text/css">
+  html,
+  body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  #info {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      bottom: 60px;
+      height: 100px;
+      width: 420px;
+      line-height: 33px;
+      background-color: #fff;
+      border-radius: 10px;
+      font-size: 18px;
+      text-align: center;
+    }
+</style>
+
+<body onload="initMap()">
+  <div id="container"></div>
+  <div id="info"></div>
+  <script type="text/javascript">
+    var map;
+
+    function initMap() {
+      var center = new TMap.LatLng(40.040452, 116.273486);//设置中心点坐标
+      //初始化地图
+      map = new TMap.Map('container', {
+        center: center,
+        zoom: 17,
+        baseMap: {
+          type: 'vector',
+          features: ['base', 'building3d', 'label'],
+        }
+      });
+
+      var path0 = [
+        new TMap.LatLng(40.041117253378246, 116.2722415837743),
+        new TMap.LatLng(40.03942536171407, 116.2726277820093),
+        new TMap.LatLng(40.03970460886076, 116.27483769345417),
+        new TMap.LatLng(40.041404706498625, 116.27443003983899),
+      ];
+
+      var path1 = [
+         new TMap.LatLng(40.04073540132186, 116.27298706942383),
+         new TMap.LatLng(40.04002894945164, 116.27307290694716),
+         new TMap.LatLng(40.04021788498498, 116.27441411815198),
+         new TMap.LatLng(40.04085861888776, 116.27390982274846)
+      ];
+
+      var path2 = [
+         new TMap.LatLng(40.04329006723823, 116.2720643160992),
+         new TMap.LatLng(40.042181140299455, 116.27236474741039),
+         new TMap.LatLng(40.042320784222156, 116.27390982274846),
+         new TMap.LatLng(40.0434214942257, 116.27365231017848)
+      ];
+
+      var path3 = [
+         new TMap.LatLng(40.039692150139594, 116.27183899269767),
+         new TMap.LatLng(40.03990573041772, 116.27289050220497),
+         new TMap.LatLng(40.03903497572191, 116.27313728512036),
+         new TMap.LatLng(40.03898568742912, 116.2719033706253)
+      ]
+
+      var position1 = new TMap.LatLng(40.04202067344373, 116.2706967910799);
+      var position2 = new TMap.LatLng(40.040443786954235, 116.2736683713456);
+
+      var polygon = new TMap.MultiPolygon({
+        id: 'polygon-layer', //图层id
+        map: map,
+        styles: {
+          // 多边形的相关样式
+          base: new TMap.PolygonStyle({
+            color: 'rgba(255,255,255,0.9)', // 面填充色
+          }),
+          red: new TMap.PolygonStyle({
+            color: 'rgba(255,0,0,0.5)', // 面填充色
+          }),
+          green: new TMap.PolygonStyle({
+            color: 'rgba(0,255,0,0.5)', // 面填充色
+          }),
+          blue: new TMap.PolygonStyle({
+            color: 'rgba(0,0,255,0.5)', // 面填充色
+          }),
+        },
+        geometries: [
+          {
+            styleId:'base',
+            id: 'polygon0', 
+            paths: path0,
+          },
+          {
+            id: 'polygon1',
+            styleId:'red',
+            paths: path1,
+          },
+          {
+            id: 'polygon2', 
+            styleId:'green',
+            paths: path2,
+          },
+          {
+            id: 'polygon3', 
+            styleId:'blue',
+            paths: path3,
+          }
+        ]
+      });
+
+      var infoDom = document.getElementById('info');
+      infoDom.innerText = 
+        `${TMap.geometry.isPolygonInPolygon(path1, path0) ? '红色多边形在白色多边形内' : '红色多边形不在白色多边形内'}`+'\n'+
+        `${TMap.geometry.isPolygonInPolygon(path2, path0) ? '绿色多边形在白色多边形内' : '绿色多边形不在白色多边形内'}`+'\n'+
+        `${TMap.geometry.isPolygonInPolygon(path3, path0) ? '蓝色多边形在白色多边形内' : '蓝色多边形不在白色多边形内'}`+'\n';
+    }
+  </script>
+</body>
+
+</html>

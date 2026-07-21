@@ -1,0 +1,96 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2kuk5yuiage8"]
+
+[ext_resource type="Script" path="res://addons/godot_mcp/ui/mcp_panel.gd" id="1_3cbiu"]
+
+[node name="MCPPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3cbiu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Godot MCP Server"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StatusContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/StatusContainer"]
+layout_mode = 2
+text = "Status:"
+
+[node name="StatusLabel" type="Label" parent="VBoxContainer/StatusContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Server: Stopped"
+
+[node name="PortContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PortContainer"]
+layout_mode = 2
+text = "Port:"
+
+[node name="PortSpinBox" type="SpinBox" parent="VBoxContainer/PortContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 65535.0
+value = 9080.0
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Start Server"
+
+[node name="StopButton" type="Button" parent="VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Stop Server"
+
+[node name="ConnectionsContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ConnectionsContainer"]
+layout_mode = 2
+text = "Connected Clients:"
+
+[node name="CountLabel" type="Label" parent="VBoxContainer/ConnectionsContainer"]
+layout_mode = 2
+text = "0"
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LogLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Server Log:"
+
+[node name="LogContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LogText" type="TextEdit" parent="VBoxContainer/LogContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1

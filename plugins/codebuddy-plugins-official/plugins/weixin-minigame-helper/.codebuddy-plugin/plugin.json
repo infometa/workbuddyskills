@@ -1,0 +1,35 @@
+{
+  "name": "weixin-minigame-helper",
+  "description": "微信小游戏AI调试、预览、运行、真机测试上传发布微信小游戏",
+  "version": "0.1.4",
+  "category": "development",
+  "author": {
+    "name": "weixin-minigame-helper",
+    "url": "https://git.woa.com/weadmin/ai-minigame-engine"
+  },
+  "homepage": "https://git.woa.com/weadmin/ai-minigame-engine",
+  "repository": "https://git.woa.com/weadmin/ai-minigame-engine.git",
+  "license": "MIT",
+  "skills": [
+    "./SKILL.md"
+  ],
+  "agents": [
+    "./agents/weixin-minigame-helper.md"
+  ],
+  "commands": [
+    "./commands/preview.md",
+    "./commands/device-test.md",
+    "./commands/publish.md"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": {
+    "weixin-minigame-helper": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "--prefer-online",
+        "@weadmin/weixin-minigame-helper-mcp@latest"
+      ]
+    }
+  }
+}

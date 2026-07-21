@@ -1,0 +1,123 @@
+# ============================================================================
+# 业务逻辑审计 — 参考数据 (Business Logic Audit Data)
+# ============================================================================
+# 纯数据文件：已知反模式、Grep 关键词、推理维度。
+# 推理逻辑由 agent 自身完成，本文件仅提供辅助数据。
+# ============================================================================
+
+# ============================================================================
+# 一、已知反模式（Grep + Read 匹配）
+# ============================================================================
+
+known_anti_patterns:
+
+  - slug: "negative-amount"
+    name: "负数金额/数量"
+    grep_keywords: "amount|price|quantity"
+    absence_check: "> 0|>= 0|positive"
+    risk: "绕过金额校验"
+
+  - slug: "flow-bypass"
+    name: "流程绕过"
+    grep_keywords: "skipValidation|bypassCheck|directPay"
+    risk: "跳过支付/验证步骤"
+
+  - slug: "illegal-state-transition"
+    name: "非法状态转换"
+    grep_keywords: "status|state|order_status"
+    context: "查找这些字段的更新方法"
+    risk: "状态回退、非法跳转"
+
+  - slug: "batch-without-per-item-auth"
+    name: "批量操作缺少逐项授权"
+    grep_keywords: "batch|bulk|List<.*Id>"
+    context: "查找接受批量 ID 参数的操作方法"
+    risk: "批量接口未逐条鉴权"
+
+  - slug: "missing-idempotency"
+    name: "幂等性缺失"
+    grep_keywords: "pay|transfer|grant|withdraw"
+    risk: "关键操作无去重/幂等控制"
+
+  - slug: "data-isolation-failure"
+    name: "数据隔离失效"
+    grep_keywords: "findBy|selectBy|queryBy"
+    context: "检查 SQL/ORM 查询是否携带 tenantId/userId 条件"
+    risk: "多租户查询未携带租户/用户条件"
+
+  - slug: "missing-audit-log"
+    name: "审计日志缺失"
+    grep_keywords: "delete|remove|updateRole|updatePermission"
+    risk: "敏感操作无审计记录"
+
+  - slug: "callback-trust"
+    name: "回调信任缺失"
+    grep_keywords: "callback|webhook|notify|onPaymentResult"
+    risk: "外部回调缺少签名验证"
+
+  - slug: "rate-limit-missing"
+    name: "频率限制缺失"
+    grep_keywords: "export|download|register|sendCode|sendSms"
+    risk: "批量/导出接口无 RateLimit"
+
+  - slug: "transaction-integrity"
+    name: "事务完整性缺陷"
+    grep_keywords: "insert.*insert|save.*save|update.*delete"
+    context: "多步写操作"
+    risk: "多步写操作未在事务内"
+
+# ============================================================================
+# 二、入口点驱动推理维度
+# ============================================================================
+
+reasoning_dimensions:
+
+  trigger: "endpointPermissionMatrix 中存在 CUD（Create/Update/Delete）操作的端点"
+
+  endpoint_selection_priority:
+    - "涉及金额/支付"
+    - "涉及用户数据/权限变更"
+    - "涉及资源删除"
+    - "其他 CUD"
+
+  dimensions:
+
+    - name: "参数信任边界"
+      check: "请求参数是否经过后端校验后才入库/执行？"
+      operation: "outgoingCalls 追踪参数传递 → Read 校验逻辑"
+
+    - name: "事务完整性"
+      check: "多步写操作是否在事务内？部分失败是否有补偿？"
+      operation: "Grep @Transactional|BEGIN|transaction → Read 确认覆盖范围"
+
+    - name: "数据隔离"
+      check: "查询条件是否包含用户/租户隔离？"
+      operation: "outgoingCalls 到 DAO → Read SQL/ORM 条件"
+
+    - name: "回调/通知信任"
+      check: "外部回调是否验证签名？通知是否可伪造？"
+      operation: "Grep callback|webhook|notify → Read 签名校验逻辑"
+
+    - name: "幂等性控制"
+      check: "关键操作是否有去重/幂等 key？"
+      operation: "Grep idempotent|dedup|requestId → Read 确认存在"
+
+# ============================================================================
+# 三、输出规则
+# ============================================================================
+
+output_rules:
+
+  formal_finding:
+    condition: "推理链完整（outgoingCalls/Read 确认代码存在 + 推理出具体风险场景）"
+    severity: "按实际影响评估"
+    discovery_method: "logic-reasoning"
+
+  suspect:
+    condition: "仅 Grep 命中但未深入确认"
+    severity: "info"
+    human_review_required: true
+
+  dedup: "与已知反模式发现合并，重叠则保留推理链更完整的版本"
+
+  anti_hallucination: "所有发现必须有 Read/Grep/LSP 工具输出作为证据。不得基于推测创建 finding。"

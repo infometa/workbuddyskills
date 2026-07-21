@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{COURSE_TOPIC}} 知识框架</title>
+  <style>
+    :root {
+      --bg: #f7f8fa; --card: #ffffff; --brand: #6366f1; --brand-soft: #e0e7ff;
+      --brand-deep: #4338ca; --text: #1f2937; --muted: #6b7280; --border: #e5e7eb;
+      --green: #16a34a; --green-soft: #dcfce7;
+      --amber: #f59e0b; --amber-soft: #fef3c7;
+      --red: #dc2626; --red-soft: #fee2e2;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+    .container { max-width: 1080px; margin: 0 auto; padding: 32px 20px 80px; }
+
+    /* ── Hero ── */
+    header.hero { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #fff; border-radius: 16px; padding: 32px 28px; display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+    .hero-icon { width: 88px; height: 88px; border-radius: 20px; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; font-size: 42px; flex-shrink: 0; }
+    .hero-info h1 { margin: 0 0 6px; font-size: 22px; font-weight: 700; }
+    .hero-info .meta { opacity: 0.88; font-size: 13px; margin-bottom: 12px; }
+    .hero-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    /* {{HERO_PILLS_HTML}} 由渲染器填充，每个 pill 格式：
+       <span class="hero-pill"><span class="pill-icon">📄</span> 基于大纲原文生成</span>
+       可选值示例：
+         📄 基于大纲原文生成 / 📝 基于课程主题生成（AI 推断）/ 📁 基于上传材料生成
+         📊 框架 + 重点讲解 / 📋 仅框架 / 📖 框架 + 全节点讲解
+         🔗 含知识点关联图
+    */
+    .hero-pill { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.18); padding: 4px 12px; border-radius: 999px; font-size: 13px; }
+    .pill-icon { font-size: 14px; }
+
+    /* ── AI 推断 banner（topic_only 模式时显示） ── */
+    .ai-banner { border-radius: 10px; padding: 14px 18px; margin-top: 18px; border-left: 4px solid var(--amber); background: var(--amber-soft); color: #92400e; }
+    .ai-banner .ai-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .ai-banner .ai-note { font-size: 13px; line-height: 1.6; }
+
+    /* ── 目录 ── */
+    nav.toc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 24px; margin-top: 18px; }
+    nav.toc h2 { margin: 0 0 12px; font-size: 15px; color: var(--muted); font-weight: 600; letter-spacing: 0.05em; }
+    nav.toc ol { margin: 0; padding-left: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 24px; }
+    nav.toc li { font-size: 14px; }
+    nav.toc a { color: var(--brand-deep); text-decoration: none; }
+    nav.toc a:hover { text-decoration: underline; }
+
+    /* ── Card ── */
+    section.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; margin-top: 18px; scroll-margin-top: 20px; }
+    section.card > h2 { margin: 0 0 16px; font-size: 18px; padding-bottom: 10px; border-bottom: 2px solid var(--brand-soft); color: var(--brand); display: flex; align-items: center; gap: 8px; }
+    section.card h3 { font-size: 15px; margin: 18px 0 8px; color: var(--text); }
+
+    /* ── 折叠树 ── */
+    details.tree-node { margin: 3px 0; }
+    details.tree-node > summary { cursor: pointer; padding: 5px 8px; border-radius: 6px; list-style: none; user-select: none; display: flex; align-items: center; gap: 6px; font-size: 14px; }
+    details.tree-node > summary::-webkit-details-marker { display: none; }
+    details.tree-node > summary::before { content: "▶"; font-size: 9px; color: var(--muted); transition: transform 0.15s; flex-shrink: 0; }
+    details.tree-node[open] > summary::before { transform: rotate(90deg); }
+    details.tree-node > summary:hover { background: var(--brand-soft); }
+    .node-title { font-weight: 500; }
+    .node-leaf { font-size: 13.5px; color: #374151; padding: 3px 8px 3px 24px; display: block; }
+    .tree-children { padding-left: 20px; border-left: 1px dashed var(--border); margin-left: 10px; }
+    /* 只保留一个对用户有意义的徽章：⭐ 重点 */
+    .badge-star { font-size: 11px; padding: 1px 8px; border-radius: 999px; background: #fef9c3; color: #854d0e; margin-left: 6px; font-weight: 600; flex-shrink: 0; }
+
+    /* ── 重点讲解卡片 ── */
+    .expl-item { border: 1px solid var(--border); border-left: 4px solid var(--brand); border-radius: 8px; padding: 16px 18px; margin-bottom: 14px; background: #fafafa; }
+    .expl-title { font-weight: 700; font-size: 15px; color: var(--brand-deep); margin-bottom: 4px; }
+    .expl-path { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+    .expl-body { font-size: 14px; line-height: 1.8; }
+    .key-points { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; margin-top: 12px; font-size: 13.5px; line-height: 1.7; }
+    .key-points strong { color: #166534; }
+
+    /* ── 关联表格 ── */
+    .deps-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .deps-table th, .deps-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+    .deps-table th { background: var(--brand-soft); color: var(--brand-deep); font-weight: 600; }
+    .deps-table tr:nth-child(even) td { background: #fafafa; }
+    /* 依赖类型标签：渲染器输出中文标签 */
+    .dep-tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
+    .dep-prerequisite   { background: #fee2e2; color: #991b1b; }   /* 前置条件 */
+    .dep-contrast       { background: #fef3c7; color: #92400e; }   /* 对比关系 */
+    .dep-specialization { background: #e0e7ff; color: #3730a3; }   /* 细化关系 */
+    .dep-application    { background: #dcfce7; color: #166534; }   /* 应用关系 */
+    .dep-generalization { background: #dbeafe; color: #1e40af; }   /* 归纳关系 */
+    .dep-tool           { background: #f3e8ff; color: #6b21a8; }   /* 工具关系 */
+
+    /* ── Mermaid ── */
+    .mermaid-wrap { background: #fafafa; border: 1px solid var(--border); border-radius: 8px; padding: 16px; overflow-x: auto; margin-top: 14px; }
+    pre.mermaid { margin: 0; font-family: Menlo, Consolas, monospace; font-size: 12px; white-space: pre; }
+
+    /* ── 延伸学习 ── */
+    .qa-list { list-style: none; padding: 0; margin: 0; }
+    .qa-item { border: 1px solid var(--border); border-left: 4px solid var(--brand); border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; background: #fafafa; display: flex; gap: 12px; align-items: flex-start; }
+    .qa-num { background: var(--brand); color: #fff; border-radius: 999px; font-size: 12px; padding: 2px 10px; flex-shrink: 0; margin-top: 2px; }
+    .qa-content .q-text { font-weight: 600; color: var(--brand-deep); font-size: 14px; }
+    .qa-content .q-why { color: var(--muted); font-size: 13px; margin-top: 3px; line-height: 1.6; }
+
+    /* ── Footer ── */
+    footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 36px; line-height: 1.8; padding-top: 20px; border-top: 1px solid var(--border); }
+
+    /* ── 打印 ── */
+    @media print {
+      body { background: #fff; }
+      header.hero { background: #4338ca !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      nav.toc, .mermaid-wrap { break-inside: avoid; }
+      details.tree-node { break-inside: avoid; }
+      details.tree-node > summary::before { content: "▼"; }
+      .expl-item, .qa-item { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ══ Hero ══
+       {{HERO_PILLS_HTML}} 渲染规则：
+         · 有 material_files → "📄 基于[文件名]生成"
+         · topic_only       → "📝 基于课程主题生成（AI 推断）"
+         · 含 guided/deep   → "📊 框架 + 重点讲解" 或 "📖 框架 + 全节点讲解"
+         · 有依赖关系       → "🔗 含知识点关联图"
+       不得出现 material_first / skim / guided / intermediate 等内部术语
+  -->
+  <header class="hero">
+    <div class="hero-icon">🧭</div>
+    <div class="hero-info">
+      <h1>{{COURSE_TOPIC}} · 知识框架</h1>
+      <div class="meta">生成时间：{{GENERATED_AT}} · {{MATERIAL_SOURCE_LABEL}}</div>
+      <div class="hero-pills">
+        {{HERO_PILLS_HTML}}
+      </div>
+    </div>
+  </header>
+
+  <!-- AI 推断 banner：仅 topic_only 模式时显示，style="display:none" 隐藏 -->
+  <div class="ai-banner" {{AI_BANNER_STYLE}}>
+    <div class="ai-title">⚠️ 本框架由 AI 根据课程主题推断生成</div>
+    <div class="ai-note">未提供教材或笔记，所有知识点均为 AI 推断，可能存在遗漏或偏差。建议对照教材核实后使用。</div>
+  </div>
+
+  <!-- ══ 目录 ══ -->
+  <nav class="toc" id="toc">
+    <h2>📋 目录</h2>
+    <ol>
+      <li><a href="#sec-framework">知识框架总览</a></li>
+      <li><a href="#sec-explain">重点知识讲解</a></li>
+      <li><a href="#sec-deps">知识点关联图</a></li>
+      <li><a href="#sec-next">延伸学习建议</a></li>
+    </ol>
+  </nav>
+
+  <!-- ══ 1. 知识框架 ══ -->
+  <section class="card" id="sec-framework">
+    <h2>📚 知识框架总览</h2>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 14px;">
+      点击任意节点可折叠/展开。标有 <span class="badge-star">⭐ 重点</span> 的节点有详细讲解，见下方第二节。
+    </p>
+    <div class="tree-root">
+{{FRAMEWORK_TREE_HTML}}
+    </div>
+  </section>
+
+  <!-- ══ 2. 重点知识讲解 ══
+       渲染规则：
+         · 章节标题：「🔑 重点知识讲解」，不写「节点讲解（N条·guided档）」
+         · 每条讲解标题用 ①②③ 序号 + 知识点名称，不暴露 is_focus/guided 字样
+         · 路径用 📍 前缀 + 自然语言，如「📍 三、四级考试 → 笔试构成」
+         · 每条末尾必须有绿色「📌 核心要点：」总结块
+         · 若无讲解内容（force_skim），整节隐藏（style="display:none"）
+  -->
+  <section class="card" id="sec-explain" {{EXPLANATIONS_BLOCK_STYLE}}>
+    <h2>🔑 重点知识讲解</h2>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 16px;">
+      以下知识点是本框架中最核心、最容易混淆或最有备考价值的部分，每条均附核心要点总结。
+    </p>
+{{NODE_EXPLANATIONS_HTML}}
+  </section>
+
+  <!-- ══ 3. 知识点关联图 ══
+       渲染规则：
+         · 章节标题：「🔗 知识点关联图」，不写「概念依赖关系（N条·conservative策略）」
+         · 表头：关系类型 / 知识点 A / 知识点 B / 关联说明（不用英文字段名）
+         · 关系类型标签用中文：前置条件/对比关系/细化关系/应用关系/归纳关系/工具关系
+         · 若无依赖内容，整节隐藏（style="display:none"）
+  -->
+  <section class="card" id="sec-deps" {{DEPS_BLOCK_STYLE}}>
+    <h2>🔗 知识点关联图</h2>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 14px;">
+      下表梳理了各知识点之间的前置关系、对比关系和应用关系，帮助你理解「学什么才能做好什么」。
+    </p>
+    <table class="deps-table">
+      <thead>
+        <tr><th style="width:90px;">关系类型</th><th>知识点 A</th><th>知识点 B</th><th>关联说明</th></tr>
+      </thead>
+      <tbody>
+{{DEPS_TABLE_HTML}}
+      </tbody>
+    </table>
+    <h3>关联图（可视化）</h3>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">{{DEPS_MERMAID}}</pre>
+    </div>
+  </section>
+
+  <!-- ══ 4. 延伸学习建议 ══
+       渲染规则：
+         · 章节标题：「💡 延伸学习建议」，不写「推荐追问（3个高ROI问题）」
+         · 每条用数字序号 + 问题 + 为什么值得深入
+         · 放在报告最末尾
+  -->
+  <section class="card" id="sec-next">
+    <h2>💡 延伸学习建议</h2>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 14px;">
+      基于本框架，以下方向是性价比最高的深入学习切入点。
+    </p>
+    <ul class="qa-list">
+{{RECOMMENDED_QUESTIONS_HTML}}
+    </ul>
+  </section>
+
+  <footer>
+    由 <strong>knowledge-framework-builder</strong> Skill 生成 · {{MATERIAL_SOURCE_LABEL}}<br>
+    AI 生成的知识框架可能存在遗漏或推断误差，建议核对教材后使用。
+  </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"
+  onerror="document.querySelectorAll('.mermaid').forEach(e=>e.style.color='#6b7280');">
+</script>
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ startOnLoad: true, theme: 'default', flowchart: { curve: 'basis' } });
+  }
+</script>
+</body>
+</html>

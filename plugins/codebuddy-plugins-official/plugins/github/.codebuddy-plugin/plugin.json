@@ -1,0 +1,12 @@
+{
+  "name": "github",
+  "description": "官方 GitHub MCP 服务器，用于仓库管理。可直接在 Claude Code 中创建议题、管理拉取请求、审查代码、搜索仓库以及调用 GitHub 完整 API。",
+  "author": {
+    "name": "GitHub"
+  },
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "未声明"
+}

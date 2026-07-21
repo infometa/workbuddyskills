@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>图文标记</title>
+  </head>
+  <script
+    charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"
+  ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <body onload="initMap()">
+    <div id="container"></div>
+    <script>
+      var map;
+      function initMap() {
+        var center = new TMap.LatLng(39.96636559909425, 116.30113309988496);
+
+        // 初始化地图
+        map = new TMap.Map('container', {
+          zoom: 13, // 设置地图缩放级别
+          pitch: 30,
+          center: center, // 设置地图中心点坐标
+          // mapStyleId: "style1", //个性化样式
+          baseMap: {
+            type: 'vector',
+            features: ['base', 'building3d'], // 隐藏矢量文字
+          },
+        });
+
+        // marker文字在图片外  MultiMarker文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocMarker
+        new TMap.MultiMarker({
+          map: map, // 显示Marker图层的底图
+          styles: {
+            small: new TMap.MarkerStyle({
+              // 点标注的相关样式
+              width: 34, // 宽度
+              height: 46, // 高度
+              anchor: { x: 17, y: 23 }, // 标注点图片的锚点位置
+              src: 'https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/small.png', // 标注点图片url或base64地址
+              color: '#333', // 标注点文本颜色
+              size: 16, // 标注点文本文字大小
+              direction: 'bottom', // 标注点文本文字相对于标注点图片的方位
+              offset: { x: 0, y: 8 }, // 标注点文本文字基于direction方位的偏移属性
+              strokeColor: '#fff', // 标注点文本描边颜色
+              strokeWidth: 2, // 标注点文本描边宽度
+            }),
+            big: new TMap.MarkerStyle({
+              width: 58,
+              height: 76,
+              anchor: { x: 36, y: 32 },
+              src: 'https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/big.png',
+              color: '#333',
+              size: 22,
+              direction: 'bottom',
+              strokeColor: '#fff',
+              offset: { x: 0, y: 10 },
+              strokeWidth: 2,
+            }),
+          },
+          enableCollision: true, // 开启碰撞
+          geometries: [
+            {
+              styleId: 'small', // 对应中的样式id
+              position: new TMap.LatLng(39.9944, 116.33066), // 标注点位置
+              content: '全聚德', // 标注点文本
+            },
+            {
+              styleId: 'big',
+              position: new TMap.LatLng(39.978867, 116.371452),
+              content: '北平楼',
+            },
+            {
+              styleId: 'small',
+              position: new TMap.LatLng(39.92442, 116.29199),
+              content: '大董烤鸭店',
+            },
+            {
+              styleId: 'small',
+              position: new TMap.LatLng(39.97912, 116.30563),
+              content: '白家大院',
+            },
+            {
+              styleId: 'small',
+              position: new TMap.LatLng(39.93282, 116.34813),
+              content: '四世同堂',
+            },
+            {
+              styleId: 'small',
+              position: new TMap.LatLng(39.96305, 116.38794),
+              content: '便宜坊',
+            },
+            {
+              styleId: 'small',
+              position: new TMap.LatLng(39.993057, 116.209706),
+              content: '小吊梨汤',
+            },
+            {
+              styleId: 'small',
+              position: new TMap.LatLng(39.972919, 116.229874),
+              content: '那家山城',
+            },
+          ],
+        });
+
+        // marker文字在图片内
+        new TMap.MultiMarker({
+          map: map,
+          styles: {
+            default: new TMap.MarkerStyle({
+              width: 92, // 宽度
+              height: 92, // 高度
+              anchor: { x: 46, y: 46 }, // 锚点位置
+              src: 'https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/circle.png', // 标注点图片url或base64地址
+              color: '#fff', // 标注点文本颜色
+              size: 22, // 标注点文本文字大小
+              offset: { x: 0, y: 16 }, // 标注点文本文字基于direction方位的偏移属性
+            }),
+          },
+          geometries: [
+            {
+              position: new TMap.LatLng(39.9543498091366, 116.3064286563349), // 标注点位置
+              content: '41', // 标注点文本
+            },
+            {
+              position: new TMap.LatLng(39.9891175495767, 116.28076993243667),
+              content: '34',
+            },
+            {
+              position: new TMap.LatLng(39.95959650879512, 116.26144674251236),
+              content: '9',
+            },
+            {
+              position: new TMap.LatLng(39.96950944017182, 116.34323407250122),
+              content: '7',
+            },
+          ],
+        });
+      }
+    </script>
+  </body>
+</html>

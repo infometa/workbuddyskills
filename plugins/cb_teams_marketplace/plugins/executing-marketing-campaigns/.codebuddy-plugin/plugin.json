@@ -1,0 +1,17 @@
+{
+  "name": "executing-marketing-campaigns",
+  "version": "1.0.0",
+  "description": "Plans, creates, and optimizes marketing campaigns including content strategy, social media, email, and analytics",
+  "author": {
+    "name": "CodeBuddy Teams",
+    "email": ""
+  },
+  "homepage": {
+    "url": "",
+    "type": "github"
+  },
+  "license": "MIT",
+  "skills": [
+    "./SKILL.md"
+  ]
+}

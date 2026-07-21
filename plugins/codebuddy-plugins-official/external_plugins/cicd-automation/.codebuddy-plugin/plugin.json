@@ -1,0 +1,11 @@
+{
+  "name": "cicd-automation",
+  "description": "CI/CD 流水线配置、GitHub Actions/GitLab CI 工作流设置及自动化部署流水线编排",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

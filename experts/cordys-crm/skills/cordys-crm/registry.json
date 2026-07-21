@@ -1,0 +1,30 @@
+{
+  "name": "cordys-crm",
+  "description": "Cordys CRM L2C全链路技能，支持跨模块关联追踪、漏斗分析、Customer 360、智能工作流引导，以及完整的 CLI 指令映射",
+  "version": "1.2.0",
+  "author": "fit2-zhao",
+  "license": "MIT",
+  "environment": {
+    "required": [
+      "CORDYS_ACCESS_KEY",
+      "CORDYS_SECRET_KEY",
+      "CORDYS_CRM_DOMAIN"
+    ],
+    "optional": [
+      "ROLE_MAP"
+    ],
+    "notes": "可以通过系统环境变量或技能目录中的.env文件提供。.env文件包含敏感信息，不应提交到版本控制。可选变量 ROLE_MAP 用于自定义岗位→角色的映射规则。"
+  },
+  "security": {
+    "requiresSecrets": true,
+    "sensitiveEnvironment": true,
+    "externalNetworkAccess": true,
+    "notes": "此技能需要访问Cordys CRM API，使用X-Access-Key和X-Secret-Key进行身份验证。请确保只向可信的CORDYS_CRM_DOMAIN发送请求。技能会读取技能目录中的.env文件（如果存在），这可能会带来安全风险。"
+  },
+  "dependencies": {
+    "system": ["curl", "python3"],
+    "python": []
+  },
+  "capabilities": ["exec", "network"],
+  "tags": ["crm", "cordys", "business", "api", "l2c", "pipeline"]
+}

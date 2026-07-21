@@ -1,0 +1,16 @@
+{
+  "name": "spglobal",
+  "version": "1.0.0",
+  "description": "S&P Global - Financial data and analytics skills including company tearsheets, earnings previews, and transaction summaries",
+  "description_zh": "S&P Global 金融数据与分析技能，包括公司 Tearsheet、财报预览和交易摘要。",
+  "author": {
+    "name": "Kensho Technologies"
+  },
+  "homepage": "",
+  "license": "Apache-2.0",
+  "skills": [
+    "./skills/earnings-preview-beta",
+    "./skills/funding-digest",
+    "./skills/tear-sheet"
+  ]
+}

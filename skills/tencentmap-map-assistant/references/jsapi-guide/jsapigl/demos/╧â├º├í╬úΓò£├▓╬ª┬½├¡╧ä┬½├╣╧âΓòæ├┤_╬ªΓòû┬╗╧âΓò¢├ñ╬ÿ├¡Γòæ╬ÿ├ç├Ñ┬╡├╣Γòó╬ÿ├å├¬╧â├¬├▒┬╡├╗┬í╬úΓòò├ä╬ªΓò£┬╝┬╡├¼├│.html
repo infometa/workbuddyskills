@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>路径顺逆时针判断与转化</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=geometry"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #info {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        bottom: 60px;
+        height: 80px;
+        width: 400px;
+        background-color: #fff;
+        border-radius: 10px;
+        font-size: 18px;
+        line-height: 80px;
+        text-align: center;
+    }
+
+    .btnContainer {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        z-index: 10000;
+    }
+
+    .btnContainer button {
+        padding: 10px 14px;
+        box-sizing: border-box;
+        border: none;
+        background-color: #3876ff;
+        border-radius: 2px;
+        color: #fff;
+        font-size: 14px;
+        line-height: 14px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div class="btnContainer">
+        <button class="btn1" onclick="transform()">路径变为顺时针</button>
+        <button class="btn2" onclick="transformAnti()">路径变为逆时针</button>
+    </div>
+    <div id="info"></div>
+    <script type="text/javascript">
+        var center = new TMap.LatLng(39.980309851613775, 116.30836114421982);
+        //初始化地图
+        var map = new TMap.Map("container", {
+            zoom: 17,
+            center: center
+        });
+        var paths = [
+            new TMap.LatLng(39.98250495981251, 116.30587233910774),
+            new TMap.LatLng(39.979150868392445, 116.30612982298771),
+            new TMap.LatLng(39.97921663629626, 116.3083828075105),
+            new TMap.LatLng(39.97892067935242, 116.31089327579048),
+            new TMap.LatLng(39.982554283513245, 116.31100056083596),
+            new TMap.LatLng(39.98250495981251, 116.3059933910774),
+        ];
+        var polylineLayer = new TMap.MultiPolyline({
+            map, // 绘制到目标地图
+            styles: { // 折线样式定义
+                'arrow_animation': new TMap.PolylineStyle({
+                    'color': 'rgba(255,0,0,0.6)', //线填充色
+                    'borderWidth': 2, //边线宽度
+                    'borderColor': '#008FFF', //边线颜色
+                    'width': 10, //折线宽度
+                    showArrow: true,
+                    arrowOptions: {
+                        width: 8, // 箭头图标宽度
+                        height: 5, // 箭头图标高度
+                        space: 50,  // 箭头图标之间的孔隙长度
+                        animSpeed: 50 // 箭头动态移动的速度 单位(像素/秒)
+                    },
+                })
+            },
+            geometries: [{
+                styleId: 'arrow_animation',
+                paths: paths
+            }],
+        });
+
+        var infoDom = document.getElementById('info');
+        infoDom.innerText = `路线为${TMap.geometry.isClockwise(paths) ? '顺时针' : '逆时针'}`;
+
+        function transform() {
+            paths = TMap.geometry.transfromClockwise(paths);
+            polylineLayer.setGeometries([{
+                styleId: 'arrow_animation',
+                paths: paths
+            }]);
+            infoDom.innerText = `路线为${TMap.geometry.isClockwise(paths) ? '顺时针' : '逆时针'}`;
+        }
+
+        function transformAnti() {
+            paths = TMap.geometry.transfromAntiClockwise(paths);
+            polylineLayer.setGeometries([{
+                styleId: 'arrow_animation',
+                paths: paths
+            }]);
+            infoDom.innerText = `路线为${TMap.geometry.isClockwise(paths) ? '顺时针' : '逆时针'}`;
+        }
+    </script>
+</body>
+
+</html>

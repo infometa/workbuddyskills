@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>折线-动态箭头</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <script type="text/javascript">
+        var center = new TMap.LatLng(39.98183908712013, 116.31021738052368);
+        //初始化地图
+        var map = new TMap.Map("container", {
+            zoom: 16,
+            center: center
+        });
+        var paths = [
+            new TMap.LatLng(39.98481500648338, 116.30571126937866),
+            new TMap.LatLng(39.982266575222155, 116.30596876144409),
+            new TMap.LatLng(39.982348784165886, 116.3111400604248),
+            new TMap.LatLng(39.978813710266024, 116.3111400604248),
+            new TMap.LatLng(39.978813710266024, 116.31699800491333)
+        ];
+        var polylineLayer = new TMap.MultiPolyline({
+            map, // 绘制到目标地图
+            styles: { // 折线样式定义
+                'arrow_animation': new TMap.PolylineStyle({
+                    'color': 'rgba(255,0,0,0.6)', //线填充色
+                    'borderWidth': 2, //边线宽度
+                    'borderColor': '#008FFF', //边线颜色
+                    'width': 10, //折线宽度
+                    showArrow: true,
+                    arrowOptions: {
+                        width: 8, // 箭头图标宽度
+                        height: 5, // 箭头图标高度
+                        space: 50,  // 箭头图标之间的孔隙长度
+                        animSpeed: 50 // 箭头动态移动的速度 单位(像素/秒)
+                    },
+                })
+            },
+            geometries: [{
+                styleId: 'arrow_animation',
+                paths: paths
+            }],
+        });
+    </script>
+</body>
+
+</html>

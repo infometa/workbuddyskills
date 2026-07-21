@@ -1,0 +1,32 @@
+{
+  "name": "commands-framework-svelte",
+  "version": "1.0.0",
+  "description": "Specialized commands for Svelte and SvelteKit development",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "framework-svelte",
+    "svelte-a11y",
+    "svelte-component",
+    "svelte-debug",
+    "svelte-migrate",
+    "svelte-optimize",
+    "svelte-scaffold",
+    "svelte-storybook",
+    "svelte-storybook-migrate",
+    "svelte-storybook-mock",
+    "svelte-storybook-setup",
+    "svelte-storybook-story",
+    "svelte-storybook-troubleshoot",
+    "svelte-test",
+    "svelte-test-coverage",
+    "svelte-test-fix",
+    "svelte-test-setup"
+  ]
+}

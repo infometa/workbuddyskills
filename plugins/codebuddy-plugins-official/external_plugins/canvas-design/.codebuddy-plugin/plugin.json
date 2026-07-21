@@ -1,0 +1,5 @@
+{
+  "name": "canvas-design",
+  "description": "使用设计哲学和美学原则创建精美的视觉艺术作品，支持生成海报、设计稿和静态艺术品的 PNG 和 PDF 文档。",
+  "license": "Apache-2.0"
+}

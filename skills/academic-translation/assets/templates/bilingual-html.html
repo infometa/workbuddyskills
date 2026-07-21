@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<!--
+  双栏对照 HTML 模板 — academic-translation skill
+  -----------------------------------------------
+  渲染时把 {{...}} 占位符全部替换；段落循环区块用 <!--BEGIN_SEG--> / <!--END_SEG--> 标记。
+  设计目标：
+    1. 单文件、零外部依赖（KaTeX + MathJax 双引擎走 CDN，可离线时改为本地路径）
+    2. 公式 / \cite{} / \ref{} 不被任何 CSS 隐藏，与 Markdown / LaTeX 输出保持字符级一致
+    3. 所有变量名/下标/上标必须走 $...$ LaTeX 语法，**严禁** <sub>/<sup>/<i> 硬拼
+       （硬拼版本视觉粗陋且违反"双语 HTML 是默认主交付物"的质量底线）
+    4. 响应式：≥ 960px 左右双栏；< 960px 自动堆叠为上下双栏
+    5. 章节侧栏 + 锚点跳转，长论文也能 1 屏定位
+    6. 复制按钮、字号切换、原/译单栏隐藏切换三件常用操控
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{PAPER_TITLE}} — 双语对照</title>
+
+<!--
+  公式渲染：KaTeX（首选，更快、对未配对 $ 报错更醒目）+ MathJax v3（兜底，兼容更广）
+  ----------------------------------------------------------------------
+  ⚠️ 严禁用 <sub> / <sup> / <i> 硬拼下标变量名（例 y<sub>it</sub>）。
+     所有变量名、下标、上标都必须用 $...$（行内）或 $$...$$（行间）写成 LaTeX，
+     由下方引擎统一渲染——这是用户视觉质量的底线。
+-->
+
+<!-- KaTeX（首选，CDN，体积 ~280KB，渲染速度比 MathJax 快 5-10×） -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+      integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+        integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous"
+        onload="renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false,
+          ignoredTags: ['script','noscript','style','textarea','pre','code'],
+          ignoredClasses: ['tok']
+        });"></script>
+
+<!-- MathJax v3 兜底（KaTeX CDN 不可达时启用；正常场景 KaTeX 先渲染完成则 MathJax 不重复处理） -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      // \cite{} \ref{} \eqref{} 不是真公式，保持原样显示，避免 MathJax 误吞
+      packages: {'[-]': ['noerrors']}
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+      ignoreHtmlClass: 'katex|tok'   // KaTeX 已渲染或 token 高亮区不再处理
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root {
+    --bg: #f4f6f9;
+    --panel: #ffffff;
+    --ink: #1f2328;
+    --muted: #57606a;
+    --accent: #0969da;
+    --accent-soft: #ddf4ff;
+    --border: #d0d7de;
+    --src-bg: #fafbfc;
+    --tgt-bg: #fffdf7;
+    --token-bg: #fff8c5;
+    --token-border: #d4a72c;
+    --sidebar-w: 240px;
+    --header-h: 56px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei",
+                 "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.75;
+    font-size: 15px;
+  }
+
+  /* ── 顶栏 ── */
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--header-h);
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 20px; gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  #topbar .title {
+    font-weight: 600; flex: 1;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  #topbar .meta { display: flex; gap: 6px; flex-wrap: nowrap; }
+  .tag {
+    background: #f6f8fa; border: 1px solid var(--border);
+    padding: 2px 10px; border-radius: 12px;
+    font-size: 0.78em; color: var(--muted); white-space: nowrap;
+  }
+
+  /* ── 控制栏 ── */
+  #controls {
+    position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 90;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 20px;
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    font-size: 0.86em;
+  }
+  #controls button, #controls select {
+    background: var(--panel); border: 1px solid var(--border);
+    padding: 4px 12px; border-radius: 6px;
+    cursor: pointer; color: var(--ink);
+    font-size: 0.92em; transition: 0.15s;
+  }
+  #controls button:hover, #controls select:hover { border-color: var(--accent); color: var(--accent); }
+  #controls button.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  #controls .sep { width: 1px; height: 18px; background: var(--border); }
+
+  /* ── 侧栏 ── */
+  #sidebar {
+    position: fixed;
+    top: calc(var(--header-h) + 42px); bottom: 0; left: 0;
+    width: var(--sidebar-w);
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 18px 0 30px;
+    z-index: 80;
+  }
+  #sidebar h3 {
+    font-size: 0.78em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 8px 18px;
+    letter-spacing: 0.05em;
+  }
+  #sidebar nav a {
+    display: block; padding: 6px 18px;
+    color: var(--ink); text-decoration: none;
+    font-size: 0.9em;
+    border-left: 3px solid transparent;
+  }
+  #sidebar nav a:hover { background: var(--accent-soft); color: var(--accent); }
+  #sidebar nav a.active { background: var(--accent-soft); border-left-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+  /* ── 主区 ── */
+  main {
+    margin-left: var(--sidebar-w);
+    padding: calc(var(--header-h) + 56px) 24px 60px;
+    max-width: 1400px;
+  }
+
+  /* 论文头部信息卡 */
+  .paper-meta {
+    background: var(--panel);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 18px 22px; margin-bottom: 24px;
+  }
+  .paper-meta h1 { margin: 0 0 8px; font-size: 1.4em; }
+  .paper-meta .sub { color: var(--muted); font-size: 0.9em; }
+  .paper-meta .stats { margin-top: 12px; display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.85em; }
+  .paper-meta .stats span { color: var(--muted); }
+  .paper-meta .stats b { color: var(--ink); }
+
+  /* 章节标题 */
+  section.chapter { margin-bottom: 36px; scroll-margin-top: calc(var(--header-h) + 50px); }
+  section.chapter > h2 {
+    margin: 0 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+    font-size: 1.2em;
+  }
+  section.chapter > h2 .zh { color: var(--accent); margin-left: 8px; font-weight: 500; font-size: 0.95em; }
+  section.chapter .prov {
+    color: var(--muted); font-size: 0.82em;
+    margin: -8px 0 14px; font-style: italic;
+  }
+
+  /* 双栏段落对照 */
+  .seg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    scroll-margin-top: calc(var(--header-h) + 50px);
+  }
+  .seg .col {
+    padding: 12px 16px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  .seg .col.src { background: var(--src-bg); border-right: 1px solid var(--border); }
+  .seg .col.tgt { background: var(--tgt-bg); }
+  .seg .col .label {
+    font-size: 0.72em; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 4px; user-select: none;
+  }
+
+  /* 单栏隐藏（控制栏切换） */
+  body.hide-src .seg { grid-template-columns: 1fr; }
+  body.hide-src .seg .col.src { display: none; }
+  body.hide-tgt .seg { grid-template-columns: 1fr; }
+  body.hide-tgt .seg .col.tgt { display: none; }
+
+  /* 移动端：堆叠 */
+  @media (max-width: 960px) {
+    #sidebar { display: none; }
+    main { margin-left: 0; padding-left: 16px; padding-right: 16px; }
+    .seg { grid-template-columns: 1fr; }
+    .seg .col.src { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+
+  /* 公式 / cite 占位高亮：把 \cite{xxx} \ref{xxx} 在双栏中以 token 形式呈现，方便审阅 */
+  .tok {
+    background: var(--token-bg);
+    border: 1px solid var(--token-border);
+    border-radius: 3px;
+    padding: 0 4px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.88em;
+    color: #6e4500;
+  }
+
+  /* 字号档位 */
+  body.font-sm { font-size: 14px; }
+  body.font-md { font-size: 15px; }
+  body.font-lg { font-size: 17px; }
+
+  /* 复制按钮（每段右上角悬浮） */
+  .seg { position: relative; }
+  .seg .copy-btn {
+    position: absolute; top: 6px; right: 8px;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid var(--border);
+    padding: 1px 8px; border-radius: 4px;
+    font-size: 0.72em; color: var(--muted);
+    cursor: pointer; opacity: 0;
+    transition: 0.15s;
+  }
+  .seg:hover .copy-btn { opacity: 1; }
+  .seg .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* 阅读建议 / 自检概要卡 */
+  .info-card {
+    background: var(--accent-soft);
+    border: 1px solid #b6e3ff;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 24px 0;
+    font-size: 0.92em;
+  }
+  .info-card h3 { margin: 0 0 8px; font-size: 1em; color: var(--accent); }
+  .info-card ul { margin: 4px 0 0; padding-left: 22px; }
+  .info-card li { margin-bottom: 4px; }
+
+  /* 页脚 */
+  footer {
+    margin-top: 40px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 0.82em;
+    text-align: center;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body class="font-md">
+
+<header id="topbar">
+  <div class="title">{{PAPER_TITLE}}</div>
+  <div class="meta">
+    <span class="tag">{{PAPER_ID}}</span>
+    <span class="tag">{{DIRECTION}}</span>
+    <span class="tag">{{DEPTH}}</span>
+    <span class="tag">{{SEGMENTS_COUNT}} 段</span>
+  </div>
+</header>
+
+<div id="controls">
+  <span style="color:var(--muted);font-size:0.85em;">视图：</span>
+  <button data-view="both" class="active">双栏</button>
+  <button data-view="src">仅原文</button>
+  <button data-view="tgt">仅译文</button>
+  <span class="sep"></span>
+  <span style="color:var(--muted);font-size:0.85em;">字号：</span>
+  <button data-font="sm">小</button>
+  <button data-font="md" class="active">中</button>
+  <button data-font="lg">大</button>
+  <span class="sep"></span>
+  <button id="toggle-tok">高亮 \cite / 公式占位</button>
+</div>
+
+<aside id="sidebar">
+  <h3>章节目录</h3>
+  <nav id="toc">
+    <!--BEGIN_TOC-->
+    <a href="#{{CHAPTER_ID}}">{{CHAPTER_LABEL}}</a>
+    <!--END_TOC-->
+  </nav>
+</aside>
+
+<main>
+  <div class="paper-meta">
+    <h1>{{PAPER_TITLE}}</h1>
+    <div class="sub">{{PAPER_AUTHORS}} · 生成于 {{GENERATED_AT}}</div>
+    <div class="stats">
+      <span>翻译方向：<b>{{DIRECTION_FULL}}</b></span>
+      <span>深度：<b>{{DEPTH_FULL}}</b></span>
+      <span>术语库：<b>{{GLOSSARY_LIST}}</b></span>
+      <span>公式保留率：<b>{{FORMULA_RATE}}</b></span>
+      <span>引用保留率：<b>{{CITE_RATE}}</b></span>
+      <span>术语命中率：<b>{{TERMS_HIT_RATE}}</b></span>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3>阅读建议</h3>
+    <ul>
+      <li>左栏为原文（保留所有 LaTeX 命令、公式与引用），右栏为终稿译文。</li>
+      <li>顶部「视图」按钮可切换为单栏（原文 / 译文），适合精读单侧。</li>
+      <li>悬停段落右上角出现「复制」按钮，可一键复制译文用于引用。</li>
+      <li>所有 <code>\cite{}</code> / <code>\ref{}</code> / 公式与左栏一字不差，可放心二次编辑。</li>
+    </ul>
+  </div>
+
+  <!--BEGIN_CHAPTER-->
+  <section class="chapter" id="{{CHAPTER_ID}}">
+    <h2>{{CHAPTER_TITLE_SRC}}<span class="zh">· {{CHAPTER_TITLE_TGT}}</span></h2>
+    <div class="prov">page {{CHAPTER_PAGE}} · §{{CHAPTER_SECTION}}</div>
+
+    <!--BEGIN_SEG-->
+    <div class="seg" id="{{SEG_ID}}">
+      <div class="col src">
+        <div class="label">原文 · {{SRC_LANG}}</div>
+        <div class="content">{{SEG_SRC_HTML}}</div>
+      </div>
+      <div class="col tgt">
+        <div class="label">译文 · {{TGT_LANG}}</div>
+        <div class="content">{{SEG_TGT_HTML}}</div>
+      </div>
+      <button class="copy-btn" data-target="{{SEG_ID}}">复制译文</button>
+    </div>
+    <!--END_SEG-->
+  </section>
+  <!--END_CHAPTER-->
+
+  <div class="info-card">
+    <h3>关联文件</h3>
+    <ul>
+      <li>直译初稿：<a href="01-step1-literal.md">01-step1-literal.md</a></li>
+      <li>学术规范版：<a href="02-step2-academic.md">02-step2-academic.md</a></li>
+      <li>信达雅终稿：<a href="03-step3-polished.md">03-step3-polished.md</a></li>
+      <li>双栏 Markdown：<a href="04-bilingual.md">04-bilingual.md</a></li>
+      <li>双栏 LaTeX：<a href="05-bilingual.tex">05-bilingual.tex</a></li>
+      <li>自检报告：<a href="06-self-check.md">06-self-check.md</a></li>
+    </ul>
+  </div>
+
+  <footer>
+    由 <a href="https://github.com/" target="_blank">academic-translation</a> skill v{{SKILL_VERSION}} 生成 ·
+    Provenance 三维度可追溯 · 公式与引用零损伤
+  </footer>
+</main>
+
+<script>
+  // ── 视图切换 ──
+  document.querySelectorAll('#controls [data-view]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#controls [data-view]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.body.classList.remove('hide-src', 'hide-tgt');
+      const v = btn.dataset.view;
+      if (v === 'src') document.body.classList.add('hide-tgt');
+      if (v === 'tgt') document.body.classList.add('hide-src');
+    });
+  });
+
+  // ── 字号切换 ──
+  document.querySelectorAll('#controls [data-font]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#controls [data-font]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.body.classList.remove('font-sm', 'font-md', 'font-lg');
+      document.body.classList.add('font-' + btn.dataset.font);
+    });
+  });
+
+  // ── 占位高亮切换（默认开启） ──
+  let tokOn = true;
+  document.getElementById('toggle-tok').addEventListener('click', e => {
+    tokOn = !tokOn;
+    document.querySelectorAll('.tok').forEach(t => {
+      t.style.background = tokOn ? '' : 'transparent';
+      t.style.border = tokOn ? '' : 'none';
+      t.style.color = tokOn ? '' : 'inherit';
+    });
+    e.target.classList.toggle('active', tokOn);
+  });
+
+  // ── 段落复制 ──
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const seg = document.getElementById(btn.dataset.target);
+      const txt = seg.querySelector('.col.tgt .content').innerText.trim();
+      try {
+        await navigator.clipboard.writeText(txt);
+        const old = btn.innerText;
+        btn.innerText = '已复制 ✓';
+        setTimeout(() => { btn.innerText = old; }, 1200);
+      } catch (err) {
+        btn.innerText = '复制失败';
+      }
+    });
+  });
+
+  // ── 侧栏目录 active 高亮（IntersectionObserver 跟随滚动） ──
+  const tocLinks = document.querySelectorAll('#toc a');
+  const tocMap = {};
+  tocLinks.forEach(a => { tocMap[a.getAttribute('href').slice(1)] = a; });
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(a => a.classList.remove('active'));
+        const link = tocMap[e.target.id];
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -65% 0px' });
+  document.querySelectorAll('section.chapter').forEach(s => io.observe(s));
+</script>
+
+</body>
+</html>

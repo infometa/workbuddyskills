@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>判断线是否与多边形相交</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=geometry"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #info {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        bottom: 60px;
+        height: 100px;
+        width: 420px;
+        line-height: 50px;
+        background-color: #fff;
+        border-radius: 10px;
+        font-size: 18px;
+        text-align: center;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+    <div id="info"></div>
+    <script type="text/javascript">
+        var map;
+
+        function initMap() {
+            var center = new TMap.LatLng(40.040452, 116.273486);//设置中心点坐标
+            //初始化地图
+            map = new TMap.Map('container', {
+                center: center,
+                zoom: 18,
+                baseMap: {
+                    type: 'vector',
+                    features: ['base', 'building3d', 'label'],
+                }
+            });
+
+            var lineRed = [
+                new TMap.LatLng(40.04154035247704, 116.27144748316823),
+                new TMap.LatLng(40.04194283332685, 116.27456963249642),
+            ];
+
+            var lineBlue = [
+                new TMap.LatLng(40.04016040071088, 116.27174789647142),
+                new TMap.LatLng(40.040587531642345, 116.2749236907166),
+            ];
+
+            var path = [
+                new TMap.LatLng(40.041117253378246, 116.2722415837743),
+                new TMap.LatLng(40.03942536171407, 116.2726277820093),
+                new TMap.LatLng(40.03970460886076, 116.27483769345417),
+                new TMap.LatLng(40.041404706498625, 116.27443003983899),
+            ];
+
+            var polygon = new TMap.MultiPolygon({
+                id: 'polygon-layer', //图层id
+                map: map,
+                geometries: [
+                    {
+                        id: 'polygon', //多边形图形数据的标志信息
+                        paths: path, //多边形的位置信息
+                    }
+                ]
+            });
+
+            var polylineLayer = new TMap.MultiPolyline({
+                id: 'polyline-layer', //图层唯一标识
+                map: map,//绘制到目标地图
+                //折线数据定义
+                styles: {
+                    red: new TMap.PolylineStyle({
+                        color: 'rgba(255,0,0,0.8)', // 面填充色
+                    }),
+                    blue: new TMap.PolylineStyle({
+                        color: 'rgba(0,0,255,0.8)', // 面填充色
+                    }),
+                },
+                geometries: [
+                    {
+                        styleId: 'red',
+                        paths: lineRed
+                    },
+                    {
+                        styleId: 'blue',
+                        paths: lineBlue
+                    }
+                ]
+            });
+
+            var infoDom = document.getElementById('info');
+            infoDom.innerText =
+                `${TMap.geometry.isLinePolygonIntersect(lineRed, path) ? '红线与多边形相交' : '红线与多边形不相交'}` + '\n' +
+                `${TMap.geometry.isLinePolygonIntersect(lineBlue, path) ? '蓝线与多边形相交' : '蓝线与多边形不相交'}`;
+        }
+    </script>
+</body>
+
+</html>

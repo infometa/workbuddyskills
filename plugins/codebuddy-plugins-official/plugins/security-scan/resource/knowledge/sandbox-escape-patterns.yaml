@@ -1,0 +1,251 @@
+# ==========================================================================
+# 沙箱逃逸检测模式 (Sandbox Escape Patterns)
+# ==========================================================================
+# 引用方: light-inline (场景 sandbox_runtime 触发) / vuln-scan / red-team
+# 用途: 检测 Node VM / Python eval / 容器 / seccomp / WASI 等沙箱配置
+#       过宽或绕过原语
+# 触发: scenarios contains "sandbox_runtime"（Light 阶段 1.5）
+# ==========================================================================
+
+# ============================================================================
+# 一、Node.js VM 沙箱信号 (nodejs_vm_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: nodejs-vm-bypass / code-eval-on-untrusted-input
+
+nodejs_vm_signals:
+  description: "Node.js vm/Function/eval 暴露宿主原型链或 process.binding"
+
+  vm_apis:
+    description: "调用了 Node 内置 vm 或动态执行入口"
+    patterns:
+      - '\bvm\.runInNewContext\('
+      - '\bvm\.runInThisContext\('
+      - '\bvm\.runInContext\('
+      - 'vm\.Script\s*\('
+      - 'new\s+Function\s*\('
+      - 'Function\s*\(\s*["\']'
+      - 'eval\s*\('
+      - 'setTimeout\s*\(\s*["\']'                                 # setTimeout("code", 0)
+      - 'setInterval\s*\(\s*["\']'
+
+  unsafe_globals:
+    description: "上下文或代码片段含逃逸原语"
+    patterns:
+      - 'this\.constructor\.constructor'
+      - '\.__proto__\.constructor'
+      - '\bprocess\.binding\('
+      - "require\\(\\s*['\"]child_process['\"]\\s*\\)"
+      - "require\\(\\s*['\"]fs['\"]\\s*\\)"
+      - "require\\(\\s*['\"]net['\"]\\s*\\)"
+      - 'globalThis\.process'
+      - "Object\\.getPrototypeOf\\([^)]+\\)\\.constructor\\(['\"]"
+
+  user_input_to_vm:
+    description: "用户输入直接进入 vm/Function/eval"
+    patterns:
+      - 'vm\.runIn[A-Za-z]+Context\([^)]*req\.body'
+      - 'vm\.runIn[A-Za-z]+Context\([^)]*req\.query'
+      - 'new\s+Function\([^)]*req\.body'
+      - 'eval\([^)]*req\.body'
+      - 'eval\([^)]*ctx\.request\.body'
+
+  defense_keywords:
+    description: "使用强隔离即视为已防御"
+    patterns:
+      - "require\\(\\s*['\"]vm2['\"]"
+      - "require\\(\\s*['\"]isolated-vm['\"]"
+      - 'NodeVM\s*\('
+      - 'IsolatedVM\s*\('
+      - 'ivm\.'
+      - 'timeout\s*:\s*\d+'                                       # vm.runInContext 中超时
+      - 'sandbox\s*:\s*Object\.create\(null\)'
+
+# ============================================================================
+# 二、Python 沙箱信号 (python_sandbox_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: python-sandbox-bypass / code-eval-on-untrusted-input
+
+python_sandbox_signals:
+  description: "Python exec/eval/compile 接受用户输入或绕过 RestrictedPython"
+
+  exec_apis:
+    description: "动态执行入口"
+    patterns:
+      - '\bexec\s*\('
+      - '\beval\s*\('
+      - '\bcompile\s*\('
+      - 'codeop\.compile_command'
+      - 'pickle\.loads'
+      - 'yaml\.load\s*\(\s*[^)]*\)\s*$'                           # 未指定 SafeLoader
+      - 'subprocess\.(run|Popen|call|check_output)\([^)]*shell\s*=\s*True'
+
+  bypass_chains:
+    description: "经典逃逸原语（即使在 RestrictedPython 中也常被滥用）"
+    patterns:
+      - '\(\)\.__class__\.__bases__'
+      - '\.__subclasses__\(\)'
+      - '__builtins__'
+      - '__globals__'
+      - '__import__\s*\(\s*["\']os["\']'
+      - 'getattr\([^,]+,\s*["\']__'                                # getattr(x, "__class__")
+
+  user_input_to_exec:
+    description: "用户输入直入 exec/eval"
+    patterns:
+      - 'exec\([^)]*request\.'
+      - 'eval\([^)]*request\.'
+      - 'exec\([^)]*flask\.request'
+      - 'exec\([^)]*body\s*\)'
+      - 'eval\([^)]*body\s*\)'
+
+  defense_keywords:
+    patterns:
+      - 'RestrictedPython'
+      - 'safe_globals'
+      - 'safe_builtins'
+      - 'compile_restricted'
+      - 'pyodide'
+      - 'asteval'
+      - 'simpleeval'
+      - 'ast\.literal_eval'
+
+# ============================================================================
+# 三、容器运行时信号 (container_runtime_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: container-escape
+
+container_runtime_signals:
+  description: "容器/Pod 配置允许逃逸或具备宿主访问能力"
+  applies_to: ["Dockerfile", "docker-compose.y?ml", "*.yaml", "*.yml", "k8s/**"]
+
+  privileged_patterns:
+    patterns:
+      - 'privileged\s*:\s*true'
+      - 'allowPrivilegeEscalation\s*:\s*true'
+      - 'securityContext\s*:\s*[\s\S]*?\bprivileged\s*:\s*true'
+      - '--privileged\b'                                          # docker run --privileged
+      - 'runAsUser\s*:\s*0\b'                                     # root 运行
+      - 'runAsNonRoot\s*:\s*false'
+
+  dangerous_caps:
+    description: "Capability 列表含高危项"
+    patterns:
+      - 'CAP_SYS_ADMIN'
+      - 'CAP_SYS_PTRACE'
+      - 'CAP_SYS_MODULE'
+      - 'CAP_DAC_READ_SEARCH'
+      - 'CAP_NET_ADMIN'
+      - 'CAP_NET_RAW'
+      - 'add\s*:\s*\[?\s*["\']?ALL["\']?\s*\]?'                   # capabilities.add: ALL
+
+  host_mount:
+    description: "宿主资源挂入容器"
+    patterns:
+      - 'hostPath\s*:\s*[\s\S]*?path\s*:\s*["\']?/\b'             # / 挂入
+      - 'hostPath\s*:\s*[\s\S]*?path\s*:\s*["\']?/etc'
+      - 'hostPath\s*:\s*[\s\S]*?path\s*:\s*["\']?/var/run/docker\.sock'
+      - 'hostPath\s*:\s*[\s\S]*?path\s*:\s*["\']?/proc'
+      - '-v\s+/var/run/docker\.sock'
+      - '-v\s+/:/'
+      - 'hostPID\s*:\s*true'
+      - 'hostNetwork\s*:\s*true'
+      - 'hostIPC\s*:\s*true'
+
+  runc_overwrite:
+    description: "CVE-2019-5736 类风险：可写 /proc/self/exe"
+    patterns:
+      - '/proc/self/exe'
+      - 'open\([^)]*proc/self/exe'
+
+  defense_keywords:
+    patterns:
+      - 'readOnlyRootFilesystem\s*:\s*true'
+      - 'allowPrivilegeEscalation\s*:\s*false'
+      - 'runAsNonRoot\s*:\s*true'
+      - 'runAsUser\s*:\s*[1-9]\d{2,}'                             # uid >= 100
+      - 'capabilities\s*:\s*[\s\S]*?drop\s*:\s*\[?\s*["\']?ALL["\']?'
+
+# ============================================================================
+# 四、Seccomp 信号 (seccomp_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: seccomp-bypass
+
+seccomp_signals:
+  description: "seccomp profile 缺失或允许危险系统调用"
+
+  missing_indicator:
+    description: "未配置 seccomp / 设为 Unconfined"
+    patterns:
+      - 'seccompProfile\s*:\s*\n?\s*type\s*:\s*Unconfined'
+      - 'seccomp=unconfined'
+      - 'security-opt\s*:\s*\[?\s*["\']?seccomp:?unconfined'
+
+  dangerous_syscalls_allowed:
+    description: "自定义 seccomp 规则允许了高危 syscall"
+    patterns:
+      - '"name"\s*:\s*"ptrace"'
+      - '"name"\s*:\s*"keyctl"'
+      - '"name"\s*:\s*"userfaultfd"'
+      - '"name"\s*:\s*"unshare"'
+      - '"name"\s*:\s*"setns"'
+      - '"name"\s*:\s*"mount"'
+      - '"name"\s*:\s*"pivot_root"'
+      - '"name"\s*:\s*"reboot"'
+      - '"defaultAction"\s*:\s*"SCMP_ACT_ALLOW"'
+
+  defense_keywords:
+    patterns:
+      - 'seccompProfile\s*:\s*\n?\s*type\s*:\s*RuntimeDefault'
+      - 'seccompProfile\s*:\s*\n?\s*type\s*:\s*Localhost'
+      - 'AppArmorProfile'
+      - 'apparmor\.security\.beta\.kubernetes\.io'
+
+# ============================================================================
+# 五、WASI 信号 (wasi_signals)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: wasi-escape
+
+wasi_signals:
+  description: "WASI runtime preopen 或继承宿主 fd 过宽"
+
+  over_permissive:
+    patterns:
+      - "preopen\\(\\s*['\"]\\./?['\"]"
+      - "preopen\\(\\s*['\"]/['\"]"
+      - "preopen_dir\\(\\s*['\"]/['\"]"
+      - 'inherit_stdio\s*\(\s*\)'
+      - 'inherit_env\s*\(\s*\)'
+      - 'WasiCtxBuilder::new\(\)\.inherit_'
+      - '--mapdir\s+/::/'
+      - '--dir\s+/'
+
+  defense_keywords:
+    patterns:
+      - 'preopen\(\s*"/sandbox"'
+      - 'allow_only\s*\(\s*&\['
+      - 'WasiCtxBuilder::new\(\)\s*\.\s*build\(\)'                # 不调用 inherit_*
+
+# ============================================================================
+# 六、跨语言通用 eval 兜底 (code_eval_generic)
+# ============================================================================
+# 对应 risk-type-taxonomy slug: code-eval-on-untrusted-input
+
+code_eval_generic:
+  description: "用户输入到代码执行的通用回退（语言无关）"
+
+  source_to_sink:
+    patterns:
+      - 'eval\([^)]*\b(input|param|arg|body|payload|query|request|req|user)\b'
+      - 'exec\([^)]*\b(input|param|arg|body|payload|query|request|req|user)\b'
+      - 'Function\([^)]*\b(input|param|arg|body|payload|query|request|req|user)\b'
+      - 'SpEL.*parseExpression\([^)]*\b(input|param|request)\b'   # Java SpEL
+      - 'Groovy(Shell|Eval).*\.evaluate\([^)]*\b(input|param|request)\b'
+      - 'Mvel\.evalToString\([^)]*\b(input|param|request)\b'
+      - 'ScriptEngine\.eval\([^)]*\b(input|param|request)\b'
+
+  defense_keywords:
+    patterns:
+      - 'SimpleBindings'
+      - 'allowedClassesForInstantiation'
+      - 'safeEval'
+      - 'sandbox\.evaluate'

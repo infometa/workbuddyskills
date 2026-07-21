@@ -1,0 +1,5 @@
+{
+  "name": "slack-gif-creator",
+  "description": "创建针对 Slack 优化的动画 GIF,提供文件大小约束验证和可组合的动画基元。",
+  "license": "Apache-2.0"
+}

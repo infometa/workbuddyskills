@@ -1,0 +1,9 @@
+{
+  "name": "feature-dev",
+  "description": "全面的功能开发工作流，配备专门的智能体用于代码库探索、架构设计和质量审查",
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "UNKNOWN"
+}

@@ -1,0 +1,432 @@
+# D4: 危险代码 Sink 模式表
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: Grep 定位所有支持语言中的危险 Sink，输出为 sinkLocations 供扫描 Agent 可选增强使用
+# 定位范围声明: 本表为已知高频 Sink 模式的 Grep 定位，用于快速广域扫描。
+#   模式表之外的危险操作由扫描 Agent 的 Source-Driven 开放式发现通过入口点正向追踪覆盖。
+#   两者互补，不存在"表外即盲区"。
+#
+# === 知识版本管理 ===
+# version: 2.0.0
+# last_updated: "2026-04-29"
+# update_strategy: semi_auto
+#   semi_auto = 由 knowledge_updater.py 提供候选更新，人工审核后合并
+# changelog:
+#   - "2.0.0 (2026-04-29): 优化 Web Sink 检测模式"
+#   - "1.0.0 (2026-03-01): 初始版本，覆盖 24 类 Web Sink"
+
+sink_types:
+  - type: SQL 注入
+    tech_stack: ["*"]
+    patterns:
+      - '"SELECT.*FROM.*"\s*\+'
+      - '"INSERT.*INTO.*"\s*\+'
+      - '"UPDATE.*SET.*"\s*\+'
+      - '"DELETE.*FROM.*"\s*\+'
+      - '(?:SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|ORDER|GROUP|LIMIT).*\$\{[^}]+\}'  # MyBatis ${} in SQL context (keyword before)
+      - '\$\{[^}]+\}.*(?:SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|ORDER|GROUP|LIMIT)'  # MyBatis ${} in SQL context (keyword after)
+      - 'String\.format.*SELECT'
+      - 'f"SELECT.*\{'
+      - '\.raw\(|\.extra\(|RawSQL\(|cursor\.execute\('                    # Django ORM 绕过（knowledge/python-web.yaml）
+      - '\.query\(.*\$\{|\.query\(.*\+'                                    # NestJS TypeORM 原始 SQL 拼接（knowledge/nodejs-web.yaml）
+      - 'fmt\.Sprintf.*(?:SELECT|INSERT|UPDATE|DELETE)'                    # Go fmt.Sprintf 拼接 SQL（knowledge/go-web.yaml）
+      - 'db\.(Query|Exec|QueryRow)\(.*\+'                                  # Go database/sql 字符串拼接（knowledge/go-web.yaml）
+      - 'jdbcTemplate\.(query|update|execute)\(.*\+'                        # Spring JdbcTemplate 拼接（knowledge/spring-security.yaml）
+      - '@Query.*nativeQuery.*true.*\+'                                    # Spring Data @Query 原生 SQL 拼接（knowledge/spring-security.yaml）
+      - 'CriteriaBuilder.*like.*concat'                                    # Spring Data Specification 不安全拼接（knowledge/spring-security.yaml）
+      - '@Select.*\$\{'                                                    # MyBatis @Select 注解中的 ${}（knowledge/mybatis-injection.yaml）
+      - '<if\s+test=.*>.*\$\{'                                             # MyBatis XML 动态 SQL 中的 ${}（knowledge/mybatis-injection.yaml）
+
+  - type: 命令注入
+    tech_stack: ["*"]
+    patterns:
+      - 'Runtime\.getRuntime\(\)\.exec\('
+      - 'ProcessBuilder\('
+      - 'os\.system\('
+      - 'os\.popen\('
+      - 'subprocess\.\w+\(.*shell\s*=\s*True'
+      - 'child_process\.(exec|spawn)\('
+      - 'exec\.Command\('
+      - 'os\.StartProcess\('                                               # Go os.StartProcess（knowledge/go-web.yaml）
+
+  - type: 反序列化
+    tech_stack: ["java-*", "python-*", "php-*"]
+    patterns:
+      - 'ObjectInputStream'
+      - '\.readObject\('
+      - 'XMLDecoder'
+      - 'Yaml\.load\('
+      - 'pickle\.loads?\('
+      - 'yaml\.load\('  # 非 safe_load
+      - 'unserialize\('
+      - 'phar://'
+
+  - type: SSRF
+    tech_stack: ["*"]
+    patterns:
+      - 'new\s+URL\('
+      - 'HttpURLConnection'
+      - 'RestTemplate'
+      - 'WebClient'
+      - 'requests\.(get|post)\('
+      - 'urllib\.request\.urlopen\('
+      - 'axios\.\w+\('
+      - 'fetch\('
+      - 'http\.Get\(|http\.Post\(|http\.NewRequest\('                      # Go net/http 发起请求（knowledge/go-web.yaml，扩展）
+
+  - type: CSV 注入
+    tech_stack: ["*"]
+    patterns:
+      - 'CSVPrinter\.printRecord\('
+      - 'setContentType\("text/csv"\)'
+      - 'Content-Disposition.*csv'
+
+  - type: 文件操作
+    tech_stack: ["*"]
+    patterns:
+      - 'new\s+File\(.*\+'
+      - 'path\.join\(.*req\.\w+'
+      - 'open\(.*\+'
+      - 'MultipartFile'
+      - 'multer'
+      - 'move_uploaded_file'
+      - 'send_file\(|send_from_directory\('                                # Flask 文件下载路径穿越（knowledge/python-web.yaml）
+      - 'new\s+ClassPathResource\(.*\+|new\s+FileSystemResource\(.*\+'     # Spring Resource 路径穿越（knowledge/spring-security.yaml）
+
+  - type: COS/万象 STS 鉴权缺失
+    tech_stack: ["*"]
+    patterns:
+      - '(putObject|uploadFile|sliceUploadFile|deleteObject|deleteMultipleObject|getObject|headObject|getObjectUrl|getSignedUrl|ciProcess|imageMogr2|ImageProcess)\s*\('
+      - '(COSClient|CosS3Client|COS\(|cos\.CosConfig|cos\.NewClient|cos-js-sdk|cos-nodejs-sdk-v5|cos-python-sdk-v5|cos-go-sdk-v5|cos-sdk-v5)'
+      - '(cos\.[a-z0-9-]+\.myqcloud\.com|\.file\.myqcloud\.com|ci\.[a-z0-9-]+\.myqcloud\.com)'
+      - '(Bucket\s*[:=]|Region\s*[:=]|Key\s*[:=]|ObjectKey\s*[:=]).*(key|fileName|filename|filePath|path|prefix|req\.|request\.|params|query|body)'
+      - '(logic\.cam\.sigAndAuth|ModeOnlyAuth|q-token|HTTP_X_CI_SECURITY_TOKEN|HTTP_X_COS_SECURITY_TOKEN)'
+      - '(X-CI-SIGN|GenerateCiKey)'
+    note: |
+      高信号候选 Sink：命中后必须 Read 上下文，确认是否为面向用户接口/转发链路、对象 Key 是否由用户补充、
+      内部签名/账号鉴权是否覆盖 STS/sessionToken/临时策略防御；ownerUin/ownerAppid/user_info/pic_process/CI_S3_ 等
+      低信号词只作为 knowledge 中的二次上下文证据，不单独进入 Fast/Deep S1 候选。
+      细化判定（fast/deep）：必须在 sink 所在的 if/switch 分支内（不是函数级）查找 STS 防御关键字，
+      以避免被同函数其他分支的 q-token/x-cos-security-token 字面量误导（典型反例：
+      `ModeAuthSign` 分支传 q-token，但 `ModeOnlyAuth` 分支只传 uin/ownerUin/ownerAppid）。
+      共享信号库：见 resource/knowledge/tencent-cloud-security.yaml > sts_authorization_check >
+      controllable_signals / sts_signals（fast 脚本 grep-cloud-resource-flow 与 light/fast 提示词共同消费）。
+
+  - type: 拒绝服务
+    tech_stack: ["*"]
+    patterns:
+      - 'Pattern\.matches\('
+      - 'new\s+BufferedImage\s*\(\s*width\s*,\s*height'
+      - 'getScaledInstance\s*\(\s*width\s*,\s*height'
+      - 'ImageIO\.write\('
+
+  - type: 支付/金额
+    tech_stack: ["*"]
+    patterns:
+      - 'price\s*='
+      - 'amount\s*='
+      - 'discount\s*='
+      - 'coupon'
+      - 'quantity\s*='
+    note: "用于定价但无服务端校验时标记"
+
+  - type: 代码执行
+    tech_stack: ["*"]
+    patterns:
+      - 'eval\('
+      - 'exec\('
+      - 'new\s+Function\('
+      - 'eval\(.*req\.'                                                    # Node.js Express 请求参数传入 eval（knowledge/nodejs-web.yaml）
+      - 'vm\.(runInNewContext|runInThisContext|createScript)'              # Node.js vm 沙箱逃逸（knowledge/nodejs-web.yaml）
+      - 'require\(.*req\.|require\(.*user'                                 # Node.js 用户控制的 require（knowledge/nodejs-web.yaml）
+
+  - type: 模板注入
+    tech_stack: ["*"]
+    patterns:
+      - 'render_template_string\('
+      - 'Velocity\.evaluate\('
+      - 'freemarker'
+      - 'return\s+"[^"]*"\s*\+\s*[A-Za-z_][A-Za-z0-9_]*'
+      - 'return\s+"[^"]*::\s*"\s*\+\s*[A-Za-z_][A-Za-z0-9_]*'
+      - '@GetMapping\(".*\{.*\}"\)'
+
+  - type: XSS
+    tech_stack: ["*"]
+    patterns:
+      - 'innerHTML\s*='
+      - 'v-html'
+      - 'dangerouslySetInnerHTML'
+      - 'document\.write\('
+      - 'mark_safe\('                                                      # Django 标记用户输入为安全 HTML（knowledge/python-web.yaml）
+      - '\|\s*safe'                                                        # Django 模板 safe 过滤器（knowledge/python-web.yaml）
+      - 'HTMLResponse\(|Response\(.*content='                              # FastAPI 直接返回用户输入的 HTML（knowledge/python-web.yaml）
+      - 'res\.send\(|res\.write\('                                         # Express 直接返回用户输入（knowledge/nodejs-web.yaml）
+      - 'template\.HTML\(|template\.JS\(|template\.CSS\('                  # Go html/template 绕过转义（knowledge/go-web.yaml）
+
+  - type: JNDI
+    tech_stack: ["java-*"]
+    patterns:
+      - '\.lookup\('
+      - 'InitialContext'
+
+  - type: 表达式注入
+    tech_stack: ["java-*"]
+    patterns:
+      - 'SpelExpressionParser|ExpressionParser|parseExpression'            # Spring SpEL 表达式注入（knowledge/spring-security.yaml，扩展）
+      - 'Ognl\.getValue'
+
+  - type: 开放重定向
+    tech_stack: ["*"]
+    patterns:
+      - 'redirect\('
+      - 'sendRedirect\('
+      - 'res\.redirect\('
+      - 'Location:\s*'
+      - 'window\.location\s*='
+      - 'returnUrl'
+      - 'redirect_uri'
+      - 'next='
+
+  - type: NoSQL 注入
+    tech_stack: ["nodejs-*", "python-*"]
+    patterns:
+      - '\$where'
+      - '\$regex'
+      - '\$ne'
+      - '\$gt'
+      - '\$lt'  # MongoDB 操作符
+      - 'find\(\{.*req\.\w+'
+      - 'collection\.find\('
+      - 'Model\.find\(.*req\.'
+
+  - type: LDAP 注入
+    tech_stack: ["*"]
+    patterns:
+      - 'DirContext\.search\('
+      - 'ldap_search\('
+      - 'SearchControls'
+      - '"(&("'  # LDAP 过滤器拼接
+      - 'LdapTemplate\.search\('
+
+  - type: CRLF 注入
+    tech_stack: ["*"]
+    patterns:
+      - 'setHeader\(.*req\.\w+'
+      - 'addHeader\(.*req\.\w+'
+      - 'res\.setHeader\('
+      - 'response\.setHeader\('  # 用户输入写入 HTTP 头
+
+  - type: 原型链污染
+    tech_stack: ["javascript", "typescript", "nodejs-*"]
+    patterns:
+      - '__proto__'
+      - 'constructor\.prototype'
+      - 'Object\.assign\(.*req\.\w+'
+      - 'merge\(.*req\.\w+'
+      - 'deepMerge\('
+      - '_.merge\('
+      - 'lodash\.merge\('
+
+  - type: Mass Assignment
+    tech_stack: ["java-*", "nodejs-*"]
+    patterns:
+      - '@ModelAttribute'  # Java，结合 Entity 直接绑定时
+      - 'req\.body'  # Node.js，直接传入 ORM create/update 时
+
+  - type: 日志注入
+    tech_stack: ["*"]
+    patterns:
+      - 'log\.\w+\(.*\+\s*request\.'
+      - 'logger\.\w+\(.*\+\s*req\.'
+      - 'logging\.\w+\(.*request\.'
+      - 'console\.\w+\(.*req\.(body|query|params)'
+
+  - type: Session 固定
+    tech_stack: ["*"]
+    patterns:
+      - 'session\.setAttribute\("user'
+      - 'req\.session\.\w+\s*='
+      - 'session\[.user.\]\s*='
+      - '\$_SESSION\[.user.\]\s*='
+
+  - type: 不安全随机数
+    tech_stack: ["*"]
+    patterns:
+      - 'new\s+Random\('                    # java.util.Random（非安全用途）
+      - 'java\.util\.Random'
+      - 'Math\.random\(\)'                  # JavaScript
+      - 'random\.random\('                  # Python random（非 secrets）
+      - 'random\.randint\('
+      - 'rand\.\w+\('                       # Go math/rand
+    note: "在安全上下文中使用（token生成、密码重置、验证码等）时标记。应使用 SecureRandom / crypto.randomBytes / secrets 模块"
+
+  - type: Cookie 安全属性缺失
+    tech_stack: ["*"]
+    patterns:
+      - 'new\s+Cookie\('                    # Java Cookie 创建
+      - 'cookie\.setSecure\(false\)'
+      - 'cookie\.setHttpOnly\(false\)'
+      - 'Set-Cookie:(?!.*[Ss]ecure)(?!.*[Hh]ttpOnly)'
+      - 'res\.cookie\(.*(?!secure|httpOnly)'  # Express
+      - 'setCookie\(.*(?!Secure|HttpOnly)'
+      - 'document\.cookie\s*='              # JavaScript 直接设置 cookie（无 HttpOnly 保护）
+    note: "Cookie 缺少 Secure/HttpOnly/SameSite 标志时标记"
+
+  - type: 弱哈希算法（密码存储）
+    tech_stack: ["*"]
+    patterns:
+      - 'MessageDigest\.getInstance\s*\(\s*[''"]SHA-?1[''"]'
+      - 'hashlib\.sha1\('
+      - 'crypto\.createHash\s*\(\s*[''"]sha1[''"]'
+      - 'Hashing\.sha1\('
+      - 'DigestUtils\.sha1Hex\('
+      - 'MessageDigest\.getInstance\s*\(\s*[''"]MD5[''"]'
+      - 'hashlib\.md5\('
+      - 'crypto\.createHash\s*\(\s*[''"]md5[''"]'
+      - 'DigestUtils\.md5Hex\('
+    note: "用于密码存储或安全签名时标记。应使用 bcrypt/scrypt/Argon2/PBKDF2"
+
+  - type: 密码存储
+    tech_stack: ["*"]
+    patterns:
+      - 'MD5\(.*password'
+      - 'md5\(.*password'
+      - 'hashlib\.md5\(.*password'
+      - 'sha1\(.*password'
+      - 'DigestUtils\.md5Hex\(.*password'
+
+  - type: Ghost Bits 类型截断
+    tech_stack: ["java-*"]
+    patterns:
+      - '\(byte\)\s*\w+'                                                        # (byte) ch 强制类型截断，高 8 位被丢弃
+      - '\w+\s*&\s*0[xX]?[fF]{2}\b'                                            # ch & 0xFF 位掩码截断，仅保留低 8 位
+      - 'DataOutputStream.*writeBytes\s*\('                                      # DataOutputStream.writeBytes() 逐字符截断写入
+      - 'ByteArrayOutputStream.*write\s*\(\s*\w+\s*\)'                          # baos.write(ch) 单字符写入，仅写低 8 位
+      - '\.getBytes\s*\(\s*\)'                                                   # String.getBytes() 无编码参数（平台默认编码，可能导致截断）
+      - 'new\s+String\s*\(\s*bytes?\s*\)'                                        # new String(bytes) 无编码参数
+    note: "Java char(16bit)→byte(8bit) 高位截断。攻击者用低 8 位为危险 ASCII 的 Unicode 字符绕过 WAF，后端截断后还原攻击载荷（Ghost Bits 漏洞）"
+
+  - type: PostMessage
+    tech_stack: ["javascript", "typescript"]
+    patterns:
+      - 'addEventListener\s*\(\s*[''"]message[''"]'
+      - 'postMessage\s*\([^,]+,\s*[''"]?\*[''"]?\s*\)'
+
+  - type: WebSocket
+    tech_stack: ["*"]
+    patterns:
+      - 'new\s+WebSocketServer\s*\('
+      - 'ws\.on\s*\(\s*[''"]connection[''"]'
+      - '@ServerEndpoint\('
+      - 'new\s+WebSocket\s*\(\s*[''"]ws://'
+
+  # ── 移动客户端安全（Android / iOS / RN / Flutter） ──
+  - type: 组件暴露
+    tech_stack: ["android-*"]
+    patterns:
+      - 'android:exported\s*=\s*"true"'                                    # AndroidManifest 显式导出，需结合是否缺 android:permission
+      - 'android:permission'                                               # 反向：用于确认导出组件是否有权限保护
+      - 'grantUriPermissions\s*=\s*"true"'                                 # ContentProvider URI 授权放开
+    note: "exported=true 且无 android:permission 时标记组件暴露；ContentProvider 暴露重点关注"
+
+  - type: WebView 不安全配置
+    tech_stack: ["android-*", "ios-*", "react-native", "flutter"]
+    patterns:
+      - 'setJavaScriptEnabled\s*\(\s*true\s*\)'
+      - 'addJavascriptInterface\s*\('
+      - 'setAllowFileAccess\s*\(\s*true\s*\)'
+      - 'setAllowUniversalAccessFromFileURLs\s*\(\s*true\s*\)'
+      - 'setAllowFileAccessFromFileURLs\s*\(\s*true\s*\)'
+      - 'evaluateJavaScript\s*\('                                          # iOS WKWebView 拼接用户输入时
+    note: "setJavaScriptEnabled(true)+addJavascriptInterface 暴露原生方法是高危信号；File 域访问开启需结合 loadUrl 来源判断"
+
+  - type: 证书校验缺失
+    tech_stack: ["android-*", "ios-*", "react-native", "flutter"]
+    patterns:
+      - 'checkServerTrusted\s*\([^)]*\)\s*\{\s*\}'                          # 空实现 TrustManager
+      - 'X509TrustManager'
+      - 'ALLOW_ALL_HOSTNAME_VERIFIER'
+      - 'setHostnameVerifier\s*\('
+      - 'NSAllowsArbitraryLoads'
+      - 'getAcceptedIssuers\s*\([^)]*\)\s*\{\s*return\s+null'
+    note: "TrustManager 空实现 / HostnameVerifier 恒真 / 信任所有证书时标记；缺少证书或公钥固定为 medium"
+
+  - type: 移动端明文存储
+    tech_stack: ["android-*", "ios-*", "react-native", "flutter"]
+    patterns:
+      - 'getSharedPreferences\s*\('
+      - 'SharedPreferences\.Editor'
+      - 'NSUserDefaults'
+      - 'standardUserDefaults'
+      - 'MODE_WORLD_READABLE|MODE_WORLD_WRITEABLE'
+    note: "Token/密码/密钥写入 SharedPreferences / NSUserDefaults / 明文 SQLite 且未加密时标记"
+
+  - type: 明文流量与不安全清单配置
+    tech_stack: ["android-*", "ios-*"]
+    patterns:
+      - 'android:usesCleartextTraffic\s*=\s*"true"'
+      - 'android:debuggable\s*=\s*"true"'
+      - 'android:allowBackup\s*=\s*"true"'
+      - 'cleartextTrafficPermitted\s*=\s*"true"'
+      - 'NSAllowsArbitraryLoads</key>\s*<true'
+    note: "AndroidManifest / network_security_config / Info.plist 不安全开关；明文流量 low、debuggable/allowBackup low"
+
+  # ── 桌面与混合客户端安全（Electron） ──
+  - type: Electron 不安全配置
+    tech_stack: ["electron", "nodejs-*"]
+    patterns:
+      - 'nodeIntegration\s*:\s*true'
+      - 'contextIsolation\s*:\s*false'
+      - 'webSecurity\s*:\s*false'
+      - 'allowRunningInsecureContent\s*:\s*true'
+      - 'sandbox\s*:\s*false'
+      - 'enableRemoteModule\s*:\s*true'
+    note: "BrowserWindow webPreferences 高危开关；nodeIntegration:true / contextIsolation:false 为 critical 信号"
+
+  - type: Electron shell 命令注入
+    tech_stack: ["electron", "nodejs-*"]
+    patterns:
+      - 'shell\.openExternal\s*\('
+      - 'shell\.openPath\s*\('
+      - 'shell\.openItem\s*\('
+    note: "shell.openExternal/openPath 接收渲染进程或远程内容传入的 URL/路径且无 scheme 白名单时标记"
+
+  - type: Electron IPC 与远程内容
+    tech_stack: ["electron", "nodejs-*"]
+    patterns:
+      - 'ipcMain\.(handle|on)\s*\('
+      - 'contextBridge\.exposeInMainWorld\s*\('
+      - 'setAsDefaultProtocolClient\s*\('
+      - 'registerSchemesAsPrivileged\s*\('
+    note: "ipcMain 信任 renderer 参数执行特权操作、preload 过度暴露、自定义协议处理器拼接时标记，需结合上下文判定"
+
+
+
+# 每个定位到的 Sink 以 needsLSPTrace: true 输出到 sinkLocations[] 中
+
+ssrf_bypass_detection:
+  description: "当命中 SSRF sink 后，若同文件或相邻调用中出现下列信号，必须结合 resource/knowledge/ssrf.yaml 继续判断是否存在绕过"
+  signals:
+    - 'isIntranet'
+    - 'isInternalIP'
+    - 'urlToIp'
+    - 'urltoIp'
+    - '仅校验 http/https 协议'
+    - '仅校验 127.0.0.1 / localhost / 169.254.169.254'
+    - '先解析一次域名/IP 再直接发请求，未做白名单域名校验、未限制重定向'
+  bypass_families:
+    - 十进制/八进制/十六进制 IP
+    - IPv6 映射地址
+    - 短链接 / 重定向链
+    - DNS 重绑定
+  action: "对这类场景，允许直接创建 SSRF finding，而不必等 scanner 二次确认"
+
+pattern_judgment_supplements:
+  - type: CSV 注入
+    condition: "检测到 CSV 导出并将用户可控字段直接写入单元格，且没有前置 ' 或 \\t 等中和策略"
+    action: "创建 CSV 注入 finding"
+  - type: 图片放大 DoS
+    condition: "width、height 等请求参数直接进入 BufferedImage / getScaledInstance，且无上限约束"
+    action: "创建拒绝服务 finding"
+  - type: Thymeleaf 路径/视图名 SSTI
+    condition: "@Controller 方法返回的视图名直接拼接请求参数，或 void 控制器让 URL 路径隐式成为视图名"
+    action: "创建模板注入 finding"

@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "long_manuscript.lebao_consent_contract.v1",
+  "contractId": "long-manuscript-lebao-consent",
+  "nativeOnly": true,
+  "runtimeDependencyRequired": false,
+  "enforcementTopology": {
+    "repositoryValidatorModule": "lib/lebao-consent.mjs",
+    "validatorScope": "workspace_root_review_only",
+    "validatorIncludedInProductZip": false,
+    "schemaIsNotAnExecutableValidator": true,
+    "hostExecutionProven": false,
+    "serviceExecutionProven": false,
+    "crossFieldEqualityEnforcement": "repository_validator_only"
+  },
+  "consentSchemaRef": "schemas/lebao-consent-v1.schema.json",
+  "protectedActions": ["offer", "claim", "steering", "profile_write"],
+  "requiredConsentFields": [
+    "purpose",
+    "minimumFields",
+    "subjectBinding",
+    "grantedAt",
+    "expiresAt",
+    "revocation",
+    "nonce",
+    "signature",
+    "idempotencyKey"
+  ],
+  "automaticReuseDecision": "record_only",
+  "packageValidConsentDecision": "record_only_pending_service_verification",
+  "protectedActionAllowedByPackage": false,
+  "subjectBindingFields": [
+    "anonymousUserCodeHash",
+    "serverBindingId",
+    "chainFingerprint"
+  ],
+  "validConsentRequirements": [
+    "explicit_user_action",
+    "active_not_revoked",
+    "granted_at_not_in_future",
+    "not_expired",
+    "purpose_matches_action",
+    "requested_fields_are_a_subset_of_minimum_fields",
+    "nonce_not_seen_by_local_caller",
+    "idempotency_key_not_consumed_by_local_caller"
+  ],
+  "servicePromotionRequires": [
+    "authorized_service_signature_verifier",
+    "durable_nonce_and_idempotency_consumption",
+    "same_subject_binding_match",
+    "service_side_revocation_check"
+  ],
+  "externalWriteForbidden": true,
+  "cannotProve": [
+    "service-side enforcement",
+    "real human identity",
+    "real human consent",
+    "signature authenticity",
+    "host profile persistence"
+  ]
+}

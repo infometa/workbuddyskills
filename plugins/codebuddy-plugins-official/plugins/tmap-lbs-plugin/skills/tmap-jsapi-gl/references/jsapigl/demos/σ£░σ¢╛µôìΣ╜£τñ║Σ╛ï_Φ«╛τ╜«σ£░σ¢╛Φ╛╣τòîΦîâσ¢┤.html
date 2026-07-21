@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>设置地图边界范围</title>
+	<meta charset='utf-8'>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<style>
+		* {
+			padding: 0px;
+			margin: 0px;
+		}
+
+		#mapContainer {
+            position: relative;
+			width: 100vw;
+			height: 100vh;
+        }
+        input{
+            position: absolute;
+            left: 30px;
+            top: 30px;
+            z-index: 9999;
+        }
+	</style>
+</head>
+
+<body>
+
+	<div id='mapContainer'></div>
+    <input id="btn" type="button" value="点击设置boundary">
+
+
+	<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+	<script>
+		window.onload = init;
+
+		var map, polygon;
+
+		function init() {
+			let sw = new TMap.LatLng(39.744154,116.124115);
+			let ne = new TMap.LatLng(40.104336,116.691284);
+			let boundary = new TMap.LatLngBounds(sw, ne);
+
+			map = new TMap.Map('mapContainer', {
+				zoom: 10,
+				center: new TMap.LatLng(39.919216,116.328735)
+			});
+
+			polygon = new TMap.MultiPolygon({
+				map,
+				geometries: [{
+					paths: [
+						boundary.getSouthWest(),
+						boundary.getSouthEast(),
+						boundary.getNorthEast(),
+						boundary.getNorthWest()
+					]
+				}]
+			});
+
+            let btn = document.getElementById('btn');
+            btn.addEventListener('click', () => {
+                map.setBoundary(boundary);
+            },false);
+		}
+	</script>
+</body>
+
+</html>

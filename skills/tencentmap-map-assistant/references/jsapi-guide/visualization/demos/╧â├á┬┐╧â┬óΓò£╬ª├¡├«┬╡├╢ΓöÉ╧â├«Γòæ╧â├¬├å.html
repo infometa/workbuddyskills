@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>全国行政区划图</title>
+  </head>
+  <script
+    charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"
+  ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #container {
+      width: 100%;
+      height: 100%;
+    }
+    #panel {
+        position: absolute;
+        background: #FFF;
+        width:350px;
+        padding: 20px;
+        z-index: 9999;
+        top: 30px;
+        left: 30px;
+    }
+  </style>
+  <body>
+    <div id="panel">
+      <p>请在右侧示例代码第59行填入您的key，并执行查看运行结果（key可在控制台应用管理中自行创建）</p>
+    </div>
+    <div id="container"></div>
+    <script src="https://lbs.gtimg.com/visual/lbs_component/v/jquery-1.11.0.min.js"></script>
+    <script src="https://mapapi.qq.com/web/visualization/demo-asset/styleMap.js"></script>
+    <script type="text/javascript">
+      //初始化地图
+      var map = new TMap.Map("container", {
+        center: new TMap.LatLng(34.22379225102061, 108.39352326742096), //设置地图中心坐标
+        zoom: 4, //地图进行缩放
+        mapStyleId: "style7", //个性化样式
+        baseMap: {
+          //设置底图样式
+          type: "vector", //设置底图为矢量底图
+          features: [
+            //设置矢量底图要素类型
+            "base",
+            "point",
+          ],
+        },
+      });
+      $.ajax({
+        url:
+          "https://apis.map.qq.com/ws/district/v1/getchildren?key=您的key&output=jsonp&get_polygon=2&max_offset=3000", // 请求地址+参数
+        type: "GET", //get请求
+        dataType: "JSONP", //指定服务器返回的数据类型
+        success: function (res) {
+          var list = [];
+          list = res.result[0]; //获取数据
+          var paths = [];
+          list.forEach((item, index) => {
+            const styleId = styleMap[item.id]; //数据所有的id值
+            const path = []; // TODO
+            item.polygon.forEach((p) => {
+              path.push([p.reverse()]);
+            }); //进行纬经度进行调换位置
+            paths.push({
+              path, //经纬度点串
+              styleId, //id=styleId
+            });
+          });
+          var area = new TMap.visualization.Area({
+            styles: {
+              //设置区域图样式
+              styel1: {
+                fillColor: "#7DF4FF", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+              },
+              styel2: {
+                fillColor: "#17D5DC", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+              },
+              styel3: {
+                fillColor: "#0EB2E7", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+              },
+              styel4: {
+                fillColor: "#0896EF", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+              },
+              styel5: {
+                fillColor: "#017CF7", //设置区域颜色
+                strokeColor: "#014080", //设置区域边线颜色
+              },
+            },
+          })
+            .setData(paths)
+            .addTo(map);
+        },
+      });
+    </script>
+  </body>
+</html>

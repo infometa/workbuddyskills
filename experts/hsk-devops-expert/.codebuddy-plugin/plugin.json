@@ -1,0 +1,44 @@
+{
+  "name": "hsk-devops-expert",
+  "version": "1.0.0",
+  "description": "DevOps expert for zero-config public preview, NAT traversal, file hosting and project deployment via HSK CLI",
+  "author": {
+    "name": "HSK Team",
+    "email": "hsk@oray.com"
+  },
+  "agents": ["./agents/hsk-devops-architect.md"],
+  "skills": ["./skills/hsk-cli"],
+
+  "expertType": "agent",
+  "agentName": "hsk-devops-architect",
+
+  "displayName": {
+    "en": "AweShell",
+    "zh": "贝锐花生壳"
+  },
+  "profession": {
+    "en": "Web Publishing and Frontend Debugging Expert",
+    "zh": "网页发布与前端调试专家"
+  },
+  "displayDescription": {
+    "en": "Zero-config public preview expert. Handles NAT traversal, file hosting, and project deployment across Windows/macOS/Linux via HSK CLI.",
+    "zh": "零配置公网预览专家，擅长内网穿透、文件托管与项目部署，支持前台/后台双模式保活，跨 Windows/macOS/Linux 平台一键将本地服务暴露到公网。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "02-Engineering",
+  "defaultInitPrompt": {
+    "zh": "把本地 9000 端口的服务暴露到公网",
+    "en": "Expose my local service on port 9000 to the public internet"
+  },
+  "plugin": "hsk-devops-expert",
+  "tags": [
+    { "en": "NAT Traversal", "zh": "内网穿透" },
+    { "en": "File Hosting", "zh": "文件托管" },
+    { "en": "Deploy", "zh": "项目部署" }
+  ],
+  "quickPrompts": [
+    { "en": "Expose my local service on port 9000 to the public internet", "zh": "把本地 9000 端口的服务暴露到公网" },
+    { "en": "Upload the dist directory and generate a public URL", "zh": "上传 dist 目录并生成公网访问链接" },
+    { "en": "Build and deploy my frontend project to the public web", "zh": "构建并部署前端项目到公网" }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "name": "mcp-builder",
+  "description": "指导创建高质量的 MCP（模型上下文协议）服务器,用于将外部 API 和服务与大语言模型集成,支持 Python 和 TypeScript 开发",
+  "license": "Apache-2.0"
+}

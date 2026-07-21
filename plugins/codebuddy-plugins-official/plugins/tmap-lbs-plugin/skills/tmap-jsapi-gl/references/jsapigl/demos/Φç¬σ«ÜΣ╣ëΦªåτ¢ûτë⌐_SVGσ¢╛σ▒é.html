@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>自定义DOM图层-Marker</title>
+  </head>
+  <script
+    charset="utf-8"
+    src="https://map.qq.com/api/gljs?libraries=tools&v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"
+  ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <body onload="initMap()">
+    <div id="container"></div>
+    <script>
+      var SVG_NS = 'http://www.w3.org/2000/svg';
+      var colorList = ['#7AF4FF', '#67D7FF', '#52B5FF', '#295BFF'];
+      var mapContainer = document.getElementById('container');
+
+      // 自定义SVG图层 - 继承DOMOverlay
+      function SvgMarker(options) {
+        TMap.DOMOverlay.call(this, options);
+      }
+
+      SvgMarker.prototype = new TMap.DOMOverlay();
+
+      // 初始化
+      SvgMarker.prototype.onInit = function (options) {
+        this.options = options.options;
+        this.map = options.map;
+      };
+
+      // 销毁时需解绑事件监听
+      SvgMarker.prototype.onDestroy = function () {
+        if (this.onClick) {
+          this.dom.removeEventListener(this.onClick);
+        }
+      };
+
+      // 创建DOM元素，返回一个DOMElement，使用this.dom可以获取到这个元素
+      SvgMarker.prototype.createDOM = function () {
+        var svg = document.createElementNS(SVG_NS, 'svg');
+        svg.id = 'svgDom';
+        svg.setAttribute('width', mapContainer.offsetWidth);
+        svg.setAttribute('height', mapContainer.offsetHeight);
+        svg.style.cssText = 'position:absolute;top:0px;left:0px;';
+        var group = []; // 定义g元素数组
+        var circleShape = []; // 定义circle元素数组
+        var textShape = []; // 定义text元素数组
+        // 遍历传入参数，创建同等数量的svg下元素节点并绑定事件
+        for (var i = 0; i < this.options.length; i++) {
+          var createCenter = this.map.projectToContainer(this.options[i].position);
+          group[i] = document.createElementNS(SVG_NS, 'g');
+          
+          // 在中心创建一个圆形
+          circleShape[i] = document.createElementNS(SVG_NS, 'circle');
+          circleShape[i].setAttribute('style', 'fill: blue;stroke:#FFFFFF;opacity:0.9;');
+          circleShape[i].setAttribute('cx', createCenter.x);
+          circleShape[i].setAttribute('cy', createCenter.y);
+          circleShape[i].setAttribute('r', 20);
+          group[i].appendChild(circleShape[i]);
+
+          // 绘制文字
+          textShape[i] = document.createElementNS(SVG_NS, 'text');
+          textShape[i].setAttribute('x', createCenter.x);
+          textShape[i].setAttribute('y', createCenter.y + 5); // +5是为了让文字向下偏移5像素，使文字居中
+          textShape[i].setAttribute('text-anchor', 'middle');
+          textShape[i].setAttribute('fill', '#FFFFFF');
+          textShape[i].innerHTML = this.options[i].id + 1;
+          svg.appendChild(group[i]);
+          group[i].appendChild(textShape[i]);
+          this.onMouseEnter = function(e) {
+            // DOMOverlay继承自EventEmitter，可以使用emit触发事件
+            // 动态修改circle颜色，所以选择传入circle节点
+            this.emit('mouseenter', e.target.firstChild);
+          }.bind(this);
+          this.onMouseLeave = function(e)  {
+            this.emit('mouseleave', e.target.firstChild);
+          }.bind(this);
+          group[i].addEventListener('mouseenter', this.onMouseEnter);
+          group[i].addEventListener('mouseleave', this.onMouseLeave);
+        }
+        return svg;
+      };
+
+      // 更新DOM元素，在地图移动/缩放后执行
+      SvgMarker.prototype.updateDOM = function () {
+        if (!this.map) {
+          return;
+        }
+
+        // 经纬度坐标转容器像素坐标
+        for (var j = 0; j < this.options.length; j++) {
+          var pixel = this.map.projectToContainer(this.options[j].position);
+          var updateCenter = this.map.projectToContainer(this.options[j].position);
+          this.dom.children[j]
+            .getElementsByTagName('circle')[0]
+            .setAttribute('cx', updateCenter.x);
+          this.dom.children[j]
+            .getElementsByTagName('circle')[0]
+            .setAttribute('cy', updateCenter.y);
+          this.dom.children[j]
+            .getElementsByTagName('text')[0]
+            .setAttribute('x', updateCenter.x);
+          this.dom.children[j]
+            .getElementsByTagName('text')[0]
+            .setAttribute('y', updateCenter.y + 5);
+        }
+      };
+
+      window.SvgMarker = SvgMarker;
+    </script>
+    <script type="text/javascript">
+      function initMap() {
+        // 初始化地图
+        var map = new TMap.Map('container', {
+          zoom: 12, // 设置地图缩放级别
+          center: new TMap.LatLng(39.984104, 116.307503) // 设置地图中心点坐标
+        });
+        // 初始化自定义marker类
+        var marker = new SvgMarker({
+          map,
+          options: [
+            {
+              position: new TMap.LatLng(39.96030543872138, 116.25809083213608),
+              id: 0,
+            },
+            {
+              position: new TMap.LatLng(39.9986945980902, 116.33598362780685),
+              id: 1
+            },
+            {
+              position: new TMap.LatLng(40.02906301748584, 116.25499991104516),
+              id: 2,
+            }
+          ]
+        });
+        map.res
+        marker.on('mouseenter', function(e) {
+          e.setAttribute('style', 'fill: red;stroke:red; opacity:0.9;');
+        });
+        marker.on('mouseleave', function(e) {
+          e.setAttribute('style', 'fill: blue;stroke:#FFFFFF;opacity:0.9;');
+        });
+        // 监听地图容器变化，动态修改svg图层大小，防止更新时元素移出svg图区
+        map.on('resize', function() {
+            document.getElementById('svgDom').setAttribute('width', mapContainer.offsetWidth);
+            document.getElementById('svgDom').setAttribute('height', mapContainer.offsetHeight);
+        })
+      }
+    </script>
+  </body>
+</html>

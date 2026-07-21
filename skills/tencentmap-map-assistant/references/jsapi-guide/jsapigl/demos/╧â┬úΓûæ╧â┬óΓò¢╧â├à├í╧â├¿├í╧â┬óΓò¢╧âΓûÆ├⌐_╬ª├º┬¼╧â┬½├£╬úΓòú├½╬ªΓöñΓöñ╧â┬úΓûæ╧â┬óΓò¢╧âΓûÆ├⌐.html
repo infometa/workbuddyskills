@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>自定义贴地图层</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+  html,
+  body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+  }
+
+  #container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+
+<body>
+<div id="container"></div>
+<canvas id="canvas" width=300 height=300 style="display: none;"></canvas>
+
+<script type="text/javascript">
+  var center = new TMap.LatLng(39.98187197091523, 116.31111860275269);
+  //初始化地图
+  var map = new TMap.Map("container", {
+    zoom: 15, //设置地图缩放级别
+    center: center, //设置地图中心点坐标
+  });
+
+
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext("2d");
+
+  // 画布的宽高
+  var cWidth = canvas.width;
+  var cHeight = canvas.height;
+  // 中心点
+  var centerX = canvas.width / 2;
+  var centerY = canvas.height / 2;
+  // 半径
+  var radius = centerX;
+
+  var drawCircle = function (r, lineWidth = 1, color = "rgba(123,153,255,0.9)") {
+    ctx.beginPath();
+    ctx.setLineDash([]);
+    ctx.arc(centerX, centerY, r, 0, 2 * Math.PI);
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+  };
+
+  var drawSector = function (sAngle, eAngle) {
+    var blob = 50;
+    var increase = 0;
+
+    if (sAngle < eAngle) {
+      increase = (eAngle - sAngle) / blob;
+    } else if (sAngle > eAngle) {
+      increase = (Math.PI * 2 - sAngle + eAngle) / blob;
+    } else {
+      return;
+    }
+
+    var angle1 = sAngle;
+    var angle2 = sAngle + increase;
+    for (var i = 0; i < blob; i++) {
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, angle1, angle2);
+      ctx.fillStyle = "rgba(42,91,255," + i / blob + ")";
+      ctx.fill();
+      angle1 = angle2;
+      angle2 = angle1 + increase;
+      if (angle2 >= Math.PI * 2) {
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, angle1, Math.PI * 2);
+        ctx.fillStyle = "rgba(42,91,255," + i / blob + ")";
+        ctx.fill();
+        angle1 = 0;
+        angle2 = angle1 + increase;
+      }
+    }
+  };
+
+  var init = function () {
+    drawCircle(1 * centerY, 2.5);
+    ctx.fillStyle = "rgba(42,91,255,0.07)";
+    ctx.arc(150, 150, 150, 0, 2 * Math.PI);
+    ctx.fill();
+    drawCircle(0.6 * centerY);
+    drawCircle(0.3 * centerY);
+  };
+
+  function scan() {
+    var angle = Math.PI / 4;
+    var scanBegin = 0;
+    var scanEnd = angle;
+    var pointRadius = 1;
+    // 绘制雷达扫描
+    var move = () => {
+      ctx.clearRect(0, 0, cWidth, cHeight); // 清除画布
+      init(); // 重绘背景
+      drawSector(scanBegin, scanEnd); // 绘制扇形扫描区域
+      // 改变点的半径以及扇形的角度
+      pointRadius += 0.08;
+      scanBegin += angle / 25;
+      scanEnd = scanBegin + angle;
+      // 超过阈值变为初始值
+      if (scanBegin >= Math.PI * 2) {
+        scanBegin = 0;
+        scanEnd = scanBegin + angle;
+      }
+      if (pointRadius >= 7) pointRadius = 0;
+      // 再次绘制
+      canvasGroundLayer.refresh();
+      animID = window.requestAnimFrame(move);
+    }
+
+    window.requestAnimFrame = (function () {
+      return window.requestAnimationFrame ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame ||
+              window.oRequestAnimationFrame ||
+              window.msRequestAnimationFrame ||
+              function (callback) {
+                window.setTimeout(callback, 1000 / 60);
+              };
+      canvasGroundLayer.refresh();
+    })();
+
+    animID = window.requestAnimFrame(move);
+  }
+  scan();
+
+  var imageSW = new TMap.LatLng(39.97897813636327, 116.3060975074768);
+  var imageNE = new TMap.LatLng(39.98506162381882, 116.316397190094);
+  var canvasLatLngBounds = new TMap.LatLngBounds(imageSW, imageNE);
+  var canvasGroundLayer = new TMap.CanvasGroundLayer({
+    bounds: canvasLatLngBounds,
+    canvas: canvas, // canvas节点
+    map: map
+  })
+</script>
+</body>
+
+</html>

@@ -1,0 +1,230 @@
+# D11: 前端安全深度检测模式表
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 检测 PostMessage、DOM Clobbering、WebSocket、CORS 滥用、客户端绕过等前端安全风险
+# 注意: XSS、原型链污染、点击劫持等基础前端风险已由 sink-patterns.yaml 和 config-baseline-patterns.yaml 覆盖
+
+# ============================================================================
+# 一、PostMessage 安全
+# ============================================================================
+
+postmessage_security:
+  description: "window.postMessage 跨域通信的安全缺陷"
+
+  vulnerable_patterns:
+    - category: 未验证消息来源
+      patterns:
+        - 'addEventListener\s*\(\s*[''"]message[''"]'
+        - 'onmessage\s*='
+        - 'window\.addEventListener\s*\(\s*[''"]message[''"]'
+      absence_check: 'event\.origin|e\.origin|origin\s*===|origin\s*!==|allowedOrigins'
+      note: "监听 message 事件但未校验 event.origin，任何窗口可发送恶意消息"
+
+    - category: 发送目标为通配符
+      patterns:
+        - 'postMessage\s*\([^,]+,\s*[''"]?\*[''"]?\s*\)'
+        - 'parent\.postMessage\s*\([^,]+,\s*[''"]?\*[''"]?\s*\)'
+        - 'opener\.postMessage\s*\([^,]+,\s*[''"]?\*[''"]?\s*\)'
+      note: "postMessage 目标 origin 为 *，敏感数据可被任何页面接收"
+
+    - category: 消息数据直接用于 DOM 操作
+      patterns:
+        - 'event\.data.*innerHTML'
+        - 'event\.data.*eval\('
+        - 'event\.data.*document\.write'
+        - 'event\.data.*\.src\s*='
+        - 'event\.data.*location'
+      note: "postMessage 接收的数据未净化直接用于危险操作"
+
+  safe_patterns:
+    - 'event\.origin\s*===\s*[''"]https://'
+    - 'allowedOrigins\.includes\(event\.origin\)'
+    - 'origin\.indexOf\s*\(\s*[''"]https://'
+
+# ============================================================================
+# 二、DOM Clobbering
+# ============================================================================
+
+dom_clobbering:
+  description: "HTML 元素的 name/id 属性可覆盖全局 DOM 对象属性，导致逻辑劫持"
+
+  vulnerable_patterns:
+    - category: 使用全局 DOM 属性访问元素
+      patterns:
+        - 'document\.\w+\s*\|\|'                    # document.xxx || fallback
+        - 'window\.\w+\s*&&\s*window\.\w+\.'        # window.xxx && window.xxx.yyy
+        - 'typeof\s+\w+\s*!==?\s*[''"]undefined[''"].*\w+\.\w+' # 检查全局变量是否存在
+      note: "通过全局属性访问 DOM 元素，可被 HTML 注入覆盖"
+
+    - category: 用户内容可注入 HTML name/id 属性
+      patterns:
+        - 'innerHTML\s*=.*<\w+.*name\s*='
+        - 'innerHTML\s*=.*<\w+.*id\s*='
+        - 'insertAdjacentHTML.*name\s*='
+      note: "用户可控 HTML 中包含 name/id 属性，可覆盖全局 DOM 对象"
+
+  context_note: "DOM Clobbering 需要结合 HTML 注入点和全局属性访问两个条件共同判断"
+
+# ============================================================================
+# 三、WebSocket 安全
+# ============================================================================
+
+websocket_security:
+  description: "WebSocket 连接的认证、来源验证和数据处理安全"
+
+  vulnerable_patterns:
+    - category: WebSocket 无认证
+      patterns:
+        - 'new\s+WebSocketServer\s*\('
+        - 'ws\.on\s*\(\s*[''"]connection[''"]'
+        - '@ServerEndpoint\('
+        - 'WebSocketHandler'
+      absence_check: 'authenticate|token|session|authorize|handshake.*auth|upgrade.*auth'
+      note: "WebSocket 连接握手阶段无认证检查"
+
+    - category: 未验证 Origin 头
+      patterns:
+        - 'ws\.on\s*\(\s*[''"]connection[''"]'
+        - 'onOpen\('
+        - 'handleWebSocketConnect'
+      absence_check: 'origin|Origin|allowedOrigins|verifyClient'
+      note: "WebSocket 服务端未验证连接的 Origin 头，存在跨站 WebSocket 劫持风险"
+
+    - category: WebSocket 消息未净化
+      patterns:
+        - 'ws\.on\s*\(\s*[''"]message[''"].*eval\('
+        - 'onMessage.*innerHTML'
+        - 'socket\.on\s*\(.*JSON\.parse.*exec\('
+      note: "WebSocket 接收的消息未净化直接用于危险操作"
+
+    - category: 使用非加密 WebSocket
+      patterns:
+        - 'new\s+WebSocket\s*\(\s*[''"]ws://'
+        - 'ws://'
+      note: "使用 ws:// 而非 wss://，通信内容可被窃听"
+
+# ============================================================================
+# 四、CORS 深度检测
+# ============================================================================
+
+cors_misconfiguration:
+  description: "CORS 配置缺陷的深度检测（基础通配符检测已在 config-baseline-patterns.yaml）"
+
+  vulnerable_patterns:
+    - category: Origin 反射（直接回显请求 Origin）
+      patterns:
+        - 'Access-Control-Allow-Origin.*request\.getHeader\s*\(\s*[''"]Origin[''"]'
+        - 'Access-Control-Allow-Origin.*req\.headers\.origin'
+        - 'Access-Control-Allow-Origin.*origin'
+        - 'res\.setHeader\s*\(\s*[''"]Access-Control-Allow-Origin[''"].*origin'
+        - 'response\.setHeader\s*\(\s*[''"]Access-Control-Allow-Origin[''"].*getHeader.*Origin'
+      note: "将请求的 Origin 头直接反射为 Allow-Origin，等同于通配符"
+
+    - category: Origin 校验不严格
+      patterns:
+        - 'origin\.endsWith\s*\('
+        - 'origin\.contains\s*\('
+        - 'origin\.indexOf\s*\('
+        - 'origin\.match\s*\(\s*\/[^/]*\.\*'
+        - 'origin\.includes\s*\(\s*[''"]\.example\.com[''"]'
+      note: "Origin 校验使用 endsWith/contains 等模糊匹配，可被子域名绕过"
+
+    - category: 凭证与通配符同时使用
+      patterns:
+        - 'Access-Control-Allow-Credentials.*true.*Access-Control-Allow-Origin.*\*'
+        - 'allowCredentials\s*[:=]\s*true.*allowedOrigins\s*[:=].*\*'
+        - 'credentials\s*:\s*true.*origin\s*:\s*true'
+      note: "Credentials=true + Origin=* 虽浏览器会拒绝，但反射 Origin 场景下有效"
+
+    - category: 预检请求缓存时间过长
+      patterns:
+        - 'Access-Control-Max-Age.*\d{6,}'
+        - 'maxAge\s*[:=]\s*\d{6,}'
+      note: "预检请求缓存时间过长（>24h），策略变更后难以及时生效"
+
+# ============================================================================
+# 五、客户端验证绕过
+# ============================================================================
+
+client_side_bypass:
+  description: "仅在前端进行的安全校验，无后端二次验证"
+
+  vulnerable_patterns:
+    - category: 仅前端权限控制
+      patterns:
+        - 'v-if\s*=\s*[''"].*role.*admin'           # Vue 条件渲染
+        - '\{.*isAdmin.*&&.*<'                       # React 条件渲染
+        - 'ng-if\s*=\s*[''"].*role'                  # Angular 条件渲染
+        - 'display:\s*none.*admin'
+        - '\.hidden.*!isAdmin'
+      note: "仅通过前端条件渲染隐藏管理功能，需确认后端有对应权限检查"
+      context: "需结合后端 API 检查是否有对应的权限校验"
+
+    - category: 仅前端输入验证
+      patterns:
+        - 'pattern\s*=\s*"[^"]*".*required'          # HTML5 pattern
+        - 'maxlength\s*=\s*"\d+"'                    # HTML maxlength
+        - '\.setCustomValidity\('                    # JS 自定义验证
+        - 'form\.checkValidity\(\)'                  # HTML5 表单验证
+      absence_check_note: "需确认后端有对应的输入验证逻辑"
+      note: "前端输入验证可被绕过，需后端二次验证"
+
+    - category: 前端价格/折扣计算
+      patterns:
+        - 'totalPrice\s*=.*price\s*\*'
+        - 'discount\s*=.*\*\s*0\.\d+'
+        - 'finalAmount\s*=.*-.*coupon'
+      note: "价格/折扣在前端计算，可通过修改请求参数绕过"
+      cross_ref: "resource/scan-data/sink-patterns.yaml → 支付/金额"
+
+# ============================================================================
+# 六、其他前端安全风险
+# ============================================================================
+
+other_frontend_risks:
+
+  - category: 不安全的 iframe 嵌入
+    patterns:
+      - '<iframe.*src\s*=\s*[''"]?\{'             # 动态 iframe src
+      - 'iframe\.src\s*=\s*\w+'                   # JS 动态设置 iframe src
+    absence_check: 'sandbox|allow-'
+    note: "动态 iframe 未设置 sandbox 属性"
+
+  - category: 敏感数据存储在 LocalStorage
+    patterns:
+      - 'localStorage\.setItem\s*\(.*[Tt]oken'
+      - 'localStorage\.setItem\s*\(.*[Pp]assword'
+      - 'localStorage\.setItem\s*\(.*[Ss]ecret'
+      - 'sessionStorage\.setItem\s*\(.*[Tt]oken'
+    note: "敏感凭证存储在 LocalStorage/SessionStorage，可被 XSS 窃取"
+
+  - category: 不安全的 JavaScript URL
+    patterns:
+      - 'href\s*=\s*[''"]?\s*javascript:'
+      - 'location\s*=\s*[''"]?\s*javascript:'
+      - 'window\.open\s*\(\s*[''"]javascript:'
+    note: "JavaScript 协议 URL 可导致 XSS"
+
+# ============================================================================
+# 七、判定补充规则
+# ============================================================================
+
+pattern_judgment_supplements:
+  - type: PostMessage 来源未验证
+    condition: "监听 message 事件但未校验 event.origin，且消息数据用于 DOM 操作/导航/eval"
+    action: "创建 postmessage-origin-bypass finding"
+    severity: "medium"
+
+  - type: CORS Origin 反射
+    condition: "Access-Control-Allow-Origin 直接使用请求的 Origin 头值，且 Allow-Credentials 为 true"
+    action: "创建 cors-origin-reflection finding"
+    severity: "medium"
+
+  - type: WebSocket 劫持
+    condition: "WebSocket 连接未验证 Origin 头且无认证机制"
+    action: "创建 websocket-hijacking finding"
+    severity: "medium"
+
+  - type: 客户端验证绕过
+    condition: "前端存在权限/输入验证但后端对应 API 无相同校验"
+    action: "创建 client-side-bypass finding"
+    severity: "low"

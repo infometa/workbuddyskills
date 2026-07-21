@@ -1,0 +1,138 @@
+# 自定义安全函数配置
+# 定义项目中可以阻断污点传播的安全函数
+
+# ========== 方式一：代码注释标记（推荐） ==========
+# 在代码中添加 @safe 注释，AI 分析时自动识别为安全函数
+#
+Go:      // @safe
+Java:    // @safe 或 /* @safe */
+Python:  # @safe
+JS/TS:   // @safe 或 /* @safe */
+#
+# 示例：
+#   // @safe
+#   func SafeHttpGet(url string) (*Response, error) { ... }
+#
+#   # @safe
+#   def safe_query(sql, params): ...
+
+# ========== 方式二：包路径配置 ==========
+sanitizers:
+  # ────────── secapi / scurl 安全开发套件 (防 SSRF) ──────────
+  # scurl 是腾讯内部安全请求客户端，默认禁止所有内网访问，
+  # hook 每次 HTTP 请求并校验目标地址，可防御 DNS 重绑定、30x 跳转等绕过。
+  # 当 sink 函数中使用 scurl 发起请求时，不存在 SSRF 风险。
+
+  # --- Go ---
+  - package: "git.woa.com/sec-api/go/scurl"
+    risk_type: ssrf
+    description: "Go scurl v1 安全请求客户端，NewSafeClient 默认拦截内网请求"
+
+  - package: "git.woa.com/sec-api/go/scurl/v2"
+    risk_type: ssrf
+    description: "Go scurl v2 安全请求客户端（推荐），NewSafeClient 默认拦截内网请求"
+
+  - package: "git.woa.com/sec-api/go/trpc_scurl"
+    risk_type: ssrf
+    description: "Go tRPC-scurl 集成，指定 sechttp 协议时自动使用安全加固 Client"
+
+  - package: "git.woa.com/sec-api/go/checkurl"
+    risk_type: ssrf
+    description: "Go checkurl URL 校验组件（注意：单步校验在多步场景存在被绕过风险）"
+
+  # --- JavaScript / TypeScript (Node.js npm 包) ---
+  - package: "@tencent/scurl"
+    risk_type: ssrf
+    description: "Node.js/TS scurl npm 包（require('@tencent/scurl')），new Scurl().hook(url) 拦截内网请求"
+
+  - package: "@tencent/checkurl"
+    risk_type: ssrf
+    description: "Node.js/TS checkurl npm 包"
+
+  - package: "git.woa.com/sec-api/javascript/scurl"
+    risk_type: ssrf
+    description: "Node.js scurl 安全请求客户端 (v1.0.8+)，git 仓库路径"
+
+  - package: "git.woa.com/sec-api/javascript/checkurl"
+    risk_type: ssrf
+    description: "Node.js checkurl URL 校验组件"
+
+  # --- TypeScript ---
+  - package: "git.woa.com/sec-api/typescript/scurl"
+    risk_type: ssrf
+    description: "TypeScript scurl 安全请求客户端"
+
+  # --- C++ ---
+  - package: "git.woa.com/sec-api/cpp/cscurl"
+    risk_type: ssrf
+    description: "C++ scurl (cscurl) 安全请求客户端"
+
+  - package: "git.woa.com/sec-api/cpp/checkurl"
+    risk_type: ssrf
+    description: "C++ checkurl URL 校验组件"
+
+  # --- Python ---
+  - package: "git.woa.com/sec-api/python/tsecapi/scurl"
+    risk_type: ssrf
+    description: "Python scurl 安全请求客户端，全局拦截 requests/aiohttp"
+
+  - package: "git.woa.com/sec-api/python/tsecapi/checkurl"
+    risk_type: ssrf
+    description: "Python checkurl URL 校验组件"
+
+  - package: "tsecapi.scurl"
+    risk_type: ssrf
+    description: "Python tsecapi.scurl 模块导入路径（pip 安装后的引用方式）"
+
+  - package: "tsecapi.checkurl"
+    risk_type: ssrf
+    description: "Python tsecapi.checkurl 模块导入路径（pip 安装后的引用方式）"
+
+  # --- Java ---
+  - package: "git.woa.com/sec-api/java/scurl"
+    risk_type: ssrf
+    description: "Java scurl 安全请求客户端"
+
+  - package: "git.woa.com/sec-api/java/checkurl"
+    risk_type: ssrf
+    description: "Java checkurl URL 校验组件"
+
+# ========== 方式三：函数名配置 ==========
+  # secapi 关键安全函数 —— 使用这些函数发起/校验请求可消除 SSRF 风险
+
+  # --- Go ---
+  - function: "secapi.NewSafeClient"
+    risk_type: ssrf
+    description: "Go secapi 安全请求客户端构造函数，默认禁止内网访问"
+
+  - function: "secapi.CheckUrl"
+    risk_type: ssrf
+    description: "Go secapi URL 白名单校验函数"
+
+  - function: "safeClient.Do"
+    risk_type: ssrf
+    description: "Go secapi SafeClient 发起请求方法，每次请求均校验目标地址"
+
+  - function: "safeClient.Get"
+    risk_type: ssrf
+    description: "Go secapi SafeClient GET 请求快捷方法"
+
+  - function: "safeClient.Post"
+    risk_type: ssrf
+    description: "Go secapi SafeClient POST 请求快捷方法"
+
+  # --- Node.js / TypeScript ---
+  - function: "Scurl"
+    risk_type: ssrf
+    description: "Node.js Scurl 构造函数（new Scurl()），来自 @tencent/scurl 包"
+
+  - function: "Scurl().hook"
+    risk_type: ssrf
+    description: "Node.js Scurl hook 方法，hook 到 got/axios agent 拦截所有出站请求"
+
+  - function: "scurl.hook"
+    risk_type: ssrf
+    description: "Node.js scurl.hook() 方法，作为 HTTP agent 拦截内网请求"
+
+  # - function: "utils.EscapeSQL"
+  #   risk_type: sql_injection

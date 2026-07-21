@@ -1,0 +1,104 @@
+name: smart_log
+description: |
+  智能日志分析工具，专为处理大型日志文件设计。
+
+  核心命令：
+  - overview：获取日志概览（文件大小、时间范围、级别分布、高频错误）
+  - search：智能搜索（支持关键词、时间段、去重、上下文）
+  - errors：错误聚类分析（按类型统计、识别主要问题）
+  - timeline：时间线分析（查看关键事件时序）
+  - trace：ID 追踪（追踪特定请求/会话）
+  - validate：时间范围验证（确认目标时间是否在日志中）
+  - chain：事件链分析（重构问题发生链路）
+  - tail：查看日志末尾N行（带行号+时间戳+级别+截断内容）
+
+  使用方法（通过 skill_run 执行）：
+
+  获取概览（排查第一步）：
+  skill_run({'skill': 'log-analysis-troubleshooting', 'command': 'python3 tools/smart_log.py overview --file "/path/to/app.log"'})
+
+  搜索关键词：
+  skill_run({'skill': 'log-analysis-troubleshooting', 'command': 'python3 tools/smart_log.py search --file "/path/to/app.log" --keyword "error|fail" --start "15:35" --end "15:40" --dedupe --context 3'})
+
+  错误聚类：
+  skill_run({'skill': 'log-analysis-troubleshooting', 'command': 'python3 tools/smart_log.py errors --file "/path/to/app.log" --top 20'})
+
+  时间线分析：
+  skill_run({'skill': 'log-analysis-troubleshooting', 'command': 'python3 tools/smart_log.py timeline --file "/path/to/app.log" --start "15:35" --end "15:40"'})
+
+  事件链分析：
+  skill_run({'skill': 'log-analysis-troubleshooting', 'command': 'python3 tools/smart_log.py chain --file "/path/to/app.log" --events "start,stop,init,exit"'})
+
+  六步排查法：概览 → 时间校验 → 范围定位 → 异常聚类 → 事件链重构 → 根因定位
+
+input_schema:
+  type: object
+  properties:
+    subcommand:
+      type: string
+      description: >-
+        子命令。可选值：overview, search, errors, timeline, trace, validate, chain。
+      enum: ["overview", "search", "errors", "timeline", "trace", "validate", "chain", "tail"]
+    file:
+      type: string
+      description: >-
+        必填。日志文件的绝对路径。
+        示例："/var/log/app.log"
+    keyword:
+      type: string
+      description: >-
+        搜索关键词，支持正则和多关键词（用 | 分隔）。
+        示例："error|fail|timeout"
+    preset:
+      type: string
+      description: >-
+        可选。预设关键词组，快速搜索常见排障场景。可选值：disconnect|error|network|auth。
+      enum: ["disconnect", "error", "network", "auth"]
+    start:
+      type: string
+      description: >-
+        可选。时间范围起始。格式："HH:MM" 或 "YYYY-MM-DD HH:MM"。
+    end:
+      type: string
+      description: >-
+        可选。时间范围结束。格式："HH:MM" 或 "YYYY-MM-DD HH:MM"。
+    top:
+      type: number
+      description: >-
+        可选。返回前 N 个结果（如错误聚类的 top N）。默认 10。
+    dedupe:
+      type: boolean
+      description: >-
+        可选。是否开启智能去重。默认 false。
+    context:
+      type: number
+      description: >-
+        可选。显示匹配行前后的上下文行数。默认 0。
+    trace_id:
+      type: string
+      description: >-
+        trace 命令专用。要追踪的请求/会话 ID。
+    events:
+      type: string
+      description: >-
+        chain 命令专用。要追踪的事件列表（逗号分隔）。
+        示例："start,stop,init,exit,connect,disconnect"
+    lines:
+      type: number
+      description: >-
+        tail 命令专用。显示末尾行数。默认 50。
+  required:
+    - subcommand
+    - file
+  additionalProperties: false
+  $schema: http://json-schema.org/draft-07/schema#
+
+skill_run_examples:
+  - description: 获取日志概览
+    command: 'python3 tools/smart_log.py overview --file "/var/log/app.log"'
+  - description: 搜索错误关键词
+    command: 'python3 tools/smart_log.py search --file "/var/log/app.log" --keyword "error|fail" --dedupe'
+  - description: 错误聚类分析
+    command: 'python3 tools/smart_log.py errors --file "/var/log/app.log" --start "15:35" --end "15:40" --top 20'
+  - description: 事件链分析
+    command: 'python3 tools/smart_log.py chain --file "/var/log/app.log" --events "start,stop,init,exit"'

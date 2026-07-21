@@ -1,0 +1,19 @@
+{
+  "name": "commands-miscellaneous",
+  "version": "1.0.0",
+  "description": "General-purpose utility commands",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "miscellaneous",
+    "five",
+    "mermaid",
+    "use-stepper"
+  ]
+}

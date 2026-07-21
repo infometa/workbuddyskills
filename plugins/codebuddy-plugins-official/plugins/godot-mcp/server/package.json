@@ -1,0 +1,40 @@
+{
+  "name": "godot-mcp-server",
+  "version": "1.0.0",
+  "description": "Godot MCP Server using FastMCP",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch src --exec \"tsc && node dist/index.js\"",
+    "test": "node test/test_commands.js",
+    "test:write": "node test/test_commands.js --write",
+    "deploy": "node scripts/deploy.js",
+    "deploy:dry": "node scripts/deploy.js --dry-run",
+    "status": "node scripts/deployment_status.js",
+    "status:diagnose": "node scripts/deployment_status.js --diagnose",
+    "uninstall": "node scripts/deployment_status.js --uninstall"
+  },
+  "keywords": [
+    "godot",
+    "mcp",
+    "fastmcp",
+    "claude",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "fastmcp": "^1.20.4",
+    "websocket": "^1.0.35",
+    "ws": "^8.13.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "@types/ws": "^8.5.5",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.1.3"
+  }
+}

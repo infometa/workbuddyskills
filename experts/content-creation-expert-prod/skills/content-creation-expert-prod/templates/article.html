@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="format-detection" content="telephone=no">
+<title>{{ title }}</title>
+<style>
+/* ===== Reset & Base ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  line-height: 1.85;
+  color: #1a1a1a;
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Container ===== */
+.article-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* ===== Typography ===== */
+h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  margin: 36px 0 20px;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 32px 0 14px;
+  line-height: 1.4;
+  border-left: 4px solid #1a1a1a;
+  padding-left: 14px;
+}
+
+h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 24px 0 10px;
+  line-height: 1.4;
+}
+
+p {
+  margin: 14px 0;
+  text-align: justify;
+  word-break: break-all;
+}
+
+/* ===== Images ===== */
+figure {
+  margin: 24px 0;
+  text-align: center;
+}
+
+figure img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  object-fit: cover;
+}
+
+figcaption {
+  font-size: 0.82rem;
+  color: #888;
+  margin-top: 10px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ===== Blockquote ===== */
+blockquote {
+  border-left: 4px solid #e0e0e0;
+  padding: 14px 18px;
+  margin: 18px 0;
+  color: #4a4a4a;
+  background: #fafafa;
+  border-radius: 0 10px 10px 0;
+  font-size: 0.95rem;
+}
+
+/* ===== List ===== */
+ul {
+  margin: 14px 0;
+  padding-left: 26px;
+}
+
+li {
+  margin: 8px 0;
+  line-height: 1.7;
+}
+
+/* ===== Links & Inline ===== */
+a {
+  color: #1a73e8;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+a:hover {
+  border-bottom-color: #1a73e8;
+}
+
+strong {
+  font-weight: 600;
+}
+
+em {
+  font-style: italic;
+  color: #555;
+}
+
+code {
+  background: #f5f5f5;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.88em;
+  font-family: "SF Mono", "Monaco", "Menlo", monospace;
+}
+
+del {
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* ===== Horizontal Rule ===== */
+hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 32px 0;
+}
+
+/* ===== Table ===== */
+.table-wrapper {
+  overflow-x: auto;
+  margin: 18px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th {
+  background: #f5f5f5;
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid #ddd;
+}
+
+td {
+  padding: 9px 14px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover td {
+  background: #fafafa;
+}
+
+/* ===== AI Image Notice ===== */
+.ai-notice {
+  font-size: 0.8rem;
+  color: #999;
+  text-align: center;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ===== Footer ===== */
+.article-footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #bbb;
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+  .article-container {
+    padding: 20px 16px 60px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 24px 0 14px;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    margin: 24px 0 10px;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin: 10px 0;
+    font-size: 0.95rem;
+  }
+
+  figure {
+    margin: 18px -16px;
+  }
+
+  figure img {
+    border-radius: 0;
+  }
+
+  figcaption {
+    padding: 0 16px;
+  }
+
+  blockquote {
+    margin: 14px 0;
+    padding: 10px 14px;
+  }
+}
+
+/* ===== Dark Mode Support ===== */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1a1a1a;
+    color: #e8e8e8;
+  }
+
+  h2 {
+    border-left-color: #e8e8e8;
+  }
+
+  figure img {
+    opacity: 0.92;
+  }
+
+  figcaption {
+    color: #999;
+  }
+
+  blockquote {
+    background: #252525;
+    border-left-color: #444;
+    color: #ccc;
+  }
+
+  code {
+    background: #2a2a2a;
+    color: #e0e0e0;
+  }
+
+  a {
+    color: #6db3f8;
+  }
+
+  .article-footer {
+    border-top-color: #333;
+    color: #555;
+  }
+}
+</style>
+</head>
+<body>
+<div class="article-container">
+  {% for block in blocks %}
+  {% if block.type == 'hr' %}
+  <hr>
+  {% elif block.type == 'h1' %}
+  <h1>{{ block.content }}</h1>
+  {% elif block.type == 'h2' %}
+  <h2>{{ block.content }}</h2>
+  {% elif block.type == 'h3' %}
+  <h3>{{ block.content }}</h3>
+  {% elif block.type == 'p' %}
+  <p>{{ block.content }}</p>
+  {% elif block.type == 'img' %}
+  <figure>
+    <img src="{{ block.src|e }}" alt="{{ block.alt|e }}" loading="lazy" decoding="async">
+  </figure>
+  {% elif block.type == 'ai_notice' %}
+  <p class="ai-notice">{{ block.content|e }}</p>
+  {% elif block.type == 'blockquote' %}
+  <blockquote>{{ block.content }}</blockquote>
+  {% elif block.type == 'list' %}
+  <ul>
+    {% for item in block.list_items %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+  {% elif block.type == 'table' %}
+  <div class="table-wrapper">
+    <table>
+      {% for row in block.rows %}
+      {% set cells = row.strip().strip('|').split('|') %}
+      {% if loop.first %}
+      <thead><tr>{% for cell in cells %}<th>{{ cell.strip() }}</th>{% endfor %}</tr></thead>
+      <tbody>
+      {% elif not row.strip().strip('|').replace('-','').replace(':','').replace(' ','').replace('|','') %}
+      {% else %}
+      <tr>{% for cell in cells %}<td>{{ cell.strip() }}</td>{% endfor %}</tr>
+      {% endif %}
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+  {% endfor %}
+
+  <div class="article-footer">
+    由 AI 内容创作专家生成
+  </div>
+</div>
+</body>
+</html>

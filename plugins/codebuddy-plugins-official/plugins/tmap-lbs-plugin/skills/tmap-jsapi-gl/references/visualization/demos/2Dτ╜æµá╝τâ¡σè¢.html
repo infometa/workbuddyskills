@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2D网格热力</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/hexagon.js"></script>
+    <script>
+        function initMap() {
+            var center = new TMap.LatLng(39.984104, 116.307503);
+
+            var data = citydata.bj;
+            //初始化地图
+            var map = new TMap.Map("container", {
+                zoom: 10,//设置地图缩放级别
+                pitch: 45,
+                center: center,//设置地图中心点坐标
+                mapStyleId: "style4", //个性化样式
+               baseMap: {
+            		type: "vector",
+            		features: ["base", "building3d"], // 隐藏矢量文字
+          		},
+            });
+            //初始化网格热力图图并添加至map图层
+            var grid =new TMap.visualization.Grid({
+                sideLength: 1000, // 设置网格边长
+                extrudable: false, // 网格不可拔起，可以做出贴地效果
+                heightRange:[1, 5000], // 高度变化区间
+                showRange:[1, 100] // 聚合数据显示区间
+
+            })
+            .addTo(map)
+            .setData(data);//设置数据
+
+            // 数据聚合之后才能够真正获取值域范围
+            grid.setShowRange(grid.getValueRange());
+        }
+    </script>
+</body>
+
+</html>

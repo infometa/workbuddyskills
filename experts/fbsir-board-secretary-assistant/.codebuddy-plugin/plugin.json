@@ -1,0 +1,328 @@
+{
+  "name": "fbsir-board-secretary-assistant",
+  "version": "26.7.2",
+  "description": "福帮手（FBSir）董秘助手，面向公告、路演、互动回复、问询函、三会材料和投关沟通稿，先做合规红队审查与审批下一步。",
+  "author": {
+    "name": "福帮手",
+    "email": "unique@u3w.com"
+  },
+  "homepage": "https://api2.u3w.com/fbss/",
+  "license": "MIT",
+  "expertType": "agent",
+  "agentName": "fbsir-board-secretary-assistant",
+  "agents": [
+    "./agents/fbsir-board-secretary-assistant.md"
+  ],
+  "skills": [
+    "./skills/board-secretary-compliance-red-team"
+  ],
+  "displayName": {
+    "en": "FBSir",
+    "zh": "福帮手"
+  },
+  "profession": {
+    "en": "Board Secretary Assistant",
+    "zh": "董秘助手"
+  },
+  "displayDescription": {
+    "en": "Runs a compliance red-team review before disclosure, roadshow, IR Q&A, announcement, or investor communication material is used externally.",
+    "zh": "面向公告、路演、投资者问答、互动回复和沟通稿，在对外使用前做合规红队审查并给出审批下一步。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "11-SecurityCompliance",
+  "defaultInitPrompt": {
+    "en": "Review this roadshow Q&A as a compliance red team and flag nonpublic-information, selective-disclosure, and forward-looking risk.",
+    "zh": "请对这段路演问答做合规红队审查，重点挑出内幕信息、选择性披露和前瞻性表述风险。"
+  },
+  "tags": [
+    {
+      "en": "Disclosure Compliance",
+      "zh": "信息披露合规"
+    },
+    {
+      "en": "Investor Relations",
+      "zh": "投资者关系"
+    },
+    {
+      "en": "Compliance Red Team",
+      "zh": "合规红队"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Review this roadshow Q&A as a compliance red team and flag nonpublic-information, selective-disclosure, and forward-looking risk.",
+      "zh": "请对这段路演问答做合规红队审查，重点挑出内幕信息、选择性披露和前瞻性表述风险。"
+    },
+    {
+      "en": "Check this announcement draft for evidence gaps, problematic fragments, and externally safer wording.",
+      "zh": "请检查这份公告草稿的补证缺口、问题片段和更稳妥的对外表述。"
+    },
+    {
+      "en": "Turn this investor communication draft into a red-team card and approval handoff checklist.",
+      "zh": "请把这份投资者沟通稿整理成合规红队卡和审批交接清单。"
+    }
+  ],
+  "brand": {
+    "zh": "福帮手",
+    "en": "FBSir"
+  },
+  "runtimeContract": {
+    "schema": "fbsir-board-secretary-assistant-runtime-contract/v1",
+    "version": "26.7.2",
+    "operatingContract": "contracts/board-secretary-assistant-operating-contract.json",
+    "productId": "fbsir-board-secretary-assistant",
+    "serviceProductId": "workbuddy_board_secretary_assistant",
+    "operatingModes": [
+      "independent_expert",
+      "compliance_red_team",
+      "review_pack_handoff",
+      "no_connector_first_value",
+      "lebao_intent_gap_fill",
+      "service_side_host_traction"
+    ],
+    "connectorToolChain": [
+      "skill_whoami",
+      "fbs_scene_pack_query",
+      "skill_consume"
+    ],
+    "entryPromptCode": "wb_fbsir_board_secretary_compliance_red_team",
+    "defaultPromptId": "fbss_board_secretary_compliance_red_team_start",
+    "cardActionId": "fbss_board_secretary_compliance_red_team_start",
+    "entryId": "board-secretary-compliance-red-team",
+    "entrySurface": "workbuddy_expert_center",
+    "expertEntryId": "fbsir-board-secretary-assistant",
+    "channelTrack": "board_secretary_assistant",
+    "intentFamily": "board_secretary_ir_workflow",
+    "profileSegment": "board_secretary",
+    "packCode": "fbss.board_secretary.compliance_red_team.v1",
+    "scenePackId": "board-secretary-compliance-red-team",
+    "routeCode": "route.board_secretary_compliance_red_team",
+    "assetType": "compliance-red-team-card",
+    "continueAssetType": "compliance-red-team-followup-card",
+    "connectorAssumedAvailable": false,
+    "connectorRequired": false,
+    "packageCapabilityDependsOnConnector": false,
+    "networkEnhancementOptional": true,
+    "optionalEnhancementOnly": true,
+    "connectorPromptSuppressionExpected": true,
+    "compatibleToolSurface": "no_connector_primary_service_observation_external",
+    "offerId": "board_secretary_compliance_review_pack_v1",
+    "firstValueContract": "contracts/first-value-contract.json",
+    "humanReviewBoundaryContract": "contracts/governance-boundary.json",
+    "serviceForwardFieldsContract": "contracts/service-forward-fields.json",
+    "serviceTractionUpgradeContract": "contracts/service-traction-upgrade-contract.json",
+    "sameBindingRequiredForFirstValue": false,
+    "sameBindingRequiredForClosure": true,
+    "noConnectorFirstValue": {
+      "firstValueDoesNotRequireConnector": true,
+      "serviceToolOptionalEnhancementOnly": true,
+      "doNotAssumeHostRuntimeUpgrade": true
+    },
+    "serviceSideDecisionOnly": true,
+    "hostCommercialDecisionAllowed": false,
+    "automaticLegalConclusionAllowed": false,
+    "priorityScope": [
+      "P0",
+      "P1",
+      "P2"
+    ],
+    "machineReadableActionEnvelopeRequired": false,
+    "hostMetadataChannelPreferred": false,
+    "publishedHostSurfaceOnly": true,
+    "hostResearchEvidenceExcludedFromPackageRuntimeContract": true,
+    "requiredInterfaces": [
+      "starterPrompt",
+      "opsEnvelope",
+      "resultCard",
+      "valueEvent",
+      "regulatorySourceRegistry",
+      "scenarioExpansion",
+      "personalizationProfile"
+    ],
+    "optionalInterfaces": [
+      "serviceFollowthroughPlan",
+      "valueEvent"
+    ],
+    "deferredHostResearchInterfaces": [
+      "hostActionEnvelope",
+      "serviceCoordinationHints",
+      "commercialEvent",
+      "deliveryTask",
+      "deliveryTaskboard",
+      "hostCapabilityRequest",
+      "opsBoard",
+      "desensitizedClientIdentity",
+      "lebaoClaimEnvelope",
+      "intentAggregationEnvelope",
+      "serviceTractionEnvelope",
+      "personalizedHostDirective"
+    ],
+    "hostAuthorizedContextRequired": true,
+    "serviceSideScenarioExpansionRequired": true,
+    "defaultFirstValueSurface": "chat_response_only",
+    "noConnectorActionContract": "contracts/no-connector-action-contract.json",
+    "serviceClosureSchema": "contracts/service-side-closure-report.schema.json",
+    "serviceCoordinationHints": {
+      "attributionFieldsMustTravelTogether": true,
+      "sameBindingReceiptRequiredBeforeUnlock": true,
+      "hostActionEnvelopeRequiredForTraction": false,
+      "hostActionEnvelopeTargetOnly": true,
+      "unknownAttributionMustRemainUnknown": true
+    },
+    "intelligentOpsClosedLoop": {
+      "maturityTarget": "best_in_class_board_secretary_closed_loop",
+      "naturalTrafficFirst": true,
+      "fullChainObservable": true,
+      "clientIdentitySubject": "independent_client",
+      "desensitizedIdentityRequired": true,
+      "allowedIdentityFields": [
+        "clientHash",
+        "installHash",
+        "hostClientIdHash",
+        "anonymousUserCodeHash",
+        "serverBindingId",
+        "sessionBindingId",
+        "chainFingerprint",
+        "platform",
+        "hostVersion",
+        "packageVersion"
+      ],
+      "forbiddenIdentityFields": [
+        "phone",
+        "email",
+        "idCard",
+        "realName",
+        "rawDeviceId",
+        "rawIp"
+      ],
+      "lebaoUnlockAndIntentCapture": {
+        "claimEncouragementAllowed": true,
+        "claimRequiresUserVisibleProgressReason": true,
+        "claimMustNotLookLikePayment": true,
+        "requiredEvents": [
+          "lebao_exposed",
+          "lebao_claim_intent",
+          "lebao_claim_receipt",
+          "intent_aggregated",
+          "host_directive_receipt"
+        ],
+        "claimablePackCode": "fbss.board_secretary.compliance_red_team.v1",
+        "intentCollectionFields": [
+          "intentFamily",
+          "profileSegment",
+          "materialType",
+          "reviewGoal",
+          "disclosureStage",
+          "riskFocus",
+          "actionPreference"
+        ]
+      },
+      "serviceDrivenHostTraction": {
+        "serviceCanRecommendHostBehavior": true,
+        "hostMustRenderDecision": true,
+        "hostActionEnvelopeRequired": false,
+        "hostActionEnvelopeTargetOnly": true,
+        "personalizationGoal": "千人千面的董办下一步建议和宿主能力激活",
+        "conversionGoal": "提升用户体验并激活宿主侧能力价值",
+        "requiredFeedbackEvents": [
+          "first_value_completed",
+          "continued_use_completed",
+          "manual_review_required",
+          "host_directive_receipt",
+          "lebao_claim_receipt"
+        ]
+      }
+    }
+  },
+  "distributionSurface": {
+    "host": "WorkBuddy",
+    "targetMarketplace": "experts",
+    "targetDisplayNameZh": "董秘助手",
+    "targetDisplayNameEn": "Board Secretary Assistant",
+    "listedProductSurface": "official_expert_marketplace",
+    "listedProductMustCarryOfficialSurfaceSignature": true,
+    "nonOfficialSurfaceCreditForbidden": true,
+    "localEquivalentTestSurface": "my-experts",
+    "localEquivalentTestOnly": true,
+    "localEquivalentPurposeZh": "仅用于当前工作区安装与入口配置，不代表最终上架路径。"
+  },
+  "plugin": "fbsir-board-secretary-assistant",
+  "entryMatrix": [
+    {
+      "entryId": "board-secretary-compliance-red-team",
+      "entrySurface": "workbuddy_expert_center",
+      "productId": "fbsir-board-secretary-assistant",
+      "serviceProductId": "workbuddy_board_secretary_assistant",
+      "entryPromptCode": "wb_fbsir_board_secretary_compliance_red_team",
+      "defaultPromptId": "fbss_board_secretary_compliance_red_team_start",
+      "cardActionId": "fbss_board_secretary_compliance_red_team_start",
+      "intentFamily": "board_secretary_ir_workflow",
+      "profileSegment": "board_secretary",
+      "profileSegments": [
+        "board_secretary",
+        "securities_rep",
+        "ir_director",
+        "cfo_office"
+      ],
+      "assetType": "compliance-red-team-card",
+      "servicePackCode": "fbss.board_secretary.compliance_red_team.v1",
+      "scenePackId": "board-secretary-compliance-red-team",
+      "routeCode": "route.board_secretary_compliance_red_team",
+      "priorityScope": [
+        "P0",
+        "P1",
+        "P2"
+      ],
+      "requiredInterfaces": [
+        "hostCapabilityRequest",
+        "deliveryTaskboard",
+        "opsBoard",
+        "regulatorySourceRegistry",
+        "scenarioExpansion",
+        "personalizationProfile"
+      ]
+    }
+  ],
+  "serviceObservationBoundary": {
+    "listedPackageAttributionMustUse": [
+      "productId",
+      "serviceProductId",
+      "entryId",
+      "expertEntryId",
+      "entryPromptCode",
+      "defaultPromptId",
+      "cardActionId",
+      "channelTrack",
+      "intentFamily",
+      "profileSegment",
+      "packCode",
+      "scenePackId",
+      "routeCode"
+    ],
+    "nonOfficialEquivalentSignalsMustStaySeparate": true,
+    "unknownAttributionPolicy": "keep_unknown_until_source_field_is_observed",
+    "connectorPublicName": "福帮手人机协同连接器",
+    "connectorSource": "fbs-connector",
+    "integrationMode": "external_service_observation_only_no_package_mcp_metadata",
+    "newConnectorRequired": false,
+    "connectorRequiredForFirstValue": false,
+    "optionalEnhancementOnly": true
+  },
+  "guardrails": {
+    "noAutomaticDisclosureDecision": true,
+    "noAutomaticLegalConclusion": true,
+    "noAutomaticPublishing": true,
+    "hostRendersServiceDecisionOnly": true,
+    "offerAfterFirstValueOnly": true,
+    "visibleJsonForbidden": true,
+    "internalIdVisibleForbidden": true,
+    "lebaoAsPaymentForbidden": true
+  },
+  "reviewPackageVersionLabel": "26.7.2",
+  "reviewPackageBoundary": {
+    "generatedForReviewOnly": true,
+    "localEquivalentEvidenceOnly": true,
+    "officialReplacementClaimAllowed": false,
+    "naturalBusinessClosureClaimAllowed": false
+  }
+}

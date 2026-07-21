@@ -1,0 +1,5 @@
+{
+  "name": "image-enhancer",
+  "description": "通过提升分辨率、锐度和清晰度来改善图像和截图质量，适用于专业演示文稿和文档制作。",
+  "license": "未声明"
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>弧线流向组合图</title>
+  </head>
+  <script
+    charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"
+  ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+    #container {
+      width: 100%;
+      height: 100%;
+    }
+    #name {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 12px;
+      color: #ffffff;
+    }
+  </style>
+  <body onload="initMap()">
+    <div id="container"></div>
+    <div id="name">北京市人口迁出图</div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/migration.js"></script>
+    <script>
+      function initMap() {
+        //初始化地图
+        var map = new TMap.Map("container", {
+          zoom: 5, //设置地图缩放级别
+          pitch: 46.9, //地图俯仰角度
+          rotation: 13.6, //地图在水平面上的旋转角度
+          center: new TMap.LatLng(34.07471242503055, 108.65100505987527), //设置地图中心点坐标
+          mapStyleId: "style4", //个性化样式
+          renderOptions: {
+            enableBloom: true, // 泛光
+          },
+          baseMap: {
+            type: "vector",
+            features: ["base", "building3d"], // 隐藏矢量文字
+          },
+        });
+
+        //初始化弧线图并添加至map图层
+        var arc = new TMap.visualization.Arc({
+          pickStyle: function (item) {
+            //轨迹图样式映射函数
+            var style;
+            if (item.count < 7000) {
+              style = {
+                width: 2,
+                color: "rgba(230,129,28,0.1)",
+                animateColor: "#FFCA1F",
+              };
+            } else {
+              style = {
+                width: 2,
+                color: "rgba(1,124,247,0.1)",
+                animateColor: "#1DFAF2",
+              };
+            }
+            return style;
+          },
+          enableBloom: true, //泛光
+          processAnimation: {
+            duration: 2000, //动画时长
+            tailFactor: 0.7, //尾迹比例
+          },
+          mode: "vertical", // 弧线平面与地平面垂直,
+        })
+          .addTo(map)
+          .setData(arcData); //设置数据
+
+        // 初始化辐射圈
+        var radiationCircle = new TMap.visualization.Radiation({
+          styles: {
+            default: {
+              fillColor: "rgba(0,0,0,0)", // 辐射圈填充颜色
+              strokeColor: "#FFF", // 辐射圈边线颜色
+              strokeWidth: 25536, //	区域边线宽度
+            },
+          },
+          number: 2, // 每一时刻，辐射圈的同心圆个数
+        })
+          .addTo(map)
+          .setData(radiationData);
+
+        //初始化散点图
+        var dot = new TMap.visualization.Dot({
+          styles: {
+            default: {
+              fillColor: "#FFF", //圆形填充颜色
+              radius: 2, //圆形半径
+            },
+          },
+          enableBloom: true, // 泛光
+        })
+          .addTo(map)
+          .setData(dotData); //设置数据
+      }
+    </script>
+  </body>
+</html>

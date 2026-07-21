@@ -1,0 +1,1400 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>用例防腐调整报告</title>
+    <style>
+      :root {
+        --c-bg: #f8f9fa;
+        --c-card: #fff;
+        --c-border: #e2e8f0;
+        --c-text: #1a202c;
+        --c-muted: #718096;
+        --c-add: #38a169;
+        --c-add-bg: #f0fff4;
+        --c-rename: #d69e2e;
+        --c-rename-bg: #fffff0;
+        --c-update: #3182ce;
+        --c-update-bg: #ebf8ff;
+        --c-move: #805ad5;
+        --c-move-bg: #faf5ff;
+        --c-delete: #e53e3e;
+        --c-delete-bg: #fff5f5;
+        --c-merge: #dd6b20;
+        --c-merge-bg: #fffaf0;
+        --c-none: #a0aec0;
+        --c-none-bg: #f7fafc;
+        --drawer-width: 780px;
+        --c-changed-bg: #f0fff4;
+        --c-changed-border: #48bb78;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: var(--c-bg);
+        color: var(--c-text);
+        padding: 24px;
+        line-height: 1.6;
+      }
+      h1 {
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        color: var(--c-muted);
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+
+      /* ── 统计卡片 ── */
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        flex: 1;
+        min-width: 120px;
+        padding: 14px 16px;
+        border-radius: 8px;
+        border: 1px solid var(--c-border);
+        background: var(--c-card);
+      }
+      .stat-card .label {
+        font-size: 12px;
+        color: var(--c-muted);
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .stat-card .value {
+        font-size: 22px;
+        font-weight: 700;
+      }
+      .stat-card .detail {
+        font-size: 11px;
+        color: var(--c-muted);
+        margin-top: 2px;
+      }
+      .stat-card.add {
+        border-left: 3px solid var(--c-add);
+      }
+      .stat-card.rename {
+        border-left: 3px solid var(--c-rename);
+      }
+      .stat-card.update {
+        border-left: 3px solid var(--c-update);
+      }
+      .stat-card.move {
+        border-left: 3px solid var(--c-move);
+      }
+      .stat-card.delete {
+        border-left: 3px solid var(--c-delete);
+      }
+      .stat-card.merge {
+        border-left: 3px solid var(--c-merge);
+      }
+
+      /* ── 图例 ── */
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+        font-size: 12px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      /* ── 目录树 ── */
+      .tree-container {
+        background: var(--c-card);
+        border: 1px solid var(--c-border);
+        border-radius: 8px;
+        padding: 16px;
+        transition: margin-right 0.3s ease;
+      }
+      .tree-container.drawer-open {
+        margin-right: calc(var(--drawer-width) + 16px);
+      }
+      .tree ul {
+        list-style: none;
+        padding-left: 20px;
+      }
+      .tree > ul {
+        padding-left: 0;
+      }
+      .tree li {
+        position: relative;
+        padding: 3px 0;
+      }
+
+      .node {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        cursor: default;
+        font-size: 13px;
+        max-width: 100%;
+      }
+      .node:hover {
+        background: #edf2f7;
+      }
+      .node.clickable {
+        cursor: pointer;
+      }
+      .node.clickable:hover {
+        background: #e2e8f0;
+      }
+      .node.active {
+        background: #ebf4ff;
+        outline: 2px solid #3182ce;
+      }
+
+      /* 折叠按钮 */
+      .toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border: none;
+        background: #edf2f7;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 10px;
+        color: var(--c-muted);
+        flex-shrink: 0;
+        transition: transform 0.15s;
+      }
+      .toggle:hover {
+        background: #e2e8f0;
+      }
+      .toggle.collapsed {
+        transform: rotate(-90deg);
+      }
+
+      /* 图标 */
+      .icon {
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      .icon-folder {
+        color: #ecc94b;
+      }
+      .icon-case {
+        color: #4299e1;
+      }
+      .node-name {
+        font-weight: 500;
+        word-break: break-all;
+      }
+
+      /* 操作标签 */
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        font-size: 10px;
+        padding: 1px 6px;
+        border-radius: 3px;
+        font-weight: 600;
+        margin-left: 4px;
+        white-space: nowrap;
+      }
+      .tag-add {
+        background: var(--c-add-bg);
+        color: var(--c-add);
+      }
+      .tag-rename {
+        background: var(--c-rename-bg);
+        color: var(--c-rename);
+      }
+      .tag-update {
+        background: var(--c-update-bg);
+        color: var(--c-update);
+      }
+      .tag-move {
+        background: var(--c-move-bg);
+        color: var(--c-move);
+      }
+      .tag-delete {
+        background: var(--c-delete-bg);
+        color: var(--c-delete);
+      }
+      .tag-merge {
+        background: var(--c-merge-bg);
+        color: var(--c-merge);
+      }
+      .tag-none {
+        background: var(--c-none-bg);
+        color: var(--c-none);
+      }
+
+      /* 原因 tooltip */
+      .reason {
+        font-size: 11px;
+        color: var(--c-muted);
+        margin-left: 4px;
+        font-weight: 400;
+      }
+
+      /* 删除状态的节点半透明 + 删除线 */
+      .node.op-delete .node-name {
+        text-decoration: line-through;
+        opacity: 0.55;
+      }
+
+      /* 折叠子树 */
+      .children-hidden {
+        display: none;
+      }
+
+      /* 全局按钮 */
+      .toolbar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .btn {
+        padding: 6px 14px;
+        font-size: 12px;
+        border: 1px solid var(--c-border);
+        border-radius: 6px;
+        background: var(--c-card);
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #edf2f7;
+      }
+
+      /* ═══════════════════════════════════════════════════ */
+      /* ── 右侧抽屉 ── */
+      /* ═══════════════════════════════════════════════════ */
+      .drawer-overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.15);
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      .drawer-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: var(--drawer-width);
+        max-width: 90vw;
+        background: var(--c-card);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .drawer.open {
+        transform: translateX(0);
+      }
+
+      /* 抽屉头部 */
+      .drawer-header {
+        padding: 20px 24px 16px;
+        border-bottom: 1px solid var(--c-border);
+        flex-shrink: 0;
+      }
+      .drawer-header-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .drawer-title {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.4;
+        word-break: break-all;
+        flex: 1;
+      }
+      /* 原名删除线+灰化 */
+      .drawer-title.stale {
+        text-decoration: line-through;
+        color: #a0aec0;
+        opacity: 0.6;
+      }
+      .drawer-badges {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+      }
+      .drawer-priority {
+        font-size: 12px;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-weight: 600;
+        background: #f0f0f0;
+        color: #555;
+      }
+      .drawer-priority.P0 {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      .drawer-priority.P1 {
+        background: #ffedd5;
+        color: #ea580c;
+      }
+      .drawer-priority.P2 {
+        background: #fef9c3;
+        color: #ca8a04;
+      }
+      .drawer-priority.P3 {
+        background: #f0fdf4;
+        color: #16a34a;
+      }
+      /* 原优先级删除线+灰化 */
+      .drawer-priority.stale {
+        text-decoration: line-through;
+        opacity: 0.5;
+        filter: grayscale(1);
+      }
+      .drawer-op-tag {
+        font-size: 12px;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-weight: 600;
+      }
+      .drawer-close {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: transparent;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 18px;
+        color: var(--c-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .drawer-close:hover {
+        background: #f1f5f9;
+        color: var(--c-text);
+      }
+
+      /* 修改后名称 */
+      .inline-change-title {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.4;
+        word-break: break-all;
+        background: var(--c-changed-bg);
+        border: 1px solid var(--c-changed-border);
+        border-radius: 6px;
+        padding: 4px 10px;
+        margin-top: 4px;
+        color: #276749;
+      }
+
+      /* 修改后优先级 */
+      .changed-priority-wrap {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-left: 4px;
+      }
+      .changed-priority-wrap .arrow {
+        color: var(--c-changed-border);
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .changed-priority-wrap .drawer-priority {
+        outline: 2px solid var(--c-changed-border);
+        outline-offset: 1px;
+      }
+
+      /* diff 高亮 */
+      .diff-hl {
+        background: #fef08a;
+        padding: 0 1px;
+        border-radius: 2px;
+      }
+
+      /* 抽屉内容区 */
+      .drawer-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 24px;
+      }
+
+      /* 详情区域通用 */
+      .detail-section {
+        margin-bottom: 16px;
+      }
+      .detail-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--c-text);
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .detail-label .required {
+        color: #e53e3e;
+      }
+      .detail-value {
+        font-size: 13px;
+        color: #4a5568;
+        padding: 10px 14px;
+        background: #f7fafc;
+        border-radius: 6px;
+        border: 1px solid var(--c-border);
+        white-space: pre-wrap;
+        word-break: break-all;
+        line-height: 1.6;
+        min-height: 36px;
+      }
+      .detail-value.empty {
+        color: var(--c-muted);
+        font-style: italic;
+      }
+      /* 原值删除线+灰化 */
+      .detail-value.stale {
+        text-decoration: line-through;
+        color: #a0aec0;
+        opacity: 0.55;
+      }
+      /* 修改后内容块 */
+      .detail-value.changed {
+        background: var(--c-changed-bg);
+        border-color: var(--c-changed-border);
+        color: #276749;
+        margin-top: 6px;
+      }
+
+      /* 所在目录面包屑 */
+      .folder-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+        padding: 10px 14px;
+        background: #f7fafc;
+        border-radius: 6px;
+        border: 1px solid var(--c-border);
+        font-size: 13px;
+      }
+      .folder-breadcrumb .crumb-icon {
+        color: #ecc94b;
+      }
+      .folder-breadcrumb .crumb-sep {
+        color: var(--c-muted);
+        margin: 0 2px;
+      }
+
+      /* 移动用例 - 目录变更展示 */
+      .folder-move-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .folder-breadcrumb.stale {
+        text-decoration: line-through;
+        color: #a0aec0;
+        opacity: 0.55;
+        background: #f7fafc;
+        border-color: var(--c-border);
+      }
+      .folder-breadcrumb.stale .crumb-icon {
+        filter: grayscale(1);
+        opacity: 0.5;
+      }
+      .folder-breadcrumb.stale .crumb-sep {
+        color: #cbd5e0;
+      }
+      .folder-breadcrumb.moved-new {
+        background: var(--c-move-bg);
+        border: 2px solid var(--c-move);
+        font-weight: 600;
+        color: var(--c-move);
+      }
+      .folder-breadcrumb.moved-new .crumb-sep {
+        color: var(--c-move);
+        opacity: 0.6;
+      }
+      .folder-move-label {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 1px 6px;
+        border-radius: 3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        margin-right: 4px;
+        white-space: nowrap;
+      }
+      .folder-move-label.old-label {
+        background: var(--c-delete-bg);
+        color: var(--c-delete);
+      }
+      .folder-move-label.new-label {
+        background: var(--c-move-bg);
+        color: var(--c-move);
+      }
+
+      /* ── 步骤表格 ── */
+      .steps-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      .steps-table th {
+        text-align: left;
+        padding: 8px 12px;
+        background: #f1f5f9;
+        border-bottom: 2px solid var(--c-border);
+        font-weight: 600;
+        color: var(--c-muted);
+        font-size: 12px;
+      }
+      .steps-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: top;
+        line-height: 1.5;
+      }
+      .steps-table tr:last-child td {
+        border-bottom: none;
+      }
+      .steps-table .step-num {
+        width: 72px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .steps-table .step-num-inner {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        white-space: nowrap;
+      }
+      .steps-table .step-num-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        padding: 0 4px;
+        background: #ebf4ff;
+        color: #2563eb;
+        font-weight: 700;
+        font-size: 12px;
+      }
+      .steps-table .step-content {
+        min-width: 180px;
+      }
+      .steps-table .step-expected {
+        min-width: 180px;
+      }
+      /* 原步骤行删除线+灰化 */
+      .step-row-stale td {
+        text-decoration: line-through;
+        color: #a0aec0 !important;
+        opacity: 0.55;
+      }
+      .step-row-stale .step-num-badge {
+        background: #edf2f7;
+        color: #a0aec0;
+      }
+      /* 变更行 */
+      .inline-change-step {
+        background: var(--c-changed-bg);
+      }
+      .inline-change-step td {
+        color: #276749 !important;
+        border-bottom: 1px solid var(--c-changed-border) !important;
+      }
+      .inline-change-step .step-num-badge {
+        background: #c6f6d5;
+        color: #276749;
+      }
+      .step-change-tag {
+        display: inline-flex;
+        align-items: center;
+        font-size: 9px;
+        padding: 0 5px;
+        border-radius: 3px;
+        background: #c6f6d5;
+        color: #276749;
+        font-weight: 700;
+        margin-right: 4px;
+        line-height: 18px;
+      }
+
+      /* 步骤文本模式 */
+      .step-text-content {
+        font-size: 13px;
+        color: #4a5568;
+        padding: 10px 14px;
+        background: #f7fafc;
+        border-radius: 6px;
+        border: 1px solid var(--c-border);
+        white-space: pre-wrap;
+        word-break: break-all;
+        line-height: 1.6;
+      }
+
+      /* 操作原因卡片 */
+      .operation-reason-card {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        border: 1px solid;
+        font-size: 13px;
+      }
+      .operation-reason-card .op-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+        font-size: 14px;
+      }
+      .operation-reason-card .op-reason {
+        color: #4a5568;
+      }
+      .operation-reason-card.op-add {
+        background: var(--c-add-bg);
+        border-color: #c6f6d5;
+      }
+      .operation-reason-card.op-add .op-title {
+        color: var(--c-add);
+      }
+      .operation-reason-card.op-rename {
+        background: var(--c-rename-bg);
+        border-color: #fefcbf;
+      }
+      .operation-reason-card.op-rename .op-title {
+        color: var(--c-rename);
+      }
+      .operation-reason-card.op-update {
+        background: var(--c-update-bg);
+        border-color: #bee3f8;
+      }
+      .operation-reason-card.op-update .op-title {
+        color: var(--c-update);
+      }
+      .operation-reason-card.op-move {
+        background: var(--c-move-bg);
+        border-color: #d6bcfa;
+      }
+      .operation-reason-card.op-move .op-title {
+        color: var(--c-move);
+      }
+      .operation-reason-card.op-delete {
+        background: var(--c-delete-bg);
+        border-color: #feb2b2;
+      }
+      .operation-reason-card.op-delete .op-title {
+        color: var(--c-delete);
+      }
+      .operation-reason-card.op-merge {
+        background: var(--c-merge-bg);
+        border-color: #fbd38d;
+      }
+      .operation-reason-card.op-merge .op-title {
+        color: var(--c-merge);
+      }
+
+      /* 合并列表 */
+      .merge-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 8px;
+      }
+      .merge-list li {
+        padding: 6px 10px;
+        margin-bottom: 4px;
+        background: #fef3cd;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #856404;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .merge-list li::before {
+        content: '🔗';
+      }
+
+      /* 移动信息 */
+      .move-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        font-size: 13px;
+        flex-wrap: wrap;
+      }
+      .move-info .from,
+      .move-info .to {
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-weight: 500;
+      }
+      .move-info .from {
+        background: #fff5f5;
+        color: #e53e3e;
+      }
+      .move-info .arrow {
+        color: var(--c-muted);
+        font-size: 16px;
+      }
+      .move-info .to {
+        background: #f0fff4;
+        color: #38a169;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📋 用例防腐调整报告</h1>
+    <p class="subtitle">
+      生成时间：<span id="genTime"></span> ｜ 目录：<span
+        id="folderPath"
+      ></span>
+    </p>
+
+    <!-- ── 统计卡片区 ── -->
+    <div class="stats" id="statsContainer"></div>
+
+    <!-- ── 图例 ── -->
+    <div class="legend">
+      <div class="legend-item">
+        <span class="legend-dot" style="background: var(--c-add)"></span>新增
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background: var(--c-rename)"></span
+        >重命名
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background: var(--c-update)"></span>更新
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background: var(--c-move)"></span>移动
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background: var(--c-delete)"></span>删除
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background: var(--c-merge)"></span>合并
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background: var(--c-none)"></span>无变化
+      </div>
+    </div>
+
+    <!-- ── 工具栏 ── -->
+    <div class="toolbar">
+      <button class="btn" onclick="window._expandAll()">全部展开</button>
+      <button class="btn" onclick="window._collapseAll()">全部收起</button>
+    </div>
+
+    <!-- ── 目录树 ── -->
+    <div class="tree-container" id="treeContainer">
+      <div class="tree" id="treeRoot"></div>
+    </div>
+
+    <!-- ── 抽屉遮罩 ── -->
+    <div
+      class="drawer-overlay"
+      id="drawerOverlay"
+      onclick="closeDrawer()"
+    ></div>
+
+    <!-- ── 右侧抽屉 ── -->
+    <div class="drawer" id="drawer">
+      <div class="drawer-header">
+        <div class="drawer-header-top">
+          <div style="flex: 1">
+            <div class="drawer-title" id="drawerTitle"></div>
+            <div id="drawerNameChange"></div>
+            <div
+              class="drawer-badges"
+              id="drawerBadges"
+              style="margin-top: 8px"
+            ></div>
+          </div>
+          <button class="drawer-close" onclick="closeDrawer()" title="关闭">
+            ✕
+          </button>
+        </div>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+    </div>
+
+    <script>
+      /**
+       * ═══════════════════════════════════════════════════
+       * 数据结构说明（生成报告时替换 REPORT_DATA）
+       * ═══════════════════════════════════════════════════
+       *
+       * const REPORT_DATA = {
+       *   meta: {
+       *     generated_at: "2026-03-10 15:30:00",
+       *     folder_path: "/根目录",
+       *     namespace: "4349",
+       *     repo_uid: "3964",
+       *     repo_version_uid: "4559",
+       *     folder_uid: "11332542"
+       *   },
+       *   stats: {
+       *     add:    { folders: 0, cases: 0 },
+       *     rename: { folders: 0, cases: 0 },
+       *     update: { folders: 0, cases: 0 },
+       *     move:   { folders: 0, cases: 0 },
+       *     delete: { folders: 1, cases: 5 },
+       *     merge:  { folders: 0, cases: 0 }
+       *   },
+       *   tree: {
+       *     uid: "11332542",
+       *     name: "根目录",
+       *     type: "folder",
+       *     operation: "none",
+       *     reason: "",
+       *     extra: {},
+       *     children: [
+       *       {
+       *         uid: "11332549",
+       *         name: "用例A",
+       *         type: "case",
+       *         operation: "update",
+       *         reason: "步骤不完整，补全预期结果",
+       *         extra: {
+       *           old_name: "旧名称"             // 重命名时原名称
+       *         },
+       *         detail: {
+       *           priority: "P1",
+       *           description: "用例描述内容",
+       *           pre_conditions: "前置条件",
+       *           step_type: "STEP",
+       *           steps: [
+       *             { id: "1", content: "步骤1描述", expected_result: "预期结果1" },
+       *             { id: "2", content: "步骤2描述", expected_result: "预期结果2" }
+       *           ],
+       *           step_text: { content: "", expected_result: "" },
+       *           folder_path: "父目录A / 父目录B"
+       *         },
+       *         changes: {
+       *           name:           { old: "旧名称",   new: "新名称" },
+       *           priority:       { old: "P2",        new: "P1" },
+       *           description:    { old: "旧描述",    new: "新描述" },
+       *           pre_conditions: { old: "旧前置",    new: "新前置" },
+       *           steps:          { old: [...], new: [...] },
+       *           folder_path:    { old: "根目录 / 旧父目录", new: "根目录 / 新父目录" }
+       *         }
+       *       }
+       *     ]
+       *   }
+       * };
+       */
+
+      // ═══ 占位：实际生成时替换此变量 ═══
+      const REPORT_DATA = __REPORT_DATA_PLACEHOLDER__;
+
+      // ═══════════════════════════════════════════════════
+      // ── 基础工具函数（必须先定义，后续函数依赖它们）──
+      // ═══════════════════════════════════════════════════
+
+      function escChar(c) {
+        if (c === '<') return '&lt;';
+        if (c === '>') return '&gt;';
+        if (c === '&') return '&amp;';
+        if (c === '"') return '&quot;';
+        return c;
+      }
+
+      function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s || '';
+        return d.innerHTML;
+      }
+
+      function opLabel(op) {
+        return (
+          {
+            add: '新增',
+            rename: '重命名',
+            update: '更新',
+            move: '移动',
+            delete: '删除',
+            merge: '合并',
+          }[op] || op
+        );
+      }
+
+      // ═══════════════════════════════════════════════════
+      // ── 字符级 Diff 算法（LCS 简化版） ──
+      // ═══════════════════════════════════════════════════
+
+      /** 行级 diff（用于较长文本） */
+      function diffHighlightByLine(oldStr, newStr) {
+        const oldLines = oldStr.split('\n');
+        const newLines = newStr.split('\n');
+        const oldSet = new Set(oldLines);
+        return newLines
+          .map((line) => {
+            if (oldSet.has(line)) {
+              return esc(line);
+            }
+            return `<span class="diff-hl">${esc(line)}</span>`;
+          })
+          .join('\n');
+      }
+
+      /**
+       * 计算两个字符串的最长公共子序列（LCS），返回新字符串中需要高亮的字符索引集合。
+       * 高亮标记未匹配到旧字符串的新增/变更部分。
+       */
+      function diffHighlight(oldStr, newStr) {
+        const safeOld = oldStr || '';
+        const safeNew = newStr || '';
+        if (safeOld === safeNew) return esc(safeNew);
+
+        const m = safeOld.length;
+        const n = safeNew.length;
+
+        // 对较长文本用行级 diff
+        if (m > 2000 || n > 2000) {
+          return diffHighlightByLine(safeOld, safeNew);
+        }
+
+        // LCS DP
+        const dp = new Uint16Array((m + 1) * (n + 1));
+        const W = n + 1;
+        for (let i = 1; i <= m; i += 1) {
+          for (let j = 1; j <= n; j += 1) {
+            dp[i * W + j] = safeOld[i - 1] === safeNew[j - 1]
+              ? dp[(i - 1) * W + (j - 1)] + 1
+              : Math.max(dp[(i - 1) * W + j], dp[i * W + (j - 1)]);
+          }
+        }
+
+        // 回溯找出 new 中哪些字符是"新增/变更"的
+        const matched = new Set();
+        let i = m;
+        let j = n;
+        while (i > 0 && j > 0) {
+          if (safeOld[i - 1] === safeNew[j - 1]) {
+            matched.add(j - 1);
+            i -= 1;
+            j -= 1;
+          } else if (dp[(i - 1) * W + j] >= dp[i * W + (j - 1)]) {
+            i -= 1;
+          } else {
+            j -= 1;
+          }
+        }
+
+        // 构建带高亮的 HTML
+        let result = '';
+        let inHl = false;
+        for (let k = 0; k < n; k += 1) {
+          const isNew = !matched.has(k);
+          if (isNew && !inHl) {
+            result += '<span class="diff-hl">';
+            inHl = true;
+          } else if (!isNew && inHl) {
+            result += '</span>';
+            inHl = false;
+          }
+          result += escChar(safeNew[k]);
+        }
+        if (inHl) result += '</span>';
+        return result;
+      }
+
+      // ═══════════════════════════════════════════════════
+      // ── 全局节点索引 ──
+      // ═══════════════════════════════════════════════════
+
+      const NODE_MAP = {};
+      function indexNodes(node) {
+        NODE_MAP[node.uid] = node;
+        if (node.children) node.children.forEach(indexNodes);
+      }
+      indexNodes(REPORT_DATA.tree);
+
+      // ═══════════════════════════════════════════════════
+      // ── 树节点辅助函数 ──
+      // ═══════════════════════════════════════════════════
+
+      function buildReasonHtml(node) {
+        const parts = [];
+        const ext = node.extra || {};
+        const op = node.operation || 'none';
+        if (op === 'rename' && ext.old_name) parts.push(`原名: ${esc(ext.old_name)}`);
+        if (op === 'move' && ext.from_folder) parts.push(`从「${esc(ext.from_folder)}」→「${esc(ext.to_folder || '?')}」`,);
+        if (op === 'merge' && ext.merged_with) parts.push(`与 ${ext.merged_with.map(m => esc(typeof m === 'object' ? m.name : m)).join('、')} 合并`,);
+        if (op === 'delete' && ext.child_handling) parts.push(esc(ext.child_handling));
+        if (node.reason) parts.push(esc(node.reason));
+        return parts.length
+          ? `<span class="reason">（${parts.join('；')}）</span>`
+          : '';
+      }
+
+      // ── 操作卡片 ──
+      function renderOperationCard(node) {
+        const op = node.operation || 'none';
+        const ext = node.extra || {};
+        const title = `防腐操作：${opLabel(op)}`;
+        let reasonHtml = node.reason
+          ? `<div class="op-reason">${esc(node.reason)}</div>`
+          : '';
+        if (op === 'move' && ext.from_folder) {
+          reasonHtml += `<div class="move-info"><span class="from">📁 ${esc(ext.from_folder)}</span><span class="arrow">→</span><span class="to">📁 ${esc(ext.to_folder || '?')}</span></div>`;
+        }
+        if (op === 'merge' && ext.merged_with && ext.merged_with.length) {
+          reasonHtml += '<ul class="merge-list">';
+          ext.merged_with.forEach((m) => {
+            reasonHtml += `<li>${esc(typeof m === 'object' ? m.name : m)}</li>`;
+          });
+          reasonHtml += '</ul>';
+        }
+        if (op === 'rename' && ext.old_name) {
+          reasonHtml += `<div style="margin-top:4px;font-size:12px"><span style="text-decoration:line-through;color:#e53e3e">${esc(ext.old_name)}</span><span style="margin:0 6px;color:var(--c-muted)">→</span><span style="color:#38a169;font-weight:600">${esc(node.name)}</span></div>`;
+        }
+        return `<div class="operation-reason-card op-${op}"><div class="op-title">${title}</div>${reasonHtml}</div>`;
+      }
+
+      // ═══════════════════════════════════════════════════
+      // ── 抽屉渲染函数 ──
+      // ═══════════════════════════════════════════════════
+
+      // ── 头部渲染 ──
+      function renderDrawerHeader(node) {
+        const op = node.operation || 'none';
+        const detail = node.detail || {};
+        const changes = node.changes || {};
+        const priority = detail.priority || '';
+        const titleEl = document.getElementById('drawerTitle');
+        const nameChangeEl = document.getElementById('drawerNameChange');
+
+        // 名称变更：原名删除线+灰化，新名diff高亮
+        if (changes.name) {
+          titleEl.className = 'drawer-title stale';
+          titleEl.textContent = changes.name.old || node.name;
+          nameChangeEl.innerHTML = `<div class="inline-change-title">${diffHighlight(changes.name.old, changes.name.new)}</div>`;
+        } else {
+          titleEl.className = 'drawer-title';
+          titleEl.textContent = node.name;
+          nameChangeEl.innerHTML = '';
+        }
+
+        // badges
+        const badges = document.getElementById('drawerBadges');
+        let badgeHtml = '';
+        // 优先级变更：原优先级删除线+灰化，新优先级绿色外框
+        if (changes.priority) {
+          badgeHtml += `<span class="drawer-priority stale ${esc(changes.priority.old)}">${esc(changes.priority.old)}</span>`;
+          badgeHtml += `<span class="changed-priority-wrap"><span class="arrow">→</span><span class="drawer-priority ${esc(changes.priority.new)}">${esc(changes.priority.new)}</span></span>`;
+        } else if (priority) {
+          badgeHtml += `<span class="drawer-priority ${esc(priority)}">${esc(priority)}</span>`;
+        }
+        if (op !== 'none') badgeHtml += `<span class="drawer-op-tag tag-${op}">${opLabel(op)}</span>`;
+        badges.innerHTML = badgeHtml;
+      }
+
+      // ── 抽屉主体渲染 ──
+      function renderDrawerBody(node) {
+        const detail = node.detail || {};
+        const changes = node.changes || {};
+        const op = node.operation || 'none';
+        let html = '';
+
+        // 操作卡片
+        if (op !== 'none') html += renderOperationCard(node);
+
+        // ── 所在目录（支持移动变更展示）──
+        if (detail.folder_path) {
+          html
+      += '<div class="detail-section"><div class="detail-label"><span class="required">*</span> 所在目录</div>';
+          if (
+            op === 'move'
+      && node.extra
+      && node.extra.from_folder
+      && node.extra.to_folder
+          ) {
+            // 移动用例：旧目录删除线+灰化，新目录醒目高亮
+            const oldFolderPath = node.extra.from_folder;
+            const newFolderPath = detail.folder_path;
+            html += '<div class="folder-move-wrap">';
+            html += `<div class="folder-breadcrumb stale"><span class="folder-move-label old-label">原目录</span><span class="crumb-icon">📁</span>${esc(oldFolderPath,)
+              .split(/\s*\/\s*/)
+              .map(p => `<span>${p}</span>`)
+              .join('<span class="crumb-sep">/</span>')}</div>`;
+            html += `<div class="folder-breadcrumb moved-new"><span class="folder-move-label new-label">📦 新目录</span><span class="crumb-icon">📁</span>${esc(newFolderPath,)
+              .split(/\s*\/\s*/)
+              .map(p => `<span>${p}</span>`)
+              .join('<span class="crumb-sep">/</span>')}</div>`;
+            html += '</div>';
+          } else {
+            html += `<div class="folder-breadcrumb"><span class="crumb-icon">📁</span>${esc(detail.folder_path,)
+              .split(/\s*\/\s*/)
+              .map(p => `<span>${p}</span>`)
+              .join('<span class="crumb-sep">/</span>')}</div>`;
+          }
+          html += '</div>';
+        }
+
+        // ── 用例描述 ──
+        html
+    += '<div class="detail-section"><div class="detail-label">用例描述</div>';
+        if (changes.description) {
+          html += `<div class="detail-value stale">${esc(changes.description.old || '')}</div>`;
+          html += `<div class="detail-value changed">${diffHighlight(changes.description.old, changes.description.new)}</div>`;
+        } else {
+          html += `<div class="detail-value ${!detail.description ? 'empty' : ''}">${detail.description ? esc(detail.description) : '暂无描述'}</div>`;
+        }
+        html += '</div>';
+
+        // ── 前置条件 ──
+        html
+    += '<div class="detail-section"><div class="detail-label">前置条件</div>';
+        if (changes.pre_conditions) {
+          html += `<div class="detail-value stale">${esc(changes.pre_conditions.old || '')}</div>`;
+          html += `<div class="detail-value changed">${diffHighlight(changes.pre_conditions.old, changes.pre_conditions.new)}</div>`;
+        } else {
+          html += `<div class="detail-value ${!detail.pre_conditions ? 'empty' : ''}">${detail.pre_conditions ? esc(detail.pre_conditions) : '暂无前置条件'}</div>`;
+        }
+        html += '</div>';
+
+        // ── 步骤描述 ──
+        html
+    += '<div class="detail-section"><div class="detail-label">步骤描述</div>';
+        if (detail.step_type === 'TEXT' && detail.step_text) {
+          html += `<div class="step-text-content">${esc(detail.step_text.content || '暂无步骤')}</div>`;
+          if (detail.step_text.expected_result) {
+            html += `<div style="margin-top:6px"><div class="detail-label" style="font-size:12px">预期结果</div><div class="step-text-content">${esc(detail.step_text.expected_result)}</div></div>`;
+          }
+        } else {
+          const steps = detail.steps || [];
+          const stepsChange = changes.steps || null;
+          const oldSteps = stepsChange ? stepsChange.old || [] : [];
+          const newSteps = stepsChange ? stepsChange.new || [] : [];
+
+          if (steps.length > 0 || (stepsChange && newSteps.length > 0)) {
+            html
+        += '<table class="steps-table" style="border-radius:6px;overflow:hidden;border:1px solid var(--c-border)"><thead><tr><th class="step-num">#</th><th class="step-content">步骤</th><th class="step-expected">预期结果</th></tr></thead><tbody>';
+
+            if (stepsChange) {
+              const maxLen = Math.max(oldSteps.length, newSteps.length);
+              for (let idx = 0; idx < maxLen; idx += 1) {
+                const os = oldSteps[idx] || null;
+                const ns = newSteps[idx] || null;
+                const contentChanged = os && ns && (os.content || '') !== (ns.content || '');
+                const expectedChanged = os
+            && ns
+            && (os.expected_result || '') !== (ns.expected_result || '');
+                const isDeleted = os && !ns;
+                const isAdded = !os && ns;
+                const hasChange = contentChanged || expectedChanged || isDeleted || isAdded;
+
+                // 原始步骤行：如果有变更或被删除，加删除线+灰化
+                if (os) {
+                  const staleClass = hasChange || isDeleted ? ' step-row-stale' : '';
+                  html += `<tr class="${staleClass}"><td class="step-num"><span class="step-num-badge">${idx + 1}</span></td><td class="step-content">${esc(os.content || '')}</td><td class="step-expected">${esc(os.expected_result || '')}</td></tr>`;
+                }
+
+                // 变更后的步骤：diff高亮
+                if (ns && (hasChange || isAdded)) {
+                  const tagText = isAdded ? '新增' : '修改';
+                  const oldContent = os ? os.content || '' : '';
+                  const oldExpected = os ? os.expected_result || '' : '';
+                  const newContent = ns.content || '';
+                  const newExpected = ns.expected_result || '';
+                  html += `<tr class="inline-change-step"><td class="step-num"><span class="step-num-inner"><span class="step-change-tag">${tagText}</span><span class="step-num-badge">${idx + 1}</span></span></td><td class="step-content">${diffHighlight(oldContent, newContent)}</td><td class="step-expected">${diffHighlight(oldExpected, newExpected)}</td></tr>`;
+                }
+              }
+            } else {
+              steps.forEach((step, idx) => {
+                html += `<tr><td class="step-num"><span class="step-num-badge">${idx + 1}</span></td><td class="step-content">${esc(step.content || '')}</td><td class="step-expected">${esc(step.expected_result || '')}</td></tr>`;
+              });
+            }
+            html += '</tbody></table>';
+          } else {
+            html += '<div class="detail-value empty">暂无步骤</div>';
+          }
+        }
+        html += '</div>';
+        document.getElementById('drawerBody').innerHTML = html;
+      }
+
+      // ═══════════════════════════════════════════════════
+      // ── 抽屉逻辑 ──
+      // ═══════════════════════════════════════════════════
+
+      let activeNodeEl = null;
+
+      function openDrawer(uid, el) {
+        const node = NODE_MAP[uid];
+        if (!node || node.type !== 'case') return;
+        if (activeNodeEl) activeNodeEl.classList.remove('active');
+        el.classList.add('active');
+        activeNodeEl = el;
+        renderDrawerHeader(node);
+        renderDrawerBody(node);
+        document.getElementById('drawer').classList.add('open');
+        document.getElementById('drawerOverlay').classList.add('open');
+        document.getElementById('treeContainer').classList.add('drawer-open');
+      }
+
+      function closeDrawer() {
+        document.getElementById('drawer').classList.remove('open');
+        document.getElementById('drawerOverlay').classList.remove('open');
+        document
+          .getElementById('treeContainer')
+          .classList.remove('drawer-open');
+        if (activeNodeEl) {
+          activeNodeEl.classList.remove('active');
+          activeNodeEl = null;
+        }
+      }
+
+      // ═══════════════════════════════════════════════════
+      // ── 构建树 ──
+      // ═══════════════════════════════════════════════════
+
+      function buildTree(node, parentUl) {
+        const li = document.createElement('li');
+        const isFolder = node.type === 'folder';
+        const isCase = node.type === 'case';
+        const hasChildren = node.children && node.children.length > 0;
+        const span = document.createElement('span');
+        const op = node.operation || 'none';
+        span.className = `node op-${op}`;
+        if (isCase) span.classList.add('clickable');
+        span.dataset.uid = node.uid;
+        let html = '';
+        if (isFolder && hasChildren) {
+          html
+      += '<button class="toggle" onclick="event.stopPropagation();window._toggleChildren(this)">▼</button>';
+        } else {
+          html += '<span style="width:18px;display:inline-block"></span>';
+        }
+        html += isFolder
+          ? '<span class="icon icon-folder">📁</span>'
+          : '<span class="icon icon-case">📝</span>';
+        html += `<span class="node-name">${esc(node.name)}</span>`;
+        if (op !== 'none') html += `<span class="tag tag-${op}">${opLabel(op)}</span>`;
+        if (isCase && node.detail && node.detail.priority) html += `<span class="tag" style="background:#f0f0f0;color:#555;margin-left:2px">${esc(node.detail.priority)}</span>`;
+        html += buildReasonHtml(node);
+        span.innerHTML = html;
+        if (isCase) {
+          span.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openDrawer(node.uid, span);
+          });
+        }
+        li.appendChild(span);
+        if (hasChildren) {
+          const childUl = document.createElement('ul');
+          for (const child of node.children) buildTree(child, childUl);
+          li.appendChild(childUl);
+        }
+        parentUl.appendChild(li);
+      }
+
+      // ── 折叠 / 展开（通过 window 暴露给 onclick 调用）──
+      window._toggleChildren = function _toggleChildren(btn) {
+        const li = btn.closest('li');
+        const childUl = li.querySelector(':scope > ul');
+        if (!childUl) return;
+        const hidden = childUl.classList.toggle('children-hidden');
+        btn.classList.toggle('collapsed', hidden);
+      };
+      window._expandAll = function _expandAll() {
+        document
+          .querySelectorAll('.tree ul')
+          .forEach(u => u.classList.remove('children-hidden'));
+        document
+          .querySelectorAll('.toggle')
+          .forEach(b => b.classList.remove('collapsed'));
+      };
+      window._collapseAll = function _collapseAll() {
+        document
+          .querySelectorAll('.tree li > ul')
+          .forEach(u => u.classList.add('children-hidden'));
+        document
+          .querySelectorAll('.toggle')
+          .forEach(b => b.classList.add('collapsed'));
+      };
+
+      // ═══════════════════════════════════════════════════
+      // ── 渲染头部信息 ──
+      // ═══════════════════════════════════════════════════
+
+      document.getElementById('genTime').textContent = REPORT_DATA.meta.generated_at;
+      document.getElementById('folderPath').textContent = REPORT_DATA.meta.folder_path;
+
+      // ── 统计卡片 ──
+      const statsLabels = {
+        add: { label: '新增', emoji: '➕' },
+        rename: { label: '重命名', emoji: '✏️' },
+        update: { label: '更新', emoji: '🔄' },
+        move: { label: '移动', emoji: '📦' },
+        delete: { label: '删除', emoji: '🗑️' },
+        merge: { label: '合并', emoji: '🔗' },
+      };
+      const sc = document.getElementById('statsContainer');
+      for (const [key, info] of Object.entries(statsLabels)) {
+        const s = REPORT_DATA.stats[key] || { folders: 0, cases: 0 };
+        const total = s.folders + s.cases;
+        const card = document.createElement('div');
+        card.className = `stat-card ${key}`;
+        card.innerHTML = `<div class="label">${info.emoji} ${info.label}</div><div class="value">${total}</div><div class="detail">${s.folders} 个目录, ${s.cases} 个用例</div>`;
+        sc.appendChild(card);
+      }
+
+      // ── 渲染树 ──
+      const root = document.getElementById('treeRoot');
+      const ul = document.createElement('ul');
+      buildTree(REPORT_DATA.tree, ul);
+      root.appendChild(ul);
+
+      // ── 键盘支持 ──
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeDrawer();
+      });
+    </script>
+  </body>
+</html>

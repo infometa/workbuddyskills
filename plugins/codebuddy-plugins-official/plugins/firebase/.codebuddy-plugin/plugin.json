@@ -1,0 +1,12 @@
+{
+  "name": "firebase",
+  "description": "Google Firebase MCP 集成。管理 Firestore 数据库、身份验证、云函数、托管服务和存储。直接从开发工作流中构建和管理 Firebase 后端。",
+  "author": {
+    "name": "Google"
+  },
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "未声明"
+}

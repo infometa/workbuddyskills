@@ -1,0 +1,45 @@
+{
+    "runtime": {
+        "type": "node"
+    },
+    "init": {
+        "darwin": "npx -y @tencent/anydev-workbuddy-installer@latest",
+        "linux": "npx -y @tencent/anydev-workbuddy-installer@latest",
+        "win32": "npx -y @tencent/anydev-workbuddy-installer@latest"
+    },
+    "npmRegistries": [
+        "https://mirrors.tencent.com/npm/",
+        "https://mirrors.cloud.tencent.com/npm/",
+        "https://registry.npmmirror.com/",
+        "https://mirrors.tuna.tsinghua.edu.cn/npm/",
+        "https://mirrors.huaweicloud.com/repository/npm/",
+        "https://registry.npmjs.org/"
+    ],
+    "versionCheck": {
+        "command": {
+            "darwin": "anydev version",
+            "linux": "anydev version",
+            "win32": "anydev.exe version"
+        },
+        "minVersion": "3.4.1"
+    },
+    "auth": {
+        "darwin": "anydev login",
+        "linux": "anydev login",
+        "win32": "anydev.exe login"
+    },
+    "unAuth": {
+        "darwin": "anydev logout",
+        "linux": "anydev logout",
+        "win32": "anydev.exe logout"
+    },
+    "status": {
+        "darwin": "anydev status",
+        "linux": "anydev status",
+        "win32": "anydev.exe status"
+    },
+    "statusMatch": "Logged in as",
+    "authUrlDomain": "devc.woa.com",
+    "authWaitForExit": true,
+    "authSuppressBrowser": false
+}

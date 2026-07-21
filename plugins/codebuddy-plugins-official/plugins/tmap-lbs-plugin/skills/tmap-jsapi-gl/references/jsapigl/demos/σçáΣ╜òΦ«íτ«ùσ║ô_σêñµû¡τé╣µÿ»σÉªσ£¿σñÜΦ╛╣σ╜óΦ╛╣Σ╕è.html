@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>判断点是否在多边形的边上</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=geometry"></script>
+<style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+</style>
+
+<body onload="initMap()">
+	<div id="container"></div>
+	<script type="text/javascript">
+      var map;
+
+      function initMap() {
+        var center = new TMap.LatLng(40.040452, 116.273486);//设置中心点坐标
+        //初始化地图
+        map = new TMap.Map('container', {
+          center: center,
+          zoom: 17,
+          baseMap: {
+            type: 'vector',
+            features: ['base', 'building3d', 'label'],
+          }
+        });
+
+        var path = [
+          new TMap.LatLng(40.041117253378246, 116.2722415837743),
+          new TMap.LatLng(40.03942536171407, 116.2726277820093),
+          new TMap.LatLng(40.03970460886076, 116.27483769345417),
+          new TMap.LatLng(40.041404706498625, 116.27443003983899),
+        ];
+        var position1 = new TMap.LatLng(40.04202067344373, 116.2706967910799);
+        var position2 = new TMap.LatLng(40.040443786954235, 116.2736683713456);
+        var position3 = new TMap.LatLng(40.03957540757015, 116.27386486303988);
+
+        var polygon = new TMap.MultiPolygon({
+          id: 'polygon-layer', //图层id
+          map: map,
+          geometries: [
+            {
+              id: 'polygon', //多边形图形数据的标志信息
+              paths: path, //多边形的位置信息
+            }
+          ]
+        });
+
+        var getLabelText = function(pos) {
+          // isPointOnSegment(point: LatLng, segment: LatLng[], tolerance: Number) tolerance单位为米
+          return TMap.geometry.isPointOnPolygon(pos, path, 10) ? '在多边形边上' : '不在多边形边上'
+        };
+
+        var label = new TMap.MultiMarker({
+          id: 'label-layer', //图层id
+          map: map,
+          styles: {
+            building:  new TMap.MarkerStyle({
+              size: 20, //文字大小属性
+              alignment: 'center', //文字水平对齐属性
+              verticalAlignment: 'bottom', //文字垂直对齐属性
+              offset:{
+                x: 0,
+                y: 35
+              }
+            })
+          },
+          geometries: [
+            {
+              styleId: 'building',
+              position: position1,
+              content: getLabelText(position1),
+            },
+            {
+              styleId: 'building',
+              position: position2,
+              content: getLabelText(position2),
+            },
+            {
+              styleId: 'building',
+              position: position3,
+              content: getLabelText(position3),
+            },
+          ]
+        });
+    }
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+{
+  "name": "soe",
+  "version": "1.0.0",
+  "description": "Security Operations Expert",
+  "author": {
+    "name": "odaywang",
+    "email": "odaywang@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "soe",
+  "agents": [
+    "./agents/soe.md"
+  ],
+  "skills": [
+    "./skills/soe"
+  ],
+  "displayName": {
+    "en": "Security Operations Expert",
+    "zh": "腾讯云安全运营专家"
+  },
+  "profession": {
+    "en": "Security Operations Expert",
+    "zh": "腾讯云安全运营专家"
+  },
+  "displayDescription": {
+    "en": "Security Operations Expert covering vulnerability management, alert triage (CWP/WAF/Yujie/Tianmu/SOC), intrusion analysis, DDoS traffic analysis, ransomware analysis, and asset management. Automatically routes requests to the right sub-skill and orchestrates multi-skill pipelines (L0 parsing -> L1 product analysis -> L2 cross-product correlation).",
+    "zh": "腾讯云安全运营专家，覆盖漏洞管理、告警研判（CWP/WAF/御界/天幕）、入侵分析、DDoS流量分析、勒索病毒分析、资产管理，支持多技能协同编排与跨产品关联"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "11-SecurityCompliance",
+  "defaultInitPrompt": {
+    "zh": "解析这份漏洞扫描报告",
+    "en": "Parse this vulnerability scan report"
+  },
+  "tags": [
+    {
+      "en": "Security Operations",
+      "zh": "安全运营"
+    },
+    {
+      "en": "Vulnerability Management",
+      "zh": "漏洞管理"
+    },
+    {
+      "en": "Threat Detection",
+      "zh": "威胁检测"
+    }
+  ],
+  "quickPrompts": [
+
+    {
+      "en": "Parse this vulnerability scan report",
+      "zh": "解析这份漏洞扫描报告"
+    },
+    {
+      "en": "Analyze this WAF attack log",
+      "zh": "分析这份WAF攻击日志"
+    },
+    {
+      "en": "Investigate suspicious intrusion on this host",
+      "zh": "排查这台主机是否存在入侵痕迹"
+    }
+  ],
+  "plugin": "soe"
+}

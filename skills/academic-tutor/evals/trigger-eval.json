@@ -1,0 +1,96 @@
+{
+  "skill": "academic-tutor",
+  "version": "1.0.0",
+  "should_trigger": [
+    {
+      "id": "trigger-1",
+      "input": "这道高数题怎么做：∫(x²+1)/(x⁴+1) dx",
+      "why": "学业题目 + 引导诉求"
+    },
+    {
+      "id": "trigger-2",
+      "input": "帮我讲讲拉格朗日中值定理，我看不太懂",
+      "why": "概念讲解（concept 意图）"
+    },
+    {
+      "id": "trigger-3",
+      "input": "我论文选题不知道选啥方向",
+      "why": "论文选题（paper-topic 意图）"
+    },
+    {
+      "id": "trigger-4",
+      "input": "这段论证我觉得有漏洞，但说不清哪里",
+      "why": "论文论证审视（paper-revision 意图）"
+    },
+    {
+      "id": "trigger-5",
+      "input": "审稿人说我方法描述不清，我该怎么改",
+      "why": "审稿应对（paper-revision 意图）"
+    },
+    {
+      "id": "trigger-6",
+      "input": "红黑树插入怎么旋转，我看了 3 遍还不懂",
+      "why": "数据结构题目 + 卡点 + 求引导"
+    },
+    {
+      "id": "trigger-7",
+      "input": "记住我是计算机大三，操作系统学到第 5 章",
+      "why": "profile 更新指令"
+    },
+    {
+      "id": "trigger-8",
+      "input": "切换到严格模式，我想被逼一下",
+      "why": "tone 切换指令"
+    }
+  ],
+  "should_not_trigger": [
+    {
+      "id": "no-trigger-1",
+      "input": "帮我做一份 30 天雅思 6.5 备考计划",
+      "should_route_to": "其它能力",
+      "why": "明确是规划任务，不是单点引导"
+    },
+    {
+      "id": "no-trigger-2",
+      "input": "今天打卡，我学完了听力和阅读",
+      "should_route_to": "其它能力",
+      "why": "打卡行为，不属于单点引导"
+    },
+    {
+      "id": "no-trigger-3",
+      "input": "帮我把整门《操作系统》课梳理成思维导图",
+      "should_route_to": "其它能力",
+      "why": "整门课结构梳理，不属于单点引导"
+    },
+    {
+      "id": "no-trigger-4",
+      "input": "帮我速读 5 篇 2025 年小样本学习的综述论文",
+      "should_route_to": "其它能力",
+      "why": "批量论文速读，不属于单点引导"
+    },
+    {
+      "id": "no-trigger-5",
+      "input": "帮我翻译这段 Nature 论文的摘要到中文",
+      "should_route_to": "其它能力",
+      "why": "纯学术翻译，不属于单点引导"
+    },
+    {
+      "id": "no-trigger-6",
+      "input": "批改我的雅思大作文，给我打分",
+      "should_route_to": "其它能力",
+      "why": "应试作文批改，不属于单点引导"
+    },
+    {
+      "id": "no-trigger-7",
+      "input": "帮我改一下简历，秋招要用",
+      "should_route_to": "其它能力",
+      "why": "简历专项，不属于单点引导"
+    },
+    {
+      "id": "no-trigger-8",
+      "input": "今天天气怎么样",
+      "should_route_to": null,
+      "why": "无关寒暄，应礼貌引回学业"
+    }
+  ]
+}

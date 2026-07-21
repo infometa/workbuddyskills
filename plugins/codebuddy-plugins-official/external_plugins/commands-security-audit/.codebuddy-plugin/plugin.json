@@ -1,0 +1,20 @@
+{
+  "name": "commands-security-audit",
+  "version": "1.0.0",
+  "description": "Commands for security auditing and vulnerability scanning",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "security-audit",
+    "add-authentication-system",
+    "dependency-audit",
+    "security-audit",
+    "security-hardening"
+  ]
+}

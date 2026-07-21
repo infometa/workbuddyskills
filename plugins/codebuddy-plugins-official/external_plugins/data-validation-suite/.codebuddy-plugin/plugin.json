@@ -1,0 +1,11 @@
+{
+  "name": "data-validation-suite",
+  "description": "模式验证、数据质量监控、流式验证管道以及后端API的输入验证",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

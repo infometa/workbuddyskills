@@ -1,0 +1,858 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/fbs/schemas/long-manuscript-expert/service-side-closure-report.schema.json",
+  "title": "Long Manuscript Expert Service-Side Closure Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "source",
+    "identity",
+    "serviceRoute",
+    "activationChecklist",
+    "followUpBranch",
+    "productCreditBoundary",
+    "hostSteering"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "status": {
+      "enum": [
+        "service_starter_ready_followthrough_required",
+        "service_starter_warn"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "trafficGroup",
+        "sampleClass",
+        "naturalClosureClaimed"
+      ],
+      "properties": {
+        "tool": {
+          "const": "long_manuscript_start"
+        },
+        "trafficGroup": {
+          "type": "string"
+        },
+        "sampleClass": {
+          "type": "string"
+        },
+        "naturalClosureClaimed": {
+          "const": false
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "sameBindingRequired",
+        "anonymousUserCodeHash",
+        "serverBindingId",
+        "chainFingerprint"
+      ],
+      "properties": {
+        "mode": {
+          "const": "anonymous_first_delayed_identify"
+        },
+        "sameBindingRequired": {
+          "const": true
+        },
+        "anonymousUserCodeHash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "serverBindingId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "chainFingerprint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "serviceRoute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "productId",
+        "serviceProductId",
+        "expertEntryId",
+        "packageName",
+        "packageVersion",
+        "channelTrack",
+        "packCode",
+        "servicePackCode",
+        "scenePackId",
+        "routeCode",
+        "entryId",
+        "entryPromptCode",
+        "entrySurface",
+        "firstValueAssetType",
+        "continuedUseAssetType"
+      ],
+      "properties": {
+        "productId": {
+          "const": "long-manuscript-expert"
+        },
+        "channelTrack": {
+          "const": "long_manuscript"
+        },
+        "skillId": {
+          "type": "string",
+          "description": "Optional host discovery metadata pending external owner confirmation; not a canonical identity or product-credit field."
+        },
+        "packCode": {
+          "const": "fbss.long_manuscript.v1"
+        },
+        "scenePackId": {
+          "const": "long-manuscript"
+        },
+        "entryId": {
+          "type": "string",
+          "const": "long-manuscript-official-entry"
+        },
+        "entrySurface": {
+          "const": "workbuddy_expert_center"
+        },
+        "entryPromptCode": {
+          "type": "string",
+          "const": "wb_long_manuscript_official_entry"
+        },
+        "expertEntryId": {
+          "const": "long-manuscript-expert"
+        },
+        "serviceProductId": {
+          "const": "workbuddy_long_manuscript_expert"
+        },
+        "packageName": {
+          "const": "long-manuscript-expert"
+        },
+        "packageVersion": {
+          "const": "26.7.18"
+        },
+        "servicePackCode": {
+          "const": "fbss.long_manuscript.v1"
+        },
+        "routeCode": {
+          "const": "route.long_manuscript"
+        },
+        "firstValueAssetType": {
+          "const": "long_manuscript_plan_card"
+        },
+        "continuedUseAssetType": {
+          "const": "long_manuscript_continue_card"
+        }
+      }
+    },
+    "activationChecklist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "currentMilestone",
+        "sameBindingRequired",
+        "valueCreditRequiresConsume",
+        "nextTool",
+        "stopCondition"
+      ],
+      "properties": {
+        "currentMilestone": {
+          "const": "first_value_ready_followthrough_required"
+        },
+        "sameBindingRequired": {
+          "const": true
+        },
+        "valueCreditRequiresConsume": {
+          "const": true
+        },
+        "nextTool": {
+          "const": "skill_consume"
+        },
+        "stopCondition": {
+          "const": "continued_use_completed"
+        }
+      }
+    },
+    "followUpBranch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "branch",
+        "sameBindingRequired",
+        "requiredEventType",
+        "nextTool",
+        "productCreditBoundary"
+      ],
+      "properties": {
+        "branch": {
+          "const": "same_binding_consume_followthrough"
+        },
+        "sameBindingRequired": {
+          "const": true
+        },
+        "requiredEventType": {
+          "const": "continued_use_completed"
+        },
+        "nextTool": {
+          "const": "skill_consume"
+        },
+        "productCreditBoundary": {
+          "const": "natural_product_credit_requires_skill_consume_first_value_and_continued_use"
+        }
+      }
+    },
+    "productCreditBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "valueCreditRequiresConsume",
+        "probeRowsDiagnosticOnly",
+        "productCreditClaimed",
+        "naturalClosureClaimed"
+      ],
+      "properties": {
+        "valueCreditRequiresConsume": {
+          "const": true
+        },
+        "probeRowsDiagnosticOnly": {
+          "const": true
+        },
+        "productCreditClaimed": {
+          "const": false
+        },
+        "naturalClosureClaimed": {
+          "const": false
+        }
+      }
+    },
+    "hostSteering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nextAction",
+        "hostDirectiveReceiptEventType",
+        "projectTemplateSelectionIsProductCredit"
+      ],
+      "properties": {
+        "nextAction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hostDirectiveReceiptEventType": {
+          "const": "host_directive_receipt"
+        },
+        "projectTemplateSelectionIsProductCredit": {
+          "const": false
+        }
+      }
+    },
+    "valueEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "productId",
+        "serviceProductId",
+        "expertEntryId",
+        "packageName",
+        "packageVersion",
+        "channelTrack",
+        "packCode",
+        "servicePackCode",
+        "scenePackId",
+        "routeCode",
+        "entryId",
+        "entryPromptCode",
+        "entrySurface",
+        "firstValueAssetType",
+        "continuedUseAssetType",
+        "schemaVersion",
+        "eventType",
+        "canonicalProductId",
+        "sameBinding",
+        "currentMilestone",
+        "nextTool",
+        "stopCondition",
+        "productCreditClaimed",
+        "paymentClosureAllowed",
+        "probeRowsDiagnosticOnly"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "fbs.valueEvent.v1"
+        },
+        "eventType": {
+          "enum": [
+            "first_value_completed",
+            "same_binding_followthrough_ready",
+            "continued_use_completed",
+            "lebao_receipt_eligible"
+          ]
+        },
+        "productId": {
+          "const": "long-manuscript-expert"
+        },
+        "expertEntryId": {
+          "const": "long-manuscript-expert"
+        },
+        "packCode": {
+          "const": "fbss.long_manuscript.v1"
+        },
+        "servicePackCode": {
+          "const": "fbss.long_manuscript.v1"
+        },
+        "scenePackId": {
+          "const": "long-manuscript"
+        },
+        "sameBinding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "observed",
+            "sameBindingEvidenceStatus"
+          ],
+          "properties": {
+            "required": {
+              "const": true
+            },
+            "observed": {
+              "type": "boolean"
+            },
+            "sameBindingEvidenceStatus": {
+              "enum": [
+                "missing",
+                "observed"
+              ]
+            },
+            "bindingKeySource": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+            },
+            "anonymousUserCodeHash": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^anon-sha256-[a-f0-9]{64}$"
+            },
+            "serverBindingId": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 8,
+              "maxLength": 160,
+              "pattern": "^binding-[A-Za-z0-9._:-]+$"
+            },
+            "chainFingerprint": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^chain-sha256-[a-f0-9]{64}$"
+            }
+          }
+        },
+        "productCreditClaimed": {
+          "const": false
+        },
+        "paymentClosureAllowed": {
+          "const": false
+        },
+        "serviceProductId": {
+          "const": "workbuddy_long_manuscript_expert"
+        },
+        "packageName": {
+          "const": "long-manuscript-expert"
+        },
+        "packageVersion": {
+          "const": "26.7.18"
+        },
+        "channelTrack": {
+          "const": "long_manuscript"
+        },
+        "routeCode": {
+          "const": "route.long_manuscript"
+        },
+        "entryId": {
+          "const": "long-manuscript-official-entry"
+        },
+        "entryPromptCode": {
+          "const": "wb_long_manuscript_official_entry"
+        },
+        "entrySurface": {
+          "const": "workbuddy_expert_center"
+        },
+        "firstValueAssetType": {
+          "const": "long_manuscript_plan_card"
+        },
+        "continuedUseAssetType": {
+          "const": "long_manuscript_continue_card"
+        },
+        "canonicalProductId": {
+          "const": "workbuddy_long_manuscript_expert"
+        },
+        "currentMilestone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "nextTool": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "stopCondition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "probeRowsDiagnosticOnly": {
+          "const": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "eventType": {
+                "enum": [
+                  "continued_use_completed",
+                  "lebao_receipt_eligible"
+                ]
+              }
+            },
+            "required": [
+              "eventType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "sameBinding": {
+                "required": [
+                  "bindingKeySource",
+                  "anonymousUserCodeHash",
+                  "serverBindingId",
+                  "chainFingerprint"
+                ],
+                "properties": {
+                  "observed": {
+                    "const": true
+                  },
+                  "sameBindingEvidenceStatus": {
+                    "const": "observed"
+                  },
+                  "bindingKeySource": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "anonymousUserCodeHash": {
+                    "type": "string",
+                    "pattern": "^anon-sha256-[a-f0-9]{64}$"
+                  },
+                  "serverBindingId": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 160,
+                    "pattern": "^binding-[A-Za-z0-9._:-]+$"
+                  },
+                  "chainFingerprint": {
+                    "type": "string",
+                    "pattern": "^chain-sha256-[a-f0-9]{64}$"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sameBinding": {
+                "properties": {
+                  "observed": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "observed"
+                ]
+              }
+            },
+            "required": [
+              "sameBinding"
+            ]
+          },
+          "then": {
+            "properties": {
+              "sameBinding": {
+                "properties": {
+                  "sameBindingEvidenceStatus": {
+                    "const": "missing"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sameBinding": {
+                "properties": {
+                  "observed": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "observed"
+                ]
+              }
+            },
+            "required": [
+              "sameBinding"
+            ]
+          },
+          "then": {
+            "properties": {
+              "sameBinding": {
+                "properties": {
+                  "sameBindingEvidenceStatus": {
+                    "const": "observed"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "personalizationProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identityMode",
+        "profileSegment",
+        "intentFamily",
+        "preferredNextBranches"
+      ],
+      "properties": {
+        "identityMode": {
+          "const": "anonymous_first_delayed_identify"
+        },
+        "profileSegment": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "intentFamily": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "cohortProfileSegment": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "cohortIntentFamily": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "documentArchetype": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "sourceMaturity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "deliveryStage": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "readerUseContext": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "evidenceComplianceMode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "postDraftLane": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "projectTemplate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "preferredNextBranches": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+          }
+        },
+        "deidentifiedCohortKey": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 192,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*(?:[.][a-z][a-z0-9]*(?:[_-][a-z0-9]+)*){1,5}$"
+        }
+      }
+    },
+    "deliveryTaskboard": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "taskId",
+          "branch",
+          "ownerSurface",
+          "sideEffectClass",
+          "requiredInputs",
+          "acceptance",
+          "doneState",
+          "successorAction",
+          "sameBindingRequired",
+          "lebaoEligibleAfter"
+        ],
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+          },
+          "ownerSurface": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+          },
+          "sideEffectClass": {
+            "const": "read_only"
+          },
+          "requiredInputs": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 16,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+            }
+          },
+          "acceptance": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 16,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+            }
+          },
+          "doneState": {
+            "const": "continued_use_completed"
+          },
+          "successorAction": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+          },
+          "sameBindingRequired": {
+            "const": true
+          },
+          "lebaoEligibleAfter": {
+            "const": "continued_use_completed"
+          }
+        }
+      }
+    },
+    "opsBoard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "currentStage",
+        "loopStatus",
+        "recordOnly",
+        "writesProductionState",
+        "productCreditPromotionAllowed",
+        "currentBlocker",
+        "nextOwnerAction",
+        "stopCondition",
+        "cannotProve"
+      ],
+      "properties": {
+        "currentStage": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "loopStatus": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "recordOnly": {
+          "const": true
+        },
+        "writesProductionState": {
+          "const": false
+        },
+        "productCreditPromotionAllowed": {
+          "const": false
+        },
+        "currentBlocker": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "nextOwnerAction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "stopCondition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+        },
+        "cannotProve": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*$"
+          }
+        }
+      }
+    },
+    "lebaoUnlockBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unlockNotBefore",
+        "claimTool",
+        "paymentClosureAllowed",
+        "valueCreditRequiresConsume",
+        "claimObserved",
+        "unlockObserved",
+        "requiredReceiptFieldGroups"
+      ],
+      "properties": {
+        "unlockNotBefore": {
+          "const": "continued_use_completed"
+        },
+        "claimTool": {
+          "const": "lebao_claim"
+        },
+        "paymentClosureAllowed": {
+          "const": false
+        },
+        "valueCreditRequiresConsume": {
+          "const": true
+        },
+        "claimObserved": {
+          "const": false
+        },
+        "unlockObserved": {
+          "const": false
+        },
+        "requiredReceiptFieldGroups": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "identity",
+              "routeSignature",
+              "benefitState",
+              "sameBindingEvidence",
+              "hostActionEnvelope"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

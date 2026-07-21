@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>弧线中点位置标记</title>
+</head>
+<script charset="utf-8"
+  src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"></script>
+<style type="text/css">
+  html,
+  body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  #container {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<body onload="initMap()">
+  <div id="container"></div>
+  <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/arc.js"></script>
+  <script>
+    function initMap() {
+      var center = new TMap.LatLng(37.80787, 112.269029);
+      var data = arcData;
+      //初始化地图
+      var map = new TMap.Map("container", {
+        zoom: 5, //设置地图缩放级别
+        pitch: 30,
+        center: center, //设置地图中心点坐标
+        mapStyleId: "style4", //个性化样式
+        baseMap: {
+          type: "vector",
+          features: ["base", "building3d"], // 隐藏矢量文字
+        },
+      });
+      //初始化弧线图并添加至map图层
+      var arc = new TMap.visualization.Arc({
+        mode: "vertical", // 弧线平面与地平面垂直
+      })
+        .addTo(map)
+        .setData(data); //设置数据
+      var date = arc.getMidPositions().slice(0, 10); // 截取10条数据
+      let geometries = [];
+      date.forEach((i, index) => {
+        let count = data[index].count.toString(); //获取文本
+        var marker = {
+          //每个marker位置及文本
+          position: i, //标注点位置
+          content: count, //标注点文本
+        };
+        geometries.push(marker);
+      });
+
+      //初始化点标记
+      var marker = new TMap.MultiMarker({
+        map: map, //显示Marker图层的底图
+        styles: {
+          default: new TMap.MarkerStyle({
+            width: 70, //宽度
+            height: 26, //高度
+            anchor: { x: 36, y: 32 }, //标注点图片的锚点位置
+            src: "https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/ellipse.png", ////标注点图片url或base64地址
+            color: "#fff", ////标注点文本颜色
+            size: 16, //标注点文本文字大小
+            offset: { x: 0, y: 1 }, //标注点文本文字基于direction方位的偏移属性
+          }),
+        },
+        geometries: geometries, //点标注数据数组
+      });
+    }
+  </script>
+</body>
+
+</html>

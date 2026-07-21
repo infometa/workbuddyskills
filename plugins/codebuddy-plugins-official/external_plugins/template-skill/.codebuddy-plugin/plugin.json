@@ -1,0 +1,5 @@
+{
+  "name": "template-skill",
+  "description": "一个演示如何创建新 Claude 技能的结构和格式的模板技能",
+  "license": "未声明"
+}

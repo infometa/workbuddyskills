@@ -1,0 +1,320 @@
+# Actuator / 管理端点暴露检测专项规则
+# 适用条件：侦察检测到 Web 应用（任意语言/框架）
+#
+# 使用须知：本文件为参考资料，辅助识别各框架管理端点、调试端点、
+# 健康检查端点的不安全暴露。Agent 的安全分析能力不受限于此文件列出的
+# 风险类型——应基于代码实际行为推理，发现未列出的风险时正常报告，不做知识对账。
+#
+# 关联风险类型：endpoint-exposure（数据与配置类）
+
+risk_type: endpoint-exposure
+
+# ============================================================================
+# 1. Spring Boot Actuator（Java / Kotlin）
+# ============================================================================
+spring_boot_actuator:
+  applies_to: ["java", "kotlin"]
+  description: "Spring Boot Actuator 提供生产级别的监控与管理端点，暴露后可泄露环境变量、Bean 定义、堆栈信息、健康检查详情甚至触发 shutdown。"
+
+  # 1.1 暴露配置检测
+  exposure_patterns:
+    - id: "actuator-expose-all"
+      pattern: "暴露所有 Actuator 端点"
+      severity: medium
+      grep_probe: "management\\.endpoints\\.web\\.exposure\\.include\\s*=\\s*\\*"
+      config_files: ["application.properties", "application.yml", "application-*.yml", "bootstrap.yml"]
+      description: "management.endpoints.web.exposure.include=* 将所有端点暴露到 Web，含 env/heapdump/shutdown 等端点"
+      remediation: "仅暴露必要端点：management.endpoints.web.exposure.include=health,info,prometheus"
+
+    - id: "actuator-expose-env"
+      pattern: "暴露 env 端点"
+      severity: medium
+      grep_probe: "management\\.endpoints\\.web\\.exposure\\.include.*env"
+      description: "/actuator/env 泄露所有环境变量，含数据库密码、API Key、云凭证等"
+      remediation: "从 exposure.include 中移除 env，或配置 management.endpoint.env.show-values=NEVER"
+
+    - id: "actuator-expose-heapdump"
+      pattern: "暴露 heapdump 端点"
+      severity: high
+      grep_probe: "management\\.endpoints\\.web\\.exposure\\.include.*(heapdump|\\*)"
+      description: "/actuator/heapdump 可下载 JVM 堆转储，从中可提取内存中的密钥、Session Token、数据库连接信息（可造成大量数据泄漏）"
+      remediation: "禁用 heapdump 端点：management.endpoint.heapdump.enabled=false"
+
+    - id: "actuator-expose-shutdown"
+      pattern: "暴露 shutdown 端点"
+      severity: medium
+      grep_probe: "management\\.endpoint\\.shutdown\\.enabled\\s*=\\s*true"
+      description: "POST /actuator/shutdown 可远程关闭应用，构成拒绝服务风险"
+      remediation: "禁用 shutdown 端点：management.endpoint.shutdown.enabled=false"
+
+    - id: "actuator-expose-jolokia"
+      pattern: "暴露 Jolokia 端点"
+      severity: high
+      grep_probe: "jolokia-core|management\\.endpoints\\.web\\.exposure\\.include.*jolokia"
+      description: "/actuator/jolokia 提供 JMX MBean 的 HTTP 接口，可被利用执行任意代码（RCE via JNDI/MBean，可直接入侵）"
+      remediation: "移除 jolokia-core 依赖或从 exposure.include 中排除 jolokia"
+
+    - id: "actuator-expose-mappings"
+      pattern: "暴露 mappings 端点"
+      severity: low
+      grep_probe: "management\\.endpoints\\.web\\.exposure\\.include.*(mappings|\\*)"
+      description: "/actuator/mappings 泄露所有 URL 路由与处理方法，便于攻击者枚举攻击面"
+      remediation: "从 exposure.include 中移除 mappings"
+
+    - id: "actuator-expose-beans"
+      pattern: "暴露 beans 端点"
+      severity: low
+      grep_probe: "management\\.endpoints\\.web\\.exposure\\.include.*(beans|\\*)"
+      description: "/actuator/beans 泄露所有 Spring Bean 定义及其依赖关系，暴露内部架构"
+
+    - id: "actuator-expose-configprops"
+      pattern: "暴露 configprops 端点"
+      severity: medium
+      grep_probe: "management\\.endpoints\\.web\\.exposure\\.include.*(configprops|\\*)"
+      description: "/actuator/configprops 泄露所有配置属性及其值，可能包含数据库凭证等敏感信息"
+
+  # 1.2 认证缺失检测
+  auth_bypass_patterns:
+    - id: "actuator-no-auth-legacy"
+      pattern: "Actuator 禁用安全认证（旧版）"
+      severity: medium
+      grep_probe: "management\\.security\\.enabled\\s*=\\s*false"
+      description: "Spring Boot 1.x 中禁用 Actuator 安全认证，所有端点无需鉴权即可访问"
+      remediation: "移除此配置，确保 spring-boot-starter-security 在依赖中"
+
+    - id: "actuator-permit-all"
+      pattern: "Security 配置对 Actuator 路径 permitAll"
+      severity: medium
+      grep_probe: "actuator.*permitAll|management.*permitAll"
+      description: "Spring Security 配置中对 /actuator/** 放行，绕过鉴权保护"
+      remediation: "对 Actuator 端点要求认证：.requestMatchers(\"/actuator/**\").hasRole(\"ADMIN\")"
+
+    - id: "actuator-custom-base-path"
+      pattern: "自定义 Actuator 基础路径（隐匿但非防护）"
+      severity: low
+      grep_probe: "management\\.endpoints\\.web\\.base-path\\s*="
+      description: "修改 Actuator 基础路径不等于安全防护，仍需认证保护"
+
+  # 1.3 网络层暴露检测
+  network_exposure_patterns:
+    - id: "actuator-same-port"
+      pattern: "Actuator 与业务端口相同"
+      severity: medium
+      grep_probe: "management\\.server\\.port"
+      negate: true  # 未配置独立端口时触发
+      description: "Actuator 端点与业务共用端口，外部流量可直接访问管理端点"
+      remediation: "配置独立管理端口：management.server.port=8081，并通过防火墙限制访问"
+
+    - id: "actuator-address-any"
+      pattern: "Actuator 绑定所有网络接口"
+      severity: medium
+      grep_probe: "management\\.server\\.address\\s*=\\s*0\\.0\\.0\\.0"
+      description: "Actuator 监听 0.0.0.0，从任意网络接口均可访问"
+      remediation: "限制为内网：management.server.address=127.0.0.1"
+
+# ============================================================================
+# 2. 通用调试/管理端点暴露（跨框架）
+# ============================================================================
+generic_debug_endpoints:
+  description: "非 Actuator 场景下的管理/调试端点暴露检测"
+
+  patterns:
+    # --- Swagger / OpenAPI ---
+    - id: "swagger-ui-exposed"
+      pattern: "Swagger UI 暴露"
+      severity: low
+      applies_to: ["java", "go", "python", "javascript", "typescript", "csharp"]
+      grep_probe: "swagger-ui|springdoc\\.api-docs|springfox|swaggo|swagger_auto_schema|@ApiOperation"
+      config_grep: "springdoc\\.swagger-ui\\.enabled\\s*=\\s*true|SWAGGER_ENABLED.*true|swag\\.init"
+      description: "Swagger UI 在生产环境暴露完整 API 文档，便于攻击者枚举接口和参数"
+      remediation: "生产环境禁用 Swagger：springdoc.swagger-ui.enabled=false 或通过 Profile 控制"
+
+    # --- GraphQL ---
+    - id: "graphql-playground-exposed"
+      pattern: "GraphQL Playground/GraphiQL 暴露"
+      severity: low
+      applies_to: ["java", "javascript", "typescript", "python", "go"]
+      grep_probe: "graphiql|graphql-playground|altair|GraphQLPlayground|GRAPHQL_PLAYGROUND"
+      description: "GraphQL Playground 允许任意查询构造与内省，暴露完整 Schema"
+      remediation: "生产环境禁用：spring.graphql.graphiql.enabled=false 或移除 playground 中间件"
+
+    - id: "graphql-introspection-enabled"
+      pattern: "GraphQL 内省未禁用"
+      severity: low
+      applies_to: ["java", "javascript", "typescript", "python", "go"]
+      grep_probe: "introspection.*true|IntrospectionQuery|__schema"
+      description: "GraphQL 内省暴露完整 Schema 定义（类型、字段、关系），利于攻击面枚举"
+      remediation: "生产环境禁用内省查询"
+
+    # --- pprof (Go) ---
+    - id: "go-pprof-exposed"
+      pattern: "Go pprof 端点暴露"
+      severity: medium
+      applies_to: ["go"]
+      grep_probe: "net/http/pprof|import.*pprof|pprof\\.Handler|pprof\\.Index"
+      description: "Go pprof 暴露 CPU Profile、内存分配、Goroutine 堆栈等调试信息，可被利用进行信息泄露或 DoS"
+      remediation: "移除 import _ \"net/http/pprof\"，或限制 pprof 仅监听内网地址"
+
+    # --- Django (Python) ---
+    - id: "django-debug-toolbar"
+      pattern: "Django Debug Toolbar 暴露"
+      severity: medium
+      applies_to: ["python"]
+      grep_probe: "debug_toolbar|DEBUG_TOOLBAR|SHOW_TOOLBAR_CALLBACK"
+      description: "Django Debug Toolbar 暴露 SQL 查询、模板上下文、信号、HTTP 头等调试信息"
+      remediation: "确保 DEBUG=False 且移除 debug_toolbar 中间件"
+
+    - id: "django-debug-true"
+      pattern: "Django DEBUG=True"
+      severity: medium
+      applies_to: ["python"]
+      grep_probe: "DEBUG\\s*=\\s*True"
+      description: "Django DEBUG 模式暴露完整堆栈跟踪、SQL 查询和配置信息"
+      remediation: "生产环境设置 DEBUG=False"
+
+    # --- Flask (Python) ---
+    - id: "flask-debugger"
+      pattern: "Flask Debugger 暴露"
+      severity: high
+      applies_to: ["python"]
+      grep_probe: "app\\.run\\(.*debug\\s*=\\s*True|FLASK_DEBUG\\s*=\\s*1|FLASK_ENV\\s*=\\s*development"
+      description: "Flask 调试器提供交互式控制台，可执行任意 Python 代码（可直接RCE入侵）"
+      remediation: "生产环境禁用调试模式：app.run(debug=False)"
+
+    # --- Express/Node.js ---
+    - id: "express-status-monitor"
+      pattern: "Express Status Monitor 暴露"
+      severity: low
+      applies_to: ["javascript", "typescript"]
+      grep_probe: "express-status-monitor|statusMonitor|express-monitor"
+      description: "Express Status Monitor 暴露服务器状态、CPU/内存使用、响应时间等运行时信息"
+
+    - id: "nodejs-debug-port"
+      pattern: "Node.js Debug 端口暴露"
+      severity: high
+      applies_to: ["javascript", "typescript"]
+      grep_probe: "--inspect=0\\.0\\.0\\.0|--inspect-brk=0\\.0\\.0\\.0|--debug=0\\.0\\.0\\.0"
+      description: "Node.js 调试端口绑定 0.0.0.0，可通过 Chrome DevTools 远程连接执行任意代码（可直接入侵）"
+      remediation: "调试端口仅绑定 127.0.0.1，或在生产环境移除 --inspect 参数"
+
+    # --- ASP.NET ---
+    - id: "aspnet-dev-exception-page"
+      pattern: "ASP.NET 开发者异常页"
+      severity: medium
+      applies_to: ["csharp"]
+      grep_probe: "UseDeveloperExceptionPage|UseExceptionHandler.*Development|ASPNETCORE_ENVIRONMENT.*Development"
+      description: "ASP.NET 开发者异常页暴露完整堆栈跟踪、源代码片段和环境变量"
+      remediation: "确保生产环境 ASPNETCORE_ENVIRONMENT=Production 且不调用 UseDeveloperExceptionPage"
+
+    # --- PHP ---
+    - id: "php-info-exposed"
+      pattern: "phpinfo() 端点暴露"
+      severity: medium
+      applies_to: ["php"]
+      grep_probe: "phpinfo\\(\\)"
+      description: "phpinfo() 暴露 PHP 版本、编译参数、模块、环境变量、服务器配置等全部信息"
+      remediation: "删除包含 phpinfo() 的文件，或限制仅内网访问"
+
+# ============================================================================
+# 3. 健康检查端点信息过度暴露
+# ============================================================================
+health_endpoint_overexposure:
+  description: "健康检查端点本身合理，但过度暴露内部组件状态（数据库连接串、Redis 地址、磁盘路径）构成信息泄露"
+
+  patterns:
+    - id: "health-show-details-always"
+      pattern: "健康检查暴露详细信息"
+      severity: medium
+      applies_to: ["java", "kotlin"]
+      grep_probe: "management\\.endpoint\\.health\\.show-details\\s*=\\s*always|management\\.endpoint\\.health\\.show-components\\s*=\\s*always"
+      description: "/actuator/health 暴露数据库、Redis、磁盘等组件详细状态和连接信息"
+      remediation: "设置 management.endpoint.health.show-details=when-authorized"
+
+    - id: "health-custom-leaking-info"
+      pattern: "自定义健康检查泄露敏感信息"
+      severity: medium
+      applies_to: ["java", "kotlin", "go", "python", "javascript", "typescript"]
+      grep_probe: "HealthIndicator|HealthContributor|/health.*password|/health.*connection.*string"
+      description: "自定义健康检查接口返回中包含数据库连接串、内网地址、凭证等敏感信息"
+
+# ============================================================================
+# 4. 端点暴露的置信度评估参考
+# ============================================================================
+confidence_assessment:
+  description: "端点暴露类风险的置信度评估维度"
+
+  dimensions:
+    - dimension: "暴露范围"
+      weight: 30
+      levels:
+        - score: 30
+          condition: "exposure.include=* 或等效全暴露"
+        - score: 20
+          condition: "暴露高危端点（heapdump/shutdown/jolokia/env）"
+        - score: 10
+          condition: "暴露中低危端点（mappings/beans/info）"
+
+    - dimension: "认证防护"
+      weight: 40
+      levels:
+        - score: 40
+          condition: "无任何认证保护（security.enabled=false 或 permitAll）"
+        - score: 20
+          condition: "有认证但配置宽松（如仅基础认证无 HTTPS）"
+        - score: 0
+          condition: "有完善的认证保护（RBAC + HTTPS）"
+
+    - dimension: "网络可达性"
+      weight: 20
+      levels:
+        - score: 20
+          condition: "与业务端口共用且绑定 0.0.0.0"
+        - score: 10
+          condition: "独立端口但未限制网络"
+        - score: 0
+          condition: "绑定 127.0.0.1 或防火墙限制"
+
+    - dimension: "数据敏感度"
+      weight: 10
+      levels:
+        - score: 10
+          condition: "可获取密钥/凭证/堆转储"
+        - score: 5
+          condition: "可获取架构信息/路由映射"
+        - score: 2
+          condition: "仅健康状态/基本信息"
+
+# ============================================================================
+# 5. 框架防御措施参考
+# ============================================================================
+framework_defenses:
+  - defense: "Spring Security 保护 Actuator"
+    effectiveness: "有效 — 需正确配置 requestMatchers"
+    confidence_impact: -25
+    check: "requestMatchers.*actuator.*authenticated|hasRole.*ADMIN.*actuator"
+
+  - defense: "独立管理端口 + 防火墙"
+    effectiveness: "有效 — 网络层隔离管理流量"
+    confidence_impact: -20
+    check: "management.server.port 已配置且 != server.port"
+
+  - defense: "Spring Boot 2.x+ 默认行为"
+    effectiveness: "部分有效 — 默认仅暴露 health 和 info"
+    confidence_impact: -10
+    check: "Spring Boot >= 2.0 且未显式配置 exposure.include"
+
+  - defense: "Nginx/网关层拦截"
+    effectiveness: "有效 — 在反向代理层阻断管理端点访问"
+    confidence_impact: -20
+    check: "Nginx 配置 deny /actuator、API 网关路由排除"
+
+# ============================================================================
+# 6. 常见误报场景
+# ============================================================================
+false_positive_indicators:
+  - "配置文件中有 exposure.include=* 但被 Profile 限制为仅开发环境生效（如 application-dev.yml）"
+  - "Actuator 端口绑定 127.0.0.1 且有防火墙规则阻止外部访问"
+  - "Swagger 仅在 @Profile(\"dev\") 下注册"
+  - "pprof 仅在 debug 构建标签下编译（//go:build debug）"
+  - "DEBUG=True 仅出现在 settings_local.py 或 .env.development 中"
+  - "phpinfo() 位于 test/ 或 mock/ 目录下"

@@ -1,0 +1,17 @@
+{
+  "name": "commands-game-development",
+  "version": "1.0.0",
+  "description": "Commands for game development workflows",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "game-development",
+    "unity-project-setup"
+  ]
+}

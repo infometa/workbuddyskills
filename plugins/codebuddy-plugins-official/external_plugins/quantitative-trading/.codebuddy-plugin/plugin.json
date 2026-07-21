@@ -1,0 +1,11 @@
+{
+  "name": "quantitative-trading",
+  "description": "量化分析、算法交易策略、金融建模、投资组合风险管理和回测",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

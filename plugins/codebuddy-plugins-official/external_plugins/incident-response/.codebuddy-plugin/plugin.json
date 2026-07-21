@@ -1,0 +1,11 @@
+{
+  "name": "incident-response",
+  "description": "生产事故管理、分级处理工作流和自动化事故解决方案",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

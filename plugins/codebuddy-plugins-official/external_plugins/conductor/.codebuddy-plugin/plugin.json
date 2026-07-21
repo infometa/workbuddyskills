@@ -1,0 +1,11 @@
+{
+  "name": "conductor",
+  "version": "1.2.0",
+  "description": "上下文驱动开发插件，将 Claude Code 转变为项目管理工具，采用结构化工作流：上下文 → 规格与计划 → 实施",
+  "author": {
+    "name": "Seth Hobson",
+    "email": "seth@major7apps.com"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/wshobson/agents"
+}

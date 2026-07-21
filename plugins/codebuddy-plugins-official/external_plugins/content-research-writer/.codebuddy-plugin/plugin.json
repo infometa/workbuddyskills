@@ -1,0 +1,5 @@
+{
+  "name": "content-research-writer",
+  "description": "协助撰写高质量内容，包括研究调查、添加引用、改进开篇、提供逐节反馈等功能。",
+  "license": "未声明"
+}

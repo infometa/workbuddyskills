@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>MultiPolygon选中高亮显示</title>
+</head>
+<script charset="utf-8"
+  src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+  html,
+  body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  #container {
+    width: 100%;
+    height: 100%;
+  }
+
+  #info {
+    display: none;
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    background: #fff;
+    border-radius: 5px;
+    padding: 10px;
+  }
+</style>
+
+<body onload="initMap()">
+  <div id="container"></div>
+  <div id="info">
+
+  </div>
+  <script>
+    var map;
+    function initMap() {
+      var info = document.getElementById("info");
+      var center = new TMap.LatLng( 40.04162653200161, 116.27402993329179);
+
+      //初始化地图
+      map = new TMap.Map("container", {
+        zoom: 16, //设置地图缩放级别
+        center: center, //设置地图中心点坐标
+      });
+
+      // 多边形数据
+      const polygonGeometries = [
+        {
+          "paths": [
+            {
+              "lat": 40.041516,
+              "lng": 116.271655,
+              "height": 0
+            },
+            {
+              "lat": 40.044479,
+              "lng": 116.271063,
+              "height": 0
+            },
+            {
+              "lat": 40.045154,
+              "lng": 116.275173,
+              "height": 0
+            },
+            {
+              "lat": 40.045127,
+              "lng": 116.275351,
+              "height": 0
+            },
+            {
+              "lat": 40.045061,
+              "lng": 116.275474,
+              "height": 0
+            },
+            {
+              "lat": 40.044007,
+              "lng": 116.276271,
+              "height": 0
+            },
+            {
+              "lat": 40.043876,
+              "lng": 116.276264,
+              "height": 0
+            },
+            {
+              "lat": 40.043774,
+              "lng": 116.276204,
+              "height": 0
+            },
+            {
+              "lat": 40.043697,
+              "lng": 116.276093,
+              "height": 0
+            },
+            {
+              "lat": 40.043411,
+              "lng": 116.274514,
+              "height": 0
+            },
+            {
+              "lat": 40.043373,
+              "lng": 116.274436,
+              "height": 0
+            },
+            {
+              "lat": 40.043313,
+              "lng": 116.274408,
+              "height": 0
+            },
+            {
+              "lat": 40.042697,
+              "lng": 116.274427,
+              "height": 0
+            },
+            {
+              "lat": 40.042122,
+              "lng": 116.27462,
+              "height": 0
+            },
+            {
+              "lat": 40.04204,
+              "lng": 116.274607,
+              "height": 0
+            },
+            {
+              "lat": 40.042001,
+              "lng": 116.274544,
+              "height": 0
+            },
+            {
+              "lat": 40.041516,
+              "lng": 116.271655,
+              "height": 0
+            },
+          ],
+        },
+        {
+          "paths": [
+            {
+              "lat": 40.043774,
+              "lng": 116.276204,
+              "height": 0
+            },
+            {
+              "lat": 40.043824,
+              "lng": 116.276332,
+              "height": 0
+            },
+            {
+              "lat": 40.04382,
+              "lng": 116.27648,
+              "height": 0
+            },
+            {
+              "lat": 40.043489,
+              "lng": 116.277156,
+              "height": 0
+            },
+            {
+              "lat": 40.043233,
+              "lng": 116.277385,
+              "height": 0
+            },
+            {
+              "lat": 40.042953,
+              "lng": 116.277482,
+              "height": 0
+            },
+            {
+              "lat": 40.04255,
+              "lng": 116.277556,
+              "height": 0
+            },
+            {
+              "lat": 40.042484,
+              "lng": 116.277524,
+              "height": 0
+            },
+            {
+              "lat": 40.042454,
+              "lng": 116.277449,
+              "height": 0
+            },
+            {
+              "lat": 40.042051,
+              "lng": 116.274762,
+              "height": 0
+            },
+            {
+              "lat": 40.042063,
+              "lng": 116.274677,
+              "height": 0
+            },
+            {
+              "lat": 40.042122,
+              "lng": 116.27462,
+              "height": 0
+            },
+            {
+              "lat": 40.042697,
+              "lng": 116.274427,
+              "height": 0
+            },
+            {
+              "lat": 40.043313,
+              "lng": 116.274408,
+              "height": 0
+            },
+            {
+              "lat": 40.043373,
+              "lng": 116.274436,
+              "height": 0
+            },
+            {
+              "lat": 40.043411,
+              "lng": 116.274514,
+              "height": 0
+            },
+            {
+              "lat": 40.043697,
+              "lng": 116.276093,
+              "height": 0
+            },
+            {
+              "lat": 40.043774,
+              "lng": 116.276204,
+              "height": 0
+            },
+          ],
+        },       
+        {
+          "paths": [
+            {
+              "lat": 40.041904,
+              "lng": 116.274781,
+              "height": 0
+            },
+            {
+              "lat": 40.041939,
+              "lng": 116.274843,
+              "height": 0
+            },
+            {
+              "lat": 40.04233,
+              "lng": 116.27752,
+              "height": 0
+            },
+            {
+              "lat": 40.04231,
+              "lng": 116.277595,
+              "height": 0
+            },
+            {
+              "lat": 40.042262,
+              "lng": 116.277644,
+              "height": 0
+            },
+            {
+              "lat": 40.041085,
+              "lng": 116.277896,
+              "height": 0
+            },
+            {
+              "lat": 40.041028,
+              "lng": 116.277879,
+              "height": 0
+            },
+            {
+              "lat": 40.040999,
+              "lng": 116.277816,
+              "height": 0
+            },
+            {
+              "lat": 40.040641,
+              "lng": 116.275151,
+              "height": 0
+            },
+            {
+              "lat": 40.040655,
+              "lng": 116.275076,
+              "height": 0
+            },
+            {
+              "lat": 40.040701,
+              "lng": 116.275027,
+              "height": 0
+            },
+            {
+              "lat": 40.041847,
+              "lng": 116.274757,
+              "height": 0
+            },
+            {
+              "lat": 40.041904,
+              "lng": 116.274781,
+              "height": 0
+            },
+          ],
+        },
+        {
+          "paths": [
+            {
+              "lat": 40.041231,
+              "lng": 116.271712,
+              "height": 0
+            },
+            {
+              "lat": 40.0413,
+              "lng": 116.271761,
+              "height": 0
+            },
+            {
+              "lat": 40.041347,
+              "lng": 116.271869,
+              "height": 0
+            },
+            {
+              "lat": 40.041821,
+              "lng": 116.27429,
+              "height": 0
+            },
+            {
+              "lat": 40.041793,
+              "lng": 116.274441,
+              "height": 0
+            },
+            {
+              "lat": 40.041701,
+              "lng": 116.274535,
+              "height": 0
+            },
+            {
+              "lat": 40.040443,
+              "lng": 116.274853,
+              "height": 0
+            },
+            {
+              "lat": 40.040906,
+              "lng": 116.27805,
+              "height": 0
+            },
+            {
+              "lat": 40.039506,
+              "lng": 116.278362,
+              "height": 0
+            },
+            {
+              "lat": 40.03863,
+              "lng": 116.272593,
+              "height": 0
+            },
+            {
+              "lat": 40.03869,
+              "lng": 116.27238,
+              "height": 0
+            },
+            {
+              "lat": 40.038957,
+              "lng": 116.272167,
+              "height": 0
+            },
+            {
+              "lat": 40.041231,
+              "lng": 116.271712,
+              "height": 0
+            },
+          ],
+        },
+]
+      
+      let polygonLayer = new TMap.MultiPolygon({
+        map,
+        geometries: polygonGeometries,
+      })
+
+      // 高亮选中图层
+      var highlightLayer = new TMap.MultiPolyline({
+        map,
+        zIndex: 1,
+        styles: {
+          highlight: new TMap.PolylineStyle({
+            'color': 'rgba(188,200,0,0.8)', //填充色
+            'width': 4, // 线宽
+            'borderColor': '#fff', //边线颜色
+            'borderWidth': 1 //边线宽度
+          })
+        }
+      });
+
+      // 高亮区域
+      let highlightGeometry = {
+        id: 'highlightGeo',
+        styleId: 'highlight'
+      }
+
+      polygonLayer.on('hover', e => {
+        if (e.geometry) {
+          // 鼠标选中时高亮区域覆盖
+          highlightGeometry.paths = e.geometry.paths;
+          highlightLayer.updateGeometries([highlightGeometry]);
+        } else {
+          // 鼠标移出时取消高亮区域覆盖
+          highlightLayer.setGeometries([]);
+        }
+      })
+    }
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+{
+  "id": "_generic",
+  "title": "通用学习状态自检（5 题）",
+  "description": "用于无专业题库的领域，通过 5 道学习习惯题粗估当前水平。每题 1-5 分，总分映射到 current_level。",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "你最近一次系统性接触本主题距今多久？",
+      "options": [
+        {"value": 1, "label": "从未接触 / 完全 0 基础"},
+        {"value": 2, "label": "1 年以上没碰，记忆模糊"},
+        {"value": 3, "label": "半年内接触过，但不熟练"},
+        {"value": 4, "label": "近 3 个月持续在学"},
+        {"value": 5, "label": "目前正在每周主动练习"}
+      ]
+    },
+    {
+      "id": "q2",
+      "prompt": "面对本主题的中等难度问题，你能独立解决的比例？",
+      "options": [
+        {"value": 1, "label": "几乎全靠搜 / 问 AI / 抄答案"},
+        {"value": 2, "label": "30% 以下能独立做出"},
+        {"value": 3, "label": "50% 左右，常需提示"},
+        {"value": 4, "label": "70% 以上独立完成"},
+        {"value": 5, "label": "90%+ 独立完成且能讲清思路"}
+      ]
+    },
+    {
+      "id": "q3",
+      "prompt": "你能否用自己的话向小白讲清楚 3 个核心概念？（费曼测试）",
+      "options": [
+        {"value": 1, "label": "1 个都讲不清"},
+        {"value": 2, "label": "勉强能讲 1 个"},
+        {"value": 3, "label": "能讲 2 个，第 3 个卡壳"},
+        {"value": 4, "label": "3 个都能讲，但不流畅"},
+        {"value": 5, "label": "3 个都能流畅讲清并举例"}
+      ]
+    },
+    {
+      "id": "q4",
+      "prompt": "目前每周可投入的有效学习时长（去掉刷手机/分心）？",
+      "options": [
+        {"value": 1, "label": "< 2 小时"},
+        {"value": 2, "label": "2-5 小时"},
+        {"value": 3, "label": "5-10 小时"},
+        {"value": 4, "label": "10-20 小时"},
+        {"value": 5, "label": "> 20 小时（考前冲刺状态）"}
+      ]
+    },
+    {
+      "id": "q5",
+      "prompt": "你对本主题的学习方法论了解程度？",
+      "options": [
+        {"value": 1, "label": "完全没规划，想到啥学啥"},
+        {"value": 2, "label": "知道要刷题，但没体系"},
+        {"value": 3, "label": "看过教程 / 买过课，半执行"},
+        {"value": 4, "label": "有清晰路径并执行 50%+"},
+        {"value": 5, "label": "有完整 SOP 且持续迭代"}
+      ]
+    }
+  ],
+  "scoring": {
+    "5-9":   {"current_level": "0 基础起步", "daily_budget": {"weekday": 60, "weekend": 120},  "advice": "建议从入门教材通读 1 遍开始，方法论先靠艾宾浩斯+番茄保持节奏"},
+    "10-14": {"current_level": "薄弱基础",   "daily_budget": {"weekday": 90, "weekend": 180},  "advice": "重点补漏，60% 时间打基础，40% 刷中等题；加强错题复盘"},
+    "15-19": {"current_level": "中等水平",   "daily_budget": {"weekday": 90, "weekend": 180},  "advice": "进入刷题+输出阶段，每周 1 次费曼讲解 / 模考"},
+    "20-22": {"current_level": "中上水平",   "daily_budget": {"weekday": 75, "weekend": 150},  "advice": "可降低基础学习占比，60% 时间放在难题/真题/模考"},
+    "23-25": {"current_level": "接近熟练",   "daily_budget": {"weekday": 60, "weekend": 120},  "advice": "重点维持手感+查漏补缺，避免过度学习导致厌学"}
+  }
+}

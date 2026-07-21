@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>空中漫游</title>
+  </head>
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=view"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .info {
+      width: 300px;
+      background-color: white;
+      padding: 10px;
+      font-size: 14px;
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      z-index: 10000;
+    }
+  </style>
+
+  <body>
+    <div class="info">
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+    </div>
+    <div id="container"></div>
+    <script type="text/javascript">
+      var center = new TMap.LatLng(40.04549968987281, 116.30132245232517); // 设置地图中心点
+      // 初始化地图
+      var map = new TMap.Map('container', {
+        center: center,
+        zoom: 17, // 地图缩放
+      });
+      var lookFromList = [
+        {
+          position: new TMap.LatLng(40.04549968987281, 116.30132245232517, 2000),
+          rotation: [30, 0, 0], // 地图在水平面上的旋转角度
+          percentage: 0, // 动画过程中该关键帧的百分比
+        },
+
+        {
+          position: new TMap.LatLng(40.05244881434931, 116.29810240088455, 2000),
+          rotation: [30, 0, 0],
+          percentage: 0.15,
+        },
+        {
+          position: new TMap.LatLng(40.05388372230792, 116.29581192862429, 2000),
+          rotation: [30, 0, 90],
+          percentage: 0.2,
+        },
+
+        {
+          position: new TMap.LatLng(40.04940045681701, 116.2727587248047, 2000),
+          rotation: [30, 0, 90],
+          percentage: 0.45,
+          pitch: 180,
+        },
+
+        {
+          position: new TMap.LatLng(40.04786914340286, 116.27002196548278, 2000),
+          rotation: [30, 0, 180],
+          percentage: 0.5,
+        },
+        {
+          position: new TMap.LatLng(40.040462003575115, 116.27165202999174, 2000),
+          rotation: [30, 0, 180],
+          percentage: 0.65,
+        },
+        {
+          position: new TMap.LatLng(40.03864934630857, 116.27347417456406, 2000),
+          rotation: [30, 0, -90],
+          percentage: 0.7,
+        },
+        {
+          position: new TMap.LatLng(40.04274037584355, 116.29890777376886, 2000),
+          rotation: [30, 0, -90],
+          percentage: 0.95,
+        },
+        {
+          position: new TMap.LatLng(40.04549968987281, 116.30132245232517, 2000),
+          rotation: [30, 0, 0],
+          percentage: 1,
+        },
+      ];
+
+      var keyFrames = lookFromList.map(function (lookFrom) {
+        var position = lookFrom.position;
+        var rotation = lookFrom.rotation;
+        var percentage = lookFrom.percentage;
+
+        // 地图视角附加库文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/glMapView
+        // getMapViewWhenLookFrom指定观察者所在位置及三轴方向上的旋转角度。
+        // position为观察者位置，需明确高度；rotation为XYZ三轴上的旋转角度，格式为[x, y, z]，默认为[0, 0, 0]。
+        var keyFrame = map.getMapViewWhenLookFrom(position, rotation);
+        keyFrame.percentage = percentage;
+        return keyFrame;
+      });
+
+      // map.startAnimation 文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/docIndexMap
+
+      // 开始动画，通过keyFrames定义关键帧
+      map.startAnimation(keyFrames, {
+        duration: 60 * 1000, // 动画周期时长，单位为ms
+        loop: Infinity, // 动画周期循环次数，若为Infinity则无限循环，默认为1
+      });
+      var infoList = document.querySelectorAll('.info p');
+      map.on('animation_playing', function (event) {
+        var lat = event.frame.center.lat;
+        var lng = event.frame.center.lng;
+        var pitch = event.frame.pitch;
+        var zoom = event.frame.zoom;
+        var rotation = event.frame.rotation;
+        infoList[0].innerText = '当前地图中心点：' + lat.toFixed(6) + ',' + lng.toFixed(6);
+        infoList[1].innerText = '当前地图俯仰角角度：' + Math.round(pitch);
+        infoList[2].innerText = '当前地图缩放等级：' + Math.round(zoom);
+        infoList[3].innerText = '当前地图旋转角度：' + Math.round(rotation);
+      });
+    </script>
+  </body>
+</html>

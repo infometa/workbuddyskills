@@ -1,0 +1,110 @@
+{
+  "voice": {
+    "tone": "professional-casual",
+    "personality": ["direct", "insightful", "practical"],
+    "avoid": ["corporate jargon", "excessive hype", "clickbait"],
+    "signature_phrases": [],
+    "emoji_level": "moderate",
+    "first_person": true,
+    "comment": "Options: professional, casual, witty, educational, inspirational, technical"
+  },
+  "platforms": {
+    "twitter": {
+      "enabled": true,
+      "priority": 1,
+      "thread_length_min": 3,
+      "thread_length_max": 10,
+      "hook_style": "bold_claim",
+      "numbered": true,
+      "include_hashtags": true,
+      "max_hashtags": 2,
+      "cta_style": "question",
+      "comment": "hook_style: bold_claim, question, stat, story_tease | cta_style: question, follow, engagement, link"
+    },
+    "linkedin": {
+      "enabled": true,
+      "priority": 2,
+      "target_length": 1500,
+      "min_length": 1300,
+      "max_length": 2000,
+      "include_story": true,
+      "b2b_focus": true,
+      "hook_style": "personal_insight",
+      "include_hashtags": true,
+      "max_hashtags": 5,
+      "comment": "hook_style: personal_insight, professional_story, bold_statement, industry_trend"
+    },
+    "newsletter": {
+      "enabled": true,
+      "priority": 3,
+      "section_style": "scannable",
+      "include_subject_lines": true,
+      "subject_line_count": 3,
+      "target_length": 400,
+      "include_cta": true,
+      "cta_placement": "end",
+      "format": "markdown",
+      "comment": "section_style: scannable (bullets/headers), narrative (flowing), hybrid"
+    },
+    "instagram": {
+      "enabled": true,
+      "priority": 4,
+      "target_length": 200,
+      "max_length": 300,
+      "emoji_density": "high",
+      "hook_length": 50,
+      "include_hashtags": true,
+      "min_hashtags": 5,
+      "max_hashtags": 10,
+      "hashtag_style": "mix",
+      "line_breaks": true,
+      "comment": "emoji_density: low, moderate, high | hashtag_style: branded, niche, popular, mix"
+    },
+    "threads": {
+      "enabled": true,
+      "priority": 5,
+      "max_length": 500,
+      "style": "casual",
+      "include_hashtags": false,
+      "comment": "style: casual, conversational, twitter-like"
+    }
+  },
+  "input": {
+    "supported_formats": ["md", "txt", "html", "url"],
+    "max_length": 10000,
+    "extract_quotes": true,
+    "extract_stats": true,
+    "extract_key_points": true,
+    "comment": "Long content is auto-summarized before repurposing"
+  },
+  "output": {
+    "directory": "~/content-repurposer-output",
+    "naming_pattern": "YYYY-MM-DD-slug",
+    "create_subdirs": true,
+    "copy_to_clipboard": "best",
+    "include_metadata": true,
+    "save_source_copy": true,
+    "comment": "copy_to_clipboard: none, best (highest priority), all (combined), ask"
+  },
+  "llm": {
+    "model": "default",
+    "temperature": 0.7,
+    "max_tokens": 2000,
+    "system_prompt_prefix": "You are a content repurposing expert. Maintain the user's voice and tone while optimizing for each platform.",
+    "comment": "Uses Clawdbot's built-in LLM - no API key needed"
+  },
+  "advanced": {
+    "generate_multiple_hooks": false,
+    "hooks_per_platform": 3,
+    "include_engagement_score": false,
+    "save_repurpose_log": true,
+    "batch_mode": false
+  },
+  "user": {
+    "name": "Your Name",
+    "brand": "Your Brand/Company",
+    "website": "https://yoursite.com",
+    "primary_cta": "Learn more: [your link]",
+    "comment": "Used for CTAs and attribution"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "hooks-development",
+  "version": "1.0.0",
+  "description": "Development Hooks - Event-driven automation hooks",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "hooks",
+    "automation",
+    "development",
+    "change-tracker",
+    "file-backup",
+    "lint-on-save",
+    "smart-formatting"
+  ]
+}

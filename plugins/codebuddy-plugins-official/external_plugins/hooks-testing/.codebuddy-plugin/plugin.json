@@ -1,0 +1,18 @@
+{
+  "name": "hooks-testing",
+  "version": "1.0.0",
+  "description": "Testing Hooks - Event-driven automation hooks",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "hooks",
+    "automation",
+    "testing",
+    "run-tests-after-changes",
+    "test-runner"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "_description": "创建对比表格示例 - 演示传统方式 vs 新方案的对比效果",
+  "_usage": "MCP Tool: 云知.block_create_block_descendant",
+
+  "entry_id": "{entry_id}",
+  "descendant": [
+    {
+      "block_id": "h2_compare",
+      "block_type": "h2",
+      "heading2": {"elements": [{"text_run": {"content": "对比效果", "text_style": {}}}]}
+    },
+    {
+      "block_id": "table_compare",
+      "block_type": "table",
+      "table": {"row_size": 4, "column_size": 2, "column_width": [400, 500], "header_row": true},
+      "children": ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"]
+    },
+    {"block_id": "c1", "block_type": "table_cell", "table_cell": {"background_color": "#F5F5F5"}, "children": ["c1_p"]},
+    {"block_id": "c1_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "传统方式", "text_style": {"bold": true}}}]}},
+    {"block_id": "c2", "block_type": "table_cell", "table_cell": {"background_color": "#F5F5F5"}, "children": ["c2_p"]},
+    {"block_id": "c2_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "新方案", "text_style": {"bold": true}}}]}},
+    {"block_id": "c3", "block_type": "table_cell", "table_cell": {"background_color": "#FFEBEE"}, "children": ["c3_p"]},
+    {"block_id": "c3_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "手动操作，耗时 2-3 小时", "text_style": {}}}]}},
+    {"block_id": "c4", "block_type": "table_cell", "table_cell": {"background_color": "#E8F5E9"}, "children": ["c4_p"]},
+    {"block_id": "c4_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "自动化执行，秒级完成", "text_style": {}}}]}},
+    {"block_id": "c5", "block_type": "table_cell", "table_cell": {"background_color": "#FFEBEE"}, "children": ["c5_p"]},
+    {"block_id": "c5_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "容易出错，需要多次检查", "text_style": {}}}]}},
+    {"block_id": "c6", "block_type": "table_cell", "table_cell": {"background_color": "#E8F5E9"}, "children": ["c6_p"]},
+    {"block_id": "c6_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "标准化流程，零出错率", "text_style": {}}}]}},
+    {"block_id": "c7", "block_type": "table_cell", "table_cell": {"background_color": "#FFEBEE"}, "children": ["c7_p"]},
+    {"block_id": "c7_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "格式不统一，维护困难", "text_style": {}}}]}},
+    {"block_id": "c8", "block_type": "table_cell", "table_cell": {"background_color": "#E8F5E9"}, "children": ["c8_p"]},
+    {"block_id": "c8_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "风格一致，模板可复用", "text_style": {}}}]}}
+  ],
+  "children": ["h2_compare", "table_compare"]
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管道线绘制</title>
+  </head>
+
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization" ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <body onload="initMap()">
+    <div id="container"></div>
+  </body>
+  <script type="text/javascript">
+    function initMap() {
+      // 初始化地图
+      var map = new TMap.Map('container', {
+        zoom: 16, // 地图缩放
+        center: new TMap.LatLng(40.06072990948079, 116.19881136848187), // 设置中心点,
+        rotation: -30, // 设置地图旋转角度
+        pitch: 70, // 设置俯仰角度
+        baseMap: {
+          type: 'vector',
+          features: ['base', 'building3d'], // 隐藏矢量文字
+        },
+      });
+      // visualization.Pipe文档地址：https://lbs.qq.com/webApi/visualizationApi/visualizationDoc/visualizationDocPipe
+      var pipeline = new TMap.visualization.Pipe({
+        pickStyle: function (item) {
+          // 管道图样式映射函数
+          if (item.styleId === 'blue') {
+            return {
+              color: '#a8d4f8',
+            };
+          } else if (item.styleId === 'orange') {
+            return {
+              color: '#df5d25',
+            };
+          }
+        },
+      });
+      pipeline.addTo(map); // 添加至指定地图实例
+      // 轨迹图样式映射函数
+      pipeline.setData([
+        {
+          path: [
+            // 管道线经纬度点串
+            new TMap.LatLng(40.05379447146618, 116.20155948520824, 0),
+            new TMap.LatLng(40.06004352839526, 116.19229963143528, 80),
+            new TMap.LatLng(40.06004352839526, 116.19229963143528, 0),
+            new TMap.LatLng(40.06830098041654, 116.19104553316492, 0),
+            new TMap.LatLng(40.06830098041654, 116.19104553316492, 80),
+            new TMap.LatLng(40.068245758301266, 116.1981483027048, 80),
+            new TMap.LatLng(40.06074739833221, 116.19878108888793, 80),
+            new TMap.LatLng(40.06089095044468, 116.20647767774494, 40),
+          ],
+          radius: 5, // 管道半径，单位为米
+          styleId: 'blue', // 样式id
+        },
+        {
+          path: [
+            new TMap.LatLng(40.05375583599823, 116.20952192478501, 0),
+            new TMap.LatLng(40.06086279776988, 116.2063721974971, 0),
+            new TMap.LatLng(40.06086279776988, 116.2063721974971, 40),
+          ],
+          radius: 5,
+          styleId: 'orange',
+        },
+        {
+          path: [
+            new TMap.LatLng(40.05379447146618, 116.20155948520824),
+            new TMap.LatLng(40.06072990948079, 116.19881136848187),
+          ],
+          radius: 5,
+          styleId: 'orange',
+        },
+        {
+          path: [
+            new TMap.LatLng(40.068245758301266, 116.1981483027048, 80),
+            new TMap.LatLng(40.068245758301266, 116.1981483027048, 0),
+            new TMap.LatLng(40.06074739833221, 116.19878108888793, 0),
+            new TMap.LatLng(40.06074739833221, 116.19878108888793, 80),
+          ],
+          radius: 5,
+          styleId: 'orange',
+        },
+        {
+          path: [
+            new TMap.LatLng(40.06830098041654, 116.19104553316492, 80),
+            new TMap.LatLng(40.06004352839526, 116.19229963143528, 80),
+          ],
+          radius: 5,
+          styleId: 'orange',
+        },
+        {
+          path: [
+            new TMap.LatLng(40.06254901759929, 116.19192572726774, 80),
+            new TMap.LatLng(40.0624535719374, 116.19862933314357, 80),
+          ],
+          radius: 5,
+          styleId: 'blue',
+        },
+      ]);
+    }
+  </script>
+</html>

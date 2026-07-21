@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>配置矢量底图</title>
+  </head>
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .box {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      z-index: 10000;
+      background-color: #fff;
+      padding: 10px 10px;
+    }
+    .box p {
+      display: inline-block;
+      padding: 10px 14px;
+      background: #919aac;
+      border-radius: 2px;
+      border: none;
+      box-sizing: border-box;
+      font-size: 14px;
+      color: #fff;
+      line-height: 14px;
+      font-family: PingFangSC-Regular;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .box p.active {
+      background: #3cab82;
+    }
+    .btnBox {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+    .btnBox label {
+      margin: 0px 5px;
+      cursor: pointer;
+    }
+  </style>
+
+  <body onload="initMap()">
+    <div class="box">
+      <div>
+        <p class="active" data-type="singleChoice">单选模式</p>
+        <p data-type="multipleChoice">多选模式</p>
+      </div>
+      <div class="btnBox">
+        <label for="base">
+          <input type="radio" id="base" value="0" name="type" />
+          道路及地面
+        </label>
+
+        <label for="building3d">
+          <input type="radio" id="building3d" value="1" name="type" />
+          3D建筑物
+        </label>
+
+        <label for="building2d">
+          <input type="radio" id="building2d" value="2" name="type" />
+          建筑物平面
+        </label>
+
+        <label for="point">
+          <input type="radio" id="point" value="3" name="type" />
+          poi文字
+        </label>
+
+        <label for="label">
+          <input type="radio" id="label" value="4" name="type" />
+          道路文字
+        </label>
+      </div>
+    </div>
+    <div id="container"></div>
+    <script type="text/javascript">
+      var map;
+      var mode = 'singleChoice';
+      var box = document.querySelector('.box');
+      var modeList = document.querySelectorAll('.box p');
+      var inputList = document.querySelectorAll('input');
+      var typeList = ['base', 'building3d', 'building2d', 'point', 'label'];
+      function cacheContainer() {
+        // 多选数据
+        var cacheList = [];
+        return {
+          set: function (elementList) {
+            cacheList = Array.prototype.map.call(elementList, function (element) {
+              var num = element.value;
+              return typeList[num];
+            });
+          },
+          get: function () {
+            return cacheList.map(function (item) {
+              return item;
+            });
+          },
+          clear: function () {
+            cacheList = [];
+          },
+        };
+      }
+      var cache = cacheContainer();
+      function initMap() {
+        var center = new TMap.LatLng(39.90989976282665, 116.39701599688226);
+        // 初始化地图
+        map = new TMap.Map('container', {
+          zoom: 17, // 设置地图缩放级别
+          center: center, // 设置地图中心点坐标
+          // 矢量底图配置：https://lbs.qq.com/webApi/javascriptGL/glDoc/docIndexMap#5
+          baseMap: {
+            type: 'vector',
+            features: typeList,
+          },
+        });
+
+        box.addEventListener('click', function (e) {
+          var type = '';
+          var nodeName = e.target.nodeName;
+          // 切换选择模式
+          if (nodeName === 'P') {
+            if (mode !== e.target.dataset.type) reset();
+            mode = e.target.dataset.type;
+            e.target.className = 'active';
+            mode = e.target.dataset.type;
+            type = mode === 'singleChoice' ? 'radio' : 'checkbox';
+            // 切换按钮
+            switchAttribute(type);
+          }
+          var checkedList = document.querySelectorAll('input:checked');
+          var selectList = ['LABEL', 'INPUT'];
+          if (selectList.indexOf(nodeName) >= 0) {
+            setMap(checkedList);
+          }
+        });
+      }
+      function reset() {
+        // 重置classname
+        modeList.forEach(function (element) {
+          element.className = '';
+        });
+        // 选项重置
+        inputList.forEach(function (element) {
+          element.checked = false;
+        });
+        // 重置底图
+        map.setBaseMap({
+          type: 'vector',
+          features: typeList,
+        });
+        // 清空多选数据
+        cache.clear();
+      }
+      function switchAttribute(type) {
+        inputList.forEach(function (element) {
+          element.type = type;
+        });
+      }
+      function setMap(list) {
+        var num = list.length > 0 && list[0].value;
+        var features;
+        if (mode === 'multipleChoice') {
+          cache.set(list);
+        }
+        features = mode === 'multipleChoice' ? cache.get() : [typeList[num]];
+        map.setBaseMap({
+          type: 'vector',
+          features: features,
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "performance-testing-review",
+  "description": "性能分析、测试覆盖率审查和 AI 驱动的代码质量评估",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

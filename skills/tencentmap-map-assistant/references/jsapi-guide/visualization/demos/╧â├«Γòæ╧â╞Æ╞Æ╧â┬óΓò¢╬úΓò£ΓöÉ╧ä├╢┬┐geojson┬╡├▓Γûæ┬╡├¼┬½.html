@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>区域图使用geojson数据</title>
+</head>
+
+<script charset="utf-8" src="https://mapapi.qq.com/web/jsapi/jsapi-gl/assets/geojson-demo.js"></script>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"></script>
+
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <!-- geojso转换为区域图数据格式函数 -->
+    <script>
+        function parseGeojsonData(geoJSONObject) {
+            let areaData = [];
+            let geoJSONFeature = null;
+            if ('FeatureCollection' === geoJSONObject['type']) {
+                const geoJSONFeatureCollection = geoJSONObject;
+                const geoJSONFeatures = geoJSONFeatureCollection['features'];
+                for (let i = 0, ii = geoJSONFeatures.length; i < ii; ++i) {
+                    geoJSONFeature = geoJSONFeatures[i];
+                    const result = readGeometryFromFeature(geoJSONFeature);
+                    if (!result) {
+                        continue;
+                    }
+                    areaData = areaData.concat(result);
+                }
+            } else {
+                geoJSONFeature = geoJSONObject;
+                const result = readGeometryFromFeature(geoJSONFeature);
+                if (!result) {
+                    return;
+                }
+                areaData = areaData.concat(result);
+            }
+
+            return areaData;
+
+        }
+
+        function readGeometryFromFeature(geoJSONFeature) {
+            const result = readGeometry(geoJSONFeature['geometry']);
+            if (!result) {
+                return null;
+            }
+            result.map(geom => {
+                geom['properties'] = geoJSONFeature['properties'];
+                geom['styleId'] = 'style1'; //此处可配置区域样式id
+            });
+            return result;
+        }
+
+        function readGeometry(geoJSONGeometry) {
+            if (!geoJSONGeometry) {
+                return null;
+            }
+            const geometry = createGeometry(geoJSONGeometry);
+            return geometry;
+        }
+
+        function createGeometry(geometry) {
+            const geoms = [];
+            geometry['coordinates'].forEach(coord => {
+                const position = convertCoordsToLatLngs(coord);
+                let geom = { path: position };
+                geoms.push(geom);
+            });
+            return geoms;
+        }
+
+        function convertCoordsToLatLngs(coords) {
+            let latLngs = null;
+
+            if (coords.length > 0 && Array.isArray(coords[0]) && typeof coords[0][0] === 'number') {
+
+                latLngs = [].concat(...coords.map(coord => [coord[1],coord[0]]));
+            } else {
+                latLngs = [];
+                coords.forEach(item => {
+                    latLngs.push(convertCoordsToLatLngs(item));
+                });
+            }
+
+            return latLngs;
+        }
+    </script>
+    <script>
+        var center = new TMap.LatLng(40.13659649977259, 116.51136018387479);
+        //初始化地图
+        var map = new TMap.Map("container", {
+            zoom: 9, // 设置地图缩放级别
+            center, // 设置地图中心点坐标
+        });
+        // geojson数据转换为区域图Area可用格式
+        const result = parseGeojsonData(geojsonData);
+        var area = new TMap.visualization.Area({
+            styles: { //设置区域图样式
+                style1: {
+                    strokeWidth: 2,
+                    fillColor: `rgba(56,124,234,${0.4})`, //设置区域填充颜色
+                    strokeColor: '#6799EA',
+                }
+            },
+            selectOptions: { //设置拾取配置
+                action: 'hover',
+                style: {
+                    fillColor: 'rgba(28,213,255,0.6)', //设置区域填充颜色
+                    strokeColor: '#fff', //设置区域边线颜色
+                    strokeWidth: 1, //区域边线宽度
+                    strokeDashArray: [0, 0] //边线虚线展示方式
+                },
+                enableHighlight: false,
+            }
+        }).setData(result).addTo(map);
+    </script>
+</body>
+
+</html>

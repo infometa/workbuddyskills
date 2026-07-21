@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>点标记应用：周边检索</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?libraries=tools&v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+  html,
+  body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+  }
+  #container {
+    position: relative;
+    width: 100%;
+    height: 90%;
+  }
+  #searchInput {
+    padding: 3px 4px;
+  }
+  #searchPart {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1001;
+  }
+  #information {
+    margin: 5px;
+  }
+</style>
+
+<body onload="initMap()">
+  <div id="container"></div>
+  <div id="searchPart">
+    <input type="text" id="searchInput" placeholder="请输入">
+    <button id="searchBtn">搜索</button>
+  </div>
+  <div id="information">
+   	*使用时需要把代码111行中的key修改为您申请了搜索服务的key。<br>
+    在左上角的输入框中输入搜索内容(如公园、超市)，点击搜索按钮后，在圆形范围内搜索符合条件的前10个结果，
+    地图会以搜索结果为基准，自适应地图的边界，搜索结果会以marker形式呈现，点击marker会提示搜索结果的信息。
+  </div>
+  <script type="text/javascript">
+
+    var map, marker, infoWindow;
+
+    function initMap() {
+      // 设置地图中心点坐标
+      const center = new TMap.LatLng(39.984104, 116.307503);
+      map = new TMap.Map("container", {
+        zoom: 15, // 设置地图缩放级别
+        center    // 设置地图中心
+      });
+      // 创建搜索范围圆
+      const circle = new TMap.MultiCircle({
+        id: 'circle',
+        map,
+        geometries: [{
+          center: center,       // 设置圆的中心
+          radius: 1000  //设置圆的半径
+        }]
+      });
+      // 创建marker图层
+      marker = new TMap.MultiMarker({
+        id: 'marker',
+        map,
+        geometries: []
+      });
+      // 创建信息窗口
+      infoWindow = new TMap.InfoWindow({
+        map,
+        position: map.getCenter(),
+        offset: {   // 设置信息弹窗的偏移量，否则会和marker重合
+          x: 0,
+          y: -48
+        }
+      }).close();
+      
+      // 添加搜索按钮点击事件
+      const searchBtn = document.getElementById('searchBtn');
+      searchBtn.addEventListener('click', searchClick, false);
+
+      marker.on('click', evt => {
+        let content = `
+          <div>
+            <p>名称: ${evt.geometry.properties.title}</p>
+            <p>地址: ${evt.geometry.properties.address}</p>
+            <p>电话: ${evt.geometry.properties.tel}</p>
+          </div>
+        `
+        infoWindow.open();
+        infoWindow.setPosition(evt.geometry.position);  // 设置信息窗口的坐标
+        infoWindow.setContent(content);   // 设置信息窗口的内容
+      });
+    }
+
+    function searchClick() {
+      let searchInput = document.getElementById('searchInput').value; // 获取搜索内容
+      let url = [
+        'https://apis.map.qq.com/ws/place/v1/search',
+        '?boundary=nearby(39.984104,116.307503,1000,0)',
+        `&keyword=${searchInput}`,
+        '&page_size=10&page_index=1&orderby=_distance',
+        '&output=jsonp&callback=cb',
+        '&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77'
+      ].join('');
+      jsonp_request(url);
+      infoWindow.close(); // 关闭信息窗口
+    }
+
+    // 使用jsonp调用接口
+    function jsonp_request(url) {
+      let script = document.createElement('script');
+      script.src = url;
+      document.body.appendChild(script);
+    }
+
+    // jsonp运行的回调函数
+    function cb(ret) {
+      let newBounds = new TMap.LatLngBounds();
+      let markerArr = [];
+      if(ret && ret.status===0 && ret.data.length>0) {
+        // 将搜索结果保存进数组中
+        ret.data.forEach( (item, index) => {
+          let position = new TMap.LatLng(item.location.lat, item.location.lng);
+          markerArr.push({
+            position: position,
+            properties: {
+              title: item.title,
+              address: item.address,
+              tel: item.tel!==' ' ? item.tel : '暂无'
+            }
+          });
+          // 寻找搜索结果的边界
+          newBounds.extend(position);
+        });
+        // 更新marker层，显示标记
+        marker.setGeometries(markerArr);
+        // 地图自适应边界
+        map.fitBounds(newBounds, {
+          padding: 100  // 边界与内容之间留的间距
+        });
+      }
+    }
+  </script>
+  </body>
+</html>

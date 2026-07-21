@@ -1,0 +1,11 @@
+{
+  "name": "seo-content-creation",
+  "description": "SEO 内容创作、规划与质量审计工具，支持 E-E-A-T 优化",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

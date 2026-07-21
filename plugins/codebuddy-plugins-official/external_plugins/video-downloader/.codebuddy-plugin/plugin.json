@@ -1,0 +1,5 @@
+{
+  "name": "video-downloader",
+  "description": "从 YouTube 和其他平台下载视频，支持离线观看、编辑或存档，提供多种格式和画质选项。",
+  "license": "未声明"
+}

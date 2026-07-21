@@ -1,0 +1,23 @@
+{
+	"name": "cloudflare-worker-base-test",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"test": "vitest",
+		"cf-typegen": "wrangler types"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "^1.17.1",
+		"@cloudflare/vitest-pool-workers": "^0.11.1",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.0",
+		"vitest": "^4.0.0",
+		"wrangler": "^4.54.0"
+	},
+	"dependencies": {
+		"hono": "^4.11.3"
+	}
+}

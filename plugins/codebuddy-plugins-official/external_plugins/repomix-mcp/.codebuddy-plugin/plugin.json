@@ -1,0 +1,18 @@
+{
+  "name": "repomix-mcp",
+  "description": "Repomix MCP 服务器，用于 AI 驱动的代码库分析。打包本地/远程仓库，搜索输出内容，读取文件并内置安全扫描。这是在 Claude Code 中启用所有 Repomix 功能的基础插件。",
+  "version": "1.0.1",
+  "author": {
+    "name": "yamadashy"
+  },
+  "homepage": "https://repomix.com/docs/guide/claude-code-plugins",
+  "repository": "https://github.com/yamadashy/repomix",
+  "keywords": [
+    "repomix",
+    "mcp",
+    "codebase-analysis",
+    "ai",
+    "github"
+  ],
+  "license": "MIT"
+}

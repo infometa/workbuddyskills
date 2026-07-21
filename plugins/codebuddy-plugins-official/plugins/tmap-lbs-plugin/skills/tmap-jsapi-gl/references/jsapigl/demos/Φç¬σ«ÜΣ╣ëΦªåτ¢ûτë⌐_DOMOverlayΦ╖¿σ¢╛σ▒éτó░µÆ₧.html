@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>DOMOverlay跨图层碰撞</title>
+    </head>
+    <script
+        charset="utf-8"
+        src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"
+    ></script>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            overflow: hidden;
+        }
+
+        #container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <body onload="initMap()">
+        <div id="container"></div>
+        <script>
+            var SVG_NS = 'http://www.w3.org/2000/svg';
+            // 自定义环状饼图 - 继承DOMOverlay
+            function Donut2(options) {
+                TMap.DOMOverlay.call(this, options);
+            }
+
+            Donut2.prototype = new TMap.DOMOverlay();
+
+            // 初始化
+            Donut2.prototype.onInit = function (options) {
+                this.position = options.position;
+                this.data = options.data;
+                this.minRadius = options.minRadius || 0;
+                this.maxRadius = options.maxRadius || 50;
+                this.zIndex = options.zIndex || 0;
+            };
+
+            // 销毁时需解绑事件监听
+            Donut2.prototype.onDestroy = function () {
+                if (this.onClick) {
+                    this.dom.removeEventListener(this.onClick);
+                }
+            };
+
+            // 创建DOM元素，返回一个DOMElement，使用this.dom可以获取到这个元素
+            Donut2.prototype.createDOM = function () {
+                let svg = document.createElementNS(SVG_NS, 'svg');
+                svg.setAttribute('version', '1.1');
+                svg.setAttribute('baseProfile', 'full');
+
+                let r = this.maxRadius;
+                svg.setAttribute('viewBox', [-r, -r, r * 2, r * 2].join(' '));
+                svg.setAttribute('width', r * 2);
+                svg.setAttribute('height', r * 2);
+                svg.style.cssText = `position:absolute;top:0px;left:0px;z-index: ${this.zIndex}`;
+
+                let donut = createDonut2(this.data, this.minRadius, this.maxRadius);
+                svg.appendChild(donut);
+
+                // click事件监听
+                this.onClick = () => {
+                    // DOMOverlay继承自EventEmitter，可以使用emit触发事件
+                    this.emit('click');
+                };
+                // pc端注册click事件，移动端注册touchend事件
+                svg.addEventListener('click', this.onClick);
+                return svg;
+            };
+
+            // 更新DOM元素，在地图移动/缩放后执行
+            Donut2.prototype.updateDOM = function () {
+                if (!this.map) {
+                    return;
+                }
+
+                // 经纬度坐标转容器像素坐标
+                let pixel = this.map.projectToContainer(this.position);
+
+                // 使饼图中心点对齐经纬度坐标点
+                let left = pixel.getX() - this.dom.clientWidth / 2 + 'px';
+                let top = pixel.getY() - this.dom.clientHeight / 2 + 'px';
+                this.dom.style.transform = `translate(${left}, ${top})`;
+            };
+
+            // 使用SVG创建环状饼图
+            function createDonut2(data, minRadius, maxRadius) {
+                const colorList = ['#7AF4FF', '#67D7FF', '#52B5FF', '#295BFF'];
+                let sum = data.reduce((prev, curr) => prev + curr, 0);
+                let angle = 0;
+
+                let group = document.createElementNS(SVG_NS, 'g');
+                data.forEach((d, i) => {
+                    let delta = (d / sum) * Math.PI * 2;
+                    (color = colorList[i]),
+                        (r = maxRadius),
+                        (startAngle = angle),
+                        (endAngle = angle + delta);
+                    angle += delta;
+
+                    // 对每个数据创建一个扇形
+                    let fanShape = document.createElementNS(SVG_NS, 'path');
+                    fanShape.setAttribute('style', `fill: ${color};`);
+                    fanShape.setAttribute(
+                        'd',
+                        [
+                            'M0 0',
+                            `L${r * Math.sin(startAngle)} ${-r * Math.cos(startAngle)}`,
+                            `A${r} ${r} 0 ${delta > Math.PI ? 1 : 0} 1 ${r * Math.sin(endAngle)} ${
+                                -r * Math.cos(endAngle)
+                            }`
+                        ].join(' ') + ' z'
+                    );
+                    group.appendChild(fanShape);
+                });
+
+                // 在中心创建一个圆形
+                let circleShape = document.createElementNS(SVG_NS, 'circle');
+                circleShape.setAttribute('style', 'fill: #FFFFFF');
+                circleShape.setAttribute('cx', 0);
+                circleShape.setAttribute('cy', 0);
+                circleShape.setAttribute('r', minRadius);
+                group.appendChild(circleShape);
+
+                // 绘制文字
+                let textShape = document.createElementNS(SVG_NS, 'text');
+                textShape.setAttribute('x', 0);
+                textShape.setAttribute('y', '0.3em');
+                textShape.setAttribute('text-anchor', 'middle');
+                textShape.innerHTML = sum;
+                group.appendChild(textShape);
+
+                return group;
+            }
+
+            window.Donut2 = Donut2;
+        </script>
+        <script type="text/javascript">
+            var map;
+            function initMap() {
+                // 初始化地图
+                map = new TMap.Map('container', {
+                    zoom: 12, // 设置地图缩放级别
+                    center: new TMap.LatLng(39.984104, 116.307503), // 设置地图中心点坐标
+                    rotation: 82.4
+                });
+
+                new Donut2({
+                    map,
+                    position: new TMap.LatLng(39.991143, 116.274421),
+                    data: [12, 1],
+                    minRadius: 13,
+                    maxRadius: 20,
+                    collisionOptions: {
+                        sameSource: true,
+                        crossSource: true,
+                        vectorBaseMapSource: true
+                    }
+                });
+                new Donut2({
+                    map,
+                    position: new TMap.LatLng(39.964471, 116.300526),
+                    data: [23, 400],
+                    minRadius: 25,
+                    maxRadius: 35,
+                    collisionOptions: {
+                        sameSource: true,
+                        crossSource: true,
+                        vectorBaseMapSource: true
+                    },
+                    zIndex: 100
+                });
+
+                var marker = new TMap.MultiMarker({
+                    map: map,
+                    geometries: [
+                        {
+                            'position': new TMap.LatLng(40.023461749240006, 116.34966865780575), //标注点位置
+                            rank: 4
+                        },
+                    ],
+                    collisionOptions: {
+                        sameSource: true,
+                        crossSource: true,
+                        vectorBaseMapSource: true
+                    },
+                    zIndex: 30
+                });
+
+                var label = new TMap.MultiLabel({
+                    id: 'label-layer',
+                    map: map,
+                    styles: {
+                        label: new TMap.LabelStyle({
+                            color: '#3777FF', // 颜色属性
+                            size: 20, // 文字大小属性
+                            offset: { x: 0, y: 0 }, // 文字偏移属性单位为像素
+                            angle: 0, // 文字旋转属性
+                            alignment: 'center', // 文字水平对齐属性
+                            verticalAlignment: 'middle' // 文字垂直对齐属性
+                        })
+                    },
+                    geometries: [
+                        {
+                            styleId: 'label', // 样式id
+                            position: new TMap.LatLng(39.976346201186146, 116.33186961161482), // 标注点位置
+                            content: 'label碰撞文字' // 标注文本
+                        },
+                    ],
+                    collisionOptions: {
+                        sameSource: true,
+                        crossSource: true,
+                        vectorBaseMapSource: true
+                    }
+                });
+
+                map.rotateTo(0,{duration: 5000})
+            }
+        </script>
+    </body>
+</html>

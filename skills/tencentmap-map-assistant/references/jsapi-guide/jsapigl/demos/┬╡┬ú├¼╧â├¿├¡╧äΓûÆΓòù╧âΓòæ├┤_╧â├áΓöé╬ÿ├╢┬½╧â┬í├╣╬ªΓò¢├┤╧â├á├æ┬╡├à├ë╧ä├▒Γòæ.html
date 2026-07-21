@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>关键字输入提示</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=您的key"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    #panel {
+        position: absolute;
+        background: #FFF;
+        width:350px;
+        padding: 20px;
+        z-index: 9999;
+        top: 30px;
+        left: 30px;
+    }
+
+    #suggestionList {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #suggestionList li a {
+        margin-top: -1px; 
+        background-color: #f6f6f6;  
+        text-decoration: none;
+        font-size: 18px; 
+        color: black; 
+        display: block; 
+    }
+
+    #suggestionList li .item_info{
+        font-size: 12px;
+        color:grey;
+        
+    }
+    
+    #suggestionList li a:hover:not(.header) {
+        background-color: #eee;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <div id="panel">
+      <p>请在右侧示例代码第10行填入您的key，并执行查看运行结果（key可在控制台应用管理中自行创建）</p>
+        <p>输入关键字，将展示相关地点提示，点击提示可定位到该处。</p>
+        <input id='keyword' type="text" value='' oninput="getSuggestions()"><input id="search" type="button" class="btn" value="搜索" onclick="searchByKeyword()" />
+        <ul id="suggestionList">
+        </ul>
+    </div>
+</body>
+
+<script type="text/javascript">
+var map = new TMap.Map('container', {
+  zoom: 14,
+  center: new TMap.LatLng(40.0402718, 116.2735831),
+});
+var suggestionList = [];
+var search = new TMap.service.Search({ pageSize: 10 }); // 新建一个地点搜索类
+var suggest = new TMap.service.Suggestion({
+  // 新建一个关键字输入提示类
+  pageSize: 10, // 返回结果每页条目数
+  region: '北京', // 限制城市范围
+  regionFix: true, // 搜索无结果时是否固定在当前城市
+});
+var markers = new TMap.MultiMarker({
+  map: map,
+  geometries: [],
+});
+var infoWindowList = Array(10);
+function getSuggestions() {
+  // 使用者在搜索框中输入文字时触发
+  var suggestionListContainer = document.getElementById('suggestionList');
+  suggestionListContainer.innerHTML = '';
+  var keyword = document.getElementById('keyword').value;
+  if (keyword) {
+    suggest
+      .getSuggestions({ keyword: keyword, location: map.getCenter() })
+      .then((result) => {
+        // 以当前所输入关键字获取输入提示
+        suggestionListContainer.innerHTML = '';
+        suggestionList = result.data;
+        suggestionList.forEach((item, index) => {
+          suggestionListContainer.innerHTML += `<li><a href="#" onclick="setSuggestion(${index})">${item.title}<span class="item_info">${item.address}</span></a></li>`;
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+}
+
+function setSuggestion(index) {
+  // 点击输入提示后，于地图中用点标记绘制该地点，并显示信息窗体，包含其名称、地址等信息
+  infoWindowList.forEach((infoWindow) => {
+    infoWindow.close();
+  });
+  infoWindowList.length = 0;
+  document.getElementById('keyword').value = suggestionList[index].title;
+  document.getElementById('suggestionList').innerHTML = '';
+  markers.setGeometries([]);
+  markers.updateGeometries([
+    {
+      id: '0', // 点标注数据数组
+      position: suggestionList[index].location,
+    },
+  ]);
+  var infoWindow = new TMap.InfoWindow({
+    map: map,
+    position: suggestionList[index].location,
+    content: `<h3>${suggestionList[index].title}</h3><p>地址：${suggestionList[index].address}</p>`,
+    offset: { x: 0, y: -50 },
+  });
+  infoWindowList.push(infoWindow);
+  map.setCenter(suggestionList[index].location);
+  markers.on('click', (e) => {
+    infoWindowList[Number(e.geometry.id)].open();
+  });
+}
+
+function searchByKeyword() {
+  // 关键字搜索功能
+  infoWindowList.forEach((infoWindow) => {
+    infoWindow.close();
+  });
+  infoWindowList.length = 0;
+  markers.setGeometries([]);
+  search
+    .searchRectangle({
+      keyword: document.getElementById('keyword').value,
+      bounds: map.getBounds(),
+    })
+    .then((result) => {
+      result.data.forEach((item, index) => {
+        var geometries = markers.getGeometries();
+        var infoWindow = new TMap.InfoWindow({
+          map: map,
+          position: item.location,
+          content: `<h3>${item.title}</h3><p>地址：${item.address}</p><p>电话：${item.tel}</p>`,
+          offset: { x: 0, y: -50 },
+        });
+        infoWindow.close();
+        infoWindowList[index] = infoWindow;
+        geometries.push({
+          id: String(index),
+          position: item.location,
+        });
+        markers.updateGeometries(geometries);
+        markers.on('click', (e) => {
+          infoWindowList[Number(e.geometry.id)].open();
+        });
+      });
+    });
+}
+    </script>
+
+</html>

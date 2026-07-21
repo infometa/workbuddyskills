@@ -1,0 +1,52 @@
+{
+  "name": "sg-finance-tax",
+  "version": "1.0.0",
+  "description": "Singapore finance, tax, accounting, banking, and compliance expert for cross-border enterprises and Chinese companies going global.",
+  "author": {
+    "name": "WorkBuddy",
+    "email": ""
+  },
+  "agents": ["./agents/sg-finance-tax.md"],
+
+  "expertType": "agent",
+  "agentName": "sg-finance-tax",
+
+  "displayName": {
+    "en": "Sg Finance & Tax",
+    "zh": "Sg Finance & Tax"
+  },
+  "profession": {
+    "en": "Singapore Finance & Tax Expert",
+    "zh": "新加坡财税金融专家"
+  },
+  "displayDescription": {
+    "en": "Expert in Singapore business operations covering tax, accounting, banking, financing, FX, payments, audit, grants, insurance and financial planning.",
+    "zh": "精通企业在新加坡经营中的税务、会计、银行、融资、外汇、支付、审计、补贴、保险和财务规划等内容"
+  },
+  "avatar": "avatars/expert.png",
+  "dependencies": {
+    "mcpServers": {
+      "singstat": {
+        "type": "http",
+        "url": "https://chatwithsandra.singstat.gov.sg/mcp",
+        "description": "Singapore Department of Statistics MCP - 2,500+ tables including GDP, CPI, employment, population, trade data. No authentication required."
+      }
+    }
+  },
+  "categoryId": "08-FinanceInvestment",
+  "defaultInitPrompt": {
+    "zh": "我要在新加坡设立公司，帮我做一个财务/税务规划模型",
+    "en": "I want to set up a company in Singapore, help me build a financial/tax planning model"
+  },
+  "plugin": "sg-finance-tax",
+  "tags": [
+    { "en": "Tax & Financial Planning", "zh": "财税规划" },
+    { "en": "Cross-border Payments", "zh": "跨境支付" },
+    { "en": "Financial Analysis", "zh": "金融分析" }
+  ],
+  "quickPrompts": [
+    { "en": "I want to set up a company in Singapore, help me build a financial/tax planning model", "zh": "我要在新加坡设立公司，帮我做一个财务/税务规划模型" },
+    { "en": "What are the key considerations when submitting audit reports in Singapore?", "zh": "企业在新加坡提交审计报告，有哪些注意事项？" },
+    { "en": "What FX management procedures must companies complete in Singapore?", "zh": "在新加坡，企业需要完成哪些外汇管理手续？" }
+  ]
+}

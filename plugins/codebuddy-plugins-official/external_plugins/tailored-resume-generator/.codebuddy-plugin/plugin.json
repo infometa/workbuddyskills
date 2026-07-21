@@ -1,0 +1,5 @@
+{
+  "name": "tailored-resume-generator",
+  "description": "分析职位描述并生成量身定制的简历，突出相关经验、技能和成就，最大化面试机会。",
+  "license": "未声明"
+}

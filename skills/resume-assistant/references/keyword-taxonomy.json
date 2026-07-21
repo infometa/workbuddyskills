@@ -1,0 +1,197 @@
+{
+  "_meta": {
+    "schema_version": "0.3",
+    "skill": "resume-assistant",
+    "note": "外置关键词词典 —— v0.3 从 parse_jd.py 内嵌迁移而来，同时新增 AI archetypes（吸收自 santifer/career-ops）。人类可读文档见 keyword-taxonomy.md。",
+    "updated_at": "2026-04-24"
+  },
+
+  "role_families": ["tech", "biz", "design", "ops"],
+
+  "role_family_title_hints": {
+    "tech": [
+      "研发工程师", "开发工程师", "算法工程师", "数据工程师", "数据开发",
+      "测试工程师", "运维工程师", "架构师", "系统工程师", "前端", "后端",
+      "全栈", "iOS", "Android", "SRE", "DevOps", "机器学习", "深度学习",
+      "大模型", "AI 工程师", "software engineer", "swe", "mle",
+      "data scientist", "data engineer", "machine learning", "algorithm"
+    ],
+    "biz": [
+      "产品经理", "产品运营", "用户运营", "内容运营", "增长", "市场",
+      "商务", "战略", "咨询", "BD", "PM", "product manager",
+      "operation", "growth", "marketing", "business"
+    ],
+    "design": [
+      "UI 设计", "UX 设计", "交互设计", "视觉设计", "游戏美术",
+      "UI designer", "UX designer", "product designer"
+    ],
+    "ops": [
+      "HR", "人力资源", "财务", "法务", "行政", "供应链",
+      "采购", "招聘", "薪酬", "tax", "legal", "finance"
+    ]
+  },
+
+  "seniority_hints": {
+    "intern":    ["实习", "intern", "实习生"],
+    "junior":    ["初级", "junior", "应届", "校招", "1-2年", "1-3年", "entry level"],
+    "mid":       ["3-5年", "3~5年", "3 年以上", "middle"],
+    "senior":    ["资深", "高级", "senior", "5年以上", "5-10年", "sr."],
+    "staff":     ["staff", "专家", "技术专家"],
+    "principal": ["principal", "首席", "总监", "director"]
+  },
+
+  "ai_archetypes": {
+    "_note": "在 role_family=tech 内部的 AI 岗位再细分为 6 种 archetype（吸收自 santifer/career-ops modes/_shared.md）。每个 archetype 对应不同的简历 framing、不同的 proof points 优先级。",
+    "AI_Platform_LLMOps": {
+      "display_name_zh": "AI 平台 / LLMOps",
+      "signals": ["observability", "evals", "evaluation", "pipelines", "monitoring", "reliability", "可观测", "评测", "模型监控", "推理优化"],
+      "framing_hint": "强调系统稳定性 / SLO / 成本治理 / 评测体系 / 故障排查"
+    },
+    "AI_Agentic_Automation": {
+      "display_name_zh": "AI Agent / 自动化",
+      "signals": ["agent", "agents", "hitl", "human-in-the-loop", "orchestration", "workflow", "multi-agent", "智能体", "工作流", "自动化"],
+      "framing_hint": "强调端到端自动化 / 工具编排 / HITL 设计 / 复杂任务拆解"
+    },
+    "Technical_AI_PM": {
+      "display_name_zh": "AI 产品经理（技术型）",
+      "signals": ["prd", "roadmap", "discovery", "stakeholder", "product manager", "ai pm", "产品规划", "产品需求"],
+      "framing_hint": "强调需求洞察 / ROI 量化 / 技术决策 / 跨团队协作"
+    },
+    "AI_Solutions_Architect": {
+      "display_name_zh": "AI 解决方案架构师",
+      "signals": ["architecture", "enterprise", "integration", "design", "systems", "解决方案", "系统设计", "企业架构"],
+      "framing_hint": "强调企业级架构 / 技术选型 / 集成能力 / 合规与可扩展"
+    },
+    "AI_Forward_Deployed": {
+      "display_name_zh": "AI 前置交付 / 客户侧工程",
+      "signals": ["client-facing", "deploy", "prototype", "fast delivery", "field", "forward deployed", "fde", "驻场", "客户侧"],
+      "framing_hint": "强调快速交付 / 客户沟通 / 现场调试 / 迭代落地"
+    },
+    "AI_Transformation": {
+      "display_name_zh": "AI 转型 / 赋能顾问",
+      "signals": ["change management", "adoption", "enablement", "transformation", "ai 转型", "变革管理", "组织赋能"],
+      "framing_hint": "强调组织落地 / 培训体系 / 流程再造 / 效果度量"
+    }
+  },
+
+  "keywords": [
+    {"id": "python",            "category": "hard_skills",     "role_family": "tech", "weight": 0.95, "aliases": ["python", "py"]},
+    {"id": "java",              "category": "hard_skills",     "role_family": "tech", "weight": 0.95, "aliases": ["java"]},
+    {"id": "golang",            "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["go", "golang", "goland"]},
+    {"id": "cpp",               "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["c++", "cpp"]},
+    {"id": "typescript",        "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["typescript", "ts"]},
+    {"id": "javascript",        "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["javascript", "js"]},
+    {"id": "rust",              "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["rust"]},
+    {"id": "sql",               "category": "hard_skills",     "role_family": "*",    "weight": 0.90, "aliases": ["sql"]},
+    {"id": "kotlin",            "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["kotlin"]},
+    {"id": "swift",             "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["swift"]},
+    {"id": "scala",             "category": "hard_skills",     "role_family": "tech", "weight": 0.75, "aliases": ["scala"]},
+    {"id": "react",             "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["react", "react.js", "reactjs"]},
+    {"id": "vue",               "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["vue", "vue.js", "vuejs"]},
+    {"id": "angular",           "category": "hard_skills",     "role_family": "tech", "weight": 0.75, "aliases": ["angular"]},
+    {"id": "nextjs",            "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["next.js", "nextjs"]},
+    {"id": "springboot",        "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["spring boot", "springboot"]},
+    {"id": "django",            "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["django"]},
+    {"id": "flask",             "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["flask"]},
+    {"id": "fastapi",           "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["fastapi", "fast-api"]},
+    {"id": "grpc",              "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["grpc"]},
+    {"id": "kafka",             "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["kafka"]},
+    {"id": "redis",             "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["redis"]},
+    {"id": "mysql",             "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["mysql"]},
+    {"id": "postgresql",        "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["postgres", "postgresql", "pg"]},
+    {"id": "mongodb",           "category": "hard_skills",     "role_family": "tech", "weight": 0.75, "aliases": ["mongo", "mongodb"]},
+    {"id": "elasticsearch",     "category": "hard_skills",     "role_family": "tech", "weight": 0.75, "aliases": ["elasticsearch", "elastic search"]},
+    {"id": "spark",             "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["spark", "pyspark"]},
+    {"id": "flink",             "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["flink"]},
+    {"id": "hadoop",            "category": "hard_skills",     "role_family": "tech", "weight": 0.75, "aliases": ["hadoop"]},
+    {"id": "hive",              "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["hive"]},
+    {"id": "airflow",           "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["airflow"]},
+    {"id": "dbt",               "category": "hard_skills",     "role_family": "tech", "weight": 0.70, "aliases": ["dbt"]},
+    {"id": "clickhouse",        "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["clickhouse", "ck"]},
+    {"id": "kubernetes",        "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["kubernetes", "k8s"]},
+    {"id": "docker",            "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["docker"]},
+    {"id": "aws",               "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["aws", "amazon web services"]},
+    {"id": "gcp",               "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["gcp", "google cloud"]},
+    {"id": "azure",             "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["azure"]},
+    {"id": "terraform",         "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["terraform"]},
+    {"id": "ci_cd",             "category": "hard_skills",     "role_family": "tech", "weight": 0.75, "aliases": ["ci/cd", "cicd"]},
+    {"id": "pytorch",           "category": "hard_skills",     "role_family": "tech", "weight": 0.95, "aliases": ["pytorch", "torch"]},
+    {"id": "tensorflow",        "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["tensorflow", "tf"]},
+    {"id": "llm",               "category": "hard_skills",     "role_family": "tech", "weight": 0.95, "aliases": ["llm", "大模型", "大语言模型"]},
+    {"id": "transformer",       "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["transformer", "transformers"]},
+    {"id": "rag",               "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["rag", "检索增强生成"]},
+    {"id": "fine_tuning",       "category": "hard_skills",     "role_family": "tech", "weight": 0.90, "aliases": ["微调", "sft", "lora", "fine-tuning", "finetuning"]},
+    {"id": "rlhf",              "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["rlhf"]},
+    {"id": "prompt_engineering","category": "hard_skills",     "role_family": "tech", "weight": 0.75, "aliases": ["prompt engineering", "提示词工程"]},
+    {"id": "agent",             "category": "hard_skills",     "role_family": "tech", "weight": 0.85, "aliases": ["agent", "智能体", "autogpt"]},
+    {"id": "langchain",         "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["langchain"]},
+    {"id": "vector_db",         "category": "hard_skills",     "role_family": "tech", "weight": 0.80, "aliases": ["向量数据库", "vector db", "pinecone", "milvus", "faiss"]},
+    {"id": "unit_test",         "category": "hard_skills",     "role_family": "tech", "weight": 0.75, "aliases": ["单元测试", "unit test"]},
+    {"id": "ab_test",           "category": "hard_skills",     "role_family": "*",    "weight": 0.90, "aliases": ["a/b test", "ab测试", "abtest"]},
+    {"id": "code_review",       "category": "hard_skills",     "role_family": "tech", "weight": 0.65, "aliases": ["code review", "cr"]},
+
+    {"id": "高并发",             "category": "industry_terms",  "role_family": "tech", "weight": 0.90, "aliases": ["高并发", "high concurrency"]},
+    {"id": "分布式系统",         "category": "industry_terms",  "role_family": "tech", "weight": 0.85, "aliases": ["分布式系统", "分布式", "distributed system"]},
+    {"id": "微服务",             "category": "industry_terms",  "role_family": "tech", "weight": 0.80, "aliases": ["微服务", "microservice"]},
+    {"id": "qps",               "category": "industry_terms",  "role_family": "tech", "weight": 0.85, "aliases": ["qps"]},
+    {"id": "p99",               "category": "industry_terms",  "role_family": "tech", "weight": 0.80, "aliases": ["p99"]},
+    {"id": "sla",               "category": "industry_terms",  "role_family": "tech", "weight": 0.70, "aliases": ["sla"]},
+    {"id": "模型训练",           "category": "industry_terms",  "role_family": "tech", "weight": 0.85, "aliases": ["模型训练", "model training"]},
+    {"id": "模型部署",           "category": "industry_terms",  "role_family": "tech", "weight": 0.85, "aliases": ["模型部署", "模型上线", "inference"]},
+    {"id": "推荐系统",           "category": "industry_terms",  "role_family": "tech", "weight": 0.90, "aliases": ["推荐系统", "recommendation system", "recsys"]},
+    {"id": "搜索排序",           "category": "industry_terms",  "role_family": "tech", "weight": 0.85, "aliases": ["搜索排序", "ltr"]},
+    {"id": "广告系统",           "category": "industry_terms",  "role_family": "tech", "weight": 0.85, "aliases": ["广告系统", "广告投放", "ad system"]},
+    {"id": "nlp",               "category": "industry_terms",  "role_family": "tech", "weight": 0.85, "aliases": ["nlp", "自然语言处理"]},
+    {"id": "computer_vision",   "category": "industry_terms",  "role_family": "tech", "weight": 0.85, "aliases": ["计算机视觉", "computer vision"]},
+
+    {"id": "excel",             "category": "hard_skills",     "role_family": "biz",  "weight": 0.75, "aliases": ["excel", "数据透视表"]},
+    {"id": "tableau",           "category": "hard_skills",     "role_family": "biz",  "weight": 0.80, "aliases": ["tableau"]},
+    {"id": "powerbi",           "category": "hard_skills",     "role_family": "biz",  "weight": 0.75, "aliases": ["power bi", "powerbi"]},
+    {"id": "axure",             "category": "hard_skills",     "role_family": "biz",  "weight": 0.75, "aliases": ["axure"]},
+    {"id": "figma",             "category": "hard_skills",     "role_family": "*",    "weight": 0.75, "aliases": ["figma"]},
+    {"id": "墨刀",               "category": "hard_skills",     "role_family": "biz",  "weight": 0.70, "aliases": ["墨刀", "mockingbot"]},
+    {"id": "prd",               "category": "hard_skills",     "role_family": "biz",  "weight": 0.85, "aliases": ["prd", "mrd", "brd", "产品需求文档"]},
+    {"id": "裂变增长",           "category": "hard_skills",     "role_family": "biz",  "weight": 0.85, "aliases": ["裂变增长", "growth hacking", "增长黑客"]},
+    {"id": "私域运营",           "category": "hard_skills",     "role_family": "biz",  "weight": 0.85, "aliases": ["私域", "社群运营"]},
+    {"id": "抖音小店",           "category": "hard_skills",     "role_family": "biz",  "weight": 0.80, "aliases": ["抖店", "tiktok shop", "抖音小店"]},
+    {"id": "淘宝后台",           "category": "hard_skills",     "role_family": "biz",  "weight": 0.70, "aliases": ["千牛", "生意参谋"]},
+
+    {"id": "用户增长",           "category": "industry_terms",  "role_family": "biz",  "weight": 0.90, "aliases": ["用户增长", "user growth"]},
+    {"id": "用户留存",           "category": "industry_terms",  "role_family": "biz",  "weight": 0.90, "aliases": ["用户留存", "留存率", "retention"]},
+    {"id": "dau",               "category": "industry_terms",  "role_family": "biz",  "weight": 0.85, "aliases": ["dau", "日活"]},
+    {"id": "mau",               "category": "industry_terms",  "role_family": "biz",  "weight": 0.85, "aliases": ["mau", "月活"]},
+    {"id": "gmv",               "category": "industry_terms",  "role_family": "biz",  "weight": 0.90, "aliases": ["gmv", "成交额"]},
+    {"id": "ltv",               "category": "industry_terms",  "role_family": "biz",  "weight": 0.85, "aliases": ["ltv", "用户生命周期价值"]},
+    {"id": "cac",               "category": "industry_terms",  "role_family": "biz",  "weight": 0.85, "aliases": ["cac", "获客成本"]},
+    {"id": "roi",               "category": "industry_terms",  "role_family": "*",    "weight": 0.80, "aliases": ["roi", "投资回报率"]},
+    {"id": "转化率",             "category": "industry_terms",  "role_family": "biz",  "weight": 0.90, "aliases": ["转化率", "conversion rate", "转化漏斗"]},
+    {"id": "冷启动",             "category": "industry_terms",  "role_family": "biz",  "weight": 0.75, "aliases": ["冷启动", "cold start"]},
+    {"id": "okr",               "category": "industry_terms",  "role_family": "*",    "weight": 0.65, "aliases": ["okr"]},
+
+    {"id": "团队协作",           "category": "soft_skills",     "role_family": "*",    "weight": 0.40, "aliases": ["团队协作", "teamwork", "collaboration"]},
+    {"id": "沟通能力",           "category": "soft_skills",     "role_family": "*",    "weight": 0.40, "aliases": ["沟通能力", "communication"]},
+    {"id": "主动性",             "category": "soft_skills",     "role_family": "*",    "weight": 0.40, "aliases": ["主动性", "proactive", "self-motivated"]},
+    {"id": "学习能力",           "category": "soft_skills",     "role_family": "*",    "weight": 0.30, "aliases": ["学习能力", "fast learner", "learning agility"]},
+    {"id": "抗压能力",           "category": "soft_skills",     "role_family": "*",    "weight": 0.30, "aliases": ["抗压能力", "work under pressure"]},
+    {"id": "吃苦耐劳",           "category": "soft_skills",     "role_family": "*",    "weight": 0.20, "aliases": ["吃苦耐劳"]},
+    {"id": "服从安排",           "category": "soft_skills",     "role_family": "*",    "weight": 0.20, "aliases": ["服从安排"]},
+    {"id": "leadership",        "category": "soft_skills",     "role_family": "*",    "weight": 0.50, "aliases": ["领导力", "leadership", "带团队"]},
+    {"id": "ownership",         "category": "soft_skills",     "role_family": "*",    "weight": 0.50, "aliases": ["ownership", "主人翁", "担当"]},
+
+    {"id": "主导",               "category": "seniority_markers","role_family": "*",   "weight": 0.70, "aliases": ["主导"]},
+    {"id": "负责",               "category": "seniority_markers","role_family": "*",   "weight": 0.50, "aliases": ["负责"]},
+    {"id": "参与",               "category": "seniority_markers","role_family": "*",   "weight": 0.40, "aliases": ["参与"]},
+    {"id": "lead",              "category": "seniority_markers","role_family": "*",   "weight": 0.70, "aliases": ["lead"]},
+    {"id": "own",               "category": "seniority_markers","role_family": "*",   "weight": 0.70, "aliases": ["own"]},
+    {"id": "drive",             "category": "seniority_markers","role_family": "*",   "weight": 0.60, "aliases": ["drive"]},
+    {"id": "optimize",          "category": "seniority_markers","role_family": "*",   "weight": 0.50, "aliases": ["optimize"]},
+    {"id": "architect",         "category": "seniority_markers","role_family": "*",   "weight": 0.80, "aliases": ["architect"]},
+    {"id": "从0到1",             "category": "seniority_markers","role_family": "*",   "weight": 0.70, "aliases": ["从 0 到 1", "从0到1", "0到1"]},
+
+    {"id": "字节范",             "category": "company_culture", "role_family": "*",    "weight": 0.20, "aliases": ["字节范"]},
+    {"id": "狼性",               "category": "company_culture", "role_family": "*",    "weight": 0.20, "aliases": ["狼性"]},
+    {"id": "拼搏",               "category": "company_culture", "role_family": "*",    "weight": 0.20, "aliases": ["拼搏"]},
+    {"id": "技术驱动",           "category": "company_culture", "role_family": "*",    "weight": 0.30, "aliases": ["技术驱动"]},
+    {"id": "客户第一",           "category": "company_culture", "role_family": "*",    "weight": 0.30, "aliases": ["客户第一"]}
+  ]
+}

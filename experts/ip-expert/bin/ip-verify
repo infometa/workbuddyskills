@@ -1,0 +1,83 @@
+#!/usr/bin/env node
+// ip-verify — unified CLI for the IP verification workbench.
+//
+// Thin wrapper that forwards to skills/ip-verification-workbench/scripts/run-verification-pipeline.mjs.
+// Works regardless of CWD by resolving the script relative to this file's location in the expert pack.
+//
+// Commands:
+//   ip-verify init    --query "..." [--task <dir>]
+//   ip-verify capture --input retrieval-batch.json [--task <dir>] [--provider web] [--allow-snippet]
+//   ip-verify audit-sources --task <dir> [--out verification/source-fulltext-queue.json]
+//   ip-verify persist --input sources.json [--task <dir>]
+//   ip-verify build   --task <dir> [--answer answer.md] [--claims claims.json]
+//   ip-verify html    --task <dir>
+//   ip-verify repair-export --task <dir> [--out verification/supplemental-search-queue.json]
+//   ip-verify repair-apply  --task <dir> --input supplemental-findings.json
+//   ip-verify assert-html   --html report.html
+//   ip-verify all     --query "..." --sources sources.json --answer answer.md [--claims claims.json]
+
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const pipeline = path.resolve(
+  __dirname,
+  '..',
+  'skills',
+  'ip-verification-workbench',
+  'scripts',
+  'run-verification-pipeline.mjs'
+);
+
+const { runPipeline } = await import(pathToFileURL(pipeline).href);
+
+// re-parse here to keep bin self-contained
+function parseArgs(argv) {
+  const args = { _: [] };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a.startsWith('--')) {
+      const key = a.slice(2);
+      const next = argv[i + 1];
+      if (next === undefined || next.startsWith('--')) args[key] = true;
+      else {
+        args[key] = next;
+        i++;
+      }
+    } else args._.push(a);
+  }
+  return args;
+}
+
+const argv = process.argv.slice(2);
+const cmd = argv[0];
+const args = parseArgs(argv.slice(1));
+
+if (!cmd || cmd === 'help' || cmd === '--help') {
+  process.stdout.write(
+    [
+      'ip-verify — 知识产权检索核验流水线',
+      '',
+      '用法:',
+      '  ip-verify init    --query "用户问题" [--task <dir>]',
+      '  ip-verify capture --input retrieval-batch.json [--task <dir>] [--provider web] [--allow-snippet]',
+      '  ip-verify audit-sources --task <dir> [--out verification/source-fulltext-queue.json]',
+      '  ip-verify persist --input sources.json [--task <dir>]',
+      '  ip-verify build   --task <dir> [--answer answer.md] [--claims claims.json]',
+      '  ip-verify html    --task <dir>',
+      '  ip-verify repair-export --task <dir> [--out verification/supplemental-search-queue.json]',
+      '  ip-verify repair-apply  --task <dir> --input supplemental-findings.json',
+      '  ip-verify assert-html   --html report.html',
+      '  ip-verify all     --query "..." --sources sources.json --answer answer.md [--claims claims.json]',
+      '',
+    ].join('\n')
+  );
+  process.exit(0);
+}
+
+runPipeline(cmd, args)
+  .then((res) => process.stdout.write(JSON.stringify(res, null, 2) + '\n'))
+  .catch((e) => {
+    process.stdout.write(JSON.stringify({ success: false, error: String(e.message || e) }, null, 2) + '\n');
+    process.exit(1);
+  });

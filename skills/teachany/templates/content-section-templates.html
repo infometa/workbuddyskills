@@ -1,0 +1,192 @@
+<!--
+TeachAny 内容区块标准模板（填入 course-skeleton.html 的 {{CONTENT_SECTIONS}}）
+原则：这里承载教学内容 section；平台接线仍由 course-skeleton.html 负责。
+用法：按课型选择片段，替换 {{PLACEHOLDER}}。不要复制本文件整体到课件。
+-->
+
+<!-- =========================================================
+1. 前测 section：所有课型必选
+========================================================= -->
+<section id="pretest" class="section" data-tts="pretest" data-tsh="前测 - 先暴露前置知识和直觉判断">
+  <div class="card">
+    <span class="phase-tag">Pretest</span>
+    <h2>{{PRETEST_TITLE}}</h2>
+    <p style="color:var(--muted)">{{PRETEST_INTRO}}</p>
+    <div class="grid">
+      <button class="choice" data-answer="wrong" data-diagnosis="{{PRETEST_Q1_WRONG_DIAGNOSIS}}">{{PRETEST_Q1_WRONG}}</button>
+      <button class="choice" data-answer="correct" data-diagnosis="{{PRETEST_Q1_CORRECT_FEEDBACK}}">{{PRETEST_Q1_CORRECT}}</button>
+      <button class="choice" data-answer="wrong" data-diagnosis="{{PRETEST_Q1_WRONG2_DIAGNOSIS}}">{{PRETEST_Q1_WRONG2}}</button>
+    </div>
+    <div class="result warn" data-feedback-for="pretest" style="margin-top:12px">{{PRETEST_DEFAULT_FEEDBACK}}</div>
+  </div>
+</section>
+
+<!-- =========================================================
+2. 核心模块 section：new-concept / review / special-topic 通用
+========================================================= -->
+<section id="module-1" class="section" data-tts="module-1" data-tsh="{{MODULE_1_HINT}}">
+  <div class="card">
+    <span class="phase-tag">{{MODULE_1_TAG}}</span>
+    <h2>{{MODULE_1_TITLE}}</h2>
+    <div class="card" data-role="abt-intro">
+      <p><strong>已经知道：</strong>{{MODULE_1_AND}}</p>
+      <p><strong>但是问题是：</strong>{{MODULE_1_BUT}}</p>
+      <p><strong>所以这一段要解决：</strong>{{MODULE_1_THEREFORE}}</p>
+    </div>
+    <div class="grid" style="margin-top:16px">
+      <div>
+        <h3>{{MODULE_1_CONCEPT_A}}</h3>
+        <p>{{MODULE_1_EXPLANATION_A}}</p>
+      </div>
+      <div>
+        <h3>{{MODULE_1_CONCEPT_B}}</h3>
+        <p>{{MODULE_1_EXPLANATION_B}}</p>
+      </div>
+      <div>
+        <h3>{{MODULE_1_CONCEPT_C}}</h3>
+        <p>{{MODULE_1_EXPLANATION_C}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+3. Worked example + 脚手架练习卡
+========================================================= -->
+<section id="scaffold-practice" class="section" data-tts="scaffold-practice" data-tsh="脚手架 - 从完整示范逐步走向独立完成">
+  <div class="card">
+    <span class="phase-tag">Scaffold</span>
+    <h2>{{SCAFFOLD_TITLE}}</h2>
+    <div class="grid">
+      <div class="card" data-scaffold="full">
+        <h3>全支架示范</h3>
+        <p>{{WORKED_EXAMPLE_FULL}}</p>
+      </div>
+      <div class="card" data-scaffold="partial">
+        <h3>半支架练习</h3>
+        <p>{{WORKED_EXAMPLE_PARTIAL}}</p>
+        <input aria-label="半支架填空" placeholder="{{PARTIAL_PLACEHOLDER}}">
+      </div>
+      <div class="card" data-scaffold="none">
+        <h3>独立完成</h3>
+        <p>{{INDEPENDENT_TASK}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+4. ConcepTest 概念测试卡：至少 1 个
+========================================================= -->
+<section id="conceptest-1" class="section" data-tts="conceptest-1" data-tsh="概念测试 - 用干扰项定位误解">
+  <div class="card" data-conceptest="true" data-bloom-level="understand">
+    <span class="phase-tag">ConcepTest</span>
+    <h2>{{CONCEPTEST_TITLE}}</h2>
+    <p>{{CONCEPTEST_STEM}}</p>
+    <div class="grid">
+      <button class="choice" data-choice="A" data-correct="false" data-diagnosis="{{DISTRACTOR_A_DIAGNOSIS}}">A. {{DISTRACTOR_A}}</button>
+      <button class="choice" data-choice="B" data-correct="true" data-diagnosis="{{CORRECT_DIAGNOSIS}}">B. {{CORRECT_OPTION}}</button>
+      <button class="choice" data-choice="C" data-correct="false" data-diagnosis="{{DISTRACTOR_C_DIAGNOSIS}}">C. {{DISTRACTOR_C}}</button>
+      <button class="choice" data-choice="D" data-correct="false" data-diagnosis="{{DISTRACTOR_D_DIAGNOSIS}}">D. {{DISTRACTOR_D}}</button>
+    </div>
+    <div class="result warn" data-feedback-for="conceptest-1" style="margin-top:12px">先独立判断，再看诊断反馈。</div>
+  </div>
+</section>
+
+<!-- =========================================================
+5. Canvas 主交互 section：数学/物理/数据类优先
+========================================================= -->
+<section id="main-interaction" class="section" data-tts="main-interaction" data-tsh="主交互 - 操作参数并观察实时反馈">
+  <div class="card">
+    <span class="phase-tag">Interactive Canvas</span>
+    <h2>{{INTERACTION_TITLE}}</h2>
+    <p style="color:var(--muted)">{{INTERACTION_INSTRUCTION}}</p>
+    <div class="canvas-wrap">
+      <canvas id="{{CANVAS_ID}}" class="wide-canvas" width="760" height="420" aria-label="{{CANVAS_ARIA_LABEL}}"></canvas>
+    </div>
+    <div class="grid" style="margin-top:14px">
+      <label>{{SLIDER_LABEL}}<input id="{{SLIDER_ID}}" type="range" min="{{SLIDER_MIN}}" max="{{SLIDER_MAX}}" step="{{SLIDER_STEP}}" value="{{SLIDER_VALUE}}"></label>
+      <div class="result" id="{{INTERACTION_RESULT_ID}}">{{INTERACTION_DEFAULT_RESULT}}</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+6. 探究课记录单：inquiry-project / experiment 必选
+========================================================= -->
+<section id="inquiry-record" class="section" data-tts="inquiry-record" data-tsh="探究记录 - 写下假设、证据和结论">
+  <div class="card">
+    <span class="phase-tag">Inquiry Record</span>
+    <h2>{{INQUIRY_TITLE}}</h2>
+    <div class="grid">
+      <label>我的假设<textarea id="hypothesis-input">{{HYPOTHESIS_STARTER}}</textarea></label>
+      <label>我的证据<textarea id="evidence-input">{{EVIDENCE_STARTER}}</textarea></label>
+      <label>我的结论<textarea id="conclusion-input">{{CONCLUSION_STARTER}}</textarea></label>
+    </div>
+    <div class="result warn" style="margin-top:12px">{{INQUIRY_RUBRIC}}</div>
+  </div>
+</section>
+
+<!-- =========================================================
+7. 自适应四路分支块：review-prereq / scaffold / normal / challenge
+========================================================= -->
+<section id="adaptive-branches" class="section" data-tts="adaptive-branches" data-tsh="自适应路径 - 根据表现选择下一步">
+  <div class="card" data-adaptive-branches="true">
+    <span class="phase-tag">Adaptive Branches</span>
+    <h2>{{ADAPTIVE_TITLE}}</h2>
+    <div class="grid">
+      <div class="card" data-branch="review-prereq"><h3>补前置</h3><p>{{BRANCH_REVIEW_PREREQ}}</p></div>
+      <div class="card" data-branch="scaffold"><h3>加支架</h3><p>{{BRANCH_SCAFFOLD}}</p></div>
+      <div class="card" data-branch="normal"><h3>正常推进</h3><p>{{BRANCH_NORMAL}}</p></div>
+      <div class="card" data-branch="challenge"><h3>挑战拓展</h3><p>{{BRANCH_CHALLENGE}}</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+8. 综合任务 section
+========================================================= -->
+<section id="synthesis" class="section" data-tts="synthesis" data-tsh="综合任务 - 把本课方法迁移到新问题">
+  <div class="card">
+    <span class="phase-tag">Synthesis</span>
+    <h2>{{SYNTHESIS_TITLE}}</h2>
+    <div class="grid">
+      <div><h3>Level 1 基础巩固</h3><p>{{SYNTHESIS_L1}}</p></div>
+      <div><h3>Level 2 应用迁移</h3><p>{{SYNTHESIS_L2}}</p></div>
+      <div><h3>Level 3 开放挑战</h3><p>{{SYNTHESIS_L3}}</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+9. 后测 section：所有课型必选
+========================================================= -->
+<section id="posttest" class="section" data-tts="posttest" data-tsh="后测 - 用新情境检验是否学会">
+  <div class="card">
+    <span class="phase-tag">Posttest</span>
+    <h2>{{POSTTEST_TITLE}}</h2>
+    <p>{{POSTTEST_STEM}}</p>
+    <div class="grid">
+      <button class="choice" data-posttest-choice="A" data-correct="false" data-diagnosis="{{POSTTEST_A_DIAGNOSIS}}">A. {{POSTTEST_A}}</button>
+      <button class="choice" data-posttest-choice="B" data-correct="true" data-diagnosis="{{POSTTEST_B_DIAGNOSIS}}">B. {{POSTTEST_B}}</button>
+      <button class="choice" data-posttest-choice="C" data-correct="false" data-diagnosis="{{POSTTEST_C_DIAGNOSIS}}">C. {{POSTTEST_C}}</button>
+    </div>
+    <div class="result warn" data-feedback-for="posttest" style="margin-top:12px">{{POSTTEST_DEFAULT_FEEDBACK}}</div>
+  </div>
+</section>
+
+<!-- =========================================================
+10. 小结 section：所有课型必选
+========================================================= -->
+<section id="summary" class="section" data-tts="summary" data-tsh="小结 - 回到开头的问题并形成可迁移结论">
+  <div class="card">
+    <span class="phase-tag">Summary</span>
+    <h2>{{SUMMARY_TITLE}}</h2>
+    <p>{{SUMMARY_ANSWER_TO_ANCHOR}}</p>
+    <ul>
+      <li>{{SUMMARY_POINT_1}}</li>
+      <li>{{SUMMARY_POINT_2}}</li>
+      <li>{{SUMMARY_POINT_3}}</li>
+    </ul>
+  </div>
+</section>

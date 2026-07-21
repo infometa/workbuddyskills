@@ -1,0 +1,97 @@
+{
+  "id": "reading",
+  "name": "主题阅读 / 读书计划",
+  "description": "适用于「N 个月读完 N 本书」「主题阅读法」「拆书学习」等阅读型目标",
+  "applicable_to": ["心理学主题阅读", "投资入门 10 本书", "经典文学补课", "刻意练习读书法"],
+  "default_duration_days": 30,
+  "total_phases": 3,
+
+  "reading_modes": [
+    {
+      "mode": "quick_skim",
+      "name": "速读模式",
+      "speed": "200-300 页/天",
+      "目标": "把握全书框架，知道在讲什么",
+      "适合": "工具书、自助书、入门读物"
+    },
+    {
+      "mode": "deep_read",
+      "name": "精读模式",
+      "speed": "30-50 页/天",
+      "目标": "深入理解 + 输出读书笔记",
+      "适合": "经典著作、专业书籍、思考型书籍"
+    },
+    {
+      "mode": "topic_compare",
+      "name": "主题对比阅读",
+      "speed": "多本同时推进",
+      "目标": "横向对比作者观点，形成自己见解",
+      "适合": "同主题多本书 / 流派对比"
+    }
+  ],
+
+  "phase_templates": [
+    {
+      "phase": 1,
+      "name": "预读 / 选书",
+      "duration_ratio": 0.15,
+      "description": "建立阅读地图：本主题最该读的 N 本书 + 阅读顺序",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["主题调研：豆瓣 + 知乎书单", "Top10 候选清单"] },
+        { "day": "Tue", "tasks": ["筛选 5 本必读", "查作者背景 / 流派"] },
+        { "day": "Wed", "tasks": ["读每本目录 + 序", "判断阅读优先级"] },
+        { "day": "Thu", "tasks": ["确定阅读顺序", "建立读书笔记模板"] },
+        { "day": "Fri", "tasks": ["第 1 本书前 30 页速读", "判断是否合适"] },
+        { "day": "Sat", "tasks": ["定位作者核心观点", "费曼法讲给自己听"] },
+        { "day": "Sun", "tasks": ["计划微调", "下阶段安排"] }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "精读 / 拆解",
+      "duration_ratio": 0.6,
+      "description": "按计划阅读 + 笔记 + 输出",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["阅读 30-50 页", "标记金句 / 概念"] },
+        { "day": "Tue", "tasks": ["阅读 30-50 页", "整理章节脉络"] },
+        { "day": "Wed", "tasks": ["阅读 30-50 页", "对比上一本书观点"] },
+        { "day": "Thu", "tasks": ["阅读 30-50 页", "写章节笔记"] },
+        { "day": "Fri", "tasks": ["阅读 30-50 页", "金句卡片整理"] },
+        { "day": "Sat", "tasks": ["完成本书 / 章节", "写读书笔记 1 篇"] },
+        { "day": "Sun", "tasks": ["艾宾浩斯复现", "知识图谱更新"] }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "输出 / 应用",
+      "duration_ratio": 0.25,
+      "description": "把读到的转化为自己的 / 用得上的",
+      "weekly_pattern": [
+        { "day": "Mon", "tasks": ["主题综述：N 本书核心观点对比"] },
+        { "day": "Tue", "tasks": ["个人观点输出", "写主题文章 1 篇"] },
+        { "day": "Wed", "tasks": ["选 1 个观点尝试应用到生活 / 工作"] },
+        { "day": "Thu", "tasks": ["分享给朋友 / 社群", "收集反馈"] },
+        { "day": "Fri", "tasks": ["金句卡片归档", "建立永久笔记"] },
+        { "day": "Sat", "tasks": ["写主题阅读总结博客", "知识图谱完善"] },
+        { "day": "Sun", "tasks": ["休息 + 规划下个主题", "整理书架"] }
+      ]
+    }
+  ],
+
+  "methodology_injection": {
+    "ebbinghaus": true,
+    "pomodoro": false,
+    "pareto": true,
+    "feynman": true,
+    "description": "读书核心是费曼法（输出倒逼输入），艾宾浩斯复现金句，二八抓每本核心章节，番茄钟反而打断阅读心流"
+  },
+
+  "special_notes": [
+    "不要追求读完，要追求读懂 + 用上",
+    "每本书读完必须输出（笔记 / 文章 / 应用）",
+    "不合适的书要果断放弃，不要 sunk cost",
+    "主题阅读 ≥ 3 本同主题书才有横向对比价值",
+    "金句卡片建议用 Anki / Heptabase / Notion 永久归档",
+    "建议每月 1 个主题，避免主题漂移"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "commands-utilities-debugging",
+  "version": "1.0.0",
+  "description": "General debugging and utility commands",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "commands",
+    "slash-commands",
+    "utilities-debugging",
+    "all-tools",
+    "architecture-scenario-explorer",
+    "check-file",
+    "clean-branches",
+    "code-permutation-tester",
+    "code-review",
+    "code-to-task",
+    "debug-error",
+    "directory-deep-dive",
+    "explain-code",
+    "generate-linear-worklog",
+    "git-status",
+    "refactor-code",
+    "ultra-think"
+  ]
+}

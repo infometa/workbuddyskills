@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postgrad1B 作文批改报告</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --brand: #2563eb;
+      --brand-soft: #dbeafe;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --excellent: #16a34a;
+      --good: #2563eb;
+      --warn: #f59e0b;
+      --danger: #dc2626;
+      --tip: #64748b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 32px 20px 80px; }
+    header.hero {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 32px 28px;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .score-circle {
+      position: relative;
+      width: 148px; height: 148px;
+      border-radius: 50%;
+      background: conic-gradient(#fff 0deg, #fff 251deg, rgba(255,255,255,0.25) 251deg 360deg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .score-circle::after {
+      content: "";
+      position: absolute; inset: 10px;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      border-radius: 50%;
+    }
+    .score-circle .score-inner {
+      position: relative; z-index: 1; text-align: center; color: #fff;
+    }
+    .score-inner .big { font-size: 40px; font-weight: 700; line-height: 1; }
+    .score-inner .sub { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+    .hero-info h1 { margin: 0 0 8px; font-size: 22px; }
+    .hero-info .meta { opacity: 0.9; font-size: 14px; margin-bottom: 12px; }
+    .hero-info .band-name {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      padding: 4px 12px; border-radius: 999px; font-size: 13px;
+    }
+    .hero-info .converted {
+      margin-top: 10px; font-size: 14px;
+      background: rgba(255,255,255,0.12);
+      padding: 6px 14px; border-radius: 8px; display: inline-block;
+    }
+
+    section.card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 26px;
+      margin-top: 20px;
+    }
+    section.card h2 {
+      margin: 0 0 14px;
+      font-size: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--brand-soft);
+      color: var(--brand);
+    }
+    section.card h3 {
+      font-size: 15px;
+      margin: 16px 0 8px;
+    }
+
+    .rubric-quote {
+      background: var(--brand-soft);
+      border-left: 4px solid var(--brand);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #1e3a8a;
+    }
+    .rubric-source { color: var(--muted); font-size: 12px; margin-top: 6px; }
+
+    .dim-row {
+      display: flex; gap: 16px; padding: 10px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .dim-row:last-child { border-bottom: none; }
+    .dim-name {
+      flex: 0 0 110px; font-weight: 600; color: var(--brand);
+    }
+    .dim-text { flex: 1; color: var(--text); }
+
+    .boundary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .boundary-grid > div {
+      background: #fafafa; border: 1px solid var(--border);
+      padding: 12px 14px; border-radius: 8px;
+    }
+    .boundary-grid h4 { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+
+    .intra-pill {
+      display: inline-block;
+      padding: 4px 12px; border-radius: 999px;
+      background: var(--brand-soft); color: var(--brand);
+      font-weight: 600;
+    }
+
+    .issue-list { list-style: none; padding: 0; margin: 0; }
+    .issue {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+    .issue .loc { font-weight: 600; margin-bottom: 6px; }
+    .issue .orig, .issue .sug { font-size: 14px; margin: 4px 0; }
+    .issue code {
+      background: #fff; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid var(--border); font-family: Menlo, Consolas, monospace;
+    }
+    .issue .reason { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+    .sev { display: flex; align-items: center; gap: 8px; }
+    .sev::before {
+      content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    }
+    .sev-critical::before { background: var(--danger); }
+    .sev-warning::before { background: var(--warn); }
+    .sev-tip::before { background: var(--tip); }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 12px; color: #fff; margin-right: 8px;
+    }
+    .tag-critical { background: var(--danger); }
+    .tag-warning { background: var(--warn); }
+    .tag-tip { background: var(--tip); }
+
+    .upgrade-list, .rationale {
+      padding-left: 20px;
+    }
+    .upgrade-list li, .rationale li {
+      margin-bottom: 8px;
+    }
+    .rationale .ev { padding-left: 18px; margin: 6px 0; color: var(--muted); font-size: 13px; }
+    .rationale .ref { color: var(--brand); font-size: 13px; margin-top: 4px; }
+
+    .deduction-list { padding-left: 20px; }
+    .deduction-list li { color: var(--danger); margin-bottom: 6px; }
+
+    /* v1.2 新增：Directions 照搬检测 */
+    .dcc-risk { padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; font-weight: 600; }
+    .dcc-risk-none     { background: #dcfce7; color: #166534; }
+    .dcc-risk-tip      { background: #fef3c7; color: #92400e; }
+    .dcc-risk-warning  { background: #ffedd5; color: #9a3412; }
+    .dcc-risk-critical { background: #fee2e2; color: #991b1b; }
+    .dcc-list { list-style: none; padding: 0; margin: 0; }
+    .dcc-item {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 12px; margin-bottom: 8px; background: #fafafa;
+    }
+    .dcc-sev-critical { border-left: 4px solid var(--danger); }
+    .dcc-sev-warning  { border-left: 4px solid var(--warn); }
+    .dcc-sev-tip      { border-left: 4px solid var(--tip); }
+    .dcc-head { margin-bottom: 6px; }
+    .dcc-body { font-size: 14px; margin: 3px 0; }
+    .dcc-body code { background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); font-family: Menlo, Consolas, monospace; }
+    .dcc-note { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .dcc-deduction { color: var(--danger); margin-top: 10px; }
+
+    /* v1.2 新增：词汇升档 */
+    .vocab-hint { color: var(--muted); font-size: 13px; }
+    .vocab-table {
+      width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px;
+    }
+    .vocab-table th, .vocab-table td {
+      border: 1px solid var(--border); padding: 8px 10px; text-align: left;
+    }
+    .vocab-table th { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+    .vocab-table code { background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); font-family: Menlo, Consolas, monospace; }
+    .tier-from { color: var(--muted); }
+    .tier-to   { color: var(--excellent); font-weight: 600; }
+
+    /* v1.6.1 新增：Calibration 状态横幅 */
+    .calib-banner {
+      border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;
+      border-left: 4px solid;
+    }
+    .calib-banner .calib-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .calib-banner .calib-note  { font-size: 13px; line-height: 1.6; }
+    .calib-banner.calib-normal { background: #dcfce7; color: #166534; border-color: #16a34a; }
+    .calib-banner.calib-warn   { background: #fef3c7; color: #92400e; border-color: #f59e0b; }
+    .calib-banner.calib-danger { background: #fee2e2; color: #991b1b; border-color: #dc2626; }
+
+    /* v1.6.1 新增：Postgrad1B 三段论诊断 */
+    .para-diag-list { list-style: none; padding: 0; margin: 0; }
+    .para-item {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 14px; margin-bottom: 10px; background: #fafafa;
+      border-left: 4px solid var(--border);
+    }
+    .para-item.para-excellent { border-left-color: var(--excellent); }
+    .para-item.para-warn      { border-left-color: var(--warn); }
+    .para-item.para-danger    { border-left-color: var(--danger); }
+    .para-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .para-q { font-size: 12px; padding: 2px 10px; border-radius: 999px; }
+    .para-q-excellent { background: #dcfce7; color: #166534; }
+    .para-q-warn      { background: #fef3c7; color: #92400e; }
+    .para-q-danger    { background: #fee2e2; color: #991b1b; }
+    .para-comment { font-size: 14px; color: var(--text); }
+    .para-evidence { font-size: 13px; color: var(--muted); margin-top: 6px; }
+    .para-evidence code {
+      background: #fff; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid var(--border); font-family: Menlo, Consolas, monospace;
+    }
+    .dialectical-ok, .dialectical-miss {
+      margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 14px;
+    }
+    .dialectical-ok   { background: #dcfce7; color: #166534; }
+    .dialectical-miss { background: #fee2e2; color: #991b1b; }
+
+    /* v1.6.1 新增：letter_category 专属检查 */
+    .letter-cat-head { margin-bottom: 10px; font-size: 15px; }
+    .letter-conf {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      background: var(--brand-soft); color: var(--brand);
+      font-size: 12px; margin-left: 8px;
+    }
+    .letter-check { list-style: none; padding: 0; margin: 0 0 10px; }
+    .letter-check li { padding: 6px 0; font-size: 14px; }
+    .lc-ok     { color: #166534; }
+    .lc-warn   { color: #92400e; }
+    .lc-danger { color: #991b1b; }
+    .letter-elem-table {
+      width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px;
+    }
+    .letter-elem-table th, .letter-elem-table td {
+      border: 1px solid var(--border); padding: 8px 10px; text-align: left;
+    }
+    .letter-elem-table th { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+    .letter-pitfalls {
+      margin-top: 12px; padding: 10px 14px; border-radius: 8px;
+      background: #fef3c7; color: #92400e; font-size: 14px;
+    }
+    .letter-pitfalls ul { margin: 6px 0 0; padding-left: 20px; }
+
+    /* v1.6.1 新增：chart_subtype_specific */
+    .chart-sub-head { margin-bottom: 10px; font-size: 15px; }
+    .chart-metric, .chart-line {
+      padding: 8px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 14px;
+      border-left: 3px solid transparent;
+    }
+    .chart-ok     { background: #dcfce7; color: #166534; border-left-color: #16a34a; }
+    .chart-warn   { background: #fef3c7; color: #92400e; border-left-color: #f59e0b; }
+    .chart-danger { background: #fee2e2; color: #991b1b; border-left-color: #dc2626; }
+    .chart-metric small { color: var(--muted); font-weight: normal; margin-left: 8px; }
+    .chart-errs {
+      background: #fee2e2; color: #991b1b; padding: 10px 14px;
+      border-radius: 8px; margin-bottom: 8px; font-size: 14px;
+    }
+    .chart-errs ul { margin: 6px 0 0; padding-left: 20px; }
+    .chart-errs code {
+      background: #fff; padding: 2px 6px; border-radius: 4px;
+      border: 1px solid var(--border); font-family: Menlo, Consolas, monospace;
+    }
+
+    /* v1.7.0 新增：SVG 图表化（进度条 + 雷达图） */
+    .svg-progress { vertical-align: middle; margin: 0 6px; }
+    .chart-metric .svg-progress { margin-left: 8px; }
+    .chart-note { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+    .letter-elem-gauge {
+      margin: 0 0 10px; padding: 8px 14px;
+      background: var(--brand-soft); border-radius: 8px;
+      display: flex; align-items: center; gap: 12px; font-size: 14px;
+    }
+    .para-radar-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      margin: 0 0 16px; padding: 12px; background: #f9fafb; border-radius: 8px;
+    }
+    .svg-radar { margin-bottom: 8px; }
+    .radar-legend { font-size: 12px; color: var(--muted); }
+    .radar-legend .lg-good { color: #166534; }
+    .radar-legend .lg-fair { color: #92400e; }
+    .radar-legend .lg-poor { color: #991b1b; }
+
+    /* 考研专有语域标签 */
+    .exam-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      background: #fce7f3; color: #9d174d; font-size: 12px; font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .essay-box {
+      background: #fafafa; border: 1px solid var(--border);
+      padding: 14px 16px; border-radius: 8px;
+      white-space: pre-wrap; font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.8;
+    }
+    .prompt-box {
+      background: var(--brand-soft); color: #1e3a8a;
+      padding: 10px 14px; border-radius: 8px; font-size: 14px;
+    }
+
+    .empty { color: var(--muted); font-style: italic; }
+    footer {
+      text-align: center; color: var(--muted); font-size: 12px;
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="hero">
+      <div class="score-circle">
+        <div class="score-inner">
+          <div class="big">14</div>
+          <div class="sub">/ 20 分</div>
+        </div>
+      </div>
+      <div class="hero-info">
+        <h1>Postgrad1B 作文批改报告<span class="exam-badge">cartoon</span></h1>
+        <div class="meta">批改时间：2026-04-22T18:00:00Z · 有效字数 <strong>195</strong> / 要求 160-200（达标）</div>
+        <span class="band-name">第四档（良好）（档内调整 +1）</span>
+        <div class="converted">14/20 分（考研按原始分计入总分）</div>
+      </div>
+    </header>
+
+    <!-- v1.6.1 新增：Calibration 状态横幅（正常时隐藏） -->
+    <section class="card" style="display:none">
+      <h2>0. 校准集状态（评分置信度）</h2>
+
+    </section>
+
+    <section class="card">
+      <h2>1. 档次判定（官方描述符）</h2>
+      <div class="rubric-quote">「较好地完成试题规定的任务。较好地切题，能较详细地描述图画并解读其寓意。用较丰富的语法结构和词汇；基本准确，只有个别错误；能适当运用衔接手段。」</div>
+      <div class="rubric-source">来源：2025 考研英语一大纲 B 节 第四档 13–16 分</div>
+    </section>
+
+    <section class="card">
+      <h2>2. 评分维度诊断（考研 5 维，官方显式维度）</h2>
+        <div class="dim-row"><span class="dim-name">任务完成度</span><span class="dim-text">三要点齐全：描述（¶1，含中文说明翻译）+ 寓意（¶2，快慢成功对比）+ 评论（¶3，主张选长路）；但寓意段论证略浅，停留于『真实成功需要年月』而未深挖</span></div>
+        <div class="dim-row"><span class="dim-name">语法结构与词汇</span><span class="dim-text">较丰富：Only by... can we（倒装）+ 现在分词状语（pointing / going up）+ but/however/so 衔接；词汇 fragile / patient / attractive 处于 mid tier</span></div>
+        <div class="dim-row"><span class="dim-name">语言准确性</span><span class="dim-text">3 处主谓一致（tell / need / make）较明显但可理解，不影响整体阅读</span></div>
+        <div class="dim-row"><span class="dim-name">衔接与连贯</span><span class="dim-text">However / But / So / In my opinion 衔接多样但偏模板；段间过渡平顺，未见跨段呼应</span></div>
+        <div class="dim-row"><span class="dim-name">格式与语域</span><span class="dim-text"><strong>format</strong>：三段论述结构规范 · <strong>register</strong>：neutral（适当非口语） · <strong>signature_compliance</strong>：N/A（B 节无署名要求）</span></div>
+    </section>
+
+    <!-- v1.2 新增：考研 A 节专有 —— Directions 原句照搬检测 -->
+    <section class="card" style="display:">
+      <h2>考研 A 节专有 · Directions 原句照搬检测</h2>
+      <p class="vocab-hint">依据《考研英语 A 节阅卷规则》：连续 8 词及以上与 Directions 一致将视为"机械照搬"，按严重程度扣 0.5-2 分。</p>
+        <p class="empty">本试题未触发 Directions 检测（非 A 节或不适用）</p>
+    </section>
+
+    <!-- v1.6.1 新增：letter_category 专属检查（Postgrad A 节 letter） -->
+    <section class="card" style="display:none">
+      <h2>考研 A 节专有 · letter_category 专属要素检查</h2>
+      <p class="vocab-hint">依据 <code>references/letter-categories.md</code>：10 类信件的开头套语、必备要素、语域均有独立硬要求。</p>
+
+    </section>
+
+    <!-- v1.6.1 新增：Postgrad1B 三段论诊断 -->
+    <section class="card" style="display:none">
+      <h2>考研英一 B 节专有 · 三段论段落诊断（cartoon_standard）</h2>
+      <p class="vocab-hint">依据 <code>references/postgrad1b-paragraph-rubric.md</code>：英一 B 节近 20 年真题均为"漫画 + 议论"，三段分工为描述 → 阐释 → 评论/对策。2022+ 鼓励辩证 discursive 写作。</p>
+
+    </section>
+
+    <!-- v1.6.1 新增：chart_subtype_specific（Postgrad2B / CET chart 题） -->
+    <section class="card" style="display:none">
+      <h2>图表题专有 · chart_subtype 数据与趋势检查</h2>
+      <p class="vocab-hint">依据 <code>references/chart-verbs.md</code>：7 类图表各有专属描述动词与硬约束。</p>
+
+    </section>
+
+    <section class="card">
+      <h2>3. 档次边界判定</h2>
+      <div class="boundary-grid">
+        <div>
+          <h4>与高一档的差距</h4>
+          <p>¶3 评论段偏单薄，缺辩证/反例（未讨论 instant success 中合理的部分，如创业者的时代机遇）；衔接手段偏向 However/So 模板化；无高阶句式如倒装、独立主格</p>
+        </div>
+        <div>
+          <h4>与低一档相比的优势</h4>
+          <p>三要点齐全且各段展开充分；有复合句（`Only by... can we`）和现在分词（`going up to the mountain`）；语言错误密度低（3 处主谓一致）</p>
+        </div>
+      </div>
+      <h3>档内 ±1 调节：<span class="intra-pill">+1</span></h3>
+      <p>档内取中高位 14——三要点完整度好于第四档下限，但语言精度和衔接多样性均未达第四档高位</p>
+    </section>
+
+    <section class="card">
+      <h2>4. 扣分明细</h2>
+        <p class="empty">无扣分项</p>
+    </section>
+
+    <section class="card">
+      <h2>5. 错误清单</h2>
+        <h3 class="sev sev-warning">待优化（3）</h3>
+        <ul class="issue-list">
+          <li class="issue"><div class="loc"><span class="tag tag-warning">语法错</span> ¶2 第 1 句</div><div class="orig">原文：<code>This picture tell us a truth</code></div><div class="sug">建议：<code>This picture tells us a truth</code></div><div class="reason">主谓一致：picture 单数</div></li>
+          <li class="issue"><div class="loc"><span class="tag tag-warning">语法错</span> ¶2 中段</div><div class="orig">原文：<code>real success often need many years</code></div><div class="sug">建议：<code>real success often requires/needs many years</code></div><div class="reason">主谓一致：success 为不可数，third person singular</div></li>
+          <li class="issue"><div class="loc"><span class="tag tag-warning">语法错</span> ¶3 末</div><div class="orig">原文：<code>long journey make us strong</code></div><div class="sug">建议：<code>a long journey makes us strong</code></div><div class="reason">主谓一致 + 冠词缺失</div></li>
+        </ul>
+        <h3 class="sev sev-tip">提升点（2）</h3>
+        <ul class="issue-list">
+          <li class="issue"><div class="loc"><span class="tag tag-tip">词汇错</span> ¶1</div><div class="orig">原文：<code>at a crossroad when night is coming</code></div><div class="sug">建议：<code>at a crossroads at dusk</code></div><div class="reason">crossroads 本身是复数形式固定搭配；`at dusk` 更地道</div></li>
+          <li class="issue"><div class="loc"><span class="tag tag-tip">结构错</span> ¶3</div><div class="orig">原文：<code>Instant success is usually fragile, but long journey make us strong</code></div><div class="sug">建议：<code>¶3 可加 1 句反面论证，如：`Of course, not every bright path is a trap — timing and opportunity matter — but even so, depth-building beats speed-chasing in the long run.`</code></div><div class="reason">辩证维度不足，评论段仅一面之词</div></li>
+        </ul>
+    </section>
+
+    <section class="card">
+      <h2>6. 升档路径</h2>
+        <p>当前 <strong>14</strong> 分 → 目标 <strong>17</strong> 分</p>
+        <ol class="upgrade-list">
+          <li>修复 3 处主谓一致：tell→tells / need→needs / make→makes</li>
+          <li>¶3 加 1 句反面论证，形成辩证结构（当前论证一面倒）</li>
+          <li>跨段呼应：¶3 开头加 `Returning to the dusk crossroads,...`</li>
+          <li>引入 1 个高阶句式：如独立主格 `With shortcuts crowded by impatient feet, the long road awaits those willing to...`</li>
+          <li>词汇升档：见 vocabulary_upgrades（重点替换 very quickly / hard practice / real ability）</li>
+        </ol>
+    </section>
+
+    <!-- v1.2 新增：词汇升档建议（CET + 考研通用，基于 writing-vocabulary.md 四层库） -->
+    <section class="card">
+      <h2>6.1 词汇升档建议（Low → Mid → High → Academic）</h2>
+        <p class="vocab-hint">以下是基于目标档次自动检出的可升级词汇（至多 5 条），请结合语境选择是否替换。</p>
+        <table class="vocab-table">
+          <thead><tr><th>位置</th><th>原词</th><th>升级建议</th><th>层级跃迁</th><th>说明</th></tr></thead>
+          <tbody>
+          <tr><td>¶2</td><td><code>very quickly</code></td><td><code>rapidly / overnight</code></td><td><span class="tier-from">低阶</span> → <span class="tier-to">中阶</span></td><td>副词升阶</td></tr>
+          <tr><td>¶2</td><td><code>hard practice</code></td><td><code>diligent practice / sustained dedication</code></td><td><span class="tier-from">中阶</span> → <span class="tier-to">高阶</span></td><td>搭配升级</td></tr>
+          <tr><td>¶3</td><td><code>working hard step by step</code></td><td><code>advancing incrementally / pursuing mastery in a measured manner</code></td><td><span class="tier-from">低阶</span> → <span class="tier-to">学术</span></td><td>口语化表达升为 academic</td></tr>
+          <tr><td>¶3</td><td><code>real ability</code></td><td><code>genuine competence / substantive expertise</code></td><td><span class="tier-from">低阶</span> → <span class="tier-to">高阶</span></td><td>抽象名词升阶</td></tr>
+          <tr><td>¶2</td><td><code>give up easily</code></td><td><code>succumb to discouragement / abandon their pursuits prematurely</code></td><td><span class="tier-from">低阶</span> → <span class="tier-to">学术</span></td><td>口语短语 → 学术表达</td></tr>
+          </tbody>
+        </table>
+    </section>
+
+    <section class="card">
+      <h2>7. 判定证据链（可追溯性）</h2>
+        <ul class="rationale">
+          <li><strong>[S1-定档] 定在第四档 13-16 分区间</strong><ul class="ev"><li>三要点齐全</li><li>较丰富语法（含倒装 + 现在分词）</li><li>语言错误 3 处但不影响理解</li><li>衔接多样但偏模板</li></ul><div class="ref">依据：postgrad-official-rubric.md §英一B·第四档</div></li>
+          <li><strong>[S2-档内调节] 档内取中高位 14</strong><ul class="ev"><li>三要点完整度显著优于第四档下限（13）</li><li>但衔接多样性、语言精度均未达高位（16）</li></ul><div class="ref">依据：scoring-workflow.md §4-档内±1调节</div></li>
+          <li><strong>[S3-排除上档] 不属于第五档</strong><ul class="ev"><li>¶3 评论段单向论证，缺辩证维度</li><li>衔接手法偏模板 However/So，未见跨段呼应</li><li>无足够的 academic tier 词汇</li></ul><div class="ref">依据：postgrad-official-rubric.md §英一B·第五档 vs 第四档</div></li>
+          <li><strong>[S4-排除下档] 不属于第三档</strong><ul class="ev"><li>三要点齐全且各段展开充分——远超第三档&#x27;基本完成&#x27;</li><li>现在分词 + 倒装已超出&#x27;简单衔接&#x27;范畴</li></ul><div class="ref">依据：postgrad-official-rubric.md §英一B·第四档 vs 第三档</div></li>
+          <li><strong>[S5-字数验证] 字数达标</strong><ul class="ev"><li>effective=195 ∈ [160,200]</li><li>无字数扣分</li></ul><div class="ref">依据：references/exam-level-matrix.md §字数要求</div></li>
+          <li><strong>[S6-词汇升档] 识别 5 个低阶词可升档</strong><ul class="ev"><li>very quickly / hard practice / real ability / give up easily / working hard step by step</li></ul><div class="ref">依据：references/writing-vocabulary.md §议论/论述类四层词汇</div></li>
+        </ul>
+    </section>
+
+    <section class="card">
+      <h2>附录：题目 & 作文原文</h2>
+      <h3>题目</h3>
+      <div class="prompt-box">Write an essay of 160-200 words based on the picture below. In your essay, you should: 1) describe the picture briefly, 2) interpret its intended meaning, and 3) give your comments.
+[Picture: A young man stands at a crossroads at dusk. One signpost points to a brightly lit city skyline labelled &quot;Instant Success&quot;; the other points to a narrow uphill path winding toward distant mountains, labelled &quot;Long Journey of Mastery&quot;. Below the picture: &quot;捷径少人走，远路终见山&quot; (Shortcuts are crowded; the long road reaches the peak).]</div>
+      <h3>作文</h3>
+      <div class="essay-box">In the picture, a young man is standing at a crossroad when night is coming. On his left, there is a sign pointing to a bright city which says &quot;Instant Success&quot;. On his right, there is another sign pointing to a narrow path going up to the mountain, with the words &quot;Long Journey of Mastery&quot;. Under the picture, there are some Chinese words which mean &quot;Shortcuts are crowded while the long road reaches the peak&quot;.
+
+This picture tell us a truth about how to grow up. Many young people today want to become successful very quickly. They see short videos of rich CEOs and think they can do the same. However, real success often need many years of hard practice. The bright city may look attractive, but it is also full of people who give up easily.
+
+In my opinion, we should choose the long road. Only by working hard step by step can we really master a skill and become a person with real ability. Instant success is usually fragile, but long journey make us strong. So young people should be patient.</div>
+    </section>
+
+    <footer>
+      由 <strong>english-exam-writing-reviewer</strong> Skill 生成 ·
+      对齐《全国大学英语四、六级考试大纲 2016 修订版》+《全国硕士研究生招生考试英语一/二考试大纲》<br>
+      AI 批改与人工阅卷仍有误差，结果仅供学习参考。
+    </footer>
+  </div>
+</body>
+</html>

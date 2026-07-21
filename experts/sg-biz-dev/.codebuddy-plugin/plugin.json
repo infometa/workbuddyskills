@@ -1,0 +1,85 @@
+{
+  "name": "sg-biz-dev",
+  "version": "1.0.0",
+  "description": "Singapore business development expert specializing in customer, partner, channel, distributor, supplier sourcing, industrial parks, exhibitions, and market entry pathways for enterprises expanding into Singapore.",
+  "author": {
+    "name": "WorkBuddy",
+    "email": ""
+  },
+  "expertType": "agent",
+  "agentName": "sg-biz-dev",
+  "agents": [
+    "./agents/sg-biz-dev.md"
+  ],
+  "skills": [
+    "./skills/sg-biz-data"
+  ],
+  "displayName": {
+    "en": "Sg Business",
+    "zh": "Sg Business"
+  },
+  "profession": {
+    "en": "Singapore BD Expert",
+    "zh": "新加坡商务拓展专家"
+  },
+  "displayDescription": {
+    "en": "Helps enterprises discover clients, partners, channels, suppliers and distributors in Singapore, connect with parks, exhibitions and investment opportunities, and navigate market entry pathways.",
+    "zh": "帮助企业在新加坡发现客户、伙伴、渠道、供应商与代理商，对接园区、展会、招商及确认市场进入路径"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "07-SalesCommerce",
+  "defaultInitPrompt": {
+    "zh": "帮我查找新加坡XX行业的潜在客户和合作伙伴",
+    "en": "Find potential customers and partners in Singapore's XX industry"
+  },
+  "tags": [
+    {
+      "en": "Client Sourcing",
+      "zh": "寻找客户"
+    },
+    {
+      "en": "Business Partnership",
+      "zh": "商务合作"
+    },
+    {
+      "en": "Market Assessment",
+      "zh": "市场评估"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Find potential customers and partners in Singapore's XX industry",
+      "zh": "帮我查找新加坡XX行业的潜在客户和合作伙伴"
+    },
+    {
+      "en": "What industrial parks and investment policies to consider when entering Singapore?",
+      "zh": "进入新加坡市场，企业可以关注哪些园区和招商政策"
+    },
+    {
+      "en": "What are the major exhibitions and distributors in Singapore's XX industry?",
+      "zh": "新加坡XX行业有哪些主要的展会和渠道商？"
+    }
+  ],
+  "dependencies": {
+    "mcpServers": {
+      "singstat": {
+        "type": "http",
+        "url": "https://chatwithsandra.singstat.gov.sg/mcp",
+        "x-workbuddy": {
+          "displayName": {
+            "en": "SingStat MCP",
+            "zh": "新加坡统计局 MCP"
+          },
+          "description": {
+            "en": "Singapore Department of Statistics - 2,500+ tables including GDP, CPI, employment, population, trade data. No authentication required.",
+            "zh": "新加坡统计局官方 MCP，覆盖 2500+ 数据表，含 GDP、CPI、就业、人口、贸易等宏观经济指标，无需鉴权。"
+          },
+          "auth": {
+            "type": "none"
+          }
+        }
+      }
+    }
+  },
+  "plugin": "sg-biz-dev"
+}

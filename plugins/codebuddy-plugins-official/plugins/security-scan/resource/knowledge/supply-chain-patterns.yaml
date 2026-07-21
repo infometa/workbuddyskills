@@ -1,0 +1,206 @@
+# D12: 供应链与组件安全检测模式表
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 检测供应链攻击模式、依赖混淆、恶意包指标、过时/废弃依赖风险
+# 注意: CVE 速查表见 scan-data/cve-quick-lookup.yaml；本表聚焦供应链攻击模式检测
+
+# ============================================================================
+# 一、依赖混淆攻击 (Dependency Confusion)
+# ============================================================================
+
+dependency_confusion:
+  description: "攻击者在公共仓库注册与内部包同名的恶意包，利用优先级劫持安装"
+
+  detection_patterns:
+    - category: 私有 registry 配置
+      files: [".npmrc", ".yarnrc", ".yarnrc.yml", "pip.conf", "settings.xml", ".pypirc"]
+      patterns:
+        - 'registry\s*=\s*https?://(?!registry\.npmjs\.org|registry\.yarnpkg\.com)'
+        - 'index-url\s*=\s*https?://(?!pypi\.org)'
+        - '<url>https?://(?!repo\.maven\.apache\.org|repo1\.maven\.org)'
+      note: "使用私有 registry → 检查是否有混合 registry 配置"
+
+    - category: 混合 registry 风险指标
+      patterns:
+        - '@scope/'                                 # npm scoped package（较安全）
+        - 'registry.*\n.*registry'                  # 多个 registry 配置
+        - 'extra-index-url'                         # pip 额外索引源
+        - '<mirrorOf>\*</mirrorOf>'                 # Maven mirror 全量代理
+      note: "多源配置增加依赖混淆风险"
+
+    - category: 内部包名泄露
+      files: ["package.json", "requirements.txt", "setup.py", "pom.xml", "go.mod"]
+      patterns:
+        - '"name"\s*:\s*"(?!@)[a-z][a-z0-9-]*-internal'
+        - '"name"\s*:\s*"(?!@)[a-z][a-z0-9-]*-private'
+        - '"name"\s*:\s*"(?!@)company-'
+      note: "非 scoped 内部包名暴露在依赖声明中，易受公共仓库抢注"
+
+  mitigation_check:
+    - 'always-auth\s*=\s*true'
+    - '@scope:registry='                          # npm scope 绑定 registry
+    - '--index-url.*--no-deps'                    # pip 锁定源
+    - 'dependencyManagement'                       # Maven 版本锁定
+
+# ============================================================================
+# 二、Typosquatting（拼写抢注）检测
+# ============================================================================
+
+typosquatting:
+  description: "攻击者注册与热门包名高度相似的恶意包名"
+
+  high_risk_indicators:
+    - category: npm 常见 typosquatting 模式
+      known_targets:
+        - { legit: "lodash", typos: ["lodahs", "lodashs", "1odash", "lodash-es-fake"] }
+        - { legit: "express", typos: ["expres", "expresss", "xpress"] }
+        - { legit: "react", typos: ["reactjs", "reacr", "raect"] }
+        - { legit: "axios", typos: ["axois", "axio", "axi0s"] }
+      note: "示例列表——实际检测应对依赖名逐一校验与已知包名的编辑距离"
+
+    - category: PyPI 常见 typosquatting 模式
+      known_targets:
+        - { legit: "requests", typos: ["request", "requets", "reequests"] }
+        - { legit: "beautifulsoup4", typos: ["beautifulsoup", "beatifulsoup4"] }
+        - { legit: "flask", typos: ["flaask", "flaskk"] }
+
+    - category: Maven 常见 typosquatting 模式
+      known_targets:
+        - { legit: "com.google.guava:guava", typos: ["com.google.guava:guavaa"] }
+
+  detection_heuristics:
+    - "包名与热门包仅差 1-2 个字符"
+    - "包名是热门包名的变体（加连字符、加数字后缀）"
+    - "包名包含 internal/private/corp 但未使用 scope"
+    - "非 scope 包发布不足 6 个月"
+
+# ============================================================================
+# 三、恶意包指标检测
+# ============================================================================
+
+malicious_package_indicators:
+  description: "检测依赖包中可能存在恶意行为的指标"
+
+  install_hook_risk:
+    description: "安装时执行的脚本可能包含恶意代码"
+    patterns:
+      - category: npm install hooks
+        files: ["package.json"]
+        patterns:
+          - '"preinstall"\s*:'
+          - '"postinstall"\s*:'
+          - '"install"\s*:'
+        note: "npm 生命周期钩子可在安装时执行任意代码"
+
+      - category: pip setup.py 执行
+        files: ["setup.py"]
+        patterns:
+          - 'os\.system\('
+          - 'subprocess\.\w+\('
+          - 'urllib\.request'
+          - 'requests\.get\('
+        note: "setup.py 中存在网络请求或命令执行"
+
+  suspicious_behaviors:
+    - category: 数据外泄指标
+      patterns:
+        - 'dns\.resolve.*\+.*hostname'              # DNS 外泄
+        - 'fetch\(.*\+.*process\.env'               # 环境变量外泄
+        - 'http\.request.*process\.env'
+        - 'os\.environ.*requests\.(get|post)'
+      note: "依赖包代码中存在环境变量/凭证外泄行为"
+
+    - category: 混淆代码指标
+      patterns:
+        - 'eval\s*\(\s*Buffer\.from\('              # 解码后 eval
+        - 'eval\s*\(\s*atob\('                      # Base64 解码后 eval
+        - 'String\.fromCharCode\s*\(\s*\d+\s*,'     # 字符编码混淆
+        - '\\x[0-9a-f]{2}.*\\x[0-9a-f]{2}.*\\x[0-9a-f]{2}' # 十六进制编码
+      note: "依赖包代码中存在高度混淆，常见于恶意包"
+
+# ============================================================================
+# 四、过时/废弃依赖检测
+# ============================================================================
+
+outdated_dependencies:
+  description: "检测明确废弃或已知不再维护的依赖"
+
+  known_deprecated:
+    npm:
+      - { package: "request", alternative: "node-fetch / axios / got", reason: "已废弃（2020年）" }
+      - { package: "querystring", alternative: "URLSearchParams", reason: "Node.js 内置已废弃" }
+      - { package: "colors@>=1.4.1", alternative: "chalk / picocolors", reason: "供应链投毒事件" }
+      - { package: "faker@>=6.6.6", alternative: "@faker-js/faker", reason: "供应链投毒事件" }
+      - { package: "event-stream@3.3.6", alternative: "其他版本", reason: "恶意代码注入事件" }
+    python:
+      - { package: "pycrypto", alternative: "pycryptodome", reason: "已废弃且有已知漏洞" }
+      - { package: "optparse", alternative: "argparse", reason: "Python 2 遗留" }
+    java:
+      - { package: "commons-httpclient", alternative: "HttpComponents HttpClient 5.x", reason: "已废弃（2011年）" }
+      - { package: "junit:junit:3.*", alternative: "JUnit 5", reason: "极度过时" }
+
+  lock_file_checks:
+    description: "检查是否使用依赖锁定文件"
+    files:
+      - { file: "package-lock.json", ecosystem: "npm" }
+      - { file: "yarn.lock", ecosystem: "yarn" }
+      - { file: "pnpm-lock.yaml", ecosystem: "pnpm" }
+      - { file: "Pipfile.lock", ecosystem: "pipenv" }
+      - { file: "poetry.lock", ecosystem: "poetry" }
+      - { file: "go.sum", ecosystem: "go" }
+    absence_note: "缺少锁定文件可能导致不可重现构建和供应链风险"
+
+# ============================================================================
+# 五、不安全的依赖引入方式
+# ============================================================================
+
+insecure_dependency_sources:
+  description: "通过不安全渠道引入依赖"
+
+  patterns:
+    - category: HTTP 源（非 HTTPS）
+      patterns:
+        - 'registry\s*=\s*http://'
+        - '<url>http://(?!localhost|127\.0\.0\.1)'
+        - 'index-url\s*=\s*http://'
+      note: "通过 HTTP 获取依赖包，存在中间人攻击风险"
+
+    - category: Git 依赖无版本锁定
+      patterns:
+        - '"git\+https://.*#master"'
+        - '"git\+https://.*#main"'
+        - 'git\+https://.*@master'
+        - 'pip install git\+.*@main'
+      note: "Git 依赖使用分支而非 commit hash/tag，可被篡改"
+
+    - category: URL 直接安装
+      patterns:
+        - 'pip install https?://'
+        - 'npm install https?://'
+        - 'curl.*\|\s*sh'
+        - 'wget.*\|\s*sh'
+      note: "通过 URL 直接安装依赖，无完整性校验"
+
+# ============================================================================
+# 六、判定补充规则
+# ============================================================================
+
+pattern_judgment_supplements:
+  - type: 依赖混淆
+    condition: "项目使用私有 registry + 混合公共源配置，且存在非 scoped 内部包名"
+    action: "创建 dependency-confusion finding"
+    severity: "medium"
+
+  - type: 已知恶意/投毒包
+    condition: "依赖列表中包含已知投毒事件的包版本（colors>=1.4.1, faker>=6.6.6, event-stream@3.3.6）"
+    action: "创建 malicious-package finding"
+    severity: "critical"
+
+  - type: 安装钩子风险
+    condition: "package.json 中存在 preinstall/postinstall 脚本且内容包含网络请求/命令执行"
+    action: "创建 install-hook-risk finding"
+    severity: "medium"
+
+  - type: 缺少依赖锁定
+    condition: "项目存在依赖声明文件但缺少对应的锁定文件"
+    action: "创建 missing-lockfile finding"
+    severity: "low"

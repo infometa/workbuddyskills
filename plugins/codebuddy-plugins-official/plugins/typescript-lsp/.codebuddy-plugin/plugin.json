@@ -1,0 +1,15 @@
+{
+  "name": "typescript-lsp",
+  "version": "1.0.0",
+  "description": "TypeScript/JavaScript 语言服务器，提供增强的代码智能功能",
+  "author": {
+    "name": "CodeBuddy",
+    "email": "codebuddy@tencent.com"
+  },
+  "keywords": [
+    "typescript",
+    "javascript",
+    "lsp"
+  ],
+  "lspServers": "./.lsp.json"
+}

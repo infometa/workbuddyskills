@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "westock-mcp": {
+      "type": "streamableHttp",
+      "url": "https://stockbuddy.qq.com/cgi/cgi-bin/openai/mcp/mcp",
+      "timeout": 30000
+    }
+  }
+}

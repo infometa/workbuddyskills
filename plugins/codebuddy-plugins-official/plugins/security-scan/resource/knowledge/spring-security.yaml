@@ -1,0 +1,95 @@
+# Spring Security 框架安全专项规则
+# 适用条件：侦察检测到 Java + Spring Boot/Spring MVC
+#
+# 使用须知：本文件为参考资料，辅助识别 Spring 特有的 Sink/防御模式。
+# Agent 的安全分析能力不受限于此文件列出的风险类型——应基于代码实际行为推理，
+# 发现未列出的风险时正常报告，不做知识对账。
+
+framework: spring
+applies_to: ["java", "kotlin"]
+
+# Spring 特有的 Sink 模式
+sink_patterns:
+  spring_mvc:
+    - pattern: "JDBC string concat"
+      sink_type: sql-injection
+      severity: high
+      grep_probe: "jdbcTemplate\\.(query|update|execute)\\(.*\\+"
+      description: "Spring JdbcTemplate SQL拼接（可造成大量数据泄漏）"
+    - pattern: "SpEL injection"
+      sink_type: expression-injection
+      severity: critical
+      grep_probe: "SpelExpressionParser|ExpressionParser|parseExpression"
+      description: "Spring SpEL表达式注入（可直接RCE）"
+    - pattern: "path traversal via Resource"
+      sink_type: path-traversal
+      severity: medium
+      grep_probe: "new\\s+ClassPathResource\\(.*\\+|new\\s+FileSystemResource\\(.*\\+"
+      description: "Spring Resource路径穿越"
+
+  spring_data:
+    - pattern: "@Query with nativeQuery concat"
+      sink_type: sql-injection
+      severity: high
+      grep_probe: "@Query.*nativeQuery.*true.*\\+"
+      description: "Spring Data @Query原生SQL拼接（可造成大量数据泄漏）"
+    - pattern: "Specification with unsafe"
+      sink_type: sql-injection
+      severity: medium
+      grep_probe: "CriteriaBuilder.*like.*concat"
+      description: "Spring Data Specification不安全拼接"
+
+# Spring Security 配置审计
+security_config:
+  dangerous_patterns:
+    - pattern: ".permitAll() on sensitive endpoints"
+      severity: medium
+      grep_probe: "permitAll\\(\\)"
+      description: "敏感端点配置为公开访问"
+    - pattern: "csrf().disable()"
+      severity: low
+      grep_probe: "csrf\\(\\)\\.disable\\(\\)|csrf\\(AbstractHttpConfigurer::disable\\)"
+      description: "全局禁用CSRF防护"
+    - pattern: "cors().configurationSource with *"
+      severity: low
+      grep_probe: "allowedOrigins\\(\"\\*\"\\)|addAllowedOrigin\\(\"\\*\"\\)"
+      description: "CORS允许任意来源"
+
+# Spring 框架自动防御
+framework_defenses:
+  - defense: "Spring Security FilterChain"
+    effectiveness: "有效 — 默认认证保护所有端点"
+    confidence_impact: -15
+    check: "@EnableWebSecurity or spring-boot-starter-security"
+  - defense: "JPA/Hibernate auto-parameterization"
+    effectiveness: "有效 — JPQL和Criteria API自动参数化"
+    confidence_impact: -20
+  - defense: "Spring CSRF token"
+    effectiveness: "有效 — 默认开启（除非显式disable）"
+    confidence_impact: -10
+  - defense: "Spring Validation (@Valid + JSR-303)"
+    effectiveness: "部分有效 — 仅校验格式，不防注入"
+    confidence_impact: -5
+  - defense: "Spring Content-Type negotiation"
+    effectiveness: "有效 — 默认JSON序列化防XSS"
+    confidence_impact: -10
+
+# Spring Boot Actuator 审计
+actuator:
+  - pattern: "actuator endpoints exposed"
+    severity: medium
+    grep_probe: "management\\.endpoints\\.web\\.exposure\\.include\\s*=\\s*\\*"
+    description: "Spring Boot Actuator暴露所有端点"
+  - pattern: "actuator without auth"
+    severity: medium
+    grep_probe: "management\\.security\\.enabled\\s*=\\s*false"
+    description: "Actuator端点无认证保护"
+
+# 常见的安全注解
+security_annotations:
+  - "@PreAuthorize"
+  - "@PostAuthorize" 
+  - "@Secured"
+  - "@RolesAllowed"
+  - "@PermitAll"
+  - "@DenyAll"

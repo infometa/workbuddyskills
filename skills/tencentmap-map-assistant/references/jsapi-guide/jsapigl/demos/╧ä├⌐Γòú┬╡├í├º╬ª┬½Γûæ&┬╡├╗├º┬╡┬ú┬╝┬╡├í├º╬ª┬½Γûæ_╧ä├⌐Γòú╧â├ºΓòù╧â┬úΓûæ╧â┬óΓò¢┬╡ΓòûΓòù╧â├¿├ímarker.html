@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>点击地图添加marker</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+    <script>
+        var center = new TMap.LatLng(39.984104, 116.307503);//设置中心点坐标
+        //初始化地图
+        var map = new TMap.Map("container", {
+            center: center
+        });
+
+        //初始化marker图层
+        var markerLayer = new TMap.MultiMarker({
+            id: 'marker-layer',
+            map: map
+        });
+
+        //监听点击事件添加marker
+        map.on("click", (evt) => {
+            markerLayer.add({
+            	position: evt.latLng
+            });                      
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "code-documentation",
+  "description": "文档生成、代码解释和技术写作，支持自动化文档生成和教程创建",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

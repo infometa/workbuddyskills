@@ -1,0 +1,149 @@
+{
+  "schemaVersion": "long_manuscript.release_control_evidence_contract.v1",
+  "contractId": "long-manuscript-release-control-evidence",
+  "packageVersion": "26.7.18",
+  "evidenceSchemaVersion": "long_manuscript.release_control_evidence.v2",
+  "purpose": "Define a fail-closed, structure-only contract for release-control evidence without embedding or impersonating a privileged executor.",
+  "candidateIdentity": {
+    "candidateIdPrefix": "long-manuscript-expert-26.7.18-",
+    "requiredDigestInputs": [
+      "strictRemoteHead",
+      "runtimeTreeDigest",
+      "releaseControlTreeDigest",
+      "manifestDigest"
+    ],
+    "headOrDigestChangeRequiresNewCandidateId": true,
+    "candidateIdManifestReuseForbidden": true
+  },
+  "cleanroomPolicy": {
+    "roles": ["source", "package", "verify"],
+    "sameStrictRemoteHeadRequired": true,
+    "pathsMustBeDisjoint": true,
+    "dirtyOverlayForbidden": true,
+    "verifyRoleReadOnly": true,
+    "deterministicRebuildRequired": true,
+    "remoteHeadReceiptRequired": true
+  },
+  "schemaUpgrade": {
+    "suiteVersions": {
+      "candidateShadowReceipt": "long_manuscript.candidate_shadow_receipt.v2",
+      "remediationAuthorization": "long_manuscript.remediation_authorization.v3",
+      "consumptionLedger": "long_manuscript.consumption_ledger.v3",
+      "configReceipt": "long_manuscript.config_receipt.v2",
+      "releasePreflight": "long_manuscript.release_preflight.v2"
+    },
+    "preflightMustCrossValidateEntireSuite": true,
+    "lebaoClaimProtocolVersion": "long_manuscript.lebao_claim_protocol.v2",
+    "lebaoClaimRequiredFieldCount": 32,
+    "shadowNegativeCases": [
+      "missing_required_field",
+      "tampered_field",
+      "unknown_protocol",
+      "self_reported_trust"
+    ],
+    "configReceiptKinds": ["success", "rollback", "abort"],
+    "actualProtocolArtifactsMustCarryOwnSchemaVersion": true,
+    "failedValidationConsumesNonce": false,
+    "productionWriteCount": 0,
+    "legacyV1Rejected": true,
+    "unknownFieldsRejected": true,
+    "sameVersionBreakingChangeForbidden": true
+  },
+  "trustedBootstrapPolicy": {
+    "locatedOutsideCandidatePackageRequired": true,
+    "fixedInstalledPathRequired": true,
+    "rootOwnershipIsExternalEvidence": true,
+    "sudoEntryRestrictedToFixedBootstrap": true,
+    "directCandidateScriptSudoForbidden": true,
+    "approvalInstallManifestExecutorAndAuthDigestsRequired": true
+  },
+  "singleOpenLoadPolicy": {
+    "safeOpenRequired": true,
+    "noPathReopenRequired": true,
+    "symlinkFollowForbidden": true,
+    "openedAndLoadedBytesMustMatch": true,
+    "deviceAndInodeRequired": true
+  },
+  "concurrencyPolicy": {
+    "configurationAndHostAckShareOneLock": true,
+    "forwardCasFields": ["deviceId", "inode", "sha256"],
+    "rollbackCasFields": ["deviceId", "inode", "sha256"],
+    "driftOutcome": "stop_without_write"
+  },
+  "hostAckProvenancePolicy": {
+    "requiredHostScopes": ["WORKBUDDY", "WORKBUDDY_AI"],
+    "requiredDigestBindings": [
+      "listingReceiptDigest",
+      "routeProfileDigest",
+      "runtimeContractDigest"
+    ],
+    "requiredContinuityBindings": [
+      "serverBindingId",
+      "chainFingerprint",
+      "coveredEventId"
+    ],
+    "crossContractFieldJoin": {
+      "requiredSources": [
+        "route",
+        "verified_ack",
+        "host_ack_provenance",
+        "lebao_claim_v2"
+      ],
+      "requiredFields": [
+        "listingReceiptDigest",
+        "routeProfileDigest",
+        "runtimeContractDigest"
+      ],
+      "hostScopeMustMatch": true,
+      "fieldValuesMustMatchExactly": true,
+      "mismatchDecision": "fail_closed"
+    },
+    "rawServiceLedgerEventRequired": true,
+    "selfReportedEvidenceRejected": true,
+    "crossHostReuseRejected": true
+  },
+  "promotionPolicy": {
+    "transition": "observe_only_to_required",
+    "independentAuthorizationScopes": [
+      "configuration",
+      "shadow",
+      "code_cutover",
+      "ack_required"
+    ],
+    "authorizationTtlAndSingleUseRequired": true,
+    "durableConsumptionRequired": true,
+    "applicationHealthRequired": true,
+    "releaseIdentityMatchRequired": true,
+    "runtimeIdentityMatchRequired": true,
+    "requiredModeCanaryHosts": ["WORKBUDDY", "WORKBUDDY_AI"],
+    "boundedObservationWindowRequired": true,
+    "anyFailureRollsBackTo": "observe_only",
+    "rollbackUsesSharedLockAndCas": true
+  },
+  "enforcementTopology": {
+    "repositoryValidatorModule": "lib/release-control-evidence.mjs",
+    "readOnlyAuditCli": "tools/audit-release-candidate.mjs",
+    "repositoryValidatorOnly": true,
+    "validatesStructureAndConsistencyOnly": true,
+    "privilegedExecutorIncluded": false,
+    "installsOrSwitchesRuntime": false,
+    "verifiesExternalAuthenticity": false
+  },
+  "externalEvidenceBoundary": {
+    "externalGateStatus": "blocked_external",
+    "externalExecutionProven": false,
+    "productionVerified": false,
+    "productCreditClaimed": false,
+    "packageFixtureCannotPromoteExternalEvidence": true
+  },
+  "cannotProve": [
+    "strict remote HEAD ownership or remote repository state",
+    "fresh-clone cleanroom execution",
+    "root ownership sudo policy or fixed bootstrap installation",
+    "same-open-byte module execution",
+    "shared-lock or CAS execution against host configuration",
+    "service-ledger provenance authenticity or per-host ACK consumption",
+    "required-mode restart application health canaries or rollback",
+    "production release or product credit"
+  ]
+}

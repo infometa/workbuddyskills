@@ -1,0 +1,11 @@
+{
+  "name": "error-debugging",
+  "description": "错误分析、堆栈追踪调试和多智能体问题诊断",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "codebase-cleanup",
+  "description": "技术债务削减、依赖更新和代码重构自动化",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

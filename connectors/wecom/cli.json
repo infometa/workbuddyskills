@@ -1,0 +1,38 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=18"
+    },
+    "init": {
+        "darwin": "npm install -g @wecom/cli",
+        "linux": "npm install -g @wecom/cli",
+        "win32": "npm install -g @wecom/cli"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "wecom-cli --version",
+            "linux": "wecom-cli --version",
+            "win32": "wecom-cli.cmd --version"
+        },
+        "minVersion": "0.1.9"
+    },
+    "auth": {
+        "darwin": "wecom-cli init --noninteractive --no-open",
+        "linux": "wecom-cli init --noninteractive --no-open",
+        "win32": "wecom-cli.cmd init --noninteractive --no-open"
+    },
+    "unAuth": {
+        "darwin": "rm -rf \"$HOME/.config/wecom\"",
+        "linux": "rm -rf \"$HOME/.config/wecom\"",
+        "win32": "rmdir /s /q \"%USERPROFILE%\\.config\\wecom\""
+    },
+    "status": {
+        "darwin": "wecom-cli auth show",
+        "linux": "wecom-cli auth show",
+        "win32": "wecom-cli.cmd auth show"
+    },
+    "statusMatch": "\"id\"\\s*:\\s*\"",
+    "authUrlDomain": "work.weixin.qq.com",
+    "authWaitForExit": true,
+    "authQrModal": true
+}

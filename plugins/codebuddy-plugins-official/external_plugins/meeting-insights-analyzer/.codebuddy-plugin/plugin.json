@@ -1,0 +1,5 @@
+{
+  "name": "meeting-insights-analyzer",
+  "description": "分析会议记录以揭示行为模式，包括冲突回避、发言比例、填充词使用和领导风格。",
+  "license": "未声明"
+}

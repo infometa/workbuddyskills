@@ -1,0 +1,11 @@
+{
+  "name": "code-refactoring",
+  "description": "代码清理、重构自动化和技术债务管理,支持上下文恢复",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

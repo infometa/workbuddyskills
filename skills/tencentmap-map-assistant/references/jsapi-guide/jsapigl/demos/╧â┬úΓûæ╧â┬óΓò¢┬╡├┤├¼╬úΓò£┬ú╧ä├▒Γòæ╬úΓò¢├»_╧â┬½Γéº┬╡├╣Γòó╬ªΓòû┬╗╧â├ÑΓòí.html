@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>实时路况</title>
+  </head>
+  <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .control {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      z-index: 9999;
+      padding: 10px;
+      background-color: white;
+    }
+  </style>
+
+  <body>
+    <div class="control">
+      <p>
+        设置路况底图透明度：<input id="range" type="range" value="10" min="0" max="10" />
+        <span id="number">1</span>
+      </p>
+    </div>
+    <div id="container"></div>
+    <script type="text/javascript">
+      var center = new TMap.LatLng(39.907093, 116.396875);
+      var range = document.querySelector('#range');
+      var number = document.querySelector('#number');
+      var map;
+      // 初始化地图 MapOptions文档地址:https://lbs.qq.com/webApi/javascriptGL/glDoc/docIndexMap#2
+      map = new TMap.Map('container', {
+        zoom: 11, // 设置地图缩放级别
+        center: center, // 设置地图中心点坐标
+        baseMap: [
+          { type: 'vector' }, // 设置矢量底图
+          // traffic底图文档地址：https://lbs.qq.com/webApi/javascriptGL/glDoc/docIndexMap#7
+          {
+            type: 'traffic',
+            opacity: 1,
+          }, // 设置路况底图
+        ],
+      });
+
+      range.addEventListener('change', function (e) {
+        // 根据范围值改变路况透明度
+        var val = e.target.value / 10;
+
+        number.innerText = val;
+        map.destroy(); // 销毁之前的地图
+        // 重新渲染地图
+        map = new TMap.Map('container', {
+          zoom: 11,
+          center: center,
+          baseMap: [
+            { type: 'vector' },
+            {
+              type: 'traffic',
+              opacity: val,
+            },
+          ],
+        });
+      });
+    </script>
+  </body>
+</html>

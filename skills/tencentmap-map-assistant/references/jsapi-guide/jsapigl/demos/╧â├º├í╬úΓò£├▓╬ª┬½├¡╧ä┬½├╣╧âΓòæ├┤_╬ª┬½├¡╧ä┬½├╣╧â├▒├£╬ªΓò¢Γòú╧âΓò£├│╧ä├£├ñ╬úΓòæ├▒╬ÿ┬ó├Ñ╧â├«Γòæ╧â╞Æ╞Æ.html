@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>计算多边形与多边形的交集区域</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            overflow: hidden;
+        }
+
+        #mapContainer {
+            width: 100%;
+            height: 100%;
+        }
+
+        .btnContainer {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            z-index: 10000;
+        }
+
+        .btnContainer button {
+            padding: 10px 14px;
+            box-sizing: border-box;
+            border: none;
+            background-color: #3876ff;
+            border-radius: 2px;
+            color: #fff;
+            font-size: 14px;
+            line-height: 14px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mapContainer"></div>
+    <div class="btnContainer">
+        <button class="btn1">计算左1和左2交集区域</button>
+        <button class="btn2">计算左2和左3交集区域</button>
+        <button class="btn3">计算左3和左1交集区域</button>
+    </div>
+    <script charset="utf-8"
+        src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=geometry"></script>
+
+    <script>
+        window.onload = initMap;
+        function initMap() {
+            var center = new TMap.LatLng(40.040452, 116.273486); //设置中心点坐标
+            //初始化地图
+            map = new TMap.Map('mapContainer', {
+                center: center,
+                zoom: 11
+            });
+
+            const p1 = [
+                // 左多边形
+                new TMap.LatLng(40.01328762425296, 116.2893131162964),
+                new TMap.LatLng(39.97042810128267, 116.2446964303781),
+                new TMap.LatLng(39.952803198235955, 116.30063889381927),
+                new TMap.LatLng(40.00434982223178, 116.3377050664094)
+            ];
+            const p2 = [
+                // 中间多边形
+                new TMap.LatLng(40.01854460829232, 116.34491237943803),
+                new TMap.LatLng(39.99856591344266, 116.30235492020074),
+                new TMap.LatLng(39.96516741243243, 116.35520853903654),
+                new TMap.LatLng(39.98147423199272, 116.37648726800035)
+            ];
+            const p3 = [
+                // 右多边形
+                new TMap.LatLng(39.9404367485336, 116.33009007781648),
+                new TMap.LatLng(40.00250953930389, 116.37839317743058),
+                new TMap.LatLng(39.983315080275965, 116.40079037547248)
+            ];
+
+            const geos = [
+                {
+                    id: '1',
+                    'paths': p1 //多边形的位置信息
+                },
+                {
+                    id: '2',
+                    'paths': p2 //多边形的位置信息
+                },
+                {
+                    id: '3',
+                    'paths': p3 //多边形的位置信息
+                }
+            ];
+
+            //初始化polygon
+            var polygon = new TMap.MultiPolygon({
+                id: 'polygon-layer', //图层id
+                map: map, //显示多边形图层的底图
+                styles: {
+                    heigh: new TMap.PolygonStyle({
+                        color: 'rgb(255,255,0)'
+                    })
+                },
+                geometries: geos
+            });
+
+            const testValue = {
+                'null': null,
+                'undefined': undefined,
+                '[]': [],
+                '': '',
+            };
+
+            document.querySelector('.btn1').addEventListener('click', (e) => {
+                var area = TMap.geometry.computePolygonIntersection(p1, p2);
+                console.log('计算左1和左2交集区域', area);
+                polygon.setGeometries([
+                    ...geos,
+                    {
+                        styleId: 'heigh',
+                        paths: area
+                    }
+                ]);
+            });
+
+            document.querySelector('.btn2').addEventListener('click', (e) => {
+                var area = TMap.geometry.computePolygonIntersection(p2, p3);
+                console.log('计算左2和左3交集区域', area);
+                const g = [...geos];
+                if (area) {
+                    g.push({
+                        styleId: 'heigh',
+                        paths: area
+                    });
+                }
+                polygon.setGeometries(g);
+            });
+
+            document.querySelector('.btn3').addEventListener('click', (e) => {
+                var area = TMap.geometry.computePolygonIntersection(p1, p3);
+                console.log('计算左3和左1交集区域', area);
+                const g = [...geos];
+                if (area) {
+                    g.push({
+                        styleId: 'heigh',
+                        paths: area
+                    });
+                }
+                polygon.setGeometries(g);
+            });
+        }
+    </script>
+</body>
+
+</html>

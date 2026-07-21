@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      overflow: hidden;
+    }
+    #root {
+      display: inline-block;
+    }
+    #root svg {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import { exportToSvg } from "https://esm.sh/@excalidraw/excalidraw?bundle";
+
+    window.renderExcalidraw = async (payload) => {
+      try {
+        const data = typeof payload === "string" ? JSON.parse(payload) : payload;
+        const elements = Array.isArray(data.elements) ? data.elements : [];
+        const appState = {
+          ...(data.appState || {}),
+          viewBackgroundColor: (data.appState && data.appState.viewBackgroundColor) || "#FFFFFF",
+          exportBackground: true,
+          exportWithDarkMode: false,
+        };
+        const files = data.files || {};
+
+        const svg = await exportToSvg({ elements, appState, files });
+        const root = document.getElementById("root");
+        root.innerHTML = "";
+        root.appendChild(svg);
+        window.__renderDone = true;
+        window.__renderError = null;
+        return { ok: true };
+      } catch (error) {
+        window.__renderDone = true;
+        window.__renderError = error.message || String(error);
+        return { ok: false, error: window.__renderError };
+      }
+    };
+
+    window.__moduleReady = true;
+  </script>
+</body>
+</html>

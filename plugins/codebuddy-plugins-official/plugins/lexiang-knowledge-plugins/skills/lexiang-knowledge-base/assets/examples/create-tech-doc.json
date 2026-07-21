@@ -1,0 +1,104 @@
+{
+  "_description": "创建技术文档示例 - 演示如何创建一个完整的技术文档结构",
+  "_usage": "MCP Tool: 云知.block_create_block_descendant",
+
+  "entry_id": "{entry_id}",
+  "descendant": [
+    {
+      "block_id": "intro",
+      "block_type": "callout",
+      "callout": {"color": "#E3F2FD", "icon": "1f680"},
+      "children": ["intro_p"]
+    },
+    {
+      "block_id": "intro_p",
+      "block_type": "p",
+      "text": {"elements": [{"text_run": {"content": "本文档介绍 XXX 功能的使用方法和最佳实践", "text_style": {}}}]}
+    },
+    {
+      "block_id": "h2_overview",
+      "block_type": "h2",
+      "heading2": {"elements": [{"text_run": {"content": "概述", "text_style": {}}}]}
+    },
+    {
+      "block_id": "p_overview",
+      "block_type": "p",
+      "text": {"elements": [{"text_run": {"content": "功能描述内容...", "text_style": {}}}]}
+    },
+    {
+      "block_id": "divider_1",
+      "block_type": "divider",
+      "divider": {}
+    },
+    {
+      "block_id": "h2_quickstart",
+      "block_type": "h2",
+      "heading2": {"elements": [{"text_run": {"content": "快速开始", "text_style": {}}}]}
+    },
+    {
+      "block_id": "code_example",
+      "block_type": "code",
+      "code": {
+        "elements": [{"text_run": {"content": "// 示例代码\nfunc main() {\n    fmt.Println(\"Hello\")\n}", "text_style": {}}}],
+        "style": {"language": "go"}
+      }
+    },
+    {
+      "block_id": "divider_2",
+      "block_type": "divider",
+      "divider": {}
+    },
+    {
+      "block_id": "h2_params",
+      "block_type": "h2",
+      "heading2": {"elements": [{"text_run": {"content": "参数说明", "text_style": {}}}]}
+    },
+    {
+      "block_id": "table_params",
+      "block_type": "table",
+      "table": {"row_size": 3, "column_size": 4, "column_width": [150, 100, 80, 270], "header_row": true},
+      "children": ["tc1", "tc2", "tc3", "tc4", "tc5", "tc6", "tc7", "tc8", "tc9", "tc10", "tc11", "tc12"]
+    },
+    {"block_id": "tc1", "block_type": "table_cell", "table_cell": {"background_color": "#F5F5F5"}, "children": ["tc1_p"]},
+    {"block_id": "tc1_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "参数名", "text_style": {"bold": true}}}]}},
+    {"block_id": "tc2", "block_type": "table_cell", "table_cell": {"background_color": "#F5F5F5"}, "children": ["tc2_p"]},
+    {"block_id": "tc2_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "类型", "text_style": {"bold": true}}}]}},
+    {"block_id": "tc3", "block_type": "table_cell", "table_cell": {"background_color": "#F5F5F5"}, "children": ["tc3_p"]},
+    {"block_id": "tc3_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "必填", "text_style": {"bold": true}}}]}},
+    {"block_id": "tc4", "block_type": "table_cell", "table_cell": {"background_color": "#F5F5F5"}, "children": ["tc4_p"]},
+    {"block_id": "tc4_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "说明", "text_style": {"bold": true}}}]}},
+    {"block_id": "tc5", "block_type": "table_cell", "table_cell": {}, "children": ["tc5_p"]},
+    {"block_id": "tc5_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "name", "text_style": {"inline_code": true}}}]}},
+    {"block_id": "tc6", "block_type": "table_cell", "table_cell": {}, "children": ["tc6_p"]},
+    {"block_id": "tc6_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "string", "text_style": {}}}]}},
+    {"block_id": "tc7", "block_type": "table_cell", "table_cell": {}, "children": ["tc7_p"]},
+    {"block_id": "tc7_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "是", "text_style": {}}}]}},
+    {"block_id": "tc8", "block_type": "table_cell", "table_cell": {}, "children": ["tc8_p"]},
+    {"block_id": "tc8_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "名称", "text_style": {}}}]}},
+    {"block_id": "tc9", "block_type": "table_cell", "table_cell": {}, "children": ["tc9_p"]},
+    {"block_id": "tc9_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "timeout", "text_style": {"inline_code": true}}}]}},
+    {"block_id": "tc10", "block_type": "table_cell", "table_cell": {}, "children": ["tc10_p"]},
+    {"block_id": "tc10_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "int", "text_style": {}}}]}},
+    {"block_id": "tc11", "block_type": "table_cell", "table_cell": {}, "children": ["tc11_p"]},
+    {"block_id": "tc11_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "否", "text_style": {}}}]}},
+    {"block_id": "tc12", "block_type": "table_cell", "table_cell": {}, "children": ["tc12_p"]},
+    {"block_id": "tc12_p", "block_type": "p", "text": {"elements": [{"text_run": {"content": "超时时间（秒），默认 30", "text_style": {}}}]}},
+    {
+      "block_id": "divider_3",
+      "block_type": "divider",
+      "divider": {}
+    },
+    {
+      "block_id": "tip_callout",
+      "block_type": "callout",
+      "callout": {"color": "#FFF3E0", "icon": "1f4a1"},
+      "children": ["tip_p"]
+    },
+    {
+      "block_id": "tip_p",
+      "block_type": "p",
+      "text": {"elements": [{"text_run": {"content": "提示：建议在生产环境设置合理的超时时间", "text_style": {}}}]}
+    }
+  ],
+  "children": ["intro", "h2_overview", "p_overview", "divider_1", "h2_quickstart", "code_example", "divider_2", "h2_params", "table_params", "divider_3", "tip_callout"]
+}

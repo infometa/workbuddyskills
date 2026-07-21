@@ -1,0 +1,11 @@
+{
+  "name": "frontend-mobile-development",
+  "description": "跨平台前端 UI 开发和移动应用实现",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "repomix-commands",
+  "description": "用于快速执行 Repomix 操作的斜杠命令。通过 /pack-local 和 /pack-remote 等简单命令打包本地和远程代码仓库。",
+  "version": "1.0.2",
+  "author": {
+    "name": "yamadashy"
+  },
+  "homepage": "https://repomix.com/docs/guide/claude-code-plugins",
+  "repository": "https://github.com/yamadashy/repomix",
+  "keywords": [
+    "repomix",
+    "commands",
+    "pack",
+    "productivity"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,86 @@
+extends SceneTree
+
+## 数据表校验 CLI 脚本（独立运行，不依赖 Autoload）。
+## 由 scaffold.py 生成；下次运行会覆盖（除非你删掉生成标记）。
+##
+## 调用方式（推荐使用 wrapper）：
+##   bash tools/validate_data.sh
+##
+## 直接调用：
+##   godot --headless --quit --script res://tools/validate_data.gd
+##
+## Godot bug #88055：--script 模式下 SceneTree.quit(code) 会被覆盖，
+## 因此本脚本不依赖 exit code，而是在 stdout 打印：
+##   VALIDATION_RESULT=OK | VALIDATION_RESULT=FAIL:<n>
+## wrapper 脚本据此决定真正的 exit code。
+
+# region CATEGORIES_AUTOGEN
+const CATEGORIES := [
+{{VALIDATOR_CATEGORIES}}
+]
+# endregion CATEGORIES_AUTOGEN
+
+
+# region CHECKS_AUTOGEN
+{{VALIDATOR_CHECKS}}
+# endregion CHECKS_AUTOGEN
+
+
+func _init() -> void:
+	print("========== Data Validation ==========")
+	var total_errors: Array[String] = []
+	var total_count: int = 0
+
+	for cat in CATEGORIES:
+		var cat_name: String = cat["name"]
+		var dir_path: String = cat["dir"]
+		var default_id: String = cat["default"]
+
+		var dir := DirAccess.open(dir_path)
+		if dir == null:
+			total_errors.append("[%s] dir missing: %s" % [cat_name, dir_path])
+			continue
+
+		var ids: Array[String] = []
+		dir.list_dir_begin()
+		var file := dir.get_next()
+		while file != "":
+			if not dir.current_is_dir() and (file.ends_with(".tres") or file.ends_with(".res")):
+				var full_path := dir_path.path_join(file)
+				var res: Resource = load(full_path)
+				if res == null:
+					total_errors.append("[%s] load failed: %s" % [cat_name, full_path])
+				else:
+					var id_raw: Variant = res.get("id")
+					var id_str: String = String(id_raw) if id_raw != null and String(id_raw) != "" else file.get_basename()
+					if ids.has(id_str):
+						total_errors.append("[%s] duplicate id: %s" % [cat_name, id_str])
+					ids.append(id_str)
+					var field_errs: Array = _run_checks(cat_name, res)
+					for e in field_errs:
+						total_errors.append("[%s/%s] %s" % [cat_name, id_str, e])
+					total_count += 1
+			file = dir.get_next()
+		dir.list_dir_end()
+
+		if ids.is_empty():
+			total_errors.append("[%s] no .tres found in %s" % [cat_name, dir_path])
+		elif default_id != "" and not ids.has(default_id):
+			total_errors.append("[%s] missing default id '%s' (found: %s)" % [cat_name, default_id, str(ids)])
+
+	if total_errors.is_empty():
+		print("OK: validated %d resource(s)." % total_count)
+		print("VALIDATION_RESULT=OK")
+	else:
+		printerr("FAIL: %d error(s):" % total_errors.size())
+		for e in total_errors:
+			printerr("  - " + e)
+		print("VALIDATION_RESULT=FAIL:%d" % total_errors.size())
+	quit()
+
+
+func _run_checks(cat_name: String, res: Resource) -> Array:
+	match cat_name:
+{{VALIDATOR_DISPATCH}}
+		_:
+			return []

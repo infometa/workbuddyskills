@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>设置/获取地图显示范围</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    #info{
+        height: 50px;
+        width: 600px;
+        padding: 10px;
+        background: #FFF;
+        position: absolute;
+        top:20px;
+        left: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    p{
+        margin: 0;
+        margin-bottom: 10px;
+    }
+    #fit-bounds{
+        position: absolute;
+        right: 40px;
+        top: 5px;
+        padding: 5px;
+        z-index: 9999;
+    }
+</style>
+<body>
+    <div id="container"></div>
+    <div id="info">
+        <p>当前地图中心点：<span id="position">39.984104, 116.307503</span></p>
+        <p><span id="bounds"></span></p>
+        <!-- 地图图层上的button需要设置z-index>1000 -->
+        <input type="button" id="fit-bounds" onclick="fitBounds()" value="fitBounds">
+    </div>
+    
+    <script>
+            var position = document.getElementById("position");
+            var bounds = document.getElementById("bounds");
+
+            var ne = new TMap.LatLng(39.96693, 116.49369);//东北角坐标
+            var sw = new TMap.LatLng(39.86000, 116.28666);//西南角坐标
+            var center = new TMap.LatLng(39.984104, 116.307503);//设置中心点坐标
+            //初始化地图
+            var map = new TMap.Map("container", {
+                center: center
+            });
+            //监听可视范围改变事件
+            map.on("bounds_changed",function(){   
+                
+                var mapCenter = map.getCenter(); //获取地图中心点坐标          
+                position.innerHTML = mapCenter.getLat().toFixed(6) + "," + mapCenter.getLng().toFixed(6);
+                var mapBounds = map.getBounds(); //获取当前地图的视野范围
+                if(mapBounds){
+                    var nothEast ="当前可视区域范围：东北/右上:[" + mapBounds.getNorthEast().getLat().toFixed(6) + "," + mapBounds.getNorthEast().getLng().toFixed(6)+"] ；";
+                    var southWest ="西南/左下:[" + mapBounds.getSouthWest().getLat().toFixed(6) + "," + mapBounds.getSouthWest().getLng().toFixed(6)+"]";
+                    bounds.innerHTML = nothEast + southWest;
+                }    
+            })
+            function fitBounds(){
+                    var latLngBounds = new TMap.LatLngBounds(sw, ne)
+                    map.fitBounds(latLngBounds); //根据指定的范围调整地图视野
+                }
+        </script>
+</body>
+</html>

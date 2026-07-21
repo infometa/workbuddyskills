@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>marker轨迹回放-跟随模式</title>
+    </head>
+    <script
+        charset="utf-8"
+        src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=geometry"
+    ></script>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            overflow: hidden;
+        }
+
+        #container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .btnContainer {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            z-index: 10000;
+        }
+
+        .btnContainer button {
+            padding: 10px 14px;
+            box-sizing: border-box;
+            border: none;
+            background-color: #919aac;
+            border-radius: 2px;
+            color: #fff;
+            font-size: 14px;
+            line-height: 14px;
+        }
+
+        .btnContainer button:focus {
+            outline: none;
+        }
+
+        .btnContainer .btn1 {
+            padding: 10px 14px;
+            background: #3876ff;
+            border-radius: 2px;
+            border: none;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: #fff;
+            line-height: 14px;
+            font-family: PingFangSC-Regular;
+        }
+
+        input {
+            height: 25px;
+        }
+
+        .info {
+            background-color: white;
+            padding: 10px;
+            font-size: 14px;
+        }
+    </style>
+
+    <body>
+        <div class="btnContainer">
+            <button class="btn1">点击小车开始移动</button>
+            <button class="btn2">重置</button>
+            <button class="btn3">暂停</button>
+            <button class="btn4">恢复</button>
+            <p>
+                <input type="text" placeholder="请输入限制移动距离" />
+                <button class="btn5">点击限制移动距离</button>
+            </p>
+            <div class="info">
+                <p></p>
+                <p>当前限制小车最大移动距离：0米</p>
+                <p>当前小车行驶距离：0米</p>
+                <p></p>
+            </div>
+        </div>
+        <div id="container"></div>
+        <script type="text/javascript">
+            var center = new TMap.LatLng(39.983860482192014, 116.30891946495672);
+            // 初始化地图
+            var map = new TMap.Map('container', {
+                zoom: 16,
+                center
+            });
+
+            var isMoving = false;
+            var roation;
+            var position;
+            var path = [
+                new TMap.LatLng(39.98481500648338, 116.30571126937866),
+                new TMap.LatLng(39.982266575222155, 116.30596876144409),
+                new TMap.LatLng(39.982348784165886, 116.3111400604248)
+            ];
+            var limitDistance = 0; // 限制距离
+            // MultiPolyline文档：https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocVector#1
+            var polylineLayer = new TMap.MultiPolyline({
+                map, // 绘制到目标地图
+                // 折线样式定义
+                styles: {
+                    style_blue: new TMap.PolylineStyle({
+                        color: '#2A88FF', // 线填充色
+                        width: 8, // 折线宽度
+                        borderWidth: 3, // 边线宽度
+                        borderColor: '#0569FF', // 边线颜色
+                        lineCap: 'round', // 线端头方式
+                        showArrow: true
+                    }),
+                    style_gray: new TMap.PolylineStyle({
+                        color: '#ccc', // 线填充色
+                        width: 8, // 折线宽度
+                        borderWidth: 3, // 边线宽度
+                        borderColor: '#FFF', // 边线颜色
+                        lineCap: 'round' // 线端头方式
+                    })
+                },
+                geometries: [
+                    {
+                        id: 'path1',
+                        styleId: 'style_blue',
+                        paths: path
+                    },
+                    {
+                        id: 'path2',
+                        styleId: 'style_blue',
+                        paths: path
+                    }
+                ]
+            });
+            // marker文档：https://lbs.qq.com/webApi/javascriptGL/glDoc/glDocMarker
+            var marker = new TMap.MultiMarker({
+                id: 'car',
+                map,
+                styles: {
+                    'car-down': new TMap.MarkerStyle({
+                        width: 48,
+                        height: 72,
+                        anchor: {
+                            x: 24,
+                            y: 36
+                        },
+                        faceTo: 'map',
+                        rotate: 180,
+                        src: 'https://mapapi.qq.com/web/mapComponents/componentsTest/zyTest/static/model_taxi.png?a=1'
+                    }),
+                    start: new TMap.MarkerStyle({
+                        anchor: {
+                            x: 16,
+                            y: 32
+                        },
+                        src: 'https://mapapi.qq.com/web/miniprogram/demoCenter/images/marker-start.png'
+                    }),
+                    end: new TMap.MarkerStyle({
+                        src: 'https://mapapi.qq.com/web/miniprogram/demoCenter/images/marker-end.png'
+                    })
+                },
+                geometries: [
+                    {
+                        id: 'car',
+                        styleId: 'car-down',
+                        position: path[0]
+                    },
+                    {
+                        id: 'start',
+                        styleId: 'start',
+                        position: path[0]
+                    },
+                    {
+                        id: 'end',
+                        styleId: 'end',
+                        position: path[2]
+                    }
+                ]
+            });
+            function initInfo() {
+                // 初始化全程长度及小车起始坐标
+                var distance = TMap.geometry.computeDistance(path);
+                var fullLength = document.querySelectorAll('.info p')[0];
+                fullLength.innerHTML = '路线全程长度：' + parseNumber(distance, 2) + '米';
+                var currentLatLng = document.querySelectorAll('.info p')[3];
+                currentLatLng.innerHTML =
+                    '当前小车坐标：' +
+                    parseNumber(path[0].lat, 6) +
+                    ',' +
+                    parseNumber(path[0].lng, 6);
+            }
+            initInfo();
+            function parseNumber(value, num) {
+                // 解析数字
+                return parseFloat(value).toFixed(num);
+            }
+            function carMove() {
+                map.off('idle', carMove);
+                marker.moveAlong(
+                    {
+                        car: {
+                            path,
+                            speed: 200
+                        }
+                    },
+                    {
+                        autoRotation: true
+                    }
+                );
+                isMoving = true;
+            }
+            marker.on('move_ended', function () {
+                isMoving = false;
+            });
+            marker.on('move_stopped', function (e) {
+                isMoving = false;
+            });
+            marker.on('moving', function (e) {
+                if (!e.car) return;
+                roation = TMap.geometry.computeHeading(
+                    e.car.passedLatLngs[e.car.passedLatLngs.length - 2],
+                    e.car.passedLatLngs[e.car.passedLatLngs.length - 1]
+                );
+                position = TMap.geometry.computeDestination(
+                    marker.getGeometryById('car').position,
+                    roation,
+                    60
+                );
+                map.easeTo(
+                    {
+                        center: position,
+                        rotation: e.car.angle && e.car.angle,
+                        zoom: 20,
+                        pitch: 70
+                    },
+                    {
+                        duration: 300
+                    }
+                );
+                // 移动路线置灰
+                polylineLayer.updateGeometries([
+                    {
+                        id: 'path2',
+                        styleId: 'style_gray',
+                        paths: e.car.passedLatLngs
+                    }
+                ]);
+                // 计算当前移动距离
+                var currentDistance = TMap.geometry.computeDistance(e.car.passedLatLngs);
+                if (limitDistance && currentDistance > limitDistance) {
+                    // 大于限制距离 停止移动
+                    marker.stopMove();
+                }
+                // 移动过程中更新小车已行驶距离
+                document.querySelectorAll('.info p')[2].innerHTML =
+                    '当前小车行驶距离：' + parseNumber(currentDistance, 2) + '米';
+                // 移动过程中更新小车当前坐标
+                var movingLatLng = e.car.passedLatLngs[e.car.passedLatLngs.length - 1];
+                document.querySelectorAll('.info p')[3].innerHTML =
+                    '当前小车坐标：' +
+                    parseNumber(movingLatLng.lat, 6) +
+                    ',' +
+                    parseNumber(movingLatLng.lng, 6);
+            });
+            document.querySelector('.btn1').onclick = function () {
+                if (isMoving) return;
+                map.easeTo(
+                    {
+                        zoom: 20,
+                        rotation: 180,
+                        pitch: 80
+                    },
+                    {
+                        duration: 1000
+                    }
+                );
+                map.on('idle', carMove);
+            };
+
+            document.querySelector('.btn2').onclick = function () {
+                marker.stopMove();
+                isMoving = false;
+                polylineLayer.setGeometries([
+                    {
+                        id: 'path1',
+                        styleId: 'style_blue',
+                        paths: path
+                    },
+                    {
+                        id: 'path2',
+                        styleId: 'style_blue',
+                        paths: path
+                    }
+                ]);
+                marker.setGeometries([
+                    {
+                        id: 'car',
+                        styleId: 'car-down',
+                        position: new TMap.LatLng(39.98481500648338, 116.30571126937866)
+                    },
+                    {
+                        id: 'start',
+                        styleId: 'start',
+                        position: new TMap.LatLng(39.98481500648338, 116.30571126937866)
+                    },
+                    {
+                        id: 'end',
+                        styleId: 'end',
+                        position: new TMap.LatLng(39.982348784165886, 116.3111400604248)
+                    }
+                ]);
+                map.easeTo({
+                    center,
+                    zoom: 16,
+                    rotation: 0,
+                    pitch: 0
+                });
+            };
+            document.querySelector('.btn3').onclick = function () {
+                marker.pauseMove();
+            };
+            document.querySelector('.btn4').onclick = function () {
+                marker.resumeMove();
+            };
+            document.querySelector('.btn5').onclick = function () {
+                // 限制小车移动距离，0||NAN 不限制
+                if (isMoving) return;
+                var value = parseFloat(document.querySelector('input').value);
+                value ? (limitDistance = value) : (limitDistance = 0);
+                document.querySelectorAll('.info p')[1].innerHTML =
+                    '当前限制小车最大移动距离：' + limitDistance + '米';
+            };
+        </script>
+    </body>
+</html>

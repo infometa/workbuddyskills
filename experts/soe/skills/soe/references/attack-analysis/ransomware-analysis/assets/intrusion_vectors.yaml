@@ -1,0 +1,123 @@
+# 入侵向量库
+# 定义常见勒索病毒入侵向量及对应环境特征指标
+
+version: "1.0"
+
+vectors:
+  - name: "RDP brute force"
+    description: "通过 RDP 服务暴破弱口令入侵"
+    risk_level: "high"
+    common_families: ["LockBit", "Phobos", "Conti"]
+    environment_indicators:
+      - env_key: "rdp_exposed"
+        env_value: true
+        description: "RDP 端口 3389 对公网开放"
+      - env_key: "rdp_weak_password"
+        env_value: true
+        description: "RDP 账户使用弱口令"
+      - env_key: "rdp_nla_disabled"
+        env_value: true
+        description: "RDP 未启用网络级认证 (NLA)"
+    detection_artifacts:
+      - "Windows 事件日志 4625 大量失败登录"
+      - "Windows 事件日志 4624 类型 10 远程登录成功"
+      - "非工作时间段的 RDP 登录"
+
+  - name: "Phishing email"
+    description: "通过钓鱼邮件携带恶意附件或链接入侵"
+    risk_level: "high"
+    common_families: ["LockBit", "Conti", "BlackCat", "Rhysida"]
+    environment_indicators:
+      - env_key: "email_gateway_unfiltered"
+        env_value: true
+        description: "邮件网关未过滤可执行附件"
+      - env_key: "macro_enabled"
+        env_value: true
+        description: "Office 宏未禁用"
+    detection_artifacts:
+      - "邮件附件含 .docm/.xlsm/.exe/.lnk"
+      - "用户报告可疑邮件"
+      - "Office 进程派生子进程 (PowerShell/cmd)"
+
+  - name: "Exploit public application"
+    description: "利用对外暴露应用的已知漏洞入侵"
+    risk_level: "critical"
+    common_families: ["BlackCat", "Play", "BianLian", "Akira"]
+    environment_indicators:
+      - env_key: "exchange_exposed"
+        env_value: true
+        description: "Exchange Server 对公网开放"
+      - env_key: "patch_status"
+        env_value: "missing"
+        description: "关键补丁未安装"
+      - env_key: "vpn_exposed"
+        env_value: true
+        description: "VPN 设备对公网开放"
+    detection_artifacts:
+      - "Web 服务器异常请求日志"
+      - "Exchange IIS 日志异常 POST 请求"
+      - "应用进程派生异常子进程"
+
+  - name: "Compromised credentials"
+    description: "使用泄露/窃取的凭据登录合法服务"
+    risk_level: "high"
+    common_families: ["BlackCat", "Royal", "Akira", "BianLian"]
+    environment_indicators:
+      - env_key: "credential_leak"
+        env_value: true
+        description: "凭据在公开泄露库中出现"
+      - env_key: "mfa_disabled"
+        env_value: true
+        description: "关键账户未启用 MFA"
+    detection_artifacts:
+      - "异地登录"
+      - "非常规时间登录"
+      - "凭据从未知 IP 使用"
+
+  - name: "Software crack / keygen"
+    description: "通过破解软件/注册机捆绑恶意代码入侵"
+    risk_level: "medium"
+    common_families: ["STOP"]
+    environment_indicators:
+      - env_key: "pirated_software"
+        env_value: true
+        description: "系统安装破解软件"
+    detection_artifacts:
+      - "近期安装可疑可执行文件"
+      - "破解工具进程运行记录"
+
+  - name: "Third-party compromise"
+    description: "通过供应链/第三方服务商信任关系入侵"
+    risk_level: "high"
+    common_families: ["BlackCat", "Conti"]
+    environment_indicators:
+      - env_key: "third_party_access"
+        env_value: true
+        description: "第三方供应商有网络访问权限"
+    detection_artifacts:
+      - "第三方账户异常活动"
+      - "供应商凭据被滥用"
+
+  - name: "Drive-by compromise"
+    description: "通过访问被入侵的网站触发浏览器漏洞入侵"
+    risk_level: "medium"
+    common_families: ["LockBit"]
+    environment_indicators:
+      - env_key: "browser_unpatched"
+        env_value: true
+        description: "浏览器存在未修复漏洞"
+    detection_artifacts:
+      - "浏览器进程异常网络连接"
+      - "浏览器进程派生子进程"
+
+  - name: "Adware bundle"
+    description: "通过广告软件捆绑分发勒索软件"
+    risk_level: "low"
+    common_families: ["STOP"]
+    environment_indicators:
+      - env_key: "adware_present"
+        env_value: true
+        description: "系统存在广告软件"
+    detection_artifacts:
+      - "广告软件进程运行"
+      - "可疑浏览器扩展"

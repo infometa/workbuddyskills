@@ -1,0 +1,17 @@
+{
+  "name": "all-hooks",
+  "version": "1.0.0",
+  "description": "Complete collection of 28 automation hooks for event-driven workflows",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "hooks",
+    "automation",
+    "all",
+    "bundle"
+  ]
+}

@@ -1,0 +1,201 @@
+# 移动客户端安全检测模式表（Android / iOS / React Native / Flutter）
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 检测移动端组件暴露、WebView 不安全配置、证书校验缺失、本地明文存储、Intent 重定向等风险
+# 触发: 场景 mobile_app 命中时加载（仅 Light）；Fast 走 sink-patterns.yaml，Deep 全量
+# 对标: OWASP MASVS / MSTG
+#
+# === 知识版本管理 ===
+# version: 1.0.0
+# last_updated: "2026-06-24"
+# update_strategy: semi_auto
+
+# ============================================================================
+# 一、组件暴露（Exported Component）
+# ============================================================================
+
+exported_component:
+  description: "Android 四大组件被显式/隐式导出且无权限保护，可被任意第三方 App 调起"
+  applies_to: ["android-*"]
+
+  vulnerable_patterns:
+    - category: 显式导出且无权限保护
+      patterns:
+        - 'android:exported\s*=\s*"true"'
+      absence_check: 'android:permission|android:protectionLevel|signature'
+      note: "exported=true 但缺少 android:permission 保护，组件可被外部 App 直接调起"
+
+    - category: 含 intent-filter 的隐式导出
+      patterns:
+        - '<intent-filter>'
+      context: "Android 12+ 含 intent-filter 的组件必须显式声明 exported；声明 true 且无权限即暴露"
+      note: "带 intent-filter 的 Activity/Service/Receiver 默认对外可见，需确认 exported 与权限"
+
+    - category: ContentProvider 暴露
+      patterns:
+        - '<provider'
+        - 'grantUriPermissions\s*=\s*"true"'
+      absence_check: 'android:permission|android:readPermission|android:writePermission'
+      note: "ContentProvider 导出且无读写权限，可被越权读写应用私有数据（SQLi/路径穿越延伸）"
+
+  safe_patterns:
+    - 'android:exported\s*=\s*"false"'
+    - 'android:permission\s*=\s*"[^"]*\.permission\.'
+
+# ============================================================================
+# 二、WebView 不安全配置
+# ============================================================================
+
+insecure_webview:
+  description: "WebView 暴露原生能力或加载不可信内容，可导致远程命令执行 / 文件读取"
+  applies_to: ["android-*", "ios-*", "react-native", "flutter"]
+
+  vulnerable_patterns:
+    - category: JS Bridge 暴露原生方法
+      patterns:
+        - 'addJavascriptInterface\s*\('
+        - '@JavascriptInterface'
+      context: "结合 setJavaScriptEnabled(true) 与 loadUrl 来源判断；加载远程/用户可控内容时为高危"
+      note: "addJavascriptInterface 将原生对象注入 JS 上下文，远程页面可反射调用原生方法（旧版 Android <4.2 可直达 Runtime.exec）"
+
+    - category: 启用 JS 且加载不可信 URL
+      patterns:
+        - 'setJavaScriptEnabled\s*\(\s*true\s*\)'
+        - 'loadUrl\s*\('
+        - 'loadDataWithBaseURL\s*\('
+      absence_check: 'shouldOverrideUrlLoading|WebViewClient|allowlist|白名单'
+      note: "启用 JS 且未限制可加载 URL，用户可控 URL 进入 loadUrl 可加载恶意页面"
+
+    - category: File 域访问开启
+      patterns:
+        - 'setAllowFileAccess\s*\(\s*true\s*\)'
+        - 'setAllowFileAccessFromFileURLs\s*\(\s*true\s*\)'
+        - 'setAllowUniversalAccessFromFileURLs\s*\(\s*true\s*\)'
+      note: "file:// 域可访问应用私有文件，结合 XSS 可读取本地敏感数据"
+
+    - category: iOS WKWebView 拼接 JS
+      patterns:
+        - 'evaluateJavaScript\s*\('
+        - 'stringByEvaluatingJavaScriptFromString'
+      note: "用户输入拼接进 evaluateJavaScript，等价于客户端 XSS/JS 注入"
+
+# ============================================================================
+# 三、证书校验缺失（Improper Certificate Validation）
+# ============================================================================
+
+improper_cert_validation:
+  description: "信任所有证书 / 主机名校验恒真 / 无证书固定，导致中间人可解密篡改通信"
+  applies_to: ["android-*", "ios-*", "react-native", "flutter"]
+
+  vulnerable_patterns:
+    - category: 空实现 TrustManager
+      patterns:
+        - 'checkServerTrusted\s*\([^)]*\)\s*\{\s*\}'
+        - 'getAcceptedIssuers\s*\([^)]*\)\s*\{\s*return\s+null'
+        - 'TrustManager\[\]'
+      note: "自定义 X509TrustManager 的 checkServerTrusted 空实现，等于信任任意证书"
+
+    - category: 主机名校验恒真
+      patterns:
+        - 'ALLOW_ALL_HOSTNAME_VERIFIER'
+        - 'setHostnameVerifier\s*\([^)]*\)\s*\{\s*return\s+true'
+        - 'verify\s*\([^)]*\)\s*\{\s*return\s+true'
+      note: "HostnameVerifier 恒返回 true，证书与目标域名不绑定"
+
+    - category: iOS 忽略证书校验
+      patterns:
+        - 'NSURLAuthenticationMethodServerTrust'
+        - 'continueWithoutCredentialForAuthenticationChallenge'
+        - 'allowsAnyHTTPSCertificateForHost'
+      note: "iOS NSURLSession/旧 API 忽略服务器证书校验"
+
+  defense_check:
+    note: "缺少证书/公钥固定（Certificate/Public-Key Pinning）的高敏感 App 标记为 medium；信任所有证书可 +1"
+
+# ============================================================================
+# 四、本地敏感数据明文存储
+# ============================================================================
+
+insecure_mobile_storage:
+  description: "凭证/密钥明文存储在 SharedPreferences / NSUserDefaults / 明文 SQLite"
+  applies_to: ["android-*", "ios-*", "react-native", "flutter"]
+
+  vulnerable_patterns:
+    - category: Android 明文偏好存储
+      patterns:
+        - 'getSharedPreferences\s*\(.*\)\.edit\(\)'
+        - 'putString\s*\(\s*"[^"]*([Tt]oken|[Pp]assword|[Ss]ecret|[Kk]ey)'
+        - 'MODE_WORLD_READABLE'
+        - 'MODE_WORLD_WRITEABLE'
+      absence_check: 'EncryptedSharedPreferences|Keystore|KeyStore|cipher|encrypt'
+      note: "Token/密码明文写入 SharedPreferences，Root 后或备份可直接读取；WORLD_READABLE 更可被任意 App 读取"
+
+    - category: iOS 明文偏好存储
+      patterns:
+        - 'NSUserDefaults.*set'
+        - 'standardUserDefaults.*setObject'
+      absence_check: 'Keychain|SecItemAdd|kSecAttrAccessible'
+      note: "敏感数据写入 NSUserDefaults（明文 plist），应改用 Keychain"
+
+    - category: 明文数据库 / 外部存储
+      patterns:
+        - 'openOrCreateDatabase\s*\('
+        - 'getExternalStorageDirectory\s*\('
+        - 'MediaStore'
+      absence_check: 'SQLCipher|encrypt'
+      note: "敏感数据写入明文 SQLite 或外部存储（公共可读）"
+
+# ============================================================================
+# 五、Intent 重定向与深链接劫持
+# ============================================================================
+
+intent_redirection:
+  description: "取出外部传入的嵌套 Intent 直接执行，或深链接参数未校验"
+  applies_to: ["android-*", "ios-*"]
+
+  vulnerable_patterns:
+    - category: 嵌套 Intent 重定向
+      patterns:
+        - 'getParcelableExtra\s*\(.*\)'
+        - 'getIntent\(\)\.getExtras'
+        - 'Intent\.parseUri\s*\('
+      context: "取出的 Intent 未校验直接 startActivity/sendBroadcast 即 Intent 重定向（CWE-940）"
+      note: "外部可控嵌套 Intent 被代理执行，可越权访问内部组件"
+
+    - category: 深链接/Scheme 参数未校验
+      patterns:
+        - 'getData\(\)\.getQueryParameter\s*\('
+        - 'intent\.data'
+        - 'openURL'
+        - 'application:openURL'
+      absence_check: 'verify|validate|allowlist|白名单|host\s*=='
+      note: "深链接/自定义 Scheme 的参数直接用于跳转/加载/鉴权，攻击者可伪造链接触发敏感操作"
+
+# ============================================================================
+# 六、判定补充规则
+# ============================================================================
+
+pattern_judgment_supplements:
+  - type: 组件暴露
+    condition: "exported=true 且无 android:permission，组件实现中存在数据读写或特权操作"
+    action: "创建 exported-component finding"
+    severity: "medium"  # 客户端本地攻击面，不可远程利用，封顶 medium
+
+  - type: WebView JS Bridge 暴露
+    condition: "setJavaScriptEnabled(true) + addJavascriptInterface，且加载的 URL 远程或用户可控"
+    action: "创建 insecure-webview finding"
+    severity: "medium"  # 限本地 WebView 上下文，封顶 medium
+
+  - type: 证书校验缺失
+    condition: "TrustManager 空实现 / HostnameVerifier 恒真 / 信任所有证书"
+    action: "创建 improper-cert-validation finding"
+    severity: "medium"
+
+  - type: 本地明文存储
+    condition: "Token/密码/密钥明文写入 SharedPreferences/NSUserDefaults/明文 SQLite"
+    action: "创建 insecure-mobile-storage finding"
+    severity: "medium"
+
+  - type: Intent 重定向
+    condition: "外部传入的嵌套 Intent 未校验直接执行，或深链接参数未校验用于跳转/鉴权"
+    action: "创建 intent-redirection finding"
+    severity: "medium"

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>调整图层顺序</title>
+</head>
+<script
+        charset="utf-8"
+        src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"
+></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #moveLayerBtn {
+        position: absolute;
+        left: 40px;
+        top: 40px;
+        z-index: 9999;
+    }
+
+    #moveLayerResetBtn {
+        position: absolute;
+        left: 40px;
+        top: 80px;
+        z-index: 9999;
+    }
+</style>
+
+<body onload="initMap()">
+<div id="mapContainer">
+    <button id="moveLayerBtn" onclick="moveLayer()">移动到文字图层上方</button>
+    <button id="moveLayerResetBtn" onclick="moveReSet()">移动到基础底图上方</button>
+</div>
+<script type="text/javascript">
+  var imageTileLayer
+  var map
+
+  function initMap () {
+    var center = new TMap.LatLng(26.870355, 100.239704) //设置中心点坐标
+    //初始化地图
+    map = new TMap.Map('mapContainer', {
+      center: center,
+      zoom: 15,
+      maxZoom: 16,
+    })
+    //初始化imageTileLayer
+    imageTileLayer = new TMap.ImageTileLayer({
+      getTileUrl: function (x, y, z) {
+        //拼接瓦片URL
+        var url =
+          'https://3gimg.qq.com/visual/lbs_gl_demo/image_tiles_layers/' +
+          z +
+          '/' +
+          x +
+          '_' +
+          y +
+          '.png'
+        return url
+      },
+      tileSize: 256, //瓦片像素尺寸
+      minZoom: 14, //显示自定义瓦片的最小级别
+      maxZoom: 16, //显示自定义瓦片的最大级别
+      visible: true, //是否可见
+      zIndex: 5000, //层级高度（z轴）
+      opacity: 0.95, //图层透明度：1不透明，0为全透明
+      map: map, //设置图层显示到哪个地图实例中
+    })
+  }
+
+  function moveLayer () {
+    var layerId = imageTileLayer.getId() // 获取图层ID
+    // 根据输入 LAYER_LEVEL 常量调整 layerId 对应图层的渲染层级 ，其中layerId可以通过图层getId方法获取。TMap.constants.LAYER_LEVEL 代表图层级别常量，见帮助文档（https://lbs.qq.com/webApi/javascriptGL/glDoc/docIndexMap）
+    map.moveLayer(layerId, TMap.constants.LAYER_LEVEL.TEXT)
+  }
+    //  移动图层至基础图层之上
+  function moveReSet () {
+    var layerId = imageTileLayer.getId() // 获取图层ID
+    // 根据输入 LAYER_LEVEL 常量调整 layerId 对应图层的渲染层级 ，其中layerId可以通过图层getId方法获取。TMap.constants.LAYER_LEVEL 代表图层级别常量，见帮助文档（https://lbs.qq.com/webApi/javascriptGL/glDoc/docIndexMap）
+    map.moveLayer(layerId, TMap.constants.LAYER_LEVEL.BASE)
+  }
+
+</script>
+</body>
+</html>

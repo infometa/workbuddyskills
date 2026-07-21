@@ -1,0 +1,630 @@
+{
+  "name": "cb_teams_marketplace",
+  "description": "CodeBuddy Teams Marketplace - 团队协作与文档处理插件集合",
+  "owner": {
+    "name": "Laurent Zhou",
+    "email": "laurentzhou@tencent.com"
+  },
+  "metadata": {
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "internal-comms",
+      "description": "A set of resources to help write internal communications using company-preferred formats (status reports, 3P updates, newsletters, FAQs, incident reports, etc.)",
+      "source": "./plugins/internal-comms",
+      "version": "1.0.0",
+      "category": "productivity",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/internal-comms"
+      ]
+    },
+    {
+      "name": "executing-marketing-campaigns",
+      "description": "Plans, creates, and optimizes marketing campaigns including content strategy, social media, email, and analytics",
+      "source": "./plugins/executing-marketing-campaigns",
+      "version": "1.0.0",
+      "category": "productivity",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "MIT",
+      "skills": [
+        "./plugins/executing-marketing-campaigns"
+      ]
+    },
+    {
+      "name": "document-skills",
+      "description": "Collection of document processing suite including Excel, Word, PowerPoint, and PDF capabilities",
+      "source": "./plugins/document-skills",
+      "version": "1.0.0",
+      "category": "productivity",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/document-skills/skills/xlsx",
+        "./plugins/document-skills/skills/docx",
+        "./plugins/document-skills/skills/pptx",
+        "./plugins/document-skills/skills/pdf",
+        "./plugins/document-skills/skills/pdfkit-py"
+      ]
+    },
+    {
+      "name": "general-skills",
+      "description": "A collection of general-purpose skills including document conversion (markitdown), skill discovery, UI/UX design, and frontend development capabilities",
+      "source": "./plugins/general-skills",
+      "version": "1.0.0",
+      "category": "utility",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "license": "See individual skills",
+      "skills": [
+        "./plugins/general-skills/skills/markitdown",
+        "./plugins/general-skills/skills/find-skills",
+        "./plugins/general-skills/skills/ui-ux-pro-max",
+        "./plugins/general-skills/skills/frontend-design"
+      ]
+    },
+    {
+      "name": "data-analysis",
+      "description": "Data analysis plugin with Excel spreadsheet creation, editing, and analysis capabilities. Supports formulas, formatting, data analysis, and visualization. Also includes WeChat article search via Sogou for high-quality Chinese content retrieval.",
+      "source": "./plugins/data-analysis",
+      "version": "1.0.0",
+      "category": "productivity",
+      "author": {
+        "name": "CodeBuddy"
+      },
+      "license": "Proprietary",
+      "skills": [
+        "./plugins/data-analysis/skills/xlsx",
+        "./plugins/data-analysis/skills/wechat-article-search"
+      ]
+    },
+    {
+      "name": "modern-webapp",
+      "description": "Modern web application development plugin with React, TypeScript, Vite, Tailwind CSS, shadcn/ui, and comprehensive UI/UX design system. Includes tools for project initialization, design intelligence, icon management, and browser testing.",
+      "source": "./plugins/modern-webapp",
+      "version": "1.0.0",
+      "category": "development",
+      "author": {
+        "name": "CodeBuddy"
+      },
+      "license": "Proprietary",
+      "skills": [
+        "./plugins/modern-webapp/skills/modern-web-app",
+        "./plugins/modern-webapp/skills/ui-ux-pro-max",
+        "./plugins/modern-webapp/skills/lucide-icons",
+        "./plugins/modern-webapp/skills/agent-browser"
+      ]
+    },
+    {
+      "name": "ppt-implement",
+      "description": "智能 PPT 生成助手，一键将您的想法转化为精美演示文稿",
+      "source": "./plugins/ppt-implement",
+      "version": "1.0.13",
+      "category": "productivity",
+      "author": {
+        "name": "rackeyyang"
+      },
+      "repository": "",
+      "license": "MIT",
+      "skills": [
+        "./plugins/ppt-implement/skills/ppt-implement"
+      ],
+      "agents": [],
+      "hooks": "./plugins/ppt-implement/hooks/hooks.json"
+    },
+    {
+      "name": "deep-research",
+      "description": "深度研究插件，支持全面的网络调研、信息综合和知识发现。包含微信公众号文章检索等高质量信息源搜索能力。",
+      "description_en": "Deep research plugin that enables comprehensive web research, information synthesis, and knowledge discovery. Includes WeChat article search for high-quality Chinese content.",
+      "source": "./plugins/deep-research",
+      "version": "1.0.0",
+      "category": "research",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "license": "MIT",
+      "skills": [
+        "./plugins/deep-research/skills/wechat-article-search"
+      ],
+      "agents": [
+        "./plugins/deep-research/agents/research-subagent.md"
+      ],
+      "rules": [
+        "./plugins/deep-research/rules/deep_research.md"
+      ]
+    },
+    {
+      "name": "data",
+      "description": "数据分析插件，支持 SQL 查询、数据探索、可视化、仪表板构建和洞察生成。包含完整的数据分析工作流程和最佳实践。",
+      "description_en": "Data analysis plugin with SQL queries, data exploration, visualization, dashboard building, and insight generation. Includes complete data analysis workflows and best practices.",
+      "source": "./plugins/data",
+      "version": "1.0.0",
+      "category": "productivity",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "license": "",
+      "skills": [
+        "./plugins/data/skills/data-analysis-workflows",
+        "./plugins/data/skills/data-context-extractor",
+        "./plugins/data/skills/data-exploration",
+        "./plugins/data/skills/data-validation",
+        "./plugins/data/skills/data-visualization",
+        "./plugins/data/skills/interactive-dashboard-builder",
+        "./plugins/data/skills/sql-queries",
+        "./plugins/data/skills/statistical-analysis"
+      ]
+    },
+    {
+      "name": "finance",
+      "description": "财务与会计插件，支持月末结账、日记账分录、账户核对、财务报表生成、差异分析、SOX 审计支持和合规测试。",
+      "description_en": "Finance and accounting plugin with month-end close, journal entries, account reconciliation, financial statements, variance analysis, SOX audit support, and compliance testing.",
+      "source": "./plugins/finance",
+      "version": "1.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "license": "",
+      "skills": [
+        "./plugins/finance/skills/finance-workflows",
+        "./plugins/finance/skills/journal-entry-prep",
+        "./plugins/finance/skills/reconciliation",
+        "./plugins/finance/skills/financial-statements",
+        "./plugins/finance/skills/variance-analysis",
+        "./plugins/finance/skills/close-management",
+        "./plugins/finance/skills/audit-support",
+        "./plugins/finance/skills/journal-entry",
+        "./plugins/finance/skills/sox-testing"
+      ]
+    },
+    {
+      "name": "product-management",
+      "description": "产品管理插件，支持功能规格编写、路线图规划、利益相关者沟通、用户研究综合、竞品分析、指标审查、产品头脑风暴和冲刺规划。",
+      "description_en": "Product management plugin with feature specs, roadmap planning, stakeholder communications, user research synthesis, competitive analysis, metrics review, product brainstorming, and sprint planning.",
+      "source": "./plugins/product-management",
+      "version": "1.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "license": "",
+      "skills": [
+        "./plugins/product-management/skills/product-management-workflows",
+        "./plugins/product-management/skills/feature-spec",
+        "./plugins/product-management/skills/roadmap-management",
+        "./plugins/product-management/skills/stakeholder-comms",
+        "./plugins/product-management/skills/user-research-synthesis",
+        "./plugins/product-management/skills/competitive-analysis",
+        "./plugins/product-management/skills/metrics-tracking",
+        "./plugins/product-management/skills/product-brainstorming",
+        "./plugins/product-management/skills/sprint-planning"
+      ]
+    },
+    {
+      "name": "design-to-code",
+      "description": "设计工具套件：Figma 设计转代码、无障碍审查、设计评审、设计交付、设计系统管理、用户研究、UX 文案。支持 React、Svelte、Vue。",
+      "description_en": "Design toolkit: Figma-to-code, accessibility review, design critique, design handoff, design system management, user research, and UX copy. Supports React, Svelte, and Vue.",
+      "source": "./plugins/design-to-code",
+      "version": "1.1.0",
+      "category": "development",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "license": "MIT",
+      "mcp": {
+        "server": "servers/design-converter.ts"
+      },
+      "skills": [
+        "./plugins/design-to-code/skills/design-to-code-workflows",
+        "./plugins/design-to-code/skills/accessibility-review",
+        "./plugins/design-to-code/skills/design-critique",
+        "./plugins/design-to-code/skills/design-handoff",
+        "./plugins/design-to-code/skills/design-system",
+        "./plugins/design-to-code/skills/research-synthesis",
+        "./plugins/design-to-code/skills/user-research",
+        "./plugins/design-to-code/skills/ux-copy"
+      ]
+    },
+    {
+      "name": "codebuddy-chat-web",
+      "description": "Initialize a web-based chat application powered by CodeBuddy Agent SDK with React frontend and Express backend",
+      "source": "./plugins/codebuddy-chat-web",
+      "version": "1.0.0",
+      "category": "development",
+      "author": {
+        "name": "CB Teams",
+        "email": "teams@codebuddy.cn"
+      },
+      "license": "MIT",
+      "skills": [
+        "./plugins/codebuddy-chat-web/skills/init-cbc-sdk-web"
+      ]
+    },
+    {
+      "name": "webapp-testing",
+      "description": "Web 应用测试助手，引导用户启动、配置和测试 Web 应用",
+      "source": "./plugins/webapp-testing",
+      "version": "1.0.0",
+      "category": "development",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "dockerfile-gen",
+      "description": "Dockerfile Generator - Automated Dockerfile generation with best practices for containerization",
+      "source": "./plugins/dockerfile-gen",
+      "version": "1.0.0",
+      "category": "development",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-generator",
+      "description": "使用 Remotion 自动生成视频。支持检测视频创建请求、创建分镜脚本、处理环境配置，输出 MP4 文件。涵盖讲解视频、产品演示、社交媒体内容和演示文稿。",
+      "description_en": "Automatically generates videos using Remotion. Detects video creation requests, creates storyboards, handles environment setup, and outputs MP4 files. Supports explainer videos, product demos, social media content, and presentations.",
+      "source": "./plugins/remotion-video-generator",
+      "version": "1.0.0",
+      "category": "content-creation",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "license": "MIT",
+      "skills": [
+        "./plugins/remotion-video-generator/skills/video-generator",
+        "./plugins/remotion-video-generator/skills/scene-planner",
+        "./plugins/remotion-video-generator/skills/environment-setup",
+        "./plugins/remotion-video-generator/skills/remotion-best-practices",
+        "./plugins/remotion-video-generator/skills/lucide-icons",
+        "./plugins/remotion-video-generator/skills/bgm-library"
+      ]
+    },
+    {
+      "name": "agent-sdk-dev",
+      "description": "用于创建和验证 CodeBuddy Agent SDK 应用程序的综合插件，支持 Python 和 TypeScript。包含 /new-sdk-app 命令用于项目脚手架，以及验证代理用于检查最佳实践。",
+      "description_en": "A comprehensive plugin for creating and verifying CodeBuddy Agent SDK applications in Python and TypeScript. Includes /new-sdk-app command for scaffolding projects and verifier agents for checking best practices.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Anthropic",
+        "email": "support@anthropic.com"
+      },
+      "source": "./plugins/agent-sdk-dev",
+      "category": "development",
+      "homepage": "https://github.com/anthropics/claude-plugins-public/tree/main/plugins/agent-sdk-dev"
+    },
+    {
+      "name": "skill-creator",
+      "description": "提供创建高效 Claude 技能的指南,通过专业知识、工作流程和工具集成来扩展 AI 助手的能力",
+      "source": "./plugins/skill-creator",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "financial-analysis",
+      "description": "金融分析核心工具，支持 DCF 估值、可比公司分析、LBO 模型、三张表模型、竞争格局分析和 PPT 质检。",
+      "description_en": "Core financial modeling and analysis tools: DCF valuation, comparable company analysis, LBO models, 3-statement models, competitive analysis, and deck QC.",
+      "source": "./plugins/financial-analysis",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/financial-analysis/skills/dcf-model",
+        "./plugins/financial-analysis/skills/comps-analysis",
+        "./plugins/financial-analysis/skills/lbo-model",
+        "./plugins/financial-analysis/skills/3-statements",
+        "./plugins/financial-analysis/skills/check-deck",
+        "./plugins/financial-analysis/skills/competitive-analysis",
+        "./plugins/financial-analysis/skills/ppt-template-creator",
+        "./plugins/financial-analysis/skills/check-model",
+        "./plugins/financial-analysis/skills/skill-creator"
+      ],
+      "hooks": "./plugins/financial-analysis/hooks/hooks.json"
+    },
+    {
+      "name": "investment-banking",
+      "description": "投资银行生产力工具，支持 CIM 撰写、并购模型、买方名单、交易追踪、流程函和 Pitch Deck 制作。",
+      "description_en": "Investment banking productivity tools: CIM creation, merger models, buyer lists, deal tracking, process letters, and pitch deck creation.",
+      "source": "./plugins/investment-banking",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/investment-banking/skills/pitch-deck",
+        "./plugins/investment-banking/skills/merger-model",
+        "./plugins/investment-banking/skills/cim-builder",
+        "./plugins/investment-banking/skills/buyer-list",
+        "./plugins/investment-banking/skills/deal-tracker",
+        "./plugins/investment-banking/skills/teaser",
+        "./plugins/investment-banking/skills/datapack-builder",
+        "./plugins/investment-banking/skills/process-letter",
+        "./plugins/investment-banking/skills/strip-profile"
+      ]
+    },
+    {
+      "name": "equity-research",
+      "description": "股票研究工具，支持财报分析、首次覆盖报告、盘前预览、晨会纪要、选股筛选和投资论点追踪。",
+      "description_en": "Equity research tools: earnings analysis, initiating coverage reports, earnings previews, morning notes, stock screening, and investment thesis tracking.",
+      "source": "./plugins/equity-research",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/equity-research/skills/initiating-coverage",
+        "./plugins/equity-research/skills/earnings-analysis",
+        "./plugins/equity-research/skills/earnings-preview",
+        "./plugins/equity-research/skills/catalyst-calendar",
+        "./plugins/equity-research/skills/idea-generation",
+        "./plugins/equity-research/skills/model-update",
+        "./plugins/equity-research/skills/morning-note",
+        "./plugins/equity-research/skills/sector-overview",
+        "./plugins/equity-research/skills/thesis-tracker"
+      ]
+    },
+    {
+      "name": "private-equity",
+      "description": "私募股权工具，支持 Deal Sourcing、项目筛选、尽调清单、IC Memo、单位经济学分析和投后管理。",
+      "description_en": "Private equity deal sourcing and workflow tools: company discovery, deal screening, due diligence, IC memos, unit economics, and portfolio monitoring.",
+      "source": "./plugins/private-equity",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/private-equity/skills/deal-sourcing",
+        "./plugins/private-equity/skills/deal-screening",
+        "./plugins/private-equity/skills/dd-checklist",
+        "./plugins/private-equity/skills/dd-meeting-prep",
+        "./plugins/private-equity/skills/ic-memo",
+        "./plugins/private-equity/skills/portfolio-monitoring",
+        "./plugins/private-equity/skills/returns-analysis",
+        "./plugins/private-equity/skills/unit-economics",
+        "./plugins/private-equity/skills/value-creation-plan"
+      ]
+    },
+    {
+      "name": "wealth-management",
+      "description": "财富管理与理财顾问工具，支持客户回顾、财务规划、投资组合再平衡、税损收割和投资提案。",
+      "description_en": "Wealth management and financial advisory tools: client reviews, financial planning, portfolio rebalancing, tax-loss harvesting, and investment proposals.",
+      "source": "./plugins/wealth-management",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/wealth-management/skills/client-review",
+        "./plugins/wealth-management/skills/client-report",
+        "./plugins/wealth-management/skills/financial-plan",
+        "./plugins/wealth-management/skills/investment-proposal",
+        "./plugins/wealth-management/skills/portfolio-rebalance",
+        "./plugins/wealth-management/skills/tax-loss-harvesting"
+      ]
+    },
+    {
+      "name": "lseg",
+      "description": "LSEG 金融数据与分析工具，支持债券分析、外汇套利、宏观利率监控、期权波动率分析和掉期曲线策略。",
+      "description_en": "LSEG financial data and analytics: bond pricing, yield curve analysis, FX carry trades, options valuation, and macro dashboards.",
+      "source": "./plugins/lseg",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "LSEG"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/lseg/skills/bond-futures-basis",
+        "./plugins/lseg/skills/bond-relative-value",
+        "./plugins/lseg/skills/equity-research",
+        "./plugins/lseg/skills/fixed-income-portfolio",
+        "./plugins/lseg/skills/fx-carry-trade",
+        "./plugins/lseg/skills/macro-rates-monitor",
+        "./plugins/lseg/skills/option-vol-analysis",
+        "./plugins/lseg/skills/swap-curve-strategy"
+      ]
+    },
+    {
+      "name": "spglobal",
+      "description": "S&P Global 金融数据与分析技能，包括公司 Tearsheet、财报预览和交易摘要。",
+      "description_en": "S&P Global financial data and analytics skills including company tearsheets, earnings previews, and transaction summaries.",
+      "source": "./plugins/spglobal",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "Kensho Technologies"
+      },
+      "homepage": "",
+      "license": "Apache-2.0",
+      "skills": [
+        "./plugins/spglobal/skills/tear-sheet",
+        "./plugins/spglobal/skills/earnings-preview-beta",
+        "./plugins/spglobal/skills/funding-digest"
+      ]
+    },
+    {
+      "name": "trading-agent",
+      "description": "多角色辩论式交易智能体，对股票/基金/指数进行系统性投资分析，输出 BUY/SELL/HOLD 建议。涵盖市场技术分析、基本面分析、新闻情绪分析、多空辩论、交易决策和三方风险评估全流程，数据源使用 NeoData 实时金融数据。",
+      "description_en": "Multi-role debate trading agent for systematic investment analysis of stocks, funds, and indices. Full pipeline: market analysis, fundamentals, news sentiment, bull/bear debate, trading decision, 3-way risk assessment. Powered by NeoData real-time financial data.",
+      "source": "./plugins/trading-agent",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/trading-agent/skills/trading-analysis"
+      ],
+      "agents": [
+        "./plugins/trading-agent/agents/market-analyst.md",
+        "./plugins/trading-agent/agents/fundamentals-analyst.md",
+        "./plugins/trading-agent/agents/news-analyst.md",
+        "./plugins/trading-agent/agents/sentiment-analyst.md",
+        "./plugins/trading-agent/agents/bull-researcher.md",
+        "./plugins/trading-agent/agents/bear-researcher.md",
+        "./plugins/trading-agent/agents/research-manager.md",
+        "./plugins/trading-agent/agents/trader.md",
+        "./plugins/trading-agent/agents/aggressive-risk-analyst.md",
+        "./plugins/trading-agent/agents/conservative-risk-analyst.md",
+        "./plugins/trading-agent/agents/neutral-risk-analyst.md",
+        "./plugins/trading-agent/agents/risk-manager.md"
+      ],
+      "rules": [
+        "./plugins/trading-agent/rules/trading-agent_rules.md"
+      ]
+    },
+    {
+      "name": "ai-hedge-fund",
+      "description": "AI 对冲基金投资分析系统：19位投资大师并行分析 + 风险管理 + 投资组合决策的全流程投资分析。涵盖巴菲特、芒格、林奇、伯里、塔勒布、伍德、格雷厄姆等13位传奇投资哲学家 + 6位专业分析师，通过信号聚合投票输出 BUY/SELL/HOLD 建议。数据源使用 NeoData 金融数据服务。",
+      "description_en": "AI Hedge Fund with 19 investment gurus analyzing in parallel — 13 legendary investors (Buffett, Munger, Lynch, Burry, Taleb, Wood, Graham, etc.) + 6 professional analysts. Signal aggregation voting for BUY/SELL/HOLD decisions. Powered by NeoData real-time financial data.",
+      "source": "./plugins/ai-hedge-fund",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "agents": [
+        "./plugins/ai-hedge-fund/agents/warren-buffett.md",
+        "./plugins/ai-hedge-fund/agents/charlie-munger.md",
+        "./plugins/ai-hedge-fund/agents/peter-lynch.md",
+        "./plugins/ai-hedge-fund/agents/michael-burry.md",
+        "./plugins/ai-hedge-fund/agents/nassim-taleb.md",
+        "./plugins/ai-hedge-fund/agents/cathie-wood.md",
+        "./plugins/ai-hedge-fund/agents/ben-graham.md",
+        "./plugins/ai-hedge-fund/agents/bill-ackman.md",
+        "./plugins/ai-hedge-fund/agents/stanley-druckenmiller.md",
+        "./plugins/ai-hedge-fund/agents/mohnish-pabrai.md",
+        "./plugins/ai-hedge-fund/agents/phil-fisher.md",
+        "./plugins/ai-hedge-fund/agents/aswath-damodaran.md",
+        "./plugins/ai-hedge-fund/agents/rakesh-jhunjhunwala.md",
+        "./plugins/ai-hedge-fund/agents/fundamentals-analyst.md",
+        "./plugins/ai-hedge-fund/agents/technicals-analyst.md",
+        "./plugins/ai-hedge-fund/agents/valuation-analyst.md",
+        "./plugins/ai-hedge-fund/agents/sentiment-analyst.md",
+        "./plugins/ai-hedge-fund/agents/growth-analyst.md",
+        "./plugins/ai-hedge-fund/agents/news-sentiment-analyst.md",
+        "./plugins/ai-hedge-fund/agents/risk-manager.md",
+        "./plugins/ai-hedge-fund/agents/portfolio-manager.md"
+      ],
+      "rules": [
+        "./plugins/ai-hedge-fund/rules/ai-hedge-fund_rules.md"
+      ]
+    },
+    {
+      "name": "a-share-analysis",
+      "description": "A股投资分析技能集，覆盖宏观研究、市场结构、个股深度、行业比较、资金行为、风险管理等 20 个专业分析 skill 和 7 个编排 agent（含总入口 a-share-advisor）。支持晨间策略简报、个股深度研报、板块选股、持仓诊断、主题投资猎手、资金行为全景等场景。",
+      "description_en": "A-share investment analysis plugin with 20 professional skills and 7 orchestration agents (incl. unified a-share-advisor entry point) covering macro research, market structure, stock deep-dive, sector comparison, capital flow tracking, and risk management.",
+      "source": "./plugins/a-share-analysis",
+      "version": "1.0.0",
+      "category": "finance",
+      "author": {
+        "name": "CodeBuddy Teams"
+      },
+      "homepage": "",
+      "license": "",
+      "skills": [
+        "./plugins/a-share-analysis/skills/market-overview",
+        "./plugins/a-share-analysis/skills/macro-research",
+        "./plugins/a-share-analysis/skills/stock-deep-dive",
+        "./plugins/a-share-analysis/skills/stock-logic-research",
+        "./plugins/a-share-analysis/skills/market-mainline",
+        "./plugins/a-share-analysis/skills/sector-comparison",
+        "./plugins/a-share-analysis/skills/style-rotation",
+        "./plugins/a-share-analysis/skills/industry-chain",
+        "./plugins/a-share-analysis/skills/macro-to-stock",
+        "./plugins/a-share-analysis/skills/valuation-framework",
+        "./plugins/a-share-analysis/skills/company-quality",
+        "./plugins/a-share-analysis/skills/financial-report",
+        "./plugins/a-share-analysis/skills/northbound-flow",
+        "./plugins/a-share-analysis/skills/institutional-holdings",
+        "./plugins/a-share-analysis/skills/fund-crowding",
+        "./plugins/a-share-analysis/skills/dividend-returns",
+        "./plugins/a-share-analysis/skills/going-global",
+        "./plugins/a-share-analysis/skills/position-management",
+        "./plugins/a-share-analysis/skills/risk-checkup",
+        "./plugins/a-share-analysis/skills/bubble-detection"
+      ],
+      "agents": [
+        "./plugins/a-share-analysis/agents/a-share-advisor.md",
+        "./plugins/a-share-analysis/agents/morning-briefing.md",
+        "./plugins/a-share-analysis/agents/stock-research.md",
+        "./plugins/a-share-analysis/agents/sector-screening.md",
+        "./plugins/a-share-analysis/agents/portfolio-diagnosis.md",
+        "./plugins/a-share-analysis/agents/thematic-hunter.md",
+        "./plugins/a-share-analysis/agents/smart-money-tracker.md"
+      ]
+    },
+    {
+      "name": "ardot-design-generator",
+      "description": "Ardot设计工具：在Ardot中生成高质量设计稿，移动端UI，网站页面，web应用，幻灯片等设计稿",
+      "description_en": "Ardot design tool: generate high-quality design drafts in Ardot, mobile UI, website pages, web applications, slides, etc.",
+      "source": "./plugins/ardot-design-generator",
+      "version": "1.0.1",
+      "category": "design",
+      "author": {
+        "name": "Ardot Teams"
+      },
+      "homepage": {
+        "url": "https://ardot.tencent.com/",
+        "type": "website"
+      },
+      "license": "MIT",
+      "keywords": [
+        "ardot",
+        "design",
+        "slide",
+        "ui",
+        "web",
+        "mobile",
+        "app",
+        "high-quality",
+        "presentation",
+        "mcp"
+      ],
+      "skills": [
+        "./plugins/ardot-design-generator/skills/ardot-design-assistant",
+        "./plugins/ardot-design-generator/skills/image-to-ui",
+        "./plugins/ardot-design-generator/skills/image-understanding-native"
+      ],
+      "rules": [
+        "./plugins/ardot-design-generator/rules/design-rules.md",
+        "./plugins/ardot-design-generator/rules/style-guide.md"
+      ]
+    }
+  ]
+}

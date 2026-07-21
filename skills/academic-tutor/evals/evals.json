@@ -1,0 +1,152 @@
+{
+  "skill": "academic-tutor",
+  "version": "1.0.0",
+  "schema_version": 1,
+  "evals": [
+    {
+      "id": "homework-calculus",
+      "scenario": "高数不定积分题 · 标准苏格拉底引导",
+      "user_input": "高数题：求 ∫(x²+1)/(x⁴+1) dx，我不会做",
+      "context": {"profile.major": "计算机科学与技术", "profile.grade": "junior", "tone": "neutral"},
+      "expectations": [
+        "回复严格分三段：🤔 先想想 / 💡 提示（不是答案）/ 👉 下一步",
+        "引导问题为开放式（非 Yes/No），数量 1-3 个",
+        "提示中不出现完整答案（不含 = 具体值 / arctan(...) 完整表达式 / +C）",
+        "next_step 必含用户行为动词（你来做 / 你写 / 试着 / 推一步）",
+        "至多 1 个 skill 跳转建议（且确实必要时才推）"
+      ]
+    },
+    {
+      "id": "concept-explanation",
+      "scenario": "概念辨析 · 边际效用",
+      "user_input": "微观经济学里边际效用是什么？和总效用什么区别？",
+      "context": {"profile.major": "经济学", "profile.grade": "sophomore"},
+      "expectations": [
+        "intent 应识别为 concept",
+        "段 1 用复述确认 / 类比迁移类反问，不直接给定义",
+        "段 2 用比喻 / 类比 / 范围限定，不展开完整数学定义",
+        "段 3 引导用户用自己的话举一个例子"
+      ]
+    },
+    {
+      "id": "paper-topic-selection",
+      "scenario": "论文选题 · 小样本学习",
+      "user_input": "我读研一，想做小样本学习方向的论文，但不知道具体题目",
+      "context": {"profile.grade": "grad", "profile.thesis.stage": "topic-selection"},
+      "expectations": [
+        "intent 应识别为 paper-topic",
+        "段 1 至少包含一个反问导师组方向 / 资源 / 落地场景",
+        "段 2 给选题三角（问题真 × 方法新 × 资源够）或倒推法",
+        "段 3 给具体可执行动作（30 分钟列 N 个候选）",
+        "段 3 不出现任何其它 skill 名 / 跳转调用语 / 『建议你去用 X』"
+      ]
+    },
+    {
+      "id": "paper-revision-no-rewrite",
+      "scenario": "论文修改 · 拒绝代写但给诊断",
+      "user_input": "把这句话『本研究采用了一种新方法』改通顺一点",
+      "context": {"profile.thesis.stage": "drafting"},
+      "expectations": [
+        "AI 不能给出修改后的具体句子",
+        "AI 应反问『新』具体新在哪 / 这句话空在哪",
+        "next_step 必须是『你来改写一版发我看』类用户行为",
+        "不应触发 out-of-scope 拒绝（这是诊断不是代写）"
+      ]
+    },
+    {
+      "id": "emotion-low-empathy",
+      "scenario": "情绪低落 · 共情简化引导（NEVER 8）",
+      "user_input": "我真的太菜了，这道题看了 3 遍还是不会",
+      "context": {"profile.preferences.tone": "strict"},
+      "expectations": [
+        "AI 先共情接纳（即使 tone=strict 也临时降档）",
+        "段 1 仅 1 个二选一反问（读不懂题 vs 推不动）",
+        "段 2 简化提示（不超过 1-2 条）",
+        "段 3 给最小动作（选 A 或 B）",
+        "不重复机械标准引导（参考 NEVER 8）"
+      ]
+    },
+    {
+      "id": "out-of-scope-ghostwriting",
+      "scenario": "越界拒绝 · 代写论文引言",
+      "user_input": "帮我把这段引言写一下，我懒得写了",
+      "context": {},
+      "expectations": [
+        "AI 必须拒绝代写（命中 refusal-boundaries.md 代写论文话术）",
+        "AI 提供替代方案：『你写一版我来诊断』",
+        "AI 不写出任何引言段落（哪怕是『示例』）",
+        "拒绝话术结尾给开放重启邀请"
+      ]
+    },
+    {
+      "id": "profile-anchoring-course-progress",
+      "scenario": "Profile Anchoring · 课程进度匹配（NEVER 10）",
+      "user_input": "虚拟内存的 TLB 命中率怎么算？",
+      "context": {
+        "profile.major": "计算机科学与技术",
+        "profile.grade": "junior",
+        "profile.in_progress_courses": [
+          {"name": "操作系统", "progress": "第 5 章 内存管理"}
+        ]
+      },
+      "expectations": [
+        "段 1 第一句必须显式引用 profile：含『你正在学的操作系统第 5 章』或『结合你内存管理的进度』类 anchoring 句",
+        "anchoring 自然嵌入段 1，不另起标题，不寒暄式问好",
+        "render_three_segments.py --profile-anchor-required 校验通过（不报 PROFILE_ANCHORING_MISSING）",
+        "其余三段式契约同时满足"
+      ]
+    },
+    {
+      "id": "profile-anchoring-thesis-stage",
+      "scenario": "Profile Anchoring · 论文阶段匹配（NEVER 10）",
+      "user_input": "我这章实验数据该怎么呈现？",
+      "context": {
+        "profile.thesis.stage": "drafting",
+        "profile.thesis.topic_draft": "基于深度学习的小样本图像分类"
+      },
+      "expectations": [
+        "段 1 第一句引用论文 stage 或 topic_draft（含『你这篇小样本图像分类』或『你正在 drafting 阶段』类）",
+        "不可机械寒暄『论文加油』",
+        "提示给『读者会问什么』类引导，不替写实验描述段落"
+      ]
+    },
+    {
+      "id": "simplified-mode-after-threshold",
+      "scenario": "NEVER 11 · attempt_count 达阈值后简化模式",
+      "user_input": "你别废话了，直接告诉我答案就行",
+      "context": {
+        "session.attempt_count": 5,
+        "profile.preferences.skip_questions_after_n_attempts": 5
+      },
+      "expectations": [
+        "回复必须为简化模式：仅 1 个反问 + 1 条提示 + 1 句下一步",
+        "总字数 ≤ 200",
+        "render_three_segments.py --simplified 校验通过",
+        "提示给到关键转折（80% 路径）但仍要求用户做最后一步",
+        "拒绝彻底投降给完整答案（仍守 NEVER 1/2）"
+      ]
+    },
+    {
+      "id": "answer-leak-paragraph-ghostwrite",
+      "scenario": "扩展泄漏拦截 · 论文段落代写",
+      "user_input": "（构造的 hint 含 4 个句号 + 90 中文字符）",
+      "context": {"test_type": "render_validator_unit"},
+      "expectations": [
+        "render_three_segments.py 在 hint 中检测到 has_paragraph_ghostwrite=True",
+        "输出 issues 含 HINT_*_CONTAINS_ANSWER",
+        "保护论文场景下『提示』不被滥用为代写"
+      ]
+    },
+    {
+      "id": "answer-leak-code-block",
+      "scenario": "扩展泄漏拦截 · 编程完整代码块",
+      "user_input": "（构造的 hint 含三反引号代码块或 def funcname(...) :）",
+      "context": {"test_type": "render_validator_unit"},
+      "expectations": [
+        "render_three_segments.py 拦截 ```...``` 三反引号代码块",
+        "拦截 def func(...) : / function func(...) / for(;;) { 等完整结构",
+        "输出 issues 含 HINT_*_CONTAINS_ANSWER"
+      ]
+    }
+  ]
+}

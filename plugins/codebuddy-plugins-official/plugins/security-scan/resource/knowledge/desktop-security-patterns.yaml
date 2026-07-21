@@ -1,0 +1,208 @@
+# 桌面与混合客户端安全检测模式表（Electron 为主）
+# 引用方: vuln-scan / logic-scan / red-team
+# 用途: 检测 Electron 进程模型不安全配置、IPC 无校验、shell 命令注入、远程内容加载、preload 过度暴露等风险
+# 触发: 场景 desktop_app 命中时加载（仅 Light）；Fast 走 sink-patterns.yaml，Deep 全量
+# 对标: Electron 官方 Security Checklist / OWASP
+#
+# === 知识版本管理 ===
+# version: 1.0.0
+# last_updated: "2026-06-24"
+# update_strategy: semi_auto
+
+# ============================================================================
+# 一、渲染进程 Node 集成与上下文隔离
+# ============================================================================
+
+electron_node_integration:
+  description: "渲染进程开启 Node 集成或关闭上下文隔离，任意 XSS 即可提升为本地 RCE"
+  applies_to: ["electron", "nodejs-*"]
+
+  vulnerable_patterns:
+    - category: nodeIntegration 开启
+      patterns:
+        - 'nodeIntegration\s*:\s*true'
+        - 'nodeIntegrationInWorker\s*:\s*true'
+        - 'nodeIntegrationInSubFrames\s*:\s*true'
+      note: "渲染进程可直接 require('child_process')/process，渲染区任意 XSS 即本地命令执行"
+
+    - category: 上下文隔离关闭
+      patterns:
+        - 'contextIsolation\s*:\s*false'
+      note: "preload 与页面共享同一 JS 上下文，原型链污染可窜改 Electron 内部对象，绕过隔离"
+
+    - category: 旧版 remote 模块开启
+      patterns:
+        - 'enableRemoteModule\s*:\s*true'
+        - "require\\(\\s*['\"]@electron/remote['\"]"
+      note: "remote 模块让渲染进程同步调用主进程对象，攻击面等同 nodeIntegration"
+
+  safe_patterns:
+    - 'contextIsolation\s*:\s*true'
+    - 'nodeIntegration\s*:\s*false'
+    - 'sandbox\s*:\s*true'
+
+# ============================================================================
+# 二、安全开关关闭
+# ============================================================================
+
+electron_disabled_websecurity:
+  description: "关闭同源策略 / 允许混合内容 / 关闭沙箱"
+  applies_to: ["electron", "nodejs-*"]
+
+  vulnerable_patterns:
+    - category: 关闭 Web 安全
+      patterns:
+        - 'webSecurity\s*:\s*false'
+        - 'allowRunningInsecureContent\s*:\s*true'
+      note: "webSecurity:false 关闭同源策略，远程页面可跨域读取本地与任意源资源"
+
+    - category: 关闭沙箱
+      patterns:
+        - 'sandbox\s*:\s*false'
+      note: "渲染进程脱离 OS 级沙箱，漏洞利用后影响范围扩大"
+
+    - category: 禁用安全特性
+      patterns:
+        - 'experimentalFeatures\s*:\s*true'
+        - 'webviewTag\s*:\s*true'
+      note: "<webview> 标签若启用且未限制，可加载任意内容并继承高权限"
+
+# ============================================================================
+# 三、shell 接口命令/协议注入
+# ============================================================================
+
+electron_shell_injection:
+  description: "shell.openExternal/openPath 接收可控数据，触发任意程序/协议执行"
+  applies_to: ["electron", "nodejs-*"]
+
+  vulnerable_patterns:
+    - category: shell 接口接收可控输入
+      patterns:
+        - 'shell\.openExternal\s*\('
+        - 'shell\.openPath\s*\('
+        - 'shell\.openItem\s*\('
+      absence_check: "startsWith\\(\\s*['\"]https|allowlist|白名单|new\\s+URL|protocol\\s*==="
+      note: "URL/路径来自渲染进程或远程内容且无 scheme 白名单，file:// / smb:// / 自定义协议可触发本地程序执行"
+
+# ============================================================================
+# 四、IPC 通道无校验
+# ============================================================================
+
+electron_ipc_no_validation:
+  description: "主进程盲信渲染进程消息执行特权操作"
+  applies_to: ["electron", "nodejs-*"]
+
+  vulnerable_patterns:
+    - category: ipcMain 直接执行特权操作
+      patterns:
+        - 'ipcMain\.handle\s*\('
+        - 'ipcMain\.on\s*\('
+      context: "回调内将渲染进程参数用于 fs/child_process/SQL/loadURL 等特权操作时为高危"
+      absence_check: 'senderFrame|validateSender|allowlist|白名单|校验'
+      note: "未校验 event.senderFrame 来源、未对参数做白名单，渲染进程被注入后可越权调用主进程能力"
+
+    - category: 危险操作直连 IPC 参数
+      patterns:
+        - 'ipcMain\.\w+\s*\([^)]*\).*=>.*(?:exec|spawn|readFile|writeFile|unlink|require)\s*\('
+      note: "IPC 参数直接进入命令执行/文件操作 sink"
+
+# ============================================================================
+# 五、加载不可信远程内容
+# ============================================================================
+
+electron_remote_content:
+  description: "加载远程/用户可控页面且未限制导航与新窗口"
+  applies_to: ["electron", "nodejs-*"]
+
+  vulnerable_patterns:
+    - category: 加载远程内容
+      patterns:
+        - 'loadURL\s*\(\s*[`''"]https?://'
+        - 'loadURL\s*\(\s*\w+\s*\)'
+      absence_check: "will-navigate|setWindowOpenHandler|will-attach-webview"
+      note: "加载远程或变量 URL，未通过 will-navigate / setWindowOpenHandler 限制导航与弹窗"
+
+    - category: 未限制新窗口/导航
+      patterns:
+        - 'setWindowOpenHandler\s*\('
+        - "on\\(\\s*['\"]will-navigate['\"]"
+      context: "存在该回调但 handler 直接 allow 或未校验目标 URL 时仍不安全"
+      note: "确认 setWindowOpenHandler 返回 {action:'deny'} 或对 URL 做白名单"
+
+# ============================================================================
+# 六、preload 过度暴露
+# ============================================================================
+
+electron_preload_overexposure:
+  description: "preload 向渲染进程暴露危险能力，等同绕过上下文隔离"
+  applies_to: ["electron", "nodejs-*"]
+
+  vulnerable_patterns:
+    - category: contextBridge 暴露危险 API
+      patterns:
+        - 'contextBridge\.exposeInMainWorld\s*\('
+      context: "暴露的对象若包含 ipcRenderer.send 通配、require、fs、child_process、eval 时为高危"
+      note: "应只暴露窄接口（固定 channel 白名单），禁止把 ipcRenderer 整体或 Node 模块挂到 window"
+
+    - category: 直接挂载到 window
+      patterns:
+        - 'window\.\w+\s*=\s*require\s*\('
+        - 'window\.ipcRenderer\s*='
+        - 'global\.\w+\s*=\s*require\s*\('
+      note: "preload 直接把 Node 能力挂到 window/global，渲染进程可任意调用"
+
+# ============================================================================
+# 七、自动更新与协议处理器
+# ============================================================================
+
+update_and_protocol:
+  description: "自动更新无验签 / 自定义协议参数未校验"
+  applies_to: ["electron", "*"]
+
+  vulnerable_patterns:
+    - category: 自动更新不安全
+      patterns:
+        - 'autoUpdater\.setFeedURL\s*\(\s*[`''"]http://'
+        - 'autoUpdater\.setFeedURL\s*\('
+        - 'electron-updater'
+      absence_check: 'verifySignature|publisherName|sha512|signature|代码签名'
+      note: "更新 feed 走 http 或未校验更新包签名/哈希，更新源被劫持即可全量投递恶意安装包"
+
+    - category: 协议处理器劫持
+      patterns:
+        - 'setAsDefaultProtocolClient\s*\('
+        - 'registerSchemesAsPrivileged\s*\('
+        - "on\\(\\s*['\"]open-url['\"]"
+        - "on\\(\\s*['\"]second-instance['\"]"
+      absence_check: 'validate|parse.*allowlist|new\s+URL|白名单'
+      note: "open-url/second-instance 回调将协议参数未校验地用于导航/文件加载/命令拼接"
+
+# ============================================================================
+# 八、判定补充规则
+# ============================================================================
+
+pattern_judgment_supplements:
+  - type: Node 集成开启
+    condition: "BrowserWindow webPreferences 含 nodeIntegration:true 或 contextIsolation:false"
+    action: "创建 electron-node-integration finding"
+    severity: "medium"  # 本地执行上下文，不可远程触发，客户端封顶 medium
+
+  - type: shell 命令注入
+    condition: "shell.openExternal/openPath 接收渲染进程或远程内容传入数据且无 scheme 白名单"
+    action: "创建 electron-shell-command-injection finding"
+    severity: "medium"  # 本地协议/程序调起，非服务端命令注入，封顶 medium
+
+  - type: IPC 无校验
+    condition: "ipcMain.handle/on 回调将渲染进程参数用于特权操作且未校验 sender/参数"
+    action: "创建 electron-ipc-no-validation finding"
+    severity: "medium"  # 本地进程间越权，封顶 medium
+
+  - type: 加载远程内容
+    condition: "loadURL 加载远程/可控 URL 且未限制 will-navigate / setWindowOpenHandler"
+    action: "创建 electron-remote-content finding"
+    severity: "medium"  # 利用链落在本地客户端，封顶 medium
+
+  - type: 自动更新未验签
+    condition: "autoUpdater feed 走 http 或未校验更新包签名"
+    action: "创建 unsigned-auto-update finding"
+    severity: "medium"  # 依赖劫持更新源的本地利用前提，封顶 medium

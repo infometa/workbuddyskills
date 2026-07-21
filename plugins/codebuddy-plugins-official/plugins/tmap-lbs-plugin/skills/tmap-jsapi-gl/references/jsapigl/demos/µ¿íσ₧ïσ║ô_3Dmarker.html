@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>3Dmarker</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            overflow: hidden;
+        }
+
+        #mapContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=model"></script>
+</head>
+
+<body>
+    <div id='mapContainer'></div>
+    <script>
+        //初始化地图
+        var map = new TMap.Map("mapContainer", {
+            center: new TMap.LatLng(30.86495306997595, 104.20363363655235),
+            zoom: 20.4,
+            rotation: 123.7,
+            pitch: 72.5,
+            maxZoom: 24,
+            enableExtendZoom: true,
+            baseMap: {
+                type: "vector",
+                features: ["base", "building3d"],
+            },
+        });
+        var Marker3D = new TMap.model.Marker3D({
+            map,
+            styles: {
+                style1: new TMap.model.Marker3DStyle({
+                    type:'location',
+                    scale: 1,
+                }),
+            },
+            geometries: [
+              {
+                styleId: "style1",
+                position: new TMap.LatLng(30.86433422782985, 104.20327833274291),
+              },
+              {
+                styleId: "style1",
+                position: new TMap.LatLng(30.86452729325582, 104.20339118505024),
+              },
+              {
+                styleId: "style1",
+                position: new TMap.LatLng(30.86472363710379, 104.20351516710048),
+              },
+              {
+                styleId: "style1",
+                position: new TMap.LatLng(30.86495306997595, 104.20363363655235),
+              },
+              {
+                styleId: "style1",
+                position: new TMap.LatLng(30.86512547751484, 104.2037208303866),
+              },
+              {
+                styleId: "style1",
+                position: new TMap.LatLng(30.86533963574645, 104.20384146276342),
+              },
+              {
+                styleId: "style1",
+                position: new TMap.LatLng(30.865510415050675, 104.20393293929749),
+              },
+            ],
+        });
+        map.on('click',(e)=>{
+            console.log(e)
+        })
+   </script>
+</body>

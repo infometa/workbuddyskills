@@ -1,0 +1,11 @@
+{
+  "name": "functional-programming",
+  "description": "函数式编程语言专家代理，包括 Haskell 和 Elixir。提供高级类型系统、纯函数式设计、OTP 模式、并发、容错分布式系统和高可靠性软件开发。",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "UNKNOWN"
+}

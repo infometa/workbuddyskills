@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "name": "plugin-recommendation-trigger",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Analyze the user's input to determine if they are expressing a need for功能 or capability that might be addressed by a plugin, but they haven't explicitly mentioned plugins.\n\nUser input: \"$USER_PROMPT\"\n\nCheck configuration file ~/.codebuddy/.local.md for 'auto_recommend' setting:\n- If file doesn't exist or auto_recommend is true → proceed with analysis\n- If auto_recommend is false → skip recommendation\n\nIf proceeding, determine:\n\n1. Is user asking about a specific task or functionality?\n2. Are they expressing a problem or need?\n3. Could a plugin help them?\n4. Have they already mentioned plugins?\n\nTrigger plugin-recommender agent if ALL of these are true:\n- User expresses a need or asks \"how to\" do something\n- The need is specific enough to match plugins\n- User hasn't explicitly mentioned plugins or asked about plugins\n- This seems like a genuine need (not just casual conversation)\n- Configuration allows auto-recommendation\n\nExamples that SHOULD trigger:\n- \"我想检查代码质量\" (wants to check code quality)\n- \"如何自动化测试？\" (asking how to automate tests)\n- \"需要部署工具\" (needs deployment tools)\n- \"有没有办法自动生成文档？\" (wants to auto-generate docs)\n\nExamples that should NOT trigger:\n- \"帮我推荐插件\" (explicitly asking about plugins - use /plugin-finder:search instead)\n- \"今天天气怎么样？\" (casual conversation, no technical need)\n- \"这个变量叫什么名字好？\" (specific code question, not plugin-related)\n- User already talking about specific plugins\n\nIf should trigger:\n  Call plugin-recommender agent with the user's need\nElse:\n  Do nothing (let conversation continue normally)\n\nBe conservative - only trigger when there's a clear, specific need that plugins could address."
+          }
+        ]
+      }
+    ]
+  }
+}

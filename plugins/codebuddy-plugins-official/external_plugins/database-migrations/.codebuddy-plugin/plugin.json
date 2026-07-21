@@ -1,0 +1,11 @@
+{
+  "name": "database-migrations",
+  "description": "数据库迁移自动化、可观测性和跨数据库迁移策略",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

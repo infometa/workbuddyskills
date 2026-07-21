@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2D经典热力</title>
+</head>
+<script charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body onload="initMap()">
+    <div id="container"></div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/heat.js"></script>
+    <script>
+        function initMap() {
+            var center = new TMap.LatLng(39.909897147274364, 116.39756310116866);
+
+            //初始化地图
+            var map = new TMap.Map("container", {
+                zoom: 11.7,//设置地图缩放级别
+                center: center,//设置地图中心点坐标
+                mapStyleId: "style4" ,//个性化样式
+                baseMap: {
+            		type: "vector",
+            		features: ["base", "building3d"], // 隐藏矢量文字
+          		},
+            });
+            //初始化热力图并添加至map图层
+            var heat = new TMap.visualization.Heat({
+                max: 350, // 热力最强阈值
+                min: 0, // 热力最弱阈值
+                height: 0, // 峰值高度
+                gradientColor: { // 渐变颜色
+                    0.6: "#673198",
+                    0.8: "#e53390",
+                    0.9: "#ffc95a",
+                },
+                radius: 30 // 最大辐射半径
+
+            }).addTo(map);
+
+            heat.setData(heatData);//设置数据
+        }
+    </script>
+</body>
+
+</html>

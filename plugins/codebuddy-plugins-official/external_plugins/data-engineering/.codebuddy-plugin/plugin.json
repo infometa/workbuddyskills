@@ -1,0 +1,11 @@
+{
+  "name": "data-engineering",
+  "description": "ETL管道构建、数据仓库设计、批处理工作流和数据驱动的功能开发",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

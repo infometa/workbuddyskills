@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>设置编辑点为GL模式</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=vector,tools"></script>
+<script charset="utf-8" src="https://mapapi.qq.com/web/jsapi/jsapi-gl/assets/geojson-demo.js"></script>
+<style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+
+    #containerOne {
+        width: 100%;
+        height: 45%;
+
+    }
+
+    #containerTwo {
+        width: 100%;
+        height: 45%;
+    }
+
+    p {
+        margin: 0;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <div id="containerOne"></div>
+    <p>地图一: SVG编辑点绘制模式-当数据形点较少时建议使用该模式；默认为该模式</p>
+    <div id="containerTwo"></div>
+    <p>地图二: GL编辑点绘制模式-当编辑的数据形点量级较大时使用该模式性能较好；但图形的渲染质量可能受机器配置影响</p>
+    <script>
+        var center = new TMap.LatLng(39.984104, 116.307503);
+        //初始化地图一
+        var mapOne = new TMap.Map("containerOne", {
+            center,
+            zoom: 9, // 设置地图缩放级别
+        });
+
+        var geoLayerOne = new TMap.vector.GeoJSONLayer({
+            map: mapOne,
+            data: geojsonData,
+            polygonStyle: new TMap.PolygonStyle({
+                'showBorder': true, //是否显示边线
+                'borderColor': '#fff', //边线颜色
+                'borderWidth': 1 //边线宽度
+            })
+        });
+
+        // 获取geojson生成的polygon图层
+        var polygonLayer = geoLayerOne.getGeometryOverlay('polygon');
+        polygonLayer.setStyles({
+            highlight: new TMap.PolygonStyle({
+                color: 'rgba(255, 255, 0, 0.6)'
+            })
+        },
+        );
+
+        // 初始化几何图形及编辑器
+        var editorOne = new TMap.tools.GeometryEditor({
+            map: mapOne, // 编辑器绑定的地图对象
+            overlayList: [ // 可编辑图层
+                {
+                    overlay: polygonLayer,
+                    id: 'polygon',
+                    selectedStyleId: 'highlight'
+                }
+            ],
+            actionMode: TMap.tools.constants.EDITOR_ACTION.INTERACT, // 编辑器的工作模式
+            modifierShapeMode: TMap.tools.constants.MODIFIER_SHAPE_MODE.SVG, // 默认编辑点绘制模式为SVG
+            activeOverlayId: 'polygon', // 激活图层
+            selectable: true, // 开启点选功能
+        });
+
+    </script>
+    <script>
+        //初始化地图二
+        var mapTwo = new TMap.Map("containerTwo", {
+            center,
+            zoom: 9, // 设置地图缩放级别
+        });
+        var geoLayerTwo = new TMap.vector.GeoJSONLayer({
+            map: mapTwo,
+            data: geojsonData,
+            polygonStyle: new TMap.PolygonStyle({
+                'showBorder': true, //是否显示边线
+                'borderColor': '#fff', //边线颜色
+                'borderWidth': 1 //边线宽度
+            })
+        });
+
+        // 获取geojson生成的polygon图层
+        var polygonLayerTwo = geoLayerTwo.getGeometryOverlay('polygon');
+        polygonLayerTwo.setStyles({
+            highlight: new TMap.PolygonStyle({
+                color: 'rgba(255, 255, 0, 0.6)'
+            })
+        },
+        );
+
+        // 初始化几何图形及编辑器
+        var editorTwo = new TMap.tools.GeometryEditor({
+            map: mapTwo, // 编辑器绑定的地图对象
+            overlayList: [ // 可编辑图层
+                {
+                    overlay: polygonLayerTwo,
+                    id: 'polygon',
+                    selectedStyleId: 'highlight'
+                }
+            ],
+            actionMode: TMap.tools.constants.EDITOR_ACTION.INTERACT, // 编辑器的工作模式
+            modifierShapeMode: TMap.tools.constants.MODIFIER_SHAPE_MODE.GL, // 大数据量下的编辑点使用GL绘制模式编辑性能更佳
+            activeOverlayId: 'polygon', // 激活图层
+            selectable: true, // 开启点选功能
+        });
+    </script>
+</body>
+
+</html>

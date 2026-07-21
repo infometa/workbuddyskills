@@ -1,0 +1,4 @@
+{
+  "name": "invoice-organizer",
+  "description": "发票整理工具"
+}

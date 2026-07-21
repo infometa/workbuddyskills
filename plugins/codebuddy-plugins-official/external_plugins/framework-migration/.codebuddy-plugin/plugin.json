@@ -1,0 +1,11 @@
+{
+  "name": "framework-migration",
+  "description": "框架升级、迁移规划与架构转型工作流",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

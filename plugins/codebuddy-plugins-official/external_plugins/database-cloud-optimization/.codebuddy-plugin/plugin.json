@@ -1,0 +1,11 @@
+{
+  "name": "database-cloud-optimization",
+  "description": "数据库查询优化、云成本优化和可扩展性改进",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

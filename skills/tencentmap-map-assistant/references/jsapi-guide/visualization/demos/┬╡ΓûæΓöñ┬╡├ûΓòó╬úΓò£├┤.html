@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, addTo-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>水晶体</title>
+  </head>
+  <script
+    charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"
+  ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      position: relative;
+    }
+
+    #container {
+      width: 100%;
+      height: 100%;
+    }
+
+    #box {
+      position: absolute;
+      z-index: 9999;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1103px;
+    }
+
+    #button {
+      width: 100%;
+      height: 5px;
+      background-image: url("https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/progressBar.png");
+      background-size: 100% 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #optional {
+      width: 19.5%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: -5px;
+    }
+
+    #optional div {
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      background-image: url("https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/buttonOptional.png");
+      background-size: 100% 100%;
+      cursor: pointer;
+    }
+
+    #optional div:nth-child(3) {
+      background-image: url("https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/buttonSelec.png");
+      background-size: 100% 100%;
+    }
+
+    #notOptional {
+      width: 81.5%;
+      height: 100%;
+      box-sizing: border-box;
+      padding-left: 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-right: -10px;
+    }
+
+    #notOptional div {
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      background-image: url("https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/buttonNotOptional.png");
+      background-size: 100% 100%;
+    }
+
+    #month {
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      color: #fff;
+    }
+
+    #month #optional_text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      margin-left: -20px;
+    }
+
+    #month #optional_text div {
+      height: 34px;
+      width: 74px;
+      line-height: 34px;
+      cursor: pointer;
+      border-right: 50px;
+      text-align: center;
+      margin-right: 12px;
+    }
+
+    #month #optional_text div:nth-child(1) {
+      margin-left: -10px;
+    }
+
+    #month #optional_text div:nth-child(2) {
+      margin-left: 10px;
+    }
+
+    #month #optional_text div:nth-child(3) {
+      margin-left: 10px;
+      margin-right: 19px;
+    }
+
+    #month #notOptional_text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 10px;
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    #month #notOptional_text div {
+      height: 34px;
+      line-height: 34px;
+      width: 74px;
+      cursor: pointer;
+      border-right: 50px;
+      text-align: center;
+      margin-right: 26px;
+    }
+    #notes {
+      position: absolute;
+      z-index: 9999;
+      top: 30px;
+      left: 30px;
+      width: 180px;
+      height: 200px;
+      background-image: url("https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/notes.png");
+      background-size: 100% 100%;
+    }
+  </style>
+
+  <body>
+    <div id="container"></div>
+    <div id="box">
+      <div id="button">
+        <div id="optional">
+          <div onclick="switchsButton(JanuaryData,this)"></div>
+          <div onclick="switchsButton(FebruaryData,this)"></div>
+          <div onclick="switchsButton(MarchData,this)"></div>
+        </div>
+        <div id="notOptional">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <div id="month">
+        <div id="optional_text">
+          <div onclick="switchsMonth(JanuaryData,this)">一月</div>
+          <div onclick="switchsMonth(FebruaryData,this)">二月</div>
+          <div onclick="switchsMonth(MarchData,this)">三月</div>
+        </div>
+        <div id="notOptional_text">
+          <div>四月</div>
+          <div>五月</div>
+          <div>六月</div>
+          <div>七月</div>
+          <div>八月</div>
+          <div>九月</div>
+          <div>十月</div>
+          <div>十一月</div>
+          <div>十二月</div>
+        </div>
+      </div>
+    </div>
+    <div id="notes"></div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/prism.js"></script>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/maskLayerData.js"></script>
+    <script>
+      //初始化地图
+      var map = new TMap.Map("container", {
+        zoom: 16.5, //设置地图缩放级别
+        center: new TMap.LatLng(39.95062479772264, 116.22699864347408), //设置地图中心点坐标
+        pitch: 48.5, // 设置地图俯仰角
+        mapStyleId: "style4", //个性化样式
+        rotation: 351.7,
+        renderOptions: {
+          enableBloom: true, // 泛光
+        },
+        baseMap: {
+          type: "vector",
+          features: ["base", "building3d"], // 隐藏矢量文字
+        },
+      });
+
+      // 遮罩层
+      var MaskLayer = new TMap.MaskLayer({
+        map: map,
+        geometries: [{ paths: maskLayerData }],
+      });
+      //创建水晶体
+      var prism = new TMap.visualization.Prism({
+        enableLighting: true, //水晶体是否开启光照
+      }).addTo(map);
+
+      function addTo(data, index) {
+        var styles = {};
+        var paths = [];
+        var buildingHeight;
+        data.forEach((item) => {
+          buildingHeight = item.floor * 10;
+          item.area.forEach((i) => {
+            var style = "style" + buildingHeight + i.risk;
+            if (i.paths[0].toString().indexOf("116.") != -1) {
+              i.paths = i.paths.reverse();
+            } else {
+              i.paths = i.paths;
+            }
+            if (i.risk === null) {
+              styles[style] = {
+                topFillColor: "rgba(62,84,125,1)", //水晶体顶面颜色
+                sideFillColor: "rgba(51,69,102,1)", //水晶体侧面颜色
+                height: buildingHeight, //水晶体拔起高度
+              };
+
+              paths.push({
+                path: i.paths,
+                styleId: style,
+              });
+            } else if (i.risk === "low") {
+              styles[style] = {
+                topFillColor: "rgba(30,155,89,1)", //水晶体顶面颜色
+                sideFillColor: "rgba(25,130,74,1)", //水晶体侧面颜色
+                height: buildingHeight, //水晶体拔起高度
+              };
+              paths.push({
+                path: i.paths,
+                styleId: style,
+              });
+            } else if (i.risk === "middle") {
+              styles[style] = {
+                topFillColor: "rgba(223,138,57,1)", //水晶体顶面颜色
+                sideFillColor: "rgba(191,118,50,1)", //水晶体侧面颜色
+                height: buildingHeight, //水晶体拔起高度
+              };
+              paths.push({
+                path: i.paths,
+                styleId: style,
+              });
+            } else if (i.risk === "high") {
+              styles[style] = {
+                topFillColor: "rgba(212,84,66,1)", //水晶体顶面颜色
+                sideFillColor: "rgba(174,67,53,1)", //水晶体侧面颜色
+                height: buildingHeight, //水晶体拔起高度
+              };
+              paths.push({
+                path: i.paths,
+                styleId: style,
+              });
+            }
+          });
+        });
+        prism.setStyles(styles);
+        prism.setData(paths);
+      }
+      //默认数据
+      addTo(MarchData);
+      var optional_text = document.getElementById("optional_text");
+      var month = optional_text.children;
+      month[2].style.backgroundImage =
+        "url(" +
+        "https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/monthBackground.png" +
+        ")"; //月份默认选中
+
+      //选中圆点
+      function switchsButton(val, e) {
+        // 默认选中态消失
+        month[0].style.backgroundImage = null;
+        // 实现按钮选中效果
+        for (let index = 0; index < e.parentNode.children.length; index++) {
+          if (e.parentNode.children[index] === e) {
+            month[index].style.backgroundImage =
+              "url(" +
+              "https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/monthBackground.png" +
+              ")";
+            e.style.backgroundImage =
+              "url(" +
+              "https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/buttonSelec.png" +
+              ")";
+          } else {
+            month[index].style.backgroundImage = null;
+            e.parentNode.children[index].style.backgroundImage =
+              "url(" +
+              "https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/buttonOptional.png" +
+              ")";
+          }
+        }
+        //添加数据
+        addTo(val);
+      }
+      var optional = document.getElementById("optional");
+      //选中月份
+      function switchsMonth(val, e) {
+        month[0].style.backgroundImage = null;
+        // 实现月份选中效果
+        for (let index = 0; index < e.parentNode.children.length; index++) {
+          if (e.parentNode.children[index] === e) {
+            optional.children[index].style.backgroundImage =
+              "url(" +
+              "https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/buttonSelec.png" +
+              ")";
+            e.style.backgroundImage =
+              "url(" +
+              "https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/monthBackground.png" +
+              ")";
+          } else {
+            e.parentNode.children[index].style.backgroundImage = null;
+            optional.children[index].style.backgroundImage =
+              "url(" +
+              "https://mapapi.qq.com/web/lbs/visualizationApi/demo/img/buttonOptional.png" +
+              ")";
+          }
+        }
+        // 添加数据
+        addTo(val);
+      }
+    </script>
+  </body>
+</html>

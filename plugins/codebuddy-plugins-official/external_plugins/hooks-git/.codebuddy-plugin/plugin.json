@@ -1,0 +1,19 @@
+{
+  "name": "hooks-git",
+  "version": "1.0.0",
+  "description": "Git Hooks - Event-driven automation hooks",
+  "author": {
+    "name": "BuildWithClaude Community",
+    "url": "https://github.com/davepoon/buildwithclaude"
+  },
+  "repository": "https://github.com/davepoon/buildwithclaude",
+  "license": "MIT",
+  "keywords": [
+    "hooks",
+    "automation",
+    "git",
+    "auto-git-add",
+    "git-add-changes",
+    "smart-commit"
+  ]
+}

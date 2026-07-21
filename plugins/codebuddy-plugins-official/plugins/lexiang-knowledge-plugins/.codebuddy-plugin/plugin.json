@@ -1,0 +1,11 @@
+{
+  "name": "lexiang-knowledge",
+  "description": "乐享知识库, 企业协同知识库，提供获取文档内容与元数据、搜索文档内容、查询知识库与目录结构、创建/编辑/移动文档、管理标签与评论、上传文件及维护附件等知识库操作能力。",
+  "author": {
+    "name": "mistcheng",
+    "url": "https://github.com/tencent-lexiang"
+  },
+  "repository": "https://github.com/tencent-lexiang/plugins",
+  "homepage": "https://github.com/tencent-lexiang/plugins",
+  "license": "未声明"
+}

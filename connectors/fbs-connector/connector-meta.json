@@ -1,0 +1,32 @@
+{
+  "name": "福帮手",
+  "publicPositioning": "福帮手人机协同连接器",
+  "description": "福帮手人机协同连接器：面向 WorkBuddy 的身份识别、场景包查询、首值与继续使用记录、乐包状态确认和超级合伙人交接。",
+  "description_zh": "福帮手人机协同连接器：面向 WorkBuddy 的身份识别、场景包查询、首值与继续使用记录、乐包状态确认和超级合伙人交接。",
+  "description_en": "FBSir connector for identity, scene-pack lookup, first-value and continued-use recording, lebao status, and super-partner handoff.",
+  "source": "fbs-connector",
+  "icon": "icon.png",
+  "version": "26.7.2",
+  "connectorContractVersion": "1.2.9",
+  "protocolCompatibility": {
+    "publicMcpContractVersion": "1.2.9",
+    "publicMcpUrl": "https://api2.u3w.com/fbs-mcp/mcp",
+    "whoamiInputCompatMode": "dual_128x_129"
+  },
+  "relatedExpertPackage": {
+    "name": "fbsir-super-partner-group",
+    "version": "1.3.0"
+  },
+  "examples_en": [
+    "Check my current FBSir identity and the safest next step before continuing.",
+    "Read the scene pack returned by skill_whoami and produce one first-value action card.",
+    "Record first_value_completed or continued_use_completed on the same binding.",
+    "Check lebao status first, then explain whether claim or redeem is appropriate."
+  ],
+  "examples_zh": [
+    "先确认我当前的福帮手身份和最稳妥的下一步，再继续推进。",
+    "根据 skill_whoami 返回的场景包读取内容，并产出一张首值执行卡。",
+    "在同一个 binding 上记录 first_value_completed 或 continued_use_completed。",
+    "先查询乐包状态，再判断是否适合领取或兑换。"
+  ]
+}

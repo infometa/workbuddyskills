@@ -1,0 +1,11 @@
+{
+  "name": "blockchain-web3",
+  "description": "使用 Solidity 进行智能合约开发、DeFi 协议实现、NFT 平台和 Web3 应用架构",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

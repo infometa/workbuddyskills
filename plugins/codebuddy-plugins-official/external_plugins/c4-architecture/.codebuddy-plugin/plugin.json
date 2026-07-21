@@ -1,0 +1,11 @@
+{
+  "name": "c4-architecture",
+  "description": "全面的 C4 架构文档工作流,采用自底向上的代码分析、组件合成、容器映射和上下文图生成",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

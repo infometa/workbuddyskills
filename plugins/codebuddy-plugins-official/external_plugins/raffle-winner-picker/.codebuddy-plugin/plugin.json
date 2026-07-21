@@ -1,0 +1,5 @@
+{
+  "name": "raffle-winner-picker",
+  "description": "从列表、电子表格或 Google Sheets 中随机选择获奖者，用于抽奖和比赛，采用密码学安全的随机性确保公平。",
+  "license": "未声明"
+}

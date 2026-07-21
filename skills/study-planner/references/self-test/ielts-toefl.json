@@ -1,0 +1,69 @@
+{
+  "id": "ielts-toefl",
+  "title": "雅思 / 托福 5 题水平自检",
+  "description": "5 道题快速估算当前英语水平和复习重点。每题选项分值 1-5，总分映射到 current_level + 推荐 daily_budget。",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "你最近一次正式英语考试（雅思/托福/CET）成绩？",
+      "options": [
+        {"value": 1, "label": "没考过 / CET-4 没过 / 雅思 < 4.5"},
+        {"value": 2, "label": "CET-4 过 / 雅思 4.5-5.0"},
+        {"value": 3, "label": "CET-6 过 / 雅思 5.5-6.0 / 托福 60-79"},
+        {"value": 4, "label": "雅思 6.5-7.0 / 托福 80-99"},
+        {"value": 5, "label": "雅思 7.5+ / 托福 100+"}
+      ]
+    },
+    {
+      "id": "q2",
+      "prompt": "听一段 3 分钟新闻类英文音频，你能 follow 多少？",
+      "options": [
+        {"value": 1, "label": "几乎听不懂 / 只能抓零星词"},
+        {"value": 2, "label": "抓住主旨但细节缺失"},
+        {"value": 3, "label": "能 follow 60-70%，但走神就掉线"},
+        {"value": 4, "label": "80%+ follow，能复述要点"},
+        {"value": 5, "label": "几乎全懂，可同步翻译关键句"}
+      ]
+    },
+    {
+      "id": "q3",
+      "prompt": "雅思阅读类题目（学术文章 + 7 道判断/填空），你 60 分钟能做对几道？",
+      "options": [
+        {"value": 1, "label": "0-1 题（看不太懂）"},
+        {"value": 2, "label": "2-3 题（懂部分但慢）"},
+        {"value": 3, "label": "4-5 题（题型熟但生词多）"},
+        {"value": 4, "label": "6 题（基本题型熟练）"},
+        {"value": 5, "label": "7 题全对（速度+准确度都到位）"}
+      ]
+    },
+    {
+      "id": "q4",
+      "prompt": "口语描述图片任务（1.5 分钟连续讲话），你能撑多久？",
+      "options": [
+        {"value": 1, "label": "30 秒就词穷 / 频繁中文夹杂"},
+        {"value": 2, "label": "1 分钟，但语法错误多"},
+        {"value": 3, "label": "撑满 1.5 分钟，但表达单一"},
+        {"value": 4, "label": "1.5 分钟流利，词汇多样"},
+        {"value": 5, "label": "可延展到 2 分钟+，语法精准"}
+      ]
+    },
+    {
+      "id": "q5",
+      "prompt": "雅思写作 Task 2（议论文 250 词），40 分钟你能写到什么水平？",
+      "options": [
+        {"value": 1, "label": "写不到 200 词 / 主体散乱"},
+        {"value": 2, "label": "凑齐 250 词但错误多 / 同义替换少"},
+        {"value": 3, "label": "结构完整，但论据空洞"},
+        {"value": 4, "label": "结构+论据+词汇都过关，偶有小错"},
+        {"value": 5, "label": "高分模板娴熟，可冲 7+"}
+      ]
+    }
+  ],
+  "scoring": {
+    "5-9":   {"current_level": "雅思 4.5 以下基础",  "daily_budget": {"weekday": 90,  "weekend": 180}, "advice": "先攻词汇 4000+ 和基础语法，听力从 BBC 6-minute 开始；写作先练范文仿写"},
+    "10-14": {"current_level": "雅思 5.0-5.5",       "daily_budget": {"weekday": 90,  "weekend": 180}, "advice": "听力精听 + 阅读做题节奏（1 篇 20min），口语每天 15min 录音"},
+    "15-19": {"current_level": "雅思 6.0",           "daily_budget": {"weekday": 90,  "weekend": 180}, "advice": "进入剑雅真题阶段，每周 1 次 4 项全套，重点提分项专项突破"},
+    "20-22": {"current_level": "雅思 6.5",           "daily_budget": {"weekday": 75,  "weekend": 150}, "advice": "口语+写作冲 7：每天 1 个高分话题 + 1 篇范文精写，限时模考"},
+    "23-25": {"current_level": "雅思 7.0+",          "daily_budget": {"weekday": 60,  "weekend": 120}, "advice": "保持手感为主，避免过度学习，重点是稳定输出 + 临场状态"}
+  }
+}

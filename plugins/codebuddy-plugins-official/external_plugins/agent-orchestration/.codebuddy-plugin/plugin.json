@@ -1,0 +1,11 @@
+{
+  "name": "agent-orchestration",
+  "description": "多智能体系统优化、智能体改进工作流和上下文管理",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

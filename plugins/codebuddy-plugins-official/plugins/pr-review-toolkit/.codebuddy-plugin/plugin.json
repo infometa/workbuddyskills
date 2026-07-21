@@ -1,0 +1,9 @@
+{
+  "name": "pr-review-toolkit",
+  "description": "全面的 PR 审查代理工具集,专注于代码注释、测试覆盖、错误处理、类型设计、代码质量和代码简化",
+  "homepage": {
+    "url": null,
+    "type": "none"
+  },
+  "license": "UNKNOWN"
+}

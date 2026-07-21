@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "nges": {
+      "type": "streamableHttp",
+      "url": "https://test.nges.qq.com/mcp/aggregate"
+    }
+  }
+}

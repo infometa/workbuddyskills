@@ -1,0 +1,11 @@
+{
+  "name": "database-design",
+  "description": "生产系统的数据库架构设计、模式设计和 SQL 优化",
+  "author": {
+    "name": "Seth Hobson",
+    "url": "https://github.com/wshobson"
+  },
+  "repository": "https://github.com/wshobson/agents",
+  "homepage": "https://github.com/wshobson/agents",
+  "license": "未声明"
+}

@@ -1,0 +1,89 @@
+extends Node
+
+## 全局数据表管理器（Autoload 名: DataManager）。
+## 由 scaffold.py 生成；# region *_AUTOGEN 块会在下次运行时重写，不要在里面手改。
+##
+## 设计要点：
+## - 字典值类型保持 Resource（而非具体 <Name>Data），以便冷启动场景（尚未刷新
+##   global_script_class_cache.cfg）也能加载。运行时若需要类型安全，调用方用
+##   `as WeaponData` 等断言即可。
+## - 不修改 Resource 实例字段；策划如需不同数值，请新增 .tres 而非运行时变更。
+
+signal data_reloaded()
+
+# region CATEGORIES_AUTOGEN
+{{CATEGORY_CONSTS}}
+# endregion CATEGORIES_AUTOGEN
+
+# region DICTS_AUTOGEN
+{{CATEGORY_DICTS}}
+# endregion DICTS_AUTOGEN
+
+# region DEFAULTS_AUTOGEN
+{{DEFAULT_IDS}}
+# endregion DEFAULTS_AUTOGEN
+
+
+func _ready() -> void:
+	reload_all()
+
+
+func reload_all() -> void:
+# region RELOAD_AUTOGEN
+{{RELOAD_BODY}}
+# endregion RELOAD_AUTOGEN
+	print("[DataManager] reloaded: " + _summary())
+	data_reloaded.emit()
+
+
+# region GETTERS_AUTOGEN
+{{GETTERS}}
+# endregion GETTERS_AUTOGEN
+
+
+## 校验所有数据表；返回错误字符串数组（空则通过）。
+func validate() -> Array[String]:
+	var errors: Array[String] = []
+# region VALIDATE_AUTOGEN
+{{VALIDATE_BODY}}
+# endregion VALIDATE_AUTOGEN
+	return errors
+
+
+func _summary() -> String:
+	var parts := PackedStringArray()
+# region SUMMARY_AUTOGEN
+{{SUMMARY_BODY}}
+# endregion SUMMARY_AUTOGEN
+	return ", ".join(parts)
+
+
+func _scan_dir(dir_path: String, expected_class: String) -> Dictionary:
+	var result: Dictionary = {}
+	var dir := DirAccess.open(dir_path)
+	if dir == null:
+		push_warning("[DataManager] Data dir not found: %s" % dir_path)
+		return result
+
+	dir.list_dir_begin()
+	var file := dir.get_next()
+	while file != "":
+		if not dir.current_is_dir() and (file.ends_with(".tres") or file.ends_with(".res")):
+			var full_path := dir_path.path_join(file)
+			var res: Resource = load(full_path)
+			if res == null:
+				push_error("[DataManager] Failed to load %s" % full_path)
+			else:
+				# 先尝试读取 Resource.id 字段；没有或为空则退回文件名
+				var id_raw: Variant = res.get("id") if (res as Object).has_method("get") else null
+				var id: StringName
+				if id_raw != null and String(id_raw) != "":
+					id = StringName(String(id_raw))
+				else:
+					id = StringName(file.get_basename())
+				if result.has(id):
+					push_error("[DataManager] Duplicate %s id: %s (%s)" % [expected_class, id, full_path])
+				result[id] = res
+		file = dir.get_next()
+	dir.list_dir_end()
+	return result

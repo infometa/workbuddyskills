@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>网格热力动画</title>
+  </head>
+  <script
+    charset="utf-8"
+    src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&libraries=visualization"
+  ></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+    #container {
+      width: 100%;
+      height: 100%;
+    }
+    #name {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+        font-size: 12px;
+        color:#ffffff;
+      }
+  </style>
+  <body onload="initMap()">
+    <div id="container"></div>
+    <div id="name">深圳市路口车辆轨迹状态</div>
+    <script src="https://mapapi.qq.com/web/lbs/visualizationApi/demo/data/shenzhen_intersection.js"></script>
+    <script>
+      function initMap() {
+        //初始化地图
+        var map = new TMap.Map("container", {
+          zoom: 10.4, //设置地图缩放级别
+          pitch: 50, //地图俯仰角度
+          rotation: 156.8, //地图旋转角度
+          center: new TMap.LatLng(22.48316065765768, 113.98332510517389), //设置地图中心点坐标
+          mapStyleId: "style4", //个性化样式
+          baseMap: {
+            type: "vector",
+            features: ["base", "building3d"], // 隐藏矢量文字
+          },
+        });
+
+        //初始化网格热力图图并添加至map图层
+        var grid = new TMap.visualization.Grid({
+          sideLength: 500, // 设置网格边长
+           heightRange: [1, 30000], // 高度变化区间
+          showRange: [1, 100], // 聚合数据显示区间
+          toggleAnimation: {
+            animationType: "grow", //动画类型
+            duration: 4000, //动画时长
+          },
+          colorList: ["#ea9c21", "#ea8e21", "#e6721c", "#e55f1d", "#cc2a18"], //颜色层级
+        })
+          .addTo(map)
+          grid.setData(gridData); //设置数据
+
+        // 数据聚合之后才能够真正获取值域范围
+        grid.setShowRange(grid.getValueRange());
+      }
+    </script>
+  </body>
+</html>
