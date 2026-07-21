@@ -104,3 +104,6 @@ cat connectors/westock-mcp/mcp.json
 - 第三方 skill / 专家包可能各自有 LICENSE，请在对应子目录查看。
 - 归档可能与官方最新版本存在差异；以官方市场为准。
 - 使用本仓库内容产生的任何后果由使用者自行承担。
+## 友情链接
+[linux.do](https://linux.do/)
+
