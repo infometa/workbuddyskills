@@ -39,7 +39,7 @@ The table uses canonical tool suffixes for readability. Under the WorkBuddy Conn
 
 | User intent | Read reference | Preferred tools |
 |---|---|---|
-| Resolve industry/theme/source IDs | `references/identity.md` | `resolve_research_identity`, `list_research_identities` |
+| Resolve industry/theme/source IDs and inspect source coverage | `references/identity.md` | `resolve_research_identity`, `list_research_identities`, `get_research_identity_coverage` |
 | 产业链图谱 / 研究框架图谱 overview/tree/node/map | `references/industry-chain-graph.md` | `get_research_frame_overview`, `get_research_frame_tree`, `query_research_frame_nodes`, `get_industry_chain_research_map` |
 | 行业图谱 overview/node brief | `references/industry-graph.md` | `list_supported_subjects`, `get_graph_overview`, `get_industry_graph`, `query_graph_nodes`, `get_graph_node_brief` |
 | Public factors and evidence | `references/industry-graph.md` | `get_public_factor_framework`, `get_factor_evidence_panel`, `get_factor_metric_values` |
@@ -55,6 +55,7 @@ The table uses canonical tool suffixes for readability. Under the WorkBuddy Conn
 - Load the relevant reference before calling detailed tools; do not keep all tool parameter notes in context by default.
 - Keep source boundaries visible: 产业链图谱/研究框架图谱 is a bounded source map, 行业图谱 tools are public-safe graph/factor projections, industry views are generated viewpoint content, and Fin Data/Doc Search/Same Boat remain separate logical source namespaces inside the aggregated Connector.
 - If no mapping, frame, metric, viewpoint, anomaly, or macro series is returned, state the specific missing coverage. Do not invent mappings, node content, sample statistics, source links, or market data.
+- Treat `SOURCE_UNAVAILABLE` and `INDUSTRY_CHAIN_GRAPH_SOURCE_UNAVAILABLE` as source errors, not empty coverage or parameter validation. State only that the relevant graph source is temporarily unavailable; do not claim the tool was not called. After either error, stop dependent identity/frame calls for that source and finish with any independently successful evidence.
 - Do not expose physical database tables, SQL, raw frame JSON, hidden notes, backend errors, personal account data, or tool logs.
 - Do not say engineering has not solved this / 不要说工程上没有解决. Use resolver/list tools first; if no candidate is returned, say no stable graph theme or industry-index candidate was matched under current filters.
 - If a multi-part question needs market data, documents, or Same Boat viewpoints too, finish the graph output and then use the relevant sibling skill/MCP.

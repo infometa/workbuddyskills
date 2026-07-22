@@ -57,6 +57,8 @@ The table uses canonical tool suffixes for readability. Under the WorkBuddy Conn
 - For sector-named news or viewpoints such as "AI 算力有哪些同舟观点", first call `search_research_sectors(query=...)` or `list_research_sectors(...)`, then pass returned `sector_id` values into `list_market_news`, `list_market_viewpoints`, or `list_sector_viewpoints`.
 - `list_sector_viewpoints` requires a stable `sector_id`, not a sector name. Do not pass the user's raw sector text as `sector_id`.
 - For detail tools, call the list/search tool first and reuse returned IDs: `get_market_news(news_id=...)`, `get_market_news_analysis(news_id=..., analyst_id=...)`, `get_market_quote_analysis(quote_id=...)`, `get_market_viewpoint_detail(viewpoint_id=...)`.
+- A UI-capable host may render these real viewpoint list/detail results through `ui://tongzhou-fin-research/viewpoints/v1`. Treat that contextual MCP App as the primary list/detail presentation; add a concise text interpretation, but do not render the same viewpoint result again with a Widget. Widget remains the fallback for hosts without the linked App or for a separate chart the user explicitly requested.
+- 对每条入选内容保留文章级元数据：标题、`publish_time`、来源类型、分析师/行业（如有）和稳定内容 ID。字段未返回就标注缺口，不从摘要推测作者、日期或发布机构。
 - 只有用户明确需要图表、图片、表格截图，或视觉材料能直接支撑当前结论时，才在详情查询后调用 `get_research_visual_evidence`。普通文字回答不要调用该工具。
 - 需要视觉证据时只加载 `references/visual-evidence.md`，不要在普通 Same Boat 查询中展开视觉契约。
 - 用户明确需要源头复核、原文入口或 HTML 证据页时，先复用列表/详情返回的真实文章级 URL。入选的 Same Boat 内容没有文章级 URL 时，才调用 `generate_content_url_link`，并且只使用返回的 `url_link`：`content_type` 只能是 `market_news`、`market_quote` 或 `market_viewpoint`；前两类必须复用已返回的 `analyst_id`，观点类复用 `viewpoint_id`。
@@ -71,6 +73,7 @@ The table uses canonical tool suffixes for readability. Under the WorkBuddy Conn
 - Do not treat database, timeout, upstream, or validation errors as empty results. If an error code contains `DATABASE_UNAVAILABLE`, `QUERY_FAILED`, `QUERY_TIMEOUT`, `UPSTREAM_UNAVAILABLE`, or `UPSTREAM_FAILED`, state that the Same Boat source is temporarily unavailable or the filter needs correction.
 - For market prices, full historical行情, macro data, or financial indicators, use the Fin Data source namespace instead of this skill (`fin_data__*` in the WorkBuddy Connector; `fin-data-query` in retained direct-server clients).
 - Same Boat market news, market quotes, and viewpoints are 同舟投研内容 sources. Do not use them as substitutes for exchange market data, public announcements, or structured broker report retrieval.
+- 同舟内容是独立的投研观点证据域，不能替代公告、新闻或结构化研报，也不能把同舟发布时间写成其他证据域的最新日期。
 - Keep investment wording descriptive and evidence-based. Do not turn content summaries into deterministic forecasts or direct recommendations.
 
 ## Output Shape
@@ -83,4 +86,5 @@ Prefer compact lists or tables. Include:
 - `publish_time` when available
 - the relevant score or sentiment field when available: `importance_score`, `popularity_score`, `sentiment`, `sentiment_score`, and `radar`
 - a real returned article-level URL or generated `url_link` only when source review is requested; otherwise keep a non-clickable source-type label
+- only a 真实文章级 URL that opens the selected content; login, OAuth, console, portal, search and service pages are never source-review links
 - visual evidence only when requested or directly useful: `schema_version`, selected `visuals`, exact `fallback_table`, and returned provenance fields

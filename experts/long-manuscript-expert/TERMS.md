@@ -1,43 +1,33 @@
-# Terms Of Use
+# Terms of Use / 使用条款
 
 ## Scope
 
-`long-manuscript-expert` is a self-contained expert package for long-form manuscript planning, drafting, revision, and finishing support inside WorkBuddy and WorkBuddyAI.
+本专家包提供 `drafting and revision assistance`，覆盖 README 所列 `three supported scenes`：材料启动、续写或有界改稿、成稿收口。它提供结构、正文和审阅建议，但不保证作品一定达到特定商业、学术、传播或审核结果。
 
-The package is designed to work without assuming connector or MCP availability. Any external service trace or legacy runtime evidence is observation-only unless a separate trusted report explicitly says otherwise.
+## User responsibility
 
-## User Responsibility
+用户在交付、传播或 `publication` 前，仍需复核：
 
-- You remain responsible for reviewing factual accuracy, quotations, citations, rights clearance, and publication suitability before external distribution.
-- You should review any generated structure, chapter map, or prose before treating it as final or authoritative.
-- The package helps with drafting and editing workflow; it does not replace legal, compliance, medical, financial, or other regulated professional review.
+- factual accuracy；
+- quotation 与 citation 的准确性和完整性；
+- rights clearance、隐私与保密义务；
+- 适用法律、政策、行业规范和组织审批；
+- 最终文稿是否符合目标读者和发布渠道要求。
 
-## Package Rights Metadata
+本专家包是写作与编辑辅助，`not professional advice`，不能替代法律、合规、医疗、金融或其他受监管专业人员的判断。
 
-The package author/contact metadata and the copyright holder named in
-`LICENSE` are separate fields. `RIGHTS-NOTICE.md` explains the distinction.
-Nothing in this package asserts legal identity or authorization between those
-labels; the publisher must confirm distribution authority before submission.
+## External actions and capabilities
 
-## Data And Boundary
+连接器、网络、文件系统、导出、发送、发布、安装或其他外部动作都需要用户的 `explicit authorization` 和当前任务中的 `successful receipt`。缺少相应能力或回执时，专家只能交付对话内成果，不声称外部状态已经改变。
 
-- The package is intended to work on materials that the user explicitly provides in chat or through approved workspace actions.
-- Local-equivalent installation is a test path only. It is not proof that the expert has been officially listed in the WorkBuddy expert center.
-- Claim, entitlement, unlock, or lebao-related states are not payment closure and must remain separate from first-value proof.
+WorkBuddy 5.3.1 是当前兼容目标，不构成宿主升级承诺。专家包的安装也不自动赋予宿主、连接器或服务新能力。
 
-## Operational Limits
+## Generated content and warranties
 
-- The package must not assume connector availability as a compatibility baseline.
-- Workspace writes require explicit user request.
-- Official-entry runtime proof must be reverified after official listing. Local-equivalent evidence must not be reused as official marketplace proof.
+生成内容可能包含错误、遗漏、不适当推断或风格偏差。用户应根据风险程度进行编辑、事实核验和人工终审。除 MIT License 明示内容外，本包按现状提供，不对准确性、适销性、特定用途适用性或不侵权作额外保证。
 
-## Support And Policy References
+## Privacy, security, and rights
 
-- Privacy policy: `PRIVACY.md`
-- Security boundary: `SECURITY.md`
-- Process evidence and review gates are maintained outside the upload artifact.
-- Testing and verification reference: `references/quality/quality-check.md`
+数据处理边界见 [Privacy](PRIVACY.md)，内容与能力安全边界见 [Security](SECURITY.md)，包体权利与作者字段说明见 [Rights notice](RIGHTS-NOTICE.md) 和 [MIT License](LICENSE)。
 
-## Acceptance
-
-By installing, reviewing, or using this package in a local-equivalent test or review flow, you agree to use it within the boundaries described in these terms and the accompanying package policy documents.
+使用本包不转移用户原始材料的权利，也不免除用户为其输入和发布行为取得必要许可的责任。

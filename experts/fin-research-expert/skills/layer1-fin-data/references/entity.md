@@ -12,9 +12,23 @@ Tools:
 - Fuzzy search by company/security name or ticker.
 - `market`: `all` | `a_stock` | `etf` | `hk_stock`.
 
+## search_security_with_market_data
+- Use when discovery and latest comparable market facts are both needed.
+- `sort_by`: `match` | `amount` | `volume`.
+- A-share candidates use latest-available snapshots; ETF/HK candidates use latest-available daily rows.
+- Keep identity candidates when `market_data_status="missing"`; do not rewrite missing facts as zero.
+- When `metadata.extras.cache_status="stale"`, display `data_date` and label the result as a recent fallback.
+
 ## get_security_profile
 - Use after ticker is known.
 - `market`: `a_stock` | `etf` | `hk_stock`.
+
+## rank_etf_candidates
+- Use for a named index/theme when the user asks which listed ETFs correspond to it or wants evidence-based candidate comparison.
+- Prefer a resolved `tracking_index_id`; otherwise pass a concise index/theme keyword.
+- Preserve `product_variant`; ordinary tracking, enhanced, strategy, and feeder products are not interchangeable.
+- The ranking uses returned daily amount, volume, turnover, premium and premium rate only. It has no AUM, bid/ask spread, order book, or realtime creation/redemption evidence.
+- Present it as candidate comparison, never a fund recommendation.
 
 ## resolve_entities
 - Use when Layer 2 needs stable entity IDs.
@@ -40,6 +54,7 @@ Tools:
 Rules:
 - Do not guess uncommon ticker or basket IDs.
 - Search first, then query constituents/profile.
+- For multi-market discovery with comparison facts, prefer `search_security_with_market_data` over repeated per-symbol calls.
 - Do not hard-code member lists in upper-layer skills.
 - Keep a basket resolution ledger for upper-layer workflows: `user_input`, `resolved_basket_id`, `resolved_basket_name`, `basket_type`, `source_tool`, and the selected candidate reason.
 - `list_constituents` must use a returned `basket_id` when present. Do not invent Shenwan, theme, ETF, or concept IDs from memory.

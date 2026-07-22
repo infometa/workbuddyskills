@@ -1,102 +1,60 @@
-# Deployment and Course Management
+# New Course Deployment
 
-## Deployment
+## Required References
 
-Ship optimized Teaching Prompts to the AI-Shifu platform as live courses. Three distinct actions are involved and should not be conflated:
+- `authentication.md`
+- `course-target.md`
+- `language-policy.md#language-audit`
+- `cli/cli-reference.md#query-commands`
+- `cli/cli-reference.md#bulk-import`
+- `cli/cli-reference.md#state-management`
+- `cli/course-directory-spec.md`
+- `report-template.md`
 
-- **Deploy** — upload local course files to the platform via `build` + `import`. After this the course exists on the platform but is not yet visible to learners on a public URL.
-- **Publish** — run `publish` on the platform, which pushes the current draft to the public student-facing URL. Only after this step does `<base>/c/<bid>` (no `preview=true`) work.
-- **Sync** — keep a local course directory and the platform draft version-consistent; the platform draft is the single source of truth. Think `git pull` before `git push`. Mechanics: `cli/cli-reference.md#version-sync-pull--status`.
+## Conditional References
 
-The standard end-to-end flow chains deploy + publish: build → import (deploy) → publish. When **editing an existing course**, use the sync loop instead: **`pull` → edit locally → `status` → `update-lesson` / `import` (push) → `publish`.**
+- When a standalone course directory lacks a Course Prompt: `course-prompt.md`
+- When a non-empty course description is required but absent: `course-description.md`
+- When an explicitly selected platform attribute must be set before first publication: `course-management.md#operations`
 
-### Prerequisites
+## Boundary
 
-- Python 3 with `requests` and `python-dotenv` packages installed.
-- CLI script: `{skillDir}/scripts/shifu-cli.py`
+Use this workflow only after `course-target.md` resolves a **new course**. It turns an already-authored course directory into a new live platform course:
 
-### Authentication
+`write directory → build → import --new → publish → verify`
 
-Complete `authentication.md` first. Always use CLI commands; never make raw HTTP/API calls directly.
+When an explicitly selected attribute must be set on the new course, insert that management operation after import and before the first publish.
 
-### Course Directory
+Existing-course edits and standalone platform-management operations are outside this workflow.
 
-Teaching Prompts must be organized in a course directory (one MarkdownFlow file per lesson under `lessons/`) before deployment. See `cli/course-directory-spec.md` for the full specification. When continuing from Optimization (Path A), write the optimized Teaching Prompts and Course Prompt into this structure automatically.
+## Preconditions
 
-**Content vs attributes — the skill changes content, not attributes, by default.**
-Content = lesson MarkdownFlow + course name/description/prompt; attributes = each
-lesson's learning permission (`access` = 无需登录/试看/付费) and `hidden`, plus
-course-level model/price/TTS/Ask/keywords/…. The skill pushes only content, and
-the platform backend uses PATCH semantics (any field a write omits is left
-unchanged), so iterating content never resets attributes. `pull` writes the
-current attributes into `structure.json` and `course-config.json` as a
-**read-only reference**. Change attributes only when the user explicitly asks —
-`set-access` for a lesson's permission, `set-tts` for course Listen Mode (flags:
-`cli/cli-reference.md#update-commands`); other course-level settings
-are changed in the platform editor.
+- Complete `authentication.md`.
+- Confirm the resolved target is `new`.
+- Provide a course directory that conforms to `cli/course-directory-spec.md`, including lesson files. Require a completed `course-prompt.md` for a content-complete deployment; when it is missing, complete the applicable conditional authoring reference before building. A missing course description keeps the CLI's existing empty-description fallback unless the author requests non-empty listing copy. This workflow consumes final artifacts; it does not define their content.
+- Complete the source-file checks in `language-policy.md#language-audit` before the first platform mutation.
 
-**Editing an existing course → use granular non-destructive commands**
-(`pull → update-lesson / add-lesson / delete-lesson / reorder / set-access / set-tts`).
-The destructive whole-course `import` recreates every outline (a recreated lesson
-gets the platform-default permission), so reserve `import --new` for brand-new
-courses — do not use it to iterate an existing one.
+## Deploy and Publish
 
-### CLI Commands
+1. Write the final authoring artifacts into the course directory without changing their defined filenames.
+2. Run `build --course-dir <dir>` to generate `<dir>/shifu-import.json` locally.
+3. Complete the payload checks in `language-policy.md#language-audit` against the generated import file. Stop before import if the payload fails.
+4. Run `import --new --json-file <dir>/shifu-import.json` and capture the returned Shifu BID. `import --new --course-dir <dir>` remains an equivalent one-step build-and-import CLI form, but a separate build is required when the payload must be inspected before mutation.
+5. Before first publication, apply only explicitly selected platform-attribute operations through the conditional management reference. This includes enabling Listen Mode when Course Design Intake selected it; leave every unspecified attribute unchanged.
+6. Run `publish <shifu_bid>` to make the current draft available at the public learner URL.
 
-All commands documented in `cli/cli-reference.md` (deployment: `build` / `import` / `publish` / `show`; version sync: `pull` / `status`; management for Path D: `list` / `update-meta` / `update-lesson` / `rename-lesson` / `set-access` / `set-tts` / `reorder` / `delete-lesson` / `archive`). Import JSON schema: `cli/cli-reference.md#import-json-schema`.
+`import --new` creates the platform course but does not publish it. The public URL is expected to work only after `publish` succeeds.
 
-### Deployment Workflow
+## Verify
 
-**From pipeline (Path A continuation):**
-1. Write Optimization outputs into the course directory: `lessons/lesson-*.md`, `README.md`, `course-description.md` (the generated SEO description; no author-side process notes), `course-prompt.md` (the Optimization `course_prompt` artifact, structured per `course-prompt.md#fillable-template`), and required `structure.json`.
-2. Run `build --course-dir <dir>` to generate `shifu-import.json`.
-3. **Deploy a new target**: Run `import --new --json-file <dir>/shifu-import.json`. If `course-target.md` resolved an existing target, do not run this command; use the Version Sync Workflow below.
-4. **Publish**: Run `publish <shifu_bid>` to push the course to its public student-facing URL.
-5. Verify via platform URL.
+1. Copy the verification URLs and their following Chinese `# ...` hints exactly from CLI output; do not reconstruct URLs. Format them according to `report-template.md`.
+2. Run `show <shifu_bid>` and compare the platform title, description, chapter structure, lesson count, and lesson titles with the local course directory. Run `export <shifu_bid>` and compare the exported Course Prompt with `course-prompt.md`.
+3. For each lesson, use its returned `outline_bid` with `show <shifu_bid> <outline_bid>` and confirm that the deployed Teaching Prompt, variables, and interaction syntax match the local file.
+4. Confirm both the preview URL and, after publication, the public learner URL are reachable.
 
-**Standalone deployment (Path C):**
-1. Ensure the course directory is ready: Teaching Prompt files under `lessons/`, a `course-description.md` SEO summary, a `course-prompt.md` (author per `course-prompt.md#fillable-template` first if missing), and `structure.json` (create it if missing). Directories without `course-description.md` still build, but the platform description will be empty unless `--description` is provided.
-2. New target: run `build` → `import --new` → `publish`. Existing target: use the Version Sync Workflow.
+## Completion Criteria
 
-### Version Sync Workflow
-
-The **front guard** that fixes the target (new-vs-edit, `find-title`,
-pulling the existing course) is `course-target.md#resolve-the-course-target` — run it first. This section covers
-what happens once the target is an existing course you have pulled: the
-**pull → edit → push** loop that converges like `git pull` before `git push`.
-
-1. **`pull <shifu_bid> --course-dir <dir>`** — download the cloud draft into the local dir and record revisions.
-2. **Edit locally** — change lesson files / course description / course prompt in place.
-3. **`status --course-dir <dir>`** — see what diverged (`behind` / `locally modified` / `new` / `deleted` on server).
-4. **Push** with `--course-dir` so the recorded baseline is used: `update-lesson <bid> <ob> --teaching-prompt-file f.md --course-dir <dir>` for a single lesson, or `import <bid> --course-dir <dir>` for the whole course.
-5. **`publish <bid>`** when ready for learners.
-
-**Convergence loop on conflict.** A push checks whether the cloud advanced since
-your last sync:
-
-- **No newer version → push succeeds (exit 0) → done.** Proceed to `publish`.
-- **Newer version → push reports a conflict (exit 2). Exit 2 means "retry", not
-  "give up".** The CLI has **already** backed up your un-pushed change,
-  auto-pulled the latest cloud copy over local, and printed who changed it and
-  when. Then **loop**: re-read the freshly pulled files (the new baseline) →
-  re-apply your intended change on top of it (you, the agent, do the merge — the
-  CLI never auto-merges content) → run the same push again → **repeat until the
-  push succeeds (exit 0)**. Never force the old content back — the cloud is
-  authoritative.
-
-Never hand-edit `.shifu-sync.json`, and always push with `--course-dir` —
-without it a concurrent edit cannot be detected. Backup file locations and full
-mechanics: `cli/cli-reference.md#version-sync-pull--status`.
-
-### Verification
-
-After any deployment or management operation, verify the result:
-1. Show the user the verification URLs the script printed — admin console, course preview, and (when the script also printed it) the published public URL. Copy URLs verbatim from the script output and render each as three lines: a Markdown link, a bare URL on the next line for copy-friendliness, and the script's following Chinese `# ...` hint copied verbatim without the leading `#` (per `report-template.md` — Deployment → Verification URLs, plus the top-level Formatting Rules exception). Never reconstruct URLs from a template by hand. Lesson-level URLs are intentionally omitted to keep the report scannable; if the user later asks for a specific lesson link, use `show <shifu_bid>` to find the `outline_bid` and build it on demand.
-2. Use `show <shifu_bid>` to get the lesson `outline_bid`, then check each lesson's Teaching Prompt, variable collection, and interaction logic.
-
-### Validation
-
-- Import completes without errors.
-- Course is accessible via platform URL.
-- Lesson count and structure match the source directory.
-- Published course is reachable in preview mode.
+- `build`, `import --new`, and `publish` complete without errors.
+- The platform structure and content match the source directory.
+- Preview and public verification succeed.
+- The final report contains the exact Shifu BID and CLI-produced URLs.

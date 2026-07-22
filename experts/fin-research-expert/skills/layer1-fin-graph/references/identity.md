@@ -1,6 +1,6 @@
 # Identity Resolution Reference
 
-Read this when the task involves industry/theme names, lycodes, Same Boat sector ids, fin-data basket ids, market/index codes, SW codes, or industry-chain frame ids.
+Read this when the task involves industry/theme names, lycodes, Same Boat sector ids, fin-data basket ids, market/index codes, SW codes, or industry-chain frame ids. This is an 行业/主题身份解析器，不是上市公司证券解析器。
 
 For cross-source work, also read `references/limitations.md`.
 
@@ -33,8 +33,15 @@ Use to discover canonical identities and coverage:
 - `has_rfg`, `has_same_boat`, `has_market_data`
 - `limit`: 1-100
 
+### `get_research_identity_coverage`
+
+Use after identity resolution when the workflow must explain which graph, market, Same Boat, basket, or industry-chain targets are actually available. Pass the resolver-returned canonical identity or supported source identifier; preserve returned `coverage_gaps` and do not convert a missing target into an inferred mapping.
+
 ## Rules
 
+- 公司问题先由支持该市场的证券/公司解析能力确认名称、市场、交易所和标准代码；不得把行业 canonical identity、图谱节点或 `market_index_code` 当作公司证券身份。
+- 同名公司、两地上市或 A/H/美股候选并存时，保留候选并要求用户确认，不能静默选择一个上市地。
+- 公司与行业同时出现时，公司证券身份与行业身份必须分别确认；公司 ticker 不得作为 `lycode`/`frame_id`，行业代码也不得作为证券 ticker。
 - If resolver returns `ambiguous`, show candidates or ask the caller to pick one; do not silently choose.
 - If resolver returns fallback `rfg:<frame_id>`, state that lycode coverage is missing.
 - If source names conflict, preserve the warning and tell the user which source ID was used.

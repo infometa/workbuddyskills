@@ -6,7 +6,7 @@
 
 - 技能包：**295** · 连接器：**66** · 专家：**353** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-22
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-23
 
 ---
 ## 目录
@@ -511,7 +511,7 @@
 | [`kdocs-ppt-creator`](./experts/kdocs-ppt-creator/) | [AIPPT专家](./experts/kdocs-ppt-creator/) | WPS官方出品一句话主题或一份参考文档，AI 自动设计大纲并生成包含标题页、内容页、总结页的完整 PPT，并按场景统一配色与排版。覆盖工作汇报、项目展示、培训课件、方案演示等高频… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`kidd-content-expert`](./experts/kidd-content-expert/) | [知识视频创作专家](./experts/kidd-content-expert/) | 基于深度研究报告，用基德风格创作口语化、反常识的知识视频脚本，覆盖时政财经、宇宙科普与科技前沿。 | 无 |
 | [`kuaishou-strategist`](./experts/kuaishou-strategist/) | [快手策略师](./experts/kuaishou-strategist/) | 深谙快手下沉市场特性和老铁文化，打造接地气的内容策略 | 无 |
-| [`long-manuscript-expert`](./experts/long-manuscript-expert/) | [长文档写作与改稿专家](./experts/long-manuscript-expert/) | 擅长把提纲、访谈、旧稿和零散素材整理成长文档手稿，独立完成结构规划、章节扩写与交付前质检。 | 可能需要启用对应 MCP / 连接器 |
+| [`long-manuscript-expert`](./experts/long-manuscript-expert/) | [长文档写作与改稿专家](./experts/long-manuscript-expert/) | 把提纲、访谈、旧稿和零散素材整理成结构清晰的长文档，支持章节续写、限定范围改稿与成稿交付前检查。 | 需要登录 / OAuth / 扫码授权 |
 | [`news-buddy`](./experts/news-buddy/) | [资讯顾问](./experts/news-buddy/) | 懂你的资讯顾问。基于隐式画像精选新闻，告诉你每条跟你有什么关系、你能做什么，让信息真正为你所用。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权 |
 | [`novel-generator`](./experts/novel-generator/) | [爽文小说生成专家](./experts/novel-generator/) | 把一句话灵感扩写成完整提示词与大纲，逐章生成连贯爽文，维护角色、地点、情节一致，支持修仙、重生、都市等题材。 | 无 |
 | [`podcast-strategist`](./experts/podcast-strategist/) | [播客策略师](./experts/podcast-strategist/) | 精通播客内容策划和增长策略，通过音频建立深度用户连接 | 需要微信/企微相关凭证或扫码登录 |
@@ -784,7 +784,7 @@
 | [`citongshuopro`](./experts/citongshuopro/) | [刺桐说Pro-投资社群嘉宾团](./experts/citongshuopro/) | 模拟真实投资社群运作模式的多智能体投研系统，已接入社群嘉宾数字分身，可7*24为您提供投资咨询服务。 | 可能需要启用对应 MCP / 连接器 |
 | [`earnings-reviewer`](./experts/earnings-reviewer/) | [财报研究员](./experts/earnings-reviewer/) | 资深季报复核分析师,读财报电话会和公告更新覆盖模型,产出季报后记、方差表与估值调整,供研究部门沿用。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`equity-research`](./experts/equity-research/) | [股票研究专家](./experts/equity-research/) | 全面的股票研究工具集：财报分析、首次覆盖报告、DCF与可比估值、多空推介、投资备忘录、事件情景分析、组合风险管理，覆盖完整买方卖方研究工作流 | 无 |
-| [`fin-research-expert`](./experts/fin-research-expert/) | [股市投研分析师](./experts/fin-research-expert/) | 连接同舟公开投研能力，稳定生成个股、行业、事件与研报的证据化简报和可复核投研案例页面 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`OSS_ACCESS_KEY_SECRET` |
+| [`fin-research-expert`](./experts/fin-research-expert/) | [股市投研分析师](./experts/fin-research-expert/) | 连接同舟公开投研能力，稳定生成个股、行业、事件与研报的证据化简报和可复核投研案例页面 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要 GitHub Token 或 `gh auth login`；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`finance`](./experts/finance/) | [财务会计专家](./experts/finance/) | 财务会计工具集：月末结账、日记账分录、账户核对、财务报表生成、差异分析和 SOX 审计支持 | 无（可选 API/账号以增强能力） |
 | [`financial-analysis`](./experts/financial-analysis/) | [金融建模专家](./experts/financial-analysis/) | 核心金融建模工具：DCF 估值、可比公司分析、LBO 模型、三张表模型、竞争格局分析和 PPT 质检 | 可能需要启用对应 MCP / 连接器 |
 | [`financial-tracker`](./experts/financial-tracker/) | [财务追踪师](./experts/financial-tracker/) | 精准追踪项目和业务的财务数据，确保每笔收支清晰透明 | 无（可选 API/账号以增强能力） |

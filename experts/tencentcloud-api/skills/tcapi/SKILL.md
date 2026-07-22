@@ -35,9 +35,30 @@ examples:
 
 ## 核心原则
 
-> **优先检索最佳实践 → 再查接口文档 → 最后调用 API**。不要跳过文档检索直接调用，避免用错接口或遗漏参数。
+> 1. **优先检索最佳实践 → 再查接口文档 → 最后调用 API**。不要跳过文档检索直接调用，避免用错接口或遗漏参数。
+> 2. **在线文档是实时态，本地 tccli 是版本快照**。以在线文档（`cloudcache.tencentcs.com`）为准判断接口/参数是否存在；本地 tccli 因版本差异，可能缺少新接口、或残留已下线的旧接口。遇到本地报「无此接口」或服务端报「接口已下线」时，先查在线文档确认真实情况，再决定升级 tccli 或换用替代接口。
 
 ## 执行流程
+
+### Step 0：环境自检（首次任务必做，一次探测串起所有分支）
+
+在真正调用业务接口前，先做一次探测，把环境状态判定清楚，避免中途反复失败：
+
+```sh
+# ① 是否安装 & 能否直接跑
+command -v tccli >/dev/null 2>&1 && tccli cvm DescribeRegions >/dev/null 2>&1 && echo "TCCLI_OK" || echo "TCCLI_NEED_CHECK"
+```
+
+判定分支：
+
+| 探测结果 | 状态 | 处理 |
+|:--------|:-----|:-----|
+| 返回 `TCCLI_OK` | 已安装、可运行、凭证有效 | 直接进入 Step 1 |
+| `command not found` | **未安装** | 引导安装（[references/install.md](references/install.md)）；若已装 Python 也可直接用 Step 5 兼容模式 |
+| `bad interpreter` / `No module named tccli` | **装了但 shebang/环境坏** | 切换 Step 5 兼容模式（动态探测 Python 调用），本会话后续统一使用 |
+| 报 `secretId is invalid` / `AuthFailure.SecretIdNotFound` | **凭证缺失** | 进入 Step 2 配置凭证 |
+
+> 探测通过（`TCCLI_OK`）后，本会话无需再重复自检，直接调用即可。
 
 ### Step 1：检索 API 文档
 
@@ -93,9 +114,18 @@ curl -s https://cloudcache.tencentcs.com/capi/refs/service/cvm/model/SystemDisk.
 
 如果已经提供了凭证，tccli 可以正常调用。
 
-如缺少凭证，执行 tccli 会提示 "secretId is invalid"。应执行 `tccli auth login` 进行浏览器授权登录，等待回调后继续（命令会起本地端口、阻塞进程，直到浏览器 OAuth 完成并回调）。
+如缺少凭证，执行 tccli 会提示 "secretId is invalid"（错误码 `AuthFailure.SecretIdNotFound`）。此时**不要直接假设 `tccli auth login` 可用**——`auth login`（浏览器 OAuth）是较新版本才有的子命令，**旧版 tccli 没有 `auth` 子命令**，硬跑会报 `invalid choice: 'auth'`。
 
-凭证授权原理，以及多用户凭证的使用方法，参考 [references/auth.md](references/auth.md)。
+**必须先探测能力，再选路径：**
+
+```sh
+tccli auth login --help >/dev/null 2>&1 && echo "AUTH_LOGIN_OK" || echo "AUTH_LOGIN_UNSUPPORTED"
+```
+
+- `AUTH_LOGIN_OK`（新版）→ 执行 `tccli auth login` 进行浏览器授权登录，等待回调后继续（命令会起本地端口、阻塞进程，直到浏览器 OAuth 完成并回调）。
+- `AUTH_LOGIN_UNSUPPORTED`（旧版）→ 引导用户二选一：① 升级 `pip install -U tccli` 后即可用浏览器登录；② 由用户在自己终端执行 `tccli configure` 交互式填入密钥。**Agent 不代填、不索要、不打印密钥。**
+
+完整的能力探测流程、双路径细节与多账户用法，参考 [references/auth.md](references/auth.md)。
 
 **安全红线**：严禁向用户索要 SecretId/SecretKey，也拒绝任何有可能打印凭证的操作（尤其是 `tccli configure list`）。
 
@@ -183,11 +213,13 @@ tccli cvm DescribeInstances --region ap-guangzhou
 
 | 错误码 | 含义 | 处理方式 |
 |:------|:-----|:---------|
-| `AuthFailure.SecretIdNotFound` | 凭证缺失或无效 | 执行 `tccli auth login` 重新授权 |
+| `AuthFailure.SecretIdNotFound` | 凭证缺失或无效 | 先探测 `tccli auth login --help`：支持则 `tccli auth login`；不支持（旧版）则升级 `pip install -U tccli` 或引导用户 `tccli configure`（详见 Step 2 / references/auth.md） |
 | `AuthFailure.UnauthorizedOperation` | 无权限 | 检查 CAM 策略，确认子账号有该接口权限 |
 | `InvalidParameterValue` | 参数值不合法 | 查阅接口文档确认参数取值范围 |
 | `ResourceNotFound` | 资源不存在 | 确认资源 ID 和地域是否正确 |
 | `RequestLimitExceeded` | 请求频率超限 | 等待后重试，或减少并发调用频率 |
+| `UnsupportedOperation` / `DeprecatedOperation` / `InvalidAction` | 接口已下线/更名，或本地版本认得但云端已淘汰 | 检索在线文档确认现行接口，改用替代接口；勿死磕旧接口 |
+| 本地 `invalid choice: 'XxxAction'` / argparse 报错，非服务端返回 | **旧版 tccli 本地缺少该新接口**（发布快照落后于云端） | 引导 `pip install -U tccli` 升级；或先查在线文档确认接口存在后再操作 |
 | `DryRunOperation` | DryRun 操作成功 | 非真实错误，表示参数校验通过 |
 | `UnsupportedRegion` | 不支持的地域 | 查阅接口文档确认支持的地域列表 |
 | `ResourceInsufficient` | 资源不足 | 换可用区或调整规格重试 |

@@ -16,6 +16,7 @@ Read this file for every HTML Playbook. The calling Layer 3 workflow reads its o
 - Use WorkBuddy-friendly tabs as `<button data-target="...">` with a tiny `scrollIntoView` handler. Do not use `href="#section-id"` or any `javascript:` link.
 - All major sections must be visible without JavaScript. Never hide content with `.section { display: none; }`.
 - Keep text readable on mobile and desktop. Set stable widths, wrapping, and line heights so text 不能溢出 cards, buttons, chips, or chart labels.
+- Follow Mainland China market color semantics for every directional value, factor, evidence label, chart, legend, and scenario: red is positive/up/`+`/bullish/supporting; green is negative/down/`-`/bearish/risk or opposing. Neutral structure uses blue/teal/gray, while mixed, missing, or pending evidence uses amber. Do not use the international green-up/red-down convention.
 
 ## Source Review
 

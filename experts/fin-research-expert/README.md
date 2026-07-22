@@ -17,6 +17,8 @@ v1 packages one WorkBuddy expert, displayed as `同舟股市投研专家`, for a
 - Policy/event impact analysis and evidence-backed HTML playbook pages
 - Research-report digest and institution viewpoint comparison
 - 同舟投研 content lookup and summarization
+- Ordinary-answer K-line, trend, event-return, grouped comparison, line-column, calibrated radar and verifiable report-image presentation with table fallback
+- WorkBuddy-native daily, workday, weekly and one-time public-market research tasks with explicit consent, lifecycle management and safe non-WorkBuddy fallback
 
 ## WorkBuddy Ecosystem Mapping
 
@@ -29,6 +31,32 @@ This package follows the WorkBuddy product whitepaper's four-module model:
 | Expert | `agents/fin-research-expert.md` is the single user-facing expert role. |
 | Playbook | `playbooks/cases/` contains sidecar WorkBuddy case assets for Discover/Playbook review and publishing. They are not part of the standard Expert package. |
 
+## Shared Skill Source Of Truth
+
+The approved public-market Layer 2 and Layer 3 research workflows come from the
+pinned `reference-materials/ly-skills` submodule. The matching paths under the
+WorkBuddy and Codex plugin `skills/` trees are source projections, not separate
+copies. This keeps both clients on the same reviewed text and helper assets.
+
+Only the 11 approved Layer 2 Skills and two approved Layer 3 Skills are projected
+into the official packages. Other entries added to `ly-skills` remain candidates
+until they pass the WorkBuddy review boundary and are explicitly added here.
+Connector guidance, Layer 1 MCP contracts, the gateway router, and the repo-only
+WorkBuddy audit Skill remain product-owned.
+
+Initialize and verify the pinned source with:
+
+```bash
+git submodule update --init reference-materials/ly-skills
+python3 scripts/shared_skill_sources.py --source .
+```
+
+Release packaging validates every projected file and then materializes it as an
+ordinary file inside the WorkBuddy and Codex ZIPs. Released packages therefore
+do not contain symlinks and do not require Git or the `ly-skills` checkout at
+install time. To update a shared workflow, merge it in `ly-skills`, advance this
+repository's submodule pointer, and run the full package audit before release.
+
 ## Single Connector Authentication
 
 The current expert declares one `tongzhou-fin-research` Connector dependency. First use opens the gateway's browser authorization page through WorkBuddy native OAuth; the user approves once, then WorkBuddy completes the exact PKCE callback and retries the original call. The renewable OAuth session is stored by WorkBuddy, so new conversations and restarts do not require four repeated API Key entries.
@@ -36,6 +64,33 @@ The current expert declares one `tongzhou-fin-research` Connector dependency. Fi
 The canonical remote MCP is `/mcp/tongzhou-research`. Its tools retain stable service namespaces for market data, documents, graph, and Tongzhou research. Existing four-entry API-Key configurations remain supported only as an explicit migration/rollback path and are not automatically removed or revoked.
 
 The standard expert zip references the approved Connector by dependency name but excludes Connector source and root `.mcp.json`. Local unpublished validation installs the Connector separately; this preserves independent Expert and Connector review boundaries.
+
+## Tongzhou Viewpoint MCP App
+
+The product owns the source for a standards-based contextual viewpoint application under `mcp-apps/financial-research-workbench/`. The directory name is retained as a release-path compatibility boundary. The runtime uses the community `io.modelcontextprotocol/ui` extension and official `@modelcontextprotocol/ext-apps` SDK.
+
+The App is a view for real Same Boat viewpoint results, not another data service, a report launcher, or a copy of the Same Boat mini program. UI-capable hosts attach it to viewpoint list/detail tools; non-UI hosts receive unchanged tool results. It never reads credentials or calls upstream HTTP services directly. Detail, source-link, and conversation actions are mediated by the host and continue through `tongzhou-fin-research` with existing grants, audit, rate limits, and metering.
+
+WorkBuddy Widget remains a compact fallback for hosts that do not render the linked MCP App. Both paths use the same sentiment, radar, time, and source semantics, but the same viewpoint result must not be rendered twice. Full recommendation feeds, following, accounts, history, and sharing remain in Same Boat H5 and the mini program.
+
+Build and validate the immutable single-file artifact with:
+
+```bash
+cd mcp-apps/financial-research-workbench
+npm ci --ignore-scripts --registry=https://registry.npmjs.org/
+npm run build
+cd ../..
+python3 scripts/build_mcp_app.py --check
+```
+
+For a reviewed Gateway update, copy the exact artifact and generated manifest explicitly:
+
+```bash
+python3 scripts/build_mcp_app.py \
+  --output ../../services/min-mcp-gateway/mcp_apps/tongzhou-viewpoints-v1.html
+```
+
+The Gateway serves that immutable artifact through authenticated MCP `resources/read`. It is not uploaded as a public page and has no external scripts, styles, images, fonts, frames, fetch calls, or browser credential storage.
 
 Internal route names such as `layer1-*`, `layer2-*`, and `layer3-*` are implementation labels. Marketplace text, quick prompts, and normal answers should use user-facing scene names such as 个股分析、行业异动、事件解读、研报挖掘、证据页. Approved public-market L1/L2/L3 skills are packaged with the expert; candidate Playbook templates and business/private-account skills remain excluded.
 
@@ -153,17 +208,37 @@ cards or missing-link warnings.
 
 `plugin.json` points to `avatars/expert-v2.png`. The repository includes a 512x512 PNG avatar so local validation and release packaging produce a complete expert package. The avatar can be replaced before marketplace publication, but the replacement must remain PNG/JPG, square, and under 500KB.
 
+## Released Tool Maintenance
+
+When a Gateway grant adds, removes, or renames a WorkBuddy research tool:
+
+1. Update the authoritative grant in `services/min-mcp-gateway/gateway_models.py` and the `RELEASED_TOOLS` snapshot in `tests/test_research_identity_skill_routing.py` in the same change set.
+2. Add the tool to the compact released-tool catalog in `skills/fin-mcp-gateway/references/layered-capabilities.md`, including market/coverage, required inputs, units, date semantics, preferred route, fallback and error behavior.
+3. Document its parameters and boundaries in exactly one matching `layer1-*` Skill/reference, then mirror that file into the Codex plugin tree. Keep detailed contracts out of the Agent prompt.
+4. Keep `agents/fin-research-expert.md` at or below the tested 1,200-word body budget. The Agent owns activation, safety and routing; Layer 1 references own tool detail.
+5. Run the catalog/parity tests, full package tests, local validator, Connector validator and source-versus-ZIP answer regression before publishing.
+
+The static parity gate intentionally fails if a released tool is absent from either the catalog or its Layer 1 contract. A tool is not release-ready merely because it appears in `tools/list`.
+
 ## Release Package
 
 Every production gateway release should build a matching expert zip:
 
 ```bash
 python3 scripts/validate_local.py --source .
+python3 scripts/validate_workbuddy_connector.py --source .
 python3 scripts/package_expert.py --source . --output-dir dist
+CONNECTOR_ZIP="$(python3 scripts/package_workbuddy_connector.py --source . --output-dir dist)"
+python3 scripts/validate_workbuddy_connector.py --zip "$CONNECTOR_ZIP"
 ```
 
 The generated zip excludes local references, `.env*`, `.sms_key`, virtual environments, caches, and git metadata.
 It also excludes `playbooks/`, because Playbook cases are reviewed and published as separate Discover/Playbook assets rather than as standard Expert runtime files.
+Shared Layer 2/3 source links are expanded to ordinary files in both release
+archives; `reference-materials/ly-skills` and `.gitmodules` are not shipped.
+The standalone Connector validator also checks the exact file whitelist, SemVer
+alignment, native OAuth shape, HTTPS transport, icon, Skill routing guidance,
+archive paths, size limits, CRC, and an optional OSS SHA256.
 
 Gitea Actions packages and publishes releases on `main` and `v*` tags when these
 repository secrets exist:
@@ -172,6 +247,15 @@ repository secrets exist:
 OSS_ACCESS_KEY_ID
 OSS_ACCESS_KEY_SECRET
 ```
+
+Release answer regression and the step-by-step CodeBuddy CLI acceptance process
+are documented in [`evaluation/`](evaluation/README.md). It runs the exact expert
+through the headless CodeBuddy runtime, can compare Hy3 with DeepSeek V4 Flash,
+or use the company LiteLLM `FAST`/`HIGH` aliases, and writes one Feishu Sheet per
+expert version. The live model step is opt-in through
+`WORKBUDDY_EVAL_ENABLED=1`; ordinary package and unit checks never consume model
+quota. Evaluation credentials use dedicated read-only identities and are not
+included in any release archive.
 
 For local manual testing, `scripts/publish_oss_release.py` also accepts the
 legacy aliases `OssAccessKeyId` and `OssAccessKeySecret`.

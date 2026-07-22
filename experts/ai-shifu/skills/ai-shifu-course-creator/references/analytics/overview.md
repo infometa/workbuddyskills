@@ -2,6 +2,10 @@
 
 Use this page as the entry point for any analytics task. The deeper references on this page are read on demand.
 
+## Required References
+
+None.
+
 ## When to Use
 
 Enter the analytics path when a course author or admin asks about:
@@ -19,7 +23,7 @@ Enter the analytics path when a course author or admin asks about:
 
 > Raw token counts are **not** exposed to creators. Any question about "how much was spent" maps to credits — query via `shifu-cli.py credit-detail`.
 
-Do **not** enter the analytics path when the user asks only "how many courses do I have?" — that is a `shifu-cli.py list` call. **But** if the user names a course by title (e.g. "show me the data on 跟 AI 学 AI 通识"), resolve the current `shifu_bid → title` via Course Metadata recipes first, *then* run the downstream analytics — `shifu-cli.py list` is a draft snapshot and can leak historical / renamed titles.
+Do **not** enter the analytics path when the user asks only "how many courses do I have?" — that is a `shifu-cli.py list` call. **But** if the user names a course by title (e.g. "show me the data on 跟 AI 学 AI 通识"), resolve the current `shifu_bid → title` via Course Metadata recipes first, _then_ run the downstream analytics — `shifu-cli.py list` is a draft snapshot and can leak historical / renamed titles.
 
 ## CLI-Only Rule
 
@@ -68,7 +72,10 @@ The CLI injects `shifu_bid` into the body, handles authentication, and prints th
   "code": 0,
   "data": {
     "columns": ["status", "n"],
-    "rows": [[602, 124], [603, 87]],
+    "rows": [
+      [602, 124],
+      [603, 87]
+    ],
     "limit": 100,
     "offset": 0
   }
@@ -90,7 +97,7 @@ Cross-course analysis: send one `analytics-query` per `shifu_bid` and merge resu
 The CLI prints the full response on every call. When the response carries a non-zero `code`, react as follows:
 
 | Code | Meaning | Action |
-|---|---|---|
+| --- | --- | --- |
 | `0` | Success | Parse `data.columns` / `data.rows`, then apply the Translation Gate |
 | `11001` | No access to this course | Confirm the `shifu_bid` is owned by the logged-in user; switch course or stop |
 | `11002` | Invalid DSL | Re-check required fields, duplicate `alias`, or leading-wildcard `like` |
@@ -113,11 +120,11 @@ Each query is scoped to one `shifu_bid`. The endpoint does not support cross-cou
 Before constructing any DSL, identify the correct table. Use this map:
 
 | User asks about... | Table | Key filter | Key field |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Course overview (high-level snapshot, not one metric)** | `learn_progress_records` + `order_orders` + `shifu_user_archives` | see **Recipe 0d** | bundles learners + orders + revenue + recent activity |
 | Learner count / completion / stuck lessons | `learn_progress_records` | `status = 603` (completed), `602` (stuck) | `outline_item_bid`, `status` |
 | **Follow-up questions / Q&A** | `learn_generated_blocks` | **`type = 321`** (NOT `role = 2`!) | `type`, `generated_content` |
-| LLM answers to follow-ups | `learn_generated_blocks` | `type = 322` | `generated_content`, `position` |
+| Teaching Agent answers to follow-ups | `learn_generated_blocks` | `type = 322` | `generated_content`, `position` |
 | Lesson ratings / read vs listen | `learn_lesson_feedbacks` | — | `score`, `mode` |
 | Orders / revenue / payment channel | `order_orders` | `status = 502` (paid) | `paid_price`, `payment_channel` |
 | Audience profile distribution | `var_variable_values` | — | `variable_bid`, `value` (aggregate only!) |
@@ -128,7 +135,7 @@ Before constructing any DSL, identify the correct table. Use this map:
 | Current course title | `shifu_published_shifus` | `deleted = 0` (auto-injected) | `title` |
 | Draft course title | `shifu_draft_shifus` | `deleted = 0` (auto-injected) | `title` |
 
-## Common Pitfalls (read this before your first query)
+## Common Query Pitfalls
 
 These are the mistakes that most commonly cause repeated failed queries and wasted time:
 
@@ -139,6 +146,7 @@ These are the mistakes that most commonly cause repeated failed queries and wast
 ### Pitfall 2 — Credit queries: `credit-detail` vs `bill_daily_usage_metrics`
 
 These are **different tools for different questions**:
+
 - `shifu-cli.py credit-detail <bid>` — raw per-usage detail, server-side join, **always works**. Use for "how many credits did I spend", "what did my learners cost me", per-lesson breakdown.
 - DSL against `bill_daily_usage_metrics` — daily aggregated trends by model/scene/type. **Currently empty in production** (cron not registered). Do not use for credit data — it always returns zero rows.
 
@@ -149,6 +157,7 @@ The DSL requires `where` to be an array of filter objects, even for a single con
 ### Pitfall 4 — Table name guessing
 
 Do not guess table names — the schema has 10 tables and many sound-alike names. Always check the full list in `tables.md` first. Common wrong guesses:
+
 - "user logs" or "user_logs" → does not exist. Use `learn_generated_blocks` for interaction data, `learn_progress_records` for progress data.
 - "billing" or "usage" → `bill_daily_usage_metrics` (currently empty) or `shifu-cli.py credit-detail` for actual credit data.
 

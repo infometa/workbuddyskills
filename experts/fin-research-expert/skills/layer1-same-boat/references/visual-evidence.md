@@ -36,6 +36,8 @@ Show returned provenance next to the image:
 
 无文章级链接时只标注已返回的来源类型和元数据，不渲染链接，也不拿门户首页或搜索页代替。For `table_image`, label it as a table screenshot；不要 OCR，也不要重构精确数值。
 
+视觉材料的 `provenance` 是图片级或报告级来源说明，不自动等于入选 Same Boat 内容的文章级元数据。只有返回的 `source_url` 确实打开对应文章/报告时才作为真实文章级 URL；登录、OAuth、控制台、门户、搜索和服务页一律丢弃。
+
 ## Failure Boundaries
 
 - `data.result=null` means the requested content identity was not found.
@@ -43,3 +45,4 @@ Show returned provenance next to the image:
 - Invalid or unsafe entries may be omitted while valid siblings remain. Use `quality.issue_counts` only to explain coverage gaps, not as research evidence.
 - A broken image, unsupported visual type or unavailable Widget must not fail the underlying research answer.
 - Never expose internal media addresses, copy image bytes into the answer, bypass access controls or fabricate missing provenance.
+- Same Boat visuals cannot replace announcement originals, general-news retrieval or structured broker reports; keep those evidence domains and dates separate.

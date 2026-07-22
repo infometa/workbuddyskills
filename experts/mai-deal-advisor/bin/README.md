@@ -1,29 +1,29 @@
-# Tool Notes
+# 工具说明
 
-Runnable scripts are bundled under `bin/` for local verification. They use only local files or public HKEX endpoints.
+这些脚本用于交付前自检。它们只读取本地文件或公开 HKEX 端点。
 
-## Source-Grounding Gate
+## 数字出处检查
 
 ```bash
 grounding_gate.py draft.md
 ```
 
-Exit code `1` means the draft has numbers that need primary-source confirmation or explicit uncertainty labeling.
+退出码 `1` 代表草稿里有数字需要补一手来源，或需要明确标为待确认。
 
-## Cap-Table Reconciliation Gate
+## 持股表勾稽
 
 ```bash
 recon_gate.py cap_table.xlsx
 ```
 
-Exit code `1` means the cap table has reconciliation issues such as inconsistent implied share bases or duplicated disclosure lines.
+退出码 `1` 代表持股表存在分母不一致、疑似重复披露或比例异常。
 
-## HKEX Announcement Fetcher
+## 港股公告查询
 
 ```bash
 hkexnews_fetch.py 00700
 ```
 
-Returns announcement date, title, and URL for the requested HK ticker and date range.
+返回指定港股代码和日期区间内的公告日期、标题和 URL。
 
-Plain `.txt` and `.md` files require no extra packages. `.xlsx` checks require `openpyxl`; `.docx` checks require `python-docx`.
+`.txt` 和 `.md` 文件不需要额外依赖。`.xlsx` 需要 `openpyxl`；`.docx` 需要 `python-docx`。

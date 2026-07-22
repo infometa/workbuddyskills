@@ -2,6 +2,10 @@
 
 Two concerns: the privacy rules baked into the endpoint (refusals, audits, masking) and the Translation Gate that every result must pass before reaching the user.
 
+## Required References
+
+None.
+
 ## `user_users` — Restricted Access
 
 `user_users` is a **global** user table with two legitimate uses:
@@ -38,8 +42,14 @@ python3 scripts/shifu-cli.py analytics-query <bid> --dsl '{
 Returns:
 
 ```json
-{"columns":["user_bid","nickname"],
- "rows":[["u-bid-1","Python 学徒"],["u-bid-2","[REDACTED-PHONE]"],["u-bid-3","Alice"]]}
+{
+  "columns": ["user_bid", "nickname"],
+  "rows": [
+    ["u-bid-1", "Python 学徒"],
+    ["u-bid-2", "[REDACTED-PHONE]"],
+    ["u-bid-3", "Alice"]
+  ]
+}
 ```
 
 ### Use B — reverse-look up `user_bid` from a phone number
@@ -56,8 +66,10 @@ python3 scripts/shifu-cli.py analytics-query <bid> --dsl '{
 Returns:
 
 ```json
-{"columns":["user_bid","nickname","user_identify"],
- "rows":[["u-bid-xxx","Python 学徒","138*****000"]]}
+{
+  "columns": ["user_bid", "nickname", "user_identify"],
+  "rows": [["u-bid-xxx", "Python 学徒", "138*****000"]]
+}
 ```
 
 Once you have the `user_bid`, use it to query `order_orders` (purchase status), `learn_progress_records` (learning progress), `learn_generated_blocks` (follow-up questions), etc.
@@ -66,7 +78,7 @@ Even when the nickname is redacted, **never paste the raw `user_bid` in user-fac
 
 ## `learn_generated_blocks.generated_content` — Selective Access
 
-The conversation/content text column is selectable **only** for types `[301, 311, 312, 321, 322]` — system narration, Markdown narration, interaction prompts, learner follow-up questions, and LLM answers to follow-ups.
+The conversation/content text column is selectable **only** for types `[301, 311, 312, 321, 322]` — system narration, Markdown narration, interaction prompts, learner follow-up questions, and Teaching Agent answers to follow-ups.
 
 Hard rules (any violation → `11002`):
 
@@ -114,6 +126,8 @@ Pass every result through these checks before showing it to the user:
 > Want to see a ranked breakdown of each learner's progress?
 
 ## Answer Structure
+
+Write answer headings, narrative findings, interpretations, refusals, and drill-down offers in `resolved_target_language`. Keep table names, JSON/DSL fields, commands, raw enum codes, and ids as internal control data; present their translated human meaning according to the gate above.
 
 1. **Numbers + plain language**: express results in ordinary language; all codes and IDs are already translated.
 2. **One-line interpretation**: avoid raw data dumps — add a brief "what this means" judgement.

@@ -7,6 +7,14 @@ description: "当用户明确要求K线、走势图、事件收益图、数据�
 
 Use this skill only after the matching research workflow has completed authentication, subject resolution and evidence retrieval.
 
+## Presentation Priority
+
+1. When a real tool result is already linked to and rendered by a negotiated MCP App, keep the interactive App as the primary view and add only a short text interpretation. Do not render the same evidence again with `show_widget`.
+2. When the host does not render the linked App and WorkBuddy exposes both `read_me` and `show_widget`, use one compact Widget for the smallest useful visual.
+3. Otherwise return the same normalized evidence as a compact table and text.
+
+MCP App and Widget share returned values, dates, units, sentiment labels, radar dimensions and source semantics. Widget is a WorkBuddy adapter, not an independent data or product layer.
+
 ## Use When
 
 - 用户明确要求“画图、走势图、K线、收益对比、事件表现、图表、研报图片”。
@@ -30,16 +38,19 @@ Load only the references needed for the request:
 - `references/widget-kline-runtime.md`: dedicated K-line, moving-average, volume and hover-detail runtime.
 - `references/widget-trend-runtime.md`: dedicated one/two-series trend runtime.
 - `references/widget-event-runtime.md`: dedicated signed event-window runtime.
+- `references/widget-compare-runtime.md`: dedicated column/grouped-column comparison runtime.
+- `references/widget-combo-runtime.md`: dedicated line-column runtime with evidence-governed dual axes.
+- `references/widget-radar-runtime.md`: dedicated radar runtime requiring aligned values and an explicit source scale.
 - `references/report-images.md`: stable report-image eligibility, source verification, MCP image boundaries and no-fake-link fallback.
 
 ## Workflow
 
 1. Finish the original Layer 2 route and its required Layer 1 contract preflight. This skill does not call a business data source by itself.
-2. Identify the smallest useful visual: candlestick/volume, line trend, event-return bars, relationship diagram or eligible report image.
+2. Identify the smallest useful visual: candlestick/volume, line trend, event-return bars, grouped comparison, line-column combination, calibrated radar or eligible report image.
 3. Normalize the evidence once and prepare the compact text/table representation first.
 4. Load `references/common.md`, the chart-specific reference, `references/widget-svg-runtime.md`, and exactly one selected family template for numeric charts.
-5. If the WorkBuddy inline visual gate passes, copy only the validated JSON payload into that family-specific JS-to-SVG template and call `show_widget` directly.
-6. If the visual gate does not pass or rendering fails, return the prepared table and text. Never expose raw widget markup or tool errors.
+5. If no MCP App already renders this result and the WorkBuddy inline visual gate passes, serialize the normalized payload once and run the packaged `scripts/render_widget.mjs` relative to this Skill directory. Pass its `show-widget` JSON output to `show_widget` without editing or reconstructing `widget_code`.
+6. If the renderer exits non-zero, the visual gate does not pass or display fails, return the prepared table and text. Never expose raw widget markup or renderer errors.
 7. Add the evidence window, source type, missing-data boundary and four-part financial disclaimer.
 
 ## Hard Boundaries
@@ -50,5 +61,8 @@ Load only the references needed for the request:
 - Every user-visible financial visual remains AI-generated public-information research. 用户可见内容必须明确：AI 生成、仅基于公开信息整理、不构成投资建议、不构成个股推荐。
 - Do not show API keys, raw MCP JSON, physical database names, internal document IDs, model scores, holdings or trade history.
 - Report images follow `references/report-images.md`; normal chart data follows `references/market-charts.md`.
+- Same Boat `research-visual/1` is an optional visual-evidence contract. Route each supported entry by `kind`, `status` and `chart_type`; never make a second visual call for an ordinary text answer.
+- `fallback_only`, unsupported versions and invalid alignment must use the returned `fallback_table` or source text. Do not coerce them into a Widget.
 - WorkBuddy-only rendering instructions remain internal. Other clients receive the same evidence as a compact table and text.
-- Normal-answer rendering must not create or execute Python/Node scripts, CLI pipelines, temporary JSON, SVG, PNG or HTML files. The selected packaged Widget family template is the renderer; do not merge all chart scripts into a generic runtime.
+- A Same Boat viewpoint list/detail rendered through `ui://tongzhou-fin-research/viewpoints/v1` must not trigger a duplicate Widget. Use Widget only as the non-App host fallback or for a separate chart the user explicitly requested.
+- Normal-answer rendering may execute only the packaged `scripts/render_widget.mjs` with one ephemeral normalized JSON input. Do not write ad hoc Python/Node renderers, compute SVG coordinates in the model, edit the renderer output, or retain temporary SVG/PNG/HTML artifacts.

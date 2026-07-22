@@ -21,15 +21,18 @@ Depends on:
 Workflow:
 1. 明确目标是公司研报、行业研报、策略/宏观研报，还是同舟/分析师观点。
 2. 如果是公司研报，先用 `search_security` / `get_security_profile` 确认 `company` 和 `ticker`，再调用 `search_research_reports(company=..., ticker=..., time_window="1y", limit=...)`；不要把公司名只放进 `query` 再配长时间窗。
-   - 港股、美股和英国市场要保留解析出的标准市场代码；如果 scoped 结果为空，再用可靠公司名去掉 `ticker` 重试一次。
-   - 如果行情身份工具未覆盖该海外市场，不要猜证券代码；可直接用用户已明确的公司名做公司级研报检索，并标明行情身份未确认。
+   - 港股、美股和英国市场要保留解析出的标准市场代码，并显式传 `market`、`scope="listing"`；精确上市地结果为空时只说明当前来源与窗口未命中，不得静默去掉 `ticker`。
+   - 只有用户要求发行人整体覆盖时，才另行使用 `company`、`scope="issuer"` 检索，并明确标为更宽的发行人范围。如果行情身份工具未覆盖该市场，不要猜证券代码或把公司名结果冒充精确上市地结果。
 3. 如果是行业研报，调用 `search_research_reports(industry=..., content_type="行业研究", time_window="3m", limit=...)`；如果是策略/宏观研究，必须传 `content_type` 或 `source_name` 并保持短窗口，不要做 query-only 长窗口泛搜。
-4. 如果是公司研报，调用 `get_security_profile` 与 `query_data/get_latest_snapshot` 补充市场背景。
-5. 如果是行业研报，可补充调用 `search_documents(doc_type="news", industry=...)` 获取近期新闻。
-6. 如果用户问同舟观点、分析师观点或机构观点横向对比，可先用 `search_research_sectors` / `list_research_sectors` 获取 `sector_id`，再用 `list_market_viewpoints` / `list_sector_viewpoints`；需要详情时必须使用返回的 `viewpoint_id`，不要猜 ID。
-7. 先判断主源：用户说“研报/券商/报告原文”时主源必须是 `doc-search` 的 `search_research_reports`；用户说“同舟怎么看/分析师观点/行业观点分数”时主源可以是 Same Boat 观点。不要用 Same Boat 观点替代券商研报样本。
-8. 如果结构化研报或同舟观点链路不可用，要明确降级，不要假装拿到了研报或观点。
-9. 如果用户要求 HTML、灵感样张或“做同款”，把结果整理成 WorkBuddy 证据包：
+   - 用户一次询问多个公司时，按公司/上市地拆成独立调用，不把 `A OR B`、逗号分隔公司或 ticker 列表塞进单次研报检索。
+   - 做多年样本判断前可调用 `get_research_coverage`，用总数、首末日期和年度样本数说明覆盖，不用示例数字补齐空年份。
+4. 搜索结果先作为候选清单展示。只有用户明确选中某篇，或一个关键结论需要更强复核时，才对所需的 `1-3` 篇调用 `get_document`；返回内容按“研报详情摘要 / 可见观点片段”使用，不代表完整研报或 PDF 全文。
+5. 如果是公司研报，调用 `get_security_profile` 与 `query_data/get_latest_snapshot` 补充市场背景。
+6. 如果是行业研报，可补充调用 `search_documents(doc_type="news", industry=...)` 获取近期新闻。
+7. 如果用户问同舟观点、分析师观点或机构观点横向对比，可先用 `search_research_sectors` / `list_research_sectors` 获取 `sector_id`，再用 `list_market_viewpoints` / `list_sector_viewpoints`；需要详情时必须使用返回的 `viewpoint_id`，不要猜 ID。
+8. 先判断主源：用户说“研报/券商/报告原文”时主源必须是 `doc-search` 的 `search_research_reports`；用户说“同舟怎么看/分析师观点/行业观点分数”时主源可以是 Same Boat 观点。不要用 Same Boat 观点替代券商研报样本。
+9. 如果结构化研报或同舟观点链路不可用，要明确降级，不要假装拿到了研报或观点。
+10. 如果用户要求 HTML、灵感样张或“做同款”，把结果整理成 WorkBuddy 证据包：
    - 研报样本边界：公司/行业/策略口径、时间窗口、样本数量、是否命中公司专属研报
    - 观点清单：报告标题、机构/来源、发布时间、研究对象、可跳转源头（如返回）
    - 3 个共同观点：只从样本中提炼，不把同舟观点混成券商共识
@@ -37,15 +40,18 @@ Workflow:
    - 关键假设：研报成立需要哪些前提
    - 小白解释：这些观点翻译成人话意味着什么
    - 引用限制：样本不足、窗口过短、来源不可用或只命中行业周报
-10. 组织成“券商最近都在说什么”输出。
+11. 组织成“券商最近都在说什么”输出。
 
 Rules:
 - 不直接替代分析师做结论，只提炼可见共识和差异。
 - 研报列表建议按时间倒序展示。
 - 只摘短摘要，不堆长段正文。
+- `get_document` 返回的是经过清洗和截断的研报详情摘要，不是完整研报、完整 PDF 或文章级源链接；不得写“已读取完整研报”“已阅读全文”。
+- 详情为空或字段不全时保留标题、机构、日期等已返回元数据并说明缺口，不得用模型记忆补齐。
 - 如果用户问的是“有没有公司研报”，优先保证公司维度准确，不要把行业周报误写成公司深度。
 - 公司研报必须是 scoped `company`/`ticker` 检索。`INVALID_BROAD_TIME_RANGE`、`MISSING_RESEARCH_FILTERS` 或其他参数/范围错误不是“未命中研报”，应修正参数后重试；只有 scoped 检索成功且结果为空，才可说明“本次未命中公司级研报样本”。
-- 海外公司代码在不同供应商间可能有补零、交易所后缀和前缀差异；一次代码检索为空后必须做一次公司名重试，两次都为空才说明当前来源与窗口未命中。
+- `MULTI_ENTITY_RESEARCH_UNSUPPORTED` 表示调用参数包含多个公司/上市地；应拆分后分别检索和标注，不能把它写成无研报。
+- 海外公司精确上市地检索必须保留 `ticker`、`market` 和 `scope="listing"`；发行人范围只能通过单独且明确标注的 `scope="issuer"` 检索获得，不能作为静默回退。
 - 如果当前只能拿到行业周报，要明确标注“行业研究”而不是“公司专属观点”。
 - 如果研报链路报错，要明确说明“当前研报源暂不可用”，并建议改用新闻、公告和行情做临时替代。
 - 同舟观点、市场要闻和结构化研报是不同来源。不要用同舟观点替代券商研报，也不要把同舟观点写成全市场机构共识。

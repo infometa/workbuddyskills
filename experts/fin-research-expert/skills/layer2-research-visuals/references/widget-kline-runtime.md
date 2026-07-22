@@ -1,28 +1,44 @@
 # K-line Widget Runtime
 
-Renderer version: `workbuddy-kline-svg/1`
+Renderer version: `workbuddy-kline-svg/2`
 
 Use only for `chart_type: "candlestick_volume"`. The template accepts 2 to 60 ascending OHLC points, optional non-negative volume and up to three moving-average windows from 5, 10, 20, 30 or 60. `options.precision` is an integer from 0 to 4.
 
-Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass it directly to `show_widget`. The tool argument starts with `<svg` and ends with `</script>`; never add CDATA or Markdown wrappers.
+This is the reviewed runtime used by `scripts/render_widget.mjs`. Do not copy or splice it in model output. Give the renderer a validated payload and pass its complete `show-widget` JSON output unchanged.
 
 ```html
-<svg data-tongzhou-kline="workbuddy-kline-svg-1" viewBox="0 0 680 340" role="img" style="display:block;width:100%;height:340px;font-family:var(--font-sans);background:transparent;touch-action:none">
+<svg data-tongzhou-kline="workbuddy-kline-svg-2" viewBox="0 0 680 340" role="img" style="display:block;width:100%;height:340px;font-family:var(--font-sans);background:transparent;touch-action:none">
   <title>行情 K 线图</title>
   <desc>基于当前已认证公开行情证据生成的日 K、均线与成交量图。</desc>
-  <text data-runtime-placeholder="true" x="340" y="170" text-anchor="middle" font-size="12" fill="#888780">图表加载中，请同时参考数据表</text>
+  <text data-runtime-placeholder="true" x="340" y="170" text-anchor="middle" font-size="12" fill="#888780">图表未渲染，请参考数据表</text>
 </svg>
+<script type="application/json" data-tongzhou-chart-payload="workbuddy-kline-svg-2">__TONGZHOU_CHART_PAYLOAD__</script>
 <script>
 (() => {
-  const payload = __TONGZHOU_CHART_PAYLOAD__;
-  const svg = Array.from(document.querySelectorAll('svg[data-tongzhou-kline="workbuddy-kline-svg-1"]')).find(item => item.dataset.rendered !== 'true');
+  const svg = Array.from(document.querySelectorAll('svg[data-tongzhou-kline="workbuddy-kline-svg-2"]')).find(item => item.dataset.rendered !== 'true');
   if (!svg) return;
   svg.dataset.rendered = 'true';
+  const payloadNode = Array.from(document.querySelectorAll('script[data-tongzhou-chart-payload="workbuddy-kline-svg-2"]')).find(item => item.dataset.consumed !== 'true');
+  const placeholder = svg.querySelector('[data-runtime-placeholder]');
+  if (!payloadNode) {
+    if (placeholder) placeholder.textContent = '图表数据缺失，请参考数据表';
+    return;
+  }
+  payloadNode.dataset.consumed = 'true';
+  let payload;
+  try {
+    payload = JSON.parse(payloadNode.textContent || '');
+  } catch {
+    if (placeholder) placeholder.textContent = '图表数据格式错误，请参考数据表';
+    return;
+  }
   const ns = 'http://www.w3.org/2000/svg';
   const colors = { up:'#d92d20', down:'#079455', neutral:'#888780', text:'#292927', muted:'#77766f', grid:'#deddd6', blue:'#185fa5', amber:'#ba7517', purple:'#534ab7', panel:'#ffffff' };
   const finite = value => Number.isFinite(Number(value));
   const number = value => Number(value);
   const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
+  const chartWidth = clamp(Math.round(svg.getBoundingClientRect().width || 680), 680, 1280);
+  svg.setAttribute('viewBox', `0 0 ${chartWidth} 340`);
   const precision = clamp(Number(payload.options?.precision ?? 2), 0, 4);
   const create = (name, attrs = {}, value = '', parent = svg) => {
     const node = document.createElementNS(ns, name);
@@ -48,9 +64,9 @@ Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass
   };
   const empty = message => {
     svg.querySelectorAll('[data-runtime-placeholder]').forEach(item => item.remove());
-    text(340, 170, message, { 'text-anchor':'middle', fill:colors.muted, 'font-size':12 });
+    text(chartWidth / 2, 170, message, { 'text-anchor':'middle', fill:colors.muted, 'font-size':12 });
   };
-  if (payload.renderer_version !== 'workbuddy-kline-svg/1' || payload.schema_version !== 'chart-evidence/1' || payload.chart_type !== 'candlestick_volume') {
+  if (payload.renderer_version !== 'workbuddy-kline-svg/2' || payload.schema_version !== 'chart-evidence/1' || payload.chart_type !== 'candlestick_volume') {
     empty('当前 K 线模板或数据版本不匹配');
     return;
   }
@@ -67,7 +83,7 @@ Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass
   svg.querySelector('title').textContent = String(payload.title ?? '行情 K 线图');
   svg.querySelector('desc').textContent = String(payload.description ?? '基于当前已认证公开行情证据生成的日 K、均线与成交量图。');
 
-  const x0 = 44, x1 = 622, priceTop = 70;
+  const x0 = 44, x1 = chartWidth - 58, priceTop = 70;
   const volumes = points.map(point => finite(point.volume) && number(point.volume) >= 0 ? number(point.volume) : 0);
   const hasVolume = Math.max(...volumes, 0) > 0;
   const priceBottom = hasVolume ? 222 : 278;
@@ -85,7 +101,7 @@ Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass
   const periodChange = (number(latest.close) / number(first.close) - 1) * 100;
   const unit = short(payload.evidence?.unit ?? payload.options?.unit ?? '', 8);
 
-  text(x0, 20, short(payload.title ?? '行情 K 线图', 18), { 'font-size':15, 'font-weight':500 });
+  text(x0, 20, short(payload.title ?? '行情 K 线图', chartWidth >= 960 ? 30 : 18), { 'font-size':15, 'font-weight':500 });
   text(x1, 20, `收 ${format(latest.close)}  区间 ${signed(periodChange)}`, { 'text-anchor':'end', 'font-size':12, 'font-weight':500, fill:periodChange > 0 ? colors.up : periodChange < 0 ? colors.down : colors.neutral });
   text(x0, 40, `${String(first.time ?? '')} - ${String(latest.time ?? '')}${unit ? ` · ${unit}` : ''}`, { fill:colors.muted });
   text(x1, 40, `高 ${format(Math.max(...highs))}  低 ${format(Math.min(...lows))}`, { 'text-anchor':'end', fill:colors.muted });
@@ -106,7 +122,7 @@ Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass
     text(x1 + 8, y + 4, format(value), { fill:colors.muted });
   }
 
-  const bodyWidth = clamp(slot * 0.58, 2.2, 9.5);
+  const bodyWidth = clamp(slot * 0.58, 2.2, chartWidth >= 960 ? 12 : 9.5);
   points.forEach((point, index) => {
     const open = number(point.open), high = number(point.high), low = number(point.low), close = number(point.close);
     const direction = close > open ? colors.up : close < open ? colors.down : colors.neutral;
@@ -156,11 +172,11 @@ Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass
   const overlay = rect(x0, priceTop, x1 - x0, (hasVolume ? volumeBottom : priceBottom) - priceTop, { fill:'transparent', 'pointer-events':'all' });
   const showPoint = event => {
     const bounds = svg.getBoundingClientRect();
-    const pointerX = (event.clientX - bounds.left) * 680 / Math.max(bounds.width, 1);
+    const pointerX = (event.clientX - bounds.left) * chartWidth / Math.max(bounds.width, 1);
     const index = clamp(Math.floor((pointerX - x0) / slot), 0, points.length - 1);
     const point = points[index];
     const x = xAt(index);
-    const boxX = x > 400 ? 52 : 300;
+    const boxX = x > chartWidth * 0.58 ? 52 : Math.max(chartWidth - 382, 52);
     hover.setAttribute('display', 'block');
     hoverLine.setAttribute('x1', x);
     hoverLine.setAttribute('x2', x);

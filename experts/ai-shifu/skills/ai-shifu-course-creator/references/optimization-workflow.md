@@ -1,40 +1,74 @@
 # Optimization Workflow
 
-## Optimization
+Audit an existing, substantially complete course artifact set and apply the smallest repairs that restore correctness, fidelity, pedagogy, and runtime safety. Optimization does not perform first-time course authoring or deployment.
 
-Audit and improve existing Teaching Prompts (and the Course Prompt). This phase is not for writing from scratch.
+## Required References
 
-### When to Use
+- `language-policy.md`
+- `authoring-mode.md#mode-selection`
+- `data-contracts.md#optimization-fallback-fields`
+- `optimization-checklist.md`
+- `report-template.md#optimization-report`
 
-Use Optimization when existing Teaching Prompts or a Course Prompt need audit and targeted improvement — gap analysis against source, quality upgrades without full rewrites, and lowering runtime failure risk. Not for from-scratch authoring.
+## Conditional References
 
-### High-Standard Constraints
+- When authoritative source material or selected immutable spans are in the audit scope: `source-preservation.md`
 
-Apply Optimization audits against artifact-specific constraints:
+## Entry Conditions
 
-- Teaching Prompt pedagogical constraints and issue taxonomy (interaction-policy effects, variable strategy, interaction design, visual-text coordination, lesson loop, information density): `pedagogy.md#interaction-policy-precedence`, `pedagogy.md#variable-strategy`, `pedagogy.md#interaction-design`, `pedagogy.md#visual-text-coordination`, `pedagogy.md#lesson-loop`, and `pedagogy.md#optimization-methodology`.
-- Course Prompt deference and presentation-layer boundaries: `course-prompt.md#purpose` and `course-prompt.md#boundaries`.
-- Interaction-policy shape and enums: `data-contracts.md#interaction-policy`.
-- Syntax / runtime constraints (preservation, deterministic blocks, variable references): `markdownflow.md`.
-- Observable audit checks: `review-checklist.md`.
+Use this workflow only when the supplied artifact set already contains the Teaching Prompts and any Course Prompt or course description that the requested audit covers. If a required artifact is absent, report it as outside the Optimization scope instead of silently creating it here.
 
-### Optimization Workflow
+Declare the audit scope before editing: one lesson, selected artifacts, or the complete existing course. When multiple versions exist, identify the authoritative version.
 
-1. Define scope (single lesson vs full course); if multiple script versions exist, declare the authoritative one before editing.
-2. Build a coverage matrix mapping source points to script coverage.
-3. Run the full audit per `review-checklist.md`, classify findings using the issue taxonomy in `pedagogy.md#optimization-methodology`, and apply smallest safe edits first.
+A pasted Prompt body may be audited as a content-only artifact. Apply every check observable from that body, but do not invent an absent lesson-schema envelope, variable table, or other metadata. Record checks that require unprovided envelope data as `not-assessed` in the Optimization report.
 
-### Course Prompt
+## Optimization Method
 
-Optimization also produces a course-level `course_prompt` artifact when input includes course material. Generate it by **copying and filling `course-prompt.md#fillable-template`, not by free-form composition**. Preserve the six sections, their order, and every non-placeholder instruction; replace every `XXX` with course-specific content and render the result in the resolved output language.
+1. When authoritative source material is supplied, build a source-to-artifact coverage map for the declared scope. Otherwise, declare a content-only audit and do not claim external-source fidelity.
+2. Run every applicable observable check in `optimization-checklist.md`.
+3. Classify each finding and rank it by learner risk and runtime risk.
+4. Repair blockers first with the narrowest coherent edit.
+5. Revalidate the changed artifact and every directly affected consumer.
+6. Record each change, its rationale, and any remaining issue in the Optimization report.
 
-The Course Prompt must not originate an independent teaching method. Its Teaching Techniques section defers to the current Teaching Prompt, while the remaining sections contribute only course-wide role, tone, wording, format, slides, and intentional cross-lesson personalization.
+Apply these priorities throughout:
 
-Auto-fill placeholders from existing artifacts (`course_author_name`, `course_profile`, `delivery_constraints`, resolved target language per `data-contracts.md#language-resolution`, Segmentation visual cues). The Role must use the course author's real name; if `course_author_name` is missing, ask the author instead of inventing a persona. Do not duplicate per-lesson interaction logic or variable collection there — those belong in Teaching Prompts.
+1. Correctness before style.
+2. Minimal safe edits before broad rewrites.
+3. Learner impact before formatting polish.
+4. Traceable changes before unexplained cleanup.
 
-### Validation
+## Controlled Rewriting
 
-- Conclusion and overall risk level presented first (report structure per `report-template.md`).
-- Full review against `review-checklist.md` passes, or remaining gaps are explicitly listed as non-blocking suggestions.
-- A `course_prompt` artifact is produced when input includes course material, with all six required canonical sections present.
-- Generated `course_prompt` has no unresolved `XXX`, retains every non-placeholder template instruction, and applies delivery-mode behavior consistent with the Course Design Intake.
+- With authoritative source material in scope, preserve its coverage, intended meaning, information density, and every selected immutable span. In a content-only audit, preserve the meaning and information density expressed by the supplied artifact without claiming comparison against an absent source.
+- Allow filler removal, sentence smoothing, and local structural repair only when those invariants still pass.
+- Never introduce a silent factual change or an unmarked omission of required evidence.
+- Broaden a rewrite only when a smaller edit cannot resolve the issue coherently; record why and revalidate affected source coverage when source material is in scope.
+- After touching an interaction, variable, branch instruction, image instruction, or deterministic span, rerun its owner-defined authoring and runtime checks.
+
+## Issue Taxonomy
+
+- Coverage gap
+- Meaning shift
+- Explanation clarity
+- Interaction effect or branching gap
+- Visual requirement missing
+- Variable or syntax risk
+- Artifact-boundary violation
+
+## Outputs
+
+Return the minimally repaired existing artifacts plus the Optimization report, applying `language-policy.md` to every changed or reported value.
+
+Under fallback mode, add only the Optimization extensions defined in `data-contracts.md#optimization-fallback-fields`.
+
+Optimization must not create a Course Prompt, course description, or Teaching Prompt from scratch, choose new preservation scope on behalf of an earlier phase, build a course directory, or publish a course.
+
+## Validation
+
+- The conclusion and overall risk appear first in the report.
+- Every applicable item in `optimization-checklist.md` passes, or the remaining gap is explicitly reported.
+- Each repair is the smallest coherent change and retains the meaning and density observable in the supplied scope. When source material is in scope, it also retains source coverage and immutable content.
+- Repaired artifacts still satisfy their owning contracts.
+- Checks that require unprovided schema-envelope data are reported as `not-assessed`, never guessed or silently marked as passing.
+- Any fallback extension matches `data-contracts.md#optimization-fallback-fields` and remains additive to the standard output.

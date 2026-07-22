@@ -1,63 +1,38 @@
-# Privacy Notice
+# Privacy Notice / 隐私说明
 
-## Baseline
+## Default processing scope
 
-长文档手稿专家默认只处理用户主动提供的提纲、旧稿、访谈整理、研究笔记和补充材料。
+默认处理范围仅限 `user-provided materials`：用户在当前对话或明确授权的任务中主动提供的提纲、笔记、访谈、草稿、成稿与修改要求。
 
-By default, `long-manuscript-expert` only processes materials that the user explicitly provides in the current conversation or approved task flow.
+专家包不会因为被安装就获得任意本地文件、账户或外部系统的访问权。任何工作区读取、写入或外部调用都需要宿主实际提供对应能力，并取得用户的 `explicit authorization`。
 
-## Processed Data Types
+## Data minimization
 
-The package may process the following user-provided content when generating first value, continuation plans, revision suggestions, or finishing guidance:
+`Data minimization` 是默认原则：只使用完成当前写作步骤所需的最小内容，只在必要时引用最小原文锚点，不为证明“记住了”而复制整篇文稿。
 
-- outlines
-- old drafts
-- interview notes
-- transcripts
-- research notes
-- whitepaper source packs
+专家包不会主动收集、写入或输出：
 
-## What The Package Does Not Do By Default
+- credential、Cookie、Token 或 password；
+- stable user identifier 或可避免的账户标识；
+- unnecessary full-manuscript copy；
+- private local path 或与当前结果无关的设备信息。
 
-- It does not scan arbitrary local files without an explicit user request.
-- It does not require hidden workspace indexing for first value.
-- It does not treat probe traffic or diagnostic traces as natural product closure.
-- It does not assume connector or MCP availability as a privacy baseline.
+如果用户材料中包含上述信息，专家应避免复述，建议删除或遮盖，并把相关内容视为待保护数据。
 
-## Storage Boundary
+## Storage and telemetry boundary
 
-The package itself is designed around reviewable files and generated verification reports.
+This package defines `no hidden telemetry`, background collection, analytics upload, or stable-identifier tracking of its own.
 
-By package default, stored data is limited to:
+The package `does not silently persist` manuscripts, conversation state, or a cross-session profile. 对话记录、文件保存、保留期限和删除能力由实际宿主或用户明确选择的存储表面控制，不由本专家包暗中扩展。
 
-- package documentation
-- generated review reports
+只有当前任务出现可见的成功写入回执时，专家才可以说明某个文件已保存；否则交付状态仅限当前对话中的可复制内容。
 
-The package is not designed to silently persist full user manuscript sources outside the normal host or user-approved workspace flow.
+## Optional external capabilities
 
-## Third-Party Sharing Boundary
+外部导入、事实查证、文件导出或归档仅是可选增强。调用前应说明目的与数据范围，确认能力可见、相关且获授权；失败时应披露失败并回退到对话内成果。专家包本身不承诺第三方服务的数据处理方式。
 
-Third-party sharing is `not_by_package_default`.
+## User control
 
-If a separate service-side observation layer exists, that layer must be reported separately from package compatibility and privacy scope. The package privacy baseline must not be widened just because an external runtime was observed in another report.
+用户可以缩小改稿范围、要求删除敏感片段、拒绝外部调用，或只接收对话内结果。对于需要持久化或外发的动作，用户应先确认目标、范围和接收方。
 
-## Verification And Fact Checking Boundary
-
-When external facts need validation, the response should explicitly state whether the information comes from:
-
-- user-provided material
-- the current conversation
-- separately verified outside information
-
-## Official Entry Boundary
-
-- Any local-equivalent installation is diagnostic evidence only.
-- It is not proof that the expert has been officially listed in the WorkBuddy expert center.
-- Official-entry runtime proof must be reverified after official listing appears.
-
-## Related Documents
-
-- Security boundary: `SECURITY.md`
-- Terms of use: `TERMS.md`
-- Process evidence and review gates are maintained outside the upload artifact.
-- Testing and verification reference: `references/quality/quality-check.md`
+相关边界见 [Security](SECURITY.md)、[Terms](TERMS.md) 和 [Rights notice](RIGHTS-NOTICE.md)。

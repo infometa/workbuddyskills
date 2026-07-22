@@ -1,5 +1,16 @@
 # Course Analytics
 
+## Required References
+
+- `../authentication.md`
+- `overview.md`
+- `dsl.md`
+- `tables.md`
+- `recipes.md`
+- `privacy-and-presentation.md`
+- `../cli/cli-reference.md#query-commands`
+- `../cli/cli-reference.md#analytics-query`
+
 ## Analytics
 
 Post-deployment data queries on live courses. Trigger this section whenever a course author or admin asks about learner count, completion rate, stuck lessons, orders, revenue, ratings, follow-up Q&A volume, credit consumption, audience profile distribution, or individual learner tracking. For a one-glance course overview use Recipe 0d in `recipes.md`.
@@ -14,7 +25,7 @@ Post-deployment data queries on live courses. Trigger this section whenever a co
 ### Workflow
 
 1. **Resolve credentials** — complete `../authentication.md`.
-2. **Resolve the course** — run `shifu-cli.py list` (or `shifu-cli.py find-title <keyword>`) to map `shifu_bid ↔ course name`. **If the user mentioned a course by title**, always resolve the *current* `shifu_bid → title` via Course Metadata recipes 0a / 0b in `recipes.md` before issuing downstream queries — `list` is a draft snapshot and can show stale or historical titles. Never report a historical title as the course's current name.
+2. **Resolve the course** — run `shifu-cli.py list` (or `shifu-cli.py find-title <keyword>`) to map `shifu_bid ↔ course name`. **If the user mentioned a course by title**, always resolve the _current_ `shifu_bid → title` via Course Metadata recipes 0a / 0b in `recipes.md` before issuing downstream queries — `list` is a draft snapshot and can show stale or historical titles. Never report a historical title as the course's current name.
 3. **Resolve the outline** (only for lesson-level dimensions) — run `shifu-cli.py show <shifu_bid>` to map `outline_item_bid → name / position`. Skipping this makes outline-dimension numbers unreadable.
 4. **Run DSL queries** — `shifu-cli.py analytics-query <shifu_bid> --dsl '<json-body>'` (or `--dsl-file query.json` for long bodies).
 5. **Translate before presenting** — pass every result through the Translation Gate in `privacy-and-presentation.md`. Never paste raw codes (`601`, `502`, `1101`), raw `*_bid` strings, or raw `user_bid` values in user-facing output.

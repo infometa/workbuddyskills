@@ -1,36 +1,16 @@
 # Pedagogy
 
-Authoritative source for **Teaching Prompt** design constraints: script style, lesson design, segmentation methodology, optimization methodology, and the teaching-side decisions around interactions, variables, and coordination between slides and text. Violating these constraints can produce a Teaching Prompt that runs but teaches poorly.
+Authoritative source for **Teaching Prompt** pedagogy: interaction-policy effects, lesson loops and patterns, cognitive techniques, interaction and feedback choices, variable-persistence decisions, and pedagogical coordination between slides and text. Prompt audience, instruction voice, and second-person meaning are defined only in [prompt-contracts.md#prompt-semantics](prompt-contracts.md#prompt-semantics). MarkdownFlow syntax and runtime behavior are defined in [markdownflow.md](markdownflow.md), while structured fields and allowed values are defined in [data-contracts.md](data-contracts.md).
 
-## Scope and Authority Boundaries
+## Required References
 
-Use each concept's authoritative source instead of restating its contract in multiple workflow files:
-
-| Concept | Authoritative source | Boundary |
-| --- | --- | --- |
-| Teaching behavior and instructional alternatives | This file | Defines what the Teaching Prompt should teach, how it should teach it, and how non-interactive alternatives preserve that intent. |
-| Course-level AI persona, presentation style, and cross-lesson use | [course-prompt.md](course-prompt.md) | Defines a presentation overlay and cross-lesson constants that follow, rather than define or replace, the Teaching Prompt's pedagogy. |
-| MarkdownFlow syntax and runtime semantics | [markdownflow.md](markdownflow.md) | Defines parsing, variables, `UNKNOWN`, interactions, branching, image-file embedding, and deterministic blocks. |
-| Structured fields and allowed values | [data-contracts.md](data-contracts.md) | Defines schemas, enums, required objects, and table shapes. |
-| Interaction-policy intake | [authoring-intake.md](authoring-intake.md) | Normalizes the author's selection into the policy consumed here; it does not redefine the policy's teaching effect. |
-| Phase execution | [generation-workflow.md](generation-workflow.md), [segmentation-orchestration.md](segmentation-orchestration.md), and [optimization-workflow.md](optimization-workflow.md) | Applies the authoritative rules at each pipeline stage without changing them. |
-| Teaching Prompt and Course Prompt red lines | [prompt-contracts.md](prompt-contracts.md) | Defines hard output boundaries that this file cannot override. |
-
-## Script Style
-
-A Teaching Prompt is the per-lesson MarkdownFlow document the AI engine reads at runtime. It is a *script that guides teaching*, not a polished learner-facing lecture. Write in imperative, model-guiding language.
-
-Reference patterns:
-
-- "Explain to the learner …"
-- "Ask the learner to …"
-- "Have the learner choose …"
-
-Disallowed patterns:
-
-- Long, polished prose written as if it is the final learner-facing lecture.
-- Author or lesson-plan meta narration, including visible labels such as "Knowledge Block 1/2/3", "Lesson Objective", "In this lesson you will …", or "Deliverable".
-- Exposing internal authoring terms in learner-facing text.
+- `data-contracts.md#interaction-policy`
+- `data-contracts.md#variable-table`
+- `prompt-contracts.md#prompt-semantics`
+- `prompt-contracts.md#artifact-responsibilities`
+- `markdownflow.md#variables`
+- `markdownflow.md#interactions`
+- `markdownflow.md#branching-on-user-input`
 
 ## Interaction Policy Precedence
 
@@ -38,13 +18,13 @@ Course Design Intake resolves the author's selection into one of the three modes
 
 | Mode | Selection state | Instructional effect | Non-interactive alternative |
 | --- | --- | --- | --- |
-| `enabled` | One or more purposes selected | Execute interactions only at the selected-purpose placements. Selecting one purpose does not make other purposes or a blanket per-lesson interaction mandatory. | At unselected-purpose slots, use the relevant worked application, model-led demonstration, or consolidation. |
-| `disabled` | The author explicitly selected no interactions | Emit no MarkdownFlow interaction blocks (`?[]`), solicit no learner answer, collect no learner-answer variables, and create no answer-dependent branch. | Use worked examples, model-led application, or consolidation wherever an interaction slot would otherwise appear. |
+| `enabled` | One or more purposes selected | Execute interactions only at the selected-purpose placements. Selecting one purpose does not make other purposes or a blanket per-lesson interaction mandatory. | At unselected-purpose slots, use the relevant worked application, demonstration by the Teaching Agent, or consolidation. |
+| `disabled` | The author explicitly selected no interactions | Use no learner interaction controls, solicit no learner answer, collect no learner-answer variables, and create no answer-dependent branch. | Use worked examples, applications demonstrated by the Teaching Agent, or consolidation wherever an interaction slot would otherwise appear. |
 | `unspecified` | No explicit interaction choice | Add no interaction-policy requirement or override; apply the default teaching rules in this file as-is. | Use an alternative only when the applicable default teaching rule already calls for it. |
 
 When the mode is `enabled`, selected purposes map to exactly these placements:
 
-| Purpose | Placement | Instructional role |
+| Purpose | Placement | Teaching purpose |
 | --- | --- | --- |
 | `learner_context` | An early course or module point | Collect context that improves later teaching. |
 | `pre_content_thinking` | Before the relevant explanation | Elicit an initial judgment that the explanation can refine. |
@@ -66,16 +46,20 @@ The default loop applies when `unspecified` leaves the baseline active or when a
 A lesson missing a phase required by its selected loop is incomplete. The following constraints apply to both loops:
 
 - **One core question per lesson**: each lesson resolves exactly one teachable question.
+- **Direct teaching start**: in standard one-on-one teaching and the standard teaching branch of combined delivery, begin with one brief text lead-in that establishes a scenario, asks a guiding question, activates prior experience, states the task, or starts a practice. Do not use a structural title, hierarchy label, ordering marker, copied source heading, slide, or image as the opening, and do not impose a word-count or sentence-count quota on the lead-in. Pure classroom slides instead begin with slide-facing content, while an explicit text-only constraint keeps the direct teaching start in text.
+- **Opening frame**: in standard one-on-one teaching, the standard teaching branch of combined delivery, and explicit text-only delivery, establish the lesson objective within the direct teaching start. In pure classroom slides, integrate the objective into the first substantive slide rather than adding a cover, decorative page, or objective-only page.
+- **Reusable result**: each lesson produces at least one reusable deliverable.
 - **Action tasks** must be immediately executable by the learner or explicitly linked to a downstream lesson; do not create orphan actions.
-- **Source information density** must be preserved through optimization; do not trade substance for fluency.
 - **Carryover statements** are allowed only when cross-lesson dependency is explicitly permitted; otherwise remove them together with any unbound carryover variables.
+- **Non-interactive close**: end with a summary, decision checkpoint, or action rather than a new learner interaction.
+- **Content-shaped structure**: adapt the number and teaching purpose of content turns to the source and core question rather than manufacturing filler to make lessons look identical.
 
 ### Teaching Patterns
 
 Keep the three patterns and their step order. The interaction-policy matrix decides whether each pattern's interaction slot remains interactive or uses the corresponding non-interactive replacement:
 
 | Pattern | Interaction slot | Non-interactive replacement |
-|---|---|---|
+| --- | --- | --- |
 | Pattern A: Evidence Chain | Step 4 learner interaction | Worked application |
 | Pattern B: Misconception Repair | Step 4 interaction check | Worked boundary check |
 | Pattern C: Comparison-Driven Learning | Step 1 baseline response capture | Worked baseline |
@@ -105,7 +89,7 @@ Keep the three patterns and their step order. The interaction-policy matrix deci
 
 ### Cognitive Techniques
 
-Increase learner understanding through targeted cognitive moves rather than information dumping. By default, each lesson should include at least one of these moves as a deepening interaction. The interaction-policy matrix determines its form: when the selected loop is non-interactive, express the move as a model-led demonstration, contrast, worked decision, or action synthesis without soliciting learner input.
+Increase learner understanding through targeted cognitive moves rather than information dumping. By default, each lesson should include at least one of these moves as a deepening interaction. The interaction-policy matrix determines its form: when the selected loop is non-interactive, express the move as a demonstration by the Teaching Agent, contrast, worked decision, or action synthesis without soliciting learner input.
 
 When `pre_content_thinking` or `lesson_end_self_check` is selected and applies, use a calibration prompt, boundary check, or misconception correction as that interaction. A `learner_context` interaction is not forced into a different purpose merely to satisfy this rule.
 
@@ -129,102 +113,32 @@ These are the teaching rules for permitted interactions. For interaction syntax,
   - For multi-select, use combined feedback, prioritization, tailored examples, or coverage of selected items; do not require an exhaustive branch for every option combination.
 - Before writing an interaction, decide whether its answer leaves the current lesson and apply [Variable Strategy](#variable-strategy).
 - Every instructional interaction must trigger immediate feedback or a visible current-lesson effect, such as a branching explanation, tailored example, practice difficulty, feedback, summary, deliverable, or reflection.
-- A viewpoint or path-choice interaction whose answer is meant to drive distinct next steps must branch by option. Use no more than one `viewpoint_check` per lesson unless justified.
+- A viewpoint or path-choice interaction whose answer is meant to drive distinct next steps must branch by option. Honor an existing author constraint that explicitly requires answer-specific branches without introducing a new control field. Use no more than one viewpoint or path-choice interaction per lesson unless justified.
 - Avoid repetitive interaction semantics across lessons unless comparison intent is explicit.
-- For input interactions, the pre-interaction question must be more specific than the short `...` placeholder.
 - Use no more than five interactions per lesson.
+
 ### Variable Strategy
 
 These are the teaching decisions for whether to collect an answer, how often to collect it, and how to ensure it matters. Variable syntax, substitution, and `UNKNOWN` runtime behavior are authoritative in [markdownflow.md#variables](markdownflow.md#variables); variable fields and naming constraints are authoritative in [data-contracts.md#variable-table](data-contracts.md#variable-table).
 
 - Collection eligibility follows the interaction policy; `disabled` collects no learner-answer variables.
-- Create a named variable only when the learner's answer must leave the current lesson: it is referenced by the [Course Prompt](course-prompt.md), reused in another lesson, or used for cross-lesson personalization, depth control, examples, summaries, or deliverable variation. Every named variable must have that course-level or cross-lesson utility; do not create throwaway variables for continue buttons, confirmations, or lesson-local choices.
+- Create a named variable only when the learner's answer must leave the current lesson: it is referenced by the Course Prompt, reused in another lesson, or used for cross-lesson personalization, depth control, examples, summaries, or deliverable variation. Every named variable must have that course-level or cross-lesson utility; do not create throwaway variables for continue buttons, confirmations, or lesson-local choices.
 - Use a no-variable interaction for lesson-local answers, including current-lesson branching, examples, feedback, summaries, deliverables, reflection, and free-text input.
 - Reuse a global variable when possible. Do not recollect the same variable unless it is explicitly marked as a staged comparison, and prevent semantic duplicates even when names differ.
 
 ### Visual-Text Coordination
 
-The Teaching Prompt hard rules in [prompt-contracts.md](prompt-contracts.md) govern every slide and image-file scenario. Within a Teaching Prompt, call every generated or described screen-facing teaching unit a slide. Use `image` only for an actual image file or uploaded image asset. Diagrams, charts, and other graphics are slide content rather than images unless they are supplied as image files.
+This section defines how slides and explanatory text divide teaching responsibility. Resolve where they appear, what each must contain, and the teaching purpose each serves independently of the normalized Teaching Prompt personalization level; that level changes only content-expression specificity inside the resolved structure and never changes the teaching effect required here. Image composition and asset handling remain separate authoring concerns; MarkdownFlow's resulting runtime behavior is defined in [markdownflow.md#images](markdownflow.md#images).
 
-Do not embed raw SVG, HTML, Mermaid, PlantUML, or Graphviz markup in a Teaching Prompt by default. When the author explicitly requests one of these raw formats, follow that request; the explicit author instruction overrides the default. Otherwise, express generated slide instructions as natural-language slide directions.
+For standard one-on-one teaching and the standard teaching branch of combined delivery, except under an explicit text-only constraint, fix the qualitative cadence **brief text lead-in → substantive visual unit → concise but complete text explanation**, then repeat one visual-and-explanation pair for each remaining substantive teaching turn. Every lesson in this mode contains at least one substantive visual unit. A visual unit is one slide or one standalone image; a slide containing an image still counts as one visual unit. Do not place two visual units back to back or defer several visuals' explanations to one later block. After the lead-in, every learner-visible prose block other than the unchanged interaction control described below belongs to the explanation for the immediately preceding visual; fold supporting details and transitions into that explanation rather than inserting an unpaired text turn between pairs.
+
+Each visual unit must carry real teaching content rather than serve as a cover, decorative page, objective-only page, or pacing filler. Group related ideas in one visual when they form one teaching turn, and keep supporting details, transitions, and repeated conclusions in the following explanation instead of manufacturing extra pages. Each explanation must add the context, relationship, reasoning, inference, or application needed to understand the preceding visual rather than merely restating it. The final pair's explanation also performs the selected summary, decision checkpoint, or action close instead of adding an isolated closing page or paragraph.
+
+Treat a question-bearing interaction in this mode as one visual-and-explanation pair: show the complete learner-facing question on a question-only slide, place the unchanged `?[]` control immediately after it, then provide the immediate feedback or explanatory effect before any later visual. Keep option labels, input hints, simulated controls, and answers off the question slide so the real control remains the single response surface. An action-only control such as `?[Continue]` does not create or justify a question slide.
 
 | Scenario | Authority and requirements |
-|---|---|
-| Standard non-slide-only teaching | Keep every core concept paired with a slide and textual explanation. The slide carries structural prompting; the text carries the complete explanation and remains understandable when the learner has not seen the slide. Pair each slide instruction with a brief explanation of what it should convey, and use natural-language slide placeholders when no image file is supplied. |
-| Author-provided image file | Follow the existing image-file understanding, upload, and embed process in [generation-workflow.md#working-with-author-provided-images](generation-workflow.md#working-with-author-provided-images) and the image-file syntax in [markdownflow.md#images](markdownflow.md#images). In standard teaching, follow the embedded image file with the complete explanatory paragraph. If the course is slide-only, the next row overrides that paragraph requirement. |
-| Pure slides | Follow the [Slide-Only Generation Override](generation-workflow.md#slide-only-generation-override). Produce concise, projection-ready slide content; do not require AI narration or a full standalone explanatory paragraph paired with every slide. |
-
-## Pipeline Methodologies
-
-### Segmentation Methodology
-
-#### Objective
-
-Produce stable lesson-oriented semantic segments from noisy source material while preserving immutable artifacts.
-
-#### Core Rules
-
-1. Preserve source order unless explicit ordering hints are provided.
-2. Keep code blocks, image files, and table blocks immutable.
-3. Segment by semantic shift, not heading depth alone.
-4. Keep each lesson candidate centered on one teachable question.
-5. Attach source spans to every segment.
-
-#### Segment Types
-
-- `concept`: explanatory statements and definitions.
-- `example`: concrete demonstrations and walkthroughs.
-- `code`: executable or pseudo-code blocks.
-- `image`: image files and their source references.
-- `exercise`: learner action prompts.
-- `transition`: bridge text that links ideas.
-
-#### Transfer Signals
-
-Every segment must contain a required, non-empty `transfer_signals` object. Include every applicable canonical key, omit inapplicable keys, and give every included key a non-empty, concise string value. The canonical meanings are:
-
-| Key | Meaning |
-|---|---|
-| `learner_hook` | Teaching entry point. |
-| `evidence_type` | Form of source evidence. |
-| `visual_cue` | Cue for expressing the segment as a slide. |
-| `concept_conflict` | Conceptual conflict or misconception. |
-| `boundary_cue` | Applicability boundary. |
-| `action_cue` | Executable application. |
-| `density_cue` | Information that must not be compressed away. |
-| `quote_cue` | Quotation that should be preserved or used. |
-| `visual_text_pair_cue` | Division of work between slide and text. |
-| `interaction_intent_cue` | Interaction purpose and expected instructional effect. |
-| `compare_cue` | Comparison objects or dimensions. |
-
-#### Failure Handling
-
-If structure is weak, output a fallback segmentation and mark uncertain spans for focused reruns.
-
-### Optimization Methodology
-
-#### Principles
-
-1. Correctness before style.
-2. Minimal safe edits before broad rewrites.
-3. Learner impact before formatting polish.
-4. Traceable changes with explicit rationale.
-
-#### Issue Taxonomy
-
-- Coverage gap
-- Meaning shift
-- Explanation clarity
-- Interaction no-branching (only for a viewpoint or path-choice interaction whose answer should drive distinct next steps, or when `require_branching_feedback` explicitly requires branching)
-- Visual requirement missing
-- Variable or syntax risk
-
-Other instructional interactions satisfy their effect requirement through immediate feedback or another visible current-lesson effect; they do not require option-by-option branching.
-
-#### Execution Sequence
-
-1. Build source-to-script coverage matrix.
-2. Rank issues by learner risk and runtime risk.
-3. Fix blockers first.
-4. Revalidate variable lifecycle and any interaction effects that are present.
-5. Run final syntax and density checks.
+| --- | --- |
+| Standard visual-text teaching | Apply the cadence above with at least one substantive visual unit. Use additional slides only for presentation-worthy relationships, contrasts, sequences, evidence, cases, conclusions, rules, boundaries, or decision points. State each visual's teaching purpose and required information clearly, group related material instead of making one page per fact, and keep every visual and following explanation understandable as one teaching turn. Once resolved, keep every visual's and explanation's presence, position, and teaching purpose independent of the personalization level. |
+| Author-provided image file | Under the standard visual-text scope above, use the asset as one substantive visual unit for an identified teaching purpose rather than as decoration, and give it the required following explanation before any later visual. The pure-slide row overrides paired-explanation expectations, while an explicit text-only constraint overrides image use entirely. Keep selected image presence and explanation placement fixed while the personalization level controls only permitted ordinary wording, elaboration, and non-exact example detail. |
+| Pure slides | Produce a classroom-ready deck controlled by a human instructor: slide-facing direction and learner-visible content only, with enough information and relationships for the instructor to teach from the projected result. Resolve the exact slide count, sequence position, teaching purpose of each slide and required content slot, required content-slot presence and placement, content groups, visual hierarchy, and semantic layout independently of the personalization level and keep them fixed. The level controls only non-exact title, body, already-required example identity and detail, transition, and feedback wording inside that structure. Do not instruct the Teaching Agent to narrate, verbally explain, or address a single learner, and omit long spoken paragraphs. When an interaction is permitted, include its complete learner-facing question, resolved options and control in their required order, and concise visible feedback states. |
+| Explicit text-only constraint | Use no slides, images, diagrams, visual directions, or layout instructions. Give complete teaching direction for every core concept, including its required facts, boundaries, reasoning, and examples where needed; keep the teaching and paragraph sequence fixed while the selected personalization level controls ordinary explanation wording, elaboration, example detail, transition wording, and feedback wording. |

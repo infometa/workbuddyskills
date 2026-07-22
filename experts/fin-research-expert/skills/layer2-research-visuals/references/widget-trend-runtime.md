@@ -1,28 +1,44 @@
 # Trend Widget Runtime
 
-Renderer version: `workbuddy-trend-svg/1`
+Renderer version: `workbuddy-trend-svg/2`
 
 Use only for `chart_type: "line"`. `evidence.series` contains one or two comparable named series with 2 to 120 ascending `{time,value}` points. `options.precision` is 0 to 4 and `options.unit` is a short display unit.
 
-Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass it directly to `show_widget`. The tool argument starts with `<svg` and ends with `</script>`; never add CDATA or Markdown wrappers.
+This is the reviewed runtime used by `scripts/render_widget.mjs`. Do not copy or splice it in model output. Give the renderer a validated payload and pass its complete `show-widget` JSON output unchanged.
 
 ```html
-<svg data-tongzhou-trend="workbuddy-trend-svg-1" viewBox="0 0 680 340" role="img" style="display:block;width:100%;height:340px;font-family:var(--font-sans);background:transparent;touch-action:none">
+<svg data-tongzhou-trend="workbuddy-trend-svg-2" viewBox="0 0 680 340" role="img" style="display:block;width:100%;height:340px;font-family:var(--font-sans);background:transparent;touch-action:none">
   <title>行情趋势图</title>
   <desc>基于当前已认证公开行情证据生成的趋势图。</desc>
-  <text data-runtime-placeholder="true" x="340" y="170" text-anchor="middle" font-size="12" fill="#888780">图表加载中，请同时参考数据表</text>
+  <text data-runtime-placeholder="true" x="340" y="170" text-anchor="middle" font-size="12" fill="#888780">图表未渲染，请参考数据表</text>
 </svg>
+<script type="application/json" data-tongzhou-chart-payload="workbuddy-trend-svg-2">__TONGZHOU_CHART_PAYLOAD__</script>
 <script>
 (() => {
-  const payload = __TONGZHOU_CHART_PAYLOAD__;
-  const svg = Array.from(document.querySelectorAll('svg[data-tongzhou-trend="workbuddy-trend-svg-1"]')).find(item => item.dataset.rendered !== 'true');
+  const svg = Array.from(document.querySelectorAll('svg[data-tongzhou-trend="workbuddy-trend-svg-2"]')).find(item => item.dataset.rendered !== 'true');
   if (!svg) return;
   svg.dataset.rendered = 'true';
+  const payloadNode = Array.from(document.querySelectorAll('script[data-tongzhou-chart-payload="workbuddy-trend-svg-2"]')).find(item => item.dataset.consumed !== 'true');
+  const placeholder = svg.querySelector('[data-runtime-placeholder]');
+  if (!payloadNode) {
+    if (placeholder) placeholder.textContent = '图表数据缺失，请参考数据表';
+    return;
+  }
+  payloadNode.dataset.consumed = 'true';
+  let payload;
+  try {
+    payload = JSON.parse(payloadNode.textContent || '');
+  } catch {
+    if (placeholder) placeholder.textContent = '图表数据格式错误，请参考数据表';
+    return;
+  }
   const ns = 'http://www.w3.org/2000/svg';
   const colors = { text:'#292927', muted:'#77766f', grid:'#deddd6', primary:'#185fa5', secondary:'#ba7517', up:'#d92d20', down:'#079455', neutral:'#888780', panel:'#ffffff' };
   const finite = value => Number.isFinite(Number(value));
   const number = value => Number(value);
   const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
+  const chartWidth = clamp(Math.round(svg.getBoundingClientRect().width || 680), 680, 1280);
+  svg.setAttribute('viewBox', `0 0 ${chartWidth} 340`);
   const precision = clamp(Number(payload.options?.precision ?? 2), 0, 4);
   const create = (name, attrs = {}, value = '', parent = svg) => {
     const node = document.createElementNS(ns, name);
@@ -41,9 +57,9 @@ Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass
   };
   const empty = message => {
     svg.querySelectorAll('[data-runtime-placeholder]').forEach(item => item.remove());
-    text(340, 170, message, { 'text-anchor':'middle', fill:colors.muted, 'font-size':12 });
+    text(chartWidth / 2, 170, message, { 'text-anchor':'middle', fill:colors.muted, 'font-size':12 });
   };
-  if (payload.renderer_version !== 'workbuddy-trend-svg/1' || payload.schema_version !== 'chart-evidence/1' || payload.chart_type !== 'line') {
+  if (payload.renderer_version !== 'workbuddy-trend-svg/2' || payload.schema_version !== 'chart-evidence/1' || payload.chart_type !== 'line') {
     empty('当前趋势模板或数据版本不匹配');
     return;
   }
@@ -59,7 +75,7 @@ Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass
   svg.querySelector('title').textContent = String(payload.title ?? '行情趋势图');
   svg.querySelector('desc').textContent = String(payload.description ?? '基于当前已认证公开行情证据生成的趋势图。');
 
-  const x0 = 44, x1 = 614, y0 = 66, y1 = 286;
+  const x0 = 44, x1 = chartWidth - 66, y0 = 66, y1 = 286;
   const values = series.flatMap(item => item.points.map(point => number(point.value)));
   let valueMin = Math.min(...values), valueMax = Math.max(...values);
   const pad = Math.max((valueMax - valueMin) * 0.08, Math.max(Math.abs(valueMax), 1) * 0.008);
@@ -73,12 +89,13 @@ Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass
   const change = number(first.value) === 0 ? null : (number(latest.value) / number(first.value) - 1) * 100;
   const unit = short(payload.evidence?.unit ?? payload.options?.unit ?? '', 8);
 
-  text(x0, 21, short(payload.title ?? '行情趋势图', 18), { 'font-size':15, 'font-weight':500 });
-  text(x1 + 34, 21, `${format(latest.value)}${unit ? ` ${unit}` : ''}${change === null ? '' : `  ${change > 0 ? '+' : ''}${change.toFixed(2)}%`}`, { 'text-anchor':'end', 'font-size':12, 'font-weight':500, fill:change === null ? colors.text : change > 0 ? colors.up : change < 0 ? colors.down : colors.neutral });
+  text(x0, 21, short(payload.title ?? '行情趋势图', chartWidth >= 960 ? 30 : 18), { 'font-size':15, 'font-weight':500 });
+  text(chartWidth - 44, 21, `${format(latest.value)}${unit ? ` ${unit}` : ''}${change === null ? '' : `  ${change > 0 ? '+' : ''}${change.toFixed(2)}%`}`, { 'text-anchor':'end', 'font-size':12, 'font-weight':500, fill:change === null ? colors.text : change > 0 ? colors.up : change < 0 ? colors.down : colors.neutral });
   text(x0, 42, `${String(first.time ?? '')} - ${String(latest.time ?? '')}`, { fill:colors.muted });
+  const legendStart = Math.max(x0 + 230, chartWidth - 320);
   [colors.primary, colors.secondary].forEach((color, index) => {
     const item = series[index];
-    if (item) text(x0 + 230 + index * 135, 42, `● ${short(item.name || `序列${index + 1}`, 12)}`, { fill:color, 'font-weight':500 });
+    if (item) text(legendStart + index * 135, 42, `● ${short(item.name || `序列${index + 1}`, 12)}`, { fill:color, 'font-weight':500 });
   });
 
   for (let index = 0; index < 5; index += 1) {
@@ -119,10 +136,10 @@ Copy the fragment unchanged, replace only `__TONGZHOU_CHART_PAYLOAD__`, and pass
   const overlay = rect(x0, y0, x1 - x0, y1 - y0, { fill:'transparent', 'pointer-events':'all' });
   const showPoint = event => {
     const bounds = svg.getBoundingClientRect();
-    const pointerX = (event.clientX - bounds.left) * 680 / Math.max(bounds.width, 1);
+    const pointerX = (event.clientX - bounds.left) * chartWidth / Math.max(bounds.width, 1);
     const index = clamp(Math.round((pointerX - x0) * (primary.points.length - 1) / (x1 - x0)), 0, primary.points.length - 1);
     const x = xAt(index);
-    const boxX = x > 400 ? 52 : 350;
+    const boxX = x > chartWidth * 0.58 ? 52 : Math.max(chartWidth - 312, 52);
     hover.setAttribute('display', 'block');
     hoverLine.setAttribute('x1', x);
     hoverLine.setAttribute('x2', x);

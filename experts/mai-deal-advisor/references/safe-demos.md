@@ -1,6 +1,6 @@
 # Safe Demos
 
-Use these short demos when the user asks what this expert can do. Keep every demo on public information, workflow discipline, or local validation.
+用户问“这个专家包能做什么”时，用下面三个安全示例回答。示例只展示公开信息、本地校验和人工分诊，不触碰私有材料。
 
 ## Demo 1: HKEX Announcement Check
 
@@ -46,7 +46,7 @@ Expected response:
 
 ```text
 [ESCALATE]
-此问题需要 MAI 资深团队人工分析：控制权变化和要约义务属于专业判断，自动流程只能整理材料和标出待确认点。
+这个问题不能靠流程包硬猜：控制权变化和要约义务属于专业判断，自动流程只能整理材料和标出待确认点。
 
 如需 MAI 人工分诊，请打开：
 https://api.mai.deals/workbuddy/intake?source=mai-lab-ma-expert-pack-v1.0.1

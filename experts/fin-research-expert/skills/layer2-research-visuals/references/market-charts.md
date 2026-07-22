@@ -10,6 +10,9 @@ Use this reference only after loading `references/common.md` and `layer1-fin-dat
 | User asks for 走势/趋势 and one numeric series is enough | Line chart | A forced candlestick without a user need |
 | User compares two evidenced series on a compatible scale | Two-line chart with direct labels | More than two dense series in one normal answer |
 | Tool returns event-window aggregate with valid samples | Signed event-return bars | Bars for windows with no valid sample |
+| Same Boat returns `column` or `grouped_column` | Dedicated comparison bars | A trend line that hides category comparison |
+| Same Boat returns `line_column` | Dedicated combination chart; split axes only for incompatible units | Rescaling one source unit into another |
+| Same Boat returns aligned radar values with a stated scale | Dedicated radar | A radar without source `scale_min`, `scale_max` and `scale_description` |
 
 ## Retrieve chart-ready market evidence
 
@@ -52,6 +55,11 @@ Use `references/widget-svg-runtime.md` to choose exactly one template:
 - `candlestick_volume` -> `references/widget-kline-runtime.md`: validated OHLCV points in ascending time order plus zero to three bounded moving-average windows.
 - `line` -> `references/widget-trend-runtime.md`: one or two validated named series on compatible units.
 - `event_return_bar` -> `references/widget-event-runtime.md`: valid event windows with signed return and real sample count.
+- `column` / `grouped_column` from `research-visual/1` -> `references/widget-compare-runtime.md`: ordered categories and exact source series values.
+- `line_column` from `research-visual/1` -> `references/widget-combo-runtime.md`: preserve line/column series types and per-series units.
+- renderable `radar` from `research-visual/1` -> `references/widget-radar-runtime.md`: aligned dimensions/values and an explicit source scale.
+
+For a Same Boat `line` chart, adapt categories and exact values to the existing trend runtime once: each category becomes `time`, each source value becomes `value`, and no interpolation or unit conversion is permitted. Media entries stay outside Widget code as ordinary Markdown images. `fallback_only`, unknown chart types and malformed entries use the returned `fallback_table`.
 
 Load only the selected family template. Replace its payload placeholder and call `show_widget`. Do not load or merge the other chart scripts, write a script, execute a local renderer, save an SVG or paste a fully expanded per-point SVG into the tool call.
 
@@ -65,6 +73,7 @@ Load only the selected family template. Replace its payload placeholder and call
 ## Event-return chart rules
 
 Use `compute_market_reaction_windows` after event evidence and the target have already been resolved.
+When one event set is compared across multiple targets, use `compute_batch_reaction_windows` once and render one series per returned target instead of issuing one tool call per target.
 
 - Read each aggregate window's `average_return`, `median_return`, `sample_count` and `missing_count`.
 - Plot a window only when `sample_count` is greater than zero and the selected return is finite.

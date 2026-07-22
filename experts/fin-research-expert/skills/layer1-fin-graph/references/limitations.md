@@ -10,9 +10,13 @@ Read this for source coverage, public-safe projection, empty results, and invest
 - Industry viewpoints are generated content tied to `index_code`; they do not prove the industry has no other news, reports, or opinions.
 - Anomaly tools query existing anomaly results; they do not trigger fresh detection.
 - Macro panels read graph nodes currently connected to `get_macro_data`; they are not a complete macro database.
+- USD/CNY central parity is available as a reference rate. Onshore `spot_CNY` and CFETS RMB index series remain unsupported until an authorized source is explicitly connected.
 
 ## Empty Results And Gaps
 
+- `SOURCE_UNAVAILABLE` and `INDUSTRY_CHAIN_GRAPH_SOURCE_UNAVAILABLE` mean the call reached the graph capability but its source is temporarily unavailable.
+- Do not rewrite either status as “未调用工具”“参数校验失败”“没有图谱覆盖” or a confirmed empty result.
+- Do not fan out to more dependent identity or industry-chain calls after one of these source errors. Keep independently retrieved market/document evidence, state the temporary graph-source gap, and stop that source family.
 - If resolver has no match, say no stable canonical identity was found under current filters.
 - If the industry-chain graph frame is missing, state 产业链图谱 coverage is missing. Do not substitute a broad index, 行业图谱, or example frame.
 - If factor metrics are missing, say that factor has no public series in the current graph projection.
@@ -28,6 +32,8 @@ Read this for source coverage, public-safe projection, empty results, and invest
 
 ## Cross-MCP Use
 
+- `resolve_research_identity` resolves industries/themes and their source IDs; it does not resolve listed-company securities. Company identity must come from a market-appropriate security/company resolver before detailed calls.
+- 对两地上市或跨市场公司，分别保留公司证券身份与行业身份。Fin Graph 的行业映射不能替代 A/H/美股代码确认，也不能决定价格币种。
 - Use fin-data for structured prices, rankings, constituents, valuation, and market time series.
 - Use doc-search for news, announcements, research reports, event backtests, document bodies, and source links.
 - Use Same Boat for internal 投研 content, analysts, market news analysis, market quote analysis, and sector viewpoints.

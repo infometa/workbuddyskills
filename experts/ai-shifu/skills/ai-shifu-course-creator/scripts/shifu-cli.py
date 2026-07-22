@@ -297,9 +297,10 @@ def fmt_time(ts):
 def _print_verification_urls(base_url, shifu_bid, include_published=False):
     """Print admin + course preview, and (when published) the public URL.
 
-    Skill docs instruct the LLM to transcribe these lines verbatim. Do not
-    let the LLM reconstruct URLs from a template — that has historically led
-    to wrong path (/shifu vs /c) and wrong param name (outline_bid vs lessonid).
+    Skill docs instruct the Skill-running agent to transcribe these lines
+    verbatim. Do not let that agent reconstruct URLs from a template — that
+    has historically led to wrong path (/shifu vs /c) and wrong param name
+    (outline_bid vs lessonid).
 
     `include_published=True` adds the public student-facing URL (no preview
     query param). Callers should set it only when the course is known to be
@@ -697,7 +698,7 @@ def cmd_show(args):
                 print(f"Desc:   {desc}")
             model = detail.get("model", "")
             if model:
-                print(f"Model:  {model}")
+                print(f"AI-Shifu's Teaching Agent model: {model}")
             print()
 
         tree = api(base_url, token, "get", f"/shifus/{shifu_bid}/outlines")
@@ -2592,8 +2593,8 @@ def cmd_upload_image(args):
     """Upload a local image (with preprocessing) or a remote URL to ai-shifu OSS.
 
     Outputs ONLY the resulting URL to stdout — designed to be captured into the
-    Teaching Prompt by an LLM or a shell pipeline. Diagnostic messages (manifest
-    writes, etc.) go to stderr.
+    Teaching Prompt by the Skill-running agent or a shell pipeline. Diagnostic
+    messages (manifest writes, etc.) go to stderr.
     """
     base_url, token = resolve_auth(args)
 
@@ -2943,7 +2944,7 @@ def build_parser():
                         "(1201 debug / 1202 preview / 1203 production)")
     p.add_argument("--usage-type", dest="usage_type",
                    help="Comma-separated usage_type codes, e.g. 1101,1102 "
-                        "(1101 LLM / 1102 TTS)")
+                        "(1101 AI-Shifu's Teaching Agent / 1102 TTS)")
     p.add_argument("--limit", type=int, default=None,
                    help="Row count cap, 1..1000 (default 100 server-side)")
     p.add_argument("--offset", type=int, default=None,

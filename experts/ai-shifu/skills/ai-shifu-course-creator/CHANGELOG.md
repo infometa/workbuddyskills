@@ -1,10 +1,14 @@
 ## Unreleased
 
+- Add the optional course author name to Course Design Intake, explain that it lets AI-Shifu's Teaching Agent teach under the author's identity, and default to no named identity when left blank.
+- Make standard AI-taught lessons open with a brief text lead-in and then alternate substantive slides or images with concise, complete explanations; keep interaction questions on question-only slides before their real controls, and preserve pure-slide and explicit text-only delivery as separate modes.
+- Introduce the learner-time AI as AI-Shifu's Teaching Agent (AI 师傅的授课智能体), then use Teaching Agent (授课智能体) as its single short human-facing name across prompt execution, interaction feedback, follow-up answers, analytics, and CLI guidance while preserving stable machine-facing `model` and `llm` fields.
+- Explain what every Course Design Intake answer changes and what experience each option creates, so authors see the Teaching Agent's one-on-one guidance, classroom projection, answer-informed teaching, AI voice with slides, and lesson-granularity tradeoffs while choosing.
+- Let course authors choose one of five Teaching Prompt personalization levels, from near-final learner-facing content to more intent-led, learner-adaptive expression, while keeping the teaching sequence, slide structure, and teaching purpose of every content slot and slide fixed at every level; pure classroom-slide courses resolve an otherwise missing choice to high determinism without an extra question.
+- Centralize Prompt audience and addressee semantics so Teaching Prompts and Course Prompts are written to the Teaching Agent, Course Prompts call the lesson input the current user message, and learner-visible `?[]` or standalone deterministic output is the explicit exception where second-person references may mean the learner.
 - Keep lesson pedagogy in Teaching Prompts and limit Course Prompts to following that pedagogy while adjusting course-wide presentation style.
-- Disambiguate pedagogy contracts by centralizing teaching effects, transfer-signal meanings, variable strategy, and visual delivery boundaries while preserving existing behavior.
+- Refactor `SKILL.md` into a compact router backed by single-purpose references for language, authoring mode and intake, source preservation, segmentation, orchestration, Teaching and Course Prompt materialization, MarkdownFlow authoring, images, course descriptions, optimization, deployment, sync, management, analytics, and reporting; declare required and conditional dependencies explicitly without changing course behavior.
 - Fix `list` and `find-title` to include courses beyond the first API page.
-- Turn `SKILL.md` into a task router with explicit shared dependencies.
-- Split authoring, deployment, authentication, and analytics instructions into route-specific reference files.
 - Restore global language and reporting contracts, narrow analytics routing to live-course data, and add routing regression evals.
 
 ## 1.0.0 - 2026-07-12

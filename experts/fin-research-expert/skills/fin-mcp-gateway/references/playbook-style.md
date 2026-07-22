@@ -53,7 +53,7 @@ The artifact should show the result before explaining the machinery:
 4. Separate facts, interpretation, risk, and next verification items.
 5. Keep source labels visible:行情数据、公告、新闻、研报、行业图谱、同舟观点.
 6. For any key fact with a returned source URL, show a user-facing "查看源头" link. Source-review anchors may use returned `http(s)` URLs, but external rendering resources are still forbidden: no CDN scripts, external stylesheets, remote images, fonts, or `@import`. If a market, financial, or graph datum has no URL, do not render it as a source card or missing-field warning; attribute it in the body or methodology as 同舟行情库、同舟财务指标库、同舟行业图谱, and never invent a link.
-7. Use a stable visual vocabulary: blue/teal for the research spine, green for supporting evidence, red for risk or opposing evidence, amber for boundary or missing evidence.
+7. Use Mainland China market colors consistently: red for positive/up/`+`/bullish/supporting evidence, green for negative/down/`-`/bearish/risk or opposing evidence, blue/teal/gray for neutral structure, and amber for mixed, boundary, missing, or pending evidence.
 
 ## Industry Windvane Visual Contract
 

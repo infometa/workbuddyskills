@@ -9,6 +9,8 @@ This Layer 2 skill is the shared presentation layer. It turns a completed eviden
 
 Every artifact is AI generated from public information and must preserve evidence, source-review, and missing-data boundaries. It does not constitute investment advice or an individual stock recommendation（AI 生成、基于公开信息、不构成投资建议、不构成个股推荐）.
 
+HTML 是表达层，不是数据源；它只能呈现已完成取证和复核的公开研究底稿，不得新增事实。页面属于非投资建议性质，用户可见区域必须保留来源类型和四要素声明：AI 生成、基于公开信息、不构成投资建议、不构成个股推荐。不要使用 `<script>` 加载外部依赖；仅可按 `references/common.md` 使用自包含的最小交互逻辑。
+
 ## Routing Boundary
 
 - 行业多空、风向标、六维因子、期限拆解: use `layer3-industry-windvane`.
@@ -30,10 +32,11 @@ If any required input is missing, return to the calling research workflow. Do no
 
 1. Read `references/common.md`.
 2. Preserve the caller's facts, units, signs, time windows, source labels, gaps, and conclusion strength exactly.
-3. Build one standalone HTML file with inline CSS, no external scripts, stylesheets, images, or fonts, and only necessary inline interaction.
-4. Use button tabs with `scrollIntoView`; do not use `href="#section-id"` navigation.
-5. Keep real article, announcement, report, and mini-program links as source-review entries. For data without article-level links, show only the source type and never invent a URL.
-6. Self-check mobile and PC layout, text overflow, source visibility, data gaps, and the four-part finance disclaimer.
+3. Apply Mainland China market colors consistently: red means positive/up/`+`/bullish/supporting evidence; green means negative/down/`-`/bearish/risk or opposing evidence. Use blue/teal/gray for neutral structure and amber for mixed, missing, or pending evidence.
+4. Build one standalone HTML file with inline CSS, no external scripts, stylesheets, images, or fonts, and only necessary inline interaction.
+5. Use button tabs with `scrollIntoView`; do not use `href="#section-id"` navigation.
+6. Keep real article, announcement, report, and mini-program links as source-review entries. For data without article-level links, show only the source type and never invent a URL.
+7. Self-check mobile and PC layout, text overflow, source visibility, data gaps, color semantics, and the four-part finance disclaimer.
 
 ## Output Boundary
 

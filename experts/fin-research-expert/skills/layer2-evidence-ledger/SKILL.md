@@ -34,12 +34,17 @@ Workflow:
    - 可跳转源头：保留 `source_url`、`document_url`、`report_url`、`original_url`、小程序页面链接或公开来源 URL；未返回链接的数据保留来源类型和证据缺口说明，不编造 URL
    - 支持、反对、背景、待验证或证据缺口
    - 对应的结论或假设
+   - `evidence_status`：found / partial / empty / unsupported / error / auth_required
+   - `actual_coverage`：本轮实际市场、来源类型、时间窗、字段和单位覆盖，不把计划调用写成已取证
+   - `genuine_link_status`：returned / unavailable / rejected；只有 `returned` 才能渲染源头链接
 4. 单独列出冲突证据：同一问题下新闻、公告、研报、行情或同舟观点不一致时，不要揉成一个确定结论。
 5. 用定性标签说明证据强弱：强、中、弱、待验证。不要伪造精确分数。
 6. 输出前检查是否有结论没有证据支撑；没有支撑的结论必须移到“待验证/不能下结论”。
 
 Rules:
 - 证据台账是审计层，不是新的数据源。不得新增事实、删掉限制或改变数据口径。
+- 逐条保留上游 `evidence_status`、`actual_coverage` 和 `genuine_link_status`；不得把 `partial` 升格为完整命中，也不得把 `empty`、`unsupported`、`error` 或 `auth_required` 合并成“没有数据”。
+- 只有 `found` / `partial` 的实际返回字段可以支撑研究结论；其他状态只能进入缺口、限制或下一步，不参与证据强弱加权。
 - 不要把同舟观点写成券商研报，不要把 Doc Search 新闻写成同舟重要度评分，不要把图谱结构写成公告事实。
 - 不要为了让结论更完整而补充未检索到的公司、行业、财务数字或历史事件。
 - 对用户可见输出使用来源类型和简短出处描述，不暴露内部 route、tool name、参数、ID 或搜索得分。

@@ -57,6 +57,8 @@ Use for:
 
 ## Parameters
 
+- 跨市场公司检索遵循宽召回优先：先确认公司、市场和标准代码，首轮只保留公司/代码、时间窗和用户明确要求的公告类型，不叠加来源名、宽泛主题词等额外过滤。
+- 港股、美股代码存在供应商变体时，一次代码空结果不能证明该公司没有文档；仅在当前公告源实际支持该市场时，才用可靠公司名去掉 `ticker` 重试一次。
 - `time_window`: `1m` for recent events/announcements; use explicit dates for reporting periods.
 - 今天 -> `time_window="1d"` or explicit same-day `start_date`/`end_date`; 本周/本月 -> explicit date range; 最近 N 天 -> `days=N`.
 - Do not use trading-day phrases from a market-data subtask as document date filters unless the user explicitly applies that time limit to documents.
@@ -98,6 +100,7 @@ Use for:
 
 ## Common Mistakes
 
+- 公告、新闻、研报是三个独立证据域。`search_events` 或新闻命中只能作为事件线索，不能填补公告原文；每个域分别保留各自返回的最新日期、来源和覆盖缺口。
 - Do not use `search_events` when the user explicitly asks for announcement original text.
 - Do not present a Hong Kong announcement empty result as evidence that no disclosure exists; state the native HKEX source gap.
 - Do not promise future schedules from timeline tools.

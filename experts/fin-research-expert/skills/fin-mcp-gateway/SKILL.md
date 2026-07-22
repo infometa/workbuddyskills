@@ -43,6 +43,8 @@ Internal names such as `layer1-*`, `layer2-*`, server names, tool names, and MCP
 8. **No local bridge**: the runtime package does not include `gateway_api.cjs` or any equivalent business-data bridge. Do not reconstruct one, do not inspect `~/.config/fin-mcp-gateway`, and do not treat a missing local API Key as an OAuth failure.
 9. **Stateless transport is valid**: the native Connector may complete an MCP request without returning `mcp-session-id`. Never require that header, diagnose its absence to the user, or recreate the protocol in Shell/Node.
 10. **No evidence, no artifact**: if this turn has no successful business tool result, do not create, write, export, or claim to have created Markdown, HTML, PDF, chart, status-report, or research artifacts. OAuth/authentication success alone is not research evidence.
+11. **Shared retrieval quality**: for identity resolution, compound research, empty-result recovery, or evidence-gap wording, load `references/retrieval-quality.md`. Use its six evidence states and two-attempt recovery budget instead of inventing route-specific meanings.
+12. **Native scheduled research**: for a WorkBuddy create/manage request or a successful research answer with explicit continuing intent, load `references/scheduled-research.md`. Use only native `automation_update`, require consent and never create a local cron/database task.
 
 ## Internal Route Decision Table
 
@@ -65,6 +67,7 @@ Layer 2 and Layer 3 route IDs are internal workflow labels inherited from the pl
 | 行业多空风向标、六维因子、期限拆解、情景矩阵 HTML | `layer3-industry-windvane` | all four Layer 1 contracts plus reusable Layer 2 evidence modules |
 | 事件因子解读、产业链传导、历史相似事件 HTML | `layer3-event-interpretation` | event/announcement evidence plus transmission, ledger, red-team, and renderer modules |
 | 其他已有审核输出合同的 HTML、报告页或仪表盘 | `layer2-html-research-playbook` | completed and typed public-research evidence brief |
+| 每日/每周/工作日/单次持续研究，或查看/修改/暂停/恢复/删除研究任务 | WorkBuddy native scheduled research | `automation_update` plus a self-contained research Prompt; business Connector calls occur when the task runs |
 | 绑定、状态、权限、额度问题 | credential check | `/portal/bindings/check`, `/servers`, `tools/list` |
 
 ## Evidence Source Arbitration
@@ -163,6 +166,7 @@ Parameter or validation errors are not permission errors. If a call returns a py
 5. Group by consensus, disagreement, assumptions, and risk factors.
 6. Add market or industry context only when it helps interpret the reports.
 7. Mark unavailable research sources explicitly instead of inventing broker views.
+8. Traverse `continuation_ref` only when the user's evidence need exceeds the current page. Continue only while `continuation_status="available"`; treat `complete` as source exhaustion and `limit_reached` / `unavailable` as bounded retrieval, never as proof that every report was reviewed.
 
 ### HTML report polish
 
@@ -173,7 +177,7 @@ Use `layer3-industry-windvane` for the reviewed industry windvane story and `lay
 3. Follow the selected Layer 3 output contract:
    - 事件因子解读: event title and source entry, event conclusion, objective factors, attribution, industry-chain position, supported business exposure, valid 3d/5d/7d/20d similar-event statistics, source review, and falsification checks;
    - 行业多空风向标: resolved industry identity, evidence strength, valid event-window breakdown, six-factor evidence, scenario and validation matrix, source review, and data methodology.
-4. Keep visual semantics stable: blue/teal for the research spine, green for support or stronger consensus, red for risk or counter-evidence, amber for boundaries and items still under verification.
+4. Keep visual semantics stable under Mainland China market convention: red for positive/up/`+`/bullish/support or stronger consensus, green for negative/down/`-`/bearish/risk or counter-evidence, blue/teal/gray for neutral structure, and amber for boundaries or items still under verification.
 5. Make tables mobile-safe with a horizontal scroll container. On small screens, cards and grids collapse to one column.
 6. If evidence is missing, show the gap prominently as "证据不足", "样本不足", or "待验证" instead of filling the page with inferred claims. If `60d` or another long window has no valid event sample, omit it from the analysis and mention it only in data methodology; do not substitute broad-index or example numbers.
 7. When drafting a WorkBuddy "做同款" prompt, include the capability name, subject, evidence window, fixed sections, card fields, source-link requirement, and single-file HTML constraints. Do not expose internal layer names.
@@ -188,7 +192,7 @@ Use `layer2-research-visuals` only after the matching research route has complet
 2. Load the visual skill, its matching chart reference, `references/widget-svg-runtime.md`, and exactly one selected chart-family template before drawing. For WorkBuddy, call `read_me` with the `chart` module once, then call `show_widget` at most once unless one correctable validation error requires a retry.
 3. Use only current evidence values. Keep a normal answer to one chart that answers the user's main question; prefer candlestick plus volume for valid OHLCV, a simple trend for one series, and signed bars only for event windows with valid samples.
 4. Keep the widget self-contained and follow Chinese market colors: positive/up is red and negative/down is green. Do not load external scripts, CSS, images, or fonts.
-5. Build one validated `chart-evidence/1` JSON payload, copy only that payload into the selected `workbuddy-kline-svg/1`, `workbuddy-trend-svg/1`, or `workbuddy-event-svg/1` template, and pass the completed fragment directly to `show_widget`. The tool's `widget_code` must start with `<svg` and end with `</script>`; never add CDATA, Markdown fences or document wrappers. After evidence retrieval, do not use Bash, Write, Edit, Python, Node CLI, heredoc, a temporary file, merged generic chart script, or hand-expanded SVG coordinates for chart rendering.
+5. Build one validated `chart-evidence/1` JSON payload, copy only that payload into the selected `workbuddy-kline-svg/2`, `workbuddy-trend-svg/2`, or `workbuddy-event-svg/2` template, and pass the completed fragment directly to `show_widget`. The tool's `widget_code` must start with `<svg` and end with `</script>`; never add CDATA, Markdown fences or document wrappers. After evidence retrieval, do not use Bash, Write, Edit, Python, Node CLI, heredoc, a temporary file, merged generic chart script, or hand-expanded SVG coordinates for chart rendering.
 6. The user-facing result is the inline widget plus its evidence text, or the table/text fallback when rendering is unavailable. Never expose the packaged renderer, payload, local command or intermediate markup.
 7. Non-WorkBuddy clients must receive the same dates, values, source meaning, limitations, and financial disclaimer through the fallback. Never emit raw widget markup.
 
@@ -202,7 +206,15 @@ Use these only after the relevant public-research evidence exists:
 
 If the evidence base is incomplete, return to the relevant stock, industry, event, report, or market route first. These layers must not invent facts, scores, companies, personal-account context, predictions, or trading instructions.
 
+### WorkBuddy scheduled research
+
+Load `references/scheduled-research.md` when the user explicitly requests a daily, workday, weekly or one-time public-market research task, or asks to view, change, pause, resume or delete one. Schedule operations are WorkBuddy-native and do not use the financial Connector until the Automation actually runs. A successful one-time answer may invite once only when the user already expressed continuing intent; ordinary queries and failed research do not trigger an invitation.
+
 ## Error Handling
+
+- 首次调用返回 `auth_required` 时只展示 WorkBuddy 授权入口；授权完成后只重试原业务调用一次，不探测本地凭证、不切换桥接脚本，也不扩展成其他查询。
+- 非认证传输错误、超时、限流或依赖失败统一保留为 `error`，同时保留其他已成功证据；不得把错误写成空召回、公司事实或来源不覆盖。
+- 可修正参数错误按 Layer 1 合同修正一次；仍失败时停止该来源。业务调用成功且目标列表为空才允许写 `empty`。
 
 | Gateway status | Meaning | User-facing action |
 |---|---|---|
@@ -223,5 +235,7 @@ Do not create a failure-summary file or a substitute report. A filename, empty s
 - `references/binding.md`
 - `references/connector.md`
 - `references/layered-capabilities.md`
+- `references/retrieval-quality.md`
+- `references/scheduled-research.md`
 - `references/playbook-style.md`
 - `references/safety.md`

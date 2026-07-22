@@ -1,6 +1,10 @@
 # Analytics DSL Syntax
 
-All examples are CLI invocations. Read `overview.md` first if you have not already.
+All examples are CLI invocations. Analytics task orientation is documented in `overview.md`.
+
+## Required References
+
+None.
 
 ## Body Shape
 
@@ -22,7 +26,7 @@ All examples are CLI invocations. Read `overview.md` first if you have not alrea
 ## Operators (`where[].op`)
 
 | Operator | Notes |
-|---|---|
+| --- | --- |
 | `=`, `!=` | Equality |
 | `>`, `>=`, `<`, `<=` | Numeric / date comparison |
 | `in` | `value` is a list |
@@ -33,11 +37,11 @@ All examples are CLI invocations. Read `overview.md` first if you have not alrea
 
 ## Aggregate Functions (`aggregate[].fn`)
 
-| Fn | Use |
-|---|---|
-| `count` | Row count |
-| `count_distinct` | Distinct values of `field` |
-| `sum`, `avg`, `min`, `max` | Numeric aggregates |
+| Fn                         | Use                        |
+| -------------------------- | -------------------------- |
+| `count`                    | Row count                  |
+| `count_distinct`           | Distinct values of `field` |
+| `sum`, `avg`, `min`, `max` | Numeric aggregates         |
 
 Every aggregate must carry an `alias` — the output column is named after it.
 

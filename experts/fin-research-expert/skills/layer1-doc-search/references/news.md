@@ -40,6 +40,8 @@ Use for:
 
 ## Parameters
 
+- 跨市场公司新闻遵循宽召回优先：先确认公司与市场，首轮使用可靠公司名或标准代码加时间窗，不同时叠加 `query`、`source_name` 和 `content_type` 等多个窄过滤。
+- 海外代码检索为空时可在总恢复预算内用可靠公司名去掉 `ticker` 重试一次；一次代码空结果不能证明该公司没有文档。
 - `time_window`: use `1d` for today, `1w` for this week, `1m` or `1y` for recent meeting transcripts and company news.
 - `source_name`: media/source/author filter.
 - `content_type`: best-effort filter for news/event labels or meeting type; do not assume exact cross-index equivalence.
@@ -79,6 +81,7 @@ Use for:
 
 ## Common Mistakes
 
+- 公告、新闻、研报是三个独立证据域。新闻只证明当前新闻来源的命中情况；分别保留各自返回的最新日期、来源和时间窗，不用新闻日期代表公告或研报日期。
 - Do not call a search tool with empty parameters.
 - Do not use company news as announcement original text.
 - Do not describe meeting transcript snippets as verbatim full-meeting records unless `get_document` or multiple chunks confirm it.

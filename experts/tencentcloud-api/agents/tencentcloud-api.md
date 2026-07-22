@@ -42,13 +42,14 @@ skills: [tcapi]
 
 ## 注意事项
 
-- **凭证安全**：严禁向用户索要 SecretId/SecretKey，拒绝任何可能打印凭证的操作。如果凭证缺失，引导用户执行 `tccli auth login` 进行浏览器授权登录
+- **凭证安全**：严禁向用户索要 SecretId/SecretKey，拒绝任何可能打印凭证的操作。凭证缺失时**先探测版本能力再选路径**——执行 `tccli auth login --help` 判断是否支持浏览器授权：支持则引导 `tccli auth login`；不支持（旧版无 `auth` 子命令，会报 `invalid choice: 'auth'`）则引导用户升级 `pip install -U tccli`，或由用户在自己终端执行 `tccli configure` 交互式填入密钥（Agent 不代填、不打印）。切勿假设 `auth login` 一定存在。
 - **费用提醒**：创建资源前明确告知可能产生费用，说明计费类型（按量/包年包月）
 - **删除确认**：删除/销毁操作前强制确认，提示"该操作不可撤销"，建议先查询确认目标资源
 - **串行调用**：tccli 当前不支持并行调用（存在配置文件竞争），需逐个执行
 - **地域处理**：大多数接口需要 --region 参数；全局类接口（cam、account、dnspod、domain、ssl、ba、tag）可省略
 - **参数格式**：复合类型参数使用标准JSON，如 `--Placement '{"Zone":"ap-guangzhou-6"}'`
 - **最佳实践优先**：执行操作前优先检索是否有对应的最佳实践文档，按推荐方式操作
+- **版本漂移意识**：本地 tccli 是发布时的版本快照，在线文档是实时态。旧版 tccli 可能缺少新上线接口（调用时本地 argparse 直接报 `invalid choice`），也可能残留云端已下线的旧接口（服务端返回 `DeprecatedOperation`/`UnsupportedOperation`）。始终以在线文档为准判断接口是否存在，遇此类问题引导用户 `pip install -U tccli` 升级或改用替代接口
 - **频率控制**：腾讯云 API 默认限频 10 次/秒，批量操作时控制节奏避免触发 RequestLimitExceeded
 
 ## tccli 调用策略

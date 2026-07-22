@@ -1,8 +1,12 @@
 # Common Visual Contract
 
+## Host presentation gate
+
+First check whether the current real tool result is already displayed through a negotiated MCP App. If it is, keep that App and do not call `show_widget` for the same evidence. A linked viewpoint App is the list/detail interaction surface; Widget does not recreate its navigation.
+
 ## WorkBuddy inline visual gate
 
-Use an inline visual only when the current runtime exposes both `read_me` and `show_widget`.
+Use an inline visual only when no MCP App already renders the result and the current runtime exposes both `read_me` and `show_widget`.
 
 1. Before the first visual call in the turn, call `read_me` with the `chart` module. Do not narrate this internal step.
 2. Call `show_widget` with a specific Chinese title, a raw self-contained SVG or HTML fragment, and one to four short Chinese loading messages.
@@ -14,13 +18,17 @@ If either tool is absent, choose the cross-client fallback. Do not ask the user 
 
 ## Direct Widget path
 
-For candlestick, line and event-return charts, load `references/widget-svg-runtime.md`, select exactly one family template, and use that template only.
+For numeric charts, load `references/widget-svg-runtime.md`, select exactly one family and use the packaged deterministic renderer.
 
 1. Build one validated `chart-evidence/1` JSON payload from the current evidence.
-2. Replace only `__TONGZHOU_CHART_PAYLOAD__` inside the selected template code block. Escape string values as JSON; do not add executable user text.
-3. Pass the completed fragment directly in the `show_widget` call.
+2. Save only that normalized payload to an ephemeral JSON input. Resolve `scripts/render_widget.mjs` relative to this Skill directory and run `node scripts/render_widget.mjs --input <payload.json>`.
+3. Parse stdout as the complete `show_widget` arguments object and pass it unchanged. Never copy, shorten, repair or regenerate `widget_code` in model text.
 
-After the evidence bundle and packaged references are loaded, do not use Bash, Write, Edit, Python, Node CLI, heredoc or a temporary JSON/SVG/PNG/HTML file to render the chart. Do not hand-expand candles, bars, coordinates or moving-average paths in the tool arguments. The inline runtime performs those deterministic transforms inside the Widget.
+The packaged renderer is the only allowed normal-answer rendering script. It validates JSON, isolates payload data from executable JavaScript and selects the reviewed family runtime. A non-zero exit means no Widget call: keep the prepared table/text fallback. Do not hand-expand candles, bars, coordinates or moving-average paths in tool arguments.
+
+`__TONGZHOU_CHART_PAYLOAD__` is an internal renderer token. The model must never replace it directly; only `scripts/render_widget.mjs` may materialize that token.
+
+Remove the ephemeral input after the call. Do not retain temporary JSON/SVG/PNG/HTML artifacts in the conversation workspace.
 
 ## Fallback first
 
@@ -28,7 +36,7 @@ Prepare the summary and compact table from the normalized evidence before callin
 
 - Continue with the existing evidence answer.
 - Do not repeat business-data calls just to redraw.
-- Retry the same visual at most once when the failure is a correctable validation error.
+- Retry payload normalization at most once when the renderer reports a correctable validation error.
 - Do not expose widget code, validation messages, tool parameters or internal route names.
 - Mention that the current client could not display the chart only when that helps answer the user's request.
 
@@ -55,7 +63,7 @@ Color is not the only signal. Keep a sign, value label, candle direction, line p
 ## Layout and accessibility
 
 - One visual answers one main question. Do not place a dashboard of unrelated charts in a normal answer.
-- Use stable dimensions. A WorkBuddy raw SVG uses the host-required `viewBox="0 0 680 340"`, sets `display:block;width:100%;height:340px`, and keeps every plot band, axis, legend and note inside that visible content height. Do not rely on the SVG's natural aspect ratio because the host widget clips taller content.
+- Use stable dimensions. A WorkBuddy raw SVG starts with the host-required `viewBox="0 0 680 340"`, sets `display:block;width:100%;height:340px`, and keeps every plot band, axis, legend and note inside that visible content height. The packaged v2 runtime may expand the internal coordinate width to the measured 680-1280px container while retaining the fixed height; it must not stretch text through `preserveAspectRatio="none"`. Do not rely on the SVG's natural aspect ratio because the host widget clips taller content.
 - HTML chart containers use an explicit height no greater than 340px. Prefer a compact price band plus volume band over a vertically scrollable chart.
 - Include an accessible description naming the subject, chart type and evidence window.
 - Use readable axis labels and rounded display values without changing underlying calculations.

@@ -1,6 +1,12 @@
 # Analytics Recipes
 
-Ready-to-run templates, grouped by scenario. Most examples run through `shifu-cli.py analytics-query <bid> --dsl '…'` (the DSL path); the **Credit Consumption** section is the exception — it uses `shifu-cli.py credit-detail <bid> …` (why the DSL path is unavailable: `tables.md`). Substitute `<bid>` with the actual `shifu_bid` from `shifu-cli.py list` (or from a Course Metadata recipe below). Read `dsl.md` and `tables.md` first for grammar and field meanings.
+Ready-to-run templates, grouped by scenario. Most examples run through `shifu-cli.py analytics-query <bid> --dsl '…'` (the DSL path); the **Credit Consumption** section is the exception — it uses `shifu-cli.py credit-detail <bid> …` (why the DSL path is unavailable: `tables.md`). Substitute `<bid>` with the actual `shifu_bid` from `shifu-cli.py list` (or from a Course Metadata recipe below). Grammar and field meanings are documented in `dsl.md` and `tables.md`.
+
+## Required References
+
+None.
+
+## Invocation Notes
 
 For DSL recipes, the bodies omit `shifu_bid` — the CLI injects it from the positional argument. For `credit-detail`, all parameters are flags on the command line; see the Credit Consumption section below for the full reference.
 
@@ -112,7 +118,7 @@ python3 scripts/shifu-cli.py analytics-query <bid> --dsl '{
 口径说明（present these definitions alongside the numbers so they are unambiguous):
 
 - **学员数 (learners)** = `count_distinct(user_bid)` on `learn_progress_records` — everyone who entered the course (Method ① in `tables.md`). This is the dashboard's "学员数".
-- **订单数 (orders)** = `count` of `order_orders` rows with `status = 502` — paid orders (includes ¥0 free enrolments). For *strictly paid* (`paid_price > 0`) use Recipe 3; for the full funnel use Recipe 5.
+- **订单数 (orders)** = `count` of `order_orders` rows with `status = 502` — paid orders (includes ¥0 free enrolments). For _strictly paid_ (`paid_price > 0`) use Recipe 3; for the full funnel use Recipe 5.
 - **营收 (revenue)** = `sum(paid_price)` over the same `status = 502` rows. Round to 2 decimals (`¥5,870.70`).
 - **最近活跃 (last_active)** = the `created_at` of the latest `learn_progress_records` row (query 1b). Convert to local time before presenting.
 - **活跃学员 (active_learners)** = non-archived learners (`shifu_user_archives.archived = 0`); usually ≤ 学员数 because some learners archived the course.
@@ -247,10 +253,10 @@ python3 scripts/shifu-cli.py credit-detail <bid> --scene 1203
 
 `--scene` accepts a comma-separated subset of `{1201, 1202, 1203}` (debug / preview / production). Combine with `--start` / `--end` to scope a window.
 
-### Recipe 11 — LLM-only vs TTS-only
+### Recipe 11 — Teaching Agent usage vs TTS usage
 
 ```bash
-# LLM only
+# Teaching Agent only
 python3 scripts/shifu-cli.py credit-detail <bid> --usage-type 1101
 
 # TTS only
@@ -276,9 +282,9 @@ Pseudo-shape:
   "code": 0,
   "data": {
     "summary": {
-      "total_records":   52,
-      "total_credits":   "26.6900",
-      "unique_users":    1,
+      "total_records": 52,
+      "total_credits": "26.6900",
+      "unique_users": 1,
       "unique_progress": 5,
       "wallet_creator_bid": "029bacf0...",
       "time_range": ["2026-05-15 16:05:18", "2026-05-15 23:45:17"]
@@ -290,15 +296,15 @@ Pseudo-shape:
         "user_bid": "...",
         "progress_record_bid": "...",
         "outline_item_bid": "...",
-        "usage_type":  1101,
+        "usage_type": 1101,
         "usage_scene": 1203,
-        "provider":    "deepseek",
-        "model":       "deepseek-v4-flash",
-        "credits":     "0.5100",
+        "provider": "deepseek",
+        "model": "deepseek-v4-flash",
+        "credits": "0.5100",
         "wallet_creator_bid": "029bacf0..."
       }
     ],
-    "limit":  100,
+    "limit": 100,
     "offset": 0
   }
 }
@@ -400,7 +406,7 @@ python3 scripts/shifu-cli.py analytics-query <bid> --dsl '{
 }'
 ```
 
-> Returns interleaved learner questions (`type = 321, role = 2`) and LLM answers (`type = 322, role = 1`) in chronological order. Every access is audited server-side.
+> Returns interleaved learner questions (`type = 321, role = 2`) and Teaching Agent answers (`type = 322, role = 1`) in chronological order. Every access is audited server-side.
 
 ### Recipe 20 — All follow-up questions by one learner (raw text, `limit ≤ 100`)
 
@@ -416,7 +422,7 @@ python3 scripts/shifu-cli.py analytics-query <bid> --dsl '{
 }'
 ```
 
-### Recipe 21 — Latest LLM answers (evaluate model quality)
+### Recipe 21 — Latest Teaching Agent answers (evaluate the underlying model)
 
 ```bash
 python3 scripts/shifu-cli.py analytics-query <bid> --dsl '{
@@ -448,7 +454,7 @@ python3 scripts/shifu-cli.py analytics-query <bid> --dsl '{
 
 Each row is one question: `(user_bid, question_text, progress_record_bid, outline_item_bid, position, asked_at)`. The 4-tuple `(progress_record_bid, outline_item_bid, position, asked_at)` is what you use to pair against the matching answer below.
 
-**Step 2 — fetch the matching LLM answers**
+**Step 2 — fetch the matching Teaching Agent answers**
 
 Collect the distinct `progress_record_bid` values from Step 1 and pass them into `in`:
 
@@ -492,7 +498,7 @@ Apply the Translation Gate in `privacy-and-presentation.md`:
 
 Final shape per row:
 
-> **Learner A (Python 学徒 · 138\*\*\*\*\*000)** asked in **Lesson 3.1 装饰器与闭包** at `2026-05-13 21:42`: "闭包和装饰器啥区别?" → AI answer: "闭包是…"
+> **Learner A (Python 学徒 · 138\*\*\*\*\*000)** asked in **Lesson 3.1 装饰器与闭包** at `2026-05-13 21:42`: "闭包和装饰器啥区别?" → Teaching Agent answer: "闭包是…"
 
 If the user starts from a phone number and wants to know which learner asked, run `privacy-and-presentation.md` Use B (`user_identify = "13800138000"` exact match) to get the `user_bid` first, then filter Step 1 by that `user_bid` (`{"field":"user_bid","op":"=","value":"<u-bid>"}`) — `in` / `like` / range on `user_identify` are rejected to prevent enumeration.
 
@@ -514,4 +520,4 @@ python3 scripts/shifu-cli.py analytics-query <bid> --dsl '{
 }'
 ```
 
-> Translate each `outline_item_bid` to "Lesson X.Y: \<title\>" via the `shifu-cli.py show <bid>` outline cache before presenting. High-ask lessons are usually candidates for content reinforcement (more concrete examples / explicit interaction). Low-ask lessons are often either very clear *or* skipped — cross-reference with `learn_progress_records` to tell which.
+> Translate each `outline_item_bid` to "Lesson X.Y: \<title\>" via the `shifu-cli.py show <bid>` outline cache before presenting. High-ask lessons are usually candidates for content reinforcement (more concrete examples / explicit interaction). Low-ask lessons are often either very clear _or_ skipped — cross-reference with `learn_progress_records` to tell which.

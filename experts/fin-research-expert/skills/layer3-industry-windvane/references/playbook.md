@@ -52,7 +52,7 @@ Use this exact product-prototype reading order:
 - Put the six factor scores in a prominent section with labels, colored progress bars, and concise data-backed explanations. When `get_factor_metric_values` returns metrics, show at least one metric value or short-history change in the corresponding factor detail; do not reduce it to `观察` or `字段可用`.
 - Below or beside the factor bars, add factor detail cards for every category. Each card must explain the industry meaning, support logic, pressure logic, and next verification point in analyst-facing language. Do not expose backend phrasing such as “tool returned”, “panel returned”, “not returned this round”, field names, parameter names, or raw availability notes; put data gaps only in 数据口径. This prevents the factor chart from feeling like a black-box judgment while keeping the page user-facing.
 - When fin-graph factor tools are available, call `get_public_factor_framework`, `get_factor_evidence_panel`, and then `get_factor_metric_values` before assigning factor explanations. Use returned metric values first; use rule-based score bands only for dimensions without usable series.
-- Use green for positive/supporting factors, red for negative/opposing factors, amber for mixed or pending factors, and blue/teal for neutral structure.
+- Follow the Mainland China market convention for signed factor semantics: positive/supporting/`+` factors and numbers are red; negative/opposing/`-` factors and numbers are green. Use amber for mixed or pending factors, and blue/teal/gray for neutral structure.
 
 ## Body Rules
 

@@ -57,7 +57,11 @@ Use for China/global macro graph panels.
 - `indicators`
 - `max_points_per_series`: 1-60
 
-Default China macro coverage includes northbound funds, margin balance, social financing, M1/M2, PMI, GDP, confidence, unemployment, industrial production, LPR, DR007/CD, RRR, MLF, OMO, deficit ratio, and local special bonds.
+Default China macro coverage includes northbound funds, margin balance, social financing, M1/M2, PMI, GDP, confidence, unemployment, industrial production, LPR, DR007/CD, USD/CNY central parity, RRR, MLF, OMO, deficit ratio, and local special bonds.
+
+`USDCNY_mid`, `美元兑人民币中间价`, and `人民币中间价` resolve to the central-parity series. Do not describe that series as onshore spot CNY, a closing price, or offshore `USDCNH`.
+
+`get_macro_data` is a compact graph panel with at most 60 recent points per series. Use Fin Data `search_macro_indicators` plus paginated `query_macro_series` when the user requests longer dated history.
 
 Default global macro coverage includes VIX, global major indices, Fed funds, US Treasury yields, dollar index, nonfarm payrolls, unemployment, wages, core CPI/PCE, ISM PMI, Michigan confidence, US GDP, and Chicago FCI.
 
