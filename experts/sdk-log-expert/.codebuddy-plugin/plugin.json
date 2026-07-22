@@ -1,0 +1,64 @@
+{
+  "name": "sdk-log-expert",
+  "version": "0.1.0",
+  "description": "SDK Log Expert — analyze Tencent RTC SDK client logs locally. Decode .clog/.xlog binary logs, unzip archives, build TRTC/IM/TUI timelines, and serve an interactive local Web preview for evidence-based troubleshooting.",
+  "author": {
+    "name": "CloudQ Team",
+    "email": "cloudq@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "sdk-log-expert",
+  "agents": [
+    "./agents/sdk-log-expert.md"
+  ],
+  "skills": [
+    "./skills/sdk-log-analysis"
+  ],
+  "displayName": {
+    "en": "CloudQ",
+    "zh": "CloudQ"
+  },
+  "profession": {
+    "en": "SDK Log Analysis Expert",
+    "zh": "SDK 日志分析专家"
+  },
+  "displayDescription": {
+    "en": "Client-side SDK log analysis: unzip & decode .clog/.xlog, TRTC/IM/TUI timeline reconstruction, evidence-based root-cause diagnosis, and interactive local Web preview.",
+    "zh": "解码客户端日志，还原 TRTC/IM/TUI 时间线，定位音视频与 IM 相关根因"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "13-TencentZone",
+  "defaultInitPrompt": {
+    "zh": "帮我解码并分析这个 .clog 文件，定位卡顿/进房失败的原因",
+    "en": "Decode and analyze this .clog file to locate the lag / join-room failure cause"
+  },
+  "tags": [
+    {
+      "en": "Log Analysis",
+      "zh": "日志分析"
+    },
+    {
+      "en": "Clog Decode",
+      "zh": "Clog 解码"
+    },
+    {
+      "en": "Timeline",
+      "zh": "时间线"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "帮我解码并分析这个 .clog 文件，定位卡顿/进房失败的原因",
+      "en": "Decode and analyze this .clog file to locate the lag / join-room failure cause"
+    },
+    {
+      "zh": "这是一个日志压缩包，帮我解压后按时间线分析关键事件",
+      "en": "This is a log archive — unzip it and analyze the key events on a timeline"
+    },
+    {
+      "zh": "分析完成后启动 Web 预览，让我按行号核对证据日志",
+      "en": "After analysis, start the Web preview so I can verify the evidence logs by line number"
+    }
+  ],
+  "plugin": "sdk-log-expert"
+}

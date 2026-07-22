@@ -1,0 +1,50 @@
+{
+  "_comment": "多游戏追踪配置。每个游戏独立配置追踪参数，Skill 会为每个游戏分别输出趋势情报和 Brief。",
+  "_region_note": "target_regions 使用 BigQuery region 值：na(北美) / eur(欧洲) / sea(东南亚) / jpn(日本) / kr(韩国) / sa(南美) / me(中东) / af(非洲)，详见 references/data-sources.md 地区代码对照表。",
+  "global_defaults": {
+    "top_n": 5,
+    "min_growth_24h": 0,
+    "max_video_age_days": 7,
+    "meme_days": 14
+  },
+  "games": [
+    {
+      "name": "示例游戏A",
+      "genre": "开放世界RPG",
+      "description": "东方奇幻风格，主打世界探索和角色收集",
+      "target_regions": ["na", "jpn", "sea", "kr"],
+      "platforms": ["tiktok", "youtube"],
+      "focus_scenarios": ["社媒内容制作", "端内资源跟进"],
+      "in_game_capabilities": {
+        "emotes": true,
+        "skins": true,
+        "bgm": true,
+        "activities": false
+      },
+      "focus_meme_types": ["Visual & Aesthetic Trends", "Audio Memes"],
+      "focus_meme_elements": ["VISUAL_IDENTITY", "AUDIO_SIGNATURE"],
+      "keywords": ["示例游戏A", "GameA", "GameA_official"],
+      "known_competitors": ["竞品游戏X", "竞品游戏Y"],
+      "notes": "即将上线新角色，重点关注角色向内容趋势"
+    },
+    {
+      "name": "示例游戏B",
+      "genre": "战术竞技",
+      "description": "5v5 竞技射击，主打团队配合",
+      "target_regions": ["na", "sa", "sea"],
+      "platforms": ["youtube", "tiktok"],
+      "focus_scenarios": ["社媒内容制作"],
+      "in_game_capabilities": {
+        "emotes": false,
+        "skins": true,
+        "bgm": false,
+        "activities": true
+      },
+      "focus_meme_types": ["Challenge & Participation", "Humor & Comedy Trends"],
+      "focus_meme_elements": ["NARRATIVE_DRIVEN", "TEXT_EXPRESSION"],
+      "keywords": ["示例游戏B", "GameB"],
+      "known_competitors": ["竞品游戏Z"],
+      "notes": "巴西市场重点推进期，SEA 本地化内容优先级高"
+    }
+  ]
+}

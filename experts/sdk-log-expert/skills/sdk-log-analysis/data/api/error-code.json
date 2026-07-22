@@ -1,0 +1,5025 @@
+[
+  {
+    "SdkName": "实时音视频TRTC",
+    "ErrorCodeList": [
+      {
+        "ErrorCode": "-3307",
+        "ErrorMessage": "ERR_TRTC_REQUEST_IP_TIMEOUT",
+        "Description": "请求 IP 和 sig 超时。",
+        "Solution": "请检查网络是否正常，或网络防火墙是否放行 UDP。可尝试访问下列 IP：162.14.22.165:8000 162.14.6.105:8000 和域名：default-query.trtc.tencent-cloud.com:8000\n防火墙相关限制可以参考：https://cloud.tencent.com/document/product/647/34399"
+      },
+      {
+        "ErrorCode": "-3317",
+        "ErrorMessage": "ERR_TRTC_INVALID_SDK_APPID",
+        "Description": "进房参数 sdkAppId 错误。",
+        "Solution": "请检查 TRTCParams.sdkAppId 是否为空。\n以android端为例，enterroom(TRTCParams, scene)中传入的TRTCParams参数，含有sdkappid字段，请检查字段是否正确\n文档参考： https://cloud.tencent.com/document/product/647/79634#a1de1e93c6cfc6be81dd4152b9e4c190"
+      },
+      {
+        "ErrorCode": "-3319",
+        "ErrorMessage": "ERR_TRTC_INVALID_USER_ID",
+        "Description": "进房参数 userId 不正确；",
+        "Solution": "请检查 TRTCParams.userId 是否为空或符合要求；\n（1）userid要求\n取值范围长度建议不超过32字节。请使用英文字符、数字或下划线，不能全为数字，区分大小写\n说明文档： https://cloud.tencent.com/document/product/647/46351#UserID \n（2）代码检查\n以android端为例，enterroom(TRTCParams, scene)中传入的TRTCParams参数，含有userId 字段，请检查字段是否正确\n文档参考： https://cloud.tencent.com/document/product/647/79634#a1de1e93c6cfc6be81dd4152b9e4c190"
+      },
+      {
+        "ErrorCode": "-3320",
+        "ErrorMessage": "ERR_TRTC_INVALID_USER_SIG",
+        "Description": "进房参数 userSig 不正确，请检查 TRTCParams.userSig 是否为空",
+        "Solution": "请检查 TRTCParams.userSig 是否为空或符合要求； \n以android端为例，enterroom(TRTCParams, scene)中传入的TRTCParams参数，含有userSig 字段，请检查字段是否正确 文档参考： https://cloud.tencent.com/document/product/647/79634#a1de1e93c6cfc6be81dd4152b9e4c190"
+      },
+      {
+        "ErrorCode": "4097",
+        "ErrorMessage": "INVALID_OPERATION",
+        "Description": "web sdk报错：非法操作\n处理建议：请根据对应接口文档检查 API 调用逻辑是否符合 SDK 要求。例如在未进房的情况下，调用 publish 接口是被禁止的。",
+        "Solution": "1.   若使用了跨房连麦功能\nhttps://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/tutorial-30-advanced-cross-room-link.html\n建议排查代码逻辑，在对应的调用位置打断点打日志，排查是否有重复clientid调用的问题，或clientid被覆盖成同一个id的问题。\n\n2. 其它场景建议按错误码返回对应的error message排查代码逻辑，是否有重复调用，是否调用顺序调用逻辑错误等。"
+      },
+      {
+        "ErrorCode": "4098",
+        "ErrorMessage": "",
+        "Description": "web sdk报错：调用 SDK 接口时抛出，表明当前浏览器不支持调用对应接口\n说明：调用 SDK 接口时抛出，表明当前浏览器不支持调用对应接口",
+        "Solution": "请您使用 SDK 支持的浏览器，请参见 检测浏览器支持性\n关于浏览器限制您可以参考文档：\n https://cloud.tencent.com/document/product/647/17249#.E6.94.AF.E6.8C.81.E7.9A.84.E5.B9.B3.E5.8F.B0\n也可以在能力检测页面检测\n https://web.sdk.qcloud.com/trtc/webrtc/demo/detect/index.html"
+      },
+      {
+        "ErrorCode": "16461",
+        "ErrorMessage": "",
+        "Description": "web sdk报错：API 被中断调用\n原因：\n1）在 client.publish() 未成功时，调用 client.leave() 退房，导致 publish 失败。\n2）在 client.subscribe() 未成功时，调用 client.unsubscribe() 或者 client.leave()，导致 subscribe 失败。",
+        "Solution": "业务侧可评估这类 API 调用时序是否符合业务预期，若符合则无需处理，若不符合应调整调用时序。"
+      },
+      {
+        "ErrorCode": "-1316",
+        "ErrorMessage": "ERR_CAMERA_OCCUPY",
+        "Description": "摄像头正在被占用中",
+        "Solution": "尝试释放占用的摄像头，或尝试打开其他摄像头"
+      },
+      {
+        "ErrorCode": "-6",
+        "ErrorMessage": "ERR_REQUEST_SERVER_TIMEOUT",
+        "Description": "请求服务器超时",
+        "Solution": "请您检查当前的网络情况"
+      },
+      {
+        "ErrorCode": "-7",
+        "ErrorMessage": "ERR_SERVER_PROCESS_FAILED",
+        "Description": "服务器无法处理您的请求"
+      },
+      {
+        "ErrorCode": "-1301",
+        "ErrorMessage": "ERR_CAMERA_START_FAIL",
+        "Description": "打开摄像头失败，例如在 Windows 或 Mac 设备，摄像头的配置程序（驱动程序）异常。",
+        "Solution": "您可以尝试禁用后重新启用设备，或者重启机器，或者更新配置程序。"
+      },
+      {
+        "ErrorCode": "-1314",
+        "ErrorMessage": "ERR_CAMERA_NOT_AUTHORIZED",
+        "Description": "摄像头设备未授权，通常在移动设备出现，可能是权限被用户拒绝了",
+        "Solution": "建议您再次尝试调用摄像头申请权限，确保用户正确赋予设备权限。\n以android端为例，工程中配置申请设备权限，可以参考：\nhttps://cloud.tencent.com/developer/article/1412589"
+      },
+      {
+        "ErrorCode": "-1315",
+        "ErrorMessage": "ERR_CAMERA_SET_PARAM_FAIL",
+        "Description": "摄像头参数设置出错（参数不支持或其它）"
+      },
+      {
+        "ErrorCode": "-1308",
+        "ErrorMessage": "ERR_SCREEN_CAPTURE_START_FAIL",
+        "Description": "开始录屏失败。",
+        "Solution": "如果在移动设备出现，可能是权限被用户拒绝了，如果在 Windows 或 Mac 系统的设备出现，请检查录屏接口的参数是否符合要求。如果是分享应用也可能失败，分享应用是Android15新特性需要适配，可以通过分享整个屏幕规避。\n如果是Android, targetSdkVersion = 30以上需要启动一个显示的service\n参考代码如下:\n<service android:name=\".MediaService\"\n            android:foregroundServiceType=\"mediaProjection\"\n            />\n\n\n\n\npackage com.tencent.trtc.apiexample;\n\nimport android.app.Notification;\nimport android.app.NotificationChannel;\nimport android.app.NotificationManager;\nimport android.app.PendingIntent;\nimport android.app.Service;\nimport android.content.Context;\nimport android.content.Intent;\nimport android.graphics.BitmapFactory;\nimport android.os.Build;\nimport android.os.IBinder;\n\nimport androidx.core.app.NotificationCompat;\n\npublic class MediaService extends Service {\n  private final String NOTIFICATION_CHANNEL_ID=\"com.tencent.trtc.apiexample.MediaService\";\n  private final String NOTIFICATION_CHANNEL_NAME=\"com.tencent.trtc.apiexample.channel_name\";\n  private final String NOTIFICATION_CHANNEL_DESC=\"com.tencent.trtc.apiexample.channel_desc\";\n  public MediaService() {\n  }\n\n  @Override\n  public void onCreate() {\n    super.onCreate();\n    startNotification();\n  }\n\n  public void startNotification() {\n    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {\n      //Call Start foreground with notification\n      Intent notificationIntent = new Intent(this, MediaService.class);\n      PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);\n      NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)\n          .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground))\n          .setSmallIcon(R.drawable.ic_launcher_foreground)\n          .setContentTitle(\"Starting Service\")\n          .setContentText(\"Starting monitoring service\")\n          .setContentIntent(pendingIntent);\n      Notification notification = notificationBuilder.build();\n      NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);\n      channel.setDescription(NOTIFICATION_CHANNEL_DESC);\n      NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);\n      notificationManager.createNotificationChannel(channel);\n      startForeground(1, notification); //必须使用此方法显示通知，不能使用notificationManager.notify，否则还是会报上面的错误\n    }\n  }\n\n  @Override\n  public IBinder onBind(Intent intent) {\n    throw new UnsupportedOperationException(\"Not yet implemented\");\n  }\n}"
+      },
+      {
+        "ErrorCode": "-1309",
+        "ErrorMessage": "ERR_SCREEN_CAPTURE_UNSURPORT",
+        "Description": "录屏失败，在 Android 平台，需要5.0以上的系统，在 iOS 平台，需要11.0以上的系统",
+        "Solution": "请确保系统版本符合要求后再试下。"
+      },
+      {
+        "ErrorCode": "-7001",
+        "ErrorMessage": "ERR_SCREEN_CAPTURE_STOPPED",
+        "Description": "录屏被系统中止"
+      },
+      {
+        "ErrorCode": "-102015",
+        "ErrorMessage": "ERR_SCREEN_SHARE_NOT_AUTHORIZED",
+        "Description": "辅路请求失败（请结合返回message判断，Windows下一般是网络请求失败，请检查网络）",
+        "Solution": ""
+      },
+      {
+        "ErrorCode": "-102016",
+        "ErrorMessage": "ERR_SCREEN_SHRAE_OCCUPIED_BY_OTHER",
+        "Description": "其他用户正在上行辅路"
+      },
+      {
+        "ErrorCode": "-1",
+        "ErrorMessage": "ERR_FAILED",
+        "Description": "暂未归类的通用错误"
+      },
+      {
+        "ErrorCode": "-2",
+        "ErrorMessage": "ERR_INVALID_PARAMETER",
+        "Description": "调用 API 时，传入的参数不合法"
+      },
+      {
+        "ErrorCode": "-3",
+        "ErrorMessage": "ERR_REFUSED",
+        "Description": "API 调用被拒绝"
+      },
+      {
+        "ErrorCode": "-4",
+        "ErrorMessage": "ERR_NOT_SUPPORTED",
+        "Description": "当前 API 不支持调用"
+      },
+      {
+        "ErrorCode": "-5",
+        "ErrorMessage": "ERR_INVALID_LICENSE",
+        "Description": "license 不合法，调用失败"
+      },
+      {
+        "ErrorCode": "-8",
+        "ErrorMessage": "ERR_DISCONNECTED",
+        "Description": "断开连接"
+      },
+      {
+        "ErrorCode": "-1303",
+        "ErrorMessage": "ERR_VIDEO_ENCODE_FAIL",
+        "Description": "视频帧编码失败，例如 iOS 设备切换到其他应用时，硬编码器可能被系统释放，再切换回来时，硬编码器重启前，可能会抛出"
+      },
+      {
+        "ErrorCode": "-1305",
+        "ErrorMessage": "ERR_UNSUPPORTED_RESOLUTION",
+        "Description": "不支持的视频分辨率",
+        "Solution": "当前sdk支持的分辨率组合您可以参考：\nhttps://cloud.tencent.com/document/product/647/32236#.E5.88.86.E8.BE.A8.E7.8E.87.E7.A0.81.E7.8E.87.E5.8F.82.E7.85.A7.E8.A1.A8"
+      },
+      {
+        "ErrorCode": "-1327",
+        "ErrorMessage": "ERR_PIXEL_FORMAT_UNSUPPORTED",
+        "Description": "自定视频采集：设置的 pixel format 不支持",
+        "Solution": "目前仅支持 TRTCVideoPixelFormat_Texture_2D、TRTC_VIDEO_PIXEL_FORMAT_TEXTURE_EXTERNAL_OES、TRTC_VIDEO_PIXEL_FORMAT_I420、TRTC_VIDEO_PIXEL_FORMAT_NV21、TRTC_VIDEO_PIXEL_FORMAT_RGBA\n更多关于自定义采集渲染的说明参看文档：\nhttps://cloud.tencent.com/document/product/647/34066"
+      },
+      {
+        "ErrorCode": "-1328",
+        "ErrorMessage": "ERR_BUFFER_TYPE_UNSUPPORTED",
+        "Description": "自定视频采集：设置的 buffer type 不支持",
+        "Solution": "目前仅支持TRTC_VIDEO_BUFFER_TYPE_TEXTURE、TRTC_VIDEO_BUFFER_TYPE_BYTE_ARRAY、TRTC_VIDEO_BUFFER_TYPE_BYTE_BUFFER\n更多关于自定义采集渲染的说明参看文档：\nhttps://cloud.tencent.com/document/product/647/34066"
+      },
+      {
+        "ErrorCode": "-2304",
+        "ErrorMessage": "ERR_NO_AVAILABLE_HEVC_DECODERS",
+        "Description": "找不到可用的 HEVC 解码器",
+        "Solution": "当抛出此错误码，说明当前设备不支持 H265 解码，请切换至 H264 数据流进行播放"
+      },
+      {
+        "ErrorCode": "-1302",
+        "ErrorMessage": "ERR_MIC_START_FAIL",
+        "Description": "打开麦克风失败，例如在 Windows 或 Mac 设备，麦克风的配置程序（驱动程序）异常；",
+        "Solution": "禁用后重新启用麦克风设备，或者重启机器，或者更新配置程序；"
+      },
+      {
+        "ErrorCode": "-1317",
+        "ErrorMessage": "ERR_MIC_NOT_AUTHORIZED",
+        "Description": "麦克风设备未授权，通常在移动设备出现，可能是权限被用户拒绝了",
+        "Solution": "建议您再次尝试调用麦克风申请权限，确保用户正确赋予设备权限。\n以android端为例，工程中配置申请设备权限，可以参考：\nhttps://cloud.tencent.com/developer/article/1412589"
+      },
+      {
+        "ErrorCode": "-1318",
+        "ErrorMessage": "ERR_MIC_SET_PARAM_FAIL",
+        "Description": "麦克风设置参数失败"
+      },
+      {
+        "ErrorCode": "-1319",
+        "ErrorMessage": "ERR_MIC_OCCUPY",
+        "Description": "麦克风正在被占用中，例如移动设备正在通话时，打开麦克风会失败",
+        "Solution": "请确认同一时刻仅有单一应用程序调用麦克风设备"
+      },
+      {
+        "ErrorCode": "-1320",
+        "ErrorMessage": "ERR_MIC_STOP_FAIL",
+        "Description": "停止麦克风失败"
+      },
+      {
+        "ErrorCode": "-1321",
+        "ErrorMessage": "ERR_SPEAKER_START_FAIL",
+        "Description": "打开扬声器失败，例如在 Windows 或 Mac 设备，扬声器的配置程序（驱动程序）异常。",
+        "Solution": "尝试禁用后重新启用设备，或者重启机器，或者更新配置程序"
+      },
+      {
+        "ErrorCode": "-1322",
+        "ErrorMessage": "ERR_SPEAKER_SET_PARAM_FAIL",
+        "Description": "扬声器设置参数失败"
+      },
+      {
+        "ErrorCode": "-1323",
+        "ErrorMessage": "ERR_SPEAKER_STOP_FAIL",
+        "Description": "停止扬声器失败"
+      },
+      {
+        "ErrorCode": "-1330",
+        "ErrorMessage": "ERR_AUDIO_PLUGIN_START_FAIL",
+        "Description": "开启系统声音录制失败，例如音频驱动插件不可用"
+      },
+      {
+        "ErrorCode": "-1331",
+        "ErrorMessage": "ERR_AUDIO_PLUGIN_INSTALL_NOT_AUTHORIZED",
+        "Description": "安装音频驱动插件未授权。",
+        "Solution": "请您重新尝试授权。"
+      },
+      {
+        "ErrorCode": "-1332",
+        "ErrorMessage": "ERR_AUDIO_PLUGIN_INSTALL_FAILED",
+        "Description": "安装音频驱动插件失败。",
+        "Solution": "请尝试重新安装驱动插件。"
+      },
+      {
+        "ErrorCode": "-1333",
+        "ErrorMessage": "ERR_AUDIO_PLUGIN_INSTALLED_BUT_NEED_RESTART",
+        "Description": "安装虚拟声卡插件成功，但首次安装后功能暂时不可用，此为 Mac 系统限制。",
+        "Solution": "请您在收到此错误码后，提示出问题的用户重启当前 APP 重试即可。"
+      },
+      {
+        "ErrorCode": "-1304",
+        "ErrorMessage": "ERR_AUDIO_ENCODE_FAIL",
+        "Description": "音频帧编码失败，例如传入自定义音频数据，SDK 无法处理"
+      },
+      {
+        "ErrorCode": "-1306",
+        "ErrorMessage": "ERR_UNSUPPORTED_SAMPLERATE",
+        "Description": "不支持的音频采样率",
+        "Solution": "HE-AAC 和 HE-AACv2 支持的输出流音频采样率范围为[48000, 44100, 32000, 24000, 16000]\n参考文档：https://liteav.sdk.qcloud.com/doc/api/zh-cn/group__TRTCCloudDef__cplusplus.html#ab2a8b098ac668befae27c446aee48bdb"
+      },
+      {
+        "ErrorCode": "-3301",
+        "ErrorMessage": "ERR_TRTC_ENTER_ROOM_FAILED",
+        "Description": "进入房间失败，请查看 onError 中的 -3301 对应的 msg 提示确认失败原因。",
+        "Solution": "该错误码说明进房失败，可能导致失败原因有很多，需要进一步通过分析msg后明确是什么原因导致的。"
+      },
+      {
+        "ErrorCode": "-3308",
+        "ErrorMessage": "ERR_TRTC_CONNECT_SERVER_TIMEOUT",
+        "Description": "请求进房超时，请检查是否断网或者是否开启vpn，您也可以切换4G进行测试确认"
+      },
+      {
+        "ErrorCode": "-3316",
+        "ErrorMessage": "ERR_TRTC_ROOM_PARAM_NULL",
+        "Description": "进房参数为空",
+        "Solution": "请检查  enterRoom 接口调用是否传入有效的 param，以安卓端为例，需要传入enterRoom(TRTCCloudDef.TRTCParams param, int scene) trtc参数和场景。\nenterRoom接口文档如下：\nhttps://cloud.tencent.com/document/product/647/79628#b379e54cd925946c111f4c5994480a3f"
+      },
+      {
+        "ErrorCode": "-3318",
+        "ErrorMessage": "ERR_TRTC_INVALID_ROOM_ID",
+        "Description": "进房参数 roomId 错误；",
+        "Solution": "请您检查 TRTCParams.roomId 或 TRTCParams.strRoomId 是否为空，注意 roomId 和 strRoomId 不可混用"
+      },
+      {
+        "ErrorCode": "-3340",
+        "ErrorMessage": "ERR_TRTC_ENTER_ROOM_REFUSED",
+        "Description": "进房请求被拒绝，",
+        "Solution": "请检查端上的代码中，是否连续调用 enterRoom 进入相同roomid的房间"
+      },
+      {
+        "ErrorCode": "-100006",
+        "ErrorMessage": "ERR_TRTC_INVALID_PRIVATE_MAPKEY",
+        "Description": "您开启了高级权限控制，但参数 TRTCParams.privateMapKey 校验失败；",
+        "Solution": "您可参考 高级权限控制 文档进行检查： https://cloud.tencent.com/document/product/647/32240"
+      },
+      {
+        "ErrorCode": "-100013",
+        "ErrorMessage": "ERR_TRTC_SERVICE_SUSPENDED",
+        "Description": "当前TRTC服务不可用。",
+        "Solution": "请检查：套餐包剩余分钟数是否大于0(TRTC控制台)，或腾讯云账号是否欠费。\n如您采用的是预付费的方式，可以看下当前套餐包使用情况：https://console.cloud.tencent.com/trtc/package"
+      },
+      {
+        "ErrorCode": "-100018",
+        "ErrorMessage": "ERR_TRTC_USER_SIG_CHECK_FAILED",
+        "Description": "UserSig 校验失败；",
+        "Solution": "请检查参数 TRTCParams.userSig 是否填写正确，或是否已经过期。\n您可参考 UserSig 生成与校验 文档进行校验：https://cloud.tencent.com/document/product/647/50686"
+      },
+      {
+        "ErrorCode": "-3321",
+        "ErrorMessage": "ERR_TRTC_PUSH_THIRD_PARTY_CLOUD_TIMEOUT",
+        "Description": "旁路转推请求超时"
+      },
+      {
+        "ErrorCode": "-3322",
+        "ErrorMessage": "ERR_TRTC_MIX_TRANSCODING_TIMEOUT",
+        "Description": "云端混流请求超时"
+      },
+      {
+        "ErrorCode": "-3323",
+        "ErrorMessage": "ERR_TRTC_PUSH_THIRD_PARTY_CLOUD_FAILED",
+        "Description": "旁路转推回包异常"
+      },
+      {
+        "ErrorCode": "-3324",
+        "ErrorMessage": "ERR_TRTC_MIX_TRANSCODING_FAILED",
+        "Description": "云端混流回包异常",
+        "Solution": "该错误码的意思是云端混流回包异常，发生该报错，要根据本地日志进一步分析，在日志中一般会紧跟一个errMsg，具体的原因可以参考errMsg做进一步判断。"
+      },
+      {
+        "ErrorCode": "-3333",
+        "ErrorMessage": "ERR_TRTC_START_PUBLISHING_TIMEOUT",
+        "Description": "开始向腾讯云的直播 CDN 推流信令超时"
+      },
+      {
+        "ErrorCode": "-3334",
+        "ErrorMessage": "ERR_TRTC_START_PUBLISHING_FAILED",
+        "Description": "开始向腾讯云的直播 CDN 推流信令异常"
+      },
+      {
+        "ErrorCode": "-3335",
+        "ErrorMessage": "ERR_TRTC_STOP_PUBLISHING_TIMEOUT",
+        "Description": "停止向腾讯云的直播 CDN 推流信令超时"
+      },
+      {
+        "ErrorCode": "-3336",
+        "ErrorMessage": "ERR_TRTC_STOP_PUBLISHING_FAILED",
+        "Description": "停止向腾讯云的直播 CDN 推流信令异常"
+      },
+      {
+        "ErrorCode": "-3326",
+        "ErrorMessage": "ERR_TRTC_CONNECT_OTHER_ROOM_TIMEOUT",
+        "Description": "请求连麦超时"
+      },
+      {
+        "ErrorCode": "-3327",
+        "ErrorMessage": "ERR_TRTC_DISCONNECT_OTHER_ROOM_TIMEOUT",
+        "Description": "请求退出连麦超时"
+      },
+      {
+        "ErrorCode": "-3328",
+        "ErrorMessage": "ERR_TRTC_CONNECT_OTHER_ROOM_INVALID_PARAMETER",
+        "Description": "无效参数"
+      },
+      {
+        "ErrorCode": "-3330",
+        "ErrorMessage": "ERR_TRTC_CONNECT_OTHER_ROOM_AS_AUDIENCE",
+        "Description": "当前是观众角色，不能请求或断开跨房连麦。",
+        "Solution": "需要先调用  switchRole  切换到主播角色后再调用。\n接口文档可参考：https://cloud.tencent.com/document/product/647/79628#0a2b76d62a79877c408aa638b61d9b8e"
+      },
+      {
+        "ErrorCode": "1103",
+        "ErrorMessage": "WARNING_HW_ENCODER_START_FAIL",
+        "Description": "硬编码启动出现问题，自动切换到软编码"
+      },
+      {
+        "ErrorCode": "1104",
+        "ErrorMessage": "WARNING_CURRENT_ENCODE_TYPE_CHANGED",
+        "Description": "表示编码器发生改变，可以通过 onWarning 函数的扩展信息中的相关字段来获取当前的编码格式和类型。"
+      },
+      {
+        "ErrorCode": "1107",
+        "ErrorMessage": "WARNING_VIDEO_ENCODER_SW_TO_HW",
+        "Description": "当前 CPU 使用率太高，无法满足软件编码需求，自动切换到硬件编码"
+      },
+      {
+        "ErrorCode": "1108",
+        "ErrorMessage": "WARNING_INSUFFICIENT_CAPTURE_FPS",
+        "Description": "摄像头采集帧率不足，部分自带美颜算法的 Android 手机上会出现"
+      },
+      {
+        "ErrorCode": "1109",
+        "ErrorMessage": "WARNING_SW_ENCODER_START_FAIL",
+        "Description": "软编码启动失败"
+      },
+      {
+        "ErrorCode": "1110",
+        "ErrorMessage": "WARNING_REDUCE_CAPTURE_RESOLUTION",
+        "Description": "摄像头采集分辨率被降低，以满足当前帧率和性能最优解。"
+      },
+      {
+        "ErrorCode": "1111",
+        "ErrorMessage": "WARNING_CAMERA_DEVICE_EMPTY",
+        "Description": "没有检测到可用的摄像头设备"
+      },
+      {
+        "ErrorCode": "1112",
+        "ErrorMessage": "WARNING_CAMERA_NOT_AUTHORIZED",
+        "Description": "用户未授权当前应用使用摄像头"
+      },
+      {
+        "ErrorCode": "1206",
+        "ErrorMessage": "WARNING_SCREEN_CAPTURE_NOT_AUTHORIZED",
+        "Description": "用户未授权当前应用使用屏幕录制"
+      },
+      {
+        "ErrorCode": "2101",
+        "ErrorMessage": "WARNING_VIDEO_FRAME_DECODE_FAIL",
+        "Description": "当前视频帧解码失败"
+      },
+      {
+        "ErrorCode": "2106",
+        "ErrorMessage": "WARNING_HW_DECODER_START_FAIL",
+        "Description": "硬解启动失败，采用软解码"
+      },
+      {
+        "ErrorCode": "2108",
+        "ErrorMessage": "WARNING_VIDEO_DECODER_HW_TO_SW",
+        "Description": "当前流硬解第一个 I 帧失败，SDK 自动切软解"
+      },
+      {
+        "ErrorCode": "2109",
+        "ErrorMessage": "WARNING_SW_DECODER_START_FAIL",
+        "Description": "软解码器启动失败"
+      },
+      {
+        "ErrorCode": "2110",
+        "ErrorMessage": "WARNING_VIDEO_RENDER_FAIL",
+        "Description": "视频渲染失败"
+      },
+      {
+        "ErrorCode": "1201",
+        "ErrorMessage": "WARNING_MICROPHONE_DEVICE_EMPTY",
+        "Description": "没有检测到可用的麦克风设备"
+      },
+      {
+        "ErrorCode": "1202",
+        "ErrorMessage": "WARNING_SPEAKER_DEVICE_EMPTY",
+        "Description": "没有检测到可用的扬声器设备"
+      },
+      {
+        "ErrorCode": "1203",
+        "ErrorMessage": "WARNING_MICROPHONE_NOT_AUTHORIZED",
+        "Description": "用户未授权当前应用使用麦克风"
+      },
+      {
+        "ErrorCode": "1204",
+        "ErrorMessage": "WARNING_MICROPHONE_DEVICE_ABNORMAL",
+        "Description": "音频采集设备不可用（例如被占用或者PC判定无效设备）"
+      },
+      {
+        "ErrorCode": "1205",
+        "ErrorMessage": "WARNING_SPEAKER_DEVICE_ABNORMAL",
+        "Description": "音频播放设备不可用（例如被占用或者PC判定无效设备）"
+      },
+      {
+        "ErrorCode": "1207",
+        "ErrorMessage": "WARNING_BLUETOOTH_DEVICE_CONNECT_FAIL",
+        "Description": "蓝牙设备连接失败（例如其他应用通过设置通话音量占用音频通道）"
+      },
+      {
+        "ErrorCode": "2102",
+        "ErrorMessage": "WARNING_AUDIO_FRAME_DECODE_FAIL",
+        "Description": "当前音频帧解码失败"
+      },
+      {
+        "ErrorCode": "7001",
+        "ErrorMessage": "WARNING_AUDIO_RECORDING_WRITE_FAIL",
+        "Description": "音频录制写入文件失败"
+      },
+      {
+        "ErrorCode": "7002",
+        "ErrorMessage": "WARNING_MICROPHONE_HOWLING_DETECTED",
+        "Description": "录制音频时监测到啸叫"
+      },
+      {
+        "ErrorCode": "6001",
+        "ErrorMessage": "WARNING_IGNORE_UPSTREAM_FOR_AUDIENCE",
+        "Description": "当前是观众角色，不支持发布音视频，需要先切换成主播角色"
+      },
+      {
+        "ErrorCode": "10001",
+        "ErrorMessage": "",
+        "Description": "小程序端用户禁止使用摄像头"
+      },
+      {
+        "ErrorCode": "10002",
+        "ErrorMessage": "",
+        "Description": "小程序端用户禁止使用录音"
+      },
+      {
+        "ErrorCode": "10003",
+        "ErrorMessage": "",
+        "Description": "小程序端背景音资源（BGM）加载失败"
+      },
+      {
+        "ErrorCode": "10004",
+        "ErrorMessage": "",
+        "Description": "小程序端等待画面资源（waiting-image）加载失败"
+      },
+      {
+        "ErrorCode": "-1307",
+        "ErrorMessage": "",
+        "Description": "全平台：系统混音启动出错，常见的出错原因及解决：1.当前系统版本无法支持，指定、排除指定进程混音功能需满足 Windows 系统为10.0.19042（20H2）或更高版本，指定路径混音功能 x64 版本需满足 Windows 系统为10.0.19042（20H2）或更高版本，请检查当前系统版本。2.传入参数非法（包括参数为空、传入路径不存在、传入进程号不存在、传入设备名不存在），请检查传入参数是否合法。3.无可用扬声器设备，请检查是否可用\n小程序端：推流出现网络断开，且经过多次重试无法恢复",
+        "Solution": "全平台：参见错误码含义\n小程序端：可能是欠费，或者小程序端没有购买套餐包能力位导致。"
+      },
+      {
+        "ErrorCode": "-100015",
+        "ErrorMessage": "",
+        "Description": "SDKAppID 异常，请检查 SDKAppID 是否正确"
+      },
+      {
+        "ErrorCode": "4096",
+        "ErrorMessage": "INVALID_PARAMETER",
+        "Description": "we端报错：无效参数",
+        "Solution": "请检查传入参数是否符合 SDK 要求，例如参数类型是否正确。"
+      },
+      {
+        "ErrorCode": "4099",
+        "ErrorMessage": "DEVICE_NOT_FOUND",
+        "Description": "web sdk报错：当前设备没有麦克风或没有摄像头，但尝试采集麦克风、摄像头。",
+        "Solution": "引导出问题的用户检查设备的摄像头及麦克风是否正常，业务侧应当增加进房前的设备检测逻辑，请参见 通话前环境与设备检测。https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/tutorial-23-advanced-support-detection.html"
+      },
+      {
+        "ErrorCode": "4100",
+        "ErrorMessage": "INITIALIZE_FAILED",
+        "Description": "LocalStream.initialize() 采集失败。",
+        "Solution": "1）请参见文档获取详细处理建议：https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/module-ErrorCode.html#.INITIALIZE_FAILED\n2）浏览器版本过低也会导致该问题，可以检查下浏览器版本是否支持：https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/tutorial-05-info-browser.html"
+      },
+      {
+        "ErrorCode": "16385",
+        "ErrorMessage": "SIGNAL_CAHNNEL_SETUP_FAILED",
+        "Description": "web sdk报错：信令通道建立失败。",
+        "Solution": "通常与腾讯云账号有关，参见具体 帐号相关错误信息。\nhttps://cloud.tencent.com/document/product/647/34342#.E8.BF.9B.E6.88.BF.E5.A4.B1.E8.B4.A5.E7.9B.B8.E5.85.B3.E9.94.99.E8.AF.AF.E4.BF.A1.E6.81.AF"
+      },
+      {
+        "ErrorCode": "16386",
+        "ErrorMessage": "SIGNAL_CHANNEL_ERROR",
+        "Description": "web sdk报错：信令通道错误。"
+      },
+      {
+        "ErrorCode": "16387",
+        "ErrorMessage": "ICE_TRANSPORT_ERROR",
+        "Description": "web sdk报错：ICE Transport 连接错误，即音视频数据传输通道错误。",
+        "Solution": "这主要是因为用户端的 UDP 端口异常（可能是用户电脑防火墙或路由器防火墙端口限制）引起，具体端口请参见 端口白名单。\nhttps://cloud.tencent.com/document/product/647/34399#webrtc-.E9.9C.80.E8.A6.81.E9.85.8D.E7.BD.AE.E5.93.AA.E4.BA.9B.E7.AB.AF.E5.8F.A3.E6.88.96.E5.9F.9F.E5.90.8D.E4.B8.BA.E7.99.BD.E5.90.8D.E5.8D.95.EF.BC.9F"
+      },
+      {
+        "ErrorCode": "16388",
+        "ErrorMessage": "JOIN_ROOM_FAILED",
+        "Description": "web sdk报错：进房失败。",
+        "Solution": "详细请参见 进房失败相关错误信息：https://cloud.tencent.com/document/product/647/34342#.E8.BF.9B.E6.88.BF.E5.A4.B1.E8.B4.A5.E7.9B.B8.E5.85.B3.E9.94.99.E8.AF.AF.E4.BF.A1.E6.81.AF"
+      },
+      {
+        "ErrorCode": "16389",
+        "ErrorMessage": "CREATE_OFFER_FAILED",
+        "Description": "web sdk报错：创建 sdp offer 失败。"
+      },
+      {
+        "ErrorCode": "16390",
+        "ErrorMessage": "SIGNAL_CHANNEL_RECONNECTION_FAILED",
+        "Description": "web sdk报错：WebSocket 信令通道重连失败\n说明：当 WebSocket 断开时，SDK 会尝试多次重连，如果都失败了，则会抛出此错误。",
+        "Solution": "监听报错，前端抛出提示提醒用户检查网络，然后重新进房。"
+      },
+      {
+        "ErrorCode": "16391",
+        "ErrorMessage": "UPLINK_RECONNECTION_FAILED",
+        "Description": "web sdk报错：上行 PeerConnection 重连失败\n说明：当上行 PeerConnection 断开时，SDK 会尝试多次重连，如果都失败了，则会抛出此错误",
+        "Solution": "监听报错，前端抛出提示提醒用户检查网络，然后重新推流或者重新进房"
+      },
+      {
+        "ErrorCode": "16392",
+        "ErrorMessage": "DOWNLINK_RECONNECTION_FAILED",
+        "Description": "web sdk报错：下行 PeerConnection 重连失败\n说明：当下行 PeerConnection 异常断开时，SDK 会尝试多次重连，如果都失败了，则会抛出此错误",
+        "Solution": "监听报错，前端抛出提示提醒用户检查网络，然后重新进房"
+      },
+      {
+        "ErrorCode": "16400",
+        "ErrorMessage": "REMOTE_STREAM_NOT_EXIST",
+        "Description": "web sdk报错：远端流不存在\n说明：在 A 尝试订阅 B 推的流时，B 取消推流，导致 A 订阅 B 失败",
+        "Solution": "属于正常交互流程，接入侧无需处理"
+      },
+      {
+        "ErrorCode": "16448",
+        "ErrorMessage": "CLIENT_BANNED",
+        "Description": "用户被踢出房间，被踢原因有：\n1）同名用户进入同一房间，注意：禁止同名用户同时进入同一房间，会导致双方音视频通话异常，业务侧应避免出现这种情况\n2）被账户管理员使用服务端 API 踢出房间"
+      },
+      {
+        "ErrorCode": "16449",
+        "ErrorMessage": "SERVER_TIMEOUT",
+        "Description": "web sdk报错：媒体传输服务超时；",
+        "Solution": "通常为客户端网络问题导致，建议检查网络状况后重试"
+      },
+      {
+        "ErrorCode": "16450",
+        "ErrorMessage": "SUBSCRIPTION_TIMEOUT",
+        "Description": "web sdk报错：远端流订阅超时；通常为客户端网络问题导致。",
+        "Solution": "通常为客户端网络问题导致，建议检查网络状况后重试"
+      },
+      {
+        "ErrorCode": "16451",
+        "ErrorMessage": "PLAY_NOT_ALLOWED",
+        "Description": "web sdk报错：自动播放被禁止错误\n说明：调用 play() 播放音视频时，由于自动播放策略 的限制导致无法自动播放：https://developer.mozilla.org/zh-CN/docs/Web/Media/Autoplay_guide",
+        "Solution": "此时应该引导用户通过手势操作调用 resume() 继续进行播放，请参见  自动播放受限处理建议：https://web.sdk.qcloud.com/trtc/webrtc/doc/zh-cn/tutorial-21-advanced-auto-play-policy.html"
+      },
+      {
+        "ErrorCode": "16452",
+        "ErrorMessage": "DEVICE_AUTO_RECOVER_FAILED",
+        "Description": "web sdk报错：自动恢复摄像头、麦克风采集失败。该错误在 LocalStream 的 error 事件抛出\n当用户的正在推流的媒体设备变更（例如：插拔摄像头、麦克风、接口松动等）时，SDK 会尝试恢复采集。发生此错误说明恢复失败",
+        "Solution": "1）提醒用户媒体设备自动恢复采集失败，请检查摄像头、麦克风接口是否松动，并确保没有被其他应用占用\n2）可在页面提供重试按钮，当用户单击重试时，重新采集摄像头、麦克风"
+      },
+      {
+        "ErrorCode": "16455",
+        "ErrorMessage": "START_MIX_TRANSCODE_FAILED",
+        "Description": "web sdk报错：开始混流转码失败。建议分析日志获取更详细的原因"
+      },
+      {
+        "ErrorCode": "16456",
+        "ErrorMessage": "STOP_MIX_TRANSCODE_FAILED",
+        "Description": "web sdk报错：停止混流转码失败"
+      },
+      {
+        "ErrorCode": "16457",
+        "ErrorMessage": "NOT_SUPPORTED_H264",
+        "Description": "web sdk报错：当前设备不支持H.264"
+      },
+      {
+        "ErrorCode": "16458",
+        "ErrorMessage": "SWITCH_ROLE_FAILED",
+        "Description": "web sdk报错：切换角色失败。建议分析日志获取更详细原因。"
+      },
+      {
+        "ErrorCode": "16459",
+        "ErrorMessage": "API_CALL_TIMEOUT",
+        "Description": "web sdk报错：API 接口调用超时。通常为客户端网络问题导致。"
+      },
+      {
+        "ErrorCode": "70001",
+        "ErrorMessage": "",
+        "Description": "userSig 过期，",
+        "Solution": "请尝试重新生成userSig 。如果是刚生成就过期，请检查有效期填写的是否过小或者误填为0"
+      },
+      {
+        "ErrorCode": "70002",
+        "ErrorMessage": "",
+        "Description": "userSig 长度为0，请确认签名计算是否正确，访问 sign_src 获取计算签名的源码，核对参数，确保签名计算正确性"
+      },
+      {
+        "ErrorCode": "70003",
+        "ErrorMessage": "",
+        "Description": "userSig 校验失败，请确认下 userSig 内容是否被截断，例如缓冲区长度不够导致的内容截断"
+      },
+      {
+        "ErrorCode": "70004",
+        "ErrorMessage": "",
+        "Description": "userSig 校验失败，请确认下 userSig 内容是否被截断，例如缓冲区长度不够导致的内容截断"
+      },
+      {
+        "ErrorCode": "70005",
+        "ErrorMessage": "",
+        "Description": "userSig 校验失败，通过工具来验证生成的 userSig 是否正确。",
+        "Solution": "使用 userSig 校验工具校验是否正确：https://console.cloud.tencent.com/im/tool-usersig \n如userSig错误，可使用该工具生成正确的userSig再试一下。"
+      },
+      {
+        "ErrorCode": "70006",
+        "ErrorMessage": "",
+        "Description": "userSig 校验失败，通过工具来验证生成的 userSig 是否正确。",
+        "Solution": "使用 userSig 校验工具校验是否正确：https://console.cloud.tencent.com/im/tool-usersig \n如userSig错误，可使用该工具生成正确的userSig再试一下。"
+      },
+      {
+        "ErrorCode": "70007",
+        "ErrorMessage": "",
+        "Description": "userSig 校验失败，通过工具来验证生成的 userSig 是否正确。",
+        "Solution": "使用 userSig 校验工具校验是否正确：https://console.cloud.tencent.com/im/tool-usersig \n如userSig错误，可使用该工具生成正确的userSig再试一下。"
+      },
+      {
+        "ErrorCode": "70008",
+        "ErrorMessage": "",
+        "Description": "userSig 校验失败，通过工具来验证生成的 userSig 是否正确。",
+        "Solution": "使用 userSig 校验工具校验是否正确：https://console.cloud.tencent.com/im/tool-usersig \n如userSig错误，可使用该工具生成正确的userSig再试一下。"
+      },
+      {
+        "ErrorCode": "70009",
+        "ErrorMessage": "",
+        "Description": "用业务公钥验证 userSig 失败，请确认生成的 userSig 使用的私钥和 sdkAppId 是否对应"
+      },
+      {
+        "ErrorCode": "70010",
+        "ErrorMessage": "",
+        "Description": "userSig 校验失败，通过工具来验证生成的 userSig 是否正确",
+        "Solution": "使用 userSig 校验工具校验是否正确：https://console.cloud.tencent.com/im/tool-usersig \n如userSig错误，可使用该工具生成正确的userSig再试一下。"
+      },
+      {
+        "ErrorCode": "70013",
+        "ErrorMessage": "",
+        "Description": "userSig 中 userId 与请求时的 userId 不匹配，请检查登录时填写的 userId 与 userSig 中的是否一致"
+      },
+      {
+        "ErrorCode": "70014",
+        "ErrorMessage": "",
+        "Description": "userSig 中 sdkAppId 与请求时的 sdkAppId 不匹配",
+        "Solution": "请检查登录时填写的 sdkAppId 与 userSig 中的是否一致"
+      },
+      {
+        "ErrorCode": "70015",
+        "ErrorMessage": "",
+        "Description": "未找到该 sdkAppId 和帐号类型对应的验证方式，请确认是否已进行帐号集成操作"
+      },
+      {
+        "ErrorCode": "70016",
+        "ErrorMessage": "",
+        "Description": "拉取到的公钥长度为0，请确认是否已上传公钥，如果是重新上传的公钥需要十分钟后再尝试"
+      },
+      {
+        "ErrorCode": "70017",
+        "ErrorMessage": "",
+        "Description": "内部第三方票据验证超时，请重试。"
+      },
+      {
+        "ErrorCode": "70018",
+        "ErrorMessage": "",
+        "Description": "内部验证第三方票据失败，建议提单反馈。"
+      },
+      {
+        "ErrorCode": "70019",
+        "ErrorMessage": "",
+        "Description": "通过 HTTPS 方式验证的票据字段为空，请正确填写 userSig",
+        "Solution": "使用 userSig 校验工具校验是否正确：https://console.cloud.tencent.com/im/tool-usersig \n如userSig错误，可使用该工具生成正确的userSig再试一下。"
+      },
+      {
+        "ErrorCode": "70020",
+        "ErrorMessage": "",
+        "Description": "sdkAppId 未找到，请确认是否已在腾讯云上配置"
+      },
+      {
+        "ErrorCode": "70052",
+        "ErrorMessage": "",
+        "Description": "userSig 已经失效，请重新生成，再次尝试"
+      },
+      {
+        "ErrorCode": "70221",
+        "ErrorMessage": "",
+        "Description": "登录状态无效，请使用 UserSig 重新鉴权"
+      },
+      {
+        "ErrorCode": "10006",
+        "ErrorMessage": "",
+        "Description": "客户服务欠费；",
+        "Solution": "请登录 实时音视频控制台，单击您已创建的应用，单击应用信息，在应用信息面板即可确认“实时音视频服务状态”；"
+      },
+      {
+        "ErrorCode": "-10012",
+        "ErrorMessage": "",
+        "Description": "未传入 roomId 或者 roomId 不符合规范, 如需使用 string 类型的 roomId",
+        "Solution": "请在调用 TRTC.createClient 时设置 useStringRoomId 为 true"
+      },
+      {
+        "ErrorCode": "-10013",
+        "ErrorMessage": "",
+        "Description": "userSig 鉴权失败，建议重试"
+      },
+      {
+        "ErrorCode": "-10015",
+        "ErrorMessage": "",
+        "Description": "服务端获取服务器节点失败，请重试"
+      },
+      {
+        "ErrorCode": "-10016",
+        "ErrorMessage": "",
+        "Description": "服务端创建房间失败，请检查 roomId 是否在流控允许范围内"
+      },
+      {
+        "ErrorCode": "-10018",
+        "ErrorMessage": "",
+        "Description": "启用高级权限控制后，client.join 未携带 privateMapKey 参数，或者 privateMapKey 为 ' '",
+        "Solution": "请参见 开启高级权限设置：https://cloud.tencent.com/document/product/647/32240"
+      },
+      {
+        "ErrorCode": "-10019",
+        "ErrorMessage": "",
+        "Description": "启用高级权限控制后，client.join 携带的 privateMapKey 参数不符合规范，",
+        "Solution": "请参见 开启高级权限设置：https://cloud.tencent.com/document/product/647/32240"
+      },
+      {
+        "ErrorCode": "-100027",
+        "ErrorMessage": "",
+        "Description": "请检查 TRTC 状态是否正常",
+        "Solution": "需在腾讯云实时音视频控制台，开启 TRTC 服务后再加入房间"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "publish timeout",
+        "Description": "publish 超时",
+        "Solution": "请尝试刷新重连，再次操作 publish()"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "join room timeout",
+        "Description": "进房超时",
+        "Solution": "建议刷新页面重进"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "DTLS Transport connection timeout (10s)",
+        "Description": "DTLS Transport 连接超时",
+        "Solution": "请尝试刷新重连"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "failed to connect to remote server via websocket",
+        "Description": "websocket 连接失败",
+        "Solution": "请尝试刷新重连"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "ICE/DTLS Transport connection failed",
+        "Description": "建立媒体传输通道时失败",
+        "Solution": "请检查 防火墙配置"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "previous publishing is ongoing, please avoid re-publishing",
+        "Description": "已经在 publishing 状态中",
+        "Solution": "publish 后请避免再次 publish()"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AbortError",
+        "Description": "由于某些设备/系统未知原因导致设备无法被使用",
+        "Solution": "建议通话前先进行设备检测"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "NotReadableError",
+        "Description": "找不由于操作系统上某个硬件、浏览器或者网页层面发生的错误导致设备无法被访问。",
+        "Solution": "根据浏览器的报错信息处理，提示用户确保当前没有其他应用请求访问摄像头/麦克风，并重试"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "NotFoundError",
+        "Description": "找不到满足请求参数的媒体类型，如音频、视频、屏幕分享；",
+        "Solution": "建议通话前先进行设备检测"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "NotAllowedError",
+        "Description": "用户拒绝了当前的浏览器实例的访问音频、视频、屏幕分享请求",
+        "Solution": "用户需授权摄像头/麦克风访问，才能进行音视频通话"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "duplicate publishing, please unpublish and then re-publish",
+        "Description": "重复 publish",
+        "Solution": "请先操作 unpublish()，再操作 publish()"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "OverconstrainedError",
+        "Description": "浏览器获取不到 cameraId / microphoneId",
+        "Solution": "请确保 cameraId / microphoneId 的值是有效的非空字符串"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "RtcError: no valid ice candidate found",
+        "Description": "TRTC Web SDK 在 STUN 打洞失败",
+        "Solution": "请检查下 防火墙配置"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "ActionOffline",
+        "Description": "该接口已下线，请查阅当前官网对外提供的接口列表：https://cloud.tencent.com/document/product/647/37078"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.InvalidAuthorization",
+        "Description": "请求头部的 Authorization 不符合腾讯云标准，请检查 Authorization  字段。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.InvalidSecretId",
+        "Description": "密钥非法（不是云 API 密钥类型）。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.MFAFailure",
+        "Description": "MFA 错误，请查阅MFA相关说明：https://cloud.tencent.com/document/product/378/12036"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.SecretIdNotFound",
+        "Description": "密钥不存在。",
+        "Solution": "请在 控制台 检查密钥是否已被删除或者禁用，如状态正常，请检查密钥是否填写正确，注意前后不得有空格。\n控制台连接：https://console.cloud.tencent.com/cam/capi"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.SignatureExpire",
+        "Description": "签名过期。Timestamp 和服务器时间相差不得超过五分钟，请检查本地时间是否和标准时间同步。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.SignatureFailure",
+        "Description": "签名错误。签名计算错误，请对照调用方式中的签名方法文档检查签名计算过程。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.TokenFailure",
+        "Description": "token 错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.UnauthorizedOperation",
+        "Description": "请求未授权。请参考 CAM 文档对鉴权的说明。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameterValue",
+        "Description": "参数取值错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "IpInBlacklist",
+        "Description": "IP地址在黑名单中。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "IpNotInWhitelist",
+        "Description": "IP地址不在白名单中。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter",
+        "Description": "缺少参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "RequestLimitExceeded",
+        "Description": "请求的次数超过了频率限制。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "RequestLimitExceeded.GlobalRegionUinLimitExceeded",
+        "Description": "主账号超过频率限制。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.UnRealNameAuthenticated",
+        "Description": "未完成实名认证，不允许此操作。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure.UnsupportedOperation",
+        "Description": "不支持该操作。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.CRUnsupportMethod",
+        "Description": "云端录制方法不支持。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.MixSessionNotExist",
+        "Description": "房间中没有设置混流模板。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.RequestRejection",
+        "Description": "云API混流模板和SDK混流冲突。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.RestrictedConcurrency",
+        "Description": "单用户并发过载，请联系我们增大并发路数到合理值。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.RoomNotExist",
+        "Description": "房间不存在，接口调用前请您确认下房间存在才可调用。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.SdkAppIdNotExist",
+        "Description": "sdkappid不存在，请检查您的sdkappid参数传入是否正确。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.CRInternalError",
+        "Description": "云端录制内部服务错误，请通过工单渠道联系我们协助排查。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.DBError",
+        "Description": "数据库查询异常，请通过工单渠道联系我们协助排查。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.EsQueryError",
+        "Description": "InternalError.EsQueryError，请通过工单渠道联系我们协助排查。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.GetRoomCacheIpError",
+        "Description": "查询房间失败，请确保房间号存在再调用此接口。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.GetRoomFromCacheError",
+        "Description": "获取房间信息失败，请确保房间号存在再调用本接口。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.AudioEncodeParams",
+        "Description": "音频编码参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.BodyParamsError",
+        "Description": "body 解析参数失败，请您检查body体是否符合要求。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.CheckContentFailed",
+        "Description": "图片过大，请确保图片大小符合要求。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.CheckSuffixFailed",
+        "Description": "后缀名校验失败。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.EncodeParams",
+        "Description": "EncodeParams参数错误，请您检查编码参数是否符合要求。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.EndTs",
+        "Description": "EndTs参数错误，请您检查结束时间戳传入是否符合要求。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.MainVideoRightAlign",
+        "Description": "大画面居右显示参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.MainVideoStreamType",
+        "Description": "大画面流类型错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.OutOfRange",
+        "Description": "参数超出范围。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.OutputParams",
+        "Description": "OutputParams参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.PageNumber",
+        "Description": "PageNumber 参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.PageSize",
+        "Description": "PageSize参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.PageSizeOversize",
+        "Description": "PageSize超过100。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.PictureNotFound",
+        "Description": "待操作的图片未找到。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.PresetLayoutConfig",
+        "Description": "自定义布局参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.PublishCdnUrls",
+        "Description": "PublishCdnUrls参数校验失败。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.PureAudioStream",
+        "Description": "纯音频推流参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.QueryScaleOversize",
+        "Description": "查询范围超过文档限制。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.RecordAudioOnly",
+        "Description": "纯音频录制参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.RecordId",
+        "Description": "RecordId参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.RoomId",
+        "Description": "RoomId参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.SdkAppId",
+        "Description": "SdkAppId参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.SdkAppid",
+        "Description": "不能操作的SdkAppid。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.SmallVideoLayoutParams",
+        "Description": "小画面布局参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.SmallVideoStreamType",
+        "Description": "小画面布局中流类型参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.StartTimeExpire",
+        "Description": "查询开始时间超过文档限制。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.StartTimeOversize",
+        "Description": "查询起始时间超过当前监控仪表盘功能版本限制，详情请见:https://cloud.tencent.com/document/product/647/81331。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.StartTs",
+        "Description": "StartTs参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.StartTsOversize",
+        "Description": "查询开始时间超过文档限制。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.StrRoomId",
+        "Description": "StrRoomId参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.StreamId",
+        "Description": "StreamId参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.UrlParamsError",
+        "Description": "Url解析参数失败。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.UserId",
+        "Description": "UserId参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.UserIds",
+        "Description": "UserIds参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.UserIdsMorethanSix",
+        "Description": "用户数超过6个。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.VideoResolution",
+        "Description": "视频分辨率参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameterValue.RoomId",
+        "Description": "RoomId值错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.AccessKey",
+        "Description": "缺少AccessKey参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.AppId",
+        "Description": "缺少AppId参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.AudioEncodeParams",
+        "Description": "EncodeParams中缺少音频输出参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.BizId",
+        "Description": "转推参数中缺少BizId。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.Bucket",
+        "Description": "缺少Bucket参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.EncodeParams",
+        "Description": "缺少EncodeParams参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.EndTs",
+        "Description": "缺少endTS_s参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.OutputParams",
+        "Description": "缺少OutputParams参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.PresetLayoutConfig",
+        "Description": "缺少自定义布局参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.PublishCdnParams",
+        "Description": "缺少转推参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.PublishCdnUrls",
+        "Description": "转推参数中缺少转推目的地址。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.RecordMode",
+        "Description": "缺少RecordMode参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.RecordParams",
+        "Description": "缺少RecordParams参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.Region",
+        "Description": "缺少Region参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.RoomId",
+        "Description": "缺少RoomId参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.RoomNum",
+        "Description": "缺少RoomNum参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.SdkAppId",
+        "Description": "缺少SdkAppId参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.SecretKey",
+        "Description": "缺少SecretKey参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.StartTs",
+        "Description": "缺少startTS_s参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.StorageParams",
+        "Description": "缺少StorageParams参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.StreamId",
+        "Description": "OutputParams中缺少StreamId参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.StreamType",
+        "Description": "缺少StreamType参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.TaskId",
+        "Description": "缺少TaskId参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.UserId",
+        "Description": "缺少UserId参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.UserIds",
+        "Description": "缺少UserIds参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.UserSig",
+        "Description": "缺少UserSig参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.Vendor",
+        "Description": "缺少Vendor参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.VideoEncodeParams",
+        "Description": "EncodeParams中缺少视频输出参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "ResourceInsufficient.RequestRejection",
+        "Description": "资源不足。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "UnauthorizedOperation.SdkAppId",
+        "Description": "没有操作SdkAppId的权限。"
+      },
+      {
+        "ErrorCode": "3308",
+        "ErrorMessage": "ERR_ROOM_REQUEST_ENTER_ROOM_TIMEOUT",
+        "Description": "请求进房超时。",
+        "Solution": "请检查当前网络是否畅通，或者是否开启vpn。建议您也可以切换4G进行测试确认。"
+      },
+      {
+        "ErrorCode": "-3325",
+        "ErrorMessage": "ERR_ROOM_REQUEST_QUIT_ROOM_TIMEOUT",
+        "Description": "请求退房超时。",
+        "Solution": "请检查您的网络情况，确保网络畅通后再次调用接口尝试退房。"
+      },
+      {
+        "ErrorCode": "-102031",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_NOT_SUPPORT",
+        "Description": "不支持跨房间连麦"
+      },
+      {
+        "ErrorCode": "-102032",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_REACH_MAX_NUM",
+        "Description": "达到跨房间连麦上限"
+      },
+      {
+        "ErrorCode": "-102033",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_REACH_MAX_RETRY_TIMES",
+        "Description": "跨房间连麦重试次数耗尽"
+      },
+      {
+        "ErrorCode": "-102034",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_REQ_TIMEOUT",
+        "Description": "跨房间连麦请求超时"
+      },
+      {
+        "ErrorCode": "-102035",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_REQ",
+        "Description": "跨房间连麦请求格式错误"
+      },
+      {
+        "ErrorCode": "-102036",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_NO_SIG",
+        "Description": "跨房间连麦无签名"
+      },
+      {
+        "ErrorCode": "-102037",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_DECRYPT_SIG",
+        "Description": "跨房间连麦签名解密失败"
+      },
+      {
+        "ErrorCode": "-102038",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_NO_KEY",
+        "Description": "未找到跨房间连麦签名解密密钥"
+      },
+      {
+        "ErrorCode": "-102039",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_PARSE_SIG",
+        "Description": "跨房间连麦签名解析错误"
+      },
+      {
+        "ErrorCode": "-102040",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_INVALID_SIG_TIME",
+        "Description": "跨房间连麦签名时间戳错误"
+      },
+      {
+        "ErrorCode": "-102041",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_SIG_GROUPID",
+        "Description": "跨房间连麦签名内房间号不匹配"
+      },
+      {
+        "ErrorCode": "-102042",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_NOT_CONNED",
+        "Description": "跨房间连麦签名内用户名不匹配"
+      },
+      {
+        "ErrorCode": "-102043",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_USER_NOT_CONNED",
+        "Description": "本用户未发起连麦"
+      },
+      {
+        "ErrorCode": "-102044",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_FAILED",
+        "Description": "跨房间连麦失败"
+      },
+      {
+        "ErrorCode": "-102045",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_CANCEL_FAILED",
+        "Description": "取消跨房间连麦失败"
+      },
+      {
+        "ErrorCode": "-102046",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_CONNED_ROOM_NOT_EXIST",
+        "Description": "被连麦房间不存在"
+      },
+      {
+        "ErrorCode": "-102047",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_CONNED_REACH_MAX_ROOM",
+        "Description": "被连麦房间达到连麦上限"
+      },
+      {
+        "ErrorCode": "-102048",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_CONNED_USER_NOT_EXIST",
+        "Description": "被连麦用户不存在"
+      },
+      {
+        "ErrorCode": "-102049",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_CONNED_USER_DELETED",
+        "Description": "被连麦用户已被删除"
+      },
+      {
+        "ErrorCode": "-102050",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_CONNED_USER_FULL",
+        "Description": "被连麦用户达到资源上限"
+      },
+      {
+        "ErrorCode": "-102051",
+        "ErrorMessage": "ERR_SERVER_CENTER_CONN_ROOM_INVALID_SEQ",
+        "Description": "连麦请求序号错乱"
+      },
+      {
+        "ErrorCode": "4000",
+        "ErrorMessage": "WARNING_START_CAPTURE_IGNORED",
+        "Description": "已经在采集，启动采集被忽略"
+      },
+      {
+        "ErrorCode": "5101",
+        "ErrorMessage": "WARNING_ROOM_DISCONNECT",
+        "Description": "网络断开连接"
+      },
+      {
+        "ErrorCode": "1102",
+        "ErrorMessage": "WARNING_RTMP_SERVER_RECONNECT",
+        "Description": "直播推流，网络断连, 已启动自动重连（自动重连连续失败超过三次会放弃）"
+      },
+      {
+        "ErrorCode": "2103",
+        "ErrorMessage": "WARNING_LIVE_STREAM_SERVER_RECONNECT",
+        "Description": "直播拉流，网络断连, 已启动自动重连（自动重连连续失败超过三次会放弃）"
+      },
+      {
+        "ErrorCode": "2104",
+        "ErrorMessage": "WARNING_RECV_DATA_LAG",
+        "Description": "网络来包不稳：可能是下行带宽不足，或由于主播端出流不均匀"
+      },
+      {
+        "ErrorCode": "3001",
+        "ErrorMessage": "WARNING_RTMP_DNS_FAIL",
+        "Description": "直播，DNS 解析失败"
+      },
+      {
+        "ErrorCode": "3002",
+        "ErrorMessage": "WARNING_RTMP_SEVER_CONN_FAIL",
+        "Description": "直播，服务器连接失败"
+      },
+      {
+        "ErrorCode": "3003",
+        "ErrorMessage": "WARNING_RTMP_SHAKE_FAIL",
+        "Description": "直播，与 RTMP 服务器握手失败"
+      },
+      {
+        "ErrorCode": "3004",
+        "ErrorMessage": "WARNING_RTMP_SERVER_BREAK_CONNECT",
+        "Description": "直播，服务器主动断开"
+      },
+      {
+        "ErrorCode": "3005",
+        "ErrorMessage": "WARNING_RTMP_READ_WRITE_FAIL",
+        "Description": "直播，RTMP 读/写失败，将会断开连接"
+      },
+      {
+        "ErrorCode": "3006",
+        "ErrorMessage": "WARNING_RTMP_WRITE_FAIL",
+        "Description": "直播，RTMP 写失败（SDK 内部错误码，不会对外抛出）"
+      },
+      {
+        "ErrorCode": "3007",
+        "ErrorMessage": "WARNING_RTMP_READ_FAIL",
+        "Description": "直播，RTMP 读失败（SDK 内部错误码，不会对外抛出）"
+      },
+      {
+        "ErrorCode": "3008",
+        "ErrorMessage": "WARNING_RTMP_NO_DATA",
+        "Description": "直播，超过30s 没有数据发送，主动断开连接。"
+      },
+      {
+        "ErrorCode": "3009",
+        "ErrorMessage": "WARNING_PLAY_LIVE_STREAM_INFO_CONNECT_FAIL",
+        "Description": "直播，connect 服务器调用失败（SDK 内部错误码，不会对外抛出）"
+      },
+      {
+        "ErrorCode": "3010",
+        "ErrorMessage": "WARNING_NO_STEAM_SOURCE_FAIL",
+        "Description": "直播，连接失败，该流地址无视频（SDK 内部错误码，不会对外抛出）"
+      },
+      {
+        "ErrorCode": "5102",
+        "ErrorMessage": "WARNING_ROOM_RECONNECT",
+        "Description": "网络断连，已启动自动重连"
+      },
+      {
+        "ErrorCode": "5103",
+        "ErrorMessage": "WARNING_ROOM_NET_BUSY",
+        "Description": "网络状况不佳：上行带宽太小，上传数据受阻"
+      },
+      {
+        "ErrorCode": "-1001",
+        "ErrorMessage": "ERR_INVALID_PARAMETER",
+        "Description": "调用 API 时，传入的参数不合法"
+      },
+      {
+        "ErrorCode": "-1002",
+        "ErrorMessage": "ERR_SDK_NOT_INITIALIZED",
+        "Description": "TUIRoomKit SDK 未初始化"
+      },
+      {
+        "ErrorCode": "-1003",
+        "ErrorMessage": "ERR_PERMISSION_DENIED",
+        "Description": "获取权限失败，当前未授权音/视频权限，请查看是否开启设备权限"
+      },
+      {
+        "ErrorCode": "-1004",
+        "ErrorMessage": "ERR_REQUIRE_PAYMENT",
+        "Description": "TUIRoomKit 该功能需要开通额外的套餐"
+      },
+      {
+        "ErrorCode": "-1100",
+        "ErrorMessage": "ERR_CAMERA_START_FAILED",
+        "Description": "系统问题，打开摄像头失败。检查摄像头设备是否正常"
+      },
+      {
+        "ErrorCode": "-1101",
+        "ErrorMessage": "ERR_CAMERA_NOT_AUTHORIZED",
+        "Description": "摄像头设备未授权，通常在移动设备出现，可能是权限被用户拒绝了"
+      },
+      {
+        "ErrorCode": "-1102",
+        "ErrorMessage": "ERR_CAMERA_OCCUPY",
+        "Description": "摄像头正在被占用中，可尝试打开其他摄像头"
+      },
+      {
+        "ErrorCode": "-1103",
+        "ErrorMessage": "ERR_CAMERA_DEVICE_EMPTY",
+        "Description": "当前无摄像头设备，请插入摄像头设备解决该问题"
+      },
+      {
+        "ErrorCode": "-1104",
+        "ErrorMessage": "ERR_MICROPHONE_START_FAILED",
+        "Description": "系统问题，打开麦克风失败。检查麦克风设备是否正常"
+      },
+      {
+        "ErrorCode": "-1105",
+        "ErrorMessage": "ERR_MICROPHONE_NOT_AUTHORIZED",
+        "Description": "麦克风没有系统授权，检查系统授权"
+      },
+      {
+        "ErrorCode": "-1106",
+        "ErrorMessage": "ERR_MICROPHONE_OCCUPY",
+        "Description": "麦克风被占用"
+      },
+      {
+        "ErrorCode": "-1107",
+        "ErrorMessage": "ERR_MICROPHONE_DEVICE_EMPTY",
+        "Description": "当前无麦克风设备"
+      },
+      {
+        "ErrorCode": "-1108",
+        "ErrorMessage": "ERR_GET_SCREEN_SHARING_TARGET_FAILED",
+        "Description": "获取屏幕分享对象失败，检查屏幕录制权限"
+      },
+      {
+        "ErrorCode": "-1109",
+        "ErrorMessage": "ERR_START_SCREEN_SHARING_FAILED",
+        "Description": "开启屏幕分享失败，检查房间内是否有人正在屏幕分享"
+      },
+      {
+        "ErrorCode": "0",
+        "ErrorMessage": "ERR_NULL",
+        "Description": "无错误"
+      },
+      {
+        "ErrorCode": "1101",
+        "ErrorMessage": "WARNING_NET_BUSY",
+        "Description": "网络状况不佳：上行带宽太小，上传数据受阻"
+      },
+      {
+        "ErrorCode": "2105",
+        "ErrorMessage": "WARNING_VIDEO_PLAY_LAG",
+        "Description": "当前视频播放出现卡顿"
+      },
+      {
+        "ErrorCode": "16453",
+        "ErrorMessage": "START_PUBLISH_CDN_FAILED",
+        "Description": "0x4045开始向 CDN 推流失败"
+      },
+      {
+        "ErrorCode": "16454",
+        "ErrorMessage": "STOP_PUBLISH_CDN_FAILED",
+        "Description": "0x4046停止向 CDN 推流失败"
+      },
+      {
+        "ErrorCode": "16460",
+        "ErrorMessage": "SCHEDULE_FAILED",
+        "Description": "0x404c信令调度失败"
+      },
+      {
+        "ErrorCode": "70101",
+        "ErrorMessage": "",
+        "Description": "请求包信息为空"
+      },
+      {
+        "ErrorCode": "70102",
+        "ErrorMessage": "",
+        "Description": "请求包帐号类型错误"
+      },
+      {
+        "ErrorCode": "70103",
+        "ErrorMessage": "",
+        "Description": "电话号码格式错误"
+      },
+      {
+        "ErrorCode": "70104",
+        "ErrorMessage": "",
+        "Description": "邮箱格式错误"
+      },
+      {
+        "ErrorCode": "70105",
+        "ErrorMessage": "",
+        "Description": "TLS 帐号格式错误"
+      },
+      {
+        "ErrorCode": "70106",
+        "ErrorMessage": "",
+        "Description": "非法帐号格式类型"
+      },
+      {
+        "ErrorCode": "70113",
+        "ErrorMessage": "",
+        "Description": "批量数量不合法"
+      },
+      {
+        "ErrorCode": "70114",
+        "ErrorMessage": "",
+        "Description": "安全原因被限制"
+      },
+      {
+        "ErrorCode": "70107",
+        "ErrorMessage": "",
+        "Description": "userId 没有注册"
+      },
+      {
+        "ErrorCode": "70115",
+        "ErrorMessage": "",
+        "Description": "uin 不是对应 sdkAppId 的开发者 uin"
+      },
+      {
+        "ErrorCode": "70140",
+        "ErrorMessage": "",
+        "Description": "sdkAppId 和 acctype 不匹配"
+      },
+      {
+        "ErrorCode": "70145",
+        "ErrorMessage": "",
+        "Description": "帐号类型错误"
+      },
+      {
+        "ErrorCode": "70169",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70201",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70203",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70205",
+        "ErrorMessage": "",
+        "Description": "查找 acctype 失败，请重试"
+      },
+      {
+        "ErrorCode": "70206",
+        "ErrorMessage": "",
+        "Description": "请求中批量数量不合法"
+      },
+      {
+        "ErrorCode": "70207",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试"
+      },
+      {
+        "ErrorCode": "70208",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试"
+      },
+      {
+        "ErrorCode": "70209",
+        "ErrorMessage": "",
+        "Description": "获取开发者 uin 标志失败"
+      },
+      {
+        "ErrorCode": "70202",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70210",
+        "ErrorMessage": "",
+        "Description": "请求中 uin 为非开发者 uin"
+      },
+      {
+        "ErrorCode": "70204",
+        "ErrorMessage": "",
+        "Description": "sdkAppId 没有对应的 acctype"
+      },
+      {
+        "ErrorCode": "70211",
+        "ErrorMessage": "",
+        "Description": "请求中 uin 非法"
+      },
+      {
+        "ErrorCode": "70213",
+        "ErrorMessage": "",
+        "Description": "访问内部数据失败，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70222",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试"
+      },
+      {
+        "ErrorCode": "70225",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70231",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70236",
+        "ErrorMessage": "",
+        "Description": "验证 user signature 失败"
+      },
+      {
+        "ErrorCode": "70308",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70346",
+        "ErrorMessage": "",
+        "Description": "票据校验失败。"
+      },
+      {
+        "ErrorCode": "70347",
+        "ErrorMessage": "",
+        "Description": "票据因过期原因校验失败"
+      },
+      {
+        "ErrorCode": "70212",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70348",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70214",
+        "ErrorMessage": "",
+        "Description": "验证内部票据失败"
+      },
+      {
+        "ErrorCode": "70362",
+        "ErrorMessage": "",
+        "Description": "内部超时，请重试。如果多次重试仍不成功，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "70401",
+        "ErrorMessage": "",
+        "Description": "内部错误，请重试"
+      },
+      {
+        "ErrorCode": "70402",
+        "ErrorMessage": "",
+        "Description": "参数非法。请检查必填字段是否填充，或者字段的填充是否满足协议要求"
+      },
+      {
+        "ErrorCode": "70050",
+        "ErrorMessage": "",
+        "Description": "因失败且重试次数过多导致被限制，请检查票据是否正确，一分钟之后再试"
+      },
+      {
+        "ErrorCode": "70051",
+        "ErrorMessage": "",
+        "Description": "帐号已被拉入黑名单，请联系 TLS 帐号支持，QQ：3268519604"
+      },
+      {
+        "ErrorCode": "-10011",
+        "ErrorMessage": "",
+        "Description": "服务端未知错误，请重试"
+      },
+      {
+        "ErrorCode": "-10020",
+        "ErrorMessage": "",
+        "Description": "服务端超时，请重试"
+      },
+      {
+        "ErrorCode": "70403",
+        "ErrorMessage": "",
+        "Description": "发起操作者不是 App 管理员，没有权限操作"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "DryRunOperation",
+        "Description": "DryRun 操作，代表请求将会是成功的，只是多传了 DryRun 参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation",
+        "Description": "操作失败。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError",
+        "Description": "内部错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidAction",
+        "Description": "接口不存在。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter",
+        "Description": "参数错误（包括参数格式、类型等错误）。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidRequest",
+        "Description": "请求 body 的 multipart 格式错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "LimitExceeded",
+        "Description": "超过配额限制。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "NoSuchProduct",
+        "Description": "产品不存在"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "NoSuchVersion",
+        "Description": "接口版本不存在。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "RequestLimitExceeded.IPLimitExceeded",
+        "Description": "IP限频。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "RequestLimitExceeded.UinLimitExceeded",
+        "Description": "主账号限频。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "RequestSizeLimitExceeded",
+        "Description": "请求包超过限制大小。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "ResourceInUse",
+        "Description": "资源被占用。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "ResourceInsufficient",
+        "Description": "资源不足。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "ResourceNotFound",
+        "Description": "资源不存在。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "ResourceUnavailable",
+        "Description": "资源不可用。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "ResponseSizeLimitExceeded",
+        "Description": "返回包超过限制大小。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "ServiceUnavailable",
+        "Description": "当前服务暂时不可用。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "UnauthorizedOperation",
+        "Description": "未授权操作。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "UnknownParameter",
+        "Description": "未知参数错误，用户多传未定义的参数会导致错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "UnsupportedOperation",
+        "Description": "操作不支持。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "UnsupportedProtocol",
+        "Description": "http(s) 请求协议错误，只支持 GET 和 POST 请求。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "UnsupportedRegion",
+        "Description": "接口不支持所传地域。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "AuthFailure",
+        "Description": "CAM签名/鉴权错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.HttpParaseFalied",
+        "Description": "http请求解析失败。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.InterfaceErr",
+        "Description": "接口错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.InternalError",
+        "Description": "内部错误，请重试。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.MethodErr",
+        "Description": "不支持的方法。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.AppId",
+        "Description": "AppId校验失败。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.BackgroundImageUrl",
+        "Description": "BackgroundImageUrl参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.CloudStorage",
+        "Description": "缺少CloudStorage参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.CommId",
+        "Description": "缺少CommId参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "MissingParameter.CommIdOrSdkAppId",
+        "Description": "缺少SdkAppId参数或CommID参数。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "SignalChannel reconnect failed",
+        "Description": "websocket 断开",
+        "Solution": "请尝试刷新重连"
+      },
+      {
+        "ErrorCode": "1113",
+        "ErrorMessage": "WARNING_OUT_OF_MEMORY",
+        "Description": "内存不足，部分功能可能不正常。"
+      },
+      {
+        "ErrorCode": "2008",
+        "ErrorMessage": "WARNING_CURRENT_DECODE_TYPE_CHANGED",
+        "Description": "表示解码器发生改变，可以通过 onWarning 函数的扩展信息中的 type 字段来获取当前的解码格式。"
+      },
+      {
+        "ErrorCode": "-1000",
+        "ErrorMessage": "",
+        "Description": "未找到 SDKAppID，请在 腾讯云视立方 SDK 控制台 确认应用信息"
+      },
+      {
+        "ErrorCode": "5001",
+        "ErrorMessage": "",
+        "Description": "服务端超时，请重试"
+      },
+      {
+        "ErrorCode": "-4001",
+        "ErrorMessage": "ERR_BGM_OPEN_FAILED",
+        "Description": "打开文件失败，如音频数据无效，FFMPEG 协议未找到等"
+      },
+      {
+        "ErrorCode": "-4002",
+        "ErrorMessage": "ERR_BGM_DECODE_FAILED",
+        "Description": "音频文件解码失败"
+      },
+      {
+        "ErrorCode": "-4003",
+        "ErrorMessage": "ERR_BGM_OVER_LIMIT",
+        "Description": "数量超过限定值，如同时预加载两首背景音乐"
+      },
+      {
+        "ErrorCode": "-4004",
+        "ErrorMessage": "ERR_BGM_INVALID_OPERATION",
+        "Description": "无效操作，如开始播放后再调用预加载操作"
+      },
+      {
+        "ErrorCode": "6006",
+        "ErrorMessage": "WARNING_UPSTREAM_AUDIO_AND_VIDEO_OUT_OF_SYNC",
+        "Description": "音视频发送时间戳异常，可能引起音画不同步问题"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.TaskFinished",
+        "Description": "调用接口时任务已结束。"
+      },
+      {
+        "ErrorCode": "1208",
+        "ErrorMessage": "WARNING_MICROPHONE_IS_OCCUPIED",
+        "Description": "音频采集设备被占用"
+      },
+      {
+        "ErrorCode": "5000",
+        "ErrorMessage": "",
+        "Description": "说明：调用接口时传入了不满足 API 要求的参数。\n处理建议：请检查传入参数是否符合 API 的规范，例如参数类型是否正确。"
+      },
+      {
+        "ErrorCode": "5100",
+        "ErrorMessage": "",
+        "Description": "说明：调用接口时，不满足 API 的前提要求。\n处理建议：请根据对应 API 文档检查调用逻辑是否符合 API 的前提要求。例如：1.未进房成功就进行切换角色2.播放的远端用户和流不存在。"
+      },
+      {
+        "ErrorCode": "5200",
+        "ErrorMessage": "",
+        "Description": "说明：当前环境不支持该功能，表明当前浏览器不支持调用对应 API\n处理建议：通常使用 TRTC.isSupported 可感知当前浏览器支持哪些能力。如果浏览器不支持，需要引导用户使用支持该能力的浏览器，参考："
+      },
+      {
+        "ErrorCode": "5300",
+        "ErrorMessage": "",
+        "Description": "说明：获取设备或者采集音视频出现异常"
+      },
+      {
+        "ErrorCode": "5400",
+        "ErrorMessage": "",
+        "Description": "说明：收到服务端返回的异常数据时抛出该错误码\n以下接口出现异常时会抛出该错误码：enterRoom、startLocalVideo、startLocalAudio、startScreenShare、startRemoteVideo、switchRole\n处理建议：服务端异常通常在开发阶段处理，常见的异常有：传入的 userSig 过期，腾讯云账号欠费，未开通TRTC服务等，服务端返回异常数据有以下原因。"
+      },
+      {
+        "ErrorCode": "5500",
+        "ErrorMessage": "",
+        "Description": "说明：在满足 API 调用要求的情况下，SDK 经过多次重试仍然无法解决的异常，通常是由于浏览器、网络的问题造成。\n以下接口出现异常时会抛出该错误码：enterRoom、startLocalVideo、startLocalAudio、startScreenShare、startRemoteVideo、switchRole\n处理建议："
+      },
+      {
+        "ErrorCode": "5998",
+        "ErrorMessage": "",
+        "Description": "说明：中止 API 执行时抛出该错误码。在不满足 API 生命周期的调用或重复调用时 API 会中止执行，避免无意义的操作。\n例如：连续调用 enterRoom，startLocalXxx等接口，在没有进房就调用退房。\n以下接口出现异常时会抛出该错误码：enterRoom、startLocalVideo、startLocalAudio、startScreenShare、startRemoteVideo、switchRole\n处理建议：捕获并识别该错误码，然后在业务逻辑规避不必要的调用，或者也可以不做任何处理，因为 SDK 做了无副作用处理，您只需在 catch 时识别该错误码并忽略。"
+      },
+      {
+        "ErrorCode": "5999",
+        "ErrorMessage": "",
+        "Description": "说明：未知错误或者未被定义的错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.QueryTaskInfoFailed",
+        "Description": "查询任务失败"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.TaskExist",
+        "Description": "任务已存在"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InternalError.HttpParseFailed",
+        "Description": "http请求解析失败。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.TaskId",
+        "Description": "TaskId 参数错误。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.NotRtmpFunction",
+        "Description": "未开通RTMP"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.UserSig",
+        "Description": "UserSig过期或错误。"
+      },
+      {
+        "ErrorCode": "1114",
+        "ErrorMessage": "WARNING_CAMERA_IS_OCCUPIED",
+        "Description": "摄像头被占用."
+      },
+      {
+        "ErrorCode": "1115",
+        "ErrorMessage": "WARNING_CAMERA_DEVICE_ERROR",
+        "Description": "摄像头设备异常."
+      },
+      {
+        "ErrorCode": "1116",
+        "ErrorMessage": "WARNING_CAMERA_DISCONNECTED",
+        "Description": "摄像头无法连接."
+      },
+      {
+        "ErrorCode": "1117",
+        "ErrorMessage": "WARNING_CAMERA_START_FAILED",
+        "Description": "摄像头启动失败."
+      },
+      {
+        "ErrorCode": "1118",
+        "ErrorMessage": "WARNING_CAMERA_SERVER_DIED",
+        "Description": "系统异常."
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.SdkAppIdNotUnderAppId",
+        "Description": "AppId下没有此SdkAppId的资源"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.SdkAppIdNotWebRecordAbility",
+        "Description": "SdkAppId未开通页面录制能力，请检查。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.TaskNotExist",
+        "Description": "任务不存在或已结束"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.InvalidSdkAppId",
+        "Description": "invalid sdkAppId"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.RequestOutdated",
+        "Description": "请求过期。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.SdkAppIdNotAITranscriptionAbility",
+        "Description": "该sdkappid没有开通AITranscription能力"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "InvalidParameter.UserSigNotAdmin",
+        "Description": "UserSig 不是超级管理员。"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.NotAbility",
+        "Description": "需要解锁所需能力位"
+      },
+      {
+        "ErrorCode": "-4005",
+        "ErrorMessage": "ERR_BGM_INVALID_PATH",
+        "Description": "非法路径导致打开文件失败，请检查您传入的路径参数是否指向一个合法的音乐文件"
+      },
+      {
+        "ErrorCode": "-4006",
+        "ErrorMessage": "ERR_BGM_INVALID_URL",
+        "Description": "非法URL导致打开文件失败，请用浏览器检查您传入的 URL 地址是否可以下载到期望的音乐文件"
+      },
+      {
+        "ErrorCode": "-4007",
+        "ErrorMessage": "ERR_BGM_NO_AUDIO_STREAM",
+        "Description": "无音频流导致打开文件失败，请确认您传入的文件是否是合法的音频文件，以及文件是否被损坏"
+      },
+      {
+        "ErrorCode": "-4008",
+        "ErrorMessage": "ERR_BGM_FORMAT_NOT_SUPPORTED",
+        "Description": "格式不支持导致打开文件失败，请确认您传入的文件格式是否是支持的文件格式，移动端支持【mp3，aac，m4a，wav，ogg，mp4，mkv】，桌面端支持 【mp3，aac，m4a，wav，mp4，mkv】"
+      },
+      {
+        "ErrorCode": "8001",
+        "ErrorMessage": "WARNING_VIRTUAL_BACKGROUND_DEVICE_UNSURPORTED",
+        "Description": "虚拟背景设备不支持"
+      },
+      {
+        "ErrorCode": "8002",
+        "ErrorMessage": "WARNING_VIRTUAL_BACKGROUND_NOT_AUTHORIZED",
+        "Description": "虚拟背景未授权"
+      },
+      {
+        "ErrorCode": "8003",
+        "ErrorMessage": "WARNING_VIRTUAL_BACKGROUND_INVALID_PARAMETER",
+        "Description": "虚拟背景参数异常"
+      },
+      {
+        "ErrorCode": "8004",
+        "ErrorMessage": "WARNING_VIRTUAL_BACKGROUND_PERFORMANCE_INSUFFICIENT",
+        "Description": "虚拟背景性能不足"
+      },
+      {
+        "ErrorCode": "",
+        "ErrorMessage": "FailedOperation.NotAllowed",
+        "Description": "不允许此操作，请提交工单联系我们"
+      }
+    ]
+  },
+  {
+  "SdkName": "即时通信IM",
+  "ErrorCodeList": [
+    {
+      "ErrorCode": "6014",
+      "ErrorMessage": "",
+      "Description": "IM SDK 未登录，请先登录，成功回调之后重试，或者已被踢下线",
+      "Solution": "可使用 TIMManager getLoginUser 检查当前是否在线"
+    },
+    {
+      "ErrorCode": "6027",
+      "ErrorMessage": "",
+      "Description": "错误的 JSON 格式，请检查参数是否符合接口的要求，具体可查看错误信息进一步定义哪个字段。"
+    },
+    {
+      "ErrorCode": "6001",
+      "ErrorMessage": "",
+      "Description": "PB 解析失败，内部错误。"
+    },
+    {
+      "ErrorCode": "6005",
+      "ErrorMessage": "",
+      "Description": "加载本地数据库操作失败，可能存储文件有损坏。"
+    },
+    {
+      "ErrorCode": "6013",
+      "ErrorMessage": "",
+      "Description": "IM SDK 未初始化，初始化成功回调之后重试。"
+    },
+    {
+      "ErrorCode": "7001",
+      "ErrorMessage": "",
+      "Description": "跨线程错误，不能在跨越不同线程中执行，内部错误。"
+    },
+    {
+      "ErrorCode": "6019",
+      "ErrorMessage": "",
+      "Description": "本地数据库操作失败，可能是部分目录无权限或者数据库文件已损坏。"
+    },
+    {
+      "ErrorCode": "4001",
+      "ErrorMessage": "",
+      "Description": "文件消息失败，对应URL不是IM分配的存储资源。"
+    },
+    {
+      "ErrorCode": "6015",
+      "ErrorMessage": "",
+      "Description": "执行中，请做好接口调用控制。例如，第一次初始化操作在回调前，后续的初始化操作会返回该错误码。"
+    },
+    {
+      "ErrorCode": "6022",
+      "ErrorMessage": "",
+      "Description": "操作本地 IO 错误，检查是否有读写权限，磁盘是否已满。"
+    },
+    {
+      "ErrorCode": "6028",
+      "ErrorMessage": "",
+      "Description": "内存不足，可能存在内存泄漏，iOS 平台使用 Instrument 工具，Android 平台使用 Profiler 工具，分析出什么地方的内存占用高。"
+    },
+    {
+      "ErrorCode": "4002",
+      "ErrorMessage": "",
+      "Description": "文件消息失败，内部服务器网络错误。"
+    },
+    {
+      "ErrorCode": "6002",
+      "ErrorMessage": "",
+      "Description": "PB 序列化失败，内部错误。"
+    },
+    {
+      "ErrorCode": "4005",
+      "ErrorMessage": "",
+      "Description": "文件消息失败，禁止发送违规封禁的文件。"
+    },
+    {
+      "ErrorCode": "4003",
+      "ErrorMessage": "",
+      "Description": "图片消息失败，数据万象返回格式错误。"
+    },
+    {
+      "ErrorCode": "6017",
+      "ErrorMessage": "",
+      "Description": "参数无效，请检查参数是否符合要求，具体可查看错误信息进一步定义哪个字段。"
+    },
+    {
+      "ErrorCode": "4004",
+      "ErrorMessage": "",
+      "Description": "图片消息失败，无效的图片格式。"
+    },
+    {
+      "ErrorCode": "7013",
+      "ErrorMessage": "",
+      "Description": "套餐包不支持该接口的使用，请升级到旗舰版套餐。"
+    },
+    {
+      "ErrorCode": "7015",
+      "ErrorMessage": "",
+      "Description": "SDK 本地内容审核，命中敏感词。"
+    },
+    {
+      "ErrorCode": "6026",
+      "ErrorMessage": "",
+      "Description": "自动登录时，并没有登录过该用户，这时候请调用 login 接口重新登录。"
+    },
+    {
+      "ErrorCode": "6208",
+      "ErrorMessage": "",
+      "Description": "其他终端登录同一个账号，引起已登录的账号被踢，需重新登录。"
+    },
+    {
+      "ErrorCode": "6206",
+      "ErrorMessage": "",
+      "Description": "UserSig 过期，请重新获取有效的 UserSig 后再重新登录，获取方法请参见 生成 UserSig。"
+    },
+    {
+      "ErrorCode": "7002",
+      "ErrorMessage": "",
+      "Description": "TinyId 为空，内部错误。请检查 UserID 是否存在并有效。"
+    },
+    {
+      "ErrorCode": "7501",
+      "ErrorMessage": "",
+      "Description": "登录正在执行中，例如，第一次 login 或 autoLogin 操作在回调前，后续的 login 或 autoLogin 操作会返回该错误码。"
+    },
+    {
+      "ErrorCode": "7006",
+      "ErrorMessage": "",
+      "Description": "空文件，要求文件大小不是0字节，如果上传图片、语音、视频或文件，请检查文件是否正确生成。"
+    },
+    {
+      "ErrorCode": "7007",
+      "ErrorMessage": "",
+      "Description": "文件打开失败，请检查文件是否存在，或者已被独占打开，引起 SDK 打开失败。"
+    },
+    {
+      "ErrorCode": "7004",
+      "ErrorMessage": "",
+      "Description": "文件不存在，请检查文件路径是否正确。"
+    },
+    {
+      "ErrorCode": "7010",
+      "ErrorMessage": "",
+      "Description": "database 操作失败。"
+    },
+    {
+      "ErrorCode": "7012",
+      "ErrorMessage": "",
+      "Description": "SDK 内部不应该出现的内部错误"
+    },
+    {
+      "ErrorCode": "7011",
+      "ErrorMessage": "",
+      "Description": "database 查询的数据不存在。"
+    },
+    {
+      "ErrorCode": "7014",
+      "ErrorMessage": "",
+      "Description": "非法请求。请检查接口调用是否符合要求。"
+    },
+    {
+      "ErrorCode": "7008",
+      "ErrorMessage": "",
+      "Description": "API 调用超频，请检查并避免高频调用接口。"
+    },
+    {
+      "ErrorCode": "7003",
+      "ErrorMessage": "",
+      "Description": "UserID 非法，必须不为空，要求可打印 ASCII 字符（0x20-0x7e），长度不超过32字节。"
+    },
+    {
+      "ErrorCode": "7005",
+      "ErrorMessage": "",
+      "Description": "文件大小超出了限制，如果上传文件，最大限制是100MB。"
+    },
+    {
+      "ErrorCode": "7009",
+      "ErrorMessage": "",
+      "Description": "正在执行时被终止，例如正在登录时，调用 unInit 停止使用 SDK。"
+    },
+    {
+      "ErrorCode": "6016",
+      "ErrorMessage": "",
+      "Description": "IM SDK 无效消息 elem，具体可查看错误信息进一步定义哪个字段。"
+    },
+    {
+      "ErrorCode": "6010",
+      "ErrorMessage": "",
+      "Description": "HTTP 请求失败，请检查 URL 地址是否合法，可在网页浏览器尝试访问该 URL 地址。"
+    },
+    {
+      "ErrorCode": "6021",
+      "ErrorMessage": "",
+      "Description": "无效的对象，例如用户自己生成 TIMImage 对象，或内部赋值错误导致对象无效。"
+    },
+    {
+      "ErrorCode": "8001",
+      "ErrorMessage": "",
+      "Description": "消息长度超出限制，消息长度不要超过12K，消息长度是各个 elem 长度的总和，elem 长度是所有 elem 字段的长度总和。"
+    },
+    {
+      "ErrorCode": "8003",
+      "ErrorMessage": "",
+      "Description": "图片转换 HTTP 请求失败。"
+    },
+    {
+      "ErrorCode": "8002",
+      "ErrorMessage": "",
+      "Description": "消息 KEY 错误，内部错误，网络请求包的 KEY 和 回复包的不一致。"
+    },
+    {
+      "ErrorCode": "7502",
+      "ErrorMessage": "",
+      "Description": "登出正在执行中，例如，第一次 logout 操作在回调前，后续的 logout 操作会返回该错误码。"
+    },
+    {
+      "ErrorCode": "7507",
+      "ErrorMessage": "",
+      "Description": "TLS SDK 请求失败，内部错误。"
+    },
+    {
+      "ErrorCode": "7503",
+      "ErrorMessage": "",
+      "Description": "TLS SDK 初始化失败，内部错误。"
+    },
+    {
+      "ErrorCode": "7505",
+      "ErrorMessage": "",
+      "Description": "TLS SDK TRANS 包格式错误，内部错误。"
+    },
+    {
+      "ErrorCode": "6004",
+      "ErrorMessage": "",
+      "Description": "会话无效，getConversation 时检查是否已经登录，如未登录获取会话，会有此错误码返回。"
+    },
+    {
+      "ErrorCode": "6006",
+      "ErrorMessage": "",
+      "Description": "文件传输鉴权失败，建议检查文件格式是否正确。"
+    },
+    {
+      "ErrorCode": "6007",
+      "ErrorMessage": "",
+      "Description": "文件传输获取 Server 列表失败。"
+    },
+    {
+      "ErrorCode": "6008",
+      "ErrorMessage": "",
+      "Description": "文件传输上传失败，请检查网络是否连接，如果上传的是图片，确认图片能够正常打开。"
+    },
+    {
+      "ErrorCode": "6031",
+      "ErrorMessage": "",
+      "Description": "文件传输上传失败，请检查上传的图片是否能够正常打开。"
+    },
+    {
+      "ErrorCode": "7504",
+      "ErrorMessage": "",
+      "Description": "TLS SDK 未初始化，内部错误。"
+    },
+    {
+      "ErrorCode": "6009",
+      "ErrorMessage": "",
+      "Description": "文件传输下载失败，请检查网络，或者文件、语音是否已经过期，目前资源文件存储7天。"
+    },
+    {
+      "ErrorCode": "7506",
+      "ErrorMessage": "",
+      "Description": "TLS SDK 解密失败，内部错误。"
+    },
+    {
+      "ErrorCode": "7508",
+      "ErrorMessage": "",
+      "Description": "TLS SDK 请求超时，内部错误。"
+    },
+    {
+      "ErrorCode": "8004",
+      "ErrorMessage": "",
+      "Description": "万象优图因为鉴黄等原因转缩略图失败。"
+    },
+    {
+      "ErrorCode": "8006",
+      "ErrorMessage": "",
+      "Description": "消息修改冲突，您请求修改的消息已经被其他人修改。"
+    },
+    {
+      "ErrorCode": "8010",
+      "ErrorMessage": "",
+      "Description": "信令请求 ID 无效或已经被处理过。"
+    },
+    {
+      "ErrorCode": "8011",
+      "ErrorMessage": "",
+      "Description": "信令请求无权限，比如取消非自己发起的邀请。"
+    },
+    {
+      "ErrorCode": "8020",
+      "ErrorMessage": "",
+      "Description": "取消消息时，取消的消息不存在，或者已经发送成功。取消失败。"
+    },
+    {
+      "ErrorCode": "8504",
+      "ErrorMessage": "",
+      "Description": "群公告非法，群公告最长300字节，字符编码必须是 UTF-8 ，如果包含中文，可能用多个字节表示一个中文字符，请注意检查字符串的字节长度。"
+    },
+    {
+      "ErrorCode": "8005",
+      "ErrorMessage": "",
+      "Description": "合并转发消息嵌套层数超过上限100层。"
+    },
+    {
+      "ErrorCode": "8508",
+      "ErrorMessage": "",
+      "Description": "不允许申请加入 Private 群组，任意群成员可邀请入群，且无需被邀请人同意。"
+    },
+    {
+      "ErrorCode": "8509",
+      "ErrorMessage": "",
+      "Description": "不允许邀请角色为群主的成员，请检查角色字段是否填写正确。"
+    },
+    {
+      "ErrorCode": "8021",
+      "ErrorMessage": "",
+      "Description": "消息发送失败，因为该消息已被取消。"
+    },
+    {
+      "ErrorCode": "8012",
+      "ErrorMessage": "",
+      "Description": "信令邀请已存在。"
+    },
+    {
+      "ErrorCode": "8511",
+      "ErrorMessage": "",
+      "Description": "群属性接口操作限制：增删改接口后台限制1秒5次，查接口 SDK 限制5秒20次。"
+    },
+    {
+      "ErrorCode": "8510",
+      "ErrorMessage": "",
+      "Description": "不允许邀请0个成员，请检查成员字段是否填写正确。"
+    },
+    {
+      "ErrorCode": "8512",
+      "ErrorMessage": "",
+      "Description": "获取群在线人数接口操作限制：查接口 SDK 限制60秒1次。"
+    },
+    {
+      "ErrorCode": "8501",
+      "ErrorMessage": "",
+      "Description": "群组 ID（群组唯一标识）非法，自定义群组 ID 必须为可打印 ASCII 字符（0x20-0x7e），最长48个字节，且前缀不能为 @TGS#（避免与服务端默认分配的群组 ID 混淆）。"
+    },
+    {
+      "ErrorCode": "8502",
+      "ErrorMessage": "",
+      "Description": "群名称非法，群名称最长30字节，字符编码必须是 UTF-8 ，如果包含中文，可能用多个字节表示一个中文字符，请注意检查字符串的字节长度。"
+    },
+    {
+      "ErrorCode": "8505",
+      "ErrorMessage": "",
+      "Description": "群头像 URL 非法，群头像 URL 最长100字节，可在网页浏览器尝试访问该 URL 地址。"
+    },
+    {
+      "ErrorCode": "8506",
+      "ErrorMessage": "",
+      "Description": "群名片非法，群名片最长50字节，字符编码必须是 UTF-8 ，如果包含中文，可能用多个字节表示一个中文字符，请注意检查字符串的字节长度。"
+    },
+    {
+      "ErrorCode": "8507",
+      "ErrorMessage": "",
+      "Description": "超过群组成员数的限制，在创建群和邀请成员时，指定的成员数超出限制，最大群成员数量：专业版是200人；增值服务可扩展至2000人，旗舰版是2000人；增值服务可扩展至6000人，IM 直播群（AVChatroom）和在线成员广播大群无限制。"
+    },
+    {
+      "ErrorCode": "8503",
+      "ErrorMessage": "",
+      "Description": "群简介非法，群简介最长240字节，字符编码必须是 UTF-8 ，如果包含中文，可能用多个字节表示一个中文字符，请注意检查字符串的字节长度。"
+    },
+    {
+      "ErrorCode": "9501",
+      "ErrorMessage": "",
+      "Description": "SSO 加密失败，内部错误。"
+    },
+    {
+      "ErrorCode": "9509",
+      "ErrorMessage": "",
+      "Description": "网络连接已建立，重复创建连接，内部错误。"
+    },
+    {
+      "ErrorCode": "9508",
+      "ErrorMessage": "",
+      "Description": "网络已断开，未建立连接，或者建立 socket 连接时，检测到无网络。"
+    },
+    {
+      "ErrorCode": "9510",
+      "ErrorMessage": "",
+      "Description": "建立网络连接超时，请等网络恢复后重试。"
+    },
+    {
+      "ErrorCode": "9511",
+      "ErrorMessage": "",
+      "Description": "网络连接已被拒绝，请求过于频繁，服务端拒绝服务。"
+    },
+    {
+      "ErrorCode": "9512",
+      "ErrorMessage": "",
+      "Description": "没有到达网络的可用路由，请等网络恢复后重试。"
+    },
+    {
+      "ErrorCode": "8513",
+      "ErrorMessage": "",
+      "Description": "获取群资料接口操作限制：查接口 SDK 限制1秒1次。"
+    },
+    {
+      "ErrorCode": "8515",
+      "ErrorMessage": "",
+      "Description": "不允许标记群成员。"
+    },
+    {
+      "ErrorCode": "9001",
+      "ErrorMessage": "",
+      "Description": "资料字段非法，资料支持标配字段及自定义字段，其中自定义字段的关键字，必须是英文字母，且长度不得超过8字节，自定义字段的值最长不能超过500字节。"
+    },
+    {
+      "ErrorCode": "9005",
+      "ErrorMessage": "",
+      "Description": "好友分组字段非法，必须不为空，每个分组的名称最长30字节，字符编码必须是 UTF-8 ，如果包含中文，可能用多个字节表示一个中文字符，请注意检查字符串的字节长度。"
+    },
+    {
+      "ErrorCode": "9503",
+      "ErrorMessage": "",
+      "Description": "SSO 未完成鉴权，可能登录未完成，请在登录完成后再操作。"
+    },
+    {
+      "ErrorCode": "9504",
+      "ErrorMessage": "",
+      "Description": "数据包压缩失败，内部错误。"
+    },
+    {
+      "ErrorCode": "9502",
+      "ErrorMessage": "",
+      "Description": "SSO 解密失败，内部错误。"
+    },
+    {
+      "ErrorCode": "9002",
+      "ErrorMessage": "",
+      "Description": "备注字段非法，最大96字节，字符编码必须是 UTF-8 ，如果包含中文，可能用多个字节表示一个中文字符，请注意检查字符串的字节长度。"
+    },
+    {
+      "ErrorCode": "9003",
+      "ErrorMessage": "",
+      "Description": "请求添加好友的请求说明字段非法，最大120字节，字符编码必须是 UTF-8 ，如果包含中文，可能用多个字节表示一个中文字符，请注意检查字符串的字节长度。"
+    },
+    {
+      "ErrorCode": "8514",
+      "ErrorMessage": "",
+      "Description": "获取加入群列表接口操作限制：查接口 SDK 限制1秒1次。"
+    },
+    {
+      "ErrorCode": "9505",
+      "ErrorMessage": "",
+      "Description": "数据包解压失败，内部错误。"
+    },
+    {
+      "ErrorCode": "9506",
+      "ErrorMessage": "",
+      "Description": "调用频率限制，最大每秒发起5次请求。"
+    },
+    {
+      "ErrorCode": "9507",
+      "ErrorMessage": "",
+      "Description": "网络请求队列超过同时请求数量的最大限制，最大请求数量为1000个。例如，网络异常时仍然在不停地发消息，网络请求队列只有入队没有消耗，请求数量很快就会达到最大。"
+    },
+    {
+      "ErrorCode": "9004",
+      "ErrorMessage": "",
+      "Description": "请求添加好友的添加来源字段非法，来源需要添加“AddSource_Type_”前缀。"
+    },
+    {
+      "ErrorCode": "9006",
+      "ErrorMessage": "",
+      "Description": "超过数量限制。"
+    },
+    {
+      "ErrorCode": "-10005",
+      "ErrorMessage": "",
+      "Description": "不允许空 Key。"
+    },
+    {
+      "ErrorCode": "-10003",
+      "ErrorMessage": "",
+      "Description": "Ticket 过期。Ticket 是根据 UserSig 生成的内部票据，Ticket 的有效期小于或等于 UserSig 的有效期。请重新调用 TIMManager.getInstance().login 登录接口生成新的 Ticket。"
+    },
+    {
+      "ErrorCode": "-10006",
+      "ErrorMessage": "",
+      "Description": "Key 中的账号和请求包头的账号不匹配。"
+    },
+    {
+      "ErrorCode": "-10007",
+      "ErrorMessage": "",
+      "Description": "验证码下发超时。"
+    },
+    {
+      "ErrorCode": "-10008",
+      "ErrorMessage": "",
+      "Description": "需要带上 Key 和 Ticket。"
+    },
+    {
+      "ErrorCode": "-10009",
+      "ErrorMessage": "",
+      "Description": "Cookie 检查不匹配。"
+    },
+    {
+      "ErrorCode": "9513",
+      "ErrorMessage": "",
+      "Description": "系统中没有足够的缓冲区空间资源可用来完成调用，系统过于繁忙，内部错误。"
+    },
+    {
+      "ErrorCode": "9515",
+      "ErrorMessage": "",
+      "Description": "socket 套接字无效，内部错误。"
+    },
+    {
+      "ErrorCode": "9517",
+      "ErrorMessage": "",
+      "Description": "网络连接到中间节点或服务端重置，引起连接失效，内部错误，SDK 内部会自动重连，请等网络连接成功 onConnSucc （ iOS ） 或 onConnected （ Android ） 回调后重试。"
+    },
+    {
+      "ErrorCode": "9516",
+      "ErrorMessage": "",
+      "Description": "IP 地址解析失败，内部错误，可能是本地 imsdk_config 配置文件被损坏，读取到 IP 地址非法。"
+    },
+    {
+      "ErrorCode": "9518",
+      "ErrorMessage": "",
+      "Description": "请求包等待进入待发送队列超时，发送时网络连接建立比较慢 或 频繁断网重连时，会出现该错误，请检查网络连接是否正常。"
+    },
+    {
+      "ErrorCode": "9523",
+      "ErrorMessage": "",
+      "Description": "请求包已进入待发送队列，等待进入系统的网络 buffer 超时，数据包较多 或 发送线程处理不过来，在回调错误码时检测到没有联网。"
+    },
+    {
+      "ErrorCode": "9522",
+      "ErrorMessage": "",
+      "Description": "请求包长度大于限制，最大支持 1MB 。"
+    },
+    {
+      "ErrorCode": "9525",
+      "ErrorMessage": "",
+      "Description": "请求包已进入待发送队列，部分数据已发送，等待发送剩余部分出现超时，可能上行带宽不足，请检查网络是否畅通，在回调错误码时检测到没有联网。"
+    },
+    {
+      "ErrorCode": "9520",
+      "ErrorMessage": "",
+      "Description": "请求包已由 IM SDK 待发送队列进入操作系统网络层，等待服务端回包超时。一般可能原因是本地网络受限/不通或本地网络与 IM SDK 后台连接不通。建议用不同的网络环境分别运行 IM SDK 来确认是否因当前网络环境问题引起。"
+    },
+    {
+      "ErrorCode": "9514",
+      "ErrorMessage": "",
+      "Description": "对端重置了连接，可能服务端过载，SDK 内部会自动重连，请等网络连接成功 onConnSucc （ iOS ） 或 onConnected （ Android ） 回调后重试。"
+    },
+    {
+      "ErrorCode": "9521",
+      "ErrorMessage": "",
+      "Description": "请求包已进入待发送队列，部分数据已发送，等待发送剩余部分出现超时，可能上行带宽不足，请检查网络是否畅通，在回调错误时检测有联网。"
+    },
+    {
+      "ErrorCode": "-10001",
+      "ErrorMessage": "",
+      "Description": "Key 过期。Key 是根据 UserSig 生成的内部票据，Key 的有效期小于或等于 UserSig 的有效期。请重新调用 TIMManager.getInstance().login 登录接口生成新的 Key。"
+    },
+    {
+      "ErrorCode": "-302",
+      "ErrorMessage": "",
+      "Description": "Server 的连接数量超出限制，服务端拒绝服务。"
+    },
+    {
+      "ErrorCode": "-10004",
+      "ErrorMessage": "",
+      "Description": "票据验证没通过。请重新调用 TIMManager.getInstance().login 登录接口生成新的票据。"
+    },
+    {
+      "ErrorCode": "9524",
+      "ErrorMessage": "",
+      "Description": "请求包已进入系统的网络 buffer ，等待服务端回包超时，可能请求包没离开终端设备、中间路由丢弃、服务端意外丢包或回包被系统网络层丢弃，在回调错误码时检测到没有联网。"
+    },
+    {
+      "ErrorCode": "9519",
+      "ErrorMessage": "",
+      "Description": "请求包已进入 IM SDK 待发送队列，等待进入操作系统的网络层时超时。一般可能原因是本地网络受限/不通或本地网络与 IM SDK 后台连接不通。建议用不同的网络环境分别运行 IM SDK 来确认是否因当前网络环境问题引起。"
+    },
+    {
+      "ErrorCode": "114004",
+      "ErrorMessage": "",
+      "Description": "读取文件内容失败。"
+    },
+    {
+      "ErrorCode": "60003",
+      "ErrorMessage": "",
+      "Description": "HTTP 请求 JSON 解析错误，请检查 JSON 格式。"
+    },
+    {
+      "ErrorCode": "60002",
+      "ErrorMessage": "",
+      "Description": "HTTP 解析错误 ，请检查 HTTP 请求 URL 格式。"
+    },
+    {
+      "ErrorCode": "60004",
+      "ErrorMessage": "",
+      "Description": "检查账号失败，请稍后重试。"
+    },
+    {
+      "ErrorCode": "60006",
+      "ErrorMessage": "",
+      "Description": "SDKAppID 失效，请核对 SDKAppID 有效性。"
+    },
+    {
+      "ErrorCode": "60005",
+      "ErrorMessage": "",
+      "Description": "检查账号失败，请稍后重试。"
+    },
+    {
+      "ErrorCode": "-10106",
+      "ErrorMessage": "",
+      "Description": "解密失败次数超过阈值，通知终端需要重置，请重新调用 TIMManager.getInstance().login 登录接口生成新的 Key。"
+    },
+    {
+      "ErrorCode": "-10112",
+      "ErrorMessage": "",
+      "Description": "SDKAppID 停用。"
+    },
+    {
+      "ErrorCode": "-10113",
+      "ErrorMessage": "",
+      "Description": "频率限制（用户），频率限制是设置针对某一个协议的每秒请求数的限制。"
+    },
+    {
+      "ErrorCode": "-10114",
+      "ErrorMessage": "",
+      "Description": "过载丢包（系统），连接的服务端处理过多请求，处理不过来，拒绝服务。"
+    },
+    {
+      "ErrorCode": "-20009",
+      "ErrorMessage": "",
+      "Description": "终端访问接口超频。"
+    },
+    {
+      "ErrorCode": "114002",
+      "ErrorMessage": "",
+      "Description": "文件大小超过限制。"
+    },
+    {
+      "ErrorCode": "114003",
+      "ErrorMessage": "",
+      "Description": "用户取消发送，如发送过程中登出等原因。"
+    },
+    {
+      "ErrorCode": "114001",
+      "ErrorMessage": "",
+      "Description": "要发送的资源文件不允许访问。"
+    },
+    {
+      "ErrorCode": "-10109",
+      "ErrorMessage": "",
+      "Description": "请求包格式错误。"
+    },
+    {
+      "ErrorCode": "115066",
+      "ErrorMessage": "",
+      "Description": "文件 MD5 校验失败。"
+    },
+    {
+      "ErrorCode": "114005",
+      "ErrorMessage": "",
+      "Description": "资源文件（例如图片、文件、语音、视频）传输超时，一般是网络问题导致。"
+    },
+    {
+      "ErrorCode": "114011",
+      "ErrorMessage": "",
+      "Description": "参数非法。"
+    },
+    {
+      "ErrorCode": "114000",
+      "ErrorMessage": "",
+      "Description": "要发送的资源文件不存在。"
+    },
+    {
+      "ErrorCode": "115068",
+      "ErrorMessage": "",
+      "Description": "分片 MD5 校验失败。"
+    },
+    {
+      "ErrorCode": "-10108",
+      "ErrorMessage": "",
+      "Description": "预付费欠费。"
+    },
+    {
+      "ErrorCode": "-10111",
+      "ErrorMessage": "",
+      "Description": "SDKAppID 设置 service cmd 黑名单。"
+    },
+    {
+      "ErrorCode": "-10110",
+      "ErrorMessage": "",
+      "Description": "SDKAppID 黑名单。"
+    },
+    {
+      "ErrorCode": "80003",
+      "ErrorMessage": "",
+      "Description": "发单聊消息前回调或发群聊消息前回调失败或回包超时，消息不下发。可在控制台自助配置 事件发生之前回调超时的处理策略。"
+    },
+    {
+      "ErrorCode": "70002",
+      "ErrorMessage": "",
+      "Description": "UserSig 长度为0，请检查传入的 UserSig 是否正确。"
+    },
+    {
+      "ErrorCode": "70001",
+      "ErrorMessage": "",
+      "Description": "UserSig 已过期，请重新生成。建议 UserSig 有效期设置不小于24小时。"
+    },
+    {
+      "ErrorCode": "70003",
+      "ErrorMessage": "",
+      "Description": "UserSig 非法，请使用官网提供的 API 重新 生成 UserSig。"
+    },
+    {
+      "ErrorCode": "70009",
+      "ErrorMessage": "",
+      "Description": "UserSig 验证失败，可能因为生成 UserSig 时混用了其他 SDKAppID 的密钥或私钥导致，请使用对应 SDKAppID 下的密钥或私钥重新 生成 UserSig。"
+    },
+    {
+      "ErrorCode": "70005",
+      "ErrorMessage": "",
+      "Description": "UserSig 非法，请使用官网提供的 API 重新 生成 UserSig。"
+    },
+    {
+      "ErrorCode": "60007",
+      "ErrorMessage": "",
+      "Description": "REST 接口调用频率超过限制，请降低请求频率。"
+    },
+    {
+      "ErrorCode": "60010",
+      "ErrorMessage": "",
+      "Description": "REST API 请求的 UserID 字段请填写 App 管理员账号。"
+    },
+    {
+      "ErrorCode": "60011",
+      "ErrorMessage": "",
+      "Description": "SDKAppID 请求频率超限，请降低请求频率。"
+    },
+    {
+      "ErrorCode": "60014",
+      "ErrorMessage": "",
+      "Description": "检查账号超时，请稍后重试。"
+    },
+    {
+      "ErrorCode": "60015",
+      "ErrorMessage": "",
+      "Description": "请求包体 UserID 类型错误，请确认 UserID 为字符串格式。"
+    },
+    {
+      "ErrorCode": "60009",
+      "ErrorMessage": "",
+      "Description": "请求资源错误，请检查请求 URL。"
+    },
+    {
+      "ErrorCode": "60018",
+      "ErrorMessage": "",
+      "Description": "请求过于频繁，请稍后重试。"
+    },
+    {
+      "ErrorCode": "60019",
+      "ErrorMessage": "",
+      "Description": "请求过于频繁，请稍后重试。"
+    },
+    {
+      "ErrorCode": "60016",
+      "ErrorMessage": "",
+      "Description": "SDKAppID 被禁用。"
+    },
+    {
+      "ErrorCode": "60017",
+      "ErrorMessage": "",
+      "Description": "请求被禁用。"
+    },
+    {
+      "ErrorCode": "60008",
+      "ErrorMessage": "",
+      "Description": "服务请求超时或 HTTP 请求格式错误，请检查并重试。"
+    },
+    {
+      "ErrorCode": "60013",
+      "ErrorMessage": "",
+      "Description": "HTTP 响应包 JSON 解析错误。"
+    },
+    {
+      "ErrorCode": "80002",
+      "ErrorMessage": "",
+      "Description": "发消息包体过长，目前支持最大12K消息包体长度，请减少包体大小重试。"
+    },
+    {
+      "ErrorCode": "80001",
+      "ErrorMessage": "",
+      "Description": "消息或者资料中文本存在敏感内容，禁止下发。"
+    },
+    {
+      "ErrorCode": "60021",
+      "ErrorMessage": "",
+      "Description": "RestAPI 调用来源 IP 非法。"
+    },
+    {
+      "ErrorCode": "80004",
+      "ErrorMessage": "",
+      "Description": "消息中图片、音频、视频等文件存在敏感内容，禁止下发。"
+    },
+    {
+      "ErrorCode": "60012",
+      "ErrorMessage": "",
+      "Description": "REST 接口需要带 SDKAppID，请检查请求 URL 中的 SDKAppID。"
+    },
+    {
+      "ErrorCode": "60020",
+      "ErrorMessage": "",
+      "Description": "服务不可用。如未购买基础服务套餐包或套餐包过期失效，请 购买 基础服务套餐包；如腾讯云账号欠费，请 充值 结清欠款。"
+    },
+    {
+      "ErrorCode": "40002",
+      "ErrorMessage": "",
+      "Description": "请求参数错误，没有指定需要拉取资料的用户账号。"
+    },
+    {
+      "ErrorCode": "40003",
+      "ErrorMessage": "",
+      "Description": "请求的用户账号不存在。"
+    },
+    {
+      "ErrorCode": "70013",
+      "ErrorMessage": "",
+      "Description": "请求中的 UserID 与生成 UserSig 时使用的 UserID 不匹配，您可以使用即时通信 IM 控制台 UserSig 生成&校验 工具校验 UserSig。"
+    },
+    {
+      "ErrorCode": "40008",
+      "ErrorMessage": "",
+      "Description": "没有资料字段的写权限，详情可参见 资料字段。"
+    },
+    {
+      "ErrorCode": "40006",
+      "ErrorMessage": "",
+      "Description": "服务端内部错误，请稍后重试。"
+    },
+    {
+      "ErrorCode": "40007",
+      "ErrorMessage": "",
+      "Description": "没有资料字段的读权限，详情可参见 资料字段。"
+    },
+    {
+      "ErrorCode": "40004",
+      "ErrorMessage": "",
+      "Description": "请求需要 App 管理员权限。"
+    },
+    {
+      "ErrorCode": "70020",
+      "ErrorMessage": "",
+      "Description": "SDKAppID 未找到，请在即时通信 IM 控制台确认应用信息。"
+    },
+    {
+      "ErrorCode": "70051",
+      "ErrorMessage": "",
+      "Description": "账号被拉入黑名单。"
+    },
+    {
+      "ErrorCode": "70114",
+      "ErrorMessage": "",
+      "Description": "因安全原因被限制登录，请不要频繁登录。"
+    },
+    {
+      "ErrorCode": "70107",
+      "ErrorMessage": "",
+      "Description": "请求的用户账号不存在。"
+    },
+    {
+      "ErrorCode": "70202",
+      "ErrorMessage": "",
+      "Description": "服务端内部超时，请稍后重试。"
+    },
+    {
+      "ErrorCode": "70403",
+      "ErrorMessage": "",
+      "Description": "请求失败，需要 App 管理员权限。"
+    },
+    {
+      "ErrorCode": "70402",
+      "ErrorMessage": "",
+      "Description": "参数非法，请检查必填字段是否填充，或者字段的填充是否满足协议要求。"
+    },
+    {
+      "ErrorCode": "70500",
+      "ErrorMessage": "",
+      "Description": "服务端内部错误，请稍后重试。"
+    },
+    {
+      "ErrorCode": "70050",
+      "ErrorMessage": "",
+      "Description": "UserSig 验证次数过于频繁。请检查 UserSig 是否正确，并于1分钟后重新验证。您可以使用即时通信 IM 控制台UserSig 生成&校验 工具校验 UserSig。"
+    },
+    {
+      "ErrorCode": "70398",
+      "ErrorMessage": "",
+      "Description": "账号数超限。如需创建多于100个账号，请将应用升级为专业版，具体操作指引请参见 购买指引。"
+    },
+    {
+      "ErrorCode": "71000",
+      "ErrorMessage": "",
+      "Description": "删除账号失败。仅支持删除 IM 体验版账号，您当前应用不是 IM 体验版，暂不支持账号删除。"
+    },
+    {
+      "ErrorCode": "40001",
+      "ErrorMessage": "",
+      "Description": "请求参数错误，请根据错误描述检查请求是否正确。"
+    },
+    {
+      "ErrorCode": "70169",
+      "ErrorMessage": "",
+      "Description": "服务端内部超时，请稍后重试。"
+    },
+    {
+      "ErrorCode": "72000",
+      "ErrorMessage": "",
+      "Description": "您当前应用为体验版或开发版，日活跃用户数（DAU）超过免费额度。若需解除该限制，请将应用升级为专业版或旗舰版，具体操作指引请参见 购买指引。"
+    },
+    {
+      "ErrorCode": "70014",
+      "ErrorMessage": "",
+      "Description": "请求中的 SDKAppID 与生成 UserSig 时使用的 SDKAppID 不匹配，您可以使用即时通信 IM 控制台 UserSig 生成&校验 工具校验 UserSig。"
+    },
+    {
+      "ErrorCode": "70016",
+      "ErrorMessage": "",
+      "Description": "公钥不存在，UserSig 验证失败，请在即时通信 IM 控制台 获取密钥。"
+    },
+    {
+      "ErrorCode": "72001",
+      "ErrorMessage": "",
+      "Description": "请在控制台开启用户状态查询及状态变更通知配置，具体操作指引请参见 操作指引。"
+    },
+    {
+      "ErrorCode": "70206",
+      "ErrorMessage": "",
+      "Description": "请求中批量数量不合法。"
+    },
+    {
+      "ErrorCode": "30014",
+      "ErrorMessage": "",
+      "Description": "对方的好友数已达系统上限。"
+    },
+    {
+      "ErrorCode": "30539",
+      "ErrorMessage": "",
+      "Description": "A 请求加 B 为好友，B 的加好友验证方式被设置为“AllowType_Type_NeedConfirm”，这时 A 与 B 之间只能形成未决关系，该返回码用于标识加未决成功，以便与加好友成功的返回码区分开，调用方可以捕捉该错误给用户一个合理的提示。"
+    },
+    {
+      "ErrorCode": "31704",
+      "ErrorMessage": "",
+      "Description": "与请求删除的账号之间不存在好友关系。"
+    },
+    {
+      "ErrorCode": "30540",
+      "ErrorMessage": "",
+      "Description": "添加好友请求被安全策略打击，请勿频繁发起添加好友请求。"
+    },
+    {
+      "ErrorCode": "31804",
+      "ErrorMessage": "",
+      "Description": "请求的用户账号不存在。"
+    },
+    {
+      "ErrorCode": "31707",
+      "ErrorMessage": "",
+      "Description": "删除好友请求被安全策略打击，请勿频繁发起删除好友请求。"
+    },
+    {
+      "ErrorCode": "30001",
+      "ErrorMessage": "",
+      "Description": "请求参数错误，请根据错误描述检查请求是否正确。"
+    },
+    {
+      "ErrorCode": "40610",
+      "ErrorMessage": "",
+      "Description": "资料字段的 Value 类型不匹配，详情可参见 标配资料字段。"
+    },
+    {
+      "ErrorCode": "30003",
+      "ErrorMessage": "",
+      "Description": "请求的用户账号不存在。"
+    },
+    {
+      "ErrorCode": "30004",
+      "ErrorMessage": "",
+      "Description": "请求需要 App 管理员权限。"
+    },
+    {
+      "ErrorCode": "30012",
+      "ErrorMessage": "",
+      "Description": "未决数已达系统上限。"
+    },
+    {
+      "ErrorCode": "30006",
+      "ErrorMessage": "",
+      "Description": "服务端内部错误，请重试。"
+    },
+    {
+      "ErrorCode": "30010",
+      "ErrorMessage": "",
+      "Description": "自己的好友数已达系统上限。"
+    },
+    {
+      "ErrorCode": "30007",
+      "ErrorMessage": "",
+      "Description": "网络超时，请稍后重试。"
+    },
+    {
+      "ErrorCode": "30009",
+      "ErrorMessage": "",
+      "Description": "后台禁止该用户发起加好友请求。"
+    },
+    {
+      "ErrorCode": "40605",
+      "ErrorMessage": "",
+      "Description": "标配资料字段的 Value 错误，详情可参见 标配资料字段。"
+    },
+    {
+      "ErrorCode": "30002",
+      "ErrorMessage": "",
+      "Description": "SDKAppID 不匹配。"
+    },
+    {
+      "ErrorCode": "40009",
+      "ErrorMessage": "",
+      "Description": "资料字段的 Tag 不存在。"
+    },
+    {
+      "ErrorCode": "30614",
+      "ErrorMessage": "",
+      "Description": "请求的未决不存在。"
+    },
+    {
+      "ErrorCode": "30013",
+      "ErrorMessage": "",
+      "Description": "黑名单数已达系统上限。"
+    },
+    {
+      "ErrorCode": "30515",
+      "ErrorMessage": "",
+      "Description": "请求添加好友时，对方在自己的黑名单中，不允许加好友。"
+    },
+    {
+      "ErrorCode": "40601",
+      "ErrorMessage": "",
+      "Description": "资料字段的 Value 长度超过500字节。"
+    },
+    {
+      "ErrorCode": "30525",
+      "ErrorMessage": "",
+      "Description": "请求添加好友时，自己在对方的黑名单中，不允许加好友。"
+    },
+    {
+      "ErrorCode": "30516",
+      "ErrorMessage": "",
+      "Description": "请求添加好友时，对方的加好友验证方式是不允许任何人添加自己为好友。"
+    },
+    {
+      "ErrorCode": "30008",
+      "ErrorMessage": "",
+      "Description": "并发写导致写冲突，建议使用批量方式。"
+    },
+    {
+      "ErrorCode": "30011",
+      "ErrorMessage": "",
+      "Description": "分组已达系统上限。"
+    },
+    {
+      "ErrorCode": "20009",
+      "ErrorMessage": "",
+      "Description": "消息发送双方互相不是好友，禁止发送（配置单聊消息校验好友关系才会出现）。"
+    },
+    {
+      "ErrorCode": "20011",
+      "ErrorMessage": "",
+      "Description": "发送单聊消息，对方不是自己的好友（单向关系），禁止发送。"
+    },
+    {
+      "ErrorCode": "20016",
+      "ErrorMessage": "",
+      "Description": "消息撤回超过了时间限制（默认2分钟）。"
+    },
+    {
+      "ErrorCode": "20012",
+      "ErrorMessage": "",
+      "Description": "发送方被禁言，该条消息被禁止发送。"
+    },
+    {
+      "ErrorCode": "20022",
+      "ErrorMessage": "",
+      "Description": "该待撤回的消息不存在，请检查。"
+    },
+    {
+      "ErrorCode": "20018",
+      "ErrorMessage": "",
+      "Description": "删除漫游内部错误。"
+    },
+    {
+      "ErrorCode": "50001",
+      "ErrorMessage": "",
+      "Description": "请求的用户账号不存在。"
+    },
+    {
+      "ErrorCode": "51006",
+      "ErrorMessage": "",
+      "Description": "修改会话标记时，调整的会话数为空或者超过了100个上限。"
+    },
+    {
+      "ErrorCode": "51008",
+      "ErrorMessage": "",
+      "Description": "会话分组的总的会话数超过了1000。"
+    },
+    {
+      "ErrorCode": "51007",
+      "ErrorMessage": "",
+      "Description": "GroupID 换 GroupCode 失败，内部错误或 Group 已经解散。"
+    },
+    {
+      "ErrorCode": "50003",
+      "ErrorMessage": "",
+      "Description": "请求需要 App 管理员权限。"
+    },
+    {
+      "ErrorCode": "20008",
+      "ErrorMessage": "",
+      "Description": "消息发送方和接收方属于不同的 SDKAppID。原因是客户端切换了 SDKAppID，但数据库未进行清理。解决办法是在切换 SDKAppID 时删除原来的数据库。"
+    },
+    {
+      "ErrorCode": "51011",
+      "ErrorMessage": "",
+      "Description": "会话分组名超过了32个字节。"
+    },
+    {
+      "ErrorCode": "51009",
+      "ErrorMessage": "",
+      "Description": "删除会话分组时分组不存在。"
+    },
+    {
+      "ErrorCode": "51012",
+      "ErrorMessage": "",
+      "Description": "超过置顶会话数量上限。置顶会话数上限为50，不支持增加。"
+    },
+    {
+      "ErrorCode": "20002",
+      "ErrorMessage": "",
+      "Description": "UserSig 或 A2 失效。"
+    },
+    {
+      "ErrorCode": "20003",
+      "ErrorMessage": "",
+      "Description": "消息发送方或接收方 UserID 无效或不存在，请检查 UserID 是否已导入即时通信 IM。"
+    },
+    {
+      "ErrorCode": "20007",
+      "ErrorMessage": "",
+      "Description": "发送单聊消息，被对方拉黑，禁止发送。 消息发送状态默认展示为失败，您可以登录控制台修改该场景下的消息发送状态展示结果，具体操作请参见 黑名单检查。"
+    },
+    {
+      "ErrorCode": "20006",
+      "ErrorMessage": "",
+      "Description": "触发发送单聊消息之前回调，App 后台返回禁止下发该消息。"
+    },
+    {
+      "ErrorCode": "20005",
+      "ErrorMessage": "",
+      "Description": "服务端内部错误，请重试。"
+    },
+    {
+      "ErrorCode": "20004",
+      "ErrorMessage": "",
+      "Description": "网络异常，请重试。"
+    },
+    {
+      "ErrorCode": "50004",
+      "ErrorMessage": "",
+      "Description": "服务端内部错误，请重试。"
+    },
+    {
+      "ErrorCode": "50002",
+      "ErrorMessage": "",
+      "Description": "请求参数错误，请根据错误描述检查请求是否正确。"
+    },
+    {
+      "ErrorCode": "50005",
+      "ErrorMessage": "",
+      "Description": "网络超时，请稍后重试。"
+    },
+    {
+      "ErrorCode": "51010",
+      "ErrorMessage": "",
+      "Description": "会话分组数超过了20个上限。"
+    },
+    {
+      "ErrorCode": "20010",
+      "ErrorMessage": "",
+      "Description": "发送单聊消息，自己不是对方的好友（单向关系），禁止发送。"
+    },
+    {
+      "ErrorCode": "20001",
+      "ErrorMessage": "",
+      "Description": "请求包非法。"
+    },
+    {
+      "ErrorCode": "90010",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包不符合消息格式描述，请参考 TIMMsgElement 对象 的定义。"
+    },
+    {
+      "ErrorCode": "90026",
+      "ErrorMessage": "",
+      "Description": "消息离线存储时间错误（最多不能超过7天）。"
+    },
+    {
+      "ErrorCode": "90031",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包体中 SyncOtherMachine 字段不是 Integer 类型。"
+    },
+    {
+      "ErrorCode": "90032",
+      "ErrorMessage": "",
+      "Description": "推送条件中的 tag 数量大于10，或添加标签请求中的标签数量大于10。"
+    },
+    {
+      "ErrorCode": "90030",
+      "ErrorMessage": "",
+      "Description": "属性长度为0或大于50。"
+    },
+    {
+      "ErrorCode": "20023",
+      "ErrorMessage": "",
+      "Description": "该消息已被撤回。"
+    },
+    {
+      "ErrorCode": "22004",
+      "ErrorMessage": "",
+      "Description": "上传的 token 长度超过256字节。"
+    },
+    {
+      "ErrorCode": "90033",
+      "ErrorMessage": "",
+      "Description": "属性无效。"
+    },
+    {
+      "ErrorCode": "22002",
+      "ErrorMessage": "",
+      "Description": "网络异常，请重试。"
+    },
+    {
+      "ErrorCode": "22003",
+      "ErrorMessage": "",
+      "Description": "上传的 token 为空。"
+    },
+    {
+      "ErrorCode": "22006",
+      "ErrorMessage": "",
+      "Description": "请求超频。"
+    },
+    {
+      "ErrorCode": "22001",
+      "ErrorMessage": "",
+      "Description": "没有上传过任何离线推送证书。"
+    },
+    {
+      "ErrorCode": "90005",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包体中缺少 MsgRandom 字段或者 MsgRandom 字段不是 Integer 类型。"
+    },
+    {
+      "ErrorCode": "90006",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包体中缺少 MsgTimeStamp 字段或者 MsgTimeStamp 字段不是 Integer 类型。"
+    },
+    {
+      "ErrorCode": "90009",
+      "ErrorMessage": "",
+      "Description": "请求需要 App 管理员权限。"
+    },
+    {
+      "ErrorCode": "90003",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包体中缺少 To_Account 字段或者 To_Account 账号不存在。"
+    },
+    {
+      "ErrorCode": "90007",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包体中 MsgBody 类型不是 Array 类型，请将其修改为 Array 类型。"
+    },
+    {
+      "ErrorCode": "90022",
+      "ErrorMessage": "",
+      "Description": "推送条件中的 TagsOr 和 TagsAnd 有重复标签。"
+    },
+    {
+      "ErrorCode": "20028",
+      "ErrorMessage": "",
+      "Description": "并发修改消息导致冲突，请重试。"
+    },
+    {
+      "ErrorCode": "90008",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包体中缺少 From_Account 字段或者 From_Account 账号不存在。"
+    },
+    {
+      "ErrorCode": "21005",
+      "ErrorMessage": "",
+      "Description": "设置 token 请求比登录请求先到后台，请确保先登录，后设置 token。"
+    },
+    {
+      "ErrorCode": "22005",
+      "ErrorMessage": "",
+      "Description": "登录请求数据超过1024字节。"
+    },
+    {
+      "ErrorCode": "90011",
+      "ErrorMessage": "",
+      "Description": "批量发消息目标账号超过500，请减少 To_Account 中目标账号数量。"
+    },
+    {
+      "ErrorCode": "90012",
+      "ErrorMessage": "",
+      "Description": "To_Account 没有注册或不存在，请确认 To_Account 是否导入即时通信 IM 或者是否拼写错误。"
+    },
+    {
+      "ErrorCode": "90018",
+      "ErrorMessage": "",
+      "Description": "请求的账号数量超过限制。"
+    },
+    {
+      "ErrorCode": "90024",
+      "ErrorMessage": "",
+      "Description": "推送过于频繁，每两次推送间隔必须大于1秒。"
+    },
+    {
+      "ErrorCode": "90001",
+      "ErrorMessage": "",
+      "Description": "JSON 格式解析失败，请检查请求包是否符合 JSON 规范。"
+    },
+    {
+      "ErrorCode": "90002",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包中 MsgBody 不符合消息格式描述，或者 MsgBody 不是 Array 类型，请参考 TIMMsgElement 对象 的定义。"
+    },
+    {
+      "ErrorCode": "90034",
+      "ErrorMessage": "",
+      "Description": "标签长度大于50。"
+    },
+    {
+      "ErrorCode": "10005",
+      "ErrorMessage": "",
+      "Description": "请求包体中携带的账号数量过多。"
+    },
+    {
+      "ErrorCode": "10011",
+      "ErrorMessage": "",
+      "Description": "解析 JSON 包体失败，请检查包体的格式是否符合 JSON 格式。"
+    },
+    {
+      "ErrorCode": "10012",
+      "ErrorMessage": "",
+      "Description": "发起操作的 UserID 非法，请检查发起操作的用户 UserID 是否填写正确。"
+    },
+    {
+      "ErrorCode": "10013",
+      "ErrorMessage": "",
+      "Description": "用户已经是群成员。"
+    },
+    {
+      "ErrorCode": "10015",
+      "ErrorMessage": "",
+      "Description": "无效的群组 ID，表示群组不存在或已经被解散。"
+    },
+    {
+      "ErrorCode": "10014",
+      "ErrorMessage": "",
+      "Description": "群已满员，无法将请求中的用户加入群组，如果是批量加人，可以尝试减少加入用户的数量。"
+    },
+    {
+      "ErrorCode": "90054",
+      "ErrorMessage": "",
+      "Description": "撤回请求中的 MsgKey 不合法。"
+    },
+    {
+      "ErrorCode": "90047",
+      "ErrorMessage": "",
+      "Description": "推送次数超过当天限额（默认为100次）。"
+    },
+    {
+      "ErrorCode": "90055",
+      "ErrorMessage": "",
+      "Description": "批量发消息的包体过长，目前支持最大12K消息包体长度。"
+    },
+    {
+      "ErrorCode": "90995",
+      "ErrorMessage": "",
+      "Description": "服务内部错误，请重试。"
+    },
+    {
+      "ErrorCode": "90045",
+      "ErrorMessage": "",
+      "Description": "未开通全员推送功能。"
+    },
+    {
+      "ErrorCode": "91000",
+      "ErrorMessage": "",
+      "Description": "服务内部错误，请重试。"
+    },
+    {
+      "ErrorCode": "90040",
+      "ErrorMessage": "",
+      "Description": "推送条件中其中1个 tag 为空。"
+    },
+    {
+      "ErrorCode": "120001 - 130000",
+      "ErrorMessage": "",
+      "Description": "单聊第三方回调返回的自定义错误码。"
+    },
+    {
+      "ErrorCode": "91101",
+      "ErrorMessage": "",
+      "Description": "Web 端长轮询被踢（Web 端同时在线实例个数超出限制）。"
+    },
+    {
+      "ErrorCode": "90992",
+      "ErrorMessage": "",
+      "Description": "服务内部错误，请重试；如果所有请求都返回该错误码，且 App 配置了第三方回调，请检查 App 服务端是否正常向即时通信 IM 后台服务端返回回调结果。"
+    },
+    {
+      "ErrorCode": "10004",
+      "ErrorMessage": "",
+      "Description": "参数非法，请根据错误描述检查请求是否正确。"
+    },
+    {
+      "ErrorCode": "10003",
+      "ErrorMessage": "",
+      "Description": "请求中的接口名称错误，请核对接口名称并重试。"
+    },
+    {
+      "ErrorCode": "10002",
+      "ErrorMessage": "",
+      "Description": "服务端内部错误，请重试。"
+    },
+    {
+      "ErrorCode": "10010",
+      "ErrorMessage": "",
+      "Description": "群组不存在，或者曾经存在过，但是目前已经被解散。"
+    },
+    {
+      "ErrorCode": "90043",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包中 OfflinePushInfo 不符合消息格式描述，请参考 OfflinePushInfo 对象 的定义。"
+    },
+    {
+      "ErrorCode": "10006",
+      "ErrorMessage": "",
+      "Description": "操作频率限制，请尝试降低调用的频率。"
+    },
+    {
+      "ErrorCode": "93000",
+      "ErrorMessage": "",
+      "Description": "JSON 数据包超长，消息包体请不要超过12K。"
+    },
+    {
+      "ErrorCode": "10009",
+      "ErrorMessage": "",
+      "Description": "该群不允许群主主动退出。"
+    },
+    {
+      "ErrorCode": "10007",
+      "ErrorMessage": "",
+      "Description": "操作权限不足（例如 Public 群组中普通成员尝试执行踢人操作，但只有 App 管理员才有权限；或者非群成员操作）。"
+    },
+    {
+      "ErrorCode": "90048",
+      "ErrorMessage": "",
+      "Description": "请求的用户账号不存在。"
+    },
+    {
+      "ErrorCode": "90044",
+      "ErrorMessage": "",
+      "Description": "JSON 格式请求包体中 MsgLifeTime 字段不是 Integer 类型。"
+    },
+    {
+      "ErrorCode": "90994",
+      "ErrorMessage": "",
+      "Description": "服务内部错误，请重试。"
+    },
+    {
+      "ErrorCode": "10046",
+      "ErrorMessage": "",
+      "Description": "自定义属性单个 val 超过了大小限制4000字节。"
+    },
+    {
+      "ErrorCode": "10049",
+      "ErrorMessage": "",
+      "Description": "自定义属性写操作触发频控。"
+    },
+    {
+      "ErrorCode": "10016",
+      "ErrorMessage": "",
+      "Description": "App 后台通过第三方回调拒绝本次操作。"
+    },
+    {
+      "ErrorCode": "10050",
+      "ErrorMessage": "",
+      "Description": "删除不存在的自定义属性。"
+    },
+    {
+      "ErrorCode": "10052",
+      "ErrorMessage": "",
+      "Description": "消息删除时候群里不存在消息。"
+    },
+    {
+      "ErrorCode": "10051",
+      "ErrorMessage": "",
+      "Description": "消息删除超过最大范围限制。"
+    },
+    {
+      "ErrorCode": "10053",
+      "ErrorMessage": "",
+      "Description": "群@数量超过上限30。"
+    },
+    {
+      "ErrorCode": "10054",
+      "ErrorMessage": "",
+      "Description": "群成员过多，请分页拉取。"
+    },
+    {
+      "ErrorCode": "10019",
+      "ErrorMessage": "",
+      "Description": "请求的用户账号不存在。"
+    },
+    {
+      "ErrorCode": "10025",
+      "ErrorMessage": "",
+      "Description": "群组 ID 已被使用，并且操作者为群主，可以直接使用。"
+    },
+    {
+      "ErrorCode": "10023",
+      "ErrorMessage": "",
+      "Description": "发消息的频率超限，请延长两次发消息时间的间隔。"
+    },
+    {
+      "ErrorCode": "10024",
+      "ErrorMessage": "",
+      "Description": "此邀请或者申请请求已经被处理。"
+    },
+    {
+      "ErrorCode": "10030",
+      "ErrorMessage": "",
+      "Description": "请求撤回的消息不存在。"
+    },
+    {
+      "ErrorCode": "10026",
+      "ErrorMessage": "",
+      "Description": "该 SDKAppID 请求的命令字已被禁用。"
+    },
+    {
+      "ErrorCode": "10031",
+      "ErrorMessage": "",
+      "Description": "消息撤回超过了时间限制（默认2分钟）。"
+    },
+    {
+      "ErrorCode": "10021",
+      "ErrorMessage": "",
+      "Description": "群组 ID 已被使用，请选择其他的群组 ID。"
+    },
+    {
+      "ErrorCode": "10033",
+      "ErrorMessage": "",
+      "Description": "群组类型不支持消息撤回操作。"
+    },
+    {
+      "ErrorCode": "10032",
+      "ErrorMessage": "",
+      "Description": "请求撤回的消息不支持撤回操作。"
+    },
+    {
+      "ErrorCode": "10035",
+      "ErrorMessage": "",
+      "Description": "IM 直播群和在线成员广播大群不支持删除消息。"
+    },
+    {
+      "ErrorCode": "10017",
+      "ErrorMessage": "",
+      "Description": "因被禁言而不能发送消息，请检查发送者是否被设置禁言。"
+    },
+    {
+      "ErrorCode": "10018",
+      "ErrorMessage": "",
+      "Description": "应答包长度超过最大包长（1MB），请求的内容过多，请尝试减少单次请求的数据量。"
+    },
+    {
+      "ErrorCode": "10037",
+      "ErrorMessage": "",
+      "Description": "单个用户可创建和加入的群组数量超过了限制，请参考 价格说明 购买或升级预付费套餐“单人可创建与加入群组数”。"
+    },
+    {
+      "ErrorCode": "10048",
+      "ErrorMessage": "",
+      "Description": "自定义属性所有 key 对应的 val 大小之和超过上限16000字节。"
+    },
+    {
+      "ErrorCode": "10034",
+      "ErrorMessage": "",
+      "Description": "该消息类型不支持删除操作。"
+    },
+    {
+      "ErrorCode": "10041",
+      "ErrorMessage": "",
+      "Description": "该应用（SDKAppID）已配置不支持群消息撤回。"
+    },
+    {
+      "ErrorCode": "10044",
+      "ErrorMessage": "",
+      "Description": "表示该群类型不支持获取漫游，例如：AVChatRoom"
+    },
+    {
+      "ErrorCode": "10045",
+      "ErrorMessage": "",
+      "Description": "自定义属性 key 超过大小限制32字节。"
+    },
+    {
+      "ErrorCode": "10047",
+      "ErrorMessage": "",
+      "Description": "自定义属性 key 数量超过了限制16。"
+    },
+    {
+      "ErrorCode": "10036",
+      "ErrorMessage": "",
+      "Description": "IM 直播群创建数量超过了限制，请参考 价格说明 购买预付费套餐“IM 直播群”。"
+    },
+    {
+      "ErrorCode": "10038",
+      "ErrorMessage": "",
+      "Description": "群成员数量超过限制，请参考 价格说明 购买或升级预付费套餐“扩展群人数上限”。（升级后需要调用 修改群资料接口 修改群最大人数）"
+    },
+    {
+      "ErrorCode": "10056",
+      "ErrorMessage": "",
+      "Description": "自定义属性写操作竞争冲突，请获取最新的自定义属性后再进行写操作。"
+    },
+    {
+      "ErrorCode": "6011",
+      "ErrorMessage": "",
+      "Description": "无效接收方。"
+    },
+    {
+      "ErrorCode": "11000",
+      "ErrorMessage": "",
+      "Description": "未开通社群功能。"
+    },
+    {
+      "ErrorCode": "10062",
+      "ErrorMessage": "",
+      "Description": "已读回执信息不存在。"
+    },
+    {
+      "ErrorCode": "10063",
+      "ErrorMessage": "",
+      "Description": "群计数器 Key 数量超过限制，最大为20个。"
+    },
+    {
+      "ErrorCode": "6024",
+      "ErrorMessage": "",
+      "Description": "TLS SDK 未初始化。"
+    },
+    {
+      "ErrorCode": "6020",
+      "ErrorMessage": "",
+      "Description": "SessionNode 为 null 。"
+    },
+    {
+      "ErrorCode": "6012",
+      "ErrorMessage": "",
+      "Description": "请求超时。"
+    },
+    {
+      "ErrorCode": "-195",
+      "ErrorMessage": "",
+      "Description": "谷歌推送构建推送对象失败，通常是证书错误导致。"
+    },
+    {
+      "ErrorCode": "6023",
+      "ErrorMessage": "",
+      "Description": "在登录完成前进行了登出（在登录时返回）。"
+    },
+    {
+      "ErrorCode": "6018",
+      "ErrorMessage": "",
+      "Description": "INIT CORE 模块失败。"
+    },
+    {
+      "ErrorCode": "-199",
+      "ErrorMessage": "",
+      "Description": "厂商网络异常。"
+    },
+    {
+      "ErrorCode": "-196",
+      "ErrorMessage": "",
+      "Description": "参数缺失，选择了 intent，但是没有设置 intent 的值。"
+    },
+    {
+      "ErrorCode": "10059",
+      "ErrorMessage": "",
+      "Description": "该特性需要购买旗舰版才可以支持。"
+    },
+    {
+      "ErrorCode": "-201",
+      "ErrorMessage": "",
+      "Description": "合法性检查没有通过，例如 token 或者证书 ID 错误。"
+    },
+    {
+      "ErrorCode": "-202",
+      "ErrorMessage": "",
+      "Description": "在推送给厂商之前，构建对象失败。"
+    },
+    {
+      "ErrorCode": "-198",
+      "ErrorMessage": "",
+      "Description": "厂商响应错误。"
+    },
+    {
+      "ErrorCode": "-200",
+      "ErrorMessage": "",
+      "Description": "IM 后台网络错误。"
+    },
+    {
+      "ErrorCode": "10058",
+      "ErrorMessage": "",
+      "Description": "表示体验版超过100个群的限制，需要购买套餐包提升建群数量限制。"
+    },
+    {
+      "ErrorCode": "1003",
+      "ErrorMessage": "",
+      "Description": "系统错误。"
+    },
+    {
+      "ErrorCode": "1005",
+      "ErrorMessage": "",
+      "Description": "文件已过期。"
+    },
+    {
+      "ErrorCode": "10060",
+      "ErrorMessage": "",
+      "Description": "群人数超过已读回执群上限。"
+    },
+    {
+      "ErrorCode": "10061",
+      "ErrorMessage": "",
+      "Description": "在线消息不支持已读回执。"
+    },
+    {
+      "ErrorCode": "1001",
+      "ErrorMessage": "",
+      "Description": "请求非法；请检查“请求 URL”是否正确。"
+    },
+    {
+      "ErrorCode": "6025",
+      "ErrorMessage": "",
+      "Description": "TLS SDK 没有找到相应的用户信息。"
+    },
+    {
+      "ErrorCode": "-203",
+      "ErrorMessage": "",
+      "Description": "华为日推送限制。"
+    },
+    {
+      "ErrorCode": "1002",
+      "ErrorMessage": "",
+      "Description": "参数非法；请检查是否管理员账号，必填字段是否填充，或者字段的填充是否满足协议要求。"
+    },
+    {
+      "ErrorCode": "-197",
+      "ErrorMessage": "",
+      "Description": "证书错误，请检查证书相关参数排查。"
+    },
+    {
+      "ErrorCode": "1004",
+      "ErrorMessage": "",
+      "Description": "文件尚未生成，或者请求时段内没有消息。"
+    },
+    {
+      "ErrorCode": "6003",
+      "ErrorMessage": "",
+      "Description": "批量操作无成功结果。"
+    },
+    {
+      "ErrorCode": "6150",
+      "ErrorMessage": "",
+      "Description": "proxy_manager 没有完成服务端数据同步。"
+    },
+    {
+      "ErrorCode": "6100",
+      "ErrorMessage": "",
+      "Description": "QALSDK 未知原因BIND失败。"
+    },
+    {
+      "ErrorCode": "6101",
+      "ErrorMessage": "",
+      "Description": "缺少 SSO 票据。"
+    },
+    {
+      "ErrorCode": "6160",
+      "ErrorMessage": "",
+      "Description": "Group assistant 请求字段中包含非预设字段。"
+    },
+    {
+      "ErrorCode": "6104",
+      "ErrorMessage": "",
+      "Description": "GUID 为空。"
+    },
+    {
+      "ErrorCode": "6162",
+      "ErrorMessage": "",
+      "Description": "加载群资料失败。"
+    },
+    {
+      "ErrorCode": "6106",
+      "ErrorMessage": "",
+      "Description": "注册超时。"
+    },
+    {
+      "ErrorCode": "6200",
+      "ErrorMessage": "",
+      "Description": "请求的时候没有网络。"
+    },
+    {
+      "ErrorCode": "6205",
+      "ErrorMessage": "",
+      "Description": "QALSDK 服务未就绪。"
+    },
+    {
+      "ErrorCode": "6207",
+      "ErrorMessage": "",
+      "Description": "账号认证失败（ TinyId 转换失败），请检查 UserID 是否存在并有效。"
+    },
+    {
+      "ErrorCode": "6201",
+      "ErrorMessage": "",
+      "Description": "响应的时候没有网络。"
+    },
+    {
+      "ErrorCode": "6120",
+      "ErrorMessage": "",
+      "Description": "发包未知错误。"
+    },
+    {
+      "ErrorCode": "6124",
+      "ErrorMessage": "",
+      "Description": "SSO 错误。"
+    },
+    {
+      "ErrorCode": "6122",
+      "ErrorMessage": "",
+      "Description": "发送回复包时没有网络。"
+    },
+    {
+      "ErrorCode": "6123",
+      "ErrorMessage": "",
+      "Description": "发送请求包时没有权限。"
+    },
+    {
+      "ErrorCode": "6102",
+      "ErrorMessage": "",
+      "Description": "重复 BIND。"
+    },
+    {
+      "ErrorCode": "6103",
+      "ErrorMessage": "",
+      "Description": "TinyId 为空。"
+    },
+    {
+      "ErrorCode": "6121",
+      "ErrorMessage": "",
+      "Description": "发送请求包时没有网络。"
+    },
+    {
+      "ErrorCode": "6107",
+      "ErrorMessage": "",
+      "Description": "正在 BIND 操作中。"
+    },
+    {
+      "ErrorCode": "6105",
+      "ErrorMessage": "",
+      "Description": "解注册包失败。"
+    },
+    {
+      "ErrorCode": "6153",
+      "ErrorMessage": "",
+      "Description": "proxy_manager 请求参数，在本地检查不合法。"
+    },
+    {
+      "ErrorCode": "6125",
+      "ErrorMessage": "",
+      "Description": "请求超时。"
+    },
+    {
+      "ErrorCode": "6126",
+      "ErrorMessage": "",
+      "Description": "回复超时。"
+    },
+    {
+      "ErrorCode": "6127",
+      "ErrorMessage": "",
+      "Description": "重发失败。"
+    },
+    {
+      "ErrorCode": "6128",
+      "ErrorMessage": "",
+      "Description": "重发时没有真正发送。"
+    },
+    {
+      "ErrorCode": "6130",
+      "ErrorMessage": "",
+      "Description": "发送过载。"
+    },
+    {
+      "ErrorCode": "6131",
+      "ErrorMessage": "",
+      "Description": "数据逻辑错误。"
+    },
+    {
+      "ErrorCode": "6151",
+      "ErrorMessage": "",
+      "Description": "proxy_manager 正在进行服务端数据同步。"
+    },
+    {
+      "ErrorCode": "6161",
+      "ErrorMessage": "",
+      "Description": "Group assistant 群资料本地存储没有开启。"
+    },
+    {
+      "ErrorCode": "6152",
+      "ErrorMessage": "",
+      "Description": "proxy_manager 同步失败。"
+    },
+    {
+      "ErrorCode": "6129",
+      "ErrorMessage": "",
+      "Description": "保存被过滤。"
+    },
+    {
+      "ErrorCode": "6209",
+      "ErrorMessage": "",
+      "Description": "在应用启动后没有尝试联网。"
+    },
+    {
+      "ErrorCode": "6210",
+      "ErrorMessage": "",
+      "Description": "QALSDK 执行失败。"
+    },
+    {
+      "ErrorCode": "6258",
+      "ErrorMessage": "",
+      "Description": "SSO cookie 无效。"
+    },
+    {
+      "ErrorCode": "6256",
+      "ErrorMessage": "",
+      "Description": "服务被暂停。"
+    },
+    {
+      "ErrorCode": "6257",
+      "ErrorMessage": "",
+      "Description": "SSO 签名错误。"
+    },
+    {
+      "ErrorCode": "6255",
+      "ErrorMessage": "",
+      "Description": "已经被其他终端踢了。"
+    },
+    {
+      "ErrorCode": "6211",
+      "ErrorMessage": "",
+      "Description": "请求非法，toMsgService 非法。"
+    },
+    {
+      "ErrorCode": "6213",
+      "ErrorMessage": "",
+      "Description": "已经被其他终端踢了。"
+    },
+    {
+      "ErrorCode": "6212",
+      "ErrorMessage": "",
+      "Description": "请求队列满。"
+    },
+    {
+      "ErrorCode": "6217",
+      "ErrorMessage": "",
+      "Description": "登录时 TLS SDK 回包校验，包体长度错误。"
+    },
+    {
+      "ErrorCode": "6220",
+      "ErrorMessage": "",
+      "Description": "登录时 TLS SDK 解密失败。"
+    },
+    {
+      "ErrorCode": "6222",
+      "ErrorMessage": "",
+      "Description": "用户已取消。"
+    },
+    {
+      "ErrorCode": "6216",
+      "ErrorMessage": "",
+      "Description": "SSO cookie 无效。"
+    },
+    {
+      "ErrorCode": "6223",
+      "ErrorMessage": "",
+      "Description": "消息撤回超过了时间限制（默认2分钟）。"
+    },
+    {
+      "ErrorCode": "6252",
+      "ErrorMessage": "",
+      "Description": "QALSDK 执行失败。"
+    },
+    {
+      "ErrorCode": "6226",
+      "ErrorMessage": "",
+      "Description": "自动登录，本地票据过期，需要 UserSig 手动登录。"
+    },
+    {
+      "ErrorCode": "6300",
+      "ErrorMessage": "",
+      "Description": "没有可用的短连接 SSO 。"
+    },
+    {
+      "ErrorCode": "70101",
+      "ErrorMessage": "",
+      "Description": "登录返回，票据过期。"
+    },
+    {
+      "ErrorCode": "6214",
+      "ErrorMessage": "",
+      "Description": "服务被暂停。"
+    },
+    {
+      "ErrorCode": "6250",
+      "ErrorMessage": "",
+      "Description": "请求时没有网络，请等网络恢复后重试。"
+    },
+    {
+      "ErrorCode": "6218",
+      "ErrorMessage": "",
+      "Description": "登录时 OPENSTATSVC 向 OPENMSG 上报状态超时。"
+    },
+    {
+      "ErrorCode": "90101",
+      "ErrorMessage": "",
+      "Description": "IM SDK 已经初始化无需重复初始化。"
+    },
+    {
+      "ErrorCode": "115000",
+      "ErrorMessage": "",
+      "Description": "OpenBDH 错误码。"
+    },
+    {
+      "ErrorCode": "6251",
+      "ErrorMessage": "",
+      "Description": "响应时没有网络，请等网络恢复后重试。"
+    },
+    {
+      "ErrorCode": "6253",
+      "ErrorMessage": "",
+      "Description": "请求非法，toMsgService 非法。"
+    },
+    {
+      "ErrorCode": "6254",
+      "ErrorMessage": "",
+      "Description": "请求队列満。"
+    },
+    {
+      "ErrorCode": "6219",
+      "ErrorMessage": "",
+      "Description": "登录时 OPENSTATSVC 向 OPENMSG 上报状态时解析回包失败。"
+    },
+    {
+      "ErrorCode": "6221",
+      "ErrorMessage": "",
+      "Description": "WIFI 需要认证。"
+    },
+    {
+      "ErrorCode": "6215",
+      "ErrorMessage": "",
+      "Description": "SSO 签名错误。"
+    },
+    {
+      "ErrorCode": "6224",
+      "ErrorMessage": "",
+      "Description": "缺少 UGC 扩展包。"
+    },
+    {
+      "ErrorCode": "2000",
+      "ErrorMessage": "",
+      "Description": "无 SDKAppID"
+    },
+    {
+      "ErrorCode": "2001",
+      "ErrorMessage": "",
+      "Description": "服务器内部错误。"
+    },
+    {
+      "ErrorCode": "2002",
+      "ErrorMessage": "",
+      "Description": "暂不支持该命令字。"
+    },
+    {
+      "ErrorCode": "2003",
+      "ErrorMessage": "",
+      "Description": "请求参数无效。"
+    },
+    {
+      "ErrorCode": "2022",
+      "ErrorMessage": "",
+      "Description": "无 tinyID"
+    },
+    {
+      "ErrorCode": "2023",
+      "ErrorMessage": "",
+      "Description": "无 a2key"
+    },
+    {
+      "ErrorCode": "2024",
+      "ErrorMessage": "",
+      "Description": "用户未登录"
+    },
+    {
+      "ErrorCode": "2025",
+      "ErrorMessage": "",
+      "Description": "重复登录"
+    },
+    {
+      "ErrorCode": "2040",
+      "ErrorMessage": "",
+      "Description": "未检测到 COS 上传插件"
+    },
+    {
+      "ErrorCode": "2041",
+      "ErrorMessage": "",
+      "Description": "获取 COS 预签名 URL 失败"
+    },
+    {
+      "ErrorCode": "2100",
+      "ErrorMessage": "",
+      "Description": "删除云端审核敏感词失败。"
+    },
+    {
+      "ErrorCode": "2101",
+      "ErrorMessage": "",
+      "Description": "未加入直播群不能向直播群发送消息"
+    },
+    {
+      "ErrorCode": "2105",
+      "ErrorMessage": "",
+      "Description": "需要 Message 的实例"
+    },
+    {
+      "ErrorCode": "2106",
+      "ErrorMessage": "",
+      "Description": "Message.conversationType 只能为 \"C2C\" 或 \"GROUP\""
+    },
+    {
+      "ErrorCode": "2108",
+      "ErrorMessage": "",
+      "Description": "无法发送空文件"
+    },
+    {
+      "ErrorCode": "2109",
+      "ErrorMessage": "",
+      "Description": "回调函数运行时遇到错误，请检查接入侧代码"
+    },
+    {
+      "ErrorCode": "2110",
+      "ErrorMessage": "",
+      "Description": "消息撤回失败"
+    },
+    {
+      "ErrorCode": "2111",
+      "ErrorMessage": "",
+      "Description": "消息删除失败"
+    },
+    {
+      "ErrorCode": "2112",
+      "ErrorMessage": "",
+      "Description": "设置所有未读消息为已读处理失败"
+    },
+    {
+      "ErrorCode": "2114",
+      "ErrorMessage": "",
+      "Description": "消息列表中没有需要发送已读回执的消息"
+    },
+    {
+      "ErrorCode": "2115",
+      "ErrorMessage": "",
+      "Description": "不能在支持话题的群组中发消息，请检查群组 isSupportTopic 属性"
+    },
+    {
+      "ErrorCode": "2116",
+      "ErrorMessage": "",
+      "Description": "不支持删除群系统通知"
+    },
+    {
+      "ErrorCode": "2117",
+      "ErrorMessage": "",
+      "Description": "翻译文本失败"
+    },
+    {
+      "ErrorCode": "2251",
+      "ErrorMessage": "",
+      "Description": "请先选择一张图片"
+    },
+    {
+      "ErrorCode": "2252",
+      "ErrorMessage": "",
+      "Description": "只允许上传 jpg png jpeg gif bmp image webp 格式的图片"
+    },
+    {
+      "ErrorCode": "2253",
+      "ErrorMessage": "",
+      "Description": "图片大小超过20M，无法发送"
+    },
+    {
+      "ErrorCode": "2300",
+      "ErrorMessage": "",
+      "Description": "语音上传失败"
+    },
+    {
+      "ErrorCode": "2301",
+      "ErrorMessage": "",
+      "Description": "语音大小超过20M，无法发送"
+    },
+    {
+      "ErrorCode": "2350",
+      "ErrorMessage": "",
+      "Description": "视频上传失败"
+    },
+    {
+      "ErrorCode": "2351",
+      "ErrorMessage": "",
+      "Description": "视频大小超过100M，无法发送"
+    },
+    {
+      "ErrorCode": "2352",
+      "ErrorMessage": "",
+      "Description": "只允许上传 mp4 格式的视频"
+    },
+    {
+      "ErrorCode": "2400",
+      "ErrorMessage": "",
+      "Description": "文件上传失败"
+    },
+    {
+      "ErrorCode": "2401",
+      "ErrorMessage": "",
+      "Description": "请先选择一个文件"
+    },
+    {
+      "ErrorCode": "2402",
+      "ErrorMessage": "",
+      "Description": "文件大小超过100M，无法发送"
+    },
+    {
+      "ErrorCode": "2403",
+      "ErrorMessage": "",
+      "Description": "缺少必要的参数文件 URL"
+    },
+    {
+      "ErrorCode": "2450",
+      "ErrorMessage": "",
+      "Description": "非合并消息"
+    },
+    {
+      "ErrorCode": "2451",
+      "ErrorMessage": "",
+      "Description": "合并消息的 messageKey 无效"
+    },
+    {
+      "ErrorCode": "2452",
+      "ErrorMessage": "",
+      "Description": "下载合并消息失败"
+    },
+    {
+      "ErrorCode": "2453",
+      "ErrorMessage": "",
+      "Description": "选择的消息类型（如群提示消息）不可以转发"
+    },
+    {
+      "ErrorCode": "2480",
+      "ErrorMessage": "",
+      "Description": "修改消息时发生冲突"
+    },
+    {
+      "ErrorCode": "2481",
+      "ErrorMessage": "",
+      "Description": "直播群不支持修改消息"
+    },
+    {
+      "ErrorCode": "2500",
+      "ErrorMessage": "",
+      "Description": "没有找到相应的会话，请检查传入参数"
+    },
+    {
+      "ErrorCode": "2501",
+      "ErrorMessage": "",
+      "Description": "没有找到相应的用户或群主，请检查传入参数"
+    },
+    {
+      "ErrorCode": "2502",
+      "ErrorMessage": "",
+      "Description": "未记录的会话类型"
+    },
+    {
+      "ErrorCode": "2503",
+      "ErrorMessage": "",
+      "Description": "无效的会话 ID"
+    },
+    {
+      "ErrorCode": "2600",
+      "ErrorMessage": "",
+      "Description": "非法的群类型，请检查传入参数"
+    },
+    {
+      "ErrorCode": "2601",
+      "ErrorMessage": "",
+      "Description": "不能加入 Work 类型的群组"
+    },
+    {
+      "ErrorCode": "2602",
+      "ErrorMessage": "",
+      "Description": "群组 ID 非法"
+    },
+    {
+      "ErrorCode": "2603",
+      "ErrorMessage": "",
+      "Description": "找不到指定 ID 的群组"
+    },
+    {
+      "ErrorCode": "2620",
+      "ErrorMessage": "",
+      "Description": "AVChatRoom 类型的群组不能转让群主"
+    },
+    {
+      "ErrorCode": "2621",
+      "ErrorMessage": "",
+      "Description": "不能把群主转让给自己"
+    },
+    {
+      "ErrorCode": "2622",
+      "ErrorMessage": "",
+      "Description": "不能解散 Work 类型的群组"
+    },
+    {
+      "ErrorCode": "2623",
+      "ErrorMessage": "",
+      "Description": "用户不在该群组内"
+    },
+    {
+      "ErrorCode": "2660",
+      "ErrorMessage": "",
+      "Description": "加群失败，请检查传入参数或重试"
+    },
+    {
+      "ErrorCode": "2661",
+      "ErrorMessage": "",
+      "Description": "AVChatRoom 类型的群不支持邀请群成员"
+    },
+    {
+      "ErrorCode": "2662",
+      "ErrorMessage": "",
+      "Description": "非 AVChatRoom 类型的群组不允许匿名加群，请先登录后再加群"
+    },
+    {
+      "ErrorCode": "2681",
+      "ErrorMessage": "",
+      "Description": "你不是群主，只有群主才有权限操作"
+    },
+    {
+      "ErrorCode": "2682",
+      "ErrorMessage": "",
+      "Description": "不能在 Work / AVChatRoom 类型的群中设置群成员身份"
+    },
+    {
+      "ErrorCode": "2683",
+      "ErrorMessage": "",
+      "Description": "不合法的群成员身份，请检查传入参数"
+    },
+    {
+      "ErrorCode": "2684",
+      "ErrorMessage": "",
+      "Description": "不能设置自己的群成员身份，请检查传入参数"
+    },
+    {
+      "ErrorCode": "2685",
+      "ErrorMessage": "",
+      "Description": "不能将自己禁言，请检查传入参数"
+    },
+    {
+      "ErrorCode": "2686",
+      "ErrorMessage": "",
+      "Description": "封禁时长无效，必须传入 duration 参数且要大于 0"
+    },
+    {
+      "ErrorCode": "2700",
+      "ErrorMessage": "",
+      "Description": "指定的 userID 不是我的好友"
+    },
+    {
+      "ErrorCode": "2701",
+      "ErrorMessage": "",
+      "Description": "已经是好友关系"
+    },
+    {
+      "ErrorCode": "2710",
+      "ErrorMessage": "",
+      "Description": "好友分组已经存在"
+    },
+    {
+      "ErrorCode": "2711",
+      "ErrorMessage": "",
+      "Description": "好友分组不存在"
+    },
+    {
+      "ErrorCode": "2716",
+      "ErrorMessage": "",
+      "Description": "好友申请不存在"
+    },
+    {
+      "ErrorCode": "2721",
+      "ErrorMessage": "",
+      "Description": "传入 updateMyProfile 接口的参数无效"
+    },
+    {
+      "ErrorCode": "2722",
+      "ErrorMessage": "",
+      "Description": "updateMyProfile 无标配资料字段或自定义资料字段"
+    },
+    {
+      "ErrorCode": "2742",
+      "ErrorMessage": "",
+      "Description": "不能拉黑自己"
+    },
+    {
+      "ErrorCode": "2800",
+      "ErrorMessage": "",
+      "Description": "网络错误"
+    },
+    {
+      "ErrorCode": "2801",
+      "ErrorMessage": "",
+      "Description": "请求超时"
+    },
+    {
+      "ErrorCode": "2805",
+      "ErrorMessage": "",
+      "Description": "未连接到网络"
+    },
+    {
+      "ErrorCode": "2903",
+      "ErrorMessage": "",
+      "Description": "未经明确定义的错误"
+    },
+    {
+      "ErrorCode": "2905",
+      "ErrorMessage": "",
+      "Description": "无效操作，如调用了未定义或者未实现的方法等"
+    },
+    {
+      "ErrorCode": "2996",
+      "ErrorMessage": "",
+      "Description": "超出 SDK 频率控制"
+    },
+    {
+      "ErrorCode": "2997",
+      "ErrorMessage": "",
+      "Description": "无法找到协议"
+    },
+    {
+      "ErrorCode": "2998",
+      "ErrorMessage": "",
+      "Description": "无法找到模块，关系链使用指引"
+    },
+    {
+      "ErrorCode": "2999",
+      "ErrorMessage": "",
+      "Description": "接口调用时机不合理，等待 SDK 处于 ready 状态后再调用（监听 TIM.EVENT.SDK_READY 事件）"
+    },
+    {
+      "ErrorCode": "3000",
+      "ErrorMessage": "",
+      "Description": "用户正在登录中导致 sdk not ready"
+    },
+    {
+      "ErrorCode": "3001",
+      "ErrorMessage": "",
+      "Description": "用户登录失败导致 sdk not ready"
+    },
+    {
+      "ErrorCode": "3002",
+      "ErrorMessage": "",
+      "Description": "用户多终端登录被踢出导致 sdk not ready"
+    },
+    {
+      "ErrorCode": "3003",
+      "ErrorMessage": "",
+      "Description": "用户多实例登录被踢出导致 sdk not ready"
+    },
+    {
+      "ErrorCode": "3004",
+      "ErrorMessage": "",
+      "Description": "用户 userSig 过期被踢出导致 sdk not ready"
+    },
+    {
+      "ErrorCode": "3005",
+      "ErrorMessage": "",
+      "Description": "用户已登出导致 sdk not ready"
+    },
+    {
+      "ErrorCode": "3006",
+      "ErrorMessage": "",
+      "Description": "用户被 REST API - kick 接口 踢出导致 sdk not ready"
+    },
+    {
+      "ErrorCode": "3021",
+      "ErrorMessage": "",
+      "Description": "topicID 非法"
+    },
+    {
+      "ErrorCode": "3122",
+      "ErrorMessage": "",
+      "Description": "套餐包不支持该接口的使用，请升级到旗舰版套餐"
+    },
+    {
+      "ErrorCode": "3123",
+      "ErrorMessage": "",
+      "Description": "文本包含本地审核拦截词"
+    },
+    {
+      "ErrorCode": "40005",
+      "ErrorMessage": "",
+      "Description": "资料字段被打击。"
+    },
+    {
+      "ErrorCode": "30005",
+      "ErrorMessage": "",
+      "Description": "当前应用没有开启关注与粉丝功能。",
+      "Solution": "需购买 旗舰版或企业版套餐包 并在 控制台 开通后方可使用。"
+    },
+    {
+      "ErrorCode": "72010",
+      "ErrorMessage": "",
+      "Description": "单用户的登录、登出、切前台、切后台和设置离线推送配置信息请求超过频率限制。",
+      "Solution": "检查是否有类似的操作。"
+    },
+    {
+      "ErrorCode": "70404",
+      "ErrorMessage": "",
+      "Description": "您使用的 SDK 版本太低，请升级到最新版本。"
+    },
+    {
+      "ErrorCode": "72002",
+      "ErrorMessage": "",
+      "Description": "您当前应用为开发版，月活跃用户数（MAU）超过免费额度。若需解除该限制，请将应用升级为专业版或旗舰版，具体操作指引请参见 购买指引。"
+    },
+    {
+      "ErrorCode": "90057",
+      "ErrorMessage": "",
+      "Description": "批量发单聊消息超出最大频率限制，需要在控制台进行相关配置，请参见：服务端 API 调频。"
+    },
+    {
+      "ErrorCode": "72011",
+      "ErrorMessage": "",
+      "Description": "请在 控制台 &gt; 登录与消息 开启全局消息免打扰相关的配置。"
+    },
+    {
+      "ErrorCode": "72012",
+      "ErrorMessage": "",
+      "Description": "请在控制台开启用户资料变更订阅配置，具体操作指引请参见 操作指引。"
+    },
+    {
+      "ErrorCode": "2004",
+      "ErrorMessage": "",
+      "Description": "该请求没有权限。"
+    },
+    {
+      "ErrorCode": "2015",
+      "ErrorMessage": "",
+      "Description": "未开启审核服务。"
+    },
+    {
+      "ErrorCode": "2016",
+      "ErrorMessage": "",
+      "Description": "添加脏词超过每次请求的限制。"
+    },
+    {
+      "ErrorCode": "93001",
+      "ErrorMessage": "",
+      "Description": "请求内部错误，如果重试未恢复，请联系我们。"
+    },
+    {
+      "ErrorCode": "93005",
+      "ErrorMessage": "",
+      "Description": "批量审核接口只支持图文审核。"
+    },
+    {
+      "ErrorCode": "93006",
+      "ErrorMessage": "",
+      "Description": "批量审核接口，存在审核超时，超时时间为5s。"
+    },
+    {
+      "ErrorCode": "93007",
+      "ErrorMessage": "",
+      "Description": "批量审核接口，不支持重复的 ContentId。"
+    },
+    {
+      "ErrorCode": "93008",
+      "ErrorMessage": "",
+      "Description": "批量审核接口，一次最多支持10个 Content 送审。"
+    },
+    {
+      "ErrorCode": "130002",
+      "ErrorMessage": "",
+      "Description": "操作权限不足，请根据错误信息检查请求参数"
+    },
+    {
+      "ErrorCode": "130004",
+      "ErrorMessage": "",
+      "Description": "公众号用户不存在，或者曾经存在过，但是目前已经被销毁"
+    },
+    {
+      "ErrorCode": "130005",
+      "ErrorMessage": "",
+      "Description": "该用户已经订阅该公众号，请勿重复订阅"
+    },
+    {
+      "ErrorCode": "130006",
+      "ErrorMessage": "",
+      "Description": "此公众号的订阅者人数已满，请参见 价格说明 购买或升级相关套餐扩展公众号的订阅人数上限"
+    },
+    {
+      "ErrorCode": "130007",
+      "ErrorMessage": "",
+      "Description": "公众号用户 ID 错误，请修改后重试"
+    },
+    {
+      "ErrorCode": "130008",
+      "ErrorMessage": "",
+      "Description": "公众号用户 ID 已经被使用，请修改后重试"
+    },
+    {
+      "ErrorCode": "130009",
+      "ErrorMessage": "",
+      "Description": "该公众号不支持删除消息"
+    },
+    {
+      "ErrorCode": "130010",
+      "ErrorMessage": "",
+      "Description": "超过预付费创建和加入公众号数量限制"
+    },
+    {
+      "ErrorCode": "131000",
+      "ErrorMessage": "",
+      "Description": "此AppId暂未开通公众号服务，请开通后重试"
+    },
+    {
+      "ErrorCode": "131003",
+      "ErrorMessage": "",
+      "Description": "订阅信息未找到，该用户可能没有订阅该公众号"
+    },
+    {
+      "ErrorCode": "131005",
+      "ErrorMessage": "",
+      "Description": "该 SDK 版本过低，不支持公众号功能，请升级 SDK 版本"
+    },
+    {
+      "ErrorCode": "30015",
+      "ErrorMessage": "",
+      "Description": "与待添加为好友的用户之间存在好友关系。"
+    },
+    {
+      "ErrorCode": "70399",
+      "ErrorMessage": "",
+      "Description": "非 IM 体验版应用，账号被删除后，三个月内不允许重新导入。"
+    },
+    {
+      "ErrorCode": "110006",
+      "ErrorMessage": "",
+      "Description": "权限组不存在，或者曾经存在过，但是目前已经被解散。"
+    },
+    {
+      "ErrorCode": "110007",
+      "ErrorMessage": "",
+      "Description": "权限组删除失败。"
+    },
+    {
+      "ErrorCode": "110008",
+      "ErrorMessage": "",
+      "Description": "无效的权限组 ID。"
+    },
+    {
+      "ErrorCode": "110009",
+      "ErrorMessage": "",
+      "Description": "未找到权限组信息。"
+    },
+    {
+      "ErrorCode": "110010",
+      "ErrorMessage": "",
+      "Description": "该话题在相应的权限组已经存在。"
+    },
+    {
+      "ErrorCode": "110011",
+      "ErrorMessage": "",
+      "Description": "该话题在相应的权限组不存在。"
+    },
+    {
+      "ErrorCode": "110012",
+      "ErrorMessage": "",
+      "Description": "权限组成员数量超过限制。"
+    },
+    {
+      "ErrorCode": "110013",
+      "ErrorMessage": "",
+      "Description": "无效的话题 ID。"
+    },
+    {
+      "ErrorCode": "110014",
+      "ErrorMessage": "",
+      "Description": "该话题权限已被删除。"
+    },
+    {
+      "ErrorCode": "110015",
+      "ErrorMessage": "",
+      "Description": "该话题权限不存在。"
+    },
+    {
+      "ErrorCode": "60025",
+      "ErrorMessage": "",
+      "Description": "RestAPI 调用 SDKAppID、Identifier、UserSig 或 ContentType 错误，请检查 URL 参数。"
+    },
+    {
+      "ErrorCode": "60026",
+      "ErrorMessage": "",
+      "Description": "RestAPI 调用域名或 SDKAppID 与应用站不匹配。"
+    },
+    {
+      "ErrorCode": "10070",
+      "ErrorMessage": "",
+      "Description": "置顶消息超出数量限制。"
+    }
+  ]
+}
+]

@@ -1,0 +1,80 @@
+{
+  "name": "databrain-opinion-expert",
+  "version": "1.0.0",
+  "description": "DataBrain Opinion Expert: player reputation and sentiment scout for score alerts, content trends, competitor comparison, and hot topic discovery.",
+  "author": {
+    "name": "DataBrain Team",
+    "email": "databrain@tencent.com"
+  },
+  "keywords": [
+    "databrain",
+    "opinion",
+    "game sentiment",
+    "brand health",
+    "hotposts",
+    "alert",
+    "competitor events",
+    "content trend"
+  ],
+  "agents": [
+    "./agents/databrain-opinion-expert.md"
+  ],
+  "skills": [
+    "./skills/databrain-opinion-metrics",
+    "./skills/databrain-opinion-summary",
+    "./skills/databrain-opinion-hotposts",
+    "./skills/databrain-opinion-alert",
+    "./skills/databrain-competitor-events",
+    "./skills/databrain-game-content-trend",
+    "./skills/opinions-crawler"
+  ],
+  "expertType": "agent",
+  "agentName": "databrain-opinion-expert",
+  "displayName": {
+    "en": "DataBrain Opinion Expert",
+    "zh": "DataBrain舆情分析专家"
+  },
+  "profession": {
+    "en": "DataBrain Opinion Expert",
+    "zh": "DataBrain舆情分析专家"
+  },
+  "displayDescription": {
+    "en": "Player reputation and opinion scout covering score alerts, content trends, competitor comparison, and hot topic discovery to sense player voices in real time.",
+    "zh": "玩家口碑与舆情侦察兵，覆盖评分告警、内容趋势、竞品对比与热点挖掘，实时感知玩家声音，辅助运营决策"
+  },
+  "avatar": "avatars/expert.jpg",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "zh": "帮我查看一款游戏近期玩家口碑与舆情变化，识别风险、热点和可跟进建议。",
+    "en": "Analyze recent player reputation and opinion changes for a game, identifying risks, hot topics, and actionable suggestions."
+  },
+  "plugin": "databrain-opinion-expert",
+  "tags": [
+    {
+      "en": "Opinion Metrics",
+      "zh": "舆情指标"
+    },
+    {
+      "en": "Score Alerts",
+      "zh": "评分告警"
+    },
+    {
+      "en": "Content Trends",
+      "zh": "内容趋势"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "帮我查看一款游戏近期玩家口碑与舆情变化，识别风险、热点和可跟进建议。",
+      "en": "Analyze recent player reputation and opinion changes for a game, identifying risks, hot topics, and actionable suggestions."
+    },
+    {
+      "zh": "帮我生成某款游戏过去 24 小时的分平台热帖日报。",
+      "en": "Generate a cross-platform hot posts digest for a game over the last 24 hours."
+    },
+    {
+      "zh": "帮我设置某款游戏的商店评分下滑告警，并说明触发阈值。",
+      "en": "Set up a store score drop alert for a game and explain the trigger thresholds."
+    }
+  ]
+}
