@@ -2,7 +2,55 @@
 
 ## 项目定位
 
-`soe` 是一个 **WorkBuddy / CodeBuddy 专家插件**（"腾讯云安全运营专家"）。它是一个 agent 型专家，覆盖漏洞管理、多产品告警研判（WAF/CWP云镜/御界NDR/天幕/SOC）、入侵溯源、DDoS流量分析、勒索病毒分析、资产管理等安全运营场景，参考 `tc-sec` 插件的架构模式实现。
+`soe` 是一个 **WorkBuddy / CodeBuddy 专家插件**（"腾讯云安全运营专家"）。它是一个 agent 型专家，覆盖漏洞管理、多产品告警研判（WAF/CWP云镜/御界NDR/天幕/CFW云防火墙/SOC）、入侵溯源、DDoS流量分析、勒索病毒分析、腾讯云产品日志排查等安全运营场景（资产关联作为告警研判的辅助能力），参考 `tc-sec` 插件的架构模式实现。
+
+## 环境准备
+
+### Python 版本
+
+本专家的子能力脚本依赖 **Python 3.8+**，请确认运行环境已安装 Python 3。
+
+```bash
+python3 --version  # 应输出 3.8+
+```
+
+### 依赖安装
+
+各子能力有独立的 `requirements.txt`，按需安装对应依赖。脚本在运行时若检测到缺失依赖会自动尝试 `pip install`，但建议预先安装以获得更稳定体验。
+
+**漏洞管理（host-cve-validator）**：
+```bash
+pip install -r skills/soe/references/vulnerability-analysis/host-cve-validator/requirements.txt
+```
+
+**漏洞管理（container-cve-fix-validator）**：
+```bash
+pip install -r skills/soe/references/vulnerability-analysis/container-cve-fix-validator/requirements.txt
+```
+
+**DDoS 攻击流量分析**：
+```bash
+pip install -r skills/soe/references/attack-analysis/ddos-analysis/scripts/requirements.txt
+```
+
+**一次性安装全部依赖**：
+```bash
+pip install -r skills/soe/references/vulnerability-analysis/host-cve-validator/requirements.txt \
+            -r skills/soe/references/vulnerability-analysis/container-cve-fix-validator/requirements.txt \
+            -r skills/soe/references/attack-analysis/ddos-analysis/scripts/requirements.txt
+```
+
+### 依赖验证
+
+```bash
+python3 -c "import openpyxl, paramiko, httpx, requests, yaml; print('核心依赖已就绪')"
+```
+
+### 入侵溯源采集脚本
+
+入侵溯源能力需要将采集脚本（`get_log_all_in_one.sh` / `get_log_all_in_one.ps1`）传到目标主机运行，目标主机无需安装 Python 依赖，脚本本身为原生 Shell / PowerShell。
+
+---
 
 ## 架构
 
@@ -28,12 +76,12 @@
 │  意图识别 → 能力匹配 → 渐进式加载 references/<能力>/SKILL.md │
 └────────────────────────────┬────────────────────────────┘
                              │ 渐进式加载
-         ┌─────────┬────────┼────────┬─────────┬──────┐
-         ▼         ▼        ▼        ▼         ▼      ▼
-┌─────────┐┌────────┐┌───────┐┌───────┐┌───────┐┌──────┐
-│漏洞管理  ││告警研判 ││入侵溯源 ││攻击分析 ││资产管理 ││通用排查│
-│(3能力)  ││(5能力)  ││(1)    ││(2)    ││(1)    ││(1)   │
-└─────────┘└────────┘└───────┘└───────┘└───────┘└──────┘
+         ┌─────────┬──────────────┬────────┬─────────┬──────────────────┐
+         ▼         ▼              ▼        ▼         ▼                  ▼
+┌─────────┐┌──────────────┐┌───────┐┌───────┐┌────────────────────┐
+│漏洞管理  ││告警研判       ││入侵溯源││攻击分析││腾讯云产品日志排查  │
+│(3能力)  ││(5能力+资产关联)││(1)    ││(2)    ││(1)                │
+└─────────┘└──────────────┘└───────┘└───────┘└────────────────────┘
 ```
 
 ## 目录结构
@@ -59,8 +107,10 @@ soe_skill/
 │           │   ├── cwp-analyzer/
 │           │   ├── yujie-analyzer/
 │           │   ├── tianmu-analyzer/
+│           │   ├── cfw-analyzer/
 │           │   └── soc-alert-pipeline/
-│           ├── intrusion-analysis/           # 入侵溯源（分类与能力同名，扁平化）
+│           ├── intrusion-analysis/           # 入侵溯源
+│           │   └── host-intrusion-analysis/
 │           ├── attack-analysis/              # 攻击分析
 │           │   ├── ddos-analysis/
 │           │   └── ransomware-analysis/
@@ -85,25 +135,26 @@ soe_skill/
 | 告警研判 | `cwp-analyzer` | CWP/云镜告警 L1 分析 |
 | 告警研判 | `yujie-analyzer` | 御界 NDR 告警 L1 分析 |
 | 告警研判 | `tianmu-analyzer` | 天幕阻断日志 L1 分析 |
+| 告警研判 | `cfw-analyzer` | CFW 云防火墙告警日志分析 |
 | 告警研判 | `soc-alert-pipeline` | SOC 告警流水线 L0 适配层 |
-| 入侵溯源 | `intrusion-analysis` | 主机入侵检测排查 |
+| 告警研判 | `asset-manager` | 告警研判资产关联辅助（IP→主机映射） |
+| 入侵溯源 | `host-intrusion-analysis` | 主机入侵检测排查 |
 | 攻击分析 | `ddos-analysis` | DDoS 攻击流量分析 |
 | 攻击分析 | `ransomware-analysis` | 勒索病毒家族识别、入侵路径分析、数据恢复评估 |
-| 资产管理 | `asset-manager` | 主机资产纳管（基础设施，供其他能力调用） |
-| 通用排查 | `log-analysis-troubleshooting` | 通用应用日志分析 |
+| 腾讯云产品日志排查 | `log-analysis-troubleshooting` | 腾讯云产品日志分析 |
 
 ## 层级依赖关系
 
 ```
 L0 适配层:    soc-alert-pipeline（统一 raw_log 解析）
                    ↓ parsed 字段
-L1 产品分析:  cwp-analyzer | yujie-analyzer | tianmu-analyzer
+L1 产品分析:  cwp-analyzer | yujie-analyzer | tianmu-analyzer | cfw-analyzer | waf-log-analyzer
                    ↓ 结构化事件
 L2 跨产品关联（关联多产品 L1 输出）
 
-资产数据层:   asset-manager（为所有能力提供 IP→主机映射）
+资产数据层:   asset-manager（告警研判资产关联辅助，提供 IP→主机映射）
 独立能力:     vul-analyse | host-cve-validator | container-cve-fix-validator
-              waf-log-analyzer | ddos-analysis | intrusion-analysis
+              host-intrusion-analysis | ddos-analysis
               ransomware-analysis | log-analysis-troubleshooting
 ```
 

@@ -1,0 +1,200 @@
+{
+  "name": "fbsir-eight-seat-board",
+  "version": "26.7.20",
+  "description": "FBSir Independent Review Board is a configurable AI decision-review team for real-economy leaders, producing evidence-aware, dissent-preserving and action-oriented review memos.",
+  "author": {
+    "name": "福帮手",
+    "email": "unique@u3w.com"
+  },
+  "brand": {
+    "en": "FBSir",
+    "zh": "福帮手"
+  },
+  "governanceModel": {
+    "schema": "fbsir-independent-review-board/v2",
+    "inspiration": "independent-director-form",
+    "notLegalBoard": true,
+    "noFiduciaryAuthority": true,
+    "aiRolesOnly": true,
+    "noEntityInterests": true,
+    "decisionOwner": "user"
+  },
+  "productIdentity": {
+    "productClass": "ai-expert-team",
+    "canonicalName": {
+      "en": "FBSir Independent Review Board",
+      "zh": "独董会"
+    },
+    "stablePackageId": "fbsir-eight-seat-board",
+    "relationshipToListedSuperPartner": "independent-product",
+    "notAliasOf": "fbsir-super-partner-group",
+    "evidenceNamespace": "fbsir-eight-seat-board"
+  },
+  "experienceModel": {
+    "principle": "configurable-role-pool-case-specific-panel",
+    "defaultMode": "standard_review",
+    "teamCreationRequiresExplicitConfirmation": true,
+    "primaryCta": "确认议案卡并开始独立审议",
+    "modes": ["quick_review", "standard_review", "deep_review"],
+    "connectorRequired": false,
+    "firstValue": "decision_start_card",
+    "rosterPolicy": {
+      "countMutable": true,
+      "leadCount": 1,
+      "supportRoleCount": 1,
+      "minimumSpecialistPoolSize": 1,
+      "currentMemberSource": "members",
+      "professionalSeatFilter": "seatClass is absent or equals professional_review",
+      "supportRolesDoNotCountAsProfessionalSeats": true,
+      "selectionByMode": {
+        "quick_review": "one_relevant_specialist",
+        "standard_review": "two_to_three_relevant_specialists_capped_by_available_pool",
+        "deep_review": "two_to_three_relevant_specialists_for_deep_review_preparation"
+      }
+    }
+  },
+  "keywords": ["福帮手", "FBSir", "独董会", "独立审议", "经营决策", "一号位决策", "实体企业"],
+  "agents": [
+    "./agents/board-convener.md",
+    "./agents/board-secretary.md",
+    "./agents/strategy-partner.md",
+    "./agents/capital-partner.md",
+    "./agents/growth-partner.md",
+    "./agents/operations-partner.md",
+    "./agents/org-partner.md",
+    "./agents/legal-partner.md",
+    "./agents/digital-partner.md"
+  ],
+  "skills": [
+    "./skills/independent-board-core"
+  ],
+  "expertType": "team",
+  "agentName": "board-convener",
+  "teamInfo": {
+    "leadAgent": "board-convener",
+    "memberAgents": [
+      "board-secretary",
+      "strategy-partner",
+      "capital-partner",
+      "growth-partner",
+      "operations-partner",
+      "org-partner",
+      "legal-partner",
+      "digital-partner"
+    ]
+  },
+  "displayName": {
+    "en": "Independent Review Board",
+    "zh": "福帮手"
+  },
+  "profession": {
+    "en": "Independent Review Board",
+    "zh": "独董会"
+  },
+  "displayDescription": {
+    "en": "Configurable FBSir AI decision-review team: frame the decision, convene only the necessary seats, surface dissent and deliver a traceable action memo.",
+    "zh": "福帮手经营决策独立审议专家团｜按案组建必要席位，独立判断、交叉质询、保留异议，交付可追溯行动备忘录"
+  },
+  "avatar": "avatars/team.png",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "我正在面对一个重要经营决策。请先给我一张决策起手卡，说明真正要决定什么、还缺哪些关键事实，以及应该采用快审、标准审议还是深度审议；在我确认议案卡前不要建团。",
+    "en": "I am facing an important business decision. Start with a decision card: clarify the real decision, critical evidence gaps, and whether this needs a quick, standard, or deep review. Do not create a team until I confirm the card."
+  },
+  "plugin": "fbsir-eight-seat-board",
+  "tags": [
+    { "en": "Executive Decision", "zh": "一号位决策" },
+    { "en": "Independent Review", "zh": "独立审议" },
+    { "en": "Decision Memo", "zh": "决策备忘录" }
+  ],
+  "quickPrompts": [
+    {
+      "en": "I am facing an important business decision. Start with a decision card: clarify the real decision, critical evidence gaps, and whether this needs a quick, standard, or deep review. Do not create a team until I confirm the card.",
+      "zh": "我正在面对一个重要经营决策。请先给我一张决策起手卡，说明真正要决定什么、还缺哪些关键事实，以及应该采用快审、标准审议还是深度审议；在我确认议案卡前不要建团。"
+    },
+    {
+      "en": "Start with a decision card for this M&A or investment decision. Select at most three conclusion-changing specialist seats from strategy, finance, legal and integration, preserve dissent, and wait for my confirmation before creating a team.",
+      "zh": "请先为这个并购或投资决策形成决策起手卡，从战略、资本财务、法务和整合候选中最多选择三个会改变结论的专业席并保留异议；在我确认前不要建团。"
+    },
+    {
+      "en": "Our growth has stalled. Start with a decision card on deepening the core business, changing channels, or testing a second curve, and wait for my confirmation before creating a team.",
+      "zh": "公司增长停滞了，请先形成决策起手卡，比较深挖主业、变革渠道和小试第二曲线；在我确认前不要建团。"
+    }
+  ],
+  "members": [
+    {
+      "id": "board-convener",
+      "name": { "en": "Chang Yuanlv", "zh": "常远虑" },
+      "displayName": { "en": "Chang Yuanlv", "zh": "常远虑" },
+      "profession": { "en": "Independent Review Convener", "zh": "独立审议召集人" },
+      "avatar": "avatars/board-convener.png",
+      "role": "lead"
+    },
+    {
+      "id": "board-secretary",
+      "name": { "en": "Ji Zhouquan", "zh": "纪周全" },
+      "displayName": { "en": "Ji Zhouquan", "zh": "纪周全" },
+      "profession": { "en": "Board Operations Secretary", "zh": "独董会秘书" },
+      "avatar": "avatars/board-secretary.png",
+      "role": "member",
+      "seatClass": "process_support",
+      "voting": false
+    },
+    {
+      "id": "strategy-partner",
+      "name": { "en": "Zhan Weigao", "zh": "詹维高" },
+      "displayName": { "en": "Zhan Weigao", "zh": "詹维高" },
+      "profession": { "en": "Strategy Review Seat", "zh": "战略独立审议席" },
+      "avatar": "avatars/strategy-partner.png",
+      "role": "member"
+    },
+    {
+      "id": "capital-partner",
+      "name": { "en": "Jin Runze", "zh": "金润泽" },
+      "displayName": { "en": "Jin Runze", "zh": "金润泽" },
+      "profession": { "en": "Capital & Finance Review Seat", "zh": "资本财务独立审议席" },
+      "avatar": "avatars/capital-partner.png",
+      "role": "member"
+    },
+    {
+      "id": "growth-partner",
+      "name": { "en": "Zhang Yang", "zh": "张扬" },
+      "displayName": { "en": "Zhang Yang", "zh": "张扬" },
+      "profession": { "en": "Growth & Marketing Review Seat", "zh": "营销增长独立审议席" },
+      "avatar": "avatars/growth-partner.png",
+      "role": "member"
+    },
+    {
+      "id": "operations-partner",
+      "name": { "en": "Zhen Shigan", "zh": "甄实干" },
+      "displayName": { "en": "Zhen Shigan", "zh": "甄实干" },
+      "profession": { "en": "Operations Review Seat", "zh": "制造运营独立审议席" },
+      "avatar": "avatars/operations-partner.png",
+      "role": "member"
+    },
+    {
+      "id": "org-partner",
+      "name": { "en": "Liu Chengyin", "zh": "柳成荫" },
+      "displayName": { "en": "Liu Chengyin", "zh": "柳成荫" },
+      "profession": { "en": "Organization & HR Review Seat", "zh": "组织人力独立审议席" },
+      "avatar": "avatars/org-partner.png",
+      "role": "member"
+    },
+    {
+      "id": "legal-partner",
+      "name": { "en": "Yan Shoucheng", "zh": "严守成" },
+      "displayName": { "en": "Yan Shoucheng", "zh": "严守成" },
+      "profession": { "en": "Legal & Risk Review Seat", "zh": "法务风控独立审议席" },
+      "avatar": "avatars/legal-partner.png",
+      "role": "member"
+    },
+    {
+      "id": "digital-partner",
+      "name": { "en": "Shu Zhishen", "zh": "舒智深" },
+      "displayName": { "en": "Shu Zhishen", "zh": "舒智深" },
+      "profession": { "en": "Digital & AI Review Seat", "zh": "数智化独立审议席" },
+      "avatar": "avatars/digital-partner.png",
+      "role": "member"
+    }
+  ]
+}

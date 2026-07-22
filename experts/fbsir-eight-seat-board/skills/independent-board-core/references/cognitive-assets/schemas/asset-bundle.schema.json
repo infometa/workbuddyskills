@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fbsir.example/schemas/cognitive-asset-bundle.v1.json",
+  "title": "FBSir Cognitive Asset Bundle",
+  "type": "object",
+  "required": [
+    "schema", "catalogVersion", "asOf", "agendaItemId", "seatId", "revision", "phase",
+    "decisionCardHash", "routingInput", "routingInputHash", "selectedAssets", "routingReasons", "charCount",
+    "evidenceBoundary", "bundleDigest"
+  ],
+  "properties": {
+    "schema": { "const": "fbsir.asset-bundle/v1" },
+    "catalogVersion": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$" },
+    "asOf": { "type": "string", "format": "date" },
+    "agendaItemId": { "$ref": "#/$defs/id" },
+    "seatId": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "phase": { "enum": ["phase0_intake", "phase1_independent", "phase1_process_support", "phase2_challenge", "phase3_synthesis"] },
+    "decisionCardHash": { "$ref": "#/$defs/sha" },
+    "routingInput": {
+      "type": "object",
+      "required": ["sceneIds", "routingTerms"],
+      "properties": {
+        "sceneIds": { "type": "array", "maxItems": 10, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 64 } },
+        "routingTerms": { "type": "array", "maxItems": 20, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 80 } }
+      },
+      "unevaluatedProperties": false
+    },
+    "routingInputHash": { "$ref": "#/$defs/sha" },
+    "selectedAssets": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["assetId", "kind", "version", "ownerSeatIds", "sourceRefs", "contentPath", "contentSha256", "content"],
+        "properties": {
+          "assetId": { "$ref": "#/$defs/id" },
+          "kind": { "enum": ["method", "checklist", "counterexample", "case"] },
+          "version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$" },
+          "ownerSeatIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+          "sourceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^src:[A-Za-z0-9][A-Za-z0-9._-]{0,119}$" } },
+          "contentPath": { "type": "string", "minLength": 1, "maxLength": 300 },
+          "contentSha256": { "$ref": "#/$defs/sha" },
+          "content": { "type": "string", "minLength": 1, "maxLength": 12000 }
+        },
+        "unevaluatedProperties": false
+      }
+    },
+    "routingReasons": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["assetId", "kind", "score", "reasonCodes"],
+        "properties": {
+          "assetId": { "$ref": "#/$defs/id" },
+          "kind": { "enum": ["method", "checklist", "counterexample", "case"] },
+          "score": { "type": "integer" },
+          "reasonCodes": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" } }
+        },
+        "unevaluatedProperties": false
+      }
+    },
+    "charCount": { "type": "integer", "minimum": 0, "maximum": 12000 },
+    "evidenceBoundary": { "const": "bundle_selected_materialized_and_hash_bound_not_cognitive_use_proof" },
+    "bundleDigest": { "$ref": "#/$defs/sha" }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$" },
+    "sha": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

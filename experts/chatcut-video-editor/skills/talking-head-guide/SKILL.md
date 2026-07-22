@@ -11,9 +11,9 @@ user-invocable: true
 
 **Required input**: an existing talking-head / 口播 video uploaded to the project. If the user wants to start without one (e.g., generate a fresh talking-head from scratch), this skill doesn't apply.
 
-**When the user enters this workflow without a source video uploaded yet, ask only for missing treatment or preference decisions in ordinary WorkBuddy chat.** For source media, use a readable WorkBuddy attachment/path with `asset-import`, or ask the user to upload it in the ChatCut editor when the host cannot read the file.
+**When the user enters this workflow without a source video uploaded yet, ask only for missing treatment or preference decisions in ordinary WorkBuddy chat.** Load `asset-import` for the source media and follow its WorkBuddy upload strategy, including its editor upload fallback when local automation is unavailable.
 
-If this workflow creates, targets, or opens a ChatCut project, surface the returned WorkBuddy preview or exact ChatCut editor link before nontrivial edits and again before final delivery when the visible editor may no longer match the project.
+If this workflow creates, targets, or opens a ChatCut project, follow the expert's editor handoff rules before nontrivial edits and again before final delivery when the visible editor may no longer match the project.
 
 Independent treatments that can be applied to talking-head videos. Pick the ones that match what the user wants — not all are needed every time.
 
@@ -30,11 +30,13 @@ Independent treatments that can be applied to talking-head videos. Pick the ones
 
 Beyond picking treatments, a talking-head edit is shaped by several orthogonal variables. When the user's ask is vague, these are what's worth clarifying first:
 
-- **Target** — platform (YouTube / TikTok / Shorts / ...), desired length, aspect ratio
+- **Target** — platform (YouTube / TikTok / Shorts / ...), desired length, and final canvas aspect ratio
 - **Which treatments to apply** — the treatments above are optional; don't assume all of them apply
 - **Pacing / tone** — tight / energetic / formal / casual; brand or voice preferences if stated. (For MG visual style, follow the active Motion Graphics skill/workflow.)
 
 When more than one of these variables is missing, ask them together in one concise WorkBuddy message. Do not run a fixed questionnaire or ask for decisions already visible in the project or source material.
+
+Resolve and apply the final canvas before placing the first visual item. An explicit user ratio wins; otherwise use the platform convention when it is unambiguous, or the primary source ratio when neither platform nor ratio is specified. Update the target timeline with `manage_timelines` and read it back before visual assembly.
 
 ## Order of execution
 
@@ -44,7 +46,7 @@ The speech timing (set by A-roll editing) anchors everything downstream — MG p
 
 So: finalize A-roll editing before committing any visual, audio, or text layer. Don't write captions against pre-edit speech, don't cut music to pre-edit length, don't place MG against timing that will shift.
 
-**You must confirm the result with the user after each major step before starting the next**, unless the user has explicitly asked to run end-to-end without stopping. Key checkpoints when multiple treatments apply: after A-roll editing finalizes the speech timing; before MG generation (confirm style and direction, and, when it isn't obvious, whether it sits over the video as an overlay or takes the whole frame); after MG generation; same pattern for B-roll, music, and captions. **Don't bundle multiple checkpoints into one response — confirm each step separately.** An upstream mistake forces redoing everything downstream (e.g., MG placed against pre-cleanup timing wastes generation credits when the timeline shifts).
+**You must confirm the result with the user after each major step before starting the next**, unless the user has explicitly asked to run end-to-end without stopping. Key checkpoints when multiple treatments apply: after A-roll editing finalizes the speech timing; before MG creation (confirm style and direction, and, when it isn't obvious, whether it sits over the video as an overlay or takes the whole frame); after MG placement; same pattern for B-roll, music, and captions. **Don't bundle multiple checkpoints into one response — confirm each step separately.** An upstream mistake forces redoing everything downstream (for example, an MG placed against pre-cleanup timing must be repositioned after the timeline shifts).
 
 ---
 
@@ -426,23 +428,6 @@ Before creating the MG, make four linked editor decisions. They prepare the acti
 | **Timing**             | When should it land with the speech?                            | Timeline start, duration, read time, and internal motion beats. |
 | **Form and placement** | What kind of MG is it, and where can it live safely?            | MG form / size, then timeline placement after asset creation.   |
 | **Background**         | Is this an overlay on the talking-head shot, or its own moment? | Transparent overlay or opaque / full-screen beat.               |
-
-#### Only for generator workflows that require a brief
-
-Use this subsection only when the active Motion Graphics workflow explicitly asks you to write a generation brief or request for another model or generator, such as Gemini / motion-graphic-gen.
-
-WorkBuddy uses the generator workflow in this package: prepare the brief, confirm any credit spend, and call the visible `submit_motion_graphic` tool. Do not invent a direct JSX-authoring path when that tool is not exposed.
-
-For generator workflows, carry the visual language into the tool call. For now, templates are generation references, not direct-apply targets. Template refs from a Design Style are no different from any other template ID. For new MG assets, pass one code reference source: same-role role anchor with `referenceAssetIds: ["<roleAnchorAssetId>:template"]` only when the visual job, structure, and canvas role are the same; otherwise use the matched template ID directly, for example `referenceAssetIds: ["<templateId>:style"]`. If no template matches, write the confirmed Direction in the brief and use any accepted role anchor only for the same role. Template slot counts are not user constraints: if the user asks for more/fewer bars, rows, items, or data points than the template shows, generate a new structure instead of asking them to fit the slots.
-
-When a template or role anchor is passed, keep the Gemini brief focused on content, role / broad form, background, and frame constraints. Let the reference carry detailed style and motion language.
-
-Map the four shared decisions into a generator brief like this:
-
-- **Content** -> `Content` in the brief.
-- **Timing** -> timeline start, plus internal `Timing` only when the MG has its own beats. Internal `Timing` values say _when_ each element appears, not _how_ it moves; leave the motion style to Gemini.
-- **Form and placement** -> `Size & shape` in the brief, not final canvas placement. Do not write final `left`, `top`, `right`, `bottom`, coordinates, or placement anchors such as "lower-left" / "top-right" into the Gemini brief.
-- **Background** -> `Background: transparent` or `Background: opaque`.
 
 #### 1. Content
 

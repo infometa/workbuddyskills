@@ -1,0 +1,67 @@
+{
+  "name": "jinshuju-expert",
+  "version": "1.0.0",
+  "description": "Build forms and manage form data on Jinshuju (jinshuju.net) with natural language",
+  "author": {
+    "name": "Jinshuju",
+    "email": "marketing@jinshuju.net"
+  },
+  "expertType": "agent",
+  "agentName": "jinshuju-expert",
+  "agents": [
+    "./agents/jinshuju-expert.md"
+  ],
+  "skills": [
+    "./skills/jinshuju"
+  ],
+  "displayName": {
+    "en": "Jinshuju",
+    "zh": "金数据"
+  },
+  "profession": {
+    "en": "Jinshuju Forms & Data Expert",
+    "zh": "金数据表单与数据管理专家"
+  },
+  "displayDescription": {
+    "en": "Through the Jinshuju MCP, build and edit forms, create/query/update/bulk-maintain entries, and check plan quota in natural language, replacing manual work in the web console",
+    "zh": "通过金数据 MCP 用自然语言搭建表单、增删改查与批量维护数据、查询套餐额度，替代登录后台手动操作"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "zh": "列一下我金数据里的表单",
+    "en": "List the forms in my Jinshuju account"
+  },
+  "tags": [
+    {
+      "en": "Form Builder",
+      "zh": "表单搭建"
+    },
+    {
+      "en": "Data Management",
+      "zh": "数据管理"
+    },
+    {
+      "en": "No-Code",
+      "zh": "零代码"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "List the forms in my Jinshuju account",
+      "zh": "列一下我金数据里的表单"
+    },
+    {
+      "en": "Create an event registration form for me",
+      "zh": "帮我建一个活动报名表"
+    },
+    {
+      "en": "Export the last 7 days of entries from this form",
+      "zh": "把这张表单最近 7 天的数据导出来"
+    }
+  ],
+  "plugin": "jinshuju-expert",
+  "dependencies": {
+    "mcpServers": "./.mcp.json"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "fbsir.independent-review-commitment-traceability/v1",
+  "productVersion": "26.7.20",
+  "evidenceBoundary": "package-contained traceability only; host invocation, official listing and product credit require separate receipts",
+  "commitments": [
+    {
+      "id": "canonical-identity",
+      "promise": "公开产品名为独董会，品牌为福帮手/FBSir，稳定技术包 ID 不作为人数承诺。",
+      "evidenceFiles": [".codebuddy-plugin/plugin.json", "README.md", "contracts/runtime-capabilities.json"]
+    },
+    {
+      "id": "marketplace-card-identity",
+      "promise": "WorkBuddy Team 标题字段同为产品名独董会，中文市场发布方/品牌行为福帮手；author.name 是单一非本地化字段，英文品牌 FBSir 保留在 brand.en 元数据中，不承诺作者行随语言自动切换。",
+      "evidenceFiles": [".codebuddy-plugin/plugin.json", "README.md", "contracts/runtime-capabilities.json", "examples/acceptance-cases.json"]
+    },
+    {
+      "id": "first-value-before-team",
+      "promise": "首次响应先交付决策起手卡，用户明确确认前不得建团。",
+      "evidenceFiles": [".codebuddy-plugin/plugin.json", "agents/board-convener.md", "references/review-protocol.md", "examples/acceptance-cases.json"]
+    },
+    {
+      "id": "review-plan-gate",
+      "promise": "确认前的起手卡选席必须经过不写案卷、无需确认回执的提案校验；确认后的会议计划必须再校验议题上限、模式、专业席、流程支持席和确认回执；两种校验都不冒充宿主动作。",
+      "evidenceFiles": ["contracts/runtime-capabilities.json", "skills/independent-board-core/SKILL.md", "skills/independent-board-core/scripts/board-envelope.mjs", "skills/independent-board-core/templates/seat-proposal-envelope.json", "skills/independent-board-core/templates/review-plan-envelope.json"]
+    },
+    {
+      "id": "public-review-mode-limits",
+      "promise": "快审为 1 个专业席；标准审议与深度准备为 2—3 个专业席；一次运行最多 5 个议题。",
+      "evidenceFiles": ["contracts/runtime-capabilities.json", "agents/board-convener.md", "references/review-protocol.md", "skills/independent-board-core/scripts/lib/core.mjs"]
+    },
+    {
+      "id": "manifest-driven-roster",
+      "promise": "实际角色池由 manifest 驱动，流程支持席不计专业席，移除席位不得被脚本或召集人继续引用。",
+      "evidenceFiles": [".codebuddy-plugin/plugin.json", "contracts/runtime-capabilities.json", "agents/board-convener.md", "skills/independent-board-core/scripts/lib/core.mjs"]
+    },
+    {
+      "id": "secretary-boundary",
+      "promise": "秘书只承担流程支持，不投票、不替代专业席，不虚构宿主能力。",
+      "evidenceFiles": ["agents/board-secretary.md", "contracts/runtime-capabilities.json", "references/operating-constitution.md", "skills/independent-board-core/scripts/lib/core.mjs"]
+    },
+    {
+      "id": "real-team-toolchain",
+      "promise": "只有真实 TeamCreate、AgentTool/Agent 与 SendMessage 宿主回执才能证明对应宿主动作；成员侧成功观察不得冒充宿主签名回执或主会话消费。",
+      "evidenceFiles": ["agents/board-convener.md", "contracts/runtime-capabilities.json", "references/review-protocol.md", "skills/independent-board-core/references/event-contract.md"]
+    },
+    {
+      "id": "durable-result-recovery",
+      "promise": "召集人先耐久记录起手卡哈希绑定的冻结计划与每席任务，并把任务原始字节哈希贯穿同一议题、席位和修订的派发请求、派发终态、收齐与交付；成员先耐久记录结果，SendMessage 成功后再记录哈希绑定的成员侧投递观察；召集人按全部选定参与席 N/N 收齐或一次重试后明确失败，宿主漏唤醒时仍可恢复内容，秘书流程支持不成为旁路。",
+      "evidenceFiles": ["agents/board-convener.md", "contracts/runtime-capabilities.json", "references/review-protocol.md", "skills/independent-board-core/SKILL.md", "skills/independent-board-core/scripts/board-collect.mjs", "skills/independent-board-core/scripts/board-record.mjs"]
+    },
+    {
+      "id": "phase-isolated-cognitive-assets",
+      "promise": "每个议题与席位使用独立、同席、限量且有效的认知资产短包；首轮只允许一张方法卡和一张清单，任务与结果用唯一 assetbundle 摘要绑定，收齐前重放冻结路由并复核资料有效期、新鲜度与当前字节。",
+      "evidenceFiles": ["agents/board-convener.md", "agents/board-secretary.md", "contracts/runtime-capabilities.json", "references/review-protocol.md", "skills/independent-board-core/references/cognitive-assets/manifest.v1.json", "skills/independent-board-core/scripts/board-assets.mjs", "skills/independent-board-core/scripts/lib/core.mjs"]
+    },
+    {
+      "id": "decision-quality-and-journal",
+      "promise": "最终交付检查决策框架、替代、信息、取舍、推理和执行承诺六链，并留下选择、指标、触发器、负责人和复审日期；不以流程质量保证结果。",
+      "evidenceFiles": ["agents/board-convener.md", "agents/board-secretary.md", "references/review-protocol.md", "skills/independent-board-core/references/document-delivery.md", "examples/acceptance-cases.json"]
+    },
+    {
+      "id": "no-connector-first-value",
+      "promise": "连接器不可用不阻断首次价值；不可核事实保持为假设或待人工核验。",
+      "evidenceFiles": ["README.md", "agents/board-convener.md", "references/operating-constitution.md", "examples/acceptance-cases.json"]
+    },
+    {
+      "id": "long-document-quality-gate",
+      "promise": "正式产物保留来源、真实席位回执、异议、条件和人工验收；文件存在不等于完成或验收。",
+      "evidenceFiles": ["agents/board-secretary.md", "skills/independent-board-core/references/document-delivery.md", "examples/acceptance-cases.json"]
+    },
+    {
+      "id": "default-artifact-delivery",
+      "promise": "收齐后默认生成模式对应的 Markdown 文件，并在结果/失败、收齐和成稿的精确哈希事件绑定、规范标题和文件哈希校验通过后向用户展示；聊天完成态或文件存在都不等于验收。",
+      "evidenceFiles": ["README.md", "agents/board-convener.md", "references/review-protocol.md", "examples/acceptance-cases.json", "skills/independent-board-core/scripts/board-delivery.mjs"]
+    },
+    {
+      "id": "proof-layer-separation",
+      "promise": "包级、本地宿主、正式上架、自然同绑定、产品信用和商业闭环分别记账。",
+      "evidenceFiles": ["README.md", "contracts/runtime-capabilities.json", "skills/independent-board-core/references/event-contract.md"]
+    }
+  ]
+}

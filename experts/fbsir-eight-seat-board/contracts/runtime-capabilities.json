@@ -1,0 +1,253 @@
+{
+  "schema": "fbsir-independent-review-runtime/v2",
+  "product": {
+    "packageId": "fbsir-eight-seat-board",
+    "nameZh": "独董会",
+    "nameEn": "FBSir Independent Review Board",
+    "brandZh": "福帮手",
+    "brandEn": "FBSir",
+    "version": "26.7.20"
+  },
+  "uiIdentity": {
+    "cardTitleFields": ["displayName", "profession"],
+    "cardTitleZh": "独董会",
+    "cardTitleEn": "Independent Review Board",
+    "teamNameFieldsMustMatch": true,
+    "marketplaceBylineField": "author.name",
+    "marketplaceByline": "福帮手",
+    "englishBrandMetadata": "FBSir",
+    "authorFieldLocalizedBySpec": false,
+    "authorLocalizationPolicy": "single_author_field_prioritizes_chinese_marketplace_byline_while_english_brand_remains_in_brand.en",
+    "localMyExpertsBylineMayBeHidden": true,
+    "evidenceBasis": "WorkBuddy 2.3 validator plus local WorkBuddy 5.2.6 team-card and My Experts readback"
+  },
+  "compliance": {
+    "expertSpecVersion": "2.3",
+    "expertSpecFileName": "WorkBuddy+专家开发规范2.3.md",
+    "expertSpecSha256": "F7C0ADF634F373F125352181B6A5A20E20C5C256751EA5ED72FC3E9B6C3FB1DC"
+  },
+  "roster": {
+    "leadAgentId": "board-convener",
+    "supportAgentIds": ["board-secretary"],
+    "specialistSeatIds": [
+      "strategy-partner",
+      "capital-partner",
+      "growth-partner",
+      "operations-partner",
+      "org-partner",
+      "legal-partner",
+      "digital-partner"
+    ],
+    "source": ".codebuddy-plugin/plugin.json#members",
+    "countPolicy": "configurable",
+    "countMutable": true,
+    "minimumSpecialistPoolSize": 1,
+    "supportRolesCountAsProfessionalSeats": false,
+    "supportRolesVote": false
+  },
+  "publicCore": {
+    "connectorRequired": false,
+    "agendaItemsPerRunMax": 5,
+    "overLimitPolicy": "split_by_dependency_risk_and_decision_time",
+    "dailyMeetingLimitIntent": 1,
+    "dailyMeetingLimitEnforcement": "not_implemented_requires_u3w_entitlement_service",
+    "commercialEntitlementStatus": "future_wave_not_claimed_by_26.7.20_package",
+    "secretaryMode": "basic_process_support",
+    "fullCapabilityBrokerRequiresVerifiedEntitlement": true
+  },
+  "firstValue": {
+    "deliverable": "decision_start_card",
+    "teamCreationRequiresExplicitConfirmation": true,
+    "primaryCta": "确认议案卡并开始独立审议",
+    "questionsMax": 3,
+    "seatProposalSchema": "fbsir.review-seat-proposal/v1",
+    "seatProposalValidationCommand": "envelope.proposal.validate",
+    "seatProposalWritesWorkspace": false,
+    "seatProposalRequiresUserConfirmation": false
+  },
+  "reviewModes": {
+    "quick_review": {
+      "activeSpecialistSeats": { "min": 1, "max": 1 },
+      "challengeRounds": 0,
+      "deliverable": "quick_review_card"
+    },
+    "standard_review": {
+      "activeSpecialistSeats": { "min": 2, "max": 3 },
+      "challengeRounds": 1,
+      "deliverable": "review_memo"
+    },
+    "deep_review": {
+      "publicCoreActiveSpecialistSeats": { "min": 2, "max": 3 },
+      "challengeRounds": 1,
+      "deliverable": "deep_review_preparation_card",
+      "expandedPanelPolicy": "only_when_host_resources_and_verified_entitlement_allow",
+      "neverMeansMechanicalFullRoster": true
+    }
+  },
+  "requiredOperations": [
+    {
+      "semanticOperation": "team.create",
+      "spec23ToolName": "TeamCreate",
+      "workBuddy526ToolName": "TeamCreate",
+      "ownerOnly": "board-convener",
+      "requiredBefore": "first_member_dispatch",
+      "receiptRequired": true
+    },
+    {
+      "semanticOperation": "teammate.spawn",
+      "spec23ToolName": "AgentTool",
+      "workBuddy526ToolName": "Agent",
+      "nameAndSubagentType": "member_agent_id",
+      "requiredBefore": "member_result",
+      "receiptRequired": true
+    },
+    {
+      "semanticOperation": "teammate.message_to_lead",
+      "spec23ToolName": "SendMessage",
+      "workBuddy526ToolName": "SendMessage",
+      "target": "board-convener",
+      "requiredBefore": "result_attribution",
+      "receiptRequired": true
+    }
+  ],
+  "scriptedCoordination": {
+    "skill": "independent-board-core",
+    "workspaceRequiredFor": "confirmed_local_review_after_decision_start_card",
+    "sharedStateWriter": "board-convener",
+    "memberOwnedArtifacts": ["drafts/<seat>", "results/<agenda>/<seat>.r<revision>.json", "receipts/<agenda>/<seat>.r<revision>.send-message.json"],
+    "convenerOwnedArtifacts": [
+      ".fbsir-board/plans/<runId>.json",
+      "tasks/<agenda>/<seat>.task.r<revision>.json",
+      "tasks/<agenda>/<seat>.assets.r<revision>.json",
+      "failures/<agenda>/<seat>.r<revision>.json"
+    ],
+    "taskByteHashLifecycle": "recorded_task_raw_bytes_sha256_bound_to_dispatch_requested_dispatch_resolution_collection_and_delivery",
+    "seatEventScope": "agendaItemId_plus_seatId_plus_revision",
+    "contentTelemetry": false,
+    "commands": [
+      "workspace.init",
+      "workspace.status",
+      "scene.route",
+      "asset.catalog.validate",
+      "asset.decision_card.hash",
+      "asset.bundle.build",
+      "asset.bundle.verify",
+      "envelope.proposal.validate",
+      "envelope.plan.validate",
+      "envelope.task.validate",
+      "envelope.result.validate",
+      "envelope.delivery.validate",
+      "envelope.failure.validate",
+      "record.plan",
+      "record.task",
+      "record.result",
+      "record.delivery_observation",
+      "record.failure",
+      "review.collect",
+      "delivery.prepare",
+      "event.append",
+      "event.verify",
+      "checkpoint.create"
+    ],
+    "doesNotReplace": ["TeamCreate", "AgentTool", "Agent", "SendMessage"]
+  },
+  "cognitiveAssets": {
+    "catalogVersion": "26.7.20-cog.1",
+    "manifest": "skills/independent-board-core/references/cognitive-assets/manifest.v1.json",
+    "sourceLedger": "skills/independent-board-core/references/cognitive-assets/source-ledger.v1.json",
+    "roleCount": 9,
+    "assetCount": 21,
+    "sourceCount": 6,
+    "phaseOnePolicy": "one_same_seat_method_plus_one_same_seat_checklist_only",
+    "phaseTwoPolicy": "after_first_round_sealed_at_most_one_relevant_counterexample_or_case_with_new_revision",
+    "phaseThreePolicy": "convener_method_bundle_cannot_replace_specialist_opinions",
+    "binding": "exactly_one_matching_assetbundle_sha256_in_task_and_result_evidenceRefs",
+    "collectionGate": "replay_frozen_routing_and_verify_bundle_identity_phase_seat_build_date_current_source_effectivity_freshness_content_hash_and_budget_before_accepting_result",
+    "decisionCardContentPersistedByHashCommand": false,
+    "externalFactStatus": "asset_cards_are_reasoning_scaffolds_not_external_fact_or_effect_proof",
+    "installedExpertPackagesAreRuntimeDependencies": false
+  },
+  "resultRecovery": {
+    "expectedCoverage": "N_of_N_selected_participants_per_agenda_with_at_least_one_accepted_professional_result",
+    "acceptedPair": ["validated_member_result", "hash_bound_member_observed_SendMessage_success"],
+    "failureClosure": "one_retry_then_convener_records_unavailable_after_retry",
+    "taskDispatchBinding": "exact_task_file_bytes_sha256_on_dispatch_requested_and_dispatched_or_dispatch_failed",
+    "seatEventScope": "agendaItemId_plus_seatId_plus_revision",
+    "teamTerminalSignalIsCollectionProof": false,
+    "uiGreenCheckIsCollectionProof": false,
+    "memberObservationIsHostSignedReceipt": false,
+    "memberObservationProvesLeadConsumption": false,
+    "recoveredResultEvent": "seat.result_recovered_with_exact_result_payload_hash",
+    "failedResultEvent": "seat.result_failed_with_exact_failure_payload_hash",
+    "collectionReadyEvent": "collection.ready_with_exact_collection_payload_hash_after_round_seal",
+    "compiledArtifactEvent": "memo.compiled_with_exact_artifact_sha256_before_delivery_prepare",
+    "eventBindingRequiredForDelivery": true,
+    "defaultArtifacts": {
+      "quick_review": "deliverables/独董会快速审议卡.md",
+      "standard_review": "deliverables/独董会审议备忘录.md",
+      "deep_review": "deliverables/独董会深度审议准备卡.md"
+    }
+  },
+  "secretary": {
+    "agentId": "board-secretary",
+    "role": "capability_broker_and_delivery_coordinator",
+    "publicCoreCapabilities": [
+      "authorized_material_index",
+      "host_capability_discovery",
+      "source_and_version_ledger",
+      "progress_card",
+      "long_document_structure",
+      "artifact_acceptance_checklist",
+      "decision_quality_six_link_gate",
+      "decision_journal",
+      "spcbg_document_gate"
+    ],
+    "futureEntitledCapabilities": [
+      "deep_research",
+      "formal_document_project",
+      "translation_delivery",
+      "image_and_video_generation",
+      "pdf_generation",
+      "content_publication",
+      "automation"
+    ],
+    "availabilityBoundary": "26.7.20 exposes basic process support as a package-availability compromise; this does not prove or activate VIP entitlement",
+    "neverVotes": true,
+    "neverWritesSpecialistOpinion": true,
+    "externalWriteRequiresExplicitApproval": true
+  },
+  "optionalOperations": [
+    {
+      "semanticOperation": "task.observe",
+      "workBuddyTool": "TaskList",
+      "mayBlockMemberStart": false
+    }
+  ],
+  "proofRules": {
+    "sourceFilesProveRuntime": false,
+    "localValidationProvesRuntime": false,
+    "toolAvailabilityProvesInvocation": false,
+    "scriptEventProvesHostInvocation": false,
+    "seatProposalValidationProvesHostInvocation": false,
+    "reviewPlanValidationProvesHostInvocation": false,
+    "memberDeliveryObservationProvesHostSignedReceipt": false,
+    "memberDeliveryObservationProvesLeadConsumption": false,
+    "assetBundleProvesCognitiveUse": false,
+    "assetBundleProvesBusinessEffect": false,
+    "actualToolReceiptRequired": true,
+    "memberSimulationAllowed": false,
+    "phaseOneCrossSeatVisibilityAllowed": false,
+    "localInstallCanPromoteOfficialListing": false
+  },
+  "degradation": {
+    "teamCreateUnavailable": "return_decision_start_card_and_orchestration_unavailable_notice",
+    "memberTimeout": "retry_once_then_mark_unavailable_without_simulation",
+    "criticalFactsMissing": "not_ready_for_conclusion",
+    "connectorUnavailable": "continue_public_core_with_user_material_and_explicit_assumptions",
+    "scriptRuntimeUnavailable": "return_decision_start_card_and_recovery_unavailable_notice_without_team_creation",
+    "workspaceUnavailable": "do_not_write_elsewhere_offer_task_only_mode",
+    "assetCatalogOrBundleInvalid": "stop_affected_dispatch_or_synthesis_without_old_cross_seat_or_unverified_asset_fallback",
+    "userChangesProposal": "invalidate_pending_dispatches_and_rebuild_decision_start_card",
+    "userStops": "stop_new_work_and_return_stage_summary"
+  }
+}

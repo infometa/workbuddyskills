@@ -15,6 +15,8 @@ import yaml
 
 # 资源文件路径
 ASSETS_DIR = Path(__file__).parent.parent / "assets"
+CACHE_DIR = ASSETS_DIR / "cache"
+EXTENSIONS_CACHE_PATH = CACHE_DIR / "ransomware_extensions.yaml"
 
 
 def load_yaml(filename: str) -> dict:
@@ -39,10 +41,91 @@ def load_decryptors() -> dict:
     return load_yaml("decryptors.yaml")
 
 
+def load_cache_yaml() -> dict:
+    """加载扩展名缓存；文件缺失或损坏时返回空字典。"""
+    if not EXTENSIONS_CACHE_PATH.exists():
+        return {}
+    try:
+        with open(EXTENSIONS_CACHE_PATH, "r", encoding="utf-8") as f:
+            return yaml.safe_load(f) or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+
+
+def build_extensions_db(rows: List[Dict]) -> dict:
+    """将 mthcht CSV 行转换为分析器使用的扩展名索引。"""
+    ext_map: Dict[str, set] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        file_path = str(row.get("file_path", "") or "").strip().lower()
+        if not file_path:
+            continue
+        ext = file_path.lstrip("*.")
+        if not ext:
+            continue
+        family = str(row.get("metadata_comment", "") or "").strip()
+        for separator in (",", ":", "；", "："):
+            if separator in family:
+                family = family.split(separator, 1)[0].strip()
+                break
+        ext_map.setdefault(ext, set()).add(family or f"unknown (from {ext})")
+
+    extensions = {
+        ext: sorted(families) for ext, families in sorted(ext_map.items())
+    }
+    return {
+        "version": "1.0",
+        "source": "mthcht/awesome-lists (MIT License)",
+        "total_extensions": len(extensions),
+        "extensions": extensions,
+    }
+
+
+def fetch_extensions_db() -> dict:
+    """优先在线获取 mthcht 数据，失败时返回空字典。"""
+    try:
+        from online_query import fetch_source
+    except ImportError:
+        sys.path.insert(0, str(Path(__file__).parent))
+        try:
+            from online_query import fetch_source
+        except ImportError:
+            return {}
+
+    try:
+        rows = fetch_source("mthcht_extensions")
+    except Exception:
+        return {}
+    if not isinstance(rows, list):
+        return {}
+
+    return build_extensions_db(rows)
+
+
+def save_extensions_cache(data: dict) -> None:
+    """在线获取成功后更新 YAML 缓存；写入失败不影响当前分析。"""
+    try:
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        with open(EXTENSIONS_CACHE_PATH, "w", encoding="utf-8") as f:
+            yaml.safe_dump(data, f, allow_unicode=True, sort_keys=False)
+    except (OSError, yaml.YAMLError):
+        pass
+
+
+def load_extensions_db() -> dict:
+    """在线优先、缓存回退；两者均不可用时返回空字典。"""
+    online_data = fetch_extensions_db()
+    if online_data:
+        save_extensions_cache(online_data)
+        return online_data
+    return load_cache_yaml()
+
+
 # ============ 家族匹配 ============
 
 def match_by_extension(extension: str, families: dict) -> List[Dict]:
-    """扩展名匹配"""
+    """扩展名匹配（高精度 10 家族 YAML）"""
     matches = []
     if not extension:
         return matches
@@ -55,6 +138,35 @@ def match_by_extension(extension: str, families: dict) -> List[Dict]:
                 "confidence": "high",
                 "matched_dimension": "extension",
                 "matched_value": f".{ext}",
+            })
+    return matches
+
+
+def match_by_extension_fallback(extension: str) -> List[Dict]:
+    """
+    扩展名回退匹配：mthcht 700+ 扩展名库。
+    仅在 match_by_extension() 未命中时调用。
+    置信度为 medium（仅扩展名单维度，无多维度佐证）。
+    """
+    matches = []
+    if not extension:
+        return matches
+    ext = extension.lower().lstrip(".")
+
+    ext_db = load_extensions_db()
+    if not ext_db:
+        return matches
+
+    extensions = ext_db.get("extensions", {})
+    if ext in extensions:
+        family_hints = extensions[ext]
+        for hint in family_hints:
+            matches.append({
+                "family": hint,
+                "confidence": "medium",
+                "matched_dimension": "extension",
+                "matched_value": f".{ext}",
+                "source": "mthcht/awesome-lists (runtime/缓存 YAML, 700+ coverage)",
             })
     return matches
 
@@ -275,6 +387,10 @@ def analyze(note: str = "", extension: str = "", note_filename: str = "") -> Dic
     if extension:
         all_matches.extend(match_by_extension(extension, families_db))
 
+    # 扩展名回退：10 家族未命中时，查 mthcht 700+ 本地索引
+    if extension and not any(m["matched_dimension"] == "extension" for m in all_matches):
+        all_matches.extend(match_by_extension_fallback(extension))
+
     if note_filename:
         all_matches.extend(match_by_note_filename(note_filename, families_db))
 
@@ -390,7 +506,7 @@ def cmd_online(args):
     elif args.online_cmd == "decryptor":
         result = query_decryptor_online(args.family)
     elif args.online_cmd == "status":
-        result = {"caches": cache_status()}
+        result = {"cache": cache_status()}
     elif args.online_cmd == "refresh":
         result = {"refresh_results": refresh_all(force=args.force)}
     else:
@@ -425,7 +541,7 @@ def main():
                           help="family <家族名> | groups | extension <扩展名> | decryptor <家族名> | status | refresh [--force]")
     p_online.add_argument("--family", type=str, help="勒索家族名（family/decryptor 子命令必填）")
     p_online.add_argument("--extension", type=str, help="加密文件扩展名（extension 子命令必填）")
-    p_online.add_argument("--force", action="store_true", help="强制刷新缓存（refresh 子命令）")
+    p_online.add_argument("--force", action="store_true", help="强制刷新（refresh 子命令）")
     p_online.set_defaults(func=cmd_online)
 
     args = parser.parse_args()

@@ -135,11 +135,11 @@ role: infrastructure                 # [可选] 角色类型（infrastructure=�
 | 分类目录 | 含义 | 适用场景 |
 |---------|------|---------|
 | `vulnerability-analysis/` | 漏洞管理 | 漏扫报告解析、CVE修复验证 |
-| `alert-analysis/` | 告警研判 | 安全产品告警研判、L0/L1 分析 |
+| `alert-analysis/` | 告警研判 | 安全产品告警研判、L0/L1 分析（含资产关联辅助） |
 | `intrusion-analysis/` | 入侵溯源 | 主机入侵排查、攻击链还原 |
 | `attack-analysis/` | 攻击分析 | DDoS/流量攻击分析、勒索病毒分析 |
-| `asset-management/` | 资产管理 | 资产纳管、IP映射 |
-| `general/` | 通用排查 | 不属于特定安全领域的通用能力 |
+| `asset-management/` | 告警研判辅助 | 告警研判资产关联辅助（IP→主机映射） |
+| `general/` | 腾讯云产品日志排查 | 腾讯云产品日志分析 |
 
 新增分类需在此表和 README.md 中同步更新。
 

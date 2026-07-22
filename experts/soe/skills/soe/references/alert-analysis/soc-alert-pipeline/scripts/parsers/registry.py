@@ -8,6 +8,7 @@
 from __future__ import annotations
 from ._base import BaseParser
 from .yujie_parser import YujieParser
+from .yujie_flat_parser import YujieFlatParser
 from .cwp_parser import CwpParser
 from .tianmu_parser import TianmuParser
 from .waf_parser import WafParser
@@ -17,6 +18,7 @@ from .waf_parser import WafParser
 # 顺序不重要, get_parser() 按字段精确匹配
 _REGISTRY: dict[str, BaseParser] = {
     YujieParser.PRODUCT: YujieParser(),
+    YujieFlatParser.PRODUCT: YujieFlatParser(),
     CwpParser.PRODUCT: CwpParser(),
     TianmuParser.PRODUCT: TianmuParser(),
     WafParser.PRODUCT: WafParser(),
@@ -79,6 +81,12 @@ def detect_product(ocsf_fields: dict) -> str | None:
     #     WAF CSV/XLSX 列头含 "攻击IP"/"被攻击域名"/"攻击类型"/"风险等级"/"攻击时间"
     if any(col in ocsf_fields for col in WafParser.IDENTIFIER_COLS):
         return WafParser.PRODUCT
+
+    # 0c. 御界直出格式识别 (EVE 风格英文列头, 无 raw_log)
+    #     御界控制台单独导出, 列头含 alert.signature / fileinfo.filename 等带点号字段
+    # TODO: CWP 直出 / CFW 直出 待用户提供样本后补充识别分支
+    if any(col in ocsf_fields for col in YujieFlatParser.IDENTIFIER_COLS):
+        return YujieFlatParser.PRODUCT
 
     # 1. 优先 logsource_subtype
     subtype = ocsf_fields.get("logsource_subtype", "").lower().strip()

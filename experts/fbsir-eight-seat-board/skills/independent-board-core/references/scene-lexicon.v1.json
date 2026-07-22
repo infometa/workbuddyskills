@@ -1,0 +1,64 @@
+{
+  "schema": "fbsir.scene-lexicon/v1",
+  "version": "26.7.20-core.1",
+  "purpose": "Deterministic hints for selecting the minimum necessary review seats; not a conclusion engine.",
+  "provenance": {
+    "derivedFrom": [
+      "independent-board preset workflows",
+      "fbsir industry scene researcher contract patterns"
+    ],
+    "evidenceBoundary": "curated_core_dictionary_not_market_or_runtime_proof"
+  },
+  "scenes": [
+    {
+      "sceneId": "operating_diagnosis",
+      "terms": ["经营诊断", "收入下滑", "利润下滑", "现金流", "连续亏损", "全面诊断", "降本增效"],
+      "negativeTerms": ["只看合同", "只改文案"],
+      "defaultMode": "deep_review",
+      "candidateSeats": ["strategy-partner", "capital-partner", "growth-partner", "operations-partner", "org-partner", "digital-partner"]
+    },
+    {
+      "sceneId": "strategy_transition",
+      "terms": ["战略转型", "第二曲线", "新业务", "业务退出", "主业", "多元化", "商业模式"],
+      "negativeTerms": ["系统选型", "单份合同"],
+      "defaultMode": "standard_review",
+      "candidateSeats": ["strategy-partner", "capital-partner", "growth-partner", "operations-partner"]
+    },
+    {
+      "sceneId": "capital_transaction",
+      "terms": ["并购", "收购", "投资", "融资", "估值", "股权", "现金流", "退出"],
+      "negativeTerms": ["广告投放"],
+      "defaultMode": "standard_review",
+      "candidateSeats": ["capital-partner", "strategy-partner", "legal-partner", "operations-partner"]
+    },
+    {
+      "sceneId": "growth_channel",
+      "terms": ["增长", "渠道", "直营", "经销", "客户", "品牌", "销售", "获客", "复购", "定价"],
+      "negativeTerms": ["劳动合同"],
+      "defaultMode": "standard_review",
+      "candidateSeats": ["growth-partner", "operations-partner", "digital-partner", "capital-partner"]
+    },
+    {
+      "sceneId": "organization_succession",
+      "terms": ["组织", "人才", "绩效", "激励", "招聘", "裁员", "传承", "接班", "控制权"],
+      "negativeTerms": ["供应链"],
+      "defaultMode": "standard_review",
+      "candidateSeats": ["org-partner", "strategy-partner", "legal-partner", "capital-partner"]
+    },
+    {
+      "sceneId": "cross_border_expansion",
+      "terms": ["出海", "跨境", "海外市场", "本地化", "关税", "出口", "海外渠道", "数据跨境"],
+      "negativeTerms": ["国内单店"],
+      "defaultMode": "standard_review",
+      "candidateSeats": ["strategy-partner", "growth-partner", "legal-partner", "capital-partner", "operations-partner"]
+    },
+    {
+      "sceneId": "digital_ai_transformation",
+      "terms": ["数字化", "AI转型", "人工智能", "大模型", "自动化", "系统选型", "数据治理", "智能体"],
+      "negativeTerms": ["纯品牌命名"],
+      "defaultMode": "standard_review",
+      "candidateSeats": ["digital-partner", "operations-partner", "capital-partner", "legal-partner"]
+    }
+  ]
+}
+

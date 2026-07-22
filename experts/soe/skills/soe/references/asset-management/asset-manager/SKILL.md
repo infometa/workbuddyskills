@@ -122,7 +122,9 @@ python3 scripts/asset_resolver.py
 
 ## 四、资产更新
 
-资产 CSV 存放在 `$CODEBUDDY_PLUGIN_DATA/soe-skill/asset-manager/assets/`，通过 `import_assets()` 函数导入：
+> **推荐方式**：用户只需提供资产文件（CSV/Excel/JSON/纯文本 IP 列表），由 AI 后台自动调用通用导入脚本 `scripts/import_assets_flexible.py` 完成识别和入库（三段降级：标准 CSV 列名优先 → 智能列名映射兜底），**无需用户执行任何命令**。
+
+资产 CSV 存放在 `$CODEBUDDY_PLUGIN_DATA/soe-skill/asset-manager/assets/`，通过 `import_assets()` 函数导入（标准列名 CSV 直接使用，非标准格式请用上面的通用导入脚本）：
 
 ```python
 from asset_resolver import import_assets

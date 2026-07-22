@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 零 Key 在线查询模块
-在本地缓存不是最新时自动从公开数据源下载更新，无需任何 API Key。
+联网优先获取公开数据源最新数据，下载失败时降级到本地缓存兜底。
 
 数据源（全部免费、无需认证）：
 1. Ransomware.live REST API  - 家族活跃度、受害者统计
@@ -9,17 +9,15 @@
 3. mthcht/awesome-lists CSV  - 700+ 勒索家族扩展名映射
 4. NoMoreRansom 解密工具页    - 170+ 家族解密工具状态
 
-缓存策略：
-- 每个数据源独立缓存到 assets/cache/<source>.json
-- 默认缓存有效期 24 小时（可配置）
-- 查询时检查缓存：过期或缺失则自动下载更新
-- 离线时使用过期缓存兜底
+联网策略（网络优先 → 缓存降级）：
+- 每次查询优先尝试在线获取最新数据
+- 在线获取成功时保存为本地缓存（assets/cache/<source>.json）
+- 在线获取失败时降级到本地缓存兜底，保证离线可用
+- 缓存是兜底数据，不是临时缓存，请勿随意删除
 """
 
 import json
-import os
 import sys
-import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -34,9 +32,6 @@ ASSETS_DIR = Path(__file__).parent.parent / "assets"
 CACHE_DIR = ASSETS_DIR / "cache"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
-# 默认缓存有效期（秒）：24 小时
-DEFAULT_TTL = 24 * 3600
-
 # 请求超时（秒）
 REQUEST_TIMEOUT = 15
 
@@ -49,65 +44,47 @@ DATA_SOURCES = {
     "ransomware_live_recentvictims": {
         "url": "https://api.ransomware.live/recentvictims",
         "description": "最近受害者列表",
-        "ttl": 6 * 3600,  # 6 小时
     },
     "ransomware_live_groups": {
         "url": "https://api.ransomware.live/groups",
         "description": "所有勒索团伙元数据",
-        "ttl": 24 * 3600,
     },
     "ransomwatch_groups": {
         "url": "https://raw.githubusercontent.com/joshhighet/ransomwatch/main/groups.json",
         "description": "勒索团伙 Tor 站点元数据",
-        "ttl": 24 * 3600,
     },
     "ransomwatch_posts": {
         "url": "https://raw.githubusercontent.com/joshhighet/ransomwatch/main/posts.json",
         "description": "受害者发布记录",
-        "ttl": 12 * 3600,
     },
     "mthcht_extensions": {
         "url": "https://raw.githubusercontent.com/mthcht/awesome-lists/main/Lists/ransomware_extensions_list.csv",
         "description": "700+ 勒索家族扩展名映射（mthcht/awesome-lists）",
-        "ttl": 7 * 24 * 3600,  # 7 天
         "format": "csv",
     },
     "nomoreransom_decryptors": {
         "url": "https://www.nomoreransom.org/zh/decryption-tools.html",
         "description": "NoMoreRansom 解密工具清单（170+ 家族解密状态）",
-        "ttl": 7 * 24 * 3600,
         "format": "html",
     },
 }
-
 
 # ============ 通用下载与缓存 ============
 
 def _cache_path(source_key: str) -> Path:
     return CACHE_DIR / f"{source_key}.json"
 
-
-def _is_cache_valid(source_key: str, ttl: Optional[int] = None) -> bool:
-    """检查缓存是否有效（未过期且内容完整）"""
-    if ttl is None:
-        ttl = DATA_SOURCES.get(source_key, {}).get("ttl", DEFAULT_TTL)
-    cp = _cache_path(source_key)
-    if not cp.exists():
+def _cache_exists(source_key: str) -> bool:
+    """检查本地缓存文件是否存在且内容可解析"""
+    sp = _cache_path(source_key)
+    if not sp.exists():
         return False
     try:
-        mtime = cp.stat().st_mtime
-        age = time.time() - mtime
-        if age > ttl:
-            return False
-        # 校验内容可解析
-        with open(cp, "r", encoding="utf-8") as f:
+        with open(sp, "r", encoding="utf-8") as f:
             data = json.load(f)
-        if not isinstance(data, (dict, list)):
-            return False
-        return True
+        return isinstance(data, (dict, list))
     except (json.JSONDecodeError, OSError):
         return False
-
 
 def _is_ssl_error(exc: BaseException) -> bool:
     """判断异常是否由 SSL 证书验证失败引起"""
@@ -119,7 +96,6 @@ def _is_ssl_error(exc: BaseException) -> bool:
         return True
     msg = str(exc)
     return "CERTIFICATE" in msg or "CERT_VERIFY" in msg or "SSL" in msg.upper()
-
 
 def _download(url: str) -> Optional[bytes]:
     """
@@ -188,10 +164,9 @@ def _download(url: str) -> Optional[bytes]:
 
     return None
 
-
 def _save_cache(source_key: str, raw: bytes) -> Optional[object]:
-    """保存原始内容到缓存并返回解析后的对象"""
-    cp = _cache_path(source_key)
+    """保存原始 JSON 内容为本地缓存并返回解析后的对象"""
+    sp = _cache_path(source_key)
     try:
         text = raw.decode("utf-8", errors="replace")
         data = json.loads(text)
@@ -207,42 +182,39 @@ def _save_cache(source_key: str, raw: bytes) -> Optional[object]:
         "data": data,
     }
     try:
-        with open(cp, "w", encoding="utf-8") as f:
+        with open(sp, "w", encoding="utf-8") as f:
             json.dump(payload, f, ensure_ascii=False, indent=2)
     except OSError as e:
-        print(f"[警告] 写入缓存失败 {cp}: {e}", file=sys.stderr)
+        print(f"[警告] 写入缓存失败 {sp}: {e}", file=sys.stderr)
     return data
-
 
 def _load_cache(source_key: str) -> Optional[object]:
     """读取缓存中的数据部分（不含 _meta）"""
-    cp = _cache_path(source_key)
-    if not cp.exists():
+    sp = _cache_path(source_key)
+    if not sp.exists():
         return None
     try:
-        with open(cp, "r", encoding="utf-8") as f:
+        with open(sp, "r", encoding="utf-8") as f:
             payload = json.load(f)
         return payload.get("data") if isinstance(payload, dict) else payload
     except (json.JSONDecodeError, OSError):
         return None
 
-
 def _load_cache_meta(source_key: str) -> Optional[dict]:
-    """读取缓存的元数据"""
-    cp = _cache_path(source_key)
-    if not cp.exists():
+    """读取缓存的元数据（含 fetched_at）"""
+    sp = _cache_path(source_key)
+    if not sp.exists():
         return None
     try:
-        with open(cp, "r", encoding="utf-8") as f:
+        with open(sp, "r", encoding="utf-8") as f:
             payload = json.load(f)
         return payload.get("_meta") if isinstance(payload, dict) else None
     except (json.JSONDecodeError, OSError):
         return None
 
-
 def _save_cache_raw(source_key: str, data: object) -> object:
-    """保存预解析数据到缓存（用于 CSV/HTML 等非 JSON 源）"""
-    cp = _cache_path(source_key)
+    """保存预解析数据为本地缓存（用于 CSV/HTML 等非 JSON 源）"""
+    sp = _cache_path(source_key)
     payload = {
         "_meta": {
             "source": source_key,
@@ -252,12 +224,11 @@ def _save_cache_raw(source_key: str, data: object) -> object:
         "data": data,
     }
     try:
-        with open(cp, "w", encoding="utf-8") as f:
+        with open(sp, "w", encoding="utf-8") as f:
             json.dump(payload, f, ensure_ascii=False, indent=2)
     except OSError as e:
-        print(f"[警告] 写入缓存失败 {cp}: {e}", file=sys.stderr)
+        print(f"[警告] 写入缓存失败 {sp}: {e}", file=sys.stderr)
     return data
-
 
 def _parse_csv(text: str) -> List[Dict]:
     """解析 CSV 文本为字典列表"""
@@ -265,7 +236,6 @@ def _parse_csv(text: str) -> List[Dict]:
     import io
     reader = csv.DictReader(io.StringIO(text))
     return list(reader)
-
 
 def _parse_nomoreransom_html(html: str) -> List[Dict]:
     """
@@ -319,19 +289,18 @@ def _parse_nomoreransom_html(html: str) -> List[Dict]:
 
 def fetch_source(source_key: str, force_refresh: bool = False) -> Optional[object]:
     """
-    获取数据源内容。若缓存有效则直接用缓存，否则下载更新。
-    force_refresh=True 时强制重新下载。
-    离线时用过期缓存兜底。
+    联网优先获取数据源内容。在线获取成功时更新本地缓存；
+    在线获取失败时降级到本地缓存兜底。
+
+    force_refresh=True 时跳过缓存兜底（在线失败直接返回 None）。
     自动根据 DATA_SOURCES 中的 format 字段选择解析器（json/csv/html）。
     """
-    if not force_refresh and _is_cache_valid(source_key):
-        return _load_cache(source_key)
-
     src = DATA_SOURCES.get(source_key)
     if not src:
         print(f"[错误] 未知数据源: {source_key}", file=sys.stderr)
         return None
 
+    # Step 1: 优先在线获取
     fmt = src.get("format", "json")
     raw = _download(src["url"])
     if raw is not None:
@@ -343,61 +312,58 @@ def fetch_source(source_key: str, force_refresh: bool = False) -> Optional[objec
             data = _parse_nomoreransom_html(text)
             return _save_cache_raw(source_key, data)
         else:
-            # JSON 源：沿用原有 _save_cache（含原始字节解析）
             data = _save_cache(source_key, raw)
             if data is not None:
                 return data
-            # 保存失败但下载成功，尝试直接返回
             try:
                 return json.loads(text)
             except json.JSONDecodeError:
                 pass
 
-    # 下载失败，用过期缓存兜底
-    cached = _load_cache(source_key)
-    if cached is not None:
+    # Step 2: 在线获取失败，降级到本地缓存
+    if force_refresh:
+        # 强制刷新模式：不兜底，直接返回 None
+        return None
+
+    fallback = _load_cache(source_key)
+    if fallback is not None:
         meta = _load_cache_meta(source_key) or {}
         print(
-            f"[警告] 在线下载失败，使用本地缓存兜底 ({source_key}, "
+            f"[降级] 在线获取失败，使用本地缓存兜底 ({source_key}, "
             f"缓存时间: {meta.get('fetched_at', '未知')})",
             file=sys.stderr,
         )
-    return cached
-
+    return fallback
 
 def cache_status() -> List[Dict]:
-    """返回所有数据源的缓存状态"""
+    """返回所有数据源的本地缓存状态"""
     statuses = []
     for key, src in DATA_SOURCES.items():
-        cp = _cache_path(key)
+        sp = _cache_path(key)
         meta = _load_cache_meta(key)
-        valid = _is_cache_valid(key)
+        exists = _cache_exists(key)
         statuses.append({
             "source": key,
             "description": src["description"],
-            "cache_exists": cp.exists(),
-            "cache_valid": valid,
+            "cache_exists": exists,
             "fetched_at": meta.get("fetched_at") if meta else None,
-            "cache_path": str(cp),
+            "cache_path": str(sp),
         })
     return statuses
 
-
 def refresh_all(force: bool = False) -> Dict[str, bool]:
-    """刷新所有数据源。force=True 时强制重新下载。"""
+    """刷新所有数据源。force=True 时在线失败不兜底。"""
     results = {}
     for key in DATA_SOURCES:
         data = fetch_source(key, force_refresh=force)
         results[key] = data is not None
     return results
 
-
 # ============ 业务查询函数 ============
 
 def _normalize_family_name(family: str) -> str:
     """归一化家族名，便于匹配"""
     return family.lower().strip()
-
 
 def query_family_activity(family: str) -> Dict:
     """
@@ -451,7 +417,6 @@ def query_family_activity(family: str) -> Dict:
         "data_source": "ransomware.live",
     }
 
-
 def query_group_onion(family: str) -> Dict:
     """
     查询某家族的 Tor 站点及元数据（来自 ransomwatch）。
@@ -481,7 +446,6 @@ def query_group_onion(family: str) -> Dict:
         "data_source": "ransomwatch (GitHub)",
     }
 
-
 def query_recent_victims_by_family(family: str, limit: int = 20) -> Dict:
     """
     查询某家族最近的受害者发布记录（来自 ransomwatch posts）。
@@ -507,7 +471,6 @@ def query_recent_victims_by_family(family: str, limit: int = 20) -> Dict:
         "posts": family_posts[:limit],
         "data_source": "ransomwatch (GitHub)",
     }
-
 
 def query_extension_online(extension: str) -> Dict:
     """
@@ -541,7 +504,6 @@ def query_extension_online(extension: str) -> Dict:
         "csv_rows_total": len(rows),
     }
 
-
 def query_decryptor_online(family: str) -> Dict:
     """
     在线查询家族解密工具状态（NoMoreRansom 数据源）。
@@ -563,7 +525,6 @@ def query_decryptor_online(family: str) -> Dict:
         "data_source": "NoMoreRansom Project",
         "nomoreransom_url": "https://www.nomoreransom.org/zh/decryption-tools.html" if matches else "",
     }
-
 
 def query_all_groups_overview() -> Dict:
     """
@@ -615,7 +576,6 @@ def query_all_groups_overview() -> Dict:
         "data_sources": ["ransomware.live", "ransomwatch"],
     }
 
-
 def online_lookup(family: str) -> Dict:
     """
     统一在线查询入口：汇总某家族的全部在线情报。
@@ -628,7 +588,6 @@ def online_lookup(family: str) -> Dict:
         "decryptor_status": query_decryptor_online(family),
         "cache_status": cache_status(),
     }
-
 
 # ============ CLI ============
 
@@ -643,14 +602,13 @@ def cmd_online(args):
     elif args.subcmd == "decryptor":
         result = query_decryptor_online(args.family)
     elif args.subcmd == "status":
-        result = {"caches": cache_status()}
+        result = {"cache": cache_status()}
     elif args.subcmd == "refresh":
         result = {"refresh_results": refresh_all(force=args.force)}
     else:
         print(f"未知子命令: {args.subcmd}", file=sys.stderr)
         sys.exit(1)
     print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
-
 
 def add_online_subparser(subparsers):
     p = subparsers.add_parser("online", help="零 Key 在线情报查询")
@@ -671,13 +629,12 @@ def add_online_subparser(subparsers):
     p_dec.add_argument("family", type=str, help="勒索家族名")
     p_dec.set_defaults(func=cmd_online)
 
-    p_status = p_sub.add_parser("status", help="查看缓存状态")
+    p_status = p_sub.add_parser("status", help="查看本地缓存状态")
     p_status.set_defaults(func=cmd_online)
 
-    p_refresh = p_sub.add_parser("refresh", help="刷新所有数据源缓存")
+    p_refresh = p_sub.add_parser("refresh", help="刷新所有数据源（联网优先，失败兜底到缓存）")
     p_refresh.add_argument("--force", action="store_true", help="强制重新下载（忽略缓存）")
     p_refresh.set_defaults(func=cmd_online)
-
 
 if __name__ == "__main__":
     import argparse

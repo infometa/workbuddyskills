@@ -44,6 +44,7 @@ from xlsx_reader import read_xlsx
 from parsers.registry import get_parser, detect_product, supported_products
 from parsers.waf_parser import WafParser
 from parsers.tianmu_parser import TianmuParser
+from parsers.yujie_flat_parser import YujieFlatParser
 from asset_resolver import AssetResolver, load_default_assets
 
 
@@ -95,6 +96,15 @@ def is_waf_format(header: list[str]) -> bool:
 def is_tianmu_format(header: list[str]) -> bool:
     """检测是否为天幕直出格式 (中文列头, 无 raw_log)"""
     return any(col in header for col in TianmuParser.IDENTIFIER_COLS)
+
+
+def is_yujie_flat_format(header: list[str]) -> bool:
+    """检测是否为御界直出格式 (EVE 风格英文列头, 无 raw_log)
+
+    御界控制台单独导出, 列头含 alert.signature / fileinfo.filename 等带点号字段.
+    # TODO: CWP 直出 / CFW 直出 待用户提供样本后补充对应 is_xxx_format 函数.
+    """
+    return any(col in header for col in YujieFlatParser.IDENTIFIER_COLS)
 
 
 def process_row(
@@ -220,18 +230,22 @@ def main():
         sys.exit(2)
     print(f"[INFO] header={len(header)} cols, rows={len(rows)}", file=sys.stderr)
 
-    # 格式识别: raw_log 列 / 天幕直出 / WAF 直出
+    # 格式识别: raw_log 列(SOC导出) / 天幕直出 / WAF直出 / 御界直出
+    # TODO: CWP 直出 / CFW 直出 待用户提供样本后补充识别分支
     has_raw_log = "raw_log" in header
     is_tianmu = is_tianmu_format(header)
     is_waf = is_waf_format(header)
-    if not has_raw_log and not is_tianmu and not is_waf:
-        print(f"[ERR] 未识别的格式: 无 raw_log 列, 且非天幕/WAF 直出格式, header={header}",
+    is_yujie_flat = is_yujie_flat_format(header)
+    if not has_raw_log and not is_tianmu and not is_waf and not is_yujie_flat:
+        print(f"[ERR] 未识别的格式: 无 raw_log 列, 且非天幕/WAF/御界 直出格式, header={header}",
               file=sys.stderr)
         sys.exit(3)
     if is_tianmu:
         print(f"[INFO] 检测到天幕直出格式 (无 raw_log, 中文列头)", file=sys.stderr)
     if is_waf:
         print(f"[INFO] 检测到 WAF 直出格式 (无 raw_log, 中文列头)", file=sys.stderr)
+    if is_yujie_flat:
+        print(f"[INFO] 检测到御界直出格式 (无 raw_log, EVE 风格英文列头)", file=sys.stderr)
 
     # 3. 限制行数
     if args.limit:

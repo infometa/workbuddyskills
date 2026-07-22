@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fbsir.example/schemas/cognitive-source-ledger.v1.json",
+  "title": "FBSir Cognitive Source Ledger",
+  "type": "object",
+  "required": ["schema", "catalogVersion", "sources", "evidenceBoundary"],
+  "properties": {
+    "schema": { "const": "fbsir.cognitive-source-ledger/v1" },
+    "catalogVersion": { "$ref": "#/$defs/version" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "evidenceBoundary": { "type": "string", "minLength": 1, "maxLength": 200 }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$" },
+    "dateOrNull": {
+      "oneOf": [
+        { "type": "string", "format": "date" },
+        { "type": "null" }
+      ]
+    },
+    "shaOrNull": {
+      "oneOf": [
+        { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        { "type": "null" }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "sourceId", "sourceType", "title", "publisherOrOwner", "locator", "publishedAt",
+        "retrievedAt", "effectiveFrom", "effectiveTo", "jurisdictions", "authorityLevel",
+        "verificationStatus", "contentSha256", "rightsBoundary", "sensitivity", "reviewBy",
+        "stalePolicy", "summary"
+      ],
+      "properties": {
+        "sourceId": { "type": "string", "pattern": "^src:[A-Za-z0-9][A-Za-z0-9._-]{0,119}$" },
+        "sourceType": { "enum": ["internal_curated", "user_first_party", "official_primary", "research_primary", "standard", "secondary"] },
+        "title": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "publisherOrOwner": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "locator": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "publishedAt": { "$ref": "#/$defs/dateOrNull" },
+        "retrievedAt": { "type": "string", "format": "date" },
+        "effectiveFrom": { "$ref": "#/$defs/dateOrNull" },
+        "effectiveTo": { "$ref": "#/$defs/dateOrNull" },
+        "jurisdictions": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^(\\*|[A-Z]{2})$" } },
+        "authorityLevel": { "enum": ["internal_curated", "user_first_party", "official_primary", "peer_reviewed_primary", "standards_body", "secondary"] },
+        "verificationStatus": { "enum": ["curated_summary", "link_verified", "content_hash_verified", "needs_review"] },
+        "contentSha256": { "$ref": "#/$defs/shaOrNull" },
+        "rightsBoundary": { "enum": ["internal_authorized_summary", "user_authorized", "public_official_link_short_summary", "link_and_short_paraphrase_only"] },
+        "sensitivity": { "enum": ["public", "internal", "confidential", "restricted"] },
+        "reviewBy": { "type": "string", "format": "date" },
+        "stalePolicy": { "enum": ["exclude", "require_review", "require_live_verification"] },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 500 }
+      },
+      "unevaluatedProperties": false
+    }
+  }
+}

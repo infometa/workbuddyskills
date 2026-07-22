@@ -25,11 +25,28 @@ version: 1.0.0
 | 告警研判 | `tianmu-analyzer` | 天幕、安全治理、阻断日志、NDR阻断 | L0 parsed 字段 / SOC导出xlsx / 天幕原始日志 | `references/alert-analysis/tianmu-analyzer/SKILL.md` |
 | 告警研判 | `cfw-analyzer` | CFW、云防火墙、防火墙告警、防火墙阻断、eventLog、CFW风险报告 | L0 parsed 字段 / SOC导出xlsx / CFW原始日志 | `references/alert-analysis/cfw-analyzer/SKILL.md` |
 | 告警研判 | `waf-log-analyzer` | WAF、Web攻击、SQL注入告警、XSS告警、WAF日志、attacklog | L0 parsed 字段 / SOC导出xlsx / WAF attacklog CSV | `references/alert-analysis/waf-log-analyzer/SKILL.md` |
-| 入侵溯源 | `host-intrusion-analysis` | 入侵检测、后门、webshell、异常进程、可疑连接、入侵排查、安全排查 | 主机日志数据 | `references/intrusion-analysis/host-intrusion-analysis/SKILL.md` |
+| 入侵溯源 | `host-intrusion-analysis` | 入侵检测、后门、webshell、异常进程、可疑连接、入侵排查、安全排查 | 主机日志数据（需先用采集脚本生成，见下方采集脚本速查表） | `references/intrusion-analysis/host-intrusion-analysis/SKILL.md` |
 | 攻击分析 | `ddos-analysis` | DDoS、流量攻击、抓包、pcap、流量分析、攻击流量 | PCAP/CAP 文件(本地路径或URL) | `references/attack-analysis/ddos-analysis/SKILL.md` |
 | 攻击分析 | `ransomware-analysis` | 勒索病毒、勒索信、勒索软件、ransomware、文件被加密、勒索家族识别、解密工具 | 勒索信文本 / 加密文件扩展名 / IOC 指标 | `references/attack-analysis/ransomware-analysis/SKILL.md` |
 | 资产管理 | `asset-manager` | 资产查询、主机资产、IP归属、资产纳管、主机映射 | 资产CSV / IP列表 | `references/asset-management/asset-manager/SKILL.md` |
 | 通用排查 | `log-analysis-troubleshooting` | 应用日志、错误日志、访问日志、排障、故障排查、日志分析 | 通用应用日志文件 | `references/general/log-analysis-troubleshooting/SKILL.md` |
+
+### 入侵分析采集脚本
+
+入侵分析需要标准化的主机日志。采集脚本源文件位于专家包内 `references/intrusion-analysis/host-intrusion-analysis/scripts/<linux|windows>/` 目录，AI 运行时通过 `find ~/.workbuddy/plugins -name "get_log_all_in_one.*"` 定位实际绝对路径，并通过 `present_files` 工具把脚本文件本身展示给用户下载。
+
+| 平台 | 脚本路径（专家包内源路径） | 运行方式 | 输出文件 |
+|------|---------|---------|---------|
+| Windows | `references/intrusion-analysis/host-intrusion-analysis/scripts/windows/get_log_all_in_one.ps1` | 管理员 PowerShell 运行 `powershell -ExecutionPolicy Bypass -File get_log_all_in_one.ps1` | `log_<主机名>_<时间戳>.txt` |
+| Linux | `references/intrusion-analysis/host-intrusion-analysis/scripts/linux/get_log_all_in_one.sh` | `sudo bash get_log_all_in_one.sh` | `log_<IP>_<主机名>_<用户>_<时间戳>.txt` |
+
+> 用户将生成的 `.txt` 文件路径提供后，即可进入入侵分析流程。
+
+### 资产导入说明
+
+资产导入由专家内部完成格式识别与入库，可以从腾讯云 CVM 控制台导出，也支持自定义 CSV / Excel / JSON / 纯文本 IP 列表四种格式，支持智能列名映射，无需按固定模板整理。你只需提供资产文件路径，剩下的交给专家处理。
+
+> 导入后数据存放于 `$CODEBUDDY_PLUGIN_DATA/soe-skill/asset-manager/assets/`，下次 `load_default_assets()` 自动加载。后台通过通用导入脚本 `scripts/import_assets_flexible.py` 完成识别入库（三段降级：标准 CSV 列名优先 → 智能列名映射兜底）。
 
 ## 路由决策流程
 
@@ -51,7 +68,7 @@ version: 1.0.0
    - SOC导出xlsx(含 raw_log) → `soc-alert-pipeline`（L0），再按 product 字段分发到对应 L1
    - 单产品原始日志（CWP/御界/天幕/CFW key=value或JSON、WAF attacklog CSV）→ `soc-alert-pipeline`（L0 解析），再分发到对应 L1
    - 漏扫报告(Nessus/绿盟/深信服等) → `vul-analyse`
-   - 主机日志 → `host-intrusion-analysis`
+   - 主机日志（`log_*.txt` 采集脚本输出 / 原始 var/log 目录 / 多主机 ZIP）→ `host-intrusion-analysis`，若用户无日志文件则引导使用采集脚本（见上方"入侵分析采集脚本"表）
 3. **关键词匹配** — 按意图路由表中的触发关键词匹配
 4. **上下文推断** — 结合对话历史推断最可能的目标能力
 
