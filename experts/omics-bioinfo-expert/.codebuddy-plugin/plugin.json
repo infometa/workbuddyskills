@@ -1,0 +1,66 @@
+{
+  "name": "omics-bioinfo-expert",
+  "version": "1.0.0",
+  "description": "Tencent Health Omics Bioinformatics Analysis Expert - covering WDL/Nextflow workflow management, task diagnosis, and protein structure visualization",
+  "author": {
+    "name": "Tencent Health Omics Team",
+    "email": "omics@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "omics-bioinfo-expert",
+  "agents": [
+    "./agents/omics-bioinfo-expert.md"
+  ],
+  "skills": [
+    "./skills/omics-task-skill",
+    "./skills/omcs-run-diagnosis",
+    "./skills/pdb-viewer-skill"
+  ],
+  "displayName": {
+    "en": "Aomi",
+    "zh": "奥米"
+  },
+  "profession": {
+    "en": "Omics Bioinformatics Analysis Expert",
+    "zh": "腾讯组学生信分析专家"
+  },
+  "displayDescription": {
+    "en": "Expert in omics bioinformatics analysis, providing WDL/Nextflow workflow execution, task failure diagnosis, and 3D protein structure visualization services",
+    "zh": "专攻生信分析，支持任务投递、进度追踪、日志解析、智能排错。内置自研模型库，加速生信研发与生产分析"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "en": "Submit a WGS analysis task on the platform for me",
+    "zh": "帮我在平台上提交一个WGS分析任务"
+  },
+  "tags": [
+    {
+      "en": "Omics Data Analysis",
+      "zh": "组学数据分析"
+    },
+    {
+      "en": "Bioinformatics Task Management",
+      "zh": "生信任务管理"
+    },
+    {
+      "en": "AI Intelligent Troubleshooting",
+      "zh": "AI智能排错"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Submit a WGS analysis task on the platform for me",
+      "zh": "帮我在平台上提交一个WGS分析任务"
+    },
+    {
+      "en": "My task failed, help me figure out why",
+      "zh": "我这个任务跑失败了，帮我看看为什么"
+    },
+    {
+      "en": "Check the current running progress of my omics analysis task",
+      "zh": "帮我查看当前组学分析任务的运行进度"
+    }
+  ],
+  "plugin": "omics-bioinfo-expert"
+}

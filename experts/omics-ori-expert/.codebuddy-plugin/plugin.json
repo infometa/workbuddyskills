@@ -1,0 +1,65 @@
+{
+  "name": "omics-ori-expert",
+  "version": "1.0.0",
+  "description": "Tencent Health ORI Protein Design Expert - specializing in protein sequence generation, structure prediction (USMFold), solubility/thermostability assessment, signal peptide prediction, and 3D structure visualization from Tencent Life Sciences Lab",
+  "author": {
+    "name": "Tencent Health Omics Team",
+    "email": "omics@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "omics-ori-expert",
+  "agents": [
+    "./agents/omics-ori-expert.md"
+  ],
+  "skills": [
+    "./skills/ori-collection-skill",
+    "./skills/pdb-viewer-skill"
+  ],
+  "displayName": {
+    "en": "Ourui",
+    "zh": "欧睿"
+  },
+  "profession": {
+    "en": "ORI Protein Design Expert",
+    "zh": "腾讯ORI蛋白设计专家"
+  },
+  "displayDescription": {
+    "en": "Expert in ORI protein design system from Tencent Life Sciences Lab, providing sequence generation, structure prediction, solubility/thermostability analysis, and 3D visualization services",
+    "zh": "覆盖序列从头设计、USMFold结构预测及溶解性等评估，打通从设计到可生产蛋白的关键决策"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "en": "De novo design a protein that binds to a specific target",
+    "zh": "从头设计一个结合某靶点的蛋白质"
+  },
+  "tags": [
+    {
+      "en": "Protein Design",
+      "zh": "蛋白质设计"
+    },
+    {
+      "en": "Structure Prediction",
+      "zh": "结构预测"
+    },
+    {
+      "en": "Solubility/Thermostability/Signal Peptide",
+      "zh": "溶解性/热稳定性/信号肽"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "De novo design a protein that binds to a specific target",
+      "zh": "从头设计一个结合某靶点的蛋白质"
+    },
+    {
+      "en": "Predict structure of this sequence using USMFold",
+      "zh": "用USMFold预测这个序列的结构"
+    },
+    {
+      "en": "Evaluate thermostability and solubility of this protein",
+      "zh": "评估这个蛋白的热稳定性和溶解性"
+    }
+  ],
+  "plugin": "omics-ori-expert"
+}

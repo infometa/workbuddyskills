@@ -1,0 +1,38 @@
+{
+  "init": {
+    "darwin": "npm install -g @lovrabet/lovrabet-cli --registry=https://registry.npmmirror.com",
+    "linux": "npm install -g @lovrabet/lovrabet-cli --registry=https://registry.npmmirror.com",
+    "win32": "npm install -g @lovrabet/lovrabet-cli --registry=https://registry.npmmirror.com"
+  },
+  "auth": {
+    "darwin": "lovrabet auth device --url-only --source workbuddy",
+    "linux": "lovrabet auth device --url-only --source workbuddy",
+    "win32": "lovrabet auth device --url-only --source workbuddy"
+  },
+  "authUrlDomain": "user.lovrabet.com",
+  "unAuth": {
+    "darwin": "lovrabet auth logout --global",
+    "linux": "lovrabet auth logout --global",
+    "win32": "lovrabet auth logout --global"
+  },
+  "status": {
+    "darwin": "lovrabet auth status --global --check",
+    "linux": "lovrabet auth status --global --check",
+    "win32": "lovrabet auth status --global --check"
+  },
+  "statusMatch": "Status: valid",
+  "runtime": {
+    "type": "node",
+    "version": ">=20"
+  },
+  "npmRegistries": ["https://registry.npmmirror.com"],
+  "versionCheck": {
+    "command": {
+      "darwin": "lovrabet --version",
+      "linux": "lovrabet --version",
+      "win32": "lovrabet --version"
+    },
+    "minVersion": "2.1.17",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  }
+}

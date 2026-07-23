@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mol* PDB Viewer</title>
+  <link rel="stylesheet" href="molstar.css" />
+  <style>
+    html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:#1a1d24; color:#e6e8eb; }
+    #app { position:relative; width:100vw; height:100vh; }
+    #viewer { position:absolute; inset:0; }
+
+    /* 右下角状态 toast */
+    #status {
+      position:absolute; bottom:16px; right:16px; z-index:20;
+      padding:8px 14px; background:rgba(20,24,32,0.9);
+      border:1px solid rgba(255,255,255,0.12); border-radius:8px;
+      font-size:12px; color:#d3d8e0; max-width:55vw;
+      white-space:pre-wrap; pointer-events:none;
+      transition:opacity 0.3s;
+    }
+    #status.loading::before {
+      content:""; display:inline-block; width:11px; height:11px; margin-right:7px;
+      border:2px solid #4a9eff; border-top-color:transparent;
+      border-radius:50%; vertical-align:-2px;
+      animation:spin 0.8s linear infinite;
+    }
+    #status.error { color:#ff7a7a; border-color:rgba(255,120,120,0.35); }
+    #status.ok { color:#7fd97f; border-color:rgba(127,217,127,0.3); }
+    #status.hidden { opacity:0; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* 左上角命令日志面板（仅 ?debug=1 可见） */
+    #cmd-log {
+      position:absolute; top:8px; left:8px; z-index:20;
+      width:340px; max-height:260px; overflow-y:auto;
+      background:rgba(10,12,18,0.88); border:1px solid rgba(100,180,100,0.3);
+      border-radius:6px; padding:8px 10px;
+      font-size:11px; font-family:monospace; color:#7fd97f;
+      display:none;
+    }
+    #cmd-log.visible { display:block; }
+    #cmd-log .log-line { margin:1px 0; line-height:1.5; }
+    #cmd-log .log-err { color:#ff7a7a; }
+    #cmd-log .log-warn { color:#ffc96e; }
+    #cmd-log .log-ok { color:#7fd97f; }
+
+    /* 保存确认弹窗 */
+    #save-dialog {
+      display:none; position:absolute; inset:0; z-index:50;
+      align-items:center; justify-content:center;
+      background:rgba(0,0,0,0.6);
+    }
+    #save-dialog.visible { display:flex; }
+    #save-dialog .box {
+      background:#1e2430; border:1px solid rgba(255,255,255,0.2);
+      border-radius:12px; padding:24px 28px; max-width:440px; width:90%;
+    }
+    #save-dialog h3 { margin:0 0 10px; font-size:14px; color:#ffca7a; }
+    #save-dialog p { margin:0 0 20px; font-size:12px; color:#b0b8c8; line-height:1.6; }
+    #save-dialog .btns { display:flex; gap:10px; justify-content:flex-end; }
+    #save-dialog button {
+      padding:7px 18px; border-radius:6px; border:1px solid rgba(255,255,255,0.2);
+      font-size:12px; cursor:pointer; background:transparent; color:#e6e8eb;
+    }
+    #save-dialog .btn-confirm { background:#c0392b; border-color:#c0392b; color:#fff; }
+    #save-dialog .btn-confirm:hover { background:#e74c3c; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="viewer"></div>
+  <div id="status" class="loading">正在初始化 Mol*…</div>
+  <div id="cmd-log"></div>
+
+  <!-- 保存确认弹窗 -->
+  <div id="save-dialog">
+    <div class="box">
+      <h3>⚠ 确认保存到文件</h3>
+      <p id="save-dialog-msg">此操作将覆盖原始 PDB 文件。建议先导出为新文件。是否继续？</p>
+      <div class="btns">
+        <button onclick="closeSaveDialog()">取消</button>
+        <button class="btn-confirm" onclick="confirmSave()">确认覆盖保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ★ 最早期诊断（在 molstar.js 加载前执行）
+// 确认 HTML 解析到了这里，且内联 JS 可以运行
+(function() {
+  var BASE = location.protocol + '//' + location.host;
+  function earlyLog(msg) {
+    try {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', BASE + '/api/log', false); // 同步 XHR 确保发出
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({msg: '[早期诊断] ' + msg, level: 'info'}));
+    } catch(_e) {}
+  }
+  earlyLog('DOM 解析到 <script> 块（molstar.js 尚未加载）');
+  earlyLog('location: ' + location.href);
+  earlyLog('userAgent: ' + navigator.userAgent.substring(0, 80));
+  // 检查 WebGL 可用性
+  try {
+    var c = document.createElement('canvas');
+    var gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+    earlyLog(gl ? 'WebGL: ✓ 可用 renderer=' + gl.getParameter(gl.RENDERER).substring(0, 50) : 'WebGL: ❌ 不可用');
+  } catch(e) { earlyLog('WebGL 检查失败: ' + e.message); }
+})();
+</script>
+<script src="molstar.js"></script>
+<script>
+// 次早期诊断（molstar.js 加载后立即执行）
+(function() {
+  try {
+    fetch('/api/log', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ msg: 'viewer.html JS 开始执行 (molstar.js 已加载)', level: 'info' }),
+      keepalive: true
+    }).catch(function(){});
+  } catch(_e) {}
+  try {
+    var molstarOk = (typeof molstar !== 'undefined' && !!molstar.Viewer);
+    fetch('/api/log', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ msg: 'molstar 检查: ' + (molstarOk ? 'Viewer 可用 ✓' : '⚠️ molstar 未定义或 Viewer 缺失'), level: molstarOk ? 'info' : 'error' }),
+      keepalive: true
+    }).catch(function(){});
+  } catch(_e) {}
+})();
+</script>
+<script>
+(function() {
+'use strict';
+
+// ========================================================================
+// 工具函数
+// ========================================================================
+var _logVisible = false;
+var _debugMode = (new URLSearchParams(location.search)).get('debug') === '1';
+var _logLines = [];
+
+function log(msg, level) {
+  var ts = new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  var entry = '[' + ts + '] ' + msg;
+  _logLines.push({ text: entry, level: level || 'ok' });
+  if (_logLines.length > 40) _logLines.shift();
+  console.log('[pdb-viewer]', msg);
+  renderLog();
+  // 同步发送到服务端，供自动化验证读取
+  try {
+    fetch('/api/log', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ msg: msg, level: level || 'info' }),
+      keepalive: true
+    }).catch(function(){});
+  } catch(_ignored) {}
+}
+
+function renderLog() {
+  var el = document.getElementById('cmd-log');
+  if (!el) return;
+  el.innerHTML = _logLines.map(function(l) {
+    var cls = l.level === 'error' ? 'log-err' : l.level === 'warn' ? 'log-warn' : 'log-ok';
+    return '<div class="log-line ' + cls + '">' + escHtml(l.text) + '</div>';
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+  // 仅 debug 模式自动展示日志面板；正式发布默认隐藏
+  if (_debugMode && !_logVisible && _logLines.length > 0) {
+    el.classList.add('visible');
+    _logVisible = true;
+  }
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function setStatus(text, kind) {
+  var el = document.getElementById('status');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.remove('loading','error','ok','hidden');
+  if (kind) el.classList.add(kind);
+}
+
+function hideStatus(delay) {
+  setTimeout(function() {
+    var el = document.getElementById('status');
+    if (el) el.classList.add('hidden');
+  }, delay || 1500);
+}
+
+function hexToInt(cssColor) {
+  var s = (cssColor || '').replace('#','');
+  if (!s) return 0xffffff;
+  return parseInt(s, 16) || 0xffffff;
+}
+
+function guessFormat(name) {
+  var n = (name || '').toLowerCase();
+  if (n.endsWith('.cif') || n.endsWith('.mmcif')) return 'mmcif';
+  if (n.endsWith('.bcif')) return 'bcif';
+  return 'pdb';
+}
+
+// ========================================================================
+// 核心上下文（持久化，全生命周期使用）
+// ========================================================================
+// window.__pdbCtx = {
+//   plugin,          // PluginUIContext (viewer.plugin)
+//   viewer,          // Viewer wrapper
+//   structure,       // StateObjectCell - structure 节点引用
+//   trajectory,      // StateObjectCell - trajectory 节点引用
+//   components: {    // polymer/ligand/water 等组件引用
+//     polymer, ligand, water
+//   },
+//   highlights: [],  // highlight 组件 ref 数组
+//   pdbName,         // 文件名
+//   pdbPath,         // 服务端绝对路径（用于保存）
+//   waterHidden,     // 水分子当前可见状态
+//   chainVisibility, // { 'A': true/false }
+// }
+
+window.__pdbCtx = null;
+
+// ========================================================================
+// 加载流程（手动 builders 建链，持有每级引用）
+// ========================================================================
+async function loadStructure(plugin, pdbText, fmt, name, path) {
+  log('开始加载: ' + name + ' (' + fmt + ')');
+  setStatus('解析结构数据…', 'loading');
+
+  // Step 1: 上传原始文本数据
+  var data = await plugin.builders.data.rawData(
+    { data: pdbText, label: name },
+    { state: { isGhost: true } }
+  );
+  log('Step1 data node OK');
+
+  // Step 2: 解析轨迹
+  var trajectory = await plugin.builders.structure.parseTrajectory(data, fmt);
+  log('Step2 trajectory OK');
+
+  // Step 3: 创建模型
+  var model = await plugin.builders.structure.createModel(trajectory);
+  log('Step3 model OK');
+
+  // Step 4: 创建结构
+  var structure = await plugin.builders.structure.createStructure(model);
+  log('Step4 structure OK');
+
+  // Step 5: 创建分组件（polymer / ligand / water）
+  var polymer = await plugin.builders.structure.tryCreateComponentStatic(structure, 'polymer');
+  var ligand  = await plugin.builders.structure.tryCreateComponentStatic(structure, 'ligand');
+  var water   = await plugin.builders.structure.tryCreateComponentStatic(structure, 'water');
+  log('Step5 components: polymer=' + !!polymer + ' ligand=' + !!ligand + ' water=' + !!water);
+
+  // Step 6: 添加默认表示
+  var reprBuilder = plugin.builders.structure.representation;
+  var update = plugin.build();
+  if (polymer) reprBuilder.buildRepresentation(update, polymer, { type: 'cartoon', color: 'chain-id' }, { tag: 'polymer-repr' });
+  if (ligand)  reprBuilder.buildRepresentation(update, ligand,  { type: 'ball-and-stick', color: 'element-symbol' }, { tag: 'ligand-repr' });
+  if (water)   reprBuilder.buildRepresentation(update, water,   { type: 'ball-and-stick', typeParams: { alpha: 0.4 } }, { tag: 'water-repr' });
+  await update.commit();
+  log('Step6 representations OK');
+
+  // 自动对焦相机
+  setTimeout(function() {
+    try { plugin.canvas3d && plugin.canvas3d.requestCameraReset(); } catch(e){}
+  }, 200);
+
+  // 持久化上下文
+  window.__pdbCtx = {
+    plugin: plugin,
+    viewer: window.__molstarViewer,
+    structure: structure,
+    trajectory: trajectory,
+    components: { polymer: polymer, ligand: ligand, water: water },
+    highlights: [],
+    pdbName: name,
+    pdbPath: path || null,
+    waterHidden: false,
+    chainVisibility: {},
+  };
+
+  log('✓ 加载完成: ' + name);
+  setStatus('✓ ' + name, 'ok');
+  hideStatus(2000);
+}
+
+// ========================================================================
+// 数据获取（优先级：预加载缓存 > URL ?pdb= 参数 > /api/pdb-url 默认）
+// ========================================================================
+async function fetchAndLoad(plugin) {
+  var params = new URLSearchParams(location.search);
+  var pdbParam = params.get('pdb');
+  var nameParam = params.get('name');
+
+  // ★ 优先：检查服务端预加载缓存（LLM 在 present_files 前已调用 /api/preload）
+  try {
+    var preResp = await fetch('/api/preloaded-pdb', { cache: 'no-store' });
+    if (preResp.ok) {
+      var preData = await preResp.json();
+      if (preData.data && preData.name) {
+        log('使用预加载缓存: ' + preData.name);
+        var pdbText = atob(preData.data);
+        var fmt = guessFormat(preData.name);
+        await loadStructure(plugin, pdbText, fmt, preData.name, null);
+        return;
+      }
+    }
+  } catch(_e) {}
+
+  if (!pdbParam) {
+    // 从 API 获取默认 PDB（serve_pdb.py 启动时 --pdb-file 指定的文件）
+    try {
+      var r = await fetch('/api/pdb-url', { cache: 'no-store' });
+      var d = await r.json();
+      if (!d.url) { setStatus('未指定 PDB 文件', 'error'); return; }
+      pdbParam = d.url;
+      nameParam = nameParam || d.name;
+    } catch(e) {
+      setStatus('获取 PDB URL 失败: ' + e.message, 'error'); return;
+    }
+  }
+
+  var name = nameParam || pdbParam.split('/').pop() || 'structure.pdb';
+  var fmt = guessFormat(name);
+
+  // 确定 fetch URL 和路径类型
+  var fetchUrl;
+  var serverPath = null;
+  var isProxied = false;
+
+  if (pdbParam.indexOf('cos://') === 0) {
+    // cos:// 协议 → 通过 /__cos 代理（omics 认证 + GetObjectData）
+    fetchUrl = '/__cos?uri=' + encodeURIComponent(pdbParam);
+    isProxied = true;
+  } else if (pdbParam.indexOf('/__file?path=') === 0 || pdbParam.indexOf('/__cos?uri=') === 0) {
+    // 已经是代理 URL（/api/pdb-url 返回的格式），直接使用
+    fetchUrl = pdbParam;
+    isProxied = true;
+    // 从 /__file?path=... 中提取原始路径，用于保存
+    var pathMatch = pdbParam.match(/\/__file\?path=(.+)/);
+    if (pathMatch) serverPath = decodeURIComponent(pathMatch[1]);
+  } else if (pdbParam.indexOf('/') === 0) {
+    // 绝对路径（如 /Users/...）→ 通过 /__file 代理
+    serverPath = pdbParam;
+    fetchUrl = '/__file?path=' + encodeURIComponent(pdbParam);
+    isProxied = true;
+  } else {
+    // 相对路径或完整 HTTP URL → 直接 fetch
+    fetchUrl = pdbParam;
+    isProxied = false;
+  }
+
+  setStatus('正在获取 ' + name + '…', 'loading');
+
+  try {
+    var resp = await fetch(fetchUrl, { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+
+    var pdbText;
+    if (isProxied) {
+      var obj = await resp.json();
+      if (obj.error) throw new Error(obj.error);
+      // base64 → text（与 serve_pdb.py 返回的 { data, name, path } 对应）
+      pdbText = atob(obj.data);
+      name = obj.name || name;
+      serverPath = obj.path || serverPath;
+    } else {
+      pdbText = await resp.text();
+    }
+
+    await loadStructure(plugin, pdbText, fmt, name, serverPath);
+  } catch(e) {
+    log('获取失败: ' + e.message, 'error');
+    setStatus('加载失败: ' + e.message, 'error');
+  }
+}
+
+// ========================================================================
+// 命令实时推送（SSE 优先，代理降级为轮询）
+// ========================================================================
+var _evtSource = null;
+var _sseConnected = false;        // SSE 是否成功建立
+var _sseFailedAt = 0;             // SSE 第一次出错的时间
+var _pollTimer = null;            // 轮询定时器
+var _pollingActive = false;       // 是否已切换到轮询模式
+
+// 轮询降级：每 1 秒拉取一次 /api/command-poll
+var _pollingReadyNotified = false;  // 轮询模式下只发一次就绪通知
+function startPolling() {
+  if (_pollingActive) return;
+  _pollingActive = true;
+  log('SSE 不可用（代理环境），切换到 HTTP 轮询模式 (1s 间隔)', 'warn');
+  _pollTimer = setInterval(function() {
+    fetch('/api/command-poll', { cache: 'no-store' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        // 轮询首次成功时，发就绪通知（SSE 模式由 onopen 负责）
+        if (!_pollingReadyNotified) {
+          _pollingReadyNotified = true;
+          fetch('/api/ready', { method: 'POST', cache: 'no-store' }).catch(function(){});
+        }
+        var cmds = d.commands || [];
+        cmds.forEach(function(cmd) {
+          executeOp(cmd).catch(function(e) {
+            log('执行失败 [' + (cmd.op || '') + ']: ' + e.message, 'error');
+          });
+        });
+      })
+      .catch(function(e) {
+        // 轮询失败时静默，不干扰 UI
+      });
+  }, 1000);
+}
+
+function connectSSE() {
+  if (_evtSource) return;
+  var src = new EventSource('/api/events');
+  src.onmessage = function(event) {
+    _sseConnected = true;
+    // 如果已经在轮询，停止轮询（切回 SSE）
+    if (_pollingActive) {
+      clearInterval(_pollTimer);
+      _pollingActive = false;
+      log('SSE 恢复，停止轮询模式');
+    }
+    try {
+      var cmd = JSON.parse(event.data);
+      executeOp(cmd).catch(function(e) {
+        log('执行失败 [' + (cmd.op || '') + ']: ' + e.message, 'error');
+      });
+    } catch(e) {
+      log('SSE 解析失败: ' + e.message, 'error');
+    }
+  };
+  src.onerror = function() {
+    if (!_sseConnected) {
+      // 从未连接成功
+      if (_sseFailedAt === 0) _sseFailedAt = Date.now();
+      // 等待 3 秒后切换到轮询
+      if (Date.now() - _sseFailedAt > 3000 && !_pollingActive) {
+        startPolling();
+      }
+    }
+    // EventSource 会自动重连，无需额外处理
+  };
+  src.onopen = function() {
+    _sseConnected = true;
+    log('SSE 实时通道已连接');
+    // 连接成功时清空 SSE 失败计时
+    _sseFailedAt = 0;
+    // 如果之前切换到了轮询，停止轮询
+    if (_pollingActive) {
+      clearInterval(_pollTimer);
+      _pollingActive = false;
+      log('SSE 已建立，停止轮询');
+    }
+    // 通知服务端：Mol* 已就绪，可以推送 get_pdb 命令
+    fetch('/api/ready', { method: 'POST', cache: 'no-store' }).catch(function(){});
+  };
+  _evtSource = src;
+  // 3 秒后检查是否需要启动轮询降级
+  setTimeout(function() {
+    if (!_sseConnected && !_pollingActive) {
+      startPolling();
+    }
+  }, 3000);
+}
+
+// ========================================================================
+// 操作执行器（核心）
+// ========================================================================
+async function executeOp(cmd) {
+  var ctx = window.__pdbCtx;
+  // 兼容旧格式 {action, ...} 和新格式 {op, params}
+  var op = cmd.op || cmd.action || '';
+  var p = cmd.params || cmd;
+
+  log('[OP] ' + op + ' ' + JSON.stringify(p).substring(0, 60));
+  setStatus('[' + op + ']', 'loading');
+
+  if (!ctx || !ctx.plugin) {
+    if (op === 'reset_view' || op === 'screenshot' || op === 'get_pdb') {
+      // 这些操作不依赖结构上下文（get_pdb 负责创建上下文）
+    } else {
+      log('上下文未就绪，跳过: ' + op, 'warn');
+      return;
+    }
+  }
+
+  switch(op) {
+
+  // ---- 0. 加载/切换 PDB 结构 ----
+  case 'get_pdb': {
+    var pdbId = p.id || p.pdb || '';
+    var pdbUrl = p.url || '';
+    log('get_pdb: id=' + pdbId + ' url=' + pdbUrl);
+    setStatus('正在加载 ' + (pdbId || pdbUrl) + '…', 'loading');
+
+    // 构建 fetch URL，并记录是否需要 base64 解码
+    var fetchUrl;
+    var isProxied2 = false;
+    var serverPath2 = null;
+    if (pdbUrl) {
+      if (pdbUrl.indexOf('cos://') === 0) {
+        // cos:// 协议 → 通过 /__cos 代理（omics 认证 + GetObjectData）
+        fetchUrl = '/__cos?uri=' + encodeURIComponent(pdbUrl);
+        isProxied2 = true;
+      } else if (pdbUrl.indexOf('/__file?path=') === 0 || pdbUrl.indexOf('/__cos?uri=') === 0) {
+        // 已是代理 URL 格式（如 /api/pdb-url 返回的内容），直接使用
+        fetchUrl = pdbUrl;
+        isProxied2 = true;
+        var pathMatch2 = pdbUrl.match(/\/__file\?path=(.+)/);
+        if (pathMatch2) serverPath2 = decodeURIComponent(pathMatch2[1]);
+      } else if (pdbUrl.indexOf('/') === 0) {
+        // 绝对服务器路径 → 通过 /__file 代理
+        fetchUrl = '/__file?path=' + encodeURIComponent(pdbUrl);
+        isProxied2 = true;
+        serverPath2 = pdbUrl;
+      } else {
+        // 相对路径或完整 HTTP URL → 直接 fetch（纯文本 PDB）
+        fetchUrl = pdbUrl;
+        isProxied2 = false;
+      }
+    } else if (pdbId) {
+      // 从 RCSB PDB 下载（直接文本，无需 base64）
+      fetchUrl = 'https://files.rcsb.org/download/' + pdbId.toUpperCase() + '.pdb';
+      isProxied2 = false;
+    } else {
+      log('get_pdb: 缺少 id 或 url 参数', 'error');
+      break;
+    }
+
+    try {
+      var resp = await fetch(fetchUrl);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      var pdbText;
+      var name2 = pdbId ? pdbId.toLowerCase() + '.pdb' : (pdbUrl.split('/').pop().split('?')[0] || 'structure.pdb');
+      if (isProxied2) {
+        // 代理路由返回 JSON: { data: base64, name: str, path: str }
+        var obj2 = await resp.json();
+        if (obj2.error) throw new Error(obj2.error);
+        pdbText = atob(obj2.data);
+        name2 = obj2.name || name2;
+        serverPath2 = obj2.path || serverPath2;
+      } else {
+        pdbText = await resp.text();
+      }
+      var fmt = guessFormat(name2);
+
+      // 清除旧结构（如果有）
+      if (ctx && ctx.plugin) {
+        try {
+          var oldUpd = ctx.plugin.build();
+          if (ctx.components.polymer) oldUpd.delete(ctx.components.polymer.ref);
+          if (ctx.components.ligand) oldUpd.delete(ctx.components.ligand.ref);
+          if (ctx.components.water) oldUpd.delete(ctx.components.water.ref);
+          if (ctx.structure) oldUpd.delete(ctx.structure.ref);
+          await oldUpd.commit();
+        } catch(e) { log('清除旧结构失败: ' + e.message, 'warn'); }
+      }
+
+      await loadStructure(window.__molPlugin, pdbText, fmt, name2, serverPath2);
+      setStatus('✓ 已加载: ' + name2, 'ok');
+    } catch(e) {
+      log('get_pdb 失败: ' + e.message, 'error');
+      setStatus('加载失败: ' + e.message, 'error');
+    }
+    hideStatus();
+    break;
+  }
+
+  // ---- 2.1 切换表示方式 ----
+  case 'set_repr': {
+    var repr = p.repr || p.type || 'cartoon';
+    repr = repr.replace(/_/g, '-'); // 统一转连字符
+    log('set_repr → ' + repr);
+
+    if (!ctx.components.polymer) { log('无 polymer 组件', 'warn'); break; }
+
+    var plugin = ctx.plugin;
+    var polymerRef = ctx.components.polymer.ref;
+
+    // 遍历找 polymer 的直接子节点（表示层）
+    var reprRefs = [];
+    plugin.state.data.cells.forEach(function(cell, ref) {
+      if (cell && cell.transform && cell.transform.parent === polymerRef) {
+        reprRefs.push(ref);
+      }
+    });
+    log('找到旧表示层: ' + reprRefs.length + ' 个');
+
+    var upd = plugin.build();
+    for (var ri = 0; ri < reprRefs.length; ri++) {
+      upd.delete(reprRefs[ri]);
+    }
+    var colorScheme = (repr === 'ball-and-stick') ? 'element-symbol' : 'chain-id';
+    plugin.builders.structure.representation.buildRepresentation(
+      upd, ctx.components.polymer,
+      { type: repr, color: colorScheme },
+      { tag: 'polymer-repr' }
+    );
+    await upd.commit();
+    log('✓ 表示已切换为: ' + repr);
+    setStatus('✓ 表示: ' + repr, 'ok');
+    hideStatus();
+    break;
+  }
+
+  // ---- 2.2 着色方案 ----
+  case 'set_color': {
+    var theme = p.theme || p.color || 'chain-id';
+    var value = p.value ? hexToInt(p.value) : null;
+    log('set_color → ' + theme);
+
+    if (!ctx.components.polymer) { log('无 polymer 组件', 'warn'); break; }
+
+    var _plugin = ctx.plugin;
+    var _polyRef = ctx.components.polymer.ref;
+    var _reprRefs2 = [];
+    _plugin.state.data.cells.forEach(function(cell, ref) {
+      if (cell && cell.transform && cell.transform.parent === _polyRef) {
+        _reprRefs2.push(ref);
+      }
+    });
+
+    if (_reprRefs2.length === 0) { log('未找到表示层，跳过着色', 'warn'); break; }
+
+    var _reprCell = _plugin.state.data.cells.get(_reprRefs2[0]);
+    var _curType = (_reprCell && _reprCell.params && _reprCell.params.values) ?
+      (_reprCell.params.values.type || { name: 'cartoon' }) : { name: 'cartoon' };
+
+    var reprParams = value !== null
+      ? { color: 'uniform', colorParams: { value: value } }
+      : { color: theme };
+
+    var _upd2 = _plugin.build();
+    for (var _ri2 = 0; _ri2 < _reprRefs2.length; _ri2++) {
+      _upd2.delete(_reprRefs2[_ri2]);
+    }
+    _plugin.builders.structure.representation.buildRepresentation(
+      _upd2, ctx.components.polymer,
+      Object.assign({ type: _curType.name || 'cartoon' }, reprParams),
+      { tag: 'polymer-repr' }
+    );
+    await _upd2.commit();
+    log('✓ 着色方案: ' + theme);
+    setStatus('✓ 着色: ' + theme, 'ok');
+    hideStatus();
+    break;
+  }
+
+  // ---- 2.3 背景颜色 ----
+  case 'set_bg': {
+    var bgColor = p.color || '#1a1d24';
+    var bgInt = hexToInt(bgColor);
+    try {
+      ctx.plugin.canvas3d && ctx.plugin.canvas3d.setProps({
+        renderer: { backgroundColor: bgInt }
+      });
+      log('✓ 背景: ' + bgColor);
+      setStatus('✓ 背景: ' + bgColor, 'ok');
+      hideStatus();
+    } catch(e) { log('set_bg 失败: ' + e.message, 'error'); }
+    break;
+  }
+
+  // ---- 2.4 水分子显隐 ----
+  case 'set_water': {
+    var show = (p.visible !== false && p.visible !== 0);
+    log('set_water → ' + (show ? '显示' : '隐藏'));
+    if (!ctx.components.water) { log('无水分子组件', 'warn'); break; }
+
+    var waterRef = ctx.components.water.ref;
+    var wPlugin = ctx.plugin;
+    await wPlugin.build().to(waterRef).update(function(old) {
+      return Object.assign({}, old, { isHidden: !show });
+    }).commit();
+    ctx.waterHidden = !show;
+    log('✓ 水分子: ' + (show ? '显示' : '已隐藏'));
+    setStatus('✓ 水分子' + (show ? '已显示' : '已隐藏'), 'ok');
+    hideStatus();
+    break;
+  }
+
+  // ---- 3.1 链可见性 ----
+  case 'chain_visibility': {
+    var chainId = (p.chain || 'A').toUpperCase();
+    var visible = (p.visible !== false && p.visible !== 0);
+    log('chain_visibility: ' + chainId + ' → ' + (visible ? '显示' : '隐藏'));
+    if (ctx.components.polymer) {
+      var cRef = ctx.components.polymer.ref;
+      await ctx.plugin.build().to(cRef).update(function(old) {
+        return Object.assign({}, old, { isHidden: !visible });
+      }).commit();
+      log('✓ 主链' + (visible ? '已显示' : '已隐藏'));
+      setStatus('✓ 主链' + (visible ? '显示' : '隐藏'), 'ok');
+      hideStatus();
+    }
+    break;
+  }
+
+  // ---- 3.4 聚焦链 ----
+  case 'focus_chain': {
+    var focusChain = (p.chain || 'A').toUpperCase();
+    log('focus_chain: ' + focusChain);
+    try {
+      ctx.plugin.canvas3d && ctx.plugin.canvas3d.requestCameraReset();
+      log('✓ 聚焦: ' + focusChain);
+      setStatus('✓ 聚焦: 链 ' + focusChain, 'ok');
+      hideStatus();
+    } catch(e) { log('focus_chain 失败: ' + e.message, 'warn'); }
+    break;
+  }
+
+  // ---- 4.1 高亮残基区间 ----
+  case 'highlight_range': {
+    var hlChain = (p.chain || 'A').toUpperCase();
+    var hlStart = parseInt(p.start || p.from || 1);
+    var hlEnd   = parseInt(p.end || p.to || hlStart);
+    var hlColor = p.color || '#ff4444';
+    log('highlight_range: ' + hlChain + ':' + hlStart + '-' + hlEnd);
+    var hlRangeList = [];
+    for (var rri = hlStart; rri <= hlEnd; rri++) hlRangeList.push(rri);
+    p = { chain: hlChain, residues: hlRangeList, color: hlColor };
+    // fall through to highlight_list
+  }
+  // eslint-disable-next-line no-fallthrough
+  case 'highlight_list': {
+    var hlChain2 = (p.chain || 'A').toUpperCase();
+    var hlResidues = (p.residues || []).map(function(r){ return parseInt(r); });
+    var hlColor2 = p.color || '#ff4444';
+    log('highlight_list: ' + hlChain2 + ' [' + hlResidues.join(',') + ']');
+    if (!hlResidues.length) { log('残基列表为空', 'warn'); break; }
+
+    try {
+      var hlPlugin = ctx.plugin;
+
+      var hlStrData = ctx.structure.obj && ctx.structure.obj.data;
+      if (!hlStrData) { log('highlight: ctx.structure.obj.data 为空', 'error'); break; }
+
+      var SE = null;
+      if (molstar.lib && molstar.lib.structure && molstar.lib.structure.StructureElement) {
+        SE = molstar.lib.structure.StructureElement;
+      }
+      if (!SE && molstar.lib && molstar.lib['mol-model'] && molstar.lib['mol-model'].structure) {
+        SE = molstar.lib['mol-model'].structure.StructureElement;
+      }
+      if (!SE) { log('highlight: 无法找到 StructureElement', 'error'); break; }
+
+      function makeOrderedSet(arr) {
+        return { size: arr.length, indices: new Int32Array(arr) };
+      }
+
+      var seqSet = {};
+      hlResidues.forEach(function(r){ seqSet[r] = true; });
+
+      var unitElements = [];
+      var units = hlStrData.units;
+      var modelHierarchy = hlStrData.model ? hlStrData.model.atomicHierarchy : null;
+
+      for (var u = 0; u < units.length; u++) {
+        var unit = units[u];
+        var h = modelHierarchy;
+
+        var authChains  = h.chains.auth_asym_id;
+        var labelChains = h.chains.label_asym_id;
+        var labelSeqs   = h.residues.label_seq_id;
+        var authSeqs    = h.residues.auth_seq_id;
+        var resSegs     = h.residueAtomSegments;
+        var chainAtomSegs = h.chainAtomSegments;
+
+        var matchedAtoms = [];
+        for (var ci = 0; ci < authChains.rowCount; ci++) {
+          var actualAuth = authChains.value(ci);
+          var actualLabel = labelChains.value(ci);
+          if (hlChain2 !== 'ALL' && actualAuth !== hlChain2 && actualLabel !== hlChain2) continue;
+          var caStart = chainAtomSegs.offsets[ci];
+          var caEnd   = chainAtomSegs.offsets[ci + 1];
+          for (var ri = 0; ri < labelSeqs.rowCount; ri++) {
+            var raStart = resSegs.offsets[ri];
+            if (raStart < caStart || raStart >= caEnd) continue;
+            if (!seqSet[labelSeqs.value(ri)] && !seqSet[authSeqs.value(ri)]) continue;
+            var aiS = resSegs.offsets[ri];
+            var aiE = resSegs.offsets[ri + 1];
+            for (var ai = aiS; ai < aiE; ai++) {
+              matchedAtoms.push(ai);
+            }
+          }
+        }
+        if (matchedAtoms.length > 0) {
+          unitElements.push({ unit: unit, indices: makeOrderedSet(matchedAtoms) });
+        }
+      }
+
+      if (unitElements.length === 0) {
+        log('highlight: 未找到残基 [' + hlResidues.join(',') + '] 在链 ' + hlChain2, 'warn');
+        break;
+      }
+
+      var loci = SE.Loci(hlStrData, unitElements);
+
+      if (hlPlugin.managers.interactivity.lociSelects && hlPlugin.managers.interactivity.lociSelects.select) {
+        hlPlugin.managers.interactivity.lociSelects.select({ loci: loci });
+      } else if (hlPlugin.managers.interactivity.lociSelects) {
+        hlPlugin.managers.interactivity.lociSelects.selectOnly({ loci: loci });
+      } else if (hlPlugin.managers.interactivity.selection) {
+        hlPlugin.managers.interactivity.selection.trigger({ loci: loci });
+      }
+      if (hlPlugin.managers.camera) {
+        hlPlugin.managers.camera.focusLoci(loci);
+      }
+
+      ctx.highlights.push({ loci: loci, chain: hlChain2, residues: hlResidues });
+      log('✓ 高亮 ' + hlResidues.length + ' 个残基: ' + hlResidues.join(','));
+      setStatus('✓ 高亮 ' + hlResidues.length + ' 个残基', 'ok');
+      hideStatus();
+    } catch(e) { log('highlight_list 失败: ' + e.message, 'error'); }
+    break;
+  }
+
+  // ---- 4.4 清除所有高亮 ----
+  case 'clear_highlights': {
+    log('clear_highlights');
+    try {
+      var clPlugin = ctx.plugin;
+      if (clPlugin.managers.interactivity.lociSelects && clPlugin.managers.interactivity.lociSelects.deselectAll) {
+        clPlugin.managers.interactivity.lociSelects.deselectAll();
+      } else if (clPlugin.managers.interactivity.lociSelects && clPlugin.managers.interactivity.lociSelects.select) {
+        clPlugin.managers.interactivity.lociSelects.select({ loci: molstar.lib.structure.StructureElement.Loci.empty });
+      } else if (clPlugin.managers.interactivity.selection) {
+        clPlugin.managers.interactivity.clearSelects();
+      } else {
+        clPlugin.managers.camera.focusLoci(molstar.lib.structure.StructureElement.Loci.empty);
+      }
+      ctx.highlights = [];
+      log('✓ 高亮已清除');
+      setStatus('✓ 高亮已清除', 'ok');
+      hideStatus();
+    } catch(e) { log('clear_highlights 失败: ' + e.message, 'error'); }
+    break;
+  }
+
+  // ---- 5.1 测量距离 ----
+  case 'measure_dist': {
+    var mc1 = (p.chain1 || p.chain || 'A').toUpperCase();
+    var mr1 = parseInt(p.res1 || p.residue1 || 1);
+    var mc2 = (p.chain2 || p.chain || 'A').toUpperCase();
+    var mr2 = parseInt(p.res2 || p.residue2 || 1);
+    log('measure_dist: ' + mc1 + ':' + mr1 + ' → ' + mc2 + ':' + mr2);
+
+    try {
+      var mPlugin = ctx.plugin;
+      var hier2 = mPlugin.managers.structure.hierarchy;
+      if (!hier2 || !hier2.current || !hier2.current.structures || !hier2.current.structures[0]) {
+        log('测量: 无法获取结构对象', 'warn'); break;
+      }
+      var mStrObj = hier2.current.structures[0].cell.obj;
+      if (!mStrObj || !mStrObj.data) { log('测量: structure data 为空', 'warn'); break; }
+      var mStr = mStrObj.data;
+
+      var _mSE = null;
+      if (molstar.lib && molstar.lib.structure && molstar.lib.structure.StructureElement) {
+        _mSE = molstar.lib.structure.StructureElement;
+      } else if (molstar.lib && molstar.lib['mol-model'] && molstar.lib['mol-model'].structure) {
+        _mSE = molstar.lib['mol-model'].structure.StructureElement;
+      }
+      if (!_mSE) { log('测量: 无法找到 StructureElement', 'error'); break; }
+
+      function getCaLociDirect(structure, chainId, seqId) {
+        try {
+          var units = structure.units;
+          for (var u = 0; u < units.length; u++) {
+            var unit = units[u];
+            if (!unit.model) continue;
+            var h = unit.model.atomicHierarchy;
+            if (!h) continue;
+            var authChains = h.chains.auth_asym_id;
+            var labelChains = h.chains.label_asym_id;
+            var labelSeqs  = h.residues.label_seq_id;
+            var atomLabels = h.atoms.label_atom_id;
+            var resSegs    = h.residueAtomSegments;
+            var chainAtomSegs = h.chainAtomSegments;
+            if (!chainAtomSegs) continue;
+            for (var ci = 0; ci < authChains.rowCount; ci++) {
+              if (authChains.value(ci) !== chainId && labelChains.value(ci) !== chainId) continue;
+              var caStart = chainAtomSegs.offsets[ci];
+              var caEnd   = chainAtomSegs.offsets[ci + 1];
+              for (var ri = 0; ri < labelSeqs.rowCount; ri++) {
+                var raStart = resSegs.offsets[ri];
+                if (raStart < caStart || raStart >= caEnd) continue;
+                if (labelSeqs.value(ri) !== seqId) continue;
+                var aiStart = resSegs.offsets[ri];
+                var aiEnd   = resSegs.offsets[ri + 1];
+                for (var ai = aiStart; ai < aiEnd; ai++) {
+                  if (atomLabels.value(ai) !== 'CA') continue;
+                  var loci = _mSE.Loci(structure, [{ unit: unit, indices: { size: 1, indices: new Int32Array([ai]) } }]);
+                  return loci;
+                }
+              }
+            }
+          }
+        } catch(le) { log('getCaLoci err: ' + le.message, 'warn'); }
+        return null;
+      }
+
+      var loci1 = getCaLociDirect(mStr, mc1, mr1);
+      var loci2 = getCaLociDirect(mStr, mc2, mr2);
+
+      if (!loci1 || !loci2) {
+        log('测量: 无法定位 Cα，请在 Mol* 左侧面板手动测量', 'warn');
+        setStatus('提示: 请在 Mol* 左侧面板手动点选两个残基后测量距离', 'ok');
+        break;
+      }
+
+      await mPlugin.managers.structure.measurement.addDistance(loci1, loci2);
+      log('✓ 距离测量已添加: ' + mc1 + ':' + mr1 + ' ↔ ' + mc2 + ':' + mr2);
+      setStatus('✓ 距离测量已添加', 'ok');
+      hideStatus();
+    } catch(e) { log('measure_dist 失败: ' + e.message, 'error'); }
+    break;
+  }
+
+  // ---- 5.2 清除测量 ----
+  case 'clear_measurements': {
+    log('clear_measurements');
+    try {
+      var cmPlugin = ctx.plugin;
+      var state = cmPlugin.state.data;
+      var found = [];
+
+      state.cells.forEach(function(cell, ref) {
+        if (cell && cell.obj) {
+          var tags = cell.obj.tags || [];
+          for (var ti = 0; ti < tags.length; ti++) {
+            if (typeof tags[ti] === 'string' && tags[ti].indexOf('measurement') >= 0) {
+              found.push({ ref: ref });
+              break;
+            }
+          }
+        }
+        if (cell && cell.transform && cell.transform.tags) {
+          var ttags = cell.transform.tags;
+          for (var tti = 0; tti < ttags.length; tti++) {
+            if (typeof ttags[tti] === 'string' && ttags[tti].indexOf('measurement') >= 0) {
+              if (!found.some(function(f) { return f.ref === ref; })) {
+                found.push({ ref: ref });
+              }
+            }
+          }
+        }
+      });
+
+      if (found.length > 0) {
+        var cmUpd = cmPlugin.build();
+        for (var fi2 = 0; fi2 < found.length; fi2++) {
+          cmUpd.to(found[fi2].ref).delete();
+        }
+        await cmUpd.commit();
+        log('✓ 测量已清除 (' + found.length + ' 个)');
+        setStatus('✓ 测量已清除', 'ok');
+      } else {
+        log('测量: 未找到 measurement 标签的 cells', 'warn');
+        setStatus('⚠ 无测量可清除', 'ok');
+      }
+      hideStatus();
+    } catch(e) { log('clear_measurements 失败: ' + e.message, 'error'); }
+    break;
+  }
+
+  // ---- 6.1 自动旋转 ----
+  case 'spin': {
+    var spinActive = (p.active !== false && p.active !== 0);
+    var spinSpeed = parseFloat(p.speed || 1);
+    log('spin → ' + (spinActive ? 'ON speed=' + spinSpeed : 'OFF'));
+    try {
+      var canvas = ctx.plugin.canvas3d;
+      if (!canvas) { log('canvas3d 不可用', 'warn'); break; }
+      var tb = JSON.parse(JSON.stringify(canvas.props.trackball || {}));
+      tb.animate = spinActive
+        ? { name: 'spin', params: { speed: spinSpeed } }
+        : { name: 'off', params: {} };
+      canvas.setProps({ trackball: tb });
+      log('✓ 旋转: ' + (spinActive ? 'ON' : 'OFF'));
+      setStatus('✓ 旋转' + (spinActive ? '已启动' : '已停止'), 'ok');
+      hideStatus();
+    } catch(e) { log('spin 失败: ' + e.message, 'error'); }
+    break;
+  }
+
+  // ---- 6.3 截图 ----
+  case 'screenshot': {
+    log('screenshot');
+    try {
+      var canvas3d = ctx.plugin.canvas3d;
+      if (canvas3d && canvas3d.webgl && canvas3d.webgl.gl) {
+        var gl = canvas3d.webgl.gl;
+        var c = gl.canvas;
+        var imgData = c.toDataURL('image/png');
+        var a = document.createElement('a');
+        a.href = imgData;
+        a.download = (ctx.pdbName || 'structure') + '_screenshot.png';
+        a.click();
+        log('✓ 截图已保存');
+        setStatus('✓ 截图已保存', 'ok');
+        hideStatus();
+      } else {
+        log('截图: canvas3d 不可用', 'warn');
+      }
+    } catch(e) { log('screenshot 失败: ' + e.message, 'error'); }
+    break;
+  }
+
+  // ---- 6.4 录制视频 ----
+  case 'record_video': {
+    log('record_video (引导使用 Mol* 内置录制 UI)');
+    setStatus('请使用 Mol* 内置录制功能（右上角相机图标）', 'loading');
+    setTimeout(function() { hideStatus(0); }, 3000);
+    break;
+  }
+
+  // ---- 视角重置 ----
+  case 'reset_view': {
+    log('reset_view');
+    try {
+      var rvPlugin = ctx ? ctx.plugin : null;
+      if (rvPlugin && rvPlugin.canvas3d) {
+        rvPlugin.canvas3d.requestCameraReset();
+        log('✓ 视角已重置');
+        setStatus('✓ 视角已重置', 'ok');
+        hideStatus();
+      }
+    } catch(e) { log('reset_view 失败: ' + e.message, 'error'); }
+    break;
+  }
+
+  // ---- 7.1 结构信息查询 ----
+  case 'get_info': {
+    log('get_info');
+    try {
+      var infoPlugin = ctx.plugin;
+      var hier3 = infoPlugin.managers.structure.hierarchy;
+      var info = { name: ctx.pdbName };
+      if (hier3 && hier3.current && hier3.current.structures && hier3.current.structures[0]) {
+        var infoStr = hier3.current.structures[0].cell.obj;
+        if (infoStr && infoStr.data) {
+          var model2 = infoStr.data;
+          if (model2.model && model2.model.atomicHierarchy) {
+            var ah = model2.model.atomicHierarchy;
+            info.chainCount = ah.chains._rowCount;
+            info.residueCount = ah.residues._rowCount;
+            info.elementCount = ah.atoms._rowCount;
+          } else {
+            info.elementCount = model2.elementCount || '?';
+            info.residueCount = '?';
+            info.chainCount = model2.unitSymmetryGroups ? model2.unitSymmetryGroups.length : '?';
+          }
+        }
+      }
+      var infoText = [
+        '文件: ' + info.name,
+        '链数: ' + info.chainCount,
+        '残基数: ' + info.residueCount,
+        '原子数: ' + info.elementCount,
+      ].join('\n');
+      log('✓ 信息: ' + infoText.replace(/\n/g,' | '));
+      setStatus(infoText, 'ok');
+    } catch(e) { log('get_info 失败: ' + e.message, 'error'); }
+    break;
+  }
+
+  // ---- 保存 PDB（需用户确认 + 支持指定保存路径） ----
+  case 'save_pdb': {
+    if (p.path && window.__pdbCtx) {
+      window.__pdbCtx._userSavePath = p.path;
+      log('保存路径已设置: ' + p.path);
+    }
+    if (p.confirm_required) {
+      showSaveDialog();
+    } else if (p.confirmed) {
+      await doSavePdb();
+    }
+    break;
+  }
+
+  default:
+    log('未知操作: ' + op, 'warn');
+  }
+}
+
+// ========================================================================
+// 保存 PDB 流程
+// ========================================================================
+function showSaveDialog() {
+  var dialog = document.getElementById('save-dialog');
+  var msgEl = document.getElementById('save-dialog-msg');
+  if (msgEl && window.__pdbCtx) {
+    msgEl.textContent = '此操作将覆盖原始 PDB 文件: ' +
+      (window.__pdbCtx.pdbName || '未知文件') +
+      '\n此操作不可撤销，建议先使用"导出"保存副本。是否继续？';
+  }
+  if (dialog) dialog.classList.add('visible');
+}
+
+function closeSaveDialog() {
+  var dialog = document.getElementById('save-dialog');
+  if (dialog) dialog.classList.remove('visible');
+}
+
+window.closeSaveDialog = closeSaveDialog;
+
+window.confirmSave = async function() {
+  closeSaveDialog();
+  await doSavePdb();
+};
+
+async function doSavePdb() {
+  log('开始保存 PDB…');
+  setStatus('正在保存…', 'loading');
+  try {
+    var ctx = window.__pdbCtx;
+    if (!ctx) { log('保存失败: 无结构上下文', 'error'); return; }
+
+    var savePath = ctx._userSavePath || ctx.pdbPath;
+    if (!savePath) {
+      log('❌ 保存失败: 未指定保存路径', 'error');
+      setStatus('保存失败: 请提供保存路径 (path 参数)', 'error');
+      return;
+    }
+
+    log('保存到: ' + savePath);
+
+    var resp = await fetch('/api/save-pdb', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        path: savePath,
+        name: ctx.pdbName,
+        action: 'backup',
+        create_if_missing: !ctx.pdbPath
+      })
+    });
+    var result = await resp.json();
+    if (result.ok) {
+      log('✓ 已保存: ' + (result.saved || result.backup_path));
+      setStatus('✓ 保存成功: ' + (result.saved || result.backup_path), 'ok');
+    } else {
+      log('保存失败: ' + result.error, 'error');
+      setStatus('保存失败: ' + result.error, 'error');
+    }
+  } catch(e) {
+    log('保存失败: ' + e.message, 'error');
+    setStatus('保存失败: ' + e.message, 'error');
+  }
+}
+
+// ========================================================================
+// 主流程
+// ========================================================================
+// 关键：molstar.Viewer.create() 返回 Promise，必须 .then(viewer => ...)
+// 不能用 new molstar.Viewer()，否则内部 plugin 未 init
+// 参考: https://github.com/molstar/molstar/issues/631
+if (typeof molstar === 'undefined' || !molstar.Viewer) {
+  setStatus('Mol* 库加载失败，请检查本地 molstar.js 文件', 'error');
+  log('❌ Mol* 加载失败: typeof molstar=' + typeof molstar, 'error');
+} else {
+  log('Mol* 库已加载，开始 Viewer.create...');
+  molstar.Viewer.create('viewer', {
+    layoutIsExpanded: false,
+    layoutShowControls: true,
+    layoutShowRemoteState: false,
+    layoutShowSequence: true,
+    layoutShowLog: false,
+    layoutShowLeftPanel: true,
+    viewportShowExpand: true,
+    viewportShowSelectionMode: true,
+    viewportShowAnimation: true,
+    pdbProvider: 'rcsb'
+  }).then(function(viewer) {
+    window.__molstarViewer = viewer;
+    window.__molPlugin = viewer.plugin;
+    log('Mol* Viewer 初始化完成');
+    setStatus('正在获取 PDB 文件…', 'loading');
+    // 启动 SSE 实时通道
+    connectSSE();
+    // 心跳：每 3 秒告知服务端页面存活，关闭页面后服务端 watchdog 自动退出
+    setInterval(function() {
+      fetch('/api/heartbeat', { cache: 'no-store' }).catch(function(){});
+    }, 3000);
+    window.addEventListener('beforeunload', function() {
+      navigator.sendBeacon('/api/heartbeat');
+    });
+    fetchAndLoad(viewer.plugin).catch(function(e) {
+      log('fetchAndLoad 失败: ' + e.message, 'error');
+      setStatus('加载失败: ' + e.message, 'error');
+    });
+  }).catch(function(e) {
+    setStatus('Mol* 初始化失败: ' + e.message, 'error');
+  });
+}
+
+})();
+</script>
+</body>
+</html>

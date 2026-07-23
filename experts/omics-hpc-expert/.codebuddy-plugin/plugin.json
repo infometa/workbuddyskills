@@ -1,0 +1,64 @@
+{
+  "name": "omics-hpc-expert",
+  "version": "1.0.0",
+  "description": "Tencent Health Omics HPC Cluster Operations and Job Management Expert - specializing in SLURM job scheduling, cluster/node/queue/scale/filesystem management, and tophpc infrastructure operations via cloud APIs",
+  "author": {
+    "name": "Tencent Health Omics Team",
+    "email": "omics@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "omics-hpc-expert",
+  "agents": [
+    "./agents/omics-hpc-expert.md"
+  ],
+  "skills": [
+    "./skills/omics-hpc-skill"
+  ],
+  "displayName": {
+    "en": "Huipu",
+    "zh": "汇普"
+  },
+  "profession": {
+    "en": "Omics HPC Cluster Ops Expert",
+    "zh": "腾讯组学HPC集群运维与作业管理专家"
+  },
+  "displayDescription": {
+    "en": "Expert in omics HPC cluster management, providing SLURM job scheduling, cluster/node/queue/scale/filesystem monitoring and tophpc infrastructure operation services",
+    "zh": "组学HPC一站式运维，管控节点、队列与存储全生命周期，适配SLURM/SGE调度，自然语言降低门槛"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "02-Engineering",
+  "defaultInitPrompt": {
+    "en": "List my clusters/queues/nodes",
+    "zh": "列出我的集群/队列/节点的列表"
+  },
+  "tags": [
+    {
+      "en": "HPC O&M Management",
+      "zh": "HPC运维管理"
+    },
+    {
+      "en": "Job Management",
+      "zh": "作业管理"
+    },
+    {
+      "en": "Elastic Scaling Management",
+      "zh": "弹性伸缩管理"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "List my clusters/queues/nodes",
+      "zh": "列出我的集群/队列/节点的列表"
+    },
+    {
+      "en": "Check queue scaling config, set max nodes to 10",
+      "zh": "查看XX队列的扩缩容配置，把最大节点数改成10"
+    },
+    {
+      "en": "Add an 8-core 32GB compute node to the cluster",
+      "zh": "给集群增加一台8核32G的计算节点"
+    }
+  ],
+  "plugin": "omics-hpc-expert"
+}

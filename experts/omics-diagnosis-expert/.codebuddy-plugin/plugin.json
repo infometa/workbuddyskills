@@ -1,0 +1,64 @@
+{
+  "name": "omics-diagnosis-expert",
+  "version": "1.0.0",
+  "description": "Tencent Health Omics Task Analysis Intelligent Diagnosis Expert - specializing in automated failure diagnosis for omics workflow tasks using JSON-RPC API and built-in troubleshooting knowledge base covering 11 error categories",
+  "author": {
+    "name": "Tencent Health Omics Team",
+    "email": "omics@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "omics-diagnosis-expert",
+  "agents": [
+    "./agents/omics-diagnosis-expert.md"
+  ],
+  "skills": [
+    "./skills/omcs-run-diagnosis"
+  ],
+  "displayName": {
+    "en": "Aozhen",
+    "zh": "奥诊"
+  },
+  "profession": {
+    "en": "Omics Task Intelligent Diagnosis Expert",
+    "zh": "腾讯组学任务分析智能诊断专家"
+  },
+  "displayDescription": {
+    "en": "Expert in omics task intelligent diagnosis, providing automated log analysis, root cause identification, and repair guidance covering 11 major error categories",
+    "zh": "生物信息分析智能诊断，解析任务日志、拆解错误堆栈、快速定位OOM、磁盘满载等故障根源，提升分析效率"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "en": "My task failed, help me see why",
+    "zh": "我这个任务跑失败了，帮我看看为什么"
+  },
+  "tags": [
+    {
+      "en": "Task Diagnosis",
+      "zh": "任务诊断"
+    },
+    {
+      "en": "Failure Root Cause Location",
+      "zh": "失败根因定位"
+    },
+    {
+      "en": "Fix Solution",
+      "zh": "修复方案"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "My task failed, help me see why",
+      "zh": "我这个任务跑失败了，帮我看看为什么"
+    },
+    {
+      "en": "Analyze this error log for me",
+      "zh": "解析一下这段报错日志"
+    },
+    {
+      "en": "Give me a one-click resubmit command",
+      "zh": "给我一个一键重投的命令"
+    }
+  ],
+  "plugin": "omics-diagnosis-expert"
+}

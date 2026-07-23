@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>正在加载结构…</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #1a1d24;
+      color: #e6e8eb;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
+      overflow: hidden;
+    }
+
+    .scene {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 36px;
+    }
+
+    /* ── 分子旋转动画 ── */
+    .mol {
+      position: relative;
+      width: 120px; height: 120px;
+    }
+
+    /* 外环轨道 */
+    .orbit {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      animation: orbit-spin linear infinite;
+    }
+    .orbit-1 {
+      border-top-color: #4a9eff;
+      border-right-color: rgba(74,158,255,0.3);
+      animation-duration: 1.8s;
+    }
+    .orbit-2 {
+      inset: 14px;
+      border-bottom-color: #7fd97f;
+      border-left-color: rgba(127,217,127,0.3);
+      animation-duration: 1.2s;
+      animation-direction: reverse;
+    }
+    .orbit-3 {
+      inset: 28px;
+      border-top-color: #f0a060;
+      border-right-color: rgba(240,160,96,0.3);
+      animation-duration: 2.4s;
+    }
+
+    @keyframes orbit-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* 原子节点（轨道上的小球） */
+    .atom {
+      position: absolute;
+      border-radius: 50%;
+      animation: orbit-spin linear infinite;
+    }
+    .atom::after {
+      content: '';
+      position: absolute;
+      top: -4px; left: calc(50% - 4px);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .atom-1 {
+      inset: -5px;
+      animation-duration: 1.8s;
+    }
+    .atom-1::after { background: #4a9eff; box-shadow: 0 0 8px #4a9eff; }
+
+    .atom-2 {
+      inset: 9px;
+      animation-duration: 1.2s;
+      animation-direction: reverse;
+    }
+    .atom-2::after { background: #7fd97f; box-shadow: 0 0 8px #7fd97f; }
+
+    .atom-3 {
+      inset: 23px;
+      animation-duration: 2.4s;
+    }
+    .atom-3::after { background: #f0a060; box-shadow: 0 0 8px #f0a060; }
+
+    /* 核心 */
+    .nucleus {
+      position: absolute;
+      inset: 42px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #5a8fff, #1a3a6a);
+      box-shadow: 0 0 16px rgba(74,158,255,0.6);
+      animation: nucleus-pulse 2s ease-in-out infinite;
+    }
+    @keyframes nucleus-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 16px rgba(74,158,255,0.6); }
+      50% { transform: scale(1.12); box-shadow: 0 0 28px rgba(74,158,255,0.9); }
+    }
+
+    /* ── 文字区 ── */
+    .text-area {
+      text-align: center;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #c8d4e8;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #6a7a8e;
+      line-height: 1.6;
+    }
+
+    /* 进度点动画 */
+    .dots span {
+      display: inline-block;
+      animation: dot-blink 1.4s ease-in-out infinite;
+      color: #4a9eff;
+    }
+    .dots span:nth-child(2) { animation-delay: 0.2s; }
+    .dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dot-blink {
+      0%, 80%, 100% { opacity: 0.2; transform: translateY(0); }
+      40% { opacity: 1; transform: translateY(-3px); }
+    }
+
+    /* ── 进度条 ── */
+    .progress-bar {
+      width: 220px;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #4a9eff, #7fd97f);
+      animation: progress-scan 1.8s ease-in-out infinite;
+      transform-origin: left;
+    }
+    @keyframes progress-scan {
+      0% { transform: translateX(-100%) scaleX(0.4); }
+      50% { transform: translateX(60%) scaleX(0.6); }
+      100% { transform: translateX(250%) scaleX(0.4); }
+    }
+
+    /* ── 状态徽章 ── */
+    .status-badge {
+      font-size: 11px;
+      font-family: monospace;
+      color: #4a6a8a;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── 超时提示 ── */
+    .timeout-msg {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(10,12,18,0.92);
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px;
+    }
+    .timeout-msg.visible { display: flex; }
+    .timeout-msg p { font-size: 14px; color: #ff7a7a; }
+    .timeout-msg small { font-size: 11px; color: #6a7a8e; }
+    .retry-btn {
+      margin-top: 8px;
+      padding: 8px 20px;
+      border: 1px solid rgba(74,158,255,0.5);
+      border-radius: 6px;
+      background: transparent;
+      color: #4a9eff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .retry-btn:hover { background: rgba(74,158,255,0.1); }
+  </style>
+</head>
+<body>
+
+<div class="scene">
+  <!-- 分子动画 -->
+  <div class="mol">
+    <div class="orbit orbit-1"></div>
+    <div class="orbit orbit-2"></div>
+    <div class="orbit orbit-3"></div>
+    <div class="atom atom-1"></div>
+    <div class="atom atom-2"></div>
+    <div class="atom atom-3"></div>
+    <div class="nucleus"></div>
+  </div>
+
+  <!-- 文字 -->
+  <div class="text-area">
+    <div class="title">
+      正在加载新结构<span class="dots"><span>.</span><span>.</span><span>.</span></span>
+    </div>
+    <div class="subtitle" id="sub-text">正在启动 Mol* 查看器</div>
+  </div>
+
+  <!-- 进度条 -->
+  <div class="progress-bar">
+    <div class="progress-fill"></div>
+  </div>
+
+  <!-- 状态徽章 -->
+  <div class="status-badge" id="status-badge">等待服务就绪</div>
+</div>
+
+<!-- 超时提示 -->
+<div class="timeout-msg" id="timeout-msg">
+  <p>⚠ 加载超时</p>
+  <small>新服务未能在预期时间内启动</small>
+  <button class="retry-btn" onclick="location.reload()">点击重试</button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── 由 serve_pdb.py 注入（替换占位符）──
+  /* __INJECT_SESSION_ID__ */
+  /* __INJECT_PDB_PARAM__ */
+
+  // 兜底默认值（注入失败时使用）
+  if (typeof CURRENT_SESSION_ID === 'undefined') var CURRENT_SESSION_ID = '';
+  if (typeof PDB_PARAM === 'undefined') var PDB_PARAM = '';
+
+  // 从 URL 参数读取 pdb（优先级高于注入值，兼容直接访问 loading.html 的情况）
+  var urlParams = new URLSearchParams(location.search);
+  var urlPdb = urlParams.get('pdb') || '';
+  if (urlPdb) PDB_PARAM = encodeURIComponent(decodeURIComponent(urlPdb));
+
+  var subText = document.getElementById('sub-text');
+  var statusBadge = document.getElementById('status-badge');
+  var timeoutMsg = document.getElementById('timeout-msg');
+
+  var POLL_INTERVAL = 500;   // ms
+  var TIMEOUT_MS = 30000;    // 30s 超时
+  var startTime = Date.now();
+  var attempts = 0;
+  var timer = null;
+
+  var PHASES = [
+    { at: 0,     text: '正在启动 Mol* 查看器' },
+    { at: 3000,  text: '正在初始化渲染引擎' },
+    { at: 8000,  text: '正在加载分子结构数据' },
+    { at: 15000, text: '正在构建三维模型' },
+    { at: 22000, text: '即将完成，请稍候' },
+  ];
+  var phaseIdx = 0;
+
+  function updatePhase() {
+    var elapsed = Date.now() - startTime;
+    while (phaseIdx < PHASES.length - 1 && elapsed >= PHASES[phaseIdx + 1].at) {
+      phaseIdx++;
+    }
+    if (subText) subText.textContent = PHASES[phaseIdx].text;
+  }
+
+  function poll() {
+    attempts++;
+    updatePhase();
+
+    // 超时检测
+    if (Date.now() - startTime > TIMEOUT_MS) {
+      clearInterval(timer);
+      if (timeoutMsg) timeoutMsg.classList.add('visible');
+      if (statusBadge) statusBadge.textContent = '超时 (' + attempts + ' 次轮询)';
+      return;
+    }
+
+    if (statusBadge) statusBadge.textContent = '轮询中… (' + attempts + ')';
+
+    var BASE = 'http://127.0.0.1:8789';
+    fetch(BASE + '/__healthz', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        // 检测到新的 session_id → 新服务已就绪 → 跳转
+        if (d && d.session_id && d.session_id !== CURRENT_SESSION_ID) {
+          clearInterval(timer);
+          var ts = Date.now();
+          var newUrl = BASE + '/view/' + ts + (PDB_PARAM ? '?pdb=' + PDB_PARAM : '');
+          if (statusBadge) statusBadge.textContent = '✓ 新服务就绪，正在跳转…';
+          if (subText) subText.textContent = '加载完成，即将打开结构';
+          // 短暂延迟让用户看到"✓"提示
+          setTimeout(function () { location.replace(newUrl); }, 300);
+        }
+        // session_id 相同或无 session_id → 旧服务还在（loading 模式）或新服务刚起来
+        // 继续等待
+      })
+      .catch(function () {
+        // 请求失败 = 旧服务已关闭，等新服务启动
+        if (statusBadge) statusBadge.textContent = '服务交接中… (' + attempts + ')';
+      });
+  }
+
+  // 立即执行第一次，然后定时轮询
+  poll();
+  timer = setInterval(poll, POLL_INTERVAL);
+})();
+</script>
+</body>
+</html>

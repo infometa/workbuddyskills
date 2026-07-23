@@ -1,0 +1,64 @@
+{
+  "name": "omics-scprotein-expert",
+  "version": "1.0.0",
+  "description": "Tencent Health scPROTEIN Single-Cell Proteomics Modeling Expert - specializing in peptide-level uncertainty quantification and cell-level embedding learning using GNN-based foundation model collection",
+  "author": {
+    "name": "Tencent Health Omics Team",
+    "email": "omics@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "omics-scprotein-expert",
+  "agents": [
+    "./agents/omics-scprotein-expert.md"
+  ],
+  "skills": [
+    "./skills/scprotein-collection-skill"
+  ],
+  "displayName": {
+    "en": "Saidanbai",
+    "zh": "赛蛋白"
+  },
+  "profession": {
+    "en": "scPROTEIN Single-Cell Proteomics Expert",
+    "zh": "腾讯scPROTEIN单细胞蛋白组建模专家"
+  },
+  "displayDescription": {
+    "en": "Expert in scPROTEIN GNN-based single-cell proteomics model, providing peptide uncertainty quantification and cell embedding services",
+    "zh": "scPROTEIN图神经网络模型，适配CITE-seq稀疏蛋白数据，实现降噪补全与不确定性预估"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "en": "Denoise this batch of CITE-seq proteomics data",
+    "zh": "对这批CITE-seq蛋白组数据做降噪"
+  },
+  "tags": [
+    {
+      "en": "Denoising & Imputation",
+      "zh": "降噪补全"
+    },
+    {
+      "en": "Uncertainty Estimation",
+      "zh": "不确定性估计"
+    },
+    {
+      "en": "Cell Representation",
+      "zh": "细胞表征"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Denoise this batch of CITE-seq proteomics data",
+      "zh": "对这批CITE-seq蛋白组数据做降噪"
+    },
+    {
+      "en": "Evaluate the uncertainty of these peptide quantifications",
+      "zh": "评估这些肽段定量的不确定性"
+    },
+    {
+      "en": "Generate embeddings for single-cell proteomics",
+      "zh": "生成单细胞蛋白组的embedding"
+    }
+  ],
+  "plugin": "omics-scprotein-expert"
+}

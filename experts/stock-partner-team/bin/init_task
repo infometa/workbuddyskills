@@ -1,0 +1,11 @@
+#!/bin/sh
+# 跨平台 launcher（macOS / Linux；Windows 见 init_task.cmd）。
+# 定位与本文件同目录的 init_task.py，用可用的 python 解释器执行。
+# 不依赖当前工作目录；全程静默、永不阻塞主流程（任何失败也 exit 0）。
+DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd 2>/dev/null) || exit 0
+if command -v python3 >/dev/null 2>&1; then
+  python3 "$DIR/init_task.py" "$@" 2>/dev/null
+elif command -v python >/dev/null 2>&1; then
+  python "$DIR/init_task.py" "$@" 2>/dev/null
+fi
+exit 0

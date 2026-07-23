@@ -1,0 +1,2726 @@
+{
+  "schemaVersion": 1,
+  "tier": "full",
+  "layouts": [
+    {
+      "id": "hero1",
+      "needsImage": "required",
+      "desc": "开场标题 / 产品发布风\n· 结构：毛玻璃大面板 + 辉光装饰 + 主副标题居中\n· 适用：视频开场或产品发布；章节切换请用 sectionBreak1",
+      "slots": [
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 9,
+          "maxLengthVertical": 9,
+          "required": true,
+          "description": "主标题（必须用 | 分段，最多 4 段）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 30,
+          "maxLengthVertical": 20,
+          "required": false,
+          "description": "副标题",
+          "maxWordsEn": 12,
+          "maxWordsEnVertical": 8
+        }
+      ]
+    },
+    {
+      "id": "hero2",
+      "needsImage": "required",
+      "desc": "开场标题 / 氛围极简\n· 结构：全屏模糊光球 + 居中大标题 + 副标题\n· 适用：人文/抒情/氛围型主题的开场",
+      "slots": [
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 9,
+          "maxLengthVertical": 8,
+          "required": true,
+          "description": "主标题（必须用 | 分段，最多 4 段）",
+          "maxWordsEn": 4,
+          "maxWordsEnVertical": 3
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 30,
+          "maxLengthVertical": 20,
+          "required": false,
+          "description": "副标题",
+          "maxWordsEn": 12,
+          "maxWordsEnVertical": 8
+        }
+      ]
+    },
+    {
+      "id": "hero3",
+      "needsImage": "required",
+      "desc": "开场标题 / 编辑杂志风\n· 结构：纯排版驱动，超大标题按字数自适应字号\n· 适用：文艺/深度/人文内容；克制无装饰的开场",
+      "slots": [
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 9,
+          "maxLengthVertical": 9,
+          "required": true,
+          "description": "主标题（必须用 | 分段，越短字号越大，最多 4 段）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 40,
+          "maxLengthVertical": 24,
+          "required": false,
+          "description": "副标题（可选）",
+          "maxWordsEn": 16,
+          "maxWordsEnVertical": 10
+        }
+      ]
+    },
+    {
+      "id": "hero4",
+      "needsImage": "required",
+      "desc": "开场标题 / 撕裂聚合冲击\n· 结构：标题逐字符从画面四方旋转飞入 spring 聚合到中心 + 副标题渐入\n· 适用：发布会/品牌片/AI 主题等需要强冲击的开场；克制氛围请用 hero1/hero2/hero3",
+      "slots": [
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 12,
+          "maxLengthVertical": 10,
+          "required": true,
+          "description": "主标题（不强制分段；若标题语义有断点想强制换行可用 |，否则直接写）",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 20,
+          "maxLengthVertical": 18,
+          "required": false,
+          "description": "副标题（标题聚合稳态后渐入）",
+          "maxWordsEn": 8,
+          "maxWordsEnVertical": 7
+        }
+      ]
+    },
+    {
+      "id": "bigNumber1",
+      "needsImage": "required",
+      "desc": "单数字冲击画面\n· 结构：超大数字居中 + 标签 + 可选补充语境 + 光晕\n· 适用：突出一个核心数字/数据（市占率、增长率、用户数等）",
+      "slots": [
+        {
+          "name": "number",
+          "type": "text",
+          "maxLength": 9,
+          "required": true,
+          "maxLengthVertical": 9,
+          "description": "核心数字（含单位）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "label",
+          "type": "text",
+          "maxLength": 9,
+          "required": true,
+          "maxLengthVertical": 9,
+          "description": "数字说明",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "context",
+          "type": "text",
+          "maxLength": 30,
+          "required": false,
+          "description": "补充语境",
+          "maxWordsEn": 12
+        }
+      ]
+    },
+    {
+      "id": "list1",
+      "needsImage": "required",
+      "desc": "单层要点列表 / 编号卡片\n· 结构：大标题 + 3~6 条一行短语（编号卡，无描述）\n· 适用：要点已自解释；需要每条一句展开请用 list2",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 10,
+          "required": true,
+          "maxLengthVertical": 7,
+          "description": "标题",
+          "maxWordsEn": 4,
+          "maxWordsEnVertical": 3
+        },
+        {
+          "name": "items",
+          "type": "textArray",
+          "maxLength": 28,
+          "maxLengthVertical": 20,
+          "maxItems": 6,
+          "required": true,
+          "description": "要点列表，每条一个核心信息，竖版每条单行",
+          "maxWordsEn": 11,
+          "maxWordsEnVertical": 8
+        }
+      ]
+    },
+    {
+      "id": "list2",
+      "needsImage": "required",
+      "desc": "双层要点列表 / 标题+描述\n· 结构：小标签 + 大标题 + 编号要点（标题 + 一句描述），左边框装饰\n· 适用：要点需要一句话解释或定义；信息密度比 list1 高",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 9,
+          "required": true,
+          "maxLengthVertical": 9,
+          "description": "标题",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "tag",
+          "type": "text",
+          "maxLength": 10,
+          "required": false,
+          "description": "小标签（如 Key Points）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 6,
+          "required": true,
+          "description": "要点列表，竖版单条 ≤2 行",
+          "fields": [
+            {
+              "name": "title",
+              "maxLength": 15,
+              "maxLengthVertical": 12,
+              "description": "要点标题，简短",
+              "maxWordsEn": 6,
+              "maxWordsEnVertical": 5
+            },
+            {
+              "name": "description",
+              "maxLength": 35,
+              "maxLengthVertical": 28,
+              "description": "要点描述",
+              "maxWordsEn": 14,
+              "maxWordsEnVertical": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "article1",
+      "needsImage": "required",
+      "desc": "深度长文 + 边栏要点（editorial 风）\n· 结构：左 60% 标题 + 副标题 + 一/两段正文；右 30% 标签 + 3~5 个一行式要点（label：text 合并成一句）\n· 适用：单页深度讲解、章节内核拆解、错峰文况；纯要点用 list2，并列 PPT 风用 cardGrid1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 14,
+          "maxLengthVertical": 14,
+          "required": true,
+          "description": "主标题（左栏顶部大字）",
+          "maxWordsEn": 6
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 29,
+          "maxLengthVertical": 22,
+          "required": false,
+          "description": "副标题 / 导语（一句话补充主标题）",
+          "maxWordsEn": 12,
+          "maxWordsEnVertical": 9
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "maxLength": 140,
+          "maxLengthVertical": 140,
+          "required": true,
+          "description": "正文段落（可含一个 | 分段成两段，每段一句话）",
+          "maxWordsEn": 56
+        },
+        {
+          "name": "sideTag",
+          "type": "text",
+          "maxLength": 14,
+          "required": false,
+          "maxLengthVertical": 18,
+          "description": "右栏顶部小标签（如「Key Facts」「重点指标」）",
+          "maxWordsEn": 6,
+          "maxWordsEnVertical": 7
+        },
+        {
+          "name": "sidePoints",
+          "type": "objectArray",
+          "maxItems": 5,
+          "maxItemsVertical": 4,
+          "required": true,
+          "description": "边栏要点列表（横版 3~5 项，竖版 3~4 项），渲染为「label：text」单行式",
+          "fields": [
+            {
+              "name": "label",
+              "maxLength": 10,
+              "maxLengthVertical": 14,
+              "description": "短标签（accent 色，如「发生时间」「核心能力」「典型案例」）",
+              "maxWordsEn": 4,
+              "maxWordsEnVertical": 6
+            },
+            {
+              "name": "text",
+              "maxLength": 18,
+              "maxLengthVertical": 20,
+              "description": "一行说明",
+              "maxWordsEn": 7,
+              "maxWordsEnVertical": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "comparison1",
+      "needsImage": "required",
+      "desc": "两项对比（文本型）\n· 结构：顶部小标题 + 左右分栏 + 中间 VS 徽章\n· 适用：两个方案/指标/选项的文本对比；强视觉图片对比请用 dualImage1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "maxLengthVertical": 12,
+          "required": true,
+          "description": "顶部小标题（如「方案对比」「性能对比」，概括本次对比主题）",
+          "maxWordsEn": 5
+        },
+        {
+          "name": "leftLabel",
+          "type": "text",
+          "maxLength": 10,
+          "required": true,
+          "description": "左侧标签",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "leftValue",
+          "type": "text",
+          "maxLength": 30,
+          "required": true,
+          "description": "左侧内容",
+          "maxWordsEn": 12
+        },
+        {
+          "name": "rightLabel",
+          "type": "text",
+          "maxLength": 10,
+          "required": true,
+          "description": "右侧标签",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "rightValue",
+          "type": "text",
+          "maxLength": 30,
+          "required": true,
+          "description": "右侧内容",
+          "maxWordsEn": 12
+        }
+      ]
+    },
+    {
+      "id": "quote1",
+      "needsImage": "required",
+      "desc": "引用金句 / 名言\n· 结构：巨型引号装饰 + 毛玻璃引文面板 + 出处\n· 适用：强调一句关键观点、名言或引语",
+      "slots": [
+        {
+          "name": "text",
+          "type": "text",
+          "maxLength": 40,
+          "required": true,
+          "maxLengthVertical": 40,
+          "description": "引用文本",
+          "maxWordsEn": 16
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "maxLength": 15,
+          "required": false,
+          "maxLengthVertical": 14,
+          "description": "出处/署名",
+          "maxWordsEn": 6
+        }
+      ]
+    },
+    {
+      "id": "process1",
+      "needsImage": "required",
+      "desc": "有序流程 / 数字步骤\n· 结构：编号圆圈 + 连接线 + 步骤描述\n· 适用：有先后顺序的操作/执行步骤；历史年表请用 timeline1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": true,
+          "maxLengthVertical": 10,
+          "description": "标题",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "steps",
+          "type": "textArray",
+          "maxLength": 28,
+          "maxLengthVertical": 20,
+          "maxItems": 6,
+          "required": true,
+          "description": "步骤列表，按顺序排列，竖版每条单行，动宾短语为主",
+          "maxWordsEn": 11,
+          "maxWordsEnVertical": 8
+        }
+      ]
+    },
+    {
+      "id": "process2",
+      "needsImage": "required",
+      "desc": "有序流程 / emoji 彩卡\n· 结构：每步 emoji 彩卡 + 名称 + 描述 + 箭头\n· 适用：可视性强、每步能配具体图标的流程；抽象步骤用 process1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 4,
+          "required": true,
+          "maxLengthVertical": 4,
+          "description": "标题",
+          "maxWordsEn": 2
+        },
+        {
+          "name": "steps",
+          "type": "objectArray",
+          "maxItems": 5,
+          "required": true,
+          "description": "步骤列表，名称简短、描述一句话，竖版避免换行",
+          "fields": [
+            {
+              "name": "emoji",
+              "maxLength": 2,
+              "description": "表情符号",
+              "maxWordsEn": 2
+            },
+            {
+              "name": "name",
+              "maxLength": 6,
+              "maxLengthVertical": 8,
+              "description": "步骤名称，简短",
+              "maxWordsEn": 2,
+              "maxWordsEnVertical": 3
+            },
+            {
+              "name": "description",
+              "maxLength": 15,
+              "maxLengthVertical": 15,
+              "description": "步骤描述，一句话",
+              "maxWordsEn": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process3",
+      "needsImage": "required",
+      "desc": "流程步骤 + 底部要点（PPT 教育风），多文字布局\n· 结构：顶部 heading + 副标题；中部 3~5 个流程卡（编号圆圈 + 标题 + emoji + 描述 + 箭头）；底部可选 footer 区（小标题 + 3~4 个 emoji 要点）\n· 适用：业务流程拆解、方法论步骤、操作指引；纯步骤用 process1/2，无步骤的并列要点用 iconGrid1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 18,
+          "maxLengthVertical": 9,
+          "required": true,
+          "description": "主标题",
+          "maxWordsEn": 7,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLengthVertical": 20,
+          "required": false,
+          "maxLength": 20,
+          "description": "副标题 / 导语（一句话）",
+          "maxWordsEn": 8
+        },
+        {
+          "name": "steps",
+          "type": "objectArray",
+          "maxItems": 5,
+          "maxItemsVertical": 4,
+          "required": true,
+          "description": "流程步骤（横版 3~5 项，竖版 3~4 项；编号由系统自动加 1~N）",
+          "fields": [
+            {
+              "name": "title",
+              "maxLength": 8,
+              "description": "步骤名（短词）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "emoji",
+              "maxLength": 1,
+              "maxLengthVertical": 1,
+              "description": "图标 emoji",
+              "maxWordsEn": 2
+            },
+            {
+              "name": "description",
+              "maxLength": 16,
+              "maxLengthVertical": 16,
+              "description": "一句解读（≤ 18 字，两行内）",
+              "maxWordsEn": 6
+            }
+          ]
+        },
+        {
+          "name": "footerItems",
+          "type": "objectArray",
+          "maxItems": 4,
+          "maxItemsVertical": 2,
+          "required": false,
+          "description": "底部要点列表（可选；横版 3~4 项，竖版 2 项）",
+          "fields": [
+            {
+              "name": "label",
+              "maxLength": 8,
+              "description": "短标签（accent 强调）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "text",
+              "maxLength": 16,
+              "maxLengthVertical": 16,
+              "description": "一行说明",
+              "maxWordsEn": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "end1",
+      "needsImage": "required",
+      "desc": "通用结尾 / 总结\n· 结构：毛玻璃大面板 + 光晕 + 大标题 + 副标题\n· 适用：普通收尾；需要仪式感/个人签名请用 end2",
+      "slots": [
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 9,
+          "required": true,
+          "maxLengthVertical": 9,
+          "description": "结尾标题",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 30,
+          "required": false,
+          "description": "结尾副标题",
+          "maxWordsEn": 12
+        }
+      ]
+    },
+    {
+      "id": "end2",
+      "needsImage": "required",
+      "desc": "签名落幕 / 仪式感收尾\n· 结构：大字标题上下细线夹击 + 底部居中签名\n· 适用：个人作品、纪念片、有仪式感的结尾",
+      "slots": [
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 9,
+          "required": true,
+          "maxLengthVertical": 9,
+          "description": "结尾标题（可用 |；越短字号越大）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 24,
+          "required": false,
+          "description": "副标题（字距拉宽）",
+          "maxWordsEn": 10
+        },
+        {
+          "name": "signature",
+          "type": "text",
+          "maxLength": 20,
+          "required": false,
+          "description": "右下角签名/作者/日期",
+          "maxWordsEn": 8
+        }
+      ]
+    },
+    {
+      "id": "timeline1",
+      "needsImage": "required",
+      "desc": "时间线 / 年表\n· 结构：中央竖线 + 节点 + 年份/事件卡片\n· 适用：有明确时间轴的历史演变/里程碑；无时间的流程请用 process1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": true,
+          "maxLengthVertical": 10,
+          "description": "时间线标题",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "events",
+          "type": "objectArray",
+          "maxItems": 8,
+          "required": true,
+          "description": "时间事件。横版最多显示 6 条，竖版最多显示 8 条",
+          "fields": [
+            {
+              "name": "year",
+              "maxLength": 7,
+              "description": "时间标签（如 2024、1970s、Q1、春、第一阶段）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "text",
+              "maxLength": 20,
+              "description": "事件描述",
+              "maxWordsEn": 8
+            }
+          ]
+        },
+        {
+          "name": "summary",
+          "type": "text",
+          "maxLength": 30,
+          "required": false,
+          "description": "总结语",
+          "maxWordsEn": 12
+        }
+      ]
+    },
+    {
+      "id": "stats1",
+      "needsImage": "required",
+      "desc": "纯数字面板\n· 结构：2~4 个数字卡片并排（数字 + 标签 + 可选脚注）\n· 适用：最克制的数字展示；带引用用 stats2",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": false,
+          "maxLengthVertical": 10,
+          "description": "面板标题",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 4,
+          "required": true,
+          "description": "数据项（2~4 条）。num **必须以阿拉伯数字开头**，只允许「数字+可选单位」（如 '6000+'、'98%'、'$2.4B'、'3大类'、'365天'），≤8 字符。**严禁把模糊量词/纯中文词/英文词/品牌名当 num**（反例：'百名+'、'数十项'、'高频'、'多维' ❌ 全是纯中文，不是合法数字）。遇到「数十」「上百」「多种」这类没有精确数字的内容，**不要硬凑成中文 num，直接改用 iconGrid1 或 list2**",
+          "fields": [
+            {
+              "name": "num",
+              "maxLength": 8,
+              "description": "数字+单位（必须以阿拉伯数字开头，如 6000+、98%、$2.4B、3大类）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "label",
+              "maxLength": 12,
+              "description": "标签说明",
+              "maxWordsEn": 5
+            }
+          ]
+        },
+        {
+          "name": "footnote",
+          "type": "text",
+          "maxLength": 30,
+          "required": false,
+          "description": "脚注说明",
+          "maxWordsEn": 12
+        }
+      ]
+    },
+    {
+      "id": "stats2",
+      "needsImage": "required",
+      "desc": "数据面板 + 引用条\n· 结构：2~4 个数字卡片 + 底部引用文字与出处\n· 适用：数据旁需要背书引语或权威出处；纯数字用 stats1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": false,
+          "maxLengthVertical": 10,
+          "description": "面板标题",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 4,
+          "required": true,
+          "description": "数据项（2~4 条）。num **必须以阿拉伯数字开头**，只允许「数字+可选单位」（如 '6000+'、'98%'、'$2.4B'、'3大类'、'365天'），≤8 字符。**严禁把模糊量词/纯中文词/英文词/品牌名当 num**（反例：'百名+'、'数十项'、'高频'、'多维' ❌ 全是纯中文，不是合法数字）。遇到「数十」「上百」「多种」这类没有精确数字的内容，**不要硬凑成中文 num，直接改用 iconGrid1 或 list2**",
+          "fields": [
+            {
+              "name": "num",
+              "maxLength": 8,
+              "description": "数字+单位（必须以阿拉伯数字开头，如 6000+、98%、$2.4B、3大类）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "label",
+              "maxLength": 12,
+              "description": "标签说明",
+              "maxWordsEn": 5
+            }
+          ]
+        },
+        {
+          "name": "quote",
+          "type": "text",
+          "maxLength": 80,
+          "maxLengthVertical": 40,
+          "required": false,
+          "description": "底部引用文字（2 行内，过长会侵入字幕区）",
+          "maxWordsEn": 32,
+          "maxWordsEnVertical": 16
+        },
+        {
+          "name": "quoteSource",
+          "type": "text",
+          "maxLength": 20,
+          "required": false,
+          "description": "引用出处",
+          "maxWordsEn": 8
+        }
+      ]
+    },
+    {
+      "id": "definition1",
+      "needsImage": "required",
+      "desc": "术语 / 概念解释\n· 结构：关键词大字 + 定义面板 + 可选示例\n· 适用：定义一个专业名词或新概念",
+      "slots": [
+        {
+          "name": "term",
+          "type": "text",
+          "maxLength": 8,
+          "required": true,
+          "maxLengthVertical": 8,
+          "description": "术语/关键词",
+          "maxWordsEn": 3
+        },
+        {
+          "name": "definition",
+          "type": "text",
+          "maxLength": 100,
+          "maxLengthVertical": 60,
+          "required": true,
+          "description": "定义/解释",
+          "maxWordsEn": 40,
+          "maxWordsEnVertical": 24
+        },
+        {
+          "name": "example",
+          "type": "text",
+          "maxLength": 40,
+          "required": false,
+          "description": "示例说明",
+          "maxWordsEn": 16
+        }
+      ]
+    },
+    {
+      "id": "imageFlow1",
+      "needsImage": "required",
+      "desc": "图片流 / 标题栏 + 多图\n· 结构：左上大标题 + 右上一句话（可选）+ 下方 1~8 张用户图 justified-grid\n· 适用：图为主、文字仅做点睛；需要论述 / 要点列表请用 userPicture1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 9,
+          "required": true,
+          "maxLengthVertical": 5,
+          "description": "左上标题",
+          "maxWordsEn": 4,
+          "maxWordsEnVertical": 2
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "maxLength": 16,
+          "maxLengthVertical": 12,
+          "required": false,
+          "description": "右上一句话点睛（可选；单行，不要写成段落）",
+          "maxWordsEn": 6,
+          "maxWordsEnVertical": 5
+        },
+        {
+          "name": "images",
+          "type": "textArray",
+          "maxLength": 200,
+          "maxItems": 8,
+          "required": true,
+          "description": "图片URL列表（1~8 张，必须来自用户素材；images 为空禁用本布局）"
+        }
+      ]
+    },
+    {
+      "id": "profileCard1",
+      "needsImage": "required",
+      "desc": "人物介绍卡片\n· 结构：姓名 + 职位 + 描述，强调线装饰\n· 适用：作者/嘉宾/专家/主角的介绍",
+      "slots": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true,
+          "maxLength": 12,
+          "maxLengthVertical": 10,
+          "description": "人物姓名",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 25,
+          "required": true,
+          "description": "头衔/职位",
+          "maxWordsEn": 10
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "maxLength": 80,
+          "required": false,
+          "description": "人物简介",
+          "maxWordsEn": 32
+        }
+      ]
+    },
+    {
+      "id": "sectionBreak1",
+      "needsImage": "required",
+      "desc": "章节过渡页\n· 结构：章节编号 + 大标题 + 副标题 + 背景水印\n· 适用：视频中段的主题切换；视频开场请用 hero",
+      "slots": [
+        {
+          "name": "sectionNumber",
+          "type": "text",
+          "maxLength": 8,
+          "required": false,
+          "description": "章节编号短串（推荐格式如 PART 02 / 02 / Chapter 1，最终原样显示，不再追加前缀）",
+          "maxWordsEn": 3
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 10,
+          "required": true,
+          "maxLengthVertical": 10,
+          "description": "章节标题（必须用 | 分段，无论长短都要标）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 30,
+          "required": false,
+          "description": "章节副标题",
+          "maxWordsEn": 12
+        }
+      ]
+    },
+    {
+      "id": "iconGrid1",
+      "needsImage": "required",
+      "desc": "图标网格 / 并列特性\n· 结构：2×2 或 3×2 的「图标 + 标题 + 描述」卡片网格\n· 适用：并列展示多个特性/服务/优势；有先后顺序请用 process1/2",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": true,
+          "maxLengthVertical": 10,
+          "description": "标题",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "tag",
+          "type": "text",
+          "maxLength": 10,
+          "required": false,
+          "description": "标签（如 Key Features）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 6,
+          "maxItemsVertical": 4,
+          "required": true,
+          "description": "卡片列表（禁用国旗 emoji 如 🇺🇸🇨🇳，改用相关含义的普通 emoji 如 🗽🐼🏛️）。横版最多 6 条，竖版最多 4 条",
+          "fields": [
+            {
+              "name": "emoji",
+              "maxLength": 2,
+              "description": "表情符号",
+              "maxWordsEn": 2
+            },
+            {
+              "name": "title",
+              "maxLength": 8,
+              "description": "卡片标题",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "description",
+              "maxLength": 16,
+              "description": "卡片描述",
+              "maxWordsEn": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "barChart1",
+      "needsImage": "required",
+      "desc": "横向柱状图\n· 结构：水平柱条 + 标签 + 数值\n· 适用：同一维度（同单位/同量级）的可比数据（销量排名、占比、逐年增长）\n· 约束：异维度数据（不同单位/数量级）请改用 stats1/2/3",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 16,
+          "required": true,
+          "maxLengthVertical": 12,
+          "description": "标题",
+          "maxWordsEn": 6,
+          "maxWordsEnVertical": 5
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 6,
+          "required": true,
+          "description": "数据项（2~6 条）。**所有条目必须同一维度、同一单位、同一量级**（如都是 % 或都是万台或都是美元），柱长才有比较意义。严禁品牌名或文字拼接",
+          "fields": [
+            {
+              "name": "num",
+              "maxLength": 8,
+              "description": "数字+单位（必须以阿拉伯数字开头，如 6000+、98%、$2.4B、3大类）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "label",
+              "maxLength": 7,
+              "description": "标签说明",
+              "maxWordsEn": 3
+            }
+          ]
+        },
+        {
+          "name": "footnote",
+          "type": "text",
+          "maxLength": 20,
+          "required": false,
+          "description": "脚注说明",
+          "maxWordsEn": 8
+        }
+      ]
+    },
+    {
+      "id": "barChart2",
+      "needsImage": "required",
+      "desc": "纵向柱状图 + 文字\n· 结构：左文（标题 + 描述段落）+ 右直角柱状图\n· 适用：同一维度的可比数据（季度营收、月度用户数）\n· 约束：异维度数据请改用 stats1/2/3",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": true,
+          "maxLengthVertical": 9,
+          "description": "标题",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "maxLength": 50,
+          "required": false,
+          "description": "描述文字",
+          "maxWordsEn": 20
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 6,
+          "required": true,
+          "description": "数据项（2~6 条）。**所有条目必须同一维度、同一单位、同一量级**（如都是 % 或都是万台或都是美元），柱长才有比较意义。严禁品牌名或文字拼接",
+          "fields": [
+            {
+              "name": "num",
+              "maxLength": 8,
+              "description": "数字+单位（必须以阿拉伯数字开头，如 6000+、98%、$2.4B、3大类）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "label",
+              "maxLength": 5,
+              "maxLengthVertical": 5,
+              "description": "标签说明",
+              "maxWordsEn": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stats3",
+      "needsImage": "required",
+      "desc": "数据面板 + 文字解读（编辑风）\n· 结构：左侧标题 + 描述段落 / 右侧 4 张数据卡竖排\n· 适用：数据需要一段文字铺垫或解读；纯数字用 stats1；带引用用 stats2",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 10,
+          "required": true,
+          "maxLengthVertical": 9,
+          "description": "左侧主标题",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "maxLength": 60,
+          "required": false,
+          "description": "左侧描述文字",
+          "maxWordsEn": 24
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 4,
+          "maxItemsVertical": 4,
+          "required": true,
+          "description": "数据项（2~4 条）",
+          "fields": [
+            {
+              "name": "num",
+              "maxLength": 8,
+              "description": "数字+单位（必须以阿拉伯数字开头，如 6000+、98%、$2.4B、3大类）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "label",
+              "maxLength": 12,
+              "description": "标签说明",
+              "maxWordsEn": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "comparison2",
+      "needsImage": "required",
+      "desc": "双列列表对比\n· 结构：左右各一列「标题 + 4~6 条编号要点」\n· 适用：「现状 vs 目标」、「问题 vs 方案」等成对长文本对比",
+      "slots": [
+        {
+          "name": "leftTitle",
+          "type": "text",
+          "maxLength": 10,
+          "required": true,
+          "maxLengthVertical": 10,
+          "description": "左列标题",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "leftItems",
+          "type": "textArray",
+          "maxLength": 35,
+          "maxLengthVertical": 20,
+          "maxItems": 6,
+          "required": true,
+          "description": "左列要点列表，竖版这列窄、单行",
+          "maxWordsEn": 14,
+          "maxWordsEnVertical": 8
+        },
+        {
+          "name": "rightTitle",
+          "type": "text",
+          "maxLength": 10,
+          "required": true,
+          "maxLengthVertical": 10,
+          "description": "右列标题",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "rightItems",
+          "type": "textArray",
+          "maxLength": 35,
+          "maxLengthVertical": 20,
+          "maxItems": 6,
+          "required": true,
+          "description": "右列要点列表，竖版这列窄、单行",
+          "maxWordsEn": 14,
+          "maxWordsEnVertical": 8
+        }
+      ]
+    },
+    {
+      "id": "map1",
+      "needsImage": "required",
+      "desc": "地图场景页\n· 结构：全屏地图 + 左侧标题与地点列表 + 地图标记点\n· 适用：有地理分布/路线/区域关系的内容",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": true,
+          "maxLengthVertical": 12,
+          "description": "地图标题",
+          "maxWordsEn": 5
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "maxLength": 30,
+          "required": false,
+          "description": "说明文字",
+          "maxWordsEn": 12
+        },
+        {
+          "name": "locations",
+          "type": "objectArray",
+          "maxItems": 6,
+          "required": true,
+          "description": "地点列表，城市、地标、海域、山脉等任何地理实体均可",
+          "fields": [
+            {
+              "name": "name",
+              "maxLength": 12,
+              "description": "地名",
+              "maxWordsEn": 5
+            },
+            {
+              "name": "coords",
+              "maxLength": 20,
+              "description": "纬度,经度（十进制度数），如 '40.71,-74.01'",
+              "maxWordsEn": 8
+            },
+            {
+              "name": "description",
+              "maxLength": 20,
+              "description": "简述",
+              "maxWordsEn": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trendStats1",
+      "needsImage": "required",
+      "desc": "趋势指标数据面板\n· 结构：2~4 个 KPI 卡片（数值 + 涨跌箭头 + 变化幅度）\n· 适用：业绩汇报、市场动态、增长报告等带方向和幅度的数据；无趋势请用 stats1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": false,
+          "maxLengthVertical": 10,
+          "description": "面板标题",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 4,
+          "required": true,
+          "description": "趋势数据项（2~4 条）。num 必须以阿拉伯数字开头（严禁 '百名+'/'数十项'/'高频' 这类模糊量词/纯中文；无精确数字改用 iconGrid1 或 list2）；change 以↑或↓开头",
+          "fields": [
+            {
+              "name": "num",
+              "maxLength": 8,
+              "description": "数字+单位（必须以阿拉伯数字开头）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "label",
+              "maxLength": 12,
+              "description": "标签说明",
+              "maxWordsEn": 5
+            },
+            {
+              "name": "change",
+              "maxLength": 8,
+              "description": "变化幅度（以↑或↓开头，如 ↑12.5%）",
+              "maxWordsEn": 3
+            }
+          ]
+        },
+        {
+          "name": "footnote",
+          "type": "text",
+          "maxLength": 30,
+          "required": false,
+          "description": "脚注（如数据来源、统计周期）",
+          "maxWordsEn": 12
+        }
+      ]
+    },
+    {
+      "id": "faq1",
+      "needsImage": "required",
+      "desc": "问答列表 / Q&A\n· 结构：2~4 组 Q&A（Q 圆点 + 问题 + 缩进答案 + 分隔线）\n· 适用：产品答疑、知识科普、概念澄清",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 10,
+          "required": false,
+          "maxLengthVertical": 10,
+          "description": "标题（如'常见问题'）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 4,
+          "required": true,
+          "description": "问答对，问题简短、回答一两句，避免溢出",
+          "fields": [
+            {
+              "name": "question",
+              "maxLength": 16,
+              "maxLengthVertical": 15,
+              "description": "问题",
+              "maxWordsEn": 6
+            },
+            {
+              "name": "answer",
+              "maxLength": 46,
+              "maxLengthVertical": 30,
+              "description": "回答，一两句话",
+              "maxWordsEn": 18,
+              "maxWordsEnVertical": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pricing1",
+      "needsImage": "required",
+      "desc": "定价方案卡\n· 结构：2~3 列阶梯定价（套餐名 + 价格 + 功能列表）\n· 适用：SaaS 产品、服务套餐、会员等级展示",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": false,
+          "maxLengthVertical": 10,
+          "description": "标题（如'选择适合你的方案'）",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "plans",
+          "type": "objectArray",
+          "maxItems": 3,
+          "maxItemsVertical": 4,
+          "required": true,
+          "description": "方案列表（2~3 个）",
+          "fields": [
+            {
+              "name": "name",
+              "maxLength": 6,
+              "description": "套餐名（简短，如 基础版、专业版）",
+              "maxWordsEn": 2
+            },
+            {
+              "name": "price",
+              "maxLength": 8,
+              "description": "价格（如 ¥99/月、$29/mo、免费）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "features",
+              "maxLength": 36,
+              "description": "功能列表（逗号分隔，如 '10GB存储,邮件支持,API接入'）",
+              "maxWordsEn": 14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "checklist1",
+      "needsImage": "required",
+      "desc": "勾选清单\n· 结构：单列勾号图标 + 要点\n· 适用：指南要点、完成事项、准备清单、注意事项；有先后顺序请用 process1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 10,
+          "required": true,
+          "maxLengthVertical": 9,
+          "description": "清单标题",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "items",
+          "type": "textArray",
+          "maxLength": 16,
+          "maxLengthVertical": 11,
+          "maxItems": 6,
+          "required": true,
+          "description": "清单条目，必须极简。竖版每条严格单行禁止换行，动词或名词短语为主（如 '提前订票'、'备好雨具' 而非整句）",
+          "maxWordsEn": 6,
+          "maxWordsEnVertical": 4
+        }
+      ]
+    },
+    {
+      "id": "matrix1",
+      "needsImage": "required",
+      "desc": "四象限矩阵\n· 结构：2×2 网格 + 轴标签\n· 适用：SWOT 分析、波士顿矩阵、优先级矩阵、风险评估",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 10,
+          "required": false,
+          "maxLengthVertical": 10,
+          "description": "标题",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "maxLength": 24,
+          "required": false,
+          "description": "副标题/说明",
+          "maxWordsEn": 10
+        },
+        {
+          "name": "xAxis",
+          "type": "text",
+          "maxLength": 5,
+          "required": false,
+          "maxLengthVertical": 5,
+          "description": "横轴标签（如'影响力'），左低右高",
+          "maxWordsEn": 2
+        },
+        {
+          "name": "yAxis",
+          "type": "text",
+          "maxLength": 5,
+          "required": false,
+          "maxLengthVertical": 3,
+          "description": "纵轴标签（如'紧急度'），下低上高",
+          "maxWordsEn": 2
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 4,
+          "required": true,
+          "description": "四象限内容，按左上、右上、左下、右下顺序",
+          "fields": [
+            {
+              "name": "title",
+              "maxLength": 6,
+              "description": "象限标题",
+              "maxWordsEn": 2
+            },
+            {
+              "name": "description",
+              "maxLength": 16,
+              "description": "象限描述",
+              "maxWordsEn": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dualImage1",
+      "needsImage": "required",
+      "desc": "强对比双图（仅限二元对立）\n· 结构：左右分屏（中间 16px 间隙）+ 左右标签\n· 适用：BEFORE vs AFTER、传统 vs 现代、方案 A vs B 等对立；同主题并列请用 imageFlow1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 9,
+          "required": false,
+          "maxLengthVertical": 10,
+          "description": "标题",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "leftLabel",
+          "type": "text",
+          "maxLength": 8,
+          "required": true,
+          "maxLengthVertical": 8,
+          "description": "左图标签（如'Before'）",
+          "maxWordsEn": 3
+        },
+        {
+          "name": "rightLabel",
+          "type": "text",
+          "maxLength": 8,
+          "required": true,
+          "maxLengthVertical": 8,
+          "description": "右图标签（如'After'）",
+          "maxWordsEn": 3
+        },
+        {
+          "name": "leftImage",
+          "type": "text",
+          "maxLength": 500,
+          "required": false,
+          "description": "左图URL（来自用户素材）"
+        },
+        {
+          "name": "leftImageHint",
+          "type": "imageHint",
+          "maxLength": 25,
+          "required": false,
+          "description": "左图描述（英文，用于生成图片）"
+        },
+        {
+          "name": "rightImage",
+          "type": "text",
+          "maxLength": 500,
+          "required": false,
+          "description": "右图URL（来自用户素材）"
+        },
+        {
+          "name": "rightImageHint",
+          "type": "imageHint",
+          "maxLength": 25,
+          "required": false,
+          "description": "右图描述（英文，用于生成图片）"
+        },
+        {
+          "name": "caption",
+          "type": "text",
+          "maxLength": 30,
+          "required": false,
+          "description": "底部说明文字",
+          "maxWordsEn": 12
+        }
+      ]
+    },
+    {
+      "id": "userPicture1",
+      "needsImage": "required",
+      "desc": "单张大图 + 文 / 图为主角\n· 结构：文字块固定宽 + 单张大图 contain 居中，imageSide 切左右（默认右）\n· 适用：只有一张用户图，配一段正文（body）；多张图请用 userPicture2",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 6,
+          "maxLengthVertical": 6,
+          "required": true,
+          "description": "标题（建议用 | 分段）",
+          "maxWordsEn": 2
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "maxLength": 70,
+          "maxLengthVertical": 46,
+          "required": false,
+          "description": "正文段落（一段话）",
+          "maxWordsEn": 28,
+          "maxWordsEnVertical": 18
+        },
+        {
+          "name": "image",
+          "type": "text",
+          "maxLength": 500,
+          "required": true,
+          "description": "单图 URL（必须来自用户素材）"
+        },
+        {
+          "name": "imageSide",
+          "type": "text",
+          "maxLength": 5,
+          "required": false,
+          "description": "图区方向：\"right\"（默认；横版图在右 / 竖版图在上）或 \"left\"（横版图在左 / 竖版图在下）。希望视觉权衡换边时填 left；不填默认 right",
+          "maxWordsEn": 2
+        }
+      ]
+    },
+    {
+      "id": "userPicture2",
+      "needsImage": "required",
+      "desc": "多图 + 文 / 图为主角\n· 结构：文 28% + 图区 72% justified-grid（contain 不裁切），imageSide 切左右（默认右）\n· 适用：2~8 张用户图，配要点列表（items）；单张大图请用 userPicture1；纯图无文字请用 imageFlow1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 6,
+          "maxLengthVertical": 6,
+          "required": true,
+          "description": "标题（建议用 | 分段）",
+          "maxWordsEn": 2
+        },
+        {
+          "name": "items",
+          "type": "textArray",
+          "maxLength": 28,
+          "maxLengthVertical": 22,
+          "maxItems": 6,
+          "required": false,
+          "description": "要点列表（最多 6 条）",
+          "maxWordsEn": 11,
+          "maxWordsEnVertical": 9
+        },
+        {
+          "name": "images",
+          "type": "textArray",
+          "maxLength": 200,
+          "maxItems": 8,
+          "maxItemsVertical": 6,
+          "required": true,
+          "description": "多图 URL 列表（横版 2~8 张，竖版 2~6 张；必须来自用户素材；images 为空禁用本布局）"
+        },
+        {
+          "name": "imageSide",
+          "type": "text",
+          "maxLength": 5,
+          "required": false,
+          "description": "图区方向：\"right\"（默认；横版图在右 / 竖版图在上）或 \"left\"（横版图在左 / 竖版图在下）。希望视觉权衡换边时填 left；不填默认 right",
+          "maxWordsEn": 2
+        }
+      ]
+    },
+    {
+      "id": "userPicture3",
+      "needsImage": "required",
+      "desc": "画布比例图 / 满屏沉浸\n· 结构：图 contain 铺满 + 顶部渐变 + heading + caption 叠加\n· 适用：图比例严格匹配画布（横版 ≈16:9 / 竖版 ≈9:16）的沉浸展示；不匹配请禁用",
+      "slots": [
+        {
+          "name": "image",
+          "type": "text",
+          "maxLength": 500,
+          "required": true,
+          "description": "用户图 URL（横版需 w/h 1.65~1.95 / 竖版需 w/h 0.51~0.61；偏离越远 bgImage 露出越宽）"
+        },
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": true,
+          "maxLengthVertical": 10,
+          "description": "顶部大标题（叠加在图上，配主题明暗反色 + 渐变保护，建议用 | 分段）",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "caption",
+          "type": "text",
+          "maxLength": 24,
+          "required": false,
+          "description": "顶部 caption（标题下方的小字描述）",
+          "maxWordsEn": 10
+        }
+      ]
+    },
+    {
+      "id": "bareImage",
+      "needsImage": "required",
+      "desc": "无字满屏图 / 纯沉浸\n· 结构：图 contain 铺满，无任何文字叠加\n· 适用：图本身已含说明信息（海报、信息图、带文字的截图 / 物料）或纯氛围镜头（风景、物品特写）；需要叠加标题或说明请用 userPicture3",
+      "slots": [
+        {
+          "name": "image",
+          "type": "text",
+          "maxLength": 500,
+          "required": true,
+          "description": "用户图 URL（建议大致匹配画布比例：横版 w/h ~1.3-2.2 / 竖版 w/h ~0.4-0.75；contain 模式偏离越远，上下或左右露出的 bgImage 越宽）"
+        }
+      ]
+    },
+    {
+      "id": "toc1",
+      "needsImage": "required",
+      "desc": "目录 / 章节索引\n· 结构：每行序号 + 标题（左）+ 简介（右），行间分隔线\n· 适用：开场目录、章节索引；单条要点用 list1，纯封面用 hero",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": false,
+          "description": "可选：整体小标题（如 '目录' / '本期内容'）；不填则纯列表",
+          "maxWordsEn": 5
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 7,
+          "maxItemsVertical": 8,
+          "required": true,
+          "description": "目录条目（横版 3~7 项，竖版 3~8 项）",
+          "fields": [
+            {
+              "name": "title",
+              "maxLength": 8,
+              "description": "标题（简短章节名）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "description",
+              "maxLength": 14,
+              "description": "简介，可选（一句话说明 / 关键词）",
+              "maxWordsEn": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "imageHero1",
+      "needsImage": "required",
+      "desc": "开场标题 / 分屏图文\n· 结构：左 1/3 文字（大标题 + 副标题）+ 右 2/3 用户图 contain 不裁切\n· 适用：需要一张主视觉图的开场；图细节多、比例不规整时优先选它",
+      "slots": [
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 9,
+          "maxLengthVertical": 11,
+          "required": true,
+          "description": "主标题（建议用 | 分段）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 18,
+          "maxLengthVertical": 20,
+          "required": false,
+          "description": "副标题（一句话补充）",
+          "maxWordsEn": 7,
+          "maxWordsEnVertical": 8
+        },
+        {
+          "name": "image",
+          "type": "text",
+          "maxLength": 500,
+          "required": true,
+          "description": "主视觉图 URL（必须来自用户素材；为空时禁用本布局）"
+        }
+      ]
+    },
+    {
+      "id": "imageHero2",
+      "needsImage": "required",
+      "desc": "开场标题 / 图满屏压标题\n· 结构：用户图 cover 满屏铺底 + 文字左对齐压图（带渐变保护可读性）\n· 适用：电影海报式冲击开场；单图主体强、可裁切（人物、场景、产品大图）",
+      "slots": [
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 8,
+          "maxLengthVertical": 12,
+          "required": true,
+          "description": "主标题（建议用 | 分段）",
+          "maxWordsEn": 3,
+          "maxWordsEnVertical": 5
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 20,
+          "maxLengthVertical": 20,
+          "required": false,
+          "description": "副标题（一句话补充）",
+          "maxWordsEn": 8
+        },
+        {
+          "name": "image",
+          "type": "text",
+          "maxLength": 500,
+          "required": true,
+          "description": "主视觉图 URL（cover 满屏，必须来自用户素材）"
+        }
+      ]
+    },
+    {
+      "id": "imageGrid1",
+      "needsImage": "required",
+      "desc": "图注网格 / 多图独立标注\n· 结构：2~6 张用户图 justified-grid，每张图带一行 caption\n· 适用：每张图都有独立标注（款号、价格、属性）；同主题用 userPicture1，纯氛围用 imageFlow1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 9,
+          "required": true,
+          "maxLengthVertical": 6,
+          "description": "左上标题",
+          "maxWordsEn": 4,
+          "maxWordsEnVertical": 2
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "maxLength": 25,
+          "maxLengthVertical": 14,
+          "required": false,
+          "description": "右上一句话点睛（可选；单行）",
+          "maxWordsEn": 10,
+          "maxWordsEnVertical": 6
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 6,
+          "required": true,
+          "description": "图注列表（2~6 项；image 必须来自用户图池）",
+          "fields": [
+            {
+              "name": "image",
+              "maxLength": 500,
+              "description": "用户图 URL"
+            },
+            {
+              "name": "caption",
+              "maxLength": 15,
+              "maxLengthVertical": 12,
+              "description": "单行标注：款号 / 价格 / 属性 / 产品名等",
+              "maxWordsEn": 6,
+              "maxWordsEnVertical": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "statsImage1",
+      "needsImage": "required",
+      "desc": "数字 KPI + 多图\n· 结构：左 stats 卡片纵向堆叠 + 右 2~4 张用户图 justified-grid\n· 适用：数字指标 + 相关产品图同框；只有图无数字请用 imageFlow1 / imageGrid1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 14,
+          "required": true,
+          "description": "面板标题",
+          "maxWordsEn": 6
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 4,
+          "required": true,
+          "description": "数据项（2~4 条）。num **必须以阿拉伯数字开头**，只允许「数字+可选单位」（如 '6000+'、'98%'、'$2.4B'、'3大类'、'365天'），≤8 字符。**严禁把模糊量词/纯中文词/英文词/品牌名当 num**（反例：'百名+'、'数十项'、'高频'、'多维' ❌ 全是纯中文，不是合法数字）。遇到「数十」「上百」「多种」这类没有精确数字的内容，**不要硬凑成中文 num，直接改用 iconGrid1 或 list2**",
+          "fields": [
+            {
+              "name": "num",
+              "maxLength": 8,
+              "description": "数字+单位（必须以阿拉伯数字开头，如 6000+、98%、$2.4B、3大类）",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "label",
+              "maxLength": 12,
+              "description": "标签说明",
+              "maxWordsEn": 5
+            }
+          ]
+        },
+        {
+          "name": "images",
+          "type": "textArray",
+          "maxLength": 200,
+          "maxItems": 4,
+          "required": true,
+          "description": "图片URL列表（2~4 张，必须来自用户素材；images 为空禁用本布局）"
+        }
+      ]
+    },
+    {
+      "id": "listImage1",
+      "needsImage": "required",
+      "desc": "要点列表 + 多图\n· 结构：左 list 编号卡 + 右 2~4 张用户图 justified-grid\n· 适用：要点列表 + 相关产品图（功能点 + 实物等）；纯要点用 list1，每图独立标注用 imageGrid1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 14,
+          "required": true,
+          "maxLengthVertical": 11,
+          "description": "标题",
+          "maxWordsEn": 6,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "items",
+          "type": "textArray",
+          "maxLength": 18,
+          "maxLengthVertical": 16,
+          "maxItems": 6,
+          "maxItemsVertical": 4,
+          "required": true,
+          "description": "要点列表，每条一个核心信息（横版 3~6 条，竖版 3~4 条）",
+          "maxWordsEn": 7,
+          "maxWordsEnVertical": 6
+        },
+        {
+          "name": "images",
+          "type": "textArray",
+          "maxLength": 200,
+          "maxItems": 4,
+          "required": true,
+          "description": "图片URL列表（2~4 张，必须来自用户素材；images 为空禁用本布局）"
+        }
+      ]
+    },
+    {
+      "id": "iconListImage1",
+      "needsImage": "required",
+      "desc": "图 + 图标卡片列表（PPT 教育风）\n· 结构：顶部 heading + 左 1 张用户图 contain + 右纵向 3~4 张「emoji + 标题 + 一句描述」富卡\n· 适用：单图配多个解读要点（模型详解、概念拆解、案例剖析）；纯网格用 iconGrid1，纯要点列表用 listImage1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 18,
+          "maxLengthVertical": 10,
+          "required": true,
+          "description": "标题（PPT 整页主题，如「AIDCA 模型详解：Desire（欲望）」）",
+          "maxWordsEn": 7,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "image",
+          "type": "text",
+          "maxLength": 500,
+          "required": true,
+          "description": "主视觉图 URL（单张用户图，contain 不裁切）"
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 4,
+          "maxItemsVertical": 3,
+          "required": true,
+          "description": "图标卡列表（禁用国旗 emoji；横版 3~4 条，竖版 3 条）",
+          "fields": [
+            {
+              "name": "emoji",
+              "maxLength": 2,
+              "description": "表情符号（卡片图标）",
+              "maxWordsEn": 2
+            },
+            {
+              "name": "title",
+              "maxLength": 14,
+              "maxLengthVertical": 12,
+              "description": "卡片标题（一句话提炼）",
+              "maxWordsEn": 6,
+              "maxWordsEnVertical": 5
+            },
+            {
+              "name": "description",
+              "maxLength": 36,
+              "maxLengthVertical": 28,
+              "description": "卡片描述（一句解读）",
+              "maxWordsEn": 14,
+              "maxWordsEnVertical": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cardGrid1",
+      "needsImage": "required",
+      "desc": "多层卡片网格（PPT 教育风）\n· 结构：顶部 heading + 2×2 / 3×2 网格卡，每卡彩色左边框 + 主标题 + 副标题 + 一句描述\n· 适用：模型 / 框架要素详解、多维度并列拆解（5W1H、SWOT 等）；轻量并列用 iconGrid1，图配卡用 iconListImage1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "maxLengthVertical": 12,
+          "required": true,
+          "description": "标题（PPT 整页主题，如「5W1H 各要素详解」）",
+          "maxWordsEn": 5
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 6,
+          "maxItemsVertical": 4,
+          "required": true,
+          "description": "卡片列表（横版 4~6 项 grid；竖版 3~4 项横条单列堆叠）",
+          "fields": [
+            {
+              "name": "title",
+              "maxLength": 10,
+              "maxLengthVertical": 10,
+              "description": "主标题（如「What 主推商品」「Why 目标」，accent 色强调）",
+              "maxWordsEn": 4
+            },
+            {
+              "name": "subtitle",
+              "maxLength": 14,
+              "maxLengthVertical": 14,
+              "description": "副标题或问句（如「主推什么商品？」）",
+              "maxWordsEn": 6
+            },
+            {
+              "name": "description",
+              "maxLength": 22,
+              "maxLengthVertical": 22,
+              "description": "一句解读 / 举例",
+              "maxWordsEn": 9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "textCard1",
+      "needsImage": "required",
+      "desc": "文字卡片网格 / 关键词 + 一句话\n· 结构：2~6 张卡片并排，accent 短标题 + 灰字说明\n· 适用：品牌列举、概念对比、关键词分组；数字用 stats1，带图标用 iconGrid1",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": false,
+          "maxLengthVertical": 10,
+          "description": "面板标题（可选）",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 6,
+          "maxItemsVertical": 5,
+          "required": true,
+          "description": "卡片列表（横版 2~6，竖版 2~5）",
+          "fields": [
+            {
+              "name": "title",
+              "maxLength": 6,
+              "maxLengthVertical": 8,
+              "description": "短词或短语（accent 色大字显示，如品牌名 / 概念名 / 关键词）",
+              "maxWordsEn": 2,
+              "maxWordsEnVertical": 3
+            },
+            {
+              "name": "description",
+              "maxLength": 28,
+              "maxLengthVertical": 28,
+              "description": "一句话说明（次级灰字）",
+              "maxWordsEn": 11
+            }
+          ]
+        },
+        {
+          "name": "footnote",
+          "type": "text",
+          "maxLength": 18,
+          "required": false,
+          "description": "脚注说明（可选）",
+          "maxWordsEn": 7
+        }
+      ]
+    },
+    {
+      "id": "textCard2",
+      "needsImage": "required",
+      "desc": "段落文字卡片网格（**慎用，最后兜底选择**）\n· 结构：2~4 张卡片并排，每卡内一段左对齐长段落（30~80 字）\n· 适用：**只在以下严格条件下用** —— 每张卡是一段独立的**完整论点/解读/案例陈述**（典型如评审意见、专家观点、案例对比），且**没有更合适的结构化布局**\n· **不该用的场景（绝大多数情况）**：\n  - 关键词 + 一句解释 → 用 textCard1\n  - 步骤流程 → 用 process1/2/3\n  - 数据/KPI → 用 stats1/2/3/statsImage1\n  - 要点列表 → 用 list1/list2/iconGrid1\n  - 图文混排 → 用 iconListImage1 / listImage1 / cardGrid1\n  - 引言/格言 → 用 quote1\n  - 对比 → 用 comparison1/2 / dualImage1\n  - 问答 → 用 faq1\n  - 仅有短标题 + 短描述 → 用 textCard1 或 cardGrid1\n· 检验标准：如果你能找到一个上面「不该用」清单里的布局来承载内容，就**不要选 textCard2**",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": false,
+          "maxLengthVertical": 10,
+          "description": "面板标题（可选）",
+          "maxWordsEn": 5,
+          "maxWordsEnVertical": 4
+        },
+        {
+          "name": "items",
+          "type": "objectArray",
+          "maxItems": 4,
+          "required": true,
+          "description": "段落卡片列表 2~4 项，每项一个小标题 + 一段说明文字",
+          "fields": [
+            {
+              "name": "title",
+              "maxLength": 10,
+              "maxLengthVertical": 14,
+              "description": "卡片小标题（accent 色短词组，可选）",
+              "maxWordsEn": 4,
+              "maxWordsEnVertical": 6
+            },
+            {
+              "name": "text",
+              "maxLength": 72,
+              "maxLengthVertical": 50,
+              "description": "段落正文，一句话或一小段（30~80 字最佳，超长会自动缩字号）",
+              "maxWordsEn": 29,
+              "maxWordsEnVertical": 20
+            }
+          ]
+        },
+        {
+          "name": "footnote",
+          "type": "text",
+          "maxLength": 30,
+          "required": false,
+          "description": "脚注说明（可选）",
+          "maxWordsEn": 12
+        }
+      ]
+    },
+    {
+      "id": "imageSpotlight1",
+      "needsImage": "required",
+      "desc": "镜头聚光图文（M3 运动巡游）\n· 结构：右侧大图 + 左上主标题/副标题 + 左下大数字解读；镜头自动 全景→图→标题→数字 逐站推近\n· 适用：单一主体的强调陈述、一个关键数据配一张图、产品/人物/案例聚焦\n· 图为用户图，按比例 contain 完整呈现不裁切",
+      "slots": [
+        {
+          "name": "title",
+          "type": "text",
+          "maxLength": 10,
+          "required": true,
+          "description": "主标题（可用 | 强制换行，建议 2 段）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "subtitle",
+          "type": "text",
+          "maxLength": 18,
+          "required": false,
+          "description": "副标题（accent 色一句）",
+          "maxWordsEn": 7
+        },
+        {
+          "name": "highlight",
+          "type": "text",
+          "maxLength": 6,
+          "required": true,
+          "description": "核心数字或关键词（大字强调，如 \"20\" 或 \"睡眠债\"）",
+          "maxWordsEn": 2
+        },
+        {
+          "name": "unit",
+          "type": "text",
+          "maxLength": 6,
+          "required": false,
+          "description": "数字单位（如 min / 倍 / %；highlight 是关键词时留空）",
+          "maxWordsEn": 2
+        },
+        {
+          "name": "insight",
+          "type": "text",
+          "maxLength": 20,
+          "required": false,
+          "description": "一句解读（次级灰字）",
+          "maxWordsEn": 8
+        },
+        {
+          "name": "image",
+          "type": "text",
+          "maxLength": 500,
+          "required": true,
+          "description": "主视觉图 URL（用户图，contain 完整呈现不裁切）"
+        }
+      ]
+    },
+    {
+      "id": "mindmapBalanced1",
+      "needsImage": "required",
+      "desc": "双侧思维导图（M3 运动巡游 / 大画布）\n· 结构：中心主题 + 分支交替分到左右两侧，每分支可带二级要点；镜头自动深钻每个节点（含二级）后拉回总览\n· 适用：一个主题拆 2~6 个并列原因/维度/分类，每条再带 0~3 个要点；结构对称、停留较长的复杂版面\n· 二级要点可增删，空着的分支镜头不去",
+      "slots": [
+        {
+          "name": "topic",
+          "type": "text",
+          "maxLength": 8,
+          "required": true,
+          "description": "中心主题",
+          "maxWordsEn": 3
+        },
+        {
+          "name": "sub",
+          "type": "text",
+          "maxLength": 10,
+          "required": false,
+          "description": "中心副标题（可选）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "branches",
+          "type": "objectArray",
+          "maxItems": 6,
+          "required": true,
+          "description": "分支（2~6 个，交替分到中心左右两侧）",
+          "fields": [
+            {
+              "name": "title",
+              "type": "text",
+              "maxLength": 6,
+              "description": "分支标题",
+              "maxWordsEn": 2
+            },
+            {
+              "name": "desc",
+              "type": "text",
+              "maxLength": 10,
+              "description": "分支副标题（可选）",
+              "maxWordsEn": 4
+            },
+            {
+              "name": "children",
+              "type": "objectArray",
+              "maxItems": 3,
+              "description": "二级要点（0~3 个；空则该分支无子点、镜头不去）。层级硬约束：思维导图最深两级（主题→分支→二级要点），每个要点只有 title 一个字段，严禁在要点内再嵌套 children 或任何下级列表",
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "text",
+                  "maxLength": 9,
+                  "description": "要点（6~8 字不换行，更长才换）",
+                  "maxWordsEn": 4
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mindmapTree1",
+      "needsImage": "required",
+      "desc": "单侧树形思维导图（M3 运动巡游 / 大画布）\n· 结构：中心在左，分支向右纵向展开，每分支可带二级要点；镜头深钻每个节点（含二级）后拉回总览\n· 适用：一个主题顺序拆 2~4 个方面，每条再带 0~3 个要点；层级清晰的纵向阅读\n· 二级要点可增删，空着的分支镜头不去",
+      "slots": [
+        {
+          "name": "topic",
+          "type": "text",
+          "maxLength": 8,
+          "required": true,
+          "description": "中心主题",
+          "maxWordsEn": 3
+        },
+        {
+          "name": "sub",
+          "type": "text",
+          "maxLength": 10,
+          "required": false,
+          "description": "中心副标题（可选）",
+          "maxWordsEn": 4
+        },
+        {
+          "name": "branches",
+          "type": "objectArray",
+          "maxItems": 4,
+          "required": true,
+          "description": "分支（2~4 个，向右纵向展开）",
+          "fields": [
+            {
+              "name": "title",
+              "type": "text",
+              "maxLength": 6,
+              "description": "分支标题",
+              "maxWordsEn": 2
+            },
+            {
+              "name": "desc",
+              "type": "text",
+              "maxLength": 10,
+              "description": "分支副标题（可选）",
+              "maxWordsEn": 4
+            },
+            {
+              "name": "children",
+              "type": "objectArray",
+              "maxItems": 3,
+              "description": "二级要点（0~3 个；空则该分支无子点、镜头不去）。层级硬约束：思维导图最深两级（主题→分支→二级要点），每个要点只有 title 一个字段，严禁在要点内再嵌套 children 或任何下级列表",
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "text",
+                  "maxLength": 9,
+                  "description": "要点（6~8 字不换行，更长才换）",
+                  "maxWordsEn": 4
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mindmapImage1",
+      "needsImage": "required",
+      "desc": "带图片的思维导图（M3 运动巡游 / 大画布）\n· 结构：顶部主题 + 下方一排 N 张图片卡（图+标题+说明），连线下分；镜头 全景 → 主题 → 从左到右逐张图卡\n· 适用：一个主题统领 2~4 个并列要点，每个要点配一张用户图\n· 卡内图按比例 contain 完整呈现不裁切（横/竖/方都行）",
+      "slots": [
+        {
+          "name": "topic",
+          "type": "text",
+          "maxLength": 8,
+          "required": true,
+          "description": "顶部主题",
+          "maxWordsEn": 3
+        },
+        {
+          "name": "sub",
+          "type": "text",
+          "maxLength": 12,
+          "required": false,
+          "description": "主题副标题（可选）",
+          "maxWordsEn": 5
+        },
+        {
+          "name": "branches",
+          "type": "objectArray",
+          "maxItems": 4,
+          "required": true,
+          "description": "图片卡（2~4 张）",
+          "fields": [
+            {
+              "name": "title",
+              "type": "text",
+              "maxLength": 6,
+              "description": "卡片标题",
+              "maxWordsEn": 2
+            },
+            {
+              "name": "caption",
+              "type": "text",
+              "maxLength": 12,
+              "description": "卡片说明（可选）",
+              "maxWordsEn": 5
+            },
+            {
+              "name": "image",
+              "type": "text",
+              "maxLength": 500,
+              "description": "用户图 URL（contain 完整呈现不裁切）"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mapTour1",
+      "needsImage": "none",
+      "desc": "地图镜头巡游（M3 运动 / map1 的镜头版）\n· 结构：整幅地图 + 城市标记；镜头 总览看全局 → 逐城推近(pin+标签放大、到站涟漪) → 回总览\n· 适用：地理分布陈述、全球/区域布局、多地点串讲；每个落点都是标好的城市\n· 地图图与标记由 map-gen 生成（mapImage + markers 的 x/y 百分比）",
+      "slots": [
+        {
+          "name": "heading",
+          "type": "text",
+          "maxLength": 12,
+          "required": true,
+          "description": "地图标题",
+          "maxWordsEn": 5
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "maxLength": 18,
+          "required": false,
+          "description": "副标题（可选）",
+          "maxWordsEn": 7
+        },
+        {
+          "name": "locations",
+          "type": "objectArray",
+          "maxItems": 6,
+          "required": true,
+          "description": "地点列表（2~6 个城市/地标/地理实体）。底图 mapImage 与标记 markers 由 map-gen 据此自动生成——你只需填 locations，不要自己编底图或坐标",
+          "fields": [
+            {
+              "name": "name",
+              "type": "text",
+              "maxLength": 8,
+              "description": "地名",
+              "maxWordsEn": 3
+            },
+            {
+              "name": "coords",
+              "type": "text",
+              "maxLength": 20,
+              "description": "纬度,经度（十进制度数），如 '40.71,-74.01'",
+              "maxWordsEn": 8
+            },
+            {
+              "name": "description",
+              "type": "text",
+              "maxLength": 10,
+              "description": "简述（可选）",
+              "maxWordsEn": 4
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "themes": [
+    {
+      "id": "serious-dark",
+      "name": "严肃深色",
+      "desc": "深蓝青蓝 · 冷峻克制",
+      "tags": [
+        "商务汇报"
+      ]
+    },
+    {
+      "id": "serious-light",
+      "name": "严肃浅色",
+      "desc": "浅灰亮蓝 · 清亮规整",
+      "tags": [
+        "商务汇报"
+      ]
+    },
+    {
+      "id": "arc-blue",
+      "name": "电光蓝",
+      "desc": "深紫电光 · 冷光未来",
+      "tags": [
+        "科技未来",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "warm",
+      "name": "温暖自然",
+      "desc": "暖米暖橙 · 温润柔和",
+      "tags": [
+        "自然清新"
+      ]
+    },
+    {
+      "id": "bold",
+      "name": "大胆鲜明",
+      "desc": "蓝橙撞色 · 强烈冲击",
+      "tags": [
+        "活泼营销"
+      ]
+    },
+    {
+      "id": "deep-serene",
+      "name": "沉静雅致",
+      "desc": "深蓝明黄 · 沉静书卷",
+      "tags": [
+        "文艺杂志",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "ink-wash",
+      "name": "水墨丹青",
+      "desc": "宣纸朱砂 · 水墨古韵",
+      "tags": [
+        "文化国风"
+      ]
+    },
+    {
+      "id": "forest-shade",
+      "name": "深林影调",
+      "desc": "墨绿嫩绿 · 静谧影调",
+      "tags": [
+        "自然清新",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "bright-pop",
+      "name": "明快跃动",
+      "desc": "浅紫圆润 · 活泼明快",
+      "tags": [
+        "活泼营销",
+        "教育知识"
+      ]
+    },
+    {
+      "id": "retro-film",
+      "name": "复古胶片",
+      "desc": "胶片米黄 · 怀旧暖调",
+      "tags": [
+        "复古怀旧",
+        "文艺杂志"
+      ]
+    },
+    {
+      "id": "cyber-neon",
+      "name": "算法朋克",
+      "desc": "紫黑霓虹 · 数字未来",
+      "tags": [
+        "科技未来",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "noir-drama",
+      "name": "暗夜戏剧",
+      "desc": "黑红对比 · 戏剧浓烈",
+      "tags": [
+        "暗夜质感",
+        "复古怀旧"
+      ]
+    },
+    {
+      "id": "paper-amber",
+      "name": "教科暖",
+      "desc": "羊皮米黄 · 课本温润",
+      "tags": [
+        "教育知识",
+        "复古怀旧"
+      ]
+    },
+    {
+      "id": "wabi-sabi",
+      "name": "侘寂",
+      "desc": "奶油赭石 · 含蓄克制",
+      "tags": [
+        "极简留白",
+        "文艺杂志"
+      ]
+    },
+    {
+      "id": "mint",
+      "name": "薄荷",
+      "desc": "纯白薄荷 · 洁净通透",
+      "tags": [
+        "科技未来"
+      ]
+    },
+    {
+      "id": "steel-amber",
+      "name": "钢灰警黄",
+      "desc": "钢灰警黄 · 冷峻硬挺",
+      "tags": [
+        "暗夜质感",
+        "科技未来"
+      ]
+    },
+    {
+      "id": "black-gold",
+      "name": "黑金",
+      "desc": "黑底鎏金 · 奢华贵气",
+      "tags": [
+        "暗夜质感",
+        "商务汇报"
+      ]
+    },
+    {
+      "id": "verdant-script",
+      "name": "苍翠手书",
+      "desc": "深绿粉笔 · 手写知识",
+      "tags": [
+        "教育知识"
+      ]
+    },
+    {
+      "id": "neon-glass",
+      "name": "霓虹渐变",
+      "desc": "白底粉紫 · 明亮鲜活",
+      "tags": [
+        "活泼营销",
+        "科技未来"
+      ]
+    },
+    {
+      "id": "deep-blue",
+      "name": "深海",
+      "desc": "深蓝电青 · 沉思远观",
+      "tags": [
+        "商务汇报",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "titan-cyan",
+      "name": "青钛",
+      "desc": "钛灰电青 · 冷峻精密",
+      "tags": [
+        "科技未来"
+      ]
+    },
+    {
+      "id": "ink-indigo",
+      "name": "静雅墨蓝",
+      "desc": "深靛米黄 · 清雅冷峻",
+      "tags": [
+        "文艺杂志",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "orange-navy",
+      "name": "橘子海",
+      "desc": "深蓝暖橘 · 沉稳温情",
+      "tags": [
+        "文艺杂志"
+      ]
+    },
+    {
+      "id": "pale-haze",
+      "name": "薄雾",
+      "desc": "米黄深蓝 · 克制理性",
+      "tags": [
+        "极简留白"
+      ]
+    },
+    {
+      "id": "neo-chinese",
+      "name": "新中式",
+      "desc": "米白朱红 · 古风典雅",
+      "tags": [
+        "文化国风"
+      ]
+    },
+    {
+      "id": "amber-cream",
+      "name": "暖橘奶油",
+      "desc": "奶油米黄 · 温馨暖调",
+      "tags": [
+        "自然清新",
+        "文艺杂志"
+      ]
+    },
+    {
+      "id": "sand-blue",
+      "name": "沙黄深蓝",
+      "desc": "沙黄海蓝 · 旷野气息",
+      "tags": [
+        "自然清新",
+        "文艺杂志"
+      ]
+    },
+    {
+      "id": "serene-sage",
+      "name": "米绿静观",
+      "desc": "燕麦米白 · 内观疗愈",
+      "tags": [
+        "自然清新"
+      ]
+    },
+    {
+      "id": "solemn-cream",
+      "name": "端庄严谨",
+      "desc": "暖米正红 · 端庄严谨",
+      "tags": [
+        "商务汇报",
+        "文化国风"
+      ]
+    },
+    {
+      "id": "starry-violet",
+      "name": "星辰深紫",
+      "desc": "深紫星空 · 深邃辽远",
+      "tags": [
+        "科技未来",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "hot-neon",
+      "name": "热粉霓虹",
+      "desc": "热粉炸色 · 狂热躁动",
+      "tags": [
+        "活泼营销",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "sugar-pink",
+      "name": "俏皮粉黄",
+      "desc": "奶白粉黄 · 童趣可爱",
+      "tags": [
+        "活泼营销",
+        "教育知识"
+      ]
+    },
+    {
+      "id": "sakura-mauve",
+      "name": "樱花粉紫",
+      "desc": "樱粉梦幻 · 甜美少女",
+      "tags": [
+        "活泼营销",
+        "文艺杂志"
+      ]
+    },
+    {
+      "id": "ink-cinnabar",
+      "name": "老墨朱砂",
+      "desc": "浓墨朱砂 · 武侠沉郁",
+      "tags": [
+        "文化国风",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "altitude-blue",
+      "name": "高空云霄",
+      "desc": "深空蓝橙 · 高空开阔",
+      "tags": [
+        "商务汇报",
+        "科技未来"
+      ]
+    },
+    {
+      "id": "flow-light",
+      "name": "流光",
+      "desc": "深棕琥珀 · 温润流光",
+      "tags": [
+        "极简留白"
+      ]
+    },
+    {
+      "id": "ember-bronze",
+      "name": "炭金",
+      "desc": "深炭古铜 · 金属沉光",
+      "tags": [
+        "极简留白"
+      ]
+    },
+    {
+      "id": "moss-mist",
+      "name": "苔痕",
+      "desc": "米白苔绿 · 林荫古静",
+      "tags": [
+        "极简留白"
+      ]
+    },
+    {
+      "id": "moonlight",
+      "name": "烟霞",
+      "desc": "雾灰紫红 · 暮色诗意",
+      "tags": [
+        "极简留白"
+      ]
+    },
+    {
+      "id": "jardin-cream",
+      "name": "儒雅清宋",
+      "desc": "暖米墨青 · 学者笔意",
+      "tags": [
+        "文化国风",
+        "教育知识"
+      ]
+    },
+    {
+      "id": "plain-grey",
+      "name": "素简灰白",
+      "desc": "灰白素简 · 中性公正",
+      "tags": [
+        "商务汇报"
+      ]
+    },
+    {
+      "id": "crimson-paper",
+      "name": "丹砂旧档",
+      "desc": "白米砖红 · 老报刊气",
+      "tags": [
+        "复古怀旧",
+        "文化国风"
+      ]
+    },
+    {
+      "id": "noir-gold",
+      "name": "夜墨鎏金",
+      "desc": "蓝黑鎏金 · 港片夜色",
+      "tags": [
+        "复古怀旧",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "blush-prose",
+      "name": "杏意文心",
+      "desc": "浅杏绿黛 · 春日诗意",
+      "tags": [
+        "文化国风",
+        "文艺杂志"
+      ]
+    },
+    {
+      "id": "warm-jade",
+      "name": "暖玉市井",
+      "desc": "暖白朱绿 · 怀旧市井",
+      "tags": [
+        "复古怀旧",
+        "文化国风"
+      ]
+    },
+    {
+      "id": "pop-burst",
+      "name": "粉酷潮",
+      "desc": "灰白热粉 · 戏谑潮酷",
+      "tags": [
+        "活泼营销"
+      ]
+    },
+    {
+      "id": "color-clash",
+      "name": "撞色构成",
+      "desc": "奶黄撞色 · 明快俏皮",
+      "tags": [
+        "活泼营销"
+      ]
+    },
+    {
+      "id": "amber-night",
+      "name": "琥珀夜读",
+      "desc": "深棕琥珀 · 学术夜读",
+      "tags": [
+        "教育知识",
+        "暗夜质感"
+      ]
+    },
+    {
+      "id": "celadon",
+      "name": "青瓷",
+      "desc": "灰绿釉色 · 东方静谧",
+      "tags": [
+        "文化国风",
+        "自然清新"
+      ]
+    },
+    {
+      "id": "void-black",
+      "name": "曜黑",
+      "desc": "极黑冰蓝 · 冷峻空旷",
+      "tags": [
+        "暗夜质感",
+        "科技未来",
+        "极简留白"
+      ]
+    }
+  ]
+}

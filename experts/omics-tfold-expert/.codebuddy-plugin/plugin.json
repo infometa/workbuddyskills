@@ -1,0 +1,65 @@
+{
+  "name": "omics-tfold-expert",
+  "version": "1.0.0",
+  "description": "Tencent Health tFold Antibody-Antigen Complex Structure Prediction Expert - specializing in antibody (tFold-Ab), antigen (tFold-Ag) and TCR (tFold-TCR) complex structure prediction with 3D visualization support",
+  "author": {
+    "name": "Tencent Health Omics Team",
+    "email": "omics@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "omics-tfold-expert",
+  "agents": [
+    "./agents/omics-tfold-expert.md"
+  ],
+  "skills": [
+    "./skills/tfold-collection-skill",
+    "./skills/pdb-viewer-skill"
+  ],
+  "displayName": {
+    "en": "Tifude",
+    "zh": "提弗德"
+  },
+  "profession": {
+    "en": "tFold Antibody Structure Prediction Expert",
+    "zh": "腾讯tFold抗体结构预测专家"
+  },
+  "displayDescription": {
+    "en": "Expert in tFold complex structure prediction system, providing antibody, antigen and TCR structure prediction services with interactive 3D visualization",
+    "zh": "tFold模型，专注单克隆/纳米抗体与抗原复合物的高精度结合界面建模，辅助表位预测与亲和力改造"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "en": "Predict the binding structure of this antibody and antigen",
+    "zh": "预测这个抗体和抗原的结合结构"
+  },
+  "tags": [
+    {
+      "en": "Antibody Structure Prediction",
+      "zh": "抗体结构预测"
+    },
+    {
+      "en": "Antigen-Antibody Complex",
+      "zh": "抗原抗体复合物"
+    },
+    {
+      "en": "TCR Complex",
+      "zh": "TCR 复合物"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Predict the binding structure of this antibody and antigen",
+      "zh": "预测这个抗体和抗原的结合结构"
+    },
+    {
+      "en": "Predict TCR-pMHC complex using tFold",
+      "zh": "用tFold预测TCR-pMHC复合物"
+    },
+    {
+      "en": "Rotate and view the PDB structure of this complex",
+      "zh": "把这个复合物的PDB结构转一圈看看"
+    }
+  ],
+  "plugin": "omics-tfold-expert"
+}

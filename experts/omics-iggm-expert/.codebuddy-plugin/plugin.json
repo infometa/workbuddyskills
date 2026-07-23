@@ -1,0 +1,65 @@
+{
+  "name": "omics-iggm-expert",
+  "version": "1.0.0",
+  "description": "Tencent Health IgGM Antibody Drug R&D Expert - specializing in de novo antibody design, CDR redesign, and affinity maturation using generative AI model (ICLR 2025), with PDB structure visualization support",
+  "author": {
+    "name": "Tencent Health Omics Team",
+    "email": "omics@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "omics-iggm-expert",
+  "agents": [
+    "./agents/omics-iggm-expert.md"
+  ],
+  "skills": [
+    "./skills/iggm-wdl-skill",
+    "./skills/pdb-viewer-skill"
+  ],
+  "displayName": {
+    "en": "Aige",
+    "zh": "艾格"
+  },
+  "profession": {
+    "en": "IgGM Antibody Drug R&D Expert",
+    "zh": "腾讯IgGM抗体药物研发专家"
+  },
+  "displayDescription": {
+    "en": "Expert in IgGM generative antibody model (ICLR 2025), providing de novo antibody/nanobody design, CDR redesign, affinity maturation, and 3D structure visualization services",
+    "zh": "精通腾讯IgGM生成式模型。覆盖CDR重设计、全链生成与人源化亲和力优化，输出可验证的抗体候选序列"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "en": "Design a nanobody targeting HER2 antigen",
+    "zh": "针对HER2抗原设计一个纳米抗体"
+  },
+  "tags": [
+    {
+      "en": "Antibody/Nanobody Design",
+      "zh": "抗体/纳米抗体设计"
+    },
+    {
+      "en": "CDR Redesign",
+      "zh": "CDR 重设计"
+    },
+    {
+      "en": "Affinity Maturation",
+      "zh": "亲和力成熟"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Design a nanobody targeting HER2 antigen",
+      "zh": "针对HER2抗原设计一个纳米抗体"
+    },
+    {
+      "en": "Redesign CDR-H3 region of my antibody",
+      "zh": "帮我的抗体做CDR-H3重设计"
+    },
+    {
+      "en": "Show me the 3D structure of this antibody",
+      "zh": "看看这个抗体的三维结构长什么样"
+    }
+  ],
+  "plugin": "omics-iggm-expert"
+}
