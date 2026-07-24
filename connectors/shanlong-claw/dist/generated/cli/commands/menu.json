@@ -1,0 +1,1198 @@
+{
+  "domain": "menu",
+  "count": 21,
+  "commands": [
+    {
+      "command": "sl menu load-cookbook",
+      "domain": "menu",
+      "action": "load-cookbook",
+      "name": "平板菜谱初始化",
+      "description": "平板菜谱初始化",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/load"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "loadCookbook",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "平板菜谱初始化"
+    },
+    {
+      "command": "sl menu setting-cook-book",
+      "domain": "menu",
+      "action": "setting-cook-book",
+      "name": "平板菜谱修改菜谱分类或IOS模板类型",
+      "description": "平板菜谱修改菜谱分类或IOS模板类型",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/modify/setting"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "settingCookBook",
+      "tags": [
+        "menu",
+        "config",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "menuAndGridSharedUse",
+          "type": "string",
+          "required": false,
+          "description": "menuAndGridSharedUse"
+        },
+        {
+          "name": "androidFixedGridTemplate",
+          "type": "string",
+          "required": false,
+          "description": "androidFixedGridTemplate"
+        },
+        {
+          "name": "isAutoFill",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "shopIds",
+          "type": "string",
+          "required": false,
+          "description": "门店ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "pageModule",
+          "type": "string",
+          "required": false,
+          "description": "pageModule"
+        },
+        {
+          "name": "pageTab",
+          "type": "string",
+          "required": false,
+          "description": "pageTab"
+        },
+        {
+          "name": "excludeDTOList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "isAndroidPadMenu",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        }
+      ],
+      "description_short": "平板菜谱修改菜谱分类或IOS模板类型"
+    },
+    {
+      "command": "sl menu get-template-list",
+      "domain": "menu",
+      "action": "get-template-list",
+      "name": "获取平板菜谱模板集合",
+      "description": "获取平板菜谱模板集合",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/template/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "getTemplateList",
+      "tags": [
+        "menu",
+        "export",
+        "菜品",
+        "菜谱",
+        "员工",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取平板菜谱模板集合"
+    },
+    {
+      "command": "sl menu get-dash-tree-data",
+      "domain": "menu",
+      "action": "get-dash-tree-data",
+      "name": "获取菜品",
+      "description": "获取菜品",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/item/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "getDashTreeData",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱",
+        "列表",
+        "树形"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取菜品"
+    },
+    {
+      "command": "sl menu save-cookbook",
+      "domain": "menu",
+      "action": "save-cookbook",
+      "name": "平板菜谱保存",
+      "description": "平板菜谱保存",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/save"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "saveCookbook",
+      "tags": [
+        "menu",
+        "manage",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "平板菜谱保存"
+    },
+    {
+      "command": "sl menu get-cookbook-list",
+      "domain": "menu",
+      "action": "get-cookbook-list",
+      "name": "平板菜谱列表",
+      "description": "平板菜谱列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/page/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "getCookbookList",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "平板菜谱列表"
+    },
+    {
+      "command": "sl menu get-cookbook-detail",
+      "domain": "menu",
+      "action": "get-cookbook-detail",
+      "name": "平板菜谱详情",
+      "description": "平板菜谱详情",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/detail"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "getCookbookDetail",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "平板菜谱详情"
+    },
+    {
+      "command": "sl menu update-cookbook-detail",
+      "domain": "menu",
+      "action": "update-cookbook-detail",
+      "name": "编辑平板菜谱",
+      "description": "编辑平板菜谱",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/modify"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "updateCookbookDetail",
+      "tags": [
+        "menu",
+        "manage",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "编辑平板菜谱"
+    },
+    {
+      "command": "sl menu remove-cookbook-detail",
+      "domain": "menu",
+      "action": "remove-cookbook-detail",
+      "name": "删除",
+      "description": "删除",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/remove"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "removeCookbookDetail",
+      "tags": [
+        "menu",
+        "action",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除"
+    },
+    {
+      "command": "sl menu preview-cookbook-detail",
+      "domain": "menu",
+      "action": "preview-cookbook-detail",
+      "name": "平板菜谱预览",
+      "description": "平板菜谱预览",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/preview"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "previewCookbookDetail",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "平板菜谱预览"
+    },
+    {
+      "command": "sl menu generate-cookbook-detail",
+      "domain": "menu",
+      "action": "generate-cookbook-detail",
+      "name": "一键生成平板菜谱",
+      "description": "一键生成平板菜谱",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/auto/generate"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "generateCookbookDetail",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "一键生成平板菜谱"
+    },
+    {
+      "command": "sl menu clear-all",
+      "domain": "menu",
+      "action": "clear-all",
+      "name": "清空平板菜谱",
+      "description": "清空平板菜谱",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/clear"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "clearAll",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S4",
+      "parameters": [],
+      "description_short": "清空平板菜谱"
+    },
+    {
+      "command": "sl menu regenerate",
+      "domain": "menu",
+      "action": "regenerate",
+      "name": "重新生成平板菜谱",
+      "description": "重新生成平板菜谱",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/auto/regenerate"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "regenerate",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        }
+      ],
+      "description_short": "重新生成平板菜谱"
+    },
+    {
+      "command": "sl menu setting-cook",
+      "domain": "menu",
+      "action": "setting-cook",
+      "name": "是否进行过一键生成",
+      "description": "是否进行过一键生成",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/auto/setting"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "settingCook",
+      "tags": [
+        "menu",
+        "config",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "是否进行过一键生成"
+    },
+    {
+      "command": "sl menu sort-list",
+      "domain": "menu",
+      "action": "sort-list",
+      "name": "平板菜谱列表排序",
+      "description": "平板菜谱列表排序",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/sort"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "sortList",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "平板菜谱列表排序"
+    },
+    {
+      "command": "sl menu copy-other-shops",
+      "domain": "menu",
+      "action": "copy-other-shops",
+      "name": "平板菜谱 复制到其他门店",
+      "description": "平板菜谱 复制到其他门店",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/copy"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "copyOtherShops",
+      "tags": [
+        "menu",
+        "action",
+        "菜品",
+        "菜谱",
+        "门店"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "menuAndGridSharedUse",
+          "type": "string",
+          "required": false,
+          "description": "menuAndGridSharedUse"
+        },
+        {
+          "name": "androidFixedGridTemplate",
+          "type": "string",
+          "required": false,
+          "description": "androidFixedGridTemplate"
+        },
+        {
+          "name": "isAutoFill",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "shopIds",
+          "type": "string",
+          "required": false,
+          "description": "门店ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "pageModule",
+          "type": "string",
+          "required": false,
+          "description": "pageModule"
+        },
+        {
+          "name": "pageTab",
+          "type": "string",
+          "required": false,
+          "description": "pageTab"
+        },
+        {
+          "name": "excludeDTOList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "isAndroidPadMenu",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        }
+      ],
+      "description_short": "平板菜谱 复制到其他门店"
+    },
+    {
+      "command": "sl menu get-exclude-items",
+      "domain": "menu",
+      "action": "get-exclude-items",
+      "name": "平板菜谱 查询排除品项明细",
+      "description": "平板菜谱 查询排除品项明细",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/getExcludeItems"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "getExcludeItems",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "平板菜谱 查询排除品项明细"
+    },
+    {
+      "command": "sl menu save-exclude-items",
+      "domain": "menu",
+      "action": "save-exclude-items",
+      "name": "平板菜谱 保存排除品项",
+      "description": "平板菜谱 保存排除品项",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/saveExcludeItems"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "saveExcludeItems",
+      "tags": [
+        "menu",
+        "manage",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "menuAndGridSharedUse",
+          "type": "string",
+          "required": false,
+          "description": "menuAndGridSharedUse"
+        },
+        {
+          "name": "androidFixedGridTemplate",
+          "type": "string",
+          "required": false,
+          "description": "androidFixedGridTemplate"
+        },
+        {
+          "name": "isAutoFill",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "shopIds",
+          "type": "string",
+          "required": false,
+          "description": "门店ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "pageModule",
+          "type": "string",
+          "required": false,
+          "description": "pageModule"
+        },
+        {
+          "name": "pageTab",
+          "type": "string",
+          "required": false,
+          "description": "pageTab"
+        },
+        {
+          "name": "excludeDTOList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "isAndroidPadMenu",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "selectedExcludeList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        }
+      ],
+      "description_short": "平板菜谱 保存排除品项"
+    },
+    {
+      "command": "sl menu get-icon",
+      "domain": "menu",
+      "action": "get-icon",
+      "name": "平板菜品 获取自定义图标",
+      "description": "平板菜品 获取自定义图标",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/getIcon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "getIcon",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "平板菜品 获取自定义图标"
+    },
+    {
+      "command": "sl menu save-icon",
+      "domain": "menu",
+      "action": "save-icon",
+      "name": "保存自定义图标",
+      "description": "保存自定义图标",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/saveIcon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "saveIcon",
+      "tags": [
+        "menu",
+        "manage",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "iconDetailList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        }
+      ],
+      "description_short": "保存自定义图标"
+    },
+    {
+      "command": "sl menu check-exclude-item",
+      "domain": "menu",
+      "action": "check-exclude-item",
+      "name": "平板菜谱，检测已在菜谱页的被排除的菜品",
+      "description": "平板菜谱，检测已在菜谱页的被排除的菜品",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/cookbook/checkExcludeItem"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/electronicMenu.js",
+      "source_function": "checkExcludeItem",
+      "tags": [
+        "menu",
+        "query",
+        "菜品",
+        "菜谱"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "menuAndGridSharedUse",
+          "type": "string",
+          "required": false,
+          "description": "menuAndGridSharedUse"
+        },
+        {
+          "name": "androidFixedGridTemplate",
+          "type": "string",
+          "required": false,
+          "description": "androidFixedGridTemplate"
+        },
+        {
+          "name": "isAutoFill",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "shopIds",
+          "type": "string",
+          "required": false,
+          "description": "门店ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "pageModule",
+          "type": "string",
+          "required": false,
+          "description": "pageModule"
+        },
+        {
+          "name": "pageTab",
+          "type": "string",
+          "required": false,
+          "description": "pageTab"
+        },
+        {
+          "name": "excludeDTOList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "isAndroidPadMenu",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "selectedExcludeList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        }
+      ],
+      "description_short": "平板菜谱，检测已在菜谱页的被排除的菜品"
+    }
+  ]
+}

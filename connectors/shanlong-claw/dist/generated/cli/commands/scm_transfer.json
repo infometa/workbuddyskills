@@ -1,0 +1,32 @@
+{
+  "domain": "scm_transfer",
+  "count": 1,
+  "commands": [
+    {
+      "command": "sl scm_transfer transfer-data",
+      "domain": "scm_transfer",
+      "action": "transfer-data",
+      "name": "transferData",
+      "description": "transferData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/base_import/v1/transfer?param=:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_import.js",
+      "source_function": "transferData",
+      "tags": [
+        "transfer",
+        "config"
+      ]
+    }
+  ]
+}

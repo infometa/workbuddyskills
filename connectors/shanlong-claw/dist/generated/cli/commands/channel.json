@@ -1,0 +1,4965 @@
+{
+  "domain": "channel",
+  "count": 132,
+  "commands": [
+    {
+      "command": "sl channel get-user-wechat-info",
+      "domain": "channel",
+      "action": "get-user-wechat-info",
+      "name": "获取微信开放平台配置",
+      "description": "获取微信开放平台配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/crm7auth/login/kotler/getWechatOpenPlatformInfo.do"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/account.ts",
+      "source_function": "getUserWechatInfo",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取微信开放平台配置"
+    },
+    {
+      "command": "sl channel get-user-wechat-token",
+      "domain": "channel",
+      "action": "get-user-wechat-token",
+      "name": "绑定微信",
+      "description": "绑定微信",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/crm7auth/user/kotler/bundleWechatUser.do"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/account.ts",
+      "source_function": "getUserWechatToken",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "code"
+        }
+      ],
+      "description_short": "绑定微信"
+    },
+    {
+      "command": "sl channel unbundle-wechat",
+      "domain": "channel",
+      "action": "unbundle-wechat",
+      "name": "解绑微信",
+      "description": "解绑微信",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/crm7auth/user/kotler/unBundleWechatUser.do"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/account.ts",
+      "source_function": "unbundleWechat",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "解绑微信"
+    },
+    {
+      "command": "sl channel user-login-we-chat",
+      "domain": "channel",
+      "action": "user-login-we-chat",
+      "name": "微信扫码登录",
+      "description": "微信扫码登录",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/crm7auth/login/kotler/wechatLogin.do"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/account.ts",
+      "source_function": "userLoginWeChat",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "code"
+        }
+      ],
+      "description_short": "微信扫码登录"
+    },
+    {
+      "command": "sl channel get-wechat-mp-list",
+      "domain": "channel",
+      "action": "get-wechat-mp-list",
+      "name": "getWechatMpList",
+      "description": "获取微信公众号/小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWechatMpList",
+      "tags": [
+        "channel",
+        "integration",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "getWechatMpList"
+    },
+    {
+      "command": "sl channel get-alipay-mp-list",
+      "domain": "channel",
+      "action": "get-alipay-mp-list",
+      "name": "获取微信公众号/小程序列表",
+      "description": "获取支付宝号列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/query"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getAlipayMpList",
+      "tags": [
+        "channel",
+        "integration",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取微信公众号/小程序列表"
+    },
+    {
+      "command": "sl channel get-tiktok-mp-list",
+      "domain": "channel",
+      "action": "get-tiktok-mp-list",
+      "name": "获取微信公众号/小程序列表",
+      "description": "获取抖音号列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/douyin/config/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getTiktokMpList",
+      "tags": [
+        "channel",
+        "integration",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取微信公众号/小程序列表"
+    },
+    {
+      "command": "sl channel create-wechat-mp",
+      "domain": "channel",
+      "action": "create-wechat-mp",
+      "name": "获取支付宝号列表",
+      "description": "新建微信公众号/小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "createWechatMp",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "获取支付宝号列表"
+    },
+    {
+      "command": "sl channel create-alipay-mp",
+      "domain": "channel",
+      "action": "create-alipay-mp",
+      "name": "获取抖音号列表",
+      "description": "新建支付宝号列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/upsert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "createAlipayMp",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "获取抖音号列表"
+    },
+    {
+      "command": "sl channel create-tiktok-mp",
+      "domain": "channel",
+      "action": "create-tiktok-mp",
+      "name": "新建微信公众号/小程序列表",
+      "description": "新建抖音号列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/douyin/config/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "createTiktokMp",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "新建微信公众号/小程序列表"
+    },
+    {
+      "command": "sl channel edit-wechat-mp",
+      "domain": "channel",
+      "action": "edit-wechat-mp",
+      "name": "新建支付宝号列表",
+      "description": "编辑微信公众号/小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "editWechatMp",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "新建支付宝号列表"
+    },
+    {
+      "command": "sl channel delete-wechat-mp",
+      "domain": "channel",
+      "action": "delete-wechat-mp",
+      "name": "新建抖音号列表",
+      "description": "删除微信公众号/小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "deleteWechatMp",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "新建抖音号列表"
+    },
+    {
+      "command": "sl channel delete-alipay-mp",
+      "domain": "channel",
+      "action": "delete-alipay-mp",
+      "name": "编辑微信公众号/小程序列表",
+      "description": "删除支付宝列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/remove"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "deleteAlipayMp",
+      "tags": [
+        "channel",
+        "action"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "编辑微信公众号/小程序列表"
+    },
+    {
+      "command": "sl channel delete-tiktok-mp",
+      "domain": "channel",
+      "action": "delete-tiktok-mp",
+      "name": "删除微信公众号/小程序列表",
+      "description": "删除抖音列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/douyin/config/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "deleteTiktokMp",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除微信公众号/小程序列表"
+    },
+    {
+      "command": "sl channel save-wechat-mp",
+      "domain": "channel",
+      "action": "save-wechat-mp",
+      "name": "删除支付宝列表",
+      "description": "微信公众号/小程序 设置邀请图文二维码",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/saveInviteInfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "saveWechatMp",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "删除支付宝列表"
+    },
+    {
+      "command": "sl channel get-wechat-shop-list",
+      "domain": "channel",
+      "action": "get-wechat-shop-list",
+      "name": "删除抖音列表",
+      "description": "获取微信公众号/小程序门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/shopPageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWechatShopList",
+      "tags": [
+        "channel",
+        "integration",
+        "门店",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "删除抖音列表"
+    },
+    {
+      "command": "sl channel get-wechat-shops",
+      "domain": "channel",
+      "action": "get-wechat-shops",
+      "name": "微信公众号/小程序 设置邀请图文二维码",
+      "description": "批量修改获取微信门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/querySelectedShopIds"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWechatShops",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "cardTypeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "微信公众号/小程序 设置邀请图文二维码"
+    },
+    {
+      "command": "sl channel get-alipay-shops",
+      "domain": "channel",
+      "action": "get-alipay-shops",
+      "name": "获取微信公众号/小程序门店",
+      "description": "批量修改获取支付宝门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/querySelectedShopIds"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getAlipayShops",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "cardTypeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取微信公众号/小程序门店"
+    },
+    {
+      "command": "sl channel get-tiktok-shops",
+      "domain": "channel",
+      "action": "get-tiktok-shops",
+      "name": "批量修改获取微信门店",
+      "description": "批量修改获取抖音门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/douyin/config/queryShopIds"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getTiktokShops",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "cardTypeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "批量修改获取微信门店"
+    },
+    {
+      "command": "sl channel add-wechat-shop",
+      "domain": "channel",
+      "action": "add-wechat-shop",
+      "name": "批量修改获取支付宝门店",
+      "description": "新增/批量修改微信公众号/小程序门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/shopSaveBatch"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "addWechatShop",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "批量修改获取支付宝门店"
+    },
+    {
+      "command": "sl channel add-alipay-shop",
+      "domain": "channel",
+      "action": "add-alipay-shop",
+      "name": "批量修改获取抖音门店",
+      "description": "新增/批量修改支付宝公众号/小程序门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/saveAlipayShopBatch"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "addAlipayShop",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "批量修改获取抖音门店"
+    },
+    {
+      "command": "sl channel add-tiktok-shop",
+      "domain": "channel",
+      "action": "add-tiktok-shop",
+      "name": "新增/批量修改微信公众号/小程序门店",
+      "description": "新增/批量修改抖音公众号/小程序门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/douyin/config/saveDetailBatch"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "addTiktokShop",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "新增/批量修改微信公众号/小程序门店"
+    },
+    {
+      "command": "sl channel edit-wechat-shop",
+      "domain": "channel",
+      "action": "edit-wechat-shop",
+      "name": "新增/批量修改支付宝公众号/小程序门店",
+      "description": "编辑修改微信公众号/小程序门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/shopSaveSingle"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "editWechatShop",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "新增/批量修改支付宝公众号/小程序门店"
+    },
+    {
+      "command": "sl channel edit-alipay-shop",
+      "domain": "channel",
+      "action": "edit-alipay-shop",
+      "name": "新增/批量修改抖音公众号/小程序门店",
+      "description": "编辑修改支付宝公众号/小程序门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/saveAlipayShopSingle"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "editAlipayShop",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "新增/批量修改抖音公众号/小程序门店"
+    },
+    {
+      "command": "sl channel edit-tiktok-shop",
+      "domain": "channel",
+      "action": "edit-tiktok-shop",
+      "name": "编辑修改微信公众号/小程序门店",
+      "description": "编辑修改抖音公众号/小程序门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/douyin/config/saveDetailSingle"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "editTiktokShop",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "编辑修改微信公众号/小程序门店"
+    },
+    {
+      "command": "sl channel default-setting-wechat-shop",
+      "domain": "channel",
+      "action": "default-setting-wechat-shop",
+      "name": "编辑修改支付宝公众号/小程序门店",
+      "description": "设置默认微信门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/shopSetDefault"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "defaultSettingWechatShop",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "编辑修改支付宝公众号/小程序门店"
+    },
+    {
+      "command": "sl channel default-setting-alipay-shop",
+      "domain": "channel",
+      "action": "default-setting-alipay-shop",
+      "name": "编辑修改抖音公众号/小程序门店",
+      "description": "设置默认支付宝公门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/saveAlipayShopSingleStatus"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "defaultSettingAlipayShop",
+      "tags": [
+        "channel",
+        "report",
+        "门店",
+        "报表"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "编辑修改抖音公众号/小程序门店"
+    },
+    {
+      "command": "sl channel default-setting-tiktok-shop",
+      "domain": "channel",
+      "action": "default-setting-tiktok-shop",
+      "name": "设置默认微信门店",
+      "description": "设置默认抖音门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/douyin/config/setDefault"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "defaultSettingTiktokShop",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "设置默认微信门店"
+    },
+    {
+      "command": "sl channel delete-wechat-shop",
+      "domain": "channel",
+      "action": "delete-wechat-shop",
+      "name": "设置默认支付宝公门店",
+      "description": "删除微信门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/shopDelSingle"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "deleteWechatShop",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "设置默认支付宝公门店"
+    },
+    {
+      "command": "sl channel delete-alipay-shop",
+      "domain": "channel",
+      "action": "delete-alipay-shop",
+      "name": "设置默认抖音门店",
+      "description": "删除支付宝门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/removeAlipayShopSingle"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "deleteAlipayShop",
+      "tags": [
+        "channel",
+        "action",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "设置默认抖音门店"
+    },
+    {
+      "command": "sl channel get-alipay-id-shop-list",
+      "domain": "channel",
+      "action": "get-alipay-id-shop-list",
+      "name": "删除支付宝门店",
+      "description": "获取支付宝门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/queryAlipayShops"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getAlipayIdShopList",
+      "tags": [
+        "channel",
+        "integration",
+        "门店",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "删除支付宝门店"
+    },
+    {
+      "command": "sl channel get-wechat-merchant-list",
+      "domain": "channel",
+      "action": "get-wechat-merchant-list",
+      "name": "获取支付宝门店",
+      "description": "获取微信商家券模板列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/merchant/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWechatMerchantList",
+      "tags": [
+        "channel",
+        "integration",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取支付宝门店"
+    },
+    {
+      "command": "sl channel update-tiktok-mp",
+      "domain": "channel",
+      "action": "update-tiktok-mp",
+      "name": "获取抖音门店",
+      "description": "更新抖音门店配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/douyin/config/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "updateTiktokMp",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "dataInfo",
+          "type": "string",
+          "required": false,
+          "description": "dataInfo"
+        },
+        {
+          "name": "cardTypeLevels",
+          "type": "string",
+          "required": false,
+          "description": "cardTypeLevels"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        }
+      ],
+      "description_short": "获取抖音门店"
+    },
+    {
+      "command": "sl channel wechat-merchant-coupon-change-state",
+      "domain": "channel",
+      "action": "wechat-merchant-coupon-change-state",
+      "name": "获取微信商家券模板列表",
+      "description": "修改微信商家券模板状态",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/merchant/switch"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "wechatMerchantCouponChangeState",
+      "tags": [
+        "channel",
+        "report",
+        "优惠券",
+        "报表"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "templateId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取微信商家券模板列表"
+    },
+    {
+      "command": "sl channel wechat-merchant-coupon-delete",
+      "domain": "channel",
+      "action": "wechat-merchant-coupon-delete",
+      "name": "更新抖音门店配置",
+      "description": "删除微信商家券模板",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "store",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/merchant/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID",
+        "shopId": "SL_CRM_STORE_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "wechatMerchantCouponDelete",
+      "tags": [
+        "channel",
+        "integration",
+        "优惠券"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "templateId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "更新抖音门店配置"
+    },
+    {
+      "command": "sl channel create-wechat-merchant-coupon",
+      "domain": "channel",
+      "action": "create-wechat-merchant-coupon",
+      "name": "修改微信商家券模板状态",
+      "description": "新建微信商家券模板",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/merchant/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "createWechatMerchantCoupon",
+      "tags": [
+        "channel",
+        "integration",
+        "优惠券"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "修改微信商家券模板状态"
+    },
+    {
+      "command": "sl channel update-wechat-merchant-coupon",
+      "domain": "channel",
+      "action": "update-wechat-merchant-coupon",
+      "name": "删除微信商家券模板",
+      "description": "编辑微信商家券模板",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/merchant/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "updateWechatMerchantCoupon",
+      "tags": [
+        "channel",
+        "integration",
+        "优惠券"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "删除微信商家券模板"
+    },
+    {
+      "command": "sl channel get-wechat-merchant-coupon-detail",
+      "domain": "channel",
+      "action": "get-wechat-merchant-coupon-detail",
+      "name": "新建微信商家券模板",
+      "description": "微信商家券模板详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/merchant/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWechatMerchantCouponDetail",
+      "tags": [
+        "channel",
+        "integration",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "templateId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "新建微信商家券模板"
+    },
+    {
+      "command": "sl channel get-enterprise-wechat-url",
+      "domain": "channel",
+      "action": "get-enterprise-wechat-url",
+      "name": "编辑微信商家券模板",
+      "description": "微信企业微信注册链接",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/work/registerAddr"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getEnterpriseWechatUrl",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "编辑微信商家券模板"
+    },
+    {
+      "command": "sl channel get-we-com-list",
+      "domain": "channel",
+      "action": "get-we-com-list",
+      "name": "微信商家券模板详情",
+      "description": "微信企业微信获得",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/work/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWeComList",
+      "tags": [
+        "channel",
+        "integration",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "微信商家券模板详情"
+    },
+    {
+      "command": "sl channel delete-we-com",
+      "domain": "channel",
+      "action": "delete-we-com",
+      "name": "微信企业微信注册链接",
+      "description": "微信企业微信删除",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/work/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "deleteWeCom",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "微信企业微信注册链接"
+    },
+    {
+      "command": "sl channel create-we-com",
+      "domain": "channel",
+      "action": "create-we-com",
+      "name": "微信企业微信获得",
+      "description": "微信企业微信新建",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/work/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "createWeCom",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "微信企业微信获得"
+    },
+    {
+      "command": "sl channel update-we-com",
+      "domain": "channel",
+      "action": "update-we-com",
+      "name": "微信企业微信删除",
+      "description": "微信企业微信编辑",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/work/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "updateWeCom",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "微信企业微信删除"
+    },
+    {
+      "command": "sl channel get-enterprise-wechat-auth-url",
+      "domain": "channel",
+      "action": "get-enterprise-wechat-auth-url",
+      "name": "微信企业微信新建",
+      "description": "微信企业微信授权链接",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/work/authAddr"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getEnterpriseWechatAuthUrl",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "微信企业微信新建"
+    },
+    {
+      "command": "sl channel edit-community-code",
+      "domain": "channel",
+      "action": "edit-community-code",
+      "name": "微信企业微信编辑",
+      "description": "社群码配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/work/updateShopColony"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "editCommunityCode",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "微信企业微信编辑"
+    },
+    {
+      "command": "sl channel get-community-code",
+      "domain": "channel",
+      "action": "get-community-code",
+      "name": "微信企业微信授权链接",
+      "description": "社群码",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/work/getShopColony"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getCommunityCode",
+      "tags": [
+        "channel",
+        "integration",
+        "门店"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "corpId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "微信企业微信授权链接"
+    },
+    {
+      "command": "sl channel tencent-map-cfg-list",
+      "domain": "channel",
+      "action": "tencent-map-cfg-list",
+      "name": "卡包1.0详情",
+      "description": "腾讯地图券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/tencent/map/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "tencentMapCfgList",
+      "tags": [
+        "channel",
+        "query",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "卡包1.0详情"
+    },
+    {
+      "command": "sl channel tencent-map-cfg-save",
+      "domain": "channel",
+      "action": "tencent-map-cfg-save",
+      "name": "卡包2.0详情",
+      "description": "腾讯地图保存",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/tencent/map/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "tencentMapCfgSave",
+      "tags": [
+        "channel",
+        "manage"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "couponIds",
+          "type": "string",
+          "required": false,
+          "description": "couponIds"
+        }
+      ],
+      "description_short": "卡包2.0详情"
+    },
+    {
+      "command": "sl channel game-life-cfg-list",
+      "domain": "channel",
+      "action": "game-life-cfg-list",
+      "name": "卡包2.0详情",
+      "description": "游戏人生券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/tencent/gameLife/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "gameLifeCfgList",
+      "tags": [
+        "channel",
+        "query",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "卡包2.0详情"
+    },
+    {
+      "command": "sl channel game-life-cfg-save",
+      "domain": "channel",
+      "action": "game-life-cfg-save",
+      "name": "游戏人生保存",
+      "description": "游戏人生保存",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/tencent/gameLife/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "gameLifeCfgSave",
+      "tags": [
+        "channel",
+        "manage"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "couponIds",
+          "type": "string",
+          "required": false,
+          "description": "couponIds"
+        }
+      ],
+      "description_short": "游戏人生保存"
+    },
+    {
+      "command": "sl channel paymentgift-list",
+      "domain": "channel",
+      "action": "paymentgift-list",
+      "name": "获取支付宝有礼活动列表",
+      "description": "获取支付宝有礼活动列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/paymentgift/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "paymentgiftList",
+      "tags": [
+        "channel",
+        "integration",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取支付宝有礼活动列表"
+    },
+    {
+      "command": "sl channel paymentgift-statr",
+      "domain": "channel",
+      "action": "paymentgift-statr",
+      "name": "支付宝有礼活动启用",
+      "description": "支付宝有礼活动启用",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/paymentgift/start"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "paymentgiftStatr",
+      "tags": [
+        "channel",
+        "report",
+        "报表"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "支付宝有礼活动启用"
+    },
+    {
+      "command": "sl channel paymentgift-stop",
+      "domain": "channel",
+      "action": "paymentgift-stop",
+      "name": "支付宝有礼活动停用",
+      "description": "支付宝有礼活动停用",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/paymentgift/stop"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "paymentgiftStop",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "支付宝有礼活动停用"
+    },
+    {
+      "command": "sl channel paymentgift-delete",
+      "domain": "channel",
+      "action": "paymentgift-delete",
+      "name": "支付宝有礼活动删除",
+      "description": "支付宝有礼活动删除",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/paymentgift/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "paymentgiftDelete",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "支付宝有礼活动删除"
+    },
+    {
+      "command": "sl channel paymentgift-detail",
+      "domain": "channel",
+      "action": "paymentgift-detail",
+      "name": "支付宝有礼活动详情",
+      "description": "支付宝有礼活动详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/paymentgift/detail"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "paymentgiftDetail",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "支付宝有礼活动详情"
+    },
+    {
+      "command": "sl channel get-alipay-mch-id",
+      "domain": "channel",
+      "action": "get-alipay-mch-id",
+      "name": "根据门店获取商户号",
+      "description": "根据门店获取商户号",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/getAlipayMchId"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getAlipayMchId",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "shopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "根据门店获取商户号"
+    },
+    {
+      "command": "sl channel getchannels",
+      "domain": "channel",
+      "action": "getchannels",
+      "name": "根据商户号获取渠道列表",
+      "description": "根据商户号获取渠道列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/paymentgift/channel"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getchannels",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "merchantId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "根据商户号获取渠道列表"
+    },
+    {
+      "command": "sl channel create-paymentgift",
+      "domain": "channel",
+      "action": "create-paymentgift",
+      "name": "支付宝有礼活动创建",
+      "description": "支付宝有礼活动创建",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/paymentgift/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "createPaymentgift",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "支付宝有礼活动创建"
+    },
+    {
+      "command": "sl channel alipay-spinner",
+      "domain": "channel",
+      "action": "alipay-spinner",
+      "name": "alipaySpinner",
+      "description": "卡包获取支付宝公众号、小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/alipay/config/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "alipaySpinner",
+      "tags": [
+        "channel",
+        "integration",
+        "列表"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "alipaySpinner"
+    },
+    {
+      "command": "sl channel get-weijing-order-list",
+      "domain": "channel",
+      "action": "get-weijing-order-list",
+      "name": "维京团购订单列表",
+      "description": "维京团购订单列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/weijing/order/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWeijingOrderList",
+      "tags": [
+        "channel",
+        "query",
+        "订单",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "维京团购订单列表"
+    },
+    {
+      "command": "sl channel get-weijing-refund-order-list",
+      "domain": "channel",
+      "action": "get-weijing-refund-order-list",
+      "name": "维京团购退款订单列表",
+      "description": "维京团购退款订单列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/weijing/order/refund/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWeijingRefundOrderList",
+      "tags": [
+        "channel",
+        "query",
+        "订单",
+        "列表"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "维京团购退款订单列表"
+    },
+    {
+      "command": "sl channel get-weijing-refund-order-info",
+      "domain": "channel",
+      "action": "get-weijing-refund-order-info",
+      "name": "维京团购订单详情",
+      "description": "维京团购订单详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/weijing/order/info"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWeijingRefundOrderInfo",
+      "tags": [
+        "channel",
+        "query",
+        "订单"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "orderNo",
+          "type": "string",
+          "required": false,
+          "description": "排序"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "维京团购订单详情"
+    },
+    {
+      "command": "sl channel export-weijing-order-list",
+      "domain": "channel",
+      "action": "export-weijing-order-list",
+      "name": "维京团购订单列表导出",
+      "description": "维京团购订单列表导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/weijing/order/list/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "exportWeijingOrderList",
+      "tags": [
+        "channel",
+        "export",
+        "订单",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "维京团购订单列表导出"
+    },
+    {
+      "command": "sl channel export-weijing-refund-list",
+      "domain": "channel",
+      "action": "export-weijing-refund-list",
+      "name": "维京团购退款列表导出",
+      "description": "维京团购退款列表导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/weijing/order/refund/list/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "exportWeijingRefundList",
+      "tags": [
+        "channel",
+        "export",
+        "订单",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "维京团购退款列表导出"
+    },
+    {
+      "command": "sl channel get-weijing-shop-list",
+      "domain": "channel",
+      "action": "get-weijing-shop-list",
+      "name": "维京团购-获取抖音对应门店列表",
+      "description": "维京团购-获取抖音对应门店列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/douyin/config/spinner"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getWeijingShopList",
+      "tags": [
+        "channel",
+        "integration",
+        "门店",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "tiktokType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        }
+      ],
+      "description_short": "维京团购-获取抖音对应门店列表"
+    },
+    {
+      "command": "sl channel get-eleme-list",
+      "domain": "channel",
+      "action": "get-eleme-list",
+      "name": "获取淘宝闪购列表",
+      "description": "获取淘宝闪购列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/eleme/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getElemeList",
+      "tags": [
+        "channel",
+        "query",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取淘宝闪购列表"
+    },
+    {
+      "command": "sl channel eleme-code",
+      "domain": "channel",
+      "action": "eleme-code",
+      "name": "淘宝闪购授权",
+      "description": "淘宝闪购授权",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/eleme/code"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "elemeCode",
+      "tags": [
+        "channel",
+        "query"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "merchantName",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "淘宝闪购授权"
+    },
+    {
+      "command": "sl channel eleme-save",
+      "domain": "channel",
+      "action": "eleme-save",
+      "name": "淘宝闪购配置保存",
+      "description": "淘宝闪购配置保存",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/eleme/config"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "elemeSave",
+      "tags": [
+        "channel",
+        "config"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "cardTypeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "openMerchantId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "shopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "淘宝闪购配置保存"
+    },
+    {
+      "command": "sl channel create-mei-tuan-wai-mai-config",
+      "domain": "channel",
+      "action": "create-mei-tuan-wai-mai-config",
+      "name": "添加美团外卖配置",
+      "description": "添加美团外卖配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/meituan/waimai/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "createMeiTuanWaiMaiConfig",
+      "tags": [
+        "channel",
+        "config"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "添加美团外卖配置"
+    },
+    {
+      "command": "sl channel get-mei-tuan-wai-mai-list",
+      "domain": "channel",
+      "action": "get-mei-tuan-wai-mai-list",
+      "name": "获取美团外卖配置列表",
+      "description": "获取美团外卖配置列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/meituan/waimai/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getMeiTuanWaiMaiList",
+      "tags": [
+        "channel",
+        "query",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "page",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        }
+      ],
+      "description_short": "获取美团外卖配置列表"
+    },
+    {
+      "command": "sl channel get-mei-tuan-wai-mai-config-list",
+      "domain": "channel",
+      "action": "get-mei-tuan-wai-mai-config-list",
+      "name": "获取美团外卖配置门店列表",
+      "description": "获取美团外卖配置门店列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/meituan/waimai/shopPageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getMeiTuanWaiMaiConfigList",
+      "tags": [
+        "channel",
+        "config",
+        "门店",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取美团外卖配置门店列表"
+    },
+    {
+      "command": "sl channel set-mei-tuan-wai-mai-config-default",
+      "domain": "channel",
+      "action": "set-mei-tuan-wai-mai-config-default",
+      "name": "美团外卖配置门店设为默认",
+      "description": "美团外卖配置门店设为默认",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/meituan/waimai/shopSetDefault"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "setMeiTuanWaiMaiConfigDefault",
+      "tags": [
+        "channel",
+        "config",
+        "门店"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "美团外卖配置门店设为默认"
+    },
+    {
+      "command": "sl channel delete-mei-tuan-wai-mai-config",
+      "domain": "channel",
+      "action": "delete-mei-tuan-wai-mai-config",
+      "name": "美团外卖配置门店删除",
+      "description": "美团外卖配置门店删除",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/meituan/waimai/shopDelSingle"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "deleteMeiTuanWaiMaiConfig",
+      "tags": [
+        "channel",
+        "config",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "美团外卖配置门店删除"
+    },
+    {
+      "command": "sl channel update-mei-tuan-wai-mai-config",
+      "domain": "channel",
+      "action": "update-mei-tuan-wai-mai-config",
+      "name": "美团外卖批量修改门店配置",
+      "description": "美团外卖批量修改门店配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "store",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/meituan/waimai/shopSaveBatch"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID",
+        "shopId": "SL_CRM_STORE_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "updateMeiTuanWaiMaiConfig",
+      "tags": [
+        "channel",
+        "action",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "editMode",
+          "type": "number",
+          "required": false,
+          "description": "editMode"
+        }
+      ],
+      "description_short": "美团外卖批量修改门店配置"
+    },
+    {
+      "command": "sl channel add-mei-tuan-wai-mai-config",
+      "domain": "channel",
+      "action": "add-mei-tuan-wai-mai-config",
+      "name": "美团外卖新建门店配置",
+      "description": "美团外卖新建门店配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "store",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/meituan/waimai/shopSaveBatch"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID",
+        "shopId": "SL_CRM_STORE_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "addMeiTuanWaiMaiConfig",
+      "tags": [
+        "channel",
+        "config",
+        "门店"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "editMode",
+          "type": "number",
+          "required": false,
+          "description": "editMode"
+        }
+      ],
+      "description_short": "美团外卖新建门店配置"
+    },
+    {
+      "command": "sl channel edit-mei-tuan-wai-mai-config",
+      "domain": "channel",
+      "action": "edit-mei-tuan-wai-mai-config",
+      "name": "美团外卖修改门店配置",
+      "description": "美团外卖修改门店配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "store",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/meituan/waimai/shopUpdateSingle"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID",
+        "shopId": "SL_CRM_STORE_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "editMeiTuanWaiMaiConfig",
+      "tags": [
+        "channel",
+        "config",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "美团外卖修改门店配置"
+    },
+    {
+      "command": "sl channel update-mei-tuan-wai-mai-shop",
+      "domain": "channel",
+      "action": "update-mei-tuan-wai-mai-shop",
+      "name": "美团外卖更新门店号",
+      "description": "美团外卖更新门店号",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/meituan/waimai/shopCodeUpdate"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "updateMeiTuanWaiMaiShop",
+      "tags": [
+        "channel",
+        "manage",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "美团外卖更新门店号"
+    },
+    {
+      "command": "sl channel get-auth-info",
+      "domain": "channel",
+      "action": "get-auth-info",
+      "name": "获取小红书配置",
+      "description": "获取小红书配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/xiaohongshu/config/getAuthInfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getAuthInfo",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取小红书配置"
+    },
+    {
+      "command": "sl channel get-shop-info",
+      "domain": "channel",
+      "action": "get-shop-info",
+      "name": "获取小红书门店信息",
+      "description": "获取小红书门店信息",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/xiaohongshu/config/shopInfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getShopInfo",
+      "tags": [
+        "channel",
+        "config",
+        "门店"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取小红书门店信息"
+    },
+    {
+      "command": "sl channel shop-sync",
+      "domain": "channel",
+      "action": "shop-sync",
+      "name": "同步小红书门店",
+      "description": "同步小红书门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/xiaohongshu/config/shopSync"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "shopSync",
+      "tags": [
+        "channel",
+        "action",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "同步小红书门店"
+    },
+    {
+      "command": "sl channel xiaohongshu-save-shop-config",
+      "domain": "channel",
+      "action": "xiaohongshu-save-shop-config",
+      "name": "保存小红书门店配置",
+      "description": "保存小红书门店配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "store",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/xiaohongshu/config/saveShopConfig"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID",
+        "shopId": "SL_CRM_STORE_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "xiaohongshuSaveShopConfig",
+      "tags": [
+        "channel",
+        "config",
+        "门店"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "保存小红书门店配置"
+    },
+    {
+      "command": "sl channel set-default-shop",
+      "domain": "channel",
+      "action": "set-default-shop",
+      "name": "小红书设置默认门店",
+      "description": "小红书设置默认门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/xiaohongshu/config/setDefaultShop"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "setDefaultShop",
+      "tags": [
+        "channel",
+        "config",
+        "门店"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "shopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "小红书设置默认门店"
+    },
+    {
+      "command": "sl channel init-private-sphere-data",
+      "domain": "channel",
+      "action": "init-private-sphere-data",
+      "name": "初始化数据",
+      "description": "初始化数据",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatesphere/init"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "initPrivateSphereData",
+      "tags": [
+        "channel",
+        "query"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "初始化数据"
+    },
+    {
+      "command": "sl channel save-private-sphere-config",
+      "domain": "channel",
+      "action": "save-private-sphere-config",
+      "name": "保存私域配置",
+      "description": "保存私域配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatesphere/save"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "savePrivateSphereConfig",
+      "tags": [
+        "channel",
+        "config"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "保存私域配置"
+    },
+    {
+      "command": "sl channel get-private-sphere-config",
+      "domain": "channel",
+      "action": "get-private-sphere-config",
+      "name": "获取私域配置",
+      "description": "获取私域配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatesphere/query"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getPrivateSphereConfig",
+      "tags": [
+        "channel",
+        "config"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取私域配置"
+    },
+    {
+      "command": "sl channel get-mp-call-recharge-list",
+      "domain": "channel",
+      "action": "get-mp-call-recharge-list",
+      "name": "获取平台小程序充值列表",
+      "description": "获取平台小程序充值列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/getMpCallRechargeList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getMpCallRechargeList",
+      "tags": [
+        "channel",
+        "integration",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取平台小程序充值列表"
+    },
+    {
+      "command": "sl channel get-pay-info",
+      "domain": "channel",
+      "action": "get-pay-info",
+      "name": "平台小程序充值",
+      "description": "平台小程序充值",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/getPayInfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getPayInfo",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "平台小程序充值"
+    },
+    {
+      "command": "sl channel pay-check",
+      "domain": "channel",
+      "action": "pay-check",
+      "name": "查询支付结果",
+      "description": "查询支付结果",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/config/payCheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "payCheck",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "recordId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "查询支付结果"
+    },
+    {
+      "command": "sl channel get-channel-summary-list",
+      "domain": "channel",
+      "action": "get-channel-summary-list",
+      "name": "获取渠道概括列表",
+      "description": "获取渠道概括列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/function/getChannelTypeDicInfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getChannelSummaryList",
+      "tags": [
+        "channel",
+        "report",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取渠道概括列表"
+    },
+    {
+      "command": "sl channel get-ying-shi-yi-task-list",
+      "domain": "channel",
+      "action": "get-ying-shi-yi-task-list",
+      "name": "getYingShiYiTaskList",
+      "description": "获取营食亿推送任务列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatespheremission/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getYingShiYiTaskList",
+      "tags": [
+        "channel",
+        "query",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "getYingShiYiTaskList"
+    },
+    {
+      "command": "sl channel update-ying-shi-yi-task-status",
+      "domain": "channel",
+      "action": "update-ying-shi-yi-task-status",
+      "name": "获取营食亿推送任务列表",
+      "description": "更新营食亿推送任务状态",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatespheremission/stop"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "updateYingShiYiTaskStatus",
+      "tags": [
+        "channel",
+        "report",
+        "报表"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "获取营食亿推送任务列表"
+    },
+    {
+      "command": "sl channel create-ying-shi-yi-task",
+      "domain": "channel",
+      "action": "create-ying-shi-yi-task",
+      "name": "更新营食亿推送任务状态",
+      "description": "创建营食亿推送任务或欢迎语任务状态",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatespheremission/add"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "createYingShiYiTask",
+      "tags": [
+        "channel",
+        "manage"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "更新营食亿推送任务状态"
+    },
+    {
+      "command": "sl channel get-ying-shi-yi-task-info",
+      "domain": "channel",
+      "action": "get-ying-shi-yi-task-info",
+      "name": "创建营食亿推送任务或欢迎语任务状态",
+      "description": "获取营食亿推送任务或欢迎语任务信息",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatespheremission/info"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getYingShiYiTaskInfo",
+      "tags": [
+        "channel",
+        "query"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "创建营食亿推送任务或欢迎语任务状态"
+    },
+    {
+      "command": "sl channel get-ying-shi-yi-shop-list",
+      "domain": "channel",
+      "action": "get-ying-shi-yi-shop-list",
+      "name": "获取营食亿推送任务或欢迎语任务信息",
+      "description": "获取营食亿门店列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatespheremission/shoplist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getYingShiYiShopList",
+      "tags": [
+        "channel",
+        "query",
+        "门店",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取营食亿推送任务或欢迎语任务信息"
+    },
+    {
+      "command": "sl channel get-ying-shi-yi-emp-list",
+      "domain": "channel",
+      "action": "get-ying-shi-yi-emp-list",
+      "name": "获取营食亿门店列表",
+      "description": "获取营食亿门店下员工列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatespheremission/userlist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getYingShiYiEmpList",
+      "tags": [
+        "channel",
+        "query",
+        "员工",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取营食亿门店列表"
+    },
+    {
+      "command": "sl channel sync-ying-shi-yi-member-group",
+      "domain": "channel",
+      "action": "sync-ying-shi-yi-member-group",
+      "name": "获取营食亿门店下员工列表",
+      "description": "同步营食亿会员群组",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/memberGroup/mininglamp/export2oss"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "syncYingShiYiMemberGroup",
+      "tags": [
+        "channel",
+        "export",
+        "会员",
+        "导出"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取营食亿门店下员工列表"
+    },
+    {
+      "command": "sl channel mp-import-ready-list",
+      "domain": "channel",
+      "action": "mp-import-ready-list",
+      "name": "同步营食亿会员群组",
+      "description": "获取导入公众号列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/privatesphere/mpImportReadyList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "mpImportReadyList",
+      "tags": [
+        "channel",
+        "manage",
+        "列表"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "同步营食亿会员群组"
+    },
+    {
+      "command": "sl channel xiaohongshu-unbind",
+      "domain": "channel",
+      "action": "xiaohongshu-unbind",
+      "name": "同步营食亿会员群组",
+      "description": "同步营食亿会员群组",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/xiaohongshu/config/authUnbind"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "xiaohongshuUnbind",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "同步营食亿会员群组"
+    },
+    {
+      "command": "sl channel youzan-get-config",
+      "domain": "channel",
+      "action": "youzan-get-config",
+      "name": "@description:  解绑小红书",
+      "description": "获取集团有赞配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/youzan/getConfig"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "youzanGetConfig",
+      "tags": [
+        "channel",
+        "config"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  解绑小红书"
+    },
+    {
+      "command": "sl channel youzan-save-config",
+      "domain": "channel",
+      "action": "youzan-save-config",
+      "name": "@description:  解绑小红书",
+      "description": "更新集团有赞配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/youzan/saveConfig"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "youzanSaveConfig",
+      "tags": [
+        "channel",
+        "config"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  解绑小红书"
+    },
+    {
+      "command": "sl channel get-jdshop-list",
+      "domain": "channel",
+      "action": "get-jdshop-list",
+      "name": "@description:  解绑小红书",
+      "description": "获取京东门店配置列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/jddj/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getJdshopList",
+      "tags": [
+        "channel",
+        "query",
+        "门店",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "@description:  解绑小红书"
+    },
+    {
+      "command": "sl channel jd-shop-detail",
+      "domain": "channel",
+      "action": "jd-shop-detail",
+      "name": "获取京东门店配置详情",
+      "description": "获取京东门店配置详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "store",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/jddj/detail"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID",
+        "shopId": "SL_CRM_STORE_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "jdShopDetail",
+      "tags": [
+        "channel",
+        "query",
+        "门店"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取京东门店配置详情"
+    },
+    {
+      "command": "sl channel jd-shop-create",
+      "domain": "channel",
+      "action": "jd-shop-create",
+      "name": "新增京东门店配置",
+      "description": "新增京东门店配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "store",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/jddj/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID",
+        "shopId": "SL_CRM_STORE_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "jdShopCreate",
+      "tags": [
+        "channel",
+        "manage",
+        "门店"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "新增京东门店配置"
+    },
+    {
+      "command": "sl channel jd-shop-update",
+      "domain": "channel",
+      "action": "jd-shop-update",
+      "name": "编辑京东门店配置",
+      "description": "编辑京东门店配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "store",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/jddj/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID",
+        "shopId": "SL_CRM_STORE_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "jdShopUpdate",
+      "tags": [
+        "channel",
+        "manage",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isDefault",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        }
+      ],
+      "description_short": "编辑京东门店配置"
+    },
+    {
+      "command": "sl channel jddj-delete",
+      "domain": "channel",
+      "action": "jddj-delete",
+      "name": "删除京东门店配置",
+      "description": "删除京东门店配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "store",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/jddj/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID",
+        "shopId": "SL_CRM_STORE_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "jddjDelete",
+      "tags": [
+        "channel",
+        "manage"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除京东门店配置"
+    },
+    {
+      "command": "sl channel get-j-d-shop-code",
+      "domain": "channel",
+      "action": "get-j-d-shop-code",
+      "name": "获取京东门店编号",
+      "description": "获取京东门店编号",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/jddj/getJDShopCode"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getJDShopCode",
+      "tags": [
+        "channel",
+        "query",
+        "门店"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取京东门店编号"
+    },
+    {
+      "command": "sl channel set-hai-di-lao-card-info",
+      "domain": "channel",
+      "action": "set-hai-di-lao-card-info",
+      "name": "保存海底捞映射数据",
+      "description": "保存海底捞映射数据",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/haidilao/saveHaidilaoConfig"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "setHaiDiLaoCardInfo",
+      "tags": [
+        "channel",
+        "config"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "cardTypeMapping",
+          "type": "string",
+          "required": false,
+          "description": "cardTypeMapping"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        }
+      ],
+      "description_short": "保存海底捞映射数据"
+    },
+    {
+      "command": "sl channel get-hai-di-lao-card-info",
+      "domain": "channel",
+      "action": "get-hai-di-lao-card-info",
+      "name": "获取海底捞映射数据",
+      "description": "获取海底捞映射数据",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/haidilao/getHaidilaoConfig"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/channel.ts",
+      "source_function": "getHaiDiLaoCardInfo",
+      "tags": [
+        "channel",
+        "config"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取海底捞映射数据"
+    },
+    {
+      "command": "sl channel wechat-spinner",
+      "domain": "channel",
+      "action": "wechat-spinner",
+      "name": "门店列表",
+      "description": "微信公众号/小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/wechat/spinner"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/common.ts",
+      "source_function": "wechatSpinner",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "mpType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "isPlatform",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        }
+      ],
+      "description_short": "门店列表"
+    },
+    {
+      "command": "sl channel alipay-spinner-crm",
+      "domain": "channel",
+      "action": "alipay-spinner-crm",
+      "name": "查询门店名称列表",
+      "description": "支付宝公众号、小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/alipay/spinner"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/common.ts",
+      "source_function": "alipaySpinner",
+      "tags": [
+        "channel",
+        "integration"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "alipayType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        }
+      ],
+      "description_short": "查询门店名称列表"
+    },
+    {
+      "command": "sl channel query-platform-mini-program-auth-num",
+      "domain": "channel",
+      "action": "query-platform-mini-program-auth-num",
+      "name": "员工列表-不分页的",
+      "description": "查询平台小程序授权剩余次数",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/wechat/platformminiprogram/queryLeftNum"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/common.ts",
+      "source_function": "queryPlatformMiniProgramAuthNum",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "员工列表-不分页的"
+    },
+    {
+      "command": "sl channel get-distribution-channel-data",
+      "domain": "channel",
+      "action": "get-distribution-channel-data",
+      "name": "储值分析-获取储值规则分布数据",
+      "description": "储值分析-获取储值渠道分布数据",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/recharge/rechargeChannel"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getDistributionChannelData",
+      "tags": [
+        "channel",
+        "report",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "储值分析-获取储值规则分布数据"
+    },
+    {
+      "command": "sl channel get-distribution-channel-data-export",
+      "domain": "channel",
+      "action": "get-distribution-channel-data-export",
+      "name": "储值分析-储值规则分布数据导出",
+      "description": "储值分析-获取储值渠道分布数据导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/recharge/rechargeChannelExport"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getDistributionChannelDataExport",
+      "tags": [
+        "channel",
+        "export",
+        "报表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "导出筛选关键词"
+        }
+      ],
+      "description_short": "储值分析-储值规则分布数据导出"
+    },
+    {
+      "command": "sl channel get-score-channel-data",
+      "domain": "channel",
+      "action": "get-score-channel-data",
+      "name": "积分分析-数据指标、积分趋势、兑换趋势",
+      "description": "积分分析-积分渠道分布",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/score/scoreChannel"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getScoreChannelData",
+      "tags": [
+        "channel",
+        "report",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "积分分析-数据指标、积分趋势、兑换趋势"
+    },
+    {
+      "command": "sl channel score-channel-export",
+      "domain": "channel",
+      "action": "score-channel-export",
+      "name": "积分分析-会员积分",
+      "description": "积分渠道导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/score/scoreChannelExport"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "scoreChannelExport",
+      "tags": [
+        "channel",
+        "export",
+        "报表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "导出筛选关键词"
+        }
+      ],
+      "description_short": "积分分析-会员积分"
+    },
+    {
+      "command": "sl channel channel-change-state",
+      "domain": "channel",
+      "action": "channel-change-state",
+      "name": "渠道配置停启用",
+      "description": "渠道配置停启用",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/memberChannel/stop"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "channelChangeState",
+      "tags": [
+        "channel",
+        "report",
+        "会员",
+        "报表"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "渠道配置停启用"
+    },
+    {
+      "command": "sl channel get-channel-list",
+      "domain": "channel",
+      "action": "get-channel-list",
+      "name": "获取渠道列表",
+      "description": "获取渠道列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/memberChannel/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "getChannelList",
+      "tags": [
+        "channel",
+        "query",
+        "会员",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "page",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        }
+      ],
+      "description_short": "获取渠道列表"
+    },
+    {
+      "command": "sl channel get-channel-config-list",
+      "domain": "channel",
+      "action": "get-channel-config-list",
+      "name": "获取渠道小程序路径",
+      "description": "获取渠道小程序路径",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/memberChannel/queryType"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "getChannelConfigList",
+      "tags": [
+        "channel",
+        "config",
+        "会员",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取渠道小程序路径"
+    },
+    {
+      "command": "sl channel create-channel",
+      "domain": "channel",
+      "action": "create-channel",
+      "name": "生成渠道配置",
+      "description": "生成渠道配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/memberChannel/saveOrUpdate"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "createChannel",
+      "tags": [
+        "channel",
+        "manage",
+        "会员"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "生成渠道配置"
+    },
+    {
+      "command": "sl channel member-channel-shop-delete",
+      "domain": "channel",
+      "action": "member-channel-shop-delete",
+      "name": "删除渠道配置门店",
+      "description": "删除渠道配置门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/memberChannel/deleteShop"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "memberChannelShopDelete",
+      "tags": [
+        "channel",
+        "manage",
+        "会员",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除渠道配置门店"
+    },
+    {
+      "command": "sl channel get-member-channel-shop",
+      "domain": "channel",
+      "action": "get-member-channel-shop",
+      "name": "获取渠道配置门店",
+      "description": "获取渠道配置门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/memberChannel/queryShop"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "getMemberChannelShop",
+      "tags": [
+        "channel",
+        "query",
+        "会员",
+        "门店"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "channelId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取渠道配置门店"
+    },
+    {
+      "command": "sl channel get-channel-shop-id-list",
+      "domain": "channel",
+      "action": "get-channel-shop-id-list",
+      "name": "获取渠道配置门店ID",
+      "description": "获取渠道配置门店ID",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/memberChannel/queryShopId"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "getChannelShopIdList",
+      "tags": [
+        "channel",
+        "query",
+        "会员",
+        "门店",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "channelId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取渠道配置门店ID"
+    },
+    {
+      "command": "sl channel save-channel-shop",
+      "domain": "channel",
+      "action": "save-channel-shop",
+      "name": "新增渠道配置门店",
+      "description": "新增渠道配置门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/memberChannel/saveShop"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "saveChannelShop",
+      "tags": [
+        "channel",
+        "manage",
+        "会员",
+        "门店"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "channelId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "新增渠道配置门店"
+    },
+    {
+      "command": "sl channel get-wechat-group",
+      "domain": "channel",
+      "action": "get-wechat-group",
+      "name": "获取平台分组微信小程序列表",
+      "description": "获取平台分组微信小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/online/group/wechatlist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "getWechatGroup",
+      "tags": [
+        "channel",
+        "integration",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取平台分组微信小程序列表"
+    },
+    {
+      "command": "sl channel get-alipay-group",
+      "domain": "channel",
+      "action": "get-alipay-group",
+      "name": "获取平台分组支付宝小程序列表",
+      "description": "获取平台分组支付宝小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/online/group/alipaylist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "getAlipayGroup",
+      "tags": [
+        "channel",
+        "integration",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取平台分组支付宝小程序列表"
+    },
+    {
+      "command": "sl channel unbind-wechat",
+      "domain": "channel",
+      "action": "unbind-wechat",
+      "name": "unbindWechat",
+      "description": "解绑预警通知人微信关系",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/emp/unbindWechat"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "unbindWechat",
+      "tags": [
+        "channel",
+        "integration",
+        "员工"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "empId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "unbindWechat"
+    },
+    {
+      "command": "sl channel bind-wechat-state",
+      "domain": "channel",
+      "action": "bind-wechat-state",
+      "name": "解绑预警通知人微信关系",
+      "description": "预警通知人微信关系 绑定结果",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/emp/bindWechatState"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/setting.ts",
+      "source_function": "bindWechatState",
+      "tags": [
+        "channel",
+        "report",
+        "员工",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "empId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "解绑预警通知人微信关系"
+    },
+    {
+      "command": "sl channel get-user-wechat-info-crm",
+      "domain": "channel",
+      "action": "get-user-wechat-info-crm",
+      "name": "获取微信开放平台配置",
+      "description": "获取微信开放平台配置",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/crm7auth/login/kotler/getWechatOpenPlatformInfo.do"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/account.ts",
+      "source_function": "getUserWechatInfo",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取微信开放平台配置"
+    },
+    {
+      "command": "sl channel get-user-wechat-token-crm",
+      "domain": "channel",
+      "action": "get-user-wechat-token-crm",
+      "name": "绑定微信",
+      "description": "绑定微信",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/crm7auth/user/kotler/bundleWechatUser.do"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/account.ts",
+      "source_function": "getUserWechatToken",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "code"
+        }
+      ],
+      "description_short": "绑定微信"
+    },
+    {
+      "command": "sl channel unbundle-wechat-crm",
+      "domain": "channel",
+      "action": "unbundle-wechat-crm",
+      "name": "解绑微信",
+      "description": "解绑微信",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/crm7auth/user/kotler/unBundleWechatUser.do"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/account.ts",
+      "source_function": "unbundleWechat",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "解绑微信"
+    },
+    {
+      "command": "sl channel user-login-we-chat-crm",
+      "domain": "channel",
+      "action": "user-login-we-chat-crm",
+      "name": "微信扫码登录",
+      "description": "微信扫码登录",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "auth",
+      "endpoint": {
+        "method": "POST",
+        "path": "/crm7auth/login/kotler/wechatLogin.do"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/account.ts",
+      "source_function": "userLoginWeChat",
+      "tags": [
+        "channel",
+        "auth"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "code"
+        }
+      ],
+      "description_short": "微信扫码登录"
+    },
+    {
+      "command": "sl channel get-wechat-list",
+      "domain": "channel",
+      "action": "get-wechat-list",
+      "name": "获取小程序/公众号列表 /kotler-base-admin/wechat/spinner",
+      "description": "获取小程序/公众号列表 /kotler-base-admin/wechat/spinner",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/wechat/spinner"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/user.ts",
+      "source_function": "getWechatList",
+      "tags": [
+        "channel",
+        "integration",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "mpType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        }
+      ],
+      "description_short": "获取小程序/公众号列表 /kotler-base-admin/wechat/spinner"
+    }
+  ]
+}

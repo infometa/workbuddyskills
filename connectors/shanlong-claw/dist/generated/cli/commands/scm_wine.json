@@ -1,0 +1,500 @@
+{
+  "domain": "scm_wine",
+  "count": 19,
+  "commands": [
+    {
+      "command": "sl scm_wine get-page",
+      "domain": "scm_wine",
+      "action": "get-page",
+      "name": "getPage",
+      "description": "getPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/store_take_wine/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "getPage",
+      "tags": [
+        "wine",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_wine get-bill-type",
+      "domain": "scm_wine",
+      "action": "get-bill-type",
+      "name": "getBillType",
+      "description": "getBillType",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/store_take_wine/v1/types"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "getBillType",
+      "tags": [
+        "wine",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_wine get-bill",
+      "domain": "scm_wine",
+      "action": "get-bill",
+      "name": "getBill",
+      "description": "getBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/store_take_wine/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "getBill",
+      "tags": [
+        "wine",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_wine submit",
+      "domain": "scm_wine",
+      "action": "submit",
+      "name": "submit",
+      "description": "submit",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/submit/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "submit",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine submit-mulity",
+      "domain": "scm_wine",
+      "action": "submit-mulity",
+      "name": "submitMulity",
+      "description": "submitMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/submit"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "submitMulity",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine back",
+      "domain": "scm_wine",
+      "action": "back",
+      "name": "back",
+      "description": "back",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/back/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "back",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine back-mulity",
+      "domain": "scm_wine",
+      "action": "back-mulity",
+      "name": "backMulity",
+      "description": "backMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/back"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "backMulity",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine check",
+      "domain": "scm_wine",
+      "action": "check",
+      "name": "check",
+      "description": "check",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/check/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "check",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine check-mulity",
+      "domain": "scm_wine",
+      "action": "check-mulity",
+      "name": "checkMulity",
+      "description": "checkMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/check"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "checkMulity",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine uncheck",
+      "domain": "scm_wine",
+      "action": "uncheck",
+      "name": "uncheck",
+      "description": "uncheck",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/uncheck/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "uncheck",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine uncheck-mulity",
+      "domain": "scm_wine",
+      "action": "uncheck-mulity",
+      "name": "uncheckMulity",
+      "description": "uncheckMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/uncheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "uncheckMulity",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine recheck",
+      "domain": "scm_wine",
+      "action": "recheck",
+      "name": "recheck",
+      "description": "recheck",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/recheck/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "recheck",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine recheck-mulity",
+      "domain": "scm_wine",
+      "action": "recheck-mulity",
+      "name": "recheckMulity",
+      "description": "recheckMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/recheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "recheckMulity",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine unrecheck",
+      "domain": "scm_wine",
+      "action": "unrecheck",
+      "name": "unrecheck",
+      "description": "unrecheck",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/un_recheck/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "unrecheck",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine unrecheck-mulity",
+      "domain": "scm_wine",
+      "action": "unrecheck-mulity",
+      "name": "unrecheckMulity",
+      "description": "unrecheckMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/un_recheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "unrecheckMulity",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine offset",
+      "domain": "scm_wine",
+      "action": "offset",
+      "name": "offset",
+      "description": "offset",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/offset/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "offset",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine offset-mulity",
+      "domain": "scm_wine",
+      "action": "offset-mulity",
+      "name": "offsetMulity",
+      "description": "offsetMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/store_take_wine/v1/offset"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "offsetMulity",
+      "tags": [
+        "wine",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_wine get-bill-chain",
+      "domain": "scm_wine",
+      "action": "get-bill-chain",
+      "name": "getBillChain",
+      "description": "getBillChain",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/store_take_wine/v1/:param/chain"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "getBillChain",
+      "tags": [
+        "wine",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_wine export-data",
+      "domain": "scm_wine",
+      "action": "export-data",
+      "name": "exportData",
+      "description": "exportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/dish_business/v1/:param/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/wine/api_wine-stock-order.js",
+      "source_function": "exportData",
+      "tags": [
+        "wine",
+        "export"
+      ]
+    }
+  ]
+}

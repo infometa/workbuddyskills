@@ -1,0 +1,6342 @@
+{
+  "domain": "coupon",
+  "count": 151,
+  "commands": [
+    {
+      "command": "sl coupon coupon-list",
+      "domain": "coupon",
+      "action": "coupon-list",
+      "name": "优惠券分页列表",
+      "description": "券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "couponName",
+          "type": "string",
+          "required": false,
+          "description": "优惠券名称（模糊搜索）",
+          "example": "满减"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "description": "状态筛选"
+        },
+        {
+          "name": "couponTypeId",
+          "type": "string",
+          "required": false,
+          "description": "优惠券类型ID"
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "source_file": "kotler-front/apps/crm/src/api/common.ts",
+      "source_function": "couponList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "description_short": "分页查询CRM优惠券列表，支持按名称、状态、类型筛选"
+    },
+    {
+      "command": "sl coupon coupon-type-list",
+      "domain": "coupon",
+      "action": "coupon-type-list",
+      "name": "查分组名称",
+      "description": "券类型列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/type/query"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/common.ts",
+      "source_function": "couponTypeList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "limitFun",
+          "type": "string",
+          "required": false,
+          "description": "limitFun"
+        }
+      ],
+      "description_short": "查分组名称"
+    },
+    {
+      "command": "sl coupon get-coupon-detail-list",
+      "domain": "coupon",
+      "action": "get-coupon-detail-list",
+      "name": "getCouponDetailList",
+      "description": "获取券明细",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/getCouponDetailList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getCouponDetailList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "getCouponDetailList"
+    },
+    {
+      "command": "sl coupon get-coupon-info-by-code",
+      "domain": "coupon",
+      "action": "get-coupon-info-by-code",
+      "name": "获取券明细",
+      "description": "券明细券号查询",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/getCouponInfoByCode"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getCouponInfoByCode",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "KFilterParams",
+          "type": "string",
+          "required": false,
+          "description": "KFilterParams"
+        }
+      ],
+      "description_short": "获取券明细"
+    },
+    {
+      "command": "sl coupon get-coupon-given-detail",
+      "domain": "coupon",
+      "action": "get-coupon-given-detail",
+      "name": "获取券明细",
+      "description": "转赠详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/couponGivenDetail"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getCouponGivenDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取券明细"
+    },
+    {
+      "command": "sl coupon get-used-coupons-coupon-operation-detail",
+      "domain": "coupon",
+      "action": "get-used-coupons-coupon-operation-detail",
+      "name": "券明细券号查询",
+      "description": "操作详情-已使用",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/getPierceCouponUsedList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getUsedCouponsCouponOperationDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "券明细券号查询"
+    },
+    {
+      "command": "sl coupon export-used-coupons-coupon-operation-detail",
+      "domain": "coupon",
+      "action": "export-used-coupons-coupon-operation-detail",
+      "name": "操作详情-已使用",
+      "description": "操作详情-已使用导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/exportPierceCouponUsedList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "exportUsedCouponsCouponOperationDetail",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "营销",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "操作详情-已使用"
+    },
+    {
+      "command": "sl coupon get-invalid-coupons-coupon-operation-detail",
+      "domain": "coupon",
+      "action": "get-invalid-coupons-coupon-operation-detail",
+      "name": "操作详情-已使用导出",
+      "description": "操作详情-已作废",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/getPierceCouponInvalidList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getInvalidCouponsCouponOperationDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "操作详情-已使用导出"
+    },
+    {
+      "command": "sl coupon export-invalid-coupons-coupon-operation-detail",
+      "domain": "coupon",
+      "action": "export-invalid-coupons-coupon-operation-detail",
+      "name": "操作详情-已作废",
+      "description": "操作详情-已作废导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/exportPierceCouponInvalidList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "exportInvalidCouponsCouponOperationDetail",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "营销",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "操作详情-已作废"
+    },
+    {
+      "command": "sl coupon get-transfer-coupons-coupon-operation-detail",
+      "domain": "coupon",
+      "action": "get-transfer-coupons-coupon-operation-detail",
+      "name": "操作详情-已作废导出",
+      "description": "操作详情-转赠中",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/getPierceCouponGivingList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getTransferCouponsCouponOperationDetail",
+      "tags": [
+        "coupon",
+        "action",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "操作详情-已作废导出"
+    },
+    {
+      "command": "sl coupon export-transfer-coupons-coupon-operation-detail",
+      "domain": "coupon",
+      "action": "export-transfer-coupons-coupon-operation-detail",
+      "name": "操作详情-转赠中",
+      "description": "操作详情-转赠中导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/exportPierceCouponGivingList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "exportTransferCouponsCouponOperationDetail",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "营销",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "操作详情-转赠中"
+    },
+    {
+      "command": "sl coupon invalid-coupon",
+      "domain": "coupon",
+      "action": "invalid-coupon",
+      "name": "操作详情-转赠中导出",
+      "description": "作废券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/invalidCoupon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "invalidCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "sendingId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "invalidRemark",
+          "type": "string",
+          "required": false,
+          "description": "invalidRemark"
+        },
+        {
+          "name": "invalidNumber",
+          "type": "string",
+          "required": false,
+          "description": "invalidNumber"
+        },
+        {
+          "name": "usedNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "maximum",
+          "type": "string",
+          "required": false,
+          "description": "maximum"
+        },
+        {
+          "name": "couponStatus",
+          "type": "string",
+          "required": false,
+          "description": "状态"
+        },
+        {
+          "name": "preInvalidCouponCount",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "invalidFrom",
+          "type": "string",
+          "required": false,
+          "description": "invalidFrom"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "invalidNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "invalidNote",
+          "type": "string",
+          "required": false,
+          "description": "invalidNote"
+        },
+        {
+          "name": "batchInvalId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "操作详情-转赠中导出"
+    },
+    {
+      "command": "sl coupon remark-coupon",
+      "domain": "coupon",
+      "action": "remark-coupon",
+      "name": "操作详情-转赠中导出",
+      "description": "添加备注",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/remarkCoupon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "remarkCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "sendingId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "remark",
+          "type": "string",
+          "required": false,
+          "description": "remark"
+        }
+      ],
+      "description_short": "操作详情-转赠中导出"
+    },
+    {
+      "command": "sl coupon get-coupon-remark",
+      "domain": "coupon",
+      "action": "get-coupon-remark",
+      "name": "作废券",
+      "description": "备注轨迹",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/getCouponRemark"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getCouponRemark",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "sendingId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "作废券"
+    },
+    {
+      "command": "sl coupon get-delay-trajectory",
+      "domain": "coupon",
+      "action": "get-delay-trajectory",
+      "name": "添加备注",
+      "description": "延期轨迹",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/couponDelayTrace"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getDelayTrajectory",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "sendingId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "添加备注"
+    },
+    {
+      "command": "sl coupon delay-coupon",
+      "domain": "coupon",
+      "action": "delay-coupon",
+      "name": "备注轨迹",
+      "description": "券明细延期",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/delayCoupon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "delayCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "sendingId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "delayTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        }
+      ],
+      "description_short": "备注轨迹"
+    },
+    {
+      "command": "sl coupon get-coupon-source-type",
+      "domain": "coupon",
+      "action": "get-coupon-source-type",
+      "name": "延期轨迹",
+      "description": "券来源",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/getCouponSourceType"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getCouponSourceType",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "延期轨迹"
+    },
+    {
+      "command": "sl coupon get-channel-list",
+      "domain": "coupon",
+      "action": "get-channel-list",
+      "name": "券明细延期",
+      "description": "发券渠道",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/memberChannel/channelList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getChannelList",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "券明细延期"
+    },
+    {
+      "command": "sl coupon delete-coupon",
+      "domain": "coupon",
+      "action": "delete-coupon",
+      "name": "券来源",
+      "description": "券来源",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "deleteCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "券来源"
+    },
+    {
+      "command": "sl coupon coupon-relation-list",
+      "domain": "coupon",
+      "action": "coupon-relation-list",
+      "name": "发券渠道",
+      "description": "券关系",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/getCouponRelationList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "couponRelationList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "发券渠道"
+    },
+    {
+      "command": "sl coupon coupon-action-list",
+      "domain": "coupon",
+      "action": "coupon-action-list",
+      "name": "券关系",
+      "description": "券活动",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/queryCampaignsByCouponId"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "couponActionList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "券关系"
+    },
+    {
+      "command": "sl coupon batch-recycled",
+      "domain": "coupon",
+      "action": "batch-recycled",
+      "name": "券关系",
+      "description": "券关系",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/batchRecycled"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "batchRecycled",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "couponIdList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "isRecycled",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        }
+      ],
+      "description_short": "券关系"
+    },
+    {
+      "command": "sl coupon create-cash-coupon",
+      "domain": "coupon",
+      "action": "create-cash-coupon",
+      "name": "券活动",
+      "description": "券活动",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/cash/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "createCashCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "券活动"
+    },
+    {
+      "command": "sl coupon update-cash-coupon",
+      "domain": "coupon",
+      "action": "update-cash-coupon",
+      "name": "@description:  新建代金券",
+      "description": "@description:  新建代金券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/cash/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "updateCashCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建代金券"
+    },
+    {
+      "command": "sl coupon review-cash-coupon",
+      "domain": "coupon",
+      "action": "review-cash-coupon",
+      "name": "@description:  编辑代金券",
+      "description": "@description:  编辑代金券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/cash/review"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "reviewCashCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  编辑代金券"
+    },
+    {
+      "command": "sl coupon get-cash-detail",
+      "domain": "coupon",
+      "action": "get-cash-detail",
+      "name": "@description:  代金券提交审批",
+      "description": "@description:  代金券提交审批",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/cash/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getCashDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  代金券提交审批"
+    },
+    {
+      "command": "sl coupon create-discount-coupon",
+      "domain": "coupon",
+      "action": "create-discount-coupon",
+      "name": "@description:  获取代金券详情",
+      "description": "@description:  获取代金券详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/discount/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "createDiscountCoupon",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  获取代金券详情"
+    },
+    {
+      "command": "sl coupon update-discount-coupon",
+      "domain": "coupon",
+      "action": "update-discount-coupon",
+      "name": "@description:  新建折扣券",
+      "description": "@description:  新建折扣券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/discount/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "updateDiscountCoupon",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建折扣券"
+    },
+    {
+      "command": "sl coupon review-discount-coupon",
+      "domain": "coupon",
+      "action": "review-discount-coupon",
+      "name": "@description:  编辑折扣券",
+      "description": "@description:  编辑折扣券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/discount/review"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "reviewDiscountCoupon",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "@description:  编辑折扣券"
+    },
+    {
+      "command": "sl coupon get-discount-detail",
+      "domain": "coupon",
+      "action": "get-discount-detail",
+      "name": "@description:  折扣券 提交审批",
+      "description": "@description:  折扣券 提交审批",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/discount/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getDiscountDetail",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  折扣券 提交审批"
+    },
+    {
+      "command": "sl coupon create-product-coupon",
+      "domain": "coupon",
+      "action": "create-product-coupon",
+      "name": "@description:  获取折扣券详情",
+      "description": "@description:  获取折扣券详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/item/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "createProductCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "菜品",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  获取折扣券详情"
+    },
+    {
+      "command": "sl coupon update-product-coupon",
+      "domain": "coupon",
+      "action": "update-product-coupon",
+      "name": "@description:  新建商品券",
+      "description": "@description:  新建商品券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/item/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "updateProductCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "菜品",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建商品券"
+    },
+    {
+      "command": "sl coupon review-product-coupon",
+      "domain": "coupon",
+      "action": "review-product-coupon",
+      "name": "@description:  编辑商品券",
+      "description": "@description:  编辑商品券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/item/review"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "reviewProductCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "菜品",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "@description:  编辑商品券"
+    },
+    {
+      "command": "sl coupon get-product-detail",
+      "domain": "coupon",
+      "action": "get-product-detail",
+      "name": "@description:  商品券提交审批",
+      "description": "@description:  商品券提交审批",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/item/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getProductDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "菜品",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  商品券提交审批"
+    },
+    {
+      "command": "sl coupon create-delivery-coupon",
+      "domain": "coupon",
+      "action": "create-delivery-coupon",
+      "name": "@description:  获取商品详情",
+      "description": "@description:  获取商品详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/distribution/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "createDeliveryCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  获取商品详情"
+    },
+    {
+      "command": "sl coupon update-delivery-coupon",
+      "domain": "coupon",
+      "action": "update-delivery-coupon",
+      "name": "@description:  新建配送券",
+      "description": "@description:  新建配送券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/distribution/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "updateDeliveryCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建配送券"
+    },
+    {
+      "command": "sl coupon review-delivery-coupon",
+      "domain": "coupon",
+      "action": "review-delivery-coupon",
+      "name": "@description:  编辑配送券",
+      "description": "提交审批",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/distribution/review"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "reviewDeliveryCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "@description:  编辑配送券"
+    },
+    {
+      "command": "sl coupon get-delivery-detail",
+      "domain": "coupon",
+      "action": "get-delivery-detail",
+      "name": "getDeliveryDetail",
+      "description": "优惠券获取详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/distribution/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getDeliveryDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "getDeliveryDetail"
+    },
+    {
+      "command": "sl coupon create-gift-coupon",
+      "domain": "coupon",
+      "action": "create-gift-coupon",
+      "name": "@description:  获取配送券详情",
+      "description": "@description:  获取配送券详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/gift/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "createGiftCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  获取配送券详情"
+    },
+    {
+      "command": "sl coupon update-gift-coupon",
+      "domain": "coupon",
+      "action": "update-gift-coupon",
+      "name": "@description:  新建赠品券",
+      "description": "@description:  新建赠品券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/gift/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "updateGiftCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建赠品券"
+    },
+    {
+      "command": "sl coupon review-gift-coupon",
+      "domain": "coupon",
+      "action": "review-gift-coupon",
+      "name": "@description:  编辑赠品券",
+      "description": "@description:  编辑赠品券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/gift/review"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "reviewGiftCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "@description:  编辑赠品券"
+    },
+    {
+      "command": "sl coupon get-gift-detail",
+      "domain": "coupon",
+      "action": "get-gift-detail",
+      "name": "@description:  赠品券 提交审批",
+      "description": "@description:  赠品券 提交审批",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/gift/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getGiftDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  赠品券 提交审批"
+    },
+    {
+      "command": "sl coupon get-wx-account-list",
+      "domain": "coupon",
+      "action": "get-wx-account-list",
+      "name": "@description:  获取赠品券详情",
+      "description": "@description:  获取赠品券详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/merchant/getWxAccountList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getWxAccountList",
+      "tags": [
+        "coupon",
+        "report",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "@description:  获取赠品券详情"
+    },
+    {
+      "command": "sl coupon get-wx-mp-infos",
+      "domain": "coupon",
+      "action": "get-wx-mp-infos",
+      "name": "* @description:  获取微信商户列表",
+      "description": "* @description:  获取微信商户列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/merchant/getWxMpInfos"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getWxMpInfos",
+      "tags": [
+        "coupon",
+        "integration"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "* @description:  获取微信商户列表"
+    },
+    {
+      "command": "sl coupon get-template-list",
+      "domain": "coupon",
+      "action": "get-template-list",
+      "name": "*",
+      "description": "公众号-列表-商家券用",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/wechat/merchant/getTemplateList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getTemplateList",
+      "tags": [
+        "coupon",
+        "export",
+        "员工",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "*"
+    },
+    {
+      "command": "sl coupon get-merchant-material",
+      "domain": "coupon",
+      "action": "get-merchant-material",
+      "name": "* 会员筛选",
+      "description": "根据公众号 id 获取公众号下的素材",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/wechat/material/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getMerchantMaterial",
+      "tags": [
+        "coupon",
+        "integration",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "mpId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "* 会员筛选"
+    },
+    {
+      "command": "sl coupon get-mini-program-types",
+      "domain": "coupon",
+      "action": "get-mini-program-types",
+      "name": "* 根据公众号 id 获取公众号下的素材",
+      "description": "获取小程序页面",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/miniProgram/miniProgramTypes"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getMiniProgramTypes",
+      "tags": [
+        "coupon",
+        "query"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "* 根据公众号 id 获取公众号下的素材"
+    },
+    {
+      "command": "sl coupon get-member-group",
+      "domain": "coupon",
+      "action": "get-member-group",
+      "name": "* 获取小程序页面",
+      "description": "获取会员分组",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/memberGroup/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getMemberGroup",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "* 获取小程序页面"
+    },
+    {
+      "command": "sl coupon send-coupon-member-portrait",
+      "domain": "coupon",
+      "action": "send-coupon-member-portrait",
+      "name": "发券接口",
+      "description": "会员画像发券发消息",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/portrait/sendMessage"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "sendCouponMemberPortrait",
+      "tags": [
+        "coupon",
+        "report",
+        "会员",
+        "优惠券",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "发券接口"
+    },
+    {
+      "command": "sl coupon get-cache-jump-url",
+      "domain": "coupon",
+      "action": "get-cache-jump-url",
+      "name": "发券接口",
+      "description": "获取最近5个自定义路径缓存",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/miniProgram/getCacheJumpUrl"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getCacheJumpUrl",
+      "tags": [
+        "coupon",
+        "query"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "发券接口"
+    },
+    {
+      "command": "sl coupon query-coupon-group-threshold",
+      "domain": "coupon",
+      "action": "query-coupon-group-threshold",
+      "name": "获取最近5个自定义路径缓存",
+      "description": "获取群组发券的会员数阈值",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/memberGroup/queryCouponGroupThreshold"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "queryCouponGroupThreshold",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取最近5个自定义路径缓存"
+    },
+    {
+      "command": "sl coupon query-sms-signature",
+      "domain": "coupon",
+      "action": "query-sms-signature",
+      "name": "获取消息模板设置",
+      "description": "获取短信签名",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/systemmanager/smsmanager/querySmsSignature"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "querySmsSignature",
+      "tags": [
+        "coupon",
+        "query"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取消息模板设置"
+    },
+    {
+      "command": "sl coupon coupon-export-excel-show-columns",
+      "domain": "coupon",
+      "action": "coupon-export-excel-show-columns",
+      "name": "couponExportExcelShowColumns",
+      "description": "导出Excel-显示列",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponSendPageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "couponExportExcelShowColumns",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "报表",
+        "分页",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "couponExportExcelShowColumns"
+    },
+    {
+      "command": "sl coupon delete-send-coupon-log",
+      "domain": "coupon",
+      "action": "delete-send-coupon-log",
+      "name": "查询发券记录列表",
+      "description": "删除发券记录",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponSendDelete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "deleteSendCouponLog",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "报表"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "查询发券记录列表"
+    },
+    {
+      "command": "sl coupon get-send-coupon-log-detail-list",
+      "domain": "coupon",
+      "action": "get-send-coupon-log-detail-list",
+      "name": "删除发券记录",
+      "description": "获取发券记录详情列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponSendDetailList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getSendCouponLogDetailList",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "报表",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除发券记录"
+    },
+    {
+      "command": "sl coupon send-coupon-log-detail-list-export-excel",
+      "domain": "coupon",
+      "action": "send-coupon-log-detail-list-export-excel",
+      "name": "获取发券记录详情列表",
+      "description": "导出Excel-发券记录详情列表（失败人数或未访问人数）",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/function/getCouponTypeDicInfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "sendCouponLogDetailListExportExcel",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取发券记录详情列表"
+    },
+    {
+      "command": "sl coupon coupon-list-export-excel",
+      "domain": "coupon",
+      "action": "coupon-list-export-excel",
+      "name": "导出Excel-发券记录详情列表（失败人数或未访问人数）",
+      "description": "导出Excel-券模板列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/getPierceCouponGivenList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "couponListExportExcel",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "营销",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "isDefaultExport",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "DEFAULT",
+          "type": "string",
+          "required": false,
+          "description": "DEFAULT"
+        },
+        {
+          "name": "isSelectExport",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "selectIds",
+          "type": "array",
+          "required": false,
+          "description": "列表"
+        }
+      ],
+      "description_short": "导出Excel-发券记录详情列表（失败人数或未访问人数）"
+    },
+    {
+      "command": "sl coupon export-given-coupons-coupon-operation-detail",
+      "domain": "coupon",
+      "action": "export-given-coupons-coupon-operation-detail",
+      "name": "操作详情-转赠中",
+      "description": "操作详情-转赠中导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/detail/exportPierceCouponGivenList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "exportGivenCouponsCouponOperationDetail",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "营销",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "操作详情-转赠中"
+    },
+    {
+      "command": "sl coupon tag-list",
+      "domain": "coupon",
+      "action": "tag-list",
+      "name": "操作详情-转赠中导出",
+      "description": "获取标签列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/label/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "tagList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "操作详情-转赠中导出"
+    },
+    {
+      "command": "sl coupon tag-create",
+      "domain": "coupon",
+      "action": "tag-create",
+      "name": "操作详情-转赠中导出",
+      "description": "新建标签",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/label/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "tagCreate",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "操作详情-转赠中导出"
+    },
+    {
+      "command": "sl coupon tag-update",
+      "domain": "coupon",
+      "action": "tag-update",
+      "name": "标签编辑  现在没有 不用",
+      "description": "标签编辑  现在没有 不用",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/label/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "tagUpdate",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "标签编辑  现在没有 不用"
+    },
+    {
+      "command": "sl coupon tag-info",
+      "domain": "coupon",
+      "action": "tag-info",
+      "name": "标签单条详情  现在没有不用",
+      "description": "标签单条详情  现在没有不用",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/label/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "tagInfo",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "labelId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "标签单条详情  现在没有不用"
+    },
+    {
+      "command": "sl coupon tag-delete",
+      "domain": "coupon",
+      "action": "tag-delete",
+      "name": "删除标签",
+      "description": "删除标签",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/label/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "tagDelete",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除标签"
+    },
+    {
+      "command": "sl coupon label-spinner",
+      "domain": "coupon",
+      "action": "label-spinner",
+      "name": "券标签列表下拉",
+      "description": "券标签列表下拉",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/label/spinner"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "labelSpinner",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "券标签列表下拉"
+    },
+    {
+      "command": "sl coupon coupon-rview-list",
+      "domain": "coupon",
+      "action": "coupon-rview-list",
+      "name": "审批列表",
+      "description": "审批列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/review/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "couponRviewList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "审批列表"
+    },
+    {
+      "command": "sl coupon coupon-rview-supplements",
+      "domain": "coupon",
+      "action": "coupon-rview-supplements",
+      "name": "补推",
+      "description": "补推",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/review/supplement"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "couponRviewSupplements",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "reviewId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "补推"
+    },
+    {
+      "command": "sl coupon get-review-content",
+      "domain": "coupon",
+      "action": "get-review-content",
+      "name": "获取 券审内容详情接口",
+      "description": "获取 券审内容详情接口",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/review/content"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getReviewContent",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "reviewId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取 券审内容详情接口"
+    },
+    {
+      "command": "sl coupon emp-coupon-page-list",
+      "domain": "coupon",
+      "action": "emp-coupon-page-list",
+      "name": "empCouponPageList",
+      "description": "发券限制管理-分组列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/emp/coupon/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "empCouponPageList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "员工",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "empCouponPageList"
+    },
+    {
+      "command": "sl coupon emp-coupon-create",
+      "domain": "coupon",
+      "action": "emp-coupon-create",
+      "name": "发券限制管理-分组列表",
+      "description": "发券限制管理-分组新建",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/emp/coupon/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "empCouponCreate",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销",
+        "员工"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "发券限制管理-分组列表"
+    },
+    {
+      "command": "sl coupon emp-coupon-update",
+      "domain": "coupon",
+      "action": "emp-coupon-update",
+      "name": "发券限制管理-分组列表",
+      "description": "发券限制管理-分组编辑",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/emp/coupon/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "empCouponUpdate",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销",
+        "员工"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "发券限制管理-分组列表"
+    },
+    {
+      "command": "sl coupon emp-coupon-delete",
+      "domain": "coupon",
+      "action": "emp-coupon-delete",
+      "name": "发券限制管理-分组新建",
+      "description": "发券限制管理-分组删除",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/emp/coupon/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "empCouponDelete",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销",
+        "员工"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "发券限制管理-分组新建"
+    },
+    {
+      "command": "sl coupon emp-coupon-single",
+      "domain": "coupon",
+      "action": "emp-coupon-single",
+      "name": "发券限制管理-分组编辑",
+      "description": "发券限制管理-分组删除",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/emp/coupon/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "empCouponSingle",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "员工"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "string",
+          "type": "string",
+          "required": false,
+          "description": "string"
+        }
+      ],
+      "description_short": "发券限制管理-分组编辑"
+    },
+    {
+      "command": "sl coupon get-configured-group-emp-list",
+      "domain": "coupon",
+      "action": "get-configured-group-emp-list",
+      "name": "发券限制管理-分组删除",
+      "description": "发券限制管理-获取已配置分组的员工ID列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/emp/coupon/getConfiguredGroupEmpList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getConfiguredGroupEmpList",
+      "tags": [
+        "coupon",
+        "config",
+        "优惠券",
+        "营销",
+        "员工",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "发券限制管理-分组删除"
+    },
+    {
+      "command": "sl coupon emp-send-coupon-page-list",
+      "domain": "coupon",
+      "action": "emp-send-coupon-page-list",
+      "name": "发券限制管理-分组删除",
+      "description": "发券限制管理-发券操作明细",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/emp/coupon/empSendCouponPageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "empSendCouponPageList",
+      "tags": [
+        "coupon",
+        "action",
+        "优惠券",
+        "营销",
+        "员工",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "发券限制管理-分组删除"
+    },
+    {
+      "command": "sl coupon get-configured-group-coupon-list",
+      "domain": "coupon",
+      "action": "get-configured-group-coupon-list",
+      "name": "发券限制管理-获取已配置分组的员工ID列表",
+      "description": "发券限制管理-发券操作明细",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/emp/coupon/getConfiguredGroupCouponList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getConfiguredGroupCouponList",
+      "tags": [
+        "coupon",
+        "config",
+        "优惠券",
+        "营销",
+        "员工",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "发券限制管理-获取已配置分组的员工ID列表"
+    },
+    {
+      "command": "sl coupon get-we-chat-product-mp-list",
+      "domain": "coupon",
+      "action": "get-we-chat-product-mp-list",
+      "name": "发券限制管理-发券操作明细",
+      "description": "获取微信商品券小程序列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "integration",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/wechat/product/spinner"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/coupon.ts",
+      "source_function": "getWeChatProductMpList",
+      "tags": [
+        "coupon",
+        "integration",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "发券限制管理-发券操作明细"
+    },
+    {
+      "command": "sl coupon get-coupon-data-indicators",
+      "domain": "coupon",
+      "action": "get-coupon-data-indicators",
+      "name": "积分渠道导出",
+      "description": "卡券分析-数据指标",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponDataIndex"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getCouponDataIndicators",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "积分渠道导出"
+    },
+    {
+      "command": "sl coupon get-coupon-analysis",
+      "domain": "coupon",
+      "action": "get-coupon-analysis",
+      "name": "会员积分明细导出",
+      "description": "卡券分析-卡券趋势（集团）",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponCompanyAnalysisPageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getCouponAnalysis",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "报表",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "会员积分明细导出"
+    },
+    {
+      "command": "sl coupon get-store-coupon-analysis-list",
+      "domain": "coupon",
+      "action": "get-store-coupon-analysis-list",
+      "name": "卡券分析-卡券趋势（集团）",
+      "description": "卡券分析-卡券趋势（门店）",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponShopAnalysisPageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getStoreCouponAnalysisList",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "门店",
+        "报表",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "卡券分析-卡券趋势（集团）"
+    },
+    {
+      "command": "sl coupon get-coupon-shop-analysis-coupon-list",
+      "domain": "coupon",
+      "action": "get-coupon-shop-analysis-coupon-list",
+      "name": "卡券分析-卡券趋势（门店）",
+      "description": "卡券分析-获取按门店分析可筛选券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponShopAnalysisCouponList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getCouponShopAnalysisCouponList",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "门店",
+        "报表",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "卡券分析-卡券趋势（门店）"
+    },
+    {
+      "command": "sl coupon get-coupon-company-analysis-export",
+      "domain": "coupon",
+      "action": "get-coupon-company-analysis-export",
+      "name": "卡券分析-获取按门店分析可筛选券列表",
+      "description": "卡券分析-发券趋势导出（集团）",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponCompanyAnalysisPageListExport"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getCouponCompanyAnalysisExport",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "报表",
+        "分页",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "卡券分析-获取按门店分析可筛选券列表"
+    },
+    {
+      "command": "sl coupon get-coupon-shop-analysis-page-list-export",
+      "domain": "coupon",
+      "action": "get-coupon-shop-analysis-page-list-export",
+      "name": "卡券分析-获取按门店分析可筛选券列表",
+      "description": "卡券分析-发券趋势导出（门店）",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponShopAnalysisPageListExport"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getCouponShopAnalysisPageListExport",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "门店",
+        "报表",
+        "分页",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "卡券分析-获取按门店分析可筛选券列表"
+    },
+    {
+      "command": "sl coupon coupon-send-analysis",
+      "domain": "coupon",
+      "action": "coupon-send-analysis",
+      "name": "卡券分析-发券趋势导出（集团）",
+      "description": "卡券分析-发券分析图表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponSendAnalysis"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "couponSendAnalysis",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "卡券分析-发券趋势导出（集团）"
+    },
+    {
+      "command": "sl coupon coupon-used-analysis",
+      "domain": "coupon",
+      "action": "coupon-used-analysis",
+      "name": "卡券分析-发券趋势导出（门店）",
+      "description": "卡券分析-用券分析图表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponUsedAnalysis"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "couponUsedAnalysis",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "卡券分析-发券趋势导出（门店）"
+    },
+    {
+      "command": "sl coupon coupon-used-record-export",
+      "domain": "coupon",
+      "action": "coupon-used-record-export",
+      "name": "卡券分析-发券分析图表",
+      "description": "卡券分析-用券分析导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponUsedRecordExport"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "couponUsedRecordExport",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "报表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "导出筛选关键词"
+        }
+      ],
+      "description_short": "卡券分析-发券分析图表"
+    },
+    {
+      "command": "sl coupon coupon-send-record-export",
+      "domain": "coupon",
+      "action": "coupon-send-record-export",
+      "name": "卡券分析-用券分析图表",
+      "description": "卡券分析-发券分析导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponSendRecordExport"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "couponSendRecordExport",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "报表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "导出筛选关键词"
+        }
+      ],
+      "description_short": "卡券分析-用券分析图表"
+    },
+    {
+      "command": "sl coupon coupon-response-time-analysis",
+      "domain": "coupon",
+      "action": "coupon-response-time-analysis",
+      "name": "卡券分析-用券分析导出",
+      "description": "卡券分析-券响应时间分析图表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponResponseTimeAnalysis"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "couponResponseTimeAnalysis",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "卡券分析-用券分析导出"
+    },
+    {
+      "command": "sl coupon get-coupon-company-analysis-coupon-list",
+      "domain": "coupon",
+      "action": "get-coupon-company-analysis-coupon-list",
+      "name": "报表-获取龙决策账号信息，用来生成龙决策报表url",
+      "description": "卡券分析-获取按集团分析可筛选券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/coupon/couponCompanyAnalysisCouponList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "getCouponCompanyAnalysisCouponList",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "报表",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "报表-获取龙决策账号信息，用来生成龙决策报表url"
+    },
+    {
+      "command": "sl coupon get-coupon-task-list",
+      "domain": "coupon",
+      "action": "get-coupon-task-list",
+      "name": "修改短信任务状态",
+      "description": "获取发券任务列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/automarketing/act/coupon/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/ma.ts",
+      "source_function": "getCouponTaskList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "修改短信任务状态"
+    },
+    {
+      "command": "sl coupon upsert-coupon-task",
+      "domain": "coupon",
+      "action": "upsert-coupon-task",
+      "name": "获取短信任务详情",
+      "description": "创建发券任务",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/automarketing/act/coupon/upsert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/ma.ts",
+      "source_function": "upsertCouponTask",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取短信任务详情"
+    },
+    {
+      "command": "sl coupon delete-coupon-task",
+      "domain": "coupon",
+      "action": "delete-coupon-task",
+      "name": "获取发券任务列表",
+      "description": "删除发券任务",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/automarketing/act/coupon/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/ma.ts",
+      "source_function": "deleteCouponTask",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取发券任务列表"
+    },
+    {
+      "command": "sl coupon update-coupon-task-status",
+      "domain": "coupon",
+      "action": "update-coupon-task-status",
+      "name": "创建发券任务",
+      "description": "修改发券任务状态",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/automarketing/act/coupon/optAble"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/ma.ts",
+      "source_function": "updateCouponTaskStatus",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销",
+        "报表"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "创建发券任务"
+    },
+    {
+      "command": "sl coupon update-coupon-task-limit-upper",
+      "domain": "coupon",
+      "action": "update-coupon-task-limit-upper",
+      "name": "删除发券任务",
+      "description": "修改发券任务次数",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/automarketing/act/coupon/optLimitUpper"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/ma.ts",
+      "source_function": "updateCouponTaskLimitUpper",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "删除发券任务"
+    },
+    {
+      "command": "sl coupon get-coupon-task-detail",
+      "domain": "coupon",
+      "action": "get-coupon-task-detail",
+      "name": "修改发券任务状态",
+      "description": "获取发券任务详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/automarketing/act/coupon/info"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/ma.ts",
+      "source_function": "getCouponTaskDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "修改发券任务状态"
+    },
+    {
+      "command": "sl coupon get-coupon-task-log-list",
+      "domain": "coupon",
+      "action": "get-coupon-task-log-list",
+      "name": "修改卡型任务次数",
+      "description": "获取发券任务日志列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/automarketing/act/coupon/touchRecord"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/ma.ts",
+      "source_function": "getCouponTaskLogList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "修改卡型任务次数"
+    },
+    {
+      "command": "sl coupon create-coupon-rebate",
+      "domain": "coupon",
+      "action": "create-coupon-rebate",
+      "name": "新增消费券返券",
+      "description": "新增消费券返券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponRebate/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "createCouponRebate",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "新增消费券返券"
+    },
+    {
+      "command": "sl coupon update-coupon-rebate",
+      "domain": "coupon",
+      "action": "update-coupon-rebate",
+      "name": "修改消费券返券",
+      "description": "修改消费券返券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponRebate/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "updateCouponRebate",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "修改消费券返券"
+    },
+    {
+      "command": "sl coupon get-coupon-rebate",
+      "domain": "coupon",
+      "action": "get-coupon-rebate",
+      "name": "获取消费券返券",
+      "description": "获取消费券返券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponRebate/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "getCouponRebate",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "campaignId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取消费券返券"
+    },
+    {
+      "command": "sl coupon delete-coupon-rebate",
+      "domain": "coupon",
+      "action": "delete-coupon-rebate",
+      "name": "删除消费券返券",
+      "description": "删除消费券返券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponRebate/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "deleteCouponRebate",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "campaignId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除消费券返券"
+    },
+    {
+      "command": "sl coupon update-coupon-rebate-status",
+      "domain": "coupon",
+      "action": "update-coupon-rebate-status",
+      "name": "启用/停用消费券返券",
+      "description": "启用/停用消费券返券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponRebate/updateStatus"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "updateCouponRebateStatus",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销",
+        "报表"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "campaignId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "启用/停用消费券返券"
+    },
+    {
+      "command": "sl coupon coupon-shops",
+      "domain": "coupon",
+      "action": "coupon-shops",
+      "name": "根据券id获取小红书门店",
+      "description": "根据券id获取小红书门店",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/xiaohongshu/couponShops"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "couponShops",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "门店"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "根据券id获取小红书门店"
+    },
+    {
+      "command": "sl coupon coupon-code-make",
+      "domain": "coupon",
+      "action": "coupon-code-make",
+      "name": "生成异业券码",
+      "description": "生成异业券码",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponCode/make"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "couponCodeMake",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "生成异业券码"
+    },
+    {
+      "command": "sl coupon coupon-code-analyze-page-list",
+      "domain": "coupon",
+      "action": "coupon-code-analyze-page-list",
+      "name": "券码分析列表",
+      "description": "券码分析列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponCode/analyzePageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "couponCodeAnalyzePageList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "券码分析列表"
+    },
+    {
+      "command": "sl coupon coupon-code-analyze-page-list-export",
+      "domain": "coupon",
+      "action": "coupon-code-analyze-page-list-export",
+      "name": "券码分析列表导出",
+      "description": "券码分析列表导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponCode/analyzeDetailPageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "couponCodeAnalyzePageListExport",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "营销",
+        "分页",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "券码分析列表导出"
+    },
+    {
+      "command": "sl coupon coupon-code-analyze-detail-page-list-export",
+      "domain": "coupon",
+      "action": "coupon-code-analyze-detail-page-list-export",
+      "name": "券码明细列表导出",
+      "description": "券码明细列表导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponCode/tsDetailList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "couponCodeAnalyzeDetailPageListExport",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "营销",
+        "分页",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "券码明细列表导出"
+    },
+    {
+      "command": "sl coupon coupon-code-refund",
+      "domain": "coupon",
+      "action": "coupon-code-refund",
+      "name": "券码退款",
+      "description": "券码退款",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/couponCode/refund"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "couponCodeRefund",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "exchangeCode",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        }
+      ],
+      "description_short": "券码退款"
+    },
+    {
+      "command": "sl coupon send-use-coupon-analysis",
+      "domain": "coupon",
+      "action": "send-use-coupon-analysis",
+      "name": "发券/用券分析",
+      "description": "发券/用券分析",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/campaign/report/couponSendUseAnalysis"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "sendUseCouponAnalysis",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "发券/用券分析"
+    },
+    {
+      "command": "sl coupon coupon-time-analysis",
+      "domain": "coupon",
+      "action": "coupon-time-analysis",
+      "name": "券响应时间分析",
+      "description": "券响应时间分析",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/campaign/report/couponResponseTimeAnalysis"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "couponTimeAnalysis",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "券响应时间分析"
+    },
+    {
+      "command": "sl coupon get-xiaohongshu-code-list",
+      "domain": "coupon",
+      "action": "get-xiaohongshu-code-list",
+      "name": "小红书优惠券码记录列表",
+      "description": "小红书优惠券码记录列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-admin/campaign/xiaohongshu/order/couponCodeList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/marketing.ts",
+      "source_function": "getXiaohongshuCodeList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "订单",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "orderNo",
+          "type": "string",
+          "required": false,
+          "description": "排序"
+        }
+      ],
+      "description_short": "小红书优惠券码记录列表"
+    },
+    {
+      "command": "sl coupon get-coupon-purchase-orders",
+      "domain": "coupon",
+      "action": "get-coupon-purchase-orders",
+      "name": "获取权益卡订单列表",
+      "description": "获取权益卡订单列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/order/coupon/buy/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/order.ts",
+      "source_function": "getCouponPurchaseOrders",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "订单",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取权益卡订单列表"
+    },
+    {
+      "command": "sl coupon refund-coupon-purchase",
+      "domain": "coupon",
+      "action": "refund-coupon-purchase",
+      "name": "获取购买券列表",
+      "description": "获取购买券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/order/coupon/refund/refundCoupon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/order.ts",
+      "source_function": "refundCouponPurchase",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "订单"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "获取购买券列表"
+    },
+    {
+      "command": "sl coupon buy-coupon-statistics-service",
+      "domain": "coupon",
+      "action": "buy-coupon-statistics-service",
+      "name": "获取购买券列表",
+      "description": "获取购买券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/order/coupon/refund/refundCouponRedress"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/order.ts",
+      "source_function": "buyCouponStatisticsService",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销",
+        "订单",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "refundId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "thirdOrderNo",
+          "type": "string",
+          "required": false,
+          "description": "排序"
+        },
+        {
+          "name": "enterpriseName",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "startTradeTime",
+          "type": "string",
+          "required": false,
+          "description": "startTradeTime"
+        }
+      ],
+      "description_short": "获取购买券列表"
+    },
+    {
+      "command": "sl coupon batch-refund-redress-tip",
+      "domain": "coupon",
+      "action": "batch-refund-redress-tip",
+      "name": "退券退款",
+      "description": "退券退款",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/order/coupon/refund/batchRefundCouponTip"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/order.ts",
+      "source_function": "batchRefundRedressTip",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "订单"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "退券退款"
+    },
+    {
+      "command": "sl coupon buy-coupon-statistics-details",
+      "domain": "coupon",
+      "action": "buy-coupon-statistics-details",
+      "name": "购买券订单退款列表批量退款提示",
+      "description": "购买券订单退款列表批量退款提示",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/order/coupon/buy/detail"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/order.ts",
+      "source_function": "buyCouponStatisticsDetails",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销",
+        "订单",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "thirdOrderNo",
+          "type": "string",
+          "required": false,
+          "description": "排序"
+        },
+        {
+          "name": "enterpriseName",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "startTradeTime",
+          "type": "string",
+          "required": false,
+          "description": "startTradeTime"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "购买券订单退款列表批量退款提示"
+    },
+    {
+      "command": "sl coupon get-coupon-purchase-orders-refund",
+      "domain": "coupon",
+      "action": "get-coupon-purchase-orders-refund",
+      "name": "购买券订单退款列表批量退款",
+      "description": "购买券订单退款列表批量退款",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/order/coupon/refund/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/order.ts",
+      "source_function": "getCouponPurchaseOrdersRefund",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "订单",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "购买券订单退款列表批量退款"
+    },
+    {
+      "command": "sl coupon coupon-purchase-order-export",
+      "domain": "coupon",
+      "action": "coupon-purchase-order-export",
+      "name": "购买券订单退款列表",
+      "description": "购买券订单退款列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/order/coupon/buy/pageListExport"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/order.ts",
+      "source_function": "couponPurchaseOrderExport",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "营销",
+        "订单",
+        "分页",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "购买券订单退款列表"
+    },
+    {
+      "command": "sl coupon coupon-purchase-orders-refund-export",
+      "domain": "coupon",
+      "action": "coupon-purchase-orders-refund-export",
+      "name": "购买券订单导出",
+      "description": "购买券订单导出",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/order/coupon/refund/pageListExport"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/order.ts",
+      "source_function": "couponPurchaseOrdersRefundExport",
+      "tags": [
+        "coupon",
+        "export",
+        "优惠券",
+        "营销",
+        "订单",
+        "分页",
+        "列表",
+        "导出"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "购买券订单导出"
+    },
+    {
+      "command": "sl coupon get-exchange-coupon-info",
+      "domain": "coupon",
+      "action": "get-exchange-coupon-info",
+      "name": "获取异业码信息-根据异业码",
+      "description": "获取异业码信息-根据异业码",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/getExchangeCouponInfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/pos.ts",
+      "source_function": "getExchangeCouponInfo",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "exchangeCouponCode",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "couponTypes",
+          "type": "string",
+          "required": false,
+          "description": "couponTypes"
+        },
+        {
+          "name": "buyFlg",
+          "type": "string",
+          "required": false,
+          "description": "buyFlg"
+        },
+        {
+          "name": "allMoney",
+          "type": "string",
+          "required": false,
+          "description": "allMoney"
+        },
+        {
+          "name": "outsider",
+          "type": "string",
+          "required": false,
+          "description": "outsider"
+        }
+      ],
+      "description_short": "获取异业码信息-根据异业码"
+    },
+    {
+      "command": "sl coupon get-exchange-coupon-info-by-serial-number",
+      "domain": "coupon",
+      "action": "get-exchange-coupon-info-by-serial-number",
+      "name": "获取异业码信息-根据序号",
+      "description": "获取异业码信息-根据序号",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/getExchangeCouponInfoBySerialNumber"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/pos.ts",
+      "source_function": "getExchangeCouponInfoBySerialNumber",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取异业码信息-根据序号"
+    },
+    {
+      "command": "sl coupon consume-exchange-coupon",
+      "domain": "coupon",
+      "action": "consume-exchange-coupon",
+      "name": "异业码消费",
+      "description": "异业码消费",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/consumeExchangeCoupon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/pos.ts",
+      "source_function": "consumeExchangeCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "异业码消费"
+    },
+    {
+      "command": "sl coupon exchange-coupon-buy",
+      "domain": "coupon",
+      "action": "exchange-coupon-buy",
+      "name": "异业码售卖-线下",
+      "description": "异业码售卖-线下",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/exchangeCouponBuy"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/pos.ts",
+      "source_function": "exchangeCouponBuy",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "异业码售卖-线下"
+    },
+    {
+      "command": "sl coupon exchange-coupon-buy-online-pay",
+      "domain": "coupon",
+      "action": "exchange-coupon-buy-online-pay",
+      "name": "异业码售卖-线上",
+      "description": "异业码售卖-线上",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/exchangeCouponBuyOnlinePay"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/pos.ts",
+      "source_function": "exchangeCouponBuyOnlinePay",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "异业码售卖-线上"
+    },
+    {
+      "command": "sl coupon exchange-coupon-convert-member-coupon",
+      "domain": "coupon",
+      "action": "exchange-coupon-convert-member-coupon",
+      "name": "使用异业券码给会员发券",
+      "description": "使用异业券码给会员发券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/exchangeCouponConvertMemberCoupon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/pos.ts",
+      "source_function": "exchangeCouponConvertMemberCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "memberId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "exchangeCodes",
+          "type": "string",
+          "required": false,
+          "description": "exchangeCodes"
+        },
+        {
+          "name": "couponTypes",
+          "type": "string",
+          "required": false,
+          "description": "couponTypes"
+        }
+      ],
+      "description_short": "使用异业券码给会员发券"
+    },
+    {
+      "command": "sl coupon trade-coupon-gift",
+      "domain": "coupon",
+      "action": "trade-coupon-gift",
+      "name": "获取赠券明细",
+      "description": "获取赠券明细",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/trade/coupon/gift"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/trade.ts",
+      "source_function": "tradeCouponGift",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "订单"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "tsCode",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        }
+      ],
+      "description_short": "获取赠券明细"
+    },
+    {
+      "command": "sl coupon trade-coupon-used",
+      "domain": "coupon",
+      "action": "trade-coupon-used",
+      "name": "获取交易核销券列表",
+      "description": "获取交易核销券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/trade/coupon/used"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/trade.ts",
+      "source_function": "tradeCouponUsed",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "订单"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取交易核销券列表"
+    },
+    {
+      "command": "sl coupon coupon-list-crm",
+      "domain": "coupon",
+      "action": "coupon-list-crm",
+      "name": "查询门店名称列表",
+      "description": "获取客位列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/common.ts",
+      "source_function": "couponList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "查询门店名称列表"
+    },
+    {
+      "command": "sl coupon coupon-list-crm-2",
+      "domain": "coupon",
+      "action": "coupon-list-crm-2",
+      "name": "couponList",
+      "description": "券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "couponList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "couponList"
+    },
+    {
+      "command": "sl coupon coupon-type-list-crm",
+      "domain": "coupon",
+      "action": "coupon-type-list-crm",
+      "name": "券列表",
+      "description": "券类型列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/type/query"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "couponTypeList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "limitFun",
+          "type": "string",
+          "required": false,
+          "description": "limitFun"
+        }
+      ],
+      "description_short": "券列表"
+    },
+    {
+      "command": "sl coupon create-cash-coupon-crm",
+      "domain": "coupon",
+      "action": "create-cash-coupon-crm",
+      "name": "券列表",
+      "description": "券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/cash/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "createCashCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "券列表"
+    },
+    {
+      "command": "sl coupon update-cash-coupon-crm",
+      "domain": "coupon",
+      "action": "update-cash-coupon-crm",
+      "name": "@description:  新建代金券",
+      "description": "@description:  新建代金券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/cash/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "updateCashCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建代金券"
+    },
+    {
+      "command": "sl coupon get-cash-detail-crm",
+      "domain": "coupon",
+      "action": "get-cash-detail-crm",
+      "name": "@description:  编辑代金券",
+      "description": "@description:  编辑代金券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/cash/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "getCashDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  编辑代金券"
+    },
+    {
+      "command": "sl coupon create-discount-coupon-crm",
+      "domain": "coupon",
+      "action": "create-discount-coupon-crm",
+      "name": "@description:  获取代金券详情",
+      "description": "@description:  获取代金券详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/discount/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "createDiscountCoupon",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  获取代金券详情"
+    },
+    {
+      "command": "sl coupon update-discount-coupon-crm",
+      "domain": "coupon",
+      "action": "update-discount-coupon-crm",
+      "name": "@description:  新建折扣券",
+      "description": "@description:  新建折扣券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/discount/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "updateDiscountCoupon",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建折扣券"
+    },
+    {
+      "command": "sl coupon get-discount-detail-crm",
+      "domain": "coupon",
+      "action": "get-discount-detail-crm",
+      "name": "@description:  编辑折扣券",
+      "description": "@description:  编辑折扣券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/discount/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "getDiscountDetail",
+      "tags": [
+        "coupon",
+        "report",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  编辑折扣券"
+    },
+    {
+      "command": "sl coupon create-product-coupon-crm",
+      "domain": "coupon",
+      "action": "create-product-coupon-crm",
+      "name": "@description:  获取折扣券详情",
+      "description": "@description:  获取折扣券详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/item/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "createProductCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "菜品",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  获取折扣券详情"
+    },
+    {
+      "command": "sl coupon update-product-coupon-crm",
+      "domain": "coupon",
+      "action": "update-product-coupon-crm",
+      "name": "@description:  新建商品券",
+      "description": "@description:  新建商品券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/item/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "updateProductCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "菜品",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建商品券"
+    },
+    {
+      "command": "sl coupon get-product-detail-crm",
+      "domain": "coupon",
+      "action": "get-product-detail-crm",
+      "name": "@description:  编辑商品券",
+      "description": "@description:  编辑商品券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/item/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "getProductDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "菜品",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  编辑商品券"
+    },
+    {
+      "command": "sl coupon create-delivery-coupon-crm",
+      "domain": "coupon",
+      "action": "create-delivery-coupon-crm",
+      "name": "@description:  获取商品详情",
+      "description": "@description:  获取商品详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/distribution/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "createDeliveryCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  获取商品详情"
+    },
+    {
+      "command": "sl coupon update-delivery-coupon-crm",
+      "domain": "coupon",
+      "action": "update-delivery-coupon-crm",
+      "name": "@description:  新建配送券",
+      "description": "@description:  新建配送券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/distribution/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "updateDeliveryCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建配送券"
+    },
+    {
+      "command": "sl coupon get-delivery-detail-crm",
+      "domain": "coupon",
+      "action": "get-delivery-detail-crm",
+      "name": "@description:  编辑配送券",
+      "description": "@description:  编辑配送券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/distribution/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "getDeliveryDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  编辑配送券"
+    },
+    {
+      "command": "sl coupon create-gift-coupon-crm",
+      "domain": "coupon",
+      "action": "create-gift-coupon-crm",
+      "name": "@description:  获取配送券详情",
+      "description": "@description:  获取配送券详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/gift/create"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "createGiftCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "@description:  获取配送券详情"
+    },
+    {
+      "command": "sl coupon update-gift-coupon-crm",
+      "domain": "coupon",
+      "action": "update-gift-coupon-crm",
+      "name": "@description:  新建赠品券",
+      "description": "@description:  新建赠品券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/gift/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "updateGiftCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  新建赠品券"
+    },
+    {
+      "command": "sl coupon get-gift-detail-crm",
+      "domain": "coupon",
+      "action": "get-gift-detail-crm",
+      "name": "@description:  编辑赠品券",
+      "description": "@description:  编辑赠品券",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/gift/single"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "getGiftDetail",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "couponId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  编辑赠品券"
+    },
+    {
+      "command": "sl coupon delete-coupon-crm",
+      "domain": "coupon",
+      "action": "delete-coupon-crm",
+      "name": "@description:  获取赠品券详情",
+      "description": "@description:  获取赠品券详情",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/coupon.ts",
+      "source_function": "deleteCoupon",
+      "tags": [
+        "coupon",
+        "manage",
+        "优惠券",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "@description:  获取赠品券详情"
+    },
+    {
+      "command": "sl coupon get-coupon-list",
+      "domain": "coupon",
+      "action": "get-coupon-list",
+      "name": "优惠券列表",
+      "description": "优惠券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/marketing.ts",
+      "source_function": "getCouponList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "优惠券列表"
+    },
+    {
+      "command": "sl coupon exchange-coupon-buy-online-pay-crm",
+      "domain": "coupon",
+      "action": "exchange-coupon-buy-online-pay-crm",
+      "name": "异业码售卖-线上",
+      "description": "异业码售卖-线上",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/exchangeCouponBuyOnlinePay"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/pos.ts",
+      "source_function": "exchangeCouponBuyOnlinePay",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "异业码售卖-线上"
+    },
+    {
+      "command": "sl coupon get-exchange-coupon-info-crm",
+      "domain": "coupon",
+      "action": "get-exchange-coupon-info-crm",
+      "name": "获取异业码信息-根据异业码",
+      "description": "获取异业码信息-根据异业码",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/getExchangeCouponInfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/pos.ts",
+      "source_function": "getExchangeCouponInfo",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "exchangeCouponCode",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "couponTypes",
+          "type": "string",
+          "required": false,
+          "description": "couponTypes"
+        },
+        {
+          "name": "buyFlg",
+          "type": "string",
+          "required": false,
+          "description": "buyFlg"
+        },
+        {
+          "name": "allMoney",
+          "type": "string",
+          "required": false,
+          "description": "allMoney"
+        },
+        {
+          "name": "outsider",
+          "type": "string",
+          "required": false,
+          "description": "outsider"
+        }
+      ],
+      "description_short": "获取异业码信息-根据异业码"
+    },
+    {
+      "command": "sl coupon exchange-coupon-buy-crm",
+      "domain": "coupon",
+      "action": "exchange-coupon-buy-crm",
+      "name": "异业码售卖-线下",
+      "description": "异业码售卖-线下",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/exchangeCouponBuy"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/pos.ts",
+      "source_function": "exchangeCouponBuy",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "异业码售卖-线下"
+    },
+    {
+      "command": "sl coupon consume-exchange-coupon-crm",
+      "domain": "coupon",
+      "action": "consume-exchange-coupon-crm",
+      "name": "异业码消费",
+      "description": "异业码消费",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/consumeExchangeCoupon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/pos.ts",
+      "source_function": "consumeExchangeCoupon",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "异业码消费"
+    },
+    {
+      "command": "sl coupon get-exchange-coupon-info-by-serial-number-crm",
+      "domain": "coupon",
+      "action": "get-exchange-coupon-info-by-serial-number-crm",
+      "name": "获取异业码信息-根据序号",
+      "description": "获取异业码信息-根据序号",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-business-member-admin/coupon/exchange/getExchangeCouponInfoBySerialNumber"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/pos.ts",
+      "source_function": "getExchangeCouponInfoBySerialNumber",
+      "tags": [
+        "coupon",
+        "query",
+        "会员",
+        "优惠券"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取异业码信息-根据序号"
+    },
+    {
+      "command": "sl coupon get-coupon-list-crm",
+      "domain": "coupon",
+      "action": "get-coupon-list-crm",
+      "name": "优惠券列表",
+      "description": "优惠券列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-marketing-coupon-admin/coupon/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/user.ts",
+      "source_function": "getCouponList",
+      "tags": [
+        "coupon",
+        "query",
+        "优惠券",
+        "营销",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNum",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "description": "每页数量",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "优惠券列表"
+    }
+  ]
+}

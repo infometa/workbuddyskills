@@ -1,0 +1,136 @@
+{
+  "domain": "scm_docking",
+  "count": 5,
+  "commands": [
+    {
+      "command": "sl scm_docking get-page",
+      "domain": "scm_docking",
+      "action": "get-page",
+      "name": "getPage",
+      "description": "getPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/platform/web/v1/log/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/docking/api_thirdPartyDocking.js",
+      "source_function": "getPage",
+      "tags": [
+        "docking",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_docking get-param-list",
+      "domain": "scm_docking",
+      "action": "get-param-list",
+      "name": "getParamList",
+      "description": "getParamList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/platform/web/v1/config/enum/query"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/docking/api_thirdPartyDocking.js",
+      "source_function": "getParamList",
+      "tags": [
+        "docking",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_docking retry",
+      "domain": "scm_docking",
+      "action": "retry",
+      "name": "retry",
+      "description": "retry",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/platform/web/v1/log/retry"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/docking/api_thirdPartyDocking.js",
+      "source_function": "retry",
+      "tags": [
+        "docking",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_docking export",
+      "domain": "scm_docking",
+      "action": "export",
+      "name": "export",
+      "description": "export",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/third/party/item/v1/batch/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_related_third.js",
+      "source_function": "export",
+      "tags": [
+        "docking",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_docking import",
+      "domain": "scm_docking",
+      "action": "import",
+      "name": "import",
+      "description": "import",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/third/party/item/v1/zgy/batch/import/mode"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_related_third.js",
+      "source_function": "import",
+      "tags": [
+        "docking",
+        "manage"
+      ]
+    }
+  ]
+}

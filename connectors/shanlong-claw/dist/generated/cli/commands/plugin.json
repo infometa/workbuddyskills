@@ -1,0 +1,254 @@
+{
+  "domain": "plugin",
+  "count": 6,
+  "commands": [
+    {
+      "command": "sl plugin get-plugin-list",
+      "domain": "plugin",
+      "action": "get-plugin-list",
+      "name": "getPluginList",
+      "description": "插件列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/plugin/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/plugin.ts",
+      "source_function": "getPluginList",
+      "tags": [
+        "plugin",
+        "query",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "getPluginList"
+    },
+    {
+      "command": "sl plugin modify-plugin",
+      "domain": "plugin",
+      "action": "modify-plugin",
+      "name": "插件列表",
+      "description": "开通/续费/移除插件",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/plugin/operation"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/plugin.ts",
+      "source_function": "modifyPlugin",
+      "tags": [
+        "plugin",
+        "manage"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "pluginId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "ownerFlag",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        }
+      ],
+      "description_short": "插件列表"
+    },
+    {
+      "command": "sl plugin open-plugin",
+      "domain": "plugin",
+      "action": "open-plugin",
+      "name": "插件列表",
+      "description": "开通/续费插件 获取支付地址",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/plugin/prePay"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/plugin.ts",
+      "source_function": "openPlugin",
+      "tags": [
+        "plugin",
+        "query"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "ownerFlag",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "pluginId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "openMonth",
+          "type": "string",
+          "required": false,
+          "description": "openMonth"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        }
+      ],
+      "description_short": "插件列表"
+    },
+    {
+      "command": "sl plugin order-simp-info",
+      "domain": "plugin",
+      "action": "order-simp-info",
+      "name": "开通/续费/移除插件",
+      "description": "插件 价格 门店数等信息",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/plugin/detail"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/plugin.ts",
+      "source_function": "orderSimpInfo",
+      "tags": [
+        "plugin",
+        "query",
+        "订单"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "开通/续费/移除插件"
+    },
+    {
+      "command": "sl plugin pay-check",
+      "domain": "plugin",
+      "action": "pay-check",
+      "name": "开通/续费插件 获取支付地址",
+      "description": "查询支付状态",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/plugin/payCheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/plugin.ts",
+      "source_function": "payCheck",
+      "tags": [
+        "plugin",
+        "query"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "recordId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "开通/续费插件 获取支付地址"
+    },
+    {
+      "command": "sl plugin get-cdp-label-status",
+      "domain": "plugin",
+      "action": "get-cdp-label-status",
+      "name": "获取cdp标签开通状态",
+      "description": "获取cdp标签开通状态",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/plugin/cdplabel/state"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/user.ts",
+      "source_function": "getCdpLabelStatus",
+      "tags": [
+        "plugin",
+        "report",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取cdp标签开通状态"
+    }
+  ]
+}

@@ -1,0 +1,3724 @@
+{
+  "domain": "scm_general",
+  "count": 143,
+  "commands": [
+    {
+      "command": "sl scm_general delete-empty-bill",
+      "domain": "scm_general",
+      "action": "delete-empty-bill",
+      "name": "deleteEmptyBill",
+      "description": "deleteEmptyBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/empty/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/bill/api_bill_common.js",
+      "source_function": "deleteEmptyBill",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general get-bill-asyn-batch-task",
+      "domain": "scm_general",
+      "action": "get-bill-asyn-batch-task",
+      "name": "getBillAsynBatchTask",
+      "description": "getBillAsynBatchTask",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/asyn_batch_task/v1/task"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/bill/api_bill_common.js",
+      "source_function": "getBillAsynBatchTask",
+      "tags": [
+        "general",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_general save-filtering-scheme",
+      "domain": "scm_general",
+      "action": "save-filtering-scheme",
+      "name": "saveFilteringScheme",
+      "description": "saveFilteringScheme",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/filtering_scheme/v1/modFilteringScheme"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/bill/api_bill_common.js",
+      "source_function": "saveFilteringScheme",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general get-filtering-scheme",
+      "domain": "scm_general",
+      "action": "get-filtering-scheme",
+      "name": "getFilteringScheme",
+      "description": "getFilteringScheme",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/filtering_scheme/v1/getFilteringScheme/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/bill/api_bill_common.js",
+      "source_function": "getFilteringScheme",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-biubiuorder-url",
+      "domain": "scm_general",
+      "action": "get-biubiuorder-url",
+      "name": "getBiubiuorderUrl",
+      "description": "getBiubiuorderUrl",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/param/config/v1/jsd/url"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_biubiuorder.js",
+      "source_function": "getBiubiuorderUrl",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general save-order-mistake-check",
+      "domain": "scm_general",
+      "action": "save-order-mistake-check",
+      "name": "saveOrderMistakeCheck",
+      "description": "saveOrderMistakeCheck",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/mistake_proofing_set/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_order-mistake-check.js",
+      "source_function": "saveOrderMistakeCheck",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-order-mistake-check",
+      "domain": "scm_general",
+      "action": "get-order-mistake-check",
+      "name": "getOrderMistakeCheck",
+      "description": "getOrderMistakeCheck",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/mistake_proofing_set/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_order-mistake-check.js",
+      "source_function": "getOrderMistakeCheck",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-order-mistake-check-all",
+      "domain": "scm_general",
+      "action": "get-order-mistake-check-all",
+      "name": "getOrderMistakeCheckAll",
+      "description": "getOrderMistakeCheckAll",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/mistake_proofing_set/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_order-mistake-check.js",
+      "source_function": "getOrderMistakeCheckAll",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-tree-data",
+      "domain": "scm_general",
+      "action": "get-tree-data",
+      "name": "getTreeData",
+      "description": "getTreeData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/param/config/v1/tree"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_param-config.js",
+      "source_function": "getTreeData",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-params-by-enum",
+      "domain": "scm_general",
+      "action": "get-params-by-enum",
+      "name": "getParamsByEnum",
+      "description": "getParamsByEnum",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/param/config/v1/type/param/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_param-config.js",
+      "source_function": "getParamsByEnum",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general save-params",
+      "domain": "scm_general",
+      "action": "save-params",
+      "name": "saveParams",
+      "description": "saveParams",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/param/config/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_param-config.js",
+      "source_function": "saveParams",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-params-all",
+      "domain": "scm_general",
+      "action": "get-params-all",
+      "name": "getParamsAll",
+      "description": "getParamsAll",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/param/config/v1/all"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_param-config.js",
+      "source_function": "getParamsAll",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-page",
+      "domain": "scm_general",
+      "action": "get-page",
+      "name": "getPage",
+      "description": "getPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/deliver_store/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_delivery_order.js",
+      "source_function": "getPage",
+      "tags": [
+        "general",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_general get",
+      "domain": "scm_general",
+      "action": "get",
+      "name": "get",
+      "description": "get",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/deliver_store/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_delivery_order.js",
+      "source_function": "get",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general del",
+      "domain": "scm_general",
+      "action": "del",
+      "name": "del",
+      "description": "del",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/deliver_store/v1/:param/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_delivery_order.js",
+      "source_function": "del",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general delete-mulity",
+      "domain": "scm_general",
+      "action": "delete-mulity",
+      "name": "deleteMulity",
+      "description": "deleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/deliver_store/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_delivery_order.js",
+      "source_function": "deleteMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general export-mulity",
+      "domain": "scm_general",
+      "action": "export-mulity",
+      "name": "exportMulity",
+      "description": "exportMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/deliver_store/v1/batch/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_delivery_order.js",
+      "source_function": "exportMulity",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general get-details",
+      "domain": "scm_general",
+      "action": "get-details",
+      "name": "getDetails",
+      "description": "getDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/deliver_store/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_delivery_order.js",
+      "source_function": "getDetails",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general export-data",
+      "domain": "scm_general",
+      "action": "export-data",
+      "name": "exportData",
+      "description": "exportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/deliver_store/v1/:param/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_delivery_order.js",
+      "source_function": "exportData",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general get-page-2",
+      "domain": "scm_general",
+      "action": "get-page-2",
+      "name": "getPage",
+      "description": "getPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getPage",
+      "tags": [
+        "general",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_general get-page-recycling",
+      "domain": "scm_general",
+      "action": "get-page-recycling",
+      "name": "getPageRecycling",
+      "description": "getPageRecycling",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getPageRecycling",
+      "tags": [
+        "general",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_general return-mulity",
+      "domain": "scm_general",
+      "action": "return-mulity",
+      "name": "returnMulity",
+      "description": "returnMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/back"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "returnMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general submit-mulity",
+      "domain": "scm_general",
+      "action": "submit-mulity",
+      "name": "submitMulity",
+      "description": "submitMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/submit"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "submitMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general del-empty-bill",
+      "domain": "scm_general",
+      "action": "del-empty-bill",
+      "name": "delEmptyBill",
+      "description": "delEmptyBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/move_apply/v1/:param/silent"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "delEmptyBill",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general recheck-mulity",
+      "domain": "scm_general",
+      "action": "recheck-mulity",
+      "name": "recheckMulity",
+      "description": "recheckMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/recheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "recheckMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general unrecheck-mulity",
+      "domain": "scm_general",
+      "action": "unrecheck-mulity",
+      "name": "unrecheckMulity",
+      "description": "unrecheckMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/un_recheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "unrecheckMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general delete-mulity-2",
+      "domain": "scm_general",
+      "action": "delete-mulity-2",
+      "name": "deleteMulity",
+      "description": "deleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "deleteMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general recover",
+      "domain": "scm_general",
+      "action": "recover",
+      "name": "recover",
+      "description": "recover",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param/restore"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "recover",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general recover-mulity",
+      "domain": "scm_general",
+      "action": "recover-mulity",
+      "name": "recoverMulity",
+      "description": "recoverMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/restore"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "recoverMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general recycling-delete",
+      "domain": "scm_general",
+      "action": "recycling-delete",
+      "name": "recyclingDelete",
+      "description": "recyclingDelete",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/move_apply/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "recyclingDelete",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general recycling-delete-mulity",
+      "domain": "scm_general",
+      "action": "recycling-delete-mulity",
+      "name": "recyclingDeleteMulity",
+      "description": "recyclingDeleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/remove"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "recyclingDeleteMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general add",
+      "domain": "scm_general",
+      "action": "add",
+      "name": "add",
+      "description": "add",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "add",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general save",
+      "domain": "scm_general",
+      "action": "save",
+      "name": "save",
+      "description": "save",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "save",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general check-in",
+      "domain": "scm_general",
+      "action": "check-in",
+      "name": "checkIn",
+      "description": "checkIn",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param/in/check"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "checkIn",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general uncheck-in",
+      "domain": "scm_general",
+      "action": "uncheck-in",
+      "name": "uncheckIn",
+      "description": "uncheckIn",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param/in/uncheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "uncheckIn",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general uncheck-mulity",
+      "domain": "scm_general",
+      "action": "uncheck-mulity",
+      "name": "uncheckMulity",
+      "description": "uncheckMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/uncheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "uncheckMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general check-mulity",
+      "domain": "scm_general",
+      "action": "check-mulity",
+      "name": "checkMulity",
+      "description": "checkMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/check"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "checkMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general agree-mulity",
+      "domain": "scm_general",
+      "action": "agree-mulity",
+      "name": "agreeMulity",
+      "description": "agreeMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/agree/batch"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "agreeMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general reject-mulity",
+      "domain": "scm_general",
+      "action": "reject-mulity",
+      "name": "rejectMulity",
+      "description": "rejectMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/reject/batch"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "rejectMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general agree",
+      "domain": "scm_general",
+      "action": "agree",
+      "name": "agree",
+      "description": "agree",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/agree/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "agree",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general reject",
+      "domain": "scm_general",
+      "action": "reject",
+      "name": "reject",
+      "description": "reject",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/reject/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "reject",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-bill-chain",
+      "domain": "scm_general",
+      "action": "get-bill-chain",
+      "name": "getBillChain",
+      "description": "getBillChain",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/move_apply/v1/:param/chain"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getBillChain",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general submit",
+      "domain": "scm_general",
+      "action": "submit",
+      "name": "submit",
+      "description": "submit",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param/submit"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "submit",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general return",
+      "domain": "scm_general",
+      "action": "return",
+      "name": "return",
+      "description": "return",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param/back"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "return",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general recheck",
+      "domain": "scm_general",
+      "action": "recheck",
+      "name": "recheck",
+      "description": "recheck",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/recheckOne"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "recheck",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general unrecheck",
+      "domain": "scm_general",
+      "action": "unrecheck",
+      "name": "unrecheck",
+      "description": "unrecheck",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param/un_recheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "unrecheck",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general del-2",
+      "domain": "scm_general",
+      "action": "del-2",
+      "name": "del",
+      "description": "del",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "del",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-details-2",
+      "domain": "scm_general",
+      "action": "get-details-2",
+      "name": "getDetails",
+      "description": "getDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/move_apply/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getDetails",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general check-details-house",
+      "domain": "scm_general",
+      "action": "check-details-house",
+      "name": "checkDetailsHouse",
+      "description": "checkDetailsHouse",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/move_apply/:param/detail/v1/:param/identical/house"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "checkDetailsHouse",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-2",
+      "domain": "scm_general",
+      "action": "get-2",
+      "name": "get",
+      "description": "get",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/move_apply/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "get",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general add-details",
+      "domain": "scm_general",
+      "action": "add-details",
+      "name": "addDetails",
+      "description": "addDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/:param/detail/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "addDetails",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general save-details",
+      "domain": "scm_general",
+      "action": "save-details",
+      "name": "saveDetails",
+      "description": "saveDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/:param/detail/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "saveDetails",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general del-detail",
+      "domain": "scm_general",
+      "action": "del-detail",
+      "name": "delDetail",
+      "description": "delDetail",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/move_apply/:param/detail/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "delDetail",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general unknown",
+      "domain": "scm_general",
+      "action": "unknown",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/:param/detail/v1/add"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "unknown",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general del-detail-mulity",
+      "domain": "scm_general",
+      "action": "del-detail-mulity",
+      "name": "delDetailMulity",
+      "description": "delDetailMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/:param/detail/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "delDetailMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general clear-details",
+      "domain": "scm_general",
+      "action": "clear-details",
+      "name": "clearDetails",
+      "description": "clearDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/:param/detail/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "clearDetails",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general check-out",
+      "domain": "scm_general",
+      "action": "check-out",
+      "name": "checkOut",
+      "description": "checkOut",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param/out/check"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "checkOut",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general uncheck-out",
+      "domain": "scm_general",
+      "action": "uncheck-out",
+      "name": "uncheckOut",
+      "description": "uncheckOut",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/v1/:param/out/uncheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "uncheckOut",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-item-by-store",
+      "domain": "scm_general",
+      "action": "get-item-by-store",
+      "name": "getItemByStore",
+      "description": "getItemByStore",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/move_apply/:param/detail/v1/house/:param/itemList/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getItemByStore",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-item-by-store-new",
+      "domain": "scm_general",
+      "action": "get-item-by-store-new",
+      "name": "getItemByStoreNew",
+      "description": "getItemByStoreNew",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/move_apply/:param/detail/v1/house/:param/outhouse/:param/itemList/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getItemByStoreNew",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-item-list-page",
+      "domain": "scm_general",
+      "action": "get-item-list-page",
+      "name": "getItemListPage",
+      "description": "getItemListPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/:param/detail/v1/item/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getItemListPage",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-item-all",
+      "domain": "scm_general",
+      "action": "get-item-all",
+      "name": "getItemAll",
+      "description": "getItemAll",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/move_apply/:param/detail/v1/itemList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getItemAll",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-item-unit-list",
+      "domain": "scm_general",
+      "action": "get-item-unit-list",
+      "name": "getItemUnitList",
+      "description": "getItemUnitList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/:param/detail/v1/unitList/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getItemUnitList",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general setting-mulity",
+      "domain": "scm_general",
+      "action": "setting-mulity",
+      "name": "settingMulity",
+      "description": "settingMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/:param/detail/v1/set"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "settingMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general export-model",
+      "domain": "scm_general",
+      "action": "export-model",
+      "name": "exportModel",
+      "description": "exportModel",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/move_apply/v1/:param/model/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "exportModel",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general export-data-2",
+      "domain": "scm_general",
+      "action": "export-data-2",
+      "name": "exportData",
+      "description": "exportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/move_apply/v1/:param/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "exportData",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general import-data",
+      "domain": "scm_general",
+      "action": "import-data",
+      "name": "importData",
+      "description": "importData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/move_apply/v1/:param/import/model"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "importData",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general multiple-import-data-in",
+      "domain": "scm_general",
+      "action": "multiple-import-data-in",
+      "name": "multipleImportDataIn",
+      "description": "multipleImportDataIn",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/move_apply/v1/batch/import/forin"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "multipleImportDataIn",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general export-model-order-in",
+      "domain": "scm_general",
+      "action": "export-model-order-in",
+      "name": "exportModelOrderIn",
+      "description": "exportModelOrderIn",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/move_apply/v1/model/export/batch/forin"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "exportModelOrderIn",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general multiple-import-data-out",
+      "domain": "scm_general",
+      "action": "multiple-import-data-out",
+      "name": "multipleImportDataOut",
+      "description": "multipleImportDataOut",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/move_apply/v1/batch/import/forout"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "multipleImportDataOut",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general export-model-order-out",
+      "domain": "scm_general",
+      "action": "export-model-order-out",
+      "name": "exportModelOrderOut",
+      "description": "exportModelOrderOut",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/move_apply/v1/model/export/batch/forout"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "exportModelOrderOut",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general multiple-import-data-inner",
+      "domain": "scm_general",
+      "action": "multiple-import-data-inner",
+      "name": "multipleImportDataInner",
+      "description": "multipleImportDataInner",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/move_apply/v1/batch/import/inner"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "multipleImportDataInner",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general export-model-order-inner",
+      "domain": "scm_general",
+      "action": "export-model-order-inner",
+      "name": "exportModelOrderInner",
+      "description": "exportModelOrderInner",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/move_apply/v1/model/export/batch/inner"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "exportModelOrderInner",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general stock-amount",
+      "domain": "scm_general",
+      "action": "stock-amount",
+      "name": "stockAmount",
+      "description": "stockAmount",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/:param/detail/v1/:param/:param/stock/amount"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "stockAmount",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-bill-type-select",
+      "domain": "scm_general",
+      "action": "get-bill-type-select",
+      "name": "getBillTypeSelect",
+      "description": "getBillTypeSelect",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/move_apply/v1/types"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getBillTypeSelect",
+      "tags": [
+        "general",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_general check-mistake",
+      "domain": "scm_general",
+      "action": "check-mistake",
+      "name": "checkMistake",
+      "description": "checkMistake",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1/mistake_proofing/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "checkMistake",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general del-check-details-mulity",
+      "domain": "scm_general",
+      "action": "del-check-details-mulity",
+      "name": "delCheckDetailsMulity",
+      "description": "delCheckDetailsMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/move_apply/:param/detail/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "delCheckDetailsMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general merge-details",
+      "domain": "scm_general",
+      "action": "merge-details",
+      "name": "mergeDetails",
+      "description": "mergeDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1/handleStockOrderMethod"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "mergeDetails",
+      "tags": [
+        "general",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_general get-rel",
+      "domain": "scm_general",
+      "action": "get-rel",
+      "name": "getRel",
+      "description": "getRel",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1/mistake_proofing/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getRel",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-zero-amount",
+      "domain": "scm_general",
+      "action": "get-zero-amount",
+      "name": "getZeroAmount",
+      "description": "getZeroAmount",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1/mistake_proofing/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getZeroAmount",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-negative-store",
+      "domain": "scm_general",
+      "action": "get-negative-store",
+      "name": "getNegativeStore",
+      "description": "getNegativeStore",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1/mistake_proofing/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "getNegativeStore",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general copy-order",
+      "domain": "scm_general",
+      "action": "copy-order",
+      "name": "copyOrder",
+      "description": "copyOrder",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/move_apply/v1/copyMoveApply/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "copyOrder",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general stock-amount-to-item",
+      "domain": "scm_general",
+      "action": "stock-amount-to-item",
+      "name": "stockAmountToItem",
+      "description": "stockAmountToItem",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/:param/detail/v1/:param/:param/stock/amountToItem"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_move_order.js",
+      "source_function": "stockAmountToItem",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-page-3",
+      "domain": "scm_general",
+      "action": "get-page-3",
+      "name": "getPage",
+      "description": "getPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/price_adjust/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "getPage",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general get-del-page",
+      "domain": "scm_general",
+      "action": "get-del-page",
+      "name": "getDelPage",
+      "description": "getDelPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/price_adjust/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "getDelPage",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general add-2",
+      "domain": "scm_general",
+      "action": "add-2",
+      "name": "add",
+      "description": "add",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/price_adjust/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "add",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general edit",
+      "domain": "scm_general",
+      "action": "edit",
+      "name": "edit",
+      "description": "edit",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "edit",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general del-3",
+      "domain": "scm_general",
+      "action": "del-3",
+      "name": "del",
+      "description": "del",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/:param/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "del",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general delete-mulity-3",
+      "domain": "scm_general",
+      "action": "delete-mulity-3",
+      "name": "deleteMulity",
+      "description": "deleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "deleteMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-bill",
+      "domain": "scm_general",
+      "action": "get-bill",
+      "name": "getBill",
+      "description": "getBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/price_adjust/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "getBill",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general submit-2",
+      "domain": "scm_general",
+      "action": "submit-2",
+      "name": "submit",
+      "description": "submit",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/:param/submit"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "submit",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general submit-mulity-2",
+      "domain": "scm_general",
+      "action": "submit-mulity-2",
+      "name": "submitMulity",
+      "description": "submitMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/submit"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "submitMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general return-2",
+      "domain": "scm_general",
+      "action": "return-2",
+      "name": "return",
+      "description": "return",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/:param/back"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "return",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general return-mulity-2",
+      "domain": "scm_general",
+      "action": "return-mulity-2",
+      "name": "returnMulity",
+      "description": "returnMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/back"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "returnMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general check",
+      "domain": "scm_general",
+      "action": "check",
+      "name": "check",
+      "description": "check",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/:param/check"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "check",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general check-mulity-2",
+      "domain": "scm_general",
+      "action": "check-mulity-2",
+      "name": "checkMulity",
+      "description": "checkMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/check"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "checkMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general restore-mulity",
+      "domain": "scm_general",
+      "action": "restore-mulity",
+      "name": "restoreMulity",
+      "description": "restoreMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/restore"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "restoreMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general remove",
+      "domain": "scm_general",
+      "action": "remove",
+      "name": "remove",
+      "description": "remove",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/price_adjust/v1/:param/remove"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "remove",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general remove-mulity",
+      "domain": "scm_general",
+      "action": "remove-mulity",
+      "name": "removeMulity",
+      "description": "removeMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/remove"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "removeMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general del-empty-bill-2",
+      "domain": "scm_general",
+      "action": "del-empty-bill-2",
+      "name": "delEmptyBill",
+      "description": "delEmptyBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/price_adjust/v1/:param/silent"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "delEmptyBill",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-details-3",
+      "domain": "scm_general",
+      "action": "get-details-3",
+      "name": "getDetails",
+      "description": "getDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/price_adjust/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "getDetails",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general add-details-2",
+      "domain": "scm_general",
+      "action": "add-details-2",
+      "name": "addDetails",
+      "description": "addDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/price/adjust/:param/detail/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "addDetails",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general add-batch-details",
+      "domain": "scm_general",
+      "action": "add-batch-details",
+      "name": "addBatchDetails",
+      "description": "addBatchDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/price/adjust/:param/detail/v1/batchPriceAdjustDetail"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "addBatchDetails",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general add-batch-details-out",
+      "domain": "scm_general",
+      "action": "add-batch-details-out",
+      "name": "addBatchDetailsOut",
+      "description": "addBatchDetailsOut",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/price/adjust/:param/detail/v1/batchPriceAdjustDetailOut"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "addBatchDetailsOut",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general edit-detail",
+      "domain": "scm_general",
+      "action": "edit-detail",
+      "name": "editDetail",
+      "description": "editDetail",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price/adjust/:param/detail/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "editDetail",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general get-effect-bill",
+      "domain": "scm_general",
+      "action": "get-effect-bill",
+      "name": "getEffectBill",
+      "description": "getEffectBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/price/adjust/:param/detail/v1/record/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "getEffectBill",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general del-detail-2",
+      "domain": "scm_general",
+      "action": "del-detail-2",
+      "name": "delDetail",
+      "description": "delDetail",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/price/adjust/:param/detail/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "delDetail",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general del-detail-mulity-2",
+      "domain": "scm_general",
+      "action": "del-detail-mulity-2",
+      "name": "delDetailMulity",
+      "description": "delDetailMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/price/adjust/:param/detail/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "delDetailMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general set-mulity",
+      "domain": "scm_general",
+      "action": "set-mulity",
+      "name": "setMulity",
+      "description": "setMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/:param/detail/v1/set"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "setMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general clear",
+      "domain": "scm_general",
+      "action": "clear",
+      "name": "clear",
+      "description": "clear",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/price/adjust/:param/detail/v1/clear"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "clear",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general adjust-cost",
+      "domain": "scm_general",
+      "action": "adjust-cost",
+      "name": "adjustCost",
+      "description": "adjustCost",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/price_adjust/v1/adjustCost"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "adjustCost",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general execute",
+      "domain": "scm_general",
+      "action": "execute",
+      "name": "execute",
+      "description": "execute",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/price_adjust/v1/:param/excute"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "execute",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general multiple-import-data",
+      "domain": "scm_general",
+      "action": "multiple-import-data",
+      "name": "multipleImportData",
+      "description": "multipleImportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/price_adjust/v1/import/model"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "multipleImportData",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general multiple-out-import-data",
+      "domain": "scm_general",
+      "action": "multiple-out-import-data",
+      "name": "multipleOutImportData",
+      "description": "multipleOutImportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/price_adjust/v1/import/modelout"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "multipleOutImportData",
+      "tags": [
+        "general",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_general export-model-order",
+      "domain": "scm_general",
+      "action": "export-model-order",
+      "name": "exportModelOrder",
+      "description": "exportModelOrder",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/price_adjust/v1/model/export/template"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "exportModelOrder",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general export-model-out-order",
+      "domain": "scm_general",
+      "action": "export-model-out-order",
+      "name": "exportModelOutOrder",
+      "description": "exportModelOutOrder",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/price_adjust/v1/model/export/templateout"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_price_adjust_order.js",
+      "source_function": "exportModelOutOrder",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general export-data-3",
+      "domain": "scm_general",
+      "action": "export-data-3",
+      "name": "exportData",
+      "description": "exportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "group",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/item/group/v1/:param/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_item_custom_group.js",
+      "source_function": "exportData",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general export-model-2",
+      "domain": "scm_general",
+      "action": "export-model-2",
+      "name": "exportModel",
+      "description": "exportModel",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "group",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/item/group/v1/:param/modle/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_item_custom_group.js",
+      "source_function": "exportModel",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general import-data-2",
+      "domain": "scm_general",
+      "action": "import-data-2",
+      "name": "importData",
+      "description": "importData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "group",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/item/group/v1/:param/import"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_item_custom_group.js",
+      "source_function": "importData",
+      "tags": [
+        "general",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_general export-data-4",
+      "domain": "scm_general",
+      "action": "export-data-4",
+      "name": "exportData",
+      "description": "exportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/order/class/v1/:param/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_item_receive_class.js",
+      "source_function": "exportData",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general add-3",
+      "domain": "scm_general",
+      "action": "add-3",
+      "name": "add",
+      "description": "add",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/check/class/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "add",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general save-2",
+      "domain": "scm_general",
+      "action": "save-2",
+      "name": "save",
+      "description": "save",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/class/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "save",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general del-4",
+      "domain": "scm_general",
+      "action": "del-4",
+      "name": "del",
+      "description": "del",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/check/class/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "del",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-3",
+      "domain": "scm_general",
+      "action": "get-3",
+      "name": "get",
+      "description": "get",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/check/class/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "get",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-page-4",
+      "domain": "scm_general",
+      "action": "get-page-4",
+      "name": "getPage",
+      "description": "getPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/check/class/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "getPage",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general setting-house",
+      "domain": "scm_general",
+      "action": "setting-house",
+      "name": "settingHouse",
+      "description": "settingHouse",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/class/house/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "settingHouse",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general setting-item",
+      "domain": "scm_general",
+      "action": "setting-item",
+      "name": "settingItem",
+      "description": "settingItem",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/class/item/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "settingItem",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general setting-must-item",
+      "domain": "scm_general",
+      "action": "setting-must-item",
+      "name": "settingMustItem",
+      "description": "settingMustItem",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/class/item/v1/must/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "settingMustItem",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-store-by-id",
+      "domain": "scm_general",
+      "action": "get-store-by-id",
+      "name": "getStoreById",
+      "description": "getStoreById",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/check/class/house/v1/all/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "getStoreById",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-item-by-id",
+      "domain": "scm_general",
+      "action": "get-item-by-id",
+      "name": "getItemById",
+      "description": "getItemById",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/check/class/item/v1/all/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "getItemById",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general get-must-item-by-id",
+      "domain": "scm_general",
+      "action": "get-must-item-by-id",
+      "name": "getMustItemById",
+      "description": "getMustItemById",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/check/class/item/v1/all/must/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "getMustItemById",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general disable-mulity",
+      "domain": "scm_general",
+      "action": "disable-mulity",
+      "name": "disableMulity",
+      "description": "disableMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/class/v1/disable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "disableMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general enabel-mulity",
+      "domain": "scm_general",
+      "action": "enabel-mulity",
+      "name": "enabelMulity",
+      "description": "enabelMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/class/v1/enable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "enabelMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general delete-mulity-4",
+      "domain": "scm_general",
+      "action": "delete-mulity-4",
+      "name": "deleteMulity",
+      "description": "deleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/class/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "deleteMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general export-data-5",
+      "domain": "scm_general",
+      "action": "export-data-5",
+      "name": "exportData",
+      "description": "exportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/check_class/v1/:param/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "exportData",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general get-take-stock-sort",
+      "domain": "scm_general",
+      "action": "get-take-stock-sort",
+      "name": "getTakeStockSort",
+      "description": "getTakeStockSort",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/check/class/sort/v1/search"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "getTakeStockSort",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general save-take-stock-sort",
+      "domain": "scm_general",
+      "action": "save-take-stock-sort",
+      "name": "saveTakeStockSort",
+      "description": "saveTakeStockSort",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/check/class/sort/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "saveTakeStockSort",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general setting-mulity-2",
+      "domain": "scm_general",
+      "action": "setting-mulity-2",
+      "name": "settingMulity",
+      "description": "settingMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/check/class/sort/v1/batch"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "settingMulity",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general export-model-3",
+      "domain": "scm_general",
+      "action": "export-model-3",
+      "name": "exportModel",
+      "description": "exportModel",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/check_class/v1/model/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "exportModel",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general import-data-3",
+      "domain": "scm_general",
+      "action": "import-data-3",
+      "name": "importData",
+      "description": "importData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/check_class/v1/import"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "importData",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general copy-data",
+      "domain": "scm_general",
+      "action": "copy-data",
+      "name": "copyData",
+      "description": "copyData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/check/class/v1/copy/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "copyData",
+      "tags": [
+        "general",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_general export-sort",
+      "domain": "scm_general",
+      "action": "export-sort",
+      "name": "exportSort",
+      "description": "exportSort",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/check_class/v1/:param/sort/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "exportSort",
+      "tags": [
+        "general",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_general import-sort",
+      "domain": "scm_general",
+      "action": "import-sort",
+      "name": "importSort",
+      "description": "importSort",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/check_class/v1/:param/sort/import"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_take_stock_class.js",
+      "source_function": "importSort",
+      "tags": [
+        "general",
+        "action"
+      ]
+    }
+  ]
+}

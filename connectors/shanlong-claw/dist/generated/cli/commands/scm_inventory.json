@@ -1,0 +1,1228 @@
+{
+  "domain": "scm_inventory",
+  "count": 47,
+  "commands": [
+    {
+      "command": "sl scm_inventory get-page",
+      "domain": "scm_inventory",
+      "action": "get-page",
+      "name": "getPage",
+      "description": "getPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/report/inventory/current"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_currentInventory.js",
+      "source_function": "getPage",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory export-excel",
+      "domain": "scm_inventory",
+      "action": "export-excel",
+      "name": "exportExcel",
+      "description": "exportExcel",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/inventory/current/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_currentInventory.js",
+      "source_function": "exportExcel",
+      "tags": [
+        "inventory",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_inventory unknown",
+      "domain": "scm_inventory",
+      "action": "unknown",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/organ/v1/manage/simple/tab"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_currentInventory.js",
+      "source_function": "unknown",
+      "tags": [
+        "inventory",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_inventory unknown-2",
+      "domain": "scm_inventory",
+      "action": "unknown-2",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/house/v1/manage/simple/tab"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_currentInventory.js",
+      "source_function": "unknown",
+      "tags": [
+        "inventory",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-item-type-cascader",
+      "domain": "scm_inventory",
+      "action": "get-item-type-cascader",
+      "name": "getItemTypeCascader",
+      "description": "getItemTypeCascader",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/item/type/v1/tree"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_currentInventory.js",
+      "source_function": "getItemTypeCascader",
+      "tags": [
+        "inventory",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-item-select-list",
+      "domain": "scm_inventory",
+      "action": "get-item-select-list",
+      "name": "getItemSelectList",
+      "description": "getItemSelectList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/report/ttjrealtimeinventory/v1/getItemByIdsAndCategory"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_currentInventory.js",
+      "source_function": "getItemSelectList",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-summary",
+      "domain": "scm_inventory",
+      "action": "get-summary",
+      "name": "getSummary",
+      "description": "getSummary",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/report/inventory/current/sum"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_currentInventory.js",
+      "source_function": "getSummary",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-page-2",
+      "domain": "scm_inventory",
+      "action": "get-page-2",
+      "name": "getPage",
+      "description": "getPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/report/ttjrealtimeinventory/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_realTimeStockSearch.js",
+      "source_function": "getPage",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory unknown-3",
+      "domain": "scm_inventory",
+      "action": "unknown-3",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/organ/v1/manage/simple/tab"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_realTimeStockSearch.js",
+      "source_function": "unknown",
+      "tags": [
+        "inventory",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-item-type-cascader-2",
+      "domain": "scm_inventory",
+      "action": "get-item-type-cascader-2",
+      "name": "getItemTypeCascader",
+      "description": "getItemTypeCascader",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/item/type/v1/tree"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_realTimeStockSearch.js",
+      "source_function": "getItemTypeCascader",
+      "tags": [
+        "inventory",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-item-select-list-2",
+      "domain": "scm_inventory",
+      "action": "get-item-select-list-2",
+      "name": "getItemSelectList",
+      "description": "getItemSelectList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/report/ttjrealtimeinventory/v1/getItemByIdsAndCategory"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_realTimeStockSearch.js",
+      "source_function": "getItemSelectList",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory export-excel-2",
+      "domain": "scm_inventory",
+      "action": "export-excel-2",
+      "name": "exportExcel",
+      "description": "exportExcel",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/ttjrealtimeinventory/v1/realtimeinventory/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_realTimeStockSearch.js",
+      "source_function": "exportExcel",
+      "tags": [
+        "inventory",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_inventory unknown-4",
+      "domain": "scm_inventory",
+      "action": "unknown-4",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/report/assign_summary/v1/sort_inventory"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/bill/api_bill-assign-summary.js",
+      "source_function": "unknown",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory unknown-5",
+      "domain": "scm_inventory",
+      "action": "unknown-5",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/assign_summary/v1/sort_inventory/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/bill/api_bill-assign-summary.js",
+      "source_function": "unknown",
+      "tags": [
+        "inventory",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-insufficient-inventory",
+      "domain": "scm_inventory",
+      "action": "get-insufficient-inventory",
+      "name": "getInsufficientInventory",
+      "description": "getInsufficientInventory",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/stock_plans/v1/mistake_proofing/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/bill/api_bill-stock-plan.js",
+      "source_function": "getInsufficientInventory",
+      "tags": [
+        "inventory",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-insufficient-inventory-2",
+      "domain": "scm_inventory",
+      "action": "get-insufficient-inventory-2",
+      "name": "getInsufficientInventory",
+      "description": "getInsufficientInventory",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/stock_order/v1/mistake_proofing/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/bill/api_bill-stock.js",
+      "source_function": "getInsufficientInventory",
+      "tags": [
+        "inventory",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-filter-organ-select-list",
+      "domain": "scm_inventory",
+      "action": "get-filter-organ-select-list",
+      "name": "getFilterOrganSelectList",
+      "description": "getFilterOrganSelectList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/organList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_close_accounts.js",
+      "source_function": "getFilterOrganSelectList",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-page-list",
+      "domain": "scm_inventory",
+      "action": "get-page-list",
+      "name": "getPageList",
+      "description": "getPageList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_close_accounts.js",
+      "source_function": "getPageList",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-un-check-bill",
+      "domain": "scm_inventory",
+      "action": "get-un-check-bill",
+      "name": "getUnCheckBill",
+      "description": "getUnCheckBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/getUnCheckBill"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_close_accounts.js",
+      "source_function": "getUnCheckBill",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory carry-forward",
+      "domain": "scm_inventory",
+      "action": "carry-forward",
+      "name": "carryForward",
+      "description": "carryForward",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/closeAccounts"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_close_accounts.js",
+      "source_function": "carryForward",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory reverse-carry-forward",
+      "domain": "scm_inventory",
+      "action": "reverse-carry-forward",
+      "name": "reverseCarryForward",
+      "description": "reverseCarryForward",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/uncloseAccounts"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_close_accounts.js",
+      "source_function": "reverseCarryForward",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-filter-organ-select-list-2",
+      "domain": "scm_inventory",
+      "action": "get-filter-organ-select-list-2",
+      "name": "getFilterOrganSelectList",
+      "description": "getFilterOrganSelectList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/organList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "getFilterOrganSelectList",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-filter-period-select-list",
+      "domain": "scm_inventory",
+      "action": "get-filter-period-select-list",
+      "name": "getFilterPeriodSelectList",
+      "description": "getFilterPeriodSelectList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/accounting_period/v1/all/year/month"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "getFilterPeriodSelectList",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-page-list-2",
+      "domain": "scm_inventory",
+      "action": "get-page-list-2",
+      "name": "getPageList",
+      "description": "getPageList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "getPageList",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory verify",
+      "domain": "scm_inventory",
+      "action": "verify",
+      "name": "verify",
+      "description": "verify",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/month/balance/v1/verify"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "verify",
+      "tags": [
+        "inventory",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_inventory un-verify",
+      "domain": "scm_inventory",
+      "action": "un-verify",
+      "name": "unVerify",
+      "description": "unVerify",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/un/month/balance/v1/verify"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "unVerify",
+      "tags": [
+        "inventory",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-queue",
+      "domain": "scm_inventory",
+      "action": "get-queue",
+      "name": "getQueue",
+      "description": "getQueue",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/month/balance/v1/queue"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "getQueue",
+      "tags": [
+        "inventory",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_inventory unknown-6",
+      "domain": "scm_inventory",
+      "action": "unknown-6",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/un/month/balance/v1/queue"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "unknown",
+      "tags": [
+        "inventory",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-un-check-bill-2",
+      "domain": "scm_inventory",
+      "action": "get-un-check-bill-2",
+      "name": "getUnCheckBill",
+      "description": "getUnCheckBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/getUnCheckBill"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "getUnCheckBill",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory carry-forward-2",
+      "domain": "scm_inventory",
+      "action": "carry-forward-2",
+      "name": "carryForward",
+      "description": "carryForward",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/inventory"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "carryForward",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory reverse-carry-forward-2",
+      "domain": "scm_inventory",
+      "action": "reverse-carry-forward-2",
+      "name": "reverseCarryForward",
+      "description": "reverseCarryForward",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/uninventory"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "reverseCarryForward",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-reason",
+      "domain": "scm_inventory",
+      "action": "get-reason",
+      "name": "getReason",
+      "description": "getReason",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/month/balance/v1/failed/reason/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "getReason",
+      "tags": [
+        "inventory",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_inventory unknown-7",
+      "domain": "scm_inventory",
+      "action": "unknown-7",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/un/month/balance/v1/failed/reason/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_inventory_cost_accounting.js",
+      "source_function": "unknown",
+      "tags": [
+        "inventory",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_inventory inventory-disable",
+      "domain": "scm_inventory",
+      "action": "inventory-disable",
+      "name": "inventoryDisable",
+      "description": "inventoryDisable",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/finance/cw_organ/v1/disableInventory"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_organ_manage.js",
+      "source_function": "inventoryDisable",
+      "tags": [
+        "inventory",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_inventory inventory-enable",
+      "domain": "scm_inventory",
+      "action": "inventory-enable",
+      "name": "inventoryEnable",
+      "description": "inventoryEnable",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/finance/cw_organ/v1/enableInventory"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_financial_organ_manage.js",
+      "source_function": "inventoryEnable",
+      "tags": [
+        "inventory",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-organ-inventory-accounting",
+      "domain": "scm_inventory",
+      "action": "get-organ-inventory-accounting",
+      "name": "getOrganInventoryAccounting",
+      "description": "getOrganInventoryAccounting",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/organ"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_payable_order.js",
+      "source_function": "getOrganInventoryAccounting",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-organ-inventory-accounting-2",
+      "domain": "scm_inventory",
+      "action": "get-organ-inventory-accounting-2",
+      "name": "getOrganInventoryAccounting",
+      "description": "getOrganInventoryAccounting",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/organ"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/financial/api_receivable_order.js",
+      "source_function": "getOrganInventoryAccounting",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-organ-inventory-accounting-3",
+      "domain": "scm_inventory",
+      "action": "get-organ-inventory-accounting-3",
+      "name": "getOrganInventoryAccounting",
+      "description": "getOrganInventoryAccounting",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/organ"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/invoice/api_purchase-invoice-new.js",
+      "source_function": "getOrganInventoryAccounting",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-organ-inventory-accounting-4",
+      "domain": "scm_inventory",
+      "action": "get-organ-inventory-accounting-4",
+      "name": "getOrganInventoryAccounting",
+      "description": "getOrganInventoryAccounting",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/finance/inventoryAccounting/v1/organ"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/invoice/api_purchase-invoice-register.js",
+      "source_function": "getOrganInventoryAccounting",
+      "tags": [
+        "inventory",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_inventory add-reason",
+      "domain": "scm_inventory",
+      "action": "add-reason",
+      "name": "addReason",
+      "description": "addReason",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/check/cause/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_inventory_profit_reason.js",
+      "source_function": "addReason",
+      "tags": [
+        "inventory",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_inventory edit-reason",
+      "domain": "scm_inventory",
+      "action": "edit-reason",
+      "name": "editReason",
+      "description": "editReason",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/cause/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_inventory_profit_reason.js",
+      "source_function": "editReason",
+      "tags": [
+        "inventory",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_inventory delete",
+      "domain": "scm_inventory",
+      "action": "delete",
+      "name": "delete",
+      "description": "delete",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/bill/check/cause/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_inventory_profit_reason.js",
+      "source_function": "delete",
+      "tags": [
+        "inventory",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-reason-details",
+      "domain": "scm_inventory",
+      "action": "get-reason-details",
+      "name": "getReasonDetails",
+      "description": "getReasonDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/bill/check/cause/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_inventory_profit_reason.js",
+      "source_function": "getReasonDetails",
+      "tags": [
+        "inventory",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_inventory get-reason-list",
+      "domain": "scm_inventory",
+      "action": "get-reason-list",
+      "name": "getReasonList",
+      "description": "getReasonList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/check/cause/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_inventory_profit_reason.js",
+      "source_function": "getReasonList",
+      "tags": [
+        "inventory",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_inventory disable-mulity",
+      "domain": "scm_inventory",
+      "action": "disable-mulity",
+      "name": "disableMulity",
+      "description": "disableMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/cause/v1/disable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_inventory_profit_reason.js",
+      "source_function": "disableMulity",
+      "tags": [
+        "inventory",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_inventory enabel-mulity",
+      "domain": "scm_inventory",
+      "action": "enabel-mulity",
+      "name": "enabelMulity",
+      "description": "enabelMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/cause/v1/enable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_inventory_profit_reason.js",
+      "source_function": "enabelMulity",
+      "tags": [
+        "inventory",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_inventory delete-mulity",
+      "domain": "scm_inventory",
+      "action": "delete-mulity",
+      "name": "deleteMulity",
+      "description": "deleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/bill/check/cause/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_inventory_profit_reason.js",
+      "source_function": "deleteMulity",
+      "tags": [
+        "inventory",
+        "action"
+      ]
+    }
+  ]
+}

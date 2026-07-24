@@ -1,0 +1,139 @@
+{
+  "domain": "report_saas",
+  "product": "report",
+  "source": "cy7reportcenter-webapp",
+  "generated_at": "2026-04-21T11:56:45.810Z",
+  "count": 5,
+  "commands": [
+    {
+      "action": "singleupgradedataallissued",
+      "name": "服务管理器调用单店转分店接口 controller",
+      "description": "服务管理器调用单店转分店接口 controller",
+      "command": "sl report_saas singleupgradedataallissued",
+      "domain": "report_saas",
+      "product": "report",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "path": "/canyin/transfer/singleupgrade/singleupgradedataallissued",
+        "method": "GET"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_REPORT_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN"
+      },
+      "source_file": "cn/com/tcsl/canyin/transfer/controller/SingleUpgradeController.java",
+      "source_function": "singleUpgradeDataAllIssued",
+      "tags": [
+        "report",
+        "saas"
+      ],
+      "security_level": "S1"
+    },
+    {
+      "action": "issued",
+      "name": "总部数据下发",
+      "description": "总部数据下发",
+      "command": "sl report_saas issued",
+      "domain": "report_saas",
+      "product": "report",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "path": "/cy7saascenter/jcdt/bizdataissued/issued",
+        "method": "GET"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_REPORT_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN"
+      },
+      "source_file": "cn/com/tcsl/cy7saascenter/jcdt/controller/BizDataIssuedController.java",
+      "source_function": "issued",
+      "tags": [
+        "report",
+        "saas"
+      ],
+      "security_level": "S3"
+    },
+    {
+      "action": "reupload",
+      "name": "门店数据重传",
+      "description": "门店数据重传",
+      "command": "sl report_saas reupload",
+      "domain": "report_saas",
+      "product": "report",
+      "credential_type": "cy7",
+      "perspective": "store",
+      "category": "manage",
+      "endpoint": {
+        "path": "/cy7saascenter/jcdt/bizdataissuedreupload/reupload",
+        "method": "GET"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_REPORT_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN"
+      },
+      "source_file": "cn/com/tcsl/cy7saascenter/jcdt/controller/BizDataIssuedReuploadController.java",
+      "source_function": "reupload",
+      "tags": [
+        "manage",
+        "saas"
+      ],
+      "security_level": "S1"
+    },
+    {
+      "action": "uploadlastusedinfo",
+      "name": "上传最后使用情况接口",
+      "description": "上传最后使用情况接口",
+      "command": "sl report_saas uploadlastusedinfo",
+      "domain": "report_saas",
+      "product": "report",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "path": "/cy7saascenter/lastusedinfo/lastusedinfo/uploadlastusedinfo",
+        "method": "GET"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_REPORT_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN"
+      },
+      "source_file": "cn/com/tcsl/cy7saascenter/lastusedinfo/controller/LastUsedInfoController.java",
+      "source_function": "uploadLastUsedInfo",
+      "tags": [
+        "manage",
+        "saas"
+      ],
+      "security_level": "S2"
+    },
+    {
+      "action": "systeminitial",
+      "name": "系统初始化Controller",
+      "description": "系统初始化Controller",
+      "command": "sl report_saas systeminitial",
+      "domain": "report_saas",
+      "product": "report",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "path": "/cy7saascenter/sysinit/systeminitial/systeminitial",
+        "method": "GET"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_REPORT_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN"
+      },
+      "source_file": "cn/com/tcsl/cy7saascenter/sysinit/controller/SystemInitialController.java",
+      "source_function": "systemInitial",
+      "tags": [
+        "report",
+        "saas"
+      ],
+      "security_level": "S1"
+    }
+  ]
+}

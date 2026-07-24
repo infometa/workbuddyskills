@@ -1,0 +1,934 @@
+{
+  "domain": "finance",
+  "count": 16,
+  "commands": [
+    {
+      "command": "sl finance get-page-list",
+      "domain": "finance",
+      "action": "get-page-list",
+      "name": "价格档列表",
+      "description": "价格档列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pricerange/pagelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/CMPriceRange.js",
+      "source_function": "getPageList",
+      "tags": [
+        "finance",
+        "query",
+        "菜品",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "价格档列表",
+      "relations": {
+        "depends_on": [],
+        "feeds_into": [
+          {
+            "command": "sl finance get-one",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl finance save",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl finance remove",
+            "relation": "delete_from",
+            "description": "从列表删除档案"
+          },
+          {
+            "command": "sl finance download",
+            "relation": "export_from",
+            "description": "导出档案列表"
+          }
+        ],
+        "role": "list",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl finance download",
+      "domain": "finance",
+      "action": "download",
+      "name": "价格档导出",
+      "description": "价格档导出",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pricerange/download"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/CMPriceRange.js",
+      "source_function": "download",
+      "tags": [
+        "finance",
+        "export",
+        "菜品",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "价格档导出",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl finance get-page-list",
+            "relation": "export_from",
+            "description": "导出档案列表"
+          },
+          {
+            "command": "sl finance get-page-list-cy7",
+            "relation": "export_from",
+            "description": "导出档案列表"
+          }
+        ],
+        "feeds_into": [],
+        "role": "export",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl finance upload",
+      "domain": "finance",
+      "action": "upload",
+      "name": "价格档导入",
+      "description": "价格档导入",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pricerange/upload"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/CMPriceRange.js",
+      "source_function": "upload",
+      "tags": [
+        "finance",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "价格档导入"
+    },
+    {
+      "command": "sl finance save-task",
+      "domain": "finance",
+      "action": "save-task",
+      "name": "新建价格调整单",
+      "description": "新建价格调整单",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pricerange/savetask"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/CMPriceRange.js",
+      "source_function": "saveTask",
+      "tags": [
+        "finance",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "formInfo",
+          "type": "string",
+          "required": false,
+          "description": "formInfo"
+        },
+        {
+          "name": "shopIds",
+          "type": "string",
+          "required": false,
+          "description": "门店ID"
+        }
+      ],
+      "description_short": "新建价格调整单"
+    },
+    {
+      "command": "sl finance cancel-publish",
+      "domain": "finance",
+      "action": "cancel-publish",
+      "name": "撤销发布",
+      "description": "撤销发布",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pricerange/backout"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/CMPriceRange.js",
+      "source_function": "cancelPublish",
+      "tags": [
+        "finance",
+        "action",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "executionTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        },
+        {
+          "name": "shopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "撤销发布"
+    },
+    {
+      "command": "sl finance tasklist",
+      "domain": "finance",
+      "action": "tasklist",
+      "name": "价格调整单列表查询",
+      "description": "价格调整单列表查询",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pricerange/tasklist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/CMPriceRange.js",
+      "source_function": "tasklist",
+      "tags": [
+        "finance",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "价格调整单列表查询"
+    },
+    {
+      "command": "sl finance task-state",
+      "domain": "finance",
+      "action": "task-state",
+      "name": "任务状态下拉",
+      "description": "任务状态下拉",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pricerange/taskstate"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/CMPriceRange.js",
+      "source_function": "taskState",
+      "tags": [
+        "finance",
+        "report",
+        "菜品",
+        "报表"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "任务状态下拉"
+    },
+    {
+      "command": "sl finance shop-list",
+      "domain": "finance",
+      "action": "shop-list",
+      "name": "过滤仅支持价格档的门店列表下拉列表",
+      "description": "过滤仅支持价格档的门店列表下拉列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "store",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/metadata/shop/shopList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID",
+        "shopId": "SL_CY7_STORE_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/CMPriceRange.js",
+      "source_function": "shopList",
+      "tags": [
+        "finance",
+        "query",
+        "门店",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "过滤仅支持价格档的门店列表下拉列表"
+    },
+    {
+      "command": "sl finance get-drop-list",
+      "domain": "finance",
+      "action": "get-drop-list",
+      "name": "下拉列表",
+      "description": "下拉列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/serviceCharge/getDropList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/serviceChargePlan.js",
+      "source_function": "getDropList",
+      "tags": [
+        "finance",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "下拉列表"
+    },
+    {
+      "command": "sl finance get-page-list-cy7",
+      "domain": "finance",
+      "action": "get-page-list-cy7",
+      "name": "分页列表",
+      "description": "分页列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/serviceCharge/getPageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/serviceChargePlan.js",
+      "source_function": "getPageList",
+      "tags": [
+        "finance",
+        "query",
+        "菜品",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "分页列表",
+      "relations": {
+        "depends_on": [],
+        "feeds_into": [
+          {
+            "command": "sl finance get-one",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl finance save",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl finance remove",
+            "relation": "delete_from",
+            "description": "从列表删除档案"
+          },
+          {
+            "command": "sl finance download",
+            "relation": "export_from",
+            "description": "导出档案列表"
+          }
+        ],
+        "role": "list",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl finance get-one",
+      "domain": "finance",
+      "action": "get-one",
+      "name": "查看明细",
+      "description": "查看明细",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/serviceCharge/getOne"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/serviceChargePlan.js",
+      "source_function": "getOne",
+      "tags": [
+        "finance",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        }
+      ],
+      "description_short": "查看明细",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl finance get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl finance get-page-list-cy7",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl finance modify",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl finance get-new-code",
+      "domain": "finance",
+      "action": "get-new-code",
+      "name": "获取新code",
+      "description": "获取新code",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/serviceCharge/getNew"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/serviceChargePlan.js",
+      "source_function": "getNewCode",
+      "tags": [
+        "finance",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取新code"
+    },
+    {
+      "command": "sl finance save",
+      "domain": "finance",
+      "action": "save",
+      "name": "新增服务费方案",
+      "description": "新增服务费方案",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/serviceCharge/save"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/serviceChargePlan.js",
+      "source_function": "save",
+      "tags": [
+        "finance",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "pageTab",
+          "type": "string",
+          "required": false,
+          "description": "pageTab"
+        },
+        {
+          "name": "posId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "formData",
+          "type": "string",
+          "required": false,
+          "description": "formData"
+        },
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "pageModule",
+          "type": "string",
+          "required": false,
+          "description": "pageModule"
+        },
+        {
+          "name": "menuId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "新增服务费方案",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl finance get-page-list",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl finance get-page-list-cy7",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "create",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl finance modify",
+      "domain": "finance",
+      "action": "modify",
+      "name": "修改服务费方案",
+      "description": "修改服务费方案",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/serviceCharge/modify"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/serviceChargePlan.js",
+      "source_function": "modify",
+      "tags": [
+        "finance",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "record",
+          "type": "string",
+          "required": false,
+          "description": "record"
+        },
+        {
+          "name": "isEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        }
+      ],
+      "description_short": "修改服务费方案",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl finance get-one",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "update",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl finance modify-enable",
+      "domain": "finance",
+      "action": "modify-enable",
+      "name": "修改服务费方案启用状态",
+      "description": "修改服务费方案启用状态",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/serviceCharge/modifyEnable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/serviceChargePlan.js",
+      "source_function": "modifyEnable",
+      "tags": [
+        "finance",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "modifyTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        },
+        {
+          "name": "belongShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isCreateCenter",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        }
+      ],
+      "description_short": "修改服务费方案启用状态"
+    },
+    {
+      "command": "sl finance remove",
+      "domain": "finance",
+      "action": "remove",
+      "name": "删除服务费方案",
+      "description": "删除服务费方案",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/serviceCharge/remove"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/serviceChargePlan.js",
+      "source_function": "remove",
+      "tags": [
+        "finance",
+        "action",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除服务费方案",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl finance get-page-list",
+            "relation": "delete_from",
+            "description": "从列表删除档案"
+          },
+          {
+            "command": "sl finance get-page-list-cy7",
+            "relation": "delete_from",
+            "description": "从列表删除档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "delete",
+        "workflow": "archive_crud"
+      }
+    }
+  ]
+}

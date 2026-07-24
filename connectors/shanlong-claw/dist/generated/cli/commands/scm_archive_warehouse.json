@@ -1,0 +1,1150 @@
+{
+  "domain": "scm_archive_warehouse",
+  "count": 44,
+  "commands": [
+    {
+      "command": "sl scm_archive_warehouse get-container-type-list",
+      "domain": "scm_archive_warehouse",
+      "action": "get-container-type-list",
+      "name": "getContainerTypeList",
+      "description": "getContainerTypeList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/container/v1/all"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "getContainerTypeList",
+      "tags": [
+        "archive_warehouse",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-container-type-enable-list",
+      "domain": "scm_archive_warehouse",
+      "action": "get-container-type-enable-list",
+      "name": "getContainerTypeEnableList",
+      "description": "getContainerTypeEnableList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/container/v1/all"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "getContainerTypeEnableList",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse add-container-type",
+      "domain": "scm_archive_warehouse",
+      "action": "add-container-type",
+      "name": "addContainerType",
+      "description": "addContainerType",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/container/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "addContainerType",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-container-page",
+      "domain": "scm_archive_warehouse",
+      "action": "get-container-page",
+      "name": "getContainerPage",
+      "description": "getContainerPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/containerCode/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "getContainerPage",
+      "tags": [
+        "archive_warehouse",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse add-container",
+      "domain": "scm_archive_warehouse",
+      "action": "add-container",
+      "name": "addContainer",
+      "description": "addContainer",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/containerCode/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "addContainer",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-details",
+      "domain": "scm_archive_warehouse",
+      "action": "get-details",
+      "name": "getDetails",
+      "description": "getDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/containerCode/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "getDetails",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse edit-container",
+      "domain": "scm_archive_warehouse",
+      "action": "edit-container",
+      "name": "editContainer",
+      "description": "editContainer",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/containerCode/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "editContainer",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse delete-mulity",
+      "domain": "scm_archive_warehouse",
+      "action": "delete-mulity",
+      "name": "deleteMulity",
+      "description": "deleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/containerCode/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "deleteMulity",
+      "tags": [
+        "archive_warehouse",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse enable-mulity",
+      "domain": "scm_archive_warehouse",
+      "action": "enable-mulity",
+      "name": "enableMulity",
+      "description": "enableMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/containerCode/v1/enable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "enableMulity",
+      "tags": [
+        "archive_warehouse",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse disable-mulity",
+      "domain": "scm_archive_warehouse",
+      "action": "disable-mulity",
+      "name": "disableMulity",
+      "description": "disableMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/containerCode/v1/disable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "disableMulity",
+      "tags": [
+        "archive_warehouse",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse multiple-import-data",
+      "domain": "scm_archive_warehouse",
+      "action": "multiple-import-data",
+      "name": "multipleImportData",
+      "description": "multipleImportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/container_code/v1/import"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "multipleImportData",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse export-model-order",
+      "domain": "scm_archive_warehouse",
+      "action": "export-model-order",
+      "name": "exportModelOrder",
+      "description": "exportModelOrder",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/container_code/v1/batch/model/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "exportModelOrder",
+      "tags": [
+        "archive_warehouse",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse export-mulity",
+      "domain": "scm_archive_warehouse",
+      "action": "export-mulity",
+      "name": "exportMulity",
+      "description": "exportMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/container_code/v1/batch/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_container-manage.js",
+      "source_function": "exportMulity",
+      "tags": [
+        "archive_warehouse",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-rack-tree",
+      "domain": "scm_archive_warehouse",
+      "action": "get-rack-tree",
+      "name": "getRackTree",
+      "description": "getRackTree",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/shelves/v1/tree"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "getRackTree",
+      "tags": [
+        "archive_warehouse",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse add-rack",
+      "domain": "scm_archive_warehouse",
+      "action": "add-rack",
+      "name": "addRack",
+      "description": "addRack",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/shelves/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "addRack",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse edit-rack",
+      "domain": "scm_archive_warehouse",
+      "action": "edit-rack",
+      "name": "editRack",
+      "description": "editRack",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/shelves/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "editRack",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse del-rack",
+      "domain": "scm_archive_warehouse",
+      "action": "del-rack",
+      "name": "delRack",
+      "description": "delRack",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/archive/shelves/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "delRack",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-rack",
+      "domain": "scm_archive_warehouse",
+      "action": "get-rack",
+      "name": "getRack",
+      "description": "getRack",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/shelves/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "getRack",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-filter-space-list",
+      "domain": "scm_archive_warehouse",
+      "action": "get-filter-space-list",
+      "name": "getFilterSpaceList",
+      "description": "getFilterSpaceList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/house_item_location/v1/search"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "getFilterSpaceList",
+      "tags": [
+        "archive_warehouse",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-filter-rack-list",
+      "domain": "scm_archive_warehouse",
+      "action": "get-filter-rack-list",
+      "name": "getFilterRackList",
+      "description": "getFilterRackList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/shelves/v1/search"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "getFilterRackList",
+      "tags": [
+        "archive_warehouse",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse unknown",
+      "domain": "scm_archive_warehouse",
+      "action": "unknown",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/house/v1/all/simple/tab"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "unknown",
+      "tags": [
+        "archive_warehouse",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-list-data",
+      "domain": "scm_archive_warehouse",
+      "action": "get-list-data",
+      "name": "getListData",
+      "description": "getListData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/house_item_location/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "getListData",
+      "tags": [
+        "archive_warehouse",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-rack-list",
+      "domain": "scm_archive_warehouse",
+      "action": "get-rack-list",
+      "name": "getRackList",
+      "description": "getRackList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/shelves/v1/search"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "getRackList",
+      "tags": [
+        "archive_warehouse",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-details-2",
+      "domain": "scm_archive_warehouse",
+      "action": "get-details-2",
+      "name": "getDetails",
+      "description": "getDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/house_item_location/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "getDetails",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse add",
+      "domain": "scm_archive_warehouse",
+      "action": "add",
+      "name": "add",
+      "description": "add",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/house_item_location/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "add",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse update",
+      "domain": "scm_archive_warehouse",
+      "action": "update",
+      "name": "update",
+      "description": "update",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/house_item_location/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "update",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse enable",
+      "domain": "scm_archive_warehouse",
+      "action": "enable",
+      "name": "enable",
+      "description": "enable",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/house_item_location/v1/enabled"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "enable",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse disable",
+      "domain": "scm_archive_warehouse",
+      "action": "disable",
+      "name": "disable",
+      "description": "disable",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/house_item_location/v1/disable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "disable",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse delete",
+      "domain": "scm_archive_warehouse",
+      "action": "delete",
+      "name": "delete",
+      "description": "delete",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/house_item_location/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "delete",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-connect-item",
+      "domain": "scm_archive_warehouse",
+      "action": "get-connect-item",
+      "name": "getConnectItem",
+      "description": "getConnectItem",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/location_item/v1/location/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "getConnectItem",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse save-connect-item",
+      "domain": "scm_archive_warehouse",
+      "action": "save-connect-item",
+      "name": "saveConnectItem",
+      "description": "saveConnectItem",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/location_item/v1/location/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "saveConnectItem",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse import-data",
+      "domain": "scm_archive_warehouse",
+      "action": "import-data",
+      "name": "importData",
+      "description": "importData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/excel/house_location/v1/import"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "importData",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse export-data",
+      "domain": "scm_archive_warehouse",
+      "action": "export-data",
+      "name": "exportData",
+      "description": "exportData",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "export",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/excel/house_location/v1/export"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_storage-manage.js",
+      "source_function": "exportData",
+      "tags": [
+        "archive_warehouse",
+        "export"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-report-custom-formula",
+      "domain": "scm_archive_warehouse",
+      "action": "get-report-custom-formula",
+      "name": "getReportCustomFormula",
+      "description": "getReportCustomFormula",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/param/report_custom_formula/v1/search"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_setting-container.js",
+      "source_function": "getReportCustomFormula",
+      "tags": [
+        "archive_warehouse",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-report-custom-formula-tree",
+      "domain": "scm_archive_warehouse",
+      "action": "get-report-custom-formula-tree",
+      "name": "getReportCustomFormulaTree",
+      "description": "getReportCustomFormulaTree",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/param/formula_config/v1/tree"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_setting-container.js",
+      "source_function": "getReportCustomFormulaTree",
+      "tags": [
+        "archive_warehouse",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse set-report-custom-formula",
+      "domain": "scm_archive_warehouse",
+      "action": "set-report-custom-formula",
+      "name": "setReportCustomFormula",
+      "description": "setReportCustomFormula",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/param/report_custom_formula/v1/mod"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/param/api_setting-container.js",
+      "source_function": "setReportCustomFormula",
+      "tags": [
+        "archive_warehouse",
+        "report"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse add-2",
+      "domain": "scm_archive_warehouse",
+      "action": "add-2",
+      "name": "add",
+      "description": "add",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/container/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_container_management.js",
+      "source_function": "add",
+      "tags": [
+        "archive_warehouse",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse edit",
+      "domain": "scm_archive_warehouse",
+      "action": "edit",
+      "name": "edit",
+      "description": "edit",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/container/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_container_management.js",
+      "source_function": "edit",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-details-3",
+      "domain": "scm_archive_warehouse",
+      "action": "get-details-3",
+      "name": "getDetails",
+      "description": "getDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/container/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_container_management.js",
+      "source_function": "getDetails",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse get-list",
+      "domain": "scm_archive_warehouse",
+      "action": "get-list",
+      "name": "getList",
+      "description": "getList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/container/v1/page "
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_container_management.js",
+      "source_function": "getList",
+      "tags": [
+        "archive_warehouse",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse disable-mulity-2",
+      "domain": "scm_archive_warehouse",
+      "action": "disable-mulity-2",
+      "name": "disableMulity",
+      "description": "disableMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/container/v1/disable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_container_management.js",
+      "source_function": "disableMulity",
+      "tags": [
+        "archive_warehouse",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse enabel-mulity",
+      "domain": "scm_archive_warehouse",
+      "action": "enabel-mulity",
+      "name": "enabelMulity",
+      "description": "enabelMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/container/v1/enable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_container_management.js",
+      "source_function": "enabelMulity",
+      "tags": [
+        "archive_warehouse",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse delete-mulity-2",
+      "domain": "scm_archive_warehouse",
+      "action": "delete-mulity-2",
+      "name": "deleteMulity",
+      "description": "deleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/container/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_container_management.js",
+      "source_function": "deleteMulity",
+      "tags": [
+        "archive_warehouse",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_warehouse delete-2",
+      "domain": "scm_archive_warehouse",
+      "action": "delete-2",
+      "name": "delete",
+      "description": "delete",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/container/v1/delete/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/support/api_container_management.js",
+      "source_function": "delete",
+      "tags": [
+        "archive_warehouse",
+        "config"
+      ]
+    }
+  ]
+}

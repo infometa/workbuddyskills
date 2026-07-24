@@ -1,0 +1,985 @@
+{
+  "domain": "cysms",
+  "count": 39,
+  "commands": [
+    {
+      "command": "sl cysms accesstoken",
+      "domain": "cysms",
+      "action": "accesstoken",
+      "name": "CY 开放 API",
+      "description": "CY 开放 API，写 cyS.auth（organization/stores 可由 getshops 等维护）；其它子命令见 sl cysms --help",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "auth",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/accesstoken"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "accesstoken"
+    },
+    {
+      "command": "sl cysms getshops",
+      "domain": "cysms",
+      "action": "getshops",
+      "name": "门店档案分页",
+      "description": "门店档案分页；SL_CY7_* 与 --store-name 解析并回写 cyS.organization（--skip-sync 关闭同步）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/getshops"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "getshops"
+    },
+    {
+      "command": "sl cysms store-region",
+      "domain": "cysms",
+      "action": "store-region",
+      "name": "门店区域编码",
+      "description": "仅从 cyS.stores 解析当前门店区域编码（外部环境类技能前置；无网络）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "__cysms_builtin__/store-region"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "store-region"
+    },
+    {
+      "command": "sl cysms business-situation",
+      "domain": "cysms",
+      "action": "business-situation",
+      "name": "营业情况汇总",
+      "description": "营业情况汇总（ShowDoc #/46/14375；需 centerId+shopId 与日期参数）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-business-data",
+      "domain": "cysms",
+      "action": "business-situation-business-data",
+      "name": "查询营业收入情况",
+      "description": "营业情况汇总拆分：仅返回 data.List.businessData（营业额、营业收入、品项消费、服务费、优惠合计等）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.businessData"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-not-income",
+      "domain": "cysms",
+      "action": "business-situation-not-income",
+      "name": "查询非收入金额",
+      "description": "营业情况汇总拆分：仅返回 data.List.notIncome（非收入总额和非收支付方式列表）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.notIncome"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-income",
+      "domain": "cysms",
+      "action": "business-situation-income",
+      "name": "查询纯收金额",
+      "description": "营业情况汇总拆分：仅返回 data.List.income（纯收总额和纯收支付方式列表）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.income"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-operate-data",
+      "domain": "cysms",
+      "action": "business-situation-operate-data",
+      "name": "查询经营指标",
+      "description": "营业情况汇总拆分：仅返回 data.List.operateData（账单数、开台数、客流量、客单价、上座率、翻台率等）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.operateData"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-other-data",
+      "domain": "cysms",
+      "action": "business-situation-other-data",
+      "name": "查询退单/废单/发票金额",
+      "description": "营业情况汇总拆分：仅返回 data.List.otherData（退单金额、废单金额、发票金额）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.otherData"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-shift-data",
+      "domain": "cysms",
+      "action": "business-situation-shift-data",
+      "name": "查询各市别营业收入",
+      "description": "营业情况汇总拆分：仅返回 data.List.shiftData（市别应收/实收合计和市别收入列表）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.shiftData"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-disc-rate",
+      "domain": "cysms",
+      "action": "business-situation-disc-rate",
+      "name": "查询折扣率",
+      "description": "营业情况汇总拆分：仅返回 data.List.discRate（折扣率）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.discRate"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-class-type-data",
+      "domain": "cysms",
+      "action": "business-situation-class-type-data",
+      "name": "查询各菜品类别营业收入",
+      "description": "营业情况汇总拆分：仅返回 data.List.classTypeData（类别应收、实收、纯收和类别收入列表）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.classTypeData"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-sale-type-data",
+      "domain": "cysms",
+      "action": "business-situation-sale-type-data",
+      "name": "查询各销售类型营业情况",
+      "description": "营业情况汇总拆分：仅返回 data.List.saleTypeData（各销售类型单数、实收、占比）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.saleTypeData"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms business-situation-meet-receivable-data",
+      "domain": "cysms",
+      "action": "business-situation-meet-receivable-data",
+      "name": "查询应收应付",
+      "description": "营业情况汇总拆分：仅返回 data.List.meetAndReceivableData（挂账金额、还款金额、还款优惠）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/business-situation"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "List.meetAndReceivableData"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "business-situation"
+    },
+    {
+      "command": "sl cysms service-area",
+      "domain": "cysms",
+      "action": "service-area",
+      "name": "消费区域与客位",
+      "description": "消费区域与客位列表（ShowDoc #/46/6642；--all-pages）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/service-area"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "service-area"
+    },
+    {
+      "command": "sl cysms service-area-list",
+      "domain": "cysms",
+      "action": "service-area-list",
+      "name": "消费区域列表",
+      "description": "消费区域与客位列表拆分：调用 getServiceArea 后仅返回图片文档中的 areaList 消费区域字段（ShowDoc #/46/6642；--all-pages）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/service-area"
+      },
+      "env_mapping": {},
+      "output_transform": {
+        "source_path": "areaList",
+        "output_key": "areaList",
+        "count_key": "area_count"
+      },
+      "output_filter": [
+        "id",
+        "code",
+        "name",
+        "pinyin",
+        "belongShopId",
+        "processPriceFlag",
+        "delflg",
+        "pointList.id",
+        "pointList.code",
+        "pointList.name",
+        "pointList.pinyin",
+        "pointList.areaId",
+        "pointList.displayName",
+        "pointList.typeId",
+        "pointList.typeName",
+        "pointList.isEnable",
+        "pointList.sortOrder",
+        "pointList.isReserve",
+        "pointList.defCapacity",
+        "pointList.minCapacity",
+        "pointList.maxCapacity"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "service-area"
+    },
+    {
+      "command": "sl cysms service-area-point-list",
+      "domain": "cysms",
+      "action": "service-area-point-list",
+      "name": "客位列表",
+      "description": "消费区域与客位列表拆分：调用 getServiceArea 后展平 data.areaList[].pointList[]，仅返回图片文档中的客位字段（ShowDoc #/46/6642；--all-pages）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/service-area"
+      },
+      "env_mapping": {},
+      "output_transform": {
+        "source_path": "areaList[].pointList[]",
+        "output_key": "pointList",
+        "count_key": "point_row_count"
+      },
+      "output_filter": [
+        "id",
+        "code",
+        "name",
+        "pinyin",
+        "areaId",
+        "displayName",
+        "typeId",
+        "typeName",
+        "isEnable",
+        "sortOrder",
+        "isReserve",
+        "defCapacity",
+        "minCapacity",
+        "maxCapacity"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "service-area"
+    },
+    {
+      "command": "sl cysms item-sellout-data",
+      "domain": "cysms",
+      "action": "item-sellout-data",
+      "name": "菜品估清明细",
+      "description": "调用 /api/datatransfer/getitemselloutdata 查询菜品估清明细；timeBegin/timeEnd 必须成对，默认本机自然当日；pageSize 最大 50；--all-pages 合并 itemSelloutDataList",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/item-sellout-data"
+      },
+      "env_mapping": {},
+      "output_transform": {
+        "source_path": "itemSelloutDataList",
+        "output_key": "itemSelloutDataList",
+        "count_key": "sellout_row_count"
+      },
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "item-sellout-data"
+    },
+    {
+      "command": "sl cysms book-order-detail",
+      "domain": "cysms",
+      "action": "book-order-detail",
+      "name": "预订明细",
+      "description": "预订明细（ShowDoc #/46/17236；--format profile-batch 画像批查结构）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/book-order-detail"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "book-order-detail"
+    },
+    {
+      "command": "sl cysms serial-data",
+      "domain": "cysms",
+      "action": "serial-data",
+      "name": "账单明细",
+      "description": "账单明细 getserialdata（ShowDoc #/46/460；--all-pages；--format checkout-anomaly-summary 返位+废单+空账；--format abnormal-bill-summary 废单+空账+挂单及服务员；stdin 整形见 process-serial-data-abnormal-bill-summary-json）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data"
+    },
+    {
+      "command": "sl cysms serial-data-openclaw",
+      "domain": "cysms",
+      "action": "serial-data-openclaw",
+      "name": "账单明细-openclaw",
+      "description": "同 getserialdata；默认无时间窗时本机自然当日全日 + dateType=5；其它日期须显式 begin/end 或 settle-date；stdout 对 billList 每项剔除 item/settleDetail 等明细数组，保留顶层主账单字段（实返若为嵌套 billDetail 可另配 output_filter）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-openclaw"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-openclaw"
+    },
+    {
+      "command": "sl cysms serial-data-items",
+      "domain": "cysms",
+      "action": "serial-data-items",
+      "name": "品项消费明细",
+      "description": "同 getserialdata；未指定时间窗时默认当日全日 + dateType=5（最后上传，同 serial-data-openclaw）；默认第 1 页且 pageInfo 尚有数据时自动顺序拉齐 billList 再展平；stdout **仅** data.itemListRaw、data.itemList（output_filter 裁剪 ShowDoc 品项字段）；不含汇总数组；按菜品/品项 id 汇总数量请用 serial-data-item-qty-summary；--single-page true 仅首屏请求",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-items"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "bs_id",
+        "sc_id",
+        "item_id",
+        "item_code",
+        "item_aid_code",
+        "item_name",
+        "item_waiter_name",
+        "item_waiter_code",
+        "invoice_item_code",
+        "invoice_item_name",
+        "invoice_item_project_code",
+        "invoice_item_tax_rate",
+        "barcode",
+        "temp_item_name",
+        "unit_id",
+        "unit_name",
+        "size_id",
+        "size_name",
+        "last_price",
+        "orig_price",
+        "is_change_price",
+        "last_make_fee",
+        "orig_qty",
+        "last_qty"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-items"
+    },
+    {
+      "command": "sl cysms serial-data-item-income",
+      "domain": "cysms",
+      "action": "serial-data-item-income",
+      "name": "品项菜品收入明细",
+      "description": "同 getserialdata 与 serial-data-items 的 query/分页/自动多页合并；将 bill.item[] 展平并补账单 bs_id/bs_code/sc_id；stdout **仅** data.itemIncomeListRaw（完整行）、data.itemIncomeList（output_filter 裁剪 ShowDoc #/46/444 品项金额：orig_subtotal 折前小计应收、disc_money、income_money 纯收入等）；bill_count、item_income_row_count、pageInfo；stdin 整形见 process-serial-data-item-income-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-item-income"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "bs_id",
+        "bs_code",
+        "sc_id",
+        "item_id",
+        "item_code",
+        "item_name",
+        "temp_item_name",
+        "last_qty",
+        "orig_subtotal",
+        "disc_money",
+        "present_money",
+        "member_money",
+        "sale_price",
+        "promote_money",
+        "disc_fix",
+        "wipe_money",
+        "last_total",
+        "not_income_money",
+        "income_money"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-item-income"
+    },
+    {
+      "command": "sl cysms process-serial-data-item-income-json",
+      "domain": "cysms",
+      "action": "process-serial-data-item-income-json",
+      "name": "品项菜品收入-stdin",
+      "description": "无网络；stdin 为 getserialdata 整包或含 data.itemIncomeList/itemIncomeListRaw 或完整 itemList/itemListRaw 或品项行数组；stdout 与 serial-data-item-income 相同 data 形状（仍走 output_filter）；整包时展平行补 bs_id/sc_id",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/process-serial-data-item-income-json"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "bs_id",
+        "bs_code",
+        "sc_id",
+        "item_id",
+        "item_code",
+        "item_name",
+        "temp_item_name",
+        "last_qty",
+        "orig_subtotal",
+        "disc_money",
+        "present_money",
+        "member_money",
+        "sale_price",
+        "promote_money",
+        "disc_fix",
+        "wipe_money",
+        "last_total",
+        "not_income_money",
+        "income_money"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "process-serial-data-item-income-json"
+    },
+    {
+      "command": "sl cysms serial-data-item-qty-summary",
+      "domain": "cysms",
+      "action": "serial-data-item-qty-summary",
+      "name": "品项数量汇总",
+      "description": "同 getserialdata 与 serial-data-items 的 query/分页/自动多页合并；stdout **仅** data.item_qty_summary（按 item_id 合计 last_qty）、data.item_qty_summary_by_name（按菜品显示名合计 last_qty）、bill_count、item_row_count、pageInfo；不输出 item 明细；--omit-item-qty-summary / --omit-item-qty-summary-by-name 可分别关闭两类汇总；stdin 整形见 process-serial-data-item-qty-summary-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-item-qty-summary"
+      },
+      "env_mapping": {},
+      "output_filter": ["id", "name", "amount"],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-item-qty-summary"
+    },
+    {
+      "command": "sl cysms process-serial-data-item-qty-summary-json",
+      "domain": "cysms",
+      "action": "process-serial-data-item-qty-summary-json",
+      "name": "品项数量汇总-stdin",
+      "description": "无网络；stdin 为 getserialdata 整包或含 data.itemList/itemListRaw 或品项行数组；stdout 与 serial-data-item-qty-summary 相同 data 形状（仍走 output_filter）；支持 --omit-item-qty-summary / --omit-item-qty-summary-by-name",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/process-serial-data-item-qty-summary-json"
+      },
+      "env_mapping": {},
+      "output_filter": ["id", "name", "amount"],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "process-serial-data-item-qty-summary-json"
+    },
+    {
+      "command": "sl cysms process-serial-data-abnormal-bill-summary-json",
+      "domain": "cysms",
+      "action": "process-serial-data-abnormal-bill-summary-json",
+      "name": "异常账单汇总-stdin",
+      "description": "无网络；stdin 为 getserialdata 整包或 data.billList 或账单主信息行数组；stdout 与 serial-data --format abnormal-bill-summary 相同（schema cy.cysms.abnormal_bill_waiter_summary.v1；state 2/3/4 与 waiter_*，ShowDoc #/46/444）；可选 --shop-id / --store-id 回显",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/process-serial-data-abnormal-bill-summary-json"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "process-serial-data-abnormal-bill-summary-json"
+    },
+    {
+      "command": "sl cysms serial-data-settle-details",
+      "domain": "cysms",
+      "action": "serial-data-settle-details",
+      "name": "结算明细展平",
+      "description": "同 getserialdata（ShowDoc #/46/460）；将 billList[].settleDetail 展平（字段定义见 #/46/444）；未指定时间窗时默认本机自然当日全日 + dateType=5；分页与 serial-data-items 一致（默认自动顺序拉齐多页，--single-page true 仅首屏）；stdout：data.settleListRaw、data.settleList（output_filter）、bill_count、settle_row_count、pageInfo；stdin 整形见 process-serial-data-settle-details-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-settle-details"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "bs_id",
+        "bs_code",
+        "pw_id",
+        "ts_id",
+        "settle_state",
+        "payway_id",
+        "payway_code",
+        "payway_out_code",
+        "payway_name",
+        "pay_money",
+        "income_money",
+        "not_income_money",
+        "crm_mobile",
+        "card_no",
+        "delflg",
+        "unpaid_person_id",
+        "unpaid_person_code",
+        "feteId",
+        "feteCode",
+        "feteName",
+        "feteRemark",
+        "payway_remark",
+        "qunGuangTicketDetail"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-settle-details"
+    },
+    {
+      "command": "sl cysms serial-data-payway-income-summary",
+      "domain": "cysms",
+      "action": "serial-data-payway-income-summary",
+      "name": "结算方式收入汇总",
+      "description": "同 getserialdata；按 settleDetail（ShowDoc #/46/444）的 payway 与账单 sale_type_id 汇总 pay_money 实收、income_money 纯收、not_income_money；stdout data 含 schema cy7.cysms.serial_data_payway_income_summary.v1、by_payway、by_sale_type、by_payway_and_sale_type、bill_level_by_sale_type（主档 last_total/income_total 对照）；默认仅 settle_state=1 或缺省且 delflg 非 1/2；--include-all-settle-states true 含返位/预结；时间与分页同 serial-data-settle-details；stdin 整形见 process-serial-data-payway-income-summary-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-payway-income-summary"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-payway-income-summary"
+    },
+    {
+      "command": "sl cysms serial-data-reversal-settlement-summary",
+      "domain": "cysms",
+      "action": "serial-data-reversal-settlement-summary",
+      "name": "返位结算汇总",
+      "description": "同 getserialdata；仅 settle_state=-1 返位结算账单：reversal_bill_count、by_waiter（waiter_code/name 分桶张数，salesman 桶内首次回填）、settleDetail 按 payway 与销售类型汇总（算法同 payway-income 且 include_all_settle_states；ShowDoc #/46/444）；时间与分页同 serial-data-payway-income-summary；stdin 见 process-serial-data-reversal-settlement-summary-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-reversal-settlement-summary"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-reversal-settlement-summary"
+    },
+    {
+      "command": "sl cysms process-serial-data-reversal-settlement-summary-json",
+      "domain": "cysms",
+      "action": "process-serial-data-reversal-settlement-summary-json",
+      "name": "返位结算汇总-stdin",
+      "description": "无网络；stdin 须 getserialdata 整包或 data.billList（须含 settle_state，支持 billDetail 嵌套）；stdout 与 serial-data-reversal-settlement-summary 相同（schema cy7.cysms.serial_data_reversal_settlement_summary.v1）；不支持仅结算行 stdin；可选 --shop-id",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/process-serial-data-reversal-settlement-summary-json"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "process-serial-data-reversal-settlement-summary-json"
+    },
+    {
+      "command": "sl cysms process-serial-data-payway-income-summary-json",
+      "domain": "cysms",
+      "action": "process-serial-data-payway-income-summary-json",
+      "name": "结算方式收入汇总-stdin",
+      "description": "无网络；stdin 为 getserialdata 整包、或 data.settleList/settleListRaw（非空）、或结算行数组；stdout 与 serial-data-payway-income-summary 相同 data；--include-all-settle-states true；可选 --shop-id / --store-id",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/process-serial-data-payway-income-summary-json"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "process-serial-data-payway-income-summary-json"
+    },
+    {
+      "command": "sl cysms serial-data-discount-details",
+      "domain": "cysms",
+      "action": "serial-data-discount-details",
+      "name": "品项打折方案优惠明细",
+      "description": "同 getserialdata（ShowDoc #/46/460）；将 billList[].discountDetail 展平（字段定义见 #/46/444）；未指定时间窗时默认本机自然当日全日 + dateType=5；分页与 serial-data-settle-details 一致；stdout：data.discountListRaw、data.discountList（output_filter）、bill_count、discount_row_count、pageInfo；stdin 整形见 process-serial-data-discount-details-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-discount-details"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "disc_id",
+        "bs_id",
+        "bs_code",
+        "disc_type",
+        "dp_id",
+        "dp_code",
+        "dp_out_code",
+        "dp_name",
+        "disc_scale",
+        "disc_money",
+        "delflg"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-discount-details"
+    },
+    {
+      "command": "sl cysms serial-data-fulloff-details",
+      "domain": "cysms",
+      "action": "serial-data-fulloff-details",
+      "name": "满减定额优惠明细展平",
+      "description": "同 getserialdata（ShowDoc #/46/460）；将 billList[].fulloffDetail 展平（字段定义见 #/46/444）；未指定时间窗时默认本机自然当日全日 + dateType=5；分页与 serial-data-discount-details 一致；stdout：data.fulloffListRaw、data.fulloffList（output_filter）、bill_count、fulloff_row_count、pageInfo；stdin 整形见 process-serial-data-fulloff-details-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-fulloff-details"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "disc_id",
+        "bs_id",
+        "bs_code",
+        "disc_type",
+        "fo_id",
+        "fo_code",
+        "fo_name",
+        "disc_scale",
+        "disc_money",
+        "delflg"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-fulloff-details"
+    },
+    {
+      "command": "sl cysms serial-data-promote-details",
+      "domain": "cysms",
+      "action": "serial-data-promote-details",
+      "name": "促销方案优惠明细展平",
+      "description": "同 getserialdata（ShowDoc #/46/460）；将 billList[].promoteDetail 展平（字段定义见 #/46/444）；未指定时间窗时默认本机自然当日全日 + dateType=5；分页与 serial-data-fulloff-details 一致；stdout：data.promoteListRaw、data.promoteList（output_filter；与网关字段不一致时以 promoteListRaw 为准）、bill_count、promote_row_count、pageInfo；stdin 整形见 process-serial-data-promote-details-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-promote-details"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "disc_id",
+        "bs_id",
+        "bs_code",
+        "disc_type",
+        "pr_id",
+        "pr_code",
+        "pr_out_code",
+        "pr_name",
+        "disc_scale",
+        "disc_money",
+        "delflg"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-promote-details"
+    },
+    {
+      "command": "sl cysms serial-data-item-method-details",
+      "domain": "cysms",
+      "action": "serial-data-item-method-details",
+      "name": "菜品做法明细展平",
+      "description": "同 getserialdata（ShowDoc #/46/460）；将 billList[].item[].itemMethodData 展平（菜品做法明细字段见 #/46/444）；未指定时间窗时默认本机自然当日全日 + dateType=5；分页与 serial-data-promote-details 一致；stdout：data.itemMethodListRaw、data.itemMethodList（output_filter）、bill_count、item_method_row_count、pageInfo；行上补 bs_id/bs_code、item_id/item_name；stdin 整形见 process-serial-data-item-method-details-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/serial-data-item-method-details"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "bs_id",
+        "bs_code",
+        "item_id",
+        "item_name",
+        "method_id",
+        "code",
+        "name",
+        "fee",
+        "total_qty",
+        "total_fee"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "serial-data-item-method-details"
+    },
+    {
+      "command": "sl cysms o2o-ticket",
+      "domain": "cysms",
+      "action": "o2o-ticket",
+      "name": "团购券明细",
+      "description": "POST /api/datatransfer/getO2oTicket（ShowDoc #/46/24327）；begin/end 与 book-order-detail 相同默认；可选 seller 平台 1-9；pageSize 最大 500；默认 pageNo=1 时按 pageInfo 自动顺序拉齐 ticketDataList（上限 200 页，全程同一 pageSize），--all-pages 自第 1 页拉齐，--single-page true 仅单页；stdout：data.ticketDataListRaw、data.ticketDataList（output_filter）、ticket_row_count、pageInfo；stdin 整形见 process-o2o-ticket-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/o2o-ticket"
+      },
+      "env_mapping": {},
+      "output_filter": [
+        "bsId",
+        "bsCode",
+        "shopId",
+        "shopName",
+        "bizType",
+        "deFromName",
+        "settleBizDate",
+        "ticketName",
+        "isTimes",
+        "marketPrice",
+        "price",
+        "discountRate",
+        "ticketIncomeMoney",
+        "payMoney",
+        "discMoney",
+        "incomeMoney",
+        "incomeOverChange",
+        "businessLast",
+        "noGiveChange",
+        "ticketCount",
+        "useTime",
+        "ticketCode",
+        "verifyId",
+        "ticketState",
+        "billState",
+        "ticketId",
+        "ticketType",
+        "pwDetailld"
+      ],
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "o2o-ticket"
+    },
+    {
+      "command": "sl cysms o2o-ticket-summary",
+      "domain": "cysms",
+      "action": "o2o-ticket-summary",
+      "name": "团购券过滤与汇总",
+      "description": "与 o2o-ticket 共用拉数；按 --only-redeemed / --ticket-types / --ticket-counts 过滤后输出 schema cy7.cysms.o2o_ticket_summary.v1（按平台与 ticketType 金额汇总、ticketCount 分布等）；stdin 离线见 process-o2o-ticket-summary-json",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/o2o-ticket-summary"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "o2o-ticket-summary"
+    },
+    {
+      "command": "sl cysms process-o2o-ticket-json",
+      "domain": "cysms",
+      "action": "process-o2o-ticket-json",
+      "name": "团购券明细-stdin",
+      "description": "无网络；stdin 为 getO2oTicket 整包或 data.ticketDataList / ticketDataListRaw / ticketDataList 行数组；stdout 与 o2o-ticket 相同（仍走 output_filter）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/process-o2o-ticket-json"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "process-o2o-ticket-json"
+    },
+    {
+      "command": "sl cysms process-o2o-ticket-summary-json",
+      "domain": "cysms",
+      "action": "process-o2o-ticket-summary-json",
+      "name": "团购券汇总-stdin",
+      "description": "无网络；stdin JSON 同 process-o2o-ticket-json；flags 同 o2o-ticket-summary（--only-redeemed、--ticket-types、--ticket-counts、可选 --begin/--end/--seller/--shop-id 仅写入汇总元数据）",
+      "product": "cy7",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "__cysms_builtin__/process-o2o-ticket-summary-json"
+      },
+      "env_mapping": {},
+      "source_file": "cli/src/cysms.ts",
+      "source_function": "process-o2o-ticket-summary-json"
+    }
+  ]
+}

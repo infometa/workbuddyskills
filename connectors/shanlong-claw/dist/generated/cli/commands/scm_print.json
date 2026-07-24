@@ -1,0 +1,214 @@
+{
+  "domain": "scm_print",
+  "count": 8,
+  "commands": [
+    {
+      "command": "sl scm_print move-apply",
+      "domain": "scm_print",
+      "action": "move-apply",
+      "name": "MoveApply",
+      "description": "MoveApply",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1/print"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/print/api_print.js",
+      "source_function": "MoveApply",
+      "tags": [
+        "print",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_print receiving-apply",
+      "domain": "scm_print",
+      "action": "receiving-apply",
+      "name": "ReceivingApply",
+      "description": "ReceivingApply",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/move_apply/v1/print"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/print/api_print.js",
+      "source_function": "ReceivingApply",
+      "tags": [
+        "print",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_print check-bill",
+      "domain": "scm_print",
+      "action": "check-bill",
+      "name": "CheckBill",
+      "description": "CheckBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/check/v1/print"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/print/api_print.js",
+      "source_function": "CheckBill",
+      "tags": [
+        "print",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_print deliver-store",
+      "domain": "scm_print",
+      "action": "deliver-store",
+      "name": "DeliverStore",
+      "description": "DeliverStore",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/deliver_store/v1/print"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/print/api_print.js",
+      "source_function": "DeliverStore",
+      "tags": [
+        "print",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_print theory-expend",
+      "domain": "scm_print",
+      "action": "theory-expend",
+      "name": "TheoryExpend",
+      "description": "TheoryExpend",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/theory/v1/print"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/print/api_print.js",
+      "source_function": "TheoryExpend",
+      "tags": [
+        "print",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_print dish-business-bill",
+      "domain": "scm_print",
+      "action": "dish-business-bill",
+      "name": "DishBusinessBill",
+      "description": "DishBusinessBill",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/dish_business/v1/print"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/print/api_print.js",
+      "source_function": "DishBusinessBill",
+      "tags": [
+        "print",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_print machine-compose",
+      "domain": "scm_print",
+      "action": "machine-compose",
+      "name": "MachineCompose",
+      "description": "MachineCompose",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/machine_compose/v1/print"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/print/api_print.js",
+      "source_function": "MachineCompose",
+      "tags": [
+        "print",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_print print-state",
+      "domain": "scm_print",
+      "action": "print-state",
+      "name": "printState",
+      "description": "printState",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/bill/:param/v1/printState"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/print/api_print.js",
+      "source_function": "printState",
+      "tags": [
+        "print",
+        "report"
+      ]
+    }
+  ]
+}

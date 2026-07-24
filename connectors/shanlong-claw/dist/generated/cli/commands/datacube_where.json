@@ -1,0 +1,102 @@
+{
+  "domain": "datacube_where",
+  "count": 1,
+  "commands": [
+    {
+      "command": "sl datacube_where task-260430165130001365",
+      "domain": "datacube_where",
+      "action": "task-260430165130001365",
+      "name": "DataCube where 条件查询",
+      "description": "DataCube 整段 where 参数模式：SQL 通过 #{title} 选择列、#{where} 接收完整条件；CLI 会从 SL_UNIFIED_G_ID 注入 group_code，按 cy_omShopCodes 白名单过滤 shopid，同时写入 shopid / store_code；不会向 where 追加条件，只会去掉前导 and。| exeTaskId=260430165130000941",
+      "product": "dc",
+      "credential_type": "sly",
+      "perspective": "store",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/lb/api/dc/dev/external/excByTaskId"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_DC_API_BASE_URL",
+        "_sessionToken": "SL_DC_SESSION_TOKEN",
+        "group_code": "SL_UNIFIED_G_ID",
+        "cy_group_code": "SL_CY7_GROUP_ID",
+        "shopid": "cy_omShopCodes"
+      },
+      "parameters": [
+        {
+          "name": "exeTaskId",
+          "type": "string",
+          "required": true,
+          "description": "DataCube 执行任务 ID。",
+          "default": "260430165130000941",
+          "example": "260430165130000941"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "SELECT 后的列清单，会作为 #{title} 传入 DataCube。",
+          "default": "*",
+          "example": "group_code,ts_code"
+        },
+        {
+          "name": "where",
+          "type": "string",
+          "required": false,
+          "description": "完整 where 条件，不含 where 关键字；SQL 模板已经在 #{where} 前拼 and，因此 CLI 会自动去掉前导 and；不传时使用 1=1。",
+          "default": "1=1",
+          "example": "used_time >= '2026-07-01' and used_time < '2026-07-02'"
+        },
+        {
+          "name": "group_code",
+          "type": "string",
+          "required": false,
+          "description": "统一集团号，运行时从 SL_UNIFIED_G_ID 自动注入，按字符串 SQL 片段传给 DataCube。",
+          "default": "",
+          "example": "G091619"
+        },
+        {
+          "name": "cy_group_code",
+          "type": "string",
+          "required": false,
+          "description": "餐饮 7 集团号，运行时从 SL_CY7_GROUP_ID 自动注入，按字符串 SQL 片段传给 DataCube。",
+          "default": "",
+          "example": "301"
+        },
+        {
+          "name": "shopid",
+          "type": "string",
+          "required": false,
+          "description": "门店编码，可传单个或逗号分隔多个；CLI 会按 token.json.biz_params.cy_omShopCodes 白名单过滤，不传时默认使用 cy_omShopCodes 全量。",
+          "default": "",
+          "example": "C146651"
+        },
+        {
+          "name": "store_code",
+          "type": "string",
+          "required": false,
+          "description": "运行时自动注入，值与过滤后的 shopid 一致。",
+          "default": "",
+          "example": "C146651"
+        },
+        {
+          "name": "limit",
+          "type": "string",
+          "required": false,
+          "description": "返回条数限制，不传默认 100。",
+          "default": "100",
+          "example": "100"
+        }
+      ],
+      "source_file": "datacube:260430165130001365",
+      "source_function": "externalExcByTaskIdWhere",
+      "tags": [
+        "datacube",
+        "where",
+        "crm"
+      ]
+    }
+  ]
+}

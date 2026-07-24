@@ -1,0 +1,2803 @@
+{
+  "domain": "marketing_cy",
+  "count": 42,
+  "commands": [
+    {
+      "command": "sl marketing_cy get-auto-add-item-drop-list",
+      "domain": "marketing_cy",
+      "action": "get-auto-add-item-drop-list",
+      "name": "下拉列表",
+      "description": "下拉列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/autoAddItemPlan/getDropList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/autoAddItemsPlan.js",
+      "source_function": "getAutoAddItemDropList",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "菜品",
+        "员工",
+        "列表"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "下拉列表"
+    },
+    {
+      "command": "sl marketing_cy get-page-list",
+      "domain": "marketing_cy",
+      "action": "get-page-list",
+      "name": "分页列表",
+      "description": "分页列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/autoAddItemPlan/getPageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/autoAddItemsPlan.js",
+      "source_function": "getPageList",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "菜品",
+        "员工",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "分页列表",
+      "relations": {
+        "depends_on": [],
+        "feeds_into": [
+          {
+            "command": "sl marketing_cy get-one",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy get-recharge-detail",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy updateinvoiceinfo",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy load-one",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy load-one-cy7",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy save",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl marketing_cy insert",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl marketing_cy insert-cy7",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl marketing_cy remove",
+            "relation": "delete_from",
+            "description": "从列表删除档案"
+          },
+          {
+            "command": "sl marketing_cy down-load-vip-coupon",
+            "relation": "export_from",
+            "description": "导出档案列表"
+          }
+        ],
+        "role": "list",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy get-one",
+      "domain": "marketing_cy",
+      "action": "get-one",
+      "name": "查看明细",
+      "description": "查看明细",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/autoAddItemPlan/getOne"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/autoAddItemsPlan.js",
+      "source_function": "getOne",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "菜品",
+        "员工"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        }
+      ],
+      "description_short": "查看明细",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl marketing_cy modify",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update-cy7",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy get-new-code",
+      "domain": "marketing_cy",
+      "action": "get-new-code",
+      "name": "获取新code",
+      "description": "获取新code",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/autoAddItemPlan/getNew"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/autoAddItemsPlan.js",
+      "source_function": "getNewCode",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "菜品",
+        "员工"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取新code"
+    },
+    {
+      "command": "sl marketing_cy save",
+      "domain": "marketing_cy",
+      "action": "save",
+      "name": "新增服务费方案",
+      "description": "新增服务费方案",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/autoAddItemPlan/save"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/autoAddItemsPlan.js",
+      "source_function": "save",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "菜品",
+        "员工"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "pageTab",
+          "type": "string",
+          "required": false,
+          "description": "pageTab"
+        },
+        {
+          "name": "posId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "formData",
+          "type": "string",
+          "required": false,
+          "description": "formData"
+        },
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "pageModule",
+          "type": "string",
+          "required": false,
+          "description": "pageModule"
+        },
+        {
+          "name": "menuId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "新增服务费方案",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "create",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy modify",
+      "domain": "marketing_cy",
+      "action": "modify",
+      "name": "修改服务费方案",
+      "description": "修改服务费方案",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/autoAddItemPlan/modify"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/autoAddItemsPlan.js",
+      "source_function": "modify",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "菜品",
+        "员工"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "record",
+          "type": "string",
+          "required": false,
+          "description": "record"
+        },
+        {
+          "name": "isEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        }
+      ],
+      "description_short": "修改服务费方案",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-one",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy get-recharge-detail",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy updateinvoiceinfo",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy load-one",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy load-one-cy7",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "update",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy modify-enable",
+      "domain": "marketing_cy",
+      "action": "modify-enable",
+      "name": "修改服务费方案启用状态",
+      "description": "修改服务费方案启用状态",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/autoAddItemPlan/modifyEnable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/autoAddItemsPlan.js",
+      "source_function": "modifyEnable",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "菜品",
+        "员工"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "modifyTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        },
+        {
+          "name": "belongShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isCreateCenter",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        }
+      ],
+      "description_short": "修改服务费方案启用状态"
+    },
+    {
+      "command": "sl marketing_cy remove",
+      "domain": "marketing_cy",
+      "action": "remove",
+      "name": "删除服务费方案",
+      "description": "删除服务费方案",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/autoAddItemPlan/remove"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/autoAddItemsPlan.js",
+      "source_function": "remove",
+      "tags": [
+        "marketing_cy",
+        "action",
+        "菜品",
+        "员工"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除服务费方案",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "delete_from",
+            "description": "从列表删除档案"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "delete_from",
+            "description": "从列表删除档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "delete",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy get-recharge-detail",
+      "domain": "marketing_cy",
+      "action": "get-recharge-detail",
+      "name": "充值记录查询",
+      "description": "充值记录查询",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/intranetPenetration/getRechargeDetail"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/domainPenetrationSetting.js",
+      "source_function": "getRechargeDetail",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "充值记录查询",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl marketing_cy modify",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update-cy7",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy get-recharge-html",
+      "domain": "marketing_cy",
+      "action": "get-recharge-html",
+      "name": "获取充值页面和单号",
+      "description": "获取充值页面和单号",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/intranetPenetration/getRechargeHtml"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/domainPenetrationSetting.js",
+      "source_function": "getRechargeHtml",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "shopIds",
+          "type": "string",
+          "required": false,
+          "description": "门店ID"
+        },
+        {
+          "name": "rechargeDuration",
+          "type": "string",
+          "required": false,
+          "description": "rechargeDuration"
+        },
+        {
+          "name": "remark",
+          "type": "string",
+          "required": false,
+          "description": "remark"
+        }
+      ],
+      "description_short": "获取充值页面和单号"
+    },
+    {
+      "command": "sl marketing_cy recharge-check",
+      "domain": "marketing_cy",
+      "action": "recharge-check",
+      "name": "充值状态查询",
+      "description": "充值状态查询",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/intranetPenetration/recharge/check"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/domainPenetrationSetting.js",
+      "source_function": "rechargeCheck",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "orderId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "充值状态查询"
+    },
+    {
+      "command": "sl marketing_cy get-invoice-url",
+      "domain": "marketing_cy",
+      "action": "get-invoice-url",
+      "name": "开票",
+      "description": "开票",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/intranetPenetration/getInvoiceUrl"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/domainPenetrationSetting.js",
+      "source_function": "getInvoiceUrl",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "orderId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "required": false,
+          "description": "金额"
+        }
+      ],
+      "description_short": "开票"
+    },
+    {
+      "command": "sl marketing_cy updateinvoiceinfo",
+      "domain": "marketing_cy",
+      "action": "updateinvoiceinfo",
+      "name": "更新开票信息",
+      "description": "更新开票信息",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/intranetPenetration/updateinvoiceinfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/domainPenetrationSetting.js",
+      "source_function": "updateinvoiceinfo",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "orderId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "invoiceUrl",
+          "type": "string",
+          "required": false,
+          "description": "invoiceUrl"
+        }
+      ],
+      "description_short": "更新开票信息",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl marketing_cy modify",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update-cy7",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy get-config-list",
+      "domain": "marketing_cy",
+      "action": "get-config-list",
+      "name": "列表",
+      "description": "列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "config",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/intranetPenetration/getConfigList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/domainPenetrationSetting.js",
+      "source_function": "getConfigList",
+      "tags": [
+        "marketing_cy",
+        "config",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "列表"
+    },
+    {
+      "command": "sl marketing_cy data-issued",
+      "domain": "marketing_cy",
+      "action": "data-issued",
+      "name": "下发",
+      "description": "下发",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/intranetPenetration/dataIssued"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/domainPenetrationSetting.js",
+      "source_function": "dataIssued",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "下发"
+    },
+    {
+      "command": "sl marketing_cy update-i-p",
+      "domain": "marketing_cy",
+      "action": "update-i-p",
+      "name": "保存ip",
+      "description": "保存ip",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/intranetPenetration/updateIP"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/domainPenetrationSetting.js",
+      "source_function": "updateIP",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "shopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "intranetIp",
+          "type": "string",
+          "required": false,
+          "description": "intranetIp"
+        }
+      ],
+      "description_short": "保存ip"
+    },
+    {
+      "command": "sl marketing_cy update-port",
+      "domain": "marketing_cy",
+      "action": "update-port",
+      "name": "保存端口号",
+      "description": "保存端口号",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/intranetPenetration/updatePort"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/domainPenetrationSetting.js",
+      "source_function": "updatePort",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "shopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "intranetPort",
+          "type": "string",
+          "required": false,
+          "description": "intranetPort"
+        }
+      ],
+      "description_short": "保存端口号"
+    },
+    {
+      "command": "sl marketing_cy marketexclusionrule-tree",
+      "domain": "marketing_cy",
+      "action": "marketexclusionrule-tree",
+      "name": "越品 左侧树列表",
+      "description": "越品 左侧树列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/marketexclusionrule/tree"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/marketingActivities/mutualExclusionAndSharingSetting.js",
+      "source_function": "marketexclusionruleTree",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销",
+        "树形"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "marketType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        }
+      ],
+      "description_short": "越品 左侧树列表"
+    },
+    {
+      "command": "sl marketing_cy detail-list",
+      "domain": "marketing_cy",
+      "action": "detail-list",
+      "name": "查询详情",
+      "description": "查询详情",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/marketexclusionrule/detailList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/marketingActivities/mutualExclusionAndSharingSetting.js",
+      "source_function": "detailList",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "查询详情"
+    },
+    {
+      "command": "sl marketing_cy save-market-exclusion-rlue",
+      "domain": "marketing_cy",
+      "action": "save-market-exclusion-rlue",
+      "name": "保存",
+      "description": "保存",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/marketexclusionrule/save"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/marketingActivities/mutualExclusionAndSharingSetting.js",
+      "source_function": "saveMarketExclusionRlue",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "marketType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        }
+      ],
+      "description_short": "保存"
+    },
+    {
+      "command": "sl marketing_cy down-load-vip-coupon",
+      "domain": "marketing_cy",
+      "action": "down-load-vip-coupon",
+      "name": "下载会员券",
+      "description": "下载会员券",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "export",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/marketexclusionrule/downLoadVipCoupon"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/marketingActivities/mutualExclusionAndSharingSetting.js",
+      "source_function": "downLoadVipCoupon",
+      "tags": [
+        "marketing_cy",
+        "export",
+        "优惠券",
+        "营销",
+        "导出"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "下载会员券",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "export_from",
+            "description": "导出档案列表"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "export_from",
+            "description": "导出档案列表"
+          }
+        ],
+        "feeds_into": [],
+        "role": "export",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy page-list",
+      "domain": "marketing_cy",
+      "action": "page-list",
+      "name": "规格做法列表接口",
+      "description": "规格做法列表接口",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/mutex/pagelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/specAndMethodConflicting.js",
+      "source_function": "pageList",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "规格做法列表接口",
+      "relations": {
+        "depends_on": [],
+        "feeds_into": [
+          {
+            "command": "sl marketing_cy get-one",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy get-recharge-detail",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy updateinvoiceinfo",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy load-one",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy load-one-cy7",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy save",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl marketing_cy insert",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl marketing_cy insert-cy7",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl marketing_cy remove",
+            "relation": "delete_from",
+            "description": "从列表删除档案"
+          },
+          {
+            "command": "sl marketing_cy down-load-vip-coupon",
+            "relation": "export_from",
+            "description": "导出档案列表"
+          }
+        ],
+        "role": "list",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy insert",
+      "domain": "marketing_cy",
+      "action": "insert",
+      "name": "新增规格做法互斥",
+      "description": "新增规格做法互斥",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/mutex/insert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/specAndMethodConflicting.js",
+      "source_function": "insert",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "新增规格做法互斥",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "create",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy update",
+      "domain": "marketing_cy",
+      "action": "update",
+      "name": "修改规格做法互斥",
+      "description": "修改规格做法互斥",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/mutex/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/specAndMethodConflicting.js",
+      "source_function": "update",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "itemList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "bareName",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        }
+      ],
+      "description_short": "修改规格做法互斥",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-one",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy get-recharge-detail",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy updateinvoiceinfo",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy load-one",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy load-one-cy7",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "update",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy delete-mutex",
+      "domain": "marketing_cy",
+      "action": "delete-mutex",
+      "name": "删除规格做法互斥",
+      "description": "删除规格做法互斥",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/mutex/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/specAndMethodConflicting.js",
+      "source_function": "deleteMutex",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除规格做法互斥"
+    },
+    {
+      "command": "sl marketing_cy load-one",
+      "domain": "marketing_cy",
+      "action": "load-one",
+      "name": "规格做法互斥详情",
+      "description": "规格做法互斥详情",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/mutex/loadOne"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/specAndMethodConflicting.js",
+      "source_function": "loadOne",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "规格做法互斥详情",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl marketing_cy modify",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update-cy7",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy generate-code",
+      "domain": "marketing_cy",
+      "action": "generate-code",
+      "name": "生成代码",
+      "description": "生成代码",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/mutex/loadnew"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/specAndMethodConflicting.js",
+      "source_function": "generateCode",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "生成代码"
+    },
+    {
+      "command": "sl marketing_cy enable-or-disable",
+      "domain": "marketing_cy",
+      "action": "enable-or-disable",
+      "name": "启用停用",
+      "description": "启用停用",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/mutex/updateenable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/specAndMethodConflicting.js",
+      "source_function": "enableOrDisable",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "modifyTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        },
+        {
+          "name": "belongShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "isCreateCenter",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        }
+      ],
+      "description_short": "启用停用"
+    },
+    {
+      "command": "sl marketing_cy get-hurried-recommend-list",
+      "domain": "marketing_cy",
+      "action": "get-hurried-recommend-list",
+      "name": "急推菜列表",
+      "description": "急推菜列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "store",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/pagelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID",
+        "shopId": "SL_CY7_STORE_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "getHurriedRecommendList",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "急推菜列表"
+    },
+    {
+      "command": "sl marketing_cy load-one-cy7",
+      "domain": "marketing_cy",
+      "action": "load-one-cy7",
+      "name": "编辑loadOne",
+      "description": "编辑loadOne",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/loadOne"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "loadOne",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "编辑loadOne",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl marketing_cy modify",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy update-cy7",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy insert-cy7",
+      "domain": "marketing_cy",
+      "action": "insert-cy7",
+      "name": "新建保存",
+      "description": "新建保存",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/insert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "insert",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "新建保存",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-page-list",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl marketing_cy page-list",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "create",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy update-cy7",
+      "domain": "marketing_cy",
+      "action": "update-cy7",
+      "name": "修改保存",
+      "description": "修改保存",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "update",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "itemList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "bareName",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        }
+      ],
+      "description_short": "修改保存",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl marketing_cy get-one",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy get-recharge-detail",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy updateinvoiceinfo",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy load-one",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl marketing_cy load-one-cy7",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "update",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl marketing_cy delete-one",
+      "domain": "marketing_cy",
+      "action": "delete-one",
+      "name": "删除",
+      "description": "删除",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "deleteOne",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除"
+    },
+    {
+      "command": "sl marketing_cy update-enable",
+      "domain": "marketing_cy",
+      "action": "update-enable",
+      "name": "启用禁用",
+      "description": "启用禁用",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/updateenable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "updateEnable",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "searchForm",
+          "type": "string",
+          "required": false,
+          "description": "searchForm"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "isEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "modifyTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        },
+        {
+          "name": "componentType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "pageType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "itemType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "isCreateCenter",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "smallClassId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "currentItemId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "currentNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "targetNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "sortOrderNumber",
+          "type": "string",
+          "required": false,
+          "description": "sortOrderNumber"
+        },
+        {
+          "name": "sortType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "searchValue",
+          "type": "string",
+          "required": false,
+          "description": "searchValue"
+        },
+        {
+          "name": "deptId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "cellphone",
+          "type": "string",
+          "required": false,
+          "description": "cellphone"
+        },
+        {
+          "name": "typeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "createShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "pageModule",
+          "type": "string",
+          "required": false,
+          "description": "pageModule"
+        },
+        {
+          "name": "pageTab",
+          "type": "string",
+          "required": false,
+          "description": "pageTab"
+        },
+        {
+          "name": "areaId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "enableFlag",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "belongShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "sortNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "currentSortNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "sortIndex",
+          "type": "string",
+          "required": false,
+          "description": "sortIndex"
+        },
+        {
+          "name": "orginSortIndex",
+          "type": "string",
+          "required": false,
+          "description": "orginSortIndex"
+        },
+        {
+          "name": "searchConfirm",
+          "type": "string",
+          "required": false,
+          "description": "searchConfirm"
+        },
+        {
+          "name": "idList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "parentId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "fee",
+          "type": "string",
+          "required": false,
+          "description": "fee"
+        }
+      ],
+      "description_short": "启用禁用"
+    },
+    {
+      "command": "sl marketing_cy enable-check",
+      "domain": "marketing_cy",
+      "action": "enable-check",
+      "name": "启用禁用校验",
+      "description": "启用禁用校验",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/enableCheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "enableCheck",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S2",
+      "parameters": [
+        {
+          "name": "isPageListEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "isEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "shopLimits",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "searchValue",
+          "type": "string",
+          "required": false,
+          "description": "searchValue"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "启用禁用校验"
+    },
+    {
+      "command": "sl marketing_cy load-new",
+      "domain": "marketing_cy",
+      "action": "load-new",
+      "name": "新建生成code",
+      "description": "新建生成code",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/loadnew"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "loadNew",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "新建生成code"
+    },
+    {
+      "command": "sl marketing_cy recyclelist",
+      "domain": "marketing_cy",
+      "action": "recyclelist",
+      "name": "回收站查询",
+      "description": "回收站查询",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/recyclelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "recyclelist",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "回收站查询"
+    },
+    {
+      "command": "sl marketing_cy recycledelete",
+      "domain": "marketing_cy",
+      "action": "recycledelete",
+      "name": "回收站内删除",
+      "description": "回收站内删除",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/recycledelete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "recycledelete",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "回收站内删除"
+    },
+    {
+      "command": "sl marketing_cy recyclerevert",
+      "domain": "marketing_cy",
+      "action": "recyclerevert",
+      "name": "回收站还原",
+      "description": "回收站还原",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/recyclerevert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "recyclerevert",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "恢复目标ID"
+        }
+      ],
+      "description_short": "回收站还原"
+    },
+    {
+      "command": "sl marketing_cy deleteall",
+      "domain": "marketing_cy",
+      "action": "deleteall",
+      "name": "回收站清空",
+      "description": "回收站清空",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/deleteall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "deleteall",
+      "tags": [
+        "marketing_cy",
+        "manage",
+        "营销"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "回收站清空"
+    },
+    {
+      "command": "sl marketing_cy revertall",
+      "domain": "marketing_cy",
+      "action": "revertall",
+      "name": "全部还原",
+      "description": "全部还原",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/revertall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "revertall",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "全部还原"
+    },
+    {
+      "command": "sl marketing_cy newcheck",
+      "domain": "marketing_cy",
+      "action": "newcheck",
+      "name": "门店创建方案前校验",
+      "description": "门店创建方案前校验",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/promotion/hurriedRecommend/newcheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/urgentPromotionOfDishes.js",
+      "source_function": "newcheck",
+      "tags": [
+        "marketing_cy",
+        "query",
+        "营销"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "门店创建方案前校验"
+    }
+  ]
+}

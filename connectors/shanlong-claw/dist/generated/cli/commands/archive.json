@@ -1,0 +1,3254 @@
+{
+  "domain": "archive",
+  "count": 62,
+  "commands": [
+    {
+      "command": "sl archive get-shop-list",
+      "domain": "archive",
+      "action": "get-shop-list",
+      "name": "商铺列表",
+      "description": "商铺列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/pagelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "getShopList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "门店",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "商铺列表"
+    },
+    {
+      "command": "sl archive shop-add",
+      "domain": "archive",
+      "action": "shop-add",
+      "name": "商铺新增",
+      "description": "商铺新增",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/insert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "shopAdd",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品",
+        "门店"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "商铺新增"
+    },
+    {
+      "command": "sl archive recycle-list",
+      "domain": "archive",
+      "action": "recycle-list",
+      "name": "回收站列表",
+      "description": "回收站列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/recyclelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "recycleList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "回收站列表"
+    },
+    {
+      "command": "sl archive shop-update",
+      "domain": "archive",
+      "action": "shop-update",
+      "name": "修改",
+      "description": "修改",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "shopUpdate",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "修改"
+    },
+    {
+      "command": "sl archive shop-revert-all",
+      "domain": "archive",
+      "action": "shop-revert-all",
+      "name": "全部还原",
+      "description": "全部还原",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/revertall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "shopRevertAll",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "全部还原"
+    },
+    {
+      "command": "sl archive shop-delete-all",
+      "domain": "archive",
+      "action": "shop-delete-all",
+      "name": "清空",
+      "description": "清空",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/deleteall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "shopDeleteAll",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品",
+        "门店"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "清空"
+    },
+    {
+      "command": "sl archive recycle-delete",
+      "domain": "archive",
+      "action": "recycle-delete",
+      "name": "单条回收站删除",
+      "description": "单条回收站删除",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/recycledelete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "recycleDelete",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "单条回收站删除"
+    },
+    {
+      "command": "sl archive recycle-revert",
+      "domain": "archive",
+      "action": "recycle-revert",
+      "name": "单条回收站还原",
+      "description": "单条回收站还原",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/recyclerevert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "recycleRevert",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "恢复目标ID"
+        }
+      ],
+      "description_short": "单条回收站还原"
+    },
+    {
+      "command": "sl archive shop-deletes",
+      "domain": "archive",
+      "action": "shop-deletes",
+      "name": "删除到回收站",
+      "description": "删除到回收站",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/deletes"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "shopDeletes",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品",
+        "门店"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除到回收站"
+    },
+    {
+      "command": "sl archive loadone",
+      "domain": "archive",
+      "action": "loadone",
+      "name": "获取详情",
+      "description": "获取详情",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/load/:id"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "loadone",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取详情",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl archive get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive get-page-list-cy7",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl archive update",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl archive get-pos-list",
+      "domain": "archive",
+      "action": "get-pos-list",
+      "name": "pos查询",
+      "description": "pos查询",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pos/notusedlist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "getPosList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "POS",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "pos查询"
+    },
+    {
+      "command": "sl archive get-not-used-signboard",
+      "domain": "archive",
+      "action": "get-not-used-signboard",
+      "name": "查询未被使用的招牌",
+      "description": "查询未被使用的招牌",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "getNotUsedSignboard",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "查询未被使用的招牌"
+    },
+    {
+      "command": "sl archive get-standard-brand",
+      "domain": "archive",
+      "action": "get-standard-brand",
+      "name": "获取标准品牌",
+      "description": "获取标准品牌",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "getStandardBrand",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取标准品牌"
+    },
+    {
+      "command": "sl archive loadnew",
+      "domain": "archive",
+      "action": "loadnew",
+      "name": "获取code",
+      "description": "获取code",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/loadnew/:id"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "loadnew",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取code"
+    },
+    {
+      "command": "sl archive get-price-gear-list",
+      "domain": "archive",
+      "action": "get-price-gear-list",
+      "name": "获取价格档位",
+      "description": "获取价格档位",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pubcode/priceGearList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "getPriceGearList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取价格档位"
+    },
+    {
+      "command": "sl archive get-all-shop-list",
+      "domain": "archive",
+      "action": "get-all-shop-list",
+      "name": "获取全部门店",
+      "description": "获取全部门店",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/shoplist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "getAllShopList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "门店",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取全部门店"
+    },
+    {
+      "command": "sl archive publish-stall-item",
+      "domain": "archive",
+      "action": "publish-stall-item",
+      "name": "按铺位发布菜品",
+      "description": "按铺位发布菜品",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/publishStallItem"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "publishStallItem",
+      "tags": [
+        "archive",
+        "action",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "按铺位发布菜品"
+    },
+    {
+      "command": "sl archive stallcomboxlist",
+      "domain": "archive",
+      "action": "stallcomboxlist",
+      "name": "铺位下拉列表",
+      "description": "铺位下拉列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/stallcomboxlist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "stallcomboxlist",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "铺位下拉列表"
+    },
+    {
+      "command": "sl archive resumelist",
+      "domain": "archive",
+      "action": "resumelist",
+      "name": "履历记录查询",
+      "description": "履历记录查询",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/stall/resumelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "resumelist",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "履历记录查询"
+    },
+    {
+      "command": "sl archive poslist",
+      "domain": "archive",
+      "action": "poslist",
+      "name": "获取铺位下所有的pos",
+      "description": "获取铺位下所有的pos",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/pos/poslist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/shopSpace.js",
+      "source_function": "poslist",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "POS",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取铺位下所有的pos"
+    },
+    {
+      "command": "sl archive get-signboard-list",
+      "domain": "archive",
+      "action": "get-signboard-list",
+      "name": "分页查询",
+      "description": "分页查询",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/pagelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "getSignboardList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "分页查询"
+    },
+    {
+      "command": "sl archive signboard-add",
+      "domain": "archive",
+      "action": "signboard-add",
+      "name": "保存",
+      "description": "保存",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/insert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "signboardAdd",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "保存"
+    },
+    {
+      "command": "sl archive signboard-deletes",
+      "domain": "archive",
+      "action": "signboard-deletes",
+      "name": "删除到回收站",
+      "description": "删除到回收站",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/deletes"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "signboardDeletes",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除到回收站"
+    },
+    {
+      "command": "sl archive recycle-delete-cy7",
+      "domain": "archive",
+      "action": "recycle-delete-cy7",
+      "name": "从回收站删除",
+      "description": "从回收站删除",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/recycledelete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "recycleDelete",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "从回收站删除"
+    },
+    {
+      "command": "sl archive recycle-list-cy7",
+      "domain": "archive",
+      "action": "recycle-list-cy7",
+      "name": "回收站列表",
+      "description": "回收站列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/recyclelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "recycleList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "belongType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isCreateCenter",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "modifyTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        },
+        {
+          "name": "belongShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "searchValue",
+          "type": "string",
+          "required": false,
+          "description": "searchValue"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "pinyin",
+          "type": "string",
+          "required": false,
+          "description": "pinyin"
+        }
+      ],
+      "description_short": "回收站列表"
+    },
+    {
+      "command": "sl archive recycle-revert-cy7",
+      "domain": "archive",
+      "action": "recycle-revert-cy7",
+      "name": "从回收站还原",
+      "description": "从回收站还原",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/recyclerevert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "recycleRevert",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "恢复目标ID"
+        }
+      ],
+      "description_short": "从回收站还原"
+    },
+    {
+      "command": "sl archive loadone-cy7",
+      "domain": "archive",
+      "action": "loadone-cy7",
+      "name": "获取单条",
+      "description": "获取单条",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/load/:id"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "loadone",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取单条",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl archive get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive get-page-list-cy7",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl archive update",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl archive signboard-update",
+      "domain": "archive",
+      "action": "signboard-update",
+      "name": "修改",
+      "description": "修改",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "signboardUpdate",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "修改"
+    },
+    {
+      "command": "sl archive recycle-delete-all",
+      "domain": "archive",
+      "action": "recycle-delete-all",
+      "name": "全部清空回收站",
+      "description": "全部清空回收站",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/deleteall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "recycleDeleteAll",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "全部清空回收站"
+    },
+    {
+      "command": "sl archive recycle-revert-all",
+      "domain": "archive",
+      "action": "recycle-revert-all",
+      "name": "回收站全部还原",
+      "description": "回收站全部还原",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/revertall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "recycleRevertAll",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "回收站全部还原"
+    },
+    {
+      "command": "sl archive loadnew-cy7",
+      "domain": "archive",
+      "action": "loadnew-cy7",
+      "name": "获取code",
+      "description": "获取code",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/loadnew"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "loadnew",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取code"
+    },
+    {
+      "command": "sl archive get-signboard",
+      "domain": "archive",
+      "action": "get-signboard",
+      "name": "获取全部招牌",
+      "description": "获取全部招牌",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/list"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "getSignboard",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "获取全部招牌"
+    },
+    {
+      "command": "sl archive modify-is-enable",
+      "domain": "archive",
+      "action": "modify-is-enable",
+      "name": "启用停用",
+      "description": "启用停用",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/signboard/modifyIsEnable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/signboard.js",
+      "source_function": "modifyIsEnable",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "searchForm",
+          "type": "string",
+          "required": false,
+          "description": "searchForm"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        }
+      ],
+      "description_short": "启用停用"
+    },
+    {
+      "command": "sl archive standard-brand-add",
+      "domain": "archive",
+      "action": "standard-brand-add",
+      "name": "新增",
+      "description": "新增",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/insert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "standardBrandAdd",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "新增"
+    },
+    {
+      "command": "sl archive standard-brand-deletes",
+      "domain": "archive",
+      "action": "standard-brand-deletes",
+      "name": "删除到回收站",
+      "description": "删除到回收站",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/deletes"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "standardBrandDeletes",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除到回收站"
+    },
+    {
+      "command": "sl archive recycle-delete-cy7-2",
+      "domain": "archive",
+      "action": "recycle-delete-cy7-2",
+      "name": "回收站单条删除",
+      "description": "回收站单条删除",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/recycledelete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "recycleDelete",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "回收站单条删除"
+    },
+    {
+      "command": "sl archive recycle-list-cy7-2",
+      "domain": "archive",
+      "action": "recycle-list-cy7-2",
+      "name": "回收站列表",
+      "description": "回收站列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/recyclelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "recycleList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "belongType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isCreateCenter",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "modifyTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        },
+        {
+          "name": "belongShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "searchValue",
+          "type": "string",
+          "required": false,
+          "description": "searchValue"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "pinyin",
+          "type": "string",
+          "required": false,
+          "description": "pinyin"
+        }
+      ],
+      "description_short": "回收站列表"
+    },
+    {
+      "command": "sl archive recycle-revert-cy7-2",
+      "domain": "archive",
+      "action": "recycle-revert-cy7-2",
+      "name": "回收站还原单条",
+      "description": "回收站还原单条",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/recyclerevert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "recycleRevert",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "恢复目标ID"
+        }
+      ],
+      "description_short": "回收站还原单条"
+    },
+    {
+      "command": "sl archive loadone-cy7-2",
+      "domain": "archive",
+      "action": "loadone-cy7-2",
+      "name": "获取单条",
+      "description": "获取单条",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/load/:id"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "loadone",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取单条",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl archive get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive get-page-list-cy7",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl archive update",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl archive standard-brand-update",
+      "domain": "archive",
+      "action": "standard-brand-update",
+      "name": "修改接口",
+      "description": "修改接口",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "standardBrandUpdate",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "修改接口"
+    },
+    {
+      "command": "sl archive standard-brand-list",
+      "domain": "archive",
+      "action": "standard-brand-list",
+      "name": "分页查询",
+      "description": "分页查询",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/pagelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "standardBrandList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "分页查询"
+    },
+    {
+      "command": "sl archive recycle-delete-all-cy7",
+      "domain": "archive",
+      "action": "recycle-delete-all-cy7",
+      "name": "清空回收站",
+      "description": "清空回收站",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/deleteall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "recycleDeleteAll",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "清空回收站"
+    },
+    {
+      "command": "sl archive recycle-revert-all-cy7",
+      "domain": "archive",
+      "action": "recycle-revert-all-cy7",
+      "name": "回收站全部还原",
+      "description": "回收站全部还原",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/revertall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "recycleRevertAll",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "回收站全部还原"
+    },
+    {
+      "command": "sl archive loadnew-cy7-2",
+      "domain": "archive",
+      "action": "loadnew-cy7-2",
+      "name": "生成code",
+      "description": "生成code",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "group",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/standardBrand/loadnew"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/businessManagement/foodPlaza/standardBrand.js",
+      "source_function": "loadnew",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "生成code"
+    },
+    {
+      "command": "sl archive get-page-list",
+      "domain": "archive",
+      "action": "get-page-list",
+      "name": "原因档案列表",
+      "description": "原因档案列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/reason/pageList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/filesManagement/businessArchives/reasonArchives.js",
+      "source_function": "getPageList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "原因档案列表",
+      "relations": {
+        "depends_on": [],
+        "feeds_into": [
+          {
+            "command": "sl archive loadone",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive loadone-cy7",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive loadone-cy7-2",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive load-one",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive insert",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          }
+        ],
+        "role": "list",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl archive load-new",
+      "domain": "archive",
+      "action": "load-new",
+      "name": "新建原因档案生成code",
+      "description": "新建原因档案生成code",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/reason/loadNew"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/filesManagement/businessArchives/reasonArchives.js",
+      "source_function": "loadNew",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "新建原因档案生成code"
+    },
+    {
+      "command": "sl archive load-one",
+      "domain": "archive",
+      "action": "load-one",
+      "name": "查询单条",
+      "description": "查询单条",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/reason/loadOne"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/filesManagement/businessArchives/reasonArchives.js",
+      "source_function": "loadOne",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "查询单条",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl archive get-page-list",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive get-page-list-cy7",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          }
+        ],
+        "feeds_into": [
+          {
+            "command": "sl archive update",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "role": "detail",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl archive save-reason",
+      "domain": "archive",
+      "action": "save-reason",
+      "name": "新增",
+      "description": "新增",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/reason/save"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/filesManagement/businessArchives/reasonArchives.js",
+      "source_function": "saveReason",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "新增"
+    },
+    {
+      "command": "sl archive modify-reason",
+      "domain": "archive",
+      "action": "modify-reason",
+      "name": "编辑",
+      "description": "编辑",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/reason/modify"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/filesManagement/businessArchives/reasonArchives.js",
+      "source_function": "modifyReason",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [],
+      "description_short": "编辑"
+    },
+    {
+      "command": "sl archive delete-reason",
+      "domain": "archive",
+      "action": "delete-reason",
+      "name": "删除",
+      "description": "删除",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/reason/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/filesManagement/businessArchives/reasonArchives.js",
+      "source_function": "deleteReason",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除"
+    },
+    {
+      "command": "sl archive type-list",
+      "domain": "archive",
+      "action": "type-list",
+      "name": "原因类别列表",
+      "description": "原因类别列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/reason/typeList"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/filesManagement/businessArchives/reasonArchives.js",
+      "source_function": "typeList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "原因类别列表"
+    },
+    {
+      "command": "sl archive update-enable",
+      "domain": "archive",
+      "action": "update-enable",
+      "name": "启用停用",
+      "description": "启用停用",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/reason/updateEnable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/filesManagement/businessArchives/reasonArchives.js",
+      "source_function": "updateEnable",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "searchForm",
+          "type": "string",
+          "required": false,
+          "description": "searchForm"
+        },
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "isEnable",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "modifyTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        },
+        {
+          "name": "componentType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "pageType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "itemType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "isCreateCenter",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "smallClassId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "currentItemId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "currentNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "targetNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "sortOrderNumber",
+          "type": "string",
+          "required": false,
+          "description": "sortOrderNumber"
+        },
+        {
+          "name": "sortType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "searchValue",
+          "type": "string",
+          "required": false,
+          "description": "searchValue"
+        },
+        {
+          "name": "deptId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "cellphone",
+          "type": "string",
+          "required": false,
+          "description": "cellphone"
+        },
+        {
+          "name": "typeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "createShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "pageModule",
+          "type": "string",
+          "required": false,
+          "description": "pageModule"
+        },
+        {
+          "name": "pageTab",
+          "type": "string",
+          "required": false,
+          "description": "pageTab"
+        },
+        {
+          "name": "areaId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "enableFlag",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "belongShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "sortNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "currentSortNum",
+          "type": "number",
+          "required": false,
+          "description": "数量"
+        },
+        {
+          "name": "sortIndex",
+          "type": "string",
+          "required": false,
+          "description": "sortIndex"
+        },
+        {
+          "name": "orginSortIndex",
+          "type": "string",
+          "required": false,
+          "description": "orginSortIndex"
+        },
+        {
+          "name": "searchConfirm",
+          "type": "string",
+          "required": false,
+          "description": "searchConfirm"
+        },
+        {
+          "name": "idList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "parentId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "fee",
+          "type": "string",
+          "required": false,
+          "description": "fee"
+        }
+      ],
+      "description_short": "启用停用"
+    },
+    {
+      "command": "sl archive get-page-list-cy7",
+      "domain": "archive",
+      "action": "get-page-list-cy7",
+      "name": "分页列表",
+      "description": "分页列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/pagelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "getPageList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页数量",
+          "example": 20
+        },
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "分页列表",
+      "relations": {
+        "depends_on": [],
+        "feeds_into": [
+          {
+            "command": "sl archive loadone",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive loadone-cy7",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive loadone-cy7-2",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive load-one",
+            "relation": "detail_of",
+            "description": "从列表查看档案详情"
+          },
+          {
+            "command": "sl archive insert",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          }
+        ],
+        "role": "list",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl archive loadnew-cy7-3",
+      "domain": "archive",
+      "action": "loadnew-cy7-3",
+      "name": "获取code",
+      "description": "获取code",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/loadnew"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "loadnew",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "获取code"
+    },
+    {
+      "command": "sl archive insert",
+      "domain": "archive",
+      "action": "insert",
+      "name": "新建",
+      "description": "新建",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/insert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "insert",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S2",
+      "parameters": [],
+      "description_short": "新建",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl archive get-page-list",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          },
+          {
+            "command": "sl archive get-page-list-cy7",
+            "relation": "create_from",
+            "description": "从列表新增档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "create",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl archive update",
+      "domain": "archive",
+      "action": "update",
+      "name": "编辑",
+      "description": "编辑",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "update",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "value"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "itemList",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "bareName",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        }
+      ],
+      "description_short": "编辑",
+      "relations": {
+        "depends_on": [
+          {
+            "command": "sl archive loadone",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl archive loadone-cy7",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl archive loadone-cy7-2",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          },
+          {
+            "command": "sl archive load-one",
+            "relation": "edit_of",
+            "description": "详情中编辑档案"
+          }
+        ],
+        "feeds_into": [],
+        "role": "update",
+        "workflow": "archive_crud"
+      }
+    },
+    {
+      "command": "sl archive delete-to-recycle",
+      "domain": "archive",
+      "action": "delete-to-recycle",
+      "name": "删除",
+      "description": "删除",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/deletes"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "deleteToRecycle",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "删除"
+    },
+    {
+      "command": "sl archive recycle-list-cy7-3",
+      "domain": "archive",
+      "action": "recycle-list-cy7-3",
+      "name": "分页查询回收站列表",
+      "description": "分页查询回收站列表",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/recyclelist"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "recycleList",
+      "tags": [
+        "archive",
+        "query",
+        "菜品",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "pageNo",
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "页码"
+        },
+        {
+          "name": "current",
+          "type": "string",
+          "required": false,
+          "description": "current"
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "required": false,
+          "default": 20,
+          "description": "每页条数"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "belongType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "isCreateCenter",
+          "type": "boolean",
+          "required": false,
+          "description": "标志"
+        },
+        {
+          "name": "modifyTime",
+          "type": "string",
+          "required": false,
+          "description": "日期/时间"
+        },
+        {
+          "name": "belongShopId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "searchValue",
+          "type": "string",
+          "required": false,
+          "description": "searchValue"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "编码"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "名称"
+        },
+        {
+          "name": "brandId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "pinyin",
+          "type": "string",
+          "required": false,
+          "description": "pinyin"
+        }
+      ],
+      "description_short": "分页查询回收站列表"
+    },
+    {
+      "command": "sl archive recycle-revert-cy7-3",
+      "domain": "archive",
+      "action": "recycle-revert-cy7-3",
+      "name": "回收站中还原",
+      "description": "回收站中还原",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/recyclerevert"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "recycleRevert",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "恢复目标ID"
+        }
+      ],
+      "description_short": "回收站中还原"
+    },
+    {
+      "command": "sl archive recycle-delete-cy7-3",
+      "domain": "archive",
+      "action": "recycle-delete-cy7-3",
+      "name": "回收站中删除",
+      "description": "回收站中删除",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/recycledelete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "recycleDelete",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "回收站中删除"
+    },
+    {
+      "command": "sl archive delete-all",
+      "domain": "archive",
+      "action": "delete-all",
+      "name": "清空回收站",
+      "description": "清空回收站",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/deleteall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "deleteAll",
+      "tags": [
+        "archive",
+        "manage",
+        "菜品"
+      ],
+      "security_level": "S4",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "清空回收站"
+    },
+    {
+      "command": "sl archive recycle-revert-all-cy7-2",
+      "domain": "archive",
+      "action": "recycle-revert-all-cy7-2",
+      "name": "回收站全部还原",
+      "description": "回收站全部还原",
+      "product": "cy7",
+      "credential_type": "cy7",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/api/itembase/billremark/recyclerall"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CY7_API_BASE_URL",
+        "_sessionToken": "SL_CY7_SESSION_TOKEN",
+        "groupId": "SL_CY7_GROUP_ID",
+        "brandId": "SL_CY7_BRAND_ID"
+      },
+      "source_file": "cy7center-platform-tom/src/api/orderRemark.js",
+      "source_function": "recycleRevertAll",
+      "tags": [
+        "archive",
+        "query",
+        "菜品"
+      ],
+      "security_level": "S3",
+      "parameters": [
+        {
+          "name": "requestSource",
+          "type": "string",
+          "required": false,
+          "description": "requestSource"
+        },
+        {
+          "name": "nodeId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "回收站全部还原"
+    }
+  ]
+}

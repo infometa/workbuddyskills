@@ -1,0 +1,45 @@
+{
+  "domain": "scm_analysis",
+  "count": 2,
+  "commands": [
+    {
+      "command": "sl scm_analysis query",
+      "domain": "scm_analysis",
+      "action": "query",
+      "name": "供应链报表分析查询",
+      "description": "POST /analysis/query，Content-Type: application/json。鉴权：供应链8 Token 或 SL_ANALYSIS_AUTHORIZATION_OVERRIDE。Base：SL_ANALYSIS_API_BASE_URL。",
+      "product": "scm",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/analysis/query"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_ANALYSIS_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      }
+    },
+    {
+      "command": "sl scm_analysis query-form",
+      "domain": "scm_analysis",
+      "action": "query-form",
+      "name": "供应链报表分析查询(form)",
+      "description": "与浏览器/curl 一致：POST /analysis/query，Content-Type: application/x-www-form-urlencoded。请在 DevTools Network 中打开 analysis/query → Payload / view source（或复制为 cURL 的 --data-raw），将整段 urlencoded 原文保存为本地文件，再通过 --body-file 传入，勿再包一层 JSON。默认补充 Origin/Referer/Accept-Language/tasTraceId；可用 SL_ANALYSIS_* 或 --header 覆盖。鉴权同 query。",
+      "product": "scm",
+      "perspective": "store",
+      "category": "report",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/analysis/query",
+        "body_format": "form"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_ANALYSIS_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      }
+    }
+  ]
+}

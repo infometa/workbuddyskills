@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**68** · 专家：**365** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**69** · 专家：**365** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-24
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-25
 
 ---
 ## 目录
@@ -407,6 +407,7 @@
 | [`qixinhuiyan-mcp`](./connectors/qixinhuiyan-mcp/) | 启信慧眼企业信息查询工具 | 可能需要启用对应 MCP / 连接器 |
 | [`qq-mail`](./connectors/qq-mail/) | QQ邮箱(QQ Mail)全功能操作技能。触发场景：看邮箱、查邮件、收件箱、看看邮件、有没有新邮件、未读邮件、帮我看看邮箱、打开邮箱、最近的邮件、邮件列表、发邮件、写邮件、发一封… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`region-insight`](./connectors/region-insight/) | 用途：Search POIs and analyze fenced-area distributions in specified areas. | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`REGION_INSIGHT_API_KEY` |
+| [`shanlong-claw`](./connectors/shanlong-claw/) | 商龙餐饮经营数据分析连接器，通过 StarRocks 数据仓库查询门店画像、营收客流、优惠结算、菜品套餐、渠道来源、员工绩效、运营效率、会员分析、供应链等多维经营数据 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`supabase`](./connectors/supabase/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`tapd`](./connectors/tapd/) | 管理需求、缺陷、任务和迭代。查询项目进度、拆分需求、流转状态、填写工时，覆盖研发全生命周期。 | 可能需要启用对应 MCP / 连接器 |
 | [`tapd-woa`](./connectors/tapd-woa/) | 用途：TAPD MCP tool operates various resources in TAPD via MCP protocol, including stories, … | 可能需要启用对应 MCP / 连接器 |
@@ -681,7 +682,7 @@
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
 | [`andon-q-expert`](./experts/andon-q-expert/) | [腾讯云智能客服](./experts/andon-q-expert/) | 精通腾讯云全线产品，提供产品咨询、故障排查、服务报告等多维度服务的技术专家。 | 需要登录 / OAuth / 扫码授权；需要环境变量：`TENCENTCLOUD_SECRET_KEY`、`TENCENTCLOUD_TOKEN` |
-| [`anti-scam-agent`](./experts/anti-scam-agent/) | [腾讯云天御反诈专家](./experts/anti-scam-agent/) | 这是一款由金融黑灰产情报驱动的反诈智能体，覆盖电信网络诈骗、职业背债人、贷款包装、反催收等常见金融黑灰产，能分析、能干活、能告警。帮助机构实现更科学、高效、可持续的黑灰产对抗。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`anti-scam-agent`](./experts/anti-scam-agent/) | [腾讯云天御反诈专家](./experts/anti-scam-agent/) | 金融黑灰产情报驱动的反诈智能体，覆盖电诈、职业背债、贷款包装、反催收，能分析、能查证、能出研判报告。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`apm-performance-expert`](./experts/apm-performance-expert/) | [应用性能专家](./experts/apm-performance-expert/) | 精通腾讯云 APM 性能诊断与调优，快速定位应用瓶颈并给出优化方案 | 可能需要启用对应 MCP / 连接器；需要环境变量：`TENCENTCLOUD_SECRET_KEY` |
 | [`capacity-expert`](./experts/capacity-expert/) | [腾讯云容量规划专家](./experts/capacity-expert/) | 容量规划专家。擅长水位监控、容量预测与弹性伸缩策略制定，防止资源瓶颈与浪费。 | 可能需要启用对应 MCP / 连接器 |
 | [`cat-network-quality-analyst`](./experts/cat-network-quality-analyst/) | [网络质量分析专家](./experts/cat-network-quality-analyst/) | 精通多维性能分析、异常定位、抓包诊断、问题定界，快速定位网络与服务异常根因 | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；需要环境变量：`CAT_SECRET_ID`、`CAT_SECRET_KEY`、`TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` |

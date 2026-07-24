@@ -1,0 +1,435 @@
+{
+  "domain": "data",
+  "count": 11,
+  "commands": [
+    {
+      "command": "sl data home-page-get-summary-data",
+      "domain": "data",
+      "action": "home-page-get-summary-data",
+      "name": "用户画像-查询会员基础信息",
+      "description": "首页-数据汇总",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "report",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-datacube-admin/dataAnalysis/overview/homePage/summary"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/data.ts",
+      "source_function": "homePageGetSummaryData",
+      "tags": [
+        "data",
+        "report",
+        "报表",
+        "分页"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "dateType",
+          "type": "string",
+          "required": false,
+          "description": "类型"
+        },
+        {
+          "name": "beginDate",
+          "type": "string",
+          "required": false,
+          "description": "开始时间"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "required": false,
+          "description": "结束时间"
+        },
+        {
+          "name": "preBeginDate",
+          "type": "string",
+          "required": false,
+          "description": "开始时间"
+        },
+        {
+          "name": "preEndDate",
+          "type": "string",
+          "required": false,
+          "description": "结束时间"
+        }
+      ],
+      "description_short": "用户画像-查询会员基础信息"
+    },
+    {
+      "command": "sl data get-common-use-list",
+      "domain": "data",
+      "action": "get-common-use-list",
+      "name": "getCommonUseList",
+      "description": "获取用户常用功能列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/common/functions"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/home-page.ts",
+      "source_function": "getCommonUseList",
+      "tags": [
+        "data",
+        "query",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        }
+      ],
+      "description_short": "getCommonUseList"
+    },
+    {
+      "command": "sl data set-common-use-list",
+      "domain": "data",
+      "action": "set-common-use-list",
+      "name": "获取用户常用功能列表",
+      "description": "更新用户常用功能列表",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "manage",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/common/functions/update"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/home-page.ts",
+      "source_function": "setCommonUseList",
+      "tags": [
+        "data",
+        "manage",
+        "分页",
+        "列表"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "keyword",
+          "type": "string",
+          "required": false,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "codeList",
+          "type": "boolean",
+          "required": false,
+          "description": "开关标志"
+        }
+      ],
+      "description_short": "获取用户常用功能列表"
+    },
+    {
+      "command": "sl data get-sms-balance",
+      "domain": "data",
+      "action": "get-sms-balance",
+      "name": "获取用户常用功能列表",
+      "description": "短信剩余条数",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/sms/balance"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/home-page.ts",
+      "source_function": "getSmsBalance",
+      "tags": [
+        "data",
+        "query",
+        "分页"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "获取用户常用功能列表"
+    },
+    {
+      "command": "sl data get-system-overview",
+      "domain": "data",
+      "action": "get-system-overview",
+      "name": "更新用户常用功能列表",
+      "description": "系统概况",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "action",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/system/overview"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/home-page.ts",
+      "source_function": "getSystemOverview",
+      "tags": [
+        "data",
+        "action",
+        "分页"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "更新用户常用功能列表"
+    },
+    {
+      "command": "sl data get-system-msg",
+      "domain": "data",
+      "action": "get-system-msg",
+      "name": "短信剩余条数",
+      "description": "首页 系统消息",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/system/msg"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/home-page.ts",
+      "source_function": "getSystemMsg",
+      "tags": [
+        "data",
+        "query",
+        "分页"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "size",
+          "type": "string",
+          "required": false,
+          "description": "size"
+        }
+      ],
+      "description_short": "短信剩余条数"
+    },
+    {
+      "command": "sl data read-system-msg",
+      "domain": "data",
+      "action": "read-system-msg",
+      "name": "系统概况",
+      "description": "首页 系统消息",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/system/msg/read"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/home-page.ts",
+      "source_function": "readSystemMsg",
+      "tags": [
+        "data",
+        "query",
+        "分页"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "msgId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "系统概况"
+    },
+    {
+      "command": "sl data view-super-sms-code",
+      "domain": "data",
+      "action": "view-super-sms-code",
+      "name": "首页 系统消息",
+      "description": "查看超级验证码",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/viewSuperSmsCode"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/home-page.ts",
+      "source_function": "viewSuperSmsCode",
+      "tags": [
+        "data",
+        "query",
+        "分页"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "首页 系统消息"
+    },
+    {
+      "command": "sl data get-pay-info",
+      "domain": "data",
+      "action": "get-pay-info",
+      "name": "短信充值",
+      "description": "短信充值",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/getPayInfo"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/home-page.ts",
+      "source_function": "getPayInfo",
+      "tags": [
+        "data",
+        "query",
+        "分页"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        },
+        {
+          "name": "openInvoice",
+          "type": "string",
+          "required": false,
+          "description": "openInvoice"
+        }
+      ],
+      "description_short": "短信充值"
+    },
+    {
+      "command": "sl data pay-check",
+      "domain": "data",
+      "action": "pay-check",
+      "name": "查询支付结果",
+      "description": "查询支付结果",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/payCheck"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/crm/src/api/home-page.ts",
+      "source_function": "payCheck",
+      "tags": [
+        "data",
+        "query",
+        "分页"
+      ],
+      "security_level": "S1",
+      "parameters": [
+        {
+          "name": "recordId",
+          "type": "string",
+          "required": false,
+          "description": "记录ID"
+        }
+      ],
+      "description_short": "查询支付结果"
+    },
+    {
+      "command": "sl data view-super-sms-code-crm",
+      "domain": "data",
+      "action": "view-super-sms-code-crm",
+      "name": "viewSuperSmsCode",
+      "description": "查看超级验证码",
+      "product": "crm",
+      "credential_type": "crm",
+      "perspective": "both",
+      "category": "query",
+      "endpoint": {
+        "method": "POST",
+        "path": "/kotler-base-admin/homePage/viewSuperSmsCode"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_CRM_API_BASE_URL",
+        "_sessionToken": "SL_CRM_SESSION_TOKEN",
+        "companyId": "SL_CRM_GROUP_ID",
+        "brandId": "SL_CRM_BRAND_ID"
+      },
+      "source_file": "kotler-front/apps/h5/src/api/pos.ts",
+      "source_function": "viewSuperSmsCode",
+      "tags": [
+        "data",
+        "query",
+        "分页"
+      ],
+      "security_level": "S1",
+      "parameters": [],
+      "description_short": "viewSuperSmsCode"
+    }
+  ]
+}

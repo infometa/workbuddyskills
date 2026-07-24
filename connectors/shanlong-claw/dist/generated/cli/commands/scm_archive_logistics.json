@@ -1,0 +1,812 @@
+{
+  "domain": "scm_archive_logistics",
+  "count": 31,
+  "commands": [
+    {
+      "command": "sl scm_archive_logistics get-page",
+      "domain": "scm_archive_logistics",
+      "action": "get-page",
+      "name": "getPage",
+      "description": "getPage",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/line_route/v1/page"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "getPage",
+      "tags": [
+        "archive_logistics",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics enabel-mulity",
+      "domain": "scm_archive_logistics",
+      "action": "enabel-mulity",
+      "name": "enabelMulity",
+      "description": "enabelMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/line_route/v1/enabled"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "enabelMulity",
+      "tags": [
+        "archive_logistics",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics disable-mulity",
+      "domain": "scm_archive_logistics",
+      "action": "disable-mulity",
+      "name": "disableMulity",
+      "description": "disableMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/line_route/v1/disable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "disableMulity",
+      "tags": [
+        "archive_logistics",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics delete-mulity",
+      "domain": "scm_archive_logistics",
+      "action": "delete-mulity",
+      "name": "deleteMulity",
+      "description": "deleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/line_route/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "deleteMulity",
+      "tags": [
+        "archive_logistics",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics add-line",
+      "domain": "scm_archive_logistics",
+      "action": "add-line",
+      "name": "addLine",
+      "description": "addLine",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/line_route/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "addLine",
+      "tags": [
+        "archive_logistics",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics edit-line",
+      "domain": "scm_archive_logistics",
+      "action": "edit-line",
+      "name": "editLine",
+      "description": "editLine",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/line_route/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "editLine",
+      "tags": [
+        "archive_logistics",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics get-line",
+      "domain": "scm_archive_logistics",
+      "action": "get-line",
+      "name": "getLine",
+      "description": "getLine",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/line_route/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "getLine",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics delete",
+      "domain": "scm_archive_logistics",
+      "action": "delete",
+      "name": "delete",
+      "description": "delete",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/line_route/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "delete",
+      "tags": [
+        "archive_logistics",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics unknown",
+      "domain": "scm_archive_logistics",
+      "action": "unknown",
+      "name": "unknown",
+      "description": "",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/house/v1/manage/simple/tab"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "unknown",
+      "tags": [
+        "archive_logistics",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics get-line-store-id",
+      "domain": "scm_archive_logistics",
+      "action": "get-line-store-id",
+      "name": "getLineStoreId",
+      "description": "getLineStoreId",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/line_route/v1/getShop/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "getLineStoreId",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics save-line-store",
+      "domain": "scm_archive_logistics",
+      "action": "save-line-store",
+      "name": "saveLineStore",
+      "description": "saveLineStore",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/line_route/v1/addLineRouteShop/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_line.js",
+      "source_function": "saveLineStore",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics save",
+      "domain": "scm_archive_logistics",
+      "action": "save",
+      "name": "save",
+      "description": "save",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/logistics_type/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics-type.js",
+      "source_function": "save",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics add",
+      "domain": "scm_archive_logistics",
+      "action": "add",
+      "name": "add",
+      "description": "add",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/logistics_type/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics-type.js",
+      "source_function": "add",
+      "tags": [
+        "archive_logistics",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics delete-2",
+      "domain": "scm_archive_logistics",
+      "action": "delete-2",
+      "name": "delete",
+      "description": "delete",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/archive/logistics_type/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics-type.js",
+      "source_function": "delete",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics save-details",
+      "domain": "scm_archive_logistics",
+      "action": "save-details",
+      "name": "saveDetails",
+      "description": "saveDetails",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/logistics/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "saveDetails",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics add-2",
+      "domain": "scm_archive_logistics",
+      "action": "add-2",
+      "name": "add",
+      "description": "add",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/logistics/v1/"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "add",
+      "tags": [
+        "archive_logistics",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics disable-mulity-2",
+      "domain": "scm_archive_logistics",
+      "action": "disable-mulity-2",
+      "name": "disableMulity",
+      "description": "disableMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/logistics/v1/disable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "disableMulity",
+      "tags": [
+        "archive_logistics",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics delete-mulity-2",
+      "domain": "scm_archive_logistics",
+      "action": "delete-mulity-2",
+      "name": "deleteMulity",
+      "description": "deleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/logistics/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "deleteMulity",
+      "tags": [
+        "archive_logistics",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics recycling-delete-mulity",
+      "domain": "scm_archive_logistics",
+      "action": "recycling-delete-mulity",
+      "name": "recyclingDeleteMulity",
+      "description": "recyclingDeleteMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/logistics/v1/delete"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "recyclingDeleteMulity",
+      "tags": [
+        "archive_logistics",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics recover",
+      "domain": "scm_archive_logistics",
+      "action": "recover",
+      "name": "recover",
+      "description": "recover",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/logistics/v1/restore/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "recover",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics recover-mulity",
+      "domain": "scm_archive_logistics",
+      "action": "recover-mulity",
+      "name": "recoverMulity",
+      "description": "recoverMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/logistics/v1/restore"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "recoverMulity",
+      "tags": [
+        "archive_logistics",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics enabel-mulity-2",
+      "domain": "scm_archive_logistics",
+      "action": "enabel-mulity-2",
+      "name": "enabelMulity",
+      "description": "enabelMulity",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "action",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/logistics/v1/enable"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "enabelMulity",
+      "tags": [
+        "archive_logistics",
+        "action"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics delete-3",
+      "domain": "scm_archive_logistics",
+      "action": "delete-3",
+      "name": "delete",
+      "description": "delete",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/archive/logistics/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "delete",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics recycling-delete",
+      "domain": "scm_archive_logistics",
+      "action": "recycling-delete",
+      "name": "recyclingDelete",
+      "description": "recyclingDelete",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/archive/logistics/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_logistics.js",
+      "source_function": "recyclingDelete",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics region-add",
+      "domain": "scm_archive_logistics",
+      "action": "region-add",
+      "name": "regionAdd",
+      "description": "regionAdd",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "manage",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/region/v1"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_region.js",
+      "source_function": "regionAdd",
+      "tags": [
+        "archive_logistics",
+        "manage"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics region-save",
+      "domain": "scm_archive_logistics",
+      "action": "region-save",
+      "name": "regionSave",
+      "description": "regionSave",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S2",
+      "endpoint": {
+        "method": "PUT",
+        "path": "/archive/region/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_region.js",
+      "source_function": "regionSave",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics region-delete",
+      "domain": "scm_archive_logistics",
+      "action": "region-delete",
+      "name": "regionDelete",
+      "description": "regionDelete",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S3",
+      "endpoint": {
+        "method": "DELETE",
+        "path": "/archive/region/v1/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_region.js",
+      "source_function": "regionDelete",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics get-area-list",
+      "domain": "scm_archive_logistics",
+      "action": "get-area-list",
+      "name": "getAreaList",
+      "description": "getAreaList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/region/v1/search"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_region.js",
+      "source_function": "getAreaList",
+      "tags": [
+        "archive_logistics",
+        "query"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics get-fathers-list",
+      "domain": "scm_archive_logistics",
+      "action": "get-fathers-list",
+      "name": "getFathersList",
+      "description": "getFathersList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/region/v1/:param/fathers"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_region.js",
+      "source_function": "getFathersList",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics get-logistics-list",
+      "domain": "scm_archive_logistics",
+      "action": "get-logistics-list",
+      "name": "getLogisticsList",
+      "description": "getLogisticsList",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "config",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "GET",
+        "path": "/archive/source/v1/Logistics/5/:param"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/archive/api_source.js",
+      "source_function": "getLogisticsList",
+      "tags": [
+        "archive_logistics",
+        "config"
+      ]
+    },
+    {
+      "command": "sl scm_archive_logistics get-line-route-list-select",
+      "domain": "scm_archive_logistics",
+      "action": "get-line-route-list-select",
+      "name": "getLineRouteListSelect",
+      "description": "getLineRouteListSelect",
+      "product": "scm",
+      "credential_type": "scm",
+      "perspective": "both",
+      "category": "query",
+      "security_level": "S1",
+      "endpoint": {
+        "method": "POST",
+        "path": "/archive/line_route/v1/search"
+      },
+      "env_mapping": {
+        "_baseUrl": "SL_SCM_API_BASE_URL",
+        "_sessionToken": "SL_SCM_SESSION_TOKEN"
+      },
+      "source_file": "src/config/api_config/store/api_delivery_order.js",
+      "source_function": "getLineRouteListSelect",
+      "tags": [
+        "archive_logistics",
+        "query"
+      ]
+    }
+  ]
+}
