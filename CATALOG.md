@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**69** · 专家：**365** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**69** · 专家：**366** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-25
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-26
 
 ---
 ## 目录
@@ -378,7 +378,7 @@
 | [`cnb-api`](./connectors/cnb-api/) | 用途：Manage CNB platform via CLI. | 无（可选 API/账号以增强能力） |
 | [`cnb-woa`](./connectors/cnb-woa/) | CNB 平台交互命令，支持代码仓库、Issue、PR、CI、制品库读写等操作。 | 无（可选 API/账号以增强能力） |
 | [`ctrip-wendao`](./connectors/ctrip-wendao/) | Trigger when user asks travel-related questions: hotel search, flight query, attraction r… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要按 token-schema 配置凭证；需要环境变量：`WENDAO_API_KEY` |
-| [`dingtalk`](./connectors/dingtalk/) | 管理钉钉产品能力(AI表格/AI搜问/日历/通讯录/群聊与机器人/待办/审批/考勤/日志/DING消息/开放平台文档/钉钉文档/钉钉云盘/AI听记/邮箱/在线电子表格/知识库等)… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`dingtalk`](./connectors/dingtalk/) | 管理钉钉产品能力(AI表格/AI搜问/日历/通讯录/群聊与机器人/待办/审批/考勤/日志/DING消息/开放平台文档/钉钉文档/钉钉云盘/原生Markdown文件/AI听记/邮箱… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`edgeone-pages`](./connectors/edgeone-pages/) | 用途：edgeone-makers | 可能需要启用对应 MCP / 连接器 |
 | [`fbs-connector`](./connectors/fbs-connector/) | 福帮手人机协同连接器：面向 WorkBuddy 的身份识别、场景包查询、首值与继续使用记录、乐包状态确认和超级合伙人交接。 | 可能需要启用对应 MCP / 连接器 |
 | [`feishu`](./connectors/feishu/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
@@ -401,7 +401,7 @@
 | [`netease-mail`](./connectors/netease-mail/) | 通过 IMAP/SMTP 连接邮箱，支持收发邮件、搜索、附件下载。支持 163、126、yeah.net 等网易邮箱及其他标准 IMAP/SMTP 邮箱。触发关键词：邮件、邮箱、… | 需要登录 / OAuth / 扫码授权；需要按 token-schema 配置凭证 |
 | [`notion`](./connectors/notion/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`patsnap-search`](./connectors/patsnap-search/) | 用途：Search Patsnap's global patent and literature databases with natural-language, semanti… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`PATSNAP_API_KEY` |
-| [`pkulaw`](./connectors/pkulaw/) | 用途：PKULaw — Semantic (natural language) + keyword (exact / fuzzy) dual-mode retrieval ove… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`pkulaw`](./connectors/pkulaw/) | 用途：PKULaw — Semantic (natural language) + keyword (exact / fuzzy) dual-mode retrieval ove… | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`qcc-company`](./connectors/qcc-company/) | 用途：Query and verify corporate registration information. Supports shareholder structure, a… | 可能需要启用对应 MCP / 连接器 |
 | [`qingflow`](./connectors/qingflow/) | 用途：QingFlow no-code platform connector for building apps, managing records, and automatin… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`QINGFLOW_TOKEN` |
 | [`qixinhuiyan-mcp`](./connectors/qixinhuiyan-mcp/) | 启信慧眼企业信息查询工具 | 可能需要启用对应 MCP / 连接器 |
@@ -749,7 +749,7 @@
 | [`social-engagement-team`](./experts/social-engagement-team/) | [社媒互动增长专家团](./experts/social-engagement-team/) | 通过智能化互动自动化、AI评论运营、高转化信号挖掘和品牌舆情监控，安全高效提升社交媒体互动效果，覆盖14+全球主流平台 | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权 |
 | [`social-media-strategist`](./experts/social-media-strategist/) | [社交媒体策略师](./experts/social-media-strategist/) | 全面统筹多平台社交媒体策略，让品牌在每个平台发出最强音 | 无 |
 
-### 行业顾问（20）
+### 行业顾问（21）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -771,6 +771,7 @@
 | [`paper-topic-selection`](./experts/paper-topic-selection/) | [选题专家团队（WANFANG TOPIC）](./experts/paper-topic-selection/) | 帮你做论文选题：检索文献、推荐方向、评估新颖性、生成标题、出领域报告。说学科方向即可。 | 需要环境变量：`APP_KEY` |
 | [`skillhub-charity-expert-team`](./experts/skillhub-charity-expert-team/) | [技术公益专家团](./experts/skillhub-charity-expert-team/) | 首席协调官星星带领六位专家，覆盖公益技能从需求分析、编写、测试、社会价值评审、版权确认和打包交付的全流程。 | 可能需要启用对应 MCP / 连接器 |
 | [`smb-team`](./experts/smb-team/) | [经营总管](./experts/smb-team/) | 经营总管调度四位领域专家，覆盖财务、营收、客户合规和运营，小企业管理一站搞定 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录 |
+| [`tanyuan-cultural-heritage-expert`](./experts/tanyuan-cultural-heritage-expert/) | [腾讯探元文博专家](./experts/tanyuan-cultural-heritage-expert/) | 基于腾讯探元文博知识库，提供文物与世界遗产查询、知识问答、文物对比、文博攻略及研学方案等专业服务。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`terminal-veteran`](./experts/terminal-veteran/) | [终端产业分析师](./experts/terminal-veteran/) | 近三十年终端老兵，11条铁律+三层方法论，厂商策略/渠道选品/投资分析+行业报告 | 无 |
 | [`tripstar-agent`](./experts/tripstar-agent/) | [旅游攻略管家](./experts/tripstar-agent/) | 生活服务管家，一站式搞定行程规划、景点/酒店/天气/预算与美团红包领取 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要 12306 账号登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`AUTH_SCRIPT`、`USER_TOKEN` |
 
