@@ -1,0 +1,37 @@
+# ===== WorkBuddy 专家包版本管理 .gitignore =====
+# 本仓库用于承载专家包源码，通过 Git 版本号触发平台 §9.3 自动更新检测。
+
+# --- 操作系统垃圾文件 ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- 编辑器 / IDE ---
+*.swp
+*~
+.vscode/
+.idea/
+
+# --- 本地临时与构建产物 ---
+*.tmp
+*.bak
+*.log
+node_modules/
+dist/
+__pycache__/
+*.pyc
+
+# --- 明文密钥 / 本地环境（已改用 ${VAR} 占位，禁止提交真值）---
+.env
+.env.*
+*.local
+
+# --- 运行态快照（非源码，每次运行变化，不应版本管理）---
+last_run_snapshot.json
+*snapshot.json
+.created-by-session
+references/runs/
+
+# --- git 自身 ---
+.git/

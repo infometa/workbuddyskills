@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**69** · 专家：**366** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**69** · 专家：**368** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-26
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-27
 
 ---
 ## 目录
@@ -749,13 +749,14 @@
 | [`social-engagement-team`](./experts/social-engagement-team/) | [社媒互动增长专家团](./experts/social-engagement-team/) | 通过智能化互动自动化、AI评论运营、高转化信号挖掘和品牌舆情监控，安全高效提升社交媒体互动效果，覆盖14+全球主流平台 | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权 |
 | [`social-media-strategist`](./experts/social-media-strategist/) | [社交媒体策略师](./experts/social-media-strategist/) | 全面统筹多平台社交媒体策略，让品牌在每个平台发出最强音 | 无 |
 
-### 行业顾问（21）
+### 行业顾问（22）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
 | [`ask-liuxiaopai`](./experts/ask-liuxiaopai/) | [产品顾问](./experts/ask-liuxiaopai/) | Raphael AI 创始人刘小排的数字分身，office-hours 风格陪你拆 idea：钉死具体的人、真痛点、第一笔钱、第一批用户在哪，再给一件今晚就能做的事。 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录 |
 | [`chaogeek-kongming`](./experts/chaogeek-kongming/) | [苏格拉底式AI思维搭子](./experts/chaogeek-kongming/) | 一人公司认知反缴械思维搭子：少问但问到根，补上下文、对齐意图，帮你驾驭智能体不外包判断力。 | 无（可选 API/账号以增强能力） |
 | [`chuangye-manor`](./experts/chuangye-manor/) | [创业伙伴](./experts/chuangye-manor/) | 林老师分身+读书伙伴。送《创业可以学》，陪创业者读书，从读书中听痛点，痛点匹配时自然引出课程咨询。擅长GTM落地、敢见客户情绪层突破、顺序判断。 | 需要微信/企微相关凭证或扫码登录 |
+| [`consulting-partners`](./experts/consulting-partners/) | [战略咨询合伙人](./experts/consulting-partners/) | 假设驱动的战略顾问，按需破题、取证、测算与撰写，产出证据扎实的决策报告与专业级PPT | 无（可选 API/账号以增强能力） |
 | [`family-education-ma`](./experts/family-education-ma/) | [家庭教育专家](./experts/family-education-ma/) | 腾讯未保营地8年一线实践，融合三大循证体系，为家长提供亲子沟通、沉迷干预、家庭成长咨询 | 无 |
 | [`fbsir-eight-seat-board`](./experts/fbsir-eight-seat-board/) | [独董会](./experts/fbsir-eight-seat-board/) | 福帮手经营决策独立审议专家团｜按案组建必要席位，独立判断、交叉质询、保留异议，交付可追溯行动备忘录 | 无（可选 API/账号以增强能力） |
 | [`fbsir-industry-scene-researcher`](./experts/fbsir-industry-scene-researcher/) | [行业场景研究员](./experts/fbsir-industry-scene-researcher/) | 围绕一个行业场景定位关键工作流缺口，并交付补位卡、3天行动计划、项目动作执行包和下一步建议。 | 可能需要启用对应 MCP / 连接器 |
@@ -791,12 +792,13 @@
 | [`study-abroad-consultant`](./experts/study-abroad-consultant/) | [留学顾问](./experts/study-abroad-consultant/) | 精通各国留学申请流程和院校信息 | 无（可选 API/账号以增强能力） |
 | [`supply-chain-strategist`](./experts/supply-chain-strategist/) | [供应链策略师](./experts/supply-chain-strategist/) | 优化供应链每个环节，实现成本效率韧性的最佳平衡 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；需要环境变量：`BROWSER_USE_API_KEY`、`TMAP_WEBSERVICE_KEY` |
 
-### 金融投资（32）
+### 金融投资（33）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
 | [`a-share-analysis`](./experts/a-share-analysis/) | [A股研究团队](./experts/a-share-analysis/) | 8位研究专家支持6个预设工作流编排，覆盖宏观策略、盘面解读、个股深度、估值定价、产业链映射、资金追踪、风险诊断 | 无（可选 API/账号以增强能力） |
 | [`accounts-payable-agent`](./experts/accounts-payable-agent/) | [应付账款代理](./experts/accounts-payable-agent/) | 自动化处理应付账款流程，确保付款准确及时 | 无 |
+| [`believe-in-light`](./experts/believe-in-light/) | [相信光么](./experts/believe-in-light/) | 光模块产业链信号监控专家团。主理人 + 6位成员Agent 三端采集信号，因果验证+权重校准，三层嵌套输出景气度评级。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`citongshuopro`](./experts/citongshuopro/) | [刺桐说Pro-投资社群嘉宾团](./experts/citongshuopro/) | 模拟真实投资社群运作模式的多智能体投研系统，已接入社群嘉宾数字分身，可7*24为您提供投资咨询服务。 | 可能需要启用对应 MCP / 连接器 |
 | [`earnings-reviewer`](./experts/earnings-reviewer/) | [财报研究员](./experts/earnings-reviewer/) | 资深季报复核分析师,读财报电话会和公告更新覆盖模型,产出季报后记、方差表与估值调整,供研究部门沿用。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`equity-research`](./experts/equity-research/) | [股票研究专家](./experts/equity-research/) | 全面的股票研究工具集：财报分析、首次覆盖报告、DCF与可比估值、多空推介、投资备忘录、事件情景分析、组合风险管理，覆盖完整买方卖方研究工作流 | 无 |

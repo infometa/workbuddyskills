@@ -1,0 +1,73 @@
+# Layout Matrix — Themes × Layouts × Char Budget
+
+> 框架级真相源。AI 在 S2（结构设计）和 S3（内容填充）必须查此矩阵。
+> 不得猜测版式能力边界。
+
+## Default Theme
+
+```
+default_theme: mckinsey
+```
+
+## Themes
+
+| Theme | Style | Engine | Color Profile |
+|-------|-------|--------|---------------|
+| `mckinsey` | 麦肯锡咨询风 | MckEngine | navy-blue |
+| `tech_minimal` | 科技极简风（待扩展）| MckEngine | dark-mode |
+
+## Layout Capacity Matrix
+
+每种版式的 **char_budget**（字符数上限）是 S3 门禁的核心依据。
+
+| Layout Method | Pattern# | Max Items | Title Chars | Body/Cell Chars | Special Limits |
+|---------------|----------|-----------|-------------|-----------------|----------------|
+| `cover` | #1 | — | 40 | subtitle: 60, author: 30 | — |
+| `toc` | #6 | 6 items | 15 | item title: 20, desc: 40 | — |
+| `section_divider` | #5 | — | 40 | subtitle: 80 | — |
+| `closing` | #36 | — | 30 | message: 60 | — |
+| `big_number` | #8 | 4 bullets | 40 | number: 10, desc: 60, bullet: 40 | — |
+| `two_stat` | #9 | 2 stats | 40 | each number: 10, label: 20 | — |
+| `three_stat` | #10 | 3 stats | 40 | each number: 10, label: 20 | — |
+| `data_table` | #11 | 8 rows | 40 | header: 15, cell: 40 | — |
+| `metric_cards` | #12 | 4 cards | 40 | card title: 20, desc: 80 | — |
+| `matrix_2x2` | #13 | 4 quads | 40 | quadrant label: 15, desc: 80 | — |
+| `table_insight` | #71 | 6 rows | 40 | header: 15, cell: 40, insight: 60 | — |
+| `process_chevron` | #16 | 5 steps max | 40 | step label: 10, title: 20, desc: 50 | ⚠️ 超5步宽度自动收窄 |
+| `side_by_side` | #19 | 2×6 bullets | 40 | option title: 20, bullet: 50 | — |
+| `before_after` | #20 | 2×5 bullets | 40 | before/after title: 20, bullet: 50 | — |
+| `pros_cons` | #21 | 2×5 bullets | 40 | bullet: 50 | — |
+| `executive_summary` | #24 | 4 items | 40 | headline: 60, item title: 25, desc: 80 | — |
+| `key_takeaway` | #25 | 3 takeaways | 40 | left text: 3×80, takeaway: 60 | — |
+| `timeline` | #29 | 6 milestones | 40 | milestone label: 8, desc: 40 | — |
+| `vertical_steps` | #30 | 5 steps | 40 | step title: 25, desc: 80 | — |
+| `value_chain` | #67 | 5 stages | 40 | stage title: 15, desc: 60 | — |
+| `meet_the_team` | #33 | 4 members | 40 | name: 20, role: 25, bio: 100 | — |
+| `case_study` | #34 | 3 sections | 40 | section title: 15, desc: 120 | — |
+| `action_items` | #35 | 4 actions | 40 | action title: 25, timeline: 15, owner: 15, desc: 80 | — |
+| `donut` | #48 | **6 segments max** | 30 | segment label: 15 | ⚠️ 超6段必然溢出 |
+| `pie` | #64 | **6 segments max** | 30 | segment label: 15 | ⚠️ 超6段必然溢出 |
+| `grouped_bar` | #37 | 6 categories × 3 series | 30 | category: 8, series label: 15 | — |
+| `stacked_bar` | #38 | 6 categories | 30 | category: 8 | — |
+| `horizontal_bar` | #39 | 8 items | 30 | item label: 20 | — |
+| `four_column` | #28 | **4 columns max** | 40 | col title: 20, desc: 120 | ⚠️ 超4列会溢出 |
+| `icon_grid` | #63 | 8 items (4×2) 或 9 (3×3) | 40 | icon label: 15, desc: 50 | — |
+| `swot` | #65 | 4×4 points | 40 | each point: 50 | — |
+| `checklist` | #61 | 7 rows | 40 | cell: 30 | — |
+| `two_column_text` | #27 | 2×5 bullets | 40 | bullet: 60 | ⚠️ 全局≤1张 |
+
+## Usage in Gates
+
+**S2 结构门禁**：检查版式分配是否在 Max Items 范围内。
+
+**S3 内容门禁**：检查每个文本块字符数是否在 char_budget 内。
+
+```python
+# S3 门禁示例伪代码
+for slide in content['slides']:
+    layout = slide['layout']
+    for field, text in slide['text_fields'].items():
+        limit = LAYOUT_MATRIX[layout]['char_budget'].get(field, 80)
+        if len(text) > limit:
+            return GateFail(f"Slide {slide['idx']} {field}: {len(text)} > {limit} chars")
+```
