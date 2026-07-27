@@ -35,6 +35,9 @@ ihr-cli conference +search --createdAtFrom "2026-03-01 00:00:00" --createdAtTo "
 # 关键词 + 状态 + 预览
 ihr-cli conference +search --queryText "渠道拓展" --statuses "READY,STARTED,COMPLETED" --previewLimit 5
 
+# 按面谈方式搜索
+ihr-cli conference +search --interviewMode DIGITAL_AVATAR --previewLimit 5
+
 # 时间范围 + 排序
 ihr-cli conference +search --startTimeFrom "2026-03-01 00:00:00" --startTimeTo "2026-03-31 23:59:59" --sortField START_TIME --sortOrder DESC
 
@@ -51,6 +54,7 @@ ihr-cli conference +search --queryText "香港出海" --output-file /tmp/ihr_con
 |------|------|------|
 | `--queryText <text>` | 否 | 搜索关键词 |
 | `--statuses <values>` | 否 | 状态列表，逗号分隔，可选值：`CANCELLED`、`READY`、`STARTED`、`EXPIRED`、`COMPLETED` |
+| `--interviewMode <mode>` | 否 | 面谈方式，取值：`ONLINE`、`OFFLINE`、`DIGITAL_AVATAR` |
 | `--startTimeFrom <time>` | 否 | 开始时间下界 |
 | `--startTimeTo <time>` | 否 | 开始时间上界 |
 | `--endTimeFrom <time>` | 否 | 结束时间下界 |
@@ -72,9 +76,10 @@ ihr-cli conference +search --queryText "香港出海" --output-file /tmp/ihr_con
 
 1. `queryText`
 2. `statuses`
-3. 任一时间范围字段
-4. 任一排序参数（`sortField` 或 `sortOrder`）
-5. `previewLimit > 0`
+3. `interviewMode`
+4. 任一时间范围字段
+5. 任一排序参数（`sortField` 或 `sortOrder`）
+6. `previewLimit > 0`
 
 ### 2. 默认面向历史面谈
 
@@ -113,18 +118,15 @@ ihr-cli conference +search --queryText "香港出海" --output-file /tmp/ihr_con
 2. `STARTED` 是搜索态，会归并多种进行中语义。
 3. 未知或空白状态字面量会按当前兼容口径归一化为 `CANCELLED`。
 
-### 7. `previewItems` 会受权限过滤
+### 7. `previewItems` 使用搜索过滤语义
 
-当前 controller 会先按当前用户权限过滤 `previewItems`，再用过滤后的结果重建：
+当前 controller 会按当前用户权限过滤 `previewItems`：
 
-1. `response.data.returnedCount`
-2. `response.data.conferenceSessionIds`
-3. `response.data.previewItems`
+1. 没有 `VIEW_BASIC_INFO` 时，整条 `previewItem` 不返回。
+2. 有基础信息权限但缺少大纲、智能总结或转写权限时，对应内容字段返回 `null`。
+3. 搜索结果不返回 `access` 对象；如需逐项判断四类内容访问状态，继续调用 `+documents`。
 
-因此：
-
-1. `previewItems` 中某些文本字段可能被裁剪为空。
-2. `currentQueryUserIdentity` 用于表达当前查询用户在该会话中的身份信息。
+`returnedCount` 和 `conferenceSessionIds` 表达搜索命中结果，不能根据是否存在同位置的 `previewItem` 推断当前用户的具体内容权限。
 
 ### 8. 默认先搜索，再读文档
 
@@ -180,8 +182,8 @@ CLI 统一输出：
 1. 请求里的时间筛选字段使用 `yyyy-MM-dd` 或 `yyyy-MM-dd HH:mm:ss`。
 2. 响应里的 `startTime`、`endTime`、`createTime` 来自服务端响应模型，格式为 ISO-8601 offset datetime。
 3. `queryText` 默认按相关性排序；若显式指定时间排序，则结果是在通过相关性门槛后，再按时间字段排序。
-4. 当前 controller 会用过滤后的 `previewItems` 重建 `returnedCount` 与 `conferenceSessionIds`，三者语义保持一致。
-5. 文本字段属于权限敏感输出；`currentQueryUserIdentity` 只有在服务端成功解析“当前查询用户在该会话中的 participant 身份”时才返回，未解析到时可能为 `null`。
+4. `previewItems` 使用搜索过滤语义：无基础信息权限时删除整条预览项，并且不返回 `access`。
+5. 文本字段属于权限敏感输出；缺少对应内容权限时返回 `null`。`currentQueryUserIdentity` 只有在服务端成功解析“当前查询用户在该会话中的 participant 身份”时才返回，未解析到时可能为 `null`。
 
 ## 搜索结果中的下一步
 
@@ -198,8 +200,8 @@ ihr-cli conference +documents --conferenceSessionIds "<conferenceSessionId>"
 | 缺少输入参数 | 没有传任何有效条件 | 至少补一个查询条件 |
 | `previewLimit 取值范围必须为 0-10` | 预览数量越界 | 改为 `0-10` |
 | 无结果 | 条件过窄 | 先只保留关键词或缩小过滤条件 |
-| 配置错误 | 尚未完成 CLI 安装或登录配置 | 先按 `ihr-shared` 下载安装指导文件并完成安装与登录授权 |
-| 未登录 | 当前 profile 没有有效登录态 | 先执行 `ihr-cli auth login` |
+| 配置错误 | 尚未初始化 CLI 配置 | 先执行 `ihr-cli config init --base-url <url>` |
+| 未登录 | 当前 profile 没有 token | 先执行 `ihr-cli auth login --api-token-stdin` |
 | 网络请求失败 | 服务不可达 | 检查服务地址与网络连通性 |
 
 ## 提示

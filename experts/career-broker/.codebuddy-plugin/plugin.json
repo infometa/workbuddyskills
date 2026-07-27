@@ -1,0 +1,107 @@
+{
+  "name": "career-broker",
+  "displayName": {
+    "en": "Tencent Career Broker",
+    "zh": "鹅厂职业经纪人"
+  },
+  "description": "Your dedicated career broker at Tencent — understands your work, helps you access internal resources, and walks the next move with you.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Career Broker",
+    "email": "career-broker@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "career-broker",
+  "plugin": "career-broker",
+  "profession": {
+    "en": "Your Career Broker",
+    "zh": "鹅厂职业经纪人"
+  },
+  "displayDescription": {
+    "en": "I help you clarify your career profile, discuss growth and transition directions, and recommend courses, experience articles, internal cases, and liveflow opportunities.",
+    "zh": "陪你梳理职业画像，讨论发展与转型方向，并推荐课程、经验文章、内部案例和活水机会。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "09-OperationsHR",
+  "tags": [
+    {
+      "en": "Career Growth",
+      "zh": "职业成长"
+    },
+    {
+      "en": "Resource Connection",
+      "zh": "资源链接"
+    },
+    {
+      "en": "Internal Opportunities",
+      "zh": "内部机会"
+    }
+  ],
+  "defaultInitPrompt": {
+    "en": "As my career broker, what can you do for me?",
+    "zh": "作为我的经纪人，你可以做什么事情？"
+  },
+  "quickPrompts": [
+    {
+      "en": "As my career broker, what can you do for me?",
+      "zh": "作为我的经纪人，你可以做什么事情？"
+    },
+    {
+      "en": "Recommend internal resources based on my situation",
+      "zh": "根据我的情况推荐司内资源"
+    },
+    {
+      "en": "Quick check — am I even eligible for liveflow right now?",
+      "zh": "我现在到底能不能走活水？帮我看看资格"
+    }
+  ],
+  "agents": [
+    "./agents/career-broker.md"
+  ],
+  "skills": [
+    "./skills/career-broker-core",
+    "./skills/profile-perception",
+    "./skills/career-qa",
+    "./skills/ai-career-agent",
+    "./skills/career-development-consultant",
+    "./skills/liveflow-job-recommender",
+    "./skills/resume-generator"
+  ],
+  "userConfig": {
+    "TAIHU_TOKEN": {
+      "type": "string",
+      "label": "太湖 PAT（集团统一鉴权 · 可选）",
+      "description": "招活MCP（recruit-mcp）现已支持在 WorkBuddy 直接弹窗连接授权（点「连接」用太湖 SSO 授权即可，无需在此手填）。仅当你的客户端不支持弹窗连接、需手动配置时，才在此填太湖 PAT：https://tai.it.woa.com/user/pat 创建 Personal Access Token，粘贴进来（不要带 Bearer 前缀）。",
+      "required": false,
+      "sensitive": true
+    }
+  },
+  "dependencies": {
+    "mcpServers": {
+      "recruit-mcp": {
+        "type": "http",
+        "url": "https://zhaopin.mcp.it.woa.com",
+        "headers": {
+          "Authorization": "Bearer ${user_config.TAIHU_TOKEN}"
+        }
+      },
+      "自评MCP": {
+        "type": "http",
+        "url": "https://self-assess.mcp.it.woa.com"
+      }
+    }
+  },
+  "mcpServers": {
+    "recruit-mcp": {
+      "type": "http",
+      "url": "https://zhaopin.mcp.it.woa.com",
+      "headers": {
+        "Authorization": "Bearer ${user_config.TAIHU_TOKEN}"
+      }
+    },
+    "自评MCP": {
+      "type": "http",
+      "url": "https://self-assess.mcp.it.woa.com"
+    }
+  }
+}

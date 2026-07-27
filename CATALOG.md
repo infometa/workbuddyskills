@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**69** · 专家：**368** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**69** · 专家：**371** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-27
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-07-28
 
 ---
 ## 目录
@@ -379,7 +379,7 @@
 | [`cnb-woa`](./connectors/cnb-woa/) | CNB 平台交互命令，支持代码仓库、Issue、PR、CI、制品库读写等操作。 | 无（可选 API/账号以增强能力） |
 | [`ctrip-wendao`](./connectors/ctrip-wendao/) | Trigger when user asks travel-related questions: hotel search, flight query, attraction r… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要按 token-schema 配置凭证；需要环境变量：`WENDAO_API_KEY` |
 | [`dingtalk`](./connectors/dingtalk/) | 管理钉钉产品能力(AI表格/AI搜问/日历/通讯录/群聊与机器人/待办/审批/考勤/日志/DING消息/开放平台文档/钉钉文档/钉钉云盘/原生Markdown文件/AI听记/邮箱… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
-| [`edgeone-pages`](./connectors/edgeone-pages/) | 用途：edgeone-makers | 可能需要启用对应 MCP / 连接器 |
+| [`edgeone-pages`](./connectors/edgeone-pages/) | 用途：Deploy the project to EdgeOne Makers and return the live access URL. Supports full-sta… | 可能需要启用对应 MCP / 连接器 |
 | [`fbs-connector`](./connectors/fbs-connector/) | 福帮手人机协同连接器：面向 WorkBuddy 的身份识别、场景包查询、首值与继续使用记录、乐包状态确认和超级合伙人交接。 | 可能需要启用对应 MCP / 连接器 |
 | [`feishu`](./connectors/feishu/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`fyopen-lawsearch`](./connectors/fyopen-lawsearch/) | 用途：Support natural language to obtain accurate and currently effective regulatory provisi… | 可能需要启用对应 MCP / 连接器 |
@@ -580,7 +580,7 @@
 | [`threat-detection-engineer`](./experts/threat-detection-engineer/) | [威胁检测工程师](./experts/threat-detection-engineer/) | 专精构建威胁检测系统，在攻击者造成损害前发现拦截威胁 | 无 |
 | [`we-chat-mini-program-developer`](./experts/we-chat-mini-program-developer/) | [微信小程序开发者](./experts/we-chat-mini-program-developer/) | 精通微信小程序开发框架和生态，打造流畅微信原生体验应用 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权 |
 
-### 数据智能（34）
+### 数据智能（36）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -603,6 +603,8 @@
 | [`gpt-researcher-team`](./experts/gpt-researcher-team/) | [深度研究团队](./experts/gpt-researcher-team/) | 深度研究报告输出，7角色5阶段聚合多源信息，经审稿修订循环输出带引用的专业报告 | 无（可选 API/账号以增强能力） |
 | [`huashu-data-pro`](./experts/huashu-data-pro/) | [花叔数据分析专家团](./experts/huashu-data-pro/) | 「一人公司」本地数据分析专家团。一份 Excel 进，趋势 / 结构 / 异常三专家并行分析，交付网页、Excel、PPT 三格式报告，数据不出本地。 | 无 |
 | [`jinshuju-expert`](./experts/jinshuju-expert/) | [金数据表单与数据管理专家](./experts/jinshuju-expert/) | 通过金数据 MCP 用自然语言搭建表单、增删改查与批量维护数据、查询套餐额度，替代登录后台手动操作 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`YOUR_API_KEY`、`YOUR_API_SECRET` |
+| [`jinshuju-form-expert`](./experts/jinshuju-form-expert/) | [金数据表单助手](./experts/jinshuju-form-expert/) | 搭建报名、问卷、预约、收款等表单，增删改查、批量导入导出数据，替代登录后台操作。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`YOUR_API_KEY`、`YOUR_API_SECRET` |
+| [`jinshuju-table-expert`](./experts/jinshuju-table-expert/) | [金数据AI表格助手](./experts/jinshuju-table-expert/) | 轻量表格，支持文本、日期等多种字段类型，专为 Agent 设计，可随时读写协作。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`YOUR_API_KEY`、`YOUR_API_SECRET` |
 | [`kdocs-data-table`](./experts/kdocs-data-table/) | [数据建表专家](./experts/kdocs-data-table/) | 金山文档出品将群聊接龙一键转为结构化表格，一句话生成可分享的信息收集表，智能美化表格并固化规则（条件格式高亮异常值、数据校验下拉约束、区域保护锁定表头）。擅长接龙识别、字段推断、… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`KINGSOFT_DOCS_TOKEN` |
 | [`llm-wiki`](./experts/llm-wiki/) | [知识管理专家](./experts/llm-wiki/) | 基于 Andrej Karpathy 的 LLM Wiki 模式，帮助用户构建、维护和查询持久化的个人知识库。擅长将原始资料（论文、文章、笔记等）编译为结构化 Markdown … | 无 |
 | [`model-quality-assurance-expert`](./experts/model-quality-assurance-expert/) | [模型质量保障专家](./experts/model-quality-assurance-expert/) | 系统化评估保障AI模型质量，确保输出准确公平安全 | 无 |
@@ -776,15 +778,16 @@
 | [`terminal-veteran`](./experts/terminal-veteran/) | [终端产业分析师](./experts/terminal-veteran/) | 近三十年终端老兵，11条铁律+三层方法论，厂商策略/渠道选品/投资分析+行业报告 | 无 |
 | [`tripstar-agent`](./experts/tripstar-agent/) | [旅游攻略管家](./experts/tripstar-agent/) | 生活服务管家，一站式搞定行程规划、景点/酒店/天气/预算与美团红包领取 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要 12306 账号登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`AUTH_SCRIPT`、`USER_TOKEN` |
 
-### 运营人力（11）
+### 运营人力（12）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
+| [`career-broker`](./experts/career-broker/) | [鹅厂职业经纪人](./experts/career-broker/) | 陪你梳理职业画像，讨论发展与转型方向，并推荐课程、经验文章、内部案例和活水机会。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`corporate-training-designer`](./experts/corporate-training-designer/) | [企业培训设计师](./experts/corporate-training-designer/) | 设计系统化企业培训课程和学习路径，让员工技能快速提升 | 需要微信/企微相关凭证或扫码登录 |
 | [`customer-support-expert`](./experts/customer-support-expert/) | [客户支持专家](./experts/customer-support-expert/) | 将每次沮丧的用户互动转化为忠实拥护者，用卓越服务创口碑 | 无 |
 | [`hr-operations-team`](./experts/hr-operations-team/) | [HR 运营团队](./experts/hr-operations-team/) | 人力资源管理流程化，招聘筛选、薪酬体系设计、组织发展与HR运营流程化管理，助力企业人才战略落地 | 无 |
 | [`ihr-ai-interviewer`](./experts/ihr-ai-interviewer/) | [数字人招聘面试专家](./experts/ihr-ai-interviewer/) | 围绕岗位画像设计面试维度与题库，管理数字人面试模板，校验候选人信息并发起面试，回查面试记录与纪要。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；需要环境变量：`IHR360_API_TOKEN` |
-| [`ihr-conference`](./experts/ihr-conference/) | [AI面谈官](./experts/ihr-conference/) | 提供九大智能面谈大纲与线上实时指引，基于云录制自动生成结构化纪要与待办，全周期辅助管理者高效沟通。 | 需要登录 / OAuth / 扫码授权；需要环境变量：`IHR360_API_TOKEN` |
+| [`ihr-conference`](./experts/ihr-conference/) | [AI面谈官](./experts/ihr-conference/) | 提供九大智能面谈大纲与线上实时指引，基于云录制自动生成结构化纪要与待办，全周期辅助管理者高效沟通。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；需要环境变量：`IHR360_API_TOKEN` |
 | [`interview-simulator`](./experts/interview-simulator/) | [面试模拟专家](./experts/interview-simulator/) | 模拟任意职位的真实面试官，覆盖技术产品销售人事等全岗位，提供逐题评分详细反馈与录用建议，助你高效备战面试。 | 无（可选 API/账号以增强能力） |
 | [`recruitment-expert`](./experts/recruitment-expert/) | [招聘专家](./experts/recruitment-expert/) | 精通人才招聘全流程，为团队找到最佳人才 | 需要飞书应用凭证或用户登录授权 |
 | [`resume-assistant`](./experts/resume-assistant/) | [简历优化专家](./experts/resume-assistant/) | 提供百分制专业评分、四十项深度清单润色、岗位匹配定制与多格式导出，全面打造高竞争力求职简历。 | 无（可选 API/账号以增强能力） |

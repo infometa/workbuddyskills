@@ -2,7 +2,7 @@
 
 > **前置条件：** 先阅读 [`../../ihr-shared/SKILL.md`](../../ihr-shared/SKILL.md) 了解共享运行规则和 JSON 协议。
 
-选人组件人员搜索，支持分页和按姓名模糊搜索。只读操作，不修改员工或组织数据。
+选人组件人员搜索，支持分页和按姓名模糊搜索；姓名搜索大小写不敏感。只读操作，不修改员工或组织数据。
 
 当前动作入口：
 
@@ -39,7 +39,7 @@ ihr-cli base +selectStaffs --searchKeyword "张三" --output-file /tmp/ihr_base_
 
 | 参数 | 必填 | 说明 |
 |------|------|------|
-| `--searchKeyword <text>` | 否 | 搜索关键词，当前主要支持姓名模糊搜索，如果用户没有给搜索词，或搜索词为空，返回所有候选可见人员 |
+| `--searchKeyword <text>` | 否 | 搜索关键词，当前主要支持姓名模糊搜索，大小写不敏感；如果用户没有给搜索词，或搜索词为空，返回所有候选可见人员 |
 | `--pageNo <n>` | 否 | 页码，从 `1` 开始，默认 `1` |
 | `--pageSize <n>` | 否 | 每页记录数，默认 `10`，最大 `100` |
 | `--json <json>` | 否 | 直接传入 JSON 字符串，调试用，不能和分项参数混用 |
@@ -53,10 +53,14 @@ ihr-cli base +selectStaffs --searchKeyword "张三" --output-file /tmp/ihr_base_
 
 当用户没有给搜索词，或搜索词为空时，本动作会按分页返回当前登录态可见人员候选。
 
+姓名搜索大小写不敏感。用户输入英文名、拼音、账号样式关键词时，直接按原词搜索即可；不要因为大小写差异要求用户重新确认或重输。
+
 ### 2. 必须分页使用
 
 `pageNo` 从 `1` 开始，`pageSize` 最大为 `100`。
 如果用户没有指定分页，保留默认值 `pageNo=1`、`pageSize=10`。
+
+分页基准已由 CLI 封装统一处理。CLI 用户侧和 JSON 输入都保持 `pageNo` 从 `1` 开始，不做 `pageNo - 1` 预转换。
 
 ### 3. 只做选人查询
 
@@ -72,12 +76,7 @@ ihr-cli base +selectStaffs --searchKeyword "张三" --output-file /tmp/ihr_base_
 
 ## 路由规则
 
-CLI 根据当前 profile 的 `baseUrl` 自动选择底层接口：
-
-| 条件 | 接口 |
-|------|------|
-| `baseUrl` 包含 `worker100` | `/gateway/ai/conference/v1/toolStaff/select` |
-| 其他情况 | `/gateway/component/api/v1/ai/conference/selectStaffs` |
+CLI 根据当前 profile 的 `baseUrl` 自动选择产品链路。Agent 只调用 `ihr-cli base +selectStaffs`，不硬编码或暴露内部 URL。
 
 ## 输出结果
 
@@ -112,12 +111,13 @@ CLI 统一输出：
 |---------|---------|---------|
 | `--pageNo 必须大于等于 1` | 页码小于 1 | 传入 `--pageNo 1` 或更大的整数 |
 | `--pageSize 取值范围必须为 1-100` | 每页数量越界 | 传入 `1` 到 `100` 之间的整数 |
-| 配置错误 | 尚未完成 CLI 安装或登录配置 | 先按 `ihr-shared` 下载安装指导文件并完成安装与登录授权 |
-| 未登录 | 当前 profile 没有有效登录态 | 先执行 `ihr-cli auth login` |
+| 配置错误 | 尚未初始化 CLI 配置 | 先执行 `ihr-cli config init --base-url <url>` |
+| 未登录 | 当前 profile 没有 token | 先执行 `ihr-cli auth login --api-token-stdin` |
 | 网络请求失败 | 服务不可达 | 检查服务地址与网络连通性 |
 
 ## 提示
 
 - 只需要按姓名找人时，优先传 `--searchKeyword`。
+- `searchKeyword` 大小写不敏感，候选姓名大小写显示不同不构成需要追问的歧义。
 - 用户没有指定分页时，保留默认 `pageNo=1`、`pageSize=10`。
 - 本动作依赖服务端当前登录态判断可见人员范围，不需要在常规场景中手动传 `companyId`、`userId` 或 `staffId`。

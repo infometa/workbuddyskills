@@ -10,7 +10,7 @@ description: "iHR360 CLI 共享规则：ihr-cli 运行时、auth/config 规则�
 本 skill 不直接承载业务动作，只负责说明 `ihr-cli` 相关命令的共享规则：
 
 1. CLI 运行时要求
-2. 安装、登录与 auth/config 规则
+2. auth/config 配置规则
 3. 默认身份上下文约定
 4. JSON 输入输出协议
 5. 相对时间处理规则
@@ -25,49 +25,47 @@ description: "iHR360 CLI 共享规则：ihr-cli 运行时、auth/config 规则�
 3. 原生网关调用器挂在 `ihr-cli interface` / `ihr-cli ihr-interface` 下。
 4. 本目录是 `ihr-cli` 随包分发的共享 skill 位置。
 
-### 2. 安装与登录
+### 2. 配置加载
 
-1. 如果当前环境缺少 `ihr-cli`，或版本状态不可确认，下载安装指导文件：
+1. 推荐先执行 `ihr-cli auth login`，按终端打印的授权链接在浏览器完成登录授权。
+2. CLI 会打印 `verification_uri_complete` 和 `user_code`，并在交互环境下尽力自动打开浏览器；无论是否自动打开，默认都会持续轮询授权结果。
+3. 授权成功后 CLI 会保存 `apiKey/baseUrl/user context`，`base`、`conference`、`ihr-interface` 等动作默认复用当前 profile 的配置与登录态。
+4. `config init --env <env>` / `config init --base-url <url>` 与 `auth login --api-token-stdin` 继续作为手工 token 兼容入口。
+5. 当前不再以 `.env` 作为主路径。
+6. `auth login` 必须能写入本机登录态目录：优先使用 `IHR_CLI_CONFIG_DIR`，未设置时为 `~/.ihr-cli`，凭证文件在其 `credentials/ihr-cli/` 子目录下。
+7. 如果当前 Agent/WorkBuddy 命令运行在只读沙盒中，出现 `credential_store_error`、`permission denied`、无法创建/写入 `credentials` 等错误时，必须停止；不要在同一沙盒内反复 `mkdir` 或重新执行 `auth login`。
+8. 沙盒无法写入时，可以先在沙盒中执行 `ihr-cli auth login --no-wait --json` 获取 `verification_uri_complete`、`user_code`、`device_code`，立即把授权链接展示/打开给用户；随后必须在宿主机终端执行 `ihr-cli auth login --device-code <device_code>` 保存凭证。
+9. 宿主机终端登录成功并确认 `ihr-cli auth verify` 通过后，Agent 再继续业务命令。
 
-```bash
-curl -fsSL https://cdn-txtoqiniu.ihr360.com/ihr-cli/agent-install.md -o /tmp/ihr-cli-agent-install.md
-```
-
-2. 按安装指导文件中的步骤安装或更新 `ihr-cli`。
-3. 安装后重新执行 `command -v ihr-cli` 与 `ihr-cli version`，确认命令可用。
-4. 使用当前专家定义正文 `<memory>` 中的 `IHR_CLI_RUNTIME_ENV` 初始化 CLI 配置：
-
-```bash
-ihr-cli config init --env work100-prod
-```
-
-5. 如果当前专家定义声明 `IHR_CLI_REQUIRED=true` 但没有提供有效的 `IHR_CLI_RUNTIME_ENV`，停止安装并提示当前专家包缺少运行环境配置，不要静默改用 `prod`。
-6. 不要在 skill 中内置复杂安装脚本、固定版本下载地址或临时安装路径；安装入口以指导文件为准。
-
-### 3. 登录授权
-
-1. 首选登录授权模式：
+推荐初始化方式：
 
 ```bash
 ihr-cli auth login
 ```
 
-2. 登录后执行 `ihr-cli auth status` 或业务命令确认当前 profile 可用。
-3. `base`、`conference`、`ihr-interface` 等动作默认复用 `ihr-cli` 当前 profile 的配置与登录态。
-4. 不推荐手动设置 `baseUrl`、手动写入 token，或默认要求用户提供 API Token。
-5. 只有在登录授权模式不可用、且用户明确提供环境地址和 API Token 时，才把手动配置作为临时兜底：
+发布包内置当前打包环境的默认 `baseUrl` 和 `authCenterUrl`。如果需要切换业务 `baseUrl` 默认值，使用 `ihr-cli config init --env prod|uat|qa2|dev|work100-prod|work100-uat|work100-qa2`；如果需要临时切换登录入口环境，使用 `ihr-cli auth login --env prod|uat|qa2|dev|work100-prod|work100-uat|work100-qa2`；如果只想覆盖认证中心地址，使用 `--auth-center-url`。当前回归测试只使用 `qa2` 和 `work100-qa2`。
+
+非交互或 Agent 分回合场景：
 
 ```bash
-ihr-cli config init --base-url <url>
+ihr-cli auth login --no-wait --json
+ihr-cli auth login --device-code <device_code> --no-browser
+```
+
+如果第一次 `--no-wait --json` 使用了 `--auth-center-url` 或 `--env`，继续轮询时也要携带同一登录入口参数，避免轮询到不同 auth-center。
+
+手工 token 兼容方式；回归测试默认不走此路径：
+
+```bash
+ihr-cli config init --env qa2
+ihr-cli config init --base-url https://qa2.ihr360.com
 printf '%s' "$IHR360_API_TOKEN" | ihr-cli auth login --api-token-stdin
 ```
 
-6. 当前不再以 `.env` 作为主路径。
-
-### 4. 身份上下文
+### 3. 身份上下文
 
 1. 业务语义上默认依赖服务端注入的身份上下文。
-2. CLI 会自动从当前登录授权态读取凭证，并注入请求头。
+2. CLI 会自动从本地 credential store 读取 token，并注入请求头。
 3. 领域 skill 不应把鉴权细节作为主流程重点说明。
 
 ## JSON 协议

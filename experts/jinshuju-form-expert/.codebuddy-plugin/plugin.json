@@ -1,0 +1,67 @@
+{
+  "name": "jinshuju-form-expert",
+  "version": "1.0.0",
+  "description": "Build forms and manage form data on Jinshuju (jinshuju.net) with natural language",
+  "author": {
+    "name": "Jinshuju",
+    "email": "marketing@jinshuju.net"
+  },
+  "expertType": "agent",
+  "agentName": "jinshuju-form-expert",
+  "agents": [
+    "./agents/jinshuju-form-expert.md"
+  ],
+  "skills": [
+    "./skills/jinshuju-form"
+  ],
+  "displayName": {
+    "en": "Forms Expert",
+    "zh": "表单管理专家"
+  },
+  "profession": {
+    "en": "Jinshuju Forms Assistant",
+    "zh": "金数据表单助手"
+  },
+  "displayDescription": {
+    "en": "Create forms for registration, questionnaires, appointments, and payments, and perform CRUD operations, as well as batch import and export of data, replacing backend login operations.",
+    "zh": "搭建报名、问卷、预约、收款等表单，增删改查、批量导入导出数据，替代登录后台操作。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "zh": "帮我做一个训练营报名表，299 元一位，限 60 人报名",
+    "en": "Please help me create a training camp registration form. It costs 299 yuan per person, and there's a limit of 60 people who can register."
+  },
+  "tags": [
+    {
+      "en": "Event Registration",
+      "zh": "活动报名"
+    },
+    {
+      "en": "Questionnaire survey",
+      "zh": "问卷调研"
+    },
+    {
+      "en": "Data Management",
+      "zh": "数据管理"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Please help me create a training camp registration form. It costs 299 yuan per person, and there's a limit of 60 people who can register.",
+      "zh": "帮我做一个训练营报名表，299 元一位，限 60 人报名"
+    },
+    {
+      "en": "Please help me analyze this month's satisfaction survey data to see what users care about most.",
+      "zh": "帮我分析这个月的满意度调研数据，看看用户最关心的问题是什么"
+    },
+    {
+      "en": "Check the registration forms from last week for those who haven't paid yet, and make a list.",
+      "zh": "查一下上周报名表里还没缴费的人，列个清单"
+    }
+  ],
+  "plugin": "jinshuju-form-expert",
+  "dependencies": {
+    "mcpServers": "./.mcp.json"
+  }
+}

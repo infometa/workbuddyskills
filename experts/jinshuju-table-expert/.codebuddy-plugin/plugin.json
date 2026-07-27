@@ -1,0 +1,67 @@
+{
+  "name": "jinshuju-table-expert",
+  "version": "1.0.0",
+  "description": "Lightweight Jinshuju (jinshuju.net) tables designed for agents — create tables and read/write rows with natural language",
+  "author": {
+    "name": "Jinshuju",
+    "email": "marketing@jinshuju.net"
+  },
+  "expertType": "agent",
+  "agentName": "jinshuju-table-expert",
+  "agents": [
+    "./agents/jinshuju-table-expert.md"
+  ],
+  "skills": [
+    "./skills/jinshuju-table"
+  ],
+  "displayName": {
+    "en": "AI Table Expert",
+    "zh": "AI表格专家"
+  },
+  "profession": {
+    "en": "Jinshuju AI Table Assistant",
+    "zh": "金数据AI表格助手"
+  },
+  "displayDescription": {
+    "en": "Lightweight tables supporting multiple field types such as text and date, designed for agents, readable and writable anytime for collaboration.",
+    "zh": "轻量表格，支持文本、日期等多种字段类型，专为 Agent 设计，可随时读写协作。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "zh": "帮我建一张办公用品领用台账，字段包括名称、数量、领用人、日期",
+    "en": "Help me create an office-supplies checkout ledger with columns for item name, quantity, recipient, and date."
+  },
+  "tags": [
+    {
+      "en": "Ledger Management",
+      "zh": "台账管理"
+    },
+    {
+      "en": "Data Statistics",
+      "zh": "数据统计"
+    },
+    {
+      "en": "Agent Data Source",
+      "zh": "Agent 数据源"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Help me create an office-supplies checkout ledger with columns for item name, quantity, recipient, and date.",
+      "zh": "帮我建一张办公用品领用台账，字段包括名称、数量、领用人、日期"
+    },
+    {
+      "en": "Summarize the last month of stock-in/out data in this inventory table and show me which items are consumed fastest.",
+      "zh": "把这张库存表最近一个月的出入库数据汇总一下，看看哪些物料消耗最快"
+    },
+    {
+      "en": "From now on, automatically log each day's sales data into this table for me.",
+      "zh": "以后帮我把每天的销售数据自动记到这张表里"
+    }
+  ],
+  "plugin": "jinshuju-table-expert",
+  "dependencies": {
+    "mcpServers": "./.mcp.json"
+  }
+}

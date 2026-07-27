@@ -1,5 +1,5 @@
 ---
-name: edgeone-makers
+name: edgeone-pages
 description_zh: "将项目部署到 EdgeOne Makers 并返回线上访问地址，支持全栈、云函数、AI Agent 等开发场景。"
 description_en: "Deploy the project to EdgeOne Makers and return the live access URL. Supports full-stack development, cloud functions, AI Agent, and other development scenarios."
 version: "1.0.0"
@@ -7,7 +7,7 @@ version: "1.0.0"
 
 # EdgeOne Pages Skill
 
-该 Skill 需要调用 `edgeone-makers-mcp-server` MCP Server。
+该 Skill 需要调用 `edgeone-pages` MCP Server。
 
 ## 概述
 

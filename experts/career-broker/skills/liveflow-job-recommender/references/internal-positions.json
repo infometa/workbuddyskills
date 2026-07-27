@@ -1,0 +1,1251 @@
+{
+  "_source": "活水平台前端 API 返回（用户 2026-06-03 提供）",
+  "_structure": "族（clan）→ 类（genus）→ 职位（position），每层带 id（int）+ code（GUID）+ name",
+  "_usage_for_search": "PostAdvancedSearch 接口 positionInfoRequests[].mappingInnerPostId 字段使用职位 code（GUID）",
+  "_levels": {
+    "level_1_clan": "族（顶层）id 14/17/18/19/22 → 5 大族",
+    "level_2_genus": "类（中层）每族下 5-10 个，selectFlag=false",
+    "level_3_position": "职位（叶子）有 selectFlag=true 标记"
+  },
+  "data": [
+    {
+      "id": 14,
+      "name": "产品/项目族（PD）",
+      "code": "29DBF19D-05CD-4A7C-ABA8-34077D6A716B",
+      "parentId": 0,
+      "selectFlag": false,
+      "types": [
+        {
+          "id": 32,
+          "name": "游戏产品类－GD",
+          "code": "789C9F32-212E-44B3-9F41-A8B17CECC780",
+          "parentId": 14,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 226,
+              "name": "游戏策划",
+              "code": "02DF8874-2102-4D59-82C5-D603BE241EF2",
+              "parentId": 32,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 337,
+              "name": "游戏运营",
+              "code": "CC47B02F-597E-4D6D-871C-3145828C138E",
+              "parentId": 32,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 338,
+              "name": "海外游戏合作管理",
+              "code": "2236947D-A49B-4DA7-AF12-5A41BBDAFA6B",
+              "parentId": 32,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 339,
+              "name": "音频策划",
+              "code": "780825F9-A123-4487-9E70-0D5C3943FEBE",
+              "parentId": 32,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 362,
+              "name": "游戏研究与应用",
+              "code": "1A7F59F8-7B9A-4E39-899A-42E3318E91A1",
+              "parentId": 32,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 395,
+              "name": "游戏增长运营",
+              "code": "329AA22A-9BCD-4C48-B135-07C33124D1D9",
+              "parentId": 32,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "name": "产品类－PDM",
+          "code": "15D6D439-5DDB-4FB0-AAF3-C47CE2297C9F",
+          "parentId": 14,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 102,
+              "name": "产品运营",
+              "code": "8EA2A63A-68A6-4283-B8A2-259EFF380D0D",
+              "parentId": 33,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 183,
+              "name": "产品策划",
+              "code": "6D8F0C97-6C0D-43C2-8C4E-94DCEDADA02D",
+              "parentId": 33,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 340,
+              "name": "行业应用",
+              "code": "102286A7-DDBD-47DC-9C1A-6DCC479BEF56",
+              "parentId": 33,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 389,
+              "name": "产品经理",
+              "code": "711B5400-981F-4722-AC1A-19E6942C2EEE",
+              "parentId": 33,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 390,
+              "name": "技术产品",
+              "code": "2FC00A8B-CE95-4CB8-BD93-3654A1011332",
+              "parentId": 33,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "name": "项目类－PM",
+          "code": "CCF95FF8-0A7A-4A8C-9A8A-EB6D34F59C11",
+          "parentId": 14,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 420,
+              "name": "研发项目管理",
+              "code": "159B5B3B-48AC-4EB0-B7D6-7D071F75E101",
+              "parentId": 34,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 421,
+              "name": "交付项目管理",
+              "code": "7831EDBF-1AB1-4841-A9F0-3632E4DC6B24",
+              "parentId": 34,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 422,
+              "name": "综合项目管理",
+              "code": "34C2F6D9-7545-4793-A9E2-90CC5440AB8B",
+              "parentId": 34,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 81,
+          "name": "金融类－FIN",
+          "code": "CE4FDC5B-B0B1-4007-8AF5-FBFCC97B3099",
+          "parentId": 14,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 368,
+              "name": "金融产品管理与研究",
+              "code": "17FCFE9A-00CB-4923-A902-6300711C9D23",
+              "parentId": 81,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 369,
+              "name": "金融风险管理",
+              "code": "4987BC2B-F6B1-468F-8E0D-23E48AC98B4D",
+              "parentId": 81,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 370,
+              "name": "金融合规",
+              "code": "65D2C279-2C6B-4998-B05A-272BC9DBE86D",
+              "parentId": 81,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 85,
+          "name": "内容类－CT",
+          "code": "F1C5D91F-79D1-4F1B-B2C2-D2275911F441",
+          "parentId": 14,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 392,
+              "name": "内容生态策略",
+              "code": "EB50CB33-EF0B-404E-ADF7-4E0CE48733E2",
+              "parentId": 85,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 393,
+              "name": "内容运营",
+              "code": "B8984A39-C0F5-4C11-95C8-8B732B7C8983",
+              "parentId": 85,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 394,
+              "name": "商业运营与拓展",
+              "code": "C2184743-91C5-4996-B7F4-2EABCAE9EA01",
+              "parentId": 85,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 397,
+              "name": "内容创作",
+              "code": "E7BFBB9D-1D8B-41B6-9F9F-106F6FF8B738",
+              "parentId": 85,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "专业族（SC）",
+      "code": "D9FBA660-4A52-437A-8FA8-7B3E6924B7EF",
+      "parentId": 0,
+      "selectFlag": false,
+      "types": [
+        {
+          "id": 40,
+          "name": "人力资源类－HR",
+          "code": "4911A814-07CA-4E13-A7D8-007BFC0E4F86",
+          "parentId": 17,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 122,
+              "name": "薪酬福利",
+              "code": "F6ACC68E-D242-4A52-8E1C-4719E46D9415",
+              "parentId": 40,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 125,
+              "name": "招聘调配",
+              "code": "7D189D61-EE97-418F-B2AA-5038C76EB665",
+              "parentId": 40,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 144,
+              "name": "组织与人才发展",
+              "code": "4EF428A2-43B8-4B2B-8787-61ED25DF74FA",
+              "parentId": 40,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 148,
+              "name": "学习发展",
+              "code": "7E20551F-353D-4B4C-8F72-64F0646D576D",
+              "parentId": 40,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 158,
+              "name": "企业文化",
+              "code": "7213D668-7416-4A42-8B7E-73052CE7C3F4",
+              "parentId": 40,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 189,
+              "name": "员工关系",
+              "code": "E67619B7-0D6E-4B85-A23D-9D8EBAF65252",
+              "parentId": 40,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 217,
+              "name": "HR业务合作伙伴",
+              "code": "E6D19F83-A61B-4F4C-9A2A-CECF3576881A",
+              "parentId": 40,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 325,
+              "name": "HR交付管理",
+              "code": "972E808E-63AF-4B90-A2B6-AF5CFF1A7B9F",
+              "parentId": 40,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 343,
+              "name": "投后管理咨询",
+              "code": "4E48975E-5E48-42D4-A1FF-C929A401D669",
+              "parentId": 40,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 41,
+          "name": "采购类－PU",
+          "code": "7DD8A00D-4C03-49F4-8893-0A60B6439349",
+          "parentId": 17,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 140,
+              "name": "采购流程管理",
+              "code": "E12FF972-8448-4922-B413-5AF5A49B1C55",
+              "parentId": 41,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 227,
+              "name": "采购商务管理",
+              "code": "D18070CF-2A70-492A-804C-D92651B32F7C",
+              "parentId": 41,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 42,
+          "name": "企管类－EM",
+          "code": "72B41152-C4EA-4C9A-A19B-1731036802EC",
+          "parentId": 17,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 286,
+              "name": "应用解决方案",
+              "code": "99D3EF05-FE27-44DE-B687-64C07DF9C532",
+              "parentId": 42,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 287,
+              "name": "业务流程管理",
+              "code": "88422F28-EE97-4DA5-A473-B46B0B047455",
+              "parentId": 42,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 43,
+          "name": "财经类－FN",
+          "code": "D4E56A0D-9523-4DFB-9222-7C3B0A5F788B",
+          "parentId": 17,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 139,
+              "name": "风险管理",
+              "code": "0D07D231-6A81-46EE-A8F5-589D2B9E37A4",
+              "parentId": 43,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 186,
+              "name": "资金管理",
+              "code": "4BB6F459-DB45-4FA2-83B5-98CF6BB391AA",
+              "parentId": 43,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 267,
+              "name": "公司秘书",
+              "code": "4B4A915E-BD59-475C-AA94-AE858FC83C36",
+              "parentId": 43,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 328,
+              "name": "财经系统交付管理",
+              "code": "7CC9D828-FC79-4F72-BDD6-FC1AB1410AD0",
+              "parentId": 43,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 385,
+              "name": "投资并购及管理",
+              "code": "58184411-F8F3-47C7-BEEA-961562991950",
+              "parentId": 43,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 424,
+              "name": "财务管理及分析",
+              "code": "380316EE-536F-4774-BED6-A51B198D7FEA",
+              "parentId": 43,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 425,
+              "name": "税务",
+              "code": "9ED078E0-72B8-4BCB-B137-9FAF08700170",
+              "parentId": 43,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 426,
+              "name": "财务会计及分析",
+              "code": "0F7A7388-68E4-431C-893F-A1A3FF07B438",
+              "parentId": 43,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 46,
+          "name": "秘书类－SE",
+          "code": "B277256D-21DA-4A64-94F1-AECE98F14133",
+          "parentId": 17,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 136,
+              "name": "秘书",
+              "code": "C75D285A-70A9-4FA0-B7A3-56FFC43CE567",
+              "parentId": 46,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 47,
+          "name": "法律类－LE",
+          "code": "7F1A294B-906D-43F4-9AA2-D2652DF52B09",
+          "parentId": 17,
+          "selectFlag": false,
+          "types": null
+        },
+        {
+          "id": 80,
+          "name": "行政建筑类－AA",
+          "code": "43C9C44D-9D6D-495E-89DF-15C13AE822E9",
+          "parentId": 17,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 110,
+              "name": "后勤",
+              "code": "ECA64F05-390C-4C36-905C-30C2C9C7BF37",
+              "parentId": 80,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 116,
+              "name": "造价管理",
+              "code": "A94D0D48-F511-4048-8109-3BA567E0303F",
+              "parentId": 80,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 167,
+              "name": "行政",
+              "code": "DA3044CE-7158-4F7F-9290-82DFBDF94AD9",
+              "parentId": 80,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 173,
+              "name": "翻译",
+              "code": "D375AB36-4FE7-4AB0-9B53-8B3EE476F18F",
+              "parentId": 80,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 179,
+              "name": "工程管理",
+              "code": "2D28FC9C-41CE-4D04-B50A-8FFC140DBEB0",
+              "parentId": 80,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 237,
+              "name": "设计管理",
+              "code": "9CE15CD3-B8AD-4C32-A41D-E54B2AB58E34",
+              "parentId": 80,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 82,
+          "name": "法律与公共策略类－LPS",
+          "code": "6576846F-326B-4628-89F6-B34580694D29",
+          "parentId": 17,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 141,
+              "name": "安全策略",
+              "code": "5543A34F-88D4-4656-8102-5FCBC06F52C1",
+              "parentId": 82,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 150,
+              "name": "专利",
+              "code": "6B17C135-DB6A-490B-ACD5-65A08BF3A8A8",
+              "parentId": 82,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 232,
+              "name": "法务",
+              "code": "D476DD61-DE0F-4D1F-8D70-DFC25A3F5C2E",
+              "parentId": 82,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 373,
+              "name": "政策舆情",
+              "code": "88E9778F-8834-436A-9632-5F4F6F87AB62",
+              "parentId": 82,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 374,
+              "name": "刑事法律",
+              "code": "FD748791-A314-441A-9832-0068DD97C8A6",
+              "parentId": 82,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 375,
+              "name": "信息技术",
+              "code": "5F6C908B-53FF-4C8C-AAE7-A887C307F588",
+              "parentId": 82,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 376,
+              "name": "公共政策",
+              "code": "905837C6-7ECB-48EB-87C2-7AB431ABCE8B",
+              "parentId": 82,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 377,
+              "name": "公共事务",
+              "code": "BFEB91A7-5CDD-4071-BB82-E5B9BE2C4233",
+              "parentId": 82,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "技术族（TE）",
+      "code": "4E2826EC-1A89-474A-9F55-DACE908819BB",
+      "parentId": 0,
+      "selectFlag": false,
+      "types": [
+        {
+          "id": 50,
+          "name": "安全技术类－SEC",
+          "code": "4F8BEC01-1DD5-40FB-A80C-0B0E41473D56",
+          "parentId": 18,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 124,
+              "name": "应用运维安全",
+              "code": "F5E13F3E-BB77-473C-96BB-4C0D243A4BB8",
+              "parentId": 50,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 197,
+              "name": "客户端安全",
+              "code": "C7566F1F-66FF-43EC-A071-A83DD3AC206D",
+              "parentId": 50,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 488,
+              "name": "风控算法",
+              "code": "D658DE72-2F74-450B-B0D5-4A5F57B518CB",
+              "parentId": 50,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 53,
+          "name": "质量管理类－QC",
+          "code": "048060B5-E682-415E-9BED-897FE9B61C55",
+          "parentId": 18,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 155,
+              "name": "专项技术测试",
+              "code": "9D628EAC-A57C-4A41-BA92-6FE1879FB08E",
+              "parentId": 53,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 170,
+              "name": "质量管理",
+              "code": "E6A83C65-D29D-4258-B0B8-8671F60118A6",
+              "parentId": 53,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 215,
+              "name": "系统测试",
+              "code": "06678F01-0257-47CB-88DE-C600CDA92ED3",
+              "parentId": 53,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 245,
+              "name": "游戏测试",
+              "code": "4AA4A8B0-95F5-4022-BDAA-F9A323280D41",
+              "parentId": 53,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 419,
+              "name": "工程效能",
+              "code": "DBD15885-43F9-43E7-9361-6338E76477C3",
+              "parentId": 53,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 56,
+          "name": "技术运营类－TO",
+          "code": "D63A246E-66B5-4061-BC36-FE045177CFBA",
+          "parentId": 18,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 98,
+              "name": "DBA",
+              "code": "CC3B68A6-74AD-433D-83FB-20BF9406F5CB",
+              "parentId": 56,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 104,
+              "name": "服务管理",
+              "code": "A0F820B6-6B1E-4DE6-9434-28786C84537F",
+              "parentId": 56,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 142,
+              "name": "网络技术",
+              "code": "6C2AE8D6-A6DB-4AC4-9100-600A73DB0AF4",
+              "parentId": 56,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 192,
+              "name": "业务运维",
+              "code": "BE0A650E-284B-4427-B169-A2E07E1AF73C",
+              "parentId": 56,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 196,
+              "name": "数据中心技术",
+              "code": "3267399D-3D01-4234-8F3F-A8364692FA3B",
+              "parentId": 56,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 225,
+              "name": "系统技术",
+              "code": "C6AABB18-CC25-4B6A-824F-D5F0ACFCD307",
+              "parentId": 56,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 266,
+              "name": "运营规划",
+              "code": "A47ED19B-26C7-46BA-A56D-5A9F4D4000B9",
+              "parentId": 56,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 477,
+              "name": "SRE",
+              "code": "1DF51493-67B0-42D7-9F34-F7855781B93B",
+              "parentId": 56,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 71,
+          "name": "技术研发类－TRD",
+          "code": "F5F0BE64-AF15-4202-858D-02920D8A4307",
+          "parentId": 18,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 298,
+              "name": "运营开发",
+              "code": "28717A50-2A72-456A-9A29-BBED99B7B328",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 299,
+              "name": "后台开发",
+              "code": "042F93BA-CCCD-476C-8040-C2CFCEFDA5B8",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 300,
+              "name": "应用开发",
+              "code": "1E96E4E2-6DE6-4538-9CB0-0558050209B2",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 301,
+              "name": "前端开发",
+              "code": "4015194A-3F16-4E9D-A647-C46DD8A5EE11",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 302,
+              "name": "测试开发",
+              "code": "5F1BB191-6A4D-4120-A997-90895A9AFA78",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 304,
+              "name": "事务型开发",
+              "code": "74A51E69-71F1-47FD-A8EB-E37CD21C8860",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 346,
+              "name": "游戏客户端开发",
+              "code": "5977BC1C-6762-4739-8CB4-AE73E3CBE92D",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 361,
+              "name": "客户端开发",
+              "code": "2A622226-3903-498E-A374-2D5BEB4A0A84",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 418,
+              "name": "硬件开发",
+              "code": "2BEE6C4F-C827-4BAC-9098-A36BA520A0EE",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 440,
+              "name": "数据工程",
+              "code": "ECB64B70-8D5E-4135-B56A-B801B6824550",
+              "parentId": 71,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 77,
+          "name": "技术研究类－TRH",
+          "code": "F3AB4CDB-179E-47A6-ACDC-3AEEDEE4DB9C",
+          "parentId": 18,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 344,
+              "name": "基础研究",
+              "code": "1DCB2918-46FC-4209-A3BF-77762F1B1D67",
+              "parentId": 77,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 345,
+              "name": "应用研究",
+              "code": "A11F7012-758C-45FC-86A5-09E37D3EC984",
+              "parentId": 77,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 441,
+              "name": "数据科学",
+              "code": "E35E467C-3E7C-4BD8-B9FD-0CFA3BF03DF4",
+              "parentId": 77,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 83,
+          "name": "解决方案与服务类－SS",
+          "code": "632C5213-93FA-4EA2-8F46-06314E00F8D4",
+          "parentId": 18,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 386,
+              "name": "技术咨询",
+              "code": "C97BEAD9-59B5-4095-B021-A2B369229DDA",
+              "parentId": 83,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 387,
+              "name": "行业咨询",
+              "code": "B6A22C3E-B44C-4F16-B77A-383BE2BC19AF",
+              "parentId": 83,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 388,
+              "name": "交付管理",
+              "code": "B1753095-A03D-4B34-A77E-799027D54B87",
+              "parentId": 83,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "市场族（MA）",
+      "code": "66EDECE8-6B74-43EE-B784-E09A45BCBE93",
+      "parentId": 0,
+      "selectFlag": false,
+      "types": [
+        {
+          "id": 57,
+          "name": "营销类－MA",
+          "code": "1A8B478E-965D-4891-8CEE-1039379EAF9C",
+          "parentId": 19,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 378,
+              "name": "消费互联网营销",
+              "code": "521D3D9A-F7BA-44C5-A8E7-18BA004D10DF",
+              "parentId": 57,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 379,
+              "name": "产业互联网营销",
+              "code": "B6212F5D-DC26-4E49-859B-0007CA5423E7",
+              "parentId": 57,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 60,
+          "name": "客服类－CS",
+          "code": "99EFD858-6ACA-4EA1-B778-56C9FBA28C81",
+          "parentId": 19,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 380,
+              "name": "服务产品运营",
+              "code": "322F3A03-3549-443B-82E8-73A514D80328",
+              "parentId": 60,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 61,
+          "name": "战略类－ST",
+          "code": "0D28691F-4CBE-478A-ABEF-690F21AB2B40",
+          "parentId": 19,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 165,
+              "name": "商业分析",
+              "code": "A9A17135-9C70-4D81-8348-7FAD3D5BEBCA",
+              "parentId": 61,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 184,
+              "name": "市场研究",
+              "code": "6BB47F38-2992-44C4-9D39-97089FF629AA",
+              "parentId": 61,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 62,
+          "name": "销售类－SA",
+          "code": "C2855150-9F1D-4F62-A89F-B80A1EE4A9E1",
+          "parentId": 19,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 100,
+              "name": "交付运营",
+              "code": "B709FA03-E47C-4388-B2C2-241A23FE9ED9",
+              "parentId": 62,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 133,
+              "name": "渠道销售",
+              "code": "532CBB6E-1023-4A64-BACA-559054D01EBC",
+              "parentId": 62,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 153,
+              "name": "直客销售",
+              "code": "FC508673-7B95-44FE-B16D-6D9C48F3162F",
+              "parentId": 62,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 218,
+              "name": "商务拓展",
+              "code": "2B93DE7B-F61D-4E48-B015-CFD90E0C3F8B",
+              "parentId": 62,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 228,
+              "name": "方案策划",
+              "code": "4D7D7CF0-EC29-4450-BD26-D9F3AB5D4E2D",
+              "parentId": 62,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 249,
+              "name": "销售支持",
+              "code": "A7178C85-974E-46C1-9E53-FFCE0DE5E46D",
+              "parentId": 62,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 75,
+          "name": "公共关系类－MR",
+          "code": "81488F43-FAD7-4B80-B5D6-F91B63F94023",
+          "parentId": 19,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 326,
+              "name": "品牌传播",
+              "code": "69BDFB00-DAF3-41B4-8806-57712D86E68C",
+              "parentId": 75,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 327,
+              "name": "媒介传播",
+              "code": "D32F8371-ED5E-4AC4-95E2-172EBCCA3CB4",
+              "parentId": 75,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 76,
+          "name": "投资类－IMA",
+          "code": "BADB14C6-F213-400D-9DDD-C29431AA67BB",
+          "parentId": 19,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 334,
+              "name": "投资并购",
+              "code": "11DA3175-F6D7-4FA7-8CED-CB6B9E6A30AD",
+              "parentId": 76,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 335,
+              "name": "投资运营",
+              "code": "65B0029C-FF63-4CEA-B692-FE7F56EBA955",
+              "parentId": 76,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 423,
+              "name": "投资者关系",
+              "code": "75351235-C893-4860-A45E-32470CAB135C",
+              "parentId": 76,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 485,
+              "name": "投后管理咨询",
+              "code": "27A819C4-6407-4B16-8746-AD8C4D4976FA",
+              "parentId": 76,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "设计族（DG）",
+      "code": "BFBDD43E-7F9B-4873-A9DB-8606B46C6180",
+      "parentId": 0,
+      "selectFlag": false,
+      "types": [
+        {
+          "id": 69,
+          "name": "设计类－DG",
+          "code": "6B227A66-61D0-42EE-893E-36FC3AE64223",
+          "parentId": 22,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 288,
+              "name": "视觉设计",
+              "code": "09C01030-800D-4E77-9968-F4290451CDD6",
+              "parentId": 69,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 289,
+              "name": "交互设计",
+              "code": "7692C66C-DFE0-4F5D-AF1F-796F24D2240C",
+              "parentId": 69,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 290,
+              "name": "用户研究",
+              "code": "1F735952-1DD0-4C15-9D84-000622148E39",
+              "parentId": 69,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 291,
+              "name": "UI开发",
+              "code": "834163C1-C4FD-48D4-9936-C4ADAD5BBF0F",
+              "parentId": 69,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 292,
+              "name": "多媒体设计",
+              "code": "097ACB73-E957-4F80-A084-F0FA3E04E643",
+              "parentId": 69,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 367,
+              "name": "产品体验设计",
+              "code": "762FAAEB-1318-4334-A6C0-14EEAB0890DB",
+              "parentId": 69,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        },
+        {
+          "id": 70,
+          "name": "游戏美术类－GAD",
+          "code": "3CEB69D3-F425-4B28-8B2E-444136B15591",
+          "parentId": 22,
+          "selectFlag": false,
+          "types": [
+            {
+              "id": 366,
+              "name": "技术美术",
+              "code": "94052D69-8F15-4189-8DB4-AA9B211533A0",
+              "parentId": 70,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 443,
+              "name": "2D角色设计",
+              "code": "EE50357C-0675-4435-8B15-D55E277BD17B",
+              "parentId": 70,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 444,
+              "name": "2D场景设计",
+              "code": "16F6F12B-48D4-4A5B-ACB7-3426ACA9F00C",
+              "parentId": 70,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 445,
+              "name": "3D角色设计",
+              "code": "CFA05260-6E16-43F4-9703-CD81999721AF",
+              "parentId": 70,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 446,
+              "name": "3D场景设计",
+              "code": "DC739509-2C45-42BB-AACE-32CF023776D6",
+              "parentId": 70,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 447,
+              "name": "动画设计",
+              "code": "E11945FC-F98B-4C49-ADA1-DCD4FC3720A1",
+              "parentId": 70,
+              "selectFlag": true,
+              "types": null
+            },
+            {
+              "id": 448,
+              "name": "特效设计",
+              "code": "423BC980-AD04-45D4-A2DD-E4E008B2FA25",
+              "parentId": 70,
+              "selectFlag": true,
+              "types": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

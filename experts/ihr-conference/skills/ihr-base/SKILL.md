@@ -14,7 +14,7 @@ metadata:
 ## 核心概念
 
 - **Base Component**：跨业务复用的基础组件能力，不归属于单一业务域。
-- **Staff Selection**：选人组件抽象查询，用于面谈配置等页面选择面谈官、面谈对象等人员。
+- **Staff Selection**：选人组件抽象查询，用于面谈配置等页面选择面谈官、面谈对象等人员；`searchKeyword` 按姓名模糊搜索，大小写不敏感。
 - **Participant Staff**：选人返回的人员候选项，包含 `id`、`name`、`avatarUrl`。
 
 ## 资源关系
@@ -34,7 +34,7 @@ Base Component
             └── avatarUrl
 ```
 
-> **路由规则**：CLI 会根据当前 profile 的 `baseUrl` 自动选择底层接口。`baseUrl` 包含 `worker100` 时走 `toolStaff/select`，其他情况走组件选人接口。
+> **路由规则**：CLI 会根据当前 profile 的 `baseUrl` 自动选择产品链路。skill 不暴露底层 endpoint，也不允许 Agent 手工拼内部接口。
 >
 > **禁止误用**：当前 skill 不负责员工档案、组织关系、入转调离或权限维护，只负责基础选人组件查询。
 >
@@ -44,7 +44,7 @@ Base Component
 
 ### 1. 选人搜索
 
-当用户需要在业务流程中查找可选人员、按姓名模糊搜索员工、分页读取候选人员时，使用 `+selectStaffs`。
+当用户需要在业务流程中查找可选人员、按姓名模糊搜索员工、分页读取候选人员时，使用 `+selectStaffs`。姓名搜索大小写不敏感，不要因为用户输入的英文大小写和候选姓名显示不一致而反复确认。
 
 ### 2. 不负责员工管理
 
@@ -72,11 +72,6 @@ Shortcut 是对常用操作的高级封装（`ihr-cli base +<verb>`）。有 Sho
 
 1. [`scenes/ihr-base-skill-test-questions.txt`](scenes/ihr-base-skill-test-questions.txt)
 
-## 直接资源
+## 能力入口
 
-当前底层对应两套服务端接口：
-
-1. 默认链路：`POST /gateway/component/api/v1/ai/conference/selectStaffs`
-2. `worker100` 链路：`POST /gateway/ai/conference/v1/toolStaff/select`
-
-CLI 会根据当前 profile 的 `baseUrl` 自动选择链路：`baseUrl` 包含 `worker100` 时走第二套，否则走默认链路。
+公开入口只有 `ihr-cli base +selectStaffs`。如果需要确认字段契约，先使用对应 schema/help；不要在 skill 中改用 `ihr-interface`、raw API、curl/httpie/wget 或自写 HTTP client。

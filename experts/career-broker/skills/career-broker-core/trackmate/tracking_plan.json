@@ -1,0 +1,374 @@
+{
+  "appId": "dt_career_broker",
+  "fields": [
+    {
+      "name": "事件名称"
+    },
+    {
+      "name": "采集方式"
+    },
+    {
+      "name": "上报时机"
+    },
+    {
+      "name": "私有参数"
+    }
+  ],
+  "rows": [
+    {
+      "cells": {
+        "事件名称": {
+          "dictItems": [
+            {
+              "code": "skill_invoked",
+              "name": "经纪人调用"
+            }
+          ]
+        },
+        "采集方式": {
+          "values": [
+            "Hook&track"
+          ]
+        },
+        "上报时机": {
+          "values": [
+            "用户召唤职业经纪人 / 命中某能力路由时"
+          ]
+        },
+        "私有参数": {
+          "paramList": [
+            {
+              "code": "session_id",
+              "name": "会话ID",
+              "description": "会话ID",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "source",
+              "name": "调用来源",
+              "description": "调用来源",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "capability",
+              "name": "命中能力",
+              "description": "命中能力：profile/qa/assessment/coaching/liveflow/resume",
+              "type": "STRING",
+              "isRequired": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "cells": {
+        "事件名称": {
+          "dictItems": [
+            {
+              "code": "task_completed",
+              "name": "任务完成"
+            }
+          ]
+        },
+        "采集方式": {
+          "values": [
+            "Hook&track"
+          ]
+        },
+        "上报时机": {
+          "values": [
+            "一次经纪人服务流程结束时"
+          ]
+        },
+        "私有参数": {
+          "paramList": [
+            {
+              "code": "session_id",
+              "name": "会话ID",
+              "description": "会话ID",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "status",
+              "name": "完成状态",
+              "description": "完成状态：success/fail/abort",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "fail_reason",
+              "name": "失败归因",
+              "description": "失败归因（可选）",
+              "type": "STRING",
+              "isRequired": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "cells": {
+        "事件名称": {
+          "dictItems": [
+            {
+              "code": "error_occurred",
+              "name": "异常发生"
+            }
+          ]
+        },
+        "采集方式": {
+          "values": [
+            "track"
+          ]
+        },
+        "上报时机": {
+          "values": [
+            "捕获到异常或错误时"
+          ]
+        },
+        "私有参数": {
+          "paramList": [
+            {
+              "code": "error_type",
+              "name": "错误类型",
+              "description": "错误类型",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "error_message",
+              "name": "错误摘要",
+              "description": "错误摘要（脱敏）",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "phase",
+              "name": "发生阶段",
+              "description": "发生阶段",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "error_code",
+              "name": "错误码",
+              "description": "错误码（可选）",
+              "type": "STRING",
+              "isRequired": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "cells": {
+        "事件名称": {
+          "dictItems": [
+            {
+              "code": "session_end",
+              "name": "会话结束"
+            }
+          ]
+        },
+        "采集方式": {
+          "values": [
+            "Hook"
+          ]
+        },
+        "上报时机": {
+          "values": [
+            "会话关闭时"
+          ]
+        },
+        "私有参数": {
+          "paramList": [
+            {
+              "code": "session_id",
+              "name": "会话ID",
+              "description": "会话ID",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "duration_seconds",
+              "name": "会话时长",
+              "description": "会话时长秒",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "reason",
+              "name": "结束原因",
+              "description": "结束原因",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "turn_count",
+              "name": "对话轮数",
+              "description": "对话轮数（可选）",
+              "type": "STRING",
+              "isRequired": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "cells": {
+        "事件名称": {
+          "dictItems": [
+            {
+              "code": "liveflow_recommended",
+              "name": "活水推荐触发"
+            }
+          ]
+        },
+        "采集方式": {
+          "values": [
+            "track"
+          ]
+        },
+        "上报时机": {
+          "values": [
+            "活水机会推荐能力输出真实在招岗位列表时"
+          ]
+        },
+        "私有参数": {
+          "paramList": [
+            {
+              "code": "session_id",
+              "name": "会话ID",
+              "description": "会话ID",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "rec_count",
+              "name": "推荐岗位数",
+              "description": "本次推荐岗位数",
+              "type": "STRING",
+              "isRequired": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "cells": {
+        "事件名称": {
+          "dictItems": [
+            {
+              "code": "assessment_offered",
+              "name": "发起测评"
+            }
+          ]
+        },
+        "采集方式": {
+          "values": [
+            "track"
+          ]
+        },
+        "上报时机": {
+          "values": [
+            "打开职业DNA测评页时"
+          ]
+        },
+        "私有参数": {
+          "paramList": [
+            {
+              "code": "session_id",
+              "name": "会话ID",
+              "description": "会话ID",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "offer_source",
+              "name": "发起来源",
+              "description": "发起来源（可选）：coaching/profile/user",
+              "type": "STRING",
+              "isRequired": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "cells": {
+        "事件名称": {
+          "dictItems": [
+            {
+              "code": "assessment_completed",
+              "name": "测评完成"
+            }
+          ]
+        },
+        "采集方式": {
+          "values": [
+            "track"
+          ]
+        },
+        "上报时机": {
+          "values": [
+            "用户贴回职业DNA结果码时"
+          ]
+        },
+        "私有参数": {
+          "paramList": [
+            {
+              "code": "session_id",
+              "name": "会话ID",
+              "description": "会话ID",
+              "type": "STRING",
+              "isRequired": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "cells": {
+        "事件名称": {
+          "dictItems": [
+            {
+              "code": "coaching_engaged",
+              "name": "教练对话深入"
+            }
+          ]
+        },
+        "采集方式": {
+          "values": [
+            "track"
+          ]
+        },
+        "上报时机": {
+          "values": [
+            "教练对话进入方向/卡点澄清等实质环节时"
+          ]
+        },
+        "私有参数": {
+          "paramList": [
+            {
+              "code": "session_id",
+              "name": "会话ID",
+              "description": "会话ID",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "turn_depth",
+              "name": "对话深度",
+              "description": "对话深度（可选）：light/deep",
+              "type": "STRING",
+              "isRequired": false
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
