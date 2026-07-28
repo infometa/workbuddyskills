@@ -1,0 +1,161 @@
+{
+  "schema": "industrial-park-investment-attraction-first-value-contract/v1",
+  "contractVersion": "1.0.0",
+  "packageVersion": "26.7.27",
+  "requestFields": [
+    "mission",
+    "timeHorizon",
+    "parkContext",
+    "taskGoal",
+    "batchPolicy",
+    "availableData",
+    "capabilitySnapshot",
+    "executionPolicy",
+    "qualityAndSpeedTarget",
+    "successDefinition"
+  ],
+  "responseSchema": "schemas/first-value-response.schema.json",
+  "stableTruthEnvelope": [
+    "packageVersion",
+    "contractVersion",
+    "boundary",
+    "contextSnapshot",
+    "routeSelected",
+    "routeFacets",
+    "blockingQuestions",
+    "deliverables",
+    "executedActions",
+    "nextActions"
+  ],
+  "taskApplicableAssets": [
+    "mode",
+    "evidenceLedger",
+    "leadDelivery",
+    "preparedActions",
+    "deliveryDepth",
+    "achievedOutcomeLevel",
+    "performanceObservation",
+    "taskAssessment",
+    "progress"
+  ],
+  "assetCatalogPolicy": "deliverables_lists_only_assets_applicable_and_actually_produced_for_this_task_no_placeholder_assets",
+  "routeSemantics": {
+    "routeSelectedMeaning": "user_readable_primary_entry_only_never_overrides_or_deletes_route_facets",
+    "routeFacetsComposable": true,
+    "skillSelectionBasis": "request_route_facets_and_required_outputs",
+    "fullSkillChainRequired": false
+  },
+  "blockingQuestionPolicy": "ask_the_smallest_decision_changing_set_no_numeric_cap",
+  "noTruthfulAssetYetPolicy": "deliverables_may_be_empty_only_with_nonempty_blocking_questions_never_emit_placeholder_asset",
+  "frontstageComposition": {
+    "fixedSequenceRequired": false,
+    "orderingBasis": "dependency_and_user_value",
+    "allowedComponents": [
+      "one_sentence_context_or_assumptions",
+      "TaskGoal_or_minimum_blocking_question_set",
+      "current_visible_batch_or_assessment",
+      "goal_progress",
+      "ordered_next_action_set",
+      "terminal_reason",
+      "decision_relevant_boundary_notes"
+    ],
+    "includeOnlyTaskApplicableComponents": true
+  },
+  "nextActionsPolicy": {
+    "orderedNecessaryActionSet": true,
+    "fixedActionCount": null,
+    "dependencyRefsMustResolveWithinSet": true,
+    "cyclesAllowed": false,
+    "portfolioNextBestAction": "projection_of_first_ready_action_never_independent_authority"
+  },
+  "quantityPolicy": "user_goal_or_coverage_no_product_level_limit",
+  "countRelationPolicy": "preserve_user_explicit_exact_at_least_at_most_between_or_none_never_invent_range",
+  "exactCountPolicy": "stop_at_exact_count_never_exceed_and_keep_extra_qualified_internal",
+  "minimumCountPolicy": "coverage_may_require_more_than_the_user_minimum",
+  "rangeCountPolicy": "complete_at_or_above_user_minimum_with_coverage_and_never_exceed_user_maximum",
+  "maximumOnlyPolicy": "requires_positive_structured_coverage_or_remains_unsupported",
+  "batchCompletionPolicy": "frozen_task_goal_authoritative_never_auto_complete_or_auto_incomplete",
+  "priorityBatchFeedbackIsOptional": true,
+  "continueWhileFrozenGoalUnmetAndExecutablePathExists": true,
+  "frontstagePresentation": {
+    "defaultAudience": "park_operator",
+    "leadWith": "actionable_result_or_minimum_blocking_question_set",
+    "ordinaryChatComponents": [
+      "one_sentence_context_or_assumptions",
+      "task_applicable_current_result_or_minimum_blocking_question_set",
+      "task_goal_or_assessment_progress_when_useful",
+      "ordered_next_action_set",
+      "terminal_reason",
+      "decision_relevant_boundary_notes"
+    ],
+    "ordinaryChatFixedSectionSetRequired": false,
+    "internalFieldsHiddenByDefault": [
+      "capabilitySnapshot",
+      "routeSelected",
+      "mode",
+      "deliveryDepth",
+      "achievedOutcomeLevel",
+      "taskState",
+      "ResumeCapsule"
+    ],
+    "internalTermsRequireExplicitTechnicalRequest": true,
+    "missingContextPolicy": "ask_only_decision_changing_unknowns_without_numeric_question_cap_or_fake_shortfall",
+    "gapEligibility": "frozen_goal_unmet_and_goal_level_exhaustion_proven",
+    "qualificationStateLabels": {
+      "qualified": "满足本次条件",
+      "needs_verification": "还需核验",
+      "excluded": "不满足本次条件"
+    },
+    "taskStateLabels": {
+      "in_progress": "仍在按本轮目标继续",
+      "completed": "已达到你这次的目标",
+      "stopped_with_gap": "本轮已停止，仍有未覆盖范围",
+      "paused": "已暂停并保留进度",
+      "superseded": "原目标已被新目标取代"
+    },
+    "preparedActionLabel": "已准备，尚未联系"
+  },
+  "executedActionsMustBeEmpty": true,
+  "maximumOutcomeLevel": "O5",
+  "defaultCta": null,
+  "ctaPolicy": {
+    "fixedCtaRequired": false,
+    "deriveFromReadyNextActions": true,
+    "mayBeEmptyWhenTerminal": true,
+    "mayContainMultipleIndependentNecessaryActions": true,
+    "mustNotInventExpansionAfterGoalCompletion": true
+  },
+  "memoryContextPolicy": {
+    "defaultState": "unused",
+    "businessPayloadSelfProofAllowed": false,
+    "externalHostRegistryJoinRequired": true,
+    "allowedContextClass": "park_scoped_preference_context",
+    "currentUserConfirmationRequired": true,
+    "readOnly": true,
+    "enterpriseEvidenceAllowed": false,
+    "qualificationEvidenceAllowed": false,
+    "completionEvidenceAllowed": false,
+    "crossParkReuseAllowed": false
+  },
+  "speedTargets": {
+    "measurementState": "not_measured",
+    "targetRegistrationState": "pending_pre_registration",
+    "targetInjectionPolicy": "formal_evaluation_configuration_only",
+    "metrics": [
+      "time_to_first_useful_result",
+      "time_to_first_visible_delivery",
+      "time_to_task_terminal"
+    ],
+    "candidateTaskOptionalMetrics": [
+      "time_to_first_valid_candidate",
+      "time_to_first_visible_candidate_batch"
+    ],
+    "evaluationBenchmarkPolicy": {
+      "packageDefaults": [],
+      "configurationSource": "formal_evaluation_configuration_only",
+      "fixedCompanyCountInProductContractAllowed": false,
+      "businessCompletionAuthority": false
+    },
+    "truthBoundary": "No company-count sample, minute target, percentile threshold, runtime benchmark, or product performance promise is registered in the package. Any benchmark must be injected by a separate formal evaluation configuration and never becomes business completion authority."
+  }
+}

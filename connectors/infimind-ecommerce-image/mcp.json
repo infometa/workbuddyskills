@@ -1,0 +1,38 @@
+{
+  "mcpServers": {
+    "infimind-ecommerce-image": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@infimind/image-mcp-cli@1.0.9"
+      ],
+      "runtime": {
+        "type": "node",
+        "version": ">=18.0.0"
+      },
+      "env": {
+        "MCP_TOKEN": "${MCP_TOKEN}"
+      },
+      "staticEnv": {
+        "API_URL": "https://aigc-next.ecpro.com"
+      },
+      "timeout": 600000,
+      "disabledTools": [
+        "get_user_credits",
+        "get_user_products",
+        "create_smart_refine_task",
+        "prepare_koc_collage_task",
+        "submit_koc_collage_task",
+        "create_image_expand_task",
+        "prepare_image_expand_task",
+        "submit_image_expand_task",
+        "create_color_change_task",
+        "create_visual_migration_task",
+        "create_koc_note_package_task",
+        "prepare_koc_note_package_task",
+        "submit_koc_note_package_task"
+      ]
+    }
+  }
+}

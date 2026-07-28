@@ -1,0 +1,276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/rendered-artifact.schema.json",
+  "title": "RenderedArtifact",
+  "description": "A task-relative rendered asset. Built-in artifact and format names are catalogs, not a closed business taxonomy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "artifactId",
+    "artifactType",
+    "format",
+    "assetRef",
+    "revision",
+    "generatedAt",
+    "encoding",
+    "columnProfile",
+    "contentRef",
+    "semanticInputHash",
+    "semanticOutputHash",
+    "bundleManifestRef",
+    "capabilityReceiptRef"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "artifactId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifactType": {
+      "oneOf": [
+        {
+          "enum": [
+            "park_brief",
+            "task_assessment",
+            "material_audit",
+            "source_audit",
+            "entity_record",
+            "evidence_ledger",
+            "candidate_discovery_ledger",
+            "target_portfolio",
+            "portfolio_evidence_bundle",
+            "verification_preparation_pack",
+            "progress_card",
+            "resume_capsule"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "format": {
+      "oneOf": [
+        {
+          "enum": [
+            "chat",
+            "json",
+            "csv",
+            "markdown",
+            "xlsx",
+            "docx"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ],
+      "description": "A format may be used only when the requested format is supported by a separately verified CapabilitySnapshot or host receipt."
+    },
+    "assetRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "encoding": {
+      "type": "string",
+      "minLength": 1
+    },
+    "columnProfile": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/columnProfile"
+        }
+      ]
+    },
+    "contentRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "semanticInputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "semanticOutputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "bundleManifestRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "capabilityReceiptRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "External receipt proving the host could create the requested format. Null only for synthetic examples or formats rendered directly in the current response."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "format": {
+            "enum": [
+              "csv",
+              "xlsx"
+            ]
+          }
+        },
+        "required": [
+          "format"
+        ]
+      },
+      "then": {
+        "properties": {
+          "columnProfile": {
+            "$ref": "#/$defs/columnProfile"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "openArtifactType": {
+      "oneOf": [
+        {
+          "enum": [
+            "park_brief",
+            "task_assessment",
+            "material_audit",
+            "source_audit",
+            "entity_record",
+            "evidence_ledger",
+            "candidate_discovery_ledger",
+            "target_portfolio",
+            "portfolio_evidence_bundle",
+            "verification_preparation_pack",
+            "progress_card",
+            "resume_capsule"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "columnProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profileId",
+        "artifactType",
+        "tables",
+        "nullPolicy",
+        "arrayPolicy",
+        "formulaInjectionPolicy"
+      ],
+      "properties": {
+        "profileId": {
+          "oneOf": [
+            {
+              "enum": [
+                "task-relative-tabular-v1"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "artifactType": {
+          "$ref": "#/$defs/openArtifactType"
+        },
+        "tables": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "tableId",
+              "columns"
+            ],
+            "properties": {
+              "tableId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "columns": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        },
+        "delimiter": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "quote": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "lineEnding": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "bom": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "nullPolicy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "arrayPolicy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "formulaInjectionPolicy": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

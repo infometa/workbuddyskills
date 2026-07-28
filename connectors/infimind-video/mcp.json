@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "infimind-video": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@infimind/video-mcp-cli@1.0.11"],
+      "env": {
+        "SORA_MCP_TOKEN": "${SORA_MCP_TOKEN}"
+      },
+      "staticEnv": {
+        "SORA_API_URL": "https://aigc-next.iclip.cn/api"
+      },
+      "timeout": 60000,
+      "runtime": {
+        "type": "node",
+        "version": ">=18.0.0"
+      }
+    }
+  }
+}

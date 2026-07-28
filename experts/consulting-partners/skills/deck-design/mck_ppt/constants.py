@@ -11,28 +11,30 @@ from pptx.dml.color import RGBColor
 # COLOR PALETTE
 # ═══════════════════════════════════════════
 
-# Primary colors
-NAVY       = RGBColor(0x05, 0x1C, 0x2C)
+# Primary colors — warm deep charcoal with subtle brown undertone
+NAVY       = RGBColor(0x2C, 0x2C, 0x34)   # Warm charcoal (not blue-cold)
 BLACK      = RGBColor(0x00, 0x00, 0x00)
 WHITE      = RGBColor(0xFF, 0xFF, 0xFF)
 
-# Gray scale
-DARK_GRAY  = RGBColor(0x33, 0x33, 0x33)
-MED_GRAY   = RGBColor(0x66, 0x66, 0x66)
-LINE_GRAY  = RGBColor(0xCC, 0xCC, 0xCC)
-BG_GRAY    = RGBColor(0xF2, 0xF2, 0xF2)
+# Gray scale — warm undertones throughout
+DARK_GRAY  = RGBColor(0x3D, 0x3D, 0x42)   # Warm near-black for body text
+MED_GRAY   = RGBColor(0x7A, 0x77, 0x72)   # Warm taupe gray for secondary
+LINE_GRAY  = RGBColor(0xE2, 0xDD, 0xD8)   # Warm sand divider
+BG_GRAY    = RGBColor(0xFA, 0xF8, 0xF5)   # Warm off-white / cream tint
 
-# Accent colors (for 3+ parallel items)
-ACCENT_BLUE   = RGBColor(0x00, 0x6B, 0xA6)
-ACCENT_GREEN  = RGBColor(0x00, 0x7A, 0x53)
-ACCENT_ORANGE = RGBColor(0xD4, 0x6A, 0x00)
-ACCENT_RED    = RGBColor(0xC6, 0x28, 0x28)
+# Accent colors — warm-leaning palette
+ACCENT_BLUE   = RGBColor(0xC4, 0x7A, 0x2B)  # Warm copper/amber (primary accent)
+ACCENT_GREEN  = RGBColor(0x5E, 0x8C, 0x6A)  # Sage green (muted, warm)
+ACCENT_ORANGE = RGBColor(0xD9, 0x7B, 0x2D)  # Burnt sienna
+ACCENT_RED    = RGBColor(0xB5, 0x4C, 0x4C)  # Dusty rose-red
+SLATE_BLUE    = RGBColor(0x3A, 0x38, 0x3F)  # Warm dark panel (charcoal-purple tint)
+PALE_BLUE     = RGBColor(0xF5, 0xF0, 0xE8)  # Warm cream highlight
 
-# Light accent backgrounds
-LIGHT_BLUE    = RGBColor(0xE3, 0xF2, 0xFD)
-LIGHT_GREEN   = RGBColor(0xE8, 0xF5, 0xE9)
-LIGHT_ORANGE  = RGBColor(0xFF, 0xF3, 0xE0)
-LIGHT_RED     = RGBColor(0xFF, 0xEB, 0xEE)
+# Light accent backgrounds — warm harmonized
+LIGHT_BLUE    = RGBColor(0xFB, 0xF5, 0xEB)  # Light warm gold
+LIGHT_GREEN   = RGBColor(0xEF, 0xF5, 0xF0)  # Pale sage
+LIGHT_ORANGE  = RGBColor(0xFD, 0xF3, 0xE7)  # Light apricot
+LIGHT_RED     = RGBColor(0xFA, 0xED, 0xED)  # Blush pink
 
 # Paired accent sets: (accent, light_bg) for easy iteration
 ACCENT_PAIRS = [
@@ -78,6 +80,9 @@ BODY_SIZE          = Pt(14)
 SMALL_SIZE         = Pt(12)
 FOOTNOTE_SIZE      = Pt(9)
 
-FONT_HEADER = 'Georgia'
+# Use a restrained modern sans-serif system. East Asian text explicitly
+# selects Microsoft YaHei for broad Office compatibility instead of a
+# calligraphic font that weakens the executive-consulting tone.
+FONT_HEADER = 'Arial'
 FONT_BODY   = 'Arial'
-FONT_EA     = 'KaiTi'
+FONT_EA     = 'Microsoft YaHei'

@@ -58,7 +58,7 @@ def full_cleanup(outpath):
 # FONT HELPERS
 # ═══════════════════════════════════════════
 
-def set_ea_font(run, typeface='KaiTi'):
+def set_ea_font(run, typeface=FONT_EA):
     """Set East Asian font on a text run for Chinese rendering."""
     rPr = run._r.get_or_add_rPr()
     ea = rPr.find(qn('a:ea'))
@@ -179,10 +179,10 @@ def add_source(slide, text, y=SOURCE_Y):
              font_size=FOOTNOTE_SIZE, font_color=MED_GRAY)
 
 
-def add_page_number(slide, num, total):
-    """Page number in bottom-right corner."""
+def add_page_number(slide, num, total, color=MED_GRAY):
+    """Page number in bottom-right corner with optional contrast color."""
     add_text(slide, PAGE_NUM_X, Inches(7.1), Inches(1), Inches(0.3),
-             f"{num}/{total}", font_size=FOOTNOTE_SIZE, font_color=MED_GRAY,
+             f"{num}/{total}", font_size=FOOTNOTE_SIZE, font_color=color,
              alignment=PP_ALIGN.RIGHT)
 
 

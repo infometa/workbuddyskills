@@ -1,0 +1,1942 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/target-portfolio.schema.json",
+  "title": "TargetPortfolio",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packageVersion",
+    "portfolioId",
+    "assetId",
+    "revision",
+    "previousRevisionRef",
+    "createdAt",
+    "updatedAt",
+    "asOf",
+    "parkBriefRef",
+    "parkConstraintHash",
+    "evidenceSnapshotHash",
+    "changeSet",
+    "evidenceBundleRef",
+    "queryLedgerRef",
+    "taskGoal",
+    "batchPolicy",
+    "taskState",
+    "selectionComputation",
+    "deliveryReceipts",
+    "deliveryBatches",
+    "deliveryPreparation",
+    "currentBatchRef",
+    "pendingCandidateRefs",
+    "currentSelectedQualifiedCount",
+    "currentTotalQualifiedPoolCount",
+    "cumulativeUniqueDeliveredCount",
+    "deliverableEligibleCandidateRefs",
+    "currentDeliverableEligibleCount",
+    "countGoalAssessment",
+    "evaluationScopeAssessment",
+    "deliveredAssessmentRefs",
+    "coverageAssessments",
+    "qualificationCriterionAssessments",
+    "unmetRequirementRefs",
+    "priorityCandidateIds",
+    "verificationOrderCandidateRefs",
+    "qualifiedCandidates",
+    "alternates",
+    "watchlist",
+    "excluded",
+    "searchCoverage",
+    "terminalProof",
+    "pauseReason",
+    "nextCursor",
+    "continuationRequirements",
+    "portfolioStrategy",
+    "performanceObservation",
+    "qualityGateReceipt",
+    "nextBestAction"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "packageVersion": {
+      "const": "26.7.27"
+    },
+    "portfolioId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assetId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "previousRevisionRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "parkBriefRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parkConstraintHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "evidenceSnapshotHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "changeSet": {
+      "$ref": "#/$defs/changeSet"
+    },
+    "evidenceBundleRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "queryLedgerRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskGoal": {
+      "$ref": "task-goal.schema.json"
+    },
+    "batchPolicy": {
+      "$ref": "#/$defs/batchPolicy"
+    },
+    "taskState": {
+      "enum": [
+        "in_progress",
+        "completed",
+        "stopped_with_gap",
+        "paused",
+        "superseded"
+      ]
+    },
+    "selectionComputation": {
+      "$ref": "#/$defs/selectionComputation"
+    },
+    "deliveryReceipts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/deliveryReceipt"
+      }
+    },
+    "deliveryBatches": {
+      "type": "array",
+      "description": "Immutable delivery audit history. A previously delivered candidate remains here after later evidence changes its current state.",
+      "items": {
+        "$ref": "#/$defs/deliveryBatch"
+      }
+    },
+    "deliveryPreparation": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/deliveryBatch"
+        }
+      ],
+      "description": "Two-phase host delivery draft. It does not count as delivered until the exact object is promoted into deliveryBatches with a matching host-verified receipt."
+    },
+    "currentBatchRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "pendingCandidateRefs": {
+      "$ref": "#/$defs/referenceList",
+      "description": "Current qualified candidates selected for a future delivery event but not present in immutable delivery history."
+    },
+    "currentSelectedQualifiedCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Current evidence-qualified candidates selected into the portfolio. Missing contact entry does not reduce this qualification count."
+    },
+    "currentTotalQualifiedPoolCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Current evidence-qualified pool size across selected qualified candidates and alternates. It is not a completion count."
+    },
+    "cumulativeUniqueDeliveredCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Historical unique candidates made visible through host-verified delivery batches."
+    },
+    "deliverableEligibleCandidateRefs": {
+      "$ref": "#/$defs/referenceList",
+      "description": "Selected qualified candidates meeting every user-approved delivery criterion. With qualification_only this equals all selected qualified candidates."
+    },
+    "currentDeliverableEligibleCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Count authority when TaskGoal.deliveryEligibilityMode is required_delivery_criteria."
+    },
+    "countGoalAssessment": {
+      "$ref": "#/$defs/countGoalAssessment"
+    },
+    "evaluationScopeAssessment": {
+      "$ref": "#/$defs/evaluationScopeAssessment"
+    },
+    "deliveredAssessmentRefs": {
+      "$ref": "#/$defs/referenceList",
+      "description": "Frozen input references whose current assessmentHash has been made visible through a host-verified delivery batch."
+    },
+    "coverageAssessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/coverageAssessment"
+      }
+    },
+    "qualificationCriterionAssessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/qualificationCriterionAssessment"
+      }
+    },
+    "unmetRequirementRefs": {
+      "$ref": "#/$defs/referenceList"
+    },
+    "priorityCandidateIds": {
+      "$ref": "#/$defs/referenceList",
+      "description": "Only current qualified candidates in the highest business-priority group produced from user-stated or user-confirmed criteria. Empty when no such criteria exist; deliveryBatches/currentBatchRef, not this field, identify the current visible batch."
+    },
+    "verificationOrderCandidateRefs": {
+      "$ref": "#/$defs/referenceList",
+      "description": "Operational evidence-verification order, separate from business priority and completion."
+    },
+    "qualifiedCandidates": {
+      "type": "array",
+      "items": {
+        "$ref": "candidate-evidence-card.schema.json"
+      }
+    },
+    "alternates": {
+      "type": "array",
+      "items": {
+        "$ref": "candidate-evidence-card.schema.json"
+      }
+    },
+    "watchlist": {
+      "type": "array",
+      "items": {
+        "$ref": "candidate-evidence-card.schema.json"
+      }
+    },
+    "excluded": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/excludedCandidate"
+      }
+    },
+    "searchCoverage": {
+      "$ref": "#/$defs/searchCoverage"
+    },
+    "terminalProof": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/terminalProof"
+        }
+      ]
+    },
+    "pauseReason": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "enum": [
+            "user_paused",
+            "timebox_reached",
+            "research_budget_checkpoint",
+            "search_unavailable",
+            "tool_failure",
+            "missing_goal_information"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ],
+      "description": "A truthful pause reason. Use a standard token when it fits; otherwise preserve the real reason as custom:<slug> instead of forcing a misleading category."
+    },
+    "nextCursor": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "continuationRequirements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "portfolioStrategy": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/portfolioStrategy"
+        }
+      ],
+      "description": "Optional only when a task-grounded customer-operation strategy is actually applicable and supported."
+    },
+    "performanceObservation": {
+      "$ref": "performance-observation.schema.json"
+    },
+    "qualityGateReceipt": {
+      "$ref": "#/$defs/qualityGateReceipt"
+    },
+    "nextBestAction": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/nextAction"
+        }
+      ],
+      "description": "Compatibility projection of the first currently executable response nextActions item; null when no further action is required."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "const": "in_progress"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "terminalProof": {
+            "type": "null"
+          },
+          "pauseReason": {
+            "type": "null"
+          },
+          "nextCursor": {
+            "type": "string",
+            "minLength": 1
+          },
+          "continuationRequirements": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "const": "completed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "terminalProof": {
+            "type": "null"
+          },
+          "pauseReason": {
+            "type": "null"
+          },
+          "nextCursor": {
+            "type": "null"
+          },
+          "unmetRequirementRefs": {
+            "maxItems": 0
+          },
+          "continuationRequirements": {
+            "maxItems": 0
+          },
+          "nextBestAction": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "const": "stopped_with_gap"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "terminalProof": {
+            "$ref": "#/$defs/terminalProof"
+          },
+          "pauseReason": {
+            "type": "null"
+          },
+          "nextCursor": {
+            "type": "null"
+          },
+          "unmetRequirementRefs": {
+            "minItems": 1
+          },
+          "continuationRequirements": {
+            "maxItems": 0
+          },
+          "nextBestAction": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "const": "paused"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "terminalProof": {
+            "type": "null"
+          },
+          "pauseReason": {
+            "type": "string"
+          },
+          "continuationRequirements": {}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "const": "superseded"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "terminalProof": {
+            "type": "null"
+          },
+          "pauseReason": {
+            "type": "null"
+          },
+          "nextCursor": {
+            "type": "null"
+          },
+          "continuationRequirements": {
+            "maxItems": 0
+          },
+          "nextBestAction": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskGoal": {
+            "properties": {
+              "prioritizationCriteria": {
+                "maxItems": 0
+              }
+            },
+            "required": [
+              "prioritizationCriteria"
+            ]
+          }
+        },
+        "required": [
+          "taskGoal"
+        ]
+      },
+      "then": {
+        "properties": {
+          "priorityCandidateIds": {
+            "maxItems": 0
+          },
+          "qualifiedCandidates": {
+            "items": {
+              "properties": {
+                "businessPriorityState": {
+                  "const": "no_business_priority"
+                }
+              }
+            }
+          },
+          "alternates": {
+            "items": {
+              "properties": {
+                "businessPriorityState": {
+                  "const": "no_business_priority"
+                }
+              }
+            }
+          },
+          "watchlist": {
+            "items": {
+              "properties": {
+                "businessPriorityState": {
+                  "const": "not_eligible_for_priority"
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "qualifiedCandidates": {
+            "items": {
+              "properties": {
+                "businessPriorityState": {
+                  "enum": [
+                    "criterion_based",
+                    "same_priority",
+                    "non_comparable"
+                  ]
+                }
+              }
+            }
+          },
+          "alternates": {
+            "items": {
+              "properties": {
+                "businessPriorityState": {
+                  "enum": [
+                    "criterion_based",
+                    "same_priority",
+                    "non_comparable"
+                  ]
+                }
+              }
+            }
+          },
+          "watchlist": {
+            "items": {
+              "properties": {
+                "businessPriorityState": {
+                  "const": "not_eligible_for_priority"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "evaluationScopeAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopeHash",
+        "expectedInputCount",
+        "auditedInputCount",
+        "mappedInputCount",
+        "dispositionedInputCount",
+        "unresolvedInputCount",
+        "inputAssessments",
+        "status"
+      ],
+      "properties": {
+        "scopeHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "expectedInputCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "auditedInputCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Frozen inputs with one complete hash-bound assessment row, including unresolved_with_evidence rows."
+        },
+        "mappedInputCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Inputs resolved to exactly one legal entity. Unresolved rows are excluded."
+        },
+        "dispositionedInputCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Resolved inputs placed in qualified, watchlist, or excluded. Unresolved rows are excluded."
+        },
+        "unresolvedInputCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Audited inputs that remain unresolved_with_evidence. They complete bounded-list audit coverage but never count as qualified or prove a market shortfall."
+        },
+        "inputAssessments": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "inputRef",
+              "inputSnapshotHash",
+              "mappingState",
+              "entityRef",
+              "disposition",
+              "evidenceRefs",
+              "claimRefs",
+              "assessmentReason",
+              "assessmentHash"
+            ],
+            "properties": {
+              "inputRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "inputSnapshotHash": {
+                "$ref": "#/$defs/hash",
+                "description": "Must equal the contentHash of the frozen searchScope.universeBindings row identified by inputRef."
+              },
+              "mappingState": {
+                "enum": [
+                  "resolved_entity",
+                  "unresolved_with_evidence"
+                ]
+              },
+              "entityRef": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              },
+              "disposition": {
+                "enum": [
+                  "qualified",
+                  "watchlist",
+                  "excluded",
+                  "unresolved"
+                ]
+              },
+              "evidenceRefs": {
+                "$ref": "#/$defs/referenceList",
+                "description": "Only current EvidenceLedger SourceRecord or ClaimEvidenceLink IDs; inputRef itself is never evidence."
+              },
+              "claimRefs": {
+                "$ref": "#/$defs/referenceList"
+              },
+              "assessmentReason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "assessmentHash": {
+                "$ref": "#/$defs/hash",
+                "description": "Canonical JSON SHA-256 of this assessment with assessmentHash excluded."
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "mappingState": {
+                      "const": "resolved_entity"
+                    }
+                  },
+                  "required": [
+                    "mappingState"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "entityRef": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "disposition": {
+                      "enum": [
+                        "qualified",
+                        "watchlist",
+                        "excluded"
+                      ]
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "entityRef": {
+                      "type": "null"
+                    },
+                    "disposition": {
+                      "const": "unresolved"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "status": {
+          "enum": [
+            "not_applicable",
+            "complete",
+            "incomplete"
+          ],
+          "description": "complete means every frozen input has one valid assessment row; it does not imply every input was resolved or qualified."
+        }
+      }
+    },
+    "terminalProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proofType",
+        "stopCode",
+        "unmetRequirementRefs",
+        "queryLedgerSnapshotHash",
+        "scopeSnapshotHash",
+        "frozenSearchScopeHash",
+        "unresolvedEvidenceGapRefs",
+        "continuableDirections",
+        "exhaustionScope"
+      ],
+      "properties": {
+        "proofType": {
+          "const": "goal_shortfall"
+        },
+        "stopCode": {
+          "enum": [
+            "bounded_source_universe_exhausted",
+            "hard_constraint_market_mismatch"
+          ]
+        },
+        "unmetRequirementRefs": {
+          "$ref": "#/$defs/referenceList",
+          "minItems": 1
+        },
+        "queryLedgerSnapshotHash": {
+          "$ref": "#/$defs/hash",
+          "description": "Canonical JSON SHA-256 of the QueryLedger resolved by queryLedgerRef from the same deliverable package."
+        },
+        "scopeSnapshotHash": {
+          "$ref": "#/$defs/hash",
+          "description": "Must equal the canonical JSON SHA-256 of exhaustionScope with scopeHash excluded."
+        },
+        "frozenSearchScopeHash": {
+          "$ref": "#/$defs/hash",
+          "description": "Must equal taskGoal.searchScope.scopeHash from the frozen goal."
+        },
+        "unresolvedEvidenceGapRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "continuableDirections": {
+          "$ref": "#/$defs/referenceList",
+          "maxItems": 0
+        },
+        "exhaustionScope": {
+          "$ref": "#/$defs/exhaustionScope"
+        }
+      }
+    },
+    "exhaustionScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopeType",
+        "universeType",
+        "universeRefs",
+        "universeBindings",
+        "universeSnapshotHash",
+        "expectedCount",
+        "assessedRefs",
+        "unassessedRefs",
+        "scopeHash",
+        "universeManifestRef"
+      ],
+      "properties": {
+        "scopeType": {
+          "const": "bounded_enumerated"
+        },
+        "universeType": {
+          "enum": [
+            "user_supplied_candidate_list",
+            "contracted_registry",
+            "closed_directory",
+            "other_bounded_source"
+          ]
+        },
+        "universeRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "universeBindings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ref",
+              "revisionRef",
+              "contentHash"
+            ],
+            "properties": {
+              "ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revisionRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contentHash": {
+                "$ref": "#/$defs/hash"
+              }
+            }
+          }
+        },
+        "universeSnapshotHash": {
+          "$ref": "#/$defs/hash",
+          "description": "Canonical hash of universeBindings."
+        },
+        "expectedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "assessedRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "unassessedRefs": {
+          "$ref": "#/$defs/referenceList",
+          "description": "Exact bounded inputs that could not be mapped to one entity and dispositioned despite the exhausted search."
+        },
+        "scopeHash": {
+          "$ref": "#/$defs/hash",
+          "description": "SHA-256 of canonical UTF-8 JSON for exhaustionScope with scopeHash excluded."
+        },
+        "universeManifestRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    },
+    "referenceList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "selectionComputation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "stateBudget",
+        "stateBudgetSource",
+        "budgetEffect",
+        "statesVisited",
+        "truncated",
+        "optimalityProven",
+        "stateBudgetAuthorityState",
+        "stateBudgetBasisRefs"
+      ],
+      "properties": {
+        "method": {
+          "enum": [
+            "ranked_prefix",
+            "bounded_dynamic_programming",
+            "bounded_input_assessment",
+            "not_run_unsupported_goal"
+          ]
+        },
+        "stateBudget": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "stateBudgetSource": {
+          "enum": [
+            "user_explicit",
+            "operator_capacity",
+            "host_limit",
+            "no_explicit_cap"
+          ]
+        },
+        "budgetEffect": {
+          "const": "algorithm_checkpoint_only_never_goal_shortfall"
+        },
+        "statesVisited": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "optimalityProven": {
+          "type": "boolean"
+        },
+        "stateBudgetAuthorityState": {
+          "enum": [
+            "not_applicable",
+            "user_input_receipt",
+            "external_runtime_receipt",
+            "package_default_non_authoritative"
+          ]
+        },
+        "stateBudgetBasisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "method": {
+              "const": "bounded_input_assessment"
+            },
+            "stateBudget": {
+              "type": "null"
+            },
+            "stateBudgetSource": {
+              "const": "no_explicit_cap"
+            },
+            "truncated": {
+              "const": false
+            }
+          },
+          "required": [
+            "method",
+            "stateBudget",
+            "stateBudgetSource",
+            "truncated"
+          ]
+        },
+        {
+          "properties": {
+            "method": {
+              "const": "ranked_prefix"
+            },
+            "stateBudget": {
+              "type": "null"
+            },
+            "stateBudgetSource": {
+              "const": "no_explicit_cap"
+            }
+          },
+          "required": [
+            "method",
+            "stateBudget",
+            "stateBudgetSource"
+          ]
+        },
+        {
+          "properties": {
+            "method": {
+              "const": "bounded_dynamic_programming"
+            },
+            "stateBudget": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "stateBudgetSource": {
+              "enum": [
+                "user_explicit",
+                "operator_capacity",
+                "host_limit",
+                "no_explicit_cap"
+              ]
+            }
+          },
+          "required": [
+            "method",
+            "stateBudget",
+            "stateBudgetSource"
+          ]
+        },
+        {
+          "properties": {
+            "method": {
+              "const": "not_run_unsupported_goal"
+            },
+            "stateBudget": {
+              "type": "null"
+            },
+            "stateBudgetSource": {
+              "const": "no_explicit_cap"
+            },
+            "statesVisited": {
+              "const": 0
+            },
+            "truncated": {
+              "const": false
+            },
+            "optimalityProven": {
+              "const": false
+            }
+          },
+          "required": [
+            "method",
+            "stateBudget",
+            "stateBudgetSource",
+            "statesVisited",
+            "truncated",
+            "optimalityProven"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "truncated": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "optimalityProven": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "stateBudgetSource": {
+                "const": "user_explicit"
+              }
+            },
+            "required": [
+              "stateBudgetSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stateBudgetAuthorityState": {
+                "const": "user_input_receipt"
+              },
+              "stateBudgetBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "stateBudgetSource": {
+                "enum": [
+                  "operator_capacity",
+                  "host_limit"
+                ]
+              }
+            },
+            "required": [
+              "stateBudgetSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stateBudgetAuthorityState": {
+                "const": "external_runtime_receipt"
+              },
+              "stateBudgetBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "stateBudgetSource": {
+                "const": "no_explicit_cap"
+              }
+            },
+            "required": [
+              "stateBudgetSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stateBudgetAuthorityState": {
+                "const": "not_applicable"
+              },
+              "stateBudgetBasisRefs": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "changeSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "addedCandidateRefs",
+        "removedCandidateRefs",
+        "rankChangedCandidateRefs",
+        "statusChangedCandidateRefs",
+        "evidenceChangedCandidateRefs",
+        "changeSummary"
+      ],
+      "properties": {
+        "addedCandidateRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "removedCandidateRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "rankChangedCandidateRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "statusChangedCandidateRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "evidenceChangedCandidateRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "changeSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      }
+    },
+    "deliveryReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receiptId",
+        "receiptType",
+        "recordState",
+        "proofBoundary",
+        "batchHash",
+        "candidateRefs",
+        "assessmentRefs",
+        "displayedAt",
+        "sessionBindingHash",
+        "hostSurface"
+      ],
+      "properties": {
+        "receiptId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receiptType": {
+          "const": "host_visible_delivery"
+        },
+        "recordState": {
+          "const": "prepared_not_host_proven",
+          "description": "This package-side record binds prepared content only and never proves that the host displayed it."
+        },
+        "proofBoundary": {
+          "const": "content_closure_only_not_visibility_proof",
+          "description": "Actual user-visible delivery evidence belongs to a separately controlled host validation surface."
+        },
+        "batchHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "candidateRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "assessmentRefs": {
+          "$ref": "#/$defs/referenceList",
+          "description": "Frozen input references whose complete assessment rows were visibly delivered in the bound batch."
+        },
+        "displayedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sessionBindingHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "hostSurface": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "candidateRefs": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "assessmentRefs": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "batchPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deliveryBatchSize",
+        "firstVisibleBatchSize",
+        "batchSizeSource",
+        "batchUnit",
+        "capacityAllocation",
+        "batchSizeAuthorityState",
+        "batchSizeBasisRefs"
+      ],
+      "properties": {
+        "deliveryBatchSize": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum total visible items in one batch. Candidate cards and bounded-input assessment rows spend the same shared capacity."
+        },
+        "firstVisibleBatchSize": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Actual candidate plus assessment item count in the first host-verified visible batch; zero until such a batch exists."
+        },
+        "batchSizeSource": {
+          "enum": [
+            "user_explicit",
+            "operator_capacity",
+            "host_limit",
+            "expert_recommended_user_adjustable"
+          ]
+        },
+        "batchUnit": {
+          "const": "visible_items",
+          "description": "One visible item is either one candidate card or one bounded-input assessment row."
+        },
+        "capacityAllocation": {
+          "const": "shared_candidate_and_assessment_items",
+          "description": "Candidate and assessment items share deliveryBatchSize; each side cannot independently consume the full capacity."
+        },
+        "batchSizeAuthorityState": {
+          "enum": [
+            "user_input_receipt",
+            "external_runtime_receipt",
+            "package_default_non_authoritative"
+          ]
+        },
+        "batchSizeBasisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "batchSizeSource": {
+                "const": "user_explicit"
+              }
+            },
+            "required": [
+              "batchSizeSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "batchSizeAuthorityState": {
+                "const": "user_input_receipt"
+              },
+              "batchSizeBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "batchSizeSource": {
+                "enum": [
+                  "operator_capacity",
+                  "host_limit"
+                ]
+              }
+            },
+            "required": [
+              "batchSizeSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "batchSizeAuthorityState": {
+                "const": "external_runtime_receipt"
+              },
+              "batchSizeBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "batchSizeSource": {
+                "const": "expert_recommended_user_adjustable"
+              }
+            },
+            "required": [
+              "batchSizeSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "batchSizeAuthorityState": {
+                "const": "package_default_non_authoritative"
+              },
+              "batchSizeBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "deliveryBatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "batchId",
+        "deliveryEventId",
+        "portfolioRevision",
+        "goalHash",
+        "deliveryMode",
+        "deliveryReceiptRef",
+        "sessionBindingHash",
+        "batchHash",
+        "batchIndex",
+        "state",
+        "plannedBatchSize",
+        "deliveryItems",
+        "candidateRefs",
+        "assessmentItems",
+        "assessmentRefs",
+        "qualifiedCount",
+        "cumulativeUniqueDeliveredCount",
+        "displayedAt",
+        "nextCursor"
+      ],
+      "properties": {
+        "batchId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deliveryEventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "portfolioRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goalHash": {
+          "$ref": "#/$defs/hash",
+          "description": "Frozen TaskGoal hash governing this immutable delivery event."
+        },
+        "deliveryMode": {
+          "enum": [
+            "incremental",
+            "all_at_once_user_explicit"
+          ]
+        },
+        "deliveryReceiptRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Resolvable host receipt proving this exact batch became visible to the user."
+        },
+        "sessionBindingHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "batchHash": {
+          "$ref": "#/$defs/hash",
+          "description": "Canonical JSON SHA-256 of this batch with batchHash excluded."
+        },
+        "batchIndex": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "state": {
+          "const": "delivered"
+        },
+        "plannedBatchSize": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Exact total visible-item count represented by this immutable batch object; equals candidateRefs plus assessmentRefs and cannot exceed batchPolicy.deliveryBatchSize."
+        },
+        "deliveryItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/deliveryItem"
+          },
+          "description": "Per-candidate immutable delivery semantics. Re-display is permitted only as an evidenced correction or update tied to a prior visible event."
+        },
+        "candidateRefs": {
+          "$ref": "#/$defs/referenceList",
+          "description": "Candidate IDs qualified at delivery time; each must remain resolvable in a current portfolio state."
+        },
+        "assessmentItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/deliveryAssessmentItem"
+          },
+          "description": "Per-input visible assessment identities, including excluded or unresolved rows that have no deliverable candidate."
+        },
+        "assessmentRefs": {
+          "$ref": "#/$defs/referenceList",
+          "description": "Ordered inputRef projection of assessmentItems."
+        },
+        "qualifiedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cumulativeUniqueDeliveredCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Historical unique qualified count as of this immutable delivery event."
+        },
+        "displayedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "nextCursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "candidateRefs": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "assessmentRefs": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "deliveryAssessmentItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputRef",
+        "assessmentHash"
+      ],
+      "properties": {
+        "inputRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assessmentHash": {
+          "$ref": "#/$defs/hash",
+          "description": "Hash of the exact evaluationScopeAssessment.inputAssessments row made visible in this delivery event."
+        }
+      }
+    },
+    "deliveryItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateRef",
+        "eventKind",
+        "priorDeliveryEventId",
+        "changeRefs"
+      ],
+      "properties": {
+        "candidateRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eventKind": {
+          "enum": [
+            "first_delivery",
+            "correction",
+            "update"
+          ]
+        },
+        "priorDeliveryEventId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "changeRefs": {
+          "$ref": "#/$defs/referenceList",
+          "description": "Claim or source references explaining a correction or material update."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "eventKind": {
+                "const": "first_delivery"
+              }
+            },
+            "required": [
+              "eventKind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "priorDeliveryEventId": {
+                "type": "null"
+              },
+              "changeRefs": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "priorDeliveryEventId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "changeRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "countGoalAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relation",
+        "exactCount",
+        "minimumCount",
+        "maximumCount",
+        "achieved",
+        "status"
+      ],
+      "properties": {
+        "relation": {
+          "enum": [
+            "exact",
+            "at_least",
+            "at_most",
+            "between",
+            "none"
+          ]
+        },
+        "exactCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "minimumCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "maximumCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "achieved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "status": {
+          "enum": [
+            "not_applicable",
+            "met",
+            "below_minimum",
+            "above_maximum",
+            "unsupported"
+          ]
+        }
+      }
+    },
+    "coverageAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirementRef",
+        "requiredDistinctQualifiedEntities",
+        "achievedDistinctQualifiedEntities",
+        "matchedCandidateRefs",
+        "status"
+      ],
+      "properties": {
+        "requirementRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredDistinctQualifiedEntities": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "achievedDistinctQualifiedEntities": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "matchedCandidateRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "status": {
+          "enum": [
+            "unmet",
+            "met"
+          ]
+        }
+      }
+    },
+    "qualificationCriterionAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "criterionRef",
+        "required",
+        "matchedCandidateRefs",
+        "evidenceRefs",
+        "status"
+      ],
+      "properties": {
+        "criterionRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "matchedCandidateRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "status": {
+          "enum": [
+            "unmet",
+            "met",
+            "not_applicable"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "met"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidenceRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "excludedCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateId",
+        "entityRef",
+        "legalEntityName",
+        "reasonCode",
+        "reason",
+        "evidenceRefs",
+        "failedConstraintRefs",
+        "contradictingClaimRefs"
+      ],
+      "properties": {
+        "candidateId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "entityRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "legalEntityName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "failedConstraintRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "contradictingClaimRefs": {
+          "$ref": "#/$defs/referenceList"
+        }
+      }
+    },
+    "searchCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceMode",
+        "queryFamiliesAttempted",
+        "queryCount",
+        "sourcesRead",
+        "checkpointReason",
+        "uncoveredDirections"
+      ],
+      "properties": {
+        "sourceMode": {
+          "enum": [
+            "live_public_search",
+            "provided_public_material_only",
+            "public_search_mission_pack",
+            "bounded_enumerated_source"
+          ]
+        },
+        "queryFamiliesAttempted": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "queryCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourcesRead": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "checkpointReason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "uncoveredDirections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      }
+    },
+    "portfolioStrategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primaryMotion",
+        "supportingMotions",
+        "channelMixRationale",
+        "customerOperationSequence",
+        "selectionBasis",
+        "executionBoundary"
+      ],
+      "properties": {
+        "primaryMotion": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 200
+        },
+        "supportingMotions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "channelMixRationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "customerOperationSequence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        },
+        "selectionBasis": {
+          "const": "task_goal_and_candidate_evidence_not_archetype_template"
+        },
+        "executionBoundary": {
+          "const": "prepared_not_contacted"
+        }
+      }
+    },
+    "qualityGateReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entityGate",
+        "hardConstraintGate",
+        "goalFitGate",
+        "evidenceGate",
+        "unresolvedDuplicateCount",
+        "duplicatesMergedCount",
+        "fatalEntityErrorCount",
+        "actionReadyCount",
+        "needsActionPreparationCount"
+      ],
+      "properties": {
+        "entityGate": {
+          "const": "pass"
+        },
+        "hardConstraintGate": {
+          "const": "pass"
+        },
+        "goalFitGate": {
+          "const": "pass"
+        },
+        "evidenceGate": {
+          "const": "pass"
+        },
+        "unresolvedDuplicateCount": {
+          "const": 0
+        },
+        "duplicatesMergedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fatalEntityErrorCount": {
+          "const": 0
+        },
+        "actionReadyCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "needsActionPreparationCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "nextAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actionType",
+        "description",
+        "owner",
+        "authorizationRequired"
+      ],
+      "properties": {
+        "actionType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "owner": {
+          "enum": [
+            "user",
+            "expert",
+            "park_operator"
+          ]
+        },
+        "authorizationRequired": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

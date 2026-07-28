@@ -1,0 +1,927 @@
+{
+  "schemaVersion": "1.0.0",
+  "bundleId": "bundle-synthetic-paused-001",
+  "assetId": "asset-portfolio-synthetic-one",
+  "revision": 1,
+  "packageVersion": "26.7.27",
+  "generatedAt": "2026-07-27T00:00:00+08:00",
+  "asOf": "2026-07-27T00:00:00+08:00",
+  "parkBrief": {
+    "schemaVersion": "1.0.0",
+    "contextKind": "park_bound_task",
+    "taskContextId": "task-context-park-synthetic-public",
+    "parkId": "park-synthetic-public",
+    "parkName": "合成演示园区",
+    "location": {
+      "country": "中国",
+      "province": "示例省",
+      "city": "示例市",
+      "district": null
+    },
+    "operatorType": "市场化园区运营商",
+    "parkArchetypes": [
+      "产业孵化基地"
+    ],
+    "developmentStage": "成长期",
+    "mission": {
+      "statement": "寻找一家能够补齐设备状态监测链节的合格企业",
+      "basisState": "user_stated",
+      "basisRefs": [
+        "input-receipt-current-request"
+      ],
+      "authority": "context_only_non_normative"
+    },
+    "timeHorizon": "本轮任务",
+    "industryFocus": [
+      "智能制造"
+    ],
+    "chainGaps": [
+      "设备状态监测"
+    ],
+    "spaceAndFacility": [],
+    "resourceAdvantages": [
+      "本地制造企业场景资源"
+    ],
+    "hardConstraints": [],
+    "softPreferences": [],
+    "knownFacts": [],
+    "assumptions": [],
+    "blockingUnknowns": [],
+    "adaptationContext": {
+      "profileVersion": "adaptive-context-1.0.0",
+      "factors": [
+        {
+          "factorId": "chain-gap",
+          "label": "产业链缺口",
+          "state": "user_stated",
+          "applicability": "applicable",
+          "summary": "当前任务只需要核验设备状态监测链节",
+          "evidenceRefs": []
+        }
+      ],
+      "routingFactorIds": [
+        "chain-gap"
+      ],
+      "contextCompleteness": "minimum_sufficient"
+    },
+    "taskGoal": {
+      "schemaVersion": "1.0.0",
+      "goalId": "goal-synthetic-one",
+      "goalRevision": 1,
+      "goalStatus": "frozen",
+      "goalMode": "explicit_count",
+      "candidateQualificationApplicability": "applicable",
+      "goalSource": "user_explicit",
+      "basisReceiptSnapshotHash": "ee0c0e5f8ad6c25d80e136dc354644b723663c82e8707bd972a24799447badfd",
+      "searchScope": {
+        "scopeMode": "open",
+        "scopeId": null,
+        "universeType": null,
+        "expectedCount": null,
+        "universeBindings": [],
+        "universeSnapshotHash": null,
+        "scopeHash": "3f69459bda5d6101db4f146900605d4aabbafc0cf16bfa67381d99a21d778222",
+        "basisRefs": [
+          "input-receipt-current-request"
+        ],
+        "universeManifest": null
+      },
+      "countRequirement": {
+        "relation": "exact",
+        "exactCount": 1,
+        "minimumCount": null,
+        "maximumCount": null,
+        "basisRefs": [
+          "input-receipt-current-request"
+        ],
+        "supportState": "supported",
+        "numberPurpose": "task_total",
+        "referenceCount": null
+      },
+      "requestedQualifiedCount": 1,
+      "coverageRequirements": [],
+      "qualificationCriteria": [
+        {
+          "criterionId": "criterion-device-monitoring",
+          "statement": "企业具备设备状态监测能力且有可回读公开证据",
+          "required": true,
+          "basisState": "user_stated",
+          "evidenceTemporalRequirement": "current_state",
+          "basisRefs": [
+            "input-receipt-current-request"
+          ],
+          "decisionRule": {
+            "ruleType": "qualitative_judgment",
+            "claimPredicates": [
+              "provides_capability"
+            ],
+            "expectedEntailment": "supports",
+            "operator": null,
+            "expectedValue": null,
+            "resultMapping": {
+              "whenTrue": "pass",
+              "whenFalse": "fail",
+              "whenIndeterminate": "unknown",
+              "whenNotApplicable": "not_applicable"
+            },
+            "operandValueType": null,
+            "expectedNormalizedValue": null,
+            "unit": null,
+            "normalization": null
+          }
+        }
+      ],
+      "completionAuthority": "structured_goal_fields_only",
+      "acceptanceCriteria": [
+        "交付恰好1家满足全部必选资格标准的去重合格企业。"
+      ],
+      "unsupportedCompletionConditions": [],
+      "blockingGoalUnknowns": [],
+      "frozenAt": "2026-07-27T00:00:00+08:00",
+      "goalHash": "6f3cb31c0f64eb29f5900e91c90cda6cc259fbf8e8c254388e0d4c4fcbfd0d42",
+      "supersedesGoalRef": null,
+      "prioritizationCriteria": [],
+      "evaluationRequirement": {
+        "mode": "none",
+        "scopeHash": null,
+        "completionRule": "not_applicable"
+      },
+      "deliveryEligibilityMode": "qualification_only",
+      "deliveryCriteria": [],
+      "taskDeliverableRequirements": []
+    },
+    "batchPolicy": {
+      "deliveryBatchSize": 1,
+      "firstVisibleBatchSize": 0,
+      "batchSizeSource": "user_explicit",
+      "batchUnit": "visible_items",
+      "capacityAllocation": "shared_candidate_and_assessment_items",
+      "batchSizeAuthorityState": "user_input_receipt",
+      "batchSizeBasisRefs": [
+        "input-receipt-current-request"
+      ]
+    },
+    "publicSourcePolicy": "public_only",
+    "researchBudget": {
+      "mode": "provided-material",
+      "budgetSource": "no_explicit_cap",
+      "timeBudgetMinutes": null,
+      "maxQueries": null,
+      "maxRetriesPerSource": null,
+      "coverageSearchStateBudget": null,
+      "coverageSearchStateBudgetSource": "no_explicit_cap",
+      "coverageSearchStateBudgetEffect": "algorithm_checkpoint_only_never_goal_shortfall",
+      "budgetEffect": "pause_checkpoint_not_market_shortfall",
+      "budgetAuthorityState": "not_applicable",
+      "budgetBasisRefs": [],
+      "coverageSearchStateBudgetAuthorityState": "not_applicable",
+      "coverageSearchStateBudgetBasisRefs": []
+    },
+    "constraintHash": "190e1b143b9e43b6352e2fb346819a91ee6421a1ba30037b1273aa2a825c045c",
+    "inputReceipts": [
+      {
+        "receiptId": "input-receipt-current-request",
+        "sourceKind": "current_turn",
+        "redactedSummary": "用户明确本轮园区、产业方向、业务总量与合格资格要求。",
+        "normalizedContentHash": "6556bc8a2315b93ddfcb29c6dd1ac8c9cde2e01d8d5dcc4d08a2a47dd62b3283",
+        "sessionBindingHash": "b159b5d8d93006ad63aff6a4e17e1b2971874d06ea5edc443ca084cb65517e81",
+        "turnBindingHash": "1e09053a40462aa456eb92f84513192b3ef88609b01553267534a9a784690ecf",
+        "recordedAt": "2026-07-27T00:00:00+08:00",
+        "confirmationState": "explicit",
+        "trustState": "synthetic_fixture_assumption",
+        "authorizationState": "not_proven_by_business_payload"
+      }
+    ],
+    "inputReceiptSnapshotHash": "ee0c0e5f8ad6c25d80e136dc354644b723663c82e8707bd972a24799447badfd"
+  },
+  "portfolio": {
+    "schemaVersion": "1.0.0",
+    "packageVersion": "26.7.27",
+    "portfolioId": "portfolio-synthetic-one",
+    "assetId": "asset-portfolio-synthetic-one",
+    "revision": 1,
+    "previousRevisionRef": null,
+    "createdAt": "2026-07-27T00:00:00+08:00",
+    "updatedAt": "2026-07-27T00:00:00+08:00",
+    "asOf": "2026-07-27T00:00:00+08:00",
+    "parkBriefRef": "examples/portfolio-evidence-bundle.example.json#/parkBrief",
+    "parkConstraintHash": "190e1b143b9e43b6352e2fb346819a91ee6421a1ba30037b1273aa2a825c045c",
+    "evidenceSnapshotHash": "5eb4a46f8df5a0d96b8a61f67a7c3fa8d1dc8abf95ab2ca31b88ed2dae7a1868",
+    "changeSet": {
+      "addedCandidateRefs": [
+        "candidate-synthetic-001"
+      ],
+      "removedCandidateRefs": [],
+      "rankChangedCandidateRefs": [],
+      "statusChangedCandidateRefs": [],
+      "evidenceChangedCandidateRefs": [],
+      "changeSummary": "首次形成一个合格候选的合成示例。"
+    },
+    "evidenceBundleRef": "examples/portfolio-evidence-bundle.example.json",
+    "queryLedgerRef": "examples/portfolio-evidence-bundle.example.json#/queryLedger",
+    "taskGoal": {
+      "schemaVersion": "1.0.0",
+      "goalId": "goal-synthetic-one",
+      "goalRevision": 1,
+      "goalStatus": "frozen",
+      "goalMode": "explicit_count",
+      "candidateQualificationApplicability": "applicable",
+      "goalSource": "user_explicit",
+      "basisReceiptSnapshotHash": "ee0c0e5f8ad6c25d80e136dc354644b723663c82e8707bd972a24799447badfd",
+      "searchScope": {
+        "scopeMode": "open",
+        "scopeId": null,
+        "universeType": null,
+        "expectedCount": null,
+        "universeBindings": [],
+        "universeSnapshotHash": null,
+        "scopeHash": "3f69459bda5d6101db4f146900605d4aabbafc0cf16bfa67381d99a21d778222",
+        "basisRefs": [
+          "input-receipt-current-request"
+        ],
+        "universeManifest": null
+      },
+      "countRequirement": {
+        "relation": "exact",
+        "exactCount": 1,
+        "minimumCount": null,
+        "maximumCount": null,
+        "basisRefs": [
+          "input-receipt-current-request"
+        ],
+        "supportState": "supported",
+        "numberPurpose": "task_total",
+        "referenceCount": null
+      },
+      "requestedQualifiedCount": 1,
+      "coverageRequirements": [],
+      "qualificationCriteria": [
+        {
+          "criterionId": "criterion-device-monitoring",
+          "statement": "企业具备设备状态监测能力且有可回读公开证据",
+          "required": true,
+          "basisState": "user_stated",
+          "evidenceTemporalRequirement": "current_state",
+          "basisRefs": [
+            "input-receipt-current-request"
+          ],
+          "decisionRule": {
+            "ruleType": "qualitative_judgment",
+            "claimPredicates": [
+              "provides_capability"
+            ],
+            "expectedEntailment": "supports",
+            "operator": null,
+            "expectedValue": null,
+            "resultMapping": {
+              "whenTrue": "pass",
+              "whenFalse": "fail",
+              "whenIndeterminate": "unknown",
+              "whenNotApplicable": "not_applicable"
+            },
+            "operandValueType": null,
+            "expectedNormalizedValue": null,
+            "unit": null,
+            "normalization": null
+          }
+        }
+      ],
+      "completionAuthority": "structured_goal_fields_only",
+      "acceptanceCriteria": [
+        "交付恰好1家满足全部必选资格标准的去重合格企业。"
+      ],
+      "unsupportedCompletionConditions": [],
+      "blockingGoalUnknowns": [],
+      "frozenAt": "2026-07-27T00:00:00+08:00",
+      "goalHash": "6f3cb31c0f64eb29f5900e91c90cda6cc259fbf8e8c254388e0d4c4fcbfd0d42",
+      "supersedesGoalRef": null,
+      "prioritizationCriteria": [],
+      "evaluationRequirement": {
+        "mode": "none",
+        "scopeHash": null,
+        "completionRule": "not_applicable"
+      },
+      "deliveryEligibilityMode": "qualification_only",
+      "deliveryCriteria": [],
+      "taskDeliverableRequirements": []
+    },
+    "batchPolicy": {
+      "deliveryBatchSize": 1,
+      "firstVisibleBatchSize": 0,
+      "batchSizeSource": "user_explicit",
+      "batchUnit": "visible_items",
+      "capacityAllocation": "shared_candidate_and_assessment_items",
+      "batchSizeAuthorityState": "user_input_receipt",
+      "batchSizeBasisRefs": [
+        "input-receipt-current-request"
+      ]
+    },
+    "taskState": "in_progress",
+    "selectionComputation": {
+      "method": "ranked_prefix",
+      "stateBudget": null,
+      "stateBudgetSource": "no_explicit_cap",
+      "budgetEffect": "algorithm_checkpoint_only_never_goal_shortfall",
+      "statesVisited": 1,
+      "truncated": false,
+      "optimalityProven": true,
+      "stateBudgetAuthorityState": "not_applicable",
+      "stateBudgetBasisRefs": []
+    },
+    "deliveryBatches": [],
+    "currentBatchRef": null,
+    "pendingCandidateRefs": [
+      "candidate-synthetic-001"
+    ],
+    "currentSelectedQualifiedCount": 1,
+    "currentTotalQualifiedPoolCount": 1,
+    "cumulativeUniqueDeliveredCount": 0,
+    "countGoalAssessment": {
+      "relation": "exact",
+      "exactCount": 1,
+      "minimumCount": null,
+      "maximumCount": null,
+      "achieved": 1,
+      "status": "met"
+    },
+    "coverageAssessments": [],
+    "qualificationCriterionAssessments": [
+      {
+        "criterionRef": "criterion-device-monitoring",
+        "required": true,
+        "matchedCandidateRefs": [
+          "candidate-synthetic-001"
+        ],
+        "evidenceRefs": [
+          "claim-synthetic-001"
+        ],
+        "status": "met"
+      }
+    ],
+    "unmetRequirementRefs": [],
+    "priorityCandidateIds": [],
+    "qualifiedCandidates": [
+      {
+        "schemaVersion": "1.0.0",
+        "candidateId": "candidate-synthetic-001",
+        "rank": null,
+        "rankReason": "资格条件 criterion-device-monitoring 获得 claim-synthetic-001 的公开材料支持；本批已满足资格与证据要求，显示顺序不代表业务优先级。",
+        "rankDelta": null,
+        "previousState": null,
+        "entityRef": "entity-synthetic-001",
+        "legalEntityName": "示例智造技术有限公司",
+        "targetRoles": [
+          "设备状态监测服务商"
+        ],
+        "criticalClaimRefs": [
+          "claim-synthetic-001"
+        ],
+        "counterevidenceClaimRefs": [],
+        "unknowns": [
+          "真实落地意愿尚未核验"
+        ],
+        "qualificationChecks": {
+          "entity": "pass",
+          "hardConstraints": "pass",
+          "goalFit": "pass",
+          "evidence": "pass"
+        },
+        "hardConstraintAssessments": [],
+        "taskFitAssessments": [
+          {
+            "criterionRef": "criterion-device-monitoring",
+            "label": "设备状态监测能力",
+            "assessment": "adequate",
+            "rationale": "关键公开材料直接支持该能力。",
+            "supportingClaimRefs": [
+              "claim-synthetic-001"
+            ],
+            "evidenceRefs": [
+              "claim-synthetic-001"
+            ]
+          }
+        ],
+        "matchedCoverageRequirementRefs": [],
+        "derivationState": "derived_from_structured_assessments",
+        "derivationRefs": [
+          "criterion-device-monitoring",
+          "claim-synthetic-001"
+        ],
+        "decisionLinks": [
+          {
+            "decisionLinkId": "decision-link-qualification-device-monitoring-001",
+            "decisionType": "qualification",
+            "decisionRef": "criterion-device-monitoring",
+            "outcome": "adequate",
+            "claimRefs": [
+              "claim-synthetic-001"
+            ],
+            "rule": {
+              "ruleType": "qualitative_judgment",
+              "claimPredicates": [
+                "provides_capability"
+              ],
+              "expectedEntailment": "supports",
+              "operator": null,
+              "expectedValue": null,
+              "resultMapping": {
+                "whenTrue": "pass",
+                "whenFalse": "fail",
+                "whenIndeterminate": "unknown",
+                "whenNotApplicable": "not_applicable"
+              },
+              "operandValueType": null,
+              "expectedNormalizedValue": null,
+              "unit": null,
+              "normalization": null
+            },
+            "rationale": "claim-synthetic-001 的谓词与任务目标授权的定性判断规则一致，并直接支持该资格结论。"
+          }
+        ],
+        "assessmentDerivation": {
+          "mode": "decision_links",
+          "decisionLinkRefs": [
+            "decision-link-qualification-device-monitoring-001"
+          ],
+          "fitAndQualificationDerived": true
+        },
+        "candidateState": "prioritized",
+        "displayOrder": 1,
+        "businessPriorityState": "no_business_priority",
+        "businessPriorityGroup": null,
+        "businessPriorityVector": [],
+        "prioritizationAssessments": [],
+        "deliveryCriteriaAssessments": []
+      }
+    ],
+    "alternates": [],
+    "watchlist": [],
+    "excluded": [],
+    "searchCoverage": {
+      "sourceMode": "provided_public_material_only",
+      "queryFamiliesAttempted": [],
+      "queryCount": 0,
+      "sourcesRead": 2,
+      "checkpointReason": "用户仅提供一份合成公开材料，本任务目标已满足。",
+      "uncoveredDirections": []
+    },
+    "terminalProof": null,
+    "pauseReason": null,
+    "nextCursor": "goal-synthetic-one:delivery-after:0:0",
+    "continuationRequirements": [
+      "等待宿主确认当前结果已向用户展示"
+    ],
+    "portfolioStrategy": {
+      "primaryMotion": "先核验业务需求",
+      "supportingMotions": [
+        "补查公开入口"
+      ],
+      "channelMixRationale": "候选资格来自任务适配和证据，渠道仅影响后续行动准备。",
+      "customerOperationSequence": [
+        "核验真实需求",
+        "准备价值主张",
+        "取得授权后再触达"
+      ],
+      "selectionBasis": "task_goal_and_candidate_evidence_not_archetype_template",
+      "executionBoundary": "prepared_not_contacted"
+    },
+    "performanceObservation": {
+      "schemaVersion": "1.0.0",
+      "measurementState": "not_measured",
+      "startedAt": null,
+      "firstUsefulResultAt": null,
+      "firstVisibleDeliveryAt": null,
+      "taskTerminalAt": null,
+      "elapsedMs": {
+        "firstUsefulResult": null,
+        "firstVisibleDelivery": null,
+        "taskTerminal": null
+      },
+      "evaluationBenchmarks": [],
+      "budget": {
+        "budgetSource": "no_explicit_cap",
+        "timeBudgetMinutes": null,
+        "queryBudget": null,
+        "queriesUsed": null,
+        "sourcesRead": null,
+        "retriesUsed": null,
+        "budgetEffect": "checkpoint_or_pause_never_market_shortfall",
+        "budgetAuthorityState": "not_applicable",
+        "budgetBasisRefs": [],
+        "usageMeasurementState": "not_measured",
+        "usageEvidenceRefs": [],
+        "queryLedgerSnapshotHash": null
+      },
+      "environment": {
+        "model": null,
+        "networkMode": null,
+        "concurrency": null
+      },
+      "checkpointReason": "静态示例不计时",
+      "notMeasuredReason": "静态合成示例不代表真实运行性能",
+      "firstUsefulResultRef": null,
+      "firstUsefulResultCriterionRef": null,
+      "firstVisibleDeliveryRef": null,
+      "firstVisibleDeliveryReceiptRef": null,
+      "taskTerminalProofRef": null,
+      "measurementBasis": {
+        "recordState": "unverified",
+        "receiptRefs": [],
+        "proofBoundary": "payload_timestamps_require_external_host_receipt_join"
+      }
+    },
+    "qualityGateReceipt": {
+      "entityGate": "pass",
+      "hardConstraintGate": "pass",
+      "goalFitGate": "pass",
+      "evidenceGate": "pass",
+      "unresolvedDuplicateCount": 0,
+      "duplicatesMergedCount": 0,
+      "fatalEntityErrorCount": 0,
+      "actionReadyCount": 0,
+      "needsActionPreparationCount": 1
+    },
+    "nextBestAction": {
+      "actionType": "prepare_verification_pack",
+      "description": "任务目标已满足；下一步可补查公开入口并准备核验问题。",
+      "owner": "expert",
+      "authorizationRequired": false
+    },
+    "deliveryReceipts": [],
+    "deliveryPreparation": null,
+    "deliverableEligibleCandidateRefs": [
+      "candidate-synthetic-001"
+    ],
+    "currentDeliverableEligibleCount": 1,
+    "evaluationScopeAssessment": {
+      "scopeHash": null,
+      "expectedInputCount": 0,
+      "auditedInputCount": 0,
+      "mappedInputCount": 0,
+      "dispositionedInputCount": 0,
+      "unresolvedInputCount": 0,
+      "inputAssessments": [],
+      "status": "not_applicable"
+    },
+    "deliveredAssessmentRefs": [],
+    "verificationOrderCandidateRefs": [
+      "candidate-synthetic-001"
+    ]
+  },
+  "entities": [
+    {
+      "schemaVersion": "1.0.0",
+      "entityId": "entity-synthetic-001",
+      "legalEntityName": "示例智造技术有限公司",
+      "unifiedSocialCreditCode": null,
+      "registrationJurisdiction": "CN",
+      "jurisdictionalRegistrationId": null,
+      "registrationRegion": "示例市",
+      "officialDomains": [
+        "example.org"
+      ],
+      "aliases": [],
+      "brandNames": [
+        "示例智造"
+      ],
+      "relationships": [],
+      "operatingBases": [],
+      "resolutionStatus": "resolved",
+      "resolutionEvidenceRefs": [
+        "source-synthetic-identity-001"
+      ],
+      "identityClaimRefs": [
+        "claim-synthetic-identity-001"
+      ],
+      "identityResolutionBasis": {
+        "closureMode": "claim_specific_responsibility_closure",
+        "legalNameClaimRefs": [
+          "claim-synthetic-identity-001"
+        ],
+        "stableDiscriminatorClaimRefs": [
+          "claim-synthetic-identity-001"
+        ],
+        "sourceRefs": [
+          "source-synthetic-identity-001"
+        ],
+        "stableKeyBindingState": "responsibility_verified",
+        "unverifiedAliasOrDomainKeyUseAllowed": false
+      },
+      "inputUniverseRefs": [],
+      "aliasMappings": [],
+      "normalizedEntityKey": "legal-region:示例智造技术有限公司|示例市",
+      "entityKeyBasis": "normalized_name_and_region"
+    }
+  ],
+  "sources": [
+    {
+      "schemaVersion": "1.0.0",
+      "sourceId": "source-synthetic-001",
+      "recordState": "synthetic_fixture_assumption",
+      "proofBoundary": "content_closure_only_not_publisher_domain_issuer_or_tool_execution_proof",
+      "url": "https://example.org/company-demo",
+      "finalUrl": null,
+      "redirectChain": [],
+      "retrievalReceiptRef": null,
+      "title": "合成公开材料结构示例",
+      "publisher": "示例发布者",
+      "publisherBinding": {
+        "state": "synthetic_fixture_assumption",
+        "observedFinalHost": "example.org",
+        "publisherClass": "company_official",
+        "bindingMethod": "synthetic_fixture_assumption",
+        "bindingClaimRefs": [
+          "claim-synthetic-001"
+        ],
+        "bindingSourceRefs": [],
+        "externalVerificationRequired": true
+      },
+      "publisherResponsibility": {
+        "state": "synthetic_fixture_assumption",
+        "roles": [
+          "self_publisher"
+        ],
+        "jurisdictions": [
+          "CN"
+        ],
+        "scopeClaimRefs": [
+          "claim-synthetic-001"
+        ],
+        "basisRefs": [
+          "source-synthetic-001"
+        ],
+        "verificationRequired": true
+      },
+      "sourceType": "user_provided_public_material",
+      "originSourceType": "company_official",
+      "trustTier": "primary_company",
+      "publishedAt": "2026-07-26T00:00:00+08:00",
+      "retrievedAt": "2026-07-27T00:00:00+08:00",
+      "contentHash": "88967aef0b4e64adb00fd5940f9f8f1dfffc3e957a4adba2419f33b121dd4898",
+      "locator": "演示段落",
+      "excerpt": "合成示例：示例智造技术有限公司提供设备状态监测技术服务。",
+      "readbackStatus": "readable",
+      "materialAccessMode": "pasted_readable_content",
+      "accessLimitation": "仅用于展示结构，不代表真实网页内容",
+      "freshnessStatus": "current",
+      "freshnessBasis": {
+        "asOf": "2026-07-27T00:00:00+08:00",
+        "assessmentMethod": "explicit_source_date",
+        "dateObserved": "2026-07-26T00:00:00+08:00",
+        "volatility": "high",
+        "updateState": "unknown",
+        "rationale": "按材料明确日期、能力主张波动性和本轮截至时间判断；这不是统一天数门槛。"
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "sourceId": "source-synthetic-identity-001",
+      "recordState": "synthetic_fixture_assumption",
+      "proofBoundary": "content_closure_only_not_publisher_domain_issuer_or_tool_execution_proof",
+      "url": "https://registry.example.gov/company-demo",
+      "finalUrl": null,
+      "redirectChain": [],
+      "retrievalReceiptRef": null,
+      "title": "合成登记信息结构示例",
+      "publisher": "示例登记机关",
+      "publisherBinding": {
+        "state": "synthetic_fixture_assumption",
+        "observedFinalHost": "registry.example.gov",
+        "publisherClass": "government_or_regulator",
+        "bindingMethod": "synthetic_fixture_assumption",
+        "bindingClaimRefs": [
+          "claim-synthetic-identity-001"
+        ],
+        "bindingSourceRefs": [],
+        "externalVerificationRequired": true
+      },
+      "publisherResponsibility": {
+        "state": "synthetic_fixture_assumption",
+        "roles": [
+          "official_registry"
+        ],
+        "jurisdictions": [
+          "CN"
+        ],
+        "scopeClaimRefs": [
+          "claim-synthetic-identity-001"
+        ],
+        "basisRefs": [
+          "source-synthetic-identity-001"
+        ],
+        "verificationRequired": true
+      },
+      "sourceType": "user_provided_public_material",
+      "originSourceType": "government_or_regulator",
+      "trustTier": "primary_authoritative",
+      "publishedAt": "2026-07-26T00:00:00+08:00",
+      "retrievedAt": "2026-07-27T00:00:00+08:00",
+      "contentHash": "a36078484c3a81c94036db97ac56b005dcd0a171cd9ff8a87381dce621d95a1b",
+      "locator": "登记信息演示段落",
+      "excerpt": "合成登记信息：示例智造技术有限公司，登记地区为示例市。",
+      "readbackStatus": "readable",
+      "materialAccessMode": "pasted_readable_content",
+      "accessLimitation": "仅用于展示结构，不代表真实登记信息",
+      "freshnessStatus": "current",
+      "freshnessBasis": {
+        "asOf": "2026-07-27T00:00:00+08:00",
+        "assessmentMethod": "explicit_source_date",
+        "dateObserved": "2026-07-26T00:00:00+08:00",
+        "volatility": "low",
+        "updateState": "unknown",
+        "rationale": "按登记材料明确日期和稳定身份主张的低波动性判断；这不是统一天数门槛。"
+      }
+    }
+  ],
+  "claims": [
+    {
+      "schemaVersion": "1.0.0",
+      "claimId": "claim-synthetic-001",
+      "entityId": "entity-synthetic-001",
+      "predicate": "provides_capability",
+      "value": "设备状态监测",
+      "claimText": "合成示例材料表明该企业提供设备状态监测能力。",
+      "critical": true,
+      "constraintRefs": [],
+      "criterionRefs": [
+        "criterion-device-monitoring"
+      ],
+      "validFrom": "2026-07-26T00:00:00+08:00",
+      "validTo": null,
+      "evidenceRefs": [
+        "source-synthetic-001"
+      ],
+      "sourceUsageAssessments": [
+        {
+          "sourceRef": "source-synthetic-001",
+          "usageEligibility": "standalone",
+          "publisherResponsibilityRole": "self_publisher",
+          "jurisdictionFit": "not_applicable",
+          "contentDirectness": "direct_publisher_content",
+          "entityBinding": "bound",
+          "readbackStatus": "readable",
+          "basisRefs": [
+            "source-synthetic-001"
+          ],
+          "assessmentBoundary": "claim_specific_no_global_source_ranking"
+        }
+      ],
+      "entailment": "supports",
+      "freshnessStatus": "current",
+      "temporalAssessment": {
+        "asOf": "2026-07-27T00:00:00+08:00",
+        "assessmentMethod": "source_date_and_volatility",
+        "sourceRefs": [
+          "source-synthetic-001"
+        ],
+        "rationale": "能力主张按材料日期、来源更新状态及高波动性在本轮截至时间判断。"
+      },
+      "conflictGroupId": null,
+      "alternativeExplanation": null,
+      "claimType": "self_declared_capability",
+      "valueCardinality": "multi_valued",
+      "priorityCriterionRefs": [],
+      "deliveryCriterionRefs": [],
+      "temporalScope": "current_state",
+      "valueType": "string",
+      "normalizedValue": "设备状态监测",
+      "unit": null,
+      "normalization": {
+        "method": "nfkc_trimmed",
+        "version": "1.0.0"
+      },
+      "criticalityAssessment": {
+        "isCritical": true,
+        "authorityRefs": [
+          "criterion-device-monitoring"
+        ],
+        "derivationRule": "task_goal_park_constraint_identity_and_delivery_reference_union"
+      }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "claimId": "claim-synthetic-identity-001",
+      "entityId": "entity-synthetic-001",
+      "predicate": "legal_entity_identity",
+      "value": "{\"entityKey\":\"legal-region:示例智造技术有限公司|示例市\",\"legalEntityName\":\"示例智造技术有限公司\"}",
+      "claimText": "合成登记材料把示例智造技术有限公司及其登记地区绑定到同一稳定主体键。",
+      "claimType": "identity",
+      "valueCardinality": "single_valued",
+      "critical": false,
+      "constraintRefs": [],
+      "criterionRefs": [],
+      "priorityCriterionRefs": [],
+      "deliveryCriterionRefs": [],
+      "temporalScope": "stable_identity",
+      "validFrom": null,
+      "validTo": null,
+      "evidenceRefs": [
+        "source-synthetic-identity-001"
+      ],
+      "sourceUsageAssessments": [
+        {
+          "sourceRef": "source-synthetic-identity-001",
+          "usageEligibility": "standalone",
+          "publisherResponsibilityRole": "official_registry",
+          "jurisdictionFit": "matched",
+          "contentDirectness": "direct_official_record",
+          "entityBinding": "bound",
+          "readbackStatus": "readable",
+          "basisRefs": [
+            "source-synthetic-identity-001"
+          ],
+          "assessmentBoundary": "claim_specific_no_global_source_ranking"
+        }
+      ],
+      "entailment": "supports",
+      "freshnessStatus": "current",
+      "temporalAssessment": {
+        "asOf": "2026-07-27T00:00:00+08:00",
+        "assessmentMethod": "stable_identity",
+        "sourceRefs": [
+          "source-synthetic-identity-001"
+        ],
+        "rationale": "法定名称与登记地区作为稳定身份区分符核验。"
+      },
+      "conflictGroupId": null,
+      "alternativeExplanation": null,
+      "valueType": "structured_identity",
+      "normalizedValue": "{\"entityKey\":\"legal-region:示例智造技术有限公司|示例市\",\"legalEntityName\":\"示例智造技术有限公司\"}",
+      "unit": null,
+      "normalization": {
+        "method": "canonical_json",
+        "version": "1.0.0"
+      },
+      "criticalityAssessment": {
+        "isCritical": true,
+        "authorityRefs": [
+          "identityClaim:claim-synthetic-identity-001"
+        ],
+        "derivationRule": "task_goal_park_constraint_identity_and_delivery_reference_union"
+      }
+    }
+  ],
+  "conflicts": [],
+  "queryLedger": {
+    "schemaVersion": "1.0.0",
+    "ledgerId": "query-ledger-bundle-synthetic",
+    "revision": 1,
+    "previousRevisionRef": null,
+    "asOf": "2026-07-27T00:00:00+08:00",
+    "sourcePolicy": "public_only",
+    "queries": [],
+    "executionReceipts": [],
+    "budget": {
+      "queryBudget": null,
+      "queriesUsed": 0,
+      "sourcesRead": 2,
+      "retriesUsed": 0
+    },
+    "stopReason": "仅使用用户提供的可回读公开材料，未执行联网搜索。",
+    "coverageConclusion": "该证据包只证明已审计材料中的企业，不代表开放市场穷尽。",
+    "uncoveredDirections": [
+      "开放市场企业发现"
+    ]
+  },
+  "discoveryLedger": {
+    "schemaVersion": "1.0.0",
+    "ledgerId": "discovery-ledger-bundle-synthetic",
+    "revision": 1,
+    "previousRevisionRef": null,
+    "asOf": "2026-07-27T00:00:00+08:00",
+    "parkBriefRef": "examples/portfolio-evidence-bundle.example.json#/parkBrief",
+    "queryLedger": {
+      "schemaVersion": "1.0.0",
+      "ledgerId": "query-ledger-bundle-synthetic",
+      "revision": 1,
+      "previousRevisionRef": null,
+      "asOf": "2026-07-27T00:00:00+08:00",
+      "sourcePolicy": "public_only",
+      "queries": [],
+      "executionReceipts": [],
+      "budget": {
+        "queryBudget": null,
+        "queriesUsed": 0,
+        "sourcesRead": 2,
+        "retriesUsed": 0
+      },
+      "stopReason": "仅使用用户提供的可回读公开材料，未执行联网搜索。",
+      "coverageConclusion": "该证据包只证明已审计材料中的企业，不代表开放市场穷尽。",
+      "uncoveredDirections": [
+        "开放市场企业发现"
+      ]
+    },
+    "candidates": [],
+    "truthBoundary": "discovery_is_not_entity_resolution_fit_or_intent"
+  },
+  "manifest": {
+    "entityCount": 1,
+    "sourceCount": 2,
+    "claimCount": 2,
+    "conflictCount": 0,
+    "portfolioHash": "930a0a6ccfef8a0f9c032664da3f5ced563238c12b00201ca676db2f311702a2",
+    "parkBriefHash": "67a05450f1c567d6e2fcbe7dca87290d3130a89f668d68f205df64d915c0ab16",
+    "queryLedgerHash": "dfd4badbe2ef3f98d35c6c8a5c44324adacfd72cf50ad700f724392db5d3ba32",
+    "discoveryLedgerHash": "de7b9d02a9095a13d5f79fdc180cb4d7ea157230682bb87cfe6f320fd7ad458a"
+  }
+}

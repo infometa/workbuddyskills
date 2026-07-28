@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "1.0.0",
+  "snapshotId": "capability-package-static-26.7.27",
+  "observedAt": "2026-07-26T12:00:00+08:00",
+  "hostProduct": "WorkBuddy",
+  "hostVersion": "5.3.5",
+  "expertEntryId": "industrial-park-investment-attraction-expert",
+  "longTermMemoryHandshake": {
+    "state": "unknown",
+    "receiptState": "not_machine_verifiable",
+    "hostReceiptId": null,
+    "observedAt": null,
+    "parkIsolationSupported": null
+  },
+  "capabilities": [
+    {
+      "capabilityId": "public_search",
+      "state": "unknown",
+      "evidenceLayer": "public_docs",
+      "claimState": "not_proven",
+      "permissionScope": "仅在宿主当前会话实际暴露且允许时使用公开搜索。",
+      "sideEffectClass": "read_only",
+      "needsConfirmation": false,
+      "fallbackId": "provided_public_material_only_or_public_search_mission_pack",
+      "sourceRefs": [
+        "contracts/runtime-contract.json"
+      ]
+    },
+    {
+      "capabilityId": "page_read",
+      "state": "unknown",
+      "evidenceLayer": "public_docs",
+      "claimState": "not_proven",
+      "permissionScope": "只读取当前任务相关的公开页面。",
+      "sideEffectClass": "read_only",
+      "needsConfirmation": false,
+      "fallbackId": "mark_access_limitation_and_do_not_guess",
+      "sourceRefs": [
+        "contracts/runtime-contract.json"
+      ]
+    },
+    {
+      "capabilityId": "structured_artifact",
+      "state": "unknown",
+      "evidenceLayer": "installed_public_metadata",
+      "claimState": "not_proven",
+      "permissionScope": "默认聊天交付；只有用户明确要求写文件时才使用。",
+      "sideEffectClass": "workspace_new_file",
+      "needsConfirmation": true,
+      "fallbackId": "render_equivalent_structure_in_chat",
+      "sourceRefs": [
+        "contracts/artifact-action-contract.json"
+      ]
+    },
+    {
+      "capabilityId": "external_write",
+      "state": "unavailable",
+      "evidenceLayer": "installed_public_metadata",
+      "claimState": "observed",
+      "permissionScope": "V1禁止发送、写CRM、建日历或任何外部写入。",
+      "sideEffectClass": "external_write",
+      "needsConfirmation": true,
+      "fallbackId": "authorization_draft_only",
+      "sourceRefs": [
+        "contracts/runtime-contract.json",
+        "contracts/artifact-action-contract.json"
+      ]
+    },
+    {
+      "capabilityId": "long_term_memory",
+      "state": "unknown",
+      "evidenceLayer": "installed_public_metadata",
+      "claimState": "not_proven",
+      "permissionScope": "未取得宿主可验证回执时按未知处理；只有宿主证明可用、园区隔离成立且用户本轮确认后，才可读取该园区的偏好上下文。",
+      "sideEffectClass": "none",
+      "needsConfirmation": true,
+      "fallbackId": "current_session_visible_capsule_only",
+      "sourceRefs": [
+        "contracts/runtime-contract.json"
+      ]
+    }
+  ],
+  "domainSkills": [
+    {
+      "skillId": "park-brief-builder",
+      "state": "available",
+      "packageVersion": "26.7.27",
+      "entrypoint": "skills/park-brief-builder/SKILL.md",
+      "claimState": "observed_package_static",
+      "evidenceRefs": [
+        "skills/park-brief-builder/SKILL.md"
+      ]
+    },
+    {
+      "skillId": "public-target-research",
+      "state": "available",
+      "packageVersion": "26.7.27",
+      "entrypoint": "skills/public-target-research/SKILL.md",
+      "claimState": "observed_package_static",
+      "evidenceRefs": [
+        "skills/public-target-research/SKILL.md"
+      ]
+    },
+    {
+      "skillId": "entity-evidence-audit",
+      "state": "available",
+      "packageVersion": "26.7.27",
+      "entrypoint": "skills/entity-evidence-audit/SKILL.md",
+      "claimState": "observed_package_static",
+      "evidenceRefs": [
+        "skills/entity-evidence-audit/SKILL.md"
+      ]
+    },
+    {
+      "skillId": "fit-portfolio",
+      "state": "available",
+      "packageVersion": "26.7.27",
+      "entrypoint": "skills/fit-portfolio/SKILL.md",
+      "claimState": "observed_package_static",
+      "evidenceRefs": [
+        "skills/fit-portfolio/SKILL.md"
+      ]
+    },
+    {
+      "skillId": "artifact-renderer",
+      "state": "available",
+      "packageVersion": "26.7.27",
+      "entrypoint": "skills/artifact-renderer/SKILL.md",
+      "claimState": "observed_package_static",
+      "evidenceRefs": [
+        "skills/artifact-renderer/SKILL.md"
+      ]
+    }
+  ]
+}

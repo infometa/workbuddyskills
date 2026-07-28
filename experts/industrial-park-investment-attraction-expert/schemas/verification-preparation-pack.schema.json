@@ -1,0 +1,388 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/verification-preparation-pack.schema.json",
+  "title": "VerificationPreparationPack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packId",
+    "revision",
+    "previousRevisionRef",
+    "generatedAt",
+    "updatedAt",
+    "asOf",
+    "portfolioRef",
+    "candidatePlans",
+    "verificationTasks",
+    "cadencePlan",
+    "executionBoundary"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "packId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "previousRevisionRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "portfolioRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verificationState": {
+      "enum": [
+        "active",
+        "completed",
+        "not_applicable"
+      ],
+      "description": "Optional compatibility discriminator. When absent, the pack is treated as active and all work arrays remain non-empty."
+    },
+    "stateBasisRefs": {
+      "$ref": "#/$defs/referenceList",
+      "description": "References to the frozen task goal, terminal proof, or applicability assessment supporting a completed or not-applicable state."
+    },
+    "stateReason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "candidatePlans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "candidateRef",
+          "valueProposition",
+          "verificationQuestions",
+          "channelReadiness",
+          "primaryChannelType",
+          "publicEntryUrl",
+          "supportingMaterials",
+          "owner",
+          "nextReviewAt"
+        ],
+        "properties": {
+          "candidateRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "valueProposition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "verificationQuestions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            }
+          },
+          "channelReadiness": {
+            "enum": [
+              "ready",
+              "partial",
+              "needs_channel_research",
+              "no_public_entry_found"
+            ]
+          },
+          "primaryChannelType": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 200
+          },
+          "publicEntryUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri",
+            "pattern": "^https?://(?!(?:localhost|127(?:\\.[0-9]{1,3}){3}|10(?:\\.[0-9]{1,3}){3}|192\\.168(?:\\.[0-9]{1,3}){2}|172\\.(?:1[6-9]|2[0-9]|3[01])(?:\\.[0-9]{1,3}){2}|169\\.254(?:\\.[0-9]{1,3}){2}|0\\.0\\.0\\.0|\\[::1\\])(?::[0-9]+)?(?:/|$))"
+          },
+          "supportingMaterials": {
+            "$ref": "#/$defs/referenceList"
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "nextReviewAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "verificationTasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "taskId",
+          "candidateRef",
+          "gapRefs",
+          "blockingClaimRefs",
+          "taskType",
+          "priority",
+          "owner",
+          "dueAt",
+          "doneCriteria",
+          "status",
+          "result",
+          "resultEvidenceRefs",
+          "updatedAt",
+          "rerankTrigger"
+        ],
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidateRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "gapRefs": {
+            "$ref": "#/$defs/referenceList"
+          },
+          "blockingClaimRefs": {
+            "$ref": "#/$defs/referenceList"
+          },
+          "taskType": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "priority": {
+            "enum": [
+              "urgent",
+              "high",
+              "normal",
+              "low"
+            ]
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "dueAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "doneCriteria": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "status": {
+            "enum": [
+              "not_started",
+              "in_progress",
+              "blocked",
+              "completed",
+              "cancelled"
+            ]
+          },
+          "result": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2000
+          },
+          "resultEvidenceRefs": {
+            "$ref": "#/$defs/referenceList"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rerankTrigger": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "cadencePlan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "milestoneId",
+          "trigger",
+          "dueAt",
+          "objective",
+          "owner",
+          "doneCriteria",
+          "status"
+        ],
+        "properties": {
+          "milestoneId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "trigger": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "dueAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "objective": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "doneCriteria": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "status": {
+            "enum": [
+              "not_started",
+              "in_progress",
+              "blocked",
+              "completed",
+              "cancelled"
+            ]
+          }
+        }
+      }
+    },
+    "executionBoundary": {
+      "const": "prepared_not_contacted"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "verificationState"
+        ],
+        "properties": {
+          "verificationState": {
+            "enum": [
+              "completed",
+              "not_applicable"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "stateBasisRefs",
+          "stateReason"
+        ],
+        "properties": {
+          "stateBasisRefs": {
+            "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "candidatePlans": {
+            "minItems": 1,
+            "items": {
+              "properties": {
+                "verificationQuestions": {
+                  "minItems": 1
+                }
+              }
+            }
+          },
+          "verificationTasks": {
+            "minItems": 1
+          },
+          "cadencePlan": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "verificationState"
+        ],
+        "properties": {
+          "verificationState": {
+            "const": "not_applicable"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "candidatePlans": {
+            "maxItems": 0
+          },
+          "verificationTasks": {
+            "maxItems": 0
+          },
+          "cadencePlan": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "referenceList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

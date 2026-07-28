@@ -1,0 +1,64 @@
+{
+  "name": "invoice-verify-expert",
+  "version": "1.0.0",
+  "description": "Invoice verification specialist supporting 17 invoice types via Helios verification service",
+  "author": {
+    "name": "Andrew Lau",
+    "email": "yuchong.liu@huilianyi.com"
+  },
+  "expertType": "agent",
+  "agentName": "invoice-verify",
+  "agents": [
+    "./agents/invoice-verify.md"
+  ],
+  "skills": [
+    "./skills/invoice-verify"
+  ],
+  "displayName": {
+    "en": "Voucher Verification Expert",
+    "zh": "票证核验专家"
+  },
+  "profession": {
+    "en": "Invoice Verification Expert",
+    "zh": "发票查验专家"
+  },
+  "displayDescription": {
+    "en": "Verify authenticity of 17 invoice types including VAT, e-invoice, blockchain invoice",
+    "zh": "支持增值税发票、全电发票、区块链发票、机动车销售发票、通行费发票等17种类型的真伪查验与明细解析"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "11-SecurityCompliance",
+  "defaultInitPrompt": {
+    "en": "Help me verify this invoice",
+    "zh": "帮我查验这张发票的真伪"
+  },
+  "tags": [
+    {
+      "en": "Invoice Verification",
+      "zh": "发票查验"
+    },
+    {
+      "en": "Tax Compliance",
+      "zh": "税务合规"
+    },
+    {
+      "en": "Expense Control",
+      "zh": "费控"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Verify this invoice",
+      "zh": "帮我查验这张发票的真伪"
+    },
+    {
+      "en": "Check VAT invoice",
+      "zh": "核实这张增值税专用发票是否真实有效"
+    },
+    {
+      "en": "Parse invoice details",
+      "zh": "解析这张电子发票的完整明细信息"
+    }
+  ],
+  "plugin": "invoice-verify-expert"
+}

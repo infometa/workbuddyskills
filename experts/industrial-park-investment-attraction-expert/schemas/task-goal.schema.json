@@ -1,0 +1,2681 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/task-goal.schema.json",
+  "title": "TaskGoal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "goalId",
+    "goalRevision",
+    "goalStatus",
+    "goalMode",
+    "goalSource",
+    "basisReceiptSnapshotHash",
+    "searchScope",
+    "countRequirement",
+    "requestedQualifiedCount",
+    "coverageRequirements",
+    "candidateQualificationApplicability",
+    "qualificationCriteria",
+    "prioritizationCriteria",
+    "evaluationRequirement",
+    "taskDeliverableRequirements",
+    "deliveryEligibilityMode",
+    "deliveryCriteria",
+    "completionAuthority",
+    "acceptanceCriteria",
+    "unsupportedCompletionConditions",
+    "blockingGoalUnknowns",
+    "frozenAt",
+    "goalHash",
+    "supersedesGoalRef"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "goalId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "goalRevision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "goalStatus": {
+      "enum": [
+        "draft",
+        "frozen",
+        "superseded"
+      ]
+    },
+    "goalMode": {
+      "enum": [
+        "explicit_count",
+        "task_coverage",
+        "hybrid",
+        "bounded_assessment",
+        "open_ended",
+        "unsupported"
+      ]
+    },
+    "goalSource": {
+      "enum": [
+        "user_explicit",
+        "park_task_derived",
+        "user_confirmed_derivation"
+      ]
+    },
+    "basisReceiptSnapshotHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of canonical UTF-8 JSON for the complete ParkBrief inputReceipts array that authorizes this TaskGoal. It is included in goalHash."
+    },
+    "searchScope": {
+      "$ref": "#/$defs/searchScope"
+    },
+    "countRequirement": {
+      "$ref": "#/$defs/countRequirement"
+    },
+    "requestedQualifiedCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "description": "Compatibility mirror used only when countRequirement.relation is exact. Non-exact relations must keep this null so it cannot become an accidental completion authority."
+    },
+    "coverageRequirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/coverageRequirement"
+      }
+    },
+    "candidateQualificationApplicability": {
+      "enum": [
+        "applicable",
+        "not_applicable",
+        "undetermined"
+      ],
+      "description": "Whether this task is authorized to qualify candidate enterprises. Material, claim, entity-resolution, and park-context audits must use not_applicable instead of inventing candidate criteria."
+    },
+    "qualificationCriteria": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/qualificationCriterion"
+      }
+    },
+    "prioritizationCriteria": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/prioritizationCriterion"
+      }
+    },
+    "evaluationRequirement": {
+      "$ref": "#/$defs/evaluationRequirement"
+    },
+    "taskDeliverableRequirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/taskDeliverableRequirement"
+      },
+      "description": "Task-relative, structured completion requirements for non-candidate deliverables. Empty when no finite deliverable has been authorized."
+    },
+    "deliveryEligibilityMode": {
+      "enum": [
+        "qualification_only",
+        "required_delivery_criteria",
+        "not_applicable"
+      ],
+      "description": "Whether count completion uses every qualified selection or only qualified selections that also meet user-approved delivery usability criteria."
+    },
+    "deliveryCriteria": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/deliveryCriterion"
+      }
+    },
+    "completionAuthority": {
+      "const": "structured_goal_fields_only",
+      "description": "Machine completion is governed only by the applicable structured count, candidate coverage, qualification, evaluation, task deliverable, and user-approved delivery fields. Non-authoritative number purposes and compatibility mirrors never create completion by themselves."
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Canonical human-readable summary derived from the structured goal fields. It cannot introduce an independent qualification or completion condition.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "unsupportedCompletionConditions": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Known completion conditions that this schema cannot yet represent without loss. A non-empty list blocks goal freezing and completion.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "blockingGoalUnknowns": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "frozenAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "goalHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of canonical UTF-8 JSON for this TaskGoal with goalHash excluded."
+    },
+    "supersedesGoalRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "goalMode": {
+            "const": "open_ended"
+          }
+        },
+        "required": [
+          "goalMode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "requestedQualifiedCount": {
+            "type": "null"
+          },
+          "coverageRequirements": {
+            "maxItems": 0
+          },
+          "countRequirement": {
+            "properties": {
+              "relation": {
+                "const": "none"
+              },
+              "numberPurpose": {
+                "enum": [
+                  "none",
+                  "batch_hint",
+                  "operator_capacity",
+                  "speed_benchmark",
+                  "approximate_preference"
+                ]
+              },
+              "supportState": {
+                "const": "supported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "goalMode": {
+            "const": "explicit_count"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "coverageRequirements": {
+            "maxItems": 0
+          },
+          "countRequirement": {
+            "properties": {
+              "relation": {
+                "enum": [
+                  "exact",
+                  "at_least",
+                  "between"
+                ]
+              },
+              "supportState": {
+                "const": "supported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "goalMode": {
+            "const": "task_coverage"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "requestedQualifiedCount": {
+            "type": "null"
+          },
+          "countRequirement": {
+            "properties": {
+              "relation": {
+                "const": "none"
+              },
+              "supportState": {
+                "const": "supported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "goalMode": {
+            "const": "hybrid"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "coverageRequirements": {
+            "minItems": 1
+          },
+          "countRequirement": {
+            "properties": {
+              "relation": {
+                "enum": [
+                  "exact",
+                  "at_least",
+                  "at_most",
+                  "between"
+                ]
+              },
+              "supportState": {
+                "const": "supported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "goalStatus": {
+            "const": "frozen"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "frozenAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "blockingGoalUnknowns": {
+            "maxItems": 0
+          },
+          "acceptanceCriteria": {
+            "minItems": 1
+          },
+          "unsupportedCompletionConditions": {
+            "maxItems": 0
+          },
+          "goalMode": {
+            "enum": [
+              "explicit_count",
+              "task_coverage",
+              "hybrid",
+              "bounded_assessment",
+              "open_ended"
+            ]
+          },
+          "candidateQualificationApplicability": {
+            "enum": [
+              "applicable",
+              "not_applicable"
+            ]
+          },
+          "countRequirement": {
+            "properties": {
+              "relation": {
+                "enum": [
+                  "exact",
+                  "at_least",
+                  "at_most",
+                  "between",
+                  "none"
+                ]
+              },
+              "supportState": {
+                "const": "supported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateQualificationApplicability": {
+            "const": "applicable"
+          },
+          "goalStatus": {
+            "const": "frozen"
+          }
+        },
+        "required": [
+          "candidateQualificationApplicability",
+          "goalStatus"
+        ]
+      },
+      "then": {
+        "properties": {
+          "qualificationCriteria": {
+            "minItems": 1,
+            "contains": {
+              "type": "object",
+              "required": [
+                "required"
+              ],
+              "properties": {
+                "required": {
+                  "const": true
+                }
+              }
+            }
+          },
+          "deliveryEligibilityMode": {
+            "enum": [
+              "qualification_only",
+              "required_delivery_criteria"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateQualificationApplicability": {
+            "const": "not_applicable"
+          },
+          "goalStatus": {
+            "const": "frozen"
+          }
+        },
+        "required": [
+          "candidateQualificationApplicability",
+          "goalStatus"
+        ]
+      },
+      "then": {
+        "properties": {
+          "goalMode": {
+            "enum": [
+              "bounded_assessment",
+              "task_coverage",
+              "open_ended"
+            ]
+          },
+          "countRequirement": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/countRequirement"
+              },
+              {
+                "properties": {
+                  "relation": {
+                    "const": "none"
+                  },
+                  "numberPurpose": {
+                    "const": "none"
+                  },
+                  "referenceCount": {
+                    "type": "null"
+                  }
+                }
+              }
+            ]
+          },
+          "requestedQualifiedCount": {
+            "type": "null"
+          },
+          "coverageRequirements": {
+            "maxItems": 0
+          },
+          "qualificationCriteria": {
+            "maxItems": 0
+          },
+          "prioritizationCriteria": {
+            "maxItems": 0
+          },
+          "deliveryEligibilityMode": {
+            "const": "not_applicable"
+          },
+          "deliveryCriteria": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateQualificationApplicability": {
+            "const": "applicable"
+          },
+          "goalMode": {
+            "const": "bounded_assessment"
+          }
+        },
+        "required": [
+          "candidateQualificationApplicability",
+          "goalMode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "searchScope": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/searchScope"
+              },
+              {
+                "properties": {
+                  "universeType": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateQualificationApplicability": {
+            "const": "undetermined"
+          }
+        },
+        "required": [
+          "candidateQualificationApplicability"
+        ]
+      },
+      "then": {
+        "properties": {
+          "goalStatus": {
+            "const": "draft"
+          },
+          "goalMode": {
+            "const": "unsupported"
+          },
+          "searchScope": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/searchScope"
+              },
+              {
+                "properties": {
+                  "scopeMode": {
+                    "const": "open"
+                  }
+                }
+              }
+            ]
+          },
+          "countRequirement": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/countRequirement"
+              },
+              {
+                "properties": {
+                  "relation": {
+                    "const": "none"
+                  },
+                  "numberPurpose": {
+                    "const": "none"
+                  },
+                  "referenceCount": {
+                    "type": "null"
+                  }
+                }
+              }
+            ]
+          },
+          "requestedQualifiedCount": {
+            "type": "null"
+          },
+          "coverageRequirements": {
+            "maxItems": 0
+          },
+          "qualificationCriteria": {
+            "maxItems": 0
+          },
+          "prioritizationCriteria": {
+            "maxItems": 0
+          },
+          "evaluationRequirement": {
+            "properties": {
+              "mode": {
+                "const": "none"
+              },
+              "scopeHash": {
+                "type": "null"
+              },
+              "completionRule": {
+                "const": "not_applicable"
+              }
+            }
+          },
+          "deliveryEligibilityMode": {
+            "const": "not_applicable"
+          },
+          "deliveryCriteria": {
+            "maxItems": 0
+          },
+          "taskDeliverableRequirements": {
+            "maxItems": 0
+          },
+          "acceptanceCriteria": {
+            "maxItems": 0
+          },
+          "blockingGoalUnknowns": {
+            "minItems": 1
+          },
+          "frozenAt": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateQualificationApplicability": {
+            "const": "applicable"
+          },
+          "goalMode": {
+            "const": "task_coverage"
+          }
+        },
+        "required": [
+          "candidateQualificationApplicability",
+          "goalMode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "coverageRequirements": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateQualificationApplicability": {
+            "const": "not_applicable"
+          },
+          "goalStatus": {
+            "const": "frozen"
+          },
+          "goalMode": {
+            "const": "task_coverage"
+          }
+        },
+        "required": [
+          "candidateQualificationApplicability",
+          "goalStatus",
+          "goalMode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "taskDeliverableRequirements": {
+            "minItems": 1
+          },
+          "evaluationRequirement": {
+            "properties": {
+              "mode": {
+                "const": "deliverable_requirements"
+              },
+              "scopeHash": {
+                "type": "null"
+              },
+              "completionRule": {
+                "const": "every_required_deliverable_verified"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "goalMode": {
+            "const": "unsupported"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "goalStatus": {
+            "enum": [
+              "draft",
+              "superseded"
+            ]
+          },
+          "requestedQualifiedCount": {
+            "type": "null"
+          },
+          "coverageRequirements": {
+            "maxItems": 0
+          },
+          "unsupportedCompletionConditions": {
+            "minItems": 1
+          },
+          "frozenAt": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "countRequirement": {
+            "properties": {
+              "relation": {
+                "const": "exact"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "requestedQualifiedCount": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "countRequirement": {
+            "properties": {
+              "relation": {
+                "enum": [
+                  "at_least",
+                  "at_most",
+                  "between",
+                  "none"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "requestedQualifiedCount": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "countRequirement": {
+            "properties": {
+              "relation": {
+                "const": "at_most"
+              },
+              "supportState": {
+                "const": "supported"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "goalMode": {
+            "const": "hybrid"
+          },
+          "coverageRequirements": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "countRequirement": {
+            "properties": {
+              "relation": {
+                "const": "at_most"
+              },
+              "supportState": {
+                "const": "unsupported"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "goalMode": {
+            "const": "unsupported"
+          },
+          "goalStatus": {
+            "enum": [
+              "draft",
+              "superseded"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "goalStatus": {
+            "const": "frozen"
+          }
+        },
+        "required": [
+          "goalStatus"
+        ]
+      },
+      "then": {
+        "properties": {
+          "qualificationCriteria": {
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/qualificationCriterion"
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "required": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "basisState": {
+                        "enum": [
+                          "user_stated",
+                          "user_confirmed_derivation"
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "coverageRequirements": {
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/coverageRequirement"
+                },
+                {
+                  "properties": {
+                    "basisState": {
+                      "enum": [
+                        "user_stated",
+                        "user_confirmed_derivation"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "goalStatus": {
+            "const": "frozen"
+          }
+        },
+        "required": [
+          "goalStatus"
+        ]
+      },
+      "then": {
+        "properties": {
+          "goalSource": {
+            "enum": [
+              "user_explicit",
+              "user_confirmed_derivation"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "goalMode": {
+            "const": "bounded_assessment"
+          }
+        },
+        "required": [
+          "goalMode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "searchScope": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/searchScope"
+              },
+              {
+                "properties": {
+                  "scopeMode": {
+                    "const": "bounded"
+                  },
+                  "universeType": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          },
+          "countRequirement": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/countRequirement"
+              },
+              {
+                "properties": {
+                  "relation": {
+                    "const": "none"
+                  },
+                  "numberPurpose": {
+                    "const": "none"
+                  },
+                  "referenceCount": {
+                    "type": "null"
+                  }
+                }
+              }
+            ]
+          },
+          "evaluationRequirement": {
+            "properties": {
+              "mode": {
+                "const": "all_bound_inputs"
+              },
+              "completionRule": {
+                "const": "every_input_audited_with_disposition_or_unresolved_evidence"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluationRequirement": {
+            "properties": {
+              "mode": {
+                "const": "none"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        },
+        "required": [
+          "evaluationRequirement"
+        ]
+      },
+      "then": {
+        "properties": {
+          "evaluationRequirement": {
+            "properties": {
+              "mode": {
+                "const": "none"
+              },
+              "scopeHash": {
+                "type": "null"
+              },
+              "completionRule": {
+                "const": "not_applicable"
+              }
+            }
+          }
+        }
+      },
+      "else": {}
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluationRequirement": {
+            "properties": {
+              "mode": {
+                "const": "all_bound_inputs"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        },
+        "required": [
+          "evaluationRequirement"
+        ]
+      },
+      "then": {
+        "properties": {
+          "searchScope": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/searchScope"
+              },
+              {
+                "properties": {
+                  "scopeMode": {
+                    "const": "bounded"
+                  }
+                }
+              }
+            ]
+          },
+          "evaluationRequirement": {
+            "properties": {
+              "scopeHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "completionRule": {
+                "const": "every_input_audited_with_disposition_or_unresolved_evidence"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluationRequirement": {
+            "properties": {
+              "mode": {
+                "const": "deliverable_requirements"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        },
+        "required": [
+          "evaluationRequirement"
+        ]
+      },
+      "then": {
+        "properties": {
+          "evaluationRequirement": {
+            "properties": {
+              "scopeHash": {
+                "type": "null"
+              },
+              "completionRule": {
+                "const": "every_required_deliverable_verified"
+              }
+            }
+          },
+          "taskDeliverableRequirements": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "deliveryEligibilityMode": {
+            "enum": [
+              "qualification_only",
+              "not_applicable"
+            ]
+          }
+        },
+        "required": [
+          "deliveryEligibilityMode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "deliveryCriteria": {
+            "maxItems": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "deliveryCriteria": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "evaluationRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "scopeHash",
+        "completionRule"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "none",
+            "all_bound_inputs",
+            "deliverable_requirements"
+          ]
+        },
+        "scopeHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "completionRule": {
+          "enum": [
+            "not_applicable",
+            "every_input_audited_with_disposition_or_unresolved_evidence",
+            "every_required_deliverable_verified"
+          ],
+          "description": "Bounded audit closes when every frozen input has a hash-bound resolved disposition or an unresolved_with_evidence row; unresolved rows never count as qualified."
+        }
+      }
+    },
+    "taskDeliverableRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirementId",
+        "artifactType",
+        "statement",
+        "verificationRule",
+        "basisState",
+        "basisRefs"
+      ],
+      "properties": {
+        "requirementId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifactType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "verificationRule": {
+          "oneOf": [
+            {
+              "enum": [
+                "artifact_present",
+                "schema_valid",
+                "schema_valid_and_evidence_bound"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "basisState": {
+          "enum": [
+            "user_stated",
+            "user_confirmed_derivation"
+          ]
+        },
+        "basisRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "deliveryCriterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deliveryCriterionId",
+        "statement",
+        "criterionType",
+        "fieldPath",
+        "basisState",
+        "basisRefs",
+        "evidenceTemporalRequirement",
+        "decisionRule"
+      ],
+      "properties": {
+        "deliveryCriterionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "criterionType": {
+          "enum": [
+            "verified_public_entry",
+            "required_field"
+          ]
+        },
+        "fieldPath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "basisState": {
+          "enum": [
+            "user_stated",
+            "user_confirmed_derivation"
+          ]
+        },
+        "basisRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "evidenceTemporalRequirement": {
+          "$ref": "#/$defs/evidenceTemporalRequirement"
+        },
+        "decisionRule": {
+          "$ref": "#/$defs/decisionRule"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "criterionType": {
+                "const": "verified_public_entry"
+              }
+            },
+            "required": [
+              "criterionType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "fieldPath": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "fieldPath": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "searchScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopeMode",
+        "scopeId",
+        "universeType",
+        "expectedCount",
+        "universeBindings",
+        "universeSnapshotHash",
+        "scopeHash",
+        "basisRefs",
+        "universeManifest"
+      ],
+      "properties": {
+        "scopeMode": {
+          "enum": [
+            "open",
+            "bounded"
+          ]
+        },
+        "scopeId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "universeType": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "user_supplied_candidate_list",
+                "user_supplied_public_materials",
+                "user_supplied_claim_set",
+                "entity_resolution_inputs",
+                "park_context_inputs",
+                "contracted_registry",
+                "closed_directory",
+                "other_bounded_source"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "expectedCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "universeBindings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/universeBinding"
+          }
+        },
+        "universeSnapshotHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "scopeHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Canonical JSON SHA-256 of searchScope with scopeHash excluded."
+        },
+        "basisRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "universeManifest": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/trustedUniverseManifest"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scopeMode": {
+                "const": "open"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "scopeId": {
+                "type": "null"
+              },
+              "universeType": {
+                "type": "null"
+              },
+              "expectedCount": {
+                "type": "null"
+              },
+              "universeBindings": {
+                "maxItems": 0
+              },
+              "universeSnapshotHash": {
+                "type": "null"
+              },
+              "universeManifest": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scopeMode": {
+                "const": "bounded"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "scopeId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "universeType": {
+                "type": "string"
+              },
+              "expectedCount": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "universeSnapshotHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scopeMode": {
+                "const": "bounded"
+              },
+              "universeType": {
+                "enum": [
+                  "user_supplied_candidate_list",
+                  "user_supplied_public_materials",
+                  "user_supplied_claim_set",
+                  "entity_resolution_inputs",
+                  "park_context_inputs"
+                ]
+              }
+            },
+            "required": [
+              "scopeMode",
+              "universeType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "universeManifest": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scopeMode": {
+                "const": "bounded"
+              },
+              "universeType": {
+                "enum": [
+                  "contracted_registry",
+                  "closed_directory",
+                  "other_bounded_source"
+                ]
+              }
+            },
+            "required": [
+              "scopeMode",
+              "universeType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "universeManifest": {
+                "$ref": "#/$defs/trustedUniverseManifest"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "universeBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "revisionRef",
+        "contentHash"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revisionRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "contentHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "countRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "numberPurpose",
+        "relation",
+        "exactCount",
+        "minimumCount",
+        "maximumCount",
+        "referenceCount",
+        "basisRefs",
+        "supportState"
+      ],
+      "properties": {
+        "numberPurpose": {
+          "enum": [
+            "none",
+            "task_total",
+            "min",
+            "max",
+            "range",
+            "batch_hint",
+            "operator_capacity",
+            "speed_benchmark",
+            "approximate_preference"
+          ],
+          "description": "Semantic role of the number. Only task_total, min, max, and range can govern task completion."
+        },
+        "relation": {
+          "enum": [
+            "exact",
+            "at_least",
+            "at_most",
+            "between",
+            "none"
+          ]
+        },
+        "exactCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "minimumCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "maximumCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "referenceCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "description": "Non-authoritative numeric hint or benchmark. It never contributes to completion."
+        },
+        "basisRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "supportState": {
+          "enum": [
+            "supported",
+            "unsupported"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "exact"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "exactCount": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "numberPurpose": {
+                "const": "task_total"
+              },
+              "minimumCount": {
+                "type": "null"
+              },
+              "maximumCount": {
+                "type": "null"
+              },
+              "referenceCount": {
+                "type": "null"
+              },
+              "supportState": {
+                "const": "supported"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "none"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "exactCount": {
+                "type": "null"
+              },
+              "minimumCount": {
+                "type": "null"
+              },
+              "maximumCount": {
+                "type": "null"
+              },
+              "supportState": {
+                "const": "supported"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "enum": [
+                  "at_least",
+                  "between"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "exactCount": {
+                "type": "null"
+              },
+              "supportState": {
+                "const": "supported"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "at_least"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "minimumCount": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "numberPurpose": {
+                "const": "min"
+              },
+              "maximumCount": {
+                "type": "null"
+              },
+              "referenceCount": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "at_most"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "exactCount": {
+                "type": "null"
+              },
+              "minimumCount": {
+                "type": "null"
+              },
+              "numberPurpose": {
+                "const": "max"
+              },
+              "maximumCount": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "referenceCount": {
+                "type": "null"
+              },
+              "supportState": {
+                "enum": [
+                  "supported",
+                  "unsupported"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "between"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "minimumCount": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "numberPurpose": {
+                "const": "range"
+              },
+              "maximumCount": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "referenceCount": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "none"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "oneOf": [
+              {
+                "properties": {
+                  "numberPurpose": {
+                    "const": "none"
+                  },
+                  "referenceCount": {
+                    "type": "null"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "numberPurpose": {
+                    "enum": [
+                      "batch_hint",
+                      "operator_capacity",
+                      "speed_benchmark",
+                      "approximate_preference"
+                    ]
+                  },
+                  "referenceCount": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "qualificationCriterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "criterionId",
+        "statement",
+        "required",
+        "basisState",
+        "basisRefs",
+        "evidenceTemporalRequirement",
+        "decisionRule"
+      ],
+      "properties": {
+        "criterionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "basisState": {
+          "enum": [
+            "user_stated",
+            "user_confirmed_derivation",
+            "observed",
+            "inferred"
+          ]
+        },
+        "basisRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "evidenceTemporalRequirement": {
+          "$ref": "#/$defs/evidenceTemporalRequirement"
+        },
+        "decisionRule": {
+          "$ref": "#/$defs/decisionRule"
+        }
+      }
+    },
+    "prioritizationCriterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "priorityCriterionId",
+        "statement",
+        "precedence",
+        "basisState",
+        "basisRefs",
+        "preferenceAttribution",
+        "userAdjustable",
+        "evidenceTemporalRequirement",
+        "decisionRule"
+      ],
+      "properties": {
+        "priorityCriterionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "precedence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "basisState": {
+          "enum": [
+            "user_stated",
+            "user_confirmed_derivation"
+          ]
+        },
+        "basisRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "preferenceAttribution": {
+          "const": "user_preference"
+        },
+        "userAdjustable": {
+          "const": true
+        },
+        "evidenceTemporalRequirement": {
+          "$ref": "#/$defs/evidenceTemporalRequirement"
+        },
+        "decisionRule": {
+          "$ref": "#/$defs/decisionRule"
+        }
+      },
+      "description": "Business-priority criteria exist only when stated by the user or explicitly confirmed from a derivation. Operator defaults belong to verificationOrderCandidateRefs and cannot create business priority."
+    },
+    "decisionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleType",
+        "claimPredicates",
+        "expectedEntailment",
+        "operator",
+        "expectedValue",
+        "operandValueType",
+        "expectedNormalizedValue",
+        "unit",
+        "normalization",
+        "resultMapping"
+      ],
+      "properties": {
+        "ruleType": {
+          "enum": [
+            "comparison",
+            "qualitative_judgment"
+          ]
+        },
+        "claimPredicates": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "expectedEntailment": {
+          "enum": [
+            "supports",
+            "contradicts",
+            null
+          ]
+        },
+        "operator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "equals",
+            "not_equals",
+            "contains",
+            "in",
+            "greater_than_or_equal",
+            "less_than_or_equal",
+            "exists",
+            null
+          ]
+        },
+        "expectedValue": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operandValueType": {
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "string_set",
+            "date",
+            "quantity",
+            "structured_identity",
+            null
+          ]
+        },
+        "expectedNormalizedValue": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "normalization": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "method",
+                "version"
+              ],
+              "properties": {
+                "method": {
+                  "enum": [
+                    "exact",
+                    "exact_url",
+                    "nfkc_trimmed",
+                    "nfkc_casefold",
+                    "sorted_unique_set",
+                    "iso_date",
+                    "si_quantity",
+                    "canonical_json"
+                  ]
+                },
+                "version": {
+                  "const": "1.0.0"
+                }
+              }
+            }
+          ]
+        },
+        "resultMapping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "whenTrue",
+            "whenFalse",
+            "whenIndeterminate",
+            "whenNotApplicable"
+          ],
+          "properties": {
+            "whenTrue": {
+              "const": "pass"
+            },
+            "whenFalse": {
+              "const": "fail"
+            },
+            "whenIndeterminate": {
+              "const": "unknown"
+            },
+            "whenNotApplicable": {
+              "const": "not_applicable"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "ruleType": {
+                "const": "qualitative_judgment"
+              }
+            },
+            "required": [
+              "ruleType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operator": {
+                "type": "null"
+              },
+              "expectedEntailment": {
+                "enum": [
+                  "supports",
+                  "contradicts"
+                ]
+              },
+              "expectedValue": {
+                "type": "null"
+              },
+              "operandValueType": {
+                "type": "null"
+              },
+              "expectedNormalizedValue": {
+                "type": "null"
+              },
+              "unit": {
+                "type": "null"
+              },
+              "normalization": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "operator": {
+                "type": "string"
+              },
+              "expectedEntailment": {
+                "type": "null"
+              },
+              "operandValueType": {
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "string_set",
+                  "date",
+                  "quantity",
+                  "structured_identity"
+                ]
+              },
+              "expectedNormalizedValue": {
+                "not": {
+                  "type": "null"
+                }
+              },
+              "normalization": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "method",
+                  "version"
+                ],
+                "properties": {
+                  "method": {
+                    "enum": [
+                      "exact",
+                      "exact_url",
+                      "nfkc_trimmed",
+                      "nfkc_casefold",
+                      "sorted_unique_set",
+                      "iso_date",
+                      "si_quantity",
+                      "canonical_json"
+                    ]
+                  },
+                  "version": {
+                    "const": "1.0.0"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "contains"
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "const": "string_set"
+              },
+              "expectedValue": {
+                "type": "string"
+              },
+              "expectedNormalizedValue": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "in"
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "enum": [
+                  "string",
+                  "date"
+                ]
+              },
+              "expectedValue": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "expectedNormalizedValue": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "enum": [
+                  "greater_than_or_equal",
+                  "less_than_or_equal"
+                ]
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "enum": [
+                  "number",
+                  "quantity"
+                ]
+              },
+              "expectedValue": {
+                "type": "number"
+              },
+              "expectedNormalizedValue": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "exists"
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "const": "boolean"
+              },
+              "expectedValue": {
+                "type": "boolean"
+              },
+              "expectedNormalizedValue": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "quantity"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "string"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "date"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "structured_identity"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "number"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "quantity"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "boolean"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "string_set"
+              },
+              "operator": {
+                "enum": [
+                  "equals",
+                  "not_equals"
+                ]
+              }
+            },
+            "required": [
+              "operandValueType",
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "evidenceTemporalRequirement": {
+      "enum": [
+        "current_state",
+        "effective_at_as_of",
+        "point_in_time"
+      ],
+      "description": "Required temporal meaning of claims used for this judgment. stable_identity is reserved for legal-entity identity and cannot satisfy a constraint, qualification, priority, or delivery criterion."
+    },
+    "coverageRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirementId",
+        "dimension",
+        "requirement",
+        "requiredDistinctQualifiedEntities",
+        "qualificationCriterionRefs",
+        "basisState",
+        "basisRefs"
+      ],
+      "properties": {
+        "requirementId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dimension": {
+          "enum": [
+            "role",
+            "chain_gap",
+            "region",
+            "carrier",
+            "facility",
+            "company_stage",
+            "customer_problem",
+            "resource_exchange",
+            "custom"
+          ]
+        },
+        "requirement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "requiredDistinctQualifiedEntities": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "qualificationCriterionRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "basisState": {
+          "enum": [
+            "user_stated",
+            "user_confirmed_derivation",
+            "observed",
+            "inferred",
+            "unknown"
+          ]
+        },
+        "basisRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "trustedUniverseManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestId",
+        "recordState",
+        "proofBoundary",
+        "registryIdentityRef",
+        "versionRef",
+        "queryParametersHash",
+        "paginationClosure",
+        "declaredTotalCount",
+        "bindingsHash",
+        "receiptRef"
+      ],
+      "properties": {
+        "manifestId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recordState": {
+          "const": "external_runtime_verification_declared"
+        },
+        "proofBoundary": {
+          "const": "payload_manifest_requires_external_registry_receipt_join"
+        },
+        "registryIdentityRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "versionRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "queryParametersHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "paginationClosure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "pageCount",
+            "terminalCursor",
+            "closureState",
+            "observedPageRefs"
+          ],
+          "properties": {
+            "mode": {
+              "enum": [
+                "page_count",
+                "terminal_cursor",
+                "full_export"
+              ]
+            },
+            "pageCount": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "terminalCursor": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "closureState": {
+              "const": "complete"
+            },
+            "observedPageRefs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "declaredTotalCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bindingsHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "receiptRef": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

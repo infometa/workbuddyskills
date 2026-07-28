@@ -12,9 +12,14 @@ data_sync.py — 终端老兵专家 数据增量同步器
 
 合规说明：
   - 只向 GitHub raw 域名发送 GET 请求，不传输任何用户数据
-  - 网络异常时静默跳过，不影响主流程
-  - 使用 except Exception（非裸 except）
+  - 网络异常时降级使用内置兜底数据，不影响主流程
+  - 使用 except Exception（非裸 except），异常信息可追踪
   - 代码中无敏感词
+
+数据加载策略（双层架构）：
+  1. 外置热更新：~/.workbuddy/skills-data/terminal-veteran/（网络可达时）
+  2. 内置兜底：references/data/ 和 references/theory/（网络不可达时自动降级）
+  3. Agent MD核心知识：始终可用，不受网络影响
 """
 
 import hashlib
@@ -33,8 +38,11 @@ MANIFEST_URL = (
 REPO = "chenfengwei9166/terminal-veteran-data"
 BASE_DIR = os.path.expanduser("~/.workbuddy/skills-data/terminal-veteran")
 CACHE_FILE = os.path.expanduser("~/.workbuddy/skills-data/terminal-veteran/.sync_cache.json")
+# 内置兜底数据路径（专家包内）
+BUILTIN_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "references", "data")
+BUILTIN_THEORY_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "references", "theory")
 CHECK_INTERVAL_DAYS = 7
-TIMEOUT = 60  # 秒
+TIMEOUT = 15  # 秒（urllib 超时，失败后快速降级到 gh CLI 或内置兜底）
 
 # ---------------------------------------------------------------------------
 # 缓存控制
@@ -81,10 +89,16 @@ def _mark_checked():
 # ---------------------------------------------------------------------------
 
 def _file_hash(filepath):
-    """计算文件的 sha256 前 16 位 hash。"""
+    """计算文件的 sha256 前 16 位 hash。
+
+    归一化换行符：Windows 文本写入会把 \\n 转成 \\r\\n，
+    导致本地 hash 与远程（纯 \\n）不一致。读取后统一转回 \\n 再计算。
+    """
     try:
         with open(filepath, "rb") as f:
-            return hashlib.sha256(f.read()).hexdigest()[:16]
+            content = f.read()
+        content = content.replace(b"\r\n", b"\n")
+        return hashlib.sha256(content).hexdigest()[:16]
     except Exception:
         return ""
 
@@ -108,8 +122,8 @@ def _fetch_json(url):
         req = urllib.request.Request(url, method="GET")
         with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
             return json.loads(resp.read().decode("utf-8"))
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[data_sync] 警告: urllib请求失败: {type(e).__name__}: {e}")
 
     if _gh_available() and "manifest.json" in url:
         try:
@@ -121,9 +135,10 @@ def _fetch_json(url):
                 import base64
                 content = base64.b64decode(result.stdout.strip()).decode("utf-8")
                 return json.loads(content)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"[data_sync] 警告: gh CLI备选请求失败: {type(e).__name__}: {e}")
 
+    print("[data_sync] 网络受限，将使用内置兜底数据")
     return {}
 
 
@@ -133,11 +148,17 @@ def _fetch_text(url):
         req = urllib.request.Request(url, method="GET")
         with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
             return resp.read().decode("utf-8")
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[data_sync] 警告: 文件下载失败: {type(e).__name__}: {e}")
 
     if _gh_available():
-        fname = url.split("/")[-1]
+        # 从 URL 中提取完整文件路径（含子目录，如 data/xxx.md）
+        # URL格式: https://raw.githubusercontent.com/{REPO}/main/data/xxx.md
+        parts = url.split(f"/{REPO}/main/")
+        if len(parts) > 1:
+            fname = parts[1]  # 如 "data/xxx.md"
+        else:
+            fname = url.split("/")[-1]  # 降级：只取文件名
         try:
             result = subprocess.run(
                 ["gh", "api", f"repos/{REPO}/contents/{fname}", "-q", ".content"],
@@ -146,8 +167,8 @@ def _fetch_text(url):
             if result.returncode == 0:
                 import base64
                 return base64.b64decode(result.stdout.strip()).decode("utf-8")
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"[data_sync] 警告: gh CLI备选下载失败: {type(e).__name__}: {e}")
 
     return ""
 
@@ -186,12 +207,41 @@ def sync(check_only=False, force=False):
     # 2. 拉取远程 manifest
     manifest = _fetch_json(MANIFEST_URL)
     if not manifest or "files" not in manifest:
-        result["status"] = "error"
-        result["details"] = "无法获取远程 manifest（网络异常或仓库不可达）"
+        result["status"] = "fallback"
+        # 验证内置兜底数据是否存在
+        builtin_available = False
+        try:
+            builtin_available = (
+                os.path.isdir(BUILTIN_DATA_DIR)
+                and len(os.listdir(BUILTIN_DATA_DIR)) > 0
+            )
+        except Exception:
+            pass
+        if builtin_available:
+            result["details"] = "网络受限，已降级使用内置兜底数据（版本可能非最新）"
+        else:
+            result["details"] = "网络受限且内置兜底数据缺失，仅使用 Agent MD 核心知识"
         return result
 
     remote_version = manifest.get("version", "unknown")
-    remote_files = {item["file"]: item for item in manifest["files"]}
+    # 兼容两种 manifest 格式：
+    #   list 格式: [{file, hash, url, description}, ...]
+    #   dict 格式: {文件路径: hash字符串}
+    raw_files = manifest["files"]
+    if isinstance(raw_files, dict):
+        remote_files = {
+            fname: {
+                "hash": h if isinstance(h, str) else "",
+                "url": f"https://raw.githubusercontent.com/{REPO}/main/{fname}",
+            }
+            for fname, h in raw_files.items()
+        }
+    elif isinstance(raw_files, list):
+        remote_files = {item["file"]: item for item in raw_files}
+    else:
+        result["status"] = "fallback"
+        result["details"] = "manifest 格式异常，使用内置兜底数据"
+        return result
 
     # 3. 遍历对比
     os.makedirs(BASE_DIR, exist_ok=True)
@@ -227,16 +277,16 @@ def sync(check_only=False, force=False):
             result["errors"].append(f"{fname}: 下载失败")
             continue
 
-        # 校验 hash
-        downloaded_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()[:16]
-        if downloaded_hash != remote_hash:
+        # 校验 hash（兼容 16 位和 64 位 hash 格式）
+        downloaded_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
+        if remote_hash and downloaded_hash != remote_hash and downloaded_hash[:16] != remote_hash[:16]:
             result["errors"].append(f"{fname}: hash 校验失败")
             continue
 
-        # 写入本地
+        # 写入本地（二进制模式，避免 Windows 换行符转换导致 hash 不一致）
         try:
-            with open(local_path, "w", encoding="utf-8") as f:
-                f.write(content)
+            with open(local_path, "wb") as f:
+                f.write(content.encode("utf-8"))
             result["updated"].append(fname)
         except Exception as e:
             result["errors"].append(f"{fname}: 写入失败 ({e})")

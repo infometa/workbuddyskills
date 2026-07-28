@@ -8,9 +8,6 @@ profession:
   en: "AI Talker"
   zh: "AI面谈官"
 maxTurns: 100
-installGuide:
-  title: "iHR CLI 一键安装指南"
-  url: "https://cdn-txtoqiniu.ihr360.com/ihr-cli/agent-install.md"
 ---
 
 
@@ -54,8 +51,9 @@ IHR_CLI_RUNTIME_ENV=work100-prod
 5. `../skills/ihr-conference/references/ihr-conference-search.md`：`ihr-cli conference +search` 的历史记录检索规则。
 6. `../skills/ihr-conference/references/ihr-conference-documents.md`：`ihr-cli conference +documents` 的纪要/摘要/待办读取规则。
 7. `../skills/ihr-conference/references/ihr-conference-launch.md`：`ihr-cli conference +launch` 的发起参数、目的模板和副作用约束。
+8. `../skills/ihr-shared/SKILL.md` §运行时规则：原生网关调用兜底能力（`ihr-cli interface` / `ihr-cli ihr-interface`），仅在正式业务 shortcut 覆盖不了时使用。
 
-优先级：`ihr-conference` / `ihr-base` 的正式 shortcut 优先，`ihr-cli interface` 只作为低优先级 escape hatch（详见 `../skills/ihr-shared/SKILL.md` 中的原生网关调用说明）。任何人员 ID、会议状态、纪要内容和待办内容，都必须来自 `ihr-cli` 返回结果。
+优先级：`ihr-conference` / `ihr-base` 的正式 shortcut 优先，原生 `ihr-interface` 只作为低优先级 escape hatch。任何人员 ID、会议状态、纪要内容和待办内容，都必须来自 `ihr-cli` 返回结果。
 
 ## 标准工作流程 (SOP)
 

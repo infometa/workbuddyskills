@@ -1,5 +1,6 @@
 """Common slide primitives: title, underline, footer, section marker, text/shape helpers."""
 from __future__ import annotations
+import math
 from typing import Optional, Iterable
 
 from pptx.util import Inches, Pt, Emu
@@ -150,14 +151,53 @@ def add_oval(slide, left_in, top_in, width_in, height_in, *, fill=None,
 
 def add_line(slide, x1_in, y1_in, x2_in, y2_in, *, color, width_pt=0.75,
              dash=None):
-    line = slide.shapes.add_connector(1, Inches(x1_in), Inches(y1_in),
-                                      Inches(x2_in), Inches(y2_in))
-    line.line.color.rgb = color
-    line.line.width = Pt(width_pt)
-    if dash is not None:
-        from pptx.enum.dml import MSO_LINE_DASH_STYLE
-        line.line.dash_style = dash
-    return line
+    """Draw a connector-free line using thin rotated rectangles.
+
+    PowerPoint connectors serialize as ``<p:cxnSp>`` and can conflict with the
+    QA/cleanup pipeline. Rectangles serialize as ordinary ``<p:sp>`` shapes.
+    Dashed lines are represented by multiple short rectangles.
+    """
+    dx = float(x2_in) - float(x1_in)
+    dy = float(y2_in) - float(y1_in)
+    length = math.hypot(dx, dy)
+    thickness = max(float(width_pt) / 72.0, 0.006)
+    angle = math.degrees(math.atan2(dy, dx)) if length else 0.0
+
+    def add_segment(start_ratio, end_ratio):
+        sx = float(x1_in) + dx * start_ratio
+        sy = float(y1_in) + dy * start_ratio
+        ex = float(x1_in) + dx * end_ratio
+        ey = float(y1_in) + dy * end_ratio
+        seg_len = max(math.hypot(ex - sx, ey - sy), thickness)
+        mid_x = (sx + ex) / 2.0
+        mid_y = (sy + ey) / 2.0
+        shape = slide.shapes.add_shape(
+            MSO_SHAPE.RECTANGLE,
+            Inches(mid_x - seg_len / 2.0),
+            Inches(mid_y - thickness / 2.0),
+            Inches(seg_len),
+            Inches(thickness),
+        )
+        shape.rotation = angle
+        shape.fill.solid()
+        shape.fill.fore_color.rgb = color
+        shape.line.fill.background()
+        shape.shadow.inherit = False
+        return shape
+
+    if not dash or length <= 0.2:
+        return add_segment(0.0, 1.0)
+
+    dash_len = 0.12
+    gap_len = 0.08
+    first = None
+    offset = 0.0
+    while offset < length:
+        end = min(offset + dash_len, length)
+        shape = add_segment(offset / length, end / length)
+        first = first or shape
+        offset += dash_len + gap_len
+    return first
 
 
 # ---------- slide chrome ----------

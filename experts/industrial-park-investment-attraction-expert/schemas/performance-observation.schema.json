@@ -1,0 +1,663 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/performance-observation.schema.json",
+  "title": "PerformanceObservation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "measurementState",
+    "startedAt",
+    "firstUsefulResultAt",
+    "firstUsefulResultRef",
+    "firstUsefulResultCriterionRef",
+    "firstVisibleDeliveryAt",
+    "firstVisibleDeliveryRef",
+    "firstVisibleDeliveryReceiptRef",
+    "taskTerminalAt",
+    "taskTerminalProofRef",
+    "elapsedMs",
+    "evaluationBenchmarks",
+    "budget",
+    "environment",
+    "measurementBasis",
+    "checkpointReason",
+    "notMeasuredReason"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "measurementState": {
+      "enum": [
+        "measured",
+        "partially_measured",
+        "not_measured"
+      ]
+    },
+    "startedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "firstUsefulResultAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "firstUsefulResultRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "firstUsefulResultCriterionRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "The pre-existing task criterion or evaluation configuration that made this result useful."
+    },
+    "firstVisibleDeliveryAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "firstVisibleDeliveryRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "firstVisibleDeliveryReceiptRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Must join to an external host-visible event receipt binding the delivered content hash."
+    },
+    "taskTerminalAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "taskTerminalProofRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "elapsedMs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "firstUsefulResult",
+        "firstVisibleDelivery",
+        "taskTerminal"
+      ],
+      "properties": {
+        "firstUsefulResult": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "firstVisibleDelivery": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "taskTerminal": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "evaluationBenchmarks": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Empty unless a separate formal evaluation configuration pre-registers a speed sample. Package defaults never supply a fixed company count or minute target.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "benchmarkId",
+          "evaluationConfigRef",
+          "registrationState",
+          "metric",
+          "sampleDefinition",
+          "sampleUnit",
+          "referenceItemCount",
+          "targetElapsedMs",
+          "measurementState",
+          "observedElapsedMs",
+          "observedItemCountAtDeadline",
+          "purpose"
+        ],
+        "properties": {
+          "benchmarkId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evaluationConfigRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "registrationState": {
+            "const": "pre_registered"
+          },
+          "metric": {
+            "oneOf": [
+              {
+            "enum": [
+              "time_to_first_useful_result",
+              "time_to_first_visible_delivery",
+              "time_to_task_terminal",
+              "time_to_first_valid_candidate",
+              "time_to_first_visible_candidate_batch"
+            ]
+              },
+              {
+                "type": "string",
+                "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+              }
+            ]
+          },
+          "sampleDefinition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sampleUnit": {
+            "oneOf": [
+              {
+                "enum": [
+                  "qualified_candidate",
+                  "public_material",
+                  "claim",
+                  "entity",
+                  "park_context",
+                  "deliverable"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+              }
+            ]
+          },
+          "referenceItemCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1
+          },
+          "targetElapsedMs": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "measurementState": {
+            "enum": [
+              "measured",
+              "not_measured",
+              "censored"
+            ]
+          },
+          "observedElapsedMs": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "observedItemCountAtDeadline": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "purpose": {
+            "const": "performance_measurement_only_never_task_completion"
+          }
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "budgetSource",
+        "budgetAuthorityState",
+        "budgetBasisRefs",
+        "timeBudgetMinutes",
+        "queryBudget",
+        "queriesUsed",
+        "sourcesRead",
+        "retriesUsed",
+        "usageMeasurementState",
+        "usageEvidenceRefs",
+        "queryLedgerSnapshotHash",
+        "budgetEffect"
+      ],
+      "properties": {
+        "budgetSource": {
+          "enum": [
+            "user_explicit",
+            "operator_capacity",
+            "host_limit",
+            "no_explicit_cap"
+          ]
+        },
+        "budgetAuthorityState": {
+          "enum": [
+            "not_applicable",
+            "synthetic_fixture_assumption",
+            "external_runtime_verification_declared"
+          ]
+        },
+        "budgetBasisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "timeBudgetMinutes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "queryBudget": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "queriesUsed": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "sourcesRead": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "retriesUsed": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "usageMeasurementState": {
+          "enum": [
+            "not_measured",
+            "synthetic_fixture_assumption",
+            "external_runtime_verification_declared"
+          ]
+        },
+        "usageEvidenceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "queryLedgerSnapshotHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "budgetEffect": {
+          "const": "checkpoint_or_pause_never_market_shortfall"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "budgetSource": {
+                "const": "no_explicit_cap"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "timeBudgetMinutes": {
+                "type": "null"
+              },
+              "queryBudget": {
+                "type": "null"
+              },
+              "budgetAuthorityState": {
+                "const": "not_applicable"
+              },
+              "budgetBasisRefs": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "budgetAuthorityState": {
+                "enum": [
+                  "synthetic_fixture_assumption",
+                  "external_runtime_verification_declared"
+                ]
+              },
+              "budgetBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "usageMeasurementState": {
+                "const": "not_measured"
+              }
+            },
+            "required": [
+              "usageMeasurementState"
+            ]
+          },
+          "then": {
+            "properties": {
+              "queriesUsed": {
+                "type": "null"
+              },
+              "sourcesRead": {
+                "type": "null"
+              },
+              "retriesUsed": {
+                "type": "null"
+              },
+              "usageEvidenceRefs": {
+                "maxItems": 0
+              },
+              "queryLedgerSnapshotHash": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "queriesUsed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "sourcesRead": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "retriesUsed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "usageEvidenceRefs": {
+                "minItems": 1
+              },
+              "queryLedgerSnapshotHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model",
+        "networkMode",
+        "concurrency"
+      ],
+      "properties": {
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 200
+        },
+        "networkMode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 200
+        },
+        "concurrency": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      }
+    },
+    "measurementBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordState",
+        "receiptRefs",
+        "proofBoundary"
+      ],
+      "properties": {
+        "recordState": {
+          "enum": [
+            "synthetic_fixture_assumption",
+            "external_runtime_verification_declared",
+            "unverified"
+          ]
+        },
+        "receiptRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "References to separately controlled host performance receipts. IDs written only inside the business payload are not proof.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "proofBoundary": {
+          "const": "payload_timestamps_require_external_host_receipt_join"
+        }
+      }
+    },
+    "checkpointReason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000
+    },
+    "notMeasuredReason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "measurementState": {
+            "const": "not_measured"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "startedAt": {
+            "type": "null"
+          },
+          "firstUsefulResultAt": {
+            "type": "null"
+          },
+          "firstUsefulResultRef": {
+            "type": "null"
+          },
+          "firstUsefulResultCriterionRef": {
+            "type": "null"
+          },
+          "firstVisibleDeliveryAt": {
+            "type": "null"
+          },
+          "firstVisibleDeliveryRef": {
+            "type": "null"
+          },
+          "firstVisibleDeliveryReceiptRef": {
+            "type": "null"
+          },
+          "taskTerminalAt": {
+            "type": "null"
+          },
+          "taskTerminalProofRef": {
+            "type": "null"
+          },
+          "elapsedMs": {
+            "properties": {
+              "firstUsefulResult": {
+                "type": "null"
+              },
+              "firstVisibleDelivery": {
+                "type": "null"
+              },
+              "taskTerminal": {
+                "type": "null"
+              }
+            }
+          },
+          "evaluationBenchmarks": {
+            "maxItems": 0
+          },
+          "measurementBasis": {
+            "properties": {
+              "recordState": {
+                "const": "unverified"
+              },
+              "receiptRefs": {
+                "maxItems": 0
+              }
+            }
+          },
+          "notMeasuredReason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "measurementBasis": {
+            "properties": {
+              "recordState": {
+                "const": "external_runtime_verification_declared"
+              },
+              "receiptRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "measurementState": {
+            "const": "measured"
+          }
+        },
+        "required": [
+          "measurementState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "firstUsefulResultAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "firstUsefulResultRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "firstUsefulResultCriterionRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "firstVisibleDeliveryAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "firstVisibleDeliveryRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "firstVisibleDeliveryReceiptRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "taskTerminalAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "taskTerminalProofRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "notMeasuredReason": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

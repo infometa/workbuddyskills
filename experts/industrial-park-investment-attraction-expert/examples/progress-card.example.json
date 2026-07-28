@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "1.0.0",
+  "packageVersion": "26.7.27",
+  "parkId": "park-synthetic-public",
+  "taskGoalRef": "examples/first-value-public-material.example.json#/leadDelivery/taskGoal",
+  "taskState": "in_progress",
+  "routeSelected": "material_to_leads",
+  "mode": "quick",
+  "completedPhase": "artifact_renderer",
+  "currentPhase": null,
+  "candidateCounts": {
+    "discovered": 1,
+    "entityResolved": 1,
+    "qualified": 1,
+    "actionReady": 0,
+    "needsActionPreparation": 1,
+    "watchlist": 0,
+    "excluded": 0
+  },
+  "unresolvedConflicts": [],
+  "currentDeliverable": {
+    "artifactType": "TargetPortfolio",
+    "artifactRef": "goal-synthetic-one@1:current-portfolio",
+    "status": "in_progress"
+  },
+  "checkpointConditions": [
+    "如用户扩大目标，创建新的 TaskGoal 修订版"
+  ],
+  "performanceObservation": {
+    "schemaVersion": "1.0.0",
+    "measurementState": "not_measured",
+    "startedAt": null,
+    "firstUsefulResultAt": null,
+    "firstVisibleDeliveryAt": null,
+    "taskTerminalAt": null,
+    "elapsedMs": {
+      "firstUsefulResult": null,
+      "firstVisibleDelivery": null,
+      "taskTerminal": null
+    },
+    "evaluationBenchmarks": [],
+    "budget": {
+      "budgetSource": "no_explicit_cap",
+      "timeBudgetMinutes": null,
+      "queryBudget": null,
+      "queriesUsed": null,
+      "sourcesRead": null,
+      "retriesUsed": null,
+      "budgetEffect": "checkpoint_or_pause_never_market_shortfall",
+      "budgetAuthorityState": "not_applicable",
+      "budgetBasisRefs": [],
+      "usageMeasurementState": "not_measured",
+      "usageEvidenceRefs": [],
+      "queryLedgerSnapshotHash": null
+    },
+    "environment": {
+      "model": null,
+      "networkMode": null,
+      "concurrency": null
+    },
+    "checkpointReason": "静态示例不计时",
+    "notMeasuredReason": "静态合成示例不代表真实运行性能",
+    "firstUsefulResultRef": null,
+    "firstUsefulResultCriterionRef": null,
+    "firstVisibleDeliveryRef": null,
+    "firstVisibleDeliveryReceiptRef": null,
+    "taskTerminalProofRef": null,
+    "measurementBasis": {
+      "recordState": "unverified",
+      "receiptRefs": [],
+      "proofBoundary": "payload_timestamps_require_external_host_receipt_join"
+    }
+  },
+  "nextActions": [
+    {
+      "actionId": "next-action-prepare-verification-001",
+      "actionType": "prepare_verification_pack",
+      "description": "目标已满足，可继续补查入口并准备核验问题；没有授权前不会触达。",
+      "owner": "expert",
+      "dependsOn": [],
+      "status": "ready",
+      "authorizationRequired": false,
+      "taskRef": "contextSnapshot.taskGoal",
+      "evidenceRefs": [],
+      "basisRefs": [],
+      "authorizationBasisRefs": []
+    }
+  ],
+  "nextAction": "目标已满足，可继续补查入口并准备核验问题；没有授权前不会触达。",
+  "persistenceBoundary": "current_session_visible_capsule_only",
+  "taskContextId": "task-context-park-synthetic-public",
+  "contextHash": "190e1b143b9e43b6352e2fb346819a91ee6421a1ba30037b1273aa2a825c045c",
+  "completedPhases": [
+    "artifact_renderer"
+  ],
+  "activeWorkstreams": [],
+  "workItemCounts": [
+    {
+      "sampleUnit": "qualified_candidate",
+      "observed": 1,
+      "assessed": 1,
+      "accepted": 1,
+      "delivered": 0,
+      "unresolved": 0
+    }
+  ],
+  "deliveryBatch": {
+    "batchId": "batch-1",
+    "batchIndex": 1,
+    "itemCounts": [
+      {
+        "sampleUnit": "qualified_candidate",
+        "plannedItemCount": 1,
+        "deliveredItemCount": 0
+      }
+    ],
+    "plannedItemCount": 1,
+    "deliveredTotal": 0,
+    "continuationState": "known_more",
+    "hasMore": true,
+    "itemRefs": [],
+    "batchHash": null
+  },
+  "taskGoalHash": "6f3cb31c0f64eb29f5900e91c90cda6cc259fbf8e8c254388e0d4c4fcbfd0d42",
+  "routeFacets": [
+    "park_context_definition",
+    "audit_public_material",
+    "evaluate_fit_and_coverage"
+  ]
+}

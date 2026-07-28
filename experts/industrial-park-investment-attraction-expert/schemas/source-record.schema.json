@@ -1,0 +1,654 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/source-record.schema.json",
+  "title": "SourceRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sourceId",
+    "recordState",
+    "proofBoundary",
+    "url",
+    "finalUrl",
+    "redirectChain",
+    "retrievalReceiptRef",
+    "title",
+    "publisher",
+    "publisherBinding",
+    "publisherResponsibility",
+    "sourceType",
+    "originSourceType",
+    "publishedAt",
+    "retrievedAt",
+    "contentHash",
+    "locator",
+    "excerpt",
+    "readbackStatus",
+    "materialAccessMode",
+    "accessLimitation",
+    "freshnessStatus",
+    "freshnessBasis"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "sourceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recordState": {
+      "enum": [
+        "synthetic_fixture_assumption",
+        "runtime_observed_not_machine_verifiable",
+        "external_runtime_verification_declared"
+      ],
+      "description": "A package record cannot self-authenticate tool execution, publisher identity, domain ownership, or issuer authority. synthetic_fixture_assumption is allowed only in package test examples."
+    },
+    "proofBoundary": {
+      "const": "content_closure_only_not_publisher_domain_issuer_or_tool_execution_proof"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://(?!(?:localhost|127(?:\\.[0-9]{1,3}){3}|10(?:\\.[0-9]{1,3}){3}|192\\.168(?:\\.[0-9]{1,3}){2}|172\\.(?:1[6-9]|2[0-9]|3[01])(?:\\.[0-9]{1,3}){2}|169\\.254(?:\\.[0-9]{1,3}){2}|0\\.0\\.0\\.0|\\[::1\\])(?::[0-9]+)?(?:/|$))"
+    },
+    "finalUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "pattern": "^https?://(?!(?:localhost|127(?:\\.[0-9]{1,3}){3}|10(?:\\.[0-9]{1,3}){3}|192\\.168(?:\\.[0-9]{1,3}){2}|172\\.(?:1[6-9]|2[0-9]|3[01])(?:\\.[0-9]{1,3}){2}|169\\.254(?:\\.[0-9]{1,3}){2}|0\\.0\\.0\\.0|\\[::1\\])(?::[0-9]+)?(?:/|$))",
+      "description": "Final URL observed after redirects. Required for page_readback and necessary, but not sufficient, for a verified public-entry claim."
+    },
+    "redirectChain": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https?://(?!(?:localhost|127(?:\\.[0-9]{1,3}){3}|10(?:\\.[0-9]{1,3}){3}|192\\.168(?:\\.[0-9]{1,3}){2}|172\\.(?:1[6-9]|2[0-9]|3[01])(?:\\.[0-9]{1,3}){2}|169\\.254(?:\\.[0-9]{1,3}){2}|0\\.0\\.0\\.0|\\[::1\\])(?::[0-9]+)?(?:/|$))"
+      }
+    },
+    "retrievalReceiptRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 300,
+      "description": "Opaque reference to a separately controlled host/tool readback receipt. Merely writing a reference in the business payload does not prove the receipt."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "publisherBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "observedFinalHost",
+        "publisherClass",
+        "bindingMethod",
+        "bindingClaimRefs",
+        "bindingSourceRefs",
+        "externalVerificationRequired"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "synthetic_fixture_assumption",
+            "unverified",
+            "conflicted",
+            "external_verification_declared"
+          ]
+        },
+        "observedFinalHost": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Za-z0-9.-]+$",
+          "maxLength": 253
+        },
+        "publisherClass": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "bindingMethod": {
+          "enum": [
+            "synthetic_fixture_assumption",
+            "external_verifier_required",
+            "conflicting_evidence",
+            "external_registry_join"
+          ]
+        },
+        "bindingClaimRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "bindingSourceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "externalVerificationRequired": {
+          "const": true
+        }
+      },
+      "description": "Publisher/domain/issuer classification is not self-authenticating. Runtime observations remain unverified until a separately controlled verifier joins the referenced receipt."
+    },
+    "publisherResponsibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "roles",
+        "jurisdictions",
+        "scopeClaimRefs",
+        "basisRefs",
+        "verificationRequired"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "synthetic_fixture_assumption",
+            "runtime_observed_not_machine_verifiable",
+            "external_runtime_verification_declared",
+            "conflicted"
+          ]
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {
+                "enum": [
+                  "self_publisher",
+                  "official_registry",
+                  "statutory_filer",
+                  "authorized_institutional_publisher",
+                  "independent_reporter",
+                  "index_or_aggregator",
+                  "unknown"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^other_responsible:[a-z0-9][a-z0-9_-]{1,63}$"
+              }
+            ]
+          }
+        },
+        "jurisdictions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          }
+        },
+        "scopeClaimRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "basisRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "verificationRequired": {
+          "const": true
+        }
+      },
+      "description": "Claim-scoped publishing responsibility and jurisdiction context. It is externally verifiable metadata, not a global source rank."
+    },
+    "sourceType": {
+      "oneOf": [
+        {
+          "enum": [
+            "government_or_regulator",
+            "exchange_or_filing",
+            "company_official",
+            "institutional",
+            "news_media",
+            "industry_association",
+            "academic",
+            "database_or_aggregator",
+            "search_snippet",
+            "user_provided_public_material"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^other_public:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "trustTier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Deprecated compatibility hint only. It must never determine claim sufficiency, qualification, identity closure, conflict resolution, or completion."
+    },
+    "originSourceType": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "enum": [
+            "government_or_regulator",
+            "exchange_or_filing",
+            "company_official",
+            "institutional",
+            "news_media",
+            "industry_association",
+            "academic",
+            "database_or_aggregator"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^other_public:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ],
+      "description": "Underlying publisher class for user-provided public material. This records provenance only; publisherResponsibility and each claim's sourceUsageAssessments determine decision use."
+    },
+    "publishedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "retrievedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "contentHash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "For readable or partial material, SHA-256 of the saved excerpt after NFKC normalization, CRLF/CR to LF conversion, and outer whitespace trimming."
+    },
+    "locator": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 500
+    },
+    "excerpt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "readbackStatus": {
+      "enum": [
+        "readable",
+        "partial",
+        "unavailable"
+      ]
+    },
+    "materialAccessMode": {
+      "enum": [
+        "page_readback",
+        "pasted_readable_content",
+        "link_only"
+      ]
+    },
+    "accessLimitation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 500
+    },
+    "freshnessStatus": {
+      "enum": [
+        "current",
+        "stale",
+        "unknown"
+      ]
+    },
+    "freshnessBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asOf",
+        "assessmentMethod",
+        "dateObserved",
+        "volatility",
+        "updateState",
+        "rationale"
+      ],
+      "properties": {
+        "asOf": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "assessmentMethod": {
+          "enum": [
+            "explicit_source_date",
+            "current_page_readback",
+            "archived_or_superseded",
+            "insufficient_basis"
+          ]
+        },
+        "dateObserved": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "volatility": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "updateState": {
+          "enum": [
+            "actively_maintained",
+            "archived",
+            "superseded",
+            "unknown"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "recordState": {
+            "const": "synthetic_fixture_assumption"
+          }
+        },
+        "required": [
+          "recordState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "publisherBinding": {
+            "properties": {
+              "state": {
+                "const": "synthetic_fixture_assumption"
+              },
+              "bindingMethod": {
+                "const": "synthetic_fixture_assumption"
+              }
+            }
+          },
+          "publisherResponsibility": {
+            "properties": {
+              "state": {
+                "const": "synthetic_fixture_assumption"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "recordState": {
+            "const": "runtime_observed_not_machine_verifiable"
+          }
+        },
+        "required": [
+          "recordState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "publisherBinding": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "unverified",
+                  "conflicted"
+                ]
+              },
+              "bindingMethod": {
+                "enum": [
+                  "external_verifier_required",
+                  "conflicting_evidence"
+                ]
+              }
+            }
+          },
+          "publisherResponsibility": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "runtime_observed_not_machine_verifiable",
+                  "conflicted"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "recordState": {
+            "const": "external_runtime_verification_declared"
+          }
+        },
+        "required": [
+          "recordState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "publisherBinding": {
+            "properties": {
+              "state": {
+                "const": "external_verification_declared"
+              },
+              "bindingMethod": {
+                "const": "external_registry_join"
+              }
+            }
+          },
+          "publisherResponsibility": {
+            "properties": {
+              "state": {
+                "const": "external_runtime_verification_declared"
+              }
+            }
+          },
+          "retrievalReceiptRef": {
+            "type": "string"
+          },
+          "finalUrl": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "materialAccessMode": {
+            "const": "page_readback"
+          }
+        },
+        "required": [
+          "materialAccessMode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "finalUrl": {
+            "type": "string"
+          },
+          "retrievalReceiptRef": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "freshnessStatus": {
+            "const": "current"
+          }
+        },
+        "required": [
+          "freshnessStatus"
+        ]
+      },
+      "then": {
+        "properties": {
+          "freshnessBasis": {
+            "properties": {
+              "assessmentMethod": {
+                "enum": [
+                  "explicit_source_date",
+                  "current_page_readback"
+                ]
+              },
+              "updateState": {
+                "not": {
+                  "enum": [
+                    "archived",
+                    "superseded"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "sourceType": {
+            "const": "user_provided_public_material"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "originSourceType": {
+            "type": "string"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "originSourceType": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "materialAccessMode": {
+            "const": "link_only"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "readbackStatus": {
+            "const": "unavailable"
+          },
+          "contentHash": {
+            "type": "null"
+          },
+          "excerpt": {
+            "type": "null"
+          },
+          "accessLimitation": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "readbackStatus": {
+            "enum": [
+              "readable",
+              "partial"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "materialAccessMode": {
+            "enum": [
+              "page_readback",
+              "pasted_readable_content"
+            ]
+          },
+          "contentHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "excerpt": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ]
+}

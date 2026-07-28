@@ -1,0 +1,802 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/progress-card.schema.json",
+  "title": "ProgressCard",
+  "description": "Task-relative progress. Candidate counts are an optional projection and never the universal unit of work.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packageVersion",
+    "taskContextId",
+    "parkId",
+    "contextHash",
+    "taskGoalRef",
+    "taskGoalHash",
+    "taskState",
+    "routeSelected",
+    "routeFacets",
+    "mode",
+    "completedPhases",
+    "activeWorkstreams",
+    "workItemCounts",
+    "deliveryBatch",
+    "unresolvedConflicts",
+    "currentDeliverable",
+    "checkpointConditions",
+    "performanceObservation",
+    "nextActions",
+    "nextAction",
+    "persistenceBoundary"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "packageVersion": {
+      "const": "26.7.27"
+    },
+    "taskContextId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parkId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "contextHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "taskGoalRef": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Same-package JSON reference to the exact TargetPortfolio.taskGoal governed by this progress card."
+    },
+    "taskGoalHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Must equal the goalHash of the exact TaskGoal resolved by taskGoalRef."
+    },
+    "taskState": {
+      "enum": [
+        "in_progress",
+        "completed",
+        "stopped_with_gap",
+        "paused",
+        "superseded"
+      ]
+    },
+    "routeSelected": {
+      "$ref": "#/$defs/openRoute"
+    },
+    "routeFacets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/openRouteFacet"
+      },
+      "description": "Exact composable route-facet projection from the owning FirstValueResponse; routeSelected alone is lossy."
+    },
+    "mode": {
+      "$ref": "#/$defs/openMode"
+    },
+    "completedPhases": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/openPhase"
+      },
+      "description": "Authoritative set; a single-phase compatibility projection must not replace it."
+    },
+    "activeWorkstreams": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/workstream"
+      },
+      "description": "All concurrent or blocked workstreams with their own state and dependencies."
+    },
+    "completedPhase": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/openPhase"
+        }
+      ],
+      "description": "Optional compatibility projection only."
+    },
+    "currentPhase": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/openPhase"
+        }
+      ],
+      "description": "Optional compatibility projection only."
+    },
+    "workItemCounts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/workItemCount"
+      },
+      "description": "Counts are reported in the real task unit. An empty list is valid before a work unit is established."
+    },
+    "deliveryBatch": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/deliveryBatch"
+        }
+      ]
+    },
+    "candidateCounts": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/candidateCounts"
+        }
+      ],
+      "description": "Optional compatibility projection for candidate-qualification tasks only. Omit it for other task types instead of emitting fake zeroes."
+    },
+    "unresolvedConflicts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "currentDeliverable": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/currentDeliverable"
+        }
+      ]
+    },
+    "checkpointConditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "performanceObservation": {
+      "$ref": "performance-observation.schema.json"
+    },
+    "nextActions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nextAction"
+      },
+      "description": "Authoritative ordered necessary-action set. It may be empty and has no fixed length."
+    },
+    "nextAction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Compatibility projection of the first currently executable ready nextActions item description, or null when none exists. Cross-field equality and dependency readiness are enforced by the semantic validator."
+    },
+    "persistenceBoundary": {
+      "const": "current_session_visible_capsule_only"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "enum": [
+              "completed",
+              "stopped_with_gap",
+              "superseded"
+            ]
+          }
+        },
+        "required": [
+          "taskState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "nextActions": {
+            "maxItems": 0
+          },
+          "nextAction": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "nextActions": {
+            "maxItems": 0
+          }
+        },
+        "required": [
+          "nextActions"
+        ]
+      },
+      "then": {
+        "properties": {
+          "nextAction": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "openRoute": {
+      "oneOf": [
+        {
+          "enum": [
+            "start_targeting_task",
+            "material_to_leads",
+            "audit_existing_list",
+            "audit_public_material",
+            "build_park_brief",
+            "clarification_required",
+            "targeted_campaign",
+            "continue_campaign",
+            "switch_park"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "openMode": {
+      "oneOf": [
+        {
+          "enum": [
+            "quick",
+            "standard",
+            "deep"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ],
+      "description": "A non-authoritative depth/cadence label. Budgets and stopping conditions are expressed separately."
+    },
+    "openRouteFacet": {
+      "oneOf": [
+        {
+          "enum": [
+            "park_context_definition",
+            "discover_public_candidates",
+            "audit_public_material",
+            "audit_existing_list",
+            "resolve_entities",
+            "audit_candidate_evidence",
+            "evaluate_fit_and_coverage",
+            "prepare_structured_artifact",
+            "continue_existing_work",
+            "switch_park_context"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "openPhase": {
+      "oneOf": [
+        {
+          "enum": [
+            "host_route",
+            "park_brief_builder",
+            "public_target_research",
+            "entity_evidence_audit",
+            "fit_portfolio",
+            "artifact_renderer"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "sampleUnit": {
+      "oneOf": [
+        {
+          "enum": [
+            "qualified_candidate",
+            "public_material",
+            "claim",
+            "entity",
+            "park_context",
+            "deliverable"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "workItemCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sampleUnit",
+        "observed",
+        "assessed",
+        "accepted",
+        "delivered",
+        "unresolved"
+      ],
+      "properties": {
+        "sampleUnit": {
+          "$ref": "#/$defs/sampleUnit"
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "assessed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "accepted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "delivered": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unresolved": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "deliveryBatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "batchId",
+        "batchIndex",
+        "itemCounts",
+        "plannedItemCount",
+        "deliveredTotal",
+        "continuationState",
+        "itemRefs",
+        "batchHash"
+      ],
+      "properties": {
+        "batchId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "batchIndex": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "itemCounts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/batchItemCount"
+          }
+        },
+        "plannedItemCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "description": "Null when no user- or host-authorized batch size exists."
+        },
+        "deliveredTotal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "continuationState": {
+          "oneOf": [
+            {
+              "enum": [
+                "known_more",
+                "goal_satisfied_no_more_required",
+                "bounded_universe_exhausted",
+                "unknown_due_pause",
+                "not_applicable"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "hasMore": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Optional lossy compatibility projection. Null when continuation is unknown or not applicable."
+        },
+        "itemRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "batchHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "batchItemCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sampleUnit",
+        "plannedItemCount",
+        "deliveredItemCount"
+      ],
+      "properties": {
+        "sampleUnit": {
+          "$ref": "#/$defs/sampleUnit"
+        },
+        "plannedItemCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "deliveredItemCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "workstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workstreamId",
+        "phase",
+        "state",
+        "owner",
+        "dependsOn",
+        "assetRefs"
+      ],
+      "properties": {
+        "workstreamId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phase": {
+          "$ref": "#/$defs/openPhase"
+        },
+        "state": {
+          "oneOf": [
+            {
+              "enum": [
+                "planned",
+                "active",
+                "blocked",
+                "completed",
+                "stopped"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "owner": {
+          "oneOf": [
+            {
+              "enum": [
+                "user",
+                "expert",
+                "park_operator",
+                "host_orchestrator"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "assetRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "candidateCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "discovered",
+        "entityResolved",
+        "qualified",
+        "actionReady",
+        "needsActionPreparation",
+        "watchlist",
+        "excluded"
+      ],
+      "properties": {
+        "discovered": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entityResolved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "qualified": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "actionReady": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "needsActionPreparation": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "watchlist": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "excluded": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "currentDeliverable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "artifactRef",
+        "status"
+      ],
+      "properties": {
+        "artifactType": {
+          "oneOf": [
+            {
+              "enum": [
+                "ParkBrief",
+                "TaskAssessment",
+                "CandidateDiscoveryLedger",
+                "EvidenceLedger",
+                "TargetPortfolio",
+                "PortfolioEvidenceBundle",
+                "VerificationPreparationPack",
+                "RenderedArtifact",
+                "ResumeCapsule"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "artifactRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "oneOf": [
+            {
+              "enum": [
+                "planned",
+                "in_progress",
+                "partial",
+                "complete",
+                "degraded"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        }
+      }
+    },
+    "nextAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actionId",
+        "taskRef",
+        "actionType",
+        "description",
+        "owner",
+        "evidenceRefs",
+        "basisRefs",
+        "dependsOn",
+        "status",
+        "authorizationRequired",
+        "authorizationBasisRefs"
+      ],
+      "properties": {
+        "actionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "taskRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "actionType": {
+          "oneOf": [
+            {
+              "enum": [
+                "define_task_goal",
+                "review_candidate_batch",
+                "audit_existing_list",
+                "resolve_evidence_gap",
+                "continue_goal_research",
+                "prepare_verification_pack",
+                "prepare_structured_artifact",
+                "revise_park_brief"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "owner": {
+          "oneOf": [
+            {
+              "enum": [
+                "user",
+                "expert",
+                "park_operator",
+                "host_orchestrator"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "basisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "status": {
+          "oneOf": [
+            {
+              "enum": [
+                "ready",
+                "blocked",
+                "completed"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "authorizationRequired": {
+          "type": "boolean"
+        },
+        "authorizationBasisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "authorizationRequired": {
+                "const": true
+              }
+            },
+            "required": [
+              "authorizationRequired"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorizationBasisRefs": {
+                "minItems": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "authorizationBasisRefs": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

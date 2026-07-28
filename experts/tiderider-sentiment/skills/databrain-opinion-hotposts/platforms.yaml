@@ -1,0 +1,103 @@
+# databrain-opinion-hotposts 平台配置
+# 字段说明：
+#   key            : 内部代号（CLI / 输出展示用）
+#   channel_name   : feeds.channel_name 的实测取值（小写匹配；查不到时整个平台 skip）
+#   display        : 推送展示名（含 emoji / 频道前缀）
+#   min_engagement : 入榜最低互动量（avoid 冷门时段堆"互动 50 的 Top 5"）
+#   default_top_n  : 默认 Top N（CLI --top_n 可覆盖）
+#   enabled        : 是否默认启用（CLI --platforms 可覆盖）
+#
+# 为什么不做"全局总榜"：平台间互动量不可比（Reddit 1k 已爆款 / X 1k 中等）。
+#
+# 入榜门槛参考来源：用户提供的舆情告警模板 §4.3.1。
+
+defaults:
+  top_n: 5                # 1~10
+  hours: 24               # 时间窗口（向前回溯）
+  dedup_keep: 2           # 同事件最多保留几条
+  dedup_prefix_chars: 30  # 标题前缀去重的字符长度
+
+platforms:
+  reddit:
+    channel_name: reddit
+    display: "🔥 Reddit"
+    min_engagement: 200
+    default_top_n: 5
+    enabled: true
+
+  x:                      # 模板里的 X = feeds 里的 twitter
+    channel_name: twitter
+    display: "🔥 X (Twitter)"
+    min_engagement: 500
+    default_top_n: 5
+    enabled: true
+
+  youtube:                 # feeds 实测 channel_name = 'youtube_keyword'
+    channel_name: youtube_keyword
+    display: "🔥 YouTube"
+    min_engagement: 1000
+    default_top_n: 5
+    enabled: true
+
+  steam:                   # PC 游戏才会有；feeds 实测 channel_name = 'steam_community'
+    channel_name: steam_community
+    display: "🔥 Steam 社区"
+    min_engagement: 50
+    default_top_n: 5
+    enabled: false
+
+  tiktok:
+    channel_name: tiktok
+    display: "🔥 TikTok"
+    min_engagement: 1000
+    default_top_n: 5
+    enabled: true
+
+  discord:                # feeds 中实测取值待确认；查无即 skip
+    channel_name: discord
+    display: "🔥 Discord"
+    min_engagement: 50
+    default_top_n: 5
+    enabled: true
+
+  forum:                  # 官方论坛；PUBGM 实测 channel_name = 'forumgamer'，其他游戏可能不同
+    channel_name: forumgamer
+    display: "🔥 官方论坛"
+    min_engagement: 50
+    default_top_n: 5
+    enabled: true
+
+  instagram:
+    channel_name: instagram
+    display: "🔥 Instagram"
+    min_engagement: 300
+    default_top_n: 5
+    enabled: true
+
+  facebook:
+    channel_name: facebook
+    display: "🔥 Facebook"
+    min_engagement: 300
+    default_top_n: 5
+    enabled: true
+
+# 按 game_id override（深合并 defaults / platforms）
+# 例：某游戏 reddit 社区小，把 min_engagement 调低到 50
+# overrides:
+#   ufc454d9b1af70b40588e2a6fa4da4a8b:
+#     platforms:
+#       reddit:
+#         min_engagement: 50
+overrides:
+  # 测试游戏：社区互动量整体偏低，降门槛保证 Top 5 有内容
+  e76337e746e1f95fdbf7e23c26010e448:
+    platforms:
+      reddit:
+        min_engagement: 30
+      x:
+        min_engagement: 30
+      youtube:
+        min_engagement: 30
+      steam:
+        enabled: true
+        min_engagement: 5

@@ -1,0 +1,95 @@
+{
+  "schema": "industrial-park-investment-attraction-entity-fit-contract/v1",
+  "contractVersion": "1.1.0",
+  "packageVersion": "26.7.27",
+  "eligibleStableKeyForms": [
+    "unified_social_credit_code",
+    "legal_name_plus_registration_region",
+    "legal_name_plus_official_domain"
+  ],
+  "identityResolutionBasisRequiredBeforeMerge": true,
+  "aliasOrDomainAloneMayMergeEntities": false,
+  "brandAloneIsEntityKey": false,
+  "relationshipsPreserved": [
+    "parent",
+    "subsidiary",
+    "branch",
+    "project_company",
+    "brand_owner",
+    "operating_base_of"
+  ],
+  "qualificationGates": [
+    "entity_distinguishable",
+    "no_proven_hard_constraint_failure",
+    "task_goal_fit",
+    "key_claims_have_readable_evidence"
+  ],
+  "qualificationDoesNotRequireActionReadiness": true,
+  "fitAndConfidenceBandsAreExplanatoryOnly": true,
+  "qualificationAuthority": "required_task_criteria_hard_constraints_identity_and_evidence_closure_only",
+  "candidateStates": [
+    "qualified",
+    "prioritized",
+    "needs_evidence",
+    "needs_constraint_verification",
+    "excluded_hard_constraint",
+    "excluded_entity_conflict",
+    "excluded_evidence_failure"
+  ],
+  "fitAssessmentPolicy": {
+    "basis": "task_goal_hard_constraints_and_coverage_requirements",
+    "fixedDimensionCountRequired": false,
+    "applicableItemsOnly": true,
+    "notApplicableAllowed": true,
+    "unknownDoesNotBecomePass": true,
+    "reasonAndEvidenceRefsRequiredForMaterialJudgments": true
+  },
+  "actionReadinessRules": {
+    "separateFromQualification": true,
+    "primaryChannelRequiredForQualification": false,
+    "publicEntryRequiredForQualification": false,
+    "nextVerificationActionRequiredForQualification": false,
+    "missingPublicEntryEffect": "lower_action_readiness_and_create_followup",
+    "externalContactClaimAllowed": false,
+    "executionBoundary": "draft_only_no_external_action"
+  },
+  "publicFitBands": [
+    "high",
+    "medium",
+    "watchlist"
+  ],
+  "portfolioRules": {
+    "taskGoalDriven": true,
+    "productLevelCandidateLimit": null,
+    "countRelationRules": {
+      "exact": "stop_at_user_value_never_exceed_and_keep_extra_qualified_internal",
+      "at_least": "complete_at_or_above_user_minimum_after_all_required_coverage_is_met",
+      "between": "complete_at_or_above_user_minimum_with_coverage_and_never_exceed_user_maximum",
+      "at_most": "requires_positive_structured_coverage_and_never_exceeds_user_maximum",
+      "none": "completion_depends_on_qualification_coverage_or_bounded_input_audit_not_a_product_number"
+    },
+    "rangeMayOnlyComeFromUserBoundTaskGoal": true,
+    "referenceOrBatchNumberNeverCompletesTask": true,
+    "deliveryBatchesDoNotChangeTaskGoal": true,
+    "fitPortfolioMayNotWriteTaskGoal": true,
+    "oneLegalEntityCountsOnce": true,
+    "oneEntityMayHoldMultipleRoles": true,
+    "roleCoverageIsDiagnosticUnlessInTaskGoal": true,
+    "weakCandidatesMayPadToTarget": false,
+    "sourceAblationRequiresRecalculation": true,
+    "parkConstraintChangeRequiresRecalculation": true,
+    "taskCompletionRequiresFrozenGoalSatisfied": true,
+    "stoppedWithGapRequiresGoalLevelExhaustionProof": true,
+    "pauseIsNotMarketShortfall": true,
+    "nonComparablePriorityRowsHaveNullRankAndGroup": true
+  },
+  "schemas": {
+    "taskGoal": "schemas/task-goal.schema.json",
+    "entity": "schemas/entity-record.schema.json",
+    "source": "schemas/source-record.schema.json",
+    "claimEvidence": "schemas/claim-evidence-link.schema.json",
+    "candidateCard": "schemas/candidate-evidence-card.schema.json",
+    "portfolio": "schemas/target-portfolio.schema.json",
+    "performanceObservation": "schemas/performance-observation.schema.json"
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "name": "roadshow-research-team",
+  "version": "1.0.0",
+  "description": "A capital-markets research team that builds a single-company timeline report (listed or unlisted) covering company profile, multi-source material parsing (audio/video/documents), industry analysis, three-statement financials (listed API + manual upload with ties verification), roadshows, analyst ratings, capital actions and price-event correlation, outputs a Word report with optional user template.",
+  "author": {
+    "name": "mengweizhou",
+    "email": "mengweizhou@workbuddy.ai"
+  },
+  "expertType": "team",
+  "agentName": "roadshow-team-lead",
+  "teamInfo": {
+    "leadAgent": "roadshow-team-lead",
+    "memberAgents": [
+      "company-profiler",
+      "material-parser",
+      "industry-analyst",
+      "financials-analyst",
+      "roadshow-curator",
+      "analyst-rating-tracker",
+      "capital-action-analyst",
+      "price-action-analyst",
+      "event-correlator",
+      "report-composer"
+    ]
+  },
+  "agents": [
+    "./agents/roadshow-team-lead.md",
+    "./agents/company-profiler.md",
+    "./agents/material-parser.md",
+    "./agents/industry-analyst.md",
+    "./agents/financials-analyst.md",
+    "./agents/roadshow-curator.md",
+    "./agents/analyst-rating-tracker.md",
+    "./agents/capital-action-analyst.md",
+    "./agents/price-action-analyst.md",
+    "./agents/event-correlator.md",
+    "./agents/report-composer.md"
+  ],
+  "skills": [
+    "./skills/a-stock-data",
+    "./skills/roadshow-research-report"
+  ],
+  "displayName": {
+    "en": "Capital Markets Roadshow Research Team",
+    "zh": "资本市场路演研究团"
+  },
+  "profession": {
+    "en": "Capital Markets Roadshow Research Team",
+    "zh": "资本市场路演研究团"
+  },
+  "displayDescription": {
+    "en": "Multi-analyst team researching a target company: multi-source materials, industry, financials (listed + unlisted), roadshows, ratings, capital actions and price-event links, outputs a Word report with optional template.",
+    "zh": "多专家协作标的研报：多源解析、行业对比、财报三表（上市+未上市）、路演研报、股价关联，模板出报告。"
+  },
+  "avatar": "avatars/team.png",
+  "categoryId": "08-FinanceInvestment",
+  "defaultInitPrompt": {
+    "zh": "帮我研究腾讯控股（00700.HK），生成一份近三年的资本市场路演时间线研究报告（Word）。",
+    "en": "Research Tencent (00700.HK) and produce a 3-year capital-markets roadshow timeline report in Word."
+  },
+  "tags": [
+    {
+      "en": "Equity Research",
+      "zh": "证券投研"
+    },
+    {
+      "en": "Industry Analysis",
+      "zh": "行业分析"
+    },
+    {
+      "en": "Financial Statements",
+      "zh": "财报三表"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Research Tencent (00700.HK) and produce a 3-year capital-markets roadshow timeline report in Word.",
+      "zh": "帮我研究腾讯控股（00700.HK），生成一份近三年的资本市场路演时间线研究报告（Word）。"
+    },
+    {
+      "en": "Analyze CATL (300750): industry comparison, three-statement financials and analyst ratings over the past 3 years.",
+      "zh": "分析宁德时代（300750）：近三年行业对比、财报三表与分析师评级情况。"
+    },
+    {
+      "en": "Compile a roadshow, capital-action and price-event timeline for Kweichow Moutai (600519).",
+      "zh": "梳理贵州茅台（600519）的路演、资本运作与股价事件时间线。"
+    }
+  ],
+  "members": [
+    {
+      "id": "roadshow-team-lead",
+      "name": {
+        "en": "Gu Quanzhi",
+        "zh": "顾全之"
+      },
+      "profession": {
+        "en": "Research Editor-in-Chief",
+        "zh": "研究主编"
+      },
+      "avatar": "avatars/roadshow-team-lead.png",
+      "role": "lead"
+    },
+    {
+      "id": "company-profiler",
+      "name": {
+        "en": "Cha Mingyuan",
+        "zh": "查明远"
+      },
+      "profession": {
+        "en": "Fundamentals Researcher",
+        "zh": "基本面研究员"
+      },
+      "avatar": "avatars/company-profiler.png",
+      "role": "member"
+    },
+    {
+      "id": "material-parser",
+      "name": {
+        "en": "Su Xicai",
+        "zh": "苏析材"
+      },
+      "profession": {
+        "en": "Multi-source Material Analyst",
+        "zh": "多源材料解析师"
+      },
+      "avatar": "avatars/material-parser.png",
+      "role": "member"
+    },
+    {
+      "id": "industry-analyst",
+      "name": {
+        "en": "Fan Xingzhi",
+        "zh": "范行知"
+      },
+      "profession": {
+        "en": "Industry Analyst",
+        "zh": "行业研究员"
+      },
+      "avatar": "avatars/industry-analyst.png",
+      "role": "member"
+    },
+    {
+      "id": "financials-analyst",
+      "name": {
+        "en": "Ji Zhangping",
+        "zh": "季账平"
+      },
+      "profession": {
+        "en": "Financial Statements Analyst",
+        "zh": "财务分析师"
+      },
+      "avatar": "avatars/financials-analyst.png",
+      "role": "member"
+    },
+    {
+      "id": "roadshow-curator",
+      "name": {
+        "en": "Lu Minghui",
+        "zh": "路明会"
+      },
+      "profession": {
+        "en": "Roadshow Briefing Analyst",
+        "zh": "路演纪要分析师"
+      },
+      "avatar": "avatars/roadshow-curator.png",
+      "role": "member"
+    },
+    {
+      "id": "analyst-rating-tracker",
+      "name": {
+        "en": "He Yanpan",
+        "zh": "贺研判"
+      },
+      "profession": {
+        "en": "Sell-side Rating Analyst",
+        "zh": "研报评级分析师"
+      },
+      "avatar": "avatars/analyst-rating-tracker.png",
+      "role": "member"
+    },
+    {
+      "id": "capital-action-analyst",
+      "name": {
+        "en": "Cai Yuntong",
+        "zh": "蔡运通"
+      },
+      "profession": {
+        "en": "Capital Actions Analyst",
+        "zh": "资本运作分析师"
+      },
+      "avatar": "avatars/capital-action-analyst.png",
+      "role": "member"
+    },
+    {
+      "id": "price-action-analyst",
+      "name": {
+        "en": "Wen Panmian",
+        "zh": "温盘面"
+      },
+      "profession": {
+        "en": "Price Action Analyst",
+        "zh": "行情分析师"
+      },
+      "avatar": "avatars/price-action-analyst.png",
+      "role": "member"
+    },
+    {
+      "id": "event-correlator",
+      "name": {
+        "en": "Yi Guiyin",
+        "zh": "易归因"
+      },
+      "profession": {
+        "en": "Event Correlation Analyst",
+        "zh": "事件关联分析师"
+      },
+      "avatar": "avatars/event-correlator.png",
+      "role": "member"
+    },
+    {
+      "id": "report-composer",
+      "name": {
+        "en": "Cheng Wenjuan",
+        "zh": "成文卷"
+      },
+      "profession": {
+        "en": "Report Composing Editor",
+        "zh": "报告撰稿主编"
+      },
+      "avatar": "avatars/report-composer.png",
+      "role": "member"
+    }
+  ],
+  "plugin": "roadshow-research-team"
+}

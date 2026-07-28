@@ -1,0 +1,214 @@
+{
+  "schemaVersion": "1.0.0",
+  "contextKind": "park_bound_task",
+  "taskContextId": "task-context-park-synthetic-demo",
+  "parkId": "park-synthetic-demo",
+  "parkName": "合成演示园区",
+  "location": {
+    "country": "中国",
+    "province": "示例省",
+    "city": "示例市",
+    "district": null
+  },
+  "operatorType": "市场化园区运营商",
+  "parkArchetypes": [
+    "产业孵化基地"
+  ],
+  "developmentStage": "成长期",
+  "mission": {
+    "statement": "寻找能够补齐智能制造设备监测链节的企业",
+    "basisState": "user_stated",
+    "basisRefs": [
+      "input-receipt-current-request"
+    ],
+    "authority": "context_only_non_normative"
+  },
+  "timeHorizon": "本轮招商任务",
+  "industryFocus": [
+    "智能制造"
+  ],
+  "chainGaps": [
+    "设备状态监测"
+  ],
+  "spaceAndFacility": [
+    "可承载轻研发与技术服务团队"
+  ],
+  "resourceAdvantages": [
+    "本地制造企业场景资源"
+  ],
+  "hardConstraints": [],
+  "softPreferences": [
+    {
+      "constraintId": "pref-local-service",
+      "category": "服务能力",
+      "statement": "优先考虑可服务本地制造客户的企业",
+      "state": "user_stated",
+      "sourceRefs": [],
+      "evidenceTemporalRequirement": "current_state"
+    }
+  ],
+  "knownFacts": [],
+  "assumptions": [
+    {
+      "assumptionId": "assumption-carrier",
+      "statement": "首批不以具体面积作为资格门",
+      "impact": "避免因载体参数尚未确认而阻断找企业",
+      "confirmationNeeded": true
+    }
+  ],
+  "blockingUnknowns": [],
+  "adaptationContext": {
+    "profileVersion": "adaptive-context-1.0.0",
+    "factors": [
+      {
+        "factorId": "development-stage",
+        "label": "发展阶段",
+        "state": "user_stated",
+        "applicability": "applicable",
+        "summary": "园区处于成长期，当前任务关注补链企业",
+        "evidenceRefs": []
+      },
+      {
+        "factorId": "operator-capacity",
+        "label": "运营承接能力",
+        "state": "unknown",
+        "applicability": "unknown",
+        "summary": "承接能力待后续确认，不阻断首批研究",
+        "evidenceRefs": []
+      }
+    ],
+    "routingFactorIds": [
+      "development-stage"
+    ],
+    "contextCompleteness": "minimum_sufficient"
+  },
+  "taskGoal": {
+    "schemaVersion": "1.0.0",
+    "goalId": "goal-synthetic-five",
+    "goalRevision": 1,
+    "goalStatus": "frozen",
+    "goalMode": "explicit_count",
+    "candidateQualificationApplicability": "applicable",
+    "goalSource": "user_explicit",
+    "basisReceiptSnapshotHash": "ee0c0e5f8ad6c25d80e136dc354644b723663c82e8707bd972a24799447badfd",
+    "searchScope": {
+      "scopeMode": "open",
+      "scopeId": null,
+      "universeType": null,
+      "expectedCount": null,
+      "universeBindings": [],
+      "universeSnapshotHash": null,
+      "scopeHash": "3f69459bda5d6101db4f146900605d4aabbafc0cf16bfa67381d99a21d778222",
+      "basisRefs": [
+        "input-receipt-current-request"
+      ],
+      "universeManifest": null
+    },
+    "countRequirement": {
+      "relation": "exact",
+      "exactCount": 5,
+      "minimumCount": null,
+      "maximumCount": null,
+      "basisRefs": [
+        "input-receipt-current-request"
+      ],
+      "supportState": "supported",
+      "numberPurpose": "task_total",
+      "referenceCount": null
+    },
+    "requestedQualifiedCount": 5,
+    "coverageRequirements": [],
+    "qualificationCriteria": [
+      {
+        "criterionId": "criterion-public-evidence",
+        "statement": "主体可区分且关键任务判断有可回读公开证据",
+        "required": true,
+        "basisState": "user_stated",
+        "evidenceTemporalRequirement": "current_state",
+        "basisRefs": [
+          "input-receipt-current-request"
+        ],
+        "decisionRule": {
+          "ruleType": "qualitative_judgment",
+          "claimPredicates": [
+            "task_relevance"
+          ],
+          "expectedEntailment": "supports",
+          "operator": null,
+          "expectedValue": null,
+          "resultMapping": {
+            "whenTrue": "pass",
+            "whenFalse": "fail",
+            "whenIndeterminate": "unknown",
+            "whenNotApplicable": "not_applicable"
+          },
+          "operandValueType": null,
+          "expectedNormalizedValue": null,
+          "unit": null,
+          "normalization": null
+        }
+      }
+    ],
+    "completionAuthority": "structured_goal_fields_only",
+    "acceptanceCriteria": [
+      "交付恰好5家满足全部必选资格标准的去重合格企业。"
+    ],
+    "unsupportedCompletionConditions": [],
+    "blockingGoalUnknowns": [],
+    "frozenAt": "2026-07-27T00:00:00+08:00",
+    "goalHash": "d0dd46edd75b98a8e6b318f5a31832b7c8b6cf5e4e9f40e19d4f458df8770392",
+    "supersedesGoalRef": null,
+    "prioritizationCriteria": [],
+    "evaluationRequirement": {
+      "mode": "none",
+      "scopeHash": null,
+      "completionRule": "not_applicable"
+    },
+    "deliveryEligibilityMode": "qualification_only",
+    "deliveryCriteria": [],
+    "taskDeliverableRequirements": []
+  },
+  "batchPolicy": {
+    "deliveryBatchSize": 3,
+    "firstVisibleBatchSize": 0,
+    "batchSizeSource": "expert_recommended_user_adjustable",
+    "batchUnit": "visible_items",
+    "capacityAllocation": "shared_candidate_and_assessment_items",
+    "batchSizeAuthorityState": "package_default_non_authoritative",
+    "batchSizeBasisRefs": [
+      "contracts/v1-product-contract.json#/batchPolicy"
+    ]
+  },
+  "publicSourcePolicy": "public_only",
+  "researchBudget": {
+    "mode": "standard",
+    "budgetSource": "no_explicit_cap",
+    "timeBudgetMinutes": null,
+    "maxQueries": null,
+    "maxRetriesPerSource": null,
+    "coverageSearchStateBudget": null,
+    "coverageSearchStateBudgetSource": "no_explicit_cap",
+    "coverageSearchStateBudgetEffect": "algorithm_checkpoint_only_never_goal_shortfall",
+    "budgetEffect": "pause_checkpoint_not_market_shortfall",
+    "budgetAuthorityState": "not_applicable",
+    "budgetBasisRefs": [],
+    "coverageSearchStateBudgetAuthorityState": "not_applicable",
+    "coverageSearchStateBudgetBasisRefs": []
+  },
+  "constraintHash": "23d51bf7b3a6c78cd39089afff1a07b6a1cb7c21a45fb26d537db20d54001859",
+  "inputReceipts": [
+    {
+      "receiptId": "input-receipt-current-request",
+      "sourceKind": "current_turn",
+      "redactedSummary": "用户明确本轮园区、产业方向、业务总量与合格资格要求。",
+      "normalizedContentHash": "6556bc8a2315b93ddfcb29c6dd1ac8c9cde2e01d8d5dcc4d08a2a47dd62b3283",
+      "sessionBindingHash": "b159b5d8d93006ad63aff6a4e17e1b2971874d06ea5edc443ca084cb65517e81",
+      "turnBindingHash": "1e09053a40462aa456eb92f84513192b3ef88609b01553267534a9a784690ecf",
+      "recordedAt": "2026-07-27T00:00:00+08:00",
+      "confirmationState": "explicit",
+      "trustState": "synthetic_fixture_assumption",
+      "authorizationState": "not_proven_by_business_payload"
+    }
+  ],
+  "inputReceiptSnapshotHash": "ee0c0e5f8ad6c25d80e136dc354644b723663c82e8707bd972a24799447badfd"
+}

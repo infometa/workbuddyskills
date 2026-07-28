@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/query-ledger.schema.json",
+  "title": "QueryLedger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "ledgerId",
+    "revision",
+    "previousRevisionRef",
+    "asOf",
+    "sourcePolicy",
+    "queries",
+    "executionReceipts",
+    "budget",
+    "stopReason",
+    "coverageConclusion",
+    "uncoveredDirections"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "ledgerId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "previousRevisionRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sourcePolicy": {
+      "const": "public_only"
+    },
+    "queries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "queryId",
+          "queryFamily",
+          "queryText",
+          "scopeHash",
+          "inputRefs",
+          "runState",
+          "executedAt",
+          "capabilityState",
+          "resultCount",
+          "sourceRefs",
+          "candidateRefs",
+          "queryExecutionReceiptRef",
+          "coverageNote"
+        ],
+        "properties": {
+          "queryId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "queryFamily": {
+            "oneOf": [
+              {
+                "enum": [
+                  "industry_chain",
+                  "expansion_event",
+                  "facility_demand",
+                  "regional_project",
+                  "resource_exchange",
+                  "counterevidence",
+                  "channel_entry"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+              }
+            ]
+          },
+          "queryText": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "scopeHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "inputRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "runState": {
+            "enum": [
+              "executed",
+              "not_run",
+              "failed"
+            ]
+          },
+          "executedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "capabilityState": {
+            "enum": [
+              "available",
+              "available_needs_confirmation",
+              "unavailable",
+              "unknown"
+            ]
+          },
+          "resultCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sourceRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "candidateRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "queryExecutionReceiptRef": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
+          },
+          "coverageNote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "runState": {
+                  "const": "not_run"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "executedAt": {
+                  "type": "null"
+                },
+                "queryExecutionReceiptRef": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "executedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "queryExecutionReceiptRef": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "runState": {
+                  "const": "executed"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "capabilityState": {
+                  "const": "available"
+                },
+                "executedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "queryExecutionReceiptRef": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "executionReceipts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/queryExecutionReceipt"
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "queryBudget",
+        "queriesUsed",
+        "sourcesRead",
+        "retriesUsed"
+      ],
+      "properties": {
+        "queryBudget": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "queriesUsed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourcesRead": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retriesUsed": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "stopReason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "coverageConclusion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "uncoveredDirections": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    }
+  },
+  "$defs": {
+    "queryExecutionReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receiptId",
+        "recordState",
+        "proofBoundary",
+        "sideEffectState",
+        "queryId",
+        "queryTextHash",
+        "scopeHash",
+        "inputRefs",
+        "resultSourceRefs",
+        "resultCandidateRefs",
+        "errorCode",
+        "startedAt",
+        "completedAt",
+        "sessionBindingHash",
+        "receiptHash"
+      ],
+      "properties": {
+        "receiptId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recordState": {
+          "const": "self_reported_not_tool_proven",
+          "description": "The business payload reports an execution outcome but does not prove that a host or tool executed it."
+        },
+        "proofBoundary": {
+          "const": "content_closure_only_not_execution_proof",
+          "description": "Static validation checks payload closure only. Actual execution evidence belongs to a separately controlled host/tool validation surface."
+        },
+        "sideEffectState": {
+          "const": "read_only_no_external_write"
+        },
+        "queryId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "queryTextHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "scopeHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "inputRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "resultSourceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "resultCandidateRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "errorCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sessionBindingHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "receiptHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Deterministic content-integrity checksum only; it does not authenticate an issuer or prove tool execution."
+        }
+      }
+    }
+  }
+}

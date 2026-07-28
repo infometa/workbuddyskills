@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/knowledge-record.schema.json",
+  "title": "KnowledgeRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "recordId",
+    "taskContextRef",
+    "topic",
+    "claimRef",
+    "claimHash",
+    "claim",
+    "evidenceClass",
+    "evidenceClassAuthority",
+    "jurisdiction",
+    "effectiveAt",
+    "expiresAt",
+    "retrievedAt",
+    "nextReviewAt",
+    "sourceRefs",
+    "sourceUrl",
+    "sourceTitle",
+    "supersedes",
+    "usePolicy",
+    "recordHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "recordId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskContextRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "topic": {
+      "oneOf": [
+        {
+          "enum": [
+            "policy",
+            "regulation",
+            "industry_trend",
+            "innovation_signal",
+            "park_case",
+            "acquisition_channel"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "claimRef": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Must resolve to a ClaimEvidenceLink in the same task evidence snapshot."
+    },
+    "claimHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Canonical content hash of the referenced ClaimEvidenceLink; integrity only, not issuer authentication."
+    },
+    "evidenceClass": {
+      "enum": [
+        "observed",
+        "inferred",
+        "hypothesis",
+        "not_proven"
+      ]
+    },
+    "evidenceClassAuthority": {
+      "const": "derived_from_claim_evidence_links_not_record_self_report"
+    },
+    "jurisdiction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "effectiveAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "retrievedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nextReviewAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "Risk- and source-specific review time when one is justified; null rather than an invented fixed cadence."
+    },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Must resolve to SourceRecord objects used by the referenced claim."
+    },
+    "sourceUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://(?!(?:localhost|127(?:\\.[0-9]{1,3}){3}|10(?:\\.[0-9]{1,3}){3}|192\\.168(?:\\.[0-9]{1,3}){2}|172\\.(?:1[6-9]|2[0-9]|3[01])(?:\\.[0-9]{1,3}){2}|169\\.254(?:\\.[0-9]{1,3}){2}|0\\.0\\.0\\.0|\\[::1\\])(?::[0-9]+)?(?:/|$))"
+    },
+    "sourceTitle": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "supersedes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "usePolicy": {
+      "const": "recheck_current_public_source_before_material_decision"
+    },
+    "recordHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Canonical JSON SHA-256 of this record with recordHash excluded; does not authenticate the issuer."
+    }
+  }
+}

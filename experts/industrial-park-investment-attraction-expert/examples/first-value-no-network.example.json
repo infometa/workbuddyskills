@@ -1,0 +1,715 @@
+{
+  "packageVersion": "26.7.27",
+  "contractVersion": "1.0.0",
+  "boundary": {
+    "sourcePolicy": "public_only",
+    "connectorRequired": false,
+    "externalWriteExposed": false,
+    "longTermMemoryUsed": false,
+    "memoryContextReceipt": null,
+    "privateFilesRead": false,
+    "capabilityDegradation": "public_search_mission_pack",
+    "truthBoundary": "当前没有可用的公开搜索能力，因此只交付研究任务包并暂停；这不是市场短缺，也没有生成任何企业事实。",
+    "capabilityStates": {
+      "snapshotRef": "examples/capability-snapshot.example.json",
+      "snapshotState": "synthetic_fixture_assumption",
+      "discoveryCapability": "unavailable",
+      "readCapability": "unavailable",
+      "providedContentCapability": "unknown",
+      "decisionAuthority": "independent_states_only_summary_non_authoritative"
+    }
+  },
+  "contextSnapshot": {
+    "schemaVersion": "1.0.0",
+    "contextKind": "park_bound_task",
+    "taskContextId": "task-context-park-synthetic-paused",
+    "parkId": "park-synthetic-paused",
+    "parkName": null,
+    "location": {
+      "country": "中国",
+      "province": null,
+      "city": "示例市",
+      "district": null
+    },
+    "operatorType": "市场化园区运营商",
+    "parkArchetypes": [],
+    "developmentStage": null,
+    "mission": {
+      "statement": "寻找5家符合本轮产业方向和资格底线的企业",
+      "basisState": "user_stated",
+      "basisRefs": [
+        "input-receipt-current-request"
+      ],
+      "authority": "context_only_non_normative"
+    },
+    "timeHorizon": "本轮任务",
+    "industryFocus": [
+      "智能制造"
+    ],
+    "chainGaps": [],
+    "spaceAndFacility": [],
+    "resourceAdvantages": [],
+    "hardConstraints": [],
+    "softPreferences": [],
+    "knownFacts": [],
+    "assumptions": [],
+    "blockingUnknowns": [],
+    "adaptationContext": {
+      "profileVersion": "adaptive-context-1.0.0",
+      "factors": [
+        {
+          "factorId": "industry-focus",
+          "label": "产业方向",
+          "state": "user_stated",
+          "applicability": "applicable",
+          "summary": "本轮先按智能制造方向研究",
+          "evidenceRefs": []
+        }
+      ],
+      "routingFactorIds": [
+        "industry-focus"
+      ],
+      "contextCompleteness": "minimum_sufficient"
+    },
+    "taskGoal": {
+      "schemaVersion": "1.0.0",
+      "goalId": "goal-synthetic-paused-five",
+      "goalRevision": 1,
+      "goalStatus": "frozen",
+      "goalMode": "explicit_count",
+      "candidateQualificationApplicability": "applicable",
+      "goalSource": "user_explicit",
+      "basisReceiptSnapshotHash": "ee0c0e5f8ad6c25d80e136dc354644b723663c82e8707bd972a24799447badfd",
+      "searchScope": {
+        "scopeMode": "open",
+        "scopeId": null,
+        "universeType": null,
+        "expectedCount": null,
+        "universeBindings": [],
+        "universeSnapshotHash": null,
+        "scopeHash": "3f69459bda5d6101db4f146900605d4aabbafc0cf16bfa67381d99a21d778222",
+        "basisRefs": [
+          "input-receipt-current-request"
+        ],
+        "universeManifest": null
+      },
+      "countRequirement": {
+        "relation": "exact",
+        "exactCount": 5,
+        "minimumCount": null,
+        "maximumCount": null,
+        "basisRefs": [
+          "input-receipt-current-request"
+        ],
+        "supportState": "supported",
+        "numberPurpose": "task_total",
+        "referenceCount": null
+      },
+      "requestedQualifiedCount": 5,
+      "coverageRequirements": [],
+      "qualificationCriteria": [
+        {
+          "criterionId": "criterion-smart-manufacturing-fit",
+          "statement": "企业符合本轮智能制造方向且关键判断有可回读公开证据",
+          "required": true,
+          "basisState": "user_stated",
+          "evidenceTemporalRequirement": "current_state",
+          "basisRefs": [
+            "input-receipt-current-request"
+          ],
+          "decisionRule": {
+            "ruleType": "qualitative_judgment",
+            "claimPredicates": [
+              "industry_fit"
+            ],
+            "expectedEntailment": "supports",
+            "operator": null,
+            "expectedValue": null,
+            "resultMapping": {
+              "whenTrue": "pass",
+              "whenFalse": "fail",
+              "whenIndeterminate": "unknown",
+              "whenNotApplicable": "not_applicable"
+            },
+            "operandValueType": null,
+            "expectedNormalizedValue": null,
+            "unit": null,
+            "normalization": null
+          }
+        }
+      ],
+      "completionAuthority": "structured_goal_fields_only",
+      "acceptanceCriteria": [
+        "交付恰好5家满足全部必选资格标准的去重合格企业。"
+      ],
+      "unsupportedCompletionConditions": [],
+      "blockingGoalUnknowns": [],
+      "frozenAt": "2026-07-27T00:00:00+08:00",
+      "goalHash": "3081a0cccad49caf53231ac0fcae0e7ecdf0479dbb140dd24098b7e83eb7a2c7",
+      "supersedesGoalRef": null,
+      "prioritizationCriteria": [],
+      "evaluationRequirement": {
+        "mode": "none",
+        "scopeHash": null,
+        "completionRule": "not_applicable"
+      },
+      "deliveryEligibilityMode": "qualification_only",
+      "deliveryCriteria": [],
+      "taskDeliverableRequirements": []
+    },
+    "batchPolicy": {
+      "deliveryBatchSize": 5,
+      "firstVisibleBatchSize": 0,
+      "batchSizeSource": "user_explicit",
+      "batchUnit": "visible_items",
+      "capacityAllocation": "shared_candidate_and_assessment_items",
+      "batchSizeAuthorityState": "user_input_receipt",
+      "batchSizeBasisRefs": [
+        "input-receipt-current-request"
+      ]
+    },
+    "publicSourcePolicy": "public_only",
+    "researchBudget": {
+      "mode": "quick",
+      "budgetSource": "no_explicit_cap",
+      "timeBudgetMinutes": null,
+      "maxQueries": null,
+      "maxRetriesPerSource": null,
+      "coverageSearchStateBudget": null,
+      "coverageSearchStateBudgetSource": "no_explicit_cap",
+      "coverageSearchStateBudgetEffect": "algorithm_checkpoint_only_never_goal_shortfall",
+      "budgetEffect": "pause_checkpoint_not_market_shortfall",
+      "budgetAuthorityState": "not_applicable",
+      "budgetBasisRefs": [],
+      "coverageSearchStateBudgetAuthorityState": "not_applicable",
+      "coverageSearchStateBudgetBasisRefs": []
+    },
+    "constraintHash": "3529812149ed3d34010efc829d64dfce81329fb48ce09d25d23c4c6e1916c8be",
+    "inputReceipts": [
+      {
+        "receiptId": "input-receipt-current-request",
+        "sourceKind": "current_turn",
+        "redactedSummary": "用户明确本轮园区、产业方向、业务总量与合格资格要求。",
+        "normalizedContentHash": "6556bc8a2315b93ddfcb29c6dd1ac8c9cde2e01d8d5dcc4d08a2a47dd62b3283",
+        "sessionBindingHash": "b159b5d8d93006ad63aff6a4e17e1b2971874d06ea5edc443ca084cb65517e81",
+        "turnBindingHash": "1e09053a40462aa456eb92f84513192b3ef88609b01553267534a9a784690ecf",
+        "recordedAt": "2026-07-27T00:00:00+08:00",
+        "confirmationState": "explicit",
+        "trustState": "synthetic_fixture_assumption",
+        "authorizationState": "not_proven_by_business_payload"
+      }
+    ],
+    "inputReceiptSnapshotHash": "ee0c0e5f8ad6c25d80e136dc354644b723663c82e8707bd972a24799447badfd"
+  },
+  "routeSelected": "start_targeting_task",
+  "routeFacets": [
+    "park_context_definition",
+    "discover_public_candidates"
+  ],
+  "blockingQuestions": [],
+  "mode": "quick",
+  "deliverables": [
+    {
+      "artifactType": "ParkBrief",
+      "status": "complete",
+      "artifactRef": "park-brief:park-synthetic-paused@1"
+    },
+    {
+      "artifactType": "PublicSearchMissionPack",
+      "status": "degraded",
+      "artifactRef": "mission-pack:park-synthetic-paused@1"
+    }
+  ],
+  "evidenceLedger": {
+    "entities": [],
+    "sources": [],
+    "claims": [],
+    "conflicts": []
+  },
+  "leadDelivery": {
+    "schemaVersion": "1.0.0",
+    "packageVersion": "26.7.27",
+    "portfolioId": "portfolio-synthetic-paused",
+    "assetId": "asset-portfolio-synthetic-paused",
+    "revision": 1,
+    "previousRevisionRef": null,
+    "createdAt": "2026-07-27T00:00:00+08:00",
+    "updatedAt": "2026-07-27T00:00:00+08:00",
+    "asOf": "2026-07-27T00:00:00+08:00",
+    "parkBriefRef": "park-brief:park-synthetic-paused@1",
+    "parkConstraintHash": "3529812149ed3d34010efc829d64dfce81329fb48ce09d25d23c4c6e1916c8be",
+    "evidenceSnapshotHash": "e4d9c3e4d3ccfe3fbff4d0992d492df0678733180f73455e1e37576aa5db7b15",
+    "changeSet": {
+      "addedCandidateRefs": [],
+      "removedCandidateRefs": [],
+      "rankChangedCandidateRefs": [],
+      "statusChangedCandidateRefs": [],
+      "evidenceChangedCandidateRefs": [],
+      "changeSummary": "搜索不可用，尚未产生候选记录。"
+    },
+    "evidenceBundleRef": "bundle:synthetic-paused@1",
+    "queryLedgerRef": "query-ledger:synthetic-paused@1",
+    "taskGoal": {
+      "schemaVersion": "1.0.0",
+      "goalId": "goal-synthetic-paused-five",
+      "goalRevision": 1,
+      "goalStatus": "frozen",
+      "goalMode": "explicit_count",
+      "candidateQualificationApplicability": "applicable",
+      "goalSource": "user_explicit",
+      "basisReceiptSnapshotHash": "ee0c0e5f8ad6c25d80e136dc354644b723663c82e8707bd972a24799447badfd",
+      "searchScope": {
+        "scopeMode": "open",
+        "scopeId": null,
+        "universeType": null,
+        "expectedCount": null,
+        "universeBindings": [],
+        "universeSnapshotHash": null,
+        "scopeHash": "3f69459bda5d6101db4f146900605d4aabbafc0cf16bfa67381d99a21d778222",
+        "basisRefs": [
+          "input-receipt-current-request"
+        ],
+        "universeManifest": null
+      },
+      "countRequirement": {
+        "relation": "exact",
+        "exactCount": 5,
+        "minimumCount": null,
+        "maximumCount": null,
+        "basisRefs": [
+          "input-receipt-current-request"
+        ],
+        "supportState": "supported",
+        "numberPurpose": "task_total",
+        "referenceCount": null
+      },
+      "requestedQualifiedCount": 5,
+      "coverageRequirements": [],
+      "qualificationCriteria": [
+        {
+          "criterionId": "criterion-smart-manufacturing-fit",
+          "statement": "企业符合本轮智能制造方向且关键判断有可回读公开证据",
+          "required": true,
+          "basisState": "user_stated",
+          "evidenceTemporalRequirement": "current_state",
+          "basisRefs": [
+            "input-receipt-current-request"
+          ],
+          "decisionRule": {
+            "ruleType": "qualitative_judgment",
+            "claimPredicates": [
+              "industry_fit"
+            ],
+            "expectedEntailment": "supports",
+            "operator": null,
+            "expectedValue": null,
+            "resultMapping": {
+              "whenTrue": "pass",
+              "whenFalse": "fail",
+              "whenIndeterminate": "unknown",
+              "whenNotApplicable": "not_applicable"
+            },
+            "operandValueType": null,
+            "expectedNormalizedValue": null,
+            "unit": null,
+            "normalization": null
+          }
+        }
+      ],
+      "completionAuthority": "structured_goal_fields_only",
+      "acceptanceCriteria": [
+        "交付恰好5家满足全部必选资格标准的去重合格企业。"
+      ],
+      "unsupportedCompletionConditions": [],
+      "blockingGoalUnknowns": [],
+      "frozenAt": "2026-07-27T00:00:00+08:00",
+      "goalHash": "3081a0cccad49caf53231ac0fcae0e7ecdf0479dbb140dd24098b7e83eb7a2c7",
+      "supersedesGoalRef": null,
+      "prioritizationCriteria": [],
+      "evaluationRequirement": {
+        "mode": "none",
+        "scopeHash": null,
+        "completionRule": "not_applicable"
+      },
+      "deliveryEligibilityMode": "qualification_only",
+      "deliveryCriteria": [],
+      "taskDeliverableRequirements": []
+    },
+    "batchPolicy": {
+      "deliveryBatchSize": 5,
+      "firstVisibleBatchSize": 0,
+      "batchSizeSource": "user_explicit",
+      "batchUnit": "visible_items",
+      "capacityAllocation": "shared_candidate_and_assessment_items",
+      "batchSizeAuthorityState": "user_input_receipt",
+      "batchSizeBasisRefs": [
+        "input-receipt-current-request"
+      ]
+    },
+    "taskState": "paused",
+    "selectionComputation": {
+      "method": "ranked_prefix",
+      "stateBudget": null,
+      "stateBudgetSource": "no_explicit_cap",
+      "budgetEffect": "algorithm_checkpoint_only_never_goal_shortfall",
+      "statesVisited": 0,
+      "truncated": false,
+      "optimalityProven": true,
+      "stateBudgetAuthorityState": "not_applicable",
+      "stateBudgetBasisRefs": []
+    },
+    "deliveryBatches": [],
+    "currentBatchRef": null,
+    "pendingCandidateRefs": [],
+    "currentSelectedQualifiedCount": 0,
+    "currentTotalQualifiedPoolCount": 0,
+    "cumulativeUniqueDeliveredCount": 0,
+    "countGoalAssessment": {
+      "relation": "exact",
+      "exactCount": 5,
+      "minimumCount": null,
+      "maximumCount": null,
+      "achieved": 0,
+      "status": "below_minimum"
+    },
+    "coverageAssessments": [],
+    "qualificationCriterionAssessments": [
+      {
+        "criterionRef": "criterion-smart-manufacturing-fit",
+        "required": true,
+        "matchedCandidateRefs": [],
+        "evidenceRefs": [],
+        "status": "unmet"
+      }
+    ],
+    "unmetRequirementRefs": [
+      "goal-synthetic-paused-five:count",
+      "criterion-smart-manufacturing-fit"
+    ],
+    "priorityCandidateIds": [],
+    "qualifiedCandidates": [],
+    "alternates": [],
+    "watchlist": [],
+    "excluded": [],
+    "searchCoverage": {
+      "sourceMode": "public_search_mission_pack",
+      "queryFamiliesAttempted": [],
+      "queryCount": 0,
+      "sourcesRead": 0,
+      "checkpointReason": "宿主公开搜索能力不可用，等待恢复后继续。",
+      "uncoveredDirections": [
+        "产业链企业发现",
+        "扩张与选址信号",
+        "公开入口核验"
+      ]
+    },
+    "terminalProof": null,
+    "pauseReason": "search_unavailable",
+    "nextCursor": "resume:public-search-required",
+    "continuationRequirements": [
+      "恢复公开搜索后从产业链企业发现开始",
+      "不得把能力中断描述为市场短缺"
+    ],
+    "portfolioStrategy": {
+      "primaryMotion": null,
+      "supportingMotions": [],
+      "channelMixRationale": "尚无企业证据，不能预设唯一获客渠道。",
+      "customerOperationSequence": [],
+      "selectionBasis": "task_goal_and_candidate_evidence_not_archetype_template",
+      "executionBoundary": "prepared_not_contacted"
+    },
+    "performanceObservation": {
+      "schemaVersion": "1.0.0",
+      "measurementState": "not_measured",
+      "startedAt": null,
+      "firstUsefulResultAt": null,
+      "firstVisibleDeliveryAt": null,
+      "taskTerminalAt": null,
+      "elapsedMs": {
+        "firstUsefulResult": null,
+        "firstVisibleDelivery": null,
+        "taskTerminal": null
+      },
+      "evaluationBenchmarks": [],
+      "budget": {
+        "budgetSource": "no_explicit_cap",
+        "timeBudgetMinutes": null,
+        "queryBudget": null,
+        "queriesUsed": null,
+        "sourcesRead": null,
+        "retriesUsed": null,
+        "budgetEffect": "checkpoint_or_pause_never_market_shortfall",
+        "budgetAuthorityState": "not_applicable",
+        "budgetBasisRefs": [],
+        "usageMeasurementState": "not_measured",
+        "usageEvidenceRefs": [],
+        "queryLedgerSnapshotHash": null
+      },
+      "environment": {
+        "model": null,
+        "networkMode": null,
+        "concurrency": null
+      },
+      "checkpointReason": "公开搜索不可用",
+      "notMeasuredReason": "未执行研究，因此没有真实计时",
+      "firstUsefulResultRef": null,
+      "firstUsefulResultCriterionRef": null,
+      "firstVisibleDeliveryRef": null,
+      "firstVisibleDeliveryReceiptRef": null,
+      "taskTerminalProofRef": null,
+      "measurementBasis": {
+        "recordState": "unverified",
+        "receiptRefs": [],
+        "proofBoundary": "payload_timestamps_require_external_host_receipt_join"
+      }
+    },
+    "qualityGateReceipt": {
+      "entityGate": "pass",
+      "hardConstraintGate": "pass",
+      "goalFitGate": "pass",
+      "evidenceGate": "pass",
+      "unresolvedDuplicateCount": 0,
+      "duplicatesMergedCount": 0,
+      "fatalEntityErrorCount": 0,
+      "actionReadyCount": 0,
+      "needsActionPreparationCount": 0
+    },
+    "nextBestAction": {
+      "actionType": "continue_goal_research",
+      "description": "公开搜索恢复后继续本任务，不把暂停写成市场短缺。",
+      "owner": "expert",
+      "authorizationRequired": false
+    },
+    "deliveryReceipts": [],
+    "deliveryPreparation": null,
+    "deliverableEligibleCandidateRefs": [],
+    "currentDeliverableEligibleCount": 0,
+    "evaluationScopeAssessment": {
+      "scopeHash": null,
+      "expectedInputCount": 0,
+      "auditedInputCount": 0,
+      "mappedInputCount": 0,
+      "dispositionedInputCount": 0,
+      "unresolvedInputCount": 0,
+      "inputAssessments": [],
+      "status": "not_applicable"
+    },
+    "deliveredAssessmentRefs": [],
+    "verificationOrderCandidateRefs": []
+  },
+  "preparedActions": [
+    {
+      "actionType": "manual_research_task",
+      "contentSummary": "按产业链、扩张信号和公开入口三类查询恢复研究。",
+      "state": "prepared",
+      "targetRef": null,
+      "owner": "expert",
+      "evidenceRefs": [],
+      "basisRefs": [],
+      "authorizationRequired": false,
+      "authorizationBasisRefs": []
+    }
+  ],
+  "executedActions": [],
+  "deliveryDepth": "D1",
+  "achievedOutcomeLevel": "O2",
+  "performanceObservation": {
+    "schemaVersion": "1.0.0",
+    "measurementState": "not_measured",
+    "startedAt": null,
+    "firstUsefulResultAt": null,
+    "firstVisibleDeliveryAt": null,
+    "taskTerminalAt": null,
+    "elapsedMs": {
+      "firstUsefulResult": null,
+      "firstVisibleDelivery": null,
+      "taskTerminal": null
+    },
+    "evaluationBenchmarks": [],
+    "budget": {
+      "budgetSource": "no_explicit_cap",
+      "timeBudgetMinutes": null,
+      "queryBudget": null,
+      "queriesUsed": null,
+      "sourcesRead": null,
+      "retriesUsed": null,
+      "budgetEffect": "checkpoint_or_pause_never_market_shortfall",
+      "budgetAuthorityState": "not_applicable",
+      "budgetBasisRefs": [],
+      "usageMeasurementState": "not_measured",
+      "usageEvidenceRefs": [],
+      "queryLedgerSnapshotHash": null
+    },
+    "environment": {
+      "model": null,
+      "networkMode": null,
+      "concurrency": null
+    },
+    "checkpointReason": "公开搜索不可用",
+    "notMeasuredReason": "未执行研究，因此没有真实计时",
+    "firstUsefulResultRef": null,
+    "firstUsefulResultCriterionRef": null,
+    "firstVisibleDeliveryRef": null,
+    "firstVisibleDeliveryReceiptRef": null,
+    "taskTerminalProofRef": null,
+    "measurementBasis": {
+      "recordState": "unverified",
+      "receiptRefs": [],
+      "proofBoundary": "payload_timestamps_require_external_host_receipt_join"
+    }
+  },
+  "progress": {
+    "schemaVersion": "1.0.0",
+    "packageVersion": "26.7.27",
+    "parkId": "park-synthetic-paused",
+    "taskGoalRef": "examples/first-value-no-network.example.json#/leadDelivery/taskGoal",
+    "taskState": "paused",
+    "routeSelected": "start_targeting_task",
+    "mode": "quick",
+    "completedPhase": "park_brief_builder",
+    "currentPhase": "public_target_research",
+    "candidateCounts": {
+      "discovered": 0,
+      "entityResolved": 0,
+      "qualified": 0,
+      "actionReady": 0,
+      "needsActionPreparation": 0,
+      "watchlist": 0,
+      "excluded": 0
+    },
+    "unresolvedConflicts": [],
+    "currentDeliverable": {
+      "artifactType": "TargetPortfolio",
+      "artifactRef": "goal-synthetic-paused-five@1:current-portfolio",
+      "status": "in_progress"
+    },
+    "checkpointConditions": [
+      "公开搜索能力恢复",
+      "用户提供可回读的公开材料"
+    ],
+    "performanceObservation": {
+      "schemaVersion": "1.0.0",
+      "measurementState": "not_measured",
+      "startedAt": null,
+      "firstUsefulResultAt": null,
+      "firstVisibleDeliveryAt": null,
+      "taskTerminalAt": null,
+      "elapsedMs": {
+        "firstUsefulResult": null,
+        "firstVisibleDelivery": null,
+        "taskTerminal": null
+      },
+      "evaluationBenchmarks": [],
+      "budget": {
+        "budgetSource": "no_explicit_cap",
+        "timeBudgetMinutes": null,
+        "queryBudget": null,
+        "queriesUsed": null,
+        "sourcesRead": null,
+        "retriesUsed": null,
+        "budgetEffect": "checkpoint_or_pause_never_market_shortfall",
+        "budgetAuthorityState": "not_applicable",
+        "budgetBasisRefs": [],
+        "usageMeasurementState": "not_measured",
+        "usageEvidenceRefs": [],
+        "queryLedgerSnapshotHash": null
+      },
+      "environment": {
+        "model": null,
+        "networkMode": null,
+        "concurrency": null
+      },
+      "checkpointReason": "公开搜索不可用",
+      "notMeasuredReason": "未执行研究，因此没有真实计时",
+      "firstUsefulResultRef": null,
+      "firstUsefulResultCriterionRef": null,
+      "firstVisibleDeliveryRef": null,
+      "firstVisibleDeliveryReceiptRef": null,
+      "taskTerminalProofRef": null,
+      "measurementBasis": {
+        "recordState": "unverified",
+        "receiptRefs": [],
+        "proofBoundary": "payload_timestamps_require_external_host_receipt_join"
+      }
+    },
+    "nextActions": [
+      {
+        "actionId": "next-action-continue-research-001",
+        "actionType": "continue_goal_research",
+        "description": "恢复公开搜索或提供公开材料后继续；当前只暂停，不宣称短缺或完成。",
+        "owner": "expert",
+        "dependsOn": [],
+        "status": "ready",
+        "authorizationRequired": false,
+        "taskRef": "contextSnapshot.taskGoal",
+        "evidenceRefs": [],
+        "basisRefs": [],
+        "authorizationBasisRefs": []
+      }
+    ],
+    "nextAction": "恢复公开搜索或提供公开材料后继续；当前只暂停，不宣称短缺或完成。",
+    "persistenceBoundary": "current_session_visible_capsule_only",
+    "taskContextId": "task-context-park-synthetic-paused",
+    "contextHash": "3529812149ed3d34010efc829d64dfce81329fb48ce09d25d23c4c6e1916c8be",
+    "completedPhases": [
+      "park_brief_builder"
+    ],
+    "activeWorkstreams": [
+      {
+        "workstreamId": "workstream-public_target_research",
+        "phase": "public_target_research",
+        "state": "active",
+        "owner": "expert",
+        "dependsOn": [],
+        "assetRefs": []
+      }
+    ],
+    "workItemCounts": [
+      {
+        "sampleUnit": "qualified_candidate",
+        "observed": 0,
+        "assessed": 0,
+        "accepted": 0,
+        "delivered": 0,
+        "unresolved": 0
+      }
+    ],
+    "deliveryBatch": {
+      "batchId": "batch-1",
+      "batchIndex": 1,
+      "itemCounts": [
+        {
+          "sampleUnit": "qualified_candidate",
+          "plannedItemCount": 5,
+          "deliveredItemCount": 0
+        }
+      ],
+      "plannedItemCount": 5,
+      "deliveredTotal": 0,
+      "continuationState": "known_more",
+      "hasMore": true,
+      "itemRefs": [],
+      "batchHash": null
+    },
+    "taskGoalHash": "3081a0cccad49caf53231ac0fcae0e7ecdf0479dbb140dd24098b7e83eb7a2c7",
+    "routeFacets": [
+      "park_context_definition",
+      "discover_public_candidates"
+    ]
+  },
+  "nextActions": [
+    {
+      "actionId": "next-action-continue-research-001",
+      "actionType": "continue_goal_research",
+      "description": "恢复公开搜索或提供公开材料后继续；当前只暂停，不宣称短缺或完成。",
+      "owner": "expert",
+      "dependsOn": [],
+      "status": "ready",
+      "authorizationRequired": false,
+      "taskRef": "contextSnapshot.taskGoal",
+      "evidenceRefs": [],
+      "basisRefs": [],
+      "authorizationBasisRefs": []
+    }
+  ]
+}

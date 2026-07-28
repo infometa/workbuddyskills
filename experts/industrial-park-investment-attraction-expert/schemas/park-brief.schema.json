@@ -1,0 +1,1697 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/park-brief.schema.json",
+  "title": "ParkBrief",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contextKind",
+    "taskContextId",
+    "parkId",
+    "inputReceipts",
+    "inputReceiptSnapshotHash",
+    "taskGoal",
+    "constraintHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "contextKind": {
+      "enum": [
+        "park_bound_task",
+        "generic_entity_audit",
+        "material_evidence_audit"
+      ],
+      "description": "Declares whether the current task actually depends on a park context. Audit short chains do not invent a park identity."
+    },
+    "taskContextId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "description": "Stable identifier for this task context even when no park is applicable."
+    },
+    "parkId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "Required only for park_bound_task. Generic entity or material audits use null instead of fabricating a park."
+    },
+    "parkName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "location": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "country",
+            "province",
+            "city",
+            "district"
+          ],
+          "properties": {
+            "country": {
+              "type": "string",
+              "minLength": 1
+            },
+            "province": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "city": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "district": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      ],
+      "description": "Optional park location context. Omit or use null when a short task such as existing-list entity audit does not need park geography."
+    },
+    "operatorType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Optional operator context. Omit or use null when it is unknown or irrelevant to the active task; it must never block a short audit route."
+    },
+    "parkArchetypes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    },
+    "developmentStage": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200
+    },
+    "mission": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "statement",
+            "basisState",
+            "basisRefs",
+            "authority"
+          ],
+          "properties": {
+            "statement": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "basisState": {
+              "enum": [
+                "user_stated",
+                "user_confirmed_derivation",
+                "observed",
+                "inferred"
+              ]
+            },
+            "basisRefs": {
+              "$ref": "#/$defs/stringArray",
+              "minItems": 1
+            },
+            "authority": {
+              "const": "context_only_non_normative",
+              "description": "Mission is context only. It cannot create qualification, count, priority, completion, or stopping authority; TaskGoal is the sole normative goal."
+            }
+          }
+        }
+      ],
+      "description": "Optional park context. Omit or use null when absent; never require a mission field merely to carry the current task."
+    },
+    "timeHorizon": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200
+    },
+    "industryFocus": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "chainGaps": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "spaceAndFacility": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "resourceAdvantages": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "hardConstraints": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/constraint"
+          },
+          {
+            "required": [
+              "decisionRule"
+            ]
+          }
+        ]
+      }
+    },
+    "softPreferences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/constraint"
+      }
+    },
+    "knownFacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contextFact"
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/assumption"
+      }
+    },
+    "blockingUnknowns": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "inputReceipts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/inputReceipt"
+      }
+    },
+    "inputReceiptSnapshotHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of canonical UTF-8 JSON for the complete ordered inputReceipts array."
+    },
+    "adaptationContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profileVersion",
+        "factors",
+        "routingFactorIds",
+        "contextCompleteness"
+      ],
+      "properties": {
+        "profileVersion": {
+          "const": "adaptive-context-1.0.0"
+        },
+        "factors": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/adaptationFactor"
+          }
+        },
+        "routingFactorIds": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "contextCompleteness": {
+          "enum": [
+            "minimum_sufficient",
+            "partial",
+            "full_for_current_task"
+          ]
+        }
+      }
+    },
+    "taskGoal": {
+      "$ref": "task-goal.schema.json"
+    },
+    "batchPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deliveryBatchSize",
+        "firstVisibleBatchSize",
+        "batchSizeSource",
+        "batchUnit",
+        "capacityAllocation",
+        "batchSizeAuthorityState",
+        "batchSizeBasisRefs"
+      ],
+      "properties": {
+        "deliveryBatchSize": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum total visible items in one batch. Candidate cards and bounded-input assessment rows spend the same shared capacity."
+        },
+        "firstVisibleBatchSize": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Actual candidate plus assessment item count in the first host-verified visible batch; zero until such a batch exists."
+        },
+        "batchSizeSource": {
+          "enum": [
+            "user_explicit",
+            "operator_capacity",
+            "host_limit",
+            "expert_recommended_user_adjustable"
+          ]
+        },
+        "batchUnit": {
+          "const": "visible_items",
+          "description": "One visible item is either one candidate card or one bounded-input assessment row."
+        },
+        "capacityAllocation": {
+          "const": "shared_candidate_and_assessment_items",
+          "description": "Candidate and assessment items share deliveryBatchSize; each side cannot independently consume the full capacity."
+        },
+        "batchSizeAuthorityState": {
+          "enum": [
+            "user_input_receipt",
+            "external_runtime_receipt",
+            "package_default_non_authoritative"
+          ]
+        },
+        "batchSizeBasisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "batchSizeSource": {
+                "const": "user_explicit"
+              }
+            },
+            "required": [
+              "batchSizeSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "batchSizeAuthorityState": {
+                "const": "user_input_receipt"
+              },
+              "batchSizeBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "batchSizeSource": {
+                "enum": [
+                  "operator_capacity",
+                  "host_limit"
+                ]
+              }
+            },
+            "required": [
+              "batchSizeSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "batchSizeAuthorityState": {
+                "const": "external_runtime_receipt"
+              },
+              "batchSizeBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "batchSizeSource": {
+                "const": "expert_recommended_user_adjustable"
+              }
+            },
+            "required": [
+              "batchSizeSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "batchSizeAuthorityState": {
+                "const": "package_default_non_authoritative"
+              },
+              "batchSizeBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "publicSourcePolicy": {
+      "const": "public_only"
+    },
+    "researchBudget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "budgetSource",
+        "timeBudgetMinutes",
+        "maxQueries",
+        "maxRetriesPerSource",
+        "coverageSearchStateBudget",
+        "coverageSearchStateBudgetSource",
+        "coverageSearchStateBudgetEffect",
+        "budgetEffect",
+        "budgetAuthorityState",
+        "budgetBasisRefs",
+        "coverageSearchStateBudgetAuthorityState",
+        "coverageSearchStateBudgetBasisRefs"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "budgetSource": {
+          "enum": [
+            "user_explicit",
+            "operator_capacity",
+            "host_limit",
+            "no_explicit_cap"
+          ]
+        },
+        "timeBudgetMinutes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "maxQueries": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "maxRetriesPerSource": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "coverageSearchStateBudget": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "coverageSearchStateBudgetSource": {
+          "enum": [
+            "user_explicit",
+            "operator_capacity",
+            "host_limit",
+            "no_explicit_cap"
+          ]
+        },
+        "coverageSearchStateBudgetEffect": {
+          "const": "algorithm_checkpoint_only_never_goal_shortfall"
+        },
+        "budgetEffect": {
+          "const": "pause_checkpoint_not_market_shortfall"
+        },
+        "budgetAuthorityState": {
+          "enum": [
+            "not_applicable",
+            "user_input_receipt",
+            "external_runtime_receipt",
+            "package_default_non_authoritative"
+          ]
+        },
+        "budgetBasisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "coverageSearchStateBudgetAuthorityState": {
+          "enum": [
+            "not_applicable",
+            "user_input_receipt",
+            "external_runtime_receipt",
+            "package_default_non_authoritative"
+          ]
+        },
+        "coverageSearchStateBudgetBasisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "budgetSource": {
+                "const": "user_explicit"
+              }
+            },
+            "required": [
+              "budgetSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "budgetAuthorityState": {
+                "const": "user_input_receipt"
+              },
+              "budgetBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "budgetSource": {
+                "enum": [
+                  "operator_capacity",
+                  "host_limit"
+                ]
+              }
+            },
+            "required": [
+              "budgetSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "budgetAuthorityState": {
+                "const": "external_runtime_receipt"
+              },
+              "budgetBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "budgetSource": {
+                "const": "no_explicit_cap"
+              }
+            },
+            "required": [
+              "budgetSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "budgetAuthorityState": {
+                "const": "not_applicable"
+              },
+              "budgetBasisRefs": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "coverageSearchStateBudgetSource": {
+                "const": "user_explicit"
+              }
+            },
+            "required": [
+              "coverageSearchStateBudgetSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "coverageSearchStateBudgetAuthorityState": {
+                "const": "user_input_receipt"
+              },
+              "coverageSearchStateBudgetBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "coverageSearchStateBudgetSource": {
+                "enum": [
+                  "operator_capacity",
+                  "host_limit"
+                ]
+              }
+            },
+            "required": [
+              "coverageSearchStateBudgetSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "coverageSearchStateBudgetAuthorityState": {
+                "const": "external_runtime_receipt"
+              },
+              "coverageSearchStateBudgetBasisRefs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "coverageSearchStateBudgetSource": {
+                "const": "no_explicit_cap"
+              }
+            },
+            "required": [
+              "coverageSearchStateBudgetSource"
+            ]
+          },
+          "then": {
+            "properties": {
+              "coverageSearchStateBudgetAuthorityState": {
+                "const": "not_applicable"
+              },
+              "coverageSearchStateBudgetBasisRefs": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "constraintHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of canonical UTF-8 JSON for the explicit park constraint snapshot fields defined by the package validator."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "contextKind": {
+            "const": "park_bound_task"
+          }
+        },
+        "required": [
+          "contextKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "parkId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "parkId": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskGoal": {
+            "properties": {
+              "goalStatus": {
+                "const": "frozen"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "mission": {
+            "properties": {
+              "basisState": {
+                "enum": [
+                  "user_stated",
+                  "user_confirmed_derivation"
+                ]
+              },
+              "basisRefs": {
+                "minItems": 1
+              }
+            }
+          },
+          "hardConstraints": {
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/constraint"
+                },
+                {
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "user_stated",
+                        "observed"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "authority",
+                    "authorityClaimRefs",
+                    "basisRefs"
+                  ],
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "state": {
+                            "const": "observed"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "authority": {
+                            "enum": [
+                              "binding_regulation",
+                              "non_negotiable_physical_requirement"
+                            ]
+                          },
+                          "sourceRefs": {
+                            "minItems": 1
+                          },
+                          "authorityClaimRefs": {
+                            "minItems": 1
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "state": {
+                            "const": "user_stated"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "authority": {
+                            "enum": [
+                              "user_explicit",
+                              "user_confirmed"
+                            ]
+                          },
+                          "basisRefs": {
+                            "minItems": 1
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "researchBudget": {
+            "properties": {
+              "budgetSource": {
+                "const": "no_explicit_cap"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "researchBudget": {
+            "properties": {
+              "timeBudgetMinutes": {
+                "type": "null"
+              },
+              "maxQueries": {
+                "type": "null"
+              },
+              "maxRetriesPerSource": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "researchBudget": {
+            "properties": {
+              "coverageSearchStateBudgetSource": {
+                "const": "no_explicit_cap"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "researchBudget": {
+            "properties": {
+              "coverageSearchStateBudget": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constraintId",
+        "category",
+        "statement",
+        "state",
+        "sourceRefs",
+        "evidenceTemporalRequirement"
+      ],
+      "properties": {
+        "constraintId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "state": {
+          "enum": [
+            "observed",
+            "user_stated",
+            "inferred",
+            "unknown"
+          ]
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "evidenceTemporalRequirement": {
+          "$ref": "#/$defs/evidenceTemporalRequirement"
+        },
+        "decisionRule": {
+          "$ref": "#/$defs/decisionRule"
+        },
+        "basisRefs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "authority": {
+          "enum": [
+            "user_explicit",
+            "user_confirmed",
+            "binding_regulation",
+            "non_negotiable_physical_requirement"
+          ]
+        },
+        "authorityClaimRefs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "decisionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleType",
+        "claimPredicates",
+        "expectedEntailment",
+        "operator",
+        "expectedValue",
+        "operandValueType",
+        "expectedNormalizedValue",
+        "unit",
+        "normalization",
+        "resultMapping"
+      ],
+      "properties": {
+        "ruleType": {
+          "enum": [
+            "comparison",
+            "qualitative_judgment"
+          ]
+        },
+        "claimPredicates": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "expectedEntailment": {
+          "enum": [
+            "supports",
+            "contradicts",
+            null
+          ]
+        },
+        "operator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "equals",
+            "not_equals",
+            "contains",
+            "in",
+            "greater_than_or_equal",
+            "less_than_or_equal",
+            "exists",
+            null
+          ]
+        },
+        "expectedValue": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operandValueType": {
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "string_set",
+            "date",
+            "quantity",
+            "structured_identity",
+            null
+          ]
+        },
+        "expectedNormalizedValue": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "normalization": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "method",
+                "version"
+              ],
+              "properties": {
+                "method": {
+                  "enum": [
+                    "exact",
+                    "exact_url",
+                    "nfkc_trimmed",
+                    "nfkc_casefold",
+                    "sorted_unique_set",
+                    "iso_date",
+                    "si_quantity",
+                    "canonical_json"
+                  ]
+                },
+                "version": {
+                  "const": "1.0.0"
+                }
+              }
+            }
+          ]
+        },
+        "resultMapping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "whenTrue",
+            "whenFalse",
+            "whenIndeterminate",
+            "whenNotApplicable"
+          ],
+          "properties": {
+            "whenTrue": {
+              "const": "pass"
+            },
+            "whenFalse": {
+              "const": "fail"
+            },
+            "whenIndeterminate": {
+              "const": "unknown"
+            },
+            "whenNotApplicable": {
+              "const": "not_applicable"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "ruleType": {
+                "const": "qualitative_judgment"
+              }
+            },
+            "required": [
+              "ruleType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operator": {
+                "type": "null"
+              },
+              "expectedEntailment": {
+                "enum": [
+                  "supports",
+                  "contradicts"
+                ]
+              },
+              "expectedValue": {
+                "type": "null"
+              },
+              "operandValueType": {
+                "type": "null"
+              },
+              "expectedNormalizedValue": {
+                "type": "null"
+              },
+              "unit": {
+                "type": "null"
+              },
+              "normalization": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "operator": {
+                "type": "string"
+              },
+              "expectedEntailment": {
+                "type": "null"
+              },
+              "operandValueType": {
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "string_set",
+                  "date",
+                  "quantity",
+                  "structured_identity"
+                ]
+              },
+              "expectedNormalizedValue": {
+                "not": {
+                  "type": "null"
+                }
+              },
+              "normalization": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "method",
+                  "version"
+                ],
+                "properties": {
+                  "method": {
+                    "enum": [
+                      "exact",
+                      "exact_url",
+                      "nfkc_trimmed",
+                      "nfkc_casefold",
+                      "sorted_unique_set",
+                      "iso_date",
+                      "si_quantity",
+                      "canonical_json"
+                    ]
+                  },
+                  "version": {
+                    "const": "1.0.0"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "contains"
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "const": "string_set"
+              },
+              "expectedValue": {
+                "type": "string"
+              },
+              "expectedNormalizedValue": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "in"
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "enum": [
+                  "string",
+                  "date"
+                ]
+              },
+              "expectedValue": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "expectedNormalizedValue": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "enum": [
+                  "greater_than_or_equal",
+                  "less_than_or_equal"
+                ]
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "enum": [
+                  "number",
+                  "quantity"
+                ]
+              },
+              "expectedValue": {
+                "type": "number"
+              },
+              "expectedNormalizedValue": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "exists"
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "const": "boolean"
+              },
+              "expectedValue": {
+                "type": "boolean"
+              },
+              "expectedNormalizedValue": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "quantity"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "string"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "date"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "structured_identity"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "number"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "quantity"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "boolean"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "string_set"
+              },
+              "operator": {
+                "enum": [
+                  "equals",
+                  "not_equals"
+                ]
+              }
+            },
+            "required": [
+              "operandValueType",
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "evidenceTemporalRequirement": {
+      "enum": [
+        "current_state",
+        "effective_at_as_of",
+        "point_in_time"
+      ],
+      "description": "Required temporal meaning of claims used for this judgment. stable_identity is reserved for legal-entity identity and cannot satisfy a park constraint."
+    },
+    "inputReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receiptId",
+        "sourceKind",
+        "redactedSummary",
+        "normalizedContentHash",
+        "sessionBindingHash",
+        "turnBindingHash",
+        "recordedAt",
+        "confirmationState",
+        "trustState",
+        "authorizationState"
+      ],
+      "properties": {
+        "receiptId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceKind": {
+          "enum": [
+            "current_turn",
+            "user_confirmed_context"
+          ]
+        },
+        "redactedSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "normalizedContentHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Content-integrity checksum only. It does not authenticate the user, session, turn, or authorization."
+        },
+        "sessionBindingHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "turnBindingHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "confirmationState": {
+          "enum": [
+            "explicit",
+            "confirmed"
+          ]
+        },
+        "trustState": {
+          "enum": [
+            "synthetic_fixture_assumption",
+            "runtime_observed_not_machine_verifiable"
+          ],
+          "description": "Source examples use synthetic_fixture_assumption. Runtime business payloads may record an observation but cannot self-authenticate it."
+        },
+        "authorizationState": {
+          "const": "not_proven_by_business_payload",
+          "description": "Actual current-turn/user authorization belongs to the separately controlled host conversation boundary."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "sourceKind": {
+                "const": "current_turn"
+              }
+            },
+            "required": [
+              "sourceKind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confirmationState": {
+                "const": "explicit"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sourceKind": {
+                "const": "user_confirmed_context"
+              }
+            },
+            "required": [
+              "sourceKind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confirmationState": {
+                "const": "confirmed"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "contextFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factId",
+        "statement",
+        "state",
+        "sourceRefs"
+      ],
+      "properties": {
+        "factId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "state": {
+          "enum": [
+            "observed",
+            "user_stated"
+          ]
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "assumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assumptionId",
+        "statement",
+        "impact",
+        "confirmationNeeded"
+      ],
+      "properties": {
+        "assumptionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "confirmationNeeded": {
+          "type": "boolean"
+        }
+      }
+    },
+    "adaptationFactor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factorId",
+        "label",
+        "state",
+        "applicability",
+        "summary",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "factorId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "semantic": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_:-]{0,99}$",
+          "description": "Optional stable semantic class used to derive invalidation behavior for a custom factor id. Absence falls back to factorId."
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "state": {
+          "enum": [
+            "observed",
+            "user_stated",
+            "inferred",
+            "unknown"
+          ]
+        },
+        "applicability": {
+          "enum": [
+            "applicable",
+            "not_applicable",
+            "unknown"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/capability-snapshot.schema.json",
+  "title": "CapabilitySnapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "snapshotId",
+    "observedAt",
+    "hostProduct",
+    "hostVersion",
+    "expertEntryId",
+    "longTermMemoryHandshake",
+    "capabilities",
+    "domainSkills"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "snapshotId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "hostProduct": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hostVersion": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "expertEntryId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "longTermMemoryHandshake": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "receiptState",
+        "hostReceiptId",
+        "observedAt",
+        "parkIsolationSupported"
+      ],
+      "properties": {
+        "state": {
+          "const": "unknown",
+          "description": "A package snapshot has no host trust root and therefore cannot promote long-term memory availability."
+        },
+        "receiptState": {
+          "const": "not_machine_verifiable",
+          "description": "Real host facts live on the separately controlled runtime-validation surface, not in this business payload."
+        },
+        "hostReceiptId": {
+          "type": "null"
+        },
+        "observedAt": {
+          "type": "null"
+        },
+        "parkIsolationSupported": {
+          "type": "null"
+        }
+      },
+      "description": "Static package capability snapshot. It deliberately cannot carry a self-declared host-verification success."
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "capabilityId",
+          "state",
+          "evidenceLayer",
+          "claimState",
+          "permissionScope",
+          "sideEffectClass",
+          "needsConfirmation",
+          "fallbackId",
+          "sourceRefs"
+        ],
+        "properties": {
+          "capabilityId": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{1,63}$"
+          },
+          "state": {
+            "enum": [
+              "available",
+              "available_needs_confirmation",
+              "unavailable",
+              "unknown"
+            ]
+          },
+          "evidenceLayer": {
+            "enum": [
+              "public_docs",
+              "update_distribution",
+              "installed_public_metadata",
+              "installed_binary",
+              "runtime_probe",
+              "runtime_implementation",
+              "controlled_ui",
+              "connector_execution",
+              "service_event"
+            ]
+          },
+          "claimState": {
+            "enum": [
+              "observed",
+              "inferred",
+              "hypothesis",
+              "not_proven",
+              "cannot_prove"
+            ]
+          },
+          "permissionScope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sideEffectClass": {
+            "enum": [
+              "none",
+              "read_only",
+              "workspace_new_file",
+              "workspace_modify",
+              "external_write",
+              "external_send",
+              "permission_change",
+              "destructive"
+            ]
+          },
+          "needsConfirmation": {
+            "type": "boolean"
+          },
+          "fallbackId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "capabilityId": {
+                  "const": "long_term_memory"
+                }
+              },
+              "required": [
+                "capabilityId"
+              ]
+            },
+            "then": {
+              "properties": {
+                "state": {
+                  "enum": [
+                    "available",
+                    "unavailable",
+                    "unknown"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "domainSkills": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "skillId",
+          "state",
+          "packageVersion",
+          "entrypoint",
+          "claimState",
+          "evidenceRefs"
+        ],
+        "properties": {
+          "skillId": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{1,63}$"
+          },
+          "state": {
+            "enum": [
+              "available",
+              "unavailable",
+              "unknown"
+            ]
+          },
+          "packageVersion": {
+            "const": "26.7.27"
+          },
+          "entrypoint": {
+            "type": "string",
+            "pattern": "^skills/[a-z0-9-]+/SKILL\\.md$"
+          },
+          "claimState": {
+            "enum": [
+              "observed_package_static",
+              "runtime_not_proven"
+            ]
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

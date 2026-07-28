@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0.0",
+  "capsuleId": "resume-synthetic-one-001",
+  "assetId": "asset-resume-synthetic-one",
+  "assetRevision": 1,
+  "packageVersion": "26.7.27",
+  "generatedAt": "2026-07-27T00:00:00+08:00",
+  "expiresAt": null,
+  "taskContextId": "task-context-park-synthetic-public",
+  "parkId": "park-synthetic-public",
+  "contextHash": "190e1b143b9e43b6352e2fb346819a91ee6421a1ba30037b1273aa2a825c045c",
+  "parkBriefRef": "examples/first-value-public-material.example.json#/contextSnapshot",
+  "parkConstraintHash": "190e1b143b9e43b6352e2fb346819a91ee6421a1ba30037b1273aa2a825c045c",
+  "taskGoalRef": "examples/first-value-public-material.example.json#/leadDelivery/taskGoal",
+  "taskGoalHash": "6f3cb31c0f64eb29f5900e91c90cda6cc259fbf8e8c254388e0d4c4fcbfd0d42",
+  "taskState": "in_progress",
+  "workStateRefs": [
+    {
+      "stateType": "park_brief",
+      "assetRef": "examples/first-value-public-material.example.json#/contextSnapshot",
+      "revision": null,
+      "integrityHash": "67a05450f1c567d6e2fcbe7dca87290d3130a89f668d68f205df64d915c0ab16"
+    },
+    {
+      "stateType": "target_portfolio",
+      "assetRef": "examples/first-value-public-material.example.json#/leadDelivery",
+      "revision": 1,
+      "integrityHash": "7bd810f417f04c62a883fbad2975ec7fe4af27727953531c5620545a03abb0bd"
+    }
+  ],
+  "visibleDeliveryRefs": [],
+  "workItemCounts": [
+    {
+      "sampleUnit": "qualified_candidate",
+      "observed": 1,
+      "assessed": 1,
+      "accepted": 1,
+      "delivered": 0,
+      "unresolved": 0
+    }
+  ],
+  "candidateState": {
+    "portfolioRef": "examples/first-value-public-material.example.json#/leadDelivery",
+    "currentBatchRef": null,
+    "currentBatchIndex": null,
+    "queryLedgerRef": "query-ledger:synthetic-one@1",
+    "deliveredCandidateRefs": [],
+    "cumulativeUniqueDeliveredCount": 0,
+    "currentSelectedQualifiedCount": 1,
+    "currentTotalQualifiedPoolCount": 1
+  },
+  "nextCursor": "goal-synthetic-one:delivery-after:0:0",
+  "evidenceSnapshotHash": "5eb4a46f8df5a0d96b8a61f67a7c3fa8d1dc8abf95ab2ca31b88ed2dae7a1868",
+  "unmetRequirementRefs": [],
+  "completedPhases": [
+    "park_brief_builder",
+    "public_target_research",
+    "entity_evidence_audit",
+    "fit_portfolio"
+  ],
+  "activeWorkstreams": [
+    {
+      "workstreamId": "render-current-qualified-batch",
+      "phase": "artifact_renderer",
+      "state": "active",
+      "owner": "expert",
+      "dependsOn": [],
+      "assetRefs": [
+        "examples/first-value-public-material.example.json#/leadDelivery"
+      ]
+    }
+  ],
+  "pendingVerificationTaskRefs": [
+    "verification-task-synthetic-001"
+  ],
+  "unresolvedConflictRefs": [],
+  "continuationRequirements": [
+    "将当前已核验合格候选作为可见批次交付，并取得宿主可见回执。"
+  ],
+  "nextActions": [
+    {
+      "actionId": "prepare-current-qualified-batch",
+      "actionType": "review_candidate_batch",
+      "description": "准备当前已核验合格候选的可见批次；包内记录不证明宿主已经展示。",
+      "owner": "expert",
+      "dependsOn": [],
+      "status": "ready",
+      "authorizationRequired": false,
+      "taskRef": "contextSnapshot.taskGoal",
+      "evidenceRefs": [],
+      "basisRefs": [],
+      "authorizationBasisRefs": []
+    }
+  ],
+  "nextAction": "准备当前已核验合格候选的可见批次；包内记录不证明宿主已经展示。",
+  "resumeInstruction": "导入本胶囊后先校验完整性哈希，再读取已绑定的园区、目标、组合与批次。",
+  "persistenceBoundary": "user_held_portable_capsule_no_hidden_memory",
+  "authenticityState": "user_supplied_not_authenticated",
+  "resumePolicy": "revalidate_bound_goal_constraints_and_evidence_before_trusting_completion",
+  "integrityHash": "8be6960e4deaa0ad6599efc078e3e481531eb4ca5c1cd90c4b1d9fc86dc850d0"
+}

@@ -1,0 +1,241 @@
+{
+  "schema": "industrial-park-investment-attraction-skill-routing-contract/v1",
+  "contractVersion": "1.0.0",
+  "packageVersion": "26.7.27",
+  "hostOrchestratorIsSkill": false,
+  "orchestratorOwnedObjects": {
+    "TaskAssessment": "derived_from_frozen_TaskGoal_and_task_applicable_evidence_then_joined_to_external_visible_delivery_receipts",
+    "PerformanceObservation": "derived_only_by_the_boundary_that_observes_start_useful_result_visible_delivery_and_terminal_events"
+  },
+  "dependencyEdges": [
+    {
+      "upstreamSkill": "park-brief-builder",
+      "downstreamSkill": "public-target-research",
+      "when": "park_bound_discovery_requires_frozen_task_context"
+    },
+    {
+      "upstreamSkill": "public-target-research",
+      "downstreamSkill": "entity-evidence-audit",
+      "when": "discovered_candidates_require_entity_and_evidence_closure"
+    },
+    {
+      "upstreamSkill": "park-brief-builder",
+      "downstreamSkill": "fit-portfolio",
+      "when": "park_bound_fit_requires_frozen_task_context"
+    },
+    {
+      "upstreamSkill": "entity-evidence-audit",
+      "downstreamSkill": "fit-portfolio",
+      "when": "portfolio_or_qualification_is_requested_for_audited_entities"
+    }
+  ],
+  "dependencyTopologyPolicy": "conditional_edges_only_no_global_default_order_or_mandatory_chain",
+  "customRoutePolicy": {
+    "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$",
+    "builtInCatalogIsExhaustive": false,
+    "customFacetMayHaveNoPredeclaredSkill": true,
+    "noFakeSkillChainForUnknownFacet": true
+  },
+  "skillSelectionPolicy": {
+    "basis": "request_route_facets_and_required_outputs",
+    "fullChainRequired": false,
+    "shortChainsAllowed": true,
+    "compositeIntentsAllowed": true,
+    "unusedSkillsMayBeSkipped": true
+  },
+  "routeFacets": [
+    {
+      "facetId": "park_context_definition",
+      "candidateSkills": [
+        "park-brief-builder"
+      ]
+    },
+    {
+      "facetId": "discover_public_candidates",
+      "candidateSkills": [
+        "public-target-research"
+      ]
+    },
+    {
+      "facetId": "audit_public_material",
+      "candidateSkills": [
+        "entity-evidence-audit"
+      ]
+    },
+    {
+      "facetId": "audit_existing_list",
+      "candidateSkills": [
+        "entity-evidence-audit"
+      ]
+    },
+    {
+      "facetId": "resolve_entities",
+      "candidateSkills": [
+        "entity-evidence-audit"
+      ]
+    },
+    {
+      "facetId": "audit_candidate_evidence",
+      "candidateSkills": [
+        "entity-evidence-audit"
+      ]
+    },
+    {
+      "facetId": "evaluate_fit_and_coverage",
+      "candidateSkills": [
+        "fit-portfolio"
+      ]
+    },
+    {
+      "facetId": "prepare_structured_artifact",
+      "candidateSkills": [
+        "artifact-renderer"
+      ]
+    },
+    {
+      "facetId": "continue_existing_work",
+      "candidateSkills": []
+    },
+    {
+      "facetId": "switch_park_context",
+      "candidateSkills": [
+        "park-brief-builder"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "skillId": "park-brief-builder",
+      "entrypoint": "skills/park-brief-builder/SKILL.md",
+      "singleWriterObjects": [
+        "ParkBrief",
+        "TaskGoal"
+      ],
+      "trigger": [
+        "first_park_task",
+        "switch_park",
+        "park_hard_constraint_changed",
+        "downstream_blocking_constraint_gap"
+      ],
+      "mustNotWrite": [
+        "CandidateDiscoveryLedger",
+        "EvidenceLedger",
+        "TargetPortfolio"
+      ],
+      "callPolicy": "once_per_unchanged_input_snapshot_rerun_only_on_evidenced_change",
+      "fallback": "minimum_blocking_question_set_or_explicit_safe_assumptions"
+    },
+    {
+      "skillId": "public-target-research",
+      "entrypoint": "skills/public-target-research/SKILL.md",
+      "singleWriterObjects": [
+        "CandidateDiscoveryLedger",
+        "QueryLedger"
+      ],
+      "trigger": [
+        "new_public_candidate_discovery",
+        "unmet_task_goal_or_coverage",
+        "new_query_family",
+        "counterevidence_search"
+      ],
+      "mustNotWrite": [
+        "ParkBrief",
+        "TaskGoal",
+        "EntityRecord",
+        "EvidenceLedger",
+        "TargetPortfolio"
+      ],
+      "callPolicy": "once_per_unchanged_input_snapshot_rerun_only_on_evidenced_change",
+      "fallback": "provided_public_material_only_or_public_search_mission_pack"
+    },
+    {
+      "skillId": "entity-evidence-audit",
+      "entrypoint": "skills/entity-evidence-audit/SKILL.md",
+      "singleWriterObjects": [
+        "EntityRecord",
+        "SourceRecord",
+        "ClaimEvidenceLink",
+        "KnowledgeRecord",
+        "EvidenceLedger",
+        "SourceConflictReport"
+      ],
+      "trigger": [
+        "new_discovered_candidate",
+        "public_material_or_claim_audit",
+        "entity_ambiguity",
+        "critical_source_changed",
+        "evidence_conflict"
+      ],
+      "mustNotWrite": [
+        "ParkBrief",
+        "TaskGoal",
+        "TargetPortfolio"
+      ],
+      "callPolicy": "once_per_unchanged_input_snapshot_rerun_only_on_evidenced_change",
+      "fallback": "ambiguous_or_watchlist_with_exact_evidence_gap"
+    },
+    {
+      "skillId": "fit-portfolio",
+      "entrypoint": "skills/fit-portfolio/SKILL.md",
+      "singleWriterObjects": [
+        "CandidateAssessments",
+        "TargetPortfolio",
+        "AcquisitionPlan",
+        "PortfolioStrategy"
+      ],
+      "trigger": [
+        "audited_candidate_batch_ready",
+        "park_constraint_changed",
+        "critical_evidence_changed",
+        "existing_portfolio_review"
+      ],
+      "mustNotWrite": [
+        "ParkBrief",
+        "TaskGoal",
+        "EntityRecord",
+        "SourceRecord",
+        "ClaimEvidenceLink"
+      ],
+      "callPolicy": "once_per_unchanged_input_snapshot_rerun_only_on_evidenced_change",
+      "fallback": "preserve_progress_and_report_goal_gap_without_changing_qualification"
+    },
+    {
+      "skillId": "artifact-renderer",
+      "entrypoint": "skills/artifact-renderer/SKILL.md",
+      "singleWriterObjects": [
+        "RenderedArtifact",
+        "VerificationPreparationPack",
+        "AuthorizationDraft",
+        "ProgressCard",
+        "ResumeCapsule"
+      ],
+      "trigger": [
+        "explicit_structured_artifact_request",
+        "explicit_export_request",
+        "verification_preparation_pack_request",
+        "external_action_draft_request",
+        "visible_resume_capsule_required"
+      ],
+      "mustNotWrite": [
+        "ParkBrief",
+        "TaskGoal",
+        "EntityRecord",
+        "EvidenceLedger",
+        "TargetPortfolio"
+      ],
+      "callPolicy": "once_per_unchanged_input_snapshot_rerun_only_on_evidenced_change",
+      "fallback": "render_equivalent_structure_in_chat"
+    }
+  ],
+  "rerunEvidenceRequired": [
+    "input_snapshot_changed",
+    "constraint_changed",
+    "new_counterevidence",
+    "source_conflict",
+    "user_goal_revised",
+    "capability_recovered",
+    "quality_gate_returned"
+  ],
+  "securityAndPermissionGatesAreRoutableSkills": false,
+  "parallelismPolicy": "Only independent discovery or counterevidence lanes may run in parallel; entity and final portfolio remain single-writer, and parallelism may be claimed only with actual member receipts."
+}

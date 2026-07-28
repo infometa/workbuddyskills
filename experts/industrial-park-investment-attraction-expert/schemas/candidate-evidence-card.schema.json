@@ -1,0 +1,2014 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/candidate-evidence-card.schema.json",
+  "title": "CandidateEvidenceCard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateId",
+    "rank",
+    "displayOrder",
+    "businessPriorityState",
+    "businessPriorityGroup",
+    "businessPriorityVector",
+    "rankReason",
+    "rankDelta",
+    "previousState",
+    "entityRef",
+    "legalEntityName",
+    "targetRoles",
+    "criticalClaimRefs",
+    "counterevidenceClaimRefs",
+    "unknowns",
+    "qualificationChecks",
+    "hardConstraintAssessments",
+    "taskFitAssessments",
+    "prioritizationAssessments",
+    "deliveryCriteriaAssessments",
+    "matchedCoverageRequirementRefs",
+    "derivationState",
+    "derivationRefs",
+    "decisionLinks",
+    "assessmentDerivation",
+    "candidateState"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "candidateId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rank": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "displayOrder": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "description": "Visible stable ordering. It is never itself a business-priority claim."
+    },
+    "businessPriorityState": {
+      "enum": [
+        "criterion_based",
+        "no_business_priority",
+        "not_eligible_for_priority",
+        "same_priority",
+        "non_comparable"
+      ],
+      "description": "no_business_priority means an otherwise eligible candidate has no user-authorized priority criteria. not_eligible_for_priority is required for watchlist or excluded candidate states. same_priority is reserved for an actual equal result after applying user-authorized criteria."
+    },
+    "businessPriorityGroup": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "description": "Pareto priority layer derived without weights. Null means no user-approved business-priority criteria exist or the candidate is not comparable because at least one priority dimension is unknown."
+    },
+    "businessPriorityVector": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "acceptable",
+          "deprioritized",
+          "unknown"
+        ]
+      }
+    },
+    "rankReason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1500
+    },
+    "rankDelta": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "previousState": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "qualified",
+        "prioritized",
+        "needs_evidence",
+        "needs_constraint_verification",
+        "excluded_hard_constraint",
+        "excluded_entity_conflict",
+        "excluded_evidence_failure",
+        null
+      ]
+    },
+    "entityRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "legalEntityName": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 300
+    },
+    "targetRoles": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    },
+    "criticalClaimRefs": {
+      "$ref": "#/$defs/referenceList"
+    },
+    "counterevidenceClaimRefs": {
+      "$ref": "#/$defs/referenceList"
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "qualificationChecks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity",
+        "hardConstraints",
+        "goalFit",
+        "evidence"
+      ],
+      "properties": {
+        "entity": {
+          "$ref": "#/$defs/checkState"
+        },
+        "hardConstraints": {
+          "$ref": "#/$defs/checkState"
+        },
+        "goalFit": {
+          "$ref": "#/$defs/checkState"
+        },
+        "evidence": {
+          "$ref": "#/$defs/checkState"
+        }
+      }
+    },
+    "hardConstraintAssessments": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "constraintRef",
+          "assessment",
+          "rationale",
+          "supportingClaimRefs",
+          "evidenceRefs"
+        ],
+        "properties": {
+          "constraintRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assessment": {
+            "enum": [
+              "pass",
+              "fail",
+              "unknown",
+              "not_applicable"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "supportingClaimRefs": {
+            "$ref": "#/$defs/referenceList",
+            "description": "Same-entity supporting claims explicitly bound to this constraint and valid for the constraint's evidenceTemporalRequirement at the portfolio asOf snapshot. Point-in-time, effective-period, and stable-identity evidence must not be rejected merely because it is not current-state evidence. Generic source IDs cannot satisfy a pass judgment."
+          },
+          "evidenceRefs": {
+            "$ref": "#/$defs/referenceList",
+            "description": "Legacy trace list; supportingClaimRefs is authoritative for a pass judgment."
+          }
+        }
+      }
+    },
+    "taskFitAssessments": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "criterionRef",
+          "label",
+          "assessment",
+          "rationale",
+          "supportingClaimRefs",
+          "evidenceRefs"
+        ],
+        "properties": {
+          "criterionRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "assessment": {
+            "enum": [
+              "adequate",
+              "weak",
+              "unknown",
+              "not_applicable"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "supportingClaimRefs": {
+            "$ref": "#/$defs/referenceList",
+            "description": "Same-entity supporting claims explicitly bound to this criterion and valid for the criterion's evidenceTemporalRequirement at the portfolio asOf snapshot. Point-in-time, effective-period, and stable-identity evidence must not be rejected merely because it is not current-state evidence. Generic source IDs cannot satisfy an adequate judgment."
+          },
+          "evidenceRefs": {
+            "$ref": "#/$defs/referenceList",
+            "description": "Legacy trace list; supportingClaimRefs is authoritative for an adequate judgment."
+          }
+        }
+      }
+    },
+    "prioritizationAssessments": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "criterionRef",
+          "assessment",
+          "rationale",
+          "supportingClaimRefs"
+        ],
+        "properties": {
+          "criterionRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assessment": {
+            "enum": [
+              "acceptable",
+              "deprioritized",
+              "unknown",
+              "not_applicable"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "supportingClaimRefs": {
+            "$ref": "#/$defs/referenceList"
+          }
+        }
+      }
+    },
+    "deliveryCriteriaAssessments": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "criterionRef",
+          "assessment",
+          "rationale",
+          "supportingClaimRefs"
+        ],
+        "properties": {
+          "criterionRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assessment": {
+            "enum": [
+              "met",
+              "not_met",
+              "unknown",
+              "not_applicable"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "supportingClaimRefs": {
+            "$ref": "#/$defs/referenceList"
+          }
+        }
+      }
+    },
+    "matchedCoverageRequirementRefs": {
+      "$ref": "#/$defs/referenceList"
+    },
+    "derivationState": {
+      "const": "derived_from_structured_assessments"
+    },
+    "derivationRefs": {
+      "$ref": "#/$defs/referenceList",
+      "minItems": 1,
+      "description": "Structured hard-constraint, task-criterion, and evidence references from which qualification and task-fit judgments are derived. Optional task-specific display labels are not authoritative."
+    },
+    "decisionLinks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/decisionLink"
+      },
+      "description": "Auditable claim-to-decision polarity links. A claim's criterionRefs alone never determine pass, fail, or preference."
+    },
+    "assessmentDerivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "decisionLinkRefs",
+        "fitAndQualificationDerived"
+      ],
+      "properties": {
+        "mode": {
+          "const": "decision_links"
+        },
+        "decisionLinkRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "fitAndQualificationDerived": {
+          "const": true
+        }
+      }
+    },
+    "fitBand": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^task_specific:",
+      "maxLength": 200,
+      "description": "Optional task-specific display label only. It is never qualification, completion, priority, ranking, or action authority; high/medium/watchlist universal bands are not allowed."
+    },
+    "confidenceBand": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^task_specific:",
+      "maxLength": 200,
+      "description": "Optional task-specific display label only. It cannot be inferred from a global source-type ranking or source count and cannot affect qualification or order."
+    },
+    "candidateState": {
+      "enum": [
+        "qualified",
+        "prioritized",
+        "needs_evidence",
+        "needs_constraint_verification",
+        "excluded_hard_constraint",
+        "excluded_entity_conflict",
+        "excluded_evidence_failure"
+      ]
+    },
+    "acquisitionPlan": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "readiness",
+        "primaryChannel",
+        "alternativeChannels",
+        "toolMode",
+        "selectionBasis",
+        "applicabilityBasis",
+        "channelPreferenceBasis",
+        "missingItems",
+        "executionBoundary"
+      ],
+      "properties": {
+        "readiness": {
+          "enum": [
+            "ready",
+            "partial",
+            "needs_channel_research",
+            "no_public_entry_found"
+          ]
+        },
+        "primaryChannel": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": false,
+          "required": [
+            "channelType",
+            "publicEntryUrl",
+            "publicEntryLabel",
+            "whyThisChannel",
+            "accessState",
+            "evidenceRefs",
+            "entryClaimRefs",
+            "evidencePageRefs",
+            "actionEntry"
+          ],
+          "properties": {
+            "channelType": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "publicEntryUrl": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "uri",
+              "pattern": "^https?://(?!(?:localhost|127(?:\\.[0-9]{1,3}){3}|10(?:\\.[0-9]{1,3}){3}|192\\.168(?:\\.[0-9]{1,3}){2}|172\\.(?:1[6-9]|2[0-9]|3[01])(?:\\.[0-9]{1,3}){2}|169\\.254(?:\\.[0-9]{1,3}){2}|0\\.0\\.0\\.0|\\[::1\\])(?::[0-9]+)?(?:/|$))",
+              "description": "Legacy display projection only; actionEntry is authoritative for action readiness."
+            },
+            "publicEntryLabel": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 300,
+              "description": "Legacy display projection only; actionEntry is authoritative for action readiness."
+            },
+            "whyThisChannel": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "accessState": {
+              "enum": [
+                "public_entry_verified",
+                "indirect_path_verified",
+                "needs_verification",
+                "not_found"
+              ]
+            },
+            "evidenceRefs": {
+              "$ref": "#/$defs/referenceList"
+            },
+            "entryClaimRefs": {
+              "$ref": "#/$defs/referenceList",
+              "description": "Legacy display projection only; actionEntry is authoritative for action readiness."
+            },
+            "evidencePageRefs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "actionEntry": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "url",
+                    "label",
+                    "sourceRef",
+                    "entryClaimRefs",
+                    "entryPurposeClaimRefs",
+                    "purpose",
+                    "readbackState"
+                  ],
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "pattern": "^https?://"
+                    },
+                    "label": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "maxLength": 300
+                    },
+                    "sourceRef": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "entryClaimRefs": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "minItems": 1
+                    },
+                    "entryPurposeClaimRefs": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "minItems": 1
+                    },
+                    "purpose": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "readbackState": {
+                      "enum": [
+                        "verified",
+                        "needs_verification",
+                        "unavailable"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "accessState": {
+                    "const": "public_entry_verified"
+                  }
+                },
+                "required": [
+                  "accessState"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "actionEntry": {
+                    "type": "object",
+                    "properties": {
+                      "readbackState": {
+                        "const": "verified"
+                      }
+                    },
+                    "required": [
+                      "readbackState"
+                    ]
+                  }
+                },
+                "required": [
+                  "actionEntry"
+                ]
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "actionEntry": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "readbackState": {
+                            "enum": [
+                              "needs_verification",
+                              "unavailable"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "readbackState"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "actionEntry"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "accessState": {
+                    "not": {
+                      "const": "public_entry_verified"
+                    }
+                  }
+                },
+                "required": [
+                  "accessState"
+                ]
+              }
+            }
+          ]
+        },
+        "alternativeChannels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/acquisitionChannel"
+          }
+        },
+        "toolMode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "selectionBasis": {
+          "const": "candidate_evidence_and_task_goal",
+          "description": "Channel and customer-motion selection must come from current candidate evidence and the frozen task goal, never from a park archetype template."
+        },
+        "applicabilityBasis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "inputReceiptRefs",
+            "taskGoalRefs",
+            "claimRefs"
+          ],
+          "properties": {
+            "inputReceiptRefs": {
+              "$ref": "#/$defs/referenceList",
+              "minItems": 1
+            },
+            "taskGoalRefs": {
+              "$ref": "#/$defs/referenceList",
+              "minItems": 1
+            },
+            "claimRefs": {
+              "$ref": "#/$defs/referenceList",
+              "minItems": 1
+            }
+          },
+          "description": "An action-preparation plan is allowed only when an explicit/confirmed task input, a TaskGoal field bound to that input, and a usable same-entity claim jointly make it applicable."
+        },
+        "channelPreferenceBasis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "basisRefs"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "none",
+                "user_explicit",
+                "user_confirmed"
+              ]
+            },
+            "basisRefs": {
+              "$ref": "#/$defs/referenceList"
+            }
+          }
+        },
+        "customerStrategy": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "motion",
+                "objective",
+                "sequenceReason",
+                "strategyState",
+                "inputReceiptRefs",
+                "taskGoalRefs",
+                "claimRefs",
+                "objectiveBasisRefs",
+                "sequenceReasonBasisRefs"
+              ],
+              "properties": {
+                "motion": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "objective": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "sequenceReason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "strategyState": {
+                  "const": "supported"
+                },
+                "inputReceiptRefs": {
+                  "$ref": "#/$defs/referenceList",
+                  "minItems": 1
+                },
+                "taskGoalRefs": {
+                  "$ref": "#/$defs/referenceList",
+                  "minItems": 1
+                },
+                "claimRefs": {
+                  "$ref": "#/$defs/referenceList",
+                  "minItems": 1
+                },
+                "objectiveBasisRefs": {
+                  "$ref": "#/$defs/referenceList",
+                  "minItems": 1
+                },
+                "sequenceReasonBasisRefs": {
+                  "$ref": "#/$defs/referenceList",
+                  "minItems": 1
+                }
+              }
+            }
+          ],
+          "description": "Optional. Omit or use null unless the current task explicitly calls for customer strategy and the objective plus sequence are grounded in trusted task input, frozen TaskGoal fields, and usable same-entity claims."
+        },
+        "missingItems": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "executionBoundary": {
+          "const": "draft_only_no_external_action"
+        }
+      }
+    },
+    "actionReadiness": {
+      "enum": [
+        "ready",
+        "partial",
+        "needs_preparation",
+        "not_applicable"
+      ]
+    },
+    "nextVerificationAction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "nextVerificationActionBasisRefs": {
+      "$ref": "#/$defs/referenceList",
+      "description": "Required only when nextVerificationAction is present; references must resolve to the task goal, current candidate claims, sources, or explicit input receipts that make the action necessary."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "acquisitionPlan": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "acquisitionPlan"
+        ]
+      },
+      "then": {
+        "properties": {
+          "actionReadiness": {
+            "const": "not_applicable"
+          },
+          "nextVerificationAction": {
+            "type": "null"
+          },
+          "nextVerificationActionBasisRefs": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateState": {
+            "enum": [
+              "excluded_hard_constraint",
+              "excluded_entity_conflict",
+              "excluded_evidence_failure"
+            ]
+          }
+        },
+        "required": [
+          "candidateState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "acquisitionPlan": {
+            "type": "null"
+          },
+          "actionReadiness": {
+            "const": "not_applicable"
+          },
+          "nextVerificationAction": {
+            "type": "null"
+          },
+          "nextVerificationActionBasisRefs": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "nextVerificationAction": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "nextVerificationAction"
+        ]
+      },
+      "then": {
+        "required": [
+          "acquisitionPlan",
+          "nextVerificationActionBasisRefs"
+        ],
+        "properties": {
+          "acquisitionPlan": {
+            "type": "object"
+          },
+          "actionReadiness": {
+            "enum": [
+              "partial",
+              "needs_preparation"
+            ]
+          },
+          "nextVerificationActionBasisRefs": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateState": {
+            "enum": [
+              "qualified",
+              "prioritized"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "qualificationChecks": {
+            "properties": {
+              "entity": {
+                "const": "pass"
+              },
+              "hardConstraints": {
+                "const": "pass"
+              },
+              "goalFit": {
+                "const": "pass"
+              },
+              "evidence": {
+                "const": "pass"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "businessPriorityState": {
+            "const": "no_business_priority"
+          }
+        },
+        "required": [
+          "businessPriorityState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "rank": {
+            "type": "null"
+          },
+          "businessPriorityGroup": {
+            "type": "null"
+          },
+          "businessPriorityVector": {
+            "maxItems": 0
+          },
+          "prioritizationAssessments": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateState": {
+            "enum": [
+              "qualified",
+              "prioritized"
+            ]
+          },
+          "businessPriorityState": {
+            "enum": [
+              "criterion_based",
+              "same_priority"
+            ]
+          }
+        },
+        "required": [
+          "candidateState",
+          "businessPriorityState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "businessPriorityState": {
+            "const": "non_comparable"
+          }
+        },
+        "required": [
+          "businessPriorityState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "rank": {
+            "type": "null"
+          },
+          "businessPriorityGroup": {
+            "type": "null"
+          },
+          "businessPriorityVector": {
+            "contains": {
+              "const": "unknown"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "businessPriorityVector": {
+            "contains": {
+              "const": "unknown"
+            }
+          }
+        },
+        "required": [
+          "businessPriorityVector"
+        ]
+      },
+      "then": {
+        "properties": {
+          "businessPriorityState": {
+            "const": "non_comparable"
+          },
+          "rank": {
+            "type": "null"
+          },
+          "businessPriorityGroup": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "candidateState": {
+            "not": {
+              "enum": [
+                "qualified",
+                "prioritized"
+              ]
+            }
+          }
+        },
+        "required": [
+          "candidateState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "rank": {
+            "type": "null"
+          },
+          "businessPriorityState": {
+            "const": "not_eligible_for_priority"
+          },
+          "businessPriorityGroup": {
+            "type": "null"
+          },
+          "businessPriorityVector": {
+            "maxItems": 0
+          },
+          "prioritizationAssessments": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "decisionLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decisionLinkId",
+        "decisionType",
+        "decisionRef",
+        "outcome",
+        "claimRefs",
+        "rule",
+        "rationale"
+      ],
+      "properties": {
+        "decisionLinkId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decisionType": {
+          "enum": [
+            "constraint",
+            "qualification",
+            "priority",
+            "delivery"
+          ]
+        },
+        "decisionRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outcome": {
+          "enum": [
+            "pass",
+            "fail",
+            "adequate",
+            "weak",
+            "acceptable",
+            "deprioritized",
+            "met",
+            "not_met",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "claimRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "rule": {
+          "$ref": "#/$defs/decisionRule"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "decisionType": {
+                "const": "constraint"
+              }
+            },
+            "required": [
+              "decisionType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "outcome": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "unknown",
+                  "not_applicable"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "decisionType": {
+                "const": "qualification"
+              }
+            },
+            "required": [
+              "decisionType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "outcome": {
+                "enum": [
+                  "adequate",
+                  "weak",
+                  "unknown",
+                  "not_applicable"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "decisionType": {
+                "const": "priority"
+              }
+            },
+            "required": [
+              "decisionType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "outcome": {
+                "enum": [
+                  "acceptable",
+                  "deprioritized",
+                  "unknown",
+                  "not_applicable"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "decisionType": {
+                "const": "delivery"
+              }
+            },
+            "required": [
+              "decisionType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "outcome": {
+                "enum": [
+                  "met",
+                  "not_met",
+                  "unknown",
+                  "not_applicable"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "decisionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleType",
+        "claimPredicates",
+        "expectedEntailment",
+        "operator",
+        "expectedValue",
+        "operandValueType",
+        "expectedNormalizedValue",
+        "unit",
+        "normalization",
+        "resultMapping"
+      ],
+      "properties": {
+        "ruleType": {
+          "enum": [
+            "comparison",
+            "qualitative_judgment"
+          ]
+        },
+        "claimPredicates": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "expectedEntailment": {
+          "enum": [
+            "supports",
+            "contradicts",
+            null
+          ]
+        },
+        "operator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "equals",
+            "not_equals",
+            "contains",
+            "in",
+            "greater_than_or_equal",
+            "less_than_or_equal",
+            "exists",
+            null
+          ]
+        },
+        "expectedValue": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operandValueType": {
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "string_set",
+            "date",
+            "quantity",
+            "structured_identity",
+            null
+          ]
+        },
+        "expectedNormalizedValue": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "normalization": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "method",
+                "version"
+              ],
+              "properties": {
+                "method": {
+                  "enum": [
+                    "exact",
+                    "exact_url",
+                    "nfkc_trimmed",
+                    "nfkc_casefold",
+                    "sorted_unique_set",
+                    "iso_date",
+                    "si_quantity",
+                    "canonical_json"
+                  ]
+                },
+                "version": {
+                  "const": "1.0.0"
+                }
+              }
+            }
+          ]
+        },
+        "resultMapping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "whenTrue",
+            "whenFalse",
+            "whenIndeterminate",
+            "whenNotApplicable"
+          ],
+          "properties": {
+            "whenTrue": {
+              "const": "pass"
+            },
+            "whenFalse": {
+              "const": "fail"
+            },
+            "whenIndeterminate": {
+              "const": "unknown"
+            },
+            "whenNotApplicable": {
+              "const": "not_applicable"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "ruleType": {
+                "const": "qualitative_judgment"
+              }
+            },
+            "required": [
+              "ruleType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operator": {
+                "type": "null"
+              },
+              "expectedEntailment": {
+                "enum": [
+                  "supports",
+                  "contradicts"
+                ]
+              },
+              "expectedValue": {
+                "type": "null"
+              },
+              "operandValueType": {
+                "type": "null"
+              },
+              "expectedNormalizedValue": {
+                "type": "null"
+              },
+              "unit": {
+                "type": "null"
+              },
+              "normalization": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "operator": {
+                "type": "string"
+              },
+              "expectedEntailment": {
+                "type": "null"
+              },
+              "operandValueType": {
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "string_set",
+                  "date",
+                  "quantity",
+                  "structured_identity"
+                ]
+              },
+              "expectedNormalizedValue": {
+                "not": {
+                  "type": "null"
+                }
+              },
+              "normalization": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "method",
+                  "version"
+                ],
+                "properties": {
+                  "method": {
+                    "enum": [
+                      "exact",
+                      "exact_url",
+                      "nfkc_trimmed",
+                      "nfkc_casefold",
+                      "sorted_unique_set",
+                      "iso_date",
+                      "si_quantity",
+                      "canonical_json"
+                    ]
+                  },
+                  "version": {
+                    "const": "1.0.0"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "contains"
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "const": "string_set"
+              },
+              "expectedValue": {
+                "type": "string"
+              },
+              "expectedNormalizedValue": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "in"
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "enum": [
+                  "string",
+                  "date"
+                ]
+              },
+              "expectedValue": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "expectedNormalizedValue": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "enum": [
+                  "greater_than_or_equal",
+                  "less_than_or_equal"
+                ]
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "enum": [
+                  "number",
+                  "quantity"
+                ]
+              },
+              "expectedValue": {
+                "type": "number"
+              },
+              "expectedNormalizedValue": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "exists"
+              }
+            },
+            "required": [
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "operandValueType": {
+                "const": "boolean"
+              },
+              "expectedValue": {
+                "type": "boolean"
+              },
+              "expectedNormalizedValue": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "quantity"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "string"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "date"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "structured_identity"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "number"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "quantity"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "boolean"
+              }
+            },
+            "required": [
+              "operandValueType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operandValueType": {
+                "const": "string_set"
+              },
+              "operator": {
+                "enum": [
+                  "equals",
+                  "not_equals"
+                ]
+              }
+            },
+            "required": [
+              "operandValueType",
+              "operator"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedNormalizedValue": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "checkState": {
+      "enum": [
+        "pass",
+        "fail",
+        "incomplete",
+        "not_applicable"
+      ]
+    },
+    "referenceList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "acquisitionChannel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channelType",
+        "publicEntryUrl",
+        "publicEntryLabel",
+        "whyThisChannel",
+        "accessState",
+        "evidenceRefs",
+        "entryClaimRefs",
+        "evidencePageRefs",
+        "actionEntry"
+      ],
+      "properties": {
+        "channelType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "publicEntryUrl": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "pattern": "^https?://(?!(?:localhost|127(?:\\.[0-9]{1,3}){3}|10(?:\\.[0-9]{1,3}){3}|192\\.168(?:\\.[0-9]{1,3}){2}|172\\.(?:1[6-9]|2[0-9]|3[01])(?:\\.[0-9]{1,3}){2}|169\\.254(?:\\.[0-9]{1,3}){2}|0\\.0\\.0\\.0|\\[::1\\])(?::[0-9]+)?(?:/|$))",
+          "description": "Legacy display projection only; actionEntry is authoritative for action readiness."
+        },
+        "publicEntryLabel": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 300,
+          "description": "Legacy display projection only; actionEntry is authoritative for action readiness."
+        },
+        "whyThisChannel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "accessState": {
+          "enum": [
+            "public_entry_verified",
+            "indirect_path_verified",
+            "needs_verification",
+            "not_found"
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "entryClaimRefs": {
+          "$ref": "#/$defs/referenceList",
+          "description": "Legacy display projection only; actionEntry is authoritative for action readiness."
+        },
+        "evidencePageRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "actionEntry": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "url",
+                "label",
+                "sourceRef",
+                "entryClaimRefs",
+                "entryPurposeClaimRefs",
+                "purpose",
+                "readbackState"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "pattern": "^https?://"
+                },
+                "label": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 300
+                },
+                "sourceRef": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "entryClaimRefs": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1
+                },
+                "entryPurposeClaimRefs": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1
+                },
+                "purpose": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "readbackState": {
+                  "enum": [
+                    "verified",
+                    "needs_verification",
+                    "unavailable"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "accessState": {
+                "const": "public_entry_verified"
+              }
+            },
+            "required": [
+              "accessState"
+            ]
+          },
+          "then": {
+            "properties": {
+              "actionEntry": {
+                "type": "object",
+                "properties": {
+                  "readbackState": {
+                    "const": "verified"
+                  }
+                },
+                "required": [
+                  "readbackState"
+                ]
+              }
+            },
+            "required": [
+              "actionEntry"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "actionEntry": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "readbackState": {
+                        "enum": [
+                          "needs_verification",
+                          "unavailable"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "readbackState"
+                    ]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "actionEntry"
+            ]
+          },
+          "then": {
+            "properties": {
+              "accessState": {
+                "not": {
+                  "const": "public_entry_verified"
+                }
+              }
+            },
+            "required": [
+              "accessState"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

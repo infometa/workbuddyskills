@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/portfolio-evidence-bundle.schema.json",
+  "title": "PortfolioEvidenceBundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "bundleId",
+    "assetId",
+    "revision",
+    "packageVersion",
+    "generatedAt",
+    "asOf",
+    "parkBrief",
+    "portfolio",
+    "entities",
+    "sources",
+    "claims",
+    "conflicts",
+    "queryLedger",
+    "discoveryLedger",
+    "manifest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "bundleId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assetId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "packageVersion": {
+      "const": "26.7.27"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "parkBrief": {
+      "$ref": "park-brief.schema.json"
+    },
+    "portfolio": {
+      "$ref": "target-portfolio.schema.json"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "$ref": "entity-record.schema.json"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "source-record.schema.json"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "claim-evidence-link.schema.json"
+      }
+    },
+    "knowledgeRecords": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "knowledge-record.schema.json"
+      },
+      "description": "Optional task-level knowledge assets. When present, every record must close to this bundle's task context, claims and sources."
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conflictId",
+          "entityRef",
+          "claimRefs",
+          "status",
+          "impact",
+          "resolutionNote",
+          "resolutionClaimRefs",
+          "resolutionSourceRefs"
+        ],
+        "properties": {
+          "conflictId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "entityRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claimRefs": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "status": {
+            "enum": [
+              "open",
+              "resolved",
+              "accepted_unknown",
+              "cannot_resolve"
+            ]
+          },
+          "impact": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "resolutionNote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "resolutionClaimRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "resolutionSourceRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "resolved"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "properties": {
+                "resolutionClaimRefs": {
+                  "minItems": 1
+                },
+                "resolutionSourceRefs": {
+                  "minItems": 1
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "resolutionClaimRefs": {
+                  "maxItems": 0
+                },
+                "resolutionSourceRefs": {
+                  "maxItems": 0
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "queryLedger": {
+      "$ref": "query-ledger.schema.json"
+    },
+    "discoveryLedger": {
+      "$ref": "candidate-discovery-ledger.schema.json"
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "portfolioHash",
+        "parkBriefHash",
+        "entityCount",
+        "sourceCount",
+        "claimCount",
+        "conflictCount",
+        "queryLedgerHash",
+        "discoveryLedgerHash"
+      ],
+      "properties": {
+        "portfolioHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "parkBriefHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "entityCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "claimCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "conflictCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "queryLedgerHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "discoveryLedgerHash": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

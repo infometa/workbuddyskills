@@ -60,18 +60,17 @@ class MckEngine:
     # ═══════════════════════════════════════════
 
     def cover(self, title, subtitle='', author='', date='', cover_image=None):
-        """#1 Cover Slide — title, subtitle, author, date, accent line.
+        """#1 Executive cover — full-bleed navy hero with optional image field.
 
         Parameters
         ----------
         cover_image : str or None
-            - None  : 不插入图片（默认，保持原有布局）
+            - None  : 使用深海军蓝几何封面，保证默认输出也具备成品感
             - 'auto': 调用腾讯混元 API 自动生成封面图
-            - 路径   : 直接使用指定的图片文件
+            - 路径   : 使用指定图片，并保留左侧高对比信息区
         """
         s = self._ns()
 
-        # ── 确定是否有封面图片 ────────────────────────────────
         img_path = None
         if cover_image == 'auto':
             from .cover_image import generate_cover_image
@@ -79,61 +78,62 @@ class MckEngine:
         elif cover_image and os.path.isfile(cover_image):
             img_path = cover_image
 
-        # ── 图片全幅垫底（先添加，后续所有元素在其上方） ────
+        # Warm executive cover: clean full-bleed dark canvas.
+        # Layout uses fixed vertical positions to prevent overlap regardless of
+        # title length — everything has a predictable slot.
+        add_rect(s, 0, 0, SW, SH, NAVY)
         if img_path:
-            s.shapes.add_picture(img_path, 0, 0, SW, SH)
+            s.shapes.add_picture(img_path, Inches(7.6), 0, Inches(5.733), SH)
+        # No right-side panel or stripe — keep it clean and uncluttered.
 
-        # ── 顶部 navy 细线 ───────────────────────────────────
-        add_rect(s, 0, 0, SW, Inches(0.05), NAVY)
+        text_left = Inches(1.1)
+        text_width = Inches(7.4)
 
-        # ── 布局参数：有图片时文字收左 ───────────────────────
-        if img_path:
-            text_left = Inches(0.9)
-            text_width = Inches(7.2)
-        else:
-            text_left = Inches(1)
-            text_width = Inches(11)
-
-        # ── 标题 ──────────────────────────────────────────────
-        lines = title.split('\n') if isinstance(title, str) else title
-        n_lines = len(lines) if isinstance(lines, list) else title.count('\n') + 1
-        title_h = Inches(0.8 + 0.62 * max(n_lines - 1, 0))
-        add_text(s, text_left, Inches(1.15), text_width, title_h,
+        # Fixed title zone: y=2.2, max height=2.0
+        title_y = Inches(2.2)
+        title_max_h = Inches(2.0)
+        add_text(s, text_left, title_y, text_width, title_max_h,
                  title, font_size=COVER_TITLE_SIZE, font_name=FONT_HEADER,
-                 font_color=NAVY, bold=True)
-        sub_y = Inches(1.15) + title_h + Inches(0.24)
+                 font_color=WHITE, bold=True)
+
+        # Fixed accent bar at y=4.4
+        add_rect(s, text_left, Inches(4.4), Inches(2.0), Inches(0.04), ACCENT_BLUE)
+
+        # Fixed subtitle zone: y=4.7
         if subtitle:
-            add_text(s, text_left, sub_y, text_width, Inches(0.62),
-                     subtitle, font_size=Pt(22), font_color=DARK_GRAY)
-            sub_y += Inches(0.95)
-        else:
-            sub_y += Inches(0.2)
-        y = sub_y + Inches(0.28)
+            add_text(s, text_left, Inches(4.7), text_width, Inches(0.55),
+                     subtitle, font_size=Pt(18), font_color=PALE_BLUE)
+
+        # Fixed metadata zone: y=5.8
+        meta_y = Inches(5.8)
         if author:
-            add_text(s, text_left, y, text_width, Inches(0.34),
-                     author, font_size=BODY_SIZE, font_color=MED_GRAY)
-            y += Inches(0.67)
+            add_text(s, text_left, meta_y, text_width, Inches(0.3),
+                     author, font_size=SMALL_SIZE, font_color=WHITE)
+            meta_y += Inches(0.4)
         if date:
-            add_text(s, text_left, y, text_width, Inches(0.34),
-                     date, font_size=BODY_SIZE, font_color=MED_GRAY)
-        add_hline(s, text_left, Inches(6.8), Inches(4.6), NAVY, Pt(2))
+            add_text(s, text_left, meta_y, text_width, Inches(0.3),
+                     date, font_size=SMALL_SIZE, font_color=MED_GRAY)
 
         return s
 
     def section_divider(self, section_label, title, subtitle=''):
-        """#5 Section Divider — navy left bar, large title."""
+        """#5 Section Divider — warm dark transition with fixed layout zones."""
         s = self._ns()
-        add_rect(s, 0, 0, Inches(0.6), SH, NAVY)
-        add_text(s, Inches(1.2), Inches(2.0), Inches(10), Inches(0.8),
-                 section_label, font_size=SUB_HEADER_SIZE,
-                 font_color=MED_GRAY, font_name=FONT_HEADER)
-        add_text(s, Inches(1.2), Inches(2.8), Inches(10), Inches(1.2),
-                 title, font_size=SECTION_TITLE_SIZE, font_color=NAVY,
+        add_rect(s, 0, 0, SW, SH, NAVY)
+        # Bottom warm accent strip
+        add_rect(s, 0, Inches(7.1), SW, Inches(0.4), ACCENT_BLUE)
+        # Section label at fixed y=2.8
+        add_text(s, Inches(1.2), Inches(2.8), Inches(10), Inches(0.35),
+                 section_label.upper(), font_size=Pt(11),
+                 font_color=MED_GRAY, bold=True, font_name=FONT_HEADER)
+        # Title at fixed y=3.3, max height 1.6
+        add_text(s, Inches(1.2), Inches(3.3), Inches(10), Inches(1.6),
+                 title, font_size=Pt(32), font_color=WHITE,
                  bold=True, font_name=FONT_HEADER)
         if subtitle:
-            add_text(s, Inches(1.2), Inches(4.2), Inches(10), Inches(0.6),
-                     subtitle, font_size=BODY_SIZE, font_color=DARK_GRAY)
-        add_page_number(s, self._page, self.total)
+            add_text(s, Inches(1.2), Inches(5.1), Inches(10), Inches(0.55),
+                     subtitle, font_size=BODY_SIZE, font_color=PALE_BLUE)
+        add_page_number(s, self._page, self.total, color=MED_GRAY)
         return s
 
     def toc(self, title='目录', items=None, source=''):
@@ -726,11 +726,13 @@ class MckEngine:
     def process_chevron(self, title, steps, source='', bottom_bar=None):
         """#16 Process Chevron — horizontal step flow with arrows.
         steps: list of (label, step_title, description).
-        Supports 2–7 steps with dynamic sizing (Guard Rail Rule 10).
+        Supports 2-5 steps; longer flows must be grouped or split across slides.
         """
+        n = len(steps)
+        if not 2 <= n <= 5:
+            raise ValueError(f"process_chevron requires 2-5 steps, got {n}")
         s = self._ns()
         add_action_title(s, title)
-        n = len(steps)
         # ── Guard Rail Rule 10: dynamic step_w to prevent negative gap ──
         MIN_GAP = Inches(0.35)          # minimum arrow gap
         ARROW_ZONE = Inches(0.4)        # width reserved for "→" glyph

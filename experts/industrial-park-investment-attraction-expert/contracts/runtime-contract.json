@@ -1,0 +1,91 @@
+{
+  "schema": "industrial-park-investment-attraction-runtime-contract/v1",
+  "contractVersion": "1.0.0",
+  "packageVersion": "26.7.27",
+  "entry": {
+    "expertId": "industrial-park-investment-attraction-expert",
+    "leadAgent": "agents/industrial-park-investment-attraction-expert.md",
+    "defaultFirstValueSurface": "chat_response_only",
+    "workspaceWriteRequiresExplicitUserIntent": true,
+    "planBeforeFirstValueRequired": false
+  },
+  "capabilityStates": [
+    "available",
+    "available_needs_confirmation",
+    "unavailable",
+    "unknown"
+  ],
+  "capabilityCheckCatalog": [
+    "public_search",
+    "page_read",
+    "structured_artifact",
+    "external_write",
+    "long_term_memory"
+  ],
+  "capabilityCheckSelectionPolicy": "derive_from_request_route_facets_and_required_outputs_never_require_full_catalog",
+  "externalWriteScope": "external_business_side_effects_such_as_crm_email_im_or_calendar_only_excludes_explicit_user_requested_local_structured_artifact_delivery",
+  "longTermMemoryHandshake": {
+    "packageSnapshotState": "unknown",
+    "packageReceiptState": "not_machine_verifiable",
+    "businessPayloadPromotionAllowed": false,
+    "externalRuntimeValidationRequired": true,
+    "externalReceiptJoinFields": [
+      "hostCapabilityReceiptRef",
+      "capabilityState",
+      "accessMode",
+      "parkIsolationState",
+      "parkRef",
+      "contextClass",
+      "contextHash",
+      "preferenceBindings",
+      "confirmationInputReceiptRef",
+      "confirmationContentHash",
+      "sessionBindingHash",
+      "turnBindingHash"
+    ],
+    "externalRuntimeStates": [
+      "available",
+      "unavailable"
+    ],
+    "useAfterExternalValidationRequiresParkIsolation": true,
+    "useAfterExternalValidationRequiresCurrentUserConfirmation": true,
+    "allowedContextClass": "park_scoped_preference_context",
+    "enterpriseEvidenceAllowed": false,
+    "qualificationEvidenceAllowed": false,
+    "completionEvidenceAllowed": false,
+    "crossParkReuseAllowed": false,
+    "writeAllowed": false,
+    "fallbackId": "current_session_visible_capsule_only"
+  },
+  "unknownCapabilityPolicy": "fail_closed_or_equivalent_degradation",
+  "sourceModes": [
+    "live_public_search",
+    "provided_public_material_only",
+    "public_search_mission_pack"
+  ],
+  "starters": [
+    "start_targeting_task",
+    "material_to_leads",
+    "audit_existing_list",
+    "audit_public_material",
+    "build_park_brief",
+    "clarification_required",
+    "targeted_campaign",
+    "continue_campaign",
+    "switch_park"
+  ],
+  "defaultModes": [
+    "quick",
+    "standard",
+    "deep"
+  ],
+  "customTaskSpecificModeAllowed": true,
+  "customRouteAllowed": true,
+  "modePolicy": "Modes change research depth and delivery cadence only; they never impose a candidate target, cap, qualification gate, or completion condition.",
+  "connectorRequired": false,
+  "mcpBundled": false,
+  "hooksBundled": false,
+  "automationBundled": false,
+  "runtimeImplementationClaim": "not_proven",
+  "listedRuntimeClaim": "not_proven"
+}

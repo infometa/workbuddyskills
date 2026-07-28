@@ -1,0 +1,674 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/task-assessment.schema.json",
+  "title": "TaskAssessment",
+  "description": "Formal task-relative result for candidate and non-candidate work. Completion is derived from the frozen TaskGoal and verified deliverable requirements, not a free-text summary.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packageVersion",
+    "assessmentId",
+    "assetId",
+    "revision",
+    "previousRevisionRef",
+    "createdAt",
+    "updatedAt",
+    "asOf",
+    "taskContextId",
+    "parkId",
+    "contextHash",
+    "taskGoalRef",
+    "taskGoalHash",
+    "taskState",
+    "evaluationScopeAssessment",
+    "deliverableRequirementAssessments",
+    "workItemCounts",
+    "unmetRequirementRefs",
+    "visibleDeliveryReceiptRefs",
+    "terminalProof",
+    "pauseReason",
+    "nextCursor",
+    "continuationRequirements",
+    "nextActions",
+    "nextAction",
+    "assessmentHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "packageVersion": {
+      "const": "26.7.27"
+    },
+    "assessmentId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assetId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "previousRevisionRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "taskContextId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parkId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "contextHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "taskGoalRef": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Must resolve to the exact frozen TaskGoal object in the same package; an opaque goal id is not completion proof."
+    },
+    "taskGoalHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "taskState": {
+      "enum": [
+        "in_progress",
+        "completed",
+        "stopped_with_gap",
+        "paused",
+        "superseded"
+      ]
+    },
+    "evaluationScopeAssessment": {
+      "$ref": "#/$defs/evaluationScopeAssessment"
+    },
+    "deliverableRequirementAssessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/deliverableRequirementAssessment"
+      },
+      "description": "There must be exactly one assessment for every TaskGoal.taskDeliverableRequirements entry and no invented extras."
+    },
+    "workItemCounts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/workItemCount"
+      }
+    },
+    "unmetRequirementRefs": {
+      "$ref": "#/$defs/referenceList"
+    },
+    "visibleDeliveryReceiptRefs": {
+      "$ref": "#/$defs/referenceList",
+      "description": "Every reference must join to a separately controlled external host-visible receipt binding this assessment, TaskGoal, requirement, artifact and content hash. The business payload cannot mint its own proof."
+    },
+    "terminalProof": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/terminalProof"
+        }
+      ]
+    },
+    "pauseReason": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "enum": [
+            "user_paused",
+            "network_unavailable",
+            "read_capability_unavailable",
+            "budget_checkpoint",
+            "unresolved_blocker",
+            "external_dependency"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "nextCursor": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "continuationRequirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "nextActions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nextAction"
+      }
+    },
+    "nextAction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Compatibility projection only: it equals the description of the first currently executable ready item in nextActions, or null when no such item exists. Cross-field equality and dependency readiness are enforced by the semantic validator."
+    },
+    "assessmentHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Canonical JSON SHA-256 of the complete TaskAssessment after removing assessmentHash."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "enum": [
+              "completed",
+              "stopped_with_gap",
+              "superseded"
+            ]
+          }
+        },
+        "required": [
+          "taskState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "terminalProof": {
+            "$ref": "#/$defs/terminalProof"
+          },
+          "continuationRequirements": {
+            "maxItems": 0
+          },
+          "nextCursor": {
+            "type": "null"
+          },
+          "nextActions": {
+            "maxItems": 0
+          },
+          "nextAction": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "terminalProof": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "const": "paused"
+          }
+        },
+        "required": [
+          "taskState"
+        ]
+      },
+      "then": {
+        "not": {
+          "properties": {
+            "pauseReason": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "pauseReason"
+          ]
+        }
+      },
+      "else": {
+        "properties": {
+          "pauseReason": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "const": "completed"
+          }
+        },
+        "required": [
+          "taskState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "deliverableRequirementAssessments": {
+            "minItems": 1
+          },
+          "unmetRequirementRefs": {
+            "maxItems": 0
+          },
+          "visibleDeliveryReceiptRefs": {
+            "minItems": 1
+          },
+          "terminalProof": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/terminalProof"
+              },
+              {
+                "properties": {
+                  "proofType": {
+                    "const": "deliverable_requirements_satisfied"
+                  }
+                },
+                "required": [
+                  "proofType"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "terminalProof": {
+            "type": "object",
+            "properties": {
+              "proofType": {
+                "const": "open_research_stopped"
+              }
+            },
+            "required": [
+              "proofType"
+            ]
+          }
+        },
+        "required": [
+          "terminalProof"
+        ]
+      },
+      "then": {
+        "properties": {
+          "taskState": {
+            "const": "stopped_with_gap"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "nextActions": {
+            "maxItems": 0
+          }
+        },
+        "required": [
+          "nextActions"
+        ]
+      },
+      "then": {
+        "properties": {
+          "nextAction": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "referenceList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "sampleUnit": {
+      "oneOf": [
+        {
+          "enum": [
+            "qualified_candidate",
+            "public_material",
+            "claim",
+            "entity",
+            "park_context",
+            "deliverable"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "workItemCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sampleUnit",
+        "observed",
+        "assessed",
+        "accepted",
+        "delivered",
+        "unresolved"
+      ],
+      "properties": {
+        "sampleUnit": {
+          "$ref": "#/$defs/sampleUnit"
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "assessed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "accepted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "delivered": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unresolved": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "evaluationScopeAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopeMode",
+        "scopeRef",
+        "status",
+        "evidenceRefs",
+        "basisRefs"
+      ],
+      "properties": {
+        "scopeMode": {
+          "oneOf": [
+            {
+              "enum": [
+                "bounded",
+                "open",
+                "not_applicable"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "scopeRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "incomplete",
+            "not_applicable",
+            "unknown"
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "basisRefs": {
+          "$ref": "#/$defs/referenceList"
+        }
+      }
+    },
+    "deliverableRequirementAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirementRef",
+        "artifactRef",
+        "contentHash",
+        "verificationState",
+        "evidenceRefs",
+        "basisRefs",
+        "deliveryReceiptRefs",
+        "rationale"
+      ],
+      "properties": {
+        "requirementRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifactRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "For a verified requirement this must resolve to the exact artifact object in the same package."
+        },
+        "contentHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Canonical JSON SHA-256 of the object resolved by artifactRef."
+        },
+        "verificationState": {
+          "enum": [
+            "verified",
+            "unverified",
+            "not_met",
+            "not_applicable"
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/referenceList",
+          "description": "For evidence-bound verification every reference must resolve to evidence content in the same package."
+        },
+        "basisRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "deliveryReceiptRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      }
+    },
+    "terminalProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proofType",
+        "proofRefs",
+        "derivedFromGoalHash",
+        "statement"
+      ],
+      "properties": {
+        "proofType": {
+          "oneOf": [
+            {
+              "enum": [
+                "deliverable_requirements_satisfied",
+                "bounded_scope_complete",
+                "open_research_stopped"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "proofRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "derivedFromGoalHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      }
+    },
+    "nextAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actionId",
+        "taskRef",
+        "actionType",
+        "description",
+        "owner",
+        "evidenceRefs",
+        "basisRefs",
+        "dependsOn",
+        "status",
+        "authorizationRequired",
+        "authorizationBasisRefs"
+      ],
+      "properties": {
+        "actionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "taskRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actionType": {
+          "oneOf": [
+            {
+              "enum": [
+                "define_task_goal",
+                "resolve_evidence_gap",
+                "continue_goal_research",
+                "prepare_verification_pack",
+                "prepare_structured_artifact",
+                "revise_park_brief"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "owner": {
+          "oneOf": [
+            {
+              "enum": [
+                "user",
+                "expert",
+                "park_operator",
+                "host_orchestrator"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "basisRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "dependsOn": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "status": {
+          "oneOf": [
+            {
+              "enum": [
+                "ready",
+                "blocked",
+                "completed"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "authorizationRequired": {
+          "type": "boolean"
+        },
+        "authorizationBasisRefs": {
+          "$ref": "#/$defs/referenceList"
+        }
+      }
+    }
+  }
+}

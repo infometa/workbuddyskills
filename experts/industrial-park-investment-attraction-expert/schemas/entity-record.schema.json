@@ -1,0 +1,678 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/entity-record.schema.json",
+  "title": "EntityRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "entityId",
+    "normalizedEntityKey",
+    "entityKeyBasis",
+    "legalEntityName",
+    "unifiedSocialCreditCode",
+    "registrationJurisdiction",
+    "jurisdictionalRegistrationId",
+    "registrationRegion",
+    "officialDomains",
+    "aliases",
+    "aliasMappings",
+    "brandNames",
+    "relationships",
+    "operatingBases",
+    "inputUniverseRefs",
+    "resolutionStatus",
+    "resolutionEvidenceRefs",
+    "identityClaimRefs",
+    "identityResolutionBasis"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "entityId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "normalizedEntityKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical entity key recomputed only after independent identity closure, using a verified jurisdiction-applicable legal registration identifier or an evidence-bound legal-name discriminator. There is no global field priority."
+    },
+    "entityKeyBasis": {
+      "enum": [
+        "uscc",
+        "jurisdictional_registration_id",
+        "normalized_name_and_registration_jurisdiction",
+        "normalized_name_and_region",
+        "normalized_name_and_official_domain"
+      ]
+    },
+    "legalEntityName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 2,
+      "maxLength": 300
+    },
+    "unifiedSocialCreditCode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9A-HJ-NPQRTUWXY]{18}$"
+    },
+    "registrationJurisdiction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Registration jurisdiction applicable to the legal entity and declared key basis, for example CN or an evidence-bound local jurisdiction name."
+    },
+    "jurisdictionalRegistrationId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Verified legal registration identifier applicable in registrationJurisdiction. USCC remains represented separately for CN entities."
+    },
+    "registrationRegion": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200
+    },
+    "officialDomains": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 253
+      }
+    },
+    "aliases": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "aliasMappings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "alias",
+          "normalizedAlias",
+          "evidenceRefs",
+          "factType",
+          "temporalScope",
+          "asOf",
+          "validFrom",
+          "validTo"
+        ],
+        "properties": {
+          "alias": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "normalizedAlias": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "evidenceRefs": {
+            "$ref": "#/$defs/stringArray",
+            "minItems": 1
+          },
+          "factType": {
+            "enum": [
+              "historical_legal_name",
+              "alternative_legal_name",
+              "trade_name",
+              "abbreviation",
+              "transliteration",
+              "other_alias"
+            ]
+          },
+          "temporalScope": {
+            "enum": [
+              "current_state",
+              "effective_period",
+              "point_in_time"
+            ]
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validFrom": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "validTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "factType": {
+                  "const": "historical_legal_name"
+                }
+              },
+              "required": [
+                "factType"
+              ]
+            },
+            "then": {
+              "properties": {
+                "temporalScope": {
+                  "enum": [
+                    "effective_period",
+                    "point_in_time"
+                  ]
+                }
+              },
+              "anyOf": [
+                {
+                  "properties": {
+                    "validFrom": {
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "validTo": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "brandNames": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "relationType",
+          "relatedEntityId",
+          "state",
+          "evidenceRefs",
+          "temporalScope",
+          "asOf",
+          "validFrom",
+          "validTo"
+        ],
+        "properties": {
+          "relationType": {
+            "enum": [
+              "parent",
+              "subsidiary",
+              "branch",
+              "project_company",
+              "brand_owner",
+              "operating_base_of",
+              "unknown"
+            ]
+          },
+          "relatedEntityId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "enum": [
+              "verified",
+              "inferred",
+              "unknown"
+            ]
+          },
+          "evidenceRefs": {
+            "$ref": "#/$defs/stringArray"
+          },
+          "temporalScope": {
+            "enum": [
+              "current_state",
+              "effective_period",
+              "point_in_time"
+            ]
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validFrom": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "validTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "enum": [
+                    "verified",
+                    "inferred"
+                  ]
+                }
+              },
+              "required": [
+                "state"
+              ]
+            },
+            "then": {
+              "properties": {
+                "evidenceRefs": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "operatingBases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "baseName",
+          "location",
+          "relationshipState",
+          "evidenceRefs",
+          "temporalScope",
+          "asOf",
+          "validFrom",
+          "validTo"
+        ],
+        "properties": {
+          "baseName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "location": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "relationshipState": {
+            "enum": [
+              "verified",
+              "inferred",
+              "unknown"
+            ]
+          },
+          "evidenceRefs": {
+            "$ref": "#/$defs/stringArray"
+          },
+          "temporalScope": {
+            "enum": [
+              "current_state",
+              "effective_period",
+              "point_in_time"
+            ]
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validFrom": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "validTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "relationshipState": {
+                  "enum": [
+                    "verified",
+                    "inferred"
+                  ]
+                }
+              },
+              "required": [
+                "relationshipState"
+              ]
+            },
+            "then": {
+              "properties": {
+                "evidenceRefs": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "inputUniverseRefs": {
+      "$ref": "#/$defs/stringArray",
+      "description": "Original bounded-input row references mapped to this legal entity. Multiple refs preserve deduplication lineage."
+    },
+    "resolutionStatus": {
+      "enum": [
+        "resolved",
+        "ambiguous",
+        "unresolved"
+      ]
+    },
+    "resolutionEvidenceRefs": {
+      "$ref": "#/$defs/stringArray"
+    },
+    "identityClaimRefs": {
+      "$ref": "#/$defs/stringArray",
+      "description": "Identity claims that bind this exact normalizedEntityKey and legalEntityName through the declared identityResolutionBasis."
+    },
+    "identityResolutionBasis": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/identityResolutionBasis"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "entityKeyBasis": {
+            "const": "uscc"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "unifiedSocialCreditCode": {
+            "type": "string"
+          },
+          "registrationJurisdiction": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "entityKeyBasis": {
+            "const": "jurisdictional_registration_id"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "registrationJurisdiction": {
+            "type": "string",
+            "minLength": 1
+          },
+          "jurisdictionalRegistrationId": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "entityKeyBasis": {
+            "const": "normalized_name_and_registration_jurisdiction"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "registrationJurisdiction": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "entityKeyBasis": {
+            "const": "normalized_name_and_region"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "registrationRegion": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "entityKeyBasis": {
+            "const": "normalized_name_and_official_domain"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "officialDomains": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "resolutionStatus": {
+            "const": "resolved"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "legalEntityName": {
+            "type": "string",
+            "minLength": 2
+          },
+          "resolutionEvidenceRefs": {
+            "minItems": 1
+          },
+          "identityClaimRefs": {
+            "minItems": 1
+          },
+          "identityResolutionBasis": {
+            "$ref": "#/$defs/identityResolutionBasis"
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "unifiedSocialCreditCode"
+            ],
+            "properties": {
+              "unifiedSocialCreditCode": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "jurisdictionalRegistrationId",
+              "registrationJurisdiction"
+            ],
+            "properties": {
+              "jurisdictionalRegistrationId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "registrationJurisdiction": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          {
+            "required": [
+              "registrationJurisdiction"
+            ],
+            "properties": {
+              "registrationJurisdiction": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          {
+            "required": [
+              "registrationRegion"
+            ],
+            "properties": {
+              "registrationRegion": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          {
+            "properties": {
+              "officialDomains": {
+                "minItems": 1
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "identityResolutionBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "closureMode",
+        "legalNameClaimRefs",
+        "stableDiscriminatorClaimRefs",
+        "sourceRefs",
+        "stableKeyBindingState",
+        "unverifiedAliasOrDomainKeyUseAllowed"
+      ],
+      "properties": {
+        "closureMode": {
+          "oneOf": [
+            {
+              "enum": [
+                "claim_specific_responsibility_closure",
+                "jurisdictional_registry_closure",
+                "statutory_identifier_closure",
+                "independent_evidence_closure",
+                "authoritative_single_source",
+                "independent_public_source_corroboration"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ],
+          "description": "Descriptive closure method only. Resolution is proved by identity claims, claim-specific source usage, publishing responsibility, and bound stable discriminators rather than this label."
+        },
+        "legalNameClaimRefs": {
+          "$ref": "#/$defs/stringArray",
+          "minItems": 1
+        },
+        "stableDiscriminatorClaimRefs": {
+          "$ref": "#/$defs/stringArray",
+          "minItems": 1
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/stringArray",
+          "minItems": 1
+        },
+        "stableKeyBindingState": {
+          "oneOf": [
+            {
+              "enum": [
+                "responsibility_verified",
+                "jurisdiction_key_verified",
+                "content_bound",
+                "independently_corroborated",
+                "registry_verified"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ],
+          "description": "Descriptive binding state only; it never substitutes for the referenced claim and source closure."
+        },
+        "unverifiedAliasOrDomainKeyUseAllowed": {
+          "const": false
+        }
+      }
+    },
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300
+      }
+    }
+  }
+}

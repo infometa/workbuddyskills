@@ -1,0 +1,73 @@
+{
+  "name": "industrial-park-investment-attraction-expert",
+  "version": "26.7.27",
+  "description": "面向市场化园区运营商，仅用公开资料快速发现和核验目标企业；用户确认优先标准后才进行业务排序。",
+  "author": {
+    "name": "FBSir",
+    "email": "unique@u3w.com"
+  },
+  "license": "MIT",
+  "agents": [
+    "./agents/industrial-park-investment-attraction-expert.md"
+  ],
+  "skills": [
+    "./skills/park-brief-builder",
+    "./skills/public-target-research",
+    "./skills/entity-evidence-audit",
+    "./skills/fit-portfolio",
+    "./skills/artifact-renderer"
+  ],
+  "expertType": "agent",
+  "agentName": "industrial-park-investment-attraction-expert",
+  "displayName": {
+    "en": "FBSir",
+    "zh": "福帮手"
+  },
+  "brand": {
+    "en": "FBSir",
+    "zh": "福帮手"
+  },
+  "profession": {
+    "en": "Industrial Park Investment Attraction Expert",
+    "zh": "产业园招商专家"
+  },
+  "displayDescription": {
+    "en": "Uses public evidence to find and verify companies against each park's actual goal. Business priority is applied only after the user states or confirms criteria.",
+    "zh": "仅用公开资料，按园区目标找对企业，逐家核验来源、适配理由、反证与未知，快速形成可行动名单。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "07-SalesCommerce",
+  "defaultInitPrompt": {
+    "zh": "我想为园区找目标企业。请先用通俗语言确认园区与载体情况、产业方向和本轮任务，只询问会改变企业池、硬约束或任务目标的最小阻断信息；不要为了限制问题数量而猜测。数量由我明确指定；未指定时，用可核验的链节、角色、区域或其他覆盖要求定义目标，不自行生成宽区间。“先给N家”只是说明：当用户给出某个数并明确是首批时，该数只控制首批；“约N家”只是说明可调整参考。N是语义占位符，不是默认值，两者均不自动成为完成条件。不要展示内部术语。收到后仅用公开资料，先交付一批关键事实已有可回看公开依据且满足本轮资格条件的企业；有我明确或确认的优先标准时才按业务优先，否则只用稳定展示顺序并单列核验顺序。逐家说明并去重企业注册主体，给出适配理由、不利或相反信息、待确认项和公开来源；只有确有必要且有这些依据时，才给出一个或多个核验动作，否则明确没有剩余动作。",
+    "en": "I want to find target companies for an industrial park. First confirm the park and facilities, industry direction, and current task in plain language. Ask only for unknowns that would change the candidate pool, hard constraints, or task goal, and do not guess merely to cap questions. A number governs completion only when I explicitly state its role; “show N first” means a user-supplied number controls only the first batch, and “about N” is an adjustable reference. N is a semantic placeholder, not a default. Use public sources only. Deliver a batch that meets the current qualification conditions and whose key facts are backed by reviewable public sources. Apply business priority only when I state or confirm criteria; otherwise use a stable display order and list verification order separately."
+  },
+  "plugin": "industrial-park-investment-attraction-expert",
+  "tags": [
+    {
+      "en": "Target Company Discovery",
+      "zh": "目标企业发现"
+    },
+    {
+      "en": "Park-Company Fit",
+      "zh": "园企适配决策"
+    },
+    {
+      "en": "Public Evidence",
+      "zh": "公开证据核验"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "我想为园区找目标企业。请先用通俗语言确认园区与载体情况、产业方向和本轮任务，只询问会改变企业池、硬约束或任务目标的最小阻断信息；不要为了限制问题数量而猜测。数量由我明确指定；未指定时，用可核验的链节、角色、区域或其他覆盖要求定义目标，不自行生成宽区间。“先给N家”只是说明：当用户给出某个数并明确是首批时，该数只控制首批；“约N家”只是说明可调整参考。N是语义占位符，不是默认值，两者均不自动成为完成条件。不要展示内部术语。收到后仅用公开资料，先交付一批关键事实已有可回看公开依据且满足本轮资格条件的企业；有我明确或确认的优先标准时才按业务优先，否则只用稳定展示顺序并单列核验顺序。逐家说明并去重企业注册主体，给出适配理由、不利或相反信息、待确认项和公开来源；只有确有必要且有这些依据时，才给出一个或多个核验动作，否则明确没有剩余动作。",
+      "en": "I want to find target companies for an industrial park. First confirm the park and facilities, industry direction, and current task in plain language. Ask only for unknowns that would change the candidate pool, hard constraints, or task goal, and do not guess merely to cap questions. A number governs completion only when I explicitly state its role; “show N first” means a user-supplied number controls only the first batch, and “about N” is an adjustable reference. N is a semantic placeholder, not a default. Use public sources only. Deliver a batch that meets the current qualification conditions and whose key facts are backed by reviewable public sources. Apply business priority only when I state or confirm criteria; otherwise use a stable display order and list verification order separately."
+    },
+    {
+      "zh": "围绕我指定的产业链环节、目标区域、载体条件和本次目标，仅用公开资料寻找企业。请先交付一批关键事实已有可回看公开依据且满足本轮资格条件的企业；有我明确或确认的优先标准时才按业务优先，否则只用稳定展示顺序并单列核验顺序。逐家确认并去重企业注册主体，标明关键依据、不利或相反信息、未知和园企适配理由；只有确有必要且有这些依据时，才给出一个或多个核验动作，否则明确没有剩余动作。",
+      "en": "For my specified value-chain segment, region, facility constraints, and task goal, use public sources only. Deliver a batch that meets the current qualification conditions and whose key facts are backed by reviewable public sources. Apply business priority only when I state or confirm criteria; otherwise use stable display order and list verification order separately."
+    },
+    {
+      "zh": "请审计我现有的企业清单：确认并去重企业注册主体，复核公开依据是否仍有效和园企适配，并让每个输入项都有合格、观察、排除，或“未解析但已给依据和原因”的结论。有我明确或确认的优先标准时才按业务优先，否则只用稳定展示顺序并单列核验顺序；说明排除理由、未解析项、未覆盖范围和补证建议。",
+      "en": "Audit every item in my existing company list for registered-entity duplicates, public-evidence freshness, and park fit. Give each input a qualified, watchlist, excluded, or unresolved-with-evidence-and-reason disposition. Apply business priority only when I state or confirm criteria; otherwise use stable display order and list verification order separately."
+    }
+  ]
+}

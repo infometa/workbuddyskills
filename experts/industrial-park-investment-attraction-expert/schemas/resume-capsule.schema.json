@@ -1,0 +1,680 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/resume-capsule.schema.json",
+  "title": "ResumeCapsule",
+  "description": "Portable task-relative resume state. Candidate state is optional and appears only when candidate qualification is applicable.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "capsuleId",
+    "assetId",
+    "assetRevision",
+    "packageVersion",
+    "generatedAt",
+    "expiresAt",
+    "taskContextId",
+    "parkId",
+    "contextHash",
+    "taskGoalRef",
+    "taskGoalHash",
+    "taskState",
+    "workStateRefs",
+    "visibleDeliveryRefs",
+    "workItemCounts",
+    "nextCursor",
+    "evidenceSnapshotHash",
+    "unmetRequirementRefs",
+    "completedPhases",
+    "activeWorkstreams",
+    "pendingVerificationTaskRefs",
+    "unresolvedConflictRefs",
+    "continuationRequirements",
+    "nextActions",
+    "nextAction",
+    "resumeInstruction",
+    "persistenceBoundary",
+    "authenticityState",
+    "resumePolicy",
+    "integrityHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "capsuleId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assetId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assetRevision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "packageVersion": {
+      "const": "26.7.27"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "taskContextId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parkId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "contextHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "parkBriefRef": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "parkConstraintHash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "taskGoalRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskGoalHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "taskState": {
+      "enum": [
+        "in_progress",
+        "completed",
+        "stopped_with_gap",
+        "paused",
+        "superseded"
+      ]
+    },
+    "workStateRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/workStateRef"
+      }
+    },
+    "visibleDeliveryRefs": {
+      "$ref": "#/$defs/referenceList"
+    },
+    "workItemCounts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/workItemCount"
+      }
+    },
+    "candidateState": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/candidateState"
+        }
+      ],
+      "description": "Optional compatibility state for candidate-qualification tasks. Omit it for material, entity, park-context and other non-candidate work."
+    },
+    "nextCursor": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "evidenceSnapshotHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "unmetRequirementRefs": {
+      "$ref": "#/$defs/referenceList"
+    },
+    "completedPhases": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "oneOf": [
+          {
+            "enum": [
+              "host_route",
+              "park_brief_builder",
+              "public_target_research",
+              "entity_evidence_audit",
+              "fit_portfolio",
+              "artifact_renderer"
+            ]
+          },
+          {
+            "type": "string",
+            "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+          }
+        ]
+      }
+    },
+    "activeWorkstreams": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/workstream"
+      }
+    },
+    "pendingVerificationTaskRefs": {
+      "$ref": "#/$defs/referenceList"
+    },
+    "unresolvedConflictRefs": {
+      "$ref": "#/$defs/referenceList"
+    },
+    "continuationRequirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "nextActions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nextAction"
+      }
+    },
+    "nextAction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Compatibility projection of the first ready nextActions item description, or null when no action remains."
+    },
+    "resumeInstruction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "persistenceBoundary": {
+      "const": "user_held_portable_capsule_no_hidden_memory"
+    },
+    "authenticityState": {
+      "const": "user_supplied_not_authenticated"
+    },
+    "resumePolicy": {
+      "const": "revalidate_bound_goal_constraints_and_evidence_before_trusting_completion"
+    },
+    "integrityHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Canonical content-integrity hash only. It is not a signature and does not authenticate the source."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "taskState": {
+            "enum": [
+              "completed",
+              "stopped_with_gap",
+              "superseded"
+            ]
+          }
+        },
+        "required": [
+          "taskState"
+        ]
+      },
+      "then": {
+        "properties": {
+          "continuationRequirements": {
+            "maxItems": 0
+          },
+          "nextActions": {
+            "maxItems": 0
+          },
+          "nextAction": {
+            "type": "null"
+          },
+          "nextCursor": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "referenceList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "sampleUnit": {
+      "oneOf": [
+        {
+          "enum": [
+            "qualified_candidate",
+            "public_material",
+            "claim",
+            "entity",
+            "park_context",
+            "deliverable"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "openPhase": {
+      "oneOf": [
+        {
+          "enum": [
+            "host_route",
+            "park_brief_builder",
+            "public_target_research",
+            "entity_evidence_audit",
+            "fit_portfolio",
+            "artifact_renderer"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "workstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workstreamId",
+        "phase",
+        "state",
+        "owner",
+        "dependsOn",
+        "assetRefs"
+      ],
+      "properties": {
+        "workstreamId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phase": {
+          "$ref": "#/$defs/openPhase"
+        },
+        "state": {
+          "oneOf": [
+            {
+              "enum": [
+                "planned",
+                "active",
+                "blocked",
+                "completed",
+                "stopped"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "owner": {
+          "oneOf": [
+            {
+              "enum": [
+                "user",
+                "expert",
+                "park_operator",
+                "host_orchestrator"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "assetRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "workItemCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sampleUnit",
+        "observed",
+        "assessed",
+        "accepted",
+        "delivered",
+        "unresolved"
+      ],
+      "properties": {
+        "sampleUnit": {
+          "$ref": "#/$defs/sampleUnit"
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "assessed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "accepted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "delivered": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unresolved": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "workStateRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stateType",
+        "assetRef",
+        "revision",
+        "integrityHash"
+      ],
+      "properties": {
+        "stateType": {
+          "oneOf": [
+            {
+              "enum": [
+                "task_goal",
+                "task_assessment",
+                "park_brief",
+                "evidence_ledger",
+                "candidate_discovery_ledger",
+                "target_portfolio",
+                "verification_preparation_pack",
+                "rendered_artifact"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "assetRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "integrityHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "candidateState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "portfolioRef",
+        "currentBatchRef",
+        "currentBatchIndex",
+        "queryLedgerRef",
+        "deliveredCandidateRefs",
+        "cumulativeUniqueDeliveredCount",
+        "currentSelectedQualifiedCount",
+        "currentTotalQualifiedPoolCount"
+      ],
+      "properties": {
+        "portfolioRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "currentBatchRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "currentBatchIndex": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "queryLedgerRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "deliveredCandidateRefs": {
+          "$ref": "#/$defs/referenceList"
+        },
+        "cumulativeUniqueDeliveredCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "currentSelectedQualifiedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "currentTotalQualifiedPoolCount": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "nextAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actionId",
+        "taskRef",
+        "actionType",
+        "description",
+        "owner",
+        "evidenceRefs",
+        "basisRefs",
+        "dependsOn",
+        "status",
+        "authorizationRequired",
+        "authorizationBasisRefs"
+      ],
+      "properties": {
+        "actionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "taskRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "actionType": {
+          "oneOf": [
+            {
+              "enum": [
+                "define_task_goal",
+                "review_candidate_batch",
+                "audit_existing_list",
+                "resolve_evidence_gap",
+                "continue_goal_research",
+                "prepare_verification_pack",
+                "prepare_structured_artifact",
+                "revise_park_brief"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "owner": {
+          "oneOf": [
+            {
+              "enum": [
+                "user",
+                "expert",
+                "park_operator",
+                "host_orchestrator"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "basisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "status": {
+          "oneOf": [
+            {
+              "enum": [
+                "ready",
+                "blocked",
+                "completed"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "authorizationRequired": {
+          "type": "boolean"
+        },
+        "authorizationBasisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "authorizationRequired": {
+                "const": true
+              }
+            },
+            "required": [
+              "authorizationRequired"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorizationBasisRefs": {
+                "minItems": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "authorizationBasisRefs": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

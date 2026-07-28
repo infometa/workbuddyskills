@@ -1,0 +1,1023 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/first-value-response.schema.json",
+  "title": "FirstValueResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packageVersion",
+    "contractVersion",
+    "boundary",
+    "contextSnapshot",
+    "routeSelected",
+    "routeFacets",
+    "blockingQuestions",
+    "deliverables",
+    "executedActions",
+    "nextActions"
+  ],
+  "properties": {
+    "packageVersion": {
+      "const": "26.7.27"
+    },
+    "contractVersion": {
+      "const": "1.0.0"
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourcePolicy",
+        "connectorRequired",
+        "externalWriteExposed",
+        "longTermMemoryUsed",
+        "memoryContextReceipt",
+        "privateFilesRead",
+        "capabilityStates",
+        "truthBoundary"
+      ],
+      "properties": {
+        "sourcePolicy": {
+          "const": "public_only"
+        },
+        "connectorRequired": {
+          "const": false
+        },
+        "externalWriteExposed": {
+          "const": false
+        },
+        "longTermMemoryUsed": {
+          "type": "boolean",
+          "description": "True is valid only when memoryContextReceipt is joined to a separately controlled host registry. The package/business payload cannot self-prove memory use."
+        },
+        "memoryContextReceipt": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/memoryContextReceipt"
+            }
+          ]
+        },
+        "privateFilesRead": {
+          "const": false
+        },
+        "capabilityStates": {
+          "$ref": "#/$defs/capabilityStates"
+        },
+        "capabilityDegradation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 500,
+          "description": "Optional human-readable summary only. It cannot override the independent capabilityStates fields."
+        },
+        "truthBoundary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "longTermMemoryUsed": {
+                "const": false
+              }
+            },
+            "required": [
+              "longTermMemoryUsed"
+            ]
+          },
+          "then": {
+            "properties": {
+              "memoryContextReceipt": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "longTermMemoryUsed": {
+                "const": true
+              }
+            },
+            "required": [
+              "longTermMemoryUsed"
+            ]
+          },
+          "then": {
+            "properties": {
+              "memoryContextReceipt": {
+                "$ref": "#/$defs/memoryContextReceipt"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "contextSnapshot": {
+      "oneOf": [
+        {
+          "$ref": "park-brief.schema.json"
+        },
+        {
+          "$ref": "#/$defs/genericTaskContext"
+        }
+      ]
+    },
+    "routeSelected": {
+      "oneOf": [
+        {
+          "enum": [
+            "start_targeting_task",
+            "material_to_leads",
+            "audit_existing_list",
+            "audit_public_material",
+            "build_park_brief",
+            "clarification_required",
+            "targeted_campaign",
+            "continue_campaign",
+            "switch_park"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "routeFacets": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "oneOf": [
+          {
+            "enum": [
+              "park_context_definition",
+              "discover_public_candidates",
+              "audit_public_material",
+              "audit_existing_list",
+              "resolve_entities",
+              "audit_candidate_evidence",
+              "evaluate_fit_and_coverage",
+              "prepare_structured_artifact",
+              "continue_existing_work",
+              "switch_park_context"
+            ]
+          },
+          {
+            "type": "string",
+            "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+          }
+        ]
+      },
+      "description": "Composable task facets. routeSelected is only the user-readable primary entry and cannot replace this set."
+    },
+    "blockingQuestions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "questionId",
+          "question",
+          "whyBlocking",
+          "affectedDecisionRefs"
+        ],
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "whyBlocking": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "affectedDecisionRefs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "description": "The complete set of independent decision-changing questions that block a truthful task asset. Empty when no such blocker remains; no fixed count."
+    },
+    "mode": {
+      "oneOf": [
+        {
+          "enum": [
+            "quick",
+            "standard",
+            "deep"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ],
+      "description": "Non-authoritative depth/cadence label. Research budgets and stopping conditions are expressed in their own governed fields."
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifactType",
+          "status",
+          "artifactRef"
+        ],
+        "properties": {
+          "artifactType": {
+            "oneOf": [
+              {
+                "enum": [
+                  "ParkBrief",
+                  "TaskAssessment",
+                  "CandidateDiscoveryLedger",
+                  "EvidenceLedger",
+                  "QualifiedCandidateBatch",
+                  "TargetPortfolio",
+                  "PortfolioEvidenceBundle",
+                  "PublicSearchMissionPack",
+                  "VerificationPreparationPack",
+                  "RenderedArtifact",
+                  "ResumeCapsule"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+              }
+            ]
+          },
+          "status": {
+            "enum": [
+              "partial",
+              "complete",
+              "degraded"
+            ]
+          },
+          "artifactRef": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "evidenceLedger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entities",
+        "sources",
+        "claims",
+        "conflicts"
+      ],
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "entity-record.schema.json"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "source-record.schema.json"
+          }
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "$ref": "claim-evidence-link.schema.json"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "conflictId",
+              "entityRef",
+              "claimRefs",
+              "status",
+              "impact",
+              "resolutionNote",
+              "resolutionClaimRefs",
+              "resolutionSourceRefs"
+            ],
+            "properties": {
+              "conflictId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "claimRefs": {
+                "type": "array",
+                "minItems": 2,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "entityRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "open",
+                  "resolved",
+                  "cannot_resolve",
+                  "accepted_unknown"
+                ]
+              },
+              "impact": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "resolutionNote": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "resolutionClaimRefs": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "resolutionSourceRefs": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "resolved"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "resolutionClaimRefs": {
+                      "minItems": 1
+                    },
+                    "resolutionSourceRefs": {
+                      "minItems": 1
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "resolutionClaimRefs": {
+                      "maxItems": 0
+                    },
+                    "resolutionSourceRefs": {
+                      "maxItems": 0
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "leadDelivery": {
+      "$ref": "target-portfolio.schema.json"
+    },
+    "taskAssessment": {
+      "$ref": "task-assessment.schema.json"
+    },
+    "preparedActions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "actionType",
+          "targetRef",
+          "contentSummary",
+          "state",
+          "owner",
+          "evidenceRefs",
+          "basisRefs",
+          "authorizationRequired",
+          "authorizationBasisRefs"
+        ],
+        "properties": {
+          "actionType": {
+            "oneOf": [
+              {
+                "enum": [
+                  "verification_question",
+                  "outreach_draft",
+                  "authorization_draft",
+                  "manual_research_task"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+              }
+            ]
+          },
+          "targetRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "contentSummary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "state": {
+            "const": "prepared"
+          },
+          "owner": {
+            "oneOf": [
+              {
+                "enum": [
+                  "user",
+                  "expert",
+                  "park_operator",
+                  "host_orchestrator"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+              }
+            ]
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "basisRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "authorizationRequired": {
+            "type": "boolean"
+          },
+          "authorizationBasisRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "executedActions": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "deliveryDepth": {
+      "enum": [
+        "D0",
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7"
+      ]
+    },
+    "achievedOutcomeLevel": {
+      "enum": [
+        "O0",
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "O5"
+      ]
+    },
+    "performanceObservation": {
+      "$ref": "performance-observation.schema.json"
+    },
+    "progress": {
+      "$ref": "progress-card.schema.json"
+    },
+    "nextActions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nextAction"
+      },
+      "description": "Ordered necessary action set with explicit internal dependencies; no fixed action count is implied."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "deliverables": {
+            "maxItems": 0
+          }
+        },
+        "required": [
+          "deliverables"
+        ]
+      },
+      "then": {
+        "properties": {
+          "blockingQuestions": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "routeSelected": {
+            "const": "clarification_required"
+          }
+        },
+        "required": [
+          "routeSelected"
+        ]
+      },
+      "then": {
+        "properties": {
+          "blockingQuestions": {
+            "minItems": 1
+          },
+          "deliverables": {
+            "maxItems": 0
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "mode"
+              ]
+            },
+            {
+              "required": [
+                "evidenceLedger"
+              ]
+            },
+            {
+              "required": [
+                "leadDelivery"
+              ]
+            },
+            {
+              "required": [
+                "preparedActions"
+              ]
+            },
+            {
+              "required": [
+                "deliveryDepth"
+              ]
+            },
+            {
+              "required": [
+                "achievedOutcomeLevel"
+              ]
+            },
+            {
+              "required": [
+                "performanceObservation"
+              ]
+            },
+            {
+              "required": [
+                "taskAssessment"
+              ]
+            },
+            {
+              "required": [
+                "progress"
+              ]
+            }
+          ]
+        }
+      },
+      "else": {
+        "properties": {
+          "routeFacets": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nextAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actionId",
+        "taskRef",
+        "actionType",
+        "description",
+        "owner",
+        "evidenceRefs",
+        "basisRefs",
+        "dependsOn",
+        "status",
+        "authorizationRequired",
+        "authorizationBasisRefs"
+      ],
+      "properties": {
+        "actionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "taskRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "actionType": {
+          "oneOf": [
+            {
+              "enum": [
+                "define_task_goal",
+                "review_candidate_batch",
+                "audit_existing_list",
+                "resolve_evidence_gap",
+                "continue_goal_research",
+                "prepare_verification_pack",
+                "prepare_structured_artifact",
+                "revise_park_brief"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "owner": {
+          "oneOf": [
+            {
+              "enum": [
+                "user",
+                "expert",
+                "park_operator",
+                "host_orchestrator"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "basisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "status": {
+          "oneOf": [
+            {
+              "enum": [
+                "ready",
+                "blocked",
+                "completed"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "authorizationRequired": {
+          "type": "boolean"
+        },
+        "authorizationBasisRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "authorizationRequired": {
+                "const": true
+              }
+            },
+            "required": [
+              "authorizationRequired"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorizationBasisRefs": {
+                "minItems": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "authorizationBasisRefs": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "capabilityStates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshotRef",
+        "snapshotState",
+        "discoveryCapability",
+        "readCapability",
+        "providedContentCapability",
+        "decisionAuthority"
+      ],
+      "properties": {
+        "snapshotRef": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "snapshotState": {
+          "enum": [
+            "external_runtime_verification_declared",
+            "synthetic_fixture_assumption",
+            "unverified"
+          ]
+        },
+        "discoveryCapability": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "readCapability": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "providedContentCapability": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "decisionAuthority": {
+          "const": "independent_states_only_summary_non_authoritative"
+        }
+      }
+    },
+    "genericTaskContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "packageVersion",
+        "taskContextId",
+        "contextKind",
+        "parkId",
+        "contextHash",
+        "taskGoal"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0.0"
+        },
+        "packageVersion": {
+          "const": "26.7.27"
+        },
+        "taskContextId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contextKind": {
+          "oneOf": [
+            {
+              "enum": [
+                "generic_public_research",
+                "generic_entity_audit",
+                "material_evidence_audit"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+            }
+          ]
+        },
+        "parkId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "contextHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "taskGoal": {
+          "$ref": "task-goal.schema.json"
+        }
+      }
+    },
+    "memoryContextReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordState",
+        "proofBoundary",
+        "receiptId",
+        "hostCapabilityState",
+        "hostCapabilityReceiptRef",
+        "inputReceiptRef",
+        "confirmationState",
+        "scopeType",
+        "parkRef",
+        "contextClass",
+        "preferenceBindings",
+        "contextHash",
+        "useBoundary",
+        "accessMode",
+        "writeAllowed",
+        "enterpriseEvidenceAllowed",
+        "qualificationEvidenceAllowed",
+        "completionEvidenceAllowed",
+        "crossParkReuseAllowed"
+      ],
+      "properties": {
+        "recordState": {
+          "const": "external_runtime_verification_declared"
+        },
+        "proofBoundary": {
+          "const": "business_payload_declaration_requires_external_host_registry_join"
+        },
+        "receiptId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hostCapabilityState": {
+          "const": "available"
+        },
+        "hostCapabilityReceiptRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inputReceiptRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confirmationState": {
+          "const": "user_confirmed"
+        },
+        "scopeType": {
+          "const": "park_isolated"
+        },
+        "parkRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contextClass": {
+          "const": "preference_context_only"
+        },
+        "preferenceBindings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "valueHash"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "pattern": "^contextSnapshot\\.softPreferences\\[[0-9]+\\]$"
+              },
+              "valueHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        },
+        "contextHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "useBoundary": {
+          "const": "park_preference_and_non_evidentiary_prioritization_only"
+        },
+        "accessMode": {
+          "const": "read_only"
+        },
+        "writeAllowed": {
+          "const": false
+        },
+        "enterpriseEvidenceAllowed": {
+          "const": false
+        },
+        "qualificationEvidenceAllowed": {
+          "const": false
+        },
+        "completionEvidenceAllowed": {
+          "const": false
+        },
+        "crossParkReuseAllowed": {
+          "const": false
+        }
+      }
+    }
+  }
+}

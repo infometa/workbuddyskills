@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "moka": {
+      "type": "streamableHttp",
+      "url": "https://mcp.mokahr.com/mcp"
+    }
+  }
+}

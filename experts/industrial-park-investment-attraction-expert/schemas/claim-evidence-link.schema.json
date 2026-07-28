@@ -1,0 +1,721 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.workbuddy.local/industrial-park-investment-attraction-expert/claim-evidence-link.schema.json",
+  "title": "ClaimEvidenceLink",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "claimId",
+    "entityId",
+    "predicate",
+    "value",
+    "valueType",
+    "normalizedValue",
+    "unit",
+    "normalization",
+    "criticalityAssessment",
+    "claimText",
+    "claimType",
+    "valueCardinality",
+    "constraintRefs",
+    "criterionRefs",
+    "priorityCriterionRefs",
+    "deliveryCriterionRefs",
+    "temporalScope",
+    "validFrom",
+    "validTo",
+    "evidenceRefs",
+    "sourceUsageAssessments",
+    "entailment",
+    "freshnessStatus",
+    "temporalAssessment",
+    "conflictGroupId",
+    "alternativeExplanation"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "claimId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entityId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Legal-entity subject when this is an enterprise claim; null for a task-level or non-entity public claim."
+    },
+    "taskContextRef": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Required for a task-level or non-entity claim; optional for an entity claim already joined through the enclosing task asset."
+    },
+    "predicate": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "value": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Human-readable display value only; normalizedValue and valueType are authoritative for comparison."
+    },
+    "claimText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1500
+    },
+    "claimType": {
+      "oneOf": [
+        {
+          "enum": [
+            "identity",
+            "self_declared_capability",
+            "public_entry",
+            "regulatory_eligibility",
+            "investment_intent",
+            "operating_performance",
+            "expansion_event",
+            "facility_demand",
+            "policy",
+            "regulation",
+            "park_fact",
+            "industry_trend",
+            "innovation_signal",
+            "other"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^custom:[a-z0-9][a-z0-9_-]{1,63}$"
+        }
+      ]
+    },
+    "valueCardinality": {
+      "enum": [
+        "single_valued",
+        "multi_valued"
+      ],
+      "description": "Whether this predicate can hold only one value or multiple values for the same entity at the same asOf snapshot. Distinct supported values form a conflict only when this is single_valued; support and contradiction of the same proposition conflict under either cardinality."
+    },
+    "critical": {
+      "type": "boolean",
+      "description": "Deprecated display-only compatibility field. It has no evidence, qualification, conflict or completion authority."
+    },
+    "constraintRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Hard constraints whose judgment this claim supports or contradicts.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "criterionRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Qualification criteria whose judgment this claim supports or contradicts.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "priorityCriterionRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Declared prioritization criteria whose assessment this claim supports or contradicts.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "deliveryCriterionRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "User-approved delivery usability criteria whose assessment this claim supports or contradicts.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "temporalScope": {
+      "enum": [
+        "current_state",
+        "effective_period",
+        "point_in_time",
+        "stable_identity"
+      ],
+      "description": "Determines how validFrom/validTo and source freshness are evaluated at the portfolio asOf snapshot."
+    },
+    "validFrom": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "validTo": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "sourceUsageAssessments": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "One claim-specific suitability assessment per evidenceRefs item. Source class and legacy trust tier are non-normative hints and cannot replace this relationship record.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceRef",
+          "usageEligibility",
+          "publisherResponsibilityRole",
+          "jurisdictionFit",
+          "contentDirectness",
+          "entityBinding",
+          "readbackStatus",
+          "basisRefs",
+          "assessmentBoundary"
+        ],
+        "properties": {
+          "sourceRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "usageEligibility": {
+            "enum": [
+              "standalone",
+              "corroborative",
+              "lead_only",
+              "not_eligible",
+              "unresolved"
+            ]
+          },
+          "publisherResponsibilityRole": {
+            "oneOf": [
+              {
+                "enum": [
+                  "self_publisher",
+                  "official_registry",
+                  "statutory_filer",
+                  "authorized_institutional_publisher",
+                  "independent_reporter",
+                  "index_or_aggregator",
+                  "unknown"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^other_responsible:[a-z0-9][a-z0-9_-]{1,63}$"
+              }
+            ]
+          },
+          "jurisdictionFit": {
+            "enum": [
+              "matched",
+              "not_applicable",
+              "unresolved",
+              "mismatched"
+            ]
+          },
+          "contentDirectness": {
+            "enum": [
+              "direct_publisher_content",
+              "direct_official_record",
+              "first_party_filing",
+              "independent_reporting",
+              "aggregated_or_indexed",
+              "unknown"
+            ]
+          },
+          "entityBinding": {
+            "enum": [
+              "bound",
+              "unresolved",
+              "mismatched"
+            ]
+          },
+          "readbackStatus": {
+            "enum": [
+              "readable",
+              "partial",
+              "unavailable",
+              "blocked",
+              "failed"
+            ]
+          },
+          "basisRefs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "assessmentBoundary": {
+            "const": "claim_specific_no_global_source_ranking"
+          }
+        }
+      }
+    },
+    "entailment": {
+      "enum": [
+        "supports",
+        "partially_supports",
+        "contradicts",
+        "unknown"
+      ]
+    },
+    "freshnessStatus": {
+      "enum": [
+        "current",
+        "stale",
+        "unknown"
+      ]
+    },
+    "temporalAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asOf",
+        "assessmentMethod",
+        "sourceRefs",
+        "rationale"
+      ],
+      "properties": {
+        "asOf": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "assessmentMethod": {
+          "enum": [
+            "stable_identity",
+            "source_date_and_volatility",
+            "effective_period",
+            "current_page_readback",
+            "point_in_time_only",
+            "insufficient_basis"
+          ]
+        },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      }
+    },
+    "conflictGroupId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "alternativeExplanation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000
+    },
+    "valueType": {
+      "enum": [
+        "string",
+        "number",
+        "boolean",
+        "string_set",
+        "date",
+        "quantity",
+        "structured_identity"
+      ]
+    },
+    "normalizedValue": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "unit": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "normalization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "version"
+      ],
+      "properties": {
+        "method": {
+          "enum": [
+            "exact",
+            "exact_url",
+            "nfkc_trimmed",
+            "nfkc_casefold",
+            "sorted_unique_set",
+            "iso_date",
+            "si_quantity",
+            "canonical_json"
+          ]
+        },
+        "version": {
+          "const": "1.0.0"
+        }
+      }
+    },
+    "criticalityAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "isCritical",
+        "authorityRefs",
+        "derivationRule"
+      ],
+      "properties": {
+        "isCritical": {
+          "type": "boolean"
+        },
+        "authorityRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "derivationRule": {
+          "const": "task_goal_park_constraint_identity_and_delivery_reference_union"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "entityId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "entityId"
+          ]
+        },
+        {
+          "properties": {
+            "entityId": {
+              "type": "null"
+            },
+            "taskContextRef": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "entityId",
+            "taskContextRef"
+          ]
+        }
+      ]
+    },
+    {
+      "if": {
+        "properties": {
+          "temporalScope": {
+            "const": "stable_identity"
+          }
+        },
+        "required": [
+          "temporalScope"
+        ]
+      },
+      "then": {
+        "properties": {
+          "claimType": {
+            "const": "identity"
+          },
+          "predicate": {
+            "const": "legal_entity_identity"
+          },
+          "constraintRefs": {
+            "maxItems": 0
+          },
+          "criterionRefs": {
+            "maxItems": 0
+          },
+          "priorityCriterionRefs": {
+            "maxItems": 0
+          },
+          "deliveryCriterionRefs": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "claimType": {
+            "const": "identity"
+          }
+        },
+        "required": [
+          "claimType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "predicate": {
+            "const": "legal_entity_identity"
+          },
+          "temporalScope": {
+            "const": "stable_identity"
+          },
+          "valueCardinality": {
+            "const": "single_valued"
+          },
+          "temporalAssessment": {
+            "properties": {
+              "assessmentMethod": {
+                "const": "stable_identity"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "freshnessStatus": {
+            "const": "current"
+          }
+        },
+        "required": [
+          "freshnessStatus"
+        ]
+      },
+      "then": {
+        "properties": {
+          "temporalAssessment": {
+            "properties": {
+              "assessmentMethod": {
+                "not": {
+                  "enum": [
+                    "point_in_time_only",
+                    "insufficient_basis"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "valueType": {
+            "const": "string"
+          }
+        },
+        "required": [
+          "valueType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "normalizedValue": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "valueType": {
+            "const": "date"
+          }
+        },
+        "required": [
+          "valueType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "normalizedValue": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "valueType": {
+            "const": "structured_identity"
+          }
+        },
+        "required": [
+          "valueType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "normalizedValue": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "valueType": {
+            "const": "number"
+          }
+        },
+        "required": [
+          "valueType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "normalizedValue": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "valueType": {
+            "const": "quantity"
+          }
+        },
+        "required": [
+          "valueType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "normalizedValue": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "valueType": {
+            "const": "boolean"
+          }
+        },
+        "required": [
+          "valueType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "normalizedValue": {
+            "type": "boolean"
+          },
+          "unit": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "valueType": {
+            "const": "string_set"
+          }
+        },
+        "required": [
+          "valueType"
+        ]
+      },
+      "then": {
+        "properties": {
+          "normalizedValue": {
+            "type": "array"
+          },
+          "unit": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}
