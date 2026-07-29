@@ -343,6 +343,26 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
         self.assertEqual(result["summary"]["error_count"], 0)
         self.assertNotIn("issues", result)
 
+    def test_lint_xml_ignores_chart_parsed_values_roundtrip_tag(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <chart topLeftX="80" topLeftY="80" width="300" height="160">
+                  <chartData>
+                    <chartField>
+                      <chartParsedValues>Africa</chartParsedValues>
+                    </chartField>
+                  </chartData>
+                </chart>
+              </data>
+            </slide>
+            """
+        )
+
+        self.assertEqual(result["summary"]["error_count"], 0)
+        self.assertNotIn("issues", result)
+
     def test_lint_xml_limits_chart_roundtrip_attrs_to_matching_tags(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
@@ -637,9 +657,10 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             </slide>
             """
         )
-        self.assertEqual(result["summary"]["error_count"], 0)
-        self.assertEqual(result["summary"]["warning_count"], 1)
+        self.assertEqual(result["summary"]["error_count"], 1)
+        self.assertEqual(result["summary"]["warning_count"], 0)
         self.assertEqual(result["slides"][0]["issues"][0]["code"], "text_may_overflow_shape")
+        self.assertEqual(result["slides"][0]["issues"][0]["level"], "error")
         self.assertEqual(result["slides"][0]["issues"][0]["elements"], ["source"])
 
     def test_lint_xml_reports_text_out_of_canvas_and_warns_for_text_height(self) -> None:
@@ -660,8 +681,8 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             """
         )
         issue = result["slides"][0]["issues"][0]
-        self.assertEqual(result["summary"]["error_count"], 1)
-        self.assertEqual(result["summary"]["warning_count"], 1)
+        self.assertEqual(result["summary"]["error_count"], 2)
+        self.assertEqual(result["summary"]["warning_count"], 0)
         self.assertEqual(issue["code"], "shape_out_of_canvas")
         self.assertEqual(issue["overflow"], {"left": 0, "top": 0, "right": 160, "bottom": 40})
 
@@ -671,7 +692,7 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             <slide xmlns="http://www.larkoffice.com/sml/2.0">
               <data>
                 <shape id="overflowing" type="text" topLeftX="80" topLeftY="80" width="360" height="80">
-                  <content fontSize="20" lineSpacing="multiple:1.5">
+                  <content fontSize="20" lineSpacing="multiple:1.5" autoFit="no-auto-fit">
                     <p>第一段</p><p>第二段</p><p>第三段</p><p>第四段</p>
                   </content>
                 </shape>
@@ -685,20 +706,29 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
                     <p>第一段</p><p>第二段</p><p>第三段</p><p>第四段</p>
                   </content>
                 </shape>
+                <shape id="shape-auto-fit" type="text" topLeftX="480" topLeftY="240" width="360" height="30">
+                  <content fontSize="20" lineSpacing="multiple:1.5" autoFit="shape-auto-fit">
+                    <p>第一段</p><p>第二段</p><p>第三段</p>
+                  </content>
+                </shape>
               </data>
             </slide>
             """
         )
         issues = result["slides"][0]["issues"]
-        self.assertEqual(result["summary"]["error_count"], 0)
-        self.assertEqual(result["summary"]["warning_count"], 1)
-        self.assertEqual(issues[0]["code"], "text_may_overflow_shape")
-        self.assertEqual(issues[0]["elements"], ["overflowing"])
-        self.assertEqual(issues[0]["line_count"], 4)
-        self.assertEqual(issues[0]["estimated_height"], 110)
-        self.assertEqual(issues[0]["available_height"], 80)
-        self.assertEqual(issues[0]["overflow"], 30)
-        self.assertIn('wrap="true" autoFit="normal-auto-fit"', issues[0]["message"])
+        overflow_issues = [issue for issue in issues if issue["code"] == "text_may_overflow_shape"]
+        self.assertEqual(result["summary"]["error_count"], 1)
+        overflow_ids = {issue["elements"][0] for issue in overflow_issues}
+        self.assertIn("overflowing", overflow_ids)
+        self.assertNotIn("auto-fit", overflow_ids)
+        self.assertNotIn("shape-auto-fit", overflow_ids)
+        self.assertNotIn("fitting", overflow_ids)
+        overflowing_issue = next(issue for issue in overflow_issues if issue["elements"] == ["overflowing"])
+        self.assertEqual(overflowing_issue["line_count"], 4)
+        self.assertEqual(overflowing_issue["estimated_height"], 110)
+        self.assertEqual(overflowing_issue["available_height"], 80)
+        self.assertEqual(overflowing_issue["overflow"], 30)
+        self.assertIn('wrap="true" autoFit="normal-auto-fit"', overflowing_issue["message"])
 
     def test_lint_xml_uses_fixed_line_spacing_for_text_height_warning(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
@@ -706,7 +736,7 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             <slide xmlns="http://www.larkoffice.com/sml/2.0">
               <data>
                 <shape id="fixed-overflow" type="text" topLeftX="80" topLeftY="80" width="360" height="50">
-                  <content fontSize="20" lineSpacing="fixed:20">
+                  <content fontSize="20" lineSpacing="fixed:20" autoFit="no-auto-fit">
                     <p>第一段</p><p>第二段</p><p>第三段</p>
                   </content>
                 </shape>
@@ -716,17 +746,525 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
         )
         issue = result["slides"][0]["issues"][0]
         self.assertEqual(result["summary"]["warning_count"], 1)
+        self.assertEqual(result["summary"]["error_count"], 0)
+        self.assertEqual(issue["level"], "warning")
         self.assertEqual(issue["line_height"], 20)
         self.assertEqual(issue["estimated_height"], 60)
         self.assertEqual(issue["overflow"], 10)
+
+    def test_lint_xml_ignores_subpixel_text_height_overflow_tolerance(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="minor-overflow" type="text" topLeftX="80" topLeftY="80" width="360" height="39.8">
+                  <content fontSize="20" lineSpacing="fixed:20" autoFit="no-auto-fit">
+                    <p>第一段</p><p>第二段</p>
+                  </content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(overflow_issues, [])
+
+    def test_lint_xml_allows_single_line_width_estimation_jitter(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="metric" type="text" topLeftX="80" topLeftY="80" width="152" height="54">
+                  <content fontSize="36" lineSpacing="multiple:1.2" autoFit="no-auto-fit"><p>4.16万亿</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(overflow_issues, [])
+
+    def test_lint_xml_allows_short_metric_text_with_separators_as_single_line(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="metric" type="text" topLeftX="80" topLeftY="80" width="150" height="50">
+                  <content textType="title" fontSize="36" autoFit="no-auto-fit"><p>4.16万亿</p></content>
+                </shape>
+                <shape id="table-number" type="text" topLeftX="80" topLeftY="160" width="25" height="20">
+                  <content fontSize="10" textAlign="center" autoFit="no-auto-fit"><p>1,380</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(overflow_issues, [])
+
+    def test_lint_xml_reports_plain_short_metric_when_it_wraps(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="plain-age" type="text" topLeftX="80" topLeftY="80" width="50" height="80">
+                  <content textType="title" fontSize="36" bold="true" autoFit="no-auto-fit"><p>82岁</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(len(overflow_issues), 1)
+        self.assertEqual(overflow_issues[0]["elements"], ["plain-age"])
+
+    def test_lint_xml_allows_centered_short_label_near_fit_as_single_line(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="centered-label" type="text" topLeftX="80" topLeftY="80" width="200" height="30">
+                  <content fontSize="14" bold="true" textAlign="center" autoFit="no-auto-fit">
+                    <p>参数服务器 (Parameter Server)</p>
+                  </content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(overflow_issues, [])
+
+    def test_lint_xml_allows_headline_near_fit_as_single_line(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="headline" type="text" topLeftX="80" topLeftY="80" width="700" height="50">
+                  <content textType="headline" fontSize="26" bold="true" lineSpacing="multiple:1.3" autoFit="no-auto-fit">
+                    <p>全球半导体市场规模持续高速增长，AI驱动新一轮景气周期</p>
+                  </content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(overflow_issues, [])
+
+    def test_lint_xml_allows_dense_body_line_spacing_estimation_slack(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="dense-body" type="text" topLeftX="80" topLeftY="80" width="360" height="140">
+                  <content fontSize="13" bold="true" lineSpacing="multiple:1.7" autoFit="no-auto-fit">
+                    <p>总体目标：</p>
+                    <p>建立深度神经网络高效训练的统一理论框架，实现训练效率与模型性能的协同优化。</p>
+                    <p>具体目标：</p>
+                    <p>提出自适应优化算法，收敛速度提升 2-3 倍</p>
+                    <p>实现结构化压缩方法，模型体积减少 10 倍以上</p>
+                    <p>构建分布式训练策略，64 GPU 加速比 &gt; 50x</p>
+                  </content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(overflow_issues, [])
+
+    def test_lint_xml_reports_dense_body_when_adjusted_height_still_overflows(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="dense-body" type="text" topLeftX="80" topLeftY="80" width="360" height="100">
+                  <content fontSize="13" bold="true" lineSpacing="multiple:1.7" autoFit="no-auto-fit">
+                    <p>总体目标：</p>
+                    <p>建立深度神经网络高效训练的统一理论框架，实现训练效率与模型性能的协同优化。</p>
+                    <p>具体目标：</p>
+                    <p>提出自适应优化算法，收敛速度提升 2-3 倍</p>
+                    <p>实现结构化压缩方法，模型体积减少 10 倍以上</p>
+                    <p>构建分布式训练策略，64 GPU 加速比 &gt; 50x</p>
+                  </content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(len(overflow_issues), 1)
+        self.assertEqual(overflow_issues[0]["elements"], ["dense-body"])
+
+    def test_lint_xml_reports_letter_spaced_caption_near_fit(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="caption" type="text" topLeftX="80" topLeftY="80" width="120" height="20">
+                  <content textType="caption" fontSize="11" letterSpacing="1" autoFit="no-auto-fit">
+                    <p>RISKS &amp; CHALLENGES</p>
+                  </content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(len(overflow_issues), 1)
+        self.assertEqual(overflow_issues[0]["elements"], ["caption"])
+
+    def test_lint_xml_reports_micro_caption_when_wrapping_overflows(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="micro-caption" type="text" topLeftX="80" topLeftY="60" width="200" height="16">
+                  <content textType="caption" fontSize="3" lineSpacing="multiple:1.3" letterSpacing="160" autoFit="no-auto-fit">
+                    <p>MARKET INSIGHT · 市场洞察</p>
+                  </content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        overflow_issues = [
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        ]
+        self.assertEqual(len(overflow_issues), 1)
+        self.assertEqual(overflow_issues[0]["elements"], ["micro-caption"])
+
+    def test_lint_xml_text_may_overflow_shape_upgrades_to_error_above_threshold(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="just-warning" type="text" topLeftX="80" topLeftY="80" width="360" height="50">
+                  <content fontSize="20" lineSpacing="fixed:20" autoFit="no-auto-fit">
+                    <p>第一段</p><p>第二段</p><p>第三段</p>
+                  </content>
+                </shape>
+                <shape id="error-overflow" type="text" topLeftX="80" topLeftY="200" width="360" height="30">
+                  <content fontSize="20" lineSpacing="fixed:20" autoFit="no-auto-fit">
+                    <p>第一段</p><p>第二段</p><p>第三段</p>
+                  </content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        issues = {issue["elements"][0]: issue for issue in result["slides"][0]["issues"]}
+        self.assertEqual(issues["just-warning"]["level"], "warning")
+        self.assertEqual(issues["just-warning"]["overflow"], 10)
+        self.assertEqual(issues["error-overflow"]["level"], "error")
+        self.assertEqual(issues["error-overflow"]["overflow"], 30)
+        self.assertEqual(result["summary"]["error_count"], 1)
+        self.assertEqual(result["summary"]["warning_count"], 1)
+
+    def test_lint_xml_text_may_overflow_shape_downgrades_background_decoration_to_info(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="bg-deco" type="text" topLeftX="0" topLeftY="0" width="600" height="80" alpha="0.3">
+                  <content fontSize="120" lineSpacing="fixed:120" autoFit="no-auto-fit"><p>2026</p></content>
+                </shape>
+                <shape id="foreground" type="text" topLeftX="40" topLeftY="20" width="400" height="60">
+                  <content fontSize="20" lineSpacing="fixed:24"><p>Annual Report</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        issues = {
+            issue["elements"][0]: issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape"
+        }
+        self.assertEqual(issues["bg-deco"]["level"], "info")
+        self.assertEqual(result["summary"]["warning_count"], 0)
+        self.assertEqual(result["summary"]["info_count"], 1)
+        self.assertEqual(result["slides"][0]["infos"], [issues["bg-deco"]])
+        self.assertIn("background decoration", issues["bg-deco"]["message"])
+
+    def test_lint_xml_allows_shape_alpha_ghost_text_out_of_canvas_and_overlap(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="ghost-number" type="text" topLeftX="-60" topLeftY="30" width="360" height="180" alpha="0.2">
+                  <content fontSize="160" lineSpacing="fixed:160" wrap="false"><p>01</p></content>
+                </shape>
+                <shape id="title" type="text" topLeftX="80" topLeftY="80" width="360" height="80">
+                  <content fontSize="30" lineSpacing="fixed:36"><p>Annual Review</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        codes = [issue["code"] for issue in result["slides"][0]["issues"]]
+        self.assertEqual(result["summary"]["error_count"], 0)
+        self.assertNotIn("shape_out_of_canvas", codes)
+        self.assertNotIn("bbox_overlap", codes)
+
+    def test_lint_xml_allows_content_color_alpha_ghost_text_out_of_canvas_and_overlap(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="ghost-year" type="text" topLeftX="760" topLeftY="20" width="260" height="160">
+                  <content fontSize="140" color="rgba(0,0,0,0.2)" lineSpacing="fixed:140" wrap="false"><p>2026</p></content>
+                </shape>
+                <shape id="headline" type="text" topLeftX="700" topLeftY="70" width="220" height="80">
+                  <content fontSize="28" lineSpacing="fixed:34"><p>Forecast</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        codes = [issue["code"] for issue in result["slides"][0]["issues"]]
+        self.assertEqual(result["summary"]["error_count"], 0)
+        self.assertNotIn("shape_out_of_canvas", codes)
+        self.assertNotIn("bbox_overlap", codes)
+
+    def test_lint_xml_allows_faint_medium_ghost_text_out_of_canvas_and_overlap(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="medium-ghost" type="text" topLeftX="820" topLeftY="300" width="270" height="72" alpha="0.32">
+                  <content fontSize="40" lineSpacing="fixed:40" wrap="false"><p>OFF EDGE</p></content>
+                </shape>
+                <shape id="caption" type="text" topLeftX="760" topLeftY="315" width="180" height="36">
+                  <content fontSize="16" lineSpacing="fixed:20"><p>Readable caption</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        codes = [issue["code"] for issue in result["slides"][0]["issues"]]
+        self.assertEqual(result["summary"]["error_count"], 0)
+        self.assertNotIn("shape_out_of_canvas", codes)
+        self.assertNotIn("bbox_overlap", codes)
+
+    def test_lint_xml_allows_ghost_text_image_overlap(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="ghost-label" type="text" topLeftX="100" topLeftY="40" width="560" height="160" alpha="0.2">
+                  <content fontSize="120" lineSpacing="fixed:120" wrap="false"><p>2026</p></content>
+                </shape>
+                <img id="photo" src="token" topLeftX="160" topLeftY="70" width="260" height="160"/>
+                <shape id="title" type="text" topLeftX="610" topLeftY="95" width="320" height="60">
+                  <content fontSize="28" lineSpacing="fixed:34"><p>Annual Review</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        codes = [issue["code"] for issue in result["slides"][0]["issues"]]
+        self.assertNotIn("image_covers_text", codes)
+        self.assertNotIn("bbox_overlap", codes)
+
+    def test_lint_slide_allows_ghost_text_whiteboard_overlap(self) -> None:
+        result = xml_text_overlap_lint.lint_slide(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <whiteboard id="board" topLeftX="180" topLeftY="70" width="420" height="300"/>
+                <shape id="ghost-label" type="text" topLeftX="100" topLeftY="40" width="560" height="160" alpha="0.2">
+                  <content fontSize="120" lineSpacing="fixed:120" wrap="false"><p>2026</p></content>
+                </shape>
+                <shape id="title" type="text" topLeftX="610" topLeftY="95" width="220" height="60">
+                  <content fontSize="28" lineSpacing="fixed:34"><p>Annual Review</p></content>
+                </shape>
+              </data>
+            </slide>
+            """,
+            1,
+        )
+        codes = [issue["code"] for issue in result["issues"]]
+        self.assertNotIn("whiteboard_external_overlap", codes)
+
+    def test_lint_xml_allows_faint_ghost_text_without_area_threshold(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="small-ghost" type="text" topLeftX="940" topLeftY="300" width="40" height="40" alpha="0.32">
+                  <content fontSize="36" lineSpacing="fixed:36" wrap="false"><p>土</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        self.assertEqual(result["summary"]["error_count"], 0)
+        self.assertEqual(result["slides"][0]["issues"], [])
+
+    def test_lint_xml_keeps_out_of_canvas_error_for_medium_text_without_faint_alpha(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="medium-not-ghost" type="text" topLeftX="820" topLeftY="300" width="270" height="72" alpha="0.36">
+                  <content fontSize="54" lineSpacing="fixed:54" wrap="false"><p>OFF EDGE</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        self.assertEqual(result["summary"]["error_count"], 1)
+        self.assertEqual(result["slides"][0]["issues"][0]["code"], "shape_out_of_canvas")
+        self.assertEqual(result["slides"][0]["issues"][0]["elements"], ["medium-not-ghost"])
+
+    def test_lint_xml_keeps_out_of_canvas_error_for_half_alpha_large_text(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="half-alpha" type="text" topLeftX="760" topLeftY="20" width="260" height="160">
+                  <content fontSize="140" color="rgba(0,0,0,0.5)" lineSpacing="fixed:140" wrap="false"><p>2026</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        self.assertEqual(result["summary"]["error_count"], 1)
+        self.assertEqual(result["slides"][0]["issues"][0]["code"], "shape_out_of_canvas")
+        self.assertEqual(result["slides"][0]["issues"][0]["elements"], ["half-alpha"])
+
+    def test_lint_xml_text_may_overflow_shape_keeps_error_when_alpha_not_low(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="opaque-big" type="text" topLeftX="0" topLeftY="0" width="600" height="80" alpha="0.9">
+                  <content fontSize="120" lineSpacing="fixed:120" autoFit="no-auto-fit"><p>2026</p></content>
+                </shape>
+                <shape id="foreground" type="text" topLeftX="40" topLeftY="20" width="400" height="60">
+                  <content fontSize="20" lineSpacing="fixed:24"><p>Annual Report</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        issue = next(
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape" and issue["elements"] == ["opaque-big"]
+        )
+        self.assertEqual(issue["level"], "error")
+
+    def test_lint_xml_text_may_overflow_shape_keeps_error_when_no_foreground_text(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="lonely-big" type="text" topLeftX="0" topLeftY="0" width="600" height="80" alpha="0.3">
+                  <content fontSize="120" lineSpacing="fixed:120" autoFit="no-auto-fit"><p>2026</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        issue = next(
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape" and issue["elements"] == ["lonely-big"]
+        )
+        self.assertEqual(issue["level"], "error")
+
+    def test_lint_xml_text_may_overflow_shape_keeps_error_when_foreground_alpha_zero(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="bg-deco" type="text" topLeftX="0" topLeftY="0" width="600" height="80" alpha="0.3">
+                  <content fontSize="120" lineSpacing="fixed:120" autoFit="no-auto-fit"><p>2026</p></content>
+                </shape>
+                <shape id="transparent-foreground" type="text" topLeftX="40" topLeftY="20" width="400" height="60" alpha="0">
+                  <content fontSize="20" lineSpacing="fixed:24"><p>Annual Report</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        issue = next(
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape" and issue["elements"] == ["bg-deco"]
+        )
+        self.assertEqual(issue["level"], "error")
+
+    def test_lint_xml_text_may_overflow_shape_keeps_error_when_foreground_is_below_in_order(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="foreground" type="text" topLeftX="40" topLeftY="20" width="400" height="60">
+                  <content fontSize="20" lineSpacing="fixed:24"><p>Annual Report</p></content>
+                </shape>
+                <shape id="top-big" type="text" topLeftX="0" topLeftY="0" width="600" height="80" alpha="0.3">
+                  <content fontSize="120" lineSpacing="fixed:120" autoFit="no-auto-fit"><p>2026</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        issue = next(
+            issue
+            for issue in result["slides"][0]["issues"]
+            if issue["code"] == "text_may_overflow_shape" and issue["elements"] == ["top-big"]
+        )
+        self.assertEqual(issue["level"], "error")
 
     def test_lint_xml_uses_paragraph_spacing_overrides_for_text_height_warning(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <slide xmlns="http://www.larkoffice.com/sml/2.0">
               <data>
-                <shape id="paragraph-overflow" type="text" topLeftX="80" topLeftY="80" width="360" height="35">
-                  <content fontSize="20" lineSpacing="multiple:1.5">
+                <shape id="paragraph-overflow" type="text" topLeftX="80" topLeftY="80" width="360" height="30">
+                  <content fontSize="20" lineSpacing="multiple:1.5" autoFit="no-auto-fit">
                     <p lineSpacing="fixed:10" beforeLineSpacing="fixed:5" afterLineSpacing="fixed:5">第一行<br/>第二行</p>
                   </content>
                 </shape>
@@ -745,7 +1283,36 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
         self.assertEqual(issues[0]["line_count"], 2)
         self.assertEqual(issues[0]["line_height"], 10)
         self.assertEqual(issues[0]["estimated_height"], 40)
-        self.assertEqual(issues[0]["overflow"], 5)
+        self.assertEqual(issues[0]["overflow"], 10)
+
+    def test_lint_xml_uses_letter_spacing_for_text_overflow_warning(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="baseline" type="text" topLeftX="0" topLeftY="0" width="120" height="30">
+                  <content fontSize="20" lineSpacing="multiple:1.5" autoFit="no-auto-fit"><p>一二三四五六</p></content>
+                </shape>
+                <shape id="content-spaced" type="text" topLeftX="200" topLeftY="0" width="120" height="30">
+                  <content fontSize="20" lineSpacing="multiple:1.5" letterSpacing="2" autoFit="no-auto-fit"><p>一二三四五六</p></content>
+                </shape>
+                <shape id="paragraph-spaced" type="text" topLeftX="400" topLeftY="0" width="120" height="30">
+                  <content fontSize="20" lineSpacing="multiple:1.5" autoFit="no-auto-fit"><p letterSpacing="2">一二三四五六</p></content>
+                </shape>
+              </data>
+            </slide>
+            """
+        )
+        issues = result["slides"][0]["issues"]
+        overflow_ids = [issue["elements"][0] for issue in issues if issue["code"] == "text_may_overflow_shape"]
+        self.assertNotIn("baseline", overflow_ids)
+        self.assertIn("content-spaced", overflow_ids)
+        self.assertIn("paragraph-spaced", overflow_ids)
+        by_id = {issue["elements"][0]: issue for issue in issues if issue["code"] == "text_may_overflow_shape"}
+        self.assertEqual(by_id["content-spaced"]["line_count"], 2)
+        self.assertEqual(by_id["content-spaced"]["estimated_height"], 50)
+        self.assertEqual(by_id["content-spaced"]["overflow"], 20)
+        self.assertEqual(by_id["paragraph-spaced"]["line_count"], 2)
 
     def test_strip_xml_paragraphs_preserves_br_as_hard_line_break(self) -> None:
         self.assertEqual(
@@ -753,7 +1320,7 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             "第一行\n第二行\n第三行",
         )
 
-    def test_lint_xml_blocks_template_style_bleed_outside_canvas(self) -> None:
+    def test_lint_xml_allows_template_style_images_outside_canvas(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <presentation xmlns="http://www.larkoffice.com/sml/2.0" width="960" height="540">
@@ -771,9 +1338,8 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             </presentation>
             """
         )
-        self.assertEqual(result["summary"]["error_count"], 1)
+        self.assertEqual(result["summary"]["error_count"], 0)
         self.assertEqual(result["summary"]["warning_count"], 0)
-        self.assertEqual(result["slides"][0]["errors"][0]["code"], "img_out_of_canvas")
 
     def test_extract_elements_preserves_supported_element_geometry_order_and_text_metadata(self) -> None:
         elements = xml_text_overlap_lint.extract_elements(
@@ -807,7 +1373,7 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
         self.assertEqual(elements[1]["fontSize"], 28)
         self.assertEqual(elements[1]["text"], "Growth & scale\nFocused execution")
 
-    def test_lint_xml_blocks_small_out_of_bounds_images(self) -> None:
+    def test_lint_xml_ignores_small_out_of_bounds_images(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <presentation xmlns="http://www.larkoffice.com/sml/2.0" width="960" height="540">
@@ -819,10 +1385,9 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             </presentation>
             """
         )
-        self.assertEqual(result["summary"]["error_count"], 1)
-        self.assertEqual(result["slides"][0]["errors"][0]["code"], "img_out_of_canvas")
+        self.assertEqual(result["summary"]["error_count"], 0)
 
-    def test_lint_xml_blocks_out_of_canvas_images(self) -> None:
+    def test_lint_xml_ignores_out_of_canvas_images(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <presentation xmlns="http://www.larkoffice.com/sml/2.0" width="960" height="540">
@@ -835,13 +1400,9 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             </presentation>
             """
         )
-        self.assertEqual(result["summary"]["error_count"], 2)
-        self.assertEqual(
-            [issue["code"] for issue in result["slides"][0]["errors"]],
-            ["img_out_of_canvas", "img_out_of_canvas"],
-        )
+        self.assertEqual(result["summary"]["error_count"], 0)
 
-    def test_lint_xml_blocks_full_bleed_images_outside_canvas(self) -> None:
+    def test_lint_xml_ignores_full_bleed_images_outside_canvas(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <presentation xmlns="http://www.larkoffice.com/sml/2.0" width="960" height="540">
@@ -853,10 +1414,9 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             </presentation>
             """
         )
-        self.assertEqual(result["summary"]["error_count"], 1)
-        self.assertEqual(result["slides"][0]["errors"][0]["code"], "img_out_of_canvas")
+        self.assertEqual(result["summary"]["error_count"], 0)
 
-    def test_lint_xml_reports_text_and_chart_out_of_canvas(self) -> None:
+    def test_lint_xml_reports_text_and_chart_but_not_image_out_of_canvas(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <presentation xmlns="http://www.larkoffice.com/sml/2.0" width="960" height="540">
@@ -871,17 +1431,16 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             """
         )
         issues = result["slides"][0]["issues"]
-        self.assertEqual(result["summary"]["error_count"], 3)
+        self.assertEqual(result["summary"]["error_count"], 2)
         self.assertEqual(
             [(issue["code"], issue["elements"], issue["overflow"]) for issue in issues],
             [
                 ("shape_out_of_canvas", ["outside-shape"], {"left": 10, "top": 0, "right": 0, "bottom": 0}),
-                ("img_out_of_canvas", ["outside-img"], {"left": 0, "top": 20, "right": 0, "bottom": 0}),
                 ("chart_out_of_canvas", ["outside-chart"], {"left": 0, "top": 0, "right": 40, "bottom": 0}),
             ],
         )
 
-    def test_lint_xml_reports_line_out_of_canvas_with_structured_geometry(self) -> None:
+    def test_lint_xml_ignores_line_out_of_canvas(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <slide xmlns="http://www.larkoffice.com/sml/2.0">
@@ -895,11 +1454,8 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             """
         )
 
-        issue = result["slides"][0]["errors"][0]
-        self.assertEqual(issue["code"], "line_out_of_canvas")
-        self.assertEqual(issue["element_ids"], ["connector"])
-        self.assertEqual(issue["measurement"]["overflow"]["right"], 20)
-        self.assertEqual(issue["related_objects"][0]["kind"], "line")
+        self.assertEqual(result["summary"]["error_count"], 0)
+        self.assertEqual(result["slides"][0]["issues"], [])
 
     def test_lint_xml_uses_rotated_text_and_chart_bounds_for_canvas_validation(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
@@ -922,13 +1478,13 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
         self.assertEqual(issues_by_element["rotated-chart"]["code"], "chart_out_of_canvas")
         self.assertAlmostEqual(issues_by_element["rotated-chart"]["overflow"]["right"], 20.710678, places=5)
 
-    def test_lint_xml_uses_rotated_bounds_for_rect_and_image_canvas_validation(self) -> None:
+    def test_lint_xml_uses_declared_bounds_for_rect_and_ignores_images(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <presentation xmlns="http://www.larkoffice.com/sml/2.0" width="960" height="540">
               <slide xmlns="http://www.larkoffice.com/sml/2.0">
                 <data>
-                  <shape id="rotated-rect" type="rect" topLeftX="0" topLeftY="0" width="100" height="100" rotation="45"/>
+                  <shape id="rotated-rect" type="rect" topLeftX="900" topLeftY="0" width="100" height="100" rotation="45"/>
                   <img id="rotated-image" topLeftX="860" topLeftY="200" width="100" height="100" rotation="45"/>
                 </data>
               </slide>
@@ -936,12 +1492,54 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             """
         )
         issues_by_element = {issue["elements"][0]: issue for issue in result["slides"][0]["issues"]}
-        self.assertEqual(result["summary"]["error_count"], 2)
+        self.assertEqual(result["summary"]["error_count"], 1)
         self.assertEqual(issues_by_element["rotated-rect"]["code"], "shape_out_of_canvas")
-        self.assertAlmostEqual(issues_by_element["rotated-rect"]["overflow"]["left"], 20.710678, places=5)
-        self.assertAlmostEqual(issues_by_element["rotated-rect"]["overflow"]["top"], 20.710678, places=5)
-        self.assertEqual(issues_by_element["rotated-image"]["code"], "img_out_of_canvas")
-        self.assertAlmostEqual(issues_by_element["rotated-image"]["overflow"]["right"], 20.710678, places=5)
+        self.assertEqual(issues_by_element["rotated-rect"]["overflow"], {"left": 0, "top": 0, "right": 40, "bottom": 0})
+        self.assertNotIn("rotated-image", issues_by_element)
+
+    def test_detect_elements_out_of_canvas_limits_detection_to_whitelist(self) -> None:
+        issues = xml_text_overlap_lint.detect_elements_out_of_canvas(
+            [
+                {"id": "table", "kind": "table", "x": 95, "y": 0, "width": 10, "height": 10, "rotation": 45},
+                {"id": "chart", "kind": "chart", "x": 95, "y": 0, "width": 10, "height": 10, "rotation": 0},
+                {
+                    "id": "text",
+                    "kind": "shape",
+                    "type": "text",
+                    "x": 95,
+                    "y": 0,
+                    "width": 10,
+                    "height": 10,
+                    "rotation": 0,
+                },
+                {
+                    "id": "rect",
+                    "kind": "shape",
+                    "type": "rect",
+                    "x": 95,
+                    "y": 0,
+                    "width": 10,
+                    "height": 10,
+                    "rotation": 45,
+                },
+                {"id": "image", "kind": "img", "x": 95, "y": 0, "width": 10, "height": 10, "rotation": 0},
+                {
+                    "id": "ellipse",
+                    "kind": "shape",
+                    "type": "ellipse",
+                    "x": 95,
+                    "y": 0,
+                    "width": 10,
+                    "height": 10,
+                    "rotation": 0,
+                },
+            ],
+            100,
+            100,
+        )
+
+        self.assertEqual([issue["elements"] for issue in issues], [["table"], ["chart"], ["text"], ["rect"]])
+        self.assertEqual(issues[-1]["bbox"], {"x": 95, "y": 0, "width": 10, "height": 10})
 
     def test_lint_xml_treats_non_finite_rotations_as_zero(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
@@ -1107,8 +1705,9 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
         )
         issues_by_dimension = {issue["dimension"]: issue for issue in result["slides"][0]["issues"]}
         self.assertEqual(result["summary"]["error_count"], 0)
-        self.assertEqual(result["summary"]["warning_count"], 2)
-        self.assertEqual(issues_by_dimension["width"]["level"], "warning")
+        self.assertEqual(result["summary"]["warning_count"], 0)
+        self.assertEqual(result["summary"]["info_count"], 2)
+        self.assertEqual(issues_by_dimension["width"]["level"], "info")
         self.assertEqual(issues_by_dimension["width"]["code"], "table_resolved_size_mismatch")
         self.assertEqual(issues_by_dimension["width"]["resolved_sizes"], [100, 100, 50])
         self.assertEqual(issues_by_dimension["width"]["resolved_size"], 250)
@@ -1201,7 +1800,7 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
         }
         script_path = Path(xml_text_overlap_lint.__file__).resolve()
         with tempfile.TemporaryDirectory() as temp_dir:
-            for name, (table_xml, expected_warning_count) in cases.items():
+            for name, (table_xml, expected_info_count) in cases.items():
                 with self.subTest(case=name):
                     input_path = Path(temp_dir) / f"{name}.xml"
                     input_path.write_text(
@@ -1221,9 +1820,10 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
                     result = json.loads(completed.stdout)
                     self.assertEqual(completed.returncode, 0, completed.stderr)
                     self.assertEqual(result["summary"]["error_count"], 0)
-                    self.assertEqual(result["summary"]["warning_count"], expected_warning_count)
+                    self.assertEqual(result["summary"]["warning_count"], 0)
+                    self.assertEqual(result["summary"]["info_count"], expected_info_count)
                     self.assertTrue(
-                        all(issue["level"] == "warning" for issue in result["slides"][0]["issues"]),
+                        all(issue["level"] == "info" for issue in result["slides"][0]["issues"]),
                         result["slides"][0]["issues"],
                     )
 
@@ -1268,8 +1868,9 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             """
         )
         issue = next(issue for issue in result["slides"][0]["issues"] if issue["code"] == "image_may_cover_vertical_text")
-        self.assertEqual(issue["level"], "warning")
+        self.assertEqual(issue["level"], "info")
         self.assertEqual(result["summary"]["error_count"], 0)
+        self.assertEqual(result["summary"]["info_count"], 1)
 
 
 class XmlTextOverlapLintDensityTest(unittest.TestCase):
@@ -1357,7 +1958,7 @@ class XmlTextOverlapLintDensityTest(unittest.TestCase):
             "id": "sparse_container_content",
         })
         self.assertEqual(issue["measurement"]["container_area"], 151700)
-        self.assertEqual(issue["measurement"]["content_coverage_ratio"], 0.032)
+        self.assertEqual(issue["measurement"]["content_coverage_ratio"], 0.03)
         self.assertEqual(issue["elements"], ["trend-card", "trend-title", "trend-copy"])
         self.assertEqual(issue["element_ids"], ["trend-card", "trend-title", "trend-copy"])
         self.assertEqual(
@@ -1842,9 +2443,9 @@ class XmlTextOverlapLintDensityTest(unittest.TestCase):
         # Must match the visual bbox that should_flag_overlap actually decided with (fontSize=14
         # from extract_elements), not the fontSize=96 max-descendant value that
         # extract_density_elements computes for the same "left" element id.
-        self.assertEqual(issue["measurement"]["intersection_width"], 117.04)
+        self.assertEqual(issue["measurement"]["intersection_width"], 109.2)
         self.assertEqual(issue["measurement"]["intersection_height"], 6.8)
-        self.assertEqual(issue["measurement"]["intersection_area"], 795.872)
+        self.assertEqual(issue["measurement"]["intersection_area"], 742.56)
 
     def test_has_similar_short_card_peer_excludes_the_element_itself(self) -> None:
         card_a = {"kind": "shape", "type": "rect", "x": 0, "y": 0, "width": 300, "height": 100}

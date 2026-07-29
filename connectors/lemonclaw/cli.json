@@ -1,0 +1,39 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "init": {
+    "win32": "npm install -g https://download.ningmengyun.com/Skills/lemonclaw-cli-launcher-1.0.1.tgz",
+    "darwin": "npm install -g https://download.ningmengyun.com/Skills/lemonclaw-cli-launcher-1.0.1.tgz",
+    "linux": "npm install -g https://download.ningmengyun.com/Skills/lemonclaw-cli-launcher-1.0.1.tgz"
+  },
+  "auth": {
+    "win32": "lemonclaw-cli.cmd auth login",
+    "darwin": "lemonclaw-cli auth login",
+    "linux": "lemonclaw-cli auth login"
+  },
+  "status": {
+    "win32": "lemonclaw-cli.cmd auth status",
+    "darwin": "lemonclaw-cli auth status",
+    "linux": "lemonclaw-cli auth status"
+  },
+  "unAuth": {
+    "win32": "lemonclaw-cli.cmd auth logout",
+    "darwin": "lemonclaw-cli auth logout",
+    "linux": "lemonclaw-cli auth logout"
+  },
+  "statusMatchJson": {
+    "status": "authenticated"
+  },
+  "authUrlDomain": "www.ningmengyun.com",
+  "authWaitForExit": true,
+  "versionCheck": {
+    "command": {
+      "win32": "lemonclaw-cli.cmd --version",
+      "darwin": "lemonclaw-cli --version",
+      "linux": "lemonclaw-cli --version"
+    },
+    "minVersion": "1.0.1"
+  }
+}

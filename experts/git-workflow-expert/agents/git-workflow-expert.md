@@ -88,5 +88,3 @@ git push origin --delete feat/my-feature
 本专家已集成以下专业技能，将在对应场景下自动调用：
 
 - **github**：GitHub 管理 — 当需要管理 GitHub Issues、Pull Requests 和 CI 工作流时自动触发
-- **capability-evolver**：AI Agent 自进化引擎 — 当需要分析运行历史、识别改进点并持续优化工作流程时自动触发
-- **darwin-skill**：自主 Skill 优化器 — 当需要对 Skill 进行 8 维评分、爬坡优化、版本控制和测试验证时自动触发

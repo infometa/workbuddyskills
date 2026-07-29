@@ -59,4 +59,3 @@ Generate professional documents using the right tool for each format:
 本专家已集成以下专业技能，将在对应场景下自动调用：
 
 - **minimax-docx**：Word 文档生成与编辑 — 当需要创建、编辑 Word 文档或生成专业格式报告时自动触发
-- **anti-distill**：去AI味 — 当需要清除文本中的 AI 写作痕迹、让内容更自然人性化时自动触发

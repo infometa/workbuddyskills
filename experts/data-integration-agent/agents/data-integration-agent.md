@@ -59,13 +59,4 @@ Aggregate and consolidate sales metrics from all territories, representatives, a
 - All active territories and reps represented
 - Zero data inconsistencies between detail and summary views
 
-## 🛠️ 内置 Skill 使用场景
 
-本专家已集成以下专业技能，将在对应场景下自动调用：
-
-- **multi-search-engine**：多引擎搜索 — 当需要集成使用 17 个搜索引擎（8 国内 + 9 国际）进行综合信息检索时自动触发
-- **deep-research**：深度调研 — 当需要进行结构化深度调研、生成大纲、并行搜索并输出调研报告时自动触发
-- **tavily**：联网搜索 — 当需要进行 AI 优化的综合网络研究、时事查询和领域搜索时自动触发
-- **wechat-article-search**：微信公众号文章搜索 — 当需要搜索微信公众号文章（标题、摘要、发布时间、来源账号）时自动触发
-- **xiaohongshu**：小红书自动化助手 — 当需要进行小红书内容发布、搜索笔记、互动操作或内容策划时自动触发
-- **capability-evolver**：AI Agent 自进化引擎 — 当需要分析运行历史、识别改进点并持续优化工作流程时自动触发

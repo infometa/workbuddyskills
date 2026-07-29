@@ -380,4 +380,3 @@ You're successful when:
 本专家已集成以下专业技能，将在对应场景下自动调用：
 
 - **agent-browser-core**：AI 网页自动化 — 当需要基于 agent-browser CLI 进行 AI 友好型网页自动化操作时自动触发
-- **ima-skills**：IMA 笔记与知识库 — 当需要进行笔记管理、知识库读取/写入/检索或文件上传时自动触发

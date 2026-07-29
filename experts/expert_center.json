@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.0.0",
-  "lastUpdated": "2026-07-28T15:28:31Z",
+  "lastUpdated": "2026-07-29T13:07:30Z",
   "author": {
     "name": "AI Expert Center",
     "source": "https://github.com/msitarzewski/agency-agents",
@@ -354,7 +354,7 @@
       "promptFile": "/plugins/douyin-strategist/agents/douyin-strategist.md",
       "avatar": "/avatars/DouyinStrategist.png",
       "createdAt": "2026-03-13T00:00:00Z",
-      "updatedAt": "2026-05-22T19:53:00Z",
+      "updatedAt": "2026-07-29T13:07:30Z",
       "defaultInitPrompt": {
         "zh": "我们想在抖音上建立品牌账号并实现快速增长,请抖音战略家帮我们制定抖音运营和内容策略。",
         "en": "We want to establish a brand account on Douyin and achieve rapid growth. Please, Douyin Strategist, help us develop Douyin operation and content strategies."
@@ -964,7 +964,7 @@
       "promptFile": "/plugins/short-video-editing-coach/agents/short-video-editing-coach.md",
       "avatar": "/avatars/ShortVideoEditingCoach.png",
       "createdAt": "2026-03-13T00:00:00Z",
-      "updatedAt": "2026-05-22T19:16:00Z",
+      "updatedAt": "2026-07-29T13:07:30Z",
       "defaultInitPrompt": {
         "zh": "我们想创作短视频内容,但剪辑技术和创意需要提升,请短视频剪辑教练帮我们提升短视频制作水平。",
         "en": "We want to create short video content, but our editing skills and creativity need improvement. Please, Short Video Editing Coach, help us improve our short video production quality."
@@ -2973,7 +2973,7 @@
       "promptFile": "/plugins/code-review-expert/agents/code-review-expert.md",
       "avatar": "/avatars/CodeReviewExpert.png",
       "createdAt": "2026-03-13T00:00:00Z",
-      "updatedAt": "2026-05-22T19:29:00Z",
+      "updatedAt": "2026-07-29T15:00:00Z",
       "defaultInitPrompt": {
         "zh": "我们的代码质量参差不齐,需要建立系统的代码审查机制,请代码审查专家帮我们制定代码审查标准和流程。",
         "en": "Our code quality is inconsistent, and we need to establish a systematic code review mechanism. Please, Code Review Expert, help us develop code review standards and processes."
@@ -25565,7 +25565,7 @@
       "promptFile": "/plugins/tanyuan-cultural-heritage-expert/agents/tanyuan-cultural-heritage-expert.md",
       "avatar": "/avatars/TanyuanCulturalHeritageExpert.png",
       "createdAt": "2026-07-24T00:00:00Z",
-      "updatedAt": "2026-07-24T00:00:00Z",
+      "updatedAt": "2026-07-29T07:47:26Z",
       "defaultInitPrompt": {
         "zh": "曾侯乙编钟的音律体系复原",
         "en": "Restoration of the musical temperament system of the Chime Bells of Marquis Yi of Zeng"
@@ -26134,8 +26134,8 @@
         "zh": "新股专家"
       },
       "profession": {
-        "en": "A-share IPO Factual Data Analyst",
-        "zh": "A股新股事实型数据分析师"
+        "en": "New Share Expert",
+        "zh": "新股专家"
       },
       "displayDescription": {
         "en": "A-share IPO factual assistant with multi-source cross-check, board-aware rules and precise K-line/intraday charting. No rating, no recommendation.",
@@ -26143,8 +26143,8 @@
       },
       "categoryId": "08-FinanceInvestment",
       "description": {
-        "en": "A-share IPO factual data analyst covering IPO calendar, factual matrix, board-aware reminders, first-day monitoring, K-line/intraday charts. Strict A-share only, multi-source cross-check, no rating, no recommendation.",
-        "zh": "A股新股事实型数据分析师，覆盖新股日历、事实矩阵、板块规则提醒、首日监控、K线/分时图表。仅限A股，多源交叉校验，不打分不推荐。"
+        "zh": "面向A股新股的事实型助手：多源交叉校验、板块规则区分、精准K线与分时绘制，仅出客观数据不打分不推荐。",
+        "en": "A-share IPO factual assistant with multi-source cross-check, board-aware rules and precise K-line/intraday charting. No rating, no recommendation."
       },
       "promptFile": "/plugins/new-share-expert/agents/new-share-expert.md",
       "avatar": "/avatars/NewShareExpert.png",
@@ -26153,9 +26153,18 @@
         "email": "darkoliu@tencent.com"
       },
       "tags": [
-        "新股申购",
-        "交叉校验",
-        "A股"
+        {
+          "en": "A-Share IPO",
+          "zh": "A股新股"
+        },
+        {
+          "en": "Multi-Source Verified",
+          "zh": "多源交叉校验"
+        },
+        {
+          "en": "Board-Aware Rules",
+          "zh": "板块规则区分"
+        }
       ],
       "quickPrompts": [
         {
@@ -26163,17 +26172,17 @@
           "zh": "最近 A 股有哪些新股可以申购？"
         },
         {
-          "en": "Generate a factual matrix for [stock name].",
-          "zh": "帮我对【股票名称】做一份事实矩阵。"
+          "en": "Run a factual matrix on stock XXX (no rating)",
+          "zh": "用事实矩阵帮我看看 XXX 这只新股"
         },
         {
-          "en": "Draw the K-line for [stock name] since its listing date.",
-          "zh": "画一下【股票名称】上市以来的 K 线。"
+          "en": "Set board-aware reminders for next week's IPOs",
+          "zh": "按板块差异化设置下周新股的关键时间提醒"
         }
       ],
       "defaultInitPrompt": {
-        "en": "What A-share IPOs are available for subscription recently?",
-        "zh": "最近 A 股有哪些新股可以申购？"
+        "zh": "最近 A 股有哪些新股可以申购？",
+        "en": "What A-share IPOs are available for subscription recently?"
       },
       "skills": [
         "./skills/ipo-compliance-gate",
@@ -26182,7 +26191,8 @@
         "./skills/ipo-kline-chart"
       ],
       "agentName": "new-share-expert",
-      "createdAt": "2026-07-28T00:00:00Z"
+      "createdAt": "2026-07-28T00:00:00Z",
+      "updatedAt": "2026-07-29T01:50:21Z"
     },
     {
       "id": "InvoiceVerifyExpert",
@@ -26462,8 +26472,8 @@
       "id": "TideriderSentiment",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "DataBrain X TideRider",
-        "zh": "DataBrain X TideRider"
+        "en": "D-Brain×T-Rider",
+        "zh": "D-Brain×T-Rider"
       },
       "profession": {
         "en": "Game Sentiment Analyst",
@@ -26476,7 +26486,7 @@
       "promptFile": "/plugins/tiderider-sentiment/agents/tiderider-analyst.md",
       "avatar": "/avatars/TideriderSentiment.png",
       "createdAt": "2026-07-28T09:56:15Z",
-      "updatedAt": "2026-07-28T09:56:15Z",
+      "updatedAt": "2026-07-29T00:00:00Z",
       "defaultInitPrompt": {
         "zh": "帮我分析一下这款游戏最近一周的舆情",
         "en": "Analyze the sentiment of this game over the past week"
@@ -26535,7 +26545,7 @@
       "promptFile": "/plugins/industrial-park-investment-attraction-expert/agents/industrial-park-investment-attraction-expert.md",
       "avatar": "/avatars/IndustrialParkInvestmentAttractionExpert.png",
       "createdAt": "2026-07-28T14:57:48Z",
-      "updatedAt": "2026-07-28T15:28:31Z",
+      "updatedAt": "2026-07-28T14:57:48Z",
       "defaultInitPrompt": {
         "zh": "我想为园区找目标企业。请先用通俗语言确认园区与载体情况、产业方向和本轮任务，只询问会改变企业池、硬约束或任务目标的最小阻断信息；不要为了限制问题数量而猜测。数量由我明确指定；未指定时，用可核验的链节、角色、区域或其他覆盖要求定义目标，不自行生成宽区间。“先给N家”只是说明：当用户给出某个数并明确是首批时，该数只控制首批；“约N家”只是说明可调整参考。N是语义占位符，不是默认值，两者均不自动成为完成条件。不要展示内部术语。收到后仅用公开资料，先交付一批关键事实已有可回看公开依据且满足本轮资格条件的企业；有我明确或确认的优先标准时才按业务优先，否则只用稳定展示顺序并单列核验顺序。逐家说明并去重企业注册主体，给出适配理由、不利或相反信息、待确认项和公开来源；只有确有必要且有这些依据时，才给出一个或多个核验动作，否则明确没有剩余动作。",
         "en": "I want to find target companies for an industrial park. First confirm the park and facilities, industry direction, and current task in plain language. Ask only for unknowns that would change the candidate pool, hard constraints, or task goal, and do not guess merely to cap questions. A number governs completion only when I explicitly state its role; “show N first” means a user-supplied number controls only the first batch, and “about N” is an adjustable reference. N is a semantic placeholder, not a default. Use public sources only. Deliver a batch that meets the current qualification conditions and whose key facts are backed by reviewable public sources. Apply business priority only when I state or confirm criteria; otherwise use a stable display order and list verification order separately."
@@ -26574,6 +26584,138 @@
       "author": {
         "zh": "FBSir",
         "en": "FBSir"
+      }
+    },
+    {
+      "id": "JobCompanionTeam",
+      "categoryId": "12-IndustryConsultant",
+      "displayName": {
+        "en": "Job Companion Team",
+        "zh": "求职陪跑团"
+      },
+      "profession": {
+        "en": "Job Companion Team",
+        "zh": "求职陪跑团"
+      },
+      "description": {
+        "zh": "5 角色陪跑型专家团，7 阶段接力覆盖自我盘点、目标定位、简历打磨、面试陪练、谈薪决策与入职复盘全流程。",
+        "en": "A multi-role companion team walking job seekers through seven stages: self-inventory, positioning, resume polish, interview prep, mock interview, salary negotiation plus offer decision, and 90-day onboarding reflection."
+      },
+      "promptFile": "/plugins/job-companion-team/agents/job-companion-team-lead.md",
+      "avatar": "/avatars/JobCompanionTeam.png",
+      "createdAt": "2026-07-29T08:01:17Z",
+      "updatedAt": "2026-07-29T08:01:17Z",
+      "defaultInitPrompt": {
+        "zh": "我现在想找工作，但完全不知道从哪儿开始，你能陪我理一理吗？",
+        "en": "I am looking for a new job but have no idea where to start — can you walk me through it?"
+      },
+      "expertType": "team",
+      "agentName": "job-companion-team-lead",
+      "plugin": "job-companion-team",
+      "tags": [
+        {
+          "en": "Job Companion",
+          "zh": "求职陪跑"
+        },
+        {
+          "en": "Resume & Interview",
+          "zh": "简历面试"
+        },
+        {
+          "en": "Offer Decision",
+          "zh": "Offer 决策"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "zh": "我现在想找工作，但完全不知道从哪儿开始，你能陪我理一理吗？",
+          "en": "I am looking for a new job but have no idea where to start — can you walk me through it?"
+        },
+        {
+          "zh": "帮我把这段项目经历改写成简历要点，突出可量化结果。",
+          "en": "Help me rewrite this project experience into resume bullets with measurable outcomes."
+        },
+        {
+          "zh": "面试官让我用 STAR 法讲一个失败案例，陪我练一下。",
+          "en": "An interviewer wants me to use STAR to tell a failure story — can you role-play and coach me?"
+        }
+      ],
+      "members": [
+        {
+          "id": "job-companion-team-lead",
+          "displayName": {
+            "en": "Companion Lead",
+            "zh": "主理人·陪跑教练"
+          },
+          "profession": {
+            "en": "Companion Director",
+            "zh": "陪跑总监"
+          },
+          "avatar": "/avatars/JobCompanionTeam-JobCompanionTeamLead.png",
+          "promptFile": "/plugins/job-companion-team/agents/job-companion-team-lead.md",
+          "role": "lead"
+        },
+        {
+          "id": "job-companion-resume",
+          "displayName": {
+            "en": "Resume Strategist",
+            "zh": "简历官·定位师"
+          },
+          "profession": {
+            "en": "Positioning Strategist",
+            "zh": "定位师"
+          },
+          "avatar": "/avatars/JobCompanionTeam-JobCompanionResume.png",
+          "promptFile": "/plugins/job-companion-team/agents/job-companion-resume.md",
+          "role": "member"
+        },
+        {
+          "id": "job-companion-interview",
+          "displayName": {
+            "en": "Interview Director",
+            "zh": "面试教练·导演"
+          },
+          "profession": {
+            "en": "Interview Coach",
+            "zh": "面试导演"
+          },
+          "avatar": "/avatars/JobCompanionTeam-JobCompanionInterview.png",
+          "promptFile": "/plugins/job-companion-team/agents/job-companion-interview.md",
+          "role": "member"
+        },
+        {
+          "id": "job-companion-negotiation",
+          "displayName": {
+            "en": "Negotiation Coach",
+            "zh": "谈判专家·分析师"
+          },
+          "profession": {
+            "en": "Compensation Officer",
+            "zh": "薪酬谈判官"
+          },
+          "avatar": "/avatars/JobCompanionTeam-JobCompanionNegotiation.png",
+          "promptFile": "/plugins/job-companion-team/agents/job-companion-negotiation.md",
+          "role": "member"
+        },
+        {
+          "id": "job-companion-reflection",
+          "displayName": {
+            "en": "Reflection Advisor",
+            "zh": "复盘顾问·战略师"
+          },
+          "profession": {
+            "en": "Reflection Strategist",
+            "zh": "复盘策略师"
+          },
+          "avatar": "/avatars/JobCompanionTeam-JobCompanionReflection.png",
+          "promptFile": "/plugins/job-companion-team/agents/job-companion-reflection.md",
+          "role": "member"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "yanghansong",
+        "en": "yanghansong"
       }
     }
   ]

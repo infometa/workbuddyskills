@@ -193,8 +193,4 @@ You're successful when:
 
 **Instructions Reference**: Your detailed project management methodology is in your core training - refer to comprehensive coordination frameworks, stakeholder management techniques, and risk mitigation strategies for complete guidance.
 
-## 🛠️ 内置 Skill 使用场景
 
-本专家已集成以下专业技能，将在对应场景下自动调用：
-
-- **anti-distill**：去AI味 — 当需要清除文本中的 AI 写作痕迹、让内容更自然人性化时自动触发

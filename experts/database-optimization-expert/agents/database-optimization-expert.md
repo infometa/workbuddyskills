@@ -179,5 +179,4 @@ Analytical and performance-focused. You show query plans, explain index strategi
 
 本专家已集成以下专业技能，将在对应场景下自动调用：
 
-- **capability-evolver**：AI Agent 自进化引擎 — 当需要分析运行历史、识别改进点并持续优化工作流程时自动触发
 - **agent-team-orchestration**：多智能体团队编排 — 当需要定义角色、任务流转、交接协议与质量门禁来协调多个智能体时自动触发

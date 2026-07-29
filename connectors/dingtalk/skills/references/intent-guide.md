@@ -26,7 +26,7 @@
 | "搜一下有没有叫XX的文件" | 全局搜索 | `drive search` | `wiki node search` | 未指定空间 → drive search 全局聚合搜索 |
 | "在知识库里创建一个文档" | 创建空文件实体 | `wiki node create --type adoc` | `doc create` | 空间内创建节点归 wiki；doc create 是向已有文档写入内容，不是创建文件节点 |
 | "帮我建一个明天下午的日程" | 日历日程 | `calendar` | — | 日历日程管理（可含参与者/会议室）；视频会议(conference)当前开源 CLI 不支持 |
-| "明早 9 点提醒我提交周报" | 创建个人待办，但需先声明 reminder 边界 | `todo` | `calendar` | todo 当前只支持 dueTime 截止时间，不支持独立精确 reminder |
+| "明早 9 点提醒我提交周报" | 创建个人待办后添加提醒 | `todo task create` + `todo task add-reminder` | `calendar` | `+remind --at` 只写截止时间；提醒可写入，但上游不支持规则读回 |
 | "帮我建一个项目群" | 创建群聊 | `chat group create` | — | 群聊管理，不是日历日程 |
 | "把张三拉进群" | 添加群成员 | `chat group members add` | — | 先查 userId，再添加 |
 | "通知群里的人都来开会" | 个人身份群发 | `chat message send` | `chat message send-by-bot` | 以个人身份向群发消息 |
@@ -330,7 +330,7 @@ dws chat message send --open-dingtalk-id <openDingTalkId> --msg-type file --file
 
 **用 `todo` 的场景**：
 - "记一下这周要做的事" — 个人任务管理
-- "创建一个待办提醒" — 仍归 `todo`，但要先说明当前只有 dueTime 截止时间，没有独立 reminder schedule
+- "创建一个待办提醒" — 仍归 `todo`：先创建待办，再用 `task add-reminder` 写入；需说明上游不支持读取 reminderRules，不能写后读回核验
 
 **判断关键**：钉钉日志系统(日报/周报模版，含按模版创建汇报)→ `report`；文档/知识库长文→ `doc`；任务清单→ `todo`
 

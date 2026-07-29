@@ -139,6 +139,8 @@ node skills/tanyuan-search/scripts/search-knowledge.js "<核心实体 + 单一�
 
 ## 输出模板
 
+**图文并茂（通用规则，适用于以下所有模板）**：检索结果带图片 URL 时（如文物 `cover`、世界遗产 `thumbUrl`/`hero`，或知识文本中出现的图片链接），应尽量以标准 Markdown 图片语法内联展示，让回答图文并茂：`![<名称>](<URL> "<名称>")`。URL 必须原样取自检索结果，不得杜撰或改写；无图片字段时直接跳过该行，不要留空占位。
+
 ### 模板 A1：文物查询卡片（用于 `search-relics.js ... 0` 结果）
 
 对 `items`：把返回的条目逐一展示成卡片；条目较多时可用折叠区域，但须把返回的条目完整放入其中。**不要把返回条数当作总数**——用"其中几件、可能还有更多"的自然表述，具体措辞见「边界与注意事项」中"返回条数 ≠ 总数"一条；仅明确的统计（COUNT）查询才呈现统计值。
@@ -151,7 +153,8 @@ node skills/tanyuan-search/scripts/search-knowledge.js "<核心实体 + 单一�
 - **馆藏机构**：<museum_name（若有）>
 - **出土地**：<place（若有）>
 - **亮点**：<一句话，取自介绍字段>
-- **图片**：<cover 链接（若有）>
+
+![<name>](<cover> "<name>")（`cover` 若有，用图片语法展示；无则跳过此行）
 
 > 来源：腾讯探元知识库
 ```
@@ -169,7 +172,8 @@ node skills/tanyuan-search/scripts/search-knowledge.js "<核心实体 + 单一�
 - **评定标准**：<criteria（若有）>
 - **濒危状态**：<inDanger（若有）>
 - **简介**：<intro（若有）>
-- **图片**：<thumbUrl 或 hero（若有）>
+
+![<name>](<thumbUrl 或 hero> "<name>")（图片字段若有则展示，无则跳过此行）
 
 > 来源：腾讯探元知识库
 ```

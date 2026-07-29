@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "archive-hospital-mcp": {
+      "type": "streamableHttp",
+      "url": "https://bingli.tengmed.com/mcp",
+      "timeout": 30000
+    }
+  }
+}

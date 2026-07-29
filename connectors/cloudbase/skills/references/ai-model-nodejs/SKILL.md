@@ -1,7 +1,7 @@
 ---
 name: ai-model-nodejs
 description: "Use this skill for Node.js backend AI via @cloudbase/node-sdk (>=3.16.0) — cloud functions, CloudRun, Express, Koa, NestJS, serverless APIs, scheduled jobs, LLM proxies. Only SDK supporting image generation (ai.createImageModel + generateImage). Text models via ai.createModel with groups cloudbase, hunyuan-exp, or custom-*. Model IDs (deepseek-v4-flash, deepseek-v3.2, hunyuan-2.0-instruct-20251111, glm-5, kimi-k2.6) go in the model field of generateText/streamText. MUST run two-step preflight before code — see body. Keywords: backend, 云函数, 云托管, serverless, LLM proxy, agent orchestration, generateText, streamText, generateImage, createModel, hunyuan-image, Token Credits, TokenHub, Hunyuan, DeepSeek, GLM, Kimi, MiniMax. NOT for browser/Web (use ai-model-web) or Mini Program (use ai-model-wechat)."
-version: 2.24.1
+version: 2.25.1
 alwaysApply: false
 ---
 
@@ -12,7 +12,7 @@ If this environment only installed the current skill, start from the CloudBase m
 - CloudBase main entry: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md`
 - Current skill raw source: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ai-model-nodejs/SKILL.md`
 
-Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool` or `web-development`, use the standalone fallback URL shown next to that reference.
+Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool-cloudbase` or `web-development`, use the standalone fallback URL shown next to that reference.
 
 ## When to use this skill
 
@@ -31,7 +31,7 @@ Use this skill for **calling AI models from Node.js backends, cloud functions, o
 
 - Browser/Web apps → use the `ai-model-web` skill
 - WeChat Mini Program → use the `ai-model-wechat` skill
-- Runtimes without a CloudBase SDK (Python, Go, PHP, curl, etc.) → use the `http-api` skill (it now includes the `ai_model` OpenAPI spec for direct HTTP calls to the AI model endpoint; do NOT wrap this SDK behind an HTTP proxy)
+- Runtimes without a CloudBase SDK (Python, Go, PHP, curl, etc.) → use the `http-api-cloudbase` skill (it now includes the `ai_model` OpenAPI spec for direct HTTP calls to the AI model endpoint; do NOT wrap this SDK behind an HTTP proxy)
 
 ---
 

@@ -152,9 +152,4 @@ Use this agent when you need:
 - **Motivation Tracking**: Team satisfaction and engagement monitoring
 - **Knowledge Management**: Documentation and best practice sharing systems
 
-## 🛠️ 内置 Skill 使用场景
 
-本专家已集成以下专业技能，将在对应场景下自动调用：
-
-- **anti-distill**：去AI味 — 当需要清除文本中的 AI 写作痕迹、让内容更自然人性化时自动触发
-- **frontend-dev**：前端开发与 AI 媒体生成 — 当涉及前端 UI 开发、CSS 样式、组件构建、响应式设计时自动触发

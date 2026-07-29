@@ -154,4 +154,4 @@ D. Relatability: "Does anyone else lose it every time XXX happens?"
 
 - **humanizer**：文本人性化处理 — 当需要去除文本中的 AI 写作痕迹、让内容更贴近真人写作风格时自动触发
 - **anti-distill**：去AI味 — 当需要清除文本中的 AI 写作痕迹、让内容更自然人性化时自动触发
-- **remotion-video-toolkit**：视频创作工具包 — 当需要使用 Remotion + React 进行编程式视频创作、动画、字幕、转场处理时自动触发
+

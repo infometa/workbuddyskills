@@ -1,6 +1,6 @@
 ---
 name: dws
-description: 管理钉钉产品能力(AI表格/AI搜问/日历/通讯录/群聊与机器人/待办/审批/考勤/日志/DING消息/开放平台文档/钉钉文档/钉钉云盘/原生Markdown文件/AI听记/邮箱/在线电子表格/知识库等)。当用户需要操作表格数据、管理日程会议、模糊找人/查谁负责某事项、查询通讯录、管理群聊、机器人发消息、创建待办、提交审批、查看考勤、提交日报周报（钉钉日志模版）、读写钉钉文档、上传下载云盘文件、读取或修改原生.md文件、查询听记纪要、收发邮件、读写在线电子表格(axls)、管理钉钉知识库时使用。
+description: 管理钉钉产品能力(AI表格/AI搜问/日历/通讯录/群聊与机器人/待办/审批/考勤/日志/DING消息/开放平台文档/钉钉文档/钉钉云盘/原生Markdown文件/AI听记/邮箱/在线电子表格/知识库等)。当用户需要操作表格数据、管理日程会议、模糊找人/查谁负责某事项、查询通讯录、管理群聊、机器人发消息、创建待办、提交审批、查看考勤、提交日报周报（钉钉日志模版）、读写钉钉文档、上传下载云盘文件、读取或修改原生.md文件、查询听记纪要、收发邮件、读写在线电子表格(axls)、管理钉钉知识库，或订阅个人 IM 事件、实时监听群成员加入、群成员退出、群改名和群解散时使用。
 cli_version: ">=1.0.15"
 ---
 
@@ -9,7 +9,7 @@ cli_version: ">=1.0.15"
 通过 `dws` 命令管理钉钉产品能力。
 
 
-> ⚠️ **命令可用性以当前 dws 二进制为准**。服务发现已下线，本文档随内置 skill 发布；如果 `dws <cmd> --help` 不存在，说明当前版本未暴露该命令。`--help` 决定 Cobra 实际接受的 flags；基础命令的 leaf Schema 决定 Agent 选择、参数映射/约束和安全确认语义，`+` shortcut 则读取独立 shortcut catalog。若命令存在但调用失败，请按错误中的 endpoint 或 tool 提示确认静态端点目录和后端工具注册。实际调用前可用 `dws <cmd> --help` 或 `--dry-run` 验证。
+> ⚠️ **命令可用性以当前 dws 二进制为准**。服务发现已下线，本文档随内置 skill 发布；如果 `dws <cmd> --help` 不存在，说明当前版本未暴露该命令。`--help` 决定 Cobra 实际接受的 flags；公开基础命令和内建 `+` shortcut 的 leaf Schema 决定 Agent 选择、参数映射/约束和安全确认语义。若命令存在但调用失败，请按错误中的 endpoint 或 tool 提示确认静态端点目录和后端工具注册。实际调用前可用 `dws <cmd> --help` 或 `--dry-run` 验证。
 
 ## 严格禁止 (NEVER DO)
 - 不要使用 dws 命令以外的方式操作（禁止 curl、HTTP API、浏览器）
@@ -29,7 +29,7 @@ cli_version: ">=1.0.15"
 `shortcut` 是对常用操作的高层封装，适合优先承担用户意图；产品参考文档和本 skill 负责判断意图、风险、跨产品流程和复杂参数，CLI 帮助负责声明当前版本真正可调用的命令。
 
 - 先按产品参考、意图表和 recipe 路由。存在精确覆盖场景的专用脚本/recipe 时继续遵循“脚本优先”；否则用户意图可由可见 shortcut 满足时，优先使用 `dws <service> +<verb> ... --format json`，不要手写等价的多步原子命令。
-- shortcut 有独立 catalog，按设计不进入 Runtime Schema。调用前用 `dws shortcut list --service <service> --format json` 读取完整 flags、required/enum、跨参数 constraints、risk/confirmation 和 examples；不要对 `+` 路径调用 `dws schema`。
+- 公开内建 shortcut 同时进入 Runtime Schema。用 `dws schema --cli-path "<service> +<verb>" --format json` 读取 Agent 选择、参数、跨参数约束、risk/confirmation 与接口语义；`dws shortcut list --service <service> --format json` 只作为轻量批量发现入口。
 - 真正组装参数前用叶子帮助 `dws <service> +<verb> --help` 核对当前 Cobra 接受的 flags。父级 `dws <service> --help` 只能发现子命令，不能替代叶子参数帮助。
 - shortcut catalog 中 `confirmation=user_required` 时，必须先获得用户确认，确认后才加 `--yes`；`not_required` 不额外确认。
 - 如果 shortcut 不在 help / list 中，改用产品参考里的原子命令、脚本或标准流程；不要猜测未展示的 `+` 命令。
@@ -120,7 +120,9 @@ cli_version: ">=1.0.15"
 用户提到"在线电子表格/钉钉表格/axls/工作表/单元格读写/合并单元格/筛选视图/导出 xlsx" → `sheet`
 用户提到"待办/TODO/任务提醒/循环待办" → `todo`
 用户提到"创建知识库/知识库列表/搜索知识库空间/wiki/团队空间/知识库成员管理/我的文档个人空间" → `wiki`
-用户提到"监听有人@我/监听单聊或群消息/监听某人发送的消息/监听消息已读/监听消息撤回/监听消息贴表情或表情回应/订阅个人 IM 事件/实时接收钉钉事件/个人事件流/event consume user_im_message_*/监听并自动回复消息/驱动 Agent 处理消息" → `event`
+用户提到"监听有人@我/监听单聊或群消息/监听所有单聊或群消息/监听某人发送的消息/监听消息已读/监听消息撤回/监听消息贴表情或表情回应/监听群成员加入/监听群成员退出/监听群改名或群解散/订阅个人 IM 事件/实时接收钉钉事件/个人事件流/event consume user_im_message_*/监听并自动回复消息/驱动 Agent 处理消息" → `event`
+
+事件监听中，同一目标、同一过滤条件的多个兼容事件优先生成一个 `dws event consume <event_key> [event_key...] --flatten`；不同用户、不同群或不同过滤条件拆成多个 consume 进程。
 
 关键区分: aitable(数据表格) vs todo(待办任务)
 关键区分: report(钉钉日志/日报周报) vs todo(待办任务)
@@ -180,7 +182,7 @@ Step 3 → 加 --yes 执行命令
 
 `dws schema` 内嵌当前二进制公开命令面的结构化契约。**Agent 选择命令、读取参数映射/约束和安全语义时必须优先渐进查询 leaf Schema**；真正组装执行参数前，用 `--help` 确认当前 Cobra 接受的 flags：
 
-本节适用于进入 Runtime Schema 的基础/原子命令。`+` shortcut 是明确例外：按“Shortcut 与原子命令的使用原则”读取 `dws shortcut list`，不得把 Schema lookup 失败误判为 shortcut 不可执行。
+本节同时适用于基础/原子命令与公开内建 `+` shortcut。用户自定义或未公开 shortcut 不进入发布 Schema；其是否可执行仍以当前 Cobra help 为准。
 
 稳定 command identity、主 CLI path 和 alias 已在构建时由 reviewed registry 与真实 Cobra tree 精确绑定。Agent 不应读取 Catalog 文件、native annotation 或其他生成 JSON 来重新推断命令；所有运行时查询都以当前二进制交付的 Schema 投影为准。
 
@@ -279,7 +281,7 @@ Schema 与 Help 冲突是**契约漂移**，不得静默猜测或把两边字段
 
 ## 详细参考 (按需读取)
 
-- [references/products/](./references/products/) — 各产品命令详细参考（Cobra 接受的 flag 以叶子 `--help` 为准；基础命令的 Agent 映射/约束/安全语义以 leaf Schema 为准，shortcut 以独立 catalog 为准）
+- [references/products/](./references/products/) — 各产品命令详细参考（Cobra 接受的 flag 以叶子 `--help` 为准；公开基础命令与内建 shortcut 的 Agent 映射/约束/安全语义以 leaf Schema 为准）
 - [references/intent-guide.md](./references/intent-guide.md) — 意图路由指南（易混淆场景对照）
 - [references/url-patterns.md](./references/url-patterns.md) — URL 格式规范 + alidocs URL 分流决策与类型探测流程（含钉盘 `document/edit|preview?dentryKey=` 链接）
 - [references/global-reference.md](./references/global-reference.md) — 全局标志、认证、输出格式

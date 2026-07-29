@@ -110,5 +110,4 @@ This agent fills a critical gap between several existing `agency-agents` roles. 
 
 本专家已集成以下专业技能，将在对应场景下自动调用：
 
-- **capability-evolver**：AI Agent 自进化引擎 — 当需要分析运行历史、识别改进点并持续优化工作流程时自动触发
 - **browser-use**：浏览器自动化 — 当需要网页自动化操作、导航、点击、截图、数据提取时自动触发

@@ -1,0 +1,150 @@
+{
+  "name": "job-companion-team",
+  "version": "1.0.0",
+  "description": "End-to-end companion team for job seekers, covering self-inventory, positioning, resume polish, interview coaching, salary negotiation, offer decision, and onboarding reflection across a seven-stage flow.",
+  "author": {
+    "name": "yanghansong",
+    "email": "yanghansong@workbuddy.local"
+  },
+  "expertType": "team",
+  "agentName": "job-companion-team-lead",
+  "teamInfo": {
+    "leadAgent": "job-companion-team-lead",
+    "memberAgents": [
+      "job-companion-resume",
+      "job-companion-interview",
+      "job-companion-negotiation",
+      "job-companion-reflection"
+    ]
+  },
+  "agents": [
+    "./agents/job-companion-team-lead.md",
+    "./agents/job-companion-resume.md",
+    "./agents/job-companion-interview.md",
+    "./agents/job-companion-negotiation.md",
+    "./agents/job-companion-reflection.md"
+  ],
+  "skills": [
+    "./skills/self-inventory",
+    "./skills/target-positioning",
+    "./skills/resume-polish",
+    "./skills/interview-prep",
+    "./skills/mock-interview",
+    "./skills/salary-negotiation",
+    "./skills/onboarding-reflection"
+  ],
+  "displayName": {
+    "en": "Job Companion Team",
+    "zh": "求职陪跑团"
+  },
+  "profession": {
+    "en": "Job Companion Team",
+    "zh": "求职陪跑团"
+  },
+  "displayDescription": {
+    "en": "A multi-role companion team walking job seekers through seven stages: self-inventory, positioning, resume polish, interview prep, mock interview, salary negotiation plus offer decision, and 90-day onboarding reflection.",
+    "zh": "5 角色陪跑型专家团，7 阶段接力覆盖自我盘点、目标定位、简历打磨、面试陪练、谈薪决策与入职复盘全流程。"
+  },
+  "avatar": "avatars/team.png",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "我现在想找工作，但完全不知道从哪儿开始，你能陪我理一理吗？",
+    "en": "I am looking for a new job but have no idea where to start — can you walk me through it?"
+  },
+  "tags": [
+    {
+      "en": "Job Companion",
+      "zh": "求职陪跑"
+    },
+    {
+      "en": "Resume & Interview",
+      "zh": "简历面试"
+    },
+    {
+      "en": "Offer Decision",
+      "zh": "Offer 决策"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "我现在想找工作，但完全不知道从哪儿开始，你能陪我理一理吗？",
+      "en": "I am looking for a new job but have no idea where to start — can you walk me through it?"
+    },
+    {
+      "zh": "帮我把这段项目经历改写成简历要点，突出可量化结果。",
+      "en": "Help me rewrite this project experience into resume bullets with measurable outcomes."
+    },
+    {
+      "zh": "面试官让我用 STAR 法讲一个失败案例，陪我练一下。",
+      "en": "An interviewer wants me to use STAR to tell a failure story — can you role-play and coach me?"
+    }
+  ],
+  "members": [
+    {
+      "id": "job-companion-team-lead",
+      "name": {
+        "en": "Companion Lead",
+        "zh": "主理人·陪跑教练"
+      },
+      "profession": {
+        "en": "Companion Director",
+        "zh": "陪跑总监"
+      },
+      "avatar": "avatars/job-companion-team-lead.png",
+      "role": "lead"
+    },
+    {
+      "id": "job-companion-resume",
+      "name": {
+        "en": "Resume Strategist",
+        "zh": "简历官·定位师"
+      },
+      "profession": {
+        "en": "Positioning Strategist",
+        "zh": "定位师"
+      },
+      "avatar": "avatars/job-companion-resume.png",
+      "role": "member"
+    },
+    {
+      "id": "job-companion-interview",
+      "name": {
+        "en": "Interview Director",
+        "zh": "面试教练·导演"
+      },
+      "profession": {
+        "en": "Interview Coach",
+        "zh": "面试导演"
+      },
+      "avatar": "avatars/job-companion-interview.png",
+      "role": "member"
+    },
+    {
+      "id": "job-companion-negotiation",
+      "name": {
+        "en": "Negotiation Coach",
+        "zh": "谈判专家·分析师"
+      },
+      "profession": {
+        "en": "Compensation Officer",
+        "zh": "薪酬谈判官"
+      },
+      "avatar": "avatars/job-companion-negotiation.png",
+      "role": "member"
+    },
+    {
+      "id": "job-companion-reflection",
+      "name": {
+        "en": "Reflection Advisor",
+        "zh": "复盘顾问·战略师"
+      },
+      "profession": {
+        "en": "Reflection Strategist",
+        "zh": "复盘策略师"
+      },
+      "avatar": "avatars/job-companion-reflection.png",
+      "role": "member"
+    }
+  ],
+  "plugin": "job-companion-team"
+}

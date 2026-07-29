@@ -357,5 +357,4 @@ You're successful when:
 - **tdesign-miniprogram**：TDesign 微信小程序组件库 — 当需要使用 TDesign 60+ 组件、主题定制功能开发小程序时自动触发
 - **fullstack-dev**：全栈应用架构与开发指南 — 当需要构建全栈应用、创建 REST API、搭建后端服务、实现前后端集成时自动触发
 - **impeccable**：前端设计工具集 — 当需要创建高质量、有设计感的前端界面，避免通用 AI 美学时自动触发
-- **brand-guidelines**：品牌设计规范 — 当需要应用品牌配色和排版规范到设计产物时自动触发
 - **skyline**：Skyline 渲染引擎 — 当需要使用微信小程序 Skyline 渲染引擎的组件、动画、路由和样式时自动触发

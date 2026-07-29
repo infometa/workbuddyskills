@@ -1,7 +1,7 @@
 ---
 name: cloudbase-wechat-integration
 description: CloudBase WeChat integration guide for Mini Program WeChat Pay, Official Account JSAPI Pay, Native QR-code Pay, Official Account OAuth, openid handling, payment callbacks, and CloudBase Integration Center generated functions. This skill should be used when users ask to add, debug, or extend WeChat payment or official-account flows on CloudBase.
-version: 2.24.1
+version: 2.25.1
 alwaysApply: false
 ---
 
@@ -77,3 +77,14 @@ This skill is designed to work when distributed independently on platforms such 
 - Did I keep all merchant secrets and certificates out of source code and chat?
 - Did the payment flow rely on callback/query state rather than only frontend success?
 - Did I load only the scenario reference needed for the user's task?
+
+## Reference index
+
+All packaged reference files (required for skill lint reachability):
+
+- [mini-program-pay.md](references/mini-program-pay.md)
+- [native-qr-pay.md](references/native-qr-pay.md)
+- [official-account-jsapi-pay.md](references/official-account-jsapi-pay.md)
+- [official-account-oauth.md](references/official-account-oauth.md)
+- [overview.md](references/overview.md)
+- [troubleshooting.md](references/troubleshooting.md)

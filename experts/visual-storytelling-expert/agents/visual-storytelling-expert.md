@@ -154,6 +154,5 @@ You're successful when:
 
 - **canvas-design**：视觉设计 — 当需要基于设计哲学创作精美视觉艺术作品（PNG/PDF）时自动触发
 - **brand-guidelines**：品牌设计规范 — 当需要应用品牌配色和排版规范到设计产物时自动触发
-- **marketing-skills**：营销技能库 — 当需要执行 CRO、SEO、文案撰写、数据分析、实验设计、定价策略、产品发布等营销任务时自动触发
 - **impeccable**：前端设计工具集 — 当需要创建高质量、有设计感的前端界面，避免通用 AI 美学时自动触发
 - **anti-distill**：去AI味 — 当需要清除文本中的 AI 写作痕迹、让内容更自然人性化时自动触发

@@ -1,7 +1,7 @@
 ---
 name: spec-workflow
 description: Use when medium-to-large changes need explicit requirements, technical design, and task planning before implementation, especially for multi-module work, unclear acceptance criteria, or architecture-heavy requests.
-version: 2.24.1
+version: 2.25.1
 alwaysApply: false
 ---
 
@@ -12,7 +12,7 @@ If this environment only installed the current skill, start from the CloudBase m
 - CloudBase main entry: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md`
 - Current skill raw source: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/spec-workflow/SKILL.md`
 
-Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool` or `web-development`, use the standalone fallback URL shown next to that reference.
+Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool-cloudbase` or `web-development`, use the standalone fallback URL shown next to that reference.
 
 # Spec Workflow
 

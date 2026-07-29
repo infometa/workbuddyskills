@@ -104,9 +104,13 @@ def run_westock(args):
 
 
 PYTHON_CANDIDATES = [
+    # Windows managed venv（Scripts/python.exe）
+    os.path.expanduser("~/.workbuddy/binaries/python/envs/default/Scripts/python.exe"),
+    # macOS/Linux managed venv（bin/python）
     os.path.expanduser("~/.workbuddy/binaries/python/envs/default/bin/python"),
-    "python3",
-    "python",
+    # PATH 兜底：Windows 通常只有 python，*nix 通常有 python3
+    "python" if sys.platform.startswith("win") else "python3",
+    "python3" if sys.platform.startswith("win") else "python",
 ]
 
 
@@ -114,7 +118,7 @@ def find_python():
     for p in PYTHON_CANDIDATES:
         if os.path.isfile(p) or p in ("python3", "python"):
             return p
-    return "python3"
+    return "python"
 
 
 def run_neodata(query: str):

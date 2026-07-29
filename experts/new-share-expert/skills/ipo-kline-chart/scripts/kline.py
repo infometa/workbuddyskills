@@ -39,10 +39,16 @@ DEFAULT_WESTOCK_PATHS = [
 ]
 
 FONT_CANDIDATES = [
+    # macOS
     "/Library/Fonts/Arial Unicode.ttf",
     "/System/Library/Fonts/PingFang.ttc",
     "/System/Library/Fonts/STHeiti Medium.ttc",
+    # Linux
     "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",
+    # Windows
+    "C:/Windows/Fonts/msyh.ttc",   # 微软雅黑
+    "C:/Windows/Fonts/simhei.ttf", # 黑体
+    "C:/Windows/Fonts/simsun.ttc", # 宋体
 ]
 
 UP_COLOR = "#E53935"

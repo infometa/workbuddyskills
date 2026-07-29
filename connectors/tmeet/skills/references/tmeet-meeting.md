@@ -92,6 +92,8 @@ tmeet meeting create \
 
 ## update — 更新会议
 
+> ⚠️ **写操作，执行前请确认用户意图。** 会议信息（时间、主题、入会限制、邀请列表、周期规则等）的变更会影响所有参会人，必须先向用户明确列出**将变更的字段及前后值**并获得确认后再执行。
+
 ```bash
 # 修改会议主题
 tmeet meeting update --meeting-id "100000000" --subject "新主题"
@@ -292,6 +294,48 @@ tmeet meeting list-ended \
 
 ---
 
+## search — 搜索会议
+
+按关键词、会议码或时间范围等条件搜索会议，所有筛选参数均为可选，可自由组合使用。
+
+```bash
+# 按主题关键词搜索
+tmeet meeting search --query "每周站会" --query-field subject
+
+# 按创建者昵称搜索
+tmeet meeting search --query "张三" --query-field creator
+
+# 按会议码精确搜索
+tmeet meeting search --meeting-code "123456789"
+
+# 按时间范围搜索
+tmeet meeting search \
+  --start "2026-04-01T00:00:00+08:00" \
+  --end "2026-04-30T23:59:59+08:00"
+
+# 组合条件 + 分页查询（翻下一页）
+tmeet meeting search \
+  --query "项目复盘" \
+  --page-token "<next_page_token>" \
+  --page-size 30
+```
+
+### 参数
+
+| 参数 | 必填 | 默认值 | 说明 |
+|------|------|--------|------|
+| `--query <text>` | 否 | — | 搜索关键词 |
+| `--query-field <field>` | 否 | `all` | 搜索字段（配合 `--query` 使用）：`subject`-会议主题；`creator`-创建者昵称/备注名；`note`-用户对会议的备注；`all`-全部字段 |
+| `--meeting-code <code>` | 否 | — | 按会议码精确搜索（仅数字，无连字符） |
+| `--start <time>` | 否 | — | 搜索时间窗口下界（ISO 8601，含时区）。会议的预定开始时间、实际开始时间或用户入会时间落在窗口内即匹配 |
+| `--end <time>` | 否 | — | 搜索时间窗口上界（ISO 8601，含时区），语义同上 |
+| `--page-token <token>` | 否 | — | 分页游标，首页不传；后续翻页传入上一次响应的 `next_page_token` |
+| `--page-size <n>` | 否 | `30` | 每页数量，默认 30，最大 30 |
+
+> 所有筛选参数均为可选，但建议至少提供一个以缩小搜索范围。
+
+---
+
 ## invitees-list — 获取会议受邀者
 
 ```bash
@@ -400,7 +444,7 @@ tmeet meeting invitees-replace \
 ### 「已邀请成员」展示规则（强约束）
 
 1. **必须以通讯录中的姓名展示**（如 `张三`）；**严禁**直接展示 `open_id` / `userid` / `ms_open_id` / 花名（如 `zhangsan`） / 邮箱前缀等任何内部标识。
-2. **信息不足时的兑底动作**：若手头没有 `open_id → 姓名` 映射，先调用 `meeting invitees-list --meeting-id <id>` 拉取变更后的完整受邀列表，再依次使用 `contact search`（仅在该场景下允许，遵循 SKILL.md 中的「通讯录搜索仅限特定场景使用」规则）将每个 `open_id` 解析为姓名后再回复。
+2. **信息不足时的兑底动作**：若手头没有 `open_id → 姓名` 映射，先调用 `meeting invitees-list --meeting-id <id>` 拉取变更后的完整受邀列表，将每个 `open_id` 解析为姓名后再回复。
 3. **解析失败的兑底**：某个 `open_id` 无法解析为姓名时，标注为 `未知成员`，**禁止**回退到打印 `open_id` 本身。
 4. **仅在用户明确要求**“展示 ID / 原始字段”时，才可附带展示 `open_id`。
 5. **基础字段补齐**：会议主题 / 会议号 / 入会链接 若变更接口未返回，使用 `meeting get --meeting-id <id>` 补齐，不得遗漏字段或用 `-` / `N/A` 占位。

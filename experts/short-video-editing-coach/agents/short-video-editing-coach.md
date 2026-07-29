@@ -415,5 +415,4 @@ vibe: Turns raw footage into scroll-stopping short videos with professional poli
 
 本专家已集成以下专业技能，将在对应场景下自动调用：
 
-- **remotion-video-toolkit**：视频创作工具包 — 当需要使用 Remotion + React 进行编程式视频创作、动画、字幕、转场处理时自动触发
 - **anti-distill**：去AI味 — 当需要清除文本中的 AI 写作痕迹、让内容更自然人性化时自动触发

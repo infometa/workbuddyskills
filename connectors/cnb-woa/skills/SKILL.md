@@ -19,8 +19,6 @@ issues:
 - `cnb issues add-labels --labels bug --labels feature` — 添加标签
 - `cnb issues list-assignees` — 查看处理人
 - `cnb issues add-assignees --assignees username` — 添加处理人
-- `cnb issues upload-file --file 文件路径` — 上传 issue 评论文件
-- `cnb issues upload-image --file 图片路径` — 上传 issue 评论图片
 - `cnb issues create-upload-file --file 文件路径` — 创建 issue 时上传文件
 - `cnb issues create-upload-image --file 图片路径` — 创建 issue 时上传图片
 - `cnb issues get-imgs --img-path 图片路径` — 获取 issue 图片
@@ -37,14 +35,13 @@ pulls:
 - `cnb pulls check-status` — 查看 CI 状态
 - `cnb pulls list-reviews` — 查看评审列表
 - `cnb pulls list-assignees` — 查看处理人
-- `cnb pulls upload-file --file 文件路径` — 上传文件
-- `cnb pulls upload-image --file 图片路径` — 上传图片
 - `cnb pulls get-ci-logs --sn 构建号（可选）` — 获取 CI 失败日志
 - `cnb pulls get-ci-timing --sn 构建号（可选）` — 分析 CI 耗时瓶颈
 - `cnb pulls get-imgs --img-path 图片路径` — 获取 PR 图片
 - `cnb pulls get-files --file-path 附件路径` — 获取 PR 附件
 
 注意事项：
+
 - **参数自动识别**：快捷命令中的 Issue/PR 编号会自动从环境变量识别，无需额外传递。
 - **默认仅需摘要**：默认会精简响应输出结果，添加 `--verbose` 输出完整数据。
 - **单引号传参**：当 bash 的参数为多行文本时，使用单引号可减少防止命令注入攻击。
@@ -54,6 +51,7 @@ pulls:
 ## 常用链接
 
 在生成链接时请遵循下面的结构：
+
 - Issue: `<host>/<slug>/-/issues/<number>`
 - PR: `<host>/<slug>/-/pulls/<number>`
 

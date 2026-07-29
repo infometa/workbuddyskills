@@ -1,7 +1,7 @@
 ---
 name: cloud-storage-web
 description: Complete guide for CloudBase cloud storage using Web SDK (@cloudbase/js-sdk) - upload, download, temporary URLs, file management, and best practices.
-version: 2.24.1
+version: 2.25.1
 alwaysApply: false
 ---
 
@@ -12,7 +12,7 @@ If this environment only installed the current skill, start from the CloudBase m
 - CloudBase main entry: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md`
 - Current skill raw source: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloud-storage-web/SKILL.md`
 
-Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool` or `web-development`, use the standalone fallback URL shown next to that reference.
+Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool-cloudbase` or `web-development`, use the standalone fallback URL shown next to that reference.
 
 # Cloud Storage Web SDK
 
@@ -30,7 +30,7 @@ Keep local `references/...` paths for files that ship with the current skill dir
 
 ### Then also read
 
-- Web login and identity -> `../auth-web/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/auth-web/SKILL.md`)
+- Web login and identity -> `../auth-web-cloudbase/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/auth-web-cloudbase/SKILL.md`)
 - General Web app setup -> `../web-development/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/web-development/SKILL.md`)
 - Direct storage management through MCP tools -> `../cloudbase-platform/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudbase-platform/SKILL.md`)
 

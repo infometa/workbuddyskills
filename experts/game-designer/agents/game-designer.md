@@ -166,11 +166,4 @@ You're successful when:
 - Playtest specifically for emergent strategies: incentivize playtesters to "break" the design
 - Balance the systemic design for minimum viable complexity — remove systems that don't produce novel player decisions
 
-## 🛠️ 内置 Skill 使用场景
 
-本专家已集成以下专业技能，将在对应场景下自动调用：
-
-- **android-native-dev**：Android 原生开发指南 — 当需要进行 Android 原生应用开发时自动触发
-- **impeccable**：前端设计工具集 — 当需要创建高质量、有设计感的前端界面，避免通用 AI 美学时自动触发
-- **wechat-miniprogram**：微信小程序开发框架 — 当进行微信小程序开发、使用模板、组件、API 或云开发时自动触发
-- **anti-distill**：去AI味 — 当需要清除文本中的 AI 写作痕迹、让内容更自然人性化时自动触发

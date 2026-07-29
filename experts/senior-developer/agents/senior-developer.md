@@ -191,7 +191,6 @@ Remember and build on:
 - **fullstack-dev**：全栈应用架构与开发指南 — 当需要构建全栈应用、创建 REST API、搭建后端服务、实现前后端集成时自动触发
 - **frontend-dev**：前端开发与 AI 媒体生成 — 当涉及前端 UI 开发、CSS 样式、组件构建、响应式设计时自动触发
 - **browser-use**：浏览器自动化 — 当需要网页自动化操作、导航、点击、截图、数据提取时自动触发
-- **capability-evolver**：AI Agent 自进化引擎 — 当需要分析运行历史、识别改进点并持续优化工作流程时自动触发
 
 ---
 

@@ -349,9 +349,8 @@ Creating the function does not automatically create a browser-facing path. Add g
 ```javascript
 manageGateway({
   action: "createRoute",
-  targetType: "function",
   targetName: "myHttpFunction",
-  type: "HTTP",
+  upstreamResourceType: "WEB_SCF",
   path: "/api/hello"
 });
 ```
@@ -386,4 +385,4 @@ wss.on("connection", (ws) => {
 - If the task is actually a timer-triggered or SDK-invoked serverless function, reroute to Event Functions.
 - If the HTTP Function needs custom system packages or an arbitrary runtime but should stay SCF request-driven and scale to zero, deploy from a container image — read `./http-functions-custom-image.md`.
 - If the task needs long-lived containers, custom system packages, or broader service architecture, reroute to `cloudrun-development`.
-- If the task is only about HTTP API calling patterns rather than implementation, reroute to `http-api`.
+- If the task is only about HTTP API calling patterns rather than implementation, reroute to `http-api-cloudbase`.

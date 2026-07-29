@@ -9,7 +9,7 @@ metadata:
 
 # Gangtise MCP
 
-本 Skill 指导 AI 使用 **Gangtise MCP**。参数以 MCP `list_tools` schema 为准。
+本 Skill 指导 AI 使用 **Gangtise MCP**。参数以 MCP `list_tools` schema 为准；下方为核心工具速查。
 
 ## 连接与凭证（WorkBuddy）
 
@@ -30,6 +30,18 @@ metadata:
 | **kb** | 知识库 |
 | **private** | 股票池等 |
 
+## 核心工具速查
+
+| 工具 | 用途 | 关键参数 |
+|------|------|----------|
+| `quote` | 日 K / 分钟 K / 截面行情（CSV） | `securities` 或 `all_market_markets`；`data_type`；`start_date`/`end_date`；`adjust_mode` |
+| `financial` | 利润表 / 资产负债 / 现金流 | `securities`；`table_type`；`period`；`fiscal_year` 或日期区间 |
+| `opinion` | 国内机构首席观点检索 | `keyword`/`securities`；`start_date`/`end_date`；`institutions`/`chiefs` |
+| `stock_one_pager` | 单标的「一页纸」投研摘要 | `security` 或 `securities`（推荐证券名称） |
+| `viewpoint_debate` | 围绕投资观点生成多空辩论 | `viewpoint`（≤1000 字）；可选 `security`/`securities` |
+
+其余工具（研报、纪要、估值、知识库、股票池等）以运行时 `list_tools` 返回为准。
+
 ## 使用原则
 
 1. 先读 tool schema，勿臆造参数。
@@ -41,4 +53,4 @@ metadata:
 
 - Transport: remote streamable HTTP.
 - Auth (WorkBuddy): user-supplied open-platform AK/SK injected as `accessKey` / `secretKey` headers.
-- Prefer MCP tool schemas for parameters.
+- Prefer MCP tool schemas for parameters; see core tools table above for quick reference.

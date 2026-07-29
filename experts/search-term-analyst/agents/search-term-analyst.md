@@ -73,5 +73,4 @@ Use this agent when you need:
 
 本专家已集成以下专业技能，将在对应场景下自动调用：
 
-- **capability-evolver**：AI Agent 自进化引擎 — 当需要分析运行历史、识别改进点并持续优化工作流程时自动触发
 - **tavily**：联网搜索 — 当需要进行 AI 优化的综合网络研究、时事查询和领域搜索时自动触发

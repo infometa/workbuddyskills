@@ -1,7 +1,7 @@
 ---
 name: cloud-functions
 description: CloudBase function runtime guide for building, deploying, and debugging your own Event Functions or HTTP Functions. This skill should be used when users need application runtime code on CloudBase, not when they are merely calling CloudBase official platform APIs.
-version: 2.24.1
+version: 2.25.1
 alwaysApply: false
 ---
 
@@ -12,7 +12,7 @@ If this environment only installed the current skill, start from the CloudBase m
 - CloudBase main entry: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md`
 - Current skill raw source: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloud-functions/SKILL.md`
 
-Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool` or `web-development`, use the standalone fallback URL shown next to that reference.
+Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool-cloudbase` or `web-development`, use the standalone fallback URL shown next to that reference.
 
 **Cross-cutting protocols** (required for public exposure and code changes):
 - Change Safety Protocol: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudbase-platform/references/protocols/change-safety-protocol.md`
@@ -32,15 +32,17 @@ Keep local `references/...` paths for files that ship with the current skill dir
 - You still need to decide between Event Function and HTTP Function.
 - The task mentions `manageFunctions`, `queryFunctions`, `manageGateway`, or legacy function-tool names.
 - The task might require `callCloudApi` as a fallback for logs or gateway setup.
+- The function uses classic TCP DB clients (`DATABASE_URL` / `mysql2` / `pg` / Redis) instead of CloudBase native SDK → also read `references/vpc-and-tcp-database.md`.
 
 ### Then also read
 
 - Detailed reference routing -> `./references.md`
-- Auth setup or provider-related backend work -> `../auth-tool/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/auth-tool/SKILL.md`)
+- Non-native TCP DB / VPC egress -> `./references/vpc-and-tcp-database.md`
+- Auth setup or provider-related backend work -> `../auth-tool-cloudbase/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/auth-tool-cloudbase/SKILL.md`)
 - CloudBase Integration Center generated WeChat Pay or Official Account functions -> `../cloudbase-wechat-integration/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudbase-wechat-integration/SKILL.md`; official docs: `https://docs.cloudbase.net/integration/introduce/index.md`)
 - AI in functions -> `../ai-model-nodejs/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ai-model-nodejs/SKILL.md`)
 - Long-lived container services or Agent runtimes -> `../cloudrun-development/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudrun-development/SKILL.md`)
-- Calling CloudBase official platform APIs from a client or script -> `../http-api/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/http-api/SKILL.md`)
+- Calling CloudBase official platform APIs from a client or script -> `../http-api-cloudbase/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/http-api-cloudbase/SKILL.md`)
 
 ### Do NOT use for
 
@@ -67,6 +69,8 @@ Keep local `references/...` paths for files that ship with the current skill dir
 - Assuming MCP covers the whole image pipeline. `manageFunctions` covers SCF image deploy (Stage B) via `runtime: "CustomImage"` + `imageConfig`, but the CloudApp custom build → TCR push (Stage A) is a raw Tencent Cloud API path — confirm action names and parameters from official docs before any `callCloudApi` fallback.
 - Making code or configuration changes without first following the Change Safety Protocol (`cloudbase-platform/references/protocols/change-safety-protocol.md`).
 - Exposing functions publicly or deploying without first completing the checks in `cloudbase-platform/references/protocols/deployment-gate.md`.
+- **Using non-native TCP DB clients (`DATABASE_URL` / `mysql2` / `pg` / Redis) without `vpc.vpcId` + `vpc.subnetId`** — create/update succeeds, then runtime cannot reach the private DB. Native `app.rdb()` / `app.database()` does not need this.
+- **Guessing VPC IDs** (`vpc-xxxxx` placeholders or copied samples). Resolve real IDs from the DB console, an existing resource detail, `callCloudApi`, or the user; stop if still unknown. See `references/vpc-and-tcp-database.md`.
 
 ### Minimal checklist
 
@@ -328,13 +332,23 @@ If these are unavailable, read `./references/operations-and-config.md` before an
 ### Gateway exposure
 
 - `queryGateway(action="getRoute")` / `listRoutes` / `listCustomDomains`
-- `manageGateway(action="createRoute")` — for HTTP functions pass `type="HTTP"` (maps to `WEB_SCF`); for Event functions pass `type="Event"` (maps to `SCF`). Omit `domain` to use the environment default (`IsDefault`)
+- `manageGateway(action="createRoute")` — for HTTP functions pass `upstreamResourceType="WEB_SCF"`; for Event functions pass `upstreamResourceType="SCF"`. Omit `domain` to use the environment default (`IsDefault`)
 - `manageGateway(action="updateRoute")` / `deleteRoute` / `bindCustomDomain` / `deleteCustomDomain`
 - Do **not** call deprecated GWAPI actions via `callCloudApi` (`CreateCloudBaseGWAPI`, etc.)
 
 ## Related skills
 
 - `cloudrun-development` -> container services, long-lived runtimes, Agent hosting
-- `http-api` -> raw CloudBase HTTP API invocation patterns
+- `http-api-cloudbase` -> raw CloudBase HTTP API invocation patterns
 - `cloudbase-platform` -> general CloudBase platform decisions
 - `ops-inspector` -> AIOps-style inspection and log search across services
+
+## Reference index
+
+All packaged reference files (required for skill lint reachability):
+
+- [event-functions.md](references/event-functions.md)
+- [http-functions-custom-image.md](references/http-functions-custom-image.md)
+- [http-functions.md](references/http-functions.md)
+- [operations-and-config.md](references/operations-and-config.md)
+- [vpc-and-tcp-database.md](references/vpc-and-tcp-database.md)

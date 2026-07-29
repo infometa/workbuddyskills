@@ -72,6 +72,51 @@ tmeet record address \
 
 ---
 
+## search — 搜索录制
+
+按关键词、会议码、会议 ID、时间范围或文件类型等条件搜索录制，所有筛选参数均为可选，可自由组合使用。
+
+```bash
+# 按转写内容关键词搜索
+tmeet record search --query "季度目标" --query-field transcript_content
+
+# 按智能纪要内容搜索
+tmeet record search --query "待办事项" --query-field smart_minutes
+
+# 按会议 ID 过滤
+tmeet record search --meeting-id "100000000"
+
+# 按时间范围搜索 + 限定文件类型
+tmeet record search \
+  --start "2026-04-01T00:00:00+08:00" \
+  --end "2026-04-30T23:59:59+08:00" \
+  --file-type video
+
+# 组合条件 + 分页查询（翻下一页）
+tmeet record search \
+  --query "项目复盘" \
+  --page-token "<next_page_token>" \
+  --page-size 30
+```
+
+### 参数
+
+| 参数 | 必填 | 默认值 | 说明 |
+|------|------|--------|------|
+| `--query <text>` | 否 | — | 搜索关键词 |
+| `--query-field <field>` | 否 | `all` | 搜索字段（配合 `--query` 使用）：`subject`-录制主题；`creator`-会议创建者昵称/备注名；`transcript_content`-文件内的原始转写内容；`smart_minutes`-文件内的智能纪要内容（摘要 + 待办）；`timeline`-文件内的时间线内容；`all`-全部字段 |
+| `--file-type <type>` | 否 | `all` | 文件类型：`video`、`audio`、`transcript`、`upload`、`external`、`all` |
+| `--meeting-id <id>` | 否 | — | 按会议 ID 过滤 |
+| `--meeting-code <code>` | 否 | — | 按会议码精确搜索（仅数字，无连字符） |
+| `--start <time>` | 否 | — | 查询起始时间（ISO 8601，含时区） |
+| `--end <time>` | 否 | — | 查询结束时间（ISO 8601，含时区） |
+| `--page-token <token>` | 否 | — | 分页游标，首页不传；后续翻页传入上一次响应的 `next_page_token` |
+| `--page-size <n>` | 否 | `30` | 每页数量，默认 30，最大 30 |
+
+> 所有筛选参数均为可选，但建议至少提供一个以缩小搜索范围。
+
+---
+
 ## smart-minutes — 获取智能纪要
 
 ```bash

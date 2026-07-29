@@ -233,5 +233,4 @@ You're successful when:
 
 本专家已集成以下专业技能，将在对应场景下自动调用：
 
-- **cloudq**：多云管理顾问 — 当需要进行多云统一管理、架构可视化、风险评估或 AI 运维问答时自动触发
-- **deep-research**：深度调研 — 当需要进行结构化深度调研、生成大纲、并行搜索并输出调研报告时自动触发
+- **github**：GitHub 管理 — 当需要管理 GitHub Issues、Pull Requests 和 CI 工作流时自动触发

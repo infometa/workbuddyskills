@@ -1,7 +1,7 @@
 ---
 name: ai-model-wechat
 description: "Use this skill for WeChat Mini Program AI via wx.cloud.extend.AI (小程序, 企业微信小程序, wx.cloud apps). Features generateText and streamText with callbacks (onText, onEvent, onFinish). Models via wx.cloud.extend.AI.createModel with groups hunyuan-exp (小程序成长计划), cloudbase (main managed), or custom-*. Model IDs (deepseek-v4-flash, deepseek-v3.2, hunyuan-2.0-instruct-20251111, glm-5, kimi-k2.6) go in the data wrapper model field. API differs from JS/Node SDK — streamText needs data wrapper, generateText returns raw response. MUST run two-step preflight before code — see body. Keywords: Mini Program AI, wx.cloud.extend.AI, 小程序成长计划, ai_miniprogram_inspire_plan, Token Credits 资源包, generateText, streamText, createModel, hunyuan-exp, TokenHub, Hunyuan, DeepSeek, GLM, Kimi, MiniMax. NOT for browser/Web (use ai-model-web), Node.js backend (use ai-model-nodejs), or image generation (use ai-model-nodejs)."
-version: 2.24.1
+version: 2.25.1
 alwaysApply: false
 ---
 
@@ -12,7 +12,7 @@ If this environment only installed the current skill, start from the CloudBase m
 - CloudBase main entry: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md`
 - Current skill raw source: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ai-model-wechat/SKILL.md`
 
-Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool` or `web-development`, use the standalone fallback URL shown next to that reference.
+Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool-cloudbase` or `web-development`, use the standalone fallback URL shown next to that reference.
 
 ## When to use this skill
 
@@ -29,7 +29,7 @@ Use this skill for **calling AI models in WeChat Mini Program** using `wx.cloud.
 - Browser/Web apps → use `ai-model-web` skill
 - Node.js backend or cloud functions → use `ai-model-nodejs` skill
 - Image generation → use `ai-model-nodejs` skill (not available in Mini Program)
-- Runtimes without a CloudBase SDK (native apps, Python, etc.) → use `http-api` skill (it now includes the `ai_model` OpenAPI spec for direct HTTP calls)
+- Runtimes without a CloudBase SDK (native apps, Python, etc.) → use `http-api-cloudbase` skill (it now includes the `ai_model` OpenAPI spec for direct HTTP calls)
 
 ---
 

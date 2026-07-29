@@ -9,16 +9,16 @@ scenarios:
   - publishable key
   - 短信登录
   - 邮箱登录
-  firstRead: auth-tool
+  firstRead: auth-tool-cloudbase
   thenRead:
-  - auth-web
+  - auth-web-cloudbase
   - web-development
   beforeAction:
   - 先检查并开启所需登录方式，再写前端代码。
   - 优先通过 `queryAppAuth` / `manageAppAuth` 获取 publishable key 并确认使用 Web SDK。
   doNotUse:
   - cloud-functions
-  - http-api
+  - http-api-cloudbase
   mustCheckBeforeAction:
   - Provider status and publishable key
   commonMistakes:
@@ -34,13 +34,13 @@ scenarios:
   - 小程序数据库
   firstRead: miniprogram-development
   thenRead:
-  - auth-wechat
-  - no-sql-wx-mp-sdk
+  - auth-wechat-miniprogram
+  - cloudbase-document-database-in-wechat-miniprogram
   beforeAction:
   - 先确认项目是否真的使用 CloudBase。
   - 使用 wx.cloud 和 OPENID 路径，不要先套 Web 认证模型。
   doNotUse:
-  - auth-web
+  - auth-web-cloudbase
   - web-development
   commonMistakes:
   - 给小程序生成多余的 Web 登录页。
@@ -56,16 +56,16 @@ scenarios:
   - Flutter CloudBase
   - React Native CloudBase
   - 原生 App 接入
-  firstRead: http-api
+  firstRead: http-api-cloudbase
   thenRead:
-  - auth-tool
-  - relational-database-tool
+  - auth-tool-cloudbase
+  - relational-database-mcp-cloudbase
   beforeAction:
   - 先确认当前平台不支持 CloudBase SDK。
   - 确认 HTTP API 鉴权方式、Base URL 和数据库能力边界；应用侧登录配置仍走 `queryAppAuth` / `manageAppAuth`。
   doNotUse:
-  - auth-web
-  - no-sql-web-sdk
+  - auth-web-cloudbase
+  - cloudbase-document-database-web-sdk
   - web-development
   commonMistakes:
   - 在原生 App 中误用 Web SDK。
@@ -82,21 +82,21 @@ scenarios:
   - NoSQL Web SDK
   firstRead: web-development
   thenRead:
-  - no-sql-web-sdk
-  - auth-web
+  - cloudbase-document-database-web-sdk
+  - auth-web-cloudbase
   beforeAction:
   - 先确认是 Web SDK 场景。
   - 确认登录态与数据库访问权限模型。
   doNotUse:
-  - relational-database-tool
-  - http-api
+  - relational-database-mcp-cloudbase
+  - http-api-cloudbase
   commonMistakes:
   - 把前端查文档库误导到 MySQL 管理工具。
   - 未确认登录态就直接写数据库代码。
   label: Web projects + NoSQL Database
   mustCheckBeforeAction:
   - Login state and database access permission model
-- id: postgresql-development
+- id: postgresql-development-cloudbase
   priority: 96
   signals:
   - CloudBase PG
@@ -114,22 +114,22 @@ scenarios:
   - auth schema
   - storage schema
   - pgvector
-  firstRead: postgresql-development
+  firstRead: postgresql-development-cloudbase
   thenRead:
-  - auth-tool
-  - auth-web
+  - auth-tool-cloudbase
+  - auth-web-cloudbase
   - web-development
   - miniprogram-development
   - cloud-storage-web
-  - http-api
+  - http-api-cloudbase
   beforeAction:
   - 先用 `queryPgDatabase` / `managePgDatabase` 检查 PG 环境、schema 与权限策略。
   - 用户名密码登录先用 `queryAppAuth` / `manageAppAuth` 确认或开启。
   - Web 业务数据优先用 JS SDK v3 `app.rdb()`，HTTP API 只在查过 `mysqldb` OpenAPI 后使用。
   - 业务数据必须落到 CloudBase PG，不要退回 NoSQL 或 MySQL 管理工具链。
   doNotUse:
-  - relational-database-tool
-  - no-sql-web-sdk
+  - relational-database-mcp-cloudbase
+  - cloudbase-document-database-web-sdk
   commonMistakes:
   - 把 CloudBase PG 当 MySQL，调用 `queryMysqlDatabase` / `manageMysqlDatabase`。
   - 只做前端按钮隐藏，没有后端或数据库层权限。
@@ -145,15 +145,15 @@ scenarios:
   - executeWriteSQL
   - security rule
   - CloudBase 关系型数据库管理
-  firstRead: relational-database-tool
+  firstRead: relational-database-mcp-cloudbase
   thenRead:
-  - relational-database-web
-  - http-api
+  - relational-database-web-cloudbase
+  - http-api-cloudbase
   beforeAction:
   - 先区分当前是 MCP 运维管理还是应用代码接入。
   - 写操作前先跑 SELECT 或先读安全规则。
   doNotUse:
-  - no-sql-web-sdk
+  - cloudbase-document-database-web-sdk
   - web-development
   commonMistakes:
   - 在 MCP 管理场景里初始化 SDK。
@@ -171,14 +171,14 @@ scenarios:
   - runtime
   firstRead: cloud-functions
   thenRead:
-  - auth-tool
+  - auth-tool-cloudbase
   - ai-model-nodejs
   beforeAction:
   - 先区分 Event Function 与 HTTP Function。
   - 创建前确定 runtime，避免后续不可变限制。
   doNotUse:
   - cloudrun-development
-  - auth-web
+  - auth-web-cloudbase
   commonMistakes:
   - 把 Web 登录逻辑错误地放进云函数。
   - 把 HTTP 函数误写成 `exports.main(event, context)`，或误以为 Node 原生 `http` 请求里自带 `req.body`。
@@ -195,8 +195,8 @@ scenarios:
   - Dockerfile
   firstRead: cloudrun-development
   thenRead:
-  - auth-tool
-  - relational-database-tool
+  - auth-tool-cloudbase
+  - relational-database-mcp-cloudbase
   beforeAction:
   - 先确认这是容器服务而不是云函数。
   - 检查 CORS、镜像入口和环境变量策略。
@@ -274,7 +274,7 @@ scenarios:
   - UI 场景先读设计规范再实现聊天界面。
   doNotUse:
   - ai-model-wechat
-  - http-api
+  - http-api-cloudbase
   commonMistakes:
   - Web 场景读成小程序或原生 App 路径。
   label: AI Model (Web)

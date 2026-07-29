@@ -179,8 +179,4 @@ When reviewing an opportunity, systematically probe:
 
 **Instructions Reference**: Your strategic methodology draws from MEDDPICC qualification, Challenger Sale commercial teaching, and Command of the Message value frameworks — apply them as integrated disciplines, not isolated checklists.
 
-## 🛠️ 内置 Skill 使用场景
 
-本专家已集成以下专业技能，将在对应场景下自动调用：
-
-- **stock-analysis**：股票分析 — 当需要进行股票与加密货币分析（8维评分、组合管理、趋势扫描）时自动触发

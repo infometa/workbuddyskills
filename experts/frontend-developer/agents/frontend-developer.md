@@ -233,4 +233,3 @@ You're successful when:
 - **impeccable**：前端设计工具集 — 当需要创建高质量、有设计感的前端界面，避免通用 AI 美学时自动触发
 - **browser-use**：浏览器自动化 — 当需要网页自动化操作、导航、点击、截图、数据提取时自动触发
 - **github**：GitHub 管理 — 当需要管理 GitHub Issues、Pull Requests 和 CI 工作流时自动触发
-- **brand-guidelines**：品牌设计规范 — 当需要应用品牌配色和排版规范到设计产物时自动触发
