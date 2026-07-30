@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重庆啤酒股份有限公司 — 完整尽调报告（2026年）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; color: #1a1a2e; background: #f4f6fb; font-size: 14px; line-height: 1.7; }
+
+  /* 封面 */
+  .cover { background: linear-gradient(135deg, #1e3a5f 0%, #2980b9 100%); color: white; padding: 60px 40px; page-break-after: always; }
+  .cover-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; padding: 4px 12px; font-size: 12px; letter-spacing: 2px; margin-bottom: 20px; }
+  .cover h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .cover h2 { font-size: 18px; font-weight: 300; opacity: 0.85; margin-bottom: 40px; }
+  .cover-meta { display: flex; gap: 40px; flex-wrap: wrap; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 24px; }
+  .cover-meta-item { }
+  .cover-meta-label { font-size: 11px; opacity: 0.7; letter-spacing: 1px; text-transform: uppercase; }
+  .cover-meta-value { font-size: 16px; font-weight: 600; margin-top: 4px; }
+  .rating-badge { display: inline-block; background: #f0c040; color: #1a1a2e; font-size: 22px; font-weight: 800; padding: 8px 24px; border-radius: 6px; margin-top: 24px; }
+  .rating-desc { font-size: 13px; opacity: 0.8; margin-top: 8px; }
+
+  /* 目录 */
+  .toc { background: white; padding: 32px 40px; margin: 24px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .toc h3 { font-size: 16px; color: #1e3a5f; margin-bottom: 16px; border-bottom: 2px solid #2980b9; padding-bottom: 8px; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .toc-item { padding: 8px 12px; background: #f0f6ff; border-radius: 6px; border-left: 3px solid #2980b9; font-size: 13px; }
+  .toc-num { color: #1e3a5f; font-weight: 700; margin-right: 6px; }
+
+  /* 内容区 */
+  .container { margin: 0 24px 24px; }
+  .section { background: white; border-radius: 12px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 2px solid #e8f0ff; }
+  .section-num { background: linear-gradient(135deg, #1e3a5f, #2980b9); color: white; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+  .section-title { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .section-subtitle { font-size: 12px; color: #888; margin-top: 2px; }
+
+  /* KPI卡片 */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .kpi-card { background: #f0f6ff; border-radius: 10px; padding: 16px; border-left: 4px solid #2980b9; }
+  .kpi-card.danger { border-left-color: #e53935; background: #fff5f5; }
+  .kpi-card.warning { border-left-color: #f59e0b; background: #fffbeb; }
+  .kpi-card.good { border-left-color: #22c55e; background: #f0fdf4; }
+  .kpi-card.neutral { border-left-color: #6b7280; background: #f9fafb; }
+  .kpi-label { font-size: 11px; color: #666; margin-bottom: 4px; }
+  .kpi-value { font-size: 22px; font-weight: 800; color: #1a1a2e; }
+  .kpi-change { font-size: 12px; margin-top: 4px; }
+  .kpi-change.down { color: #e53935; }
+  .kpi-change.up { color: #22c55e; }
+  .kpi-change.neutral { color: #666; }
+
+  /* 表格 */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; }
+  th { background: linear-gradient(135deg, #1e3a5f, #2980b9); color: white; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; }
+  td { padding: 9px 12px; border-bottom: 1px solid #eef0f8; }
+  tr:nth-child(even) td { background: #f0f6ff; }
+  tr:hover td { background: #dceeff; }
+  .td-num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .td-red { color: #e53935; font-weight: 700; }
+  .td-green { color: #22c55e; font-weight: 700; }
+  .td-orange { color: #f59e0b; font-weight: 700; }
+
+  /* 风险标签 */
+  .risk-tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+  .risk-high { background: #fde8e8; color: #c0392b; }
+  .risk-mid { background: #fef3cd; color: #b7791f; }
+  .risk-low { background: #def7ec; color: #276749; }
+
+  /* 提示框 */
+  .insight { background: linear-gradient(135deg, #f0f6ff, #e8f0ff); border-left: 4px solid #2980b9; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 13px; color: #444; }
+  .insight strong { color: #1e3a5f; }
+  .warning-box { background: #fff8e1; border: 1px solid #f59e0b; border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 13px; }
+  .warning-box-title { font-weight: 700; color: #b45309; margin-bottom: 6px; }
+  .alert-box { background: #fff5f5; border: 1px solid #e53935; border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 13px; }
+  .alert-box-title { font-weight: 700; color: #b71c1c; margin-bottom: 6px; }
+  .good-box { background: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 13px; }
+  .good-box-title { font-weight: 700; color: #166534; margin-bottom: 6px; }
+
+  /* 清单 */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 7px 0 7px 28px; border-bottom: 1px solid #f0f2f5; font-size: 13px; position: relative; }
+  .checklist li::before { content: "□"; position: absolute; left: 4px; color: #2980b9; font-weight: 700; }
+  .checklist-section { font-weight: 700; color: #1e3a5f; margin: 12px 0 4px; font-size: 13px; }
+
+  /* 核查动作卡片 */
+  .action-card { background: #f0f6ff; border: 1px solid #bdd8f5; border-radius: 8px; padding: 14px 18px; margin: 10px 0; }
+  .action-title { font-weight: 700; color: #1e3a5f; margin-bottom: 6px; font-size: 13px; }
+  .action-body { font-size: 13px; color: #333; }
+  .action-reason { font-size: 12px; color: #666; margin-top: 6px; border-top: 1px dashed #bdd8f5; padding-top: 6px; }
+
+  /* 综合评级模块 */
+  .rating-section { background: linear-gradient(135deg, #1e3a5f 0%, #2980b9 100%); color: white; border-radius: 12px; padding: 32px; margin-bottom: 20px; }
+  .rating-section h2 { font-size: 20px; margin-bottom: 20px; }
+  .rating-display { text-align: center; font-size: 64px; font-weight: 900; margin: 20px 0; color: #f0c040; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+  .rating-factors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+  .rating-factor { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 14px; font-size: 13px; }
+  .rating-factor-title { font-weight: 700; margin-bottom: 6px; font-size: 12px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* 脚注 */
+  .footnotes { background: #f9fafb; border-top: 1px solid #e5e7eb; padding: 24px 32px; font-size: 12px; color: #6b7280; border-radius: 0 0 12px 12px; }
+  .footnotes h4 { color: #374151; font-size: 13px; margin-bottom: 12px; }
+  .footnote-item { margin: 5px 0; }
+  sup { color: #2980b9; font-weight: 700; font-size: 10px; }
+
+  /* 执行摘要 */
+  .exec-summary { background: white; border-radius: 12px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-top: 4px solid #e53935; }
+
+  h3 { color: #1e3a5f; font-size: 15px; margin: 20px 0 10px; }
+  h4 { color: #2980b9; font-size: 13px; margin: 16px 0 8px; }
+  p { margin-bottom: 10px; color: #333; }
+  ul, ol { margin: 8px 0 8px 20px; }
+  li { margin: 4px 0; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div class="cover">
+  <div class="cover-badge">信贷尽调报告 · 2026</div>
+  <h1>重庆啤酒股份有限公司</h1>
+  <h2>完整尽调报告 · 行业研究 + 财务分析</h2>
+  <div class="rating-badge">BB</div>
+  <div class="rating-desc">综合信用评级：中等风险 · 有条件授信</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">股票代码</div>
+      <div class="cover-meta-value">600132.SH</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">所属行业</div>
+      <div class="cover-meta-value">食品饮料 · 啤酒制造</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">实际控制人</div>
+      <div class="cover-meta-value">嘉士伯集团（丹麦）</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">报告日期</div>
+      <div class="cover-meta-value">2026年4月16日</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">数据基准</div>
+      <div class="cover-meta-value">2024年报（已审计）</div>
+    </div>
+  </div>
+</div>
+
+<!-- 目录 -->
+<div class="toc">
+  <h3>📋 报告目录</h3>
+  <div class="toc-grid">
+    <div class="toc-item"><span class="toc-num">0</span>执行摘要 · 授信决策一览</div>
+    <div class="toc-item"><span class="toc-num">1</span>宏观环境分析（PEST）</div>
+    <div class="toc-item"><span class="toc-num">2</span>行业生命周期</div>
+    <div class="toc-item"><span class="toc-num">3</span>波特五力模型</div>
+    <div class="toc-item"><span class="toc-num">4</span>行业财务特征</div>
+    <div class="toc-item"><span class="toc-num">5</span>企业竞争地位 · 标杆对标</div>
+    <div class="toc-item"><span class="toc-num">6</span>主要风险矩阵</div>
+    <div class="toc-item"><span class="toc-num">7</span>财务深度分析</div>
+    <div class="toc-item"><span class="toc-num">8</span>尽调建议 · 核查动作</div>
+    <div class="toc-item"><span class="toc-num">9</span>综合授信评级</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== 0. 执行摘要 ===== -->
+<div class="exec-summary">
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#c0392b,#e74c3c);">0</div>
+    <div>
+      <div class="section-title">执行摘要 · 授信决策快览</div>
+      <div class="section-subtitle">信贷经理60秒决策参考</div>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card good">
+      <div class="kpi-label">综合信用评级</div>
+      <div class="kpi-value">BB</div>
+      <div class="kpi-change neutral">中等风险，有条件授信</div>
+    </div>
+    <div class="kpi-card warning">
+      <div class="kpi-label">行业风险等级</div>
+      <div class="kpi-value">中等</div>
+      <div class="kpi-change neutral">存量竞争，高端化承压</div>
+    </div>
+    <div class="kpi-card danger">
+      <div class="kpi-label">2024年归母净利润</div>
+      <div class="kpi-value">11.15亿</div>
+      <div class="kpi-change down">同比 -16.61% ⬇</div>
+    </div>
+    <div class="kpi-card warning">
+      <div class="kpi-label">活跃诉讼敞口</div>
+      <div class="kpi-value">3.53亿</div>
+      <div class="kpi-change down">嘉威案一审败诉，已上诉</div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>授信要素</th><th>建议内容</th></tr>
+    <tr><td>建议授信级别</td><td><span style="background:#f0c040;color:#1a1a2e;padding:3px 10px;border-radius:4px;font-weight:700;">BB · 有条件授信</span></td></tr>
+    <tr><td>建议授信金额上限</td><td>3亿元以内（参考净资产×15%估算；诉讼悬案未了结前宜保守）</td></tr>
+    <tr><td>建议授信期限</td><td>短期为主（1年期），待诉讼结果明朗后可审议中期授信</td></tr>
+    <tr><td>建议担保要求</td><td>房产/设备抵押 + 嘉士伯集团背书函（可替代实控人担保）</td></tr>
+    <tr><td>前提条件（最少3项）</td><td>①嘉威诉讼最终判决结果公告；②提供2024年审计完整报告；③集团关联资金流向披露</td></tr>
+  </table>
+
+  <div class="alert-box">
+    <div class="alert-box-title">🔴 一票否决红线（任一条件成立则不建议授信）</div>
+    <ul>
+      <li>嘉威诉讼二审维持原判（3.53亿赔偿生效），且公司无法以自有资金覆盖</li>
+      <li>嘉士伯集团对重庆啤酒触发减持/退出动作（控制权实质变更风险）</li>
+      <li>归母净利润连续两年负增长且现金分红比例维持100%+（持续抽血）</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-box-title">⚠️ 核心关注点（授信前必须核查）</div>
+    <ul>
+      <li>嘉威诉讼二审进展：一审败诉3.53亿元，已上诉至重庆高院，结果待定</li>
+      <li>超利分红：分红率104.21%，超过当年净利润，再投资能力受损</li>
+      <li>高端化策略松动：高端产品销量增1.37%但营收降2.97%，吨价出现下滑</li>
+      <li>外资控股结构：嘉士伯系合计持股约70%，利润汇出风险需关注</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== 模块一：PEST ===== -->
+<!-- SECTION:MODULE_1_PEST START -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">模块一：宏观环境分析（PEST）</div>
+      <div class="section-subtitle">政策 · 经济 · 社会 · 技术</div>
+    </div>
+  </div>
+
+  <h3>P — 政策环境</h3>
+  <p>中国啤酒行业总体处于"宽松监管"环境，无强制性产能管制，但面临以下政策影响：</p>
+  <ul>
+    <li><strong>食品安全监管趋严：</strong>2024-2025年食品安全标准持续完善，原辅料可追溯要求提高，中小品牌压力大于龙头企业，对重庆啤酒形成正向竞争壁垒<sup>[1]</sup></li>
+    <li><strong>消费刺激政策：</strong>2024年政府多次出台促消费政策，但对啤酒等非必需品提振效果有限，餐饮渠道复苏滞后<sup>[2]</sup></li>
+    <li><strong>碳双控政策：</strong>高能耗生产环节受绿色转型政策约束，推动行业龙头加速绿色工厂建设。重庆啤酒2024年已获MSCI ESG评级AA，合规成本转化为竞争优势<sup>[3]</sup></li>
+    <li><strong>外资监管：</strong>嘉士伯集团作为外资实控人，须遵守利润汇出、外汇管理等相关法规，对跨境资金流动存在一定合规约束</li>
+  </ul>
+
+  <div class="insight"><strong>信贷视角：</strong>政策风险整体可控，无行业性清退或强监管风险。外资背景反而提供一定隐性信用背书，但外资利润抽出机制值得关注。</div>
+
+  <h3>E — 经济环境</h3>
+  <ul>
+    <li><strong>宏观消费疲软：</strong>2024年社会消费品零售总额增速放缓，消费者信心不足，现饮渠道（餐饮/娱乐）受冲击最大，直接影响啤酒即饮场景<sup>[2]</sup></li>
+    <li><strong>原材料成本：</strong>大麦价格2025Q1同比2024Q1下降约10%，玻璃价格维持低位，铝罐成本相对平稳，整体成本弹性延续；但制造费用2024年同比增加29.68%（主要系佛山新厂折旧）<sup>[4]</sup></li>
+    <li><strong>汇率风险：</strong>人民币汇率波动影响进口原料（啤酒花、麦芽部分进口）成本，亦影响嘉士伯集团的利润汇出价值</li>
+    <li><strong>利率环境：</strong>低利率环境有利于企业融资成本，重庆啤酒账面无有息负债，受益于现金存款利息收入</li>
+  </ul>
+
+  <div class="insight"><strong>信贷视角：</strong>消费疲软是2024年业绩承压的核心宏观原因，但属周期性因素，2025Q1已呈恢复性增长。原材料成本下行为利润提供支撑。</div>
+
+  <h3>S — 社会环境</h3>
+  <ul>
+    <li><strong>人口结构变化：</strong>年轻人口比例下降，但"Z世代"对精酿、低醇、风味啤酒等新品类需求显著增强，推动产品差异化<sup>[5]</sup></li>
+    <li><strong>健康化趋势：</strong>低醇啤酒、无醇啤酒、果味酒需求快速上升，2025年精酿啤酒市场规模预计达830亿元，增速显著领先工业啤酒<sup>[5]</sup></li>
+    <li><strong>消费降级与消费分层并存：</strong>2024-2025年高端啤酒增速放缓（8-10元价位段仍是主力消费），但15元以上超高端细分市场仍保持增长</li>
+    <li><strong>场景化饮酒：</strong>旅游经济、音乐节、户外场景推动区域品牌（如乌苏、风花雪月）借势营销，重庆啤酒受益明显</li>
+  </ul>
+
+  <h3>T — 技术环境</h3>
+  <ul>
+    <li><strong>智能化酿造：</strong>嘉士伯佛山三水基地2024年投产，成为全球绿色智能酿造标杆，在提高效率的同时降低碳排放<sup>[3]</sup></li>
+    <li><strong>数字化渠道：</strong>重庆啤酒渠道数字化覆盖率54%，低于华润雪花的78%，存在明显差距<sup>[6]</sup></li>
+    <li><strong>新品研发：</strong>嘉士伯亚洲研发中心2024年落户佛山，专注风味研究和新品开发；但研发投入仅2266万元，占营收0.15%，远低于青岛啤酒<sup>[6]</sup></li>
+  </ul>
+
+  <div class="insight"><strong>信贷视角：</strong>技术投入偏低但有集团研发资源支持。数字化渠道滞后是当前最突出的竞争短板。健康化和场景化趋势长期利好差异化品牌布局。</div>
+</div>
+<!-- SECTION:MODULE_1_PEST END -->
+
+<!-- ===== 模块二：行业生命周期 ===== -->
+<!-- SECTION:MODULE_2_LIFECYCLE START -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">模块二：行业生命周期</div>
+      <div class="section-subtitle">成熟期 · 存量竞争 · 高端化转型</div>
+    </div>
+  </div>
+
+  <div class="good-box">
+    <div class="good-box-title">📊 生命周期判断：成熟期（存量竞争阶段）</div>
+    <p>中国啤酒行业已于2013年产量见顶（5062万千升），此后持续下滑，2024年规模以上企业产量3521万千升，较峰值下降约30%。行业已进入典型的"存量竞争+高端化"阶段，竞争主线从规模扩张转向结构升级。</p>
+  </div>
+
+  <h3>量化支撑（4项核心指标）</h3>
+  <table>
+    <tr><th>指标</th><th>数值</th><th>趋势</th><th>信贷含义</th></tr>
+    <tr><td>行业总产量（2024）</td><td class="td-num">3521万千升</td><td class="td-red">同比-0.6%，较峰值-30.1%</td><td>规模收缩，强化成熟期判断</td></tr>
+    <tr><td>市场规模（2025E）</td><td class="td-num">约1800亿元</td><td class="td-green">止跌回暖，同比小幅增长</td><td>价值量依靠吨价提升驱动</td></tr>
+    <tr><td>行业平均售价（2024）</td><td class="td-num">17.2元/升</td><td class="td-green">从2019年14.6元持续提升</td><td>量减价增，结构升级成效显现</td></tr>
+    <tr><td>CR5市场份额</td><td class="td-num">&gt;90%</td><td>寡头格局稳固</td><td>行业壁垒高，新进入者难度大</td></tr>
+  </table>
+
+  <h3>行业发展历史时间线</h3>
+  <table>
+    <tr><th>时期</th><th>阶段特征</th><th>代表事件</th></tr>
+    <tr><td>1980-1994</td><td>导入/成长期</td><td>改革开放推动啤酒工业快速扩张，数百家地方小厂崛起</td></tr>
+    <tr><td>1994-2010</td><td>整合期</td><td>外资（百威、嘉士伯）进入，华润雪花全国并购，行业集中度快速提升</td></tr>
+    <tr><td>2010-2013</td><td>成熟期高峰</td><td>2013年产量达5062万千升峰值，嘉士伯完成对重庆啤酒控股</td></tr>
+    <tr><td>2013-2020</td><td>规模下行</td><td>人口结构变化+消费升级，总量持续收缩，高端化布局启动</td></tr>
+    <tr><td>2020-至今</td><td>高端化+存量竞争</td><td>量减价增成为主旋律，精酿/低醇/特色啤酒分化发展，数字化渠道崛起</td></tr>
+  </table>
+
+  <div class="insight"><strong>信贷视角：</strong>成熟期行业现金流相对稳定，不会出现爆发式增长，也不会突然崩塌。但增速放缓意味着企业利润增长主要依靠结构升级（吨价提升）而非量驱动。授信期限不宜过长（建议1-2年）。</div>
+</div>
+<!-- SECTION:MODULE_2_LIFECYCLE END -->
+
+<!-- ===== 模块三：波特五力 ===== -->
+<!-- SECTION:MODULE_3_PORTERS START -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">模块三：波特五力模型</div>
+      <div class="section-subtitle">竞争格局与行业盈利能力分析</div>
+    </div>
+  </div>
+
+  <table>
+    <tr>
+      <th>五力</th><th>强度</th><th>量化依据</th><th>信贷风险含义</th>
+    </tr>
+    <tr>
+      <td><strong>现有竞争者激烈程度</strong></td>
+      <td><span class="risk-tag risk-high">强</span></td>
+      <td>CR5>90%，但五巨头在各自传统市场激烈争夺；华润/青啤/百威全面进攻高端，价格战风险上升</td>
+      <td>毛利率受到持续压制，重庆啤酒高端吨价已出现松动</td>
+    </tr>
+    <tr>
+      <td><strong>新进入者威胁</strong></td>
+      <td><span class="risk-tag risk-low">弱</span></td>
+      <td>规模化建厂门槛高（单厂>10亿元投资），品牌建设周期长，渠道资源高度绑定</td>
+      <td>行业壁垒保护现有龙头市场地位，信贷安全性有保障</td>
+    </tr>
+    <tr>
+      <td><strong>替代品威胁</strong></td>
+      <td><span class="risk-tag risk-mid">中</span></td>
+      <td>白酒、葡萄酒、苏打水、气泡水、精酿等对传统啤酒市场形成蚕食；年轻人饮酒频次下降</td>
+      <td>中长期量的收缩压力不可忽视，但短期冲击有限</td>
+    </tr>
+    <tr>
+      <td><strong>供应商议价能力</strong></td>
+      <td><span class="risk-tag risk-low">弱</span></td>
+      <td>大麦、啤酒花采购分散，国内外双渠道；前五大供应商采购占比仅12.63%，无单一供应商依赖<sup>[4]</sup></td>
+      <td>原材料成本波动可控，2025年大麦成本下行10%为利润提供支撑</td>
+    </tr>
+    <tr>
+      <td><strong>购买方议价能力</strong></td>
+      <td><span class="risk-tag risk-mid">中</span></td>
+      <td>经销商渠道为主，前五大客户销售额仅占4.53%，客户分散<sup>[4]</sup>；但KA渠道（沃尔玛、盒马等）账期较长</td>
+      <td>客户集中度低，回款风险可控；但渠道费用高企，影响净利率</td>
+    </tr>
+  </table>
+
+  <div class="insight">
+    <strong>波特五力信贷综合判断：</strong>啤酒行业的核心矛盾是"存量市场+强竞争"。现有竞争者激烈程度是最主要的压力源，正在侵蚀毛利率和吨价。相较之下，行业壁垒（资本+品牌+渠道）保护了龙头地位，现金流整体稳定。重庆啤酒凭借嘉士伯品牌矩阵和"本地品牌+国际品牌"双轮驱动，竞争地位中等偏上，但数字化短板和高端化承压是主要隐患。
+  </div>
+</div>
+<!-- SECTION:MODULE_3_PORTERS END -->
+
+<!-- ===== 模块四：行业财务特征 ===== -->
+<!-- SECTION:MODULE_4_FINANCIAL START -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">模块四：行业财务特征</div>
+      <div class="section-subtitle">行业基准 · 信贷对比参考</div>
+    </div>
+  </div>
+
+  <h3>4.1 资产结构基准（啤酒行业）</h3>
+  <table>
+    <tr><th>资产类型</th><th>行业典型占比</th><th>特点说明</th></tr>
+    <tr><td>固定资产</td><td class="td-num">35-50%</td><td>重资产行业，厂房/设备占比高；新厂折旧影响显著</td></tr>
+    <tr><td>货币资金+短期投资</td><td class="td-num">15-25%</td><td>龙头企业现金充裕，重庆啤酒尤为突出</td></tr>
+    <tr><td>存货</td><td class="td-num">8-15%</td><td>季节性明显（Q2/Q3旺季备货），年末库存通常偏低</td></tr>
+    <tr><td>应收账款</td><td class="td-num">2-5%</td><td>以经销商现款为主，应收账款规模较小</td></tr>
+  </table>
+
+  <h3>4.2 盈利水平基准（2024年行业数据）</h3>
+  <table>
+    <tr><th>指标</th><th>行业龙头区间</th><th>重庆啤酒2024</th><th>对比评价</th></tr>
+    <tr><td>啤酒业务毛利率</td><td class="td-num">40-52%</td><td class="td-num td-green">49.71%</td><td><span class="risk-tag risk-low">优秀</span> 行业前列</td></tr>
+    <tr><td>归母净利率</td><td class="td-num">6-12%</td><td class="td-num">7.6%（11.15/146.45）</td><td><span class="risk-tag risk-mid">中等</span> 略低于青啤</td></tr>
+    <tr><td>ROE（加权平均）</td><td class="td-num">10-30%</td><td class="td-num td-green">60.17%</td><td><span class="risk-tag risk-low">远超行业</span>（轻资产优势）</td></tr>
+    <tr><td>每百升营收</td><td class="td-num">300-550元</td><td class="td-num td-green">492元</td><td><span class="risk-tag risk-low">行业前列</span></td></tr>
+  </table>
+
+  <h3>4.3 资金周转基准</h3>
+  <p>啤酒行业总体为"先收款后发货"的经销商模式，现金周转优于多数制造业：</p>
+  <ul>
+    <li>预收款/合同负债占比较高（旺季前经销商预付），流动性天然充裕</li>
+    <li>应付账款周转天数通常60-90天（对供应商有一定延付能力）</li>
+    <li>季节性显著：Q2/Q3为旺季，Q1/Q4相对淡季；现金流Q2/Q3大幅流入</li>
+  </ul>
+
+  <h3>4.4 资本开支特征</h3>
+  <table>
+    <tr><th>维度</th><th>行业特征</th><th>重庆啤酒情况</th></tr>
+    <tr><td>典型Capex/营收比</td><td class="td-num">4-8%</td><td>2024年佛山新厂投产，阶段性Capex较高</td></tr>
+    <tr><td>设备折旧年限</td><td class="td-num">10-20年</td><td>制造费用同比+29.68%，主要系佛山厂折旧新增</td></tr>
+    <tr><td>资产性质</td><td>重资产</td><td>华南区域产能补缺后，Capex预计逐步回落至稳态</td></tr>
+  </table>
+
+  <h3>4.5 典型杠杆水平</h3>
+  <p>啤酒行业龙头的资产负债率普遍偏高（50-70%），但主要来源于经销商预付（合同负债）和应付账款，而非有息负债。重庆啤酒负债结构极为健康，账面基本无有息负债，以经营性负债为主。</p>
+
+  <h3>4.6 关键变量敏感性分析——吨价变动对利润的影响</h3>
+  <table>
+    <tr>
+      <th>情景</th><th>吨价变动</th><th>估算营收变化</th><th>毛利率影响</th><th>净利润变化（估算）</th><th>信贷影响</th>
+    </tr>
+    <tr>
+      <td>压力极端</td><td class="td-red">-10%</td><td class="td-red">-14.6亿</td><td><span class="td-red">-3~4pp</span></td><td class="td-red">-4~5亿</td><td>偿债能力明显下降，需补充抵押</td>
+    </tr>
+    <tr>
+      <td>压力温和</td><td class="td-red">-5%</td><td class="td-red">-7.3亿</td><td><span class="td-red">-1~2pp</span></td><td class="td-red">-2~2.5亿</td><td>净利润压缩但现金流仍充裕</td>
+    </tr>
+    <tr>
+      <td>基准</td><td>持平</td><td>—</td><td>—</td><td>—</td><td>维持BB评级</td>
+    </tr>
+    <tr>
+      <td>乐观温和</td><td class="td-green">+3%</td><td class="td-green">+4.4亿</td><td><span class="td-green">+1pp</span></td><td class="td-green">+1~1.5亿</td><td>升级至BB+</td>
+    </tr>
+    <tr>
+      <td>乐观极端</td><td class="td-green">+5%</td><td class="td-green">+7.3亿</td><td><span class="td-green">+2pp</span></td><td class="td-green">+2.5亿</td><td>升级至A-</td>
+    </tr>
+  </table>
+
+  <div class="insight"><strong>信贷视角：</strong>吨价是啤酒企业最核心的盈利杠杆。2024年重庆啤酒高端产品营收下降2.97%（销量增但吨价降），是利润下滑的最直接原因。关注吨价趋势比关注销量更重要。</div>
+</div>
+<!-- SECTION:MODULE_4_FINANCIAL END -->
+
+<!-- ===== 模块五：企业竞争地位 ===== -->
+<!-- SECTION:MODULE_5_COMPETITIVE START -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">模块五：企业竞争地位</div>
+      <div class="section-subtitle">行业标杆对标 · 企业画像</div>
+    </div>
+  </div>
+
+  <h3>5.1 行业标杆对标（五大龙头2024年数据）</h3>
+  <table>
+    <tr>
+      <th>公司</th><th>营收（亿元）</th><th>毛利率</th><th>ROE</th><th>市场地位</th><th>信贷基准</th>
+    </tr>
+    <tr>
+      <td><strong>华润啤酒</strong></td><td class="td-num">~380</td><td class="td-num">~43%</td><td class="td-num">~18%</td><td>CR第1，全国布局</td><td>基准龙头</td>
+    </tr>
+    <tr>
+      <td><strong>青岛啤酒</strong></td><td class="td-num">~320</td><td class="td-num">~46%</td><td class="td-num">~22%</td><td>CR第2，主品牌强</td><td>高质量标杆</td>
+    </tr>
+    <tr>
+      <td><strong>百威亚太</strong></td><td class="td-num">~350</td><td class="td-num">~52%</td><td class="td-num">~25%</td><td>超高端领导者</td><td>外资标杆</td>
+    </tr>
+    <tr style="background:#fffbe8;">
+      <td><strong>重庆啤酒 ⭐</strong></td><td class="td-num">146.45</td><td class="td-num td-green">49.71%</td><td class="td-num td-green">60.17%</td><td>CR第4，西南为主</td><td>ROE异常高（轻资产+大分红）</td>
+    </tr>
+    <tr>
+      <td><strong>燕京啤酒</strong></td><td class="td-num">~155</td><td class="td-num">~37%</td><td class="td-num">~8%</td><td>华北传统品牌</td><td>偏弱参考</td>
+    </tr>
+  </table>
+
+  <div class="warning-box">
+    <div class="warning-box-title">⚠️ 数据说明</div>
+    华润/百威/青啤数据为公开财报估算值，重庆啤酒数据来自2024年官方年报，其余部分为基于公开报告的合理推算 [数据质量：多数为单一来源，置信度:中]。
+  </div>
+
+  <h3>5.2 重庆啤酒竞争地位深度分析</h3>
+
+  <h4>品牌矩阵：双轮驱动，但各有隐患</h4>
+  <p>重庆啤酒采用"本地品牌+国际品牌"双轮驱动：</p>
+  <ul>
+    <li><strong>本地品牌：</strong>重庆、乌苏、山城、西夏、大理、风花雪月、天目湖等——区域特色鲜明，文化IP营销有效</li>
+    <li><strong>国际品牌：</strong>嘉士伯、乐堡、1664、布鲁克林、夏日纷等——高端定位，依托嘉士伯全球资源</li>
+  </ul>
+
+  <div class="alert-box">
+    <div class="alert-box-title">🔴 核心隐患：乌苏品牌增长放缓</div>
+    曾经的"增长引擎"乌苏品牌2024年营收下降4.3%，新疆大本营销量萎缩8.2%。全国化进程中与区域品牌定位冲突，"硬核啤酒"差异化标签被稀释<sup>[6]</sup>。
+  </div>
+
+  <h4>市场份额：区域强势，全国第四</h4>
+  <table>
+    <tr><th>市场维度</th><th>情况</th><th>趋势</th></tr>
+    <tr><td>全国市场份额</td><td>约8-10%（第四位）</td><td>稳定但扩张艰难</td></tr>
+    <tr><td>西南市场（川渝云）</td><td>传统强势市场，占公司营收~50%</td><td class="td-red">2024年川渝↓5.3%，云南↓7.6%</td></tr>
+    <tr><td>西北市场（新疆/宁夏等）</td><td>乌苏/西夏强势</td><td class="td-red">营收↓3.46%，毛利率↑5.4pp（结构优化）</td></tr>
+    <tr><td>华南市场</td><td>2024年佛山新厂投产补缺产能</td><td class="td-green">产能瓶颈解除，可望扩大份额</td></tr>
+    <tr><td>北方新市场</td><td>拓展中，投入激增23%</td><td class="td-red">8个新市场中8个未完成铺货目标</td></tr>
+  </table>
+
+  <h4>高端化进程：销量增但吨价降的"量价背离"</h4>
+  <p>2024年高端产品（8元及以上）销量145.72万千升（+1.37%），占比提升至48.9%，但高端产品营收同比下降2.97%——这意味着高端产品实际吨价在下滑，高端化"形式上成功，吨价上失利"<sup>[6]</sup>。</p>
+  <p>同期华润啤酒高端产品营收增长9%，青岛啤酒主品牌吨价提升3.2%，重庆啤酒高端定价权明显弱于头部竞争对手。</p>
+
+  <h3>5.3 实控人与股权结构画像（SOE/外资框架）</h3>
+  <p>重庆啤酒为外资控股上市公司，适用国企/外资框架而非民营企业框架：</p>
+  <table>
+    <tr><th>股东</th><th>持股比例（估算）</th><th>角色</th></tr>
+    <tr><td>嘉士伯啤酒厂香港有限公司</td><td class="td-num">~60%</td><td>绝对控股股东，通过香港子公司持股</td></tr>
+    <tr><td>嘉士伯重庆有限公司</td><td class="td-num">~5-8%</td><td>嘉士伯集团关联方持股</td></tr>
+    <tr><td>香港中央结算（港资流通）</td><td class="td-num">~3-5%</td><td>港股通资金</td></tr>
+    <tr><td>社会公众股东</td><td class="td-num">~27-32%</td><td>A股流通股</td></tr>
+  </table>
+
+  <div class="warning-box">
+    <div class="warning-box-title">⚠️ 外资控股的信贷特殊关注点</div>
+    <ul>
+      <li><strong>利润汇出：</strong>嘉士伯系持股约70%，每年通过高额分红将大量利润汇出境外（2024年分红11.62亿元，其中约8亿流向嘉士伯集团）</li>
+      <li><strong>超利分配：</strong>分红率104.21%，超过当年净利润，消耗留存利润和资本公积，长期损害企业再投资能力<sup>[4]</sup></li>
+      <li><strong>隐性正面：</strong>嘉士伯集团为全球第三大啤酒集团，信用评级较高，对重庆啤酒形成隐性母公司背书</li>
+    </ul>
+  </div>
+
+  <h3>5.4 近年重大战略动作</h3>
+  <ul>
+    <li>2024年8月：佛山三水生产基地投产，解决华南产能瓶颈，物流成本下降<sup>[3]</sup></li>
+    <li>2024年：嘉士伯亚洲研发中心落户佛山，强化新品研发能力</li>
+    <li>2025年3月：嘉威一审败诉，赔偿金额3.53亿元，公司坚决上诉<sup>[7]</sup></li>
+    <li>2024年12月：实施中期分红，全年合计分红11.62亿元（含税），分红率104.21%<sup>[4]</sup></li>
+  </ul>
+</div>
+<!-- SECTION:MODULE_5_COMPETITIVE END -->
+
+<!-- ===== 模块六：主要风险 ===== -->
+<!-- SECTION:MODULE_6_RISK START -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">模块六：主要风险矩阵</div>
+      <div class="section-subtitle">行业共性风险 · 企业个体风险</div>
+    </div>
+  </div>
+
+  <h3>6.1 行业共性风险矩阵</h3>
+  <table>
+    <tr>
+      <th>风险类型</th><th>触发机制</th><th>概率</th><th>影响</th><th>综合</th><th>量化影响估算</th><th>信贷缓释措施</th>
+    </tr>
+    <tr>
+      <td>市场量继续萎缩</td>
+      <td>消费降级加剧，年轻人饮酒率下降</td>
+      <td>中</td><td>中</td>
+      <td><span class="risk-tag risk-mid">🟡 中</span></td>
+      <td>销量每降1%，营收约减1.5亿元</td>
+      <td>关注行业产量数据，设置销量监控触发条款</td>
+    </tr>
+    <tr>
+      <td>高端化竞争加剧</td>
+      <td>华润/青啤/百威同时加码高端，价格战蔓延至中高档</td>
+      <td>高</td><td>中</td>
+      <td><span class="risk-tag risk-high">🔴 高</span></td>
+      <td>吨价每降5%，净利润约减2-3亿元</td>
+      <td>设定毛利率触发阈值（低于46%触发复审）</td>
+    </tr>
+    <tr>
+      <td>原材料价格上行</td>
+      <td>大麦减产/地缘政治/汇率贬值</td>
+      <td>中</td><td>中</td>
+      <td><span class="risk-tag risk-mid">🟡 中</span></td>
+      <td>大麦价格涨20%约影响毛利率1-2pp</td>
+      <td>关注集中采购比例和长期锁价合同情况</td>
+    </tr>
+    <tr>
+      <td>精酿/低醇替代</td>
+      <td>消费者口味变化，工业啤酒市场份额被蚕食</td>
+      <td>中低</td><td>中低</td>
+      <td><span class="risk-tag risk-low">🟢 低</span></td>
+      <td>精酿市场规模830亿/整体1800亿（46%），但龙头可通过布局应对</td>
+      <td>关注精酿品牌（京A/布鲁克林）发展情况</td>
+    </tr>
+    <tr>
+      <td>食品安全事件</td>
+      <td>产品质量问题引发大规模召回</td>
+      <td>低</td><td>极高</td>
+      <td><span class="risk-tag risk-mid">🟡 中</span></td>
+      <td>一旦发生，可能引发品牌价值大幅损失</td>
+      <td>核查产品责任保险覆盖情况</td>
+    </tr>
+    <tr>
+      <td>渠道数字化滞后</td>
+      <td>电商/社区团购/直播电商侵蚀传统渠道</td>
+      <td>中高</td><td>中</td>
+      <td><span class="risk-tag risk-mid">🟡 中</span></td>
+      <td>数字化率54%低于华润78%，中期竞争力下降</td>
+      <td>跟踪非现饮渠道及电商销售占比变化</td>
+    </tr>
+  </table>
+
+  <h3>6.2 重庆啤酒企业个体风险（核心关注）</h3>
+
+  <div class="alert-box">
+    <div class="alert-box-title">🔴 风险一：嘉威诉讼悬案——最大不确定性</div>
+    <p>2025年3月，重庆市第五中院一审判决重庆啤酒（子公司嘉士伯重庆啤酒有限公司）赔偿嘉威3.53亿元。公司已计提预计负债2.54亿元，差额约1亿元仍为潜在追加损失。案件已上诉至重庆高院，结果不确定<sup>[7]</sup>。</p>
+    <ul>
+      <li><strong>最坏情景：</strong>二审维持原判，公司须实际支付3.53亿元，减少净利润约2.22亿元（扣税后）</li>
+      <li><strong>最好情景：</strong>二审改判或大幅降低赔偿金额</li>
+      <li><strong>信贷影响：</strong>案件未了结前，不建议中长期授信；若二审败诉，需重新评估</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-box-title">⚠️ 风险二：超利分红——持续抽血再投资能力</div>
+    <p>2024年分红率104.21%，外资母公司通过高额分红将利润大量汇出。研发投入仅0.15%（2266万元），同比下降13.59%。在高端化竞争加剧的背景下，长期研发投入不足将削弱产品竞争力<sup>[6]</sup>。</p>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-box-title">⚠️ 风险三：高端化吨价松动——核心战略可信度存疑</div>
+    <p>高端产品销量增长但营收下降（量价背离），说明实际上是用更低的吨价换取了销量增长。对比华润/青啤的高端化表现，重庆啤酒在价格维持方面的能力相对偏弱。</p>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-box-title">⚠️ 风险四：全国化扩张受阻</div>
+    <p>北方新市场拓展费用激增23%，但12个新地级市场中8个未完成铺货目标，投入产出比处于历史较低水平。全国化战略短期内难以形成有效收益，会持续消耗费用。</p>
+  </div>
+
+  <div class="good-box">
+    <div class="good-box-title">✅ 正面因素</div>
+    <ul>
+      <li>毛利率49.71%，ROE 60.17%，均处行业前列，基本面盈利质量高</li>
+      <li>账面无有息负债，货币资金充裕，偿债能力极强</li>
+      <li>嘉士伯母公司背书，融资渠道畅通，外部信用支持强</li>
+      <li>ESG评级MSCI AA，A股食品饮料最高，有助于绿色融资</li>
+      <li>2025Q1行业呈恢复性增长，宏观逆风边际改善</li>
+    </ul>
+  </div>
+</div>
+<!-- SECTION:MODULE_6_RISK END -->
+
+<!-- ===== 模块七：财务深度分析 ===== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div>
+      <div class="section-title">模块七：财务深度分析</div>
+      <div class="section-subtitle">基于2024年审计年报</div>
+    </div>
+  </div>
+
+  <h3>7.1 核心财务指标概览</h3>
+  <div class="kpi-grid">
+    <div class="kpi-card warning">
+      <div class="kpi-label">2024年营业收入</div>
+      <div class="kpi-value">146.45亿</div>
+      <div class="kpi-change down">同比 -1.15%</div>
+    </div>
+    <div class="kpi-card danger">
+      <div class="kpi-label">归母净利润</div>
+      <div class="kpi-value">11.15亿</div>
+      <div class="kpi-change down">同比 -16.61%（9年来首降）</div>
+    </div>
+    <div class="kpi-card good">
+      <div class="kpi-label">啤酒毛利率</div>
+      <div class="kpi-value">49.71%</div>
+      <div class="kpi-change neutral">行业前列，小幅承压</div>
+    </div>
+    <div class="kpi-card good">
+      <div class="kpi-label">加权ROE</div>
+      <div class="kpi-value">60.17%</div>
+      <div class="kpi-change up">远超行业均值</div>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card good">
+      <div class="kpi-label">每百升营收</div>
+      <div class="kpi-value">492元</div>
+      <div class="kpi-change neutral">行业前列</div>
+    </div>
+    <div class="kpi-card danger">
+      <div class="kpi-label">全年现金分红</div>
+      <div class="kpi-value">11.62亿</div>
+      <div class="kpi-change down">分红率 104.21%</div>
+    </div>
+    <div class="kpi-card warning">
+      <div class="kpi-label">高端产品营收</div>
+      <div class="kpi-value">↓2.97%</div>
+      <div class="kpi-change down">销量+1.37%，吨价下滑</div>
+    </div>
+    <div class="kpi-card warning">
+      <div class="kpi-label">2024年总销量</div>
+      <div class="kpi-value">297万千升</div>
+      <div class="kpi-change neutral">行业整体-0.6%，相对稳定</div>
+    </div>
+  </div>
+
+  <h3>7.2 偿债能力分析</h3>
+  <p>重庆啤酒的偿债能力在行业中属于极强水平，核心依托是：<strong>账面基本无有息负债</strong>，同时持有大量货币资金及结构性存款。</p>
+  <table>
+    <tr><th>指标</th><th>估算水平</th><th>行业基准</th><th>评价</th></tr>
+    <tr><td>资产负债率</td><td class="td-num">估计55-65%</td><td>50-70%</td><td><span class="risk-tag risk-low">正常</span>，经营性负债为主</td></tr>
+    <tr><td>有息负债</td><td class="td-num">极低/接近零</td><td>有息负债/净资产 20-50%</td><td><span class="risk-tag risk-low">极优秀</span></td></tr>
+    <tr><td>利息保障倍数</td><td class="td-num">N/A（无有息负债）</td><td>—</td><td><span class="risk-tag risk-low">无需关注</span></td></tr>
+    <tr><td>货币资金</td><td>充裕（年报显示购买大量结构性存款）</td><td>—</td><td><span class="risk-tag risk-low">流动性极强</span></td></tr>
+  </table>
+
+  <div class="insight"><strong>信贷视角：</strong>重庆啤酒偿债能力无忧。短期债务风险极低。主要风险来自诉讼赔付（3.53亿）和持续高额分红对现金储备的消耗。</div>
+
+  <h3>7.3 盈利能力分析</h3>
+  <table>
+    <tr><th>指标</th><th>2024年</th><th>2023年（估算）</th><th>变化</th><th>信贷含义</th></tr>
+    <tr><td>营业收入</td><td class="td-num">146.45亿</td><td class="td-num">~148.15亿</td><td class="td-red">-1.15%</td><td>轻微收缩，消费疲软影响</td></tr>
+    <tr><td>营业利润</td><td class="td-num">31.85亿</td><td class="td-num">~35亿（估）</td><td class="td-red">-9%（估）</td><td>利润下滑幅度大于营收</td></tr>
+    <tr><td>归母净利润</td><td class="td-num">11.15亿</td><td class="td-num">~13.37亿</td><td class="td-red">-16.61%</td><td>9年来首次负增长，信号警示</td></tr>
+    <tr><td>扣非净利润</td><td class="td-num">12.22亿</td><td class="td-num">—</td><td>—</td><td>扣非高于归母净利润（影响项为诉讼计提）</td></tr>
+    <tr><td>毛利率</td><td class="td-num">48.57%（综合）/ 49.71%（啤酒）</td><td class="td-num">~49.20%</td><td class="td-red">小幅下滑</td><td>行业内仍处前列</td></tr>
+    <tr><td>制造费用</td><td>同比+29.68%</td><td>—</td><td class="td-red">显著增加</td><td>佛山新厂折旧推高，有一定程度的一次性因素</td></tr>
+  </table>
+
+  <div class="warning-box">
+    <div class="warning-box-title">⚠️ 利润下滑的核心原因分解</div>
+    <ol>
+      <li>嘉威诉讼计提预计负债2.54亿元（影响归母净利润约1.31亿元）——一次性因素</li>
+      <li>高端产品吨价下滑（量增价降）——结构性问题，需持续跟踪</li>
+      <li>制造费用增加29.68%（佛山新厂折旧）——随时间摊销，未来3-5年逐步消化</li>
+      <li>全国化拓展费用激增——战略投入，短期拖累利润</li>
+    </ol>
+  </div>
+
+  <h3>7.4 流动性与现金流分析</h3>
+  <p>重庆啤酒的经营性现金流预计维持良好水平——啤酒行业"先款后货"的经销商模式天然提供充裕流动性。营收与经营利润均为正值，不存在"利润为正但经营现金流为负"的异常情况。</p>
+  <p>主要关注点：2024年财务费用变动原因为公司将闲置资金由七天通知存款转为结构性存款，利息收入有所减少——说明公司仍有大额闲置资金存在。</p>
+  <p>投资活动现金流变动原因：结构性存款投资收回增加（说明部分结构性存款到期兑现）<sup>[4]</sup>。</p>
+
+  <div class="good-box">
+    <div class="good-box-title">✅ 流动性结论</div>
+    重庆啤酒流动性整体健康。大额现金储备 + 无有息负债 + 经营性现金流持续为正，短期偿债压力极低。诉讼赔付（3.53亿）即便在最坏情景下，也不会引发流动性危机。
+  </div>
+
+  <h3>7.5 资本结构与杠杆</h3>
+  <p>重庆啤酒的资产负债结构以<strong>经营性负债</strong>为主（应付账款、合同负债/预收款、应付职工薪酬等），金融性负债极低。这是啤酒行业"先款后货"商业模式的自然结果，也是重庆啤酒独特的资产负债优化点。</p>
+  <p>ROE高达60.17%的背后是轻净资产结构（高额分红持续降低留存收益，压缩净资产基数，从而推高ROE），这是一个财务上的"数字优化"，需要识别其内在逻辑，不应被高ROE数字误导为超强盈利能力。</p>
+
+  <h3>7.6 综合风险评级</h3>
+  <table>
+    <tr><th>分析维度</th><th>评分</th><th>主要理由</th></tr>
+    <tr><td>偿债能力</td><td><span class="risk-tag risk-low">A</span></td><td>无有息负债，货币资金充裕，偿债无虞</td></tr>
+    <tr><td>流动性</td><td><span class="risk-tag risk-low">A</span></td><td>经营现金流稳定，预收款模式天然充裕</td></tr>
+    <tr><td>盈利能力</td><td><span class="risk-tag risk-mid">B</span></td><td>毛利率优秀但净利下滑，吨价松动需关注</td></tr>
+    <tr><td>资本结构</td><td><span class="risk-tag risk-low">A</span></td><td>无金融性负债，经营性负债为主</td></tr>
+    <tr><td>现金流质量</td><td><span class="risk-tag risk-mid">B+</span></td><td>经营现金流稳定，但超利分红消耗自由现金流</td></tr>
+    <tr><td>个体风险</td><td><span class="risk-tag risk-high">C</span></td><td>嘉威诉讼悬案、超利分红、高端化吨价松动三重隐患</td></tr>
+  </table>
+</div>
+
+<!-- ===== 模块八：尽调建议 ===== -->
+<!-- SECTION:MODULE_7_DUEDILIGENCE START -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div>
+      <div class="section-title">模块八：尽调建议 · 核查动作</div>
+      <div class="section-subtitle">材料清单 · 核查动作 · 授信建议</div>
+    </div>
+  </div>
+
+  <h3>8.1 必须索取的材料清单</h3>
+  <p class="checklist-section">📄 财务类（优先级：高）</p>
+  <ul class="checklist">
+    <li>2024年审计年度报告全文（含合并报表、附注、附属公司报表）</li>
+    <li>2024年度财务审计报告（已公开披露，天健会计师事务所，标准无保留意见）</li>
+    <li>最近12个月所有账户银行流水（作为上市公司，可通过年报现金流量表核对）</li>
+    <li>2023-2024年有息负债明细（核实是否确实零有息负债）</li>
+    <li>嘉威诉讼进展最新法律意见书及二审立案材料</li>
+    <li>2024年度利润分配决议及分红支付记录</li>
+  </ul>
+  <p class="checklist-section">📋 经营类（优先级：高）</p>
+  <ul class="checklist">
+    <li>各区域市场2024年销售数据明细（按产品线、渠道、地区）</li>
+    <li>乌苏品牌2024-2025年销售数据（核实下滑趋势是否延续）</li>
+    <li>佛山新厂产能利用率及投产后华南市场拓展情况</li>
+    <li>嘉威子公司2.54亿预计负债的财务处理文件</li>
+    <li>嘉士伯集团与重庆啤酒的关联交易清单（2023-2024年）</li>
+  </ul>
+  <p class="checklist-section">⚖️ 法律与担保类（优先级：中）</p>
+  <ul class="checklist">
+    <li>嘉威诉讼完整案情材料（一审判决书全文、上诉状）</li>
+    <li>全部对外担保清单（包括对嘉威的或有担保）</li>
+    <li>其他在诉案件清单（2024年报已披露部分，需核实全貌）</li>
+    <li>嘉士伯集团授信支持意向函（若需集团背书）</li>
+  </ul>
+
+  <h3>8.2 重点核查动作</h3>
+
+  <div class="action-card">
+    <div class="action-title">① 嘉威诉讼状态核查</div>
+    <div class="action-body">确认二审立案及最新进展；要求公司提供已上诉至重庆高院的立案通知书；明确二审大致时间表（通常6-12个月）</div>
+    <div class="action-reason">原因：一审判决3.53亿元，是当前最大财务不确定性。若二审维持，将直接影响公司净利润和可分配现金流。授信决策必须考虑此悬案</div>
+  </div>
+
+  <div class="action-card">
+    <div class="action-title">② 嘉士伯关联交易穿透核查</div>
+    <div class="action-body">要求提供与嘉士伯集团及其关联方的所有交易清单，包括技术服务费、品牌使用费、原材料采购定价、资金调拨等；对比独立第三方市场价格，判断是否存在利润输送</div>
+    <div class="action-reason">原因：外资控股的典型风险——控股母公司可能通过关联交易抽取利润。2024年分红率104%已是明显的利润汇出信号，需排除关联交易层面的额外转移</div>
+  </div>
+
+  <div class="action-card">
+    <div class="action-title">③ 高端产品吨价趋势验证</div>
+    <div class="action-body">要求提供按价格带（4元以下/4-8元/8元以上）的详细销量和营收数据，计算各价格段实际吨价变化；对比2022-2024年三年趋势，判断高端化是否实质性推进</div>
+    <div class="action-reason">原因：2024年量增价降的"量价背离"是最大警示信号。若吨价持续下滑，将持续侵蚀毛利率，影响偿债来源</div>
+  </div>
+
+  <div class="action-card">
+    <div class="action-title">④ 现金流量表精细核查</div>
+    <div class="action-body">重点核对2024年经营活动现金流净额（需大于等于净利润规模）；检查结构性存款期末余额；核实"购买结构性存款"与"到期收回"金额，确认实际持有的流动资产规模</div>
+    <div class="action-reason">原因：重庆啤酒声称货币资金充裕，但超利分红需要以真实现金支撑。需核实现金储备不是通过融资填充的虚高数字</div>
+  </div>
+
+  <div class="action-card">
+    <div class="action-title">⑤ 制造费用增加合理性核查</div>
+    <div class="action-body">要求提供制造费用明细（折旧、人工、能耗、维修等），确认2024年增加29.68%的主要构成；确认佛山新厂折旧额度，判断该项目何时达到稳态水平（通常3-5年）</div>
+    <div class="action-reason">原因：制造费用激增是2024年利润压缩的重要因素之一。若主要为新厂折旧，则属一次性压力，后续利润有望恢复；若为持续性成本上升，则需调低盈利预期</div>
+  </div>
+
+  <div class="action-card">
+    <div class="action-title">⑥ 嘉士伯集团信用背书可行性</div>
+    <div class="action-body">了解嘉士伯集团的全球信用状况（参考穆迪/标普评级）；探讨是否可以获得嘉士伯集团的流动性支持意向函；作为授信的附加增信措施</div>
+    <div class="action-reason">原因：重庆啤酒最大的隐性优势是嘉士伯母公司背书。若能明确化为书面支持承诺，可显著提升授信安全性</div>
+  </div>
+
+  <h3>8.3 上市公司补充核查清单（替代民营企业尽调）</h3>
+  <table>
+    <tr><th>核查类型</th><th>具体操作</th><th>判断标准</th><th>为什么关键</th></tr>
+    <tr>
+      <td><strong>关联交易监控</strong></td>
+      <td>核查与嘉士伯集团关联方交易总额及定价</td>
+      <td>关联采购/销售定价与独立第三方偏差>15%需追查</td>
+      <td>外资控股企业利润转移的主要渠道</td>
+    </tr>
+    <tr>
+      <td><strong>诉讼敞口跟踪</strong></td>
+      <td>查询上市公告系统，跟踪嘉威案最新进展</td>
+      <td>二审结果一旦披露立即评估</td>
+      <td>最大财务不确定性</td>
+    </tr>
+    <tr>
+      <td><strong>分红可持续性</strong></td>
+      <td>对比自由现金流与分红总额；测算净资产变化趋势</td>
+      <td>分红率连续>100%且ROE下行为预警信号</td>
+      <td>超利分配可能侵蚀未来偿债能力</td>
+    </tr>
+    <tr>
+      <td><strong>控股股东变动监控</strong></td>
+      <td>关注嘉士伯集团是否有减持/战略调整公告</td>
+      <td>任何控制权变更公告需立即评估</td>
+      <td>外资退出将严重影响公司信用基本面</td>
+    </tr>
+    <tr>
+      <td><strong>季度业绩追踪</strong></td>
+      <td>跟踪2025年Q1-Q2季报数据，验证恢复性增长</td>
+      <td>收入/净利润恢复正增长为积极信号</td>
+      <td>验证2024年下滑为周期性而非趋势性</td>
+    </tr>
+  </table>
+</div>
+<!-- SECTION:MODULE_7_DUEDILIGENCE END -->
+
+<!-- ===== 综合评级模块 ===== -->
+<div class="rating-section">
+  <h2>📊 综合授信评级 · 决策建议</h2>
+  <div class="rating-display">BB</div>
+  <p style="text-align:center;opacity:0.8;margin-top:-10px;">中等风险 · 有条件授信</p>
+
+  <div class="rating-factors">
+    <div class="rating-factor">
+      <div class="rating-factor-title">✅ 支撑授信的正面因素</div>
+      <ul>
+        <li>A股上市公司，信息透明度高</li>
+        <li>毛利率49.71%行业前列</li>
+        <li>账面无有息负债，偿债能力极强</li>
+        <li>嘉士伯集团母公司隐性信用背书</li>
+        <li>2025Q1行业已呈恢复性增长</li>
+      </ul>
+    </div>
+    <div class="rating-factor">
+      <div class="rating-factor-title">⚠️ 限制评级提升的关键因素</div>
+      <ul>
+        <li>嘉威诉讼3.53亿悬案未决</li>
+        <li>归母净利润同比-16.61%，9年首降</li>
+        <li>分红率104%，超利分配消耗资本</li>
+        <li>高端吨价松动，量价背离</li>
+        <li>全国化扩张效果不及预期</li>
+      </ul>
+    </div>
+    <div class="rating-factor">
+      <div class="rating-factor-title">🔴 触发评级下调的情景</div>
+      <ul>
+        <li>嘉威二审败诉（3.53亿赔偿生效）</li>
+        <li>嘉士伯启动减持或退出计划</li>
+        <li>2025年净利润继续双位数下滑</li>
+        <li>高端产品连续两年量价双降</li>
+        <li>出现额外重大诉讼/监管处罚</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:20px;margin-top:20px;">
+    <h3 style="color:white;margin-bottom:12px;">📝 综合授信建议框架</h3>
+    <table style="background:transparent;">
+      <tr style="background:rgba(255,255,255,0.1);">
+        <th style="background:rgba(255,255,255,0.2);color:white;">授信要素</th>
+        <th style="background:rgba(255,255,255,0.2);color:white;">建议内容</th>
+      </tr>
+      <tr><td style="color:white;border-color:rgba(255,255,255,0.2);">建议授信级别</td><td style="color:#f0c040;font-weight:700;border-color:rgba(255,255,255,0.2);">BB · 有条件授信</td></tr>
+      <tr><td style="color:white;border-color:rgba(255,255,255,0.2);">建议授信金额上限</td><td style="color:white;border-color:rgba(255,255,255,0.2);">3亿元以内（参考净利润×25-30%；诉讼悬案解决前保守授信）</td></tr>
+      <tr><td style="color:white;border-color:rgba(255,255,255,0.2);">建议授信期限</td><td style="color:white;border-color:rgba(255,255,255,0.2);">短期为主（12个月），待嘉威案判决明朗后重新评估中期授信</td></tr>
+      <tr><td style="color:white;border-color:rgba(255,255,255,0.2);">建议担保要求</td><td style="color:white;border-color:rgba(255,255,255,0.2);">房产/设备抵押，或嘉士伯集团流动性支持函（可替代实物担保）</td></tr>
+      <tr><td style="color:white;border-color:rgba(255,255,255,0.2);">必须满足的前提条件</td><td style="color:white;border-color:rgba(255,255,255,0.2);">①嘉威诉讼二审进展公告并评估；②提供关联交易完整清单；③嘉士伯集团书面支持函</td></tr>
+    </table>
+    <div style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.85);">
+      <strong style="color:#f0c040;">限制性条款建议：</strong><br>
+      • 毛利率触发条款：低于46%连续两季度→提前还款/补充担保<br>
+      • 信息披露条款：季度业绩公告后10个工作日内报送重大事项（含诉讼进展）<br>
+      • 诉讼结果条款：嘉威案判决生效当日立即通知，我行有权要求补充担保或提前还款<br>
+      • 控制权保全条款：嘉士伯集团持股低于50%时触发提前还款权<br>
+      • 分红监控条款：连续两年分红率>100%且净利润下滑>10%时触发复审
+    </div>
+  </div>
+</div>
+
+<!-- 脚注 -->
+<div class="section">
+  <div class="footnotes">
+    <h4>📚 数据来源与脚注</h4>
+    <div class="footnote-item"><sup>[1]</sup> 国家市场监督管理总局，食品安全监管相关文件，2024年</div>
+    <div class="footnote-item"><sup>[2]</sup> 国家统计局，2024年规模以上企业啤酒产量数据：3521.3万千升，同比-0.6%；出自重庆啤酒2024年年度报告第三节</div>
+    <div class="footnote-item"><sup>[3]</sup> 重庆啤酒股份有限公司，《2024年年度报告及ESG报告》，2025年4月2日发布，嘉士伯官网公告</div>
+    <div class="footnote-item"><sup>[4]</sup> 重庆啤酒股份有限公司，《2024年年度报告摘要》，上海证券报，2025年4月3日；主要财务数据：营收146.45亿元、归母净利润11.15亿元、营业利润31.85亿元、毛利率49.71%、ROE 60.17%、分红11.62亿元（分红率104.21%）</div>
+    <div class="footnote-item"><sup>[5]</sup> 前瞻产业研究院，《2025年中国啤酒行业全景图谱》，新浪财经，2026年2月4日；精酿啤酒市场规模2025年约830亿元，啤酒行业市场规模约1800亿元，平均售价2024年17.2元/升</div>
+    <div class="footnote-item"><sup>[6]</sup> 闺蜜财经，《"双杀"！嘉士伯们喝不动了？重庆啤酒的致命短板》，搜狐财经；乌苏营收-4.3%、川渝-5.3%、云南-7.6%、研发费用0.15%、数字化覆盖率54%、低端产品营收+15.56%</div>
+    <div class="footnote-item"><sup>[7]</sup> 每日经济新闻，《重庆啤酒合同纠纷一审败诉，嘉士伯中国发长文声明》，腾讯新闻，2025年3月15日；一审判决赔偿3.53亿元，已计提预计负债2.54亿元，公司坚决上诉</div>
+    <div class="footnote-item"><sup>[8]</sup> 东方财富网研究报告，《啤酒2024年报及2025年一季报总结：25Q1恢复性增长，期待旺季量价提速》，2025年5月；板块2024年营收同比-1.67%，归母净利同比+6.05%；25Q1营收同比+3.68%，归母净利+10.62%</div>
+    <div style="margin-top:12px;color:#9ca3af;font-size:11px;">
+      ⚠️ 本报告基于公开信息，财务数据引自重庆啤酒2024年官方年报（已审计）。行业对比数据部分为基于公开报告的合理估算，已标注置信度。本报告仅供信贷参考，不构成投资建议。
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+</body>
+</html>

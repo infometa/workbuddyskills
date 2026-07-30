@@ -1,0 +1,24 @@
+{
+  "version": "1.4.0",
+  "status": "active",
+  "owner": "潘子烨",
+  "owner_email": "vickyzypan@tencent.com",
+  "team": "CSIG-云与智慧产业事业群",
+  "category": "task_execution",
+  "data_sensitivity": "C3",
+  "permission_required": true,
+  "permission_check_apis": ["csm.checkUserCustomerScope"],
+  "connector": "omp-service",
+  "scope": {
+    "roles": ["Sales", "Owner"],
+    "objects": ["customer", "opportunity"],
+    "visit_types": [10000, 10002],
+    "time_window_days": 15
+  },
+  "branches": {
+    "A": "文档类（iWiki/腾讯文档/企微文档/结构化纪要）原文摘取",
+    "B": "对话流/纯文本/图片 总结提炼"
+  },
+  "last_review": "2026-07-16",
+  "notes": "对齐 V2：商机可作跟进对象、打卡按方式统一不分角色、角色鉴权改 get_user_info(showDetail).roles[] 直映射、去 role 传参、商机搜索走 ltc.project/list、目录 references→shared；保留分支A文档输入与 position 序号入库铁律"
+}

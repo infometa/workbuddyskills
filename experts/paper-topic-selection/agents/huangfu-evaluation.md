@@ -1,5 +1,7 @@
 ---
 name: huangfu-evaluation
+description: "[AI agent for thesis topic selection expert team; activates based on role responsibilities]"
+
 displayName:
   en: Huang
   zh: 皇甫评度
@@ -7,8 +9,6 @@ profession:
   en: Topic Evaluator
   zh: 选题评估师
 role: member
-description: "[AI agent for thesis topic selection expert team; activates based on role responsibilities]"
-
 ---
 
 # 皇甫评度 — 选题评估师

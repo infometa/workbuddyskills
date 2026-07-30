@@ -1,0 +1,115 @@
+{
+  "name": "empirical-research-team",
+  "version": "1.1.0",
+  "description": "A team of experts covering the full empirical research pipeline: data engineering, causal inference, robustness auditing, academic writing, de-AIGC peer review simulation, literature review, and topic refinement.",
+  "author": {
+    "name": "johanzheng",
+    "email": ""
+  },
+  "agents": [
+    "./agents/empirical-research-team-team-lead.md",
+    "./agents/causal-analyst.md",
+    "./agents/data-engineer.md",
+    "./agents/robustness-auditor.md",
+    "./agents/academic-writer.md",
+    "./agents/deaigc-reviewer.md",
+    "./agents/lit-reviewer.md",
+    "./agents/topic-refiner.md"
+  ],
+  "skills": ["./skills/aers-reference"],
+
+  "expertType": "team",
+  "agentName": "empirical-research-team-team-lead",
+  "teamInfo": {
+    "leadAgent": "empirical-research-team-team-lead",
+    "memberAgents": ["causal-analyst", "data-engineer", "robustness-auditor", "academic-writer", "deaigc-reviewer", "lit-reviewer", "topic-refiner"]
+  },
+
+  "displayName": {
+    "en": "WorkBuddy Team",
+    "zh": "WorkBuddy团队"
+  },
+  "profession": {
+    "en": "Empirical Research Team",
+    "zh": "实证研究团"
+  },
+  "displayDescription": {
+    "en": "A full-stack team for empirical social science research: causal inference, robustness checks, publication-ready output, and de-AIGC editing.",
+    "zh": "覆盖实证研究全流程的专家团：因果推断、稳健性检验、出版级表图与降AIGC，高效完成可复现学术论文"
+  },
+  "avatar": "avatars/team.png",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "zh": "帮我用 DID 方法分析一项政策的处理效应，从数据清洗到发表级表格",
+    "en": "Help me analyze a policy's treatment effect using DID, from data cleaning to publication-ready tables"
+  },
+  "plugin": "empirical-research-team",
+  "tags": [
+    { "en": "Causal Inference", "zh": "因果推断" },
+    { "en": "Empirical Paper", "zh": "实证论文" },
+    { "en": "Econometrics", "zh": "计量经济学" }
+  ],
+  "quickPrompts": [
+    { "en": "Help me analyze a policy's treatment effect using DID, from data cleaning to publication-ready tables", "zh": "帮我用 DID 方法分析一项政策的处理效应，从数据清洗到发表级表格" },
+    { "en": "I have a Chinese empirical paper draft, help me reduce its AIGC detection rate", "zh": "我有一篇完成的中文实证论文初稿，帮我降低 AIGC 检测率" },
+    { "en": "Help me design an IV strategy and evaluate instrument validity", "zh": "帮我设计一个 IV 策略并评估工具变量的有效性" }
+  ],
+  "members": [
+    {
+      "id": "empirical-research-team-team-lead",
+      "name": { "en": "Lun", "zh": "论笃行" },
+      "profession": { "en": "Research Orchestrator", "zh": "研究总编排" },
+      "avatar": "avatars/empirical-research-team-team-lead.png",
+      "role": "lead"
+    },
+    {
+      "id": "causal-analyst",
+      "name": { "en": "Gu", "zh": "顾因果" },
+      "profession": { "en": "Econometrician", "zh": "计量经济学家" },
+      "avatar": "avatars/causal-analyst.png",
+      "role": "member"
+    },
+    {
+      "id": "data-engineer",
+      "name": { "en": "Xi", "zh": "洗澄明" },
+      "profession": { "en": "Data Engineer", "zh": "数据工程师" },
+      "avatar": "avatars/data-engineer.png",
+      "role": "member"
+    },
+    {
+      "id": "robustness-auditor",
+      "name": { "en": "Yan", "zh": "严复核" },
+      "profession": { "en": "Robustness Auditor", "zh": "稳健性审计师" },
+      "avatar": "avatars/robustness-auditor.png",
+      "role": "member"
+    },
+    {
+      "id": "academic-writer",
+      "name": { "en": "Wen", "zh": "文锦成" },
+      "profession": { "en": "Academic Writer", "zh": "学术写作专家" },
+      "avatar": "avatars/academic-writer.png",
+      "role": "member"
+    },
+    {
+      "id": "deaigc-reviewer",
+      "name": { "en": "Qu", "zh": "去伪存" },
+      "profession": { "en": "De-AIGC & Peer Review Sim", "zh": "降AIGC与审稿模拟" },
+      "avatar": "avatars/deaigc-reviewer.png",
+      "role": "member"
+    },
+    {
+      "id": "lit-reviewer",
+      "name": { "en": "Sou", "zh": "搜文献" },
+      "profession": { "en": "Literature Review Specialist", "zh": "文献综述专家" },
+      "avatar": "avatars/lit-reviewer.png",
+      "role": "member"
+    },
+    {
+      "id": "topic-refiner",
+      "name": { "en": "Xuan", "zh": "选题锐" },
+      "profession": { "en": "Topic Selection Specialist", "zh": "选题精炼专家" },
+      "avatar": "avatars/topic-refiner.png",
+      "role": "member"
+    }
+  ]
+}

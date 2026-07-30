@@ -20,14 +20,23 @@ tags:
       zh: 定题评测
 quickPrompts:
   - prompt:
-      en: Search papers in XX field
-      zh: 搜 XX 方向的论文
+      en: Search literature/Look for experts → "Search papers in XX field"
+      zh: 🔍 搜文献 / 找专家 → "搜 XX 方向的论文"
   - prompt:
-      en: Recommend some XX topics
-      zh: 帮我推荐几个 XX 方向选题
+      en: Recommended Topics → "Could you recommend a few topics in the XX field for me?"
+      zh: 💡 推荐选题 → "帮我推荐几个 XX 方向选题"
   - prompt:
-      en: Check if this topic works
-      zh: 评估一下这个题目行不行
+      en: Evaluate the topic → "Evaluate whether this topic works or not"
+      zh: 📊 评估选题 → "评估一下这个题目行不行"
+  - prompt:
+      en: Come up with titles → "Come up with several titles for this topic"
+      zh: ✏️ 拟标题 → "给这个选题起几个标题"
+  - prompt:
+      en: Research report in some fields → "Produce a development report in the XX field"
+      zh: 📈 领域报告 → "出一份 XX 领域发展报告"
+  - prompt:
+      en: Inspiration/viral term → "What are the viral topics in XX field recently?"
+      zh: 🔥 灵感 / 热词 → "最近 XX 领域有什么热点"
 defaultInitPrompt:
   en: |-
     - 🔍 Search literature / find experts → "Search papers in XX field"

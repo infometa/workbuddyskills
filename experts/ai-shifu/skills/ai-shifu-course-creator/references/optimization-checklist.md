@@ -26,7 +26,7 @@ For a pasted content-only Prompt, run every check observable from the body and r
 ## Artifact Boundaries
 
 - Teaching Prompts contain lesson method and flow; the Course Prompt contributes only course-wide role and presentation behavior.
-- Chapter titles, lesson titles, numbering, hierarchy, and ordering remain in structure metadata rather than Teaching Prompt bodies.
+- Chapter titles, numbering, hierarchy, and ordering remain in structure metadata rather than Teaching Prompt bodies.
 - No artifact relies on another artifact to supply behavior that its owner requires locally.
 
 ## Teaching Prompt Behavior
@@ -41,7 +41,8 @@ For a pasted content-only Prompt, run every check observable from the body and r
 - When multiple level variants or an approved lesson skeleton are in scope, compare their structural signatures explicitly. For an isolated content-only Prompt with no supplied structure reference, record cross-level structural consistency as `not-assessed` rather than inferring a skeleton.
 - At every level, unrequested font or color choices, pixel coordinates, and animations remain defects, and each resolved constraint island remains complete and exact under its owning MarkdownFlow authoring, source-preservation, or image-authoring rule.
 - In the standard visual-text scope—standard one-on-one teaching and the standard teaching branch of combined delivery, except under an explicit text-only constraint—the first non-empty instruction makes the first learner-visible block one brief text lead-in instead of a heading, structure label, slide, or image; no arbitrary word-count or sentence-count quota is imposed.
-- Within that scope, the lesson contains at least one substantive visual unit and repeats one visual-and-explanation pair per substantive teaching turn. Flag a visual opening, consecutive visual units, several visuals followed by one delayed explanation, a cover or decorative or objective-only page, and any unpaired learner-visible text turn after the lead-in as cadence defects.
+- Within that scope, the lesson contains at least one substantive visual unit and repeats one visual-and-explanation pair per substantive teaching turn. Flag a visual opening, consecutive visual units, several visuals followed by one delayed explanation, and any unpaired learner-visible text turn after the lead-in as cadence defects.
+- Across visual delivery modes, flag any visual unit whose sole purpose is to pad the lesson's length or pacing, whether newly proposed or already present. Do not treat a unit with a defined framing, orientation, transition, atmosphere, or teaching purpose as padding merely because it is non-substantive.
 - Within that scope, each explanation appears before the next visual and adds context, relationship, reasoning, inference, or application rather than merely restating the preceding visual. The final explanation also performs the required close instead of leaving an isolated closing page or paragraph.
 - Within that scope, a question-bearing interaction follows the question-only visual → unchanged `?[]` control → immediate feedback or explanation sequence. The question visual contains no duplicated option labels, input hint, simulated control, or answer, while an action-only control does not require an invented question visual.
 - Pure classroom slides do not use Teaching Agent narration or paired explanatory text; explicit text-only delivery uses no visual units.
@@ -70,7 +71,7 @@ For a pasted content-only Prompt, run every check observable from the body and r
 
 - The existing Course Prompt keeps all six required sections in order and has no unresolved `XXX` placeholder.
 - Every non-placeholder instruction remains behaviorally represented after localization.
-- Standard and pure-slide delivery behavior matches `course-prompt.md`; lesson pedagogy is not duplicated there.
+- Standard and pure-slide delivery behavior matches `course-prompt.md`; its `# Slides` section contains the general presentation requirements applied uniformly to every slide, without special handling for a cover or any other slide position or teaching purpose and without duplicating or changing lesson pedagogy or lesson-specific slide structure.
 - The complete artifact passes `course-prompt.md#materialization-checks` and `prompt-contracts.md`.
 
 ## Course Description

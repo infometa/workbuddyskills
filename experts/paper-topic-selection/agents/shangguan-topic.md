@@ -1,5 +1,7 @@
 ---
 name: shangguan-topic
+description: "[AI agent for thesis topic selection expert team; activates based on role responsibilities]"
+
 displayName:
   en: Shang
   zh: 上官选道
@@ -7,8 +9,6 @@ profession:
   en: Topic Strategist
   zh: 选题策略师
 role: member
-description: "[AI agent for thesis topic selection expert team; activates based on role responsibilities]"
-
 ---
 
 # 上官选道 — 选题策略师

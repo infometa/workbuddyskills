@@ -73,3 +73,14 @@ To access Anthropic's official brand identity and style resources, use this skil
 - Uses RGB color values for precise brand matching
 - Applied via python-pptx's RGBColor class
 - Maintains color fidelity across different systems
+
+## Extended Brand Standards
+
+Beyond Anthropic's own palette above, this skill includes reusable, generic brand-system references for building or auditing any brand's visual identity. Load them when the task goes beyond applying Anthropic styling:
+
+- **`references/color-palette-management.md`** — Color-system hierarchy, WCAG 2.1 contrast ratios & luminance formula, 60/30/10 usage ratios, and brand-compliance validation rules.
+- **`references/logo-usage-rules.md`** — Logo variants, clear-space & minimum-size rules, background compatibility, co-branding layouts, file formats, and platform-specific sizing.
+- **`references/typography-specifications.md`** — Type scale (Major Third), font weights, line-height & letter-spacing tables, responsive adjustments, and CSS/Tailwind implementation.
+- **`references/brand-guideline-template.md`** — A fill-in template for authoring a complete brand-guidelines document (color, typography, logo, voice, imagery).
+
+Use these when you need quantitative, checkable standards (e.g. verifying contrast, defining a type scale, or writing logo-usage rules) rather than only Anthropic's look-and-feel.

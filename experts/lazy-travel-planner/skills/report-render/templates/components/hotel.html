@@ -1,0 +1,28 @@
+<div class="hotel-grid">
+  {% for h in hotels %}
+    <div class="hotel-card">
+      <div class="h-rank">#{{ loop.index }}</div>
+      <h4>{{ h.name or '酒店名待核实' }}</h4>
+      <div class="h-price">
+        {% if h.price_per_night_ref %}参考价 ¥{{ h.price_per_night_ref }}/晚{% else %}参考价待核实{% endif %}
+      </div>
+      <div class="h-rating">
+        {% if h.rating %}美团 ⭐ {{ h.rating.meituan }} ｜ 小红书情感 {{ h.rating.xhs_sentiment }}{% endif %}
+      </div>
+      <div class="h-loc">📍 {{ h.area or '位置待核实' }}{% if h.location_score %} {{ h.location_score }}{% endif %}</div>
+      {% if h.recommend_reason %}<div class="h-reason">推荐理由：{{ h.recommend_reason }}</div>{% endif %}
+      <div class="h-amenities">
+        {% for a in h.amenities or [] %}<span class="tag">{{ a }}</span>{% endfor %}
+      </div>
+      {% for w in h.warnings or [] %}<div class="warning">⚠️ {{ w }}</div>{% endfor %}
+      <div class="book-links">
+        <span class="book-label">去预订：</span>
+        <a href="https://hotels.meituan.com/search/?q={{ h.name|urlencode }}" target="_blank" rel="noopener">美团</a>
+        <a href="https://hotels.ctrip.com/hotels/list?city=&checkIn=&checkOut=&keyword={{ h.name|urlencode }}" target="_blank" rel="noopener">携程</a>
+        <a href="https://hotel.fliggy.com/search.htm?searchType=hotel&keywords={{ h.name|urlencode }}" target="_blank" rel="noopener">飞猪</a>
+        <a href="https://www.booking.com/searchresults.html?ss={{ h.name|urlencode }}" target="_blank" rel="noopener">Booking</a>
+      </div>
+      <span class="confidence-badge confidence-{{ h.confidence|default('yellow') }}"></span>
+    </div>
+  {% endfor %}
+</div>

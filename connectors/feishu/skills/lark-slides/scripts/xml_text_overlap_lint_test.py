@@ -1026,7 +1026,7 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
         self.assertEqual(result["slides"][0]["infos"], [issues["bg-deco"]])
         self.assertIn("background decoration", issues["bg-deco"]["message"])
 
-    def test_lint_xml_allows_shape_alpha_ghost_text_out_of_canvas_and_overlap(self) -> None:
+    def test_lint_xml_reports_shape_alpha_ghost_text_out_of_canvas_but_allows_overlap(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <slide xmlns="http://www.larkoffice.com/sml/2.0">
@@ -1042,11 +1042,11 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             """
         )
         codes = [issue["code"] for issue in result["slides"][0]["issues"]]
-        self.assertEqual(result["summary"]["error_count"], 0)
-        self.assertNotIn("shape_out_of_canvas", codes)
+        self.assertEqual(result["summary"]["error_count"], 1)
+        self.assertIn("shape_out_of_canvas", codes)
         self.assertNotIn("bbox_overlap", codes)
 
-    def test_lint_xml_allows_content_color_alpha_ghost_text_out_of_canvas_and_overlap(self) -> None:
+    def test_lint_xml_reports_content_color_alpha_ghost_text_out_of_canvas_but_allows_overlap(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <slide xmlns="http://www.larkoffice.com/sml/2.0">
@@ -1062,11 +1062,11 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             """
         )
         codes = [issue["code"] for issue in result["slides"][0]["issues"]]
-        self.assertEqual(result["summary"]["error_count"], 0)
-        self.assertNotIn("shape_out_of_canvas", codes)
+        self.assertEqual(result["summary"]["error_count"], 1)
+        self.assertIn("shape_out_of_canvas", codes)
         self.assertNotIn("bbox_overlap", codes)
 
-    def test_lint_xml_allows_faint_medium_ghost_text_out_of_canvas_and_overlap(self) -> None:
+    def test_lint_xml_reports_faint_medium_ghost_text_out_of_canvas_but_allows_overlap(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <slide xmlns="http://www.larkoffice.com/sml/2.0">
@@ -1082,8 +1082,8 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             """
         )
         codes = [issue["code"] for issue in result["slides"][0]["issues"]]
-        self.assertEqual(result["summary"]["error_count"], 0)
-        self.assertNotIn("shape_out_of_canvas", codes)
+        self.assertEqual(result["summary"]["error_count"], 1)
+        self.assertIn("shape_out_of_canvas", codes)
         self.assertNotIn("bbox_overlap", codes)
 
     def test_lint_xml_allows_ghost_text_image_overlap(self) -> None:
@@ -1126,7 +1126,7 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
         codes = [issue["code"] for issue in result["issues"]]
         self.assertNotIn("whiteboard_external_overlap", codes)
 
-    def test_lint_xml_allows_faint_ghost_text_without_area_threshold(self) -> None:
+    def test_lint_xml_reports_faint_ghost_text_out_of_canvas_without_area_threshold(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
             """
             <slide xmlns="http://www.larkoffice.com/sml/2.0">
@@ -1138,8 +1138,8 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
             </slide>
             """
         )
-        self.assertEqual(result["summary"]["error_count"], 0)
-        self.assertEqual(result["slides"][0]["issues"], [])
+        self.assertEqual(result["summary"]["error_count"], 1)
+        self.assertEqual(result["slides"][0]["issues"][0]["code"], "shape_out_of_canvas")
 
     def test_lint_xml_keeps_out_of_canvas_error_for_medium_text_without_faint_alpha(self) -> None:
         result = xml_text_overlap_lint.lint_xml(
@@ -1456,6 +1456,187 @@ class XmlTextOverlapLintGeometryTest(unittest.TestCase):
 
         self.assertEqual(result["summary"]["error_count"], 0)
         self.assertEqual(result["slides"][0]["issues"], [])
+
+    def test_lint_xml_reports_horizontal_line_crossing_headline_glyphs(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="title" type="text" topLeftX="80" topLeftY="200" width="500" height="90">
+                  <content fontSize="60"><p>测试文字 ABC</p></content>
+                </shape>
+                <line id="strike" startX="80" startY="245" endX="560" endY="245">
+                  <border color="rgb(255, 0, 0)" width="4"/>
+                </line>
+              </data>
+            </slide>
+            """
+        )
+        crossing = [
+            issue for issue in result["slides"][0]["errors"] if set(issue["elements"]) == {"strike", "title"}
+        ]
+        self.assertEqual(len(crossing), 1)
+        self.assertEqual(crossing[0]["code"], "bbox_overlap")
+
+    def test_lint_xml_reports_vertical_line_crossing_multiline_text(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="col" type="text" topLeftX="700" topLeftY="180" width="240" height="180">
+                  <content fontSize="20"><p>第一行文字内容</p><p>第二行文字内容</p><p>第三行文字内容</p></content>
+                </shape>
+                <line id="vbar" startX="740" startY="170" endX="740" endY="360">
+                  <border color="rgb(0, 0, 255)" width="3"/>
+                </line>
+              </data>
+            </slide>
+            """
+        )
+        crossing = [
+            issue for issue in result["slides"][0]["errors"] if set(issue["elements"]) == {"vbar", "col"}
+        ]
+        self.assertEqual(len(crossing), 1)
+
+    def test_lint_xml_reports_diagonal_line_crossing_text_block(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="para" type="text" topLeftX="80" topLeftY="400" width="420" height="140">
+                  <content fontSize="18"><p>这是一段测试文字用于验证线条穿过</p></content>
+                </shape>
+                <line id="diag" startX="80" startY="410" endX="500" endY="530">
+                  <border color="rgb(255, 0, 0)" width="3"/>
+                </line>
+              </data>
+            </slide>
+            """
+        )
+        crossing = [
+            issue for issue in result["slides"][0]["errors"] if set(issue["elements"]) == {"diag", "para"}
+        ]
+        self.assertEqual(len(crossing), 1)
+
+    def test_lint_xml_ignores_diagonal_line_whose_bbox_but_not_segment_crosses_text(self) -> None:
+        # The diagonal's axis-aligned bounding box overlaps the text, but the segment itself passes
+        # through empty space in the opposite corner -- a naive bbox test would false-positive here.
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="corner-text" type="text" topLeftX="80" topLeftY="80" width="120" height="40">
+                  <content fontSize="18"><p>corner</p></content>
+                </shape>
+                <line id="far-diag" startX="700" startY="80" endX="90" endY="500">
+                  <border color="rgb(255, 0, 0)" width="3"/>
+                </line>
+              </data>
+            </slide>
+            """
+        )
+        crossing = [
+            issue for issue in result["slides"][0]["errors"] if set(issue["elements"]) == {"far-diag", "corner-text"}
+        ]
+        self.assertEqual(crossing, [])
+
+    def test_lint_xml_ignores_line_touching_text_frame_but_not_glyphs(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="lbl" type="text" topLeftX="80" topLeftY="80" width="300" height="200">
+                  <content fontSize="18" verticalAlign="top"><p>短标签</p></content>
+                </shape>
+                <line id="below" startX="80" startY="270" endX="380" endY="270">
+                  <border color="rgb(255, 0, 0)" width="2"/>
+                </line>
+              </data>
+            </slide>
+            """
+        )
+        self.assertEqual(result["summary"]["error_count"], 0)
+
+    def test_lint_xml_ignores_invisible_line_crossing_text(self) -> None:
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape id="title" type="text" topLeftX="80" topLeftY="200" width="500" height="90">
+                  <content fontSize="60"><p>测试文字 ABC</p></content>
+                </shape>
+                <line id="ghost-line" startX="80" startY="245" endX="560" endY="245">
+                  <border color="rgba(255, 0, 0, 0.03)" width="4"/>
+                </line>
+              </data>
+            </slide>
+            """
+        )
+        self.assertEqual(result["summary"]["error_count"], 0)
+
+    def test_lint_xml_ignores_vertical_line_grazing_text_left_edge(self) -> None:
+        # Verbatim from deck GpGusGCwplQyK8dFN9LczmBXnwQ slide 4: a vertical line sitting on the text
+        # frame's left edge renders before the first glyph, so it must not be flagged.
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape width="240" height="60" topLeftX="120" topLeftY="100" type="text" id="bmm">
+                  <content fontSize="20" fontFamily="Arial" color="rgba(31, 35, 41, 1)" lineSpacing="fixed:24">
+                    <p>Vertical edge graze</p>
+                  </content>
+                </shape>
+                <line id="bmX" startX="120.00000000000001" startY="90" endX="120.00000000000001" endY="150.00833275470998">
+                  <border color="rgba(0, 0, 0, 1)"/>
+                </line>
+              </data>
+            </slide>
+            """
+        )
+        self.assertEqual(result["summary"]["error_count"], 0)
+
+    def test_lint_xml_ignores_polyline_crossing_text(self) -> None:
+        # Verbatim from deck GpGusGCwplQyK8dFN9LczmBXnwQ slide 6: the crossing check is scoped to
+        # <line> only, so a <polyline> over text is not flagged.
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape width="240" height="60" topLeftX="120" topLeftY="100" type="text" id="bmr">
+                  <content fontSize="20" fontFamily="Arial" color="rgba(31, 35, 41, 1)" lineSpacing="fixed:24">
+                    <p>Polyline target</p>
+                  </content>
+                </shape>
+                <polyline id="bmH" width="270" height="55" topLeftX="110" topLeftY="95">
+                  <border color="rgba(0, 0, 0, 1)"/>
+                </polyline>
+              </data>
+            </slide>
+            """
+        )
+        self.assertEqual(result["summary"]["error_count"], 0)
+
+    def test_lint_xml_ignores_line_below_visual_glyph_height(self) -> None:
+        # Verbatim from deck GpGusGCwplQyK8dFN9LczmBXnwQ slide 7: the shape frame is 80px tall but the
+        # single 20px line of glyphs occupies only its top; a line at the frame's lower region grazes
+        # under the visual glyph box (underline look) and must not be flagged.
+        result = xml_text_overlap_lint.lint_xml(
+            """
+            <slide xmlns="http://www.larkoffice.com/sml/2.0">
+              <data>
+                <shape width="240" height="80" topLeftX="120" topLeftY="100" type="text" id="bmB">
+                  <content fontSize="20" fontFamily="Arial" color="rgba(31, 35, 41, 1)" lineSpacing="fixed:24">
+                    <p>Visual height target</p>
+                  </content>
+                </shape>
+                <line id="bmQ" startX="110" startY="150" endX="380.00185184550116" endY="150">
+                  <border color="rgba(0, 0, 0, 1)"/>
+                </line>
+              </data>
+            </slide>
+            """
+        )
+        self.assertEqual(result["summary"]["error_count"], 0)
 
     def test_lint_xml_uses_rotated_text_and_chart_bounds_for_canvas_validation(self) -> None:
         result = xml_text_overlap_lint.lint_xml(

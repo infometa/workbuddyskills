@@ -1,0 +1,39 @@
+{
+    "runtime": {
+        "type": "python",
+        "version": ">=3.11"
+    },
+    "init": {
+        "darwin": "python -m pip install --upgrade tccli",
+        "linux": "python -m pip install --upgrade tccli",
+        "win32": "python -m pip install --upgrade tccli"
+    },
+    "auth": {
+        "darwin": "tccli auth login",
+        "linux": "tccli auth login",
+        "win32": "tccli auth login"
+    },
+    "unAuth": {
+        "darwin": "tccli auth logout || true",
+        "linux": "tccli auth logout || true",
+        "win32": "tccli auth logout"
+    },
+    "status": {
+        "darwin": "tccli emr DescribeInstancesList --region ap-guangzhou --version 2019-01-03 --cli-unfold-argument --DisplayStrategy clusterList --Limit 1 >/dev/null 2>&1 && echo 'Authenticated and EMR accessible' || (echo 'Not authenticated or no EMR access' >&2; exit 1)",
+        "linux": "tccli emr DescribeInstancesList --region ap-guangzhou --version 2019-01-03 --cli-unfold-argument --DisplayStrategy clusterList --Limit 1 >/dev/null 2>&1 && echo 'Authenticated and EMR accessible' || (echo 'Not authenticated or no EMR access' >&2; exit 1)",
+        "win32": "powershell -Command \"tccli emr DescribeInstancesList --region ap-guangzhou --version 2019-01-03 --cli-unfold-argument --DisplayStrategy clusterList --Limit 1 *> $null; if ($LASTEXITCODE -eq 0) { Write-Output 'Authenticated and EMR accessible'; exit 0 } else { Write-Error 'Not authenticated or no EMR access'; exit 1 }\""
+    },
+    "authUrlDomain": "cloud.tencent.com",
+    "statusMatch": "Authenticated and EMR accessible",
+    "authWaitForExit": true,
+    "authSuppressBrowser": true,
+    "versionCheck": {
+        "command": {
+            "darwin": "tccli --version",
+            "linux": "tccli --version",
+            "win32": "tccli --version"
+        },
+        "minVersion": "3.1.56.1",
+        "versionPattern": "(\\d+\\.\\d+\\.\\d+(?:\\.\\d+)?)"
+    }
+}

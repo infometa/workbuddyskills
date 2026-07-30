@@ -221,7 +221,7 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
 ```json
 {
   "version": "1.0",
-  "exported_at": "2026-01-01T00:00:00",
+  "exported_at": "2026-01-01T00:00:00Z",
   "shifu": {
     "shifu_bid": "generated_uuid",
     "title": "Course Title",

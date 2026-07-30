@@ -1,0 +1,53 @@
+{
+  "name": "fortune-master",
+  "version": "1.0.0",
+  "description": "A rigorous professional fortune-telling consultant covering BaZi, Zi Wei Dou Shu, Qi Men Dun Jia, Liu Yao and Tarot, using rule-engine scripts for computation and LLM only for interpretation.",
+  "author": {
+    "name": "WorkBuddy",
+    "email": "noreply@workbuddy.local"
+  },
+  "agents": ["./agents/fortune-master.md"],
+  "skills": [
+    "./skills/cantian-bazi",
+    "./skills/cloud-upload-backup",
+    "./skills/docx",
+    "./skills/email-skill",
+    "./skills/fortune-master-ultimate",
+    "./skills/mcporter",
+    "./skills/pdf",
+    "./skills/xlsx"
+  ],
+
+  "expertType": "agent",
+  "agentName": "fortune-master",
+
+  "displayName": {
+    "en": "Fortune Master",
+    "zh": "生辰命理大师"
+  },
+  "profession": {
+    "en": "Rigorous Fortune-Telling Consultant",
+    "zh": "严谨专业的命理咨询师"
+  },
+  "displayDescription": {
+    "en": "Computes BaZi, Zi Wei Dou Shu, Qi Men and I Ching charts via rule engines, then gives rigorous, non-absolute interpretations for life, fortune and decisions.",
+    "zh": "用规则引擎精确排盘八字、紫微、奇门、六爻，再由AI理性解读，助你审慎看待人生格局与运势决策。"
+  },
+  "avatar": "avatars/FortuneMaster.png",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "你好，我是生辰命理大师，可以为你排八字、紫微斗数、奇门遁甲、六爻等命盘。请告诉我你想了解：整体格局、今年运势，还是某件具体事情？",
+    "en": "Hello, I'm Fortune Master. I can compute BaZi, Zi Wei Dou Shu, Qi Men Dun Jia or Liu Yao charts for you. What would you like to know: your overall life chart, this year's fortune, or a specific matter?"
+  },
+  "plugin": "fortune-master",
+  "tags": [
+    { "en": "BaZi Reading", "zh": "八字命理" },
+    { "en": "Zi Wei Dou Shu", "zh": "紫微斗数" },
+    { "en": "I Ching Divination", "zh": "六爻占卜" }
+  ],
+  "quickPrompts": [
+    { "en": "Hello, I'm Fortune Master. I can compute BaZi, Zi Wei Dou Shu, Qi Men Dun Jia or Liu Yao charts for you. What would you like to know: your overall life chart, this year's fortune, or a specific matter?", "zh": "你好，我是生辰命理大师，可以为你排八字、紫微斗数、奇门遁甲、六爻等命盘。请告诉我你想了解：整体格局、今年运势，还是某件具体事情？" },
+    { "en": "Please read my BaZi chart based on my birth date, time and city.", "zh": "帮我根据出生日期、时辰和城市排一份八字命盘解读" },
+    { "en": "Should I take this new job? Give me a Liu Yao divination.", "zh": "我该不该接这份新工作？帮我起一卦六爻看看" }
+  ]
+}

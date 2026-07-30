@@ -1,0 +1,31 @@
+<div class="budget-section">
+  <div class="budget-pie-wrap">
+    <canvas id="budget-pie" width="320" height="320"></canvas>
+  </div>
+  <div class="budget-table">
+    <table>
+      <thead><tr><th>类目</th><th>金额（¥）</th><th>占比</th></tr></thead>
+      <tbody>
+        {% set b = budget.breakdown %}
+        {% set tot = budget.grand_total or 0 %}
+        <tr><td>大交通</td><td>{{ b.transport_long }}</td><td>{% if tot %}{{ (b.transport_long/tot*100)|round(1) }}%{% else %}待核实{% endif %}</td></tr>
+        <tr><td>住宿</td><td>{{ b.accommodation }}</td><td>{% if tot %}{{ (b.accommodation/tot*100)|round(1) }}%{% else %}待核实{% endif %}</td></tr>
+        <tr><td>餐饮</td><td>{{ b.food }}</td><td>{% if tot %}{{ (b.food/tot*100)|round(1) }}%{% else %}待核实{% endif %}</td></tr>
+        <tr><td>门票</td><td>{{ b.ticket }}</td><td>{% if tot %}{{ (b.ticket/tot*100)|round(1) }}%{% else %}待核实{% endif %}</td></tr>
+        <tr><td>市内交通</td><td>{{ b.transport_intra }}</td><td>{% if tot %}{{ (b.transport_intra/tot*100)|round(1) }}%{% else %}待核实{% endif %}</td></tr>
+        <tr><td>备用</td><td>{{ b.buffer }}</td><td>{% if tot %}{{ (b.buffer/tot*100)|round(1) }}%{% else %}待核实{% endif %}</td></tr>
+        <tr class="grand"><td>合计</td><td>{{ budget.grand_total }}</td><td>人均 {{ budget.per_person_total }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+  {% if budget.tradeoffs %}
+    <div class="tradeoffs">
+      <h4>💡 超支取舍建议</h4>
+      <ul>
+        {% for t in budget.tradeoffs %}
+          <li><strong>{{ t.label }}</strong> · 节省 ~¥{{ t.savings_per_person }}/人 · {{ t.impact }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,49 @@
+{
+  "name": "study-planner",
+  "version": "1.0.0",
+  "description": "Strict, execution-focused study planning agent that turns vague exam-prep goals into trackable, adjustable study plans, revision schedules, and learning roadmaps.",
+  "author": {
+    "name": "WorkBuddy",
+    "email": "noreply@workbuddy.dev"
+  },
+  "agents": ["./agents/study-planner.md"],
+  "skills": [
+    "./skills/education-search",
+    "./skills/study-plan",
+    "./skills/study-revision-planner",
+    "./skills/study-roadmap-generator"
+  ],
+
+  "expertType": "agent",
+  "agentName": "study-planner",
+
+  "displayName": {
+    "en": "Study Planner",
+    "zh": "学习规划师"
+  },
+  "profession": {
+    "en": "Study Planning Consultant",
+    "zh": "学习规划师"
+  },
+  "displayDescription": {
+    "en": "A strict mentor and efficiency tool that turns 'I want to pass XX exam' into an executable, trackable, adjustable study plan.",
+    "zh": "严格导师+效率工具，帮你把模糊的备考目标变成可执行、可追踪、可调整的学习计划，不废话，只做实事。"
+  },
+  "avatar": "avatars/StudyPlanner.png",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "你好！我是学习规划师，专门帮你做备考计划的。你准备考什么？",
+    "en": "Hi! I'm your Study Planner, here to help you build a real exam-prep plan. What exam are you preparing for?"
+  },
+  "plugin": "study-planner",
+  "tags": [
+    { "en": "Study Planning", "zh": "学习规划" },
+    { "en": "Exam Prep", "zh": "备考" },
+    { "en": "Progress Tracking", "zh": "进度追踪" }
+  ],
+  "quickPrompts": [
+    { "en": "Hi! I'm your Study Planner, here to help you build a real exam-prep plan. What exam are you preparing for?", "zh": "你好！我是学习规划师，专门帮你做备考计划的。你准备考什么？" },
+    { "en": "Help me build a study roadmap from scratch to my target level.", "zh": "帮我规划一份从入门到目标水平的学习路线图。" },
+    { "en": "Help me create a revision schedule based on the forgetting curve.", "zh": "帮我按艾宾浩斯遗忘曲线安排复习节奏。" }
+  ]
+}

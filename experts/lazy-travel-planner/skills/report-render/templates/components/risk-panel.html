@@ -1,0 +1,50 @@
+<!--
+  AGENT MUST-DO: 至少 3 类风险（天气 / 节假日 / 防坑），加 1 类应急联系。
+  上游 risk-check 给空时用 skeleton_fallbacks.risk_panel_default 兜底。
+-->
+<div class="risk-panel">
+  <div class="risk-block confidence-{{ risk.weather.confidence|default('yellow') }}">
+    <h4>🌤️ 天气</h4>
+    <p>{{ risk.weather.summary if risk.weather and risk.weather.summary else skeleton_fallbacks.risk_panel_default.weather }}</p>
+    {% if risk.weather and risk.weather.recommendations %}
+      <ul>{% for r in risk.weather.recommendations %}<li>{{ r }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div>
+
+  {% if risk.holiday_alert and risk.holiday_alert.is_holiday %}
+    <div class="risk-block confidence-yellow">
+      <h4>🎉 节假日</h4>
+      <p><strong>{{ risk.holiday_alert.holiday_name }}</strong> · {{ risk.holiday_alert.details }}</p>
+      {% if risk.holiday_alert.alternative_dates %}
+        <p>建议改期：{{ risk.holiday_alert.alternative_dates|join(', ') }}</p>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="risk-block confidence-gray">
+      <h4>🎉 节假日</h4>
+      <p>出行日期无重大节假日；常规人流参考正常水平。</p>
+    </div>
+  {% endif %}
+
+  <div class="risk-block">
+    <h4>🚨 防坑提示</h4>
+    {% set effective_scams = risk.scams_to_watch if risk.scams_to_watch else skeleton_fallbacks.risk_panel_default.scams %}
+    {% for sc in effective_scams %}
+      <div class="scam-group">
+        <strong>{{ sc.category }}{% if sc.city %} · {{ sc.city }}{% endif %}</strong>
+        <ul>{% for it in sc["items"] %}<li>{{ it }}</li>{% endfor %}</ul>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="risk-block confidence-green">
+    <h4>📞 应急电话</h4>
+    <ul class="emergency">
+      <li>报警 {{ (risk.emergency_contacts and risk.emergency_contacts.police) or '110' }}</li>
+      <li>急救 {{ (risk.emergency_contacts and risk.emergency_contacts.medical) or '120' }}</li>
+      <li>旅游投诉 {{ (risk.emergency_contacts and risk.emergency_contacts.tourism_complaint) or '12301' }}</li>
+      <li>消费维权 {{ (risk.emergency_contacts and risk.emergency_contacts.consumer) or '12315' }}</li>
+      <li>气象预警 {{ (risk.emergency_contacts and risk.emergency_contacts.weather_alert) or '12379' }}</li>
+    </ul>
+  </div>
+</div>

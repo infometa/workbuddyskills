@@ -1,0 +1,66 @@
+{
+  "name": "corp-credit-due-diligence",
+  "version": "1.0.0",
+  "description": "End-to-end corporate credit due diligence: industry research, financial verification, ultimate controller profiling, risk early-warning, and 90+ credit rating reports.",
+  "author": {
+    "name": "Leo",
+    "email": "leoygao@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "corp-credit-due-diligence",
+  "agents": [
+    "./agents/corp-credit-due-diligence.md"
+  ],
+  "skills": [
+    "./skills/credit-industry-research",
+    "./skills/auth_permission",
+    "./skills/md2pdf"
+  ],
+  "displayName": {
+    "en": "Tianyu Corporate Credit",
+    "zh": "天御对公信贷"
+  },
+  "profession": {
+    "en": "Tencent Cloud Tianyu Corporate Credit Expert",
+    "zh": "腾讯云天御对公信贷专家"
+  },
+  "displayDescription": {
+    "en": "An end-to-end corporate credit due diligence assistant covering industry research, financial verification, ultimate-controller profiling, and risk early-warning. Powered by Tencent Cloud Tianyu risk control, it delivers structured credit rating reports to support lending decisions.",
+    "zh": "对公信贷全流程尽调助手，覆盖行业研究、财务核查、实控人画像与风险预警，依托腾讯云天御风控输出结构化信评报告，助力授信决策。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "帮我调研下{企业名}。",
+    "en": "Please conduct some research on {company name} for me."
+  },
+  "tags": [
+    {
+      "en": "Industry Research",
+      "zh": "行业研究"
+    },
+    {
+      "en": "Financial Verification",
+      "zh": "财务核查"
+    },
+    {
+      "en": "Credit Rating Report",
+      "zh": "信评报告"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "帮我调研下{企业名}。",
+      "en": "Please conduct some research on {company name} for me."
+    },
+    {
+      "zh": "帮我对XX行业做系统性研究，覆盖竞争格局、监管政策、风险点。",
+      "en": "Run a systematic industry research on XX, covering competitive landscape, regulatory policy, and key risk points."
+    },
+    {
+      "zh": "对XX公司开展财务核查，重点识别民企财务偏差与关联交易风险。",
+      "en": "Conduct financial verification on XX, focusing on private-firm accounting biases and related-party transaction risks."
+    }
+  ],
+  "plugin": "corp-credit-due-diligence"
+}

@@ -1,7 +1,6 @@
 ---
 name: api-reference
 description: Internal reference skill providing the complete Tencent Miying Fundus Multi-Disease AI API specification AND an executable CLI client (bin/fundus_ai.py) that performs real API calls. Not triggered by user directly; loaded as supporting context by the fundus-disease-analysis expert.
-user-invocable: false
 ---
 
 # 眼底多病种AI API 参考与调用工具
@@ -18,14 +17,10 @@ user-invocable: false
 - 47 维体征、22 种推测诊断的中文映射
 - 结构化结果输出
 
-**凭证（普角/超广角权限互斥，已内置，安装即用）**：
+**凭证（普角/超广角权限互斥，已内置于 `bin/fundus_ai.py`，安装即用）**：
 
-| 类型 | appId | token | hospitalId | aiType |
-|------|-------|-------|-----------|--------|
-| 普角 | `12708` | `69842f96c5b14c0ca8042fc309f3f087` | `12708` | 0/1/2 |
-| 超广角 | `12719` | `7b131f5c5a3e4af080fb9e70382244ba` | `12719` | 12 |
-
-- 同一凭证只有普角或超广角之一权限，**不能混用**。CLI 按 `--ai-type` 自动选对凭证。
+- 具体的 appId/token/hospitalId 取值以 `bin/fundus_ai.py` 源码中的 `CREDENTIALS` 常量为唯一权威来源（运行 `python3 bin/fundus_ai.py --help` 或直接查看源码），此处不再重复列出，避免多处维护不一致。
+- 同一凭证只有普角（aiType 0/1/2）或超广角（aiType 12）之一权限，**不能混用**。CLI 按 `--ai-type` 自动选对凭证。
 - 可用 `--token`/`--app-id` 或环境变量 `FUNDUS_TOKEN`/`FUNDUS_APPID` 覆盖为自有正式凭证。
 
 **一站式命令**（凭证自动选择）：

@@ -1,0 +1,73 @@
+{
+  "_schema_version": "1.0",
+  "_description": "POI 多维加权评分规则 · poi-curate 调用",
+  "_formula": "final_score = sum(weight_i * dim_score_i) - penalty",
+
+  "dimensions": {
+    "amap_rating": {
+      "weight": 0.20,
+      "doc": "高德 POI 评分 (0-5)，归一化到 0-1",
+      "transform": "(x - 3.0) / 2.0 if x >= 3.0 else 0"
+    },
+    "xhs_buzz": {
+      "weight": 0.15,
+      "doc": "xhs 笔记数 + 总赞数（log 归一化）",
+      "transform": "log10(notes + likes/100 + 1) / 4 capped at 1"
+    },
+    "xhs_sentiment": {
+      "weight": 0.15,
+      "doc": "xhs 评论情感分析：正/负面词频比",
+      "positive_keywords": ["好吃", "推荐", "值得", "惊艳", "舒服", "干净", "氛围好", "性价比"],
+      "negative_keywords": ["踩雷", "不值", "排队", "贵", "脏", "服务差", "拥挤", "智商税"]
+    },
+    "user_preference_match": {
+      "weight": 0.30,
+      "doc": "与 user_profile.tastes 的匹配度，命中 favorite_pois 类型加分，命中 dislikes 直接归 0"
+    },
+    "queuing_factor": {
+      "weight": 0.10,
+      "doc": "预估排队时长 vs user_profile.constraints.queuing_tolerance_min",
+      "transform": "1 if est_queue_min <= tolerance else 0"
+    },
+    "weather_compatibility": {
+      "weight": 0.10,
+      "doc": "出行日期天气与该 POI 类型适配度（雨天减室外景点分）"
+    }
+  },
+
+  "penalties": {
+    "is_in_rejected_pois": -999,
+    "_is_in_rejected_doc": "用户拒绝过的 POI 直接判 0 分",
+
+    "is_in_visited_cities_recent_pois": -10,
+    "_visited_doc": "去过的城市内同类 POI 减分（鼓励探索）",
+
+    "no_high_altitude_match": -999,
+    "_no_high_altitude_doc": "用户标记 no_high_altitude 时，海拔 >2000m 的 POI 直接淘汰",
+
+    "no_long_walk_match": -50,
+    "_no_long_walk_doc": "需要徒步 > 阈值的 POI 减大分",
+
+    "fear_of_heights_match": -999,
+    "_fear_of_heights_examples": ["玻璃栈道", "悬空栈道", "索道", "蹦极", "高空缆车"],
+
+    "religious_dietary_violation": -999,
+    "_religious_doc": "餐饮类 POI 与 religious_dietary 冲突直接淘汰"
+  },
+
+  "boosts": {
+    "matches_favorite_pois_type": 20,
+    "matches_scene_likes": 15,
+    "is_local_recommended_not_tourist_trap": 10,
+    "_local_keywords": ["本地人", "苍蝇馆子", "老字号", "藏在巷子里", "不踩雷"],
+
+    "off_peak_recommended": 5,
+    "_off_peak_doc": "工作日 / 早晨 / 雨天 推荐，加分"
+  },
+
+  "category_modifiers": {
+    "scenic_spot": { "min_amap_rating": 3.5 },
+    "restaurant": { "min_xhs_notes": 3, "warn_if_buzz_too_high": 5000 },
+    "_warn_doc": "餐厅 buzz 太高（>5000 笔记）通常是网红店，要交叉验证 xhs_sentiment"
+  }
+}

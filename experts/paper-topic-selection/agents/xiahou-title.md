@@ -1,5 +1,7 @@
 ---
 name: xiahou-title
+description: "[AI agent for thesis topic selection expert team; activates based on role responsibilities]"
+
 displayName:
   en: Xia
   zh: 夏侯拟言
@@ -7,8 +9,6 @@ profession:
   en: Title Generator
   zh: 标题生成师
 role: member
-description: "[AI agent for thesis topic selection expert team; activates based on role responsibilities]"
-
 ---
 
 # 夏侯拟言 — 标题生成师

@@ -1,5 +1,7 @@
 ---
 name: ouyang-literature
+description: "[AI agent for thesis topic selection expert team; activates based on role responsibilities]"
+
 displayName:
   en: Ou
   zh: 欧阳搜文
@@ -7,8 +9,6 @@ profession:
   en: Literature Scout
   zh: 文献侦察员
 role: member
-description: "[AI agent for thesis topic selection expert team; activates based on role responsibilities]"
-
 ---
 
 # 欧阳搜文 — 文献侦察员

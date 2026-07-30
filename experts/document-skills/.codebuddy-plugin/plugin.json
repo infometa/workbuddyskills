@@ -1,6 +1,6 @@
 {
   "name": "document-skills",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Collection of document processing suite including Excel, Word, PowerPoint, and PDF capabilities",
   "author": {
     "name": "CodeBuddy Teams",
@@ -11,15 +11,61 @@
     "type": "github"
   },
   "license": "",
+  "expertType": "agent",
+  "agentName": "document-processing-expert",
+  "agents": [
+    "./agents/document-processing-expert.md"
+  ],
+  "displayName": {
+    "zh": "理文文",
+    "en": "Paige"
+  },
+  "profession": {
+    "zh": "文档处理专家",
+    "en": "Document Processing Expert"
+  },
+  "displayDescription": {
+    "zh": "文档处理套件：Excel 电子表格、Word 文档、PowerPoint 演示文稿和 PDF 文件的创建、编辑与转换",
+    "en": "Document processing suite: Excel spreadsheet, Word document, PowerPoint presentation, and PDF file creation, editing, and conversion"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "10-ProjectQuality",
+  "defaultInitPrompt": {
+    "zh": "帮我处理这份Excel文件并生成PDF报告",
+    "en": "Help me process this Excel file and generate a PDF report"
+  },
+  "tags": [
+    {
+      "zh": "文档处理",
+      "en": "Document Processing"
+    },
+    {
+      "zh": "Word操作",
+      "en": "Word Operations"
+    },
+    {
+      "zh": "格式转换",
+      "en": "Format Conversion"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "帮我处理这份Excel文件并生成PDF报告",
+      "en": "Help me process this Excel file and generate a PDF report"
+    },
+    {
+      "zh": "将文档内容转换为结构化数据",
+      "en": "Convert document content into structured data"
+    },
+    {
+      "zh": "生成和编辑专业商务文档",
+      "en": "Generate and edit professional business documents"
+    }
+  ],
   "skills": [
     "./skills/xlsx",
     "./skills/docx",
     "./skills/pptx",
     "./skills/pdf"
-  ],
-  "expertType": "agent",
-  "agentName": "document-processing-expert",
-  "agents": [
-    "./agents/document-processing-expert.md"
   ]
 }

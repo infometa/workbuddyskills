@@ -1,0 +1,266 @@
+/* 出游规划师 · HTML 行程书样式 · v1.0 */
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  background: #fafafa;
+  color: #222;
+  line-height: 1.55;
+}
+header.cover {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: #fff;
+  padding: 60px 40px 40px;
+}
+header.cover h1 { margin: 0 0 12px; font-size: 32px; font-weight: 700; }
+header.cover .sub { font-size: 16px; opacity: 0.85; }
+.confidence-summary {
+  margin-top: 16px; font-size: 13px; opacity: 0.9;
+}
+.confidence-summary .dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+  margin: 0 4px 0 12px; vertical-align: middle;
+}
+.dot-green  { background: #2ecc71; }
+.dot-yellow { background: #f1c40f; }
+.dot-gray   { background: #95a5a6; }
+.meta-stamp { margin-top: 8px; font-size: 12px; opacity: 0.6; }
+
+section {
+  max-width: 1080px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
+section h2 {
+  font-size: 22px; margin: 32px 0 16px; padding-left: 12px;
+  border-left: 4px solid #3498db;
+}
+
+/* 总览地图 */
+#map {
+  width: 100%; height: 480px; border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+/* 大交通 */
+.transport-section { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.transport-section .intra-tip {
+  grid-column: 1 / -1; background: #f0f4f8; padding: 16px; border-radius: 8px;
+}
+.dir-block h4 { margin: 0 0 12px; }
+.trans-card {
+  background: #fff; border-radius: 10px; padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 12px; position: relative;
+}
+.trans-mode { font-weight: 700; font-size: 18px; color: #3498db; }
+.trans-route { font-size: 15px; margin: 4px 0; }
+.trans-time { color: #555; font-size: 14px; }
+.trans-price { font-weight: 600; color: #e74c3c; margin-top: 6px; }
+.book-links {
+  margin-top: 10px; padding-top: 8px; border-top: 1px dashed #e0e0e0;
+  font-size: 13px; color: #555;
+}
+.book-links .book-label { color: #888; margin-right: 6px; }
+.book-links a {
+  display: inline-block; margin-right: 10px; color: #3498db;
+  text-decoration: none; padding: 2px 0; border-bottom: 1px solid transparent;
+}
+.book-links a:hover { border-bottom-color: #3498db; }
+
+/* 小红书笔记区 */
+.xhs-section { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+.xhs-intro { color: #666; font-size: 14px; margin: 0 0 20px; }
+.xhs-group { margin-bottom: 24px; }
+.xhs-group h4 { margin: 0 0 12px; font-size: 16px; }
+.xhs-count { color: #999; font-size: 13px; font-weight: 400; margin-left: 6px; }
+.xhs-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px;
+}
+.xhs-card {
+  display: block; text-decoration: none; color: inherit;
+  background: #fafafa; border-radius: 10px; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s;
+  border: 1px solid #eee;
+}
+.xhs-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.xhs-cover {
+  width: 100%; padding-top: 75%; background-size: cover; background-position: center;
+  background-color: #ddd;
+}
+.xhs-body { padding: 12px; }
+.xhs-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
+.xhs-meta { font-size: 12px; color: #888; margin-bottom: 6px; }
+.xhs-meta span { margin-right: 10px; }
+.xhs-snippet { font-size: 12px; color: #666; line-height: 1.5; margin-bottom: 8px; }
+.xhs-sentiment {
+  display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px;
+}
+.xhs-sentiment-positive { background: #e8f5e9; color: #2e7d32; }
+.xhs-sentiment-negative { background: #ffebee; color: #c62828; }
+.xhs-sentiment-neutral  { background: #f0f0f0; color: #555; }
+.xhs-disclaimer { color: #999; font-size: 12px; margin-top: 16px; text-align: center; }
+
+/* 住宿 */
+.hotel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.hotel-card {
+  background: #fff; border-radius: 10px; padding: 18px; position: relative;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.hotel-card .h-rank {
+  position: absolute; top: 12px; right: 14px; font-weight: 700; color: #f39c12;
+}
+.h-price { color: #e74c3c; font-weight: 600; margin: 6px 0; }
+.h-rating, .h-loc { font-size: 13px; color: #555; }
+.h-amenities { margin: 8px 0 0; }
+.tag {
+  display: inline-block; background: #ecf0f1; color: #555;
+  border-radius: 4px; padding: 2px 8px; margin: 2px 4px 0 0; font-size: 12px;
+}
+.warning { color: #e67e22; font-size: 13px; margin-top: 6px; }
+
+/* 每日行程 */
+.day-card {
+  background: #fff; border-radius: 12px; padding: 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+.day-header h3 { margin: 0 0 6px; }
+.day-meta { font-size: 13px; color: #888; }
+.day-meta span { margin-right: 12px; }
+.timeline { list-style: none; padding-left: 0; margin: 16px 0 0; }
+.timeline .stop {
+  display: grid; grid-template-columns: 100px 1fr; gap: 16px;
+  border-left: 3px solid #3498db; padding: 10px 0 10px 14px; margin-left: 8px;
+}
+.timeline .stop:not(:last-child) { padding-bottom: 18px; }
+.t-time { font-weight: 600; color: #3498db; }
+.t-title { font-size: 15px; margin-bottom: 4px; }
+.t-emoji { margin-right: 6px; }
+.rating { color: #f39c12; margin-left: 8px; font-size: 13px; }
+.t-detail { font-size: 13px; color: #666; }
+.t-detail span { margin-right: 14px; }
+.stop-breakfast, .stop-lunch, .stop-dinner { border-left-color: #e74c3c; }
+.stop-evening { border-left-color: #9b59b6; }
+
+/* 预算 */
+.budget-section {
+  display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start;
+}
+.budget-pie-wrap {
+  background: #fff; border-radius: 10px; padding: 20px; display: flex; justify-content: center;
+}
+.budget-table table {
+  width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden;
+}
+.budget-table th, .budget-table td { padding: 10px 16px; text-align: left; border-bottom: 1px solid #eee; }
+.budget-table tr.grand td { font-weight: 700; background: #f7f9fc; }
+.tradeoffs {
+  grid-column: 1 / -1; background: #fff5e6; padding: 16px 20px; border-radius: 10px; margin-top: 8px;
+}
+
+/* 风险 */
+.risk-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.risk-block {
+  background: #fff; padding: 16px; border-radius: 10px; border-left: 4px solid #95a5a6;
+}
+.risk-block.confidence-green  { border-left-color: #2ecc71; }
+.risk-block.confidence-yellow { border-left-color: #f1c40f; }
+.risk-block.confidence-gray   { border-left-color: #95a5a6; }
+.risk-block h4 { margin: 0 0 10px; }
+.scam-group { margin-bottom: 10px; }
+.emergency { columns: 2; list-style: none; padding: 0; }
+
+/* 清单 */
+.checklist { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.check-group {
+  background: #fff; padding: 16px; border-radius: 10px;
+}
+.check-group h4 { margin: 0 0 8px; }
+.check-group ul { list-style: none; padding: 0; }
+.check-group li { padding: 4px 0; }
+
+/* 置信度徽章 */
+.confidence-badge {
+  position: absolute; top: 10px; right: 10px;
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.confidence-green  { background: #2ecc71; }
+.confidence-yellow { background: #f1c40f; }
+.confidence-gray   { background: #95a5a6; }
+
+footer {
+  text-align: center; color: #888; font-size: 12px; padding: 30px 20px;
+}
+
+@media print {
+  header.cover { background: #2c3e50 !important; -webkit-print-color-adjust: exact; }
+  .day-card, .hotel-card, .trans-card, .risk-block { break-inside: avoid; }
+  .book-btn { display: none; }
+}
+@media (max-width: 720px) {
+  .transport-section, .budget-section { grid-template-columns: 1fr; }
+}
+
+/* ===== v2.0 新增：实际路线 / 兜底卡 / 数据完整性 ===== */
+
+/* 每日行程的路线步骤 */
+.day-routes {
+  background: #f8f9fa; padding: 12px 16px; border-radius: 8px; margin: 12px 0;
+  border-left: 4px solid #3498db;
+}
+.day-routes h4 { margin: 0 0 8px; font-size: 14px; }
+.route-steps { list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 1.7; }
+.route-steps li { padding: 2px 0; }
+.route-source-real { color: #2ecc71; font-weight: 600; font-size: 12px; }
+.route-source-text { color: #555; font-weight: 500; }
+.route-source-fallback { color: #c62828; font-size: 12px; }
+
+/* 推荐理由 */
+.t-reason { color: #777; font-size: 13px; margin: 4px 0 6px; }
+
+/* 当天预算 */
+.day-budget { text-align: right; padding: 8px 0; color: #e67e22; font-weight: 600; }
+
+/* 坐标待校验 marker */
+.warn-badge {
+  display: inline-block; background: #fff3e0; color: #e67e22;
+  font-size: 11px; padding: 1px 8px; border-radius: 10px; margin-left: 6px;
+}
+
+/* xhs 空数据兜底卡 */
+.xhs-empty-card {
+  background: #fafafa; border: 2px dashed #ddd;
+  padding: 24px; border-radius: 12px; text-align: center;
+}
+.xhs-empty-card h4 { margin: 0 0 8px; color: #777; }
+.xhs-empty-card p { color: #888; margin: 4px 0; font-size: 14px; }
+.manual-search { list-style: none; padding: 0; margin-top: 16px; }
+.manual-search li {
+  display: inline-block; margin: 4px 8px;
+}
+.manual-search a {
+  display: inline-block; padding: 6px 14px;
+  background: #fff; border: 1px solid #ddd; border-radius: 16px;
+  color: #3498db; text-decoration: none; font-size: 13px;
+}
+.manual-search a:hover { border-color: #3498db; }
+
+/* 数据完整性面板 */
+.completeness-panel {
+  background: #fff; padding: 24px; border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05); font-size: 14px;
+}
+.comp-row { margin-bottom: 14px; }
+.comp-row strong { display: block; margin-bottom: 6px; }
+.comp-row ul { margin: 0; padding-left: 20px; color: #555; line-height: 1.8; }
+.comp-warn ul { color: #e67e22; }
+.comp-tip {
+  border-top: 1px dashed #eee; padding-top: 12px; margin-top: 12px;
+  color: #888; font-size: 13px;
+}
+
+/* 地图图例 */
+.map-legend { font-family: inherit; }
+
+/* confidence 灰色 */
+.confidence-gray {
+  border-left-color: #95a5a6 !important;
+}

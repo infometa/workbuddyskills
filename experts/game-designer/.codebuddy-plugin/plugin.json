@@ -1,57 +1,44 @@
 {
   "name": "game-designer",
   "version": "1.0.1",
-  "description": "Expert in game systems and mechanics design, building gameplay through loops, levers, and psychology",
-  "agents": [
-    "./agents/game-designer.md"
+  "description": "A senior game designer who turns fun into engineered deliverables through systems thinking, balance obsession, and player empathy.",
+  "agents": ["./agents/game-designer.md"],
+  "skills": [
+    "./skills/android-native-dev",
+    "./skills/impeccable",
+    "./skills/wechat-miniprogram"
   ],
+
   "expertType": "agent",
   "agentName": "game-designer",
+
   "displayName": {
-    "en": "Dale",
-    "zh": "玩法师"
-  },
-  "profession": {
     "en": "Game Designer",
     "zh": "游戏设计师"
   },
-  "displayDescription": {
-    "en": "Expert in game systems and mechanics design, building gameplay through loops, levers, and psychology",
-    "zh": "精通游戏系统和机制设计，用循环杠杆和心理构建玩法"
+  "profession": {
+    "en": "Game Systems & Mechanics Designer",
+    "zh": "游戏系统与机制设计师"
   },
-  "avatar": "avatars/expert.png",
+  "displayDescription": {
+    "en": "Designs game mechanics and core loops, models economy sources and sinks, and pairs every tuning value with a rationale and playtest path—turning fun into engineered deliverables.",
+    "zh": "用系统思维拆解游戏机制，画清经济系统源与汇，为每条数值配平衡验证路径，把好玩变成可交付的工程产物"
+  },
+  "avatar": "avatars/GameDesigner.png",
   "categoryId": "03-GameSpatial",
   "defaultInitPrompt": {
-    "zh": "我们需要设计好玩的游戏机制和系统,请游戏设计师帮我们设计游戏玩法和平衡性。",
-    "en": "We need to design fun game mechanics and systems. Please, Game Designer, help us design game gameplay and balance."
+    "zh": "我有一个游戏概念想验证，帮我先写出 fun hypothesis 和 3-5 条 design pillars，再拆解核心循环。",
+    "en": "I have a game concept to validate—help me write the fun hypothesis and 3-5 design pillars first, then break down the core loop."
   },
+  "plugin": "game-designer",
   "tags": [
-    {
-      "zh": "游戏设计",
-      "en": "Game Design"
-    },
-    {
-      "zh": "玩法策划",
-      "en": "Gameplay Design"
-    },
-    {
-      "zh": "游戏系统",
-      "en": "Game Systems"
-    }
+    { "en": "Game Mechanics", "zh": "游戏机制设计" },
+    { "en": "System Design", "zh": "系统与经济设计" },
+    { "en": "Balance & Tuning", "zh": "平衡与数值调优" }
   ],
   "quickPrompts": [
-    {
-      "zh": "我们需要设计好玩的游戏机制和系统,请游戏设计师帮我们设计游戏玩法和平衡性。",
-      "en": "We need to design fun game mechanics and systems. Please, Game Designer, help us design game gameplay and balance."
-    },
-    {
-      "zh": "制定游戏数值体系和平衡方案",
-      "en": "Develop game numerical systems and balance plan"
-    },
-    {
-      "zh": "撰写游戏设计文档GDD",
-      "en": "Write a Game Design Document (GDD)"
-    }
-  ],
-  "skills": []
+    { "en": "I have a game concept to validate—help me write the fun hypothesis and 3-5 design pillars first, then break down the core loop.", "zh": "我有一个游戏概念想验证，帮我先写出 fun hypothesis 和 3-5 条 design pillars，再拆解核心循环。" },
+    { "en": "Help me design the economy for my game—draw the sources and sinks, and check for inflation risk.", "zh": "帮我设计游戏的经济系统，画出 sources 和 sinks，并检查有没有通胀风险。" },
+    { "en": "This mechanic feels off but I can't tell why. Help me diagnose it from feedback channels to the mechanic itself.", "zh": "这个机制感觉不对但说不清哪里，帮我从反馈通道到机制本身逐层诊断。" }
+  ]
 }

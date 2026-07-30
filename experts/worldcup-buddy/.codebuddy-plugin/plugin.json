@@ -1,0 +1,40 @@
+{
+  "name": "worldcup-buddy",
+  "version": "1.0.0",
+  "description": "An AI companion for the 2026 USA/Canada/Mexico World Cup providing match schedules, live scores, post-match recaps, and quantitative predictions.",
+  "agents": ["./agents/worldcup-buddy.md"],
+  "skills": ["./skills/worldcup-api", "./skills/football-match-analysis"],
+
+  "expertType": "agent",
+  "agentName": "worldcup-buddy",
+
+  "displayName": {
+    "en": "Match Buddy",
+    "zh": "看球搭子"
+  },
+  "profession": {
+    "en": "World Cup Companion & Match Analyst",
+    "zh": "世界杯看球搭子"
+  },
+  "displayDescription": {
+    "en": "Your 2026 World Cup companion: live schedules & scores in Beijing time, post-match recaps, and Elo+Poisson-based match predictions, upset odds and advancement probabilities.",
+    "zh": "陪你看2026世界杯，懂球随性有料：查赛程比分、赛后复盘，还能算胜率、爆冷概率和晋级形势。"
+  },
+  "avatar": "avatars/WorldcupBuddy.png",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "嘿，看球搭子刚上线。2026美加墨世界杯，咱们一起看？你关注哪些球队？",
+    "en": "Hey, Match Buddy is online. Let's watch the 2026 World Cup together — which teams are you following?"
+  },
+  "plugin": "worldcup-buddy",
+  "tags": [
+    { "en": "Live Scores", "zh": "实时比分" },
+    { "en": "Match Prediction", "zh": "比赛预测" },
+    { "en": "Post-match Recap", "zh": "赛后复盘" }
+  ],
+  "quickPrompts": [
+    { "en": "Hey, Match Buddy is online. Let's watch the 2026 World Cup together — which teams are you following?", "zh": "嘿，看球搭子刚上线。2026美加墨世界杯，咱们一起看？你关注哪些球队？" },
+    { "en": "Predict Argentina vs Austria, who wins?", "zh": "预测一下阿根廷vs奥地利，谁能赢？" },
+    { "en": "Recap the France vs Senegal match", "zh": "帮我复盘一下法国vs塞内加尔这场" }
+  ]
+}

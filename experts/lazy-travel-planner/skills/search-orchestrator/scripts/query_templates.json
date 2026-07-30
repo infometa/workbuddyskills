@@ -1,0 +1,61 @@
+{
+  "_schema_version": "1.0",
+  "_description": "查询模板矩阵 · 由 query_expand.py 加载",
+
+  "destination": [
+    "{location} 攻略",
+    "{location} 必去",
+    "{location} 避雷",
+    "{location} {season} 推荐",
+    "{location} {duration}日游",
+    "{location} 自由行",
+    "{location} 小众"
+  ],
+
+  "poi": [
+    "{location} {category}",
+    "{location} 本地人 {category}",
+    "{location} {category} 性价比",
+    "{location} {category} 排队",
+    "{location} {category} 不踩雷"
+  ],
+
+  "accommodation": [
+    "{location} {tier_label} 酒店推荐",
+    "{location} 民宿 真实体验",
+    "{location} 住哪里 方便",
+    "{location} {area} 酒店"
+  ],
+
+  "risk": [
+    "{location} 避雷",
+    "{location} 被坑",
+    "{location} 注意事项",
+    "{location} 黑车",
+    "{location} {month} 天气"
+  ],
+
+  "preference_addons": {
+    "_doc": "基于 user_profile 的可选附加查询，命中相应偏好时加入",
+    "no_long_walk": ["{location} 不爬山 推荐", "{location} 老人友好"],
+    "fear_of_heights": ["{location} 平地 景点"],
+    "must_have_starbucks_or_equivalent": ["{location} 咖啡馆 推荐"],
+    "scene_likes_photo": ["{location} 拍照 机位", "{location} 出片 圣地"],
+    "scene_likes_food": ["{location} 美食 本地人", "{location} 苍蝇馆子"],
+    "scene_dislikes_crowded": ["{location} 小众 不踩雷", "{location} 反向 旅游"]
+  },
+
+  "season_map": {
+    "01": "冬季", "02": "冬季", "03": "春季",
+    "04": "春季", "05": "春季", "06": "初夏",
+    "07": "盛夏", "08": "盛夏", "09": "初秋",
+    "10": "秋季", "11": "深秋", "12": "冬季"
+  },
+
+  "tier_label_map": {
+    "economy": "便宜",
+    "standard": "性价比",
+    "premium": "精品",
+    "luxury": "高端"
+  }
+}

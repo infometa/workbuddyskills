@@ -19,6 +19,8 @@ Course-level materialization contract for the Course Prompt artifact.
 
 Use this file to materialize one course-wide artifact from the six-section template below. It defines the template, fill-value sources, context used while filling those values, and completion checks; it does not redefine shared Prompt semantics, lesson pedagogy, or MarkdownFlow runtime behavior.
 
+The template's `# Slides` section is the single runtime owner for presentation requirements that apply uniformly to every slide rather than to a particular slide position or teaching purpose. Teaching Prompts decide each lesson's slide count, order, teaching purposes, required content, relationship to explanatory text, and any position- or purpose-specific treatment; the Course Prompt applies the shared presentation rules without changing those decisions.
+
 - Apply shared Prompt semantics and the Course Prompt versus Teaching Prompt authority boundary from [prompt-contracts.md](prompt-contracts.md).
 - Resolve any variable references in the completed artifact against [markdownflow.md#variables](markdownflow.md#variables).
 
@@ -98,4 +100,5 @@ Use these inputs as context constraints while wording the applicable fill values
 - The optional named Role identity item is either absent or contains a non-empty name. The remaining four `XXX` occurrences are replaced with course-specific content derived from the mapped sources, and the completed artifact contains no unresolved `XXX` placeholder.
 - Every non-placeholder template instruction remains represented with the same behavior.
 - The fill values satisfy the learner-profile, topic-scope, and delivery-mode context constraints above.
+- Every presentation requirement that applies uniformly to every slide remains in the `# Slides` section. The section does not special-case a cover or any other slide position or teaching purpose, and it does not change lesson-specific slide structure or pedagogy supplied by the current user message.
 - The completed artifact follows [prompt-contracts.md](prompt-contracts.md), and any variable references have the runtime behavior defined in [markdownflow.md#variables](markdownflow.md#variables), without copying those rules into this file.

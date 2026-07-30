@@ -1,0 +1,74 @@
+<!--
+  AGENT MUST-DO（每天卡片）:
+  ① day.theme / day.fatigue_index 必填（否则 header 残缺）
+  ② day.stops 至少 3-6 条（含三餐 + 景点），每条必须有 time / poi.name / duration_min
+  ③ day.routes 必填（实际道路 polyline 或 路径文字版，规则同总览地图）
+  ④ stop.poi 缺字段时，agent 自己用 WebSearch 补 rating/open_hours/ticket_price
+-->
+<article class="day-card" data-day="{{ day.day_index }}">
+  <header class="day-header">
+    <h3>D{{ day.day_index }} · {{ day.date }} · {{ day.theme }}</h3>
+    <div class="day-meta">
+      <span>📍 {{ day.total_distance_km|default('—') }}km</span>
+      <span>🚶 {{ day.fatigue_index|default(0)|round(2) }} 体力指数</span>
+      {% if day.weather %}<span>☁️ {{ day.weather.summary }}</span>{% endif %}
+    </div>
+  </header>
+
+  {% if day.routes %}
+    <div class="day-routes">
+      <h4>🗺️ 当日路线</h4>
+      <ol class="route-steps">
+        {% for r in day.routes %}
+          <li>
+            {% if r.geometry %}
+              <span class="route-source-real">实际道路</span>
+            {% elif r.description %}
+              <span class="route-source-text">路径：</span>{{ r.description }}
+            {% else %}
+              <span class="route-source-fallback">⚠️ 实际路线未获取（仅直线示意）</span>
+            {% endif %}
+            {% if day.stops[r.from] and day.stops[r.to] %}
+              · {{ day.stops[r.from].poi.name }} → {{ day.stops[r.to].poi.name }}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
+  {% endif %}
+
+  <ol class="timeline">
+    {% for stop in day.stops %}
+      <li class="stop stop-{{ stop.type }}">
+        <div class="t-time">{{ stop.time }}</div>
+        <div class="t-body">
+          <div class="t-title">
+            <span class="t-emoji">
+              {%- if stop.type == 'breakfast' -%}🥐
+              {%- elif stop.type == 'lunch' -%}🍜
+              {%- elif stop.type == 'dinner' -%}🍽️
+              {%- elif stop.type == 'evening' -%}🌃
+              {%- else -%}📌
+              {%- endif -%}
+            </span>
+            <strong>{{ stop.poi.name }}</strong>
+            {% if stop.poi.rating %}<span class="rating">⭐ {{ stop.poi.rating }}</span>{% endif %}
+            {% if stop.poi.coord_status == 'unverified' %}<span class="warn-badge">⚠️ 坐标待校验</span>{% endif %}
+          </div>
+          {% if stop.poi.recommend_reason %}
+            <div class="t-reason">💡 {{ stop.poi.recommend_reason }}</div>
+          {% endif %}
+          <div class="t-detail">
+            {% if stop.poi.open_hours %}<span>🕐 {{ stop.poi.open_hours }}</span>{% endif %}
+            {% if stop.poi.ticket_price %}<span>🎫 ¥{{ stop.poi.ticket_price }}</span>{% endif %}
+            <span>⏱️ 约 {{ stop.duration_display or (stop.duration_min ~ ' 分钟') }}</span>
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+
+  {% if day.daily_budget %}
+    <div class="day-budget">💸 当天预算约 ¥{{ day.daily_budget|int }}</div>
+  {% endif %}
+</article>

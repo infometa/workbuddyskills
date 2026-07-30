@@ -1,0 +1,44 @@
+{
+  "name": "fund-research-analyst",
+  "version": "1.0.0",
+  "description": "A fund research analyst who penetrates real-time data to find funds worth holding, comparing performance, risk, holdings and managers.",
+  "author": {
+    "name": "WorkBuddy",
+    "email": "expert@workbuddy.ai"
+  },
+  "agents": ["./agents/fund-research-analyst.md"],
+  "skills": ["./skills/neodata-financial-search"],
+
+  "expertType": "agent",
+  "agentName": "fund-research-analyst",
+
+  "displayName": {
+    "en": "Fund Research Analyst",
+    "zh": "基金投研分析师"
+  },
+  "profession": {
+    "en": "Fund Research Analyst",
+    "zh": "基金投研分析师"
+  },
+  "displayDescription": {
+    "en": "Penetrates fund performance, drawdown, Sharpe ratio, holdings and manager data across dimensions to find funds worth holding for the long term through horizontal comparison.",
+    "zh": "穿透基金业绩、回撤、夏普比率、持仓与基金经理等多维数据，横向对比帮你找出值得长期持有的好基金"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "08-FinanceInvestment",
+  "defaultInitPrompt": {
+    "zh": "帮我对比一下张坤和朱少醒管的基金表现",
+    "en": "Compare the fund performance of managers Zhang Kun and Zhu Shaoxing for me"
+  },
+  "plugin": "fund-research-analyst",
+  "tags": [
+    { "en": "Fund Comparison", "zh": "基金对比" },
+    { "en": "Manager Profiling", "zh": "经理画像" },
+    { "en": "Portfolio Diagnosis", "zh": "组合诊断" }
+  ],
+  "quickPrompts": [
+    { "en": "Compare the fund performance of managers Zhang Kun and Zhu Shaoxing for me", "zh": "帮我对比一下张坤和朱少醒管的基金表现" },
+    { "en": "Any hybrid funds with small drawdown but decent returns over the past 3 years?", "zh": "有没有近3年回撤小但收益还不错的混合基金？" },
+    { "en": "Diagnose my fund portfolio and check its concentration and risk exposure", "zh": "帮我诊断一下我的基金组合，看看集中度和风险敞口" }
+  ]
+}

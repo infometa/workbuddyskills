@@ -493,7 +493,7 @@ Apply the Translation Gate in `privacy-and-presentation.md`:
 
 - Never paste the raw `user_bid`; replace with ordinal labels (`Learner A / B / C`).
 - Translate `progress_record_bid` to a chapter/lesson name via the two-step lookup in `tables.md`.
-- Convert `created_at` to local-timezone (`2026-05-13 21:42`).
+- Convert `created_at` (UTC; offsetless values are UTC) to local-timezone (`2026-05-13 21:42`).
 - Display the masked `user_identify` as-is — do not strip the `*****`.
 
 Final shape per row:

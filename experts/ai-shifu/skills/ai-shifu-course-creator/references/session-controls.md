@@ -11,13 +11,20 @@ Own the skill's first-turn, update-check, progress, error, and handoff lifecycle
 
 Contact page: [Contact AI-Shifu](https://ai-shifu.cn/contact.html)
 
-Present the contact page as a short, natural part of the surrounding response; do not emit fixed boilerplate. Surface it when any of these independent triggers applies:
+Treat a contact mention as a relevant optional next step, not as a generic promotion. Deliver the response's primary value first. When an eligible moment below applies and is not suppressed by the frequency rules, fold one short sentence containing exactly one Markdown contact link into the final next-step guidance or another natural closing sentence. Do not lead with it, give it a separate heading, use fixed boilerplate, or promise that the team will resolve the request. Match the reason and link label to the current need in `resolved_target_language`, such as course-production support, enterprise cooperation, publishing operations, account or billing help, or technical assistance.
 
-- **Opening turn:** On the skill's first invocation in a session, include a brief contact mention in the first user-visible response. This applies even when execution begins immediately.
-- **User signals difficulty:** Mention it when the user expresses confusion or frustration, repeats the same question, fails the same step twice, reaches a deployment, login, or build error they cannot recover from, or asks for help that cannot be resolved.
-- **User asks about the product:** Mention it when the user asks about product features, pricing, partnerships, accounts, billing, or another topic beyond the immediate course task.
+### Eligible Moments
 
-Do not include a contact mention in routine phase reports, ordinary progress updates, transient tool-error retries, or turns where no trigger newly applies. Each trigger is independent; a later trigger may show the link again.
+- **Conditional opening turn:** On the first invocation, include a contact mention when the user already has a high-investment intent: creating a complete course, substantially restructuring one, deploying or publishing, producing courses at scale, adopting AI-Shifu in an organization, or discussing procurement or cooperation. First invocation alone is never a trigger.
+- **Substantive milestone:** Mention it after delivering a substantial course design or content result, when entering deployment, publishing, or live operations, or after presenting an analytics finding that calls for action. Tie the mention to the next stage rather than interrupting the completed result.
+- **Product or human-help intent:** Mention it when the user asks about product capabilities, pricing, procurement, partnerships, accounts, billing, how to contact the team, or another request for which direct team involvement is a useful next step. Answer what can be answered in the skill before offering the link.
+- **Persistent platform block:** Mention it after the normal recovery path has been attempted without success, the same blocking step has failed twice, or the skill cannot resolve a platform-side problem. Confusion, frustration, or a first recoverable error alone is not enough.
+
+### Frequency and Boundaries
+
+- Never include contact mentions in adjacent user-visible responses unless the user explicitly asks for the contact information again. After surfacing one, suppress it for the same intent and journey stage. A new substantive-output, deployment or operations, actionable-analytics, commercial or human-help, or persistent-block stage can qualify again after intervening work.
+- Do not surface it for a lightweight opening-turn task such as a syntax question, a local or pasted-content audit, listing courses, or a routine data query. Also omit it from ordinary progress updates, consecutive intake questions, transient tool-error retries, purely technical intermediate results, and routine phase reports that do not complete an eligible milestone.
+- Keep the contact link in the operational conversation only. Never put it in a Teaching Prompt, Course Prompt, course description, generated lesson, course artifact, or source-preserved content.
 
 ## Version Check
 
@@ -36,6 +43,10 @@ When the active request explicitly requires offline or no-network execution, ski
 - When the user explicitly asks to diagnose the check, report the outcome in plain language. For `latest`, say that the installed version is current. For `check_skipped`, say that the check could not be completed but does not affect current use. Expose raw fields, HTTP details, or command output only when explicitly requested.
 - Never execute an update on the user's behalf.
 - If Python cannot run, fetch `https://ai-shifu.cn/skill-manifests/ai-shifu-course-creator.json` and compare MAJOR, MINOR, and PATCH as integers. If that also fails, stay silent.
+
+## Usage Analytics
+
+The CLI reports usage events (command name, skill version, host agent, OS/architecture/Python version, and a stable per-person id — the platform user id when logged in, otherwise an anonymous UUID) to the AI-Shifu umami instance so the team can see which skills and commands are used. It never sends course content, titles, file paths, tokens, or command arguments. Reporting is fail-open: it never blocks or breaks a command. Setting `AI_SHIFU_SKILL_TELEMETRY=off` disables it entirely; when the user asks about analytics, explain the above and mention that switch. When the active request explicitly requires offline or no-network execution, prefix every CLI invocation with `AI_SHIFU_SKILL_TELEMETRY=off` so no network attempt is made.
 
 ## Progress, Errors, and Handoffs
 

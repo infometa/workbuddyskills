@@ -1,0 +1,71 @@
+<div class="transport-section">
+  <div class="dir-block">
+    <h4>去程</h4>
+    {% for opt in transport.outbound.options %}
+      <div class="trans-card">
+        <div class="trans-mode">{{ opt.train_no or opt.flight_no or opt.mode }}</div>
+        <div class="trans-route">{{ opt.depart_station or '出发站待核实' }} → {{ opt.arrive_station or '到达站待核实' }}</div>
+        <div class="trans-time">
+          {{ opt.depart_time or '出发时刻待核实' }} - {{ opt.arrive_time or '到达时刻待核实' }}
+          {% if opt.duration_min %}({{ opt.duration_min }}分钟){% endif %}
+        </div>
+        <div class="trans-price">
+          {% if opt.price_ref %}参考价 ¥{{ opt.price_ref }}{% else %}参考价待核实{% endif %}
+          <small>{{ opt.ticket_class }}</small>
+        </div>
+        <div class="book-links">
+          <span class="book-label">去订票：</span>
+          {% if 'rail' in opt.mode|default('') or opt.train_no %}
+            <a href="https://kyfw.12306.cn/otn/leftTicket/init" target="_blank" rel="noopener">12306</a>
+            <a href="https://train.ctrip.com/" target="_blank" rel="noopener">携程火车票</a>
+            <a href="https://train.qunar.com/" target="_blank" rel="noopener">去哪儿</a>
+          {% else %}
+            <a href="https://flights.ctrip.com/" target="_blank" rel="noopener">携程机票</a>
+            <a href="https://flight.qunar.com/" target="_blank" rel="noopener">去哪儿</a>
+            <a href="https://www.fliggy.com/" target="_blank" rel="noopener">飞猪</a>
+          {% endif %}
+        </div>
+        <span class="confidence-badge confidence-{{ opt.confidence|default('yellow') }}"></span>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="dir-block">
+    <h4>回程</h4>
+    {% for opt in transport.return.options %}
+      <div class="trans-card">
+        <div class="trans-mode">{{ opt.train_no or opt.flight_no or opt.mode }}</div>
+        <div class="trans-route">{{ opt.depart_station or '出发站待核实' }} → {{ opt.arrive_station or '到达站待核实' }}</div>
+        <div class="trans-time">
+          {{ opt.depart_time or '出发时刻待核实' }} - {{ opt.arrive_time or '到达时刻待核实' }}
+          {% if opt.duration_min %}({{ opt.duration_min }}分钟){% endif %}
+        </div>
+        <div class="trans-price">
+          {% if opt.price_ref %}参考价 ¥{{ opt.price_ref }}{% else %}参考价待核实{% endif %}
+          <small>{{ opt.ticket_class }}</small>
+        </div>
+        <div class="book-links">
+          <span class="book-label">去订票：</span>
+          {% if 'rail' in opt.mode|default('') or opt.train_no %}
+            <a href="https://kyfw.12306.cn/otn/leftTicket/init" target="_blank" rel="noopener">12306</a>
+            <a href="https://train.ctrip.com/" target="_blank" rel="noopener">携程火车票</a>
+            <a href="https://train.qunar.com/" target="_blank" rel="noopener">去哪儿</a>
+          {% else %}
+            <a href="https://flights.ctrip.com/" target="_blank" rel="noopener">携程机票</a>
+            <a href="https://flight.qunar.com/" target="_blank" rel="noopener">去哪儿</a>
+            <a href="https://www.fliggy.com/" target="_blank" rel="noopener">飞猪</a>
+          {% endif %}
+        </div>
+        <span class="confidence-badge confidence-{{ opt.confidence|default('yellow') }}"></span>
+      </div>
+    {% endfor %}
+  </div>
+  {% if transport.intra_city %}
+    <div class="intra-tip">
+      <strong>市内交通</strong>
+      <ul>
+        {% if transport.intra_city.airport_to_hotel %}<li>{{ transport.intra_city.airport_to_hotel }}</li>{% endif %}
+        {% if transport.intra_city.hotel_to_attraction_default %}<li>{{ transport.intra_city.hotel_to_attraction_default }}</li>{% endif %}
+      </ul>
+    </div>
+  {% endif %}
+</div>

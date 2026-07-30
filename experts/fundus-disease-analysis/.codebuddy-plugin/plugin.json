@@ -1,24 +1,26 @@
 {
   "name": "fundus-disease-analysis",
-  "version": "1.0.0",
-  "description": "AI-powered multi-disease analysis of fundus images from both standard (45\u00b0) and ultra-wide fundus cameras, covering glaucoma, diabetic retinopathy, AMD, and dozens of ophthalmic conditions with structured diagnostic reports.",
+  "version": "1.1.0",
+  "description": "AI-powered multi-disease analysis of fundus images from both standard (45°) and ultra-wide fundus cameras, covering glaucoma, diabetic retinopathy, AMD, and dozens of ophthalmic conditions with structured diagnostic reports.",
   "author": {
     "name": "Tencent Miying",
     "email": "miying@tencent.com"
   },
-  "agents": ["./agents/fundus-disease-analysis.md"],
-  "skills": ["./skills/api-reference"],
-
   "expertType": "agent",
-  "agentName": "fundus-disease-analysis",
-
+  "agentName": "腾讯健康-觅影-眼底彩照疾病分析专家",
+  "agents": [
+    "./agents/腾讯健康-觅影-眼底彩照疾病分析专家.md"
+  ],
+  "skills": [
+    "./skills/api-reference"
+  ],
   "displayName": {
-    "en": "Zhen",
-    "zh": "甄瞳"
+    "en": "TENCENT AIMIS Fundus Disease Analyst Specialist",
+    "zh": "腾讯健康-觅影-眼底彩照疾病分析专家"
   },
   "profession": {
-    "en": "Ophthalmic AI Diagnostic Specialist",
-    "zh": "眼科AI诊断专家"
+    "en": "TENCENT AIMIS Fundus Disease Analyst Specialist",
+    "zh": "腾讯健康-觅影-眼底彩照疾病分析专家"
   },
   "displayDescription": {
     "en": "AI-powered multi-disease analysis of standard and ultra-wide fundus images, covering glaucoma, DR, AMD and dozens of conditions with inferred diagnosis, sign classification, detection, segmentation and structured reports.",
@@ -31,13 +33,32 @@
     "en": "Analyze this fundus image for abnormalities"
   },
   "tags": [
-    { "en": "Fundus AI Analysis", "zh": "眼底AI分析" },
-    { "en": "Ophthalmic Diagnosis", "zh": "眼科疾病诊断" },
-    { "en": "Medical Image Interpretation", "zh": "医学影像解读" }
+    {
+      "en": "Fundus AI Analysis",
+      "zh": "眼底AI分析"
+    },
+    {
+      "en": "Ophthalmic Diagnosis",
+      "zh": "眼科疾病诊断"
+    },
+    {
+      "en": "Medical Image Interpretation",
+      "zh": "医学影像解读"
+    }
   ],
   "quickPrompts": [
-    { "en": "Analyze this fundus image for abnormalities", "zh": "帮我分析这张眼底彩照，看看有没有异常" },
-    { "en": "Perform multi-disease screening on this ultra-wide fundus image", "zh": "请对这份超广角眼底图像进行多病种筛查" },
-    { "en": "Interpret this fundus AI analysis report and explain the findings", "zh": "解读这份眼底AI分析报告，告诉我具体有哪些发现" }
-  ]
+    {
+      "en": "Analyze this fundus image for abnormalities",
+      "zh": "帮我分析这张眼底彩照，看看有没有异常"
+    },
+    {
+      "en": "Perform multi-disease screening on this ultra-wide fundus image",
+      "zh": "请对这份超广角眼底图像进行多病种筛查"
+    },
+    {
+      "en": "Interpret this fundus AI analysis report and explain the findings",
+      "zh": "解读这份眼底AI分析报告，告诉我具体有哪些发现"
+    }
+  ],
+  "plugin": "fundus-disease-analysis"
 }

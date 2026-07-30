@@ -1,0 +1,28 @@
+<!--
+  AGENT MUST-DO:
+  这是固定底部面板，告诉用户哪些数据是一手 / 哪些是兜底。
+  data_sources 由 check_deps + agent 实际调用情况组装。
+-->
+<div class="completeness-panel">
+  <div class="comp-row">
+    <strong>✅ 已启用</strong>
+    <ul>
+      {% if data_sources.meituan_travel %}<li>meituan-travel — 景点 / 酒店 / 火车票一手数据</li>{% endif %}
+      {% if data_sources.xhs_logged_in %}<li>小红书 — 真实游记 + 评论</li>{% endif %}
+      {% if data_sources.qweather %}<li>和风天气 — 气象预警 + 分钟级降水</li>{% endif %}
+      {% if data_sources.websearch %}<li>WebSearch — 兜底数据源</li>{% endif %}
+    </ul>
+  </div>
+  {% if data_sources.skipped or data_sources.degraded %}
+    <div class="comp-row comp-warn">
+      <strong>⚠️ 未启用 / 已降级</strong>
+      <ul>
+        {% for s in data_sources.skipped or [] %}<li>{{ s }} — 你跳过了，对应段落用兜底数据，建议出行前再核实</li>{% endfor %}
+        {% for s in data_sources.degraded or [] %}<li>{{ s.name }} — {{ s.reason }}</li>{% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  <p class="comp-tip">
+    💡 想升级数据可信度？把对应数据源配上后告诉 agent「重跑 XX」即可增量更新。
+  </p>
+</div>

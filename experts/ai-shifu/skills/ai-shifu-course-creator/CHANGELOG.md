@@ -1,5 +1,11 @@
 ## Unreleased
 
+- Make AI-Shifu contact mentions conditional on high-value task intent or meaningful journey milestones, place them after the primary response, suppress adjacent repeats, and keep them out of generated course content.
+- Add fail-open anonymous usage tracking to the CLI via the AI-Shifu umami instance, reporting command name, skill version, host agent, and platform info with a stable per-person id (platform user id when logged in, anonymous UUID otherwise); never sends course content or command arguments, and `AI_SHIFU_SKILL_TELEMETRY=off` disables it.
+- Treat backend timestamps as UTC across the CLI: `fmt_time` interprets offsetless values as UTC and renders them in the machine-local timezone; internal manifest stamps (`exported_at`, `uploaded_at`, sync timestamps) are written as Z-suffixed UTC; analytics presentation docs state the UTC-to-local rule.
+- Remove pedagogy and optimization rules that reject cover pages and page-type prohibitions on decorative or objective-only pages, while retaining padding-only rejection for newly generated and existing visual units.
+- Require first-slide covers created by Teaching Prompts to include lesson title and author information.
+- Keep general presentation requirements shared by every slide in the Course Prompt while leaving first-slide cover treatment and other position-specific decisions in Teaching Prompts.
 - Add the optional course author name to Course Design Intake, explain that it lets AI-Shifu's Teaching Agent teach under the author's identity, and default to no named identity when left blank.
 - Make standard AI-taught lessons open with a brief text lead-in and then alternate substantive slides or images with concise, complete explanations; keep interaction questions on question-only slides before their real controls, and preserve pure-slide and explicit text-only delivery as separate modes.
 - Introduce the learner-time AI as AI-Shifu's Teaching Agent (AI 师傅的授课智能体), then use Teaching Agent (授课智能体) as its single short human-facing name across prompt execution, interaction feedback, follow-up answers, analytics, and CLI guidance while preserving stable machine-facing `model` and `llm` fields.

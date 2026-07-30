@@ -1,0 +1,23 @@
+<!--
+  AGENT MUST-DO: checklist 至少 4 类（证件/充电/支付/应急）。
+  risk-check 给了具体内容用具体内容，没给就用 skeleton_fallbacks.json 兜底。
+-->
+{% set effective_checklist = checklist if checklist else skeleton_fallbacks.checklist_default %}
+<div class="checklist">
+  {% for cat, items in effective_checklist.items() %}
+    <div class="check-group">
+      <h4>
+        {%- if cat == 'ids' -%}🪪 证件
+        {%- elif cat == 'health' -%}💊 健康/应急
+        {%- elif cat == 'weather' -%}☂️ 天气
+        {%- elif cat == 'tech' -%}🔌 充电/数码
+        {%- elif cat == 'money' -%}💵 现金/支付
+        {%- else -%}📦 {{ cat }}
+        {%- endif -%}
+      </h4>
+      <ul>
+        {% for it in items %}<li><label><input type="checkbox"> {{ it }}</label></li>{% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+</div>

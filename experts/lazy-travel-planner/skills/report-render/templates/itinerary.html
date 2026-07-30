@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ trip.main_city }} · {{ trip.start_date }} 行程书</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+{{ styles_css|safe }}
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="cover-meta">
+    <h1>{{ trip.main_city }} · {{ trip.duration_days }}日行程</h1>
+    <p class="sub">{{ trip.start_date }} ~ {{ trip.end_date }} ｜ {{ trip.party_size }}人 ｜ 预算 ¥{{ budget.grand_total|int }}</p>
+    <div class="confidence-summary">
+      <span class="dot dot-green"></span> 一手数据 {{ confidence.green_pct }}%
+      <span class="dot dot-yellow"></span> 抓取 {{ confidence.yellow_pct }}%
+      <span class="dot dot-gray"></span> 静态参考 {{ confidence.gray_pct }}%
+    </div>
+    <div class="meta-stamp">数据生成时间 {{ generated_at }}</div>
+  </div>
+</header>
+
+<!--
+═══════════════════════════════════════════════════════════════════════════════
+                         AGENT INSTRUCTIONS · 必读
+═══════════════════════════════════════════════════════════════════════════════
+本 HTML 共 8 个骨架 section，**全部必出**（无论数据完整度）。每个 section 下
+有具体「必须做到 X」的指令，agent 在生成 trip 数据时务必按指令准备字段；
+缺数据时自己想办法补（调工具 / WebSearch / 静态兜底），绝不允许空白渲染。
+缺失任何一项都视为本次任务未完成。
+═══════════════════════════════════════════════════════════════════════════════
+-->
+
+<!--
+  📍 总览地图 · AGENT MUST-DO:
+  ① POI 必须有坐标。拿不到真坐标时，用城市中心点 + POI 名 marker 兜底，
+     并在 poi.coord_status 写 "unverified"，模板会标"坐标待校验"
+  ② **路线必须是实际道路路线，不是两点之间的直线**。三种合法形式（任选）：
+     a) day.routes[].geometry = [[lng,lat],...] 真实 polyline 坐标数组（最佳）
+     b) day.routes[].description = "沿建国路向东 → 转入人民南路 → 春熙路"
+        路径文字版（OSRM/高德拿不到时用 WebSearch / 自己推理写出）
+     c) 完全无能为力时 day.routes[].source = "straight_line_unavailable"
+        模板会画虚线 + 红字"⚠️ 实际路线未获取"，但**不允许直接用直线还假装是真实路线**
+  ③ 同一天 POI 用同色 marker，不同天换色；起终点要有方向感
+-->
+<section id="overview-map">
+  <h2>📍 总览地图</h2>
+  <div id="map" style="height: 480px; border-radius: 12px;"></div>
+</section>
+
+<!--
+  🚄 大交通 · AGENT MUST-DO:
+  ① 至少给出 1 条去程 + 1 条回程（具体车次/航班号 + 时刻 + 参考价 + 查询时间）
+  ② 每条方案至少 3 个不同平台的可点订票链接（12306/携程/去哪儿/飞猪）
+  ③ 价格旁必须标"参考价 + 查询时刻"，不允许写绝对价
+  数据来源优先级：美团火车票 > 12306 > WebSearch（携程/去哪儿）
+-->
+<section id="transport">
+  <h2>🚄 大交通</h2>
+  {% include "components/transport.html" %}
+</section>
+
+<!--
+  🏨 住宿候选 · AGENT MUST-DO:
+  ① 至少 3 家酒店候选（不能凑数，宁少勿假）
+  ② 每家必须有：酒店全名 / 价格区间 / ≥2 个不同平台的预订链接 / 一句"为什么推荐"
+  ③ 数据来源：美团酒店 > xhs 真实评价 > WebSearch
+  ④ 凑不齐 3 家时，明确写"暂时只找到 X 家，建议你打开美团搜更多"，不要硬编造
+-->
+<section id="hotel">
+  <h2>🏨 住宿候选</h2>
+  {% include "components/hotel.html" %}
+</section>
+
+<!--
+  📅 每日行程 · AGENT MUST-DO:
+  ① 必须按 trip.duration_days 给出**全部天数**的卡片（D1 ~ Dn 一个不能少）
+  ② 每天至少包含：当天主题 / 时间轴 / 3-6 个 POI / 三餐推荐
+  ③ 每个 POI 必须有：名称 / 推荐理由 / 用时建议 / 营业时间 / 评分（缺失时显式标）
+  ④ 每天必须有"当天小地图 + 当天路线"（路线规则同总览地图）
+  ⑤ 每天必须有：当天预算小计 + 体力指数（轻松/适中/暴走）
+-->
+<section id="days">
+  <h2>📅 每日行程</h2>
+  {% for day in itinerary.days %}
+    {% include "components/day-card.html" %}
+  {% endfor %}
+</section>
+
+<!--
+  💰 预算明细 · AGENT MUST-DO:
+  ① 必须有总预算 + 6 类目占比（交通/住宿/餐饮/门票/购物/备用）
+  ② 必须有饼图（数据由 budget.categories 驱动，模板自带 Chart.js）
+  ③ 必须有"实际 vs 用户期望预算"对比，超支时标红
+  ④ 凑不齐细项时，按类目占比模板（见 data/skeleton_fallbacks.json）兜底
+-->
+<section id="budget">
+  <h2>💰 预算明细</h2>
+  {% include "components/budget-chart.html" %}
+</section>
+
+<!--
+  ⚠️ 风险提示 · AGENT MUST-DO:
+  无论数据完整度，本节必须输出至少 3 类风险：
+    1. 天气（出行日预报 + 异常天气警告，缺时调 WebSearch）
+    2. 节假日 / 人流（结合 risk_knowledge.json + 出行日期）
+    3. 当地骗局 / 防坑（risk_knowledge.json 该城市条目 + xhs"X 避雷"补充）
+  每条风险必须标置信度 🟢🟡⚪
+-->
+<section id="risk">
+  <h2>⚠️ 风险提示</h2>
+  {% include "components/risk-panel.html" %}
+</section>
+
+<!--
+  📓 小红书真实笔记参考 · AGENT MUST-DO:
+  本节必出，至少 6-10 篇真实笔记，按主题分组（攻略/美食/住宿/拍照/避雷/其他）
+  数据获取（按优先级）：
+    Tier 1: 调 xhs CLI（用户已登录时）
+    Tier 2: WebSearch site:xiaohongshu.com（用户跳过登录时）
+    Tier 3: WebSearch 马蜂窝/抖音目的地关键词
+  完全失败时，渲染"本次未拿到第三方游记"提示卡 + 给一组手动搜索链接
+  （绝不允许这一节空白；本 section 即使 xhs_notes=None 也要 include）
+-->
+<section id="xhs-notes">
+  <h2>📓 小红书真实笔记参考</h2>
+  {% include "components/xhs-notes.html" %}
+</section>
+
+<section id="data-completeness">
+  <h2>📊 数据完整性</h2>
+  {% include "components/data-completeness.html" %}
+</section>
+
+<!--
+  🎒 行前清单 · AGENT MUST-DO:
+  无论数据完整度，必须输出至少 4 类清单：
+    1. 证件（身份证/驾照/学生证/老年证）
+    2. 充电（充电宝/数据线/转换头）
+    3. 现金/支付（少量现金/支付宝微信备用）
+    4. 应急（常用药/急救联系/保险卡）
+  risk-check 给了具体内容就用具体内容，没给就用以上 4 类硬清单
+  （兜底数据见 data/skeleton_fallbacks.json）
+-->
+<section id="checklist">
+  <h2>🎒 行前清单</h2>
+  {% include "components/checklist.html" %}
+</section>
+
+<footer>
+  <p>由出游规划师 v{{ agent_version }} 生成 · {{ generated_at }}</p>
+  <p>本报告所有价格 / 营业 / 评分均为查询时刻的参考值，请出行前再核实。</p>
+</footer>
+
+<script>
+  // 总览地图 —— 国内可用瓦片源（按可达性顺序），任何一个失败自动切下一个
+  const map = L.map('map', { preferCanvas: true });
+
+  const TILE_SOURCES = [
+    {
+      // 高德矢量瓦片（无需 key，国内最稳）
+      url: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+      options: { subdomains: ['1','2','3','4'], attribution: '高德地图', maxZoom: 18 }
+    },
+    {
+      // 高德卫星瓦片（备用）
+      url: 'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+      options: { subdomains: ['1','2','3','4'], attribution: '高德卫星', maxZoom: 18 }
+    },
+    {
+      // 腾讯地图瓦片（再备用）
+      url: 'https://rt{s}.map.gtimg.com/realtimerender?z={z}&x={x}&y={y}&type=vector&style=0',
+      options: { subdomains: ['0','1','2','3'], attribution: '腾讯地图', maxZoom: 18 }
+    },
+    {
+      // OSM（最后兜底，国内可能慢）
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      options: { subdomains: ['a','b','c'], attribution: 'OSM', maxZoom: 18 }
+    }
+  ];
+
+  let tileLayer;
+  let sourceIdx = 0;
+  function loadTileSource(idx) {
+    if (idx >= TILE_SOURCES.length) {
+      document.getElementById('map').innerHTML =
+        '<div style="padding:40px;text-align:center;color:#888;">地图加载失败，请检查网络后刷新</div>';
+      return;
+    }
+    if (tileLayer) map.removeLayer(tileLayer);
+    const src = TILE_SOURCES[idx];
+    tileLayer = L.tileLayer(src.url, src.options);
+    let errorCount = 0;
+    tileLayer.on('tileerror', function () {
+      errorCount++;
+      if (errorCount > 3) {
+        console.warn('瓦片源失败，切换到下一个：', src.attribution);
+        loadTileSource(idx + 1);
+      }
+    });
+    tileLayer.addTo(map);
+  }
+  loadTileSource(0);
+
+  const dayColors = ['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22'];
+  const allLatLngs = [];
+  const days = {{ itinerary.days|tojson }};
+
+  days.forEach((day, idx) => {
+    const color = dayColors[idx % dayColors.length];
+
+    // === 路线绘制 ===
+    // 优先使用 day.routes[].geometry（真实道路 polyline）
+    // 拿不到时退到 day.routes[].description（路径文字版，画虚线）
+    // 都没有时退到直接连点（虚线 + 红字提示）
+    const routes = day.routes || [];
+    if (routes.length > 0) {
+      routes.forEach(r => {
+        if (r.geometry && r.geometry.length >= 2) {
+          // 真实路线（lng,lat → lat,lng for Leaflet）
+          const latlngs = r.geometry.map(p => [p[1], p[0]]);
+          L.polyline(latlngs, {
+            color, weight: 5, opacity: 0.85
+          }).addTo(map).bindTooltip(`D${day.day_index} 路段 ${r.from}→${r.to} · 实际道路`, {sticky: true});
+        } else if (r.source === "straight_line_unavailable" || !r.geometry) {
+          // 兜底：直线 + 虚线 + 红字提示
+          const stopFrom = day.stops[r.from], stopTo = day.stops[r.to];
+          if (stopFrom && stopTo && stopFrom.poi.lat && stopTo.poi.lat) {
+            L.polyline([
+              [stopFrom.poi.lat, stopFrom.poi.lng],
+              [stopTo.poi.lat,   stopTo.poi.lng]
+            ], {
+              color: '#999', weight: 3, opacity: 0.6, dashArray: '8,8'
+            }).addTo(map).bindTooltip(
+              `⚠️ D${day.day_index} 路段 ${r.from}→${r.to} 实际路线未获取`,
+              {sticky: true}
+            );
+          }
+        }
+      });
+    } else {
+      // 完全没 routes 字段时，老兼容：按 stops 顺序连虚线
+      const dayLatLngs = day.stops.map(s => [s.poi.lat, s.poi.lng])
+                                  .filter(p => p[0] && p[1]);
+      if (dayLatLngs.length >= 2) {
+        L.polyline(dayLatLngs, {
+          color: '#999', weight: 3, opacity: 0.6, dashArray: '8,8'
+        }).addTo(map).bindTooltip(
+          `⚠️ D${day.day_index} 实际路线数据缺失（agent 未生成 routes 字段）`,
+          {sticky: true}
+        );
+      }
+    }
+
+    // === Marker 绘制 ===
+    day.stops.forEach((s, i) => {
+      if (!s.poi.lat || !s.poi.lng) return;
+      const isUnverified = s.poi.coord_status === "unverified";
+      const icon = L.divIcon({
+        className: 'day-marker',
+        html: `<div style="background:${color};color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;border:${isUnverified?'2px dashed #fff':'2px solid #fff'};box-shadow:0 1px 4px rgba(0,0,0,0.3);">D${day.day_index}·${i+1}</div>`,
+        iconSize: [26, 26],
+        iconAnchor: [13, 13]
+      });
+      const m = L.marker([s.poi.lat, s.poi.lng], { icon }).addTo(map);
+      const verifyTag = isUnverified ? '<br><span style="color:#e67e22;">⚠️ 坐标待校验</span>' : '';
+      m.bindPopup(`<b>D${day.day_index} 第 ${i+1} 站 · ${s.poi.name}</b><br>🕐 ${s.time}<br>${s.poi.category||''}${verifyTag}`);
+      allLatLngs.push([s.poi.lat, s.poi.lng]);
+    });
+  });
+
+  // === 路线图例 ===
+  const legend = L.control({position: 'bottomleft'});
+  legend.onAdd = function() {
+    const div = L.DomUtil.create('div', 'map-legend');
+    div.innerHTML = `
+      <div style="background:rgba(255,255,255,0.95);padding:8px 12px;border-radius:6px;font-size:12px;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.2);">
+        <div><span style="display:inline-block;width:24px;height:3px;background:#3498db;vertical-align:middle;"></span> 实际道路路线</div>
+        <div><span style="display:inline-block;width:24px;height:3px;background:#999;border-top:1px dashed #999;vertical-align:middle;"></span> 实际路线未获取（直线示意）</div>
+      </div>`;
+    return div;
+  };
+  legend.addTo(map);
+  if (allLatLngs.length === 1) {
+    map.setView(allLatLngs[0], 13);
+  } else if (allLatLngs.length > 1) {
+    map.fitBounds(allLatLngs, { padding: [60, 60], maxZoom: 14 });
+  } else {
+    map.setView([35, 105], 5);
+  }
+
+  // 预算饼图
+  const ctx = document.getElementById('budget-pie');
+  if (ctx) {
+    const bd = {{ budget.breakdown|tojson }};
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['大交通','住宿','餐饮','门票','市内交通','备用'],
+        datasets: [{
+          data: [bd.transport_long, bd.accommodation, bd.food, bd.ticket, bd.transport_intra, bd.buffer],
+          backgroundColor: ['#3498db','#9b59b6','#e74c3c','#f39c12','#1abc9c','#95a5a6'],
+        }]
+      },
+      options: { plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+{
+  "name": "panshi-customer-visit-agent",
+  "version": "1.0.0",
+  "description": "Panshi CRM follow-up & visit assistant for CSIG. Handles follow-up record query, visit check-in query, and follow-up record migration/write-in (from iWiki / Tencent Docs / WeCom Docs links, pasted text, chat forwards and images into Panshi CRM). Routes user queries to specialized skills; does not self-answer business questions.",
+  "author": {
+    "name": "潘子烨",
+    "email": "vickyzypan@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "panshi-customer-visit-agent",
+  "agents": [
+    "./agents/panshi-customer-visit-agent.md"
+  ],
+  "skills": [
+    "./skills/crm-query-visit-skill",
+    "./skills/crm-query-check-in-skill",
+    "./skills/crm-visit-sync"
+  ],
+  "displayName": {
+    "en": "Panshi CRM Visit Assistant",
+    "zh": "磐石CRM跟进拜访助手"
+  },
+  "profession": {
+    "en": "CRM Follow-up & Visit Assistant",
+    "zh": "跟进拜访助手"
+  },
+  "displayDescription": {
+    "en": "Panshi official AI assistant: query follow-up records and visit check-ins, and sync follow-up content from iWiki / Tencent Docs / WeCom Docs or pasted text into Panshi CRM.",
+    "zh": "磐石官方AI助手，查询跟进与拜访打卡，将iWiki/腾讯文档/企微文档或粘贴文本同步录入磐石CRM。"
+  },
+  "avatar": "avatars/panshi-customer-visit-agent.png",
+  "categoryId": "12-IndustryConsultant",
+  "defaultInitPrompt": {
+    "zh": "帮我查一下我上周的跟进记录",
+    "en": "Show me my follow-up records from last week"
+  },
+  "tags": [
+    {
+      "en": "Query Visit Records",
+      "zh": "查询跟进拜访记录"
+    },
+    {
+      "en": "Write Follow-up Records",
+      "zh": "写入跟进记录"
+    },
+    {
+      "en": "Multi-platform Sync",
+      "zh": "多平台跟进记录同步"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Show me my follow-up records from last week",
+      "zh": "帮我查一下我上周的跟进记录"
+    },
+    {
+      "en": "List my visit check-ins that are not yet linked to a follow-up",
+      "zh": "列一下我还没关联跟进的拜访打卡"
+    },
+    {
+      "en": "Migrate the follow-up record in this doc into Panshi CRM",
+      "zh": "把这个文档里的跟进记录搬运录入到磐石 CRM"
+    }
+  ],
+  "dependencies": {
+    "mcpServers": "./.mcp.json"
+  },
+  "plugin": "panshi-customer-visit-agent"
+}

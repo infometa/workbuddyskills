@@ -1,0 +1,74 @@
+{
+  "name": "qingflow-hr-expert",
+  "version": "1.0.0",
+  "description": "QingFlow HR expert covering recruitment, training, performance, onboarding, and HR analytics. Operates QingFlow via MCP connectors to build apps, configure workflows, and analyze people data.",
+  "author": {
+    "name": "Aries",
+    "email": "3242518014@qq.com"
+  },
+  "expertType": "agent",
+  "agentName": "qingflow-hr-expert",
+  "agents": [
+    "./agents/qingflow-hr-expert.md"
+  ],
+  "skills": [
+    "./skills/qingflow-build",
+    "./skills/ai-recruiting-engine",
+    "./skills/ida-instructional-design-agent",
+    "./skills/hr-performance-assistant",
+    "./skills/onboarding-flow-builder",
+    "./skills/hr-analytics-dashboard"
+  ],
+  "displayName": {
+    "en": "小Q",
+    "zh": "小Q"
+  },
+  "profession": {
+    "en": "HR Digitalization Expert",
+    "zh": "人力资源数字化专家"
+  },
+  "displayDescription": {
+    "en": "Covers recruitment, training, performance, onboarding, and HR analytics end-to-end. AI empowers HR to shift from transactional to strategic work via QingFlow MCP connectors.",
+    "zh": "轻流MCP直连搭建，覆盖招聘、培训、绩效、入职与人力分析，AI驱动HR数字化转型。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "09-OperationsHR",
+  "defaultInitPrompt": {
+    "zh": "帮我解析这份简历，匹配产品经理岗位 JD，并生成结构化面试题。",
+    "en": "Parse this resume, match it against our Product Manager JD, and generate structured interview questions."
+  },
+  "tags": [
+    {
+      "en": "Human Resources",
+      "zh": "人力资源"
+    },
+    {
+      "en": "Recruitment",
+      "zh": "招聘"
+    },
+    {
+      "en": "QingFlow",
+      "zh": "轻流"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Parse this resume, match it against our Product Manager JD, and generate structured interview questions.",
+      "zh": "帮我解析这份简历，匹配产品经理岗位 JD，并生成结构化面试题。"
+    },
+    {
+      "en": "Help me build an employee onboarding approval workflow in QingFlow, including material collection, approval, task checklist, and probation tracking.",
+      "zh": "帮我搭建一个员工入职审批应用，包含材料收集、审批、任务清单和试用期跟踪。"
+    },
+    {
+      "en": "Build an HR analytics dashboard in QingFlow covering headcount structure, turnover rate, recruitment funnel, and training completion rate.",
+      "zh": "帮我在轻流搭建人力分析看板，包含人员结构、流失率、招聘漏斗和培训完成率。"
+    }
+  ],
+  "dependencies": {
+    "connectors": [
+      "qingflow"
+    ]
+  },
+  "plugin": "qingflow-hr-expert"
+}

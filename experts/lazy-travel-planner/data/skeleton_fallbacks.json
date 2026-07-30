@@ -1,0 +1,107 @@
+{
+  "_meta": {
+    "doc": "骨架层硬兜底数据。当上游所有 skill / 数据源都失败时，模板用这套保底，确保 8 大 section 永不空白。Agent 在生成任何骨架字段时若发现 LLM 推断+工具调用都拿不到，可显式指定 use_fallback=true，模板自动注入此处对应字段。",
+    "version": "1.0.0",
+    "principle": "宁可让用户看到「这是兜底通用值」，也不能让 section 空白"
+  },
+
+  "checklist_default": {
+    "ids": [
+      "身份证（必带，国内出行核心）",
+      "驾照（自驾时）",
+      "学生证 / 老年证 / 军官证（享门票优惠时）",
+      "健康码 / 行程码（特殊时期）"
+    ],
+    "tech": [
+      "充电宝（≤100Wh，飞机可携带）",
+      "手机充电线 + 数据线",
+      "多孔插线板 / 转换头",
+      "耳机 / 备用电池"
+    ],
+    "money": [
+      "少量现金（200-500 元，应对扫码失败）",
+      "支付宝 / 微信备用",
+      "银行卡（信用卡 + 借记卡各 1 张）",
+      "保险卡（出行险）"
+    ],
+    "health": [
+      "常用药（感冒 / 肠胃 / 创可贴）",
+      "晕车药（长途必备）",
+      "防蚊液 / 防晒霜",
+      "急救联系人电话（写纸条放钱包）"
+    ]
+  },
+
+  "risk_panel_default": {
+    "weather": "出行前 3 天再查实时天气；夏季备伞 + 防晒，冬季备保暖 + 防滑。",
+    "scams": [
+      {
+        "category": "通用景区",
+        "city": "",
+        "items": [
+          "拒绝主动搭讪的「免费导游」「合影老人」",
+          "热门景区门口的「特价票」「内部票」基本是黄牛票",
+          "餐饮店进店前问清是否按斤算价 / 时令价",
+          "打车要求打表，拒绝议价；偏远地区上车前先与司机确认价格"
+        ]
+      },
+      {
+        "category": "交通枢纽",
+        "city": "",
+        "items": [
+          "火车站 / 机场出口的「黑车」拼车坑率高，优先用美团 / 滴滴",
+          "酒店「机场接送」要核对身份再上车",
+          "陌生人让你帮带行李一律拒绝"
+        ]
+      }
+    ]
+  },
+
+  "budget_default_breakdown": {
+    "_doc": "用户没说预算或细项算不出时，按 standard 档 6 类目占比模板兜底",
+    "transport_long": 0.30,
+    "accommodation": 0.30,
+    "food": 0.20,
+    "ticket": 0.10,
+    "transport_intra": 0.05,
+    "buffer": 0.05
+  },
+
+  "transport_search_links": {
+    "_doc": "大交通段拿不到具体方案时，用通用搜索链接兜底",
+    "rail": [
+      {"name": "12306", "url": "https://kyfw.12306.cn/otn/leftTicket/init"},
+      {"name": "携程火车票", "url": "https://train.ctrip.com/"},
+      {"name": "去哪儿火车票", "url": "https://train.qunar.com/"}
+    ],
+    "flight": [
+      {"name": "携程机票", "url": "https://flights.ctrip.com/"},
+      {"name": "去哪儿机票", "url": "https://flight.qunar.com/"},
+      {"name": "飞猪机票", "url": "https://www.fliggy.com/"}
+    ]
+  },
+
+  "hotel_search_links": [
+    {"name": "美团酒店", "url_tpl": "https://hotels.meituan.com/search/?q={city}"},
+    {"name": "携程酒店", "url_tpl": "https://hotels.ctrip.com/hotels/list?city={city}"},
+    {"name": "飞猪酒店", "url_tpl": "https://hotel.fliggy.com/search.htm?keywords={city}"},
+    {"name": "Booking", "url_tpl": "https://www.booking.com/searchresults.html?ss={city}"}
+  ],
+
+  "xhs_search_links": [
+    {"name": "小红书 · 攻略", "url_tpl": "https://www.xiaohongshu.com/search_result?keyword={city}%20攻略"},
+    {"name": "小红书 · 美食", "url_tpl": "https://www.xiaohongshu.com/search_result?keyword={city}%20美食"},
+    {"name": "小红书 · 避雷", "url_tpl": "https://www.xiaohongshu.com/search_result?keyword={city}%20避雷"},
+    {"name": "马蜂窝", "url_tpl": "https://www.mafengwo.cn/search/q.php?q={city}"},
+    {"name": "抖音", "url_tpl": "https://www.douyin.com/search/{city}%20旅游"}
+  ],
+
+  "emergency_contacts_default": {
+    "police": "110",
+    "medical": "120",
+    "fire": "119",
+    "tourism_complaint": "12301",
+    "consumer": "12315",
+    "weather_alert": "12379"
+  }
+}

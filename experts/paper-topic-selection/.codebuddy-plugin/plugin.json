@@ -1,20 +1,11 @@
 {
   "name": "paper-topic-selection",
-  "version": "8.0.1",
+  "version": "8.0.6",
   "description": "One-stop thesis topic selection expert team built on Wanfang Data academic resources: literature search, topic discovery, novelty evaluation, title generation, and domain reports.",
   "author": {
     "name": "WorkBuddy Product Team",
     "email": "support@workbuddy.cn"
   },
-  "agents": [
-    "./agents/huangfu-evaluation.md",
-    "./agents/ouyang-literature.md",
-    "./agents/shangguan-topic.md",
-    "./agents/situ-inspiration.md",
-    "./agents/taishi-report.md",
-    "./agents/xiahou-title.md",
-    "./agents/zhuge-consultant.md"
-  ],
   "expertType": "team",
   "agentName": "zhuge-consultant",
   "teamInfo": {
@@ -28,6 +19,18 @@
       "xiahou-title"
     ]
   },
+  "agents": [
+    "./agents/huangfu-evaluation.md",
+    "./agents/ouyang-literature.md",
+    "./agents/shangguan-topic.md",
+    "./agents/situ-inspiration.md",
+    "./agents/taishi-report.md",
+    "./agents/xiahou-title.md",
+    "./agents/zhuge-consultant.md"
+  ],
+  "skills": [
+    "./skills/wanfang-search"
+  ],
   "displayName": {
     "en": "Paper Topic Selection Expert Team (WANFANG TOPIC)",
     "zh": "选题专家团队（WANFANG TOPIC）"
@@ -46,7 +49,6 @@
     "zh": "你好！我是选题专家团队的负责人。你可以这样用我：\n1. 🔍 搜文献/找专家 → \"搜 XX 方向的论文\"\n2. 💡 推荐选题 → \"帮我推荐几个 XX 方向选题\"\n3. 📊 评估选题 → \"评估一下这个题目行不行\"\n4. ✏️ 拟标题 → \"给这个选题起几个标题\"\n5. 📈 领域报告 → \"出一份 XX 领域发展报告\"\n6. 🔥 灵感/热词 → \"最近 XX 领域有什么热点\"\n回复数字选功能；不想选的话，直接说你的专业方向，我帮你推荐选题。我们马上开始。",
     "en": "Hello! I'm the lead of the Topic Selection Expert Team. Here's how to use me:\n1. 🔍 Search papers/experts → \"Search papers in XX field\"\n2. 💡 Recommend topics → \"Recommend some XX topics\"\n3. 📊 Evaluate topic → \"Check if this topic works\"\n4. ✏️ Generate titles → \"Give me titles for this topic\"\n5. 📈 Domain report → \"Produce a development report for XX field\"\n6. 🔥 Inspiration/buzzwords → \"What's hot in XX field lately\"\nReply with a number to pick a function; or just tell me your field and I'll recommend topics. Let's start."
   },
-  "plugin": "paper-topic-selection",
   "tags": [
     {
       "en": "Literature Deep Reading",
@@ -75,9 +77,6 @@
       "zh": "评估一下这个题目行不行"
     }
   ],
-  "skills": [
-    "./skills/wanfang-search"
-  ],
   "members": [
     {
       "id": "huangfu-evaluation",
@@ -90,10 +89,6 @@
       "displayName": {
         "en": "Huang",
         "zh": "皇甫评度"
-      },
-      "name": {
-        "zh": "皇甫评度",
-        "en": "Huangfu Pingdu"
       }
     },
     {
@@ -107,10 +102,6 @@
       "displayName": {
         "en": "Ou",
         "zh": "欧阳搜文"
-      },
-      "name": {
-        "zh": "欧阳搜文",
-        "en": "Ouyang Souwen"
       }
     },
     {
@@ -124,10 +115,6 @@
       "displayName": {
         "en": "Shang",
         "zh": "上官选道"
-      },
-      "name": {
-        "zh": "上官选道",
-        "en": "Shangguan Xuandao"
       }
     },
     {
@@ -141,10 +128,6 @@
       "displayName": {
         "en": "Si",
         "zh": "司徒启思"
-      },
-      "name": {
-        "zh": "司徒启思",
-        "en": "Situ Qisi"
       }
     },
     {
@@ -158,10 +141,6 @@
       "displayName": {
         "en": "Tai",
         "zh": "太史撰域"
-      },
-      "name": {
-        "zh": "太史撰域",
-        "en": "Taishi Zhuanyu"
       }
     },
     {
@@ -175,10 +154,6 @@
       "displayName": {
         "en": "Xia",
         "zh": "夏侯拟言"
-      },
-      "name": {
-        "zh": "夏侯拟言",
-        "en": "Xiahou Niyan"
       }
     },
     {
@@ -192,11 +167,8 @@
       "displayName": {
         "en": "Zhu",
         "zh": "诸葛谋之"
-      },
-      "name": {
-        "zh": "诸葛谋之",
-        "en": "Zhuge Mouzhi"
       }
     }
-  ]
+  ],
+  "plugin": "paper-topic-selection"
 }

@@ -1,0 +1,101 @@
+{
+  "_schema_version": "1.0",
+  "_description": "出游规划师 · 用户偏好画像（跨次复用）",
+  "_doc": "由 preference-load 写入；BOOTSTRAP 极简问卷首次填充；每次对话后增量更新",
+  "_created_at": null,
+  "_last_active": "2026-07-27T14:55:53+08:00",
+  "basic": {
+    "preferred_pace": "relaxed",
+    "_pace_options": [
+      "walker_intense",
+      "normal",
+      "relaxed"
+    ],
+    "_pace_doc": "walker_intense=暴走打卡, normal=正常游览, relaxed=慢游躺平",
+    "budget_tier": "standard",
+    "_budget_options": [
+      "economy",
+      "standard",
+      "premium",
+      "luxury"
+    ],
+    "_budget_doc": "单人单日（不含大交通）：economy 300-600 / standard 600-1200 / premium 1200-2500 / luxury 2500+",
+    "default_party_size": 2,
+    "default_transport_mode": "high_speed_rail"
+  },
+  "tastes": {
+    "food_likes": [],
+    "food_dislikes": [],
+    "_food_dislikes_examples": [
+      "spicy",
+      "seafood",
+      "lamb",
+      "raw_food",
+      "innards"
+    ],
+    "religious_dietary": null,
+    "_religious_options": [
+      null,
+      "halal",
+      "vegetarian",
+      "vegan",
+      "buddhist_vegetarian"
+    ],
+    "scene_likes": [],
+    "_scene_examples": [
+      "mountain",
+      "lake",
+      "ancient_town",
+      "coffee_shop",
+      "bookstore",
+      "museum",
+      "art_gallery",
+      "skyline_view",
+      "night_market"
+    ],
+    "scene_dislikes": [
+      "long_queue"
+    ],
+    "_scene_dislikes_examples": [
+      "crowded_check_in_spot",
+      "long_queue",
+      "hiking",
+      "amusement_park",
+      "shopping_district"
+    ]
+  },
+  "physical": {
+    "no_high_altitude": false,
+    "no_long_walk": true,
+    "_no_long_walk_threshold_km": 5,
+    "motion_sickness": false,
+    "fear_of_heights": false,
+    "needs_accessibility": false
+  },
+  "constraints": {
+    "must_have_starbucks_or_equivalent": false,
+    "must_have_wifi": false,
+    "no_share_room": false,
+    "queuing_tolerance_min": 30,
+    "_queuing_doc": "可接受的排队上限（分钟），超过会被自动避开"
+  },
+  "history": {
+    "visited_cities": [],
+    "rejected_pois": [],
+    "_rejected_pois_doc": "用户在过往会话中明确拒绝过的 POI（id 或名称），永不再推荐",
+    "favorite_pois": [],
+    "_favorite_pois_doc": "明确喜欢的 POI，类似的优先推",
+    "completed_trips": [],
+    "_completed_trips_schema": {
+      "destination": "成都",
+      "start_date": "2025-04-15",
+      "duration_days": 4,
+      "report_path": "output/成都-2025-04-15-行程书.html",
+      "user_rating": null
+    }
+  },
+  "session": {
+    "pending_trip": null,
+    "_pending_doc": "如果上次会话有未完成的行程规划，记录在这里，下次激活时主动询问是否继续"
+  }
+}

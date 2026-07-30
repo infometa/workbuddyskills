@@ -1,0 +1,148 @@
+{
+  "_schema_version": "1.0",
+  "_description": "国内 20 个热门城市 · 吃住行价格基准（用于 budget-balance 校准）",
+  "_doc": "数据来源：美团/携程/小红书均价综合（2025 Q4 抽样）；季度更新。低估时调用 WebSearch 校准。",
+  "_currency": "CNY",
+  "_unit": "per_person_per_day",
+
+  "cities": {
+    "北京": {
+      "hotel": { "economy": [200, 350], "standard": [400, 700], "premium": [800, 1500], "luxury": [1500, 5000] },
+      "food": { "economy": [60, 120], "standard": [150, 300], "premium": [300, 600], "luxury": [600, 2000] },
+      "ticket": { "min": 0, "median": 60, "max_attraction": 240 },
+      "transport_intra": { "subway_avg": 8, "taxi_avg_per_trip": 35 },
+      "_note": "皇宫/长城等名胜门票偏高，预算时单列"
+    },
+    "上海": {
+      "hotel": { "economy": [220, 380], "standard": [420, 750], "premium": [900, 1800], "luxury": [1800, 6000] },
+      "food": { "economy": [70, 140], "standard": [180, 350], "premium": [350, 700], "luxury": [700, 2500] },
+      "ticket": { "min": 0, "median": 80, "max_attraction": 290 },
+      "transport_intra": { "subway_avg": 7, "taxi_avg_per_trip": 40 }
+    },
+    "广州": {
+      "hotel": { "economy": [180, 300], "standard": [350, 600], "premium": [700, 1300], "luxury": [1300, 4000] },
+      "food": { "economy": [50, 100], "standard": [120, 280], "premium": [280, 550], "luxury": [550, 1800] },
+      "ticket": { "min": 0, "median": 50, "max_attraction": 180 },
+      "transport_intra": { "subway_avg": 6, "taxi_avg_per_trip": 30 }
+    },
+    "深圳": {
+      "hotel": { "economy": [200, 350], "standard": [400, 700], "premium": [800, 1500], "luxury": [1500, 5000] },
+      "food": { "economy": [60, 130], "standard": [150, 300], "premium": [300, 600], "luxury": [600, 2000] },
+      "ticket": { "min": 0, "median": 80, "max_attraction": 270 },
+      "transport_intra": { "subway_avg": 6, "taxi_avg_per_trip": 30 }
+    },
+    "成都": {
+      "hotel": { "economy": [150, 280], "standard": [320, 560], "premium": [600, 1200], "luxury": [1200, 3500] },
+      "food": { "economy": [40, 90], "standard": [100, 220], "premium": [220, 450], "luxury": [450, 1500] },
+      "ticket": { "min": 0, "median": 55, "max_attraction": 200 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 25 }
+    },
+    "重庆": {
+      "hotel": { "economy": [140, 260], "standard": [300, 530], "premium": [580, 1100], "luxury": [1100, 3000] },
+      "food": { "economy": [40, 90], "standard": [100, 220], "premium": [220, 450], "luxury": [450, 1500] },
+      "ticket": { "min": 0, "median": 45, "max_attraction": 180 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 25 }
+    },
+    "杭州": {
+      "hotel": { "economy": [200, 350], "standard": [380, 680], "premium": [750, 1500], "luxury": [1500, 5000] },
+      "food": { "economy": [60, 130], "standard": [150, 320], "premium": [320, 650], "luxury": [650, 2000] },
+      "ticket": { "min": 0, "median": 70, "max_attraction": 250 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 30 },
+      "_note": "西湖周边住宿溢价高"
+    },
+    "苏州": {
+      "hotel": { "economy": [180, 320], "standard": [350, 600], "premium": [650, 1300], "luxury": [1300, 4000] },
+      "food": { "economy": [55, 120], "standard": [140, 280], "premium": [280, 550], "luxury": [550, 1800] },
+      "ticket": { "min": 0, "median": 75, "max_attraction": 260 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 28 },
+      "_note": "园林联票推荐"
+    },
+    "南京": {
+      "hotel": { "economy": [170, 300], "standard": [330, 580], "premium": [620, 1200], "luxury": [1200, 3500] },
+      "food": { "economy": [50, 110], "standard": [130, 260], "premium": [260, 500], "luxury": [500, 1600] },
+      "ticket": { "min": 0, "median": 50, "max_attraction": 190 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 25 }
+    },
+    "西安": {
+      "hotel": { "economy": [140, 250], "standard": [290, 500], "premium": [550, 1100], "luxury": [1100, 3000] },
+      "food": { "economy": [40, 85], "standard": [95, 200], "premium": [200, 420], "luxury": [420, 1300] },
+      "ticket": { "min": 0, "median": 70, "max_attraction": 320 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 25 },
+      "_note": "兵马俑+华清宫联票"
+    },
+    "厦门": {
+      "hotel": { "economy": [180, 320], "standard": [380, 680], "premium": [750, 1500], "luxury": [1500, 4500] },
+      "food": { "economy": [60, 130], "standard": [150, 320], "premium": [320, 650], "luxury": [650, 2000] },
+      "ticket": { "min": 0, "median": 80, "max_attraction": 220 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 25 },
+      "_note": "鼓浪屿渡轮单列"
+    },
+    "青岛": {
+      "hotel": { "economy": [160, 280], "standard": [320, 580], "premium": [650, 1300], "luxury": [1300, 4000] },
+      "food": { "economy": [55, 120], "standard": [140, 280], "premium": [280, 550], "luxury": [550, 1800] },
+      "ticket": { "min": 0, "median": 60, "max_attraction": 200 },
+      "transport_intra": { "subway_avg": 6, "taxi_avg_per_trip": 25 }
+    },
+    "三亚": {
+      "hotel": { "economy": [200, 380], "standard": [450, 850], "premium": [900, 1900], "luxury": [1900, 8000] },
+      "food": { "economy": [80, 160], "standard": [180, 380], "premium": [380, 800], "luxury": [800, 3000] },
+      "ticket": { "min": 0, "median": 100, "max_attraction": 350 },
+      "transport_intra": { "taxi_avg_per_trip": 50 },
+      "_note": "无地铁，打车为主；亚龙湾酒店区单独溢价"
+    },
+    "丽江": {
+      "hotel": { "economy": [120, 220], "standard": [260, 480], "premium": [550, 1200], "luxury": [1200, 3500] },
+      "food": { "economy": [50, 110], "standard": [130, 260], "premium": [260, 520], "luxury": [520, 1500] },
+      "ticket": { "min": 0, "median": 80, "max_attraction": 280 },
+      "transport_intra": { "taxi_avg_per_trip": 25 },
+      "_note": "古维费 + 玉龙雪山套票单列"
+    },
+    "大理": {
+      "hotel": { "economy": [120, 220], "standard": [260, 480], "premium": [550, 1100], "luxury": [1100, 3000] },
+      "food": { "economy": [45, 100], "standard": [120, 240], "premium": [240, 480], "luxury": [480, 1400] },
+      "ticket": { "min": 0, "median": 60, "max_attraction": 200 },
+      "transport_intra": { "taxi_avg_per_trip": 25 }
+    },
+    "昆明": {
+      "hotel": { "economy": [130, 240], "standard": [280, 500], "premium": [550, 1100], "luxury": [1100, 3000] },
+      "food": { "economy": [40, 95], "standard": [110, 230], "premium": [230, 460], "luxury": [460, 1400] },
+      "ticket": { "min": 0, "median": 50, "max_attraction": 180 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 22 }
+    },
+    "长沙": {
+      "hotel": { "economy": [150, 270], "standard": [310, 560], "premium": [600, 1200], "luxury": [1200, 3500] },
+      "food": { "economy": [45, 100], "standard": [120, 250], "premium": [250, 500], "luxury": [500, 1600] },
+      "ticket": { "min": 0, "median": 0, "max_attraction": 150 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 25 },
+      "_note": "免门票景区多"
+    },
+    "武汉": {
+      "hotel": { "economy": [160, 280], "standard": [320, 570], "premium": [620, 1200], "luxury": [1200, 3500] },
+      "food": { "economy": [50, 110], "standard": [130, 270], "premium": [270, 540], "luxury": [540, 1700] },
+      "ticket": { "min": 0, "median": 60, "max_attraction": 200 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 25 }
+    },
+    "南昌": {
+      "hotel": { "economy": [140, 250], "standard": [280, 500], "premium": [540, 1050], "luxury": [1050, 2800] },
+      "food": { "economy": [40, 95], "standard": [110, 230], "premium": [230, 460], "luxury": [460, 1400] },
+      "ticket": { "min": 0, "median": 55, "max_attraction": 220 },
+      "transport_intra": { "subway_avg": 5, "taxi_avg_per_trip": 22 },
+      "_note": "庐山 / 婺源 / 三清山等周边景区单独算"
+    },
+    "拉萨": {
+      "hotel": { "economy": [180, 300], "standard": [350, 600], "premium": [650, 1300], "luxury": [1300, 4500] },
+      "food": { "economy": [70, 140], "standard": [160, 320], "premium": [320, 640], "luxury": [640, 2000] },
+      "ticket": { "min": 0, "median": 100, "max_attraction": 380 },
+      "transport_intra": { "taxi_avg_per_trip": 35 },
+      "_note": "无地铁；高反药品 + 氧气罐预算单列；不建议 economy 档"
+    }
+  },
+
+  "default_ratio_by_tier": {
+    "_doc": "占比建议（不含大交通），用作健康度检查",
+    "economy":  { "hotel": 0.35, "food": 0.30, "ticket": 0.15, "transport": 0.10, "buffer": 0.10 },
+    "standard": { "hotel": 0.40, "food": 0.30, "ticket": 0.10, "transport": 0.10, "buffer": 0.10 },
+    "premium":  { "hotel": 0.45, "food": 0.30, "ticket": 0.08, "transport": 0.07, "buffer": 0.10 },
+    "luxury":   { "hotel": 0.50, "food": 0.30, "ticket": 0.05, "transport": 0.05, "buffer": 0.10 }
+  }
+}

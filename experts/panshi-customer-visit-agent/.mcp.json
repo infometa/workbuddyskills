@@ -1,0 +1,53 @@
+{
+  "mcpServers": {
+    "omp-service": {
+      "timeout": 180,
+      "url": "https://omp-service.mcp.it.woa.com",
+      "headers": {
+        "Authorization": "Bearer <PLACEHOLDER_USER_PAT>"
+      },
+      "x-workbuddy": {
+        "displayName": {
+          "zh": "磐石 omp-service",
+          "en": "Panshi omp-service"
+        },
+        "description": {
+          "zh": "连接后可使用跟进记录查询、拜访打卡查询、跟进记录搬运录入等全部磐石业务接口（客户/商机定位、角色鉴权、打卡关联、写入）。一次授权，本专家全部 skill 通用。",
+          "en": "Once connected, all Panshi business APIs used by this expert are available: follow-up query, visit check-in query, and follow-up record migration/write-in (customer/opportunity locating, role auth, check-in linking). One auth, all skills."
+        },
+        "icon": "./avatars/omp-service.png",
+        "auth": {
+          "type": "bearer",
+          "helpUrl": "https://tai.it.woa.com/user/pat",
+          "helpDescription": {
+            "zh": "前往 PAT 申请页面，授权应用选「omp_service_woa_prod」（中文名：磐石），创建后把令牌粘贴到上方输入框。",
+            "en": "Visit the PAT application page, select 'omp_service_woa_prod' (Chinese name: 磐石/Panshi) as the authorized app, then paste the token into the input field above."
+          }
+        }
+      }
+    }
+  },
+  "x-workbuddy-connectors": {
+    "note": {
+      "zh": "crm-visit-sync 的分支 A（文档类搬运）在读取文档链接时依赖以下 WorkBuddy 内置连接器，请在「连接器管理」中按需授权后使用；这些为平台内置连接器，无需在本文件里填写 URL/Token。",
+      "en": "The document-branch (branch A) of crm-visit-sync relies on the following WorkBuddy built-in connectors to read source links. Authorize them in the connector manager as needed. They are built-in connectors and do NOT require URL/Token entries here."
+    },
+    "connectors": [
+      {
+        "id": "iwiki-woa",
+        "displayName": { "zh": "iWiki", "en": "iWiki" },
+        "usedFor": { "zh": "读取 iWiki 文档链接中的跟进记录原文", "en": "Read follow-up records from iWiki doc links" }
+      },
+      {
+        "id": "tencent-docs",
+        "displayName": { "zh": "腾讯文档", "en": "Tencent Docs" },
+        "usedFor": { "zh": "读取腾讯文档链接中的跟进记录原文", "en": "Read follow-up records from Tencent Docs links" }
+      },
+      {
+        "id": "wecom",
+        "displayName": { "zh": "企业微信", "en": "WeCom" },
+        "usedFor": { "zh": "读取企微文档链接、企微聊天合并转发中的跟进记录原文", "en": "Read follow-up records from WeCom doc links / chat forwards" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+<!--
+  AGENT MUST-DO: 至少 6-10 篇真实笔记，按主题分组。
+  完全没拿到时，自动渲染"未拿到第三方游记"提示 + 给一组手动搜索链接。
+-->
+<div class="xhs-section">
+  {% if not xhs_notes or xhs_notes|length == 0 %}
+    <div class="xhs-empty-card">
+      <h4>📭 本次未拿到第三方游记数据</h4>
+      <p>可能原因：小红书账号未登录 / 网络抓取受限 / 关键词无匹配。</p>
+      <p>建议你登录小红书后重跑此 section，或手动看以下几个站点：</p>
+      <ul class="manual-search">
+        <li><a href="https://www.xiaohongshu.com/search_result?keyword={{ trip.main_city|urlencode }}%20攻略" target="_blank" rel="noopener">小红书：{{ trip.main_city }} 攻略</a></li>
+        <li><a href="https://www.mafengwo.cn/search/q.php?q={{ trip.main_city|urlencode }}" target="_blank" rel="noopener">马蜂窝：{{ trip.main_city }} 游记</a></li>
+        <li><a href="https://www.douyin.com/search/{{ trip.main_city|urlencode }}%20旅游" target="_blank" rel="noopener">抖音：{{ trip.main_city }} 旅游</a></li>
+        <li><a href="https://www.bilibili.com/search?keyword={{ trip.main_city|urlencode }}%20旅游" target="_blank" rel="noopener">B 站：{{ trip.main_city }} 旅游</a></li>
+      </ul>
+    </div>
+  {% else %}
+  <p class="xhs-intro">这里是搜索过程中找到的高质量真实笔记，按主题分类，点击直达原文。</p>
+  {% for group in xhs_notes %}
+    <div class="xhs-group">
+      <h4>{{ group.theme }} <span class="xhs-count">{{ group.notes|length }} 篇</span></h4>
+      <div class="xhs-grid">
+        {% for n in group.notes %}
+          <a class="xhs-card" href="{{ n.url }}" target="_blank" rel="noopener">
+            {% if n.cover %}
+              <div class="xhs-cover" style="background-image:url('{{ n.cover }}');"></div>
+            {% endif %}
+            <div class="xhs-body">
+              <div class="xhs-title">{{ n.title|truncate(40) }}</div>
+              <div class="xhs-meta">
+                {% if n.author %}<span>@{{ n.author }}</span>{% endif %}
+                {% if n.likes %}<span>❤️ {{ n.likes }}</span>{% endif %}
+                {% if n.comments %}<span>💬 {{ n.comments }}</span>{% endif %}
+              </div>
+              {% if n.snippet %}
+                <div class="xhs-snippet">{{ n.snippet|truncate(80) }}</div>
+              {% endif %}
+              {% if n.sentiment %}
+                <span class="xhs-sentiment xhs-sentiment-{{ n.sentiment }}">
+                  {%- if n.sentiment == 'positive' -%}👍 推荐
+                  {%- elif n.sentiment == 'negative' -%}⚠️ 避雷
+                  {%- else -%}🔍 参考
+                  {%- endif -%}
+                </span>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+  <p class="xhs-disclaimer">
+    💡 笔记内容由作者发布，仅作参考。点击卡片跳转小红书原文。
+  </p>
+  {% endif %}
+</div>

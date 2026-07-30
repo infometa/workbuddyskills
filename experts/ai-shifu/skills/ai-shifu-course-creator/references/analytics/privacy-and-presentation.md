@@ -111,7 +111,7 @@ Pass every result through these checks before showing it to the user:
 1. **Integer / string enums** (status, type, scene, mode) → translate via the code tables in `tables.md`. Never show raw codes like `601`, `502`, `1101`, `"read"`.
 2. **ID fields** → apply the ID Field Translation Rules in `tables.md`: never display a raw `*_bid`; `user_bid` → ordinal labels ("Learner A / B / C"); `outline_item_bid` → "Lesson X.Y: \<title\>"
 3. **Monetary values** → add currency unit (¥/CNY/USD), 2 decimal places
-4. **Timestamps** (`created_at`, `updated_at` etc.) → convert to local-timezone readable format (`2026-05-12 14:23`); never show raw ISO timestamps
+4. **Timestamps** (`created_at`, `updated_at` etc.) → backend timestamps are UTC (treat values without an explicit offset as UTC); convert to the user's local-timezone readable format (`2026-05-12 14:23`); never show raw ISO timestamps. Convert using the machine's timezone rules; do not substitute a session-fixed numeric UTC offset (DST-observing zones shift), and never assume a timezone from the conversation language
 5. **Ratios / percentages** → use percent form ("62%" not "0.623")
 6. **Credits** → round to 2 decimal places (e.g. `154.05 积分`); take credit values only from `credit-detail` output (`credits` / `total_credits`) — never invent or re-derive them (`bill_daily_usage_metrics.consumed_credits` applies only once the daily aggregation cron is enabled)
 
