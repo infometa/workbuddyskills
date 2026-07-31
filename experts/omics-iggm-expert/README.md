@@ -1,4 +1,4 @@
-# IgGM Antibody R&D Expert
+# IgGM Antibody Drug R&D Expert
 
 精通腾讯IgGM生成式模型。覆盖CDR重设计、全链生成与人源化亲和力优化，输出可验证的抗体候选序列
 

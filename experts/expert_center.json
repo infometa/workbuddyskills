@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.0.0",
-  "lastUpdated": "2026-07-30T16:44:11Z",
+  "lastUpdated": "2026-07-31T09:01:34Z",
   "author": {
     "name": "AI Expert Center",
     "source": "https://github.com/msitarzewski/agency-agents",
@@ -19717,7 +19717,7 @@
     },
     {
       "id": "TcSec",
-      "categoryId": "13-TencentZone",
+      "categoryId": "11-SecurityCompliance",
       "displayName": {
         "en": "Tencent Cloud Security Expert",
         "zh": "腾讯云安全专家"
@@ -19727,13 +19727,13 @@
         "zh": "腾讯云安全专家"
       },
       "description": {
-        "zh": "联动CWP/KMS/BH/CDS/CFW/SSM/TCSS/WAF/CSIP产品接口生成安全运营报告",
+        "zh": "调用云API对容器/主机安全、WAF、云防、云安全中心、堡垒机、密钥管理、数据安全告警/资产进行分析",
         "en": "Expert in Tencent Cloud security products, supporting cross-product automation, risk identification, threat analysis, compliance inspection, security report generation, and assisting users in completing security operations."
       },
       "promptFile": "/plugins/tc-sec/agents/tc-sec.md",
       "avatar": "/avatars/TcSec.png",
       "createdAt": "2026-06-26T10:19:56Z",
-      "updatedAt": "2026-07-14T08:23:12Z",
+      "updatedAt": "2026-07-31T09:01:34Z",
       "defaultInitPrompt": {
         "zh": "我今天重点需要关注的告警事件",
         "en": "I need to focus on the following alert events"
@@ -25021,8 +25021,8 @@
       "id": "OmicsBioinfoExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Aomi",
-        "zh": "奥米"
+        "en": "Omics Bioinformatics Analysis Expert",
+        "zh": "腾讯组学生信分析专家"
       },
       "profession": {
         "en": "Omics Bioinformatics Analysis Expert",
@@ -25035,7 +25035,7 @@
       "promptFile": "/plugins/omics-bioinfo-expert/agents/omics-bioinfo-expert.md",
       "avatar": "/avatars/OmicsBioinfoExpert.png",
       "createdAt": "2026-07-23T07:13:45Z",
-      "updatedAt": "2026-07-23T07:13:45Z",
+      "updatedAt": "2026-07-31T08:03:43Z",
       "defaultInitPrompt": {
         "en": "Submit a WGS analysis task on the platform for me",
         "zh": "帮我在平台上提交一个WGS分析任务"
@@ -25080,54 +25080,51 @@
       "id": "OmicsCdgptExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Cidi",
-        "zh": "希帝"
+        "en": "CD-GPT Bio-Sequence Modeling Expert",
+        "zh": "腾讯CD-GPT生物序列建模专家"
       },
       "profession": {
         "en": "CD-GPT Bio-Sequence Modeling Expert",
         "zh": "腾讯CD-GPT生物序列建模专家"
       },
       "description": {
-        "zh": "基于腾讯CD-GPT多模态大模型，覆盖DNA、RNA、蛋白质序列，支持翻译、反向翻译、生成与功能注释",
+        "zh": "基于腾讯CD-GPT多模态大模型，覆盖DNA、RNA、蛋白质序列，支持翻译、反向翻译、生成",
         "en": "Expert in CD-GPT generative biological foundation model, providing DNA/RNA/protein sequence translation and reverse translation services"
       },
       "promptFile": "/plugins/omics-cdgpt-expert/agents/omics-cdgpt-expert.md",
       "avatar": "/avatars/OmicsCdgptExpert.png",
       "createdAt": "2026-07-23T07:13:45Z",
-      "updatedAt": "2026-07-23T07:13:45Z",
+      "updatedAt": "2026-07-31T08:03:43Z",
       "defaultInitPrompt": {
-        "en": "Translate this DNA sequence to the corresponding protein sequence",
-        "zh": "把这段 DNA 翻译成对应的蛋白质序列"
+        "en": "What can this expert do for me?",
+        "zh": "这个专家能帮我做什么"
       },
       "expertType": "agent",
       "agentName": "omics-cdgpt-expert",
       "plugin": "omics-cdgpt-expert",
       "tags": [
         {
-          "en": "Sequence Translation",
           "zh": "序列翻译"
         },
         {
-          "en": "Sequence Generation",
           "zh": "序列生成"
         },
         {
-          "en": "Function Annotation",
-          "zh": "功能注释"
+          "zh": "多模态生物序列建模"
         }
       ],
       "quickPrompts": [
         {
-          "en": "Translate this DNA sequence to the corresponding protein sequence",
-          "zh": "把这段 DNA 翻译成对应的蛋白质序列"
+          "en": "What can this expert do for me?",
+          "zh": "这个专家能帮我做什么"
         },
         {
-          "en": "Reverse-translate this protein sequence to the corresponding nucleic acid coding sequence",
-          "zh": "把这段蛋白序列逆翻译生成对应的核酸编码序列"
+          "en": "Generate a synthetic test CDS, use default template to run forward translation",
+          "zh": "生成一个合成测试CDS，使用默认模版运行正向翻译"
         },
         {
-          "en": "What sub-workflows are available in CD-GPT",
-          "zh": "CD-GPT 里有哪些可以用的子流程"
+          "en": "Generate test protein sequence, use default template to run reverse translation",
+          "zh": "生成测试蛋白质序列，使用默认模版运行反向翻译"
         }
       ],
       "author": {
@@ -25139,8 +25136,8 @@
       "id": "OmicsDiagnosisExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Aozhen",
-        "zh": "奥诊"
+        "en": "Omics Task Intelligent Diagnosis Expert",
+        "zh": "腾讯组学任务分析智能诊断专家"
       },
       "profession": {
         "en": "Omics Task Intelligent Diagnosis Expert",
@@ -25153,7 +25150,7 @@
       "promptFile": "/plugins/omics-diagnosis-expert/agents/omics-diagnosis-expert.md",
       "avatar": "/avatars/OmicsDiagnosisExpert.png",
       "createdAt": "2026-07-23T07:13:45Z",
-      "updatedAt": "2026-07-23T07:13:45Z",
+      "updatedAt": "2026-07-31T08:03:44Z",
       "defaultInitPrompt": {
         "en": "My task failed, help me see why",
         "zh": "我这个任务跑失败了，帮我看看为什么"
@@ -25181,12 +25178,12 @@
           "zh": "我这个任务跑失败了，帮我看看为什么"
         },
         {
-          "en": "Analyze this error log for me",
-          "zh": "解析一下这段报错日志"
+          "en": "Output a diagnosis report for this failed task",
+          "zh": "帮我输出错误任务的诊断报告"
         },
         {
-          "en": "Give me a one-click resubmit command",
-          "zh": "给我一个一键重投的命令"
+          "en": "Give me a fix solution for this error task",
+          "zh": "帮我给出这个错误任务的修复方案"
         }
       ],
       "author": {
@@ -25198,23 +25195,22 @@
       "id": "OmicsHpcExpert",
       "categoryId": "02-Engineering",
       "displayName": {
-        "en": "Huipu",
-        "zh": "汇普"
+        "en": "Omics HPC Cluster Ops Expert",
+        "zh": "腾讯组学HPC集群运维与作业管理专家"
       },
       "profession": {
         "en": "Omics HPC Cluster Ops Expert",
         "zh": "腾讯组学HPC集群运维与作业管理专家"
       },
       "description": {
-        "zh": "组学HPC一站式运维，管控节点、队列与存储全生命周期，适配SLURM/SGE调度，自然语言降低门槛",
+        "zh": "远程组学HPC一站式运维，管控节点、队列、存储全生命周期，适配SLURM/SGE调度，自然语言交互降低门槛",
         "en": "Expert in omics HPC cluster management, providing SLURM job scheduling, cluster/node/queue/scale/filesystem monitoring and tophpc infrastructure operation services"
       },
       "promptFile": "/plugins/omics-hpc-expert/agents/omics-hpc-expert.md",
       "avatar": "/avatars/OmicsHpcExpert.png",
       "createdAt": "2026-07-23T07:13:45Z",
-      "updatedAt": "2026-07-23T07:13:45Z",
+      "updatedAt": "2026-07-31T08:03:44Z",
       "defaultInitPrompt": {
-        "en": "List my clusters/queues/nodes",
         "zh": "列出我的集群/队列/节点的列表"
       },
       "expertType": "agent",
@@ -25236,16 +25232,13 @@
       ],
       "quickPrompts": [
         {
-          "en": "List my clusters/queues/nodes",
           "zh": "列出我的集群/队列/节点的列表"
         },
         {
-          "en": "Check queue scaling config, set max nodes to 10",
-          "zh": "查看XX队列的扩缩容配置，把最大节点数改成10"
+          "zh": "查看compute队列扩缩容配置，把最大节点数改成10"
         },
         {
-          "en": "Add an 8-core 32GB compute node to the cluster",
-          "zh": "给集群增加一台8核32G的计算节点"
+          "zh": "查询作业状态"
         }
       ],
       "author": {
@@ -25257,8 +25250,8 @@
       "id": "OmicsIggmExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Aige",
-        "zh": "艾格"
+        "en": "IgGM Antibody Drug R&D Expert",
+        "zh": "腾讯IgGM抗体药物研发专家"
       },
       "profession": {
         "en": "IgGM Antibody Drug R&D Expert",
@@ -25271,10 +25264,10 @@
       "promptFile": "/plugins/omics-iggm-expert/agents/omics-iggm-expert.md",
       "avatar": "/avatars/OmicsIggmExpert.png",
       "createdAt": "2026-07-23T07:13:46Z",
-      "updatedAt": "2026-07-23T07:13:46Z",
+      "updatedAt": "2026-07-31T08:03:45Z",
       "defaultInitPrompt": {
-        "en": "Design a nanobody targeting HER2 antigen",
-        "zh": "针对HER2抗原设计一个纳米抗体"
+        "en": "What can this expert do for me?",
+        "zh": "这个专家能帮我做什么"
       },
       "expertType": "agent",
       "agentName": "omics-iggm-expert",
@@ -25295,16 +25288,16 @@
       ],
       "quickPrompts": [
         {
-          "en": "Design a nanobody targeting HER2 antigen",
-          "zh": "针对HER2抗原设计一个纳米抗体"
+          "en": "What can this expert do for me?",
+          "zh": "这个专家能帮我做什么"
         },
         {
-          "en": "Redesign CDR-H3 region of my antibody",
-          "zh": "帮我的抗体做CDR-H3重设计"
+          "en": "Use default template to generate antibody sequences in de novo design scenario",
+          "zh": "按照从头设计场景，使用默认模版，生成抗体序列"
         },
         {
-          "en": "Show me the 3D structure of this antibody",
-          "zh": "看看这个抗体的三维结构长什么样"
+          "en": "View 3D structure",
+          "zh": "查看3D结构"
         }
       ],
       "author": {
@@ -25316,24 +25309,24 @@
       "id": "OmicsOriExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Ourui",
-        "zh": "欧睿"
+        "en": "ORI Protein Design Expert",
+        "zh": "腾讯ORI蛋白设计专家"
       },
       "profession": {
         "en": "ORI Protein Design Expert",
         "zh": "腾讯ORI蛋白设计专家"
       },
       "description": {
-        "zh": "覆盖序列从头设计、USMFold结构预测及溶解性等评估，打通从设计到可生产蛋白的关键决策",
+        "zh": "覆盖序列从头设计、USMFold结构预测与溶解性、热稳定性，打通从设计到可生产蛋白的关键决策",
         "en": "Expert in ORI protein design system from Tencent Life Sciences Lab, providing sequence generation, structure prediction, solubility/thermostability analysis, and 3D visualization services"
       },
       "promptFile": "/plugins/omics-ori-expert/agents/omics-ori-expert.md",
       "avatar": "/avatars/OmicsOriExpert.png",
       "createdAt": "2026-07-23T07:13:46Z",
-      "updatedAt": "2026-07-23T07:13:46Z",
+      "updatedAt": "2026-07-31T08:03:45Z",
       "defaultInitPrompt": {
-        "en": "De novo design a protein that binds to a specific target",
-        "zh": "从头设计一个结合某靶点的蛋白质"
+        "en": "Design enzyme with thermostability >60°C, EC number <EC:3.1.1.101>, generate 20 sequences",
+        "zh": "设计热稳定性大于60度的酶，编号<EC:3.1.1.101>，生成20条"
       },
       "expertType": "agent",
       "agentName": "omics-ori-expert",
@@ -25349,21 +25342,21 @@
         },
         {
           "en": "Solubility/Thermostability/Signal Peptide",
-          "zh": "溶解性/热稳定性/信号肽"
+          "zh": "溶解性/热稳定性"
         }
       ],
       "quickPrompts": [
         {
-          "en": "De novo design a protein that binds to a specific target",
-          "zh": "从头设计一个结合某靶点的蛋白质"
+          "en": "Design enzyme with thermostability >60°C, EC number <EC:3.1.1.101>, generate 20 sequences",
+          "zh": "设计热稳定性大于60度的酶，编号<EC:3.1.1.101>，生成20条"
         },
         {
           "en": "Predict structure of this sequence using USMFold",
-          "zh": "用USMFold预测这个序列的结构"
+          "zh": "用 USMFold 预测这个序列的结构"
         },
         {
-          "en": "Evaluate thermostability and solubility of this protein",
-          "zh": "评估这个蛋白的热稳定性和溶解性"
+          "en": "View 3D structure",
+          "zh": "查看3D结构"
         }
       ],
       "author": {
@@ -25375,24 +25368,24 @@
       "id": "OmicsScbertExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Sichen",
-        "zh": "思宸"
+        "en": "scBERT Single-Cell Pre-training Expert",
+        "zh": "腾讯scBert单细胞预训练专家"
       },
       "profession": {
         "en": "scBERT Single-Cell Pre-training Expert",
         "zh": "腾讯scBert单细胞预训练专家"
       },
       "description": {
-        "zh": "基于scBERT模型，实现细胞精细注释、新亚群挖掘及Marker筛选，助力肿瘤细胞研究",
+        "zh": "基于腾讯scBERT模型，实现细胞精细注释、新亚群挖掘及Marker筛选，自适应多组织参数，助力肿瘤细胞研究",
         "en": "Expert in scBERT single-cell pre-trained model, providing domain adaptation finetuning and cell type prediction services based on BERT paradigm"
       },
       "promptFile": "/plugins/omics-scbert-expert/agents/omics-scbert-expert.md",
       "avatar": "/avatars/OmicsScbertExpert.png",
       "createdAt": "2026-07-23T07:13:46Z",
-      "updatedAt": "2026-07-23T07:13:46Z",
+      "updatedAt": "2026-07-31T08:03:46Z",
       "defaultInitPrompt": {
-        "en": "Perform cell type annotation on my PBMC data",
-        "zh": "给我的PBMC数据做细胞类型注释"
+        "en": "What can this expert do for me?",
+        "zh": "这个专家能帮我做什么"
       },
       "expertType": "agent",
       "agentName": "omics-scbert-expert",
@@ -25413,16 +25406,16 @@
       ],
       "quickPrompts": [
         {
-          "en": "Perform cell type annotation on my PBMC data",
-          "zh": "给我的PBMC数据做细胞类型注释"
+          "en": "What can this expert do for me?",
+          "zh": "这个专家能帮我做什么"
         },
         {
-          "en": "Help me find novel cell populations in the tumor microenvironment",
-          "zh": "帮我找一下肿瘤微环境里的新型细胞群"
+          "en": "Use default template for FINETUNE cell type prediction",
+          "zh": "用默认模版进行FINETUNE细胞类型预测"
         },
         {
-          "en": "Screen marker genes for this dataset",
-          "zh": "筛选这个数据集的Marker基因"
+          "en": "Query task status",
+          "zh": "查询任务状态"
         }
       ],
       "author": {
@@ -25434,54 +25427,54 @@
       "id": "OmicsScproteinExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Saidanbai",
-        "zh": "赛蛋白"
+        "en": "scPROTEIN Single-Cell Proteomics Expert",
+        "zh": "腾讯scPROTEIN单细胞蛋白组建模专家"
       },
       "profession": {
         "en": "scPROTEIN Single-Cell Proteomics Expert",
         "zh": "腾讯scPROTEIN单细胞蛋白组建模专家"
       },
       "description": {
-        "zh": "scPROTEIN图神经网络模型，适配CITE-seq稀疏蛋白数据，实现降噪补全与不确定性预估",
+        "zh": "腾讯 scPROTEIN表征模型，实现对单细胞蛋白组的多肽不确定性估计，去除批次效应噪声以及单细胞蛋白组的细胞类型注释",
         "en": "Expert in scPROTEIN GNN-based single-cell proteomics model, providing peptide uncertainty quantification and cell embedding services"
       },
       "promptFile": "/plugins/omics-scprotein-expert/agents/omics-scprotein-expert.md",
       "avatar": "/avatars/OmicsScproteinExpert.png",
       "createdAt": "2026-07-23T07:13:46Z",
-      "updatedAt": "2026-07-23T07:13:46Z",
+      "updatedAt": "2026-07-31T08:03:47Z",
       "defaultInitPrompt": {
-        "en": "Denoise this batch of CITE-seq proteomics data",
-        "zh": "对这批CITE-seq蛋白组数据做降噪"
+        "en": "What can this expert do for me?",
+        "zh": "这个专家能帮我做什么"
       },
       "expertType": "agent",
       "agentName": "omics-scprotein-expert",
       "plugin": "omics-scprotein-expert",
       "tags": [
         {
-          "en": "Denoising & Imputation",
-          "zh": "降噪补全"
-        },
-        {
           "en": "Uncertainty Estimation",
           "zh": "不确定性估计"
         },
         {
-          "en": "Cell Representation",
-          "zh": "细胞表征"
+          "en": "Cell Type Annotation",
+          "zh": "细胞类型注释"
+        },
+        {
+          "en": "Batch Effect Removal & Data Denoising",
+          "zh": "去除批次效应和数据噪声"
         }
       ],
       "quickPrompts": [
         {
-          "en": "Denoise this batch of CITE-seq proteomics data",
-          "zh": "对这批CITE-seq蛋白组数据做降噪"
+          "en": "What can this expert do for me?",
+          "zh": "这个专家能帮我做什么"
         },
         {
-          "en": "Evaluate the uncertainty of these peptide quantifications",
-          "zh": "评估这些肽段定量的不确定性"
+          "en": "Evaluate peptide-level uncertainty quantification, use default template",
+          "zh": "评估肽级不确定性定量，使用默认模版"
         },
         {
-          "en": "Generate embeddings for single-cell proteomics",
-          "zh": "生成单细胞蛋白组的embedding"
+          "en": "Query task status",
+          "zh": "查询任务状态"
         }
       ],
       "author": {
@@ -25493,23 +25486,22 @@
       "id": "OmicsTfoldExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Tifude",
-        "zh": "提弗德"
+        "en": "tFold Antibody Structure Prediction Expert",
+        "zh": "腾讯tFold抗体结构预测专家"
       },
       "profession": {
         "en": "tFold Antibody Structure Prediction Expert",
         "zh": "腾讯tFold抗体结构预测专家"
       },
       "description": {
-        "zh": "tFold模型，专注单克隆/纳米抗体与抗原复合物的高精度结合界面建模，辅助表位预测与亲和力改造",
+        "zh": "腾讯tFold模型，专注单克隆抗体、纳米抗体与抗原复合物的高精度结合界面建模，辅助表位预测与亲和力改造",
         "en": "Expert in tFold complex structure prediction system, providing antibody, antigen and TCR structure prediction services with interactive 3D visualization"
       },
       "promptFile": "/plugins/omics-tfold-expert/agents/omics-tfold-expert.md",
       "avatar": "/avatars/OmicsTfoldExpert.png",
       "createdAt": "2026-07-23T07:13:47Z",
-      "updatedAt": "2026-07-23T07:13:47Z",
+      "updatedAt": "2026-07-31T08:03:47Z",
       "defaultInitPrompt": {
-        "en": "Predict the binding structure of this antibody and antigen",
         "zh": "预测这个抗体和抗原的结合结构"
       },
       "expertType": "agent",
@@ -25531,16 +25523,13 @@
       ],
       "quickPrompts": [
         {
-          "en": "Predict the binding structure of this antibody and antigen",
           "zh": "预测这个抗体和抗原的结合结构"
         },
         {
-          "en": "Predict TCR-pMHC complex using tFold",
-          "zh": "用tFold预测TCR-pMHC复合物"
+          "zh": "用 tFold 预测 TCR-pMHC 复合物"
         },
         {
-          "en": "Rotate and view the PDB structure of this complex",
-          "zh": "把这个复合物的PDB结构转一圈看看"
+          "zh": "把这个复合物的 PDB 结构转一圈看看"
         }
       ],
       "author": {
@@ -27353,8 +27342,8 @@
       "id": "TideriderSentiment",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "D-Brain×T-Rider",
-        "zh": "D-Brain×T-Rider"
+        "en": "DataBrain X TideRider",
+        "zh": "DataBrain X TideRider"
       },
       "profession": {
         "en": "Game Sentiment Analyst",
@@ -27367,7 +27356,7 @@
       "promptFile": "/plugins/tiderider-sentiment/agents/tiderider-analyst.md",
       "avatar": "/avatars/TideriderSentiment.png",
       "createdAt": "2026-07-28T09:56:15Z",
-      "updatedAt": "2026-07-29T00:00:00Z",
+      "updatedAt": "2026-07-31T07:30:33Z",
       "defaultInitPrompt": {
         "zh": "帮我分析一下这款游戏最近一周的舆情",
         "en": "Analyze the sentiment of this game over the past week"
@@ -27855,7 +27844,7 @@
       "promptFile": "/plugins/empirical-research-team/agents/empirical-research-team-team-lead.md",
       "avatar": "/avatars/EmpiricalResearchTeam.png",
       "createdAt": "2026-07-30T00:00:00Z",
-      "updatedAt": "2026-07-30T16:44:11Z",
+      "updatedAt": "2026-07-30T00:00:00Z",
       "defaultInitPrompt": {
         "zh": "帮我用 DID 方法分析一项政策的处理效应，从数据清洗到发表级表格",
         "en": "Help me analyze a policy's treatment effect using DID, from data cleaning to publication-ready tables"

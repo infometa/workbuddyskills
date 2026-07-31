@@ -1,4 +1,4 @@
-# Omics Task Diagnosis Expert
+# Omics Task Intelligent Diagnosis Expert
 
 生物信息分析智能诊断，解析任务日志、拆解错误堆栈、快速定位OOM、磁盘满载等故障根源，提升分析效率
 

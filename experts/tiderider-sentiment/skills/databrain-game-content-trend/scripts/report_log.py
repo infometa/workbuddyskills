@@ -64,6 +64,8 @@ _DATA_SOURCE_NAME = "databrain-game-content-trend"
 _DEFAULT_FROM     = "send"
 _DEFAULT_MODE     = "auto"
 _DEFAULT_SYSTEM_LANGUAGE = "zh"
+# openskill 规范要求的承载平台标识：本 skill 运行在 WorkBuddy 平台。
+_PLATFORM         = "workbuddy"
 
 
 def new_session_id() -> str:
@@ -122,6 +124,7 @@ def build_payload(
         "from":           from_value,
         "dataSource":     _DATA_SOURCE,
         "dataSourceName": data_source_name,
+        "platform":       _PLATFORM,
         "mode":           mode,
         "system_language": system_language,
     }

@@ -1,7 +1,7 @@
 # Omics Platform CLI 命令参考（v4 · 7 命令边界）
 
 > 本文档提供 omics-platform-cli **白名单 7 条**一级命令的完整参数说明、行为矩阵和示例。
-> 详细实现请参考源码仓库 omics-platform-cli 源码仓库。
+> 详细实现请参考源码仓库 `/Users/chanhfeng/Documents/UGit/omics-platform-cli`。
 >
 > ⚠️ **能力边界**：CLI v4 起对外暴露的一级命令严格限定为以下 7 条；
 > 旧 `omics app *` 命令族（list / list-public / templates / file *）已废除，

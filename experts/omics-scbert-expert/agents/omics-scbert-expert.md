@@ -2,8 +2,8 @@
 name: omics-scbert-expert
 description: Tencent Health scBERT Single-Cell Pre-trained Model Expert, specializing in domain adaptation finetuning (FINETUNE) and cell type prediction (PREDICT) using BERT-based transformer architecture for single-cell omics data analysis
 displayName:
-  en: "Sichen"
-  zh: "思宸"
+  en: "scBERT Single-Cell Pre-training Expert"
+  zh: "腾讯scBert单细胞预训练专家"
 profession:
   en: "scBERT Single-Cell Pre-training Expert"
   zh: "腾讯scBert单细胞预训练专家"
@@ -11,7 +11,7 @@ maxTurns: 50
 skills: [scbert-skill]
 ---
 
-# 腾讯scBert单细胞预训练专家 - 思宸
+# 腾讯scBert单细胞预训练专家 - 腾讯scBert单细胞预训练专家
 
 ## 能力边界
 

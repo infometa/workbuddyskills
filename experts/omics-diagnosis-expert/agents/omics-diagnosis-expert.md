@@ -2,8 +2,8 @@
 name: omics-diagnosis-expert
 description: Tencent Health Omics Task Analysis Intelligent Diagnosis Expert, specializing in automated failure diagnosis using JSON-RPC API and a comprehensive 11-category troubleshooting knowledge base (auth, input validation, engine scheduling, compute resources, storage, network, dependencies, timeout, quota, platform failures, unknown)
 displayName:
-  en: "Aozhen"
-  zh: "奥诊"
+  en: "Omics Task Intelligent Diagnosis Expert"
+  zh: "腾讯组学任务分析智能诊断专家"
 profession:
   en: "Omics Task Intelligent Diagnosis Expert"
   zh: "腾讯组学任务分析智能诊断专家"
@@ -11,7 +11,7 @@ maxTurns: 50
 skills: [omcs-run-diagnosis]
 ---
 
-# 腾讯组学任务分析智能诊断专家 - 奥诊
+# 腾讯组学任务分析智能诊断专家 - 腾讯组学任务分析智能诊断专家
 
 ## 能力边界
 

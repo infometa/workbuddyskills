@@ -1,7 +1,7 @@
 ---
 name: pdb-viewer-skill
-version: 1.0.0
-description: 在 WorkBuddy 内置浏览器中以 3D 结构展示 PDB 文件，支持通过自然语言操控结构（高亮、隐藏链、测量距离等）。Mol* 5.9.0 本地自托管，支持本地文件和腾讯健康组学平台 COS 路径。
+version: 1.1.0
+description: 在 WorkBuddy 内置浏览器中以 3D 结构展示 PDB 文件，支持通过自然语言操控结构（高亮、隐藏链、测量距离/角度、相互作用分析、标签、透明度控制等）。Mol* 5.9.0 本地自托管，支持本地文件和腾讯健康组学平台 COS 路径。
 author: WorkBuddy
 tags:
   [
@@ -55,21 +55,35 @@ triggers:
 | 类别           | 能力                         | 用户示例                          |
 | -------------- | ---------------------------- | --------------------------------- |
 | **数据加载**   | 本地 PDB / COS URI / RCSB ID | "打开 xxx.pdb"                    |
-| **可视化控制** | 切换表示方式                 | "显示为球棍模型"                  |
-|                | 着色方案                     | "按二级结构着色" / "全部设为蓝色" |
-|                | 背景                         | "背景设为黑色"                    |
-| **结构操作**   | 隐藏/显示链                  | "隐藏 B 链" / "显示所有链"        |
-|                | 移除/恢复水分子              | "去掉水分子" / "显示水"           |
+| **可视化控制** | 切换表示方式（8 种）         | "显示为球棍模型"                  |
+|                | 着色方案（8 种主题）         | "按二级结构着色" / "全部设为蓝色" |
+|                | 透明度控制                   | "蛋白表面设为 50% 透明"           |
+|                | 背景                         | "背景设为白色"                    |
+| **结构操作**   | 按单链精确隐藏/显示          | "隐藏 B 链" / "显示所有链"        |
+|                | 配体/水/氢原子显隐           | "去掉水分子" / "隐藏配体"         |
+|                | 隔离/恢复全部                | "只看 A 链" / "恢复全部显示"      |
 |                | 重置视图                     | "重置到默认状态"                  |
-| **高亮标注**   | 区间高亮                     | "高亮 A 链 50-100 位残基"         |
-|                | 离散残基高亮                 | "高亮突变位点 N501Y 的两个残基"   |
-|                | 清除高亮                     | "清除所有高亮"                    |
-| **测量分析**   | 距离测量                     | "测量 A 链 501 和 505 的 Cα 距离" |
+| **选择器**     | 残基区间/离散列表            | "高亮 A 链 50-100 位残基"         |
+|                | 按原子名/元素/配体名         | "选中所有锌离子"                  |
+|                | 空间距离选择（X Å 内）       | "选中 ATP 周围 5 Å 的残基"        |
+|                | 按 B-factor 阈值             | "选中 B-factor > 50 的残基"       |
+| **标注**       | 残基文字标签                 | "标注 His57"                      |
+|                | 自定义标签文字               | "标注 His57 为活性位点"           |
+| **视角控制**   | 精确聚焦到链/选区            | "聚焦 A 链" / "聚焦 ATP 口袋"     |
+|                | 正交/透视投影切换            | "切换为正交投影"                  |
+|                | 视角快照保存/恢复            | "保存当前视角" / "恢复视角"       |
+| **测量分析**   | 距离测量（支持任意原子）     | "测量 Lys42 NZ 与 O3 距离"        |
+|                | 角度/二面角测量              | "测量 His57 NE2-N-CA 角度"        |
 |                | 清除测量                     | "删除所有测量线"                  |
+| **相互作用**   | 氢键/金属配位/盐桥/疏水      | "显示氢键" / "显示锌配位键"       |
+|                | 碰撞检测                     | "显示空间冲突"                    |
+| **结构清理**   | 视图侧隐藏水/配体/氢         | "去掉水分子"                      |
+|                | 导出过滤后结构（derive_file）| "删除 HOH 并导出"                 |
 | **动画与导出** | 自动旋转                     | "开始旋转" / "停止旋转"           |
-|                | 截图                         | "截个图"                          |
-|                | 保存 PDB                     | "保存当前结构"                    |
-| **信息查询**   | 结构概要                     | "这个蛋白有什么信息"              |
+|                | 截图（支持透明背景）         | "截个图" / "透明背景截图"         |
+|                | 场景快照保存/恢复            | "保存当前场景"                    |
+| **信息查询**   | 结构概要/链列表/配体列表     | "这个蛋白有几条链"                |
+|                | B-factor 查询                | "查询 A 链 50 号残基的 B-factor"  |
 
 ## 架构
 
@@ -90,8 +104,6 @@ triggers:
 │  推送机制:  GET /api/events (SSE 实时推送到浏览器)             │
 │  静态服务:  templates/viewer.html + molstar.js/css           │
 │  心跳监控:  页面关闭 30s 后自动释放端口                        │
-│  日志文件:  .pdb-viewer.log (SKILL_ROOT 绝对路径)             │
-│              ★ [PUB-LOG-MARKER] 日志功能位置标记 ★            │
 │                                                              │
 └──────────────────────┬───────────────────────────────────────┘
                        │
@@ -117,7 +129,6 @@ pdb-viewer-skill/
 │   └── loading.html            # ★ 加载动画页（file:// 协议加载）
 └── scripts/
     └── serve_pdb.py            # ★ HTTP 服务器（主入口）
-                                #   ★ [PUB-LOG-MARKER] 日志代码位置 ★
 ```
 
 ## 前置依赖
@@ -157,7 +168,7 @@ omics whoami
 ```bash
 # ★ SKILL_ROOT 必须使用实际安装路径，不能硬编码
 # 获取方式（由 LLM 在运行时自动执行）：
-#   - 用户级安装: <user-skill-dir>/pdb-viewer-skill
+#   - 用户级安装: ~/.workbuddy/skills/pdb-viewer-skill
 #   - 项目级安装: <project>/.workbuddy/skills/pdb-viewer-skill
 
 # 方式 1: 后台启动（推荐，由 LLM 自动调用 run_in_background=true）
@@ -212,67 +223,103 @@ curl http://localhost:8789/api/status
 
 ### 数据加载
 
-| `op`                         | 参数                          | 说明                                                       |
-| ---------------------------- | ----------------------------- | ---------------------------------------------------------- |
-| `get_pdb`                    | `id`/`pdb` (str), `url` (str) | 从 RCSB ID / URL / 本地路径加载 PDB                        |
-| **[PUB-LOG-MARKER]** preload | `uri` (str)                   | **预加载 PDB 到服务端缓存（发布前删除此 API 和相关代码）** |
+| `op`      | 参数                          | 说明                                                       |
+| --------- | ----------------------------- | ---------------------------------------------------------- |
+| `get_pdb` | `id`/`pdb` (str), `url` (str) | 从 RCSB ID / URL / 本地路径加载 PDB                        |
 
 ### 可视化控制
 
-| `op`        | 参数             | 说明                                                                               |
-| ----------- | ---------------- | ---------------------------------------------------------------------------------- |
-| `set_repr`  | `repr` (str)     | cartoon / ball-and-stick / spacefill / gaussian-surface / putty                    |
-| `set_color` | `theme` (str)    | chain-id / element-symbol / secondary-structure / b-factor / uniform (+ value hex) |
-| `set_bg`    | `color` (str)    | CSS 颜色名或 hex                                                                   |
-| `set_water` | `visible` (bool) | 水分子显隐                                                                         |
+| `op`                    | 参数                          | 说明                                                                                       |
+| ----------------------- | ----------------------------- | ------------------------------------------------------------------------------------------ |
+| `set_repr`              | `repr` (str)                  | cartoon / ball-and-stick / spacefill / gaussian-surface / putty / sticks / trace / dots    |
+| `set_repr_by_component` | `polymer`/`ligand`/`water`    | 分组件差异化表示                                                                           |
+| `set_color`             | `theme` (str), `value` (hex)  | chain-id / element-symbol / secondary-structure / b-factor / uniform / residue-type / occupancy / plddt |
+| `set_color_selection`   | `value` (hex)                 | 对当前选区单独染色                                                                         |
+| `set_opacity`           | `target`, `alpha` (0-1)       | 设置透明度                                                                                 |
+| `set_bg`                | `color` (str)                 | CSS 颜色名或 hex                                                                           |
+| `set_water`             | `visible` (bool)              | 水分子显隐                                                                                 |
 
 ### 结构操作
 
-| `op`               | 参数                            | 说明                         |
-| ------------------ | ------------------------------- | ---------------------------- |
-| `chain_visibility` | `chain` (str), `visible` (bool) | 链可见性                     |
-| `focus_chain`      | `chain` (str)                   | 聚焦到链（当前为全结构重置） |
-| `reset_view`       | —                               | 重置视角                     |
+| `op`                 | 参数                            | 说明                                  |
+| -------------------- | ------------------------------- | ------------------------------------- |
+| `chain_visibility`   | `chain` (str), `visible` (bool) | 按单链精确隐藏/显示（v1.1 已修复）    |
+| `ligand_visibility`  | `visible` (bool)                | 配体整体显隐                          |
+| `isolate`            | `target` (str)                  | 隔离模式（如 target=chain:A）         |
+| `show_all`           | —                               | 恢复全部显示                          |
+| `hide_hydrogens`     | `visible` (bool)                | 氢原子显隐                            |
+| `show_backbone_only` | —                               | 仅显示主链骨架                        |
+| `focus_chain`        | `chain` (str)                   | 精确聚焦到链（v1.1 已修复）           |
+| `focus_selection`    | —                               | 聚焦到最近选区                        |
+| `reset_view`         | —                               | 重置视角                              |
+| `save_view`          | `name` (str)                    | 保存视角快照                          |
+| `restore_view`       | `name` (str)                    | 恢复视角快照                          |
+| `set_projection`     | `mode` (orthographic/perspective) | 切换投影模式                        |
 
-### 高亮与标注
+### 选择器
 
-| `op`               | 参数                                    | 说明         |
-| ------------------ | --------------------------------------- | ------------ |
-| `highlight_range`  | `chain`, `start`, `end`, `color`        | 区间高亮残基 |
-| `highlight_list`   | `chain`, `residues`(list[int]), `color` | 离散残基高亮 |
-| `clear_highlights` | —                                       | 清除所有高亮 |
+| `op`               | 参数                                    | 说明                     |
+| ------------------ | --------------------------------------- | ------------------------ |
+| `highlight_range`  | `chain`, `start`, `end`, `color`        | 区间高亮残基             |
+| `highlight_list`   | `chain`, `residues` (list[int]), `color`| 离散残基高亮             |
+| `select_by_atom`   | `atom_name` (str)                       | 按原子名选择（如 CA）    |
+| `select_by_element`| `element` (str)                         | 按元素符号选择（如 ZN）  |
+| `select_ligand`    | `component_id` (str)                    | 按配体名称选择（如 ATP） |
+| `select_within`    | `anchor_ligand`, `distance` (Å)         | 空间距离选择             |
+| `select_by_bfactor`| `op` (gt/lt/gte/lte), `value`           | 按 B-factor 阈值选择     |
+| `clear_highlights` | —                                       | 清除所有高亮             |
+
+### 标注
+
+| `op`                   | 参数                              | 说明                       |
+| ---------------------- | --------------------------------- | -------------------------- |
+| `add_label`            | `chain`, `residue`, `text` (可选) | 为残基添加文字标签         |
+| `auto_label_selection` | —                                 | 对当前选区批量添加标签     |
+| `clear_labels`         | —                                 | 清除所有文字标签           |
 
 ### 测量
 
-| `op`                 | 参数                               | 说明         |
-| -------------------- | ---------------------------------- | ------------ |
-| `measure_dist`       | `chain1`, `res1`, `chain2`, `res2` | Cα 距离测量  |
-| `clear_measurements` | —                                  | 清除所有测量 |
+| `op`                 | 参数                                               | 说明                       |
+| -------------------- | -------------------------------------------------- | -------------------------- |
+| `measure_dist`       | `chain1`, `res1`, `atom1`(可选), `chain2`, `res2`, `atom2`(可选) | 距离测量（支持任意原子）   |
+| `measure_angle`      | `loci1`, `loci2`, `loci3` (chain:res:atom)        | 三原子角度测量             |
+| `measure_dihedral`   | `loci1`~`loci4` (chain:res:atom)                  | 四原子二面角测量           |
+| `clear_measurements` | —                                                  | 清除所有测量               |
+
+### 相互作用分析
+
+| `op`                | 参数            | 说明                                     |
+| ------------------- | --------------- | ---------------------------------------- |
+| `show_hbonds`       | —               | 显示候选氢键（基于几何阈值）             |
+| `show_metal_coord`  | `element`(可选) | 显示金属配位键                           |
+| `show_salt_bridges` | —               | 显示盐桥                                 |
+| `show_hydrophobic`  | —               | 显示疏水接触                             |
+| `show_clashes`      | —               | 显示空间碰撞冲突                         |
+| `clear_interactions`| —               | 清除所有相互作用标注                     |
+
+### 信息查询
+
+| `op`           | 参数               | 说明                                          |
+| -------------- | ------------------ | --------------------------------------------- |
+| `get_info`     | —                  | 返回链数/残基数/原子数                        |
+| `list_chains`  | —                  | 枚举所有链 ID（结果通过 /api/query-result 读取）|
+| `list_ligands` | —                  | 枚举配体列表及实例数                          |
+| `list_models`  | —                  | 枚举 NMR 模型列表                             |
+| `get_bfactor`  | `chain`, `residue` | 查询指定残基各原子 B-factor                   |
 
 ### 动画与导出
 
-| `op`           | 参数                                                              | 说明                                |
-| -------------- | ----------------------------------------------------------------- | ----------------------------------- |
-| `spin`         | `active` (bool), `speed` (number)                                 | 自动旋转 ON/OFF                     |
-| `screenshot`   | —                                                                 | 浏览器下载 PNG                      |
-| `record_video` | —                                                                 | 占位提示（引导使用 Mol\* 内置录制） |
-| `save_pdb`     | `confirm_required` (bool), `confirmed` (bool), `path` (str, 可选) | 保存 PDB（需确认弹窗）              |
-
-### 信息
-
-| `op`       | 参数 | 说明                   |
-| ---------- | ---- | ---------------------- |
-| `get_info` | —    | 返回链数/残基数/原子数 |
-
-### 日志相关 API（发布前删除）
-
-| 路由              | 方法 | 说明                      | 删除标记             |
-| ----------------- | ---- | ------------------------- | -------------------- |
-| `/api/log`        | POST | 前端执行日志写入          | **[DEL-BEFORE-PUB]** |
-| `/api/logs`       | GET  | 执行日志读取              | **[DEL-BEFORE-PUB]** |
-| `.pdb-viewer.log` | 文件 | 日志文件存储位置          | **[DEL-BEFORE-PUB]** |
-| `log_message()`   | 方法 | HTTP Handler 日志写入方法 | **[DEL-BEFORE-PUB]** |
-| `_exec_logs`      | 变量 | 内存日志队列              | **[DEL-BEFORE-PUB]** |
+| `op`                    | 参数                                           | 说明                           |
+| ----------------------- | ---------------------------------------------- | ------------------------------ |
+| `spin`                  | `active` (bool), `speed` (number)              | 自动旋转 ON/OFF                |
+| `screenshot`            | `width`/`height` (可选)                        | 截图下载 PNG（支持自定义分辨率）|
+| `screenshot_transparent`| —                                              | 透明背景截图                   |
+| `save_pdb`              | `confirm_required`, `confirmed`, `path` (可选) | 保存 PDB（需确认弹窗）         |
+| `export_selection`      | `path` (str)                                   | 导出选区为新 PDB 文件          |
+| `export_filtered`       | `path`, `remove`, `keep_chains`, `keep_altloc` | 过滤后导出（derive_file 模式） |
+| `save_scene`            | `name` (str)                                   | 保存完整场景状态快照           |
+| `load_scene`            | `name` (str)                                   | 恢复场景状态快照               |
+| `record_video`          | —                                              | 引导使用 Mol\* 内置录制 UI     |
 
 ## 腾讯健康组学平台 COS 支持
 
@@ -319,6 +366,146 @@ pdb-viewer-skill 只调用以下一个接口，**不做其他任何操作**：
 环境 ID（`EnvironmentId`）从 `~/.omics-platform-cli/omics_config.json` 中的 `EnvironmentId` 字段读取，与 omics-platform-cli 的环境配置保持一致。
 
 已连接**正式环境**（`https://omics.qq.com`）。
+
+## 通用 COS 访问（coscli）
+
+### 概述
+
+除了腾讯健康组学平台绑定的 COS 桶外，pdb-viewer-skill 还支持通过 **coscli**（腾讯云官方命令行工具）访问**任意 COS 桶**中的 PDB 文件。
+
+### 路由策略
+
+当用户输入 `cos://` URI 时，系统按以下逻辑自动选择通道：
+
+```
+cos://<bucket>/[<region>/]<key.pdb>
+           │
+           ▼
+   ┌─ 解析 bucket 名称 ─┐
+          │
+   ┌──────┴──────────┐
+   │                  │
+ bucket 在            bucket 不在
+ ~/.cos.yaml          ~/.cos.yaml
+ 的 buckets 列表中？  的 buckets 列表中？
+   │                  │
+   ▼                  ▼
+ ┌──────────┐    ┌──────────────────┐
+ │ coscli   │    │  omics 通道      │
+ │ （通用桶）│    │ （平台绑定桶）     │
+ └──────────┘    └──────────────────┘
+```
+
+- **优先走 coscli**：如果用户在 `~/.cos.yaml` 中显式配置了该桶，说明用户意图明确访问该桶
+- **fallback 到 omics**：未配置时尝试 omics 平台绑定桶
+
+### 前置依赖
+
+#### 安装 coscli
+
+```bash
+# macOS (Apple Silicon / M1/M2/M3)
+wget https://cosbrowser.cloud.tencent.com/software/coscli/coscli-darwin-arm64
+mv coscli-darwin-arm64 coscli && chmod +x coscli
+sudo mv coscli /usr/local/bin/
+
+# macOS (Intel)
+wget https://cosbrowser.cloud.tencent.com/software/coscli/coscli-darwin-amd64
+mv coscli-darwin-amd64 coscli && chmod +x coscli
+sudo mv coscli /usr/local/bin/
+
+# Linux (x86_64)
+wget https://cosbrowser.cloud.tencent.com/software/coscli/coscli-linux-amd64
+mv coscli-linux-amd64 coscli && chmod +x coscli
+sudo mv coscli /usr/local/bin/
+
+# 验证安装
+coscli --version  # 应输出 v1.0.8 或更高版本
+```
+
+> 官方下载页面: https://cloud.tencent.com/document/product/436/63144
+
+#### 配置 coscli
+
+首次使用需要初始化配置文件：
+
+```bash
+coscli config init
+```
+
+按交互提示输入：
+1. **Secret ID**: 腾讯云 API 密钥 ID（建议使用子账号密钥，遵循最小权限原则）
+2. **Secret Key**: 腾讯云 API 密钥 Key
+3. **Session Token**: 直接回车跳过（当前仅支持永久密钥模式）
+4. **APPID**: 腾讯云账号 APPID（从 [账号信息](https://console.cloud.tencent.com/developer) 获取）
+5. **Bucket Name**: 存储桶名称（格式 `<BucketName-APPID>`）
+6. **Bucket Endpoint**: 存储桶地域域名（如 `cos.ap-guangzhou.myqcloud.com`）
+7. **Bucket Alias**: 存储桶别名（可选，用于简化命令）
+
+添加更多存储桶：
+
+```bash
+coscli config add -b <bucket-name-appid> -r <region> -a <alias>
+```
+
+查看当前配置：
+
+```bash
+cosli config show
+```
+
+### 配置文件格式
+
+coscli 配置文件位于 `~/.cos.yaml`，YAML 格式：
+
+```yaml
+cos:
+  base:
+    secretid: <加密存储>
+    secretkey: <加密存储>
+    sessiontoken: ""
+    protocol: https
+  buckets:
+  - name: mybucket-1250000000    # 存储桶全称
+    alias: mybucket              # 别名（可选）
+    region: ap-guangzhou         # 地域
+    endpoint: cos.ap-guangzhou.myqcloud.com
+    ofs: false
+  - name: another-bucket-123456789
+    alias: another
+    region: ap-beijing
+    endpoint: cos.ap-beijing.myqcloud.com
+    ofs: false
+```
+
+### 使用方式
+
+与 omics COS 完全一致，统一使用 `cos://` URI 格式：
+
+```python
+# 预加载通用 COS 桶的 PDB 文件
+POST /api/preload
+{"uri": "cos://mybucket-1250000000/path/to/structure.pdb"}
+
+# 或在 URL 参数中指定
+present_files(["http://127.0.0.1:8789?pdb=cos://mybucket-1250000000/path/to/structure.pdb"])
+```
+
+### 权限范围
+
+coscli 通道只执行以下操作：
+
+| 操作 | 用途 |
+|------|------|
+| `coscli cp <cos_url> <local_file>` | 从 COS 下载 PDB 文件到本地临时目录 |
+
+**不允许通过此 SKILL 调用 coscli 的其他命令**（如 mb/rm/sync 等）。
+
+### 当前限制
+
+- 仅支持**永久密钥**模式（Session Token 留空）
+- 不支持 STS 临时密钥
+- 需要用户自行安装和配置 cosli
 
 ## LLM 行为约定（核心！）
 
@@ -387,7 +574,7 @@ import os
 
 # ── ★ 动态获取 SKILL_ROOT（必读）─────────────────────────────
 # 优先级：用户级安装 > 项目级安装
-_user_skill = os.path.expanduser("<user-skill-dir>/pdb-viewer-skill")
+_user_skill = os.path.expanduser("~/.workbuddy/skills/pdb-viewer-skill")
 _project_skill = os.path.join(os.environ.get("PROJECT_ROOT", "."), ".workbuddy/skills/pdb-viewer-skill")
 
 if os.path.isdir(_user_skill):
@@ -504,8 +691,7 @@ display:flex;align-items:center;justify-content:center;height:100vh;margin:0;}}<
 4. `set_repr` 的 repr 参数使用 kebab-case（如 `ball-and-stick`），不是 snake_case
 5. 如果命令失败，向用户报告错误原因并建议修正
 6. **只允许在 WorkBuddy 内置浏览器中打开，不允许主动打开用户本机浏览器**
-7. **日志文件位置标记：搜索 `[DEL-BEFORE-PUB]` 可快速找到所有需删除的日志相关代码**
-8. **浏览器页面默认不显示命令日志面板**；调试时在 URL 追加 `?debug=1` 可开启
+7. **浏览器页面默认不显示命令日志面板**；调试时在 URL 追加 `?debug=1` 可开启
 
 ### save_pdb 特殊说明
 
@@ -563,30 +749,11 @@ POST /api/command {"op": "save_pdb", "params": {"confirmed": true}}
 - session_id 仅用于调用 `CosBucketService.GetObjectData`，不通过 HTTP 暴露给浏览器
 - Mol\* 库本地自托管，无 CDN 依赖
 
-## 发布前清理清单（重要！）
+## 发布前清理清单
 
-在将此 Skill 发布给其他用户前，**必须完成以下清理工作**：
+在将此 Skill 发布给其他用户前，完成以下验证：
 
-### 日志功能删除（搜索 `[DEL-BEFORE-PUB]` 标记）
-
-| 序号 | 文件           | 删除内容                                            | 标记位置           |
-| ---- | -------------- | --------------------------------------------------- | ------------------ |
-| 1    | `serve_pdb.py` | `LOG_FILE` 常量定义 (~line 70)                      | `[DEL-BEFORE-PUB]` |
-| 2    | `serve_pdb.py` | `log_message()` 方法 (~line 312-321)                | `[DEL-BEFORE-PUB]` |
-| 3    | `serve_pdb.py` | `_exec_logs` 变量及相关锁 (~line 120-122)           | `[DEL-BEFORE-PUB]` |
-| 4    | `serve_pdb.py` | `/api/log` POST 路由处理 (~line 812-827)            | `[DEL-BEFORE-PUB]` |
-| 5    | `serve_pdb.py` | `/api/logs` GET 路由处理 (~line 667-670)            | `[DEL-BEFORE-PUB]` |
-| 6    | `serve_pdb.py` | `_preloaded_pdb` 相关代码（可选，preload 缓存机制） | `[PUB-LOG-MARKER]` |
-| 7    | `SKILL.md`     | 本清单章节（发布后删除整个"发布前清理清单"章节）    | —                  |
-
-### 清理验证
-
-删除完成后：
-
-1. 全局搜索 `DEL-BEFORE-PUB` 和 `PUB-LOG-MARKER`，确保无残留
-2. 启动服务，确认无 `.pdb-viewer.log` 文件创建
-3. 访问 `/api/log` 和 `/api/logs`，应返回 404
-4. 功能测试：加载 PDB、执行命令等核心流程正常
+1. 功能测试：加载 PDB、执行命令等核心流程正常
 
 ## 常见问题
 
@@ -618,3 +785,30 @@ A: 在运行时查看 LLM 日志，应该能看到类似输出：
 ```
 
 如果报错 `找不到 pdb-viewer-skill 安装位置`，说明 Skill 未正确安装到预期路径。
+
+**Q: 通用 COS 桶的 PDB 加载失败，提示 "coscli 未安装"。**
+A: 请按以下步骤安装 coscli：
+
+```bash
+# macOS (Apple Silicon)
+wget https://cosbrowser.cloud.tencent.com/software/coscli/coscli-darwin-arm64
+mv coscli-darwin-arm64 coscli && chmod +x coscli
+sudo mv coscli /usr/local/bin/
+coscli --version
+```
+
+然后执行 `cosli config init` 完成配置（输入 SecretId、SecretKey、APPID、Bucket 信息等）。
+
+**Q: 通用 COS 桶加载失败，提示 "coscli 配置文件不存在"。**
+A: 请执行 `cosli config init` 初始化配置文件。配置完成后，目标桶名称会出现在 `~/.cos.yaml` 的 `cos.buckets` 列表中。
+
+**Q: 通用 COS 桶加载失败，提示 "coscli cp 失败"。**
+A: 可能原因：
+1. bucket 名称或 key 路径不正确
+2. 当前密钥没有该桶的读取权限（需要 `cos:GetObject` 权限）
+3. 网络连接问题
+
+请检查 `~/.cos.yaml` 中该桶的配置是否正确，或手动运行 `cosli cp cos://<bucket>/<key> /tmp/test.pdb` 排查。
+
+**Q: 我的 COS 桶同时配置了 omics 和 coscli，会走哪条路？**
+A: **优先走 coscli**。如果桶名称出现在 `~/.cos.yaml` 的 `buckets` 列表中，系统认为用户显式配置了该桶，会使用 coscli 通道。如需强制走 omics，可从 coscli 配置中移除该桶。

@@ -1,4 +1,4 @@
-# Omics Bioinfo Expert
+# Omics Bioinformatics Analysis Expert
 
 专攻生信分析，支持任务投递、进度追踪、日志解析、智能排错。内置自研模型库，加速生信研发与生产分析
 

@@ -1,4 +1,4 @@
-# scBert Single-cell Pretraining Expert
+# scBERT Single-Cell Pre-training Expert
 
 基于腾讯scBERT模型，实现细胞精细注释、新亚群挖掘及Marker筛选，自适应多组织参数，助力肿瘤细胞研究
 

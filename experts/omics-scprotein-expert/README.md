@@ -1,4 +1,4 @@
-# scPROTEIN Single-cell Proteomics Expert
+# scPROTEIN Single-Cell Proteomics Expert
 
 腾讯 scPROTEIN图神经网络模型，适配CITE-seq、REAP-seq稀疏蛋白数据，实现降噪补全与不确定性预估
 

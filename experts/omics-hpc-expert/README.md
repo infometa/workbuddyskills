@@ -1,4 +1,4 @@
-# Omics HPC Operations Expert
+# Omics HPC Cluster Ops Expert
 
 远程组学HPC一站式运维，管控节点、队列、存储全生命周期，适配SLURM/SGE调度，自然语言交互降低门槛
 

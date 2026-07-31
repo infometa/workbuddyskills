@@ -1,17 +1,19 @@
 {
   "name": "tc-sec",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Tencent Cloud Security Expert",
   "author": {
     "name": "sainclaw",
     "email": "sainclaw@tencent.com"
   },
-  "agents": ["./agents/tc-sec.md"],
-  "skills": ["./skills/tc-sec"],
-
   "expertType": "agent",
   "agentName": "tc-sec",
-
+  "agents": [
+    "./agents/tc-sec.md"
+  ],
+  "skills": [
+    "./skills/tc-sec"
+  ],
   "displayName": {
     "en": "Tencent Cloud Security Expert",
     "zh": "腾讯云安全专家"
@@ -22,23 +24,41 @@
   },
   "displayDescription": {
     "en": "Expert in Tencent Cloud security products, supporting cross-product automation, risk identification, threat analysis, compliance inspection, security report generation, and assisting users in completing security operations.",
-    "zh": "联动CWP/KMS/BH/CDS/CFW/SSM/TCSS/WAF/CSIP产品接口生成安全运营报告"
+    "zh": "调用云API对容器/主机安全、WAF、云防、云安全中心、堡垒机、密钥管理、数据安全告警/资产进行分析"
   },
   "avatar": "avatars/expert.png",
-  "categoryId": "13-TencentZone",
+  "categoryId": "11-SecurityCompliance",
   "defaultInitPrompt": {
     "zh": "我今天重点需要关注的告警事件",
     "en": "I need to focus on the following alert events"
   },
-  "plugin": "tc-sec",
   "tags": [
-    { "en": "Tencent Cloud Security", "zh": "腾讯云安全" },
-    { "en": "Security Products", "zh": "安全产品" },
-    { "en": "Security Operations", "zh": "安全运营" }
+    {
+      "en": "Tencent Cloud Security",
+      "zh": "腾讯云安全"
+    },
+    {
+      "en": "Security Products",
+      "zh": "安全产品"
+    },
+    {
+      "en": "Security Operations",
+      "zh": "安全运营"
+    }
   ],
   "quickPrompts": [
-    { "en": "I need to focus on the following alert events", "zh": "我今天重点需要关注的告警事件" },
-    { "en": "Generate today's security report", "zh": "生成今日安全报告"},
-    { "en": "Generate a weekly WAF security report", "zh": "生成WAF的安全防护周报"}
-  ]
+    {
+      "en": "I need to focus on the following alert events",
+      "zh": "我今天重点需要关注的告警事件"
+    },
+    {
+      "en": "Generate today's security report",
+      "zh": "生成今日安全报告"
+    },
+    {
+      "en": "Generate a weekly WAF security report",
+      "zh": "生成WAF的安全防护周报"
+    }
+  ],
+  "plugin": "tc-sec"
 }

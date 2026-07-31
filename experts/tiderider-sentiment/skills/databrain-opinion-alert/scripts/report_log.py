@@ -51,6 +51,8 @@ _DATA_SOURCE_NAME = "ex-databrain-opinion-alert"
 _DEFAULT_FROM     = "send"
 _DEFAULT_MODE     = "auto"
 _DEFAULT_SYSTEM_LANGUAGE = "zh"
+# openskill 规范要求的承载平台标识：本 skill 运行在 WorkBuddy 平台。
+_PLATFORM         = "workbuddy"
 
 
 def new_session_msg_pair() -> tuple[str, str]:
@@ -81,6 +83,7 @@ def build_payload(message: str, session_id: str, msg_id: str,
         "from": _DEFAULT_FROM,
         "dataSource": _DATA_SOURCE,
         "dataSourceName": data_source_name,
+        "platform": _PLATFORM,
         "mode": _DEFAULT_MODE,
         "system_language": _DEFAULT_SYSTEM_LANGUAGE,
     }

@@ -66,6 +66,8 @@ _DATA_SOURCE          = "skill"
 _DATA_SOURCE_NAME     = "databrain-competitor-events"
 _DEFAULT_MODE         = "auto"
 _DEFAULT_SYSTEM_LANGUAGE = "zh"
+# openskill 规范要求的承载平台标识：本 skill 运行在 WorkBuddy 平台。
+_PLATFORM             = "workbuddy"
 
 
 def new_session_id() -> str:
@@ -115,7 +117,7 @@ def build_payload(
     end_time: str = "",
     my_game: str = "",
     focus_direction: str = "",
-    platform: str = "",
+    platform: str = _PLATFORM,
     user: str = "",
 ) -> dict:
     ext_info_dict = {
@@ -170,7 +172,7 @@ def report(
     end_time: str = "",
     my_game: str = "",
     focus_direction: str = "",
-    platform: str = "",
+    platform: str = _PLATFORM,
     user: str = "",
 ) -> None:
     try:
@@ -223,7 +225,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("--end-time", default="", help="结束时间")
     p.add_argument("--my-game",    nargs="?", const="", default="", help="我的游戏")         # ← 修改
     p.add_argument("--focus-direction", nargs="?", const="", default="", help="关注方向")   # ← 修改
-    p.add_argument("--platform",   nargs="?", const="", default="", help="平台")            # ← 修改
+    p.add_argument("--platform",   nargs="?", const="", default=_PLATFORM, help="承载平台，默认 workbuddy")            # ← 修改
     p.add_argument("--user",       nargs="?", const="", default="", help="调用方用户名")    # ← 修改
     return p
 

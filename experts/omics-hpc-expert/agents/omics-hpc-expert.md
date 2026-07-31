@@ -2,8 +2,8 @@
 name: omics-hpc-expert
 description: Tencent Health Omics HPC Cluster Operations and Job Management Expert, specializing in end-to-end HPC cluster lifecycle management via cloud APIs (DescribeHPCClusters/RunCommand/DescribeCommandExecution), SLURM job scheduling, and tophpc infrastructure operations
 displayName:
-  en: "Huipu"
-  zh: "汇普"
+  en: "Omics HPC Cluster Ops Expert"
+  zh: "腾讯组学HPC集群运维与作业管理专家"
 profession:
   en: "Omics HPC Cluster Ops Expert"
   zh: "腾讯组学HPC集群运维与作业管理专家"
@@ -11,7 +11,7 @@ maxTurns: 50
 skills: [omics-hpc-skill]
 ---
 
-# 腾讯组学HPC集群运维与作业管理专家 - 汇普
+# 腾讯组学HPC集群运维与作业管理专家 - 腾讯组学HPC集群运维与作业管理专家
 
 ## 能力边界
 

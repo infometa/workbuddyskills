@@ -15,13 +15,30 @@ node --version   # 应输出 v20.x.x 或更高
 npm --version
 ```
 
-如果没有安装 Node.js，推荐使用 nvm 管理：
+如果没有安装 Node.js，推荐使用 nvm 管理。
+
+> ⚠️ **安全提示**：`curl ... | bash` 会把远程脚本直接交给 shell 执行，无法在运行前审查内容，存在供应链投毒/中间人篡改风险。**建议先下载脚本、核对来源与内容后再执行**（下方为推荐做法）；或直接参考 [nvm 官方安装文档](https://github.com/nvm-sh/nvm#installing-and-updating) 手动安装。
+
+推荐做法（下载 → 审查 → 执行）：
 
 ```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+# 1. 下载安装脚本到本地（不直接执行）
+curl -fsSL -o /tmp/nvm-install.sh https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh
+
+# 2. 审查脚本内容，确认无异常再继续
+less /tmp/nvm-install.sh
+
+# 3.（可选）比对官方发布的校验和 / 用固定 commit 而非 tag 以防被移动
+#    参见 https://github.com/nvm-sh/nvm/releases
+
+# 4. 确认无误后执行
+bash /tmp/nvm-install.sh
+
 nvm install 22
 nvm use 22
 ```
+
+> 如你完全信任该来源并接受风险，也可用一行式 `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash`，但不推荐用于生产/共享环境。
 
 ## 步骤一：安装 OpenCLI CLI
 

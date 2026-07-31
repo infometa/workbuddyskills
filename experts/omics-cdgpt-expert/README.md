@@ -1,4 +1,4 @@
-# CD-GPT Bio Sequence Modeling Expert
+# CD-GPT Bio-Sequence Modeling Expert
 
 基于腾讯CD-GPT多模态大模型，覆盖DNA、RNA、蛋白质序列，支持翻译、反向翻译、生成与功能注释
 
