@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**78** · 专家：**399** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**78** · 专家：**400** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-01
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-02
 
 ---
 ## 目录
@@ -548,7 +548,7 @@
 | [`xiaohongshu-operations-expert`](./experts/xiaohongshu-operations-expert/) | [小红书运营专家](./experts/xiaohongshu-operations-expert/) | 深谙小红书种草生态和推荐机制，打造高互动率种草内容 | 需要 GitHub Token 或 `gh auth login`；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`zhihu-strategist`](./experts/zhihu-strategist/) | [知乎策略师](./experts/zhihu-strategist/) | 精通知乎推荐机制和知识营销策略，通过高质量回答建立权威 | 需要 GitHub Token 或 `gh auth login` |
 
-### 技术工程（41）
+### 技术工程（42）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -593,6 +593,7 @@
 | [`terminal-integration-expert`](./experts/terminal-integration-expert/) | [终端集成专家](./experts/terminal-integration-expert/) | 精通终端应用与空间计算环境的集成 | 无 |
 | [`threat-detection-engineer`](./experts/threat-detection-engineer/) | [威胁检测工程师](./experts/threat-detection-engineer/) | 专精构建威胁检测系统，在攻击者造成损害前发现拦截威胁 | 无 |
 | [`we-chat-mini-program-developer`](./experts/we-chat-mini-program-developer/) | [微信小程序开发者](./experts/we-chat-mini-program-developer/) | 精通微信小程序开发框架和生态，打造流畅微信原生体验应用 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权 |
+| [`workspace-builder`](./experts/workspace-builder/) | [工作台搭建师](./experts/workspace-builder/) | 为不同人群定制专属数字工作台，覆盖学习备考、职场效率、自媒体创作、宝妈育儿、生活管理五大场景，PC/移动端双适配，一键部署即用 | 需要微信/企微相关凭证或扫码登录 |
 
 ### 数据智能（41）
 
