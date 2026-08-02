@@ -6,7 +6,7 @@
 
 - 技能包：**295** · 连接器：**78** · 专家：**400** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-02
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-03
 
 ---
 ## 目录
@@ -613,7 +613,7 @@
 | [`database-optimization-expert`](./experts/database-optimization-expert/) | [数据库优化专家](./experts/database-optimization-expert/) | 专精数据库性能调优和查询优化，让慢查询变快让瓶颈消失 | 需要环境变量：`SUPABASE_ANON_KEY` |
 | [`databrain-opinion-expert`](./experts/databrain-opinion-expert/) | [DataBrain舆情分析专家](./experts/databrain-opinion-expert/) | 玩家口碑与舆情侦察兵，覆盖评分告警、内容趋势、竞品对比与热点挖掘，实时感知玩家声音，辅助运营决策 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；需要环境变量：`DATABRAIN_TOKEN`、`TAI_IT_TOKEN` |
 | [`deep-research`](./experts/deep-research/) | [深度研究专家](./experts/deep-research/) | 综合性深度研究专家，支持多源信息检索、事实验证、知识发现和结构化报告生成，含微信公众号文章搜索能力 | 需要微信/企微相关凭证或扫码登录 |
-| [`empirical-research-team`](./experts/empirical-research-team/) | [实证研究团](./experts/empirical-research-team/) | 覆盖实证研究全流程的专家团：因果推断、稳健性检验、出版级表图与降AIGC，高效完成可复现学术论文 | 无（可选 API/账号以增强能力） |
+| [`empirical-research-team`](./experts/empirical-research-team/) | [科研专家团](./experts/empirical-research-team/) | 覆盖实证研究全流程的专家团：因果推断、稳健性检验、出版级表图与降AIGC，高效完成可复现学术论文 | 无（可选 API/账号以增强能力） |
 | [`finance-data`](./experts/finance-data/) | [金融数据检索专家](./experts/finance-data/) | 金融数据检索专家，通过自然语言查询 209 个金融数据 API，涵盖股票、指数、期货、债券、基金和宏观经济等 15 大类 | 无（可选 API/账号以增强能力） |
 | [`fundus-disease-analysis`](./experts/fundus-disease-analysis/) | [腾讯健康-觅影-眼底彩照疾病分析专家](./experts/fundus-disease-analysis/) | 基于普角与超广角眼底彩照的AI多病种分析，覆盖青光眼、糖网、AMD等数十种疾病的诊断与报告解读。 | 需要环境变量：`FUNDUS_TOKEN` |
 | [`gpt-researcher-team`](./experts/gpt-researcher-team/) | [深度研究团队](./experts/gpt-researcher-team/) | 深度研究报告输出，7角色5阶段聚合多源信息，经审稿修订循环输出带引用的专业报告 | 无（可选 API/账号以增强能力） |
@@ -837,7 +837,7 @@
 | [`believe-in-light`](./experts/believe-in-light/) | [相信光么](./experts/believe-in-light/) | 光模块产业链信号监控专家团。主理人 + 6位成员Agent 三端采集信号，因果验证+权重校准，三层嵌套输出景气度评级。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`citongshuopro`](./experts/citongshuopro/) | [刺桐说Pro-投资社群嘉宾团](./experts/citongshuopro/) | 模拟真实投资社群运作模式的多智能体投研系统，已接入社群嘉宾数字分身，可7*24为您提供投资咨询服务。 | 可能需要启用对应 MCP / 连接器 |
 | [`earnings-reviewer`](./experts/earnings-reviewer/) | [财报研究员](./experts/earnings-reviewer/) | 资深季报复核分析师,读财报电话会和公告更新覆盖模型,产出季报后记、方差表与估值调整,供研究部门沿用。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
-| [`equity-research`](./experts/equity-research/) | [股票研究专家](./experts/equity-research/) | 全面的股票研究工具集：财报分析、首次覆盖报告、DCF与可比估值、多空推介、投资备忘录、事件情景分析、组合风险管理，覆盖完整买方卖方研究工作流 | 无 |
+| [`equity-research`](./experts/equity-research/) | [股票研究专家](./experts/equity-research/) | 全面的股票研究工具集：财报分析、首次覆盖报告、DCF与可比估值、多空推介、投资备忘录、事件情景分析、组合风险管理，覆盖完整买方卖方研究工作流 | 无（可选 API/账号以增强能力） |
 | [`fin-research-expert`](./experts/fin-research-expert/) | [股市投研分析师](./experts/fin-research-expert/) | 连接同舟公开投研能力，稳定生成个股、行业、事件与研报的证据化简报和可复核投研案例页面 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要 GitHub Token 或 `gh auth login`；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`finance`](./experts/finance/) | [财务会计专家](./experts/finance/) | 财务会计工具集：月末结账、日记账分录、账户核对、财务报表生成、差异分析和 SOX 审计支持 | 无（可选 API/账号以增强能力） |
 | [`financial-analysis`](./experts/financial-analysis/) | [金融建模专家](./experts/financial-analysis/) | 核心金融建模工具：DCF 估值、可比公司分析、LBO 模型、三张表模型、竞争格局分析和 PPT 质检 | 可能需要启用对应 MCP / 连接器 |

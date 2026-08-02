@@ -1,228 +1,111 @@
 ---
-name: earnings-analysis
-description: Create professional equity research earnings update reports (8-12 pages, 3,000-5,000 words) analyzing quarterly results for companies already under coverage. Fast-turnaround format focusing on beat/miss analysis, key metrics, updated estimates, and revised thesis. Includes 1-3 summary tables and 8-12 charts. Use when user requests "earnings update", "quarterly update", "earnings analysis", "Q1/Q2/Q3/Q4 results", or post-earnings report.
+name: earnings
+description: |
+  盈利分析技能，支持两种模式：
+  - Preview 模式：业绩发布前的前瞻分析、情景假设、关键观测指标
+  - Analysis 模式：业绩发布后的深度解读、Beat/Miss 分析、估计修正
+  触发词：earnings analysis、earnings preview、业绩分析、业绩前瞻、财报分析、季报解读、pre-earnings、post-earnings、Q1/Q2/Q3/Q4 results
 ---
 
-# Equity Research Earnings Update
+# 盈利分析（Earnings）
 
-Create professional **EARNINGS UPDATE REPORTS** analyzing quarterly results for companies already under coverage, following institutional standards (JPMorgan, Goldman Sachs, Morgan Stanley format).
+## 功能说明
 
-**Key Characteristics:**
-- **Length**: 8-12 pages
-- **Word Count**: 3,000-5,000 words
-- **Tables**: 1-3 summary tables (NOT comprehensive)
-- **Figures**: 8-12 charts
-- **Turnaround**: 1-2 days (within 24-48 hours of earnings)
-- **Audience**: Clients already familiar with the company
-- **Focus**: What's NEW - beat/miss, updated estimates, thesis impact
-- **Font**: Times New Roman throughout (unless user specifies otherwise)
+统一的盈利分析技能，根据业绩发布时间自动选择模式：
+- **Preview 模式**：业绩尚未发布 → 前瞻分析
+- **Analysis 模式**：业绩已发布 → 深度解读
 
-## When to Use
+## 模式判断
 
-Use when the user requests:
-- "Create an earnings update for [Company] Q3 2024"
-- "Analyze [Company]'s quarterly results"
-- "Post-earnings report for [Company]"
-- "Q1/Q2/Q3/Q4 update for [Company]"
+1. 确认公司和报告季度
+2. 搜索该季度业绩是否已发布
+3. 已发布 → Analysis 模式；未发布 → Preview 模式
 
-**Do NOT use if:**
-- User requests "initiation report" → Use different skill
-- User requests "flash note" or "quick take" → Different format
-- Company is not already covered → Need initiation first
+---
 
-## Critical Requirements
+## Preview 模式（业绩前瞻）
 
-### 1. Speed & Timeliness
-- Publish within 24-48 hours of earnings release
-- Focus on NEW information only
-- Don't rehash company background extensively
+### 工作流
 
-### 2. Beat/Miss Analysis
-- Lead with whether company beat or missed estimates
-- Quantify variances (e.g., "Revenue beat by $120M or 3%")
-- Explain WHY results differed from expectations
+**Step 1: 采集共识估计**
+- 公司名、报告季度、业绩日期（盘前/盘后）
+- 共识估计：收入、EPS、关键分部指标
+- 前一季度管理层指引
 
-### 3. Summary Format
-- Keep tables to 1-3 (summary only, not comprehensive)
-- No full P&L/Cash Flow/Balance Sheet (just key metrics)
-- Assume reader has seen initiation report
+**Step 2: 关键观测框架**
 
-### 4. Citations & Source Attribution ⭐⭐⭐ MANDATORY
+| 维度 | 指标 |
+|------|------|
+| 财务 | 收入/EPS vs 共识、毛利率/营业利润率变化、FCF、前瞻指引 |
+| 运营 | 行业特定 KPI（SaaS: ARR/NRR; 零售: 同店; 工业: 订单簿） |
 
-**CRITICAL**: Properly cite all data with SPECIFIC sources and CLICKABLE HYPERLINKS.
+**Step 3: 情景分析**
 
-**Include specific citations WITH CLICKABLE LINKS in every figure and table:**
+| 情景 | 收入 | EPS | 关键驱动 | 股价反应预估 |
+|------|------|-----|---------|------------|
+| 牛市 | | | | |
+| 基本 | | | | |
+| 熊市 | | | | |
 
-```
-Source: Q3 2024 10-Q filed November 8, 2024; Company earnings release
-        [Hyperlink "10-Q" to: https://www.sec.gov/cgi-bin/viewer?accession=...]
-        [Hyperlink "earnings release" to: https://investor.company.com/news/q3-2024]
-```
+**Step 4: 催化清单**
+- 3-5 个决定股价反应的关键因素
+- 期权隐含波动率 vs 历史业绩日波动
 
-**HOW HYPERLINKS SHOULD APPEAR IN WORD:**
-- Document names appear as blue, underlined clickable links
-- Reader can Ctrl+Click to open source directly
-- Not plain text URLs - formatted hyperlinks with display text
+### 输出
+一页纸 Preview：共识估计表 + 关键观测排序 + 情景表 + 催化清单 + 交易设置
 
-**REQUIRED SOURCES LIST:**
+---
 
-Cite in every earnings update:
-- ✅ Earnings release (with date and URL)
-- ✅ 10-Q filing (with filing date and EDGAR link)
-- ✅ Earnings call transcript (with date)
-- ✅ Investor presentation/supplemental materials (if available)
-- ✅ Consensus estimates source (Bloomberg/FactSet/etc. with date)
-- ✅ Prior guidance (from previous quarter's materials)
+## Analysis 模式（业绩深度分析）
 
-**REFERENCE SECTION WITH CLICKABLE HYPERLINKS:**
+### 工作流
 
-Include "Sources" section at end of report:
+**🚨 数据时效性检查**：
+1. 确认今日日期
+2. 搜索最新业绩（"[Company] latest earnings results"）
+3. 验证业绩发布日在 3 个月以内
 
-```
-SOURCES & REFERENCES
+**Step 1: Beat/Miss 判定**
+- 收入 vs 共识（金额和百分比）
+- EPS vs 共识
+- 关键分部/KPI vs 预期
+- 前瞻指引 vs 共识
 
-Earnings Materials (Q3 2024):
-• Earnings Release (November 7, 2024)
-  [Hyperlink entire line to: https://investor.company.com/news/q3-2024-earnings]
+**Step 2: 深度分析**
+- 分部/区域/产品拆解
+- 毛利率和费用率变动原因
+- 管理层电话会关键表态
+- 一次性项目 vs 可持续趋势
 
-• Form 10-Q (Filed November 8, 2024)
-  [Hyperlink to: https://www.sec.gov/cgi-bin/viewer?accession=...]
+**Step 3: 估计修正**
+- 更新前瞻 EPS/收入预测
+- 展示旧估计 vs 新估计 + 变动原因
+- 对目标价的影响
 
-• Earnings Call Transcript (November 7, 2024)
-  [Hyperlink to: https://seekingalpha.com/article/...]
+**Step 4: 论点影响评估**
+- 原投资逻辑是否强化/弱化
+- 评级是否需要调整
+- 下一个关键验证点
 
-• Investor Presentation (November 7, 2024)
-  [Hyperlink to: https://investor.company.com/presentations/q3-2024.pdf]
-```
+### 输出
+8-12 页 DOCX 报告（详见 `references/workflow.md`）：
+- P1: 摘要（评级/目标价/关键数据）
+- P2-3: 业绩详解
+- P4-5: KPI 与指引
+- P6-7: 论点更新
+- P8-10: 估值与估计修正
+- 8-12 图表
 
-**VERIFICATION CHECKLIST:**
-- [ ] Every figure has source with specific document and date
-- [ ] Every table has source with document reference
-- [ ] Beat/miss analysis cites consensus source with date
-- [ ] Guidance changes cite current and prior guidance sources
-- [ ] Key statistics have footnotes
-- [ ] Sources section lists all materials with URLs
-- [ ] ALL URLs are CLICKABLE HYPERLINKS (not plain text)
-- [ ] All SEC filings hyperlinked to EDGAR viewer
+**文件名**: `[Company]_Q[X]_[Year]_Earnings_Update.docx`
 
-### 5. Updated Estimates
-- Update forward estimates based on results
-- Show old vs. new estimates clearly
-- Explain what changed and why
+## 引用标准
 
-## High-Level Workflow
-
-The earnings update process follows 5 phases:
-
-### Phase 1: Data Collection (30-60 minutes)
-
-**🚨🚨🚨 CRITICAL: TRAINING DATA IS OUTDATED 🚨🚨🚨**
-
-**BEFORE STARTING - COMPLETE THESE 4 STEPS IN ORDER:**
-1. **CHECK TODAY'S DATE** - Write down the current date
-2. **SEARCH FOR LATEST** - Use web search: "[Company] latest earnings results"
-3. **VERIFY THE DATE** - Confirm earnings release is within last 3 months
-4. **CHECK TRANSCRIPT DATE** - Verify transcript date matches release date
-
-**COMMON MISTAKE**: Using outdated earnings calls from training data instead of searching for the latest.
-
-**REQUIREMENTS:**
-- ✅ Search for latest earnings - do NOT rely on training data
-- ✅ Write down today's date and the release date found
-- ✅ Verify release date is within 3 months of today
-- ✅ Verify transcript date matches release date
-- ✅ If dates don't match or are old (>3 months), search again
-
-**See [references/workflow.md](references/workflow.md)** for detailed search procedures and verification steps.
-
-### Phase 2: Analysis (2-3 hours)
-- Beat/miss analysis for each key metric
-- Segment/geographic/product breakdown
-- Margin and guidance analysis
-- Update financial model and estimates
-
-**See [references/workflow.md](references/workflow.md)** for detailed analysis framework.
-
-### Phase 3: Chart Generation (1-2 hours)
-Create 8-12 charts focusing on quarterly trends and what's new:
-- Quarterly revenue progression
-- Quarterly EPS progression
-- Quarterly margin trends
-- Revenue by segment/geography
-- Key operating metrics
-- Beat/miss summary
-- Estimate revisions
-- Valuation charts
-
-**See [references/workflow.md](references/workflow.md)** for chart specifications.
-
-### Phase 4: Report Creation (2-3 hours)
-Create 8-12 page DOCX report with specific structure.
-
-**See [references/report-structure.md](references/report-structure.md)** for complete page-by-page templates and formatting requirements.
-
-**High-level structure:**
-- Page 1: Earnings summary with rating and price target
-- Pages 2-3: Detailed results analysis
-- Pages 4-5: Key metrics & guidance
-- Pages 6-7: Updated investment thesis
-- Pages 8-10: Valuation & estimates
-- Pages 11-12: Appendix (optional)
-
-### Phase 5: Quality Check & Delivery (30 minutes)
-Verify content, formatting, accuracy, and timeliness before delivery.
-
-**See [references/best-practices.md](references/best-practices.md)** for quality checklist and common mistakes to avoid.
-
-## Output Specification
-
-**Primary Deliverable**: DOCX report (8-12 pages)
-**File Name**: `[Company]_Q[Quarter]_[Year]_Earnings_Update.docx`
-**Example**: `Nike_Q2_FY24_Earnings_Update.docx`
-
-**Contents:**
-- Page 1: Summary with rating, price target, key takeaways
-- Pages 2-3: Detailed results analysis
-- Pages 4-5: Key metrics and guidance
-- Pages 6-7: Updated thesis assessment
-- Pages 8-10: Valuation and estimates
-- Pages 11-12: Appendix (optional)
-- 8-12 embedded charts
-- 1-3 summary tables
-- Complete sources section with clickable hyperlinks
-
-**Optional Deliverable**: XLS model update (optional for earnings updates)
-
-## Key Differences from Initiation Report
-
-| Aspect | Earnings Update | Initiation Report |
-|--------|----------------|-------------------|
-| **Length** | 8-12 pages | 30-50 pages |
-| **Words** | 3,000-5,000 | 10,000-15,000 |
-| **Tables** | 1-3 summary | 12-20 comprehensive |
-| **Figures** | 8-12 | 25-35 |
-| **Turnaround** | 1-2 days | 3-6 weeks |
-| **Scope** | Quarterly results | Complete company |
-| **Focus** | What's NEW | Everything |
-| **Company Background** | Brief mention | 6-10 pages |
-| **XLS Model** | Optional | Required |
+- 每个数据点标注来源和日期
+- 必须引用：业绩公告、10-Q、电话会纪录、投资者材料、共识来源
+- 所有引用须为可点击超链接
 
 ## Resources
 
-### references/workflow.md
-Detailed Phase 1-5 instructions with step-by-step procedures for data collection, analysis, chart generation, and report creation.
-
-### references/report-structure.md
-Complete page-by-page templates, table formats, and formatting requirements for the DOCX report.
-
-### references/best-practices.md
-Examples of good/bad headlines, tips for success, common mistakes to avoid, and comprehensive quality checklist.
-
-## Dependencies
-
-**Required:**
-- Python (matplotlib, pandas, seaborn) for chart generation
-- DOCX skill for report creation
-
-**Optional:**
-- XLS skill for model updates (not required for earnings updates)
+- `references/workflow.md` — Analysis 模式详细步骤
+- `references/report-structure.md` — 报告页面模板
+- `references/best-practices.md` — 质量清单

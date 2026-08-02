@@ -1,3 +1,8 @@
+---
+description: Equity valuation methodology standards. Apply when performing DCF, comps valuation, initiating coverage valuation tasks, or any price target derivation.
+alwaysApply: false
+---
+
 # 股权估值方法论标准
 
 本标准适用于所有涉及估值判断的股票研究技能。

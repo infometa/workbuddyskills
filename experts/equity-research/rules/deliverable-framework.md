@@ -1,3 +1,8 @@
+---
+description: Report deliverable format standards. Apply when generating initiating coverage reports, earnings analysis, long-short pitches, or memo builder outputs.
+alwaysApply: false
+---
+
 # 研究交付物框架
 
 本标准规定股票研究输出的产出形式、质量标准和结构规范。
@@ -60,12 +65,6 @@
 - 数据截至日期
 
 ## 质量标准
-
-### 数据纪律
-- 所有数字有来源标注
-- 陈旧数据（>90天）标注 [STALE]
-- 缺失数据标注 [MISSING]，不编造
-- 管理层声明与事实数据明确区分
 
 ### 分析纪律
 - 禁止无结论的"两边都有道理"式分析
