@@ -1,0 +1,116 @@
+<section style="font-family: var(--font-sans); color: var(--color-text-primary); max-width: 680px;">
+  <h2 class="sr-only">越南建厂选址成本实时对比</h2>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-bottom: 12px;">
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      员工人数
+      <input id="lc_hc" type="number" value="100" min="1" step="10" style="font-size: 14px; padding: 7px 9px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      厂房面积 (m²)
+      <input id="lc_fa" type="number" value="5000" min="0" step="500" style="font-size: 14px; padding: 7px 9px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      用地面积 (m²)
+      <input id="lc_la" type="number" value="50000" min="0" step="5000" style="font-size: 14px; padding: 7px 9px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+  </div>
+
+  <div style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 6px;">选择对比省份（默认全选）</div>
+  <div id="lc_boxes" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;"></div>
+
+  <div id="lc_svg_wrap" style="width: 100%;"></div>
+
+  <div id="lc_best" style="font-size: 13px; color: var(--color-text-secondary); margin: 10px 0 12px;"></div>
+
+  <button onclick="lcExport()" style="font-size: 13px; padding: 8px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer;">导出报告 (HTML)</button>
+</section>
+
+<style>
+  .bar-rect { transition: none; cursor: pointer; }
+  .bar-rect:hover { filter: brightness(1.12); }
+  .lc-label { font-size: 14px; fill: var(--color-text-primary); }
+  .lc-val { font-size: 13px; fill: var(--color-text-secondary); }
+  .lc-axis { font-size: 11px; fill: var(--color-text-secondary); }
+</style>
+
+<script>
+const P={
+  bac_ninh:['北宁',15.2,5.8,22000000,10], hai_phong:['海防',14.0,5.5,20000000,10],
+  bac_giang:['北江',11.0,4.8,18000000,10], binh_duong:['平阳',18.6,5.6,21000000,20],
+  dong_nai:['同奈',16.0,5.2,19000000,20], ho_chi_minh:['胡志明市',22.0,7.0,25000000,20],
+  quang_ngai:['广义',9.6,4.2,17000000,10], da_nang:['岘港',12.0,4.5,18000000,10]
+};
+const EX=26300, SEL=Object.keys(P);
+let timer;
+function usd(v){ return '$'+(v/1e6).toFixed(2)+'M'; }
+function buildBoxes(){
+  const wrap=document.getElementById('lc_boxes');
+  wrap.innerHTML='';
+  Object.keys(P).forEach(k=>{
+    const c=document.createElement('label');
+    c.style.cssText='display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;';
+    const cb=document.createElement('input');
+    cb.type='checkbox'; cb.value=k; cb.checked=SEL.includes(k);
+    cb.addEventListener('change',calcDebounced);
+    c.appendChild(cb); c.appendChild(document.createTextNode(P[k][0]));
+    wrap.appendChild(c);
+  });
+}
+function calcRows(){
+  const hc=Math.max(1,+document.getElementById('lc_hc').value||0);
+  const fa=Math.max(0,+document.getElementById('lc_fa').value||0);
+  const la=Math.max(0,+document.getElementById('lc_la').value||0);
+  const boxes=[...document.querySelectorAll('#lc_boxes input:checked')].map(b=>b.value);
+  let rows=boxes.map(k=>{
+    const [name,land,fac,wage,cit]=P[k];
+    const landC=land*la, facC=fac*fa*12, payC=hc*wage*1.225/EX;
+    return {k,name,total:landC+facC+payC,cit};
+  }).sort((a,b)=>a.total-b.total);
+  return {hc,fa,la,rows};
+}
+function renderSVG(rows){
+  const wrap=document.getElementById('lc_svg_wrap');
+  if(!rows.length){ wrap.innerHTML=''; document.getElementById('lc_best').textContent='请至少选择一个省份'; return; }
+  const W=1000, rowH=46, padTop=14, labelW=120, barX=140, maxBarW=600, valPad=10;
+  const max=Math.max(...rows.map(r=>r.total));
+  const H=padTop+rows.length*rowH+6;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:680px;height:auto;display:block" role="img" aria-label="各省年度运营成本对比">';
+  rows.forEach((r,i)=>{
+    const y=padTop+i*rowH;
+    const cy=y+rowH/2;
+    const bw=max>0?(r.total/max)*maxBarW:0;
+    const color=i===0?'#3B6D11':'#185FA5';
+    const citTxt=r.cit===10?'10%优惠区':'20%标准';
+    s+='<text class="lc-label" x="12" y="'+(cy+5)+'">'+r.name+'</text>';
+    s+='<rect class="bar-rect" x="'+barX+'" y="'+(y+9)+'" width="'+bw.toFixed(1)+'" height="'+(rowH-18)+'" rx="4" fill="'+color+'">'
+      +'<title>'+r.name+' 年度运营成本 '+usd(r.total)+'（CIT '+citTxt+'）｜土地+厂房+用工(含21.5%社保)</title></rect>';
+    s+='<text class="lc-val" x="'+(barX+bw+valPad)+'" y="'+(cy+5)+'">'+usd(r.total)+'</text>';
+  });
+  s+='</svg>';
+  wrap.innerHTML=s;
+  const b=rows[0];
+  document.getElementById('lc_best').innerHTML='★ 最低综合成本：<strong>'+b.name+'</strong>，约 '+usd(b.total)+'/年（CIT '+(b.cit===10?'10%（优惠区）':'20%（标准）')+'）';
+}
+function calc(){ renderSVG(calcRows().rows); }
+function calcDebounced(){ clearTimeout(timer); timer=setTimeout(calc,30); }
+['lc_hc','lc_fa','lc_la'].forEach(id=>document.getElementById(id).addEventListener('input',calcDebounced));
+buildBoxes(); calc();
+function downloadReport(title, rows){
+  const d=new Date().toLocaleDateString('zh-CN');
+  let h='<!doc'+'type html><ht'+'ml lang="zh"><he'+'ad><meta charset="utf-8"><title>'+title+'</title><style>body{font-family:sans-serif;padding:32px;color:#222}h1{font-size:20px}table{width:100%;border-collapse:collapse;margin-top:16px}td,th{border:1px solid #ddd;padding:8px 12px;text-align:left;font-size:14px}.k{color:#555}.v{font-weight:600}.foot{margin-top:24px;color:#999;font-size:12px}</style></he'+'ad><bo'+'dy>';
+  h+='<h1>'+title+'</h1><div style="color:#666;font-size:13px">生成日期：'+d+' ｜ 越南财税金融专家（指示性测算，非税务意见）</div><table>';
+  rows.forEach(r=>{h+='<tr><td class="k">'+r[0]+'</td><td class="v">'+r[1]+'</td></tr>';});
+  h+='</table><div class="foot">数据来源：专家包 references/data/cost_reference.json（Cushman & Wakefield 2026Q1 + Decree 293/2025）。运营成本=土地租金+厂房租金+用工总成本(含21.5%社保)；CIT 单列未计入。签约前须以具体工业园报价为准。</div></body></html>';
+  const b=new Blob([h],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=title+'.html'; a.click();
+}
+function lcExport(){
+  const {hc,fa,la,rows}=calcRows();
+  const out=[['员工人数',hc+' 人'],['厂房面积',fa+' m²'],['用地面积',la+' m²']];
+  rows.forEach(r=>{
+    out.push([r.name+' 年度运营成本', usd(r.total)+'（CIT '+(r.cit===10?'10%优惠':'20%标准')+'）']);
+  });
+  downloadReport('越南建厂选址成本对比', out);
+}
+</script>

@@ -1,0 +1,232 @@
+{
+  "meta": {
+    "name": "越南财税金融实时数据源注册表",
+    "purpose": "在用户提问时通过 WebFetch 直连权威源进行快速实时查询，弥补静态语料无实时行情的短板",
+    "created": "2026-07-24",
+    "maintainer": "vietnam-finance-tax-expert",
+    "note": "查询方法列为 WebFetch 的 prompt 模板；部分源需要英文/越南语关键词，已注明"
+  },
+  "sources": [
+    {
+      "id": "sbv_fx",
+      "name_cn": "越南国家银行(SBV)官方参考汇率",
+      "name_vn": "Ngân hàng Nhà nước Việt Nam - Tỷ giá",
+      "url": "https://www.sbv.gov.vn/vi/t%E1%BB%B7-gi%C3%A1",
+      "category": "外汇/实时",
+      "datatype": "USD/EUR/JPY/CNY 等买入/卖出/中间价，每日约08:00更新",
+      "query_method": "WebFetch 该 URL，prompt: '提取今日各主要币种兑越南盾的买入价、卖出价、中间价，特别是 USD 和 CNY'",
+      "update_freq": "每日",
+      "reliability": "权威(官方)",
+      "notes": "SBV 官网为动态页面，若 WebFetch 取不到可用 Vietcombank 替代"
+    },
+    {
+      "id": "vcb_fx",
+      "name_cn": " Vietcombank 外汇牌价(零售+对公)",
+      "name_vn": "Vietcombank - Tỷ giá ngoại tệ",
+      "url": "https://www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-Tien-ich/Ty-gia",
+      "category": "外汇/实时",
+      "datatype": "多币种现钞/转账买入、卖出价，含 CNY；页面注明可提供 XML 格式",
+      "query_method": "WebFetch 该 URL，prompt: '提取 USD、CNY、EUR 的买入价与卖出价(越南盾)，以及更新时间'",
+      "update_freq": "每日多次",
+      "reliability": "权威(商业银行基准)",
+      "notes": "实战最常用、最易抓取；XML 端点可在页面'XML'链接获取"
+    },
+    {
+      "id": "gdt_news",
+      "name_cn": "越南税务总局(GDT)门户/新闻",
+      "name_vn": "Tổng cục Thuế - Cổng thông tin",
+      "url": "https://gdt.gov.vn",
+      "category": "税务/半实时",
+      "datatype": "税务新政、电子发票、跨境税务、全球最低税动态",
+      "query_method": "WebFetch https://web.gdt.gov.vn/wps/portal/ ，prompt: '列出近期越南税务最新政策/新闻标题与日期'",
+      "update_freq": "持续",
+      "reliability": "权威(官方)",
+      "notes": "越南语为主，可用英文关键词检索"
+    },
+    {
+      "id": "chinatax_vn",
+      "name_cn": "中国国家税务总局'税路通'越南税讯(中文)",
+      "name_vn": "China Tax - Vietnam Tax News",
+      "url": "https://www.chinatax.gov.cn/chinatax/c102745/c5242838/content.html",
+      "category": "税务/半实时",
+      "datatype": "越南税改中文编译(企业所得税法、税收管理法、DTA等)",
+      "query_method": "WebSearch 'site:chinatax.gov.cn 越南 税收' 或 WebFetch 具体文章 URL",
+      "update_freq": "持续",
+      "reliability": "高(中文，适合中资企业)",
+      "notes": "中资出海首选中文源；已收录 67/2025 CIT修订、320/2025 指南、108/2025 税收管理法"
+    },
+    {
+      "id": "tariff_customs",
+      "name_cn": "越南海关税则信息系统(官方)",
+      "name_vn": "Hệ thống thông tin biểu thuế - Tổng cục Hải quan",
+      "url": "https://tariff.customs.gov.vn",
+      "category": "关税/实时",
+      "datatype": "按 HS 编码查进口关税(MFN)、VAT、特别消费税(SCT)、监管条件",
+      "query_method": "WebFetch https://tariff.customs.gov.vn ，prompt: '查询 HS编码 [编码] 的进口关税、VAT、特别消费税及监管条件'",
+      "update_freq": "随法令更新",
+      "reliability": "权威(官方)",
+      "notes": "唯一官方 HS 查询平台，支持中英文关键词；注意越南2022起用10位制"
+    },
+    {
+      "id": "vtip",
+      "name_cn": "越南贸易门户(VTIP)",
+      "name_vn": "Cổng Thông tin Thương mại Việt Nam",
+      "url": "https://www.vietnamtradeportal.gov.vn/",
+      "category": "贸易/关税/半实时",
+      "datatype": "进出口流程、HS与税率、法规、SPS/TBT措施、FTAs",
+      "query_method": "WebFetch 该 URL，prompt: '查找 [产品] 的 HS 编码与进口税率及所需证书'",
+      "update_freq": "持续",
+      "reliability": "权威(海关主办)",
+      "notes": "与 tariff.customs.gov.vn 互补，偏流程与合规"
+    },
+    {
+      "id": "vbpl",
+      "name_cn": "越南国家法理库(官方)",
+      "name_vn": "Cơ sở dữ liệu quốc gia về pháp luật",
+      "url": "https://vbpl.vn/",
+      "category": "法规/半实时",
+      "datatype": "法律/法令/决议全文，结构化数据，2026-04-23 升级版(含AI)",
+      "query_method": "WebFetch https://vbpl.vn/ ，prompt: '查找 [法律/法令编号或名称] 的全文与生效日期'",
+      "update_freq": "持续",
+      "reliability": "权威(司法部)",
+      "notes": "核实法条原文首选；支持按编号(如 67/2025/QH15)检索"
+    },
+    {
+      "id": "lawnet",
+      "name_cn": "Lawnet 法律检索(英文)",
+      "name_vn": "Lawnet",
+      "url": "https://lawnet.vn/",
+      "category": "法规/半实时",
+      "datatype": "法律/法令英文版、效力状态、关联文件",
+      "query_method": "WebFetch https://lawnet.vn/ ，prompt: '查找 [越南文法律名] 的英文摘要与生效状态'",
+      "update_freq": "持续",
+      "reliability": "高(商业法律库)",
+      "notes": "英文界面友好，适合快速理解"
+    },
+    {
+      "id": "luatvietnam",
+      "name_cn": "LuatVietnam 法律库(越南语/中文友好)",
+      "name_vn": "LuatVietnam",
+      "url": "https://luatvietnam.vn/",
+      "category": "法规/半实时",
+      "datatype": "法律解读、实务问答、模板",
+      "query_method": "WebSearch 'luatvietnam [关键词]' 或 WebFetch 具体文章",
+      "update_freq": "持续",
+      "reliability": "高(专业律所库)",
+      "notes": "语料库已大量引用，实战解读详尽"
+    },
+    {
+      "id": "fia_vn",
+      "name_cn": "越南外资局(FIA)",
+      "name_vn": "Cục Đầu tư nước ngoài (FIA)",
+      "url": "https://dautunuocngoai.gov.vn/",
+      "category": "投资/半实时",
+      "datatype": "FDI 政策、投资指南、审批流程、统计数据",
+      "query_method": "WebFetch https://dautunuocngoai.gov.vn/ ，prompt: '提取外资企业在越投资最新指南与流程要点'",
+      "update_freq": "持续",
+      "reliability": "权威(计划投资部下属)",
+      "notes": "投资/ODI 落地流程权威源"
+    },
+    {
+      "id": "mof_vn",
+      "name_cn": "越南财政部(MoF)",
+      "name_vn": "Bộ Tài chính",
+      "url": "https://www.mof.gov.vn/",
+      "category": "财税/会计/保险/半实时",
+      "datatype": "会计准(VAS)、保险监管、证券、国家预算法令",
+      "query_method": "WebFetch https://www.mof.gov.vn/ ，prompt: '查找 [通函/法令编号] 关于会计准/保险/证券的内容'",
+      "update_freq": "持续",
+      "reliability": "权威(官方)",
+      "notes": "VAS/IFRS、保险框架、证券法规的发布主体"
+    },
+    {
+      "id": "ssc_vn",
+      "name_cn": "越南国家证券委员会(SSC)",
+      "name_vn": "Ủy ban Chứng khoán Nhà nước",
+      "url": "https://www.ssc.gov.vn/",
+      "category": "证券/半实时",
+      "datatype": "证券发行、上市、披露规则",
+      "query_method": "WebFetch https://www.ssc.gov.vn/ ，prompt: '提取证券市场最新监管动态'",
+      "update_freq": "持续",
+      "reliability": "权威(官方)",
+      "notes": "证券主题补充源"
+    },
+    {
+      "id": "wtocenter",
+      "name_cn": "VCCI 世贸中心关税工具",
+      "name_vn": "TTWTO VCCI",
+      "url": "https://www.wtocenter.vn/german-market/24176-import-tax-searching-tools",
+      "category": "关税/FTA/半实时",
+      "datatype": "FTA 特殊优惠税率检索指引(ATIGA/ACFTA/EVFTA/CPTPP等)",
+      "query_method": "WebFetch 该 URL，prompt: '列出越南各FTA项下特殊优惠进口税率检索方法'",
+      "update_freq": "随法令更新",
+      "reliability": "高(商协会)",
+      "notes": "FTA 税率优惠判定指引，配合 tariff.customs.gov.vn 使用"
+    },
+    {
+      "id": "sbv_policy_rate",
+      "name_cn": "越南国家银行(SBV)政策利率与信贷利率",
+      "name_vn": "SBV - Lãi suất",
+      "url": "https://www.sbv.gov.vn/webcenter/portal/vi/menu/trang-chu/hoat-dong-nh/tra-soat-lai-suat",
+      "category": "银行/实时",
+      "datatype": "再融资利率、再贴现利率、准备金率、银行间平均放贷利率",
+      "query_method": "WebFetch SBV 利率页面，prompt: '提取当前再融资利率(refinancing rate)、再贴现利率(discount rate)及银行业平均贷款利率'",
+      "update_freq": "按货币政策会议调整",
+      "reliability": "权威(官方)",
+      "notes": "补足语料缺的实时利率；SBV 官网动态，必要时用 Vietcombank 牌价页替代"
+    },
+    {
+      "id": "vcb_rates",
+      "name_cn": "Vietcombank 存贷款利率表",
+      "name_vn": "Vietcombank - Biểu lãi suất",
+      "url": "https://www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-Tien-ich/Lai-suat",
+      "category": "银行/实时",
+      "datatype": "个人/企业本外币存贷款基准利率，按期限(1/3/6/12月+)",
+      "query_method": "WebFetch 该 URL，prompt: '提取企业越南盾贷款基准利率各期限，以及1年期存款利率'",
+      "update_freq": "随行就价",
+      "reliability": "权威(商业银行基准)",
+      "notes": "贸易融资/银团贷款产品条款语料薄，实时查利率可补足；实际授信以银行报价为准"
+    },
+    {
+      "id": "vss_portal",
+      "name_cn": "越南社会保险局(VSS)门户",
+      "name_vn": "Bảo hiểm xã hội Việt Nam",
+      "url": "https://baohiemxahoi.gov.vn/",
+      "category": "社保/半实时",
+      "datatype": "社保费率、参保指南、外籍员工社保、VssID查询",
+      "query_method": "WebFetch 该 URL，prompt: '提取强制性社保缴费比例与外籍员工适用规则'",
+      "update_freq": "随《社保法》修订",
+      "reliability": "权威(官方)",
+      "notes": "社保主题权威源；已收录 41/2024/QH15 法与 21.5%/10.5% 费率进语料"
+    },
+    {
+      "id": "hose_hnx",
+      "name_cn": "胡志明/河内证交所行情(HOSE/HNX)",
+      "name_vn": "HOSE / HNX",
+      "url": "https://www.hsx.vn/Modules/Listing/Web/Stock",
+      "category": "证券/实时",
+      "datatype": "股指、个股市价、成交量、上市公司名单",
+      "query_method": "WebFetch HSX 行情页，prompt: '提取 VN-Index 最新点位与主要成分股报价'",
+      "update_freq": "交易时段实时",
+      "reliability": "权威(交易所)",
+      "notes": "证券行情语料无，需实时查；上市公司合规见 ssc_vn"
+    },
+    {
+      "id": "mof_insurance",
+      "name_cn": "财政部保险管理局(保险监管)",
+      "name_vn": "Cục Quản lý, giám sát bảo hiểm (MoF)",
+      "url": "https://www.mof.gov.vn/webcenter/portal/vi/pages_tt/ttcq/bh",
+      "category": "保险/半实时",
+      "datatype": "保险经营许可、强制保险费率、保险法配套通告",
+      "query_method": "WebFetch MoF 保险监管页，prompt: '提取强制保险(机动车/火灾爆炸/工程)费率与实施规定'",
+      "update_freq": "随保险法令更新",
+      "reliability": "权威(官方)",
+      "notes": "保险产品条款费率语料薄，强制险框架/费率可从此实时核；商业险具体条款须持牌经纪"
+    }
+  ],
+  "workflow": {
+    "实时查询": "用户问'当前汇率/最新税率/某HS编码关税'时，先匹配 sources 中对应条目，用其 query_method 调 WebFetch 取实时值，再结合语料给出结论并标注'实时数据'与来源URL。",
+    "语料补全": "发现比语料更新的法规(如 108/2025 税收管理法)，用 WebFetch 抓取全文/摘要存入 corpus_supplement/ 并重建索引(见 README.md)。",
+    "时效标注": "凡实时抓取内容，回复中须注明'实时数据 @URL 抓取于YYYY-MM-DD'，不与静态语料混淆。"
+  }
+}

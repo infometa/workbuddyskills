@@ -20,7 +20,7 @@ Team 型（多角色协作团队）
 
 本专家团的 `bin/wanfang_topic_cli.py`、`bin/wanfang_api_validator.py` 调用万方选题 API 时，需要万方开放平台的 **AppKey**。
 
-> ⚠️ 包内已内置万方 AppKey（主用 `108_9288c3c77544491b_3a14cd`），开箱即可调用 API，无需设置环境变量。若对外分发此包，密钥会随包暴露；如需重新外部化，可改回从环境变量 `${APP_KEY}` 读取。
+> ⚠️ AppKey 从环境变量 `APP_KEY` 读取，不随包内置。请按以下步骤配置后方可使用。
 
 ### 1. 获取 AppKey
 联系万方数据（WANFANG）开放平台 / 你的接口负责人申请 `X-Ca-AppKey`，获得主用密钥（与可选的备用密钥）。

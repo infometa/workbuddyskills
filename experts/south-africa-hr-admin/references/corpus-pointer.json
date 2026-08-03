@@ -1,0 +1,58 @@
+{
+  "name": "south-africa-hr-corpus",
+  "version": "1.2.0",
+  "description": "South Africa HR and administration corpus covering labour law (BCEA/LRA/EEA), payroll & social security (PAYE/UIF/SDL/COIDA), visa & immigration, B-BBEE & employment equity, company registration & admin, CCMA dispute resolution, office facilities, occupational health safety, and Chinese enterprise practice. 114 markdown files with TF-IDF + semantic index (9 newly added on 2026-07-28 to cover admin SOP / employee handbook / attendance / remote work / facilities / restraint-of-trade).",
+  "fileCount": 114,
+  "indexFiles": {
+    "vectorizer": "tfidf_vectorizer.pkl",
+    "matrix": "tfidf_matrix.npz",
+    "metadata": "chunks_metadata.json"
+  },
+  "searchScript": "search_corpus.py",
+  "buildScript": "build_index.py",
+  "corpusPath": "./corpus/south-africa-hr-corpus/",
+  "corpusPathNote": "Relative to the expert package's references/ directory. Do NOT hardcode an installation root — the package may be installed under any marketplace, a project-level .workbuddy/, or a plain unzipped folder. All scripts resolve paths from __file__, so the package works from any location.",
+  "accessMethod": {
+    "type": "permanent-embedded",
+    "description": "Corpus files are permanently inside the expert package. Use search_corpus.py for TF-IDF retrieval, or Read/Grep/Glob tools for direct file access. No unzip, no deployment, no network required.",
+    "pathResolution": "Every script derives its own directory via Path(__file__).resolve().parent, so the corpus is located relative to the package itself on any OS and at any install location.",
+    "thirdPartyDependency": "None required. sklearn/scipy/numpy are used opportunistically when present; when absent, search_corpus.py builds a pure-Python TF-IDF index at runtime from chunks_metadata.json (~130ms for 583 chunks)."
+  },
+  "selfContainmentStatement": "100% self-contained and permanently ready. No zip, no API keys, no cloud credentials, no network connection required. Corpus files are physically inside the expert package and travel with it to any computer.",
+  "statistics": {
+    "totalFiles": 114,
+    "totalChunks": 583,
+    "vocabularySize": 50000,
+    "totalCharacters": 721381,
+    "indexMode": "sklearn TF-IDF (auto-fallback to pure Python if sklearn unavailable)",
+    "boards": {
+      "01-labour-law": 28,
+      "02-payroll-social-security": 25,
+      "03-visa-immigration": 8,
+      "04-bbbee-employment-equity": 8,
+      "05-company-registration-admin": 12,
+      "06-ccma-dispute-resolution": 16,
+      "07-office-facilities": 6,
+      "08-occupational-health-safety": 4,
+      "09-chinese-practice": 7
+    }
+  },
+  "integrity": {
+    "verifiedDate": "2026-08-03",
+    "portabilityTestPassed": true,
+    "retrievalTests": {
+      "PAYE累进税表": "top-1命中 salary-structure-ctc-gross-net-design-2025.md (0.1853)",
+      "CCMA不当解雇": "top-1命中 ccma-unfair-dismissal-process-timeline.md (0.1651)",
+      "B-BBEE评分卡": "top-1命中 bbbee-ownership-management-control-detailed.md (0.2408)",
+      "南非最低工资标准2025": "top-1命中 sectoral-determinations-minimum-wage-2025.md (0.1693)",
+      "关键技能工作签证申请材料": "top-1命中 critical-skills-list-points-based-system.md (0.2038)",
+      "裁员遣散费Section189": "top-1命中 retrenchment-section-189-detailed-process-2025.md (0.2269)",
+      "员工手册政策包": "top-1命中 employee-handbook-workplace-policy-pack.md (TF-IDF 0.2120 / semantic 0.659)",
+      "竞业限制保密": "top-1命中 restraint-of-trade-confidentiality-ip.md (TF-IDF 0.2005 / semantic 0.626)",
+      "考勤生物识别POPIA": "top-1命中 attendance-leave-administration-sop.md (TF-IDF 0.2300)",
+      "远程混合工作断开权": "top-1命中 remote-hybrid-work-policy.md (TF-IDF 0.1488 / semantic 0.527)",
+      "入职离职档案保存": "top-1命中 employee-onboarding-offboarding-records-sop.md (TF-IDF 0.1410)",
+      "合规日历全年节点": "top-1命中 compliance-calendar-2026-2027.md (TF-IDF 0.1593)"
+    }
+  }
+}

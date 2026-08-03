@@ -1,0 +1,202 @@
+<section style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; background:#f5f5f7; display:flex; justify-content:center; padding:24px; color:#1a1a1a;">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 18px;
+      border: 0.5px solid #e2e2e4;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 20px 20px 16px;
+      position: relative;
+    }
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
+      object-fit: cover;
+      margin-right: 14px;
+      background: #f2f2f2;
+    }
+    .close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 20px;
+      height: 20px;
+      color: #999;
+      font-size: 18px;
+      line-height: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #f2f2f2;
+      color: #555;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .section {
+      padding: 0 20px 20px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #888;
+      margin-bottom: 10px;
+      letter-spacing: 0.02em;
+    }
+    .intro {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #333;
+    }
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .skill-pill {
+      padding: 7px 14px;
+      border-radius: 8px;
+      background: #f7f7f8;
+      border: 0.5px solid #e5e5e7;
+      font-size: 13px;
+      color: #333;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .skill-pill:hover { background: #eee; }
+    .question-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: #f8f8f9;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: 0.5px solid transparent;
+    }
+    .question:hover {
+      background: #f1f1f2;
+      border-color: #e0e0e2;
+    }
+    .question-text {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #222;
+      padding-right: 12px;
+    }
+    .arrow {
+      color: #999;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .footer {
+      padding: 14px 20px 24px;
+    }
+    .cta {
+      width: 100%;
+      padding: 14px 0;
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .cta:hover { background: #333; }
+  </style>
+  <div class="card">
+    <div class="header">
+      <img class="avatar" src="../avatars/expert.png" alt="Thandiwe">
+      <div>
+        <div class="title">南非人力行政专家</div>
+        <div class="subtitle">
+          South Africa HR & Administration
+          <span class="tag">专家</span>
+          <span class="tag">运营人力</span>
+        </div>
+      </div>
+      <div class="close">×</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">能力介绍</div>
+      <div class="intro">
+        我是南非人力行政专家，覆盖招聘、薪酬、签证、B-BBEE及劳动合规。可直接帮你算薪资成本、查签证费用，并生成可视化交付物。
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">擅长领域</div>
+      <div class="skills">
+        <span class="skill-pill" onclick="sendPrompt('南非招聘本地员工的渠道和B-BBEE要求')">南非招聘</span>
+        <span class="skill-pill" onclick="sendPrompt('南非劳动合规核心要求')">劳动合规</span>
+        <span class="skill-pill" onclick="sendPrompt('南非工作签证类型与中企外派申请')">签证工签</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">试试这样问我</div>
+      <div class="question-list">
+        <div class="question" onclick="sendPrompt('在南非雇佣一名员工，帮我算算雇主每月总成本和员工到手净薪，并出一张成本结构图。')">
+          <span class="question-text">"在<strong>南非</strong>雇佣一名员工，帮我算算<strong>雇主每月总成本</strong>和<strong>员工到手净薪</strong>，并出一张<strong>成本结构图</strong>。"</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="question" onclick="sendPrompt('南非企业在 2026/27 年度有哪些强制合规申报节点？请给我一份全年合规时间线。')">
+          <span class="question-text">"南非企业在 <strong>2026/27 年度</strong>有哪些强制合规申报节点？请给我一份<strong>全年合规时间线</strong>。"</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="question" onclick="sendPrompt('我想做一次 B-BBEE 评分缺口分析，当前得分离目标等级还差多少？应该优先补哪一项？')">
+          <span class="question-text">"我想做一次 <strong>B-BBEE 评分缺口分析</strong>，当前得分离目标等级还差多少？<strong>应该</strong>优先补哪一项？"</span>
+          <span class="arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button class="cta" onclick="sendPrompt('你好，介绍一下你能做什么')">召唤South Africa HR & Administration Specialist</button>
+    </div>
+  </div>
+
+  <script>
+    function sendPrompt(text) {
+      if (window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'sendPrompt', prompt: text }, '*');
+      } else {
+        console.log('sendPrompt:', text);
+        alert('模拟发送: ' + text);
+      }
+    }
+  </script>
+</section>

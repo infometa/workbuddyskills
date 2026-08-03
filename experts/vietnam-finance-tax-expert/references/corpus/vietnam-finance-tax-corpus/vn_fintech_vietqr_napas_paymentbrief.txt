@@ -1,0 +1,148 @@
+Source: https://paymentbrief.com/articles/vietnam-vietqr-napas247-operator-guide
+Downloaded: 2026-07-21 12:29
+Content-Length: 14766 chars
+============================================================
+
+Vietnam Payments: VietQR & NAPAS 247 — PaymentBrief
+Skip to content
+TL;DR
+NAPAS 247 processed 8.9 billion instant transfers in 2024 (+33.8% YoY); VietQR unified QR adoption across 40+ banks — but foreign operators still need SBV's payment intermediary license or a licensed local partner to access either rail.
+Vietnam
+'s payment infrastructure has changed more in the past four years than in the preceding two decades. NAPAS 247, the country's real-time interbank transfer system, processed 8.9 billion transactions in 2024 — a 33.8% increase year-over-year. VietQR, the unified QR payment standard, has enrolled 40+ banks and e-wallets onto a common format. Yet most foreign operators approaching the
+Vietnam
+ese market still route payments through fragmented e-wallet integrations, unaware of the underlying rails that determine cost, speed, and regulatory exposure.
+This article maps the actual infrastructure stack — how NAPAS 247 and VietQR work, who controls access, what the licensing requirements are, and what a practical integration path looks like for operators building payment flows that touch Vietnam.
+NAPAS 247: The Real-Time Interbank Backbone
+NAPAS
+(National Payment Corporation of Vietnam) is the state-owned payment infrastructure operator, majority-owned by the State Bank of Vietnam (SBV) with commercial banks holding minority stakes. NAPAS operates several payment rails, but the one that matters most for operators is NAPAS 247 — the real-time
+real-time rail
+for interbank fund transfers, available 24 hours a day, seven days a week.
+NAPAS 247 launched in 2017 and replaced the previous batch-processing interbank
+settlement
+system (which operated on business hours only). The key parameters:
+Speed:
+Settlement in under 15 seconds for the overwhelming majority of transactions
+Availability:
+24/7/365, including Vietnamese public holidays
+Transaction limit:
+VND 500 million per transaction (~$20,000
+US
+D) for retail transfers; higher limits apply for corporate accounts through specific bank channels
+Participant count:
+40+ member banks as of 2025, covering effectively all licensed commercial banks in Vietnam
+Volume growth:
+NAPAS 247 processed 8.9 billion instant transfers in 2024, up 33.8% year-over-year, with daily volume exceeding 26 million transactions (NAPAS/ClearingPost, 2025)
+The technical model is a hub-and-spoke architecture. NAPAS operates the central clearing switch; member banks connect via the NAPAS Gateway. Transactions originate from a sender's bank account, route through the NAPAS switch, and credit the recipient's account at the destination bank — all within the 15-second window.
+How Banks Connect to NAPAS 247
+Every licensed commercial bank in Vietnam participates in NAPAS through a bilateral membership agreement. The participation is not voluntary for banks — the SBV has made NAPAS membership a de facto requirement for banks holding retail banking licenses. For operators, this means that any Vietnamese bank account is, in principle, reachable via a NAPAS 247 transfer.
+The practical limitation is on the access side. NAPAS 247 transfers can only be initiated by licensed entities. A foreign operator cannot connect to NAPAS directly — access requires either: (a) a Vietnamese commercial bank account and a direct API relationship with that bank's
+payment gateway
+, or (b) a licensed
+payment intermediary
+acting as the access point.
+VietQR: The Unified QR Standard
+VietQR
+is Vietnam's national QR payment standard, developed by NAPAS and the SBV and formally launched in 2021. Before VietQR, Vietnam had multiple incompatible QR formats: VNPay's QR, individual bank QR codes, MoMo's QR, and others — meaning a merchant needed multiple QR codes displayed at checkout to capture different app users.
+VietQR solves this by standardizing QR code encoding across all participating banks and e-wallets. A single VietQR code encodes the recipient's bank account details (bank code, account number, amount, and transaction reference) in EMV QR code format. Any VietQR-compliant app — whether a bank's mobile app, MoMo, ZaloPay, or VNPay — can scan the code and initiate a transfer.
+The underlying settlement for a VietQR scan at a bank-linked app flows through NAPAS 247 as an interbank transfer. The QR code is the front-end; NAPAS 247 is the back-end. This architecture means:
+VietQR merchant acceptance is effectively zero-
+MDR
+for bank account-linked payments (the transfer is a standard NAPAS IBFT, which banks generally do not charge merchants to receive)
+E-wallet scans of VietQR codes may route differently — some wallets convert to an internal transfer before initiating the NAPAS leg, which can add a fee on the wallet side
+Reconciliation is straightforward because each VietQR transaction carries a structured reference field that maps to the merchant's order ID
+VietQR Adoption and Limitations
+As of Q1 2025, VietQR is accepted by 40+ banks and all major e-wallets. The SBV has mandated VietQR compatibility for all payment intermediaries holding licenses. Physical merchant adoption is high in urban areas — convenience stores, restaurants, and market stalls in Ho Chi Minh City and Hanoi commonly display VietQR codes.
+The limitation is on the pull-payment side. VietQR is designed for push payments (the customer initiates the transfer). There is no standardized pull mechanism in VietQR for merchant-initiated charges, recurring billing, or subscription payments. Operators needing to pull funds from a customer's Vietnamese bank account need a different solution — typically a card-on-file arrangement or an e-wallet direct debit agreement.
+The E-Wallet Layer: VNPay, MoMo, ZaloPay
+Vietnam's dominant e-wallets are
+VNPay
+,
+MoMo
+, and
+ZaloPay
+. Each holds a payment intermediary license from the SBV, and each operates as both an access layer for NAPAS 247 and a closed-loop transaction network for wallet-to-wallet payments.
+VNPay
+(operated by VNPay JSC, part of VNLIFE) is the largest e-wallet by merchant terminal coverage and was first to scale national QR acceptance in Vietnam. VNPay holds licenses as both a payment gateway and an e-wallet. Note:
+VNPay is privately held — not state-owned, and not a VNPT subsidiary.
+VNPT is the separate state telecommunications operator, which runs its own VNPT-Pay product (a different wallet than VNPay). Confusing the two is a common error; they are different companies.
+MoMo
+(legal entity: M_Service JSC — M_Service is MoMo's corporate name, with major shareholders including Warburg Pincus and others) has surpassed 40 million users and is Vietnam's dominant consumer P2P wallet. MoMo's strength is in peer-to-peer transfers, bill payments, and in-app purchases. It has an extensive agent network for cash top-up, which is important in a market where a significant portion of the population still operates primarily in cash.
+ZaloPay
+is backed by VNG Corporation, Vietnam's largest tech company, and benefits from distribution through Zalo — Vietnam's dominant messaging app with 77.6 million monthly active users (Decision Lab/Q&Me, 2025–2026). ZaloPay is deeply integrated into the Zalo app, which gives it a distribution advantage for user-initiated payments but limits its standalone merchant acceptance footprint.
+E-Wallet Fragmentation: The Operator Problem
+For operators needing to accept payments from Vietnamese consumers, the e-wallet landscape requires either integrating with all three major wallets separately or using an aggregator. Direct integration with VNPay, MoMo, and ZaloPay requires individual contracts, separate API integrations, separate settlement accounts, and separate
+reconciliation
+flows. Each wallet has different API standards, sandbox environments, and merchant onboarding requirements.
+The aggregator path — using a payment gateway that provides unified access — simplifies integration but adds a fee layer. Major aggregators operating in Vietnam include VNPay (which also acts as a gateway for other wallets), Payoo, and international providers like 2C2P and Checkout.com who have built local wallet acceptance into their Vietnamese products.
+Licensing Requirements: What the SBV Requires
+The SBV issues two categories of license relevant to payment operators:
+Payment intermediary license
+(Giấy phép hoạt động cung ứng dịch vụ trung gian thanh toán): This is the primary license for companies providing payment gateway services, e-wallets, or financial switching services in Vietnam. Requirements include:
+Established legal entity in Vietnam (foreign ownership restrictions apply — typically 49% maximum foreign ownership in a licensed payment company, though this is subject to ongoing regulatory review)
+Minimum charter capital of VND 50 billion (~$2 million USD) for gateway services; higher for e-wallet services
+Dedicated payment systems and data storage in Vietnam (data localization requirement under the Cybersecurity Law)
+SBV technical audit of the payment system before license issuance
+Anti-money laundering program meeting SBV standards
+Payment service provider agreement model:
+Foreign operators who cannot or choose not to obtain a direct SBV license can provide services through a licensed Vietnamese payment intermediary. Under this model, the Vietnamese licensed entity acts as the payment service provider; the foreign operator is a technology provider or downstream partner. Revenue sharing arrangements vary. This path is faster (no SBV license application required) but creates dependency on the Vietnamese partner's license status and commercial terms.
+SBV Sandbox:
+The SBV launched a fintech sandbox in 2021, allowing licensed sandbox participants to test payment services with real transactions under a regulatory exemption. The sandbox covers credit scoring, P2P lending, and payment services. Foreign-invested companies can participate under certain conditions. Sandbox
+authorization
+is not equivalent to a production license but provides a path for proof-of-concept before committing to full licensing.
+Practical Integration Architecture for Foreign Operators
+For a foreign operator processing payments from Vietnamese customers or disbursing to Vietnamese recipients, the practical integration options are:
+Option 1: Bank partnership with API integration
+Partner with a top-tier Vietnamese commercial bank (Vietcombank, Techcombank, VPBank, MB Bank are the most API-mature) that provides merchant payment services. The bank holds the NAPAS 247 membership; you integrate via the bank's payment API. This gives NAPAS 247 access, VietQR generation capability, and often e-wallet acceptance bundled. Settlement is to a Vietnamese VND account. FX conversion back to the operator's base currency requires a separate arrangement.
+Option 2: Licensed aggregator
+Use a licensed payment aggregator operating in Vietnam — 2C2P, Checkout.com, or VNPay's gateway product. These provide unified access to NAPAS, VietQR, and major e-wallets through a single API, with multi-currency settlement options. MDR for card transactions is typically 2.5–3.5%; e-wallet and NAPAS transfer acceptance fees are lower. The trade-off is less control over bank relationships and higher per-transaction cost versus a direct bank integration.
+Option 3: SBV-licensed subsidiary
+For operators with significant Vietnam volume or strategic reasons to hold a local license, obtaining a payment intermediary license directly provides the most control. Timeline is typically 12–24 months from entity incorporation to license issuance. This path is appropriate for operators expecting to process more than $50–100 million per year in Vietnam volume — below that threshold, the licensing overhead rarely justifies the cost savings versus an aggregator.
+The Disbursement Side: Paying Out to Vietnamese Bank Accounts
+For operators disbursing to Vietnamese recipients — marketplace sellers, gig workers, insurance payouts — NAPAS 247 IBFT is the standard mechanism. The practical requirements:
+You need either a Vietnamese bank account from which transfers originate, or a licensed payment partner who initiates NAPAS transfers on your behalf
+Recipients need a Vietnamese bank account (NAPAS member bank) and their account number + bank code
+VietQR can be used to collect the recipient's account details in a standardized format if you build a VietQR scanning flow in your application
+NAPAS 247 transfers complete in seconds; your licensed partner may impose cutoffs or batch schedules for operational reasons — confirm settlement timing with the partner directly
+What This Means for Operators
+Vietnam's payment infrastructure is more capable than most foreign operators expect, and less accessible than the domestic user experience suggests. NAPAS 247 is fast, reliable, and broadly adopted — but every access path for foreign operators runs through an SBV-licensed intermediary, adding cost and counterparty dependency.
+The e-wallet fragmentation problem is real but manageable. VietQR is solving the merchant-side problem; the remaining gap is in pull payments and recurring billing, where no unified standard exists yet.
+For operators assessing Vietnam entry, the practical question is volume threshold: at what volume does the licensing cost of a direct SBV license become cheaper than aggregator MDR? The crossover point for most payment types is in the $50–100 million annual range. Below that, an aggregator or bank partnership gets you market access faster with predictable economics. Above it, the SBV license pays back quickly.
+The SBV has been incrementally liberalizing payment regulations since 2020, and the sandbox regime suggests continued openness to fintech participation. The licensing requirements that exist today are unlikely to become more restrictive — but the data localization requirements under Vietnam's Cybersecurity Law are a long-term infrastructure constraint that operators must build for from the start, not retrofit.
+For a side-by-side comparison of NAPAS 247 and VietQR against Pix, UPI, SPEI, PromptPay, PayNow, InstaPay, and DuitNow — MDR model, identifier architecture, cross-border readiness, and licensing path — see the
+Real-Time Payment Rails Comparison Matrix
+.
+By
+Shaun Toh
+·
+Director, Digital Payments · Razer
+More Global Payments briefings
+Global Payments
+·
+11 min read
+Egypt Payments Operator Guide: Fawry, Meeza, InstaPay, Cards, and Wallets
+Jun 17, 2026
+Global Payments
+·
+13 min read
+ISO 20022 Investigation Messages: A camt Operator Reference
+Jun 13, 2026
+Global Payments
+·
+14 min read
+PayTo and the NPP: An Operator Guide to Australia's A2A Rails
+Jun 13, 2026
+All Global Payments briefings →
+ESC
+Search 297+ briefings
+145 articles
+52 markets
+100 glossary terms
+No results found
+Try fewer or different keywords
+Search temporarily unavailable
+up/down
+navigate
+enter
+open
+ESC
+close

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script>
+      (function(){
+          setTimeout(function(){
+              window.location.reload();
+          }, 5000);
+      }())
+  </script>
+  <link rel="icon" href="data:,">
+  <title>One moment, please...</title>
+  <style>
+.spinner {
+    -webkit-animation: spin 1s ease-out;
+    animation: spin 1s ease-out;
+}
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+#outer-container {
+    text-align: center;
+}
+#container {
+        display: inline-block;
+        height: 100px;
+    }
+#text {
+    float: left;
+    height: 100px;
+    line-height: 100px;
+    font-size: 3rem;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    padding: 0 .4em 0 .2em;
+    letter-spacing: 0.06em;
+    color: rgba(38, 122, 72, 0.86);
+}
+@media (min-height: 180px) {
+    #outer-container {
+        margin-top: 0;
+    }
+}
+@media (min-height: 360px) {
+    #outer-container {
+        margin-top: 5%;
+    }
+}
+@media (min-height: 540px) {
+    #outer-container {
+        margin-top: 10%;
+    }
+}
+@media (min-height: 720px) {
+    #outer-container {
+        margin-top: 20%;
+    }
+}
+@media (min-width: 1450px) {
+    .throbber {
+        width: 90px;
+        height: 90px;
+        float: left;
+        padding: 5px 0 5px 5px;
+        opacity: 0.86;
+    }
+    #container {
+        display: inline-block;
+        border: 3px solid rgb(38, 122, 72, 0.86);
+        border-radius: 51px;
+        height: 100px;
+    }
+}
+
+  </style>
+</head>
+<body>
+  <div id="outer-container">
+    <div id="container">
+<div class="throbber">
+    <svg class="spinner" width="90px" height="90px" viewBox="0 0 47 47"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+        <title>Loader</title>
+        <defs>
+            <polygon id="path-1"
+                     points="0 0.375484146 0 15.7255695 15.7013244 15.7255695 15.7013244 0.375484146 0 0.375484146"></polygon>
+        </defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none"
+           fill-rule="evenodd">
+            <g id="Logo" transform="translate(-5.000000, -2.000000)">
+                <g id="Group-2" transform="translate(5.000000, 2.000000)">
+                    <path d="M22.6150244,4.52988293 C23.1538049,3.06256585 23.6031707,1.59582195 24.231939,0.158882927 C25.1902805,2.22459024 25.8190488,4.43989512 26.7768171,6.47579756 C29.1417195,7.40376098 31.7164024,7.7929439 34.1116829,8.69110244 C28.9623171,11.2663585 23.7229634,13.7510537 18.4836098,16.176139 C19.7709512,12.2545049 21.2382683,8.4217122 22.6150244,4.52988293 L22.6150244,4.52988293 Z"
+                          id="Fill-1" fill="#467C45"></path>
+                    <path d="M13.7718598,8.94461585 C16.1424939,7.68077439 18.4500793,6.28968902 20.8207134,5.02527439 C18.9240915,10.8412378 16.7747012,16.5614817 14.8465549,22.3774451 C12.7292622,18.3950549 10.895689,14.2544695 8.9044939,10.2090305 C8.27228659,8.85004268 7.5455061,7.55353049 7.00844512,6.16359146 C9.31545732,6.95342073 11.4648476,8.24935976 13.7718598,8.94461585"
+                          id="Fill-3" fill="#467C45"></path>
+                    <path d="M24.2134256,15.0745049 C29.4602305,12.4969561 34.7379866,9.91940732 40.0157427,7.4031878 C39.1565598,9.61276098 38.1747183,11.7300537 37.2232549,13.9086756 C38.4504134,16.2099561 39.9544134,18.388578 41.0898646,20.7511878 C35.4435598,18.9405415 29.8287793,17.0381878 24.2134256,15.0745049"
+                          id="Fill-5" fill="#467C45"></path>
+                    <g id="Group-9"
+                       transform="translate(0.000000, 11.919659)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="Clip-8"></g>
+                        <path d="M8.34869024,0.375484146 C9.93064146,3.33419146 11.2781659,6.43963049 12.7426171,9.45622805 C13.7387878,11.5362646 14.793422,13.5876427 15.7013244,15.7255695 C10.4579585,13.9091915 5.21401951,12.03435 -0.000114634146,10.0718134 C2.05069024,9.1341061 4.21842195,8.4898622 6.29845854,7.61119146 C6.97193415,5.17980122 7.67521463,2.77706951 8.34869024,0.375484146"
+                              id="Fill-7" fill="#467C45"
+                              mask="url(#mask-2)"></path>
+                    </g>
+                    <path d="M29.1793195,18.0496049 C33.5600634,19.4670561 37.9081366,21.0776659 42.2888805,22.5593122 C43.6742341,23.0745927 45.1558805,23.4609098 46.5085634,24.1372512 C44.2216122,25.039422 41.9025634,25.9100683 39.6477098,26.8110927 C38.8103073,29.4195927 38.2302585,32.1261049 37.3607585,34.7346049 C35.5890878,31.4497634 34.0432463,28.0353854 32.3684415,24.6852024 C31.3052098,22.4945439 30.1456854,20.3044585 29.1793195,18.0496049"
+                          id="Fill-10" fill="#467C45"></path>
+                    <path d="M28.9972232,29.3489207 C29.5789915,27.69475 30.0684793,26.0113476 30.7419549,24.3887012 C31.538089,25.7660305 32.1811866,27.2356402 32.9154183,28.6444939 C34.7220524,32.4709817 36.68115,36.205189 38.4568329,40.0316768 C36.2827963,39.1449817 34.1402841,38.1654329 31.9364427,37.2460671 C29.6403207,38.4709329 27.4662841,39.9405427 25.1094061,41.1035061 C26.3033207,37.1549329 27.7419793,33.2671159 28.9972232,29.3489207"
+                          id="Fill-12" fill="#467C45"></path>
+                    <path d="M4.97133902,25.64555 C9.93385122,27.1873793 14.7737049,29.036428 19.6748878,30.6705378 C20.4148512,30.9170012 21.1542415,31.1944159 21.8328756,31.5337329 C16.5304732,33.9685622 11.3214976,36.6498549 5.95776585,38.99355 C6.82096098,36.8355622 7.89966829,34.7698549 8.7319122,32.581489 C7.68358293,30.1764646 6.11194878,28.01905 4.97133902,25.64555"
+                          id="Fill-14" fill="#467C45"></path>
+                    <path d="M15.4549183,35.8770488 C19.4671134,33.9317073 23.4483573,31.8952317 27.4915037,30.0433171 C26.4110768,33.6542927 25.0222841,37.203939 23.8186256,40.8143415 C23.1090402,42.7275854 22.5530646,44.7033049 21.7511988,46.5855976 C20.7630524,44.4866463 20.0534671,42.2650366 19.1277963,40.1351341 C16.6276256,39.2094634 14.0042232,38.684439 11.4736744,37.9748537 C12.6773329,37.0801341 14.1584061,36.586061 15.4549183,35.8770488"
+                          id="Fill-16" fill="#467C45"></path>
+                </g>
+            </g>
+        </g>
+    </svg>
+</div>
+      <div id="text">
+        Please wait while your request is being verified...
+      </div>
+    </div>
+  </div>
+  <div id="r4ee1g8j9ljo"></div>
+  <script>
+var a0D=a0J;(function(W,B){var a0w={W:0x205,B:0x217,O:0x1f0,J:0x1fb,n:0x200},v=a0J,O=W();while(!![]){try{var J=-parseInt(v(a0w.W))/0x1+parseInt(v(0x221))/0x2*(parseInt(v(0x203))/0x3)+-parseInt(v(0x208))/0x4*(parseInt(v(a0w.B))/0x5)+parseInt(v(a0w.O))/0x6+parseInt(v(0x212))/0x7+parseInt(v(a0w.J))/0x8*(parseInt(v(a0w.n))/0x9)+parseInt(v(0x227))/0xa*(parseInt(v(0x215))/0xb);if(J===B)break;else O['push'](O['shift']());}catch(n){O['push'](O['shift']());}}}(a0O,0xae9d0));function a0O(){var Q=['ent','7643058PlFDox','GET','append','ne;','stener','ById','getElement','type','toString','appendChil','document','115504kjmeTK','method','a6105c0a61','open','input','450FYAuXF','outerHeigh','techange','15eTCYKz','onreadysta','1124832qeFOsM','0950635027','prototype','4338508wMUIuQ','createElem','__proto__','addEventLi','d49030b349','(((.+)+)+)','length','7fa3b767c4','forEach','userAgent','949627abnfto','webdriver','language','1441cDPItR','submit','5JptDZp','apply','name','1b41b08f12','search','form','mimeTypes','entries','style','plugins','127830aCwLdE','value','navigator','languages','test','hidden','36160LRJAzW','action','map','attachEven'];a0O=function(){return Q;};return a0O();}var a0n=window[a0D(0x223)],a0l={'webdriverCheck':function(){var y=a0D;return y(0x213)in window||!!a0n[y(0x213)];},'userAgentCheck':function(){var a0H={W:0x225},o=a0D;return/headless|bytespider/i[o(a0H.W)](a0n[o(0x211)]);},'appVersionCheck':function(){return/headless/i['test'](a0n['appVersion']);},'pluginArraySpoofing':function(){var a0h={W:0x207},L=a0D;let W=PluginArray[L(0x207)]===a0n['plugins'][L(0x20a)];if(a0n[L(0x220)][L(0x20e)]>0x0)W&=Plugin[L(a0h.W)]===a0n[L(0x220)][0x0]['__proto__'];return!W;},'mimeTypeArraySpoofing':function(){var a0X={W:0x21d,B:0x20e,O:0x207,J:0x21d},Y=a0D;let W=MimeTypeArray[Y(0x207)]===a0n[Y(a0X.W)][Y(0x20a)];if(a0n['mimeTypes'][Y(a0X.B)]>0x0)W&=MimeType[Y(a0X.O)]===a0n[Y(a0X.J)][0x0][Y(0x20a)];return!W;},'noLanguage':function(){var a0K={W:0x224,B:0x20e},P=a0D;return!a0n[P(0x214)]||a0n[P(a0K.W)][P(a0K.B)]===0x0;},'zeroOuterDimensions':function(){var a0S={W:0x201},F=a0D;return window[F(a0S.W)+'t']===0x0&&window['outerWidth']===0x0;}},a0q=function(O,J){var a0U={W:0x1f4,B:0x1ee,O:0x204},a0m={W:0x1f8,B:0x20d},I=a0D,n=(function(){var q=!![];return function(V,G){var p=q?function(){var i=a0J;if(G){var c=G[i(0x218)](V,arguments);return G=null,c;}}:function(){};return q=![],p;};}()),l=n(this,function(){var A=a0J;return l[A(0x1f8)]()[A(0x21b)](A(0x20d)+'+$')[A(a0m.W)]()['constructo'+'r'](l)[A(0x21b)](A(a0m.B)+'+$');});l(),window[I(0x20b)+I(a0U.W)]?window[I(0x1fa)]['addEventLi'+I(a0U.W)]('DOMContent'+'Loaded',O,J):window[I(0x1fa)][I(a0U.B)+'t'](I(a0U.O)+I(0x202),O);};function a0J(W,B){var O=a0O();return a0J=function(J,n){J=J-0x1ee;var l=O[J];return l;},a0J(W,B);}a0q(function(){var a0b={W:0x1fa,B:0x1f5,O:0x1fa,J:0x1ef,n:0x1ff,l:0x1fa,q:0x229,V:0x20e,G:0x1f2,p:0x1fd,c:0x21a,u:0x206,s:0x1f3,g:0x1f1,t:0x228,e:0x219,Z:0x222,x:0x1f7,k:0x20f,M:0x226,D:0x1f7,w:0x1f9,r:0x1f9,H:0x216};setTimeout(function(){var E=a0J,W=window[E(a0b.W)][E(0x1f6)+E(a0b.B)]('r4ee1g8j9ljo'),B=+((+!+[]+!![]+!![])+(+!+[]+!![]+!![]+[])+(+!+[]+!![]+!![]+!![]+!![]+!![])+(+!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+[])+(+!+[]+!![])+(+!+[]+!![]+!![]+!![]+[])+(+!+[]+!![]+!![]+!![])),O=window[E(a0b.O)][E(0x209)+E(a0b.J)](E(0x21c)),J=window[E(a0b.O)][E(0x209)+'ent'](E(0x1ff)),n=window['document'][E(0x209)+E(0x1ef)](E(0x1ff)),l=window[E(a0b.O)]['createElem'+E(0x1ef)](E(a0b.n)),q=window[E(a0b.l)][E(0x209)+E(0x1ef)](E(0x1ff)),V=+((+!+[]+!![]+!![]+!![]+!![]+!![])+(+!+[]+!![]+!![]+!![]+!![]+[])+(+!+[])+(+!+[]+!![]+!![]+[])+(+!+[]+!![]+!![]+!![]+!![]+!![]+!![])+(+!+[]+[])+(+!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![])),G='wsidchk',p='pdata',c='https%3A%2F%2Fvnlawfirm.vn%2Fvan-ban%2Flaw-on-fire-and-rescue-of-vietnam-2024%2F',u='/z0f76a1d14fd21a8fb5fd0d03e0fdc3d3cedae52f',s='failedChecks',g=Object[E(0x21e)](a0l)[E(a0b.q)](([x,k])=>{try{return k()?x:null;}catch(M){return null;}})['filter'](x=>x!==null),t=g[E(a0b.V)]>0x0;if(t){var e=new URLSearchParams();e[E(a0b.G)]('id',E(a0b.p)+E(a0b.c)+E(a0b.u)+'9e'),e[E(0x1f2)]('ts','1784608192'),e[E(a0b.G)](G,B+V),e['append'](p,c),g[E(0x210)](x=>e[E(0x1f2)](s,x));var Z=new XMLHttpRequest();Z[E(0x1fe)](E(0x1f1),u+'?'+e[E(0x1f8)]()),Z['send'](null);}else O['id']='r4ee1g8j9ljo',O[E(0x21f)]='display:no'+E(a0b.s),O[E(0x1fc)]=E(a0b.g),O[E(a0b.t)]=u,J['id']='wp3v92rrpacr',J[E(a0b.e)]=G,J[E(a0b.Z)]=B+V,J[E(a0b.x)]=E(0x226),l[E(0x219)]='id',l['value']=E(a0b.k)+'60b54a2be4'+E(0x20c)+'c7',l[E(a0b.x)]=E(a0b.M),q[E(a0b.e)]='ts',q[E(0x222)]='1784608192',q[E(0x1f7)]='hidden',n['id']='zir485o48rd4',n[E(0x219)]=p,n['value']=c,n[E(a0b.D)]=E(a0b.M),O[E(0x1f9)+'d'](J),O[E(a0b.w)+'d'](n),O[E(0x1f9)+'d'](l),O[E(a0b.r)+'d'](q),W[E(0x1f9)+'d'](O),O[E(a0b.H)]();},0x3e8);},![]);
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1e777980a2f88ff',t:'MTc4NDYwODE5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"861b311cc0864df3973aab23fe5e402e","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

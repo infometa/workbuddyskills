@@ -1,0 +1,146 @@
+<section style="font-family: var(--font-sans); color: var(--color-text-primary); max-width: 680px;">
+  <h2 class="sr-only">南非 B-BBEE 评分卡试算器</h2>
+
+  <div style="font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 10px;">
+    五要素基础满分 105 分（25+15+20+40+5）；含 Y.E.S./Pivotal 等加分项最高约 109 分。等级阈值为绝对分值（Amended Codes 2015）。
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-bottom: 12px;">
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      所有权 Ownership（满分 25）
+      <input id="e1" type="number" value="10" min="0" max="25" step="1" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      管理控制 Management Ctrl（满分 15）
+      <input id="e2" type="number" value="8" min="0" max="15" step="1" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      技能发展 Skills Dev（满分 20）
+      <input id="e3" type="number" value="12" min="0" max="20" step="1" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      企业供应商发展 ESD（满分 40）
+      <input id="e4" type="number" value="25" min="0" max="40" step="1" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      社会经济发展 Socio-Econ（满分 5）
+      <input id="e5" type="number" value="3" min="0" max="5" step="1" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      加分项 Bonus（Y.E.S/Pivotal，最高约4）
+      <input id="bn" type="number" value="0" min="0" max="13" step="1" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-bottom: 14px;">
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.8rem;">
+      <div style="font-size: 11px; color: var(--color-text-secondary);">总分（含加分）</div>
+      <div id="tot" style="font-size: 20px; font-weight: 500; margin-top: 4px; color: #185FA5;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.8rem;">
+      <div style="font-size: 11px; color: var(--color-text-secondary);">当前等级</div>
+      <div id="lvl" style="font-size: 20px; font-weight: 500; margin-top: 4px; color: #A32D2D;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.8rem;">
+      <div style="font-size: 11px; color: var(--color-text-secondary);">采购认可度</div>
+      <div id="recog" style="font-size: 20px; font-weight: 500; margin-top: 4px; color: #0F6E56;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.8rem;">
+      <div style="font-size: 11px; color: var(--color-text-secondary);">距 Level 4(80)</div>
+      <div id="gap" style="font-size: 20px; font-weight: 500; margin-top: 4px; color: #854F0B;">—</div>
+    </div>
+  </div>
+
+  <div id="bbbeeBars" style="width: 100%; margin-bottom: 8px;"></div>
+  <div style="font-size: 12px; color: var(--color-text-tertiary); line-height: 1.7; margin: 4px 0 10px;">
+    <span style="color:#185FA5;">■</span> 当前得分　<span style="color:#BA7517;">▒</span> 满分上限　<span style="color:#854F0B;">┊</span> Level 4 目标线(80)
+  </div>
+
+  <button onclick="bbbExport()" style="font-size: 13px; padding: 8px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer;">导出报告 (HTML)</button>
+</section>
+
+<style>
+  .bbb-bar { transition: none; }
+  .bbb-bar:hover { filter: brightness(1.12); }
+  .bbb-axis { font-size: 10px; fill: var(--color-text-secondary); }
+</style>
+
+<script>
+const MAX = { e1:25, e2:15, e3:20, e4:40, e5:5 };
+const LBL = { e1:'所有权', e2:'管理控制', e3:'技能发展', e4:'ESD', e5:'社会经发' };
+const COL = { e1:'#185FA5', e2:'#3B6D11', e3:'#BA7517', e4:'#993C1D', e5:'#854F0B' };
+const BASE_MAX = 105;
+const TARGET_L4 = 80;
+
+const LEVELS = [
+  [100,'Level 1','135%'],[95,'Level 2','125%'],[90,'Level 3','110%'],
+  [80,'Level 4','100%'],[75,'Level 5','80%'],[70,'Level 6','70%'],
+  [55,'Level 7','50%'],[40,'Level 8','10%'],[0,'Non-compliant','0%']
+];
+function getLevel(tot){
+  for(const [lo,name,recog] of LEVELS){ if(tot>=lo) return {name,recog}; }
+  return {name:'Non-compliant',recog:'0%'};
+}
+
+function calc(){
+  let baseTot=0;
+  const vals={};
+  for(const k in MAX){ const v=Math.max(0,Math.min(MAX[k],+document.getElementById(k).value||0)); vals[k]=v; baseTot+=v; }
+  const bonus=Math.max(0,Math.min(13,+document.getElementById('bn').value||0));
+  const tot=baseTot+bonus;
+  const lv=getLevel(tot);
+  document.getElementById('tot').textContent = tot+' / '+BASE_MAX;
+  document.getElementById('lvl').textContent = lv.name;
+  document.getElementById('recog').textContent = lv.recog;
+  const gap = TARGET_L4 - tot;
+  document.getElementById('gap').textContent = (gap<=0?'已达标 (+'+(0-gap)+')':'缺 '+gap+' 分');
+  renderBars(vals, tot);
+}
+
+function renderBars(vals, tot){
+  const wrap=document.getElementById('bbbeeBars');
+  const W=680, padL=8, padR=8, padT=14, chartH=170, padB=26;
+  const n=Object.keys(MAX).length;
+  const gap=(W-padL-padR)/n, bw=Math.min(gap*0.5,70);
+  const rowMax=40;
+  let s='<svg viewBox="0 0 '+W+' '+(chartH+padT+padB)+'" width="100%" style="max-width:680px;height:auto;display:block" role="img" aria-label="B-BBEE 五要素得分">';
+  s+='<line x1="'+padL+'" y1="'+(padT+chartH)+'" x2="'+(W-padR)+'" y2="'+(padT+chartH)+'" stroke="var(--color-border-secondary)"/>';
+  const ty = padT + chartH - (TARGET_L4/rowMax*chartH);
+  s+='<line x1="'+padL+'" y1="'+ty.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+ty.toFixed(1)+'" stroke="#854F0B" stroke-width="1.5" stroke-dasharray="4 3"/>';
+  s+='<text x="'+(W-padR)+'" y="'+(ty-4).toFixed(1)+'" text-anchor="end" font-size="10" fill="#854F0B">Level 4 = 80</text>';
+  Object.keys(MAX).forEach((k,i)=>{
+    const x=padL+i*gap+(gap-bw)/2;
+    const mh=MAX[k]/rowMax*chartH, hh=vals[k]/rowMax*chartH;
+    const yM=padT+chartH-mh, yH=padT+chartH-hh;
+    s+='<rect class="bbb-bar" x="'+x.toFixed(1)+'" y="'+yM.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+mh.toFixed(1)+'" rx="2" fill="'+COL[k]+'" opacity="0.25"></rect>';
+    if(hh>0) s+='<rect class="bbb-bar" x="'+x.toFixed(1)+'" y="'+yH.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+hh.toFixed(1)+'" rx="2" fill="'+COL[k]+'"><title>'+LBL[k]+'：'+vals[k]+' / '+MAX[k]+'</title></rect>';
+    s+='<text class="bbb-axis" x="'+(x+bw/2).toFixed(1)+'" y="'+(yH-5).toFixed(1)+'" text-anchor="middle" fill="'+COL[k]+'">'+vals[k]+'/'+MAX[k]+'</text>';
+    s+='<text class="bbb-axis" x="'+(x+bw/2).toFixed(1)+'" y="'+(padT+chartH+14).toFixed(1)+'" text-anchor="middle">'+LBL[k]+'</text>';
+  });
+  s+='</svg>';
+  wrap.innerHTML=s;
+}
+
+['e1','e2','e3','e4','e5','bn'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+calc();
+
+function bbbExport(){
+  let baseTot=0; const rows=[];
+  for(const k in MAX){ const v=Math.max(0,Math.min(MAX[k],+document.getElementById(k).value||0)); baseTot+=v;
+    rows.push([LBL[k]+'（满分'+MAX[k]+'）', v+' 分']); }
+  const bonus=Math.max(0,Math.min(13,+document.getElementById('bn').value||0));
+  const tot=baseTot+bonus;
+  const lv=getLevel(tot);
+  rows.push(['加分项 Bonus', bonus+' 分']);
+  rows.push(['总分（含加分）', tot+' / '+BASE_MAX]);
+  rows.push(['当前等级', lv.name+'（采购认可度 '+lv.recog+'）']);
+  rows.push(['距 Level 4(80)', (TARGET_L4-tot<=0?'已达标 (+'+(0-(TARGET_L4-tot))+')':'缺 '+(TARGET_L4-tot)+' 分')]);
+  const d=new Date().toLocaleDateString('en-ZA');
+  let h='<!doc'+'type html><ht'+'ml lang="en"><he'+'ad><meta charset="utf-8"><title>SA B-BBEE</title><style>body{font-family:sans-serif;padding:32px;color:#222}h1{font-size:20px}table{width:100%;border-collapse:collapse;margin-top:16px}td,th{border:1px solid #ddd;padding:8px 12px;text-align:left;font-size:14px}.k{color:#555}.v{font-weight:600}.foot{margin-top:24px;color:#999;font-size:12px}</style></he'+'ad><bo'+'dy>';
+  h+='<h1>南非 B-BBEE 评分卡试算</h1><div style="color:#666;font-size:13px">生成日期：'+d+' ｜ 南非人力行政专家（指示性测算，非正式认证）</div><table>';
+  rows.forEach(r=>{h+='<tr><td class="k">'+r[0]+'</td><td class="v">'+r[1]+'</td></tr>';});
+  h+='</table><div class="foot">五要素基础满分：所有权25 / 管理控制15 / 技能发展20 / ESD 40 / 社会经济发展5 = 105；含加分项最高约109。等级阈值（Amended Codes 2015）：L1≥100 / L2≥95 / L3≥90 / L4≥80 / L5≥75 / L6≥70 / L7≥55 / L8≥40。注意：B-BBEE 含优先级要素（所有权、技能发展、ESD）须达子最低要求，且 2026-01-29 草案拟引入转型基金等——草案未生效。实际等级须以 SANAS 认证机构出具证书为准。</div></body></html>';
+  const b=new Blob([h],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='SA_BBBEE_Scorecard.html'; a.click();
+}
+</script>

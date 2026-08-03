@@ -39,20 +39,9 @@ quickPrompts:
       zh: 🔥 灵感 / 热词 → "最近 XX 领域有什么热点"
 defaultInitPrompt:
   en: |-
-    - 🔍 Search literature / find experts → "Search papers in XX field"
-    - 💡 Recommend topics → "Recommend some XX topics"
-    - 📊 Evaluate topic → "Check if this topic works"
-    - ✏️ Generate titles → "Give a few titles for this topic"
-    - 📈 Domain report → "Generate a XX domain development report"
-    - 🔥 Inspiration / hot words → "What's trending in XX field lately"
+    Search literature/Look for experts → "Search papers in XX field"
   zh: |-
-    1. 🔍 搜文献 / 找专家 → "搜 XX 方向的论文"
-    2. 💡 推荐选题 → "帮我推荐几个 XX 方向选题"
-    3. 📊 评估选题 → "评估一下这个题目行不行"
-    4. ✏️ 拟标题 → "给这个选题起几个标题"
-    5. 📈 领域报告 → "出一份 XX 领域发展报告"
-    6. 🔥 灵感 / 热词 → "最近 XX 领域有什么热点"
-    回复数字选功能；不想选的话，直接说你的专业方向，我帮你推荐选题。我们马上开始。
+    🔍 搜文献 / 找专家 → "搜 XX 方向的论文"
 greeting:
   en: |
     Hello! I'm the lead of the Topic Selection Expert Team. Here's how you can use me:
@@ -73,12 +62,24 @@ greeting:
     回复数字选功能；不想选的话，直接说你的专业方向，我帮你推荐选题。我们马上开始。
 lead: zhuge-consultant
 members:
-  - ouyang-literature
-  - shangguan-topic
-  - huangfu-evaluation
-  - situ-inspiration
-  - xiahou-title
-  - taishi-report
+  - name:
+      en: Ou
+      zh: 欧阳搜文
+  - name:
+      en: Shang
+      zh: 上官选道
+  - name:
+      en: Huang
+      zh: 皇甫评度
+  - name:
+      en: Si
+      zh: 司徒启思
+  - name:
+      en: Xia
+      zh: 夏侯拟言
+  - name:
+      en: Tai
+      zh: 太史撰域
 ---
 
 # 选题专家团队（WANFANG TOPIC）
@@ -356,10 +357,21 @@ SOP中所有"输出《选题评估报告》""输出《选题推荐报告》""输
 ### 通用配置
 
 - **Base URL**: `https://api.wfdata.com`（不带.cn后缀）
-- **请求头部**: `X-Ca-AppKey: 108_9288c3c77544491b_3a14cd`
+- **请求头部**: `X-Ca-AppKey: ${APP_KEY}`（从环境变量读取）
 - **Content-Type**: `application/json`
 - **路径格式**: 必须斜杠 `/topic/{module}/{endpoint}`
-- > ⚠️ 已作废密钥：`30084_*` 系列，切勿使用
+- > ⚠️ 旧版 30084_* 系列密钥已失效，请勿使用
+
+### 环境变量配置
+
+使用万方 API 前需设置 `APP_KEY` 环境变量：
+```bash
+# Linux/macOS
+export APP_KEY="你的万方AppKey"
+# Windows PowerShell
+$env:APP_KEY="你的万方AppKey"
+```
+详见 `README.md` 依赖配置章节。
 
 ### 参数名差异速记
 

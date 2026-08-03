@@ -1,0 +1,124 @@
+<section style="font-family: var(--font-sans); color: var(--color-text-primary); max-width: 680px;">
+  <h2 class="sr-only">南非工作签证费用测算器</h2>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      签证类型
+      <select id="vt" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+        <option value="cs">关键技能工签 Critical Skills</option>
+        <option value="gw">一般工作签证 General Work</option>
+        <option value="ict">公司内部调动 ICT</option>
+        <option value="rw">远程工作签证 Remote Work</option>
+        <option value="corp">企业签证 Corporate</option>
+        <option value="biz">商务/投资签证 Business</option>
+      </select>
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      申请人数量
+      <input id="n" type="number" value="1" min="1" step="1" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-bottom: 14px;">
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">单人合计（R）</div>
+      <div id="per" style="font-size: 21px; font-weight: 500; margin-top: 4px; color: #185FA5;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">团队总计（R）</div>
+      <div id="tot" style="font-size: 21px; font-weight: 500; margin-top: 4px; color: #3B6D11;">—</div>
+    </div>
+  </div>
+
+  <div id="visaBar" style="width: 100%; margin-bottom: 8px;"></div>
+  <div style="font-size: 12px; color: var(--color-text-tertiary); line-height: 1.7; margin: 4px 0 10px;">
+    <span style="color:#185FA5;">■</span> DHA 申请费　<span style="color:#3B6D11;">■</span> VFS 服务费　<span style="color:#BA7517;">■</span> SAQA 学历认证　<span style="color:#993C1D;">■</span> 体检/无犯罪/证件翻译
+  </div>
+
+  <button onclick="visaExport()" style="font-size: 13px; padding: 8px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer;">导出报告 (HTML)</button>
+</section>
+
+<style>
+  .vbar { transition: none; }
+  .vbar:hover { filter: brightness(1.12); }
+  .vaxis { font-size: 10px; fill: var(--color-text-secondary); }
+</style>
+
+<script>
+// 各类签证典型费用（R，单人）。费率为 2025–2026 公开标准，实际以 DHA/VFS 官网为准。
+const FEE = {
+  cs:   { dha:1520, vfs:1550, saqa:2145, misc:1900, label:'关键技能工签' },   // SAQA R2,145 + 体检/无犯罪/翻译等
+  gw:   { dha:1520, vfs:1550, saqa:2145, misc:2400, label:'一般工作签证' }, // 另需 DoL 推荐信办理成本
+  ict:  { dha:1520, vfs:1550, saqa:0,    misc:1900, label:'公司内部调动 ICT' },
+  rw:   { dha:1520, vfs:1550, saqa:0,    misc:1900, label:'远程工作签证' },
+  corp: { dha:1520, vfs:1550, saqa:2145, misc:1900, label:'企业签证(单人)' },
+  biz:  { dha:1520, vfs:1550, saqa:0,    misc:3500, label:'商务/投资签证' }    // 另计 R5M 投资额（部分行业豁免）
+};
+function fmt(v){ v=Math.round(v); if(v>=1e6) return 'R '+(v/1e6).toFixed(2)+'M'; if(v>=1e3) return 'R '+(v/1e3).toFixed(1)+'k'; return 'R '+v.toLocaleString('en-US'); }
+
+function calc(){
+  const k = document.getElementById('vt').value;
+  const n = Math.max(1, Math.floor(+document.getElementById('n').value||1));
+  const f = FEE[k];
+  const per = f.dha + f.vfs + f.saqa + f.misc;
+  const tot = per * n;
+  document.getElementById('per').textContent = fmt(per);
+  document.getElementById('tot').textContent = fmt(tot);
+
+  const segs = [
+    {v:f.dha,  c:'#185FA5', t:'DHA 申请费'},
+    {v:f.vfs,  c:'#3B6D11', t:'VFS 服务费'},
+    {v:f.saqa, c:'#BA7517', t:'SAQA 学历认证'},
+    {v:f.misc, c:'#993C1D', t:'体检/无犯罪/翻译'}
+  ];
+  renderBar(segs, f.label, n);
+}
+
+function renderBar(segs, label, n){
+  const wrap = document.getElementById('visaBar');
+  const W=680, padL=8, padR=8, padT=12, chartH=150, padB=24;
+  const maxV = Math.max(...segs.map(s=>s.v),1);
+  const gap = (W-padL-padR)/segs.length;
+  const bw = Math.min(gap*0.6, 90);
+  let s='<svg viewBox="0 0 '+W+' '+(chartH+padT+padB)+'" width="100%" style="max-width:680px;height:auto;display:block" role="img" aria-label="'+label+' 费用构成">';
+  s+='<line x1="'+padL+'" y1="'+(padT+chartH)+'" x2="'+(W-padR)+'" y2="'+(padT+chartH)+'" stroke="var(--color-border-secondary)"/>';
+  segs.forEach((g,i)=>{
+    if(g.v<=0) return;
+    const x = padL + i*gap + (gap-bw)/2;
+    const h = g.v/maxV*chartH;
+    const y = padT + chartH - h;
+    s+='<rect class="vbar" x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="2" fill="'+g.c+'"><title>'+g.t+'：'+fmt(g.v)+'</title></rect>';
+    s+='<text class="vaxis" x="'+(x+bw/2).toFixed(1)+'" y="'+(y-4).toFixed(1)+'" text-anchor="middle">'+fmt(g.v)+'</text>';
+    s+='<text class="vaxis" x="'+(x+bw/2).toFixed(1)+'" y="'+(padT+chartH+14).toFixed(1)+'" text-anchor="middle">'+g.t.split(' ')[0]+'</text>';
+  });
+  s+='</svg>';
+  wrap.innerHTML=s;
+}
+
+['vt','n'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+calc();
+
+function visaExport(){
+  const k=document.getElementById('vt').value;
+  const n=Math.max(1,Math.floor(+document.getElementById('n').value||1));
+  const f=FEE[k];
+  const per=f.dha+f.vfs+f.saqa+f.misc, tot=per*n;
+  const rows=[
+    ['签证类型', f.label+'（'+k.toUpperCase()+'）'],
+    ['DHA 申请费（单人）', fmt(f.dha)],
+    ['VFS 服务费（单人）', fmt(f.vfs)],
+    ['SAQA 学历认证（单人）', f.saqa>0?fmt(f.saqa):'不适用'],
+    ['体检/无犯罪/翻译（单人）', fmt(f.misc)],
+    ['单人合计', fmt(per)],
+    ['申请人数量', n+' 人'],
+    ['团队总计', fmt(tot)]
+  ];
+  const d=new Date().toLocaleDateString('en-ZA');
+  let h='<!doc'+'type html><ht'+'ml lang="en"><he'+'ad><meta charset="utf-8"><title>SA Visa Cost</title><style>body{font-family:sans-serif;padding:32px;color:#222}h1{font-size:20px}table{width:100%;border-collapse:collapse;margin-top:16px}td,th{border:1px solid #ddd;padding:8px 12px;text-align:left;font-size:14px}.k{color:#555}.v{font-weight:600}.foot{margin-top:24px;color:#999;font-size:12px}</style></he'+'ad><bo'+'dy>';
+  h+='<h1>南非工作签证费用测算</h1><div style="color:#666;font-size:13px">生成日期：'+d+' ｜ 南非人力行政专家（指示性测算，非法律意见）</div><table>';
+  rows.forEach(r=>{h+='<tr><td class="k">'+r[0]+'</td><td class="v">'+r[1]+'</td></tr>';});
+  h+='</table><div class="foot">数据来源：DHA 申请费 R1,520 + VFS 服务费 R1,550（2025–2026 公开标准）；SAQA 学历认证 R2,145/首学历 + R900/额外；体检 R500–1,200、无犯罪证明 R180–190、证件翻译另计。实际以 DHA/VFS 官网与签证官要求为准；ICT 签证 4 年不可续签，企业签证按人头计，商务签证另计 R5M 投资额（部分行业豁免）。</div></body></html>';
+  const b=new Blob([h],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='SA_Visa_Cost_Report.html'; a.click();
+}
+</script>

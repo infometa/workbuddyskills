@@ -9,10 +9,11 @@ description: 直接调用万方选题 API 检索论文与学者、推荐选题�
 
 ## 前置条件
 
-- 包内 `bin/wanfang_topic_cli.py` 已内置万方 AppKey，开箱即可直接调用，无需设置环境变量（如需对外分发，请注意密钥随包暴露）。
+- 使用前需设置 `APP_KEY` 环境变量（万方开放平台 AppKey）：
   ```bash
   export APP_KEY="你的真实AppKey"
   ```
+  Windows PowerShell: `$env:APP_KEY="你的真实AppKey"`
 - 运行环境需有 Python 3。
 
 ## 调用方式

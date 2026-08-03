@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Vietnam trade portal, Commodity Code" />
+        <meta name="keywords" content="Vietnam Trade,Vietnam Trade Portal,Vietnam NTM,Vietnam trade repository, Vietnam Import Export, Import taxes, Export taxes, VITP" />
+        <meta name="author" content="Worldbank" />
+        <meta name="robots" content="index,follow" />
+        <meta name="googlebot" content="all" />
+	        <!-- blueprint CSS framework -->
+        <link rel="stylesheet" type="text/css" href="/css/screen.css" media="screen, projection" />
+
+        <link rel="stylesheet" type="text/css" href="/css/print.css" media="print" />
+        <!--[if lt IE 8]>
+        <link rel="stylesheet" type="text/css" href="/css/ie.css" media="screen, projection" />
+        <![endif]-->
+
+                    <link href='//fonts.googleapis.com/css?family=Open+Sans|Battambang|Moul' rel='stylesheet' type='text/css' />
+            <link rel="stylesheet" type="text/css" href="/css/main_la.css" />
+
+                <link rel="stylesheet" type="text/css" href="/css/form.css" />
+        <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap-social.css" />
+        <link rel="stylesheet" type="text/css" href="/bootstrap/css/font-awesome.css" />
+                <style type="text/css">
+        #footer {
+        background: #a1a1a1;
+    }
+
+    .portlet-decoration {
+        padding: 3px 8px;
+        background: #2073a6;
+        border-left: 0px solid #2073a6;
+    }
+
+    .portlet-content {
+        font-size: 0.9em;
+        margin: 0 0 5px 0;
+        padding: 5px 8px;
+        background: #f6f4f9;
+        border: 1px solid #f6f4f9;
+    }
+
+    #nav-bar { border-top:1px solid #a1a1a1; border-bottom:1px solid #a1a1a1; background:#a1a1a1; padding:0px 0px 0px 0px;  }
+    #nav { float:left; margin:0;list-style-image:none;list-style-position:outside;list-style-type:none;margin:0px;padding:0;}
+
+    /************** ALL LEVELS  *************/
+    #nav li { position:relative; text-align:left; }
+    #nav li.over { z-index:99; }
+    #nav li.active { z-index:100; }
+    #nav a,
+    #nav a:hover { display:block; text-decoration:none; }
+    #nav span { display:block; }
+    #nav a { line-height:1.3em; }
+
+    /************ 1ST LEVEL  ***************/
+    #nav li { float:left; background:url(../css/nav1_sep.gif) no-repeat 100% 0;  }
+    #nav li.active { margin-left:0px; background:url(../css/nav1_bg.gif) no-repeat; color:#FF0000; font-weight:bold;  }
+    #nav li.active em { display:block; position:absolute; top:0; right:-1px; width:3px; height:27px; background:url(../css/nav1_active.gif) no-repeat 100% 0; }
+    #nav a { float:left; padding:0 14px; color:#fff; line-height:27px; }
+    #nav li.over a { color:#d6e2e5; }
+
+
+    /************ 1ST LEVEL RESET ************/
+    #nav ul li,
+    #nav ul li.active { list-style-image:none;list-style-position:outside;list-style-type:none;margin:0;padding:0; float:none; height:auto; background:none; margin:0; }
+    #nav ul a,
+    #nav ul a:hover { float:none; padding:0; line-height:1.3em; }
+    #nav ul li.over a,
+    #nav ul li.over a:hover,
+    #nav ul a,
+    #nav li.active li { font-weight:normal; }
+
+
+    /************ 2ND LEVEL ************/
+    #nav ul { list-style-image:none;list-style-position:outside;list-style-type:none;margin:0;padding:0 0 3px 0; position:absolute; width:189px; top:27px; left:-10000px; border-top:1px solid #2d444f; }
+    #nav ul ul  { list-style-image:none;list-style-position:outside;list-style-type:none;margin:0;padding:2px 0 0 0; border-top:0; background:url(../css/nav3_bg.png) 0 0 no-repeat; left:100px; top:13px; }
+
+    /* Show menu */
+    #nav li.over ul { left:-1px; }
+    #nav li.over ul ul { left:-10000px; }
+    #nav li.over ul li.over ul { left:100px; }
+
+    #nav ul li { background:url(../css/nav2_li_bg.png) repeat-y; padding:0 2px; }
+    #nav ul li a { background:#e3ecee; }
+    #nav ul li a:hover { background:#d0dfe2; }
+    #nav li.over ul a,
+    #nav ul li.active a,
+    #nav ul li a,
+    #nav ul li a:hover { color:#2f2f2f; }
+    #nav ul span,
+    #nav ul li.last li span { padding:5px 15px; background:url(../css/nav2_link_bg.gif) repeat-x 0 100%; }
+    #nav ul li.last span,
+    #nav ul li.last li.last span { background:none; }
+    #nav ul li.last { background:url(../css/nav2_last_li_bg.png) no-repeat 0 100%; padding-bottom:3px; }
+
+    #nav ul li.parent a,
+    #nav ul li.parent li.parent a { background-image:url(../css/nav2_parent_arrow.gif); background-position:100% 100%; background-repeat:no-repeat; }
+    #nav ul li.parent li a,
+    #nav ul li.parent li.parent li a { background-image:none; }
+
+    /************ 3RD+ LEVEL ************/
+    /* Cursors */
+    #nav li.parent a,
+    #nav li.parent li.parent a,
+    #nav li.parent li.parent li.parent a { cursor:default; }
+
+    #nav li.parent li a,
+    #nav li.parent li.parent li a,
+    #nav li.parent li.parent li.parent li a { cursor:pointer; }
+
+    /* Show menu */
+    #nav ul ul ul { left:-10000px; list-style-image:none;list-style-position:outside;list-style-type:none;margin:0;padding:0; }
+    #nav li.over ul li.over ul ul { left:-10000px;}
+    #nav li.over ul li.over ul li.over ul { left:100px; }
+
+    #nav-bar:after, #nav-container:after { content:"."; display:block; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
+
+    /* Nav bar background */
+    .navbar-default {
+        background-color: #a1a1a1 !important;
+        border-color: #e7e7e7;
+    }
+    .navbar-default .navbar-nav > .active > a,
+    .navbar-default .navbar-nav > .active > a:hover,
+    .navbar-default .navbar-nav > .active > a:focus {
+        color: #fff;
+        background-color: #a1a1a1 !important;
+        font-weight: bold;
+    }
+
+    .grid-view table.items th{
+        background: #2073a6 !important;
+        color: white;
+        text-align: center;
+    }
+</style><style type="text/css">
+    @font-face {
+        font-family: 'Rezland';
+        src: url('https://www.vietnamtradeportal.gov.vn/ckeditor/Rezland.eot'); /* IE9 Compat Modes */
+        src: url('https://www.vietnamtradeportal.gov.vn/ckeditor/Rezland.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+            url('https://www.vietnamtradeportal.gov.vn/ckeditor/Rezland.woff2') format('woff2'), /* Modern Browsers */
+            url('https://www.vietnamtradeportal.gov.vn/ckeditor/Rezland.woff') format('woff'), /* Modern Browsers */
+            url('https://www.vietnamtradeportal.gov.vn/ckeditor/Rezland.ttf') format('truetype'), /* Safari, Android, iOS */
+            url('https://www.vietnamtradeportal.gov.vn/ckeditor/Rezland.svg') format('svg'); /* Legacy iOS */
+        font-weight: normal;
+        font-style: normal;
+    }
+</style>        <script src="/bootstrap/js/jquery2.0.3.min.js"></script>
+        <script src="/bootstrap/js/bootstrap.js"></script>
+        <link rel="stylesheet" type="text/css" href="/assets/c50fe8a4/gridview/styles.css" />
+<link rel="stylesheet" type="text/css" href="/assets/ac150bcb/select2.css" />
+<link rel="stylesheet" type="text/css" href="/assets/c41c103d/jui/css/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="./css/pager.css" />
+<link rel="stylesheet" type="text/css" href="/assets/fd2ddfcb/style.css" />
+<script type="text/javascript" src="/assets/c41c103d/jquery.js"></script>
+<script type="text/javascript" src="/assets/c41c103d/jquery.ba-bbq.js"></script>
+<script type="text/javascript" src="/assets/c41c103d/jquery.yii.js"></script>
+<script type="text/javascript" src="/assets/c41c103d/jquery.yiiactiveform.js"></script>
+<script type="text/javascript" src="/assets/ac150bcb/select2.js"></script>
+<title>The Trade Portal - Display Site</title>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-91463743-3"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-91463743-3"></script><script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            gtag('js', new Date());
+
+            gtag('config', 'UA-91463743-3');
+            </script>        <script>
+            function sendSurvey()
+            {
+                var data = $("#survey-form").serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: 'https://www.vietnamtradeportal.gov.vn/index.php?r=site/getSurvey',
+                    data: data,
+                    success: function (data) {
+                        if (data.result == 'success') {
+
+                        }
+                    },
+                    error: function (data) { // if error occured
+                        alert("Error occured.please try again");
+                        alert(data);
+                    },
+                    beforeSend: function (data) {
+                        var radios = $("#survey-form :input[type=radio]");
+                        var value;
+                        var names = new Array();
+                        var nbchecked = 0;
+                        for (var i = 0; i < radios.length; i++) {
+                            if (i == 0)
+                                names.push(radios[i].name);
+                            else if (radios[i].name != names[names.length - 1])
+                            {
+                                names.push(radios[i].name);
+                            }
+                            if (radios[i].checked) {
+                                nbchecked++;
+                            }
+                        }
+                        if (names.length == nbchecked) {
+                            closePopup('200');
+                        } else {
+                            alert('profitable');
+                            return false;
+                        }
+                    },
+                    dataType: 'json'
+                });
+            }
+        </script>
+        <!-- Import fonts used in ckeditor in the main-->
+        <script>
+            FontsGoogle = ['Calibri', 'Courier New'];
+            for (var i = 0; i < FontsGoogle.length; i++) {
+                FontsGoogle[i] = 'http://fonts.googleapis.com/css?family=' + FontsGoogle[i].replace(' ', '+');
+                $("head").append("<link rel='stylesheet' href='" + FontsGoogle[i] + "'>");
+            }
+        </script>
+        <!-- script enable or disable good and service measure -->
+        <script>
+            $(document).ready(function () {
+                $('img').addClass('img-fluid');
+                $('input[type="text"]').each(function () {
+                    var att = $(this).attr('class');
+                    if (typeof att !== typeof undefined && att !== false) {
+                        if (!$(this).hasClass('form-control')) {
+                            $(this).addClass('form-control');
+                        }
+                    } else {
+                        $(this).attr('class', 'form-control');
+                    }
+                });
+                $('input[type="password"]').each(function () {
+                    var att = $(this).attr('class');
+                    if (typeof att !== typeof undefined && att !== false) {
+                        if (!$(this).hasClass('form-control')) {
+                            $(this).addClass('form-control');
+                        }
+                    } else {
+                        $(this).attr('class', 'form-control');
+                    }
+                });
+                $('select').each(function () {
+                    var att = $(this).attr('class');
+                    if (typeof att !== typeof undefined && att !== false) {
+                        if (!$(this).hasClass('form-control')) {
+                            $(this).addClass('form-control');
+                        }
+                    } else {
+                        $(this).attr('class', 'form-control');
+                    }
+                    if ($(this).hasClass('select2-offscreen')) {
+                        $(this).removeClass('form-control');
+                    }
+                });
+                $(window).load(function () {
+                    // this code will run after all other $(document).ready() scripts
+                    // have completely finished, AND all page elements are fully loaded.
+                    /*$('select').each(function () {
+                     var att = $(this).attr('class');
+                     if (typeof att !== typeof undefined && att !== false) {
+                     if (!$(this).hasClass('form-control')) {
+                     $(this).addClass('form-control');
+                     }
+                     } else {
+                     $(this).attr('class', 'form-control');
+                     }
+                     if ($(this).hasClass('select2-offscreen')) {
+                     //	$(this).removeClass('form-control');
+                     }
+                     });*/
+                    $('div .select2-container').attr('style', 'border:0px; padding:6px 0px;background-color:transparent; box-shadow:none');
+                    $('a .select2-choice').attr('style', 'height:105%');
+                });
+                $('div').each(function () {
+                    var att = $(this).attr('class');
+                    if (typeof att !== typeof undefined && att !== false) {
+                        if ($(this).hasClass('select2-container')) {
+                            $(this).removeClass('form-control');
+                        }
+                    }
+                });
+                $('table').each(function () {
+                    var att = $(this).attr('class');
+                    if (typeof att !== typeof undefined && att !== false) {
+                        if (!$(this).hasClass('items')) {
+                            $(this).addClass('container-table');
+                        }
+                    } else {
+                        $(this).attr('class', 'container-table');
+                    }
+                });
+                $('.portlet table').each(function () {
+                    var att = $(this).attr('class');
+                    if (typeof att !== typeof undefined && att !== false) {
+                        $(this).removeClass('container-table');
+                    }
+                });
+            });</script>
+
+            </head>
+
+    <body>
+
+        <div class="container-fluid" style=" padding-left: 0px; padding-right: 0px;">
+            <img width="100%" src="./images/banner_la.jpg">
+            <!-- header -->
+
+            <div id="mainMbMenu" style="margin-left: 0px; margin-right: 0px">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <div class="showflag">
+                                                            </div>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                                <li class="active"><a href="/index.php?r=site/index">Trang chủ</a></li>
+                                <li><a href="/index.php?r=site/display&amp;id=12">Giới thiệu</a></li>
+                                                                <li><a href="/index.php?r=site/display&amp;id=3">Hướng dẫn XNK-XNC</a></li>
+                                <li><a href="/index.php?r=site/display&amp;id=5">Câu hỏi thường gặp</a></li>
+                                <li><a href="/index.php?r=site/contact">Liên hệ</a></li>
+                                <li><a href="/index.php?r=site/display&amp;id=6">Trợ giúp</a></li>
+
+                            </ul>
+                            <div class="btn-group nav navbar-right" style="padding: 15px">
+                                <a class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-share-alt fa-inverse"></i> Share
+                                </a>
+                                <ul class="dropdown-menu" style="background-color:#fff;min-width:87px !important; padding: 5px; margin-top: -15px">
+                                    <li>
+                                        <div style="padding:0px;" id="yw5"><a class="btn btn-social-icon  btn-xs" style="background:#085ff7" title="Facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.vietnamtradeportal.gov.vn%2Findex.php%3Fid%3D3697%26page%3D14%26r%3Dsite%252Fdisplay"><span class="fa fa-facebook" style="color:#fff"></span> </a> <a class="btn btn-social-icon  btn-xs" style="background:#087bc7" title="Twitter" target="_blank" href="http://twitter.com/share?url=https%3A%2F%2Fwww.vietnamtradeportal.gov.vn%2Findex.php%3Fid%3D3697%26page%3D14%26r%3Dsite%252Fdisplay"><span class="fa fa-twitter" style="color:#fff"></span> </a> <a class="btn btn-social-icon  btn-xs" style="background:#f73c23" title="Google" target="_blank" href="https://plus.google.com/share?url=https%3A%2F%2Fwww.vietnamtradeportal.gov.vn%2Findex.php%3Fid%3D3697%26page%3D14%26r%3Dsite%252Fdisplay"><span class="fa fa-google" style="color:#fff"></span> </a> <div style='padding-top:5px;'></div><a class="btn btn-social-icon  btn-xs" style="background:#f0911d" title="Email" target="_blank" href="http://www.vietnamtradeportal.gov.vn/index.php?r=site/sendmail&amp;url=https%3A%2F%2Fwww.vietnamtradeportal.gov.vn%2Findex.php%3Fid%3D3697%26page%3D14%26r%3Dsite%252Fdisplay"><span class="fa fa-envelope" style="color:#fff"></span> </a> </div>                                    </li>
+                                </ul>
+                            </div>
+                            <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
+                                <li>
+                                                                    </li>
+
+                            </ul>
+                        </div><!-- /.navbar-collapse -->
+
+
+
+                    </div>
+                    <!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        <div class="cont" >
+            <div class="col-sm-6 col-md-6">
+                                    <!-- breadcrumbs -->
+                            </div>
+            <!--            <div class="col-sm-6  col-md-6">
+                            <div  style="padding-bottom: 5px;">
+
+                                 Single button
+                                <div class="btn-group nav navbar-right">
+                                    <a class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-share-alt fa-inverse"></i> Share
+                                    </a>
+                                    <ul class="dropdown-menu" style="background-color:#fff;min-width:87px !important; padding: 5px;">
+                                        <li>
+            <div style="padding:0px;" id="yw6"><a class="btn btn-social-icon  btn-xs" style="background:#085ff7" title="Facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.vietnamtradeportal.gov.vn%2Findex.php%3Fid%3D3697%26page%3D14%26r%3Dsite%252Fdisplay"><span class="fa fa-facebook" style="color:#fff"></span> </a> <a class="btn btn-social-icon  btn-xs" style="background:#087bc7" title="Twitter" target="_blank" href="http://twitter.com/share?url=https%3A%2F%2Fwww.vietnamtradeportal.gov.vn%2Findex.php%3Fid%3D3697%26page%3D14%26r%3Dsite%252Fdisplay"><span class="fa fa-twitter" style="color:#fff"></span> </a> <a class="btn btn-social-icon  btn-xs" style="background:#f73c23" title="Google" target="_blank" href="https://plus.google.com/share?url=https%3A%2F%2Fwww.vietnamtradeportal.gov.vn%2Findex.php%3Fid%3D3697%26page%3D14%26r%3Dsite%252Fdisplay"><span class="fa fa-google" style="color:#fff"></span> </a> <div style='padding-top:5px;'></div><a class="btn btn-social-icon  btn-xs" style="background:#f0911d" title="Email" target="_blank" href="http://www.vietnamtradeportal.gov.vn/index.php?r=site/sendmail&amp;url=https%3A%2F%2Fwww.vietnamtradeportal.gov.vn%2Findex.php%3Fid%3D3697%26page%3D14%26r%3Dsite%252Fdisplay"><span class="fa fa-envelope" style="color:#fff"></span> </a> </div>                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>-->
+                        <div  style="padding: 0px;">
+    <div id="fff">
+        <div id="ddd">
+            <!--<div class="form">!-->
+
+
+<!-- For Display News,Event,Announcement -->
+
+<!-- For Display Articles -->
+    <div class="row">
+        <h2>
+            Bài viết mới nhất        </h2>
+        <h4>Áp dụng 609 dòng thuế xuất khẩu ưu đãi, 11.526 dòng thuế nhập khẩu ưu đãi đặc biệt thực hiện Hiệp định CPTPP</h4>
+    </div>
+
+    <hr>
+    <div class="row">
+        <!--        <div class="span-3">-->
+                    <img width="100px" align="right" src="defaultpic.jpg" alt="Áp dụng 609 dòng thuế xuất khẩu ưu đãi, 11.526 dòng thuế nhập khẩu ưu đãi đặc biệt thực hiện Hiệp định CPTPP" />                <!--        </div>-->
+        <br><h1 style="text-align: justify;">&nbsp;</h1>
+
+<table style="font-size: 14px;">
+	<tbody>
+		<tr>
+			<td><img alt="Áp dụng 609 dòng thuế xuất khẩu ưu đãi, 11.526 dòng thuế nhập khẩu ưu đãi đặc biệt thực hiện Hiệp định CPTPP" border="0" src="https://haiquanonline.com.vn/stores/news_dataimages/anhntp/032023/16/16/in_article/1206_12-_Ynh_bai_16-3_CPTPP.jpg?rt=20230316161209" title="Áp dụng 609 dòng thuế xuất khẩu ưu đãi, 11.526 dòng thuế nhập khẩu ưu đãi đặc biệt thực hiện Hiệp định CPTPP" /></td>
+		</tr>
+		<tr>
+			<td>Biểu thuế nhập khẩu ưu đ&atilde;i đặc biệt thực hiện Hiệp định CPTPP gồm 11.526 d&ograve;ng thuế. Ảnh: ST</td>
+		</tr>
+	</tbody>
+</table>
+
+<p style="text-align: justify;">Nghị định số 115/2022/NĐ-CP về Biểu thuế xuất khẩu ưu đ&atilde;i, Biểu thuế nhập khẩu ưu đ&atilde;i đặc biệt của Việt Nam để thực hiện Hiệp định Đối t&aacute;c To&agrave;n diện v&agrave; Tiến bộ xuy&ecirc;n Th&aacute;i B&igrave;nh Dương (CPTPP) giai đoạn 2022 &ndash; 2027 đ&atilde; được Ch&iacute;nh phủ ban h&agrave;nh cuối năm 2022. Trước đ&oacute;, Hiệp định CPTPP k&yacute; ng&agrave;y 8/3/2018 v&agrave; đ&atilde; c&oacute; hiệu lực từ ng&agrave;y 30/12/2018 sau khi c&oacute; 6 nước th&agrave;nh vi&ecirc;n đầu ti&ecirc;n ph&ecirc; chuẩn Hiệp định v&agrave; ho&agrave;n th&agrave;nh nghĩa vụ th&ocirc;ng b&aacute;o cho cơ quan lưu chiểu Hiệp định, gồm Australia, Canada, Nhật Bản, Mehico, New Zealand, Singapore. Đối với Việt Nam, ng&agrave;y 12/11/2018, tại Kỳ họp thứ 6, Quốc hội kho&aacute; XIV đ&atilde; th&ocirc;ng qua Nghị quyết số 72/2018/QH14 ph&ecirc; chuẩn Hiệp định CPTPP c&ugrave;ng c&aacute;c văn kiện li&ecirc;n quan.</p>
+
+<p style="text-align: justify;">Để triển khai thực hiện cam kết về thuế xuất khẩu, thuế nhập khẩu của Việt Nam theo Hiệp định CPTPP, Bộ T&agrave;i ch&iacute;nh đ&atilde; tr&igrave;nh Ch&iacute;nh phủ ban h&agrave;nh Nghị định số 57/2019/NĐ-CP ng&agrave;y 26/6/2019 ban h&agrave;nh Biểu thuế xuất khẩu ưu đ&atilde;i, Biểu thuế nhập khẩu ưu đ&atilde;i đặc biệt của Việt Nam để thực hiện Hiệp định CPTPP giai đoạn 2019-2022 &aacute;p dụng cho 6 nước th&agrave;nh vi&ecirc;n đ&atilde; ph&ecirc; chuẩn Hiệp định đến ng&agrave;y 26/6/2019 gồm Australia, Canada, Nhật Bản, Mehico, New Zealand, Singapore v&agrave; Nghị định số 21/2022/NĐ-CP ng&agrave;y 10/3/2022 sửa đổi, bổ sung một số điều của Nghị định số 57/2019/NĐ-CP ng&agrave;y 26/6/2019 để bổ sung quy định &aacute;p dụng đối với Peru sau khi Hiệp định CPTPP c&oacute; hiệu lực đối với Peru v&agrave;o ng&agrave;y 19/9/2021. C&aacute;c Biểu thuế ban h&agrave;nh k&egrave;m Nghị định n&ecirc;u tr&ecirc;n được x&acirc;y dựng theo Danh mục Biểu thuế h&agrave;i h&ograve;a ASEAN phi&ecirc;n bản 2017.</p>
+
+<p style="text-align: justify;">Ng&agrave;y 8/3/2022, Ch&iacute;nh phủ đ&atilde; ban h&agrave;nh Nghị quyết số 29/NQ-CP ph&ecirc; duyệt danh mục Biểu thuế h&agrave;i h&ograve;a ASEAN phi&ecirc;n bản 2022 (Danh mục AHTN 2022). Nhằm thực hiện thống nhất với Danh mục h&agrave;ng h&oacute;a xuất khẩu, nhập khẩu Việt Nam triển khai Danh mục AHTN 2022 v&agrave; để tiếp tục thực hiện cam kết về thuế xuất nhập khẩu trong Hiệp định CPTPP, Bộ T&agrave;i ch&iacute;nh đ&atilde; x&acirc;y dựng v&agrave; tr&igrave;nh Ch&iacute;nh phủ k&yacute; ban h&agrave;nh Nghị định số 115/2022/NĐ-CP ng&agrave;y 30/12/2022 ban h&agrave;nh Biểu thuế xuất khẩu ưu đ&atilde;i, Biểu thuế nhập khẩu ưu đ&atilde;i đặc biệt của Việt Nam để thực hiện Hiệp định CPTPP giai đoạn 2022-2027. Phạm vi điều chỉnh của Nghị định sẽ bao gồm tất cả c&aacute;c nước th&agrave;nh vi&ecirc;n của Hiệp định CPTPP m&agrave; Hiệp định đ&atilde; c&oacute; hiệu lực đối với c&aacute;c nước đ&oacute;, bao gồm Australia, Canada, Nhật Bản, Mehico, New Zealand, Singapore, Peru v&agrave; Việt Nam.</p>
+
+<p style="text-align: justify;">Về c&aacute;c nội dung cơ bản của Nghị định, cụ thể l&agrave; về biểu thuế xuất khẩu ưu đ&atilde;i thực hiện Hiệp định CPTPP, biểu thuế xuất khẩu ưu đ&atilde;i gồm 609 d&ograve;ng thuế; c&aacute;c mặt h&agrave;ng kh&ocirc;ng thuộc Biểu thuế xuất khẩu ưu đ&atilde;i n&agrave;y &aacute;p dụng thuế xuất khẩu ưu đ&atilde;i 0% khi xuất khẩu sang l&atilde;nh thổ c&aacute;c nước th&agrave;nh vi&ecirc;n m&agrave; Hiệp định CPTPP đ&atilde; c&oacute; hiệu lực. Để được hưởng thuế suất thuế xuất khẩu ưu đ&atilde;i, h&agrave;ng h&oacute;a xuất khẩu phải c&oacute; chứng từ vận tải v&agrave; tờ khai hải quan nhập khẩu hoặc chứng từ thay thế tờ khai hải quan thể hiện đ&iacute;ch đến thuộc l&atilde;nh thổ c&aacute;c nước th&agrave;nh vi&ecirc;n m&agrave; Hiệp định CPTPP đ&atilde; c&oacute; hiệu lực được quy định tại phạm vi điều chỉnh của Nghị định.</p>
+
+<p style="text-align: justify;">Tại thời điểm l&agrave;m thủ tục hải quan, người khai hải quan thực hiện khai tờ khai xuất khẩu, &aacute;p dụng thuế suất thuế xuất khẩu, t&iacute;nh thuế v&agrave; nộp thuế theo Danh mục mặt h&agrave;ng chịu thuế tại Nghị định Biểu thuế xuất khẩu, Biểu thuế nhập khẩu ưu đ&atilde;i, Danh mục h&agrave;ng h&oacute;a v&agrave; mức thuế tuyệt đối, thuế hỗn hợp, thuế nhập khẩu ngo&agrave;i hạn ngạch thuế quan. Trong thời hạn 1 năm kể từ ng&agrave;y đăng k&yacute; tờ khai xuất khẩu, người khai hải quan nộp bản chụp chứng từ vận tải v&agrave; bản chụp tờ khai hải quan nhập khẩu v&agrave; thực hiện khai bổ sung theo quy định của ph&aacute;p luật hải quan để được &aacute;p dụng mức thuế suất thuế xuất khẩu ưu đ&atilde;i theo Hiệp định CPTPP. Qu&aacute; thời hạn 1 năm n&ecirc;u tr&ecirc;n, h&agrave;ng h&oacute;a xuất khẩu kh&ocirc;ng được &aacute;p dụng thuế suất thuế xuất khẩu ưu đ&atilde;i theo Hiệp định CPTPP. Cơ quan Hải quan thực hiện kiểm tra hồ sơ, kiểm tra mức thuế suất thuế xuất khẩu ưu đ&atilde;i, nếu h&agrave;ng h&oacute;a xuất khẩu đ&aacute;p ứng đủ c&aacute;c điều kiện quy định của Nghị định th&igrave; được &aacute;p dụng thuế suất thuế xuất khẩu ưu đ&atilde;i theo Hiệp định CPTPP v&agrave; thực hiện xử l&yacute; tiền thuế nộp thừa cho người khai hải quan theo quy định của ph&aacute;p luật về quản l&yacute; thuế.</p>
+
+<p style="text-align: justify;">Đối với thuế nhập khẩu ưu đ&atilde;i đặc biệt thực hiện Hiệp định CPTPP, biểu thuế nhập khẩu ưu đ&atilde;i đặc biệt gồm 11.526 d&ograve;ng thuế, trong đ&oacute; c&oacute; 207 d&ograve;ng thuế được chi tiết theo cấp độ 10 số v&agrave; Danh mục h&agrave;ng h&oacute;a v&agrave; thuế nhập khẩu ưu đ&atilde;i đặc biệt đối với xe &ocirc; t&ocirc; đ&atilde; qua sử dụng &aacute;p dụng hạn ngạch thuế quan để thực hiện Hiệp định CPTPP. H&agrave;ng h&oacute;a nhập khẩu được &aacute;p dụng mức thuế nhập khẩu ưu đ&atilde;i đặc biệt theo Hiệp định CPTPP phải đ&aacute;p ứng đủ c&aacute;c điều kiện l&agrave; thuộc Biểu thuế nhập khẩu ưu đ&atilde;i đặc biệt hoặc Danh mục h&agrave;ng h&oacute;a v&agrave; thuế nhập khẩu ưu đ&atilde;i đặc biệt đối với xe &ocirc; t&ocirc; đ&atilde; qua sử dụng; được nhập khẩu v&agrave;o Việt Nam từ c&aacute;c nước th&agrave;nh vi&ecirc;n của Hiệp định CPTPP đ&atilde; c&oacute; hiệu lực bao gồm cả h&agrave;ng h&oacute;a từ khu phi thuế quan nhập khẩu v&agrave;o thị trường trong nước; đ&aacute;p ứng c&aacute;c quy định về xuất xứ h&agrave;ng h&oacute;a v&agrave; c&oacute; chứng từ chứng nhận xuất xứ h&agrave;ng ho&aacute; theo quy định của Hiệp định CPTPP.</p>
+
+<p style="text-align: justify;">Về c&aacute;c nh&oacute;m nước trong lộ tr&igrave;nh cắt giảm thuế quan của Nghị định, thực hiện quy định tại Điều 3 v&agrave; Phụ lục 2D của Hiệp định CPTPP, Việt Nam &aacute;p dụng 2 lộ tr&igrave;nh cắt giảm thuế đối với 2 nh&oacute;m nước trong phạm vi điều chỉnh của Nghị định. Theo đ&oacute;, Mehico &aacute;p dụng lộ tr&igrave;nh thuế đối với cả thuế xuất khẩu v&agrave; thuế nhập khẩu chậm hơn 1 năm so với nh&oacute;m c&aacute;c nước c&ograve;n lại gồm Australia, Canada, Nhật Bản, New Zealand, Singapore v&agrave; Peru. Việc &aacute;p dụng lộ tr&igrave;nh ri&ecirc;ng cho hai nh&oacute;m nước như tr&ecirc;n đảm bảo tu&acirc;n thủ cam kết, đảm bảo lợi &iacute;ch cho Việt Nam tr&ecirc;n cơ sở thực hiện nguy&ecirc;n tắc c&oacute; đi c&oacute; lại.</p>
+
+<p style="text-align: justify;">C&aacute;c nội dung quy định của Nghị định số 115/2022/NĐ-CP ng&agrave;y 30/12/2022 ban h&agrave;nh Biểu thuế xuất khẩu ưu đ&atilde;i, Biểu thuế nhập khẩu ưu đ&atilde;i đặc biệt của Việt Nam để thực hiện Hiệp định CPTPP giai đoạn 2022-2027 về cơ bản kế thừa quy định tại c&aacute;c Nghị định số 57/2019/NĐ-CP ban h&agrave;nh Biểu thuế thực hiện Hiệp định CPTPP giai đoạn 2019-2022. Trong qu&aacute; tr&igrave;nh thực thi Nghị định, Bộ T&agrave;i ch&iacute;nh kh&ocirc;ng ghi nhận trường hợp doanh nghiệp v&agrave; cơ quan Hải quan gặp vướng mắc với c&aacute;c quy định của Nghị định.</p>
+
+<p style="text-align: justify;"><em><strong>(Theo Tạp ch&iacute; Hải quan)</strong></em></p>
+
+        <div class="row">
+                    </div>
+    </div>
+    <hr>
+    <h1>Bài viết    mới nhất
+</h1>
+<div id="mostrecentnews-grid" class="grid-view">
+<table class="items">
+<thead>
+<tr>
+<th class="link-column" id="mostrecentnews-grid_c0">Tiêu đề</th><th id="mostrecentnews-grid_c1">Hạng mục</th><th id="mostrecentnews-grid_c2">Tạo ngày</th></tr>
+</thead>
+<tbody>
+<tr class="odd"><td class="link-column"><a href="?r=site/display&amp;id=4528" /></td><td>General</td><td style="width:70px">2026-07-21 09:20:12</td></tr>
+<tr class="even"><td class="link-column"><a href="?r=site/display&amp;id=4526" /></td><td>General</td><td style="width:70px">2026-07-20 09:48:33</td></tr>
+<tr class="odd"><td class="link-column"><a href="?r=site/display&amp;id=4525" /></td><td>General</td><td style="width:70px">2026-07-20 09:42:32</td></tr>
+<tr class="even"><td class="link-column"><a href="?r=site/display&amp;id=4524" /></td><td>General</td><td style="width:70px">2026-07-17 14:10:45</td></tr>
+<tr class="odd"><td class="link-column"><a href="?r=site/display&amp;id=4523" /></td><td>General</td><td style="width:70px">2026-07-17 14:07:48</td></tr>
+</tbody>
+</table><div class="keys" style="display:none" title="/index.php?id=3697&amp;page=14&amp;r=site%2Fdisplay"><span>4528</span><span>4526</span><span>4525</span><span>4524</span><span>4523</span></div>
+</div>
+    <hr>
+    <h1>Tìm kiếm tất cả Bài viết  </h1>
+<div class="form">
+
+    <form id="search-form" action="/index.php?id=3697&amp;page=14&amp;r=site%2Fdisplay" method="post">
+    <div class="row">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <label for="SearchDocumentForm_keyword">Từ khóa</label>                        <input size="20" name="SearchDocumentForm[keyword]" id="SearchDocumentForm_keyword" type="text" maxlength="255" />                                            </th>
+                    <th>
+                        <label for="SearchDocumentForm_categoryId">Hạng mục</label>                        <select name="SearchDocumentForm[category]" id="SearchDocumentForm_category">
+<option value=""></option>
+<option value="14">General</option>
+</select>                                            </th>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="SearchDocumentForm_from">Từ ngày</label><input id="from_date" name="SearchDocumentForm[from]" type="text" />                    </th>
+                    <th>
+                        <label for="SearchDocumentForm_to">Đến ngày</label><input id="to_date" name="SearchDocumentForm[to]" type="text" />
+                    </th>
+
+                </tr>
+            </thead>
+
+        </table>
+    </div>
+
+    <div class="row buttons">
+        <input style="font-family:Saysettha OT" type="submit" name="yt0" value="Tìm kiếm" id="yt0" />    </div>
+
+    <div class="row">
+        <div id="doc-search-result" class="grid-view">
+<div class="summary">Hiển thị 131-140 của 1410 kết quả.</div>
+<table class="items">
+<thead>
+<tr>
+<th class="link-column" id="doc-search-result_c0">Tiêu đề</th><th id="doc-search-result_c1">Hạng mục</th><th style="display:none" id="doc-search-result_c2">Ngày ban hành</th></tr>
+</thead>
+<tbody>
+<tr class="odd"><td class="link-column"><a href="?r=site/display&amp;id=3988">Xuất khẩu tôm sang nhiều thị trường đã tăng trưởng dương</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+<tr class="even"><td class="link-column"><a href="?r=site/display&amp;id=1921">Xuất khẩu tôm nỗ lực vươn tới mục tiêu 10 tỷ USD</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+<tr class="odd"><td class="link-column"><a href="?r=site/display&amp;id=2992">Xuất khẩu tôm có cơ hội đạt trên 4 tỷ USD</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+<tr class="even"><td class="link-column"><a href="?r=site/display&amp;id=3993">Xuất khẩu thủy sản: Đã chạm đáy và đang dần phục hồi</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+<tr class="odd"><td class="link-column"><a href="?r=site/display&amp;id=2092">Xuất khẩu thủy sản “hạ nhiệt&quot; tháng đầu năm</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+<tr class="even"><td class="link-column"><a href="?r=site/display&amp;id=3213">Xuất khẩu thủy sản trong tháng 7 giảm tốc mạnh</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+<tr class="odd"><td class="link-column"><a href="?r=site/display&amp;id=3375">Xuất khẩu thủy sản tiến sát mốc 10 tỷ USD</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+<tr class="even"><td class="link-column"><a href="?r=site/display&amp;id=4201">Xuất khẩu thủy sản tháng 6 đạt cao nhất kể từ đầu năm</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+<tr class="odd"><td class="link-column"><a href="?r=site/display&amp;id=3831">Xuất khẩu thủy sản tháng 4 sụt giảm gần 30%</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+<tr class="even"><td class="link-column"><a href="?r=site/display&amp;id=3440">Xuất khẩu thủy sản sẽ nhanh chóng trở lại guồng tăng trưởng</a></td><td>General</td><td style="display: none;width:70px"></td></tr>
+</tbody>
+</table>
+<div class="pager"><ul id="yw0" class="yiiPager"><li class="first"><a href="/index.php?r=site/display&amp;id=3697">Đầu</a></li>
+<li class="previous"><a href="/index.php?r=site/display&amp;id=3697&amp;page=13">Trước</a></li>
+<li class="page"><a href="/index.php?r=site/display&amp;id=3697&amp;page=9">9</a></li>
+<li class="page"><a href="/index.php?r=site/display&amp;id=3697&amp;page=10">10</a></li>
+<li class="page"><a href="/index.php?r=site/display&amp;id=3697&amp;page=11">11</a></li>
+<li class="page"><a href="/index.php?r=site/display&amp;id=3697&amp;page=12">12</a></li>
+<li class="page"><a href="/index.php?r=site/display&amp;id=3697&amp;page=13">13</a></li>
+<li class="page selected"><a href="/index.php?r=site/display&amp;id=3697&amp;page=14">14</a></li>
+<li class="page"><a href="/index.php?r=site/display&amp;id=3697&amp;page=15">15</a></li>
+<li class="page"><a href="/index.php?r=site/display&amp;id=3697&amp;page=16">16</a></li>
+<li class="page"><a href="/index.php?r=site/display&amp;id=3697&amp;page=17">17</a></li>
+<li class="page"><a href="/index.php?r=site/display&amp;id=3697&amp;page=18">18</a></li>
+<li class="next"><a href="/index.php?r=site/display&amp;id=3697&amp;page=15">Sau</a></li>
+<li class="last"><a href="/index.php?r=site/display&amp;id=3697&amp;page=141">Cuối</a></li></ul></div><div class="keys" style="display:none" title="/index.php?id=3697&amp;page=14&amp;r=site%2Fdisplay"><span>3988</span><span>1921</span><span>2992</span><span>3993</span><span>2092</span><span>3213</span><span>3375</span><span>4201</span><span>3831</span><span>3440</span></div>
+</div>    </div>
+    </form>
+</div><!-- form -->
+
+
+<!-- For Display Legal -->
+<!-- End For Display Legal -->
+
+
+<!-- For Display Publication -->
+<!-- End For Display Publication -->
+
+
+<!-- For Display Static -->
+        </div>
+    </div>
+    <div id="nspacs">
+        <div class="row">
+            <div class="portlet" id="yw1">
+<div class="portlet-decoration">
+<div class="portlet-title">Dành cho thành viên</div>
+</div>
+<div class="portlet-content">
+<div class="form">
+    <form id="sign-in-form" action="/index.php?id=3697&amp;page=14&amp;r=site%2Fdisplay" method="post">
+    <div class="row">
+        <label style="display:inline;" for="LoginForm_email" class="required">Email <span class="required">*</span></label>        <input style="width:100%;float:right;valign:top" name="LoginForm[email]" id="LoginForm_email" type="text" />        <div style="clear: both"></div>
+<div style="clear:both;display:none" class="errorMessage" id="LoginForm_email_em_"></div>    </div>
+
+    <div class="row">
+        <label style="display:inline;valign:center" for="LoginForm_password" class="required">Mật khẩu <span class="required">*</span></label><input style="width:100%;float:right;clear:right" name="LoginForm[password]" id="LoginForm_password" type="password" /><div style="clear:both;display:none" class="errorMessage" id="LoginForm_password_em_"></div>    </div>
+    <br/>
+    <div class="row rememberMe">
+        <input id="ytLoginForm_rememberMe" type="hidden" value="0" name="LoginForm[rememberMe]" /><input name="LoginForm[rememberMe]" id="LoginForm_rememberMe" value="1" type="checkbox" />        <label for="LoginForm_rememberMe">Nhớ tên truy cập và mật khẩu</label><input style="font-family:Saysettha OT" type="submit" name="yt1" value="Đăng nhập" /><div class="errorMessage" id="LoginForm_rememberMe_em_" style="display:none"></div>    </div>
+
+    <div class="row">
+        <a href="?r=site/registration">Đăng ký</a> | <a href="?r=site/ResetPasswordNotification">Quên mật khẩu</a>
+    </div>
+
+</form></div><!-- form -->
+</div>
+</div>        </div><div class="row">
+            <div class="portlet" id="yw2">
+<div class="portlet-decoration">
+<div class="portlet-title">Tìm kiếm trang web</div>
+</div>
+<div class="portlet-content">
+<div class="form">
+    <form id="content-search-form" action="/index.php?id=3697&amp;page=14&amp;r=site%2Fdisplay" method="post">
+    <div class="row buttons">
+        <input style="width:80%" name="SearchForm[keyword]" id="SearchForm_keyword" type="text" />        <input style="font-family:Saysettha OT" type="submit" name="yt2" value="Tìm kiếm" />            </div>
+    </form></div><!-- form -->
+</div>
+</div>        </div><div class="row">
+            <div class="portlet" id="yw3">
+<div class="portlet-decoration">
+<div class="portlet-title">Nội dung</div>
+</div>
+<div class="portlet-content">
+<table border="0" cellpadding="1" cellspacing="1" style="width:200px;">
+	<tbody>
+		<tr>
+			<td>
+			<p><strong>Giới thiệu nhanh</strong><iframe allowfullscreen="" frameborder="0" height="168" src="http://www.youtube.com/embed/cR4kZtLoEDs?&amp;rel=0&amp;theme=light&amp;showinfo=0&amp;controls=0&amp;autohide=1&amp;color=white" width="300"></iframe></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<p><strong>T&igrave;m kiếm th&ocirc;ng tin thương mại&nbsp;</strong></p>
+
+<table border="0" cellpadding="0" cellspacing="1">
+	<tbody>
+		<tr>
+			<td style="white-space: nowrap; width: 50px;">
+			<p>​<img alt="" height="40" src="/kcfinder/upload/images/Commodities.png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=tradeInfo/index">H&agrave;ng h&oacute;a v&agrave; thuế suất </a></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="white-space: nowrap;">
+			<p><img alt="" border="0" height="40" src="/kcfinder/upload/images/Legal%20doc.png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=site/displaythemostrecentxx&amp;category=Legal%20Document">Văn bản ph&aacute;p quy</a></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="white-space: nowrap;">
+			<p><img alt="" border="0" height="40" src="/kcfinder/upload/images/Measures%281%29.png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=SearchMeasures/index">Biện ph&aacute;p v&agrave; Ti&ecirc;u chuẩn </a></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><img alt="" border="0" height="40" src="/kcfinder/upload/images/Procedures%281%29.png" width="41" /></p>
+			</td>
+			<td>
+			<p><a href="?r=SearchProcedure/index">Thủ tục</a></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="white-space: nowrap;">
+			<p><img alt="" border="0" height="39" src="/kcfinder/upload/images/Forms.png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=SearchForms/index">Biểu mẫu</a></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+
+<p><strong>Th&ocirc;ng tin nổi bật</strong></p>
+
+<table border="0" cellpadding="0" cellspacing="1">
+	<tbody>
+		<tr>
+			<td style="width: 40px;">
+			<p><img alt="" border="0" height="40" src="/kcfinder/upload/images/FTA.png" width="40" />​</p>
+			</td>
+			<td>
+			<p><a href="?r=site/display&amp;id=298">Hiệp định thương mại tự do</a></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width: 50px;">
+			<p><img alt="" border="0" height="40" src="/kcfinder/upload/images/Market.png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=site/display&amp;id=13">Th&ocirc;ng tin tiếp cận&nbsp;thị trường</a>&nbsp;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><img alt="" border="0" height="40" src="/kcfinder/upload/images/Asean(1).png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=site/display&amp;id=33">Kho tư liệu thương mại ASEAN</a></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><img alt="" border="0" height="40" src="/kcfinder/upload/images/SPSTBT.png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=site/display&amp;id=4">Điểm hỏi đ&aacute;p về SBS/TBT</a></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+
+<p><strong>Th&ocirc;ng tin v&agrave; b&agrave;i viết</strong>&nbsp;</p>
+
+<table border="0" cellpadding="1" cellspacing="1">
+	<tbody>
+		<tr>
+			<td style="width: 50px;">
+			<p>​<img alt="" border="0" height="40" src="/kcfinder/upload/images/News(3).png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=site/displaythemostrecentxx&amp;category=News">Tin tức</a></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width: 40px;">
+			<p>​<img alt="" border="0" height="40" src="/kcfinder/upload/images/Publication.png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=site/displaythemostrecentxx&amp;category=Publication">Ấn phẩm</a></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>​<img alt="" border="0" height="40" src="/kcfinder/upload/images/Announcement.png" width="40" /></p>
+			</td>
+			<td>
+			<p><a href="?r=site/displaythemostrecentxx&amp;category=Announcement">Th&ocirc;ng b&aacute;o </a></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><img alt="" border="0" height="40" src="/kcfinder/upload/images/Useful%20link.png" width="40" />​</p>
+			</td>
+			<td>
+			<p><a href="?r=site/display&amp;id=890">Trang li&ecirc;n kết</a></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div>
+<div class="row" style="font-size: 11.81px;">
+<hr />
+<table border="1" cellpadding="1" cellspacing="1" style="width: 200px">
+	<tbody>
+		<tr>
+			<td style="background-color: rgb(189, 200, 227);">
+			<p align="center"><span style="font-family: trebuchet ms,helvetica,sans-serif;"><span style="color: rgb(0, 0, 128);"><span style="font-size: 14px;"><strong>H&atilde;y li&ecirc;n hệ ch&uacute;ng t&ocirc;i!</strong></span></span></span></p>
+
+			<p style="text-align: center;"><span style="font-family: trebuchet ms,helvetica,sans-serif;"><span style="font-size: 14px;"><span style="color: rgb(0, 0, 128);">Nếu kh&ocirc;ng t&igrave;m thấy th&ocirc;ng tin qu&yacute; vị&nbsp;cần tr&ecirc;n trang web n&agrave;y, xin h&atilde;y li&ecirc;n hệ với ch&uacute;ng t&ocirc;i.&nbsp;</span><a href="?r=site/contact"><strong><em><span style="color: rgb(0, 0, 128);">Nhấp chuột v&agrave;o đ&acirc;y</span></em></strong></a><span style="color: rgb(0, 0, 128);">&nbsp;để gửi th&ocirc;ng điệp cho ch&uacute;ng t&ocirc;i&nbsp;&gt;&gt;&gt;</span></span></span></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</div>
+
+<p>&nbsp;</p>
+</div>
+</div>        </div><div class="row">
+            <div class="portlet" id="yw4">
+<div class="portlet-decoration">
+<div class="portlet-title">Sự kiện sắp tới</div>
+</div>
+<div class="portlet-content">
+    <a href="/index.php?r=site/displaythemostrecentxx&amp;category=Event">Xem tất cả sự kiện</a></div>
+</div>        </div>
+    </div>
+    <div style="clear:both"></div>
+</div>
+        </div>
+        <div id="footer">
+            <div id="footerMenu">
+                <a href="/index.php?r=site/display&amp;id=9">Sơ đồ trang</a> |
+                <a href="/index.php?r=site/display&amp;id=10">Thuật ngữ thường dùng</a> |
+                <a href="/index.php?r=site/display&amp;id=11">Điều khoản và Điều kiện</a> |
+                <a href="/index.php?r=site/feedback">Thông tin phản hồi</a>            </div>
+            &copy;Bản quyền 2026 
+            Tổng cục Hải quan (General Department of Vietnam Customs). Bảo lưu mọi quyền.<br/>
+            <br/>
+        </div><!-- footer -->
+
+    </div><!-- page -->
+
+<script type="text/javascript" src="/assets/c50fe8a4/gridview/jquery.yiigridview.js"></script>
+<script type="text/javascript" src="/assets/c41c103d/jui/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/assets/fd2ddfcb/script.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+jQuery(function($) {
+jQuery('#mostrecentnews-grid').yiiGridView({'ajaxUpdate':['mostrecentnews-grid'],'ajaxVar':'ajax','pagerClass':'pager','loadingClass':'grid-view-loading','filterClass':'filters','tableClass':'items','selectableRows':1});
+jQuery('#SearchDocumentForm_category').select2({'formatNoMatches':function(){return "No matches found";},'formatInputTooShort':function(input,min){return "Please enter "+(min-input.length)+" more characters";},'formatInputTooLong':function(input,max){return "Please enter "+(input.length-max)+" less characters";},'formatSelectionTooBig':function(limit){return "You can only select "+limit+" items";},'formatLoadMore':function(pageNumber){return "Loading more results...";},'formatSearching':function(){return "Searching...";},'placeholder':'Bài viết Tất cả','allowClear':true});
+jQuery('#from_date').datepicker({'showAnim':'slide','dateFormat':'dd-mm-yy','showOn':'focus','buttonText':'Chọn từ lịch','buttonImage':'/images/calendar.jpeg','buttonImageOnly':true,'changeMonth':'true','changeYear':'true','showButtonPanel':'true'});
+jQuery('#to_date').datepicker({'showAnim':'slide','dateFormat':'dd-mm-yy','showOn':'focus','buttonText':'Chọn từ lịch','buttonImage':'/images/calendar.jpeg','buttonImageOnly':true,'changeMonth':'true','changeYear':'true','showButtonPanel':'true'});
+jQuery('body').undelegate('#yt0','click').delegate('#yt0','click',function(){jQuery.yii.submitForm(this,'/index.php?r=site/search',{});return false;});
+jQuery('#doc-search-result').yiiGridView({'ajaxUpdate':['doc-search-result'],'ajaxVar':'ajax','pagerClass':'pager','loadingClass':'grid-view-loading','filterClass':'filters','tableClass':'items','selectableRows':1,'pageVar':'page'});
+$('#sign-in-form').yiiactiveform({'validateOnSubmit':true,'attributes':[{'id':'LoginForm_email','inputID':'LoginForm_email','errorID':'LoginForm_email_em_','model':'LoginForm','name':'LoginForm[email]','enableAjaxValidation':false,'clientValidation':function(value, messages, attribute) {
+
+if($.trim(value)=='') {
+	messages.push("kh\u00f4ng \u0111\u01b0\u1ee3c b\u1ecf tr\u1ed1ng");
+}
+
+
+if($.trim(value)!='' && !value.match(/^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/)) {
+	messages.push("Email is not a valid email address.");
+}
+
+}},{'id':'LoginForm_password','inputID':'LoginForm_password','errorID':'LoginForm_password_em_','model':'LoginForm','name':'LoginForm[password]','enableAjaxValidation':false,'clientValidation':function(value, messages, attribute) {
+
+if($.trim(value)=='') {
+	messages.push("kh\u00f4ng \u0111\u01b0\u1ee3c b\u1ecf tr\u1ed1ng");
+}
+
+}},{'id':'LoginForm_rememberMe','inputID':'LoginForm_rememberMe','errorID':'LoginForm_rememberMe_em_','model':'LoginForm','name':'LoginForm[rememberMe]','enableAjaxValidation':false,'clientValidation':function(value, messages, attribute) {
+
+if($.trim(value)!='' && value!="1" && value!="0") {
+	messages.push("Nh\u1edb t\u00ean truy c\u1eadp v\u00e0 m\u1eadt kh\u1ea9u must be either 1 or 0.");
+}
+
+}}]});
+});
+/*]]>*/
+</script>
+</body>
+</html>

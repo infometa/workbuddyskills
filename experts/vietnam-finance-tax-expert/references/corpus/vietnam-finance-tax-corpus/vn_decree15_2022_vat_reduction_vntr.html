@@ -1,0 +1,4311 @@
+<!DOCTYPE html>
+<!--[if IE 7]><html class="ie ie7" lang="vi"><![endif]-->
+<!--[if IE 8]><html class="ie ie8" lang="vi"><![endif]-->
+<!--[if IE 9]><html class="ie ie9" lang="vi"><![endif]-->
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=1"
+          name="viewport"/>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="csrf-token" content="GE42MbKPmY0wgxuxOPbOpYbO0yQESCCagmvPlrmV">
+    <!-- Fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto"
+          rel="stylesheet" type="text/css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://vntr.moit.gov.vn/css/listree.min.css"/>
+    <link rel="stylesheet" href="https://vntr.moit.gov.vn/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="https://vntr.moit.gov.vn/css/slick-theme.css"/>
+    <link rel="stylesheet" type="text/css" href="https://vntr.moit.gov.vn/css/slick.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://vntr.moit.gov.vn/js/listree.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://vntr.moit.gov.vn/js/main.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <style>
+        :root {
+            --color-1st: { {
+        theme_option('primary_color', '#bead8e')
+        }
+        };
+        --primary-font: 'Roboto  ',
+        sans-serif;
+        }
+        .header-1 {
+            background-color: #ffffff;
+            max-width: 1440px;
+            margin-right: auto;
+            margin-left: auto;
+            position: relative;
+        }
+        .header-1 .header-above {
+            display: flex;
+            position: relative;
+            width: 100%;
+            padding: 0 5px 0 5px;
+        }
+        .header-1 .header-flag {
+            width: 25%;
+        }
+        .header-1 a {
+            float: left;
+            color: black;
+            text-align: center;
+            padding: 6px;
+            text-decoration: none;
+            font-size: 18px;
+            line-height: 25px;
+            border-radius: 4px;
+        }
+        .header-1 a.sign-up {
+            border: 1px solid #17257E;
+            box-sizing: border-box;
+            border-radius: 10px;
+            color: #17257E;
+            font-size: 15px;
+        }
+        .header-1 a.sign-up:hover{
+            box-shadow: 0px 0px 8px 0px #00000040;
+        }
+        .header-1 a.sign-in {
+            font-family: 'Roboto', sans-serif;
+            border: 1px solid #17257E;
+            box-sizing: border-box;
+            border-radius: 10px;
+            color: #17257E;
+            font-size: 15px;
+        }
+        .header-1 a.sign-in:hover{
+            box-shadow: 0px 0px 8px 0px #00000040;
+        }
+        .header-1 a.logo {
+            font-size: 25px;
+            font-weight: bold;
+            display: flex;
+            justify-content: flex-start;
+            width: 15%;
+            padding: 15px 0px 0px;
+            left: 2%
+        }
+        .header-right {
+            float: right;
+            display: flex;
+            padding: 15px 0 15px;
+            width: 20%;
+            justify-content: flex-end;
+        }
+        .nav {
+            display: inline-flex;
+            position: relative;
+            background-color: #fff;
+            float: none;
+            display: block;
+            text-align: left;
+            width: 70%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav-item {
+            color: #83818c;
+            padding: 20px;
+            text-decoration: none;
+            transition: 0.3s;
+            margin: 0;
+            z-index: 1;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            position: relative;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 17px;
+            line-height: 20px;
+        }
+        .nav-item:before {
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #17257E;
+            border-radius: 8px 8px 0 0;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        /* .nav-item:not(.is-active):hover:before {
+            opacity: 1;
+            bottom: 0;
+        } */
+        .nav-item:hover:before, .nav-item.is-active:before {
+            opacity: 1;
+            bottom: 0;
+        }
+        .header-1 .is-active{
+            font-weight: 700;
+            color: #17257E;
+        }
+        .nav-indicator {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 4px;
+            transition: 0.4s;
+            height: 5px;
+            z-index: 1;
+            border-radius: 8px 8px 0 0;
+        }
+        .nav-indicator-1 {
+            transform: rotate(90deg);
+            width:35px;
+            position: absolute;
+            left: -15px;
+            bottom: 305px;
+            height: 4px;
+            transition: 0.4s;
+            height: 5px;
+            z-index: 1;
+            background-color: #17257E;
+            border-radius: 8px 8px 0 0;
+        }
+        .header-1 a.select-1 {
+            font-family: 'Roboto', sans-serif;
+            font-style: normal;
+            font-size: 17px;
+            line-height: 60px;
+        }
+        .header-1 .icon {
+            display: none;
+        }
+        .header-1 .flag {
+            display: none;
+        }
+        .language-wrapper-1 {
+            width: 10%;
+        }
+        .header-1 .nav-1 .select-1 {
+            line-height: 35px;
+        }
+        .header-1 .nav-1 a {
+            display: none;
+        }
+        /* mobile submenu */
+        .header-1 .nav-1.mobile-menu .has-submenu .dropdown-submenu-mobile {
+            padding-right: 15px;
+        }
+        .header-1 .nav-1.mobile-menu .has-submenu .dropdown-submenu-mobile a {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            padding-left: 25px;
+        }
+        .header-1 .nav-1.mobile-menu.responsive .has-submenu.is-active a {
+            display: block;
+        }
+        .header-1 .nav-1.mobile-menu.responsive .has-submenu.is-active > a {
+            font-weight: 700;
+            color: #17257E;
+        }
+        .header-1 .nav-1.mobile-menu.responsive .has-submenu.is-active .dropdown-submenu-mobile a.is-active {
+            font-weight: normal;
+            background: #EEF2FF;
+            color: black;
+        }
+        @media  screen and (max-width: 1024px) {
+            .header-1 .header-above{
+                padding: 0;
+            }
+            .header-1 a {
+                float: none;
+                display: block;
+                text-align: left;
+            }
+            .header-1 a.logo {
+                width: 65%;
+                margin-left: 10px;
+                margin-bottom: 16px;
+                margin-top: 4px;
+            }
+            .header-1 .header-right {
+                width: 35%;
+                display: flex;
+                justify-content: space-between;
+                margin-right: 10px;
+                padding: 20px 0 0;
+            }
+            .header-1 .header-flag{
+                width: 35%;
+            }
+            .header-1 .nav {
+                flex-wrap: wrap;
+                width: 100%;
+                display: none;
+            }
+            .header-1 a.icon {
+                float: right;
+                display: block;
+                width: 30%;
+            }
+            .header-1 a.flag {
+                float: right;
+                display: block;
+            }
+            .header-right {
+                float: none;
+            }
+            .header-1 .sign-up-section {
+                display: none;
+            }
+        }
+
+        @media  screen and (max-width: 1024px) {
+            .nav-1.responsive .select-1 {
+                float: none;
+                display: block;
+                text-align: left;
+                font-size: 17px;
+            }
+            .responsive {
+                border: 1px solid #c4c4c4;
+                border-bottom: none;
+                border-right: none;
+                border-left: none;
+                padding: 5px 0px 5px 35px;
+            }
+        }
+        @media  screen and (max-width: 767px) {
+            .page-logo img{
+                width: 148px;
+                height: 50px;
+            }
+        }
+        .dropdown-home{
+            position: relative;
+        }
+        .dropdown-home-1{
+            display: none;
+            position: absolute;
+            width: 260px;
+            height: auto;
+            top: 100%;
+            right: 0;
+            background: #FFFFFF;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            z-index: 21;
+        }
+        .dropdown-home-1 a{
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 16px;
+            font-family: 'Roboto', sans-serif;
+            color: #000000;
+            text-align: left;
+            padding: 20px;
+            width: 100%;
+        }
+        .dropdown-home-1 a:hover{
+            background: #EEF2FF;
+            color: #17257E;
+            font-weight: 700;
+        }
+        .dropdown-home-1 img{
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .dropdown-home:hover .dropdown-home-1{
+            display: block;
+        }
+        .responsive .res{
+            display: block!important;
+            width: initial!important;
+            border: 0!important;
+            box-sizing: border-box;
+            border-radius: 10px;
+            color: black!important;
+            font-size: 15px;
+            font-family: 'Roboto', sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .header-1 .sign-up-section, .header-1 .user-info-section {
+            width: 88px;
+            padding-top: 3px;
+            height: 40px;
+        }
+        .header-1 .user-info-section > .dropleft > img {
+            height: 40px;
+            display: block;
+            margin:auto;
+        }
+
+        .header-1 .user-info-section > .dropleft:hover .dropdown-menu {
+            display: block;
+        }
+        .header-1 .user-info-section > .dropleft {
+            position: relative;
+        }
+
+        .header-1 .user-info-section > .dropleft .dropdown-menu-right {
+            right: 20px;
+            left: auto;
+            top: 96%;
+        }
+
+        .header-1 .user-info-section .dropdown-menu .dropdown-item {
+            color: #17257E;
+            font-size: 15px;
+        }
+        .header-1 .user-info-section .dropdown-menu {
+            min-width: 80px;
+        }
+
+            .modal-popup-search {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(20px);
+    }
+
+    /* Modal Content */
+    .modal-popup-search .modal-content {
+        margin: auto;
+        background: #FFFFFF;
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+        border-radius: 20px;
+        width: 790px;
+        /* height: 441.4px; */
+    }
+
+    .modal-content-form {
+        width: 690px;
+        margin: 25px auto;
+    }
+
+    .modal-content-form p {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 18px;
+        color: #000000;
+    }
+
+    .modal-content-form select {
+        width: 330px;
+        height: 50px;
+        background: #FFFFFF;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        /* border-radius: 10px; */
+        padding: 15px;
+        outline: 0;
+        -webkit-appearance: none;
+        background-image: url(/themes/ripple/images/Shape.jpg);
+        background-position: calc(100% - 30px) calc(1em + 8px), calc(100% - 25px) calc(1em + 8px);
+        background-repeat: no-repeat;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content-form select:focus {
+        border: 1px solid #17257E;
+        box-sizing: border-box;
+    }
+
+    .modal-content-form select option {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content-form .modal-search {
+        width: 100%;
+        height: 50px;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 10px;
+        padding: 15px;
+        outline: 0;
+        -webkit-appearance: none;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: rgba(0, 0, 0, 0.8);
+    }
+    .modal-content-form .form-control{
+        width: 330px;
+        height: 50px;   
+    }
+    .modal-content-form .modal-search:focus {
+        border: 1px solid #17257E;
+        box-sizing: border-box;
+    }
+
+    .checkbox-3 .third-element-checkbox {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        color: #000000;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .checkbox-legal label input{
+        margin-right: 10px;
+    }
+    .checkbox-legal .checkmark{
+        margin-right: 10px;
+        width: 25px !important;
+    }
+
+    .checkbox-legal{
+        display: flex;
+        width: 100%;
+        padding-top: 35px;
+    }
+    .checkbox-legal label{
+        width: 32%;
+    }
+    .checkbox-legal label input{
+        margin-right: 10px;
+    }
+    .checkbox-legal .checkmark{
+        margin-right: 10px;
+    }
+
+    .modal-content .button-search {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 20px;
+    }
+
+    .button-search button:nth-child(1) {
+        background-color: #FFFFFF;
+        color: #17257E;
+        border: 1px solid #17257E;
+        box-sizing: border-box;
+        border-radius: 10px;
+        width: 130px;
+        height: 40px;
+        margin-right: 20px;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+    }
+
+    .button-search button:nth-child(2) {
+        border: 1px solid #17257E;
+        box-sizing: border-box;
+        border-radius: 10px;
+        background: #17257E;
+        border-radius: 10px;
+        color: #FFFFFF;
+        width: 130px;
+        height: 40px;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+    }
+
+    .checkbox-legal p {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        color: #000000;
+    }
+
+    #search-filter .form-search-in-goods {
+        width: 100%;
+    }
+
+    .elementor-form-container-1 {
+       justify-content: center;
+    }
+
+    @media  only screen and (max-width:767px) {
+        #search-filter .form-search-in-goods .input-field {
+            width: 100%;
+        }
+    }
+
+    * {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    @keyframes  click-wave {
+        0% {
+            height: 40px;
+            width: 40px;
+            opacity: 0.35;
+            position: relative;
+        }
+
+        100% {
+            height: 200px;
+            width: 200px;
+            margin-left: -80px;
+            margin-top: -80px;
+            opacity: 0;
+        }
+    }
+
+    .option-input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -o-appearance: none;
+        appearance: none;
+        position: relative;
+        top: 13.33333px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 40px;
+        width: 40px;
+        transition: all 0.15s ease-out 0s;
+        background: #cbd1d8;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        margin-right: 0.5rem;
+        outline: none;
+        position: relative;
+        z-index: 1000;
+    }
+
+    .option-input:hover {
+        background: #9faab7;
+    }
+
+    .option-input:checked {
+        background: #17257E;
+    }
+
+    .option-input:checked::before {
+        height: 40px;
+        width: 40px;
+        position: absolute;
+        content: '✔';
+        display: inline-block;
+        font-size: 26.66667px;
+        text-align: center;
+        line-height: 40px;
+    }
+
+    .option-input:checked::after {
+        /*-webkit-animation: click-wave 0.65s;
+  -moz-animation: click-wave 0.65s;
+  animation: click-wave 0.65s;
+  background: #40e0d0;*/
+        content: '';
+        display: block;
+        position: relative;
+        z-index: 100;
+    }
+
+    .option-input.radio {
+        border-radius: 50%;
+    }
+
+    .option-input.radio::after {
+        border-radius: 50%;
+    }
+    .language_bar_list li a img{
+        margin-left: 5px;
+    }
+    #btnShowModalSearch {
+        max-height: 25px;
+        margin-top: 10px;
+        cursor: pointer;
+        width: 25px;
+        margin-right: 5px;
+    }
+
+    #btnShowModalLegal .filterDoc{
+            color:#FFFFFF;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 18px;
+            text-align: center;
+            color: #FFFFFF;
+            margin: 0;
+        }
+    .gsc-search-box .gsc-search-button{
+        height: 60px;
+        border-radius: 15px;
+        width: 100px;
+    }
+    .gsc-search-box .gsc-input-box{
+        border-radius: 15px;
+    }
+    .gsc-search-box .gsc-input {
+        height: 50px !important;
+    }
+    .gsc-control-cse {
+        padding: 1em 0 !important;
+    }
+    .closeModalSearch:hover{
+        box-shadow: 0 0 10px #7b7b7b;
+    }
+    
+    @media  only screen and (max-width:480px) {
+        .table-service, .table-service-details {
+            width: 100%;
+        }
+
+        .gsc-search-box .gsc-search-button{
+            width: 65px;
+        }
+        .language_bar_list li a img{
+            margin-left: -3px;
+        }
+        #btnShowModalSearch {
+            max-height: 25px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 25px;
+        }
+        .service-legal-title h1{
+            font-size: 24px;
+        }
+        .table-service .docName,
+        .table-service .docAgent,
+        .table-service .docDate,
+        .table-service .docType
+        {
+            display: none;
+        }
+        .table-service .docCode{
+            width: 65% !important;
+        }
+        #btnShowModalLegal {
+            width: 96px;
+        }
+        #btnShowModalLegal .filterDoc{
+            display: none;
+        }
+        .modal-popup-search .modal-content{
+            width: 345px;
+            padding: 20px;
+        }
+        .modal-content-form{
+            width: 100%;
+        }
+        .modal-content-form select,.modal-content-form .form-control{
+            width: 100%;
+        }
+        .modal-content-form .formText{
+            display: inherit !important;
+            padding: 0 !important;
+        }
+        .modal-content-form div div{
+            padding-top: 15px !important;
+        }
+        .modal-content-form .gsc-input-box{
+            padding: 0px !important;
+        }
+        .checkbox-legal{
+            display: block;
+        }
+        .checkbox-legal label{
+            width: 100%;
+        }
+        .modal-content .button-search{
+            justify-content: space-around;
+        }
+    }
+
+    .highlight {
+        background-color: yellow;
+        font-weight: 700
+    }
+    .notifications {
+        width: 350px;
+        max-height: 400px;
+        display: none;
+        position: absolute;
+        top: 73px;
+        right: 50px;
+        border-radius: 5px 0px 5px 5px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        z-index: 1;
+        overflow: auto;
+    }
+
+    .notifications h2 {
+        font-size: 14px;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        color: #999;
+        margin: 0;
+    }
+
+    .notifications h2 span {
+        color: #f00
+    }
+
+    .notifications-item {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        padding: 6px 9px;
+        margin-bottom: 0px;
+        cursor: pointer
+    }
+    .on-read {
+        background: #e3e3e3;
+    }
+
+    .notifications-item:hover {
+        background-color: #eee
+    }
+
+    .notifications-item i {
+        display: block;
+        height: 50px;
+        margin-right: 9px;
+        border-radius: 50%;
+        margin-top: 5px;
+    }
+
+    .notifications-item .text h4 {
+        color: #777;
+        font-size: 16px;
+        margin-top: 3px
+    }
+
+    .notifications-item .text p {
+        color: #aaa;
+        font-size: 12px
+    }
+    #bell{
+        font-size: 22px;
+        margin-top: 6px;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+    </style>
+
+    <link rel="shortcut icon" href="https://vntr.moit.gov.vn/storage/icon/rectangle.png">
+
+<title>Chi tiết</title>
+<meta name="description" content="Chi tiết">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google-site-verification" content="https://www.vietnamtradeinfo.com/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-217878714-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-217878714-1');
+</script>
+<meta property="og:site_name" content="">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Chi tiết">
+<meta property="og:description" content="Chi tiết">
+<meta name="twitter:title" content="Chi tiết">
+<meta name="twitter:description" content="Chi tiết">
+
+<link media="all" type="text/css" rel="stylesheet" href="https://vntr.moit.gov.vn/vendor/core/plugins/cookie-consent/css/cookie-consent.css?v=1.0.0">
+<link media="all" type="text/css" rel="stylesheet" href="https://vntr.moit.gov.vn/vendor/core/plugins/language/css/language-public.css?v=1.0.0">
+<link media="all" type="text/css" rel="stylesheet" href="https://vntr.moit.gov.vn/themes/ripple/plugins/bootstrap/css/bootstrap.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="https://vntr.moit.gov.vn/themes/ripple/plugins/font-awesome/css/font-awesome.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="https://vntr.moit.gov.vn/themes/ripple/plugins/ionicons/css/ionicons.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="https://vntr.moit.gov.vn/themes/ripple/css/style.css?v=5.11">
+
+
+
+
+<link rel="alternate" href="https://vntr.moit.gov.vn/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions" hreflang="en" />
+    <link rel="alternate" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions" hreflang="vi" />
+
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+</head>
+
+<body >
+<div class="header-1">
+    <div class="header-above">
+      <a href="https://vntr.moit.gov.vn/vi" class="page-logo logo">
+        <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 17.jpg" alt="Logo of FTA information system" height="50">
+      </a>
+      <nav class="nav" style="left: 2%">
+        
+                <div class="dropdown-home">
+            <a href="https://vntr.moit.gov.vn/vi" class=" nav-item select-1" active-color="#17257E">Trang chủ</a>
+            <div class="dropdown-home-1">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+        </div>
+                <div class="dropdown-home">
+            <a href="https://vntr.moit.gov.vn/vi/search" class=" nav-item select-1" active-color="#17257E">Thương mại hàng hóa</a>
+            <div class="dropdown-home-1">
+                                                <a href="https://vntr.moit.gov.vn/vi/nomenclature">Danh mục hàng hóa</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/tariff/tfta">Biểu thuế</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/roo/rfta">Quy tắc xuất xứ</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/measures">Biện pháp phi thuế quan</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/legal-documents?pages=good">Văn bản pháp quy</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                <a href="https://vntr.moit.gov.vn/vi/procedures">Thủ tục</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                <a href="https://vntr.moit.gov.vn/vi/administrative_rulings">Phán quyết hành chính</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                <a href="https://vntr.moit.gov.vn/vi/thong-le-tot-nhat">Thông lệ tốt nhất</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                <a href="https://vntr.moit.gov.vn/vi/danh-sach-cac-nha-giao-dich-duoc-uy-quyen">Danh sách các doanh nghiệp ưu tiên</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                            </div>
+        </div>
+                <div class="dropdown-home">
+            <a href="https://vntr.moit.gov.vn/vi/search?t=service" class=" nav-item select-1" active-color="#17257E">Thương mại dịch vụ</a>
+            <div class="dropdown-home-1">
+                                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/search?t=service">Phân loại các ngành dịch vụ theo WTO</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/un-service-classification-vn">Phân loại sản phẩm theo UN</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                <a href="https://vntr.moit.gov.vn/vi/service/sfta">Hiệp định thương mại dịch vụ</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/search?t=service">Biểu dịch vụ</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/legal-documents?pages=service">Văn bản pháp quy</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                            </div>
+        </div>
+                <div class="dropdown-home">
+            <a href="https://vntr.moit.gov.vn/vi/investment/ifta" class=" nav-item select-1" active-color="#17257E">Đầu tư</a>
+            <div class="dropdown-home-1">
+                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/phan-loai-cac-hoat-dong-kinh-te">Phân loại các hoạt động kinh tế</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/investment/ifta">Các hiệp định về đầu tư</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/search?t=investment">Biểu đầu tư</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                <a href="https://vntr.moit.gov.vn/vi/legal-documents?pages=investment">Văn bản pháp quy</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                                                                                                                                                            </div>
+        </div>
+                <div class="dropdown-home">
+            <a href="https://vntr.moit.gov.vn/vi/fta" class=" nav-item select-1" active-color="#17257E">Hiệp định</a>
+            <div class="dropdown-home-1">
+                                                                                                                <a href="https://vntr.moit.gov.vn/vi/fta/3/0">Văn kiện hiệp định</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/fta/3/1">Cam kết chính</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/legal-documents?pages=agreement">Văn bản pháp quy</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+        </div>
+                <div class="dropdown-home">
+            <a href="#" class=" nav-item select-1" active-color="#17257E">Tin tức</a>
+            <div class="dropdown-home-1">
+                                                                                <a href="https://vntr.moit.gov.vn/vi/news/post/News">Tin tức</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/news/post/Events">Sự kiện</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/news/post/Publications">Ấn phẩm</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/news/post/Statistics">Số liệu thống kê</a>
+                <img src="https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 248.jpg" alt="Underline">
+                                                                                                                                                                                                                                            </div>
+        </div>
+                 
+        <span style="display:none" class="nav-indicator"></span>
+
+        </nav>
+        <div class="header-right">
+            <img id="btnShowModalSearch" src="https://vntr.moit.gov.vn/themes/ripple/images/Group 89.jpg" alt="Underline">
+            
+                <div id="myModalSearch" class="modal-popup-search">
+                    <div class="modal-content">
+                        <div class="modal-content-form">
+                            <h1 style="font-size: 35px;">Tìm kiếm nội dung trong trang</h1>
+                            <div class="gcse-search"></div>
+                            <div class="button-search">
+                                <button class="closeModalSearch">Hủy bỏ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            <div class="header-flag">
+            <ul class="language_bar_list ">
+                                                <li>
+                        <a rel="alternate" hreflang="en" href="https://vntr.moit.gov.vn/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=2" style="margin: revert;">
+                            <img src="https://vntr.moit.gov.vn/vendor/core/core/base/images/flags/us.svg" title="English" width="16" alt="English">                                                    </a>
+                    </li>
+                                                                </ul>
+        <span class="caret hidden" data-lang="vi"></span>
+        <div class="clearfix"></div>
+    
+            </div>
+                                        <div class="sign-up-section">
+                                            <a href="https://vntr.moit.gov.vn/vi/login" class="res sign-in" id="sign-in"
+                           style="max-height: 40px">Đăng nhập</a>
+                                    </div>
+                        <a href="javascript:void(0);" class="icon" onclick="myFunctionNav()">
+            <img style="width: 18px; height: 18px;" id="navbar-button-mobile" onclick="myFunctionNavButton()" src="https://vntr.moit.gov.vn/themes/ripple/images/Group 90.svg" alt="menu">
+            <img id="navbar-button-mobile-x" class="d-none" onclick="myFunctionNavButton()" src="https://vntr.moit.gov.vn/themes/ripple/images/x.svg" alt="menu close">
+            </a>
+        </div>
+    </div>
+    <nav class="nav-1 mobile-menu" id="myNav">
+        
+                    <div class="has-submenu">
+                <a href="https://vntr.moit.gov.vn/vi" class=" select-1" active-color="#17257E">Trang chủ</a>
+                <div class="dropdown-submenu-mobile">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+            </div>
+                    <div class="has-submenu">
+                <a href="https://vntr.moit.gov.vn/vi/search" class=" select-1" active-color="#17257E">Thương mại hàng hóa</a>
+                <div class="dropdown-submenu-mobile">
+                                                        <a href="https://vntr.moit.gov.vn/vi/nomenclature" class="">Danh mục hàng hóa</a>
+                                                                                                                                                                                                                                                                                                                                        <a href="https://vntr.moit.gov.vn/vi/tariff/tfta" class="">Biểu thuế</a>
+                                                                                                                                                                                        <a href="https://vntr.moit.gov.vn/vi/roo/rfta" class="">Quy tắc xuất xứ</a>
+                                                                                                                                                                                                                            <a href="https://vntr.moit.gov.vn/vi/measures" class="">Biện pháp phi thuế quan</a>
+                                                                                                                                                    <a href="https://vntr.moit.gov.vn/vi/legal-documents?pages=good" class="">Văn bản pháp quy</a>
+                                                                            <a href="https://vntr.moit.gov.vn/vi/procedures" class="">Thủ tục</a>
+                                                                            <a href="https://vntr.moit.gov.vn/vi/administrative_rulings" class="">Phán quyết hành chính</a>
+                                                                            <a href="https://vntr.moit.gov.vn/vi/thong-le-tot-nhat" class="">Thông lệ tốt nhất</a>
+                                                                            <a href="https://vntr.moit.gov.vn/vi/danh-sach-cac-nha-giao-dich-duoc-uy-quyen" class="">Danh sách các doanh nghiệp ưu tiên</a>
+                                                    </div>
+            </div>
+                    <div class="has-submenu">
+                <a href="https://vntr.moit.gov.vn/vi/search?t=service" class=" select-1" active-color="#17257E">Thương mại dịch vụ</a>
+                <div class="dropdown-submenu-mobile">
+                                                                                                                                                                                                        <a href="https://vntr.moit.gov.vn/vi/search?t=service" class="">Phân loại các ngành dịch vụ theo WTO</a>
+                                                                                                                                                                                                                            <a href="https://vntr.moit.gov.vn/vi/un-service-classification-vn" class="">Phân loại sản phẩm theo UN</a>
+                                                                                                                <a href="https://vntr.moit.gov.vn/vi/service/sfta" class="">Hiệp định thương mại dịch vụ</a>
+                                                                                                                                                                                                                            <a href="https://vntr.moit.gov.vn/vi/search?t=service" class="">Biểu dịch vụ</a>
+                                                                                                                                                    <a href="https://vntr.moit.gov.vn/vi/legal-documents?pages=service" class="">Văn bản pháp quy</a>
+                                                                                                                                                                                                                                        </div>
+            </div>
+                    <div class="has-submenu">
+                <a href="https://vntr.moit.gov.vn/vi/investment/ifta" class=" select-1" active-color="#17257E">Đầu tư</a>
+                <div class="dropdown-submenu-mobile">
+                                                                                                                                                                    <a href="https://vntr.moit.gov.vn/vi/phan-loai-cac-hoat-dong-kinh-te" class="">Phân loại các hoạt động kinh tế</a>
+                                                                                                                                                                                        <a href="https://vntr.moit.gov.vn/vi/investment/ifta" class="">Các hiệp định về đầu tư</a>
+                                                                                                                                                                                                                                                                                                    <a href="https://vntr.moit.gov.vn/vi/search?t=investment" class="">Biểu đầu tư</a>
+                                                                            <a href="https://vntr.moit.gov.vn/vi/legal-documents?pages=investment" class="">Văn bản pháp quy</a>
+                                                                                                                                                                                                                                                                                                                                                                                        </div>
+            </div>
+                    <div class="has-submenu">
+                <a href="https://vntr.moit.gov.vn/vi/fta" class=" select-1" active-color="#17257E">Hiệp định</a>
+                <div class="dropdown-submenu-mobile">
+                                                                                                                                <a href="https://vntr.moit.gov.vn/vi/fta/3/0" class="">Văn kiện hiệp định</a>
+                                                                                                                                                                                        <a href="https://vntr.moit.gov.vn/vi/fta/3/1" class="">Cam kết chính</a>
+                                                                                                                                                                                        <a href="https://vntr.moit.gov.vn/vi/legal-documents?pages=agreement" class="">Văn bản pháp quy</a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+            </div>
+                    <div class="has-submenu">
+                <a href="#" class=" select-1" active-color="#17257E">Tin tức</a>
+                <div class="dropdown-submenu-mobile">
+                                                                                            <a href="https://vntr.moit.gov.vn/vi/news/post/News" class="">Tin tức</a>
+                                                                                                                                                                                        <a href="https://vntr.moit.gov.vn/vi/news/post/Events" class="">Sự kiện</a>
+                                                                                                                                                                                                                                                                                                                                        <a href="https://vntr.moit.gov.vn/vi/news/post/Publications" class="">Ấn phẩm</a>
+                                                                                                                                                                                                                            <a href="https://vntr.moit.gov.vn/vi/news/post/Statistics" class="">Số liệu thống kê</a>
+                                                                                                                                                                                                                                                                            </div>
+            </div>
+            </nav>
+</div>
+<script async src="https://cse.google.com/cse.js?cx=2af997a14d8c41505"></script>
+<script>
+    $(document).ready(function(){
+        var down = false;
+        $('#bell').click(function(e){
+            var color = $(this).text();
+            if(down){
+                $('#boxNotifications').css('height','0px');
+                $('#boxNotifications').css('display','none');
+                down = false;
+            }else{
+                $('#boxNotifications').css('height','auto');
+                $('#boxNotifications').css('display','block');
+                down = true;
+                }
+            });
+        });
+    "use strict";
+
+    var indicator = document.querySelector('.nav-indicator');
+    var items = document.querySelectorAll('.mobile-menu .nav-item ');
+
+    function handleIndicator(el) {
+        items.forEach(function (item) {
+            item.classList.remove('is-active');
+            item.removeAttribute('style');
+        });
+        console.log(el);
+        indicator.style.width = "".concat(el.closest('.dropdown-home').offsetWidth, "px");
+        indicator.style.left = "".concat(el.closest('.dropdown-home').offsetLeft, "px");
+        indicator.style.backgroundColor = el.getAttribute('active-color');
+        el.classList.add('is-active');
+    }
+
+    items.forEach(function (item, index) {
+        item.addEventListener('click', function (e) {
+            handleIndicator(e.target);
+        });
+        item.classList.contains('is-active') && handleIndicator(item);
+    });
+
+    //Show Nav Mobile
+    function myFunctionNav() {
+        jQuery('#myNav').toggleClass("responsive");
+    }
+
+    //Hide and show button
+    function myFunctionNavButton() {
+        var x = document.getElementById("navbar-button-mobile");
+        var y = document.getElementById("navbar-button-mobile-x");
+        if (y.className == "d-none") {
+            x.className += "d-none";
+            y.className = "";
+        } else {
+            y.className += "d-none";
+            x.className = "";
+        }
+    }
+
+
+
+    jQuery(document).ready(function($) {
+        $('.mobile-menu .has-submenu').on('click', 'a.select-1', function (e) {
+            var parent_menu = $(this).parents('.has-submenu');
+            if(!parent_menu.hasClass('is-active')) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                $('.has-submenu').removeClass('is-active');
+                $('.nav-1 .select-1').removeClass('is-active');
+                parent_menu.toggleClass("is-active");
+            }
+        });
+
+
+        $('#sign-up').on('click', function(e){
+            localStorage.setItem('block', 'block');
+
+        });
+
+        // var a = localStorage.getItem('block');
+        // $('#sign-in').css('display', a);
+
+        $('.sign-out').on('click', function (event) {
+            event.preventDefault();
+            $('form#logoutForm').submit();
+        });
+        // $(document).on('click', 'has-submenu a.select-1', function (e) {
+
+        // }
+    });
+
+    $(document).ready(function() {
+       $("#btnShowModalSearch").on("click", function(e) {
+            e.preventDefault();
+            $("#myModalSearch").attr("style", "display:block");
+            
+       });
+       $(".closeModalSearch").on("click", function(e) {
+            e.preventDefault();
+            $("#myModalSearch").attr("style", "display:none");
+       });
+
+    });
+
+
+</script>
+<div id="page-wrap">
+
+<style>
+    .elementor-section {
+        width: 100%;
+        position: relative;
+        margin: 30px 0px 0px;
+        flex-wrap: wrap;
+    }
+
+    section .search-nav-bar {
+        display: flex;
+        margin-right: auto;
+        margin-left: auto;
+        position: relative;
+        padding: 97px 15px 50px 0px;
+    }
+
+    .elementor-container {
+        width: 100%;
+        display: flex;
+        margin-right: auto;
+        margin-left: auto;
+        position: relative;
+    }
+
+    .elementor-container .elementor-column {
+        position: relative;
+        width: 100%;
+    }
+
+    .elementor-widget-wrap .elementor-widget-wrap-left {
+        width: 100%;
+        position: relative;
+        display: flex;
+    }
+
+    .elementor-widget-wrap-left .wrap-left-items,
+    .elementor-widget-wrap-left .wrap-left-items-1 {
+        width: 11.11%;
+        height: 120px;
+        position: relative;
+        border: none;
+        background-color: transparent;
+        flex-direction: unset;
+    }
+
+    .elementor-widget-wrap-left .wrap-left-items {
+        height: 150px;
+    }
+
+    .wrap-left-items .wrap-left-items-back,
+    .wrap-left-items-1 .wrap-left-items-back-1 {
+        position: relative;
+        /* background: #FFFFFF; */
+        width: 140px;
+        border-radius: 8px;
+        height: 140px;
+    }
+
+    .wrap-left-items .wrap-left-items-back:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+    }
+
+    .wrap-left-items-1 .wrap-left-items-back-1:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+    }
+
+    /* .wrap-left-items-1 p {
+        display: flex;
+        justify-content: center;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        color: #171717;
+        font-family: 'Roboto', sans-serif;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0 10px 0 10px;
+    } */
+
+    /* .wrap-left-items .wrap-left-items-back:hover .image{
+        width: 80px!important
+        height: 80px!important;
+    } */
+    /* .wrap-left-items .wrap-left-items-back:hover .image img{
+        padding: 17px 0!important;
+    } */
+    .wrap-left-items-1 .wrap-left-items-back-1 .image,
+    .wrap-left-items .wrap-left-items-back .image {
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        width: 60px;
+        height: 60px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center
+    }
+
+    .wrap-left-items-back-1 img,
+    .wrap-left-items-back img {
+        margin-right: auto;
+        margin-left: auto;
+        display: flex;
+        width: 32px;
+    }
+
+    /* .wrap-left-items-back-1 img {
+        margin-right: auto;
+        margin-left: auto;
+        display: flex;
+        width: 40px;
+        padding: 16px 0px 16px;
+    } */
+
+  
+
+    .elementor-container-1 .elementor-container-1-text {
+        width: 100%;
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
+        padding-bottom: 25px;
+    }
+
+    form .form-control-1,
+    .form-control-2 {
+        border: 1px;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 15px;
+        color: #000000;
+        font-weight: 500;
+        background: #FFFFFF;
+    }
+
+    .input-submit button:hover {
+        box-shadow: 0px 0px 8px 0px #00000040;
+    }
+
+    #search-filter form .form-control-1:focus {
+        border: 1px solid #17257E !important;
+        border-radius: 10px !important;
+    }
+
+    .form-search-in-goods .input-field select option:first-child {
+        display: block;
+    }
+
+    form .form-control-1 {
+        font-family: 'Roboto', sans-serif;
+        width: 22%;
+        margin: 0px 15px 0px 0px;
+        height: 50px;
+        color: #17257E;
+        /* -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box; */
+        -webkit-appearance: none;
+        /* -moz-appearance: none; */
+    }
+
+    form .form-control-2 {
+        width: 25%;
+        margin: 0px 15px 0px 15px;
+        height: 50px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .form-control-1 option {
+        border-radius: 10px;
+    }
+
+    .elementor-container-1-text p {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 30px;
+        line-height: 33px;
+        color: #FFFFFF;
+    }
+
+    .elementor-form-container-1 {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .elementor-widget-wrap {
+
+        display: flex;
+        position: relative;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 30px 0 82px 0;
+        top: 40px;
+    }
+
+    .below {
+        /* padding: 50px 0px 0px 0px; */
+        display: flex;
+        position: relative;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .form-button-1 {
+        width: 15%;
+        position: relative;
+    }
+
+    .form-search-1 {
+        width: 45%;
+        position: relative;
+    }
+
+    .form-search-1 input {
+        width: 100%;
+        background: #FFFFFF;
+        border-radius: 10px;
+        font-family: 'Roboto', sans-serif;
+        height: 50px;
+        padding: 10px;
+        border: 1px;
+        color: #000000;
+        font-size: 15px;
+        padding: 15px;
+    }
+
+    .form-search-1 input:focus {
+        border: 1px solid #17257E;
+        border-radius: 10px;
+    }
+
+    .form-button-1 button {
+        width: 100%;
+        background: #17257E;
+        border-radius: 10px;
+        font-family: 'Roboto', sans-serif;
+        height: 50px;
+        color: white;
+        border: 1px;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .form-button-1 button:hover {
+        box-shadow: 0px 0px 8px 0px #00000040;
+    }
+
+    .elementor-widget-wrap-center {
+        width: 100%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin: 15px;
+    }
+
+    .elementor-widget-wrap-center p {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 15.23px;
+        font-family: 'Roboto', sans-serif;
+        color: #FFFFFF;
+    }
+
+    .elementor-widget-wrap-tag {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .elementor-widget-wrap .wrap-center-items{
+        margin: 12px;
+        padding: 6px 28px;
+        /* border: 1px solid gray; */
+        height: 35px;
+        border: 1px solid #FFFFFF;
+        box-sizing: border-box;
+        backdrop-filter: blur(12px);
+        border-radius: 8px;
+    }
+
+    .elementor-widget-wrap .wrap-center-items p{
+        font-style: normal;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 22px;
+        font-family: 'Roboto', sans-serif;
+        color: #FFFFFF;
+    }
+
+
+    .elementor-widget-wrap-right {
+        width: 100%;
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .elementor-widget-wrap-right p {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 21.09px;
+        font-family: 'Roboto', sans-serif;
+        color: #FFFFFF;
+    }
+
+    .elementor-widget-wrap-left p {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 15.23px;
+        text-align: center;
+        font-family: 'Roboto', sans-serif;
+        color: #FFFFFF;
+        padding: 0 !important;
+        margin-top: 20px !important;
+        margin: 0 10px;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        display: -webkit-box;
+        /* white-space: nowrap; */
+    }
+
+    @media  only screen and (max-width: 480px) {
+        .elementor-widget-wrap-left p {
+            margin: 0px;
+        }
+
+        .elementor-widget-wrap-left .wrap-left-items .wrap-left-items-back,
+        .elementor-widget-wrap-left .wrap-left-items-1 .wrap-left-items-back-1 {
+            width: 95% !important;
+        }
+    }
+
+    .whole-sidebar {
+        width: 100%;
+        display: flex;
+        position: relative;
+        flex-wrap: wrap;
+        margin-left: 15px;
+    }
+
+    .service-code {
+        margin-left: 15px;
+    }
+
+    @media  only screen and (max-width: 1024px) {
+
+        .elementor-widget-wrap-left .wrap-left-items,
+        .elementor-widget-wrap-left .wrap-left-items-1 {
+            width: 16.6%;
+        }
+    }
+
+    @media  only screen and (max-width: 980px) {
+        section .search-nav-bar {
+            padding: 0;
+        }
+
+        .elementor-form-container-1 {
+            width: 100%;
+            position: relative;
+            margin-bottom: 0;
+        }
+
+        .elementor-widget-wrap-form {
+            flex-wrap: wrap;
+            padding: 0 0 0 15px;
+        }
+
+        .elementor-container {
+            flex-wrap: wrap;
+            padding: 0;
+        }
+
+        .elementor-form-container-1 .form-control-2 {
+            width: 100%;
+            margin: 15px 0px 0px 0px;
+        }
+
+        .elementor-widget-wrap {
+            display: flex;
+            position: relative;
+            width: 100%;
+            flex-wrap: wrap;
+            align-content: flex-start;
+        }
+
+        .form-button-1 {
+            width: 10%;
+            position: relative;
+        }
+
+        .form-control-2 {
+            width: 25%;
+            position: relative;
+        }
+
+        .form-search-1 {
+            width: 45%;
+            position: relative;
+        }
+
+        .form-select-1 select {
+            width: 100%;
+            background: #FFFFFF;
+            border-radius: 10px;
+            height: 50px;
+            padding: 10px;
+        }
+
+        .form-select-1 select option {
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 18px;
+            font-style: normal;
+            font-family: 'Roboto', sans-serif;
+            color: #17257E;
+        }
+
+        .form-select-2 select {
+            width: 100%;
+            background: #FFFFFF;
+            border-radius: 10px;
+            font-family: 'Roboto', sans-serif;
+            height: 50px;
+            padding: 10px;
+        }
+
+        .form-button-1 button {
+            width: 100%;
+        }
+
+        .service-code {
+            margin-left: 0px;
+            margin-top: 15px;
+        }
+    }
+
+    @media  only screen and (max-width: 980px) {
+        .elementor-widget-wrap-left p {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .elementor-container-1 {
+            padding: 0 15px;
+            padding-bottom: 0;
+            width: 100%;
+        }
+
+        .elementor-section {
+            margin: 25px 0 0 0;
+        }
+
+        .whole-sidebar {
+            margin-top: 25px;
+            margin-bottom: 40px;
+            margin-left: 0;
+        }
+
+        .elementor-container-1-text p {
+            display: block;
+            font-size: 28px;
+        }
+
+        .elementor-widget-wrap-left {
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .elementor-widget-wrap .elementor-widget-wrap-left .wrap-left-items {
+            width: 33.33%;
+        }
+
+        .elementor-widget-wrap-left .wrap-left-items .wrap-left-items-back,
+        .elementor-widget-wrap-left .wrap-left-items-1 .wrap-left-items-back-1 {
+            margin-left: auto;
+            margin-right: auto;
+            width: 90%;
+        }
+
+        .elementor-widget-wrap-right p {
+            padding: 0px 10px;
+            font-weight: 500;
+            font-size: 20px;
+        }
+
+        .elementor-container-1 .elementor-container-1-text {
+            padding: 0px 10px;
+        }
+
+        .elementor-widget-wrap-left .wrap-left-items-1 {
+            width: 33.33%;
+            position: relative;
+        }
+
+        .form-button-1,
+        .form-search-1 {
+            width: 100%;
+            margin: 15px 0px 0px 0px;
+        }
+
+        .elementor-widget-wrap {
+            max-width: 767px;
+            padding-bottom: 0;
+        }
+
+    }
+
+    @media  only screen and (max-width: 480px) {
+        .elementor-container-1 {
+            padding: 0 15px !important;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        #search-filter button[type="submit"],
+        #search-filter button[type="button"] {
+            margin-bottom: 0;
+        }
+    }
+
+    select.form-control-1 {
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/Shape.jpg');
+        background-position: calc(100% - 30px) calc(1em + 8px), calc(100% - 25px) calc(1em + 8px);
+        background-repeat: no-repeat;
+    }
+
+    .select2-container--default .select2-selection--multiple {
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/Shape.jpg');
+        background-position: calc(100% - 30px) calc(1em + 8px), calc(100% - 25px) calc(1em + 8px);
+        background-repeat: no-repeat;
+    }
+
+    /* select.type-search {
+        width: 20%;
+        margin: 0px 15px 0px 0px;
+        height: 50px;
+        color: #17257E;
+        -webkit-appearance: none;
+        background-image: url('
+
+
+
+
+
+    https://vntr.moit.gov.vn/themes/ripple/images/Shape.jpg
+
+
+
+
+
+    ');
+                                background-position: calc(100% - 30px) calc(1em + 8px), calc(100% - 25px) calc(1em + 8px);
+                                background-repeat: no-repeat;
+                                border-radius: 10px;
+                                padding: 10px 20px;
+                            } */
+
+    .form-control-1:focus {
+        outline: 0 solid #17257E;
+        border-radius: 10px !important;
+    }
+
+    select.form-control-2 {
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/Shape.jpg');
+        background-position: calc(100% - 30px) calc(1em + 8px), calc(100% - 25px) calc(1em + 8px);
+        background-repeat: no-repeat;
+    }
+
+    select.form-control-1:focus {
+        border: 1px solid #17257E !important;
+        border-radius: 10px !important;
+    }
+
+    #search-filter .country-error-text {
+        margin-left: 75%;
+    }
+
+    /* @media  only screen and (max-width: 1030px) {
+        #search-filter .service-code {
+            width: 48% !important;
+        }
+    } */
+
+    /* @media  only screen and (max-width: 991px) {
+        form .form-control-1 {
+            width: 160px !important;
+        }
+
+        .select2-container {
+            width: 158px !important;
+        }
+
+        #search-filter .country-error-text {
+            margin-left: 78% !important;
+        }
+
+        #search-filter .service-code {
+            width: calc(100% - 365px) !important;
+        }
+
+    } */
+
+    @media  only screen and (max-width: 1199px) and (min-width: 768px) {
+        form .form-control-1 {
+            width: 26%;
+        }
+
+        #search-filter .wrap-country {
+            max-width: 158px;
+            width: 85%;
+        }
+
+        #search-filter .wrap-country .country-placeholder {
+            right: 52px;
+        }
+    }
+
+    @media  only screen and (max-width: 768px) and (min-width: 480px) {
+        .elementor-container {
+            padding-bottom: 0;
+        }
+    }
+
+    @media  only screen and (max-width: 767px) {
+        #search-filter .country-error-text {
+            margin-left: 0% !important;
+        }
+
+        #search-filter .error-mess {
+            color: #fbff00;
+        }
+
+    }
+
+
+    @media  only screen and (max-width: 1024px) {
+        .elementor-widget-wrap-left .wrap-left-items {
+            width: 16.66%;
+            position: relative;
+        }
+
+        .elementor-container-1 {
+            width: 100%;
+        }
+    }
+
+    #search-filter ul#select2-country-container {
+        position: absolute;
+        top: 51px;
+        left: -700px;
+    }
+
+    @media  only screen and (max-width: 1500px) {
+        #search-filter ul#select2-country-container {
+            left: -698px;
+        }
+    }
+
+    @media  only screen and (max-width: 1310px) {
+        #search-filter ul#select2-country-container {
+            left: -692px;
+        }
+    }
+
+</style>
+
+<section id="search-filter" class="section bg-cover" style="background-image:linear-gradient(180deg, rgba(23, 37, 126, 0.13) 16.81%, #17257E 100%), url('https://vntr.moit.gov.vn/storage/slideshow/slide.png');" >
+    <div class="container">
+        <div class="search-nav-bar">
+            <div class="feather-icon">
+                <a href="" class="btn-filter">
+                    <img src="https://vntr.moit.gov.vn/images/layers.svg" alt="Collage and Expand">
+                </a>
+            </div>
+            <div class="whole-sidebar">
+                <div class="elementor-form-container-1">
+                    <div class="elementor-container-1">
+
+                        
+                                                    <form action="https://vntr.moit.gov.vn/vi/search" class="form-search-in-goods home" method="get">
+                                <div class="input-field">
+                                    <select class="form-control-1 type-search" name="t" aria-label="Select service or good">
+                                        <option value="good" >
+                                            Tìm kiếm hàng hóa
+                                        </option>
+                                        <option value="service" >
+                                            Tìm kiếm dịch vụ
+                                        </option>
+                                        <option value="investment" >
+                                            Tìm kiếm đầu tư
+                                        </option>
+                                    </select>
+                                    <input id="code" type="text" class="required-field" aria-label="Input Hscode or commodity"
+                                        placeholder="Nhập mã HS hoặc tên hàng (tùy chọn)"
+                                        name="v" value="" />
+                                    <select class="js-example-tags" id="country" multiple="multiple" name="country[]"
+                                        data-placeholder="Chọn nước" aria-label="Select country">s
+                                                                                                                                                                                                                                        <option value="4" >
+                                                        Andorra</option>
+                                                                                                    <option value="6" >
+                                                        Ác-mê-ni-a</option>
+                                                                                                    <option value="8" >
+                                                        Áo</option>
+                                                                                                    <option value="10" >
+                                                        Úc</option>
+                                                                                                    <option value="12" >
+                                                        Bỉ</option>
+                                                                                                    <option value="14" >
+                                                        Bun-ga-ri</option>
+                                                                                                    <option value="16" >
+                                                        Bru-nây</option>
+                                                                                                    <option value="18" >
+                                                        Bê-la-rút</option>
+                                                                                                    <option value="20" >
+                                                        Ca-na-đa</option>
+                                                                                                    <option value="22" >
+                                                        Chi Lê</option>
+                                                                                                    <option value="24" >
+                                                        Trung Quốc</option>
+                                                                                                    <option value="26" >
+                                                        Cộng hòa Síp</option>
+                                                                                                    <option value="28" >
+                                                        Cộng hòa Séc</option>
+                                                                                                    <option value="30" >
+                                                        Đức</option>
+                                                                                                    <option value="32" >
+                                                        Đan Mạch</option>
+                                                                                                    <option value="34" >
+                                                        E-xtô-ni-a</option>
+                                                                                                    <option value="36" >
+                                                        Tây Ban Nha</option>
+                                                                                                    <option value="38" >
+                                                        Phần Lan</option>
+                                                                                                    <option value="40" >
+                                                        Pháp</option>
+                                                                                                    <option value="42" >
+                                                        Vương quốc Anh</option>
+                                                                                                    <option value="44" >
+                                                        Hy Lạp</option>
+                                                                                                    <option value="46" >
+                                                        Hồng Kông</option>
+                                                                                                    <option value="48" >
+                                                        Crô-a-ti-a</option>
+                                                                                                    <option value="50" >
+                                                        Hung-ga-ri</option>
+                                                                                                    <option value="52" >
+                                                        In-đô-nê-xi-a</option>
+                                                                                                    <option value="54" >
+                                                        Ai-len</option>
+                                                                                                    <option value="56" >
+                                                        Ấn Độ</option>
+                                                                                                    <option value="58" >
+                                                        Ý</option>
+                                                                                                    <option value="60" >
+                                                        Nhật Bản</option>
+                                                                                                    <option value="62" >
+                                                        Cư-rơ-gư-dơ-xtan</option>
+                                                                                                    <option value="64" >
+                                                        Cam-pu-chia</option>
+                                                                                                    <option value="66" >
+                                                        Hàn Quốc</option>
+                                                                                                    <option value="68" >
+                                                        Ca-dắc-xtan</option>
+                                                                                                    <option value="70" >
+                                                        Lào</option>
+                                                                                                    <option value="72" >
+                                                        Lít-va</option>
+                                                                                                    <option value="74" >
+                                                        Lúc-xăm-bua</option>
+                                                                                                    <option value="76" >
+                                                        Lát-vi-a</option>
+                                                                                                    <option value="78" >
+                                                        Mi-an-ma</option>
+                                                                                                    <option value="82" >
+                                                        Mê-hi-cô</option>
+                                                                                                    <option value="84" >
+                                                        Ma-lai-xi-a</option>
+                                                                                                    <option value="86" >
+                                                        Hà Lan</option>
+                                                                                                    <option value="88" >
+                                                        Niu Di-lân</option>
+                                                                                                    <option value="90" >
+                                                        Pê-ru</option>
+                                                                                                    <option value="92" >
+                                                        Phi-líp-pin</option>
+                                                                                                    <option value="94" >
+                                                        Ba lan</option>
+                                                                                                    <option value="96" >
+                                                        Bồ Đào Nha</option>
+                                                                                                    <option value="98" >
+                                                        Ru-ma-ni</option>
+                                                                                                    <option value="100" >
+                                                        Liên Bang Nga</option>
+                                                                                                    <option value="102" >
+                                                        Thụy Điển</option>
+                                                                                                    <option value="104" >
+                                                        Xinh-ga-po</option>
+                                                                                                    <option value="106" >
+                                                        Xlô-ven-ni-a</option>
+                                                                                                    <option value="108" >
+                                                        Xlô-va-ki-a</option>
+                                                                                                    <option value="112" >
+                                                        Thái Lan</option>
+                                                                                                    <option value="114" >
+                                                        Việt Nam</option>
+                                                                                                                                                                        </select>
+                                    <div class="country-error-text hidden"><b
+                                            class="error-mess">Vui lòng chọn quốc gia</b></div>
+                                    <div class="js-example-tags-container"></div>
+                                </div>
+
+                                <!-- <div class="js-example-tags-container"></div> -->
+                                <div class="input-submit">
+                                    <button type="button" id="navSearchBtn"
+                                        value="Search">Tìm kiếm</button>
+                                </div>
+
+                            </form>
+                                            </div>
+                                        <div class="elementor-section" id="banner_show" style="display:none;">
+                        <div class="elementor-container">
+                            <div class="elementor-widget-wrap">
+                                    <div class="elementor-widget-wrap-center">
+                                        <p style="margin-bottom: 10px;">Bạn quan tâm thông tin nào?
+                                        </p>
+                                    </div>
+                                    <div class="elementor-widget-wrap-tag">
+                                        <div class="wrap-center-items">
+                                            <a class="wrap-left-items-back"
+                                                    href="https://vntr.moit.gov.vn/vi/nomenclature"
+                                                    title="Danh mục hàng hóa">
+                                                <p>Danh mục hàng hóa</p>
+                                            </a>
+                                        </div>
+                                        <div class="wrap-center-items">
+                                            <a class="wrap-left-items-back" href="https://vntr.moit.gov.vn/vi/tariff/tfta"
+                                                    title="Biểu thuế">
+                                                    <p >Biểu thuế</p>
+                                            </a>
+                                        </div>
+                                        <div class="wrap-center-items">
+                                            <a class="wrap-left-items-back" href="https://vntr.moit.gov.vn/vi/roo/rfta"
+                                                    title="Quy tắc xuất xứ">
+                                                    <p >Quy tắc xuất xứ</p>
+                                            </a>
+                                        </div>
+                                        <div class="wrap-center-items">
+                                            <a class="wrap-left-items-back" href="https://vntr.moit.gov.vn/vi/measures"
+                                                    title="Biện pháp phi thuế quan">
+                                                    <p >Biện pháp phi thuế quan</p>
+                                            </a>
+                                        </div>
+                                        <div class="wrap-center-items">
+                                            <a class="wrap-left-items-back" href="https://vntr.moit.gov.vn/vi/legal-documents"
+                                                    title="Văn bản pháp quy">
+                                                    <p >Văn bản pháp quy</p>
+                                            </a>
+                                        </div>
+                                        <div class="wrap-center-items">
+                                            <a class="wrap-left-items-back" href="https://vntr.moit.gov.vn/vi/procedures"
+                                                    title="Thủ tục">
+                                                    <p >Thủ tục</p>
+                                            </a>
+                                        </div>
+                                        <div class="wrap-center-items">
+                                            <a href="https://vntr.moit.gov.vn/vi/administrative_rulings" class="wrap-left-items-back" title="Quản trị">
+                                                    <p >Quản trị</p>
+                                            </a>
+                                        </div>
+                                        <div class="wrap-center-items">
+                                            <a href="https://vntr.moit.gov.vn/vi/thong-le-tot-nhat" class="wrap-left-items-back" title="Thông lệ tốt nhất">
+                                                    <p >Thông lệ tốt nhất</p>
+                                            </a>
+                                        </div>
+                                        <div class="wrap-center-items">
+                                            <a href="https://vntr.moit.gov.vn/vi/danh-sach-cac-nha-giao-dich-duoc-uy-quyen" class="wrap-left-items-back"
+                                                    title="Danh sách các doanh nghiệp ưu tiên">
+                                                    <p >Danh sách các doanh nghiệp ưu tiên</p>
+                                            </a>
+                                        </div>
+                                       <!--  <div class="wrap-center-items">
+                                            <a href="https://vntr.moit.gov.vn/vi/service/sfta" title="Hiệp định thương mại dịch vụ">
+                                                <p>Hiệp định thương mại dịch vụ</p>
+                                            </a>
+                                        </div> -->
+                                        <div class="wrap-center-items">
+											<a href="https://vntr.moit.gov.vn/vi/search?t=service" title="Lộ trình cam kết dịch vụ">
+												<p >Lộ trình cam kết dịch vụ</p>
+                                            </a>
+                                        </div>
+                                        <!-- <div class="wrap-center-items">
+                                            <a href="https://vntr.moit.gov.vn/vi/investment/ifta" title="Các hiệp định về đầu tư">
+                                                <p >Các hiệp định về đầu tư</p>
+                                            </a>
+                                        </div> -->
+                                        <div class="wrap-center-items">
+                                            <a href="https://vntr.moit.gov.vn/vi/search?t=investment" title="Các hiệp định về đầu tư">
+                                                <p >Lộ trình cam kết đầu tư</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <script type="text/javascript">
+                    /* linear-gradient(180deg, rgba(23, 37, 126, 0.13) 16.81%, #17257E 100%), url('https://vntr.moit.gov.vn/themes/ripple/images/Rectangle 20.png'); */
+            
+                        
+
+                        $('.type-search').on('input', function(argument) {
+                            let type_search = $('.type-search').val();
+
+                            switch (type_search) {
+                                case 'good':
+                                    window.location.href = 'https://vntr.moit.gov.vn/vi/search';
+                                    break;
+                                case 'service':
+                                    window.location.href = 'https://vntr.moit.gov.vn/vi/search?t=service';
+                                    break;
+                                default:
+                                    window.location.href = 'https://vntr.moit.gov.vn/vi/search?t=investment';
+                            }
+                        });
+
+                        $(document).ready(function() {
+                            $("#code").keypress(function(event) {
+                                var keycode = event.keyCode ? event.keyCode : event.which;
+                                var value = $(this).val().toLowerCase();
+                                if (keycode == '13') {
+                                    $("#documentTable tr").filter(function() {
+                                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                                    });
+                                };
+                            });
+                        });
+
+                        $(document).ready(function() {
+                            $("#searchLegalDoc").on('click', function() {
+                                var value = $("#code").val().toLowerCase();
+                                $("#documentTable tr").filter(function() {
+                                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                                });
+                            });
+                        });
+
+                        $(document).ready(function() {
+                            $(".getStr").each(function() {
+                                var arr = $(this).text().trim().split(" ");
+                                if(arr.length >2){
+                                    $(this).text($(this).text().trim().split(" ",2).join(" ") + "...")
+                                }
+                            });
+                        });
+                        $( "#navSearchBtn").keyup(function(evt) {
+                            if(evt.key === "Tab")
+                            $(this).click();
+                        });
+                    </script>
+
+</section>
+<style>
+    #search-filter .feather-icon {
+        margin-right: 15px;
+        display: block;
+    }
+    #post_content > p {
+        font-family: Roboto;
+        font-size: 15px;
+        color: #000000;
+    }
+
+    #post_content table {
+        width: 100% !important;
+    }
+    #post_content table td{
+        padding: 10px !important;
+
+    }
+    #post_content table td{
+        padding: 10px !important;
+
+    }
+
+    #post_content .form-adress-1{
+        margin-bottom: 20px;
+    }
+
+    #post_content .btn-register{
+      background: #3848AC;
+      border-radius: 10px;
+      border: 1px #3848AC;
+      color: white;
+      height: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 5px;
+      padding: 10px 20px;
+    }
+    @media  only screen and (max-width: 767px){
+        #news-detail .main .time-social{
+            margin-bottom: 20px;
+        }
+        #news-detail .main .time-social .time{
+            margin-bottom: 10px;
+        }
+        #news-detail .main .time-social .social{
+            position: relative;
+        }
+    }
+    .box-content-new{
+        display: flex;
+        margin: 20px 0px;
+        height: 95px;
+    }
+    .box-content-new .image img{
+        max-width: 95px;
+        min-height: 95px;
+        width: 95px;
+        height: 95px;
+    }
+    .page-new-1 {
+         padding: 0 20px; 
+    }
+    .box-content-new .content-title {
+        padding-left: 15px;
+        width: 70%;
+        font-size: 15px;
+    }
+    .box-content-new .content-title {
+        padding-left: 20px;
+        width: 70%;
+        font-size: 15px;
+        position: relative;
+    }
+    .box-content-new .content-title a{        
+        color: #17257E;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 25px;
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+    .box-content-new .content-title .btn-register{        
+        font-family: 'Roboto', sans-serif;
+        border-radius: 10px;
+        width: 140px;
+        height: 40px;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: #fff;
+        padding: 10px 20px;
+        background: #17257E;
+        position: absolute;
+        bottom: 0;
+    }
+    .box-content-new .content-title .content-title-event,
+    .box-content-new .content-title .time .local,.hot-content-event .content-title .time .local {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 25px;
+        -webkit-line-clamp: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+</style>
+<section id="news-detail">
+    <div class="container">
+        <div class="content">
+            <div class="main">
+                <h2 class="main-title">Vietnam Reduces VAT Rate, Businesses Allowed to Claim CIT Deductions</h2>
+                <input type="hidden" id="slug" value="Vietnam Reduces VAT Rate, Businesses Allowed to Claim CIT Deductions" name="">
+                <div class="time-social">
+                    <div class="time"
+                         style="color: #646464">03:10   -   23/02/2022</div>
+                    <div class="social">
+                        <button class="btn btn-primary" id="fontSizePlus"><b>A+</b></button> 
+                        <button class="btn btn-primary" id="fontReset"><b>Reset</b></button> 
+                        <button class="btn btn-primary" id="fontSizeMinus"><b>A-</b></button>
+                        <a target="_blank" href="http://www.facebook.com/sharer.php?u=https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions" aria-label="Facebook">
+                            <img src="https://vntr.moit.gov.vn/images/fta-fb.png" alt="">
+                        </a>
+                        <a target="_blank" href="https://twitter.com/intent/tweet?text=https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions" aria-label="Twitter">
+                            <img src="https://vntr.moit.gov.vn/images/fta-twitter.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="text" id="post_content" style="padding-bottom: 30px;">
+                    <p style="margin-top:0in; margin-right:0in; margin-bottom:.25in; margin-left:0in"><span style="background:white"><span style="line-height:18.0pt"><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black"><img alt="" src="/storage/publications/news/46-vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions.jpg" style="margin: 10px; float: left; width: 250px; height: 167px;" />Vietnam issued </span></span></span><span style="color:black"><em><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black"><span style="text-decoration:none"><span style="text-underline:none">Decree 15/2022/ND-CP</span></span></span></span></span></em></span><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black"> (Decree 15) on guiding the implementation and reduction of value-added tax (VAT) and corporate income tax (CIT) supporting the country&rsquo;s post-pandemic recovery. Decree 15 implements the National Assembly&rsquo;s <em><span style="font-family:Roboto">Resolution No 43/2022/QH15</span></em> on fiscal and monetary policies for the recovery of the economy from the pandemic.</span></span></span></span></span></p>
+
+
+
+<p style="margin-top:0in; margin-right:0in; margin-bottom:.25in; margin-left:0in"><span style="background:white"><span style="line-height:18.0pt"><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black">Vietnam Briefing highlights the reduction in VAT and tax relief in CIT that businesses should be aware of.</span></span></span></span></span></p>
+
+
+
+<h2 style="margin-top:15.0pt; margin-right:0in; margin-bottom:15.0pt; margin-left:0in; background:white"><b><span style="font-size:11.5pt"><span style="line-height:107%"><span style="font-family:Roboto"><span style="color:black">VAT reduction</span></span></span></span></b></h2>
+
+
+
+<p style="margin-top:0in; margin-right:0in; margin-bottom:.25in; margin-left:0in"><span style="background:white"><span style="line-height:18.0pt"><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black">The government cut the VAT rate to 8 percent from February 1 to December 31, 2022, for several services. The VAT rate was previously 10 percent.</span></span></span></span></span></p>
+
+
+
+<p style="margin-top:0in; margin-right:0in; margin-bottom:.25in; margin-left:0in"><span style="background:white"><span style="line-height:18.0pt"><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black">The VAT reduction applies to all goods involved in import, manufacturing, processing as well as trade, however, taxpayers are required to issue a separate invoice for goods and services that are eligible for the reduction. In addition, they must declare these goods under Form 01 as per Decree 15.</span></span></span></span></span></p>
+
+
+
+<p style="margin-top:0in; margin-right:0in; margin-bottom:.25in; margin-left:0in"><span style="background:white"><span style="line-height:18.0pt"><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black">There are certain goods and services however that are not eligible for the VAT reduction, which includes telecom services, financial services, banking, securities, metals, chemical and mining products, real estate, IT goods and services, and goods and services subject to special consumption tax (SCT). A full list can be found in Appendix I, II, and Appendix III of Decree 15.</span></span></span></span></span></p>
+
+
+
+<p style="margin-top:0in; margin-right:0in; margin-bottom:.25in; margin-left:0in"><span style="background:white"><span style="line-height:18.0pt"><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black">The VAT reduction is applicable on both the deduction method and the direct method.</span></span></span></span></span></p>
+
+
+
+<h2 style="margin-top:15.0pt; margin-right:0in; margin-bottom:15.0pt; margin-left:0in; background:white"><b><span style="font-size:11.5pt"><span style="line-height:107%"><span style="font-family:Roboto"><span style="color:black">CIT deduction</span></span></span></span></b></h2>
+
+
+
+<p style="margin-top:0in; margin-right:0in; margin-bottom:.25in; margin-left:0in"><span style="background:white"><span style="line-height:18.0pt"><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black">Businesses can claim a CIT deduction for any donation or sponsorship expenses related to pandemic prevention in Vietnam for the 2022 fiscal year. To do this, businesses need to submit the relevant documents to avail of the deduction. The amount of donation or sponsorship must be confirmed in writing by the receiving authority or agency.</span></span></span></span></span></p>
+
+
+
+<p style="margin-top:0in; margin-right:0in; margin-bottom:.25in; margin-left:0in"><span style="background:white"><span style="line-height:18.0pt"><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black">Decree 15 took effect on February 1, 2022, however, the government may issue further guiding circulars for implementation of the Decree. The tax breaks are expected to help businesses due to the pandemic and recover production.</span></span></span></span></span></p>
+
+
+
+<p style="margin-top:0in; margin-right:0in; margin-bottom:.25in; margin-left:0in"><span style="background:white"><span style="line-height:18.0pt"><span style="font-size:11.5pt"><span style="font-family:Roboto"><span style="color:black">Source: </span><em><a href="https://www.vietnam-briefing.com/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deduction.html/" target="_blank"><span style="color:#2980b9;">Asia Briefing</span></a></em></span></span></span></span></p>
+                                                        </div>
+                <div class="social" style="margin-top: 10px;margin-bottom: 30px">
+                    <a href="http://www.facebook.com/sharer.php?u=https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions" target="_blank" aria-label="Facebook"><img src="https://vntr.moit.gov.vn/images/fta-fb.png" alt=""></a>
+                    <a target="_blank" href="https://twitter.com/intent/tweet?text=https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions" aria-label="Twitter">
+                        <img src="https://vntr.moit.gov.vn/images/fta-twitter.png" alt="">
+                    </a>
+                </div>
+                <div class="post">
+                    <div class="card-latest-news">                        
+                        <div class="container-filter">
+                            <div class="row-fiter">
+                                <div class="col-100-filter">
+                                    <input type="text" id="searchkey" name="search" placeholder="Tìm kiếm..">
+                                </div>
+                            </div>
+                            <div class="collapse-date">
+                                <div class="row-filter">
+                                    <div class="col-50-filter" style="padding-right:10px">
+                                        <div class="col-100-filter">
+                                            <label for="ldate">Từ ngày</label>
+                                        </div>
+                                        <div class="col-100-filter" >
+                                            <input type="date" id="fromdate" name="fromdate" >
+                                        </div>                                    
+                                    </div>
+
+                                    <div class="col-50-filter" style="padding-left:10px">
+                                        <div class="col-100-filter">
+                                            <label for="ldate">Đến ngày</label>
+                                        </div>
+                                        <div class="col-100-filter" >
+                                            <input type="date" id="todate" name="todate" >
+                                        </div>                                    
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-filter">
+                                <input id="search_post" type="submit" value="Tìm kiếm">
+                            </div>
+                        </div>
+                                                                                    <div class="container-table">
+                                <p class="note" style="padding: 10px 0 0 0; color: black;">Tổng số bài đăng <span id="countPost">491</span>.</p>
+                                    <table id="customers-filter">
+                                        <thead>
+                                            <tr>
+                                                <th>Tiêu đề</th>
+                                                <th>Ngày</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="list_post">  
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/hoi-nghi-hoi-dong-cong-dong-kinh-te-asean-lan-thu-27">HỘI NGHỊ HỘI ĐỒNG CỘNG ĐỒNG KINH TẾ ASEAN LẦN THỨ 27</a></td>
+                                                <td id="date">
+                                                                                                        22-05-2026
+                                                </td>
+                                            </tr>
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/hoi-nghi-chung-giua-bo-truong-ngoai-giao-bo-truong-kinh-te-asean">HỘI NGHỊ CHUNG GIỮA BỘ TRƯỞNG NGOẠI GIAO – BỘ TRƯỞNG KINH TẾ ASEAN</a></td>
+                                                <td id="date">
+                                                                                                        22-05-2026
+                                                </td>
+                                            </tr>
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/phien-18-uy-ban-dam-phan-hiep-dinh-thuong-mai-tu-do-asean-canada-va-cac-nhom-ky-thuat-lien-quan">Phiên 18 Ủy ban đàm phán Hiệp định Thương mại tự do ASEAN – Canada và các nhóm kỹ thuật liên quan</a></td>
+                                                <td id="date">
+                                                                                                        22-05-2026
+                                                </td>
+                                            </tr>
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/han-quoc-va-asean-nang-tam-doi-tac-chien-luoc-but-pha-tu-viec-nang-cap-akfta">Hàn Quốc và ASEAN Nâng tầm đối tác chiến lược, bứt phá từ việc nâng cấp AKFTA</a></td>
+                                                <td id="date">
+                                                                                                        22-05-2026
+                                                </td>
+                                            </tr>
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/hoi-nghi-cap-cao-asean-lan-thu-48">Hội nghị Cấp cao ASEAN lần thứ 48</a></td>
+                                                <td id="date">
+                                                                                                        22-05-2026
+                                                </td>
+                                            </tr>
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/xuat-khau-gao-quy-i2026-philippines-giu-vung-vi-tri-thi-truong-chu-luc">Xuất khẩu gạo quý I/2026: Philippines giữ vững vị trí thị trường chủ lực</a></td>
+                                                <td id="date">
+                                                                                                        15-05-2026
+                                                </td>
+                                            </tr>
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/thong-tin-bao-chi-hoi-nghi-bo-truong-nang-luong-asean-amem-dac-biet-ve-tinh-hinh-moi-nhat-tai-trung-dong">THÔNG TIN BÁO CHÍ HỘI NGHỊ BỘ TRƯỞNG NĂNG LƯỢNG ASEAN (AMEM) ĐẶC BIỆT  VỀ TÌNH HÌNH MỚI NHẤT TẠI TRUNG ĐÔNG</a></td>
+                                                <td id="date">
+                                                                                                        28-04-2026
+                                                </td>
+                                            </tr>
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/khoi-dong-du-an-thuc-day-tan-dung-hiep-dinh-doi-tac-kinh-te-toan-dien-khu-vuc-rcep">Khởi động dự án thúc đẩy tận dụng Hiệp định Đối tác Kinh tế toàn diện khu vực (RCEP)</a></td>
+                                                <td id="date">
+                                                                                                        24-03-2026
+                                                </td>
+                                            </tr>
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/hoi-nghi-rjc-12-tiep-tuc-thuc-day-thuc-thi-hiep-dinh-rcep-va-chuan-bi-cho-cac-buoc-phat-trien-tiep-theo">HỘI NGHỊ RJC 12: TIẾP TỤC THÚC ĐẨY THỰC THI HIỆP ĐỊNH RCEP VÀ CHUẨN BỊ CHO CÁC BƯỚC PHÁT TRIỂN TIẾP THEO</a></td>
+                                                <td id="date">
+                                                                                                        19-03-2026
+                                                </td>
+                                            </tr>
+                                                                                        <tr>
+                                                <td><a id="name" href="https://vntr.moit.gov.vn/vi/news/hoi-nghi-bo-truong-kinh-te-asean-hep-lan-thu-32">HỘI NGHỊ BỘ TRƯỞNG KINH TẾ ASEAN HẸP LẦN THỨ 32</a></td>
+                                                <td id="date">
+                                                                                                        16-03-2026
+                                                </td>
+                                            </tr>
+                                                                                    </tbody>
+                                    </table>
+                                    <nav>
+        <ul class="pagination">
+            
+                            <li class="page-item">
+                    <a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=1" rel="prev" aria-label="&laquo; Trước">&lsaquo;</a>
+                </li>
+            
+            
+                            
+                
+                
+                                                                                        <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=1">1</a></li>
+                                                                                                <li class="page-item active" aria-current="page"><span class="page-link">2</span></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=3">3</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=4">4</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=5">5</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=6">6</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=7">7</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=8">8</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=9">9</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=10">10</a></li>
+                                                                                        
+                                    <li class="page-item disabled" aria-disabled="true"><span class="page-link">...</span></li>
+                
+                
+                                            
+                
+                
+                                                                                        <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=48">48</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=49">49</a></li>
+                                                                        
+            
+                            <li class="page-item">
+                    <a class="page-link" href="https://vntr.moit.gov.vn/vi/news/vietnam-reduces-vat-rate-businesses-allowed-to-claim-cit-deductions?page=3" rel="next" aria-label="Sau &raquo;">&rsaquo;</a>
+                </li>
+                    </ul>
+    </nav>
+
+                                </div>
+                                                                        </div>
+                </div>
+            </div>
+                        <style>
+                #news-detail .content .main{
+                    width: 74%;
+                }
+            </style>
+            <div class="side-bar">
+                <!-- <div class="main-title">
+                    <h2>
+                                                                                    Tin tức khác
+                                                                        </h2>
+                    <img src="https://vntr.moit.gov.vn/themes/ripple/images/Group 829.svg" alt="Highline title" style="display: flex;">
+                </div> -->
+                <div class="other-news" style="border: none; padding-top: 0px;">
+                                                                        <div class="box-content-new">
+                            <div class="image">
+                                <a href="https://vntr.moit.gov.vn/vi/news/phien-ban-30-fta-asean-trung-quoc-to-chuc-dam-phan-vong-3">
+
+                                                                                                                <img src="https://vntr.moit.gov.vn/storage/img-20230626-wa0006-q8kiyef4b2so2m26cn5tbwsbale4sj8vfavxxsuan0-150x150.jpg" alt="PHIÊN BẢN 3.0 FTA ASEAN-TRUNG QUỐC TỔ CHỨC ĐÀM PHÁN VÒNG 3">
+                                                             
+                                </a>
+                            </div>
+                            <div class="content-title">
+                                <a href="https://vntr.moit.gov.vn/vi/news/phien-ban-30-fta-asean-trung-quoc-to-chuc-dam-phan-vong-3">
+                                   PHIÊN BẢN 3.0 FTA ASEAN-TRUNG QUỐC TỔ CHỨC ĐÀM PHÁN VÒNG 3
+                                </a>                            
+                            </div>
+                        </div>
+                                                    <div class="box-content-new">
+                            <div class="image">
+                                <a href="https://vntr.moit.gov.vn/vi/news/dam-phan-vong-thu-2-ve-khu-vuc-thuong-mai-tu-do-trung-quoc-asean-phien-ban-30-duoc-to-chuc-tai-thai-lan">
+
+                                                                                                                <img src="https://vntr.moit.gov.vn/storage/whatsapp-image-2023-04-12-at-150400-150x150.jpeg" alt="ĐÀM PHÁN VÒNG THỨ 2 VỀ KHU VỰC THƯƠNG MẠI TỰ DO TRUNG QUỐC-ASEAN PHIÊN BẢN 3.0 ĐƯỢC TỔ CHỨC TẠI THÁI LAN">
+                                                             
+                                </a>
+                            </div>
+                            <div class="content-title">
+                                <a href="https://vntr.moit.gov.vn/vi/news/dam-phan-vong-thu-2-ve-khu-vuc-thuong-mai-tu-do-trung-quoc-asean-phien-ban-30-duoc-to-chuc-tai-thai-lan">
+                                   ĐÀM PHÁN VÒNG THỨ 2 VỀ KHU VỰC THƯƠNG MẠI TỰ DO TRUNG QUỐC-ASEAN PHIÊN BẢN 3.0 ĐƯỢC TỔ CHỨC TẠI THÁI LAN
+                                </a>                            
+                            </div>
+                        </div>
+                                                    <div class="box-content-new">
+                            <div class="image">
+                                <a href="https://vntr.moit.gov.vn/vi/news/thong-tin-bao-chi-hoi-nghi-hoi-dong-cong-dong-kinh-te-asean-lan-thu-22">
+
+                                                                                                                <img src="https://vntr.moit.gov.vn/storage/aecc2-150x150.jpg" alt="THÔNG TIN BÁO CHÍ HỘI NGHỊ HỘI ĐỒNG CỘNG ĐỒNG KINH TẾ ASEAN LẦN THỨ 22">
+                                                             
+                                </a>
+                            </div>
+                            <div class="content-title">
+                                <a href="https://vntr.moit.gov.vn/vi/news/thong-tin-bao-chi-hoi-nghi-hoi-dong-cong-dong-kinh-te-asean-lan-thu-22">
+                                   THÔNG TIN BÁO CHÍ HỘI NGHỊ HỘI ĐỒNG CỘNG ĐỒNG KINH TẾ ASEAN LẦN THỨ 22
+                                </a>                            
+                            </div>
+                        </div>
+                                                            </div>
+            </div>
+                    </div>
+    </div>
+</section>
+<script type="text/javascript">
+$("#search_post").on("click", function(e) {
+    var postList = '';
+    var url = window.location.hostname
+    if ($("html").attr("lang")=='vi') {
+        var url = window.location.hostname+'/vi'
+    }
+    var slug = $("#slug").val();
+    var search = $("#searchkey").val();
+    var fromdate = $("#fromdate").val();
+    var todate = $("#todate").val();
+    $.ajax({
+        method: "GET",
+        url: '/news/ajax/'+slug,
+        data:{   
+            search,
+            fromdate, 
+            todate
+        }
+    })
+    .done(function( response ) {
+        $("#countPost").html(response['countPost']); 
+        for (var i = 0; i < response['postList'].length; i++) {
+            date = response['postList'][i]['created_at'].split('T')[0];
+            formatdate = date.split('-')
+            postList += '<tr><td><a href="/news/'+response['postList'][i]['slug']+'">'+response['postList'][i]['name']+'</a></td><td>'+formatdate[2]+'-'+formatdate[1]+'-'+formatdate[0]+'</td></tr>';
+        }
+        $(".list_post").html(postList); 
+        $(".pagination").css('display', 'none');
+    });
+});
+</script>
+<script>
+    $(document).ready(function() {
+        var min = 10;
+        var max = 30;
+        var de = 15;
+        var reset = $('#post_content > p').css('font-size');
+        var elm = $('#post_content > p');
+        var size = reset.replace('px', '');
+
+        $("#fontSizePlus").on("click", function(e) {
+            e.preventDefault();
+            if (size <= max) {
+                size++;
+                $("#post_content *").css("font-size" , size+"px");
+            }
+        });
+
+        $("#fontSizeMinus").on("click", function(e) {
+            e.preventDefault();
+            if (size >= min) {
+                size--;
+                $("#post_content *").css("font-size" , size+"px");
+            }
+        });
+
+        $("#fontReset").on("click", function(e) {
+            e.preventDefault();
+            $("#post_content > p").css("font-size" , de + "px");
+        });
+
+
+    });
+</script>
+<style>
+    .footer-page-1 {
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        height: 100%;
+        margin-top: 40px;
+    }
+
+    #data-search {
+        overflow: auto;
+        height: 300px;
+        text-align: left;
+        padding: 10px;
+    }
+
+    #data-search li {
+        list-style: none;
+        background: #387DEE;
+        padding: 5px;
+        font-size: 18px;
+        border-radius: 4px;
+        margin: 5px;
+        color: white;
+    }
+
+
+    .form-search-1 input {
+        border: 1px solid;
+    }
+
+    .footer-page-1 .footer-page-warp {
+        width:100%;
+        position: relative;
+    }
+
+    .footer-page-warp .footer-page-warp-above {
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .footer-page-warp .footer-page-warp-above-1 {
+        width: 100%;
+        position: relative;
+        padding: 0px 0px 0px 25px;
+        border: 1px solid #d5d5d5;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        margin-left: 0;
+    }
+
+    .footer-page-warp .footer-page-warp-above-2 {
+        width: 100%;
+        max-width: 1199.02px;
+        max-height: 230.5px;
+        position: relative;
+        display: flex;
+        padding: 57px 0px 62.5px 0px;
+        margin: 0 auto;
+    }
+
+    .footer-page-warp-above-2 .footer-page-warp-above-2-item {
+        width: 16.667%;
+        position: relative;
+        flex-wrap: wrap;
+    }
+
+    .footer-page-warp-above-2-item p {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+        font-family: 'Roboto', sans-serif;
+        color: #171717;
+        padding: 25px 0px 0px 0px;
+        transition: 0.5s;
+    }
+
+    .footer-page-warp-above-2-item:hover {
+        cursor: pointer;
+    }
+
+    .footer-page-warp-above-2-item p a {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 17.58px;
+        text-align: center;
+        font-family: 'Roboto', sans-serif;
+        color: #171717;
+        padding: 25px 0px 0px 0px;
+    }
+
+    .footer-page-warp-above-2-item img {
+        display: flex;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 0;
+        width: 60px;
+        height: 60px;
+    }
+
+    .footer-page-warp-above .footer-page-warp-above-1 p {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 35px;
+        font-family: 'Roboto', sans-serif;
+        color: #17257E;
+    }
+
+    .footer-page-warp-above .footer-page-warp-above-1 img {
+        display: flex;
+    }
+
+    .footer-page-warp-1 {
+        width: 100%;
+        position: relative;
+        padding-top: 36.85px;
+        background-color: #f3f3f3;
+        border: 1px solid #d5d5d5;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .footer-page-warp-1 .footer-information-1 {
+        position: relative;
+        max-width: 1321.41px;
+        display: flex;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .footer-information-1 .footer-warp-information-1 {
+        width: 25%;
+        flex-wrap: wrap;
+    }
+    .footer-information-1 .footer-warp-information-1 .moit-center{
+        padding-top: 15px;
+    }
+    .footer-warp-information-1 h1 {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 46px;
+        line-height: 100%;
+        letter-spacing: 0.19em;
+        color: #17257C;
+        text-align: center;
+    }
+
+    .footer-warp-information-1 p {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+        color: #000000;
+    }
+
+    .footer-information-1 .footer-warp-information-2 {
+        width: 25%;
+        flex-wrap: wrap;
+        padding: 0px 0px 0px 80px;
+    }
+
+    .footer-warp-information-2 p {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 18px;
+        color: #000000;
+        padding: 0px 0px 10px;
+        cursor: pointer;
+    }
+
+    .footer-warp-information-2 p a {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 18px;
+        color: #000000;
+        padding: 0px 0px 15px;
+        cursor: pointer;
+    }
+
+    .footer-information-1 .footer-warp-information-3 {
+        width: 23%;
+        flex-wrap: wrap;
+        padding: 0px 0px 0px 50px;
+    }
+
+    .footer-warp-information-3 p {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 100%;
+        color: #17257E;
+    }
+
+    .footer-information-1 .footer-warp-information-4 {
+        width: 27%;
+        flex-wrap: wrap;
+    }
+
+    .footer-warp-information-4 a.head-line {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 23.44px;
+        color: #17257E;
+    }
+
+    .footer-warp-information-4 .multi a{
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 18.75px;
+        color: #000000;
+    }
+
+    .footer-warp-information-4 .multi a:hover{
+        color:#17254a;
+        text-decoration:underline;
+    }
+
+    .footer-warp-information-4 p {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 17.58px;
+        color: #000000;
+    }
+
+    .footer-page-warp-1 .footer-information-2 {
+        width: 100%;
+        position: relative;
+        max-width: 1321.41px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .footer-page-warp-1 .footer-information-3 {
+        position: relative;
+        max-width: 1410px;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid #d5d5d5;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        height: 55.74px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .footer-information-2 .all-infor-footer {
+        width: 100%;
+    }
+
+    .all-infor-footer p {
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-size: 15px;
+        line-height: 18px;
+        color: #000000;
+        text-align: left;
+        margin: 0;
+    }
+
+    .social-media {
+        display: flex;
+    }
+
+    .social-media img {
+        width: auto;
+    }
+
+    .footer-page-warp-1 .develop-footer-1 p {
+        font-size: 15px;
+        color: #000000;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+        line-height: 17.58px;
+        height: 75.11px;
+        margin-bottom: 0px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .footer-warp-information-contact-4 {
+        width: 100%;
+        position: relative;
+    }
+
+    .flex-display {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+
+    .footer-warp-information-contact-4 .contact-1 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 30%;
+        flex: 0 0 30%;
+        max-width: 30%;
+        position: relative;
+    }
+
+    .footer-warp-information-contact-4 .contact-2 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 70%;
+        flex: 0 0 70%;
+        max-width: 70%;
+        position: relative;
+    }
+
+    @media  only screen and (max-width: 998px) {
+        .footer-information-1 .footer-warp-information-1 {
+            width: 25%;
+            padding-left: 30px;
+        }
+
+        .footer-information-1 .footer-warp-information-2 {
+            width: 25%;
+            padding: 0 0 0 50px;
+        }
+        .footer-information-1 .footer-warp-information-3{
+            padding: 0 0 0 20px;
+        }
+    }
+
+    @media  only screen and (max-width: 768px) {
+        .footer-information-1 .footer-warp-information-1 {
+            width: 25%;
+            padding-left: 0;
+        }
+        .footer-page-1 {
+            max-width: 767px;
+        }
+
+        .all-infor-footer p {
+            padding: 0;
+            font-size: 15px;
+        }
+
+        .footer-information-3 .all-infor-footer p {
+            text-align: center;
+        }
+
+        .footer-information-3 .all-infor-footer span {
+            display: block;
+        }
+
+        .footer-page-1 .footer-page-warp-above-1 p {
+            padding: 0px 0px 0px 30px;
+            font-size: 25px;
+        }
+
+        .footer-page-1 .footer-page-warp-above-1 img {
+            padding: 0px 0px 0px 30px
+        }
+
+        .footer-page-1 .footer-page-warp-above-2 {
+            width: 100%;
+            max-height: 100%;
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+            flex-wrap: wrap;
+            padding: 30px 0px 0px 0px;
+        }
+
+        .footer-page-warp .footer-page-warp-above-1 {
+            padding: 0px 0px 0px 5px;
+        }
+
+        .footer-page-1 .footer-page-warp-above-2-item {
+            width: 50%;
+            padding: 20px 0px 0px 0px;
+        }
+
+        .footer-page-warp-1 .footer-information-1 {
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .footer-page-warp-1 .footer-warp-information-1 {
+            width: 100%;
+        }
+
+        .footer-page-warp-1 .footer-warp-information-2 {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 15px 0px 15px;
+        }
+
+        .footer-page-warp-1 .footer-warp-information-2 p {
+            font-size: 15px;
+        }
+
+        .footer-page-warp-1 .footer-warp-information-3 {
+            width: 100%;
+            padding: 25px 15px 0px 15px;
+        }
+
+        /* .footer-page-warp-1 .footer-warp-information-3 .social-media img {
+            width: 10%;
+        } */
+        .footer-page-warp-1 .footer-warp-information-4 {
+            width: 100%;
+            padding: 30px 15px 0px 15px;
+        }
+
+        .footer-page-warp-1 .footer-information-2 {
+            width: 100%;
+            position: relative;
+            padding: 20px 0 0px;
+        }
+
+        .footer-page-warp-1 .footer-information-3 {
+            text-align: center;
+        }
+
+        .footer-page-warp-1 .all-infor-footer {
+            width: 100%;
+            padding: 0px 15px 0px 15px;
+        }
+
+        .footer-page-warp-1 .develop-footer-1 {
+            display: flex;
+            width: 81%;
+            margin-left: auto;
+            padding: 15px 15px;
+        }
+
+        .footer-page-warp-1 .develop-footer-1 p {
+            font-size: 14px;
+            padding: 0;
+        }
+
+        .footer-information-3 .all-infor-footer {
+            padding: 0px 35px 0px 35px;
+        }
+    }
+
+    @media  only screen and (max-width: 480px) {
+        .footer-page-warp-1 .footer-warp-information-3{
+            padding: 25px 0px 0px 0px;
+        }
+        .footer-page-warp-1 .footer-warp-information-4 {
+            padding: 30px 0px 0px 0px;
+        }
+        .footer-page-warp-1 .all-infor-footer{
+            padding: 0;
+        }
+        .footer-page-1 .footer-page-warp-above-1 img{
+            padding: 0px 0px 0px 25px;
+        }
+        .footer-page-1 .footer-page-warp-above-1 p{
+            padding: 0px 0px 0px 25px;
+        }
+        .footer-page-warp .footer-page-warp-above-1{
+            padding: 0px;
+        }
+        .footer-page-warp-1 .footer-information-1,.footer-page-warp-1 .footer-information-2,.footer-page-warp-1 .footer-information-3{
+            max-width: 331px;
+        }
+        .footer-page-1 .footer-page-warp-above-2-item {
+            padding: 20px 0px 58px 0px;
+        }
+
+    }
+    .popup .overlay {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(20px);
+        z-index: 1;
+        display: none;
+    }
+
+    .popup .content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: #FFFFFF;
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+        border-radius: 20px;
+        width: 905px;
+        height: 500px;
+        z-index: 2;
+        text-align: center;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .popup .content-1 {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: #FFFFFF;
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+        border-radius: 20px;
+        width: 770px;
+        height: 670px;
+        z-index: 2;
+        padding: 20px;
+        box-sizing: border-box;
+        padding-bottom: 0;
+    }
+
+    @media  only screen and (max-width: 1024px) {
+        .popup .content-1 {
+            width: calc(100% - 100px);
+        }
+    }
+
+    @media  only screen and (max-width: 768px) {
+        .popup .content-1 {
+            width: calc(100% - 50px);
+        }
+        .footer-warp-information-2 p a {
+            margin: 5px;
+        }
+    }
+
+    /* @media  only screen and (max-width: 540px) {
+        .popup .content-1 {
+            width: 470px;
+        }
+    } */
+
+    @media  only screen and (max-width: 480px) {
+        .popup .content-1 {
+            width: calc(100% - 30px);
+        }
+
+        .scroll-bar-survey {
+            padding: 20px 0 !important;
+        }
+
+        .scroll-bar-survey {
+            padding: 0px;
+        }
+
+        .popup .content-1 p {
+            line-height: 30px;
+        }
+
+        .scroll-bar-survey .checkbox-1 {
+            flex-direction: column;
+        }
+
+        .scroll-bar-survey .checkbox-3 {
+            flex-direction: column;
+        }
+
+        .second-element-checkbox .hover-input {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scroll-bar-survey-below {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hover-input {
+            width: 150px;
+        }
+
+        .footer-warp-information-2 p a {
+            font-size: 15px;
+        }
+    }
+
+    @media  only screen and (max-width: 360px) {
+        .popup .content-1 {
+            width: 300px;
+            height: 540px;
+        }
+
+        .scroll-bar-survey {
+            height: 350px;
+        }
+
+        .scroll-bar-progress {
+            width: 170px;
+        }
+    }
+
+    .scroll-bar-survey {
+        overflow: scroll;
+        overflow-x: hidden;
+        background: #FFFFFF;
+        border-radius: 20px;
+        height: 445px;
+        z-index: 2;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .popup .content h1 {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 35px;
+        text-align: center;
+        color: #17257E;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .popup .content-1 h1 {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 35px;
+        text-align: center;
+        color: #17257E;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .popup .content p {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 30px;
+        color: #000000;
+        font-family: 'Roboto', sans-serif;
+        padding-top: 45px;
+        margin-bottom: 20px !important;
+    }
+
+    .popup .content-1 p {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 30px;
+        color: #000000;
+        font-family: 'Roboto', sans-serif;
+        padding-top: 25px;
+        padding-bottom: 0;
+    }
+
+    .popup img {
+        cursor: pointer;
+        float: right;
+    }
+
+    .popup.active .overlay {
+        display: block;
+    }
+
+    .popup.active .content {
+        transition: all 300ms ease-in-out;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .popup.active .content-1 {
+        transition: all 300ms ease-in-out;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .check-box-survey {
+        width: 50%;
+        position: relative;
+        display: flex;
+        justify-content: space-evenly;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+    }
+
+    .check-box-survey label {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 18px;
+        color: #000000;
+        font-family: 'Roboto', sans-serif;
+        width: 20%;
+    }
+
+    .check-box-survey input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    .button-survey {
+        width: 50%;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 20px;
+    }
+
+    .button-survey button:nth-child(1) {
+        background: #FFFFFF;
+        border-radius: 10px;
+        position: relative;
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+        color: #17257E;
+        width: 145px;
+        border: 1px solid #17257E;
+        height: 40px;
+        right: 20px;
+    }
+
+    .button-survey button:nth-child(1):hover {
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+    }
+
+    .button-survey button:nth-child(2) {
+        background: #17257E;
+        border-radius: 10px;
+        position: relative;
+        font-family: 'Roboto', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+        color: #FFFFFF;
+        width: 145px;
+        height: 40px;
+        left: 20px;
+    }
+
+    .button-survey button:nth-child(2):hover {
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+    }
+
+    .scroll-bar-survey .checkbox-1 {
+        display: flex;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .scroll-bar-survey .checkbox-2 {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .checkbox-1 .first-element-checkbox {
+        display: flex;
+        flex-direction: row-reverse;
+        flex: 1;
+        justify-content: flex-end;
+        margin-right: 10px;
+        padding-top: 15px;
+    }
+
+    .scroll-bar-survey .checkbox-3 {
+        display: flex;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .checkbox-3 .third-element-checkbox input {
+        float: left;
+        margin: 0;
+        width: 20px;
+        height: 18px;
+    }
+
+    .checkbox-3 .third-element-checkbox {
+        display: flex;
+        flex-direction: row-reverse;
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    .year-in-trading {
+        background: #FFFFFF;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 5px;
+        width: 147px;
+        padding: 15px;
+        height: 40px;
+        margin-left: 30px;
+    }
+
+    .sector-input {
+        height: 40px;
+        width: 60%;
+        background: #FFFFFF;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 5px;
+        padding-left: 15px;
+        margin-left: 30px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/Shape.jpg');
+        background-position: calc(100% - 25px) calc(1em + 3px), calc(100% - 25px) calc(1em + 8px);
+        background-repeat: no-repeat;
+    }
+
+    .more-information {
+        height: 40px;
+        width: auto;
+        background: #FFFFFF;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 5px;
+        padding: 15px;
+        margin-left: 30px;
+    }
+
+    .footer-page-warp-1 label {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 18px;
+        font-family: 'Roboto', sans-serif;
+        color: #000000;
+    }
+
+    .content-1 button {
+        width: 130px;
+        height: 40px;
+        margin-left: auto;
+        display: flex;
+        margin-right: auto;
+        background: #17257E;
+        border-radius: 10px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+        padding: 10px 45px;
+        margin-top: 50px;
+        color: #FFFFFF;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .content-1 button:hover {
+        background: #17257E;
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+    }
+
+    #scroll-bar-survey-1::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    #scroll-bar-survey-1::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px #C6D3F6;
+        border-radius: 5px;
+    }
+
+    /* Handle */
+    #scroll-bar-survey-1::-webkit-scrollbar-thumb {
+        background: #17257E;
+        border-radius: 5px;
+    }
+
+    .scroll-bar-survey-below {
+        width: 95%;
+        border: 1px solid #C4C4C4;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        margin-top: 30px;
+        justify-content: center;
+    }
+
+    .scroll-bar-progress {
+        background: #FFFFFF;
+        border: 1px solid #17257E;
+        box-sizing: border-box;
+        border-radius: 10px;
+        width: 200px;
+        height: 8px;
+        margin-top: 25px;
+    }
+
+    .scroll-bar-progress-check {
+        background: #17257E;
+        border: 1px solid #17257E;
+        box-sizing: border-box;
+        height: 7px;
+        border-radius: 10px 0px 0px 10px;
+    }
+
+    .first-element-checkbox input {
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .second-element-checkbox input {
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .third-element-checkbox input {
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .first-element-checkbox .checkmark {
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/Oval.jpg');
+        height: 20px;
+        width: 20px;
+        background-repeat: no-repeat;
+    }
+
+    .first-element-checkbox input:checked ~ .checkmark {
+        background-color: #FFFFFF;
+    }
+
+    .first-element-checkbox:after {
+        content: "";
+        display: none;
+    }
+
+    .first-element-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    .first-element-checkbox .checkmark:after {
+        position: relative;
+        content: '';
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/check-v.jpg');
+        height: 20px;
+        width: 20px;
+        background-repeat: no-repeat;
+        bottom: 2px;
+    }
+
+    .second-element-checkbox .checkmark {
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/Oval.jpg');
+        height: 20px;
+        width: 27px;
+        background-repeat: no-repeat;
+    }
+
+    .second-element-checkbox:after {
+        content: "";
+        display: none;
+    }
+
+    .second-element-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    .second-element-checkbox .checkmark:after {
+        position: relative;
+        content: '';
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/check-v.jpg');
+        height: 20px;
+        width: 20px;
+        background-repeat: no-repeat;
+        bottom: 2px;
+    }
+
+    .third-element-checkbox .checkmark {
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/Rectangle-path.jpg');
+        height: 20px;
+        width: 20px;
+        background-repeat: no-repeat;
+    }
+
+    .third-element-checkbox input:checked ~ .checkmark {
+        background-color: #FFFFFF;
+    }
+
+    .third-element-checkbox:after {
+        content: "";
+        display: none;
+    }
+
+    .third-element-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    .third-element-checkbox .checkmark:after {
+        position: relative;
+        content: '';
+        background-image: url('https://vntr.moit.gov.vn/themes/ripple/images/check-square.jpg');
+        height: 20px;
+        width: 25px;
+        background-repeat: no-repeat;
+        bottom: 2px;
+    }
+
+    .hover-input:focus {
+        background: #FFFFFF;
+        border: 1px solid #17257E;
+        box-sizing: border-box;
+        border-radius: 10px;
+    }
+
+    .hover-input {
+        padding: 15px;
+        height: 40px;
+        float: none;
+        background: #FFFFFF;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 5px;
+    }
+
+    .footer-page-1 .slick-dots{
+        bottom: 25px;
+    }
+    .footer-page-1 .slick-prev{
+        display:none !important;
+    }
+    .footer-page-1 .slick-next{
+        display:none !important;
+    }
+
+</style>
+<footer class="footer-page-1">
+    <div class="container">
+        <div class="footer-page-warp">
+            <div class="footer-page-warp-above">
+                <div class="footer-page-warp-above-1 page-new-bg">
+                    <p>Hỗ trợ</p>
+                    <img src="https://vntr.moit.gov.vn/themes/ripple/images/Group 829.svg" alt="Highline title">
+                </div>
+                <div class="footer-page-warp-above-2 multiple-items-sp">
+                                                                    <div class="footer-page-warp-above-2-item">
+                        
+                            <a href="https://vntr.moit.gov.vn/vi/hscode-la-gi" title="Tìm hiểu về HS Code"><img width="100%" height="100%" src="https://vntr.moit.gov.vn/storage/logo-support/hscode.png" alt="Tìm hiểu về HS Code"></a>
+                            <p style="padding: 29px 0px 0px 0px;">
+                                <a href="https://vntr.moit.gov.vn/vi/hscode-la-gi" title="Tìm hiểu về HS Code">Tìm hiểu về HS Code</a>
+                            </p>
+                        </div>
+                                                <div class="footer-page-warp-above-2-item">
+                        
+                            <a href="https://vntr.moit.gov.vn/vi/huong-dan-su-dung" title="Hướng dẫn sử dụng trang web"><img width="100%" height="100%" src="https://vntr.moit.gov.vn/storage/logo-support/use-site.png" alt="Hướng dẫn sử dụng trang web"></a>
+                            <p style="padding: 29px 0px 0px 0px;">
+                                <a href="https://vntr.moit.gov.vn/vi/huong-dan-su-dung" title="Hướng dẫn sử dụng trang web">Hướng dẫn sử dụng trang web</a>
+                            </p>
+                        </div>
+                                                <div class="footer-page-warp-above-2-item">
+                        
+                            <a href="https://vntr.moit.gov.vn/vi/huong-dan-giao-dich-1" title="Các nguồn tham khảo"><img width="100%" height="100%" src="https://vntr.moit.gov.vn/storage/logo-support/icon-loogo.jpg" alt="Các nguồn tham khảo"></a>
+                            <p style="padding: 29px 0px 0px 0px;">
+                                <a href="https://vntr.moit.gov.vn/vi/huong-dan-giao-dich-1" title="Các nguồn tham khảo">Các nguồn tham khảo</a>
+                            </p>
+                        </div>
+                                                <div class="footer-page-warp-above-2-item">
+                        
+                            <a href="https://vntr.moit.gov.vn/vi/phu-nu-trong-kinh-doanh" title="Phụ nữ trong kinh doanh"><img width="100%" height="100%" src="https://vntr.moit.gov.vn/storage/logo-support/women.png" alt="Phụ nữ trong kinh doanh"></a>
+                            <p style="padding: 29px 0px 0px 0px;">
+                                <a href="https://vntr.moit.gov.vn/vi/phu-nu-trong-kinh-doanh" title="Phụ nữ trong kinh doanh">Phụ nữ trong kinh doanh</a>
+                            </p>
+                        </div>
+                                                <div class="footer-page-warp-above-2-item">
+                        
+                            <a href="https://vntr.moit.gov.vn/vi/tiep-can-binh-dang-3" title="Tiếp cận bình đẳng"><img width="100%" height="100%" src="https://vntr.moit.gov.vn/storage/logo-support/access.png" alt="Tiếp cận bình đẳng"></a>
+                            <p style="padding: 29px 0px 0px 0px;">
+                                <a href="https://vntr.moit.gov.vn/vi/tiep-can-binh-dang-3" title="Tiếp cận bình đẳng">Tiếp cận bình đẳng</a>
+                            </p>
+                        </div>
+                                                <div class="footer-page-warp-above-2-item">
+                        
+                            <a href="https://vntr.moit.gov.vn/vi/question-and-answer" title="Câu hỏi thường gặp"><img width="100%" height="100%" src="https://vntr.moit.gov.vn/storage/logo-support/use-site.png" alt="Câu hỏi thường gặp"></a>
+                            <p style="padding: 29px 0px 0px 0px;">
+                                <a href="https://vntr.moit.gov.vn/vi/question-and-answer" title="Câu hỏi thường gặp">Câu hỏi thường gặp</a>
+                            </p>
+                        </div>
+                                                                
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="footer-page-warp-1">
+    <div class="container">
+        <div class="footer-information-1">
+            <div class="footer-warp-information-1">
+                <div class="moit-center">
+                    <h1>MOIT</h1>
+                    <p>Bộ Công Thương</p>
+                </div>
+            </div>
+            <div class="footer-warp-information-2">
+                <p><a href="https://vntr.moit.gov.vn/vi/glossary">Bảng thuật ngữ</a></p>
+                <p><a href="https://vntr.moit.gov.vn/vi/dieu-khoan-va-dieu-kien">Điều khoản và điều kiện</a></p>
+                
+                <p class="first-survey-toggle"><a>Phản hồi</a></p>
+                <p><a href="https://vntr.moit.gov.vn/vi/contact-us">Liên hệ</a></p>
+                <p><a href="https://vntr.moit.gov.vn/vi/ve-chung-toi">Về chúng tôi</a></p>
+            </div>
+            <div class="footer-warp-information-3">
+                <p>Theo dõi chúng tôi</p>
+                <div class="social-media">
+                    <a target="_blank" href=https://facebook.com title="Facebook">
+                        <img src="https://vntr.moit.gov.vn/themes/ripple/images/FB.svg" alt="Facebook">
+                    </a>
+                    <a target="_blank" href=https://youtube.com title="Youtube">
+                        <img src="https://vntr.moit.gov.vn/themes/ripple/images/YT.svg" style="margin: 0px 0px 0px 10px;" alt="YouTube">
+                    </a>
+                    <a target="_blank" href="https://www.linkedin.com/company/viet-nam-national-trade-repository/" title="Linkedein">
+                        <img src="https://vntr.moit.gov.vn/themes/ripple/images/linkedin.svg" style="margin: 0px 0px 0px 10px; width:31px; height:31px; " alt="Linkedin">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-warp-information-4">
+                <p>
+                <a class="head-line" style="color: #17257E;">Liên hệ với chúng tôi</a>
+                </p>
+                <p class="multi"><a href="https://vntr.moit.gov.vn/vi/vu-chinh-sach-thuong-mai-da-bien">Vụ Chính sách Thương mại Đa biên</a></p>
+                <div class="footer-warp-information-contact-4">
+                    <div class="flex-display">
+                        <p class="contact-1">Địa chỉ</p>
+                        <p class="contact-2"><a target="_blank" href="https://goo.gl/maps/wyFTnERnpuE1K1rY9">54 Hai Bà Trưng - Hoàn Kiếm - Hà Nội</a></p>
+                    </div>
+                    <div class="flex-display">
+                        <p class="contact-1">Điện thoại</p>
+                        <p class="contact-2"><a href="tel:+842422205412">024 2220 5412</a></p>
+                    </div>
+                    <div class="flex-display">
+                        <p class="contact-1">Fax</p>
+                        <p class="contact-2"><a href="fax:+84.24.2220.2525" class="contact-2">024 2220 2525</a></p>
+                    </div>
+                    <div class="flex-display">
+                        <p class="contact-1">Email</p>
+                        <p class="contact-2"><a href="mailto:vntr@moit.gov.vn">vntr@moit.gov.vn</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-information-2">
+            <div class="all-infor-footer">
+                <p><b style="color: black; font-family:'Roboto';">Miễn trừ trách nhiệm</b>: Tất cả thông tin trên trang web này chỉ nhằm mục đích tham khảo và không thay thế cho các tư vấn về mặt pháp lý. Người dùng hoàn toàn chịu trách nhiệm pháp lý cho các thông tin mà mình sử dụng. Người dùng được khuyến cáo trước khi sử dụng nguồn thông tin lấy từ trang web cần tham khảo ý kiến tư vấn chuyên môn từ các cơ quan liên quan.</p>
+            </div>
+            <div class="develop-footer-1" style="text-align: end;">
+                <p>Trang web được xây dựng theo Nguyên tắc về Nội dung Web Tiếp cận WCAG 2.0</p>
+            </div>
+        </div>
+        <div class="footer-information-3">
+            <div class="all-infor-footer">
+                <p>Bộ Công Thương Việt Nam. Đã đăng kí bản quyền.</p>
+            </div>
+        </div>
+        <input type="hidden" value="https://vntr.moit.gov.vn/vi/ajax/getFtaCountry" id="getFtaCountryUrlInput">
+        <div class="popup" id="firstSurveyPopUp">
+    <div class="overlay"></div>
+    <div class="content">
+        <div class="first-survey-toggle">
+            <img src="https://vntr.moit.gov.vn/themes/ripple/images/x.svg" alt="close button">
+        </div>
+        <div style="clear: both;">
+            <h1>Phản hồi</h1>
+            <p>Bạn đã tìm thấy những gì bạn đang tìm kiếm chưa?</p>
+            <div class="check-box-survey">
+                <label class="first-element-checkbox"
+                    style="display: flex; flex-direction: row-reverse; width: 90%;
+                    justify-content: center;">Có
+                    <input type="radio" checked="checked" name="radio">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="first-element-checkbox"
+                    style="display: flex; flex-direction: row-reverse; width: 90%;
+                    justify-content: center;">Không
+                    <input type="radio" name="radio">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <p>Chúng tôi có thể hỏi bạn thêm một số câu hỏi để giúp cải thiện VNTR không?</p>
+            <div class="button-survey">
+                <button type="button" class="first-survey-toggle">Không</button>
+                <button type="button" class="second-survey-toggle" style="border: none">Có</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="popup" id="secondSurveyPopUp">
+    <div class="overlay"></div>
+    <div class="content-1">
+        <div class="second-survey-toggle">
+            <img src="https://vntr.moit.gov.vn/themes/ripple/images/x.svg" alt="close button">
+        </div>
+        <div style="clear: both;" id="devel-generate-content-form">
+            <h1>Phản hồi</h1>
+            <div class="scroll-bar-survey" id="scroll-bar-survey-1">
+                <form id="secondSurveyForm" method="POST" action="https://vntr.moit.gov.vn/vi/ajax/survey/create">
+                    <div class="error-message"></div>
+                    <input type="hidden" name="_token" value="GE42MbKPmY0wgxuxOPbOpYbO0yQESCCagmvPlrmV">                    <div>
+                        <p>1. Giới tính?</p>
+                        <div class="checkbox-1">
+                            <label class="first-element-checkbox">Nam
+                                <input type="radio" class="count-checked" name="gender" value="male">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">Nữ
+                                <input type="radio" class="count-checked" name="gender" value="female">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">Khác
+                                <input type="radio" class="count-checked" name="gender" value="other">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <p>2. Nhóm tuổi?</p>
+                        <div class="checkbox-1">
+                            <label class="first-element-checkbox">18-30
+                                <input type="radio" class="count-checked" name="age" value="young">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">31-65
+                                <input type="radio" class="count-checked" name="age" value="middle">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">65 tuổi trở lên
+                                <input type="radio" class="count-checked" name="age" value="old">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <p>3. Mục đích của chuyến viếng thăm?</p>
+                        <div class="checkbox-2">
+                            <label
+                                style="padding-top: 15px; display: flex; flex-direction: row-reverse; justify-content: flex-end;"
+                                class="second-element-checkbox">Lợi ích chung
+                                <input type="radio" class="count-checked" value="general_interest" name="purposeVisit">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label
+                                style="padding-top: 15px; display: flex; flex-direction: row-reverse; justify-content: flex-end;"
+                                class="second-element-checkbox">Quy định cụ thể
+                                <input type="radio" class="count-checked" value="specific_regulation"
+                                    name="purposeVisit">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="disable-input-other" style="display:flex;">
+                                <label class="second-element-checkbox"
+                                    style="margin-right:30px; display: flex; flex-direction: row-reverse; justify-content: flex-end; padding-top: 15px;">Khác
+                                    <input type="radio" class="count-checked input-other" value="other"
+                                        name="purposeVisit">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <input type="text" class="hover-input" placeholder="Vui lòng ghi rõ"
+                                    style="width: 85.5%;" name="purposeVisit_otherText" id="surveySecondPurposeOtherText"
+                                    disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p>4. Nhà nhập khẩu hay Nhà xuất khẩu vào Việt Nam?</p>
+                        <div class="checkbox-1">
+                            <label class="first-element-checkbox">Nhà nhập khẩu
+                                <input type="radio" class="count-checked" value="importer" name="importerExporter">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">Nhà xuất khẩu
+                                <input type="radio" class="count-checked" value="exporter" name="importerExporter">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <p>5. Năm kinh doanh?</p>
+                        <input type="text" class="year-in-trading count-checked hover-input" name="yearTrading"
+                            placeholder="Nhập năm">
+                    </div>
+                    <div class="sector-section">
+                        <p>6. Lĩnh vực?</p>
+                            <select id="sectorDropdown" class="select2-custom"
+                                    data-placeholder="Chọn lĩnh vực">
+                                <option></option>
+                                <option value="1">Khu vực công</option>
+                                <option value="2">Chế tạo</option>
+                                <option value="3">Nhập khẩu và xuất khẩu</option>
+                                <option value="4">Dịch vụ</option>
+                                <option value="5">Logistics</option>
+                                <option value="6">Khác, vui lòng ghi rõ</option>
+                            </select>
+                            <input type="hidden" name="sector" class="count-checked count-other select2-custom-container"
+                                   id="inputSector">
+                    </div>
+                    <div>
+                        <p>7. Quy mô của Doanh nghiệp?</p>
+                        <div class="checkbox-1">
+                            <label class="first-element-checkbox">100 <
+                                <input type="radio" class="count-checked" value="small_business" name="sizeBusiness">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">100 - 200 
+                                <input type="radio" class="count-checked" value="normal_business" name="sizeBusiness">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">200 – 500 
+                                <input type="radio" class="count-checked" value="medium_business" name="sizeBusiness">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">> 500 
+                                <input type="radio" class="count-checked" value="big_business" name="sizeBusiness">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <p>8. Làm thế nào bạn tìm thấy chúng tôi?</p>
+                        <div class="checkbox-3">
+                            <div style="flex: 1;">
+                                <label class="third-element-checkbox" style="padding-top: 10px; height:40px">Google
+                                    <input type="checkbox" class="count-checked" value="google" name="howFindUs[]">
+                                    <span class="checkmark" style="border-radius: 20%;"></span>
+                                </label>
+                                <label class="third-element-checkbox">Trang web của Bộ Công Thương
+                                    <input type="checkbox" class="count-checked" value="moit_website"
+                                        name="howFindUs[]">
+                                    <span class="checkmark" style="border-radius: 20%;"></span>
+                                </label>
+                            </div>
+                            <div style="flex: 2;">
+                                <div class="disable-input-other" style="display: flex;">
+                                    <label class="third-element-checkbox"
+                                        style="flex: none; padding-top: 10px; padding-right: 20px;">Truyền thông xã hội
+                                        <input type="checkbox" class="count-checked input-other" value="social_media"
+                                            name="howFindUs[]">
+                                        <span class="checkmark" style="border-radius: 20%;"></span>
+                                    </label>
+                                    <input type="text" class="hover-input" name="howFindUs_socialMediaText"
+                                        placeholder="Vui lòng ghi rõ" style="width: 124px;" disabled>
+                                </div>
+                                <label style="padding-top: 5px;"
+                                    class="third-element-checkbox">Giới thiệu (từ bạn bè, đồng nghiệp, chuyên gia)
+                                    <input type="checkbox" class="count-checked" value="recommendation"
+                                        name="howFindUs[]">
+                                    <span class="checkmark" style="border-radius: 20%;"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p>9. Bạn đã tìm thấy những gì bạn đang tìm kiếm chưa?</p>
+                        <div class="checkbox-1">
+                            <label class="first-element-checkbox">Có
+                                <input type="radio" class="count-checked" value="yes" name="findWhatYouLookFor">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">Không
+                                <input type="radio" class="count-checked" value="no" name="findWhatYouLookFor">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="first-element-checkbox">
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <p>10. Còn thiếu gì không?</p>
+                        <div class="checkbox-2">
+                            <div class="disable-input-other" style="height: 30px; display:flex">
+                                <label class="second-element-checkbox"
+                                    style="display: flex; flex-direction: row-reverse; justify-content: flex-end; padding-top: 10px;">Có
+                                    <input type="radio" class="count-checked input-other" value="yes"
+                                        name="anythingMissing">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <input type="text" class="hover-input" placeholder="Vui lòng ghi rõ"
+                                    name="anythingMissing_yesText" style="margin-left: 10px; width: 85.5%;" disabled>
+                            </div>
+                            <label class="second-element-checkbox"
+                                style="padding-top: 25px; display: flex; flex-direction: row-reverse; justify-content: flex-end;">Không
+                                <input type="radio" class="count-checked" value="no" name="anythingMissing">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <p>11. Có đề xuất nào về cách cải thiện VNTR không?</p>
+                        <div class="checkbox-2">
+                            <div class="disable-input-other" style="height: 30px;display:flex;">
+                                <label class="second-element-checkbox"
+                                    style="display: flex; flex-direction: row-reverse; justify-content: flex-end; padding-top: 10px;">Có
+                                    <input type="radio" class="count-checked input-other" value="yes"
+                                        name="recommendationImproveVntr">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <input type="text" class="hover-input" name="recommendationImproveVntr_yesText"
+                                    placeholder="Vui lòng ghi rõ" style="margin-left: 10px; width: 85.5%;" disabled>
+                            </div>
+                            <label class="second-element-checkbox"
+                                style="padding-top: 25px; display: flex; flex-direction: row-reverse; justify-content: flex-end;">Không
+                                <input type="radio" class="count-checked" value="no" name="recommendationImproveVntr">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <p>12. Chúng tôi có thể liên hệ với bạn để biết thêm thông tin? (tùy chọn)</p>
+                        <input type="text" class="hover-input more-information count-checked count-other"
+                            name="contactForInformation" placeholder="Số điện thoại">
+                    </div>
+
+                    
+                                            <div class="col-md-12">
+                            <div class="form-group">
+                                <br><br>
+                                <script src="https://www.google.com/recaptcha/api.js?hl=vi" async defer></script><script>var refreshRecaptcha = function () { grecaptcha.reset(); };</script><div class="g-recaptcha"  theme="light" id="buzzNoCaptchaId_c98a04846f06e042ce7410793d69db02" data-sitekey="6Lc7uyQfAAAAABPT3W8BBvKlBn3tH8oOe3Vjpe0d"></div>
+                            </div>
+                        </div>
+                    
+                    <button type="button" id="secondSurveySubmitBtn" style="border: none">Xong</button>
+                </form>
+            </div>
+            <div class="scroll-bar-survey-below">
+                <div style="display: flex; justify-content: space-between; width: 52%;">
+                    <p style="padding-top: 17px; font-size:16px;">
+                        <span id="count-checked-checkboxes"
+                            style="font-family: 'Roboto', sans-serif;font-style: normal;font-weight: bold;font-size: 16px;line-height: 19px;text-align: center; color: #000000;">0</span>
+                        của 12 Đã trả lời
+                    </p>
+                    <div>
+                        <div class="scroll-bar-progress">
+                            <div class="scroll-bar-progress-check d-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+<input type="hidden" value="https://vntr.moit.gov.vn/vi/search?page=2" class="search-url">
+<input type="hidden" value="https://vntr.moit.gov.vn/vi/api/v1/chart/fta" id="chart-fta">
+<input type="hidden" value="" id="short-id">
+<input type="hidden" value="" id="country-id">
+<input type="hidden" value="" id="search-v">
+<input type="hidden" value="" id="search-fta">
+<!-- JS Library-->
+<script src="https://vntr.moit.gov.vn/themes/ripple/plugins/jquery/jquery.min.js"></script>
+<script src="https://vntr.moit.gov.vn/themes/ripple/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://vntr.moit.gov.vn/themes/ripple/js/custom.min.js?v=5.11"></script>
+<script src="https://vntr.moit.gov.vn/themes/ripple/js/ripple.js?v=5.11"></script>
+<script src="https://vntr.moit.gov.vn/vendor/core/plugins/cookie-consent/js/cookie-consent.js?v=1.0.0"></script>
+<script src="https://vntr.moit.gov.vn/vendor/core/plugins/language/js/language-public.js?v=1.0.0"></script>
+
+
+
+<div class="js-cookie-consent cookie-consent" style="background-color: #000000 !important; color: #FFFFFF !important;">
+        <div class="cookie-consent-body" style="max-width: 1170px;">
+            <span class="cookie-consent__message">
+                Chúng tôi dùng cookie để cho bạn trải nghiệm online tốt nhất. Cho chúng tôi biết bạn đồng ý về mọi cookie này.
+                                    <a href="https://vntr.moit.gov.vn/cookie-policy">Cookie Policy</a>
+                            </span>
+
+            <button class="js-cookie-consent-agree cookie-consent__agree" style="background-color: #000000 !important; color: #FFFFFF !important; border: 1px solid #FFFFFF !important;">
+                Allow cookies
+            </button>
+        </div>
+    </div>
+    <div data-site-cookie-name="botble_cookie_consent"></div>
+    <div data-site-cookie-lifetime="7300"></div>
+    <div data-site-cookie-domain="vntr.moit.gov.vn"></div>
+    <div data-site-session-secure=""></div>
+
+
+
+    <div id="fb-root"></div>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                xfbml: true,
+                version: 'v7.0'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.4/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://vntr.moit.gov.vn/js/slick.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="https://vntr.moit.gov.vn/js/highlight.js"></script>
+
+    <script type="text/javascript" >
+        $(document).ready(function () {
+
+        });
+    </script>
+
+<script>
+    $(document).ready(function () {
+
+        var select = $("#countrySelectSearch");
+        var inputUrl = $("#getFtaCountryUrlInput").val();
+        $.ajax({
+            url: inputUrl
+        }).done(function (response) {
+            var html = '';
+            $.each(response.data, function (key, value) {
+                html += '<option value="' + key + '" >' + value + '</option>';
+            });
+            $(select).append(html);
+        });
+
+        
+        $(".multiple-items-sp").slick({
+            dots: true,
+            infinite: true,
+            slidesToShow: 5,
+            slidesToScroll: 3,
+            responsive: [{
+                breakpoint: 1199,
+                settings: {
+                    slidesToShow: 4,
+                    slidesToScroll: 2,
+                    dots: true,
+                },
+            },
+                {
+                    breakpoint: 991,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 2,
+                        dots: true,
+                    },
+                },
+                {
+                    breakpoint: 767,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 2,
+                        dots: true,
+                    },
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2,
+                        dots: true,
+                    },
+                }
+            ],
+        });
+
+        $(".multiple-items").slick({
+            dots: true,
+            infinite: true,
+            slidesToShow: 4,
+            slidesToScroll: 4,
+            responsive: [{
+                breakpoint: 1199,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    dots: true,
+                },
+            },
+                {
+                    breakpoint: 991,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2,
+                        dots: true,
+                    },
+                },
+                {
+                    breakpoint: 767,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2,
+                        dots: true,
+                    },
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                        dots: true,
+                    },
+                }
+            ],
+        });
+
+        $("ul.list-title li.title a").click(function (e) {
+            e.preventDefault();
+
+            $(".hide-product").removeClass("active");
+            var data = $(this).attr("href");
+            if (data == "#auction") {
+                $(".hide-option").addClass("show-option");
+            } else {
+                $(".hide-option").removeClass("show-option");
+            }
+            $("ul.list-title li").removeClass("active");
+            $("ul.lists").removeClass("active");
+            $("div.lists").removeClass("active");
+            $("div.item").removeClass("active");
+
+            $(this).parent().addClass("active");
+            $(".abc").removeClass("vcd");
+            $(data).addClass("active");
+            $(data).addClass("vcd");
+            console.log(data);
+            $('.multiple-items').slick("refresh");
+        });
+    })
+
+</script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+$('.js-data-example-ajax').select2({
+    placeholder: '',
+    allowClear: true,
+    ajax: {
+        url: 'https://vntr.moit.gov.vn/vi/api/commodity',
+        dataType: 'json',
+        delay: 250,
+        processResults: function (data) {
+          return {
+            results:  $.map(data, function (item) {
+                  return {
+                      text: item.HS_code +' - '+ item.description,
+                      id: item.id
+                  }
+              })
+          };
+        },
+        cache: true
+    }
+});
+</script>
+<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"> -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+
+</body>
+
+</html>
+

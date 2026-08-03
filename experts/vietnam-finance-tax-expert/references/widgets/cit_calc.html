@@ -1,0 +1,167 @@
+<section style="font-family: var(--font-sans); color: var(--color-text-primary); max-width: 680px;">
+  <h2 class="sr-only">越南企业所得税 CIT 试算器</h2>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-bottom: 12px;">
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      年营收（亿 VND）
+      <input id="rc" type="number" value="500" min="0" step="10" style="font-size: 14px; padding: 7px 9px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      年可扣成本（亿 VND）
+      <input id="cc" type="number" value="380" min="0" step="10" style="font-size: 14px; padding: 7px 9px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      适用 CIT 税率 %
+      <input id="rate" type="number" value="10" min="0" step="1" style="font-size: 14px; padding: 7px 9px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-bottom: 14px;">
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      免税年数（前 N 年，税率 0%）
+      <input id="free" type="number" value="4" min="0" step="1" style="font-size: 14px; padding: 7px 9px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      减半年数（其后 N 年，税率 ½）
+      <input id="half" type="number" value="9" min="0" step="1" style="font-size: 14px; padding: 7px 9px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-bottom: 12px;">
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.85rem 0.95rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">应税所得（年）</div>
+      <div id="taxable" style="font-size: 19px; font-weight: 500; margin-top: 3px;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.85rem 0.95rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">无优惠年税（全额税率）</div>
+      <div id="fullYear" style="font-size: 19px; font-weight: 500; margin-top: 3px;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.85rem 0.95rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">优惠期累计税负</div>
+      <div id="cumInc" style="font-size: 19px; font-weight: 500; margin-top: 3px; color: var(--color-text-info);">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.85rem 0.95rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">累计节税（vs 无优惠）</div>
+      <div id="saving" style="font-size: 19px; font-weight: 500; margin-top: 3px; color: #3B6D11;">—</div>
+    </div>
+  </div>
+
+  <div id="cit_svg_wrap" style="width: 100%; margin-bottom: 6px;"></div>
+  <div style="font-size: 12px; color: var(--color-text-tertiary); margin: 4px 0 10px; line-height: 1.6;">
+    <span style="color:#3B6D11;">■</span> 免税期（0%）　<span style="color:#185FA5;">■</span> 减半期（½税率）　优惠期平均实际税率 <strong id="avgEff">—</strong>%。
+  </div>
+
+  <div style="font-size: 12px; color: var(--color-text-tertiary); line-height: 1.6; margin-bottom: 10px;">
+    依据《企业所得税法》67/2025 第13.1、14.1条：电子制造（电子设备生产 / 半导体 / 电子资讯配套）属优先行业，新投资项目落于高新区·经济区优惠区可享 <strong>10%×15年 + 最长4年免 + 9年减半</strong>。本测算假设年应税所得恒定，仅作指示性参考。
+  </div>
+
+  <button onclick="citExport()" style="font-size: 13px; padding: 8px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer;">导出报告 (HTML)</button>
+</section>
+
+<style>
+  .cit-bar { cursor: pointer; transition: none; }
+  .cit-bar:hover { filter: brightness(1.12); }
+  .cit-axis { font-size: 10px; fill: var(--color-text-secondary); }
+</style>
+
+<script>
+function fmtE(v){ if(v>=1e8) return (v/1e8).toFixed(1)+'亿 VND'; if(v>=1e6) return (v/1e6).toFixed(1)+'百万 VND'; return Math.round(v).toLocaleString('en-US')+' VND'; }
+
+let chartRows = [];
+function calc(){
+  const rev = Math.max(0, (+document.getElementById('rc').value||0) * 1e8);
+  const cost = Math.max(0, (+document.getElementById('cc').value||0) * 1e8);
+  const rate = Math.max(0, +document.getElementById('rate').value||0);
+  const free = Math.max(0, Math.floor(+document.getElementById('free').value||0));
+  const half = Math.max(0, Math.floor(+document.getElementById('half').value||0));
+
+  const taxable = Math.max(rev - cost, 0);
+  const H = Math.max(free + half, 1);
+  chartRows = [];
+  let cumInc = 0, cumFull = 0;
+  for(let y=1; y<=H; y++){
+    let eff;
+    if(y <= free) eff = 0;
+    else if(y <= free + half) eff = rate/2;
+    else eff = rate;
+    const tInc = taxable * eff / 100;
+    const tFull = taxable * rate / 100;
+    cumInc += tInc; cumFull += tFull;
+    chartRows.push({y, eff, tInc, tFull});
+  }
+  const saving = cumFull - cumInc;
+  const avgEff = taxable ? cumInc / (taxable * H) * 100 : 0;
+
+  document.getElementById('taxable').textContent = fmtE(taxable);
+  document.getElementById('fullYear').textContent = fmtE(taxable * rate / 100);
+  document.getElementById('cumInc').textContent = fmtE(cumInc);
+  document.getElementById('saving').textContent = fmtE(saving);
+  document.getElementById('avgEff').textContent = avgEff.toFixed(2);
+
+  renderChart(taxable, rate, free, half, H);
+}
+
+function renderChart(taxable, rate, free, half, H){
+  const wrap = document.getElementById('cit_svg_wrap');
+  const W = 680, padL = 36, padR = 8, padT = 10, chartH = 190, padB = 26;
+  const chartW = W - padL - padR;
+  const gap = chartW / H;
+  const bw = Math.min(gap * 0.62, 34);
+  const maxT = Math.max(taxable * rate / 100, 1);
+  let s = '<svg viewBox="0 0 '+W+' '+(chartH+padT+padB)+'" width="100%" style="max-width:680px;height:auto;display:block" role="img" aria-label="CIT 免税减半期逐年税负图">';
+  // y 轴标题
+  s += '<text class="cit-axis" x="4" y="'+(padT+6)+'" >税(亿)</text>';
+  s += '<line x1="'+padL+'" y1="'+(padT+chartH)+'" x2="'+(W-padR)+'" y2="'+(padT+chartH)+'" stroke="var(--color-border-secondary)"/>';
+  chartRows.forEach((r,i)=>{
+    const x = padL + i*gap + (gap-bw)/2;
+    const h = r.tInc / maxT * chartH;
+    const y = padT + chartH - h;
+    const color = r.eff===0 ? '#3B6D11' : (r.eff < rate ? '#185FA5' : '#888');
+    const phase = r.eff===0 ? '免税' : (r.eff < rate ? '减半' : '全额');
+    s += '<rect class="cit-bar" x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="2" fill="'+color+'">'
+       + '<title>第'+r.y+'年 · '+phase+' · 税率'+r.eff+'% · 税 '+fmtE(r.tInc)+'</title></rect>';
+    s += '<text class="cit-axis" x="'+(x+bw/2).toFixed(1)+'" y="'+(padT+chartH+14)+'" text-anchor="middle">'+r.y+'</text>';
+  });
+  s += '</svg>';
+  wrap.innerHTML = s;
+}
+
+['rc','cc','rate','free','half'].forEach(id=>document.getElementById(id).addEventListener('input', calc));
+calc();
+
+function citExport(){
+  const rev = Math.max(0, (+document.getElementById('rc').value||0) * 1e8);
+  const cost = Math.max(0, (+document.getElementById('cc').value||0) * 1e8);
+  const rate = Math.max(0, +document.getElementById('rate').value||0);
+  const free = Math.max(0, Math.floor(+document.getElementById('free').value||0));
+  const half = Math.max(0, Math.floor(+document.getElementById('half').value||0));
+  const taxable = Math.max(rev-cost,0);
+  let cumInc=0, cumFull=0;
+  const sched=[];
+  for(let y=1;y<=Math.max(free+half,1);y++){
+    let eff = y<=free?0:(y<=free+half?rate/2:rate);
+    const tInc=taxable*eff/100, tFull=taxable*rate/100;
+    cumInc+=tInc; cumFull+=tFull;
+    sched.push([y, eff===0?'免税':(eff<rate?'减半':'全额'), fmtE(tInc), fmtE(tFull)]);
+  }
+  const out=[
+    ['年营收', (+document.getElementById('rc').value||0)+' 亿 VND'],
+    ['年可扣成本', (+document.getElementById('cc').value||0)+' 亿 VND'],
+    ['适用税率', rate+'%'],
+    ['免税/减半年数', free+' 年 / '+half+' 年'],
+    ['应税所得(年)', fmtE(taxable)],
+    ['无优惠年税', fmtE(taxable*rate/100)],
+    ['优惠期累计税负', fmtE(cumInc)],
+    ['累计节税', fmtE(cumFull-cumInc)],
+    ['优惠期平均实际税率', (taxable?(cumInc/(taxable*Math.max(free+half,1))*100):0).toFixed(2)+'%']
+  ];
+  sched.forEach(r=>out.push(['第'+r[0]+'年 '+r[1], '税 '+r[2]+' / 无优惠 '+r[3]]));
+  const d=new Date().toLocaleDateString('zh-CN');
+  let h='<!doc'+'type html><ht'+'ml lang="zh"><he'+'ad><meta charset="utf-8"><title>越南CIT试算</title><style>body{font-family:sans-serif;padding:32px;color:#222}h1{font-size:20px}table{width:100%;border-collapse:collapse;margin-top:16px}td,th{border:1px solid #ddd;padding:8px 12px;text-align:left;font-size:14px}.k{color:#555}.v{font-weight:600}.foot{margin-top:24px;color:#999;font-size:12px}</style></he'+'ad><bo'+'dy>';
+  h+='<h1>越南企业所得税(CIT)试算报告</h1><div style="color:#666;font-size:13px">生成日期：'+d+' ｜ 越南财税金融专家（指示性测算，非税务意见）</div><table>';
+  out.forEach(r=>{h+='<tr><td class="k">'+r[0]+'</td><td class="v">'+r[1]+'</td></tr>';});
+  h+='</table><div class="foot">依据《企业所得税法》67/2025 第13.1、14.1条；测算假设年应税所得恒定。实际优惠资格须以 IRC 投资证及税务机关认定为准。</div></body></html>';
+  const b=new Blob([h],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='越南CIT试算报告.html'; a.click();
+}
+</script>

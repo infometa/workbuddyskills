@@ -1,0 +1,109 @@
+<section style="font-family: var(--font-sans); color: var(--color-text-primary); max-width: 640px;">
+  <h2 class="sr-only">越南工厂用工总成本实时计算器</h2>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      员工人数
+      <input id="hc" type="number" value="100" min="1" step="10" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      人均月薪（万 VND）
+      <input id="wg" type="number" value="1200" min="100" step="50" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-bottom: 16px;">
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">月雇主总成本</div>
+      <div id="mCost" style="font-size: 21px; font-weight: 500; margin-top: 4px;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">年雇主总成本</div>
+      <div id="yCost" style="font-size: 21px; font-weight: 500; margin-top: 4px;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">人均月成本</div>
+      <div id="pHc" style="font-size: 21px; font-weight: 500; margin-top: 4px;">—</div>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 12px;">
+    <div id="payDonut" role="img" aria-label="用工成本构成环形图" style="width:200px;height:200px;flex:none;"></div>
+    <div style="font-size: 12px; color: var(--color-text-secondary); line-height: 1.9;">
+      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #185FA5;"></span>工资基准 100%</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #993C1D;"></span>社保·医保·失业 21.5%</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #854F0B;"></span>工会费 1.0%</div>
+      <div style="margin-top: 8px; color: var(--color-text-tertiary);">雇主实付 = 工资 × 1.225</div>
+    </div>
+  </div>
+
+  <button onclick="payExport()" style="font-size: 13px; padding: 8px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer;">导出报告 (HTML)</button>
+</section>
+
+<!-- Chart.js 依赖已移除：改用纯 SVG 渲染环形图，零外部依赖，离线可用 -->
+<script>
+function fmt(v){ if(v>=1e8){ return (v/1e8).toFixed(2)+'亿 VND'; } if(v>=1e6){ return (v/1e6).toFixed(1)+'百万 VND'; } return Math.round(v).toLocaleString('en-US')+' VND'; }
+const SI=0.215, UNION=0.01, EX=26300;
+function arcPath(cx,cy,rO,rI,a0,a1){
+  const large=(a1-a0)>180?1:0;
+  const P=(r,a)=>[cx+r*Math.cos((a-90)*Math.PI/180), cy+r*Math.sin((a-90)*Math.PI/180)];
+  const x1=P(rO,a0),x2=P(rO,a1),x3=P(rI,a1),x4=P(rI,a0);
+  return 'M'+x1[0].toFixed(2)+' '+x1[1].toFixed(2)+' A'+rO+' '+rO+' 0 '+large+' 1 '+x2[0].toFixed(2)+' '+x2[1].toFixed(2)+' L'+x3[0].toFixed(2)+' '+x3[1].toFixed(2)+' A'+rI+' '+rI+' 0 '+large+' 0 '+x4[0].toFixed(2)+' '+x4[1].toFixed(2)+' Z';
+}
+function renderDonut(el,segs){
+  const total=segs.reduce((s,x)=>s+x.val,0)||1;
+  const cx=100,cy=100,rO=90,rI=60;
+  let a=0, s='<svg viewBox="0 0 200 200" width="200" height="200">';
+  segs.forEach(g=>{
+    const a1=a+g.val/total*360;
+    if(g.val>0){ s+='<path d="'+arcPath(cx,cy,rO,rI,a,a1)+'" fill="'+g.color+'"><title>'+g.label+'：'+fmt(g.val)+'</title></path>'; }
+    a=a1;
+  });
+  s+='<circle cx="100" cy="100" r="46" fill="var(--color-background-primary)"/>';
+  s+='<text x="100" y="96" text-anchor="middle" font-size="12" fill="var(--color-text-secondary)">雇主实付</text>';
+  s+='<text x="100" y="113" text-anchor="middle" font-size="14" font-weight="600" fill="var(--color-text-primary)">×1.225</text>';
+  s+='</svg>';
+  el.innerHTML=s;
+}
+function calc(){
+  const hc=Math.max(1, +document.getElementById('hc').value||0);
+  const wgWan=Math.max(0, +document.getElementById('wg').value||0);
+  const wage=wgWan*10000;
+  const perPerson=wage*(1+SI+UNION);
+  const mTot=hc*perPerson;
+  const yTot=mTot*12;
+  document.getElementById('mCost').textContent=fmt(mTot);
+  document.getElementById('yCost').textContent=fmt(yTot);
+  document.getElementById('pHc').textContent=fmt(perPerson);
+  renderDonut(document.getElementById('payDonut'),[
+    {val:wage, color:'#185FA5', label:'工资基准'},
+    {val:wage*SI, color:'#993C1D', label:'社保·医保·失业'},
+    {val:wage*UNION, color:'#854F0B', label:'工会费'}
+  ]);
+}
+document.getElementById('hc').addEventListener('input',calc);
+document.getElementById('wg').addEventListener('input',calc);
+calc();
+function downloadReport(title, rows){
+  const d=new Date().toLocaleDateString('zh-CN');
+  let h='<!doc'+'type html><ht'+'ml lang="zh"><he'+'ad><meta charset="utf-8"><title>'+title+'</title><style>body{font-family:sans-serif;padding:32px;color:#222}h1{font-size:20px}table{width:100%;border-collapse:collapse;margin-top:16px}td,th{border:1px solid #ddd;padding:8px 12px;text-align:left;font-size:14px}.k{color:#555}.v{font-weight:600}.foot{margin-top:24px;color:#999;font-size:12px}</style></he'+'ad><bo'+'dy>';
+  h+='<h1>'+title+'</h1><div style="color:#666;font-size:13px">生成日期：'+d+' ｜ 越南财税金融专家（指示性测算，非税务意见）</div><table>';
+  rows.forEach(r=>{h+='<tr><td class="k">'+r[0]+'</td><td class="v">'+r[1]+'</td></tr>';});
+  h+='</table><div class="foot">数据来源：专家包 references/data/cost_reference.json（Decree 293/2025/NĐ-CP 最低工资 + 雇主社保 21.5% + 工会费 1%）。签约前须以实际工资与社保基数核实。</div></body></html>';
+  const b=new Blob([h],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=title+'.html'; a.click();
+}
+function payExport(){
+  const hc=Math.max(1,+document.getElementById('hc').value||0);
+  const wgWan=Math.max(0,+document.getElementById('wg').value||0);
+  const wage=wgWan*10000, perPerson=wage*1.225, mTot=hc*perPerson, yTot=mTot*12;
+  downloadReport('越南用工总成本测算',[
+    ['员工人数', hc+' 人'],
+    ['人均月薪', wgWan+' 万 VND'],
+    ['人均月成本（含附加）', fmt(perPerson)],
+    ['月雇主总成本', fmt(mTot)],
+    ['年雇主总成本', fmt(yTot)],
+    ['雇主附加比例', '工资 × 1.225（社保21.5% + 工会费1%）']
+  ]);
+}
+</script>

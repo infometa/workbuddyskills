@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>南非薪酬计算器 — 2026/27</title>
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-sec: #6b6b6b;
+    --text-ter: #999;
+    --border: #e5e3dd;
+    --line: #1a1a1a;
+    --green: #2E7D52;
+    --blue: #3B5BA0;
+    --gray: #B0B0B0;
+    --red: #C45C3E;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    line-height: 1.6;
+  }
+  .container { max-width: 560px; margin: 0 auto; }
+
+  /* Input bar */
+  .input-bar {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .input-group { flex: 1; min-width: 120px; }
+  .input-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-sec);
+    margin-bottom: 4px;
+  }
+  .input-group input, .input-group select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--card);
+    outline: none;
+  }
+  .input-group input:focus, .input-group select:focus {
+    border-color: var(--green);
+  }
+
+  /* Main card */
+  .main-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+  .main-card h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  /* Salary rows */
+  .salary-rows { display: flex; flex-direction: column; gap: 4px; }
+  .salary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 15px;
+  }
+  .salary-row .label { color: var(--text-sec); }
+  .salary-row .amount {
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .salary-row.deduct .amount { color: var(--red); }
+
+  .divider {
+    border: none;
+    border-top: 2px solid var(--line);
+    margin: 12px 0;
+  }
+
+  .net-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0 20px;
+  }
+  .net-row .label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-sec);
+  }
+  .net-row .amount {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Donut area */
+  .donut-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    padding-top: 8px;
+  }
+  .donut-wrap { position: relative; width: 180px; height: 180px; flex-shrink: 0; }
+  .donut-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: var(--card);
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 4px var(--card);
+  }
+  .donut-center .pct {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1.1;
+  }
+  .donut-center .sublabel {
+    font-size: 11px;
+    color: var(--text-sec);
+    margin-top: 2px;
+  }
+  .legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .legend-label { color: var(--text-sec); width: 56px; }
+  .legend-pct { font-weight: 600; color: var(--text); width: 48px; text-align: right; }
+
+  /* Footnote card */
+  .footnote-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-sec);
+    line-height: 1.8;
+  }
+  .footnote-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .footnote-card p { margin-bottom: 10px; }
+  .footnote-card p:last-child { margin-bottom: 0; }
+  .footnote-card em {
+    font-size: 12px;
+    color: var(--text-ter);
+  }
+
+  @media (max-width: 480px) {
+    .main-card { padding: 20px 20px; }
+    .donut-area { flex-direction: column; gap: 20px; }
+    .net-row .amount { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- INPUT -->
+  <div class="input-bar">
+    <div class="input-group">
+      <label>月基本薪资 (R)</label>
+      <input type="number" id="salary" value="45000" min="0" step="100">
+    </div>
+    <div class="input-group">
+      <label>年龄</label>
+      <input type="number" id="age" value="35" min="18" max="100">
+    </div>
+    <div class="input-group">
+      <label>医疗受赡养人数</label>
+      <input type="number" id="dependants" value="0" min="0" max="10">
+    </div>
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="main-card">
+    <h2>员工到手薪资参考</h2>
+
+    <div class="salary-rows">
+      <div class="salary-row">
+        <span class="label">基本薪资 (毛薪)</span>
+        <span class="amount" id="row-gross">R 45,000.00</span>
+      </div>
+      <div class="salary-row deduct">
+        <span class="label">PAYE 个人所得税</span>
+        <span class="amount" id="row-paye">-R 9,275.58</span>
+      </div>
+      <div class="salary-row deduct">
+        <span class="label">UIF (雇员 1%)</span>
+        <span class="amount" id="row-uif">-R 177.12</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="net-row">
+      <span class="label">月净薪</span>
+      <span class="amount" id="row-net">R 35,547.30</span>
+    </div>
+
+    <div class="donut-area">
+      <div class="donut-wrap">
+        <svg width="180" height="180" viewBox="0 0 180 180" id="donut-svg" style="overflow:visible">
+          <g transform="rotate(-90 90 90)">
+            <circle cx="90" cy="90" r="65" fill="none" stroke="#EDECE6" stroke-width="24" />
+          </g>
+        </svg>
+        <div class="donut-center">
+          <div class="pct" id="donut-pct">79.0%</div>
+          <div class="sublabel">到手占比</div>
+        </div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+
+  <!-- FOOTNOTE -->
+  <div class="footnote-card">
+    <h3>计算说明与注意事项</h3>
+    <p><strong>计算依据：</strong>SARS 2026/27 PAYE 七档累进税率 (18%-45%) · 基本退税 R17,820/年 (65岁以下) · 个税起征点 R99,000/年 · UIF 月薪上限 R17,712 (封顶 R177.12/方，雇主雇员各1%) · SDL 雇主月薪总额 1% (年薪酬 >R500,000 适用) · COIDA 2026/27 年收入上限 R668,000 · 医疗税收抵免 R376/月(本人+第一赡养人), 额外赡养人 R254/月</p>
+    <p><strong>注意：</strong>COIDA 费率按行业风险等级浮动，上表为估算值，实际费率以 Compensation Fund 年度评估为准。未含医疗援助 / 退休金等可选福利（如含，雇主成本通常增加 15%-25%）。</p>
+    <p><em>* 以上费率适用于 2026/27 税年，建议向 SARS / DOL / Compensation Fund 核实最新数据。</em></p>
+  </div>
+
+</div>
+
+<script>
+const TAX_BRACKETS = [
+  { min: 0,       max: 245100,  rate: 0.18 },
+  { min: 245100,  max: 383100,  rate: 0.26 },
+  { min: 383100,  max: 530200,  rate: 0.31 },
+  { min: 530200,  max: 695800,  rate: 0.36 },
+  { min: 695800,  max: 887000,  rate: 0.39 },
+  { min: 887000,  max: 1878600, rate: 0.41 },
+  { min: 1878600, max: Infinity,rate: 0.45 }
+];
+const REBATE_UNDER65 = 17820;
+const REBATE_65_74 = 9785;
+const REBATE_75_PLUS = 3249;
+const UIF_CAP_SALARY = 17712;
+const UIF_CAP_CONTRIB = 177.12;
+const MTC_SELF_FIRST = 376;
+const MTC_ADDITIONAL = 254;
+
+function fmt(n) {
+  return 'R ' + n.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function calcPAYE(annualSalary, age) {
+  let tax = 0;
+  for (const b of TAX_BRACKETS) {
+    if (annualSalary > b.min) {
+      const taxable = Math.min(annualSalary, b.max) - b.min;
+      tax += taxable * b.rate;
+    }
+  }
+  let rebate = REBATE_UNDER65;
+  if (age >= 75) rebate += REBATE_65_74 + REBATE_75_PLUS;
+  else if (age >= 65) rebate += REBATE_65_74;
+  return Math.max(0, (tax - rebate) / 12);
+}
+
+function calcMTC(dependants) {
+  if (dependants <= 0) return 0;
+  let mtc = MTC_SELF_FIRST;
+  if (dependants > 1) mtc += (dependants - 1) * MTC_ADDITIONAL;
+  return mtc;
+}
+
+function update() {
+  const salary = parseFloat(document.getElementById('salary').value) || 0;
+  const age = parseInt(document.getElementById('age').value) || 18;
+  const dependants = parseInt(document.getElementById('dependants').value) || 0;
+  const annualSalary = salary * 12;
+
+  let paye = calcPAYE(annualSalary, age);
+  const mtc = calcMTC(dependants);
+  paye = Math.max(0, paye - mtc);
+
+  const uifEmployee = Math.min(salary * 0.01, UIF_CAP_CONTRIB);
+  const netPay = salary - paye - uifEmployee;
+
+  // Rows
+  document.getElementById('row-gross').textContent = fmt(salary);
+  document.getElementById('row-paye').textContent = '-R ' + paye.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  document.getElementById('row-uif').textContent = '-R ' + uifEmployee.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  document.getElementById('row-net').textContent = fmt(netPay);
+
+  // Donut
+  const netPct = netPay / salary * 100;
+  const payePct = paye / salary * 100;
+  const uifPct = uifEmployee / salary * 100;
+  document.getElementById('donut-pct').textContent = netPct.toFixed(1) + '%';
+
+  drawDonut([
+    { label: '到手 Net', value: netPay, color: '#2E7D52', pct: netPct },
+    { label: 'PAYE',     value: paye,    color: '#3B5BA0', pct: payePct },
+    { label: 'UIF',      value: uifEmployee, color: '#B0B0B0', pct: uifPct }
+  ], salary);
+}
+
+function drawDonut(data, total) {
+  const svg = document.getElementById('donut-svg');
+  const legend = document.getElementById('legend');
+  svg.innerHTML = '<g transform="rotate(-90 90 90)"><circle cx="90" cy="90" r="65" fill="none" stroke="#EDECE6" stroke-width="24" /></g>';
+  legend.innerHTML = '';
+
+  const g = svg.querySelector('g');
+  const r = 65, sw = 24;
+  const circ = 2 * Math.PI * r;
+  let offset = 0;
+
+  data.forEach(d => {
+    const seg = (d.value / total) * circ;
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', '90');
+    circle.setAttribute('cy', '90');
+    circle.setAttribute('r', r);
+    circle.setAttribute('fill', 'none');
+    circle.setAttribute('stroke', d.color);
+    circle.setAttribute('stroke-width', sw);
+    circle.setAttribute('stroke-dasharray', `${seg} ${circ}`);
+    circle.setAttribute('stroke-dashoffset', -offset);
+    circle.setAttribute('shape-rendering', 'geometricPrecision');
+    g.appendChild(circle);
+    offset += seg;
+
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `<span class="legend-dot" style="background:${d.color}"></span><span class="legend-label">${d.label}</span><span class="legend-pct">${d.pct.toFixed(1)}%</span>`;
+    legend.appendChild(item);
+  });
+}
+
+document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('input', update);
+  el.addEventListener('change', update);
+});
+update();
+</script>
+</body>
+</html>

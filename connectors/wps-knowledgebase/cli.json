@@ -1,0 +1,40 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=16"
+  },
+  "env": {
+    "KWIKI_CONNECTOR_HOME": "$HOME/.workbuddy/connectors-marketplace/connectors/wps-knowledgebase"
+  },
+  "init": {
+    "darwin": "node \"$KWIKI_CONNECTOR_HOME/cli/install.js\"",
+    "linux": "node \"$KWIKI_CONNECTOR_HOME/cli/install.js\"",
+    "win32": "node \"%KWIKI_CONNECTOR_HOME%\\cli\\install.js\""
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "kwiki-cli --version",
+      "linux": "kwiki-cli --version",
+      "win32": "kwiki-cli.cmd --version"
+    },
+    "minVersion": "2.0.2"
+  },
+  "auth": {
+    "darwin": "kwiki-cli auth login",
+    "linux": "kwiki-cli auth login",
+    "win32": "kwiki-cli.cmd auth login"
+  },
+  "authWaitForExit": true,
+  "unAuth": {
+    "darwin": "kwiki-cli auth logout",
+    "linux": "kwiki-cli auth logout",
+    "win32": "kwiki-cli.cmd auth logout"
+  },
+  "status": {
+    "darwin": "kwiki-cli auth status",
+    "linux": "kwiki-cli auth status",
+    "win32": "kwiki-cli.cmd auth status"
+  },
+  "statusMatch": "Logged in",
+  "authUrlDomain": "zhishi.wps.cn"
+}

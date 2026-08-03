@@ -1,0 +1,114 @@
+<section style="font-family: var(--font-sans); color: var(--color-text-primary); max-width: 640px;">
+  <h2 class="sr-only">越南进口环节税实时测算</h2>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      CIF 货值（百万 VND）
+      <input id="tc_cif" type="number" value="100" min="1" step="10" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-secondary);">
+      进口品类
+      <select id="tc_cat" style="font-size: 15px; padding: 8px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary);">
+        <option value="machinery_import">机械设备/生产线</option>
+        <option value="raw_material">原辅料/零部件</option>
+        <option value="intermediate">中间品/半成品</option>
+        <option value="finished_goods">成品/消费品</option>
+        <option value="alcohol">酒类</option>
+        <option value="vehicle">汽车/整车</option>
+        <option value="tobacco">烟草</option>
+      </select>
+    </label>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-bottom: 16px;">
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">进口环节总税负</div>
+      <div id="tc_tax" style="font-size: 19px; font-weight: 500; margin-top: 4px;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">综合税负率</div>
+      <div id="tc_rate" style="font-size: 19px; font-weight: 500; margin-top: 4px;">—</div>
+    </div>
+    <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem;">
+      <div style="font-size: 12px; color: var(--color-text-secondary);">含税总成本</div>
+      <div id="tc_total" style="font-size: 19px; font-weight: 500; margin-top: 4px;">—</div>
+    </div>
+  </div>
+
+  <div id="tcChartSvg" role="img" aria-label="进口环节税构成柱状图" style="width:100%;"></div>
+
+  <div id="tc_note" style="font-size: 12px; color: var(--color-text-tertiary); margin: 10px 0 12px;"></div>
+
+  <button onclick="tcExport()" style="font-size: 13px; padding: 8px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer;">导出报告 (HTML)</button>
+</section>
+
+<!-- Chart.js 依赖已移除：改用纯 SVG 渲染柱状图，零外部依赖，离线可用 -->
+<script>
+const CAT={
+  machinery_import:['机械设备/生产线',0,0], raw_material:['原辅料/零部件',0,0],
+  intermediate:['中间品/半成品',5,0], finished_goods:['成品/消费品',15,0],
+  alcohol:['酒类',30,65], vehicle:['汽车/整车',47,45], tobacco:['烟草',35,75]
+};
+const VAT=0.10;
+function renderBars(el,labels,vals,colors){
+  const W=640,H=240,padL=8,padR=8,padT=26,padB=34,n=labels.length;
+  const cw=W-padL-padR,gap=cw/n,bw=Math.min(gap*0.5,54);
+  const max=Math.max.apply(null,vals.concat([1]));
+  const chartH=H-padT-padB;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:640px;height:auto;display:block" role="img" aria-label="进口环节税构成柱状图">';
+  s+='<line x1="'+padL+'" y1="'+(padT+chartH)+'" x2="'+(W-padR)+'" y2="'+(padT+chartH)+'" stroke="var(--color-border-secondary)"/>';
+  vals.forEach((v,i)=>{
+    const x=padL+i*gap+(gap-bw)/2;
+    const h=v/max*chartH, y=padT+chartH-h;
+    s+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+colors[i]+'"><title>'+labels[i]+'：'+fmt(v)+'</title></rect>';
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(y-6).toFixed(1)+'" text-anchor="middle" font-size="11" fill="var(--color-text-secondary)">'+fmt(v)+'</text>';
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(padT+chartH+16).toFixed(1)+'" text-anchor="middle" font-size="11" fill="var(--color-text-primary)">'+labels[i]+'</text>';
+  });
+  s+='</svg>';
+  el.innerHTML=s;
+}
+function fmt(v){ if(v>=1e8){ return (v/1e8).toFixed(2)+'亿 VND'; } if(v>=1e6){ return (v/1e6).toFixed(1)+'百万 VND'; } return Math.round(v).toLocaleString('en-US')+' VND'; }
+function calc(){
+  const cif=Math.max(0,+document.getElementById('tc_cif').value||0)*1e6;
+  const [nm,dutyP,sctP]=CAT[document.getElementById('tc_cat').value];
+  const duty=cif*dutyP/100;
+  const sct=(cif+duty)*sctP/100;
+  const vat=(cif+duty+sct)*VAT;
+  const tax=duty+sct+vat, total=cif+tax, rate=tax/cif*100;
+  document.getElementById('tc_tax').textContent=fmt(tax);
+  document.getElementById('tc_rate').textContent=rate.toFixed(1)+'%';
+  document.getElementById('tc_total').textContent=fmt(total);
+  document.getElementById('tc_note').textContent=nm+'：关税 '+dutyP+'% ｜ 特别消费税 '+sctP+'% ｜ VAT 10%。持中国 Form E 原产地证常可享优惠甚至 0 关税。';
+  renderBars(document.getElementById('tcChartSvg'),
+    ['CIF货值','进口关税','特别消费税','增值税'],
+    [Math.round(cif),Math.round(duty),Math.round(sct),Math.round(vat)],
+    ['#5F5E5A','#185FA5','#993C1D','#854F0B']);
+}
+document.getElementById('tc_cif').addEventListener('input',calc);
+document.getElementById('tc_cat').addEventListener('change',calc);
+calc();
+function downloadReport(title, rows){
+  const d=new Date().toLocaleDateString('zh-CN');
+  let h='<!doc'+'type html><ht'+'ml lang="zh"><he'+'ad><meta charset="utf-8"><title>'+title+'</title><style>body{font-family:sans-serif;padding:32px;color:#222}h1{font-size:20px}table{width:100%;border-collapse:collapse;margin-top:16px}td,th{border:1px solid #ddd;padding:8px 12px;text-align:left;font-size:14px}.k{color:#555}.v{font-weight:600}.foot{margin-top:24px;color:#999;font-size:12px}</style></he'+'ad><bo'+'dy>';
+  h+='<h1>'+title+'</h1><div style="color:#666;font-size:13px">生成日期：'+d+' ｜ 越南财税金融专家（指示性测算，非税务意见）</div><table>';
+  rows.forEach(r=>{h+='<tr><td class="k">'+r[0]+'</td><td class="v">'+r[1]+'</td></tr>';});
+  h+='</table><div class="foot">数据来源：专家包 references/data/tariff_reference.json（越南海关税则 + 增值税法 + 特别消费税法）。实际税率以 HS 编码为准；Form E 常可享优惠。签约前须核实。</div></body></html>';
+  const b=new Blob([h],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=title+'.html'; a.click();
+}
+function tcExport(){
+  const cif=Math.max(0,+document.getElementById('tc_cif').value||0)*1e6;
+  const [nm,dutyP,sctP]=CAT[document.getElementById('tc_cat').value];
+  const duty=cif*dutyP/100, sct=(cif+duty)*sctP/100, vat=(cif+duty+sct)*VAT, tax=duty+sct+vat, total=cif+tax;
+  downloadReport('越南进口环节税测算',[
+    ['进口品类', nm],
+    ['CIF 货值', fmt(cif)],
+    ['进口关税 ('+dutyP+'%)', fmt(duty)],
+    ['特别消费税 ('+sctP+'%)', fmt(sct)],
+    ['增值税 (10%)', fmt(vat)],
+    ['进口环节总税负', fmt(tax)],
+    ['综合税负率', (tax/cif*100).toFixed(1)+'%'],
+    ['含税总成本', fmt(total)]
+  ]);
+}
+</script>

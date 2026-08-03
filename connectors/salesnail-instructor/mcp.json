@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "salesnail-instructor": {
+      "type": "streamableHttp",
+      "url": "https://sn.long-arena.com/mcp"
+    }
+  }
+}

@@ -1,11 +1,20 @@
 {
   "name": "paper-topic-selection",
-  "version": "8.0.6",
+  "version": "8.1.0",
   "description": "One-stop thesis topic selection expert team built on Wanfang Data academic resources: literature search, topic discovery, novelty evaluation, title generation, and domain reports.",
   "author": {
     "name": "WorkBuddy Product Team",
     "email": "support@workbuddy.cn"
   },
+  "agents": [
+    "./agents/huangfu-evaluation.md",
+    "./agents/ouyang-literature.md",
+    "./agents/shangguan-topic.md",
+    "./agents/situ-inspiration.md",
+    "./agents/taishi-report.md",
+    "./agents/xiahou-title.md",
+    "./agents/zhuge-consultant.md"
+  ],
   "expertType": "team",
   "agentName": "zhuge-consultant",
   "teamInfo": {
@@ -19,18 +28,6 @@
       "xiahou-title"
     ]
   },
-  "agents": [
-    "./agents/huangfu-evaluation.md",
-    "./agents/ouyang-literature.md",
-    "./agents/shangguan-topic.md",
-    "./agents/situ-inspiration.md",
-    "./agents/taishi-report.md",
-    "./agents/xiahou-title.md",
-    "./agents/zhuge-consultant.md"
-  ],
-  "skills": [
-    "./skills/wanfang-search"
-  ],
   "displayName": {
     "en": "Paper Topic Selection Expert Team (WANFANG TOPIC)",
     "zh": "选题专家团队（WANFANG TOPIC）"
@@ -46,9 +43,10 @@
   "avatar": "avatars/team.jpg",
   "categoryId": "12-IndustryConsultant",
   "defaultInitPrompt": {
-    "zh": "你好！我是选题专家团队的负责人。你可以这样用我：\n1. 🔍 搜文献/找专家 → \"搜 XX 方向的论文\"\n2. 💡 推荐选题 → \"帮我推荐几个 XX 方向选题\"\n3. 📊 评估选题 → \"评估一下这个题目行不行\"\n4. ✏️ 拟标题 → \"给这个选题起几个标题\"\n5. 📈 领域报告 → \"出一份 XX 领域发展报告\"\n6. 🔥 灵感/热词 → \"最近 XX 领域有什么热点\"\n回复数字选功能；不想选的话，直接说你的专业方向，我帮你推荐选题。我们马上开始。",
-    "en": "Hello! I'm the lead of the Topic Selection Expert Team. Here's how to use me:\n1. 🔍 Search papers/experts → \"Search papers in XX field\"\n2. 💡 Recommend topics → \"Recommend some XX topics\"\n3. 📊 Evaluate topic → \"Check if this topic works\"\n4. ✏️ Generate titles → \"Give me titles for this topic\"\n5. 📈 Domain report → \"Produce a development report for XX field\"\n6. 🔥 Inspiration/buzzwords → \"What's hot in XX field lately\"\nReply with a number to pick a function; or just tell me your field and I'll recommend topics. Let's start."
+    "zh": "搜文献/找专家 → 搜 XX 方向的论文",
+    "en": "Search papers/experts → Search papers in XX field"
   },
+  "plugin": "paper-topic-selection",
   "tags": [
     {
       "en": "Literature Deep Reading",
@@ -65,110 +63,70 @@
   ],
   "quickPrompts": [
     {
-      "en": "Hello! I'm the lead of the Topic Selection Expert Team. Here's how to use me:\n1. 🔍 Search papers/experts → \"Search papers in XX field\"\n2. 💡 Recommend topics → \"Recommend some XX topics\"\n3. 📊 Evaluate topic → \"Check if this topic works\"\n4. ✏️ Generate titles → \"Give me titles for this topic\"\n5. 📈 Domain report → \"Produce a development report for XX field\"\n6. 🔥 Inspiration/buzzwords → \"What's hot in XX field lately\"\nReply with a number to pick a function; or just tell me your field and I'll recommend topics. Let's start.",
-      "zh": "你好！我是选题专家团队的负责人。你可以这样用我：\n1. 🔍 搜文献/找专家 → \"搜 XX 方向的论文\"\n2. 💡 推荐选题 → \"帮我推荐几个 XX 方向选题\"\n3. 📊 评估选题 → \"评估一下这个题目行不行\"\n4. ✏️ 拟标题 → \"给这个选题起几个标题\"\n5. 📈 领域报告 → \"出一份 XX 领域发展报告\"\n6. 🔥 灵感/热词 → \"最近 XX 领域有什么热点\"\n回复数字选功能；不想选的话，直接说你的专业方向，我帮你推荐选题。我们马上开始。"
+      "en": "Search papers/experts → Search papers in XX field",
+      "zh": "搜文献/找专家 → 搜 XX 方向的论文"
     },
     {
-      "en": "Recommend some XX topics",
-      "zh": "帮我推荐几个 XX 方向选题"
+      "en": "Recommend topics → Recommend some XX topics",
+      "zh": "推荐选题 → 帮我推荐几个 XX 方向选题"
     },
     {
-      "en": "Check if this topic works",
-      "zh": "评估一下这个题目行不行"
+      "en": "Evaluate topic → Check if this topic works",
+      "zh": "评估选题 → 评估一下这个题目行不行"
     }
+  ],
+  "skills": [
+    "./skills/wanfang-search"
   ],
   "members": [
     {
       "id": "huangfu-evaluation",
-      "profession": {
-        "en": "Topic Evaluator",
-        "zh": "选题评估师"
-      },
+      "name": { "en": "Huang", "zh": "皇甫评度" },
+      "profession": { "en": "Topic Evaluator", "zh": "选题评估师" },
       "avatar": "avatars/huangfu-evaluation.jpg",
-      "role": "member",
-      "displayName": {
-        "en": "Huang",
-        "zh": "皇甫评度"
-      }
+      "role": "member"
     },
     {
       "id": "ouyang-literature",
-      "profession": {
-        "en": "Literature Scout",
-        "zh": "文献侦察员"
-      },
+      "name": { "en": "Ou", "zh": "欧阳搜文" },
+      "profession": { "en": "Literature Scout", "zh": "文献侦察员" },
       "avatar": "avatars/ouyang-literature.jpg",
-      "role": "member",
-      "displayName": {
-        "en": "Ou",
-        "zh": "欧阳搜文"
-      }
+      "role": "member"
     },
     {
       "id": "shangguan-topic",
-      "profession": {
-        "en": "Topic Strategist",
-        "zh": "选题策略师"
-      },
+      "name": { "en": "Shang", "zh": "上官选道" },
+      "profession": { "en": "Topic Strategist", "zh": "选题策略师" },
       "avatar": "avatars/shangguan-topic.jpg",
-      "role": "member",
-      "displayName": {
-        "en": "Shang",
-        "zh": "上官选道"
-      }
+      "role": "member"
     },
     {
       "id": "situ-inspiration",
-      "profession": {
-        "en": "Trend Analyst",
-        "zh": "趋势分析师"
-      },
+      "name": { "en": "Si", "zh": "司徒启思" },
+      "profession": { "en": "Trend Analyst", "zh": "趋势分析师" },
       "avatar": "avatars/situ-inspiration.jpg",
-      "role": "member",
-      "displayName": {
-        "en": "Si",
-        "zh": "司徒启思"
-      }
+      "role": "member"
     },
     {
       "id": "taishi-report",
-      "profession": {
-        "en": "Domain Analyst",
-        "zh": "领域分析师"
-      },
+      "name": { "en": "Tai", "zh": "太史撰域" },
+      "profession": { "en": "Domain Analyst", "zh": "领域分析师" },
       "avatar": "avatars/taishi-report.jpg",
-      "role": "member",
-      "displayName": {
-        "en": "Tai",
-        "zh": "太史撰域"
-      }
+      "role": "member"
     },
     {
       "id": "xiahou-title",
-      "profession": {
-        "en": "Title Generator",
-        "zh": "标题生成师"
-      },
+      "name": { "en": "Xia", "zh": "夏侯拟言" },
+      "profession": { "en": "Title Generator", "zh": "标题生成师" },
       "avatar": "avatars/xiahou-title.jpg",
-      "role": "member",
-      "displayName": {
-        "en": "Xia",
-        "zh": "夏侯拟言"
-      }
+      "role": "member"
     },
     {
       "id": "zhuge-consultant",
-      "profession": {
-        "en": "Chief Topic Advisor",
-        "zh": "选题参谋长"
-      },
+      "name": { "en": "Zhu", "zh": "诸葛谋之" },
+      "profession": { "en": "Chief Topic Advisor", "zh": "选题参谋长" },
       "avatar": "avatars/zhuge-consultant.jpg",
-      "role": "lead",
-      "displayName": {
-        "en": "Zhu",
-        "zh": "诸葛谋之"
-      }
+      "role": "lead"
     }
-  ],
-  "plugin": "paper-topic-selection"
+  ]
 }

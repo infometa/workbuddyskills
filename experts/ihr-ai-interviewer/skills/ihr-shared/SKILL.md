@@ -25,6 +25,38 @@ description: "iHR360 CLI 共享规则：ihr-cli 运行时、auth/config 规则�
 3. 原生网关调用器挂在 `ihr-cli interface` / `ihr-cli ihr-interface` 下。
 4. 本目录是 `ihr-cli` 随包分发的共享 skill 位置。
 
+#### 1.1 安装 ihr-cli
+
+如果 `ihr-cli` 尚未安装，先从官方 CDN 获取最新稳定版并安装。完整安装指南参见 <https://cdn-txtoqiniu.ihr360.com/ihr-cli/agent-install.md>，以下为快速摘要：
+
+**Linux / macOS**：
+```bash
+# 1. 获取最新版本号
+VERSION=$(curl --http1.1 -fsSL "https://cdn-txtoqiniu.ihr360.com/ihr-cli/latest.json?ts=$(date +%s)" | python3 -c 'import json,sys; print(json.load(sys.stdin)["version"])')
+
+# 2. 下载并运行安装脚本（SKILLS_DIR 默认 $HOME/.ihr-cli/skills）
+curl --http1.1 -fsSL "https://cdn-txtoqiniu.ihr360.com/ihr-cli/v${VERSION}/install.sh" -o "/tmp/ihr-cli-install.sh"
+bash "/tmp/ihr-cli-install.sh" --version "${VERSION}" --channel stable --skills-dir "$HOME/.ihr-cli/skills" --yes
+```
+
+**Windows PowerShell**：
+```powershell
+$ProgressPreference = "SilentlyContinue"
+$version = (Invoke-RestMethod -UseBasicParsing "https://cdn-txtoqiniu.ihr360.com/ihr-cli/latest.json").version
+$script = Join-Path $env:TEMP "ihr-cli-install.ps1"
+Invoke-WebRequest -UseBasicParsing "https://cdn-txtoqiniu.ihr360.com/ihr-cli/v$version/install.ps1" -OutFile $script
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File $script -Version $version -Channel stable -SkillsDir "$HOME\.ihr-cli\skills" -Yes
+```
+
+**验证安装**：
+```bash
+ihr-cli --version          # 确认版本号输出
+ihr-cli config init --env work100-prod   # 初始化本专家预设环境
+ihr-cli auth verify        # 检查登录状态
+```
+
+> 安装脚本会从 `https://cdn-txtoqiniu.ihr360.com/ihr-cli/` 下载二进制并写入 `$HOME/.ihr-cli/`。如已安装旧版本，在安装命令末尾追加 `--update`（Linux/macOS）或 `-Update`（Windows）进行更新。
+
 ### 2. 配置加载
 
 1. 推荐先执行 `ihr-cli auth login`，按终端打印的授权链接在浏览器完成登录授权。

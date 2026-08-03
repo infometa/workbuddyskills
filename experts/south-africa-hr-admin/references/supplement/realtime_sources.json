@@ -1,0 +1,172 @@
+{
+  "meta": {
+    "name": "南非人力行政实时数据源注册表",
+    "purpose": "在用户提问时通过 WebFetch 直连权威源进行快速实时查询，弥补静态语料无实时行情/最新公报的短板",
+    "created": "2026-07-27",
+    "maintainer": "south-africa-hr-admin",
+    "note": "查询方法列为 WebFetch 的 prompt 模板；南非官网多为英文，已注明关键词"
+  },
+  "sources": [
+    {
+      "id": "sars",
+      "name_cn": "南非税务局（SARS）",
+      "name_en": "South African Revenue Service",
+      "url": "https://www.sars.gov.za",
+      "category": "税务/实时",
+      "datatype": "PAYE 税率表、税务通则法、eFiling、EMP201/EMP501 申报、VAT、UIF 通过 SARS 缴纳",
+      "query_method": "WebFetch https://www.sars.gov.za ，prompt: 'Extract the current PAYE tax tables / tax rates for tax year 2026/2027, and the latest EMP201 filing deadlines'",
+      "update_freq": "每年（税率 3 月生效）",
+      "reliability": "权威(官方)",
+      "notes": "所有税率/申报时效以 SARS 官网为准；语料 tax_rates_2025_26.json 为 2025/26 基准"
+    },
+    {
+      "id": "dha",
+      "name_cn": "南非内政部（DHA）",
+      "name_en": "Department of Home Affairs",
+      "url": "https://www.dha.gov.za",
+      "category": "签证/移民/半实时",
+      "datatype": "签证类别、关键技能清单（Critical Skills List）、ETA 电子旅行授权试点、申请流程",
+      "query_method": "WebFetch https://www.dha.gov.za ，prompt: 'List current work visa categories and the latest Critical Skills List updates / points-based system for 2026'",
+      "update_freq": "持续（2025–2026 改革期）",
+      "reliability": "权威(官方)",
+      "notes": "签证费 + VFS 服务费另见 VFS Global；关键技能清单预计 2026 年更新"
+    },
+    {
+      "id": "vfs",
+      "name_cn": "VFS Global（南非签证受理）",
+      "name_en": "VFS Global South Africa",
+      "url": "https://www.vfsglobal.com",
+      "category": "签证/费用/实时",
+      "datatype": "生物信息采集预约、签证服务费（R1,550 级别）、材料清单",
+      "query_method": "WebFetch https://www.vfsglobal.com ，prompt: 'South Africa work visa VFS service fee and required documents for Critical Skills Work Visa'",
+      "update_freq": "随 DHA 调整",
+      "reliability": "权威(官方受理方)",
+      "notes": "与 DHA 申请费（R1,520）叠加"
+    },
+    {
+      "id": "del",
+      "name_cn": "就业与劳工部（DEL/原 DoL）",
+      "name_en": "Department of Employment and Labour",
+      "url": "https://www.labour.gov.za",
+      "category": "劳动法/半实时",
+      "datatype": "BCEA 基本雇佣条件、国家最低工资 NMW、UIF、就业公平法 EEA、COIDA",
+      "query_method": "WebFetch https://www.labour.gov.za ，prompt: 'Extract the current National Minimum Wage hourly rate and the BCEA earnings threshold effective 2026'",
+      "update_freq": "最低工资每年 3 月调整",
+      "reliability": "权威(官方)",
+      "notes": "NMW 2026-03-01 起 R30.23/时；BCEA 门槛 2026-05-01 起 R269,600.90/年"
+    },
+    {
+      "id": "bbbee_comm",
+      "name_cn": "B-BBEE 委员会",
+      "name_en": "B-BBEE Commission",
+      "url": "https://www.bbbeecommission.gov.za",
+      "category": "经济赋权/半实时",
+      "datatype": "B-BBEE 评分卡、合规证书、行业章程、2026-01-29 草案（转型基金/100%黑人供应商）",
+      "query_method": "WebFetch https://www.bbbeecommission.gov.za ，prompt: 'Latest B-BBEE scorecard codes, priority elements sub-minima, and status of the 2026 amendment draft (GG 54032)'",
+      "update_freq": "持续（草案期）",
+      "reliability": "权威(官方)",
+      "notes": "2026 草案尚未生效；认证须由认证机构出具"
+    },
+    {
+      "id": "cipc",
+      "name_cn": "公司与知识产权委员会（CIPC）",
+      "name_en": "Companies and Intellectual Property Commission",
+      "url": "https://www.cipc.co.za",
+      "category": "公司注册/半实时",
+      "datatype": "Pty Ltd 注册、年度申报、受益所有权披露、MOI",
+      "query_method": "WebFetch https://www.cipc.co.za ，prompt: 'Extract the current CIPC annual return deadline and beneficial ownership disclosure requirements'",
+      "update_freq": "持续",
+      "reliability": "权威(官方)",
+      "notes": "逾期年度申报公司将被注销（deregistration）"
+    },
+    {
+      "id": "comp_fund",
+      "name_cn": "工伤赔偿基金（COIDA Compensation Fund）",
+      "name_en": "Compensation Fund (under DEL)",
+      "url": "https://www.labour.gov.za",
+      "category": "社保/半实时",
+      "datatype": "ROE 年度申报、行业费率（0.11%–7.79%）、良好存续函 LOGS、2026 修正",
+      "query_method": "WebFetch https://www.labour.gov.za ，prompt: 'Extract COIDA 2026 amendment changes, Return of Earnings (ROE) deadline, and industry assessment rates'",
+      "update_freq": "ROE 每年 6 月 30 日截止",
+      "reliability": "权威(官方)",
+      "notes": "年收入上限 2026/27 R668,000；LOGS 每年 4 月 30 日到期"
+    },
+    {
+      "id": "inforeg",
+      "name_cn": "信息监管局（POPIA）",
+      "name_en": "Information Regulator",
+      "url": "https://www.inforegulator.org.za",
+      "category": "数据保护/半实时",
+      "datatype": "POPIA 合规、信息官指定、数据泄露登记、处罚",
+      "query_method": "WebFetch https://www.inforegulator.org.za ，prompt: 'Extract POPIA compliance obligations for employers and current penalty thresholds'",
+      "update_freq": "持续",
+      "reliability": "权威(官方)",
+      "notes": "违规最高罚款 R10M + 民事诉讼"
+    },
+    {
+      "id": "sarbb",
+      "name_cn": "南非储备银行（汇率）",
+      "name_en": "South African Reserve Bank",
+      "url": "https://www.resbank.co.za",
+      "category": "外汇/实时",
+      "datatype": "兰特兑 USD/EUR/CNY 汇率、利率",
+      "query_method": "WebFetch https://www.resbank.co.za ，prompt: 'Extract the latest ZAR/USD and ZAR/CNY exchange rates'",
+      "update_freq": "交易日实时",
+      "reliability": "权威(央行)",
+      "notes": "外派/跨境薪酬换算、利润汇回需实时汇率"
+    },
+    {
+      "id": "govgazette",
+      "name_cn": "政府公报（GG）",
+      "name_en": "Government Gazette",
+      "url": "https://www.gpw.co.za",
+      "category": "法规/半实时",
+      "datatype": "法案、修正草案、部长令、公报号（如 GG 54032 / GG 54220）全文",
+      "query_method": "WebFetch https://www.gpw.co.za ，prompt: 'Find Government Gazette notice [编号或名称] full text and effective date'",
+      "update_freq": "持续",
+      "reliability": "权威(官方)",
+      "notes": "草案与生效法以公报原文为准；2026 劳工法修正 GG 54220、B-BBEE 草案 GG 54032"
+    },
+    {
+      "id": "stats_sa",
+      "name_cn": "南非统计局",
+      "name_en": "Statistics South Africa",
+      "url": "https://www.statssa.gov.za",
+      "category": "统计/半实时",
+      "datatype": "失业率、CPI、薪资基准调查、人口数据",
+      "query_method": "WebFetch https://www.statssa.gov.za ，prompt: 'Extract latest quarterly unemployment rate and CPI figure for South Africa'",
+      "update_freq": "季度/月度",
+      "reliability": "权威(官方)",
+      "notes": "CPI 用于最低工资/费率年度调整基准"
+    },
+    {
+      "id": "saqa",
+      "name_cn": "南非资格局（SAQA）",
+      "name_en": "South African Qualifications Authority",
+      "url": "https://www.saqa.org.za",
+      "category": "教育/签证/半实时",
+      "datatype": "学历评估（NQF 等级）、关键技能签证学历认证",
+      "query_method": "WebFetch https://www.saqa.org.za ，prompt: 'Extract the SAQA qualification evaluation process and fees for foreign qualifications'",
+      "update_freq": "持续",
+      "reliability": "权威(官方)",
+      "notes": "关键技能工签需 SAQA 认证（R2,145/首学历 + R900/额外）"
+    },
+    {
+      "id": "ccma",
+      "name_cn": "调解仲裁委员会（CCMA）",
+      "name_en": "CCMA",
+      "url": "https://www.ccma.org.za",
+      "category": "劳动争议/半实时",
+      "datatype": "争议受理流程、时效、LRA Schedule 8 公平程序指引",
+      "query_method": "WebFetch https://www.ccma.org.za ，prompt: 'Extract CCMA referral time limits (e.g. 30 days for unfair dismissal) and conciliation process'",
+      "update_freq": "持续",
+      "reliability": "权威(官方)",
+      "notes": "劳动争议首先经 CCMA 调解仲裁"
+    }
+  ],
+  "workflow": {
+    "实时查询": "用户问'当前最低工资/最新 PAYE 税率/某签证最新费用/某草案是否生效'时，先匹配 sources 中对应条目，用其 query_method 调 WebFetch 取实时值，再结合语料给出结论并标注'实时数据'与来源 URL。",
+    "语料补全": "发现比语料更新的法规（如 2026 劳工法修正 GG 54220），用 WebFetch 抓取摘要存入 corpus 并重建索引（见 corpus/.../build_index.py --force）。",
+    "时效标注": "凡实时抓取内容，回复中须注明'实时数据 @URL 抓取于 YYYY-MM-DD'，不与静态语料混淆。"
+  }
+}

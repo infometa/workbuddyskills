@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**78** · 专家：**400** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**81** · 专家：**405** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-03
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-04
 
 ---
 ## 目录
@@ -385,7 +385,6 @@
 | [`fbs-connector`](./connectors/fbs-connector/) | 福帮手人机协同连接器：面向 WorkBuddy 的身份识别、场景包查询、首值与继续使用记录、乐包状态确认和超级合伙人交接。 | 可能需要启用对应 MCP / 连接器 |
 | [`feishu`](./connectors/feishu/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`fyopen-lawsearch`](./connectors/fyopen-lawsearch/) | 用途：Support natural language to obtain accurate and currently effective regulatory provisi… | 可能需要启用对应 MCP / 连接器 |
-| [`gangtise-mcp`](./connectors/gangtise-mcp/) | Gangtise MCP汇聚机构级观点，纪要，日程等另类数据，提供投研AI Agent预生成数据及全球行情/财务/估值/宏观行业等结构化数据。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`GTS_ACCESS_KEY`、`GTS_SECRET_KEY` |
 | [`gildata`](./connectors/gildata/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`GILDATA_TOKEN` |
 | [`github`](./connectors/github/) | 用途：Use github connector to access github MCP capabilities via github mcp server. | 可能需要启用对应 MCP / 连接器 |
 | [`github-remote`](./connectors/github-remote/) | 用途：Use github-remote connector to access github-remote MCP capabilities via github-remote… | 可能需要启用对应 MCP / 连接器 |
@@ -405,16 +404,19 @@
 | [`lovrabet-cli`](./connectors/lovrabet-cli/) | 通过 Lovrabet Runtime CLI 访问已发布应用的数据集、运行态 API、SQL、BFF、文件、OCR、Artifact 和知识库能力。 | 需要登录 / OAuth / 扫码授权 |
 | [`mastergo-vibe-mcp`](./connectors/mastergo-vibe-mcp/) | 用途：Connect to the MasterGo canvas to allow AI to design, modify, synchronize, and retriev… | 可能需要启用对应 MCP / 连接器 |
 | [`moka`](./connectors/moka/) | 招聘和人事一体的 AI 同事，把查询与执行收进一个对话。人才推荐、招聘动态、考勤绩效、审批待办，一句话问清；智能寻聘、面试分析与面试官评估，一句话发起。 | 可能需要启用对应 MCP / 连接器 |
+| [`mx-ds-mcp`](./connectors/mx-ds-mcp/) | 用途：The financial investment research MCP tool suite, which enables natural language queri… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`neo-crm`](./connectors/neo-crm/) | 用自然语言查客户、推商机、盘线索、领公海、写跟进，一句话打通销售工作闭环。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`netease-mail`](./connectors/netease-mail/) | 通过 IMAP/SMTP 连接邮箱，支持收发邮件、搜索、附件下载。支持 163、126、yeah.net 等网易邮箱及其他标准 IMAP/SMTP 邮箱。触发关键词：邮件、邮箱、… | 需要登录 / OAuth / 扫码授权；需要按 token-schema 配置凭证 |
 | [`notion`](./connectors/notion/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`patsnap-search`](./connectors/patsnap-search/) | 用途：Search Patsnap's global patent and literature databases with natural-language, semanti… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`PATSNAP_API_KEY` |
 | [`pkulaw`](./connectors/pkulaw/) | 用途：PKULaw — Semantic (natural language) + keyword (exact / fuzzy) dual-mode retrieval ove… | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`qcc-company`](./connectors/qcc-company/) | 用途：Query and verify corporate registration information. Supports shareholder structure, a… | 可能需要启用对应 MCP / 连接器 |
+| [`qcc-legal`](./connectors/qcc-legal/) | 用途：Search and verify Chinese statutes and judicial cases through natural language. Covers… | 可能需要启用对应 MCP / 连接器 |
 | [`qingflow`](./connectors/qingflow/) | 用途：QingFlow no-code platform connector for building apps, managing records, and automatin… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`QINGFLOW_TOKEN` |
 | [`qixinhuiyan-mcp`](./connectors/qixinhuiyan-mcp/) | 启信慧眼企业信息查询工具 | 可能需要启用对应 MCP / 连接器 |
 | [`qq-mail`](./connectors/qq-mail/) | QQ邮箱(QQ Mail)全功能操作技能。触发场景：看邮箱、查邮件、收件箱、看看邮件、有没有新邮件、未读邮件、帮我看看邮箱、打开邮箱、最近的邮件、邮件列表、发邮件、写邮件、发一封… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`region-insight`](./connectors/region-insight/) | 用途：Search POIs and analyze fenced-area distributions in specified areas. | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`REGION_INSIGHT_API_KEY` |
+| [`salesnail-instructor`](./connectors/salesnail-instructor/) | 用途：Design, generate, configure, publish, and teach SalesNail games with browser-based acc… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`supabase`](./connectors/supabase/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`tapd`](./connectors/tapd/) | 管理需求、缺陷、任务和迭代。查询项目进度、拆分需求、流转状态、填写工时，覆盖研发全生命周期。 | 可能需要启用对应 MCP / 连接器 |
 | [`tapd-woa`](./connectors/tapd-woa/) | 用途：TAPD MCP tool operates various resources in TAPD via MCP protocol, including stories, … | 可能需要启用对应 MCP / 连接器 |
@@ -437,7 +439,8 @@
 | [`weisheng-scrm`](./connectors/weisheng-scrm/) | 当用户需要查询或管理微盛企微管家（企业微信） SCRM 中的客户信息、客户标签、客户群、营销素材、活码、群发、跟进记录、聊天记录、会话存档、联系人、商机、汇报、抽奖、客户日程、客… | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SCRM_APP_KEY` |
 | [`westock-mcp`](./connectors/westock-mcp/) | 提供实时行情，支持条件选股、自选管理、股价提醒与模拟交易。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`wind-finance`](./connectors/wind-finance/) | 用途：Wind data for stocks, funds, indices, bonds, news, and macroeconomics. | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`WIND_API_KEY` |
-| [`wk-workbuddy`](./connectors/wk-workbuddy/) | 用途：Built on Wolters Kluwer China's authoritative and real-time legal database, MCP servic… | 可能需要启用对应 MCP / 连接器 |
+| [`wk-workbuddy`](./connectors/wk-workbuddy/) | 威科先行依托全面、准确、及时更新的法规、案例等法律数据研发的MCP服务，支持语义检索、关键词检索等场景。 | 可能需要启用对应 MCP / 连接器 |
+| [`wps-knowledgebase`](./connectors/wps-knowledgebase/) | 用途：WPS/zhishi knowledge base CLI: list spaces, file trees, ask (SSE), share links, and sk… | 需要登录 / OAuth / 扫码授权 |
 | [`xiaoe-cloud-cli`](./connectors/xiaoe-cloud-cli/) | 用途：Manage your Xiaoe shop with natural language: query courses and students, create or up… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`yingmi-mcp`](./connectors/yingmi-mcp/) | 查询基金与市场数据，完成基金研究、组合分析、财富规划及金融内容生成。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`YINGMI_API_KEY` |
 | [`yuandian-mcp`](./connectors/yuandian-mcp/) | 用途：Huayu Yuandian Legal Data provides agents with MCP tool capabilities for laws and regu… | 可能需要启用对应 MCP / 连接器 |
@@ -641,7 +644,7 @@
 | [`trend-researcher`](./experts/trend-researcher/) | [行业趋势专家](./experts/trend-researcher/) | 持续追踪行业和技术趋势，为产品战略提供前瞻性洞察 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；需要环境变量：`BROWSER_USE_API_KEY`、`IMA_OPENAPI_APIKEY` |
 | [`vocab-craft-expert`](./experts/vocab-craft-expert/) | [智能词汇教练](./experts/vocab-craft-expert/) | 融合间隔重复记忆科学与键盘输入训练的AI英语词汇教练，支持每日定时推送、错词强化、三种练习模式，让背单词更科学高效 | 无 |
 
-### 法务安全（25）
+### 法务安全（26）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -664,6 +667,7 @@
 | [`legal-search-pro`](./experts/legal-search-pro/) | [法律检索专家](./experts/legal-search-pro/) | 识别检索意图与场景，按法源位阶检索法规与类案，验证效力评估相似度，适配14种输出可溯源报告。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`litigation-legal`](./experts/litigation-legal/) | [诉讼支持顾问](./experts/litigation-legal/) | 面向诉讼律师的案件支持专家，梳理案件、证据、时间线、质证准备、索赔图表和文书草稿。 | 需要微信/企微相关凭证或扫码登录 |
 | [`marketing-reviewer`](./experts/marketing-reviewer/) | [营销文案审查官](./experts/marketing-reviewer/) | 9维度34条规则扫描营销文案，定位广告法与隐私合规风险，输出分级Excel与HTML审查报告。 | 无（可选 API/账号以增强能力） |
+| [`sa-legal-compliance`](./experts/sa-legal-compliance/) | [南非法务合规专家](./experts/sa-legal-compliance/) | 专注南非法务合规领域，覆盖公司注册、合同管理、知识产权保护、数据隐私合规、行业准入与争议解决等关键领域。 | 无 |
 | [`smb-compliance`](./experts/smb-compliance/) | [客户与合规官](./experts/smb-compliance/) | 小企业客户与合规官，处理客户反馈、客诉工单、CRM清理和合同风险审查 | 需要微信/企微相关凭证或扫码登录 |
 | [`soe`](./experts/soe/) | [腾讯云安全运营专家](./experts/soe/) | 分析WAF/主机安全/云防火墙/SOC/御界/天幕的告警/事件等离线数据，含漏洞、攻击、溯源分析。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`tax-compliance-team`](./experts/tax-compliance-team/) | [财税合规专家团](./experts/tax-compliance-team/) | 覆盖票据处理、记账核算、报表编制、税务申报、合规审计五大环节的企业财税合规全链路管理专家团 | 无 |
@@ -774,7 +778,7 @@
 | [`trend-hunter`](./experts/trend-hunter/) | [自媒体热点雷达与内容增长官](./experts/trend-hunter/) | 追踪微博抖音小红书全网热搜，关键词过滤加竞品监控，从选题文案到视频与全平台分发，打通内容全链路 | 需要微信/企微相关凭证或扫码登录 |
 | [`wechat-channels-strategist`](./experts/wechat-channels-strategist/) | [微信视频号运营策略师](./experts/wechat-channels-strategist/) | 精通视频号社交推荐与生态联动，专注内容策划、直播带货、社交裂变与私域闭环，助力视频号从0到1增长 | 需要微信/企微相关凭证或扫码登录 |
 
-### 行业顾问（31）
+### 行业顾问（33）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -804,13 +808,15 @@
 | [`personal-fitness-coach`](./experts/personal-fitness-coach/) | [私人健身营养教练](./experts/personal-fitness-coach/) | 专业务实的私人健身教练，制定可执行的训练计划、动作指导与饮食宏量方案，安全第一，鼓励但不废话。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要环境变量：`DEMO_KEY`、`USDA_API_KEY` |
 | [`skillhub-charity-expert-team`](./experts/skillhub-charity-expert-team/) | [技术公益专家团](./experts/skillhub-charity-expert-team/) | 首席协调官星星带领六位专家，覆盖公益技能从需求分析、编写、测试、社会价值评审、版权确认和打包交付的全流程。 | 可能需要启用对应 MCP / 连接器 |
 | [`smb-team`](./experts/smb-team/) | [经营总管](./experts/smb-team/) | 经营总管调度四位领域专家，覆盖财务、营收、客户合规和运营，小企业管理一站搞定 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录 |
+| [`south-africa-strategy-advisor`](./experts/south-africa-strategy-advisor/) | [南非战略顾问专家](./experts/south-africa-strategy-advisor/) | 专注南非市场的战略顾问，覆盖宏观环境、产业趋势、投资选址、进入模式与风险评估，提供数据驱动决策支持。 | 无 |
 | [`study-planner`](./experts/study-planner/) | [学习规划师](./experts/study-planner/) | 严格导师+效率工具，帮你把模糊的备考目标变成可执行、可追踪、可调整的学习计划，不废话，只做实事。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要环境变量：`BAIDU_API_KEY` |
 | [`tanyuan-cultural-heritage-expert`](./experts/tanyuan-cultural-heritage-expert/) | [腾讯探元文博专家](./experts/tanyuan-cultural-heritage-expert/) | 基于腾讯探元文博知识库，提供文物与世界遗产查询、知识问答、文物对比、文博攻略及研学方案等专业服务。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`terminal-veteran`](./experts/terminal-veteran/) | [终端产业分析师](./experts/terminal-veteran/) | 近三十年终端老兵，11条铁律+三层方法论，厂商策略/渠道选品/投资分析+行业报告 | 无 |
 | [`tripstar-agent`](./experts/tripstar-agent/) | [旅游攻略管家](./experts/tripstar-agent/) | 生活服务管家，一站式搞定行程规划、景点/酒店/天气/预算与美团红包领取 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要 12306 账号登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`AUTH_SCRIPT`、`USER_TOKEN` |
+| [`vietnam-public-affairs`](./experts/vietnam-public-affairs/) | [越南公共事务专家](./experts/vietnam-public-affairs/) | 精通越南政府关系、政策解读、监管沟通、行业协会、公共舆论、社会责任、媒体关系和危机公关 | 无 |
 | [`worldcup-buddy`](./experts/worldcup-buddy/) | [世界杯看球搭子](./experts/worldcup-buddy/) | 陪你看2026世界杯，懂球随性有料：查赛程比分、赛后复盘，还能算胜率、爆冷概率和晋级形势。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要环境变量：`API_KEY` |
 
-### 运营人力（13）
+### 运营人力（14）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -825,10 +831,11 @@
 | [`recruitment-expert`](./experts/recruitment-expert/) | [招聘专家](./experts/recruitment-expert/) | 精通人才招聘全流程，为团队找到最佳人才 | 需要飞书应用凭证或用户登录授权 |
 | [`resume-assistant`](./experts/resume-assistant/) | [简历优化专家](./experts/resume-assistant/) | 提供百分制专业评分、四十项深度清单润色、岗位匹配定制与多格式导出，全面打造高竞争力求职简历。 | 无（可选 API/账号以增强能力） |
 | [`smb-operations`](./experts/smb-operations/) | [组织运营师](./experts/smb-operations/) | 小企业组织运营师，负责招聘入职、工具初始化和业务快照，让运营不掉链子 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录 |
+| [`south-africa-hr-admin`](./experts/south-africa-hr-admin/) | [南非人力行政专家](./experts/south-africa-hr-admin/) | 南非人力行政专家，覆盖招聘、薪酬、签证、B-BBEE与劳动合规，可算成本、查费用、生成可视化交付物。 | 无（可选 API/账号以增强能力） |
 | [`study-abroad-consultant`](./experts/study-abroad-consultant/) | [留学顾问](./experts/study-abroad-consultant/) | 精通各国留学申请流程和院校信息 | 无（可选 API/账号以增强能力） |
 | [`supply-chain-strategist`](./experts/supply-chain-strategist/) | [供应链策略师](./experts/supply-chain-strategist/) | 优化供应链每个环节，实现成本效率韧性的最佳平衡 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；需要环境变量：`BROWSER_USE_API_KEY`、`TMAP_WEBSERVICE_KEY` |
 
-### 金融投资（36）
+### 金融投资（37）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -866,6 +873,7 @@
 | [`tdx-value-assessor`](./experts/tdx-value-assessor/) | [价值评估师](./experts/tdx-value-assessor/) | 秉承格雷厄姆-巴菲特价值体系，运用15+估值模型，通过护城河评估与多维估值分析，评估企业内在价值与安全边际水平。 | 可能需要启用对应 MCP / 连接器 |
 | [`trading-agent`](./experts/trading-agent/) | [交易分析团队](./experts/trading-agent/) | 13位专业角色分5阶段协作完成投资分析：技术面、基本面、新闻面、情绪面数据采集 → 多空辩论 → 交易决策 → 三方风险评估 → 最终报告，输出 BUY/SELL/HOLD 建议… | 无 |
 | [`valuation-reviewer`](./experts/valuation-reviewer/) | [组合估值主管](./experts/valuation-reviewer/) | PE/VC 基金组合估值主管,收 GP 估值包、跑标准估值模板、算基金 NAV 与 LP 分配、出 LP 报告草稿交投资者关系签核。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
+| [`vietnam-finance-tax-expert`](./experts/vietnam-finance-tax-expert/) | [越南财税金融专家](./experts/vietnam-finance-tax-expert/) | 覆盖越南企业税务、会计、银行、外汇与财务合规，提供选址测算、税负计算与ODI落地等可量化交付物。 | 无（可选 API/账号以增强能力） |
 | [`wealth-management`](./experts/wealth-management/) | [财富管理专家](./experts/wealth-management/) | 财富管理工具集：客户回顾、财务规划、投资组合再平衡、税损收割、投资提案和客户报告生成 | 可能需要启用对应 MCP / 连接器 |
 | [`yahoo-finance-cli`](./experts/yahoo-finance-cli/) | [行情洞察与趋势发现专家](./experts/yahoo-finance-cli/) | 查询全球股票实时行情、基本面、财报预期、评级、历史走势与估值洞察，发现热门趋势标的，支持模糊检索与并排对比。 | 无 |
 

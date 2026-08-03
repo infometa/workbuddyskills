@@ -7,7 +7,6 @@ tools:
   - Write
   - Bash
   - web_search
-model: inherit
 permissionMode: acceptEdits
 ---
 

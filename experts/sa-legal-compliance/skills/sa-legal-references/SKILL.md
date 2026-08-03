@@ -1,0 +1,129 @@
+---
+name: sa-legal-references
+description: |
+  South Africa legal compliance reference corpus. Provides indexed access to 118 core legal documents (statutes, codes, regulations, procedural rules) covering company law, labour, tax, B-BBEE, data privacy, IP, mining, environment, dispute resolution, and more.
+  Trigger: South Africa law, company registration, POPIA, labour law, tax compliance, B-BBEE, mining regulation, arbitration.
+---
+
+This skill provides fast access to extracted key provisions from 118 core South African statutes, codes, regulations, and procedural rules. Use these references when answering questions about company law, corporate governance (King IV), M&A, business rescue, data protection, access to information, consumer protection, electronic transactions, cyber crime, intellectual property, labour relations, employment conditions, employment equity, occupational health and safety, mine health and safety, COIDA (work injury compensation), skills development (SDA + SDL levy), unemployment insurance (UIF), immigration, arbitration, international arbitration, PEPUDA anti-discrimination, protected disclosures/whistleblowing, regulatory procedures, anti-corruption (PRECCA), black economic empowerment (B-BBEE Act + Codes + 6 sector charters + Mining Charter), AML/CFT compliance, consumer credit, competition, investment protection, financial sector regulation (twin peaks), financial markets, banking, insurance (long-term + short-term), financial advisory and intermediary services, pension funds, mining and petroleum resources, electricity regulation, income tax, VAT, tax administration, customs and excise duties, carbon tax, securities transfer tax, expropriation and land reform, land restitution, illegal eviction (PIE), environmental management (NEMA + waste + air quality + water), heritage resources, insolvency and liquidation, administrative justice (PAJA), foreign exchange control, product standards and compulsory specifications, building standards, food, medicines, hazardous substances, High Court procedure, Magistrates Court procedure, CCMA rules, public finance (PFMA), government procurement (PPPFA), construction (CIDB), deeds registries, sectional titles, spatial planning (SPLUMA), rental housing, prescription, and the Constitution of South Africa.
+
+## Reference Files
+
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Admiralty_Act105_1983_KeyProvisions.txt` -- Admiralty_Act105_1983
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Admiralty_Summary.txt` -- Admiralty [Summary]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Arbitration_Act42_1965_KeyProvisions.txt` -- Arbitration_Act42_1965
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/B-BBEE_KeyProvisions.txt` -- B-BBEE
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BBBEE_AgriBEESectorCode_2017_KeyProvisions.txt` -- BBBEE_AgriBEESectorCode_2017
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BBBEE_Codes_2019_KeyProvisions.txt` -- BBBEE_Codes_2019
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BBBEE_DefenceSectorCode_2018_KeyProvisions.txt` -- BBBEE_DefenceSectorCode_2018
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BBBEE_DraftAmendment_Jan2026_KeyProvisions.txt` -- BBBEE_DraftAmendment_Jan2026
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BBBEE_FinancialSectorCode_2017_KeyProvisions.txt` -- BBBEE_FinancialSectorCode_2017
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BBBEE_ICTSectorCode_2016_KeyProvisions.txt` -- BBBEE_ICTSectorCode_2016
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BBBEE_Statement500_2019_KeyProvisions.txt` -- BBBEE_Statement500_2019
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BBBEE_Statements000_300_400_2019_KeyProvisions.txt` -- BBBEE_Statements000_300_400_2019
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BCEA_Act75_1997_KeyProvisions.txt` -- BCEA_Act75_1997
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BCEA_SectoralDets_Summary.txt` -- BCEA_SectoralDets [Summary]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Banks_Act94_1990_KeyProvisions.txt` -- Banks_Act94_1990
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/BuildingStandards_Act103_1977_KeyProvisions.txt` -- BuildingStandards_Act103_1977
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CCMA_InfoSheet_Jan2025_KeyProvisions.txt` -- CCMA_InfoSheet_Jan2025
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CCMA_Rules_2023_KeyProvisions.txt` -- CCMA_Rules_2023
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CIDB_Act38_2000_KeyProvisions.txt` -- CIDB_Act38_2000
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CIPC_FeeSchedule_2026.txt` -- CIPC_FeeSchedule_2026
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/COIDA_Act130_1993_KeyProvisions.txt` -- COIDA_Act130_1993
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CPA_Act68_2008_KeyProvisions.txt` -- CPA_Act68_2008
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CarbonTax_Act15_2019_KeyProvisions.txt` -- CarbonTax_Act15_2019
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CaseLaw_Note.txt` -- CaseLaw [Note]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/ChinaSA_DTA_2000_KeyProvisions.txt` -- ChinaSA_DTA_2000
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/China_SA_CommonPitfalls.txt` -- China_SA_CommonPitfalls
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CompaniesAct71_2008_KeyProvisions.txt` -- CompaniesAct71_2008
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CompaniesRegulations_2011_KeyProvisions.txt` -- CompaniesRegulations_2011
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CompetitionAct89_1998_KeyProvisions.txt` -- CompetitionAct89_1998
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Compliance_Checklist_ZAReg_2026.txt` -- Compliance_Checklist_ZAReg_2026
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Constitution_1996_KeyProvisions.txt` -- Constitution_1996
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Copyright_Act98_1978_KeyProvisions.txt` -- Copyright_Act98_1978
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CriminalProcedure_Act51_1977_KeyProvisions.txt` -- CriminalProcedure_Act51_1977
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/CustomsExcise_Act91_1964_KeyProvisions.txt` -- CustomsExcise_Act91_1964
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Cybercrimes_Act19_2020_KeyProvisions.txt` -- Cybercrimes_Act19_2020
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/DHA_VisaFees_2026.txt` -- DHA_VisaFees_2026
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/DeedsRegistries_Act47_1937_KeyProvisions.txt` -- DeedsRegistries_Act47_1937
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Designs_Act195_1993_KeyProvisions.txt` -- Designs_Act195_1993
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/ECA_Act36_2005_KeyProvisions.txt` -- ECA_Act36_2005
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/ECA_Summary.txt` -- ECA [Summary]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/ECTA_Act25_2002_KeyProvisions.txt` -- ECTA_Act25_2002
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/EEA_KeyProvisions.txt` -- EEA
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/ElectricityRegulation_Act4_2006_KeyProvisions.txt` -- ElectricityRegulation_Act4_2006
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/ExchangeControlRegs_KeyProvisions.txt` -- ExchangeControlRegs
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Expropriation_Act13_2024_KeyProvisions.txt` -- Expropriation_Act13_2024
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/FAIS_Act37_2002_KeyProvisions.txt` -- FAIS_Act37_2002
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/FICA_KeyProvisions.txt` -- FICA
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/FMA_Act19_2012_KeyProvisions.txt` -- FMA_Act19_2012
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/FSRAct_Act9_2017_KeyProvisions.txt` -- FSRAct_Act9_2017
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Foodstuffs_Act54_1972_KeyProvisions.txt` -- Foodstuffs_Act54_1972
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/HazardousSubstances_Act15_1973_KeyProvisions.txt` -- HazardousSubstances_Act15_1973
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/HeritageResources_Act25_1999_KeyProvisions.txt` -- HeritageResources_Act25_1999
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Immigration_Act13_2002_KeyProvisions.txt` -- Immigration_Act13_2002
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/IncomeTax_Act58_1962_KeyProvisions.txt` -- IncomeTax_Act58_1962
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Insolvency_Act24_1936_KeyProvisions.txt` -- Insolvency_Act24_1936
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/InternationalArbitration_Act15_2017_KeyProvisions.txt` -- InternationalArbitration_Act15_2017
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/JSE_ListingRequirements_Summary.txt` -- JSE_ListingRequirements [Summary]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/KingIV_2016_KeyProvisions.txt` -- KingIV_2016
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/LRA_Act66_1995_KeyProvisions.txt` -- LRA_Act66_1995
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/LRA_DismissalCode_Summary.txt` -- LRA_DismissalCode [Summary]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/LandRestitution_Act22_1994_KeyProvisions.txt` -- LandRestitution_Act22_1994
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/LongTermInsurance_Act52_1998_KeyProvisions.txt` -- LongTermInsurance_Act52_1998
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/MHSA_Act29_1996_KeyProvisions.txt` -- MHSA_Act29_1996
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/MPRDA_Act28_2002_KeyProvisions.txt` -- MPRDA_Act28_2002
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/MagistratesCourtRules_Amendment_2026_KeyProvisions.txt` -- MagistratesCourtRules_Amendment_2026
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Medicines_Act101_1965_KeyProvisions.txt` -- Medicines_Act101_1965
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/MiningCharterIII_2018_KeyProvisions.txt` -- MiningCharterIII_2018
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/MiningCharterIII_Guidelines_2018_KeyProvisions.txt` -- MiningCharterIII_Guidelines_2018
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/NCA_KeyProvisions.txt` -- NCA
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/NEMA_AirQuality_Act39_2004_KeyProvisions.txt` -- NEMA_AirQuality_Act39_2004
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/NEMA_KeyProvisions.txt` -- NEMA
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/NEMBA_Biodiversity_Act10_2004_KeyProvisions.txt` -- NEMBA_Biodiversity_Act10_2004
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/NERSA_Act40_2004_KeyProvisions.txt` -- NERSA_Act40_2004
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/NRCS_Act5_2008_KeyProvisions.txt` -- NRCS_Act5_2008
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/NationalWater_Act36_1998_KeyProvisions.txt` -- NationalWater_Act36_1998
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/OHSA_Act85_1993_KeyProvisions.txt` -- OHSA_Act85_1993
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/OHSA_ConstructionRegs_Summary.txt` -- OHSA_ConstructionRegs [Summary]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/OHSA_MajorHazard_Summary.txt` -- OHSA_MajorHazard [Summary]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/PAIA_Act2_2000_KeyProvisions.txt` -- PAIA_Act2_2000
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/PAJA_KeyProvisions.txt` -- PAJA
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/PFMA_Act1_1999_KeyProvisions.txt` -- PFMA_Act1_1999
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/PIE_Act19_1998_KeyProvisions.txt` -- PIE_Act19_1998
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/POPIA_Act4_2013_KeyProvisions.txt` -- POPIA_Act4_2013
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/POPIA_Regulations_2018_KeyProvisions.txt` -- POPIA_Regulations_2018
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/PPPFA_Act5_2000_KeyProvisions.txt` -- PPPFA_Act5_2000
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/PRECCA_Act12_2004_KeyProvisions.txt` -- PRECCA_Act12_2004
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Patents_Act57_1978_KeyProvisions.txt` -- Patents_Act57_1978
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/PensionFunds_Act24_1956_KeyProvisions.txt` -- PensionFunds_Act24_1956
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/PetroleumPipelines_Act60_2003_KeyProvisions.txt` -- PetroleumPipelines_Act60_2003
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Prescription_Act68_1969_KeyProvisions.txt` -- Prescription_Act68_1969
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Prescription_Limitation_SA.txt` -- Prescription_Limitation_SA
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/PromotionEquality_Act4_2000_KeyProvisions.txt` -- PromotionEquality_Act4_2000
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/ProtectedDisclosures_Act26_2000_KeyProvisions.txt` -- ProtectedDisclosures_Act26_2000
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/ProtectionOfInvestmentAct22_2015_KeyProvisions.txt` -- ProtectionOfInvestmentAct22_2015
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/RAF_Act56_1996_KeyProvisions.txt` -- RAF_Act56_1996
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/RentalHousing_Act50_1999_KeyProvisions.txt` -- RentalHousing_Act50_1999
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SACU_AfCFTA_AGOA_Summary.txt` -- SACU_AfCFTA_AGOA [Summary]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SARB_BusinessCycleIndicators_Jul2026_KeyProvisions.txt` -- SARB_BusinessCycleIndicators_Jul2026
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SARB_CurrencyImagePolicy_KeyProvisions.txt` -- SARB_CurrencyImagePolicy
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SARS_TaxRates_2026.txt` -- SARS_TaxRates_2026
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SA_Regulator_Contacts.txt` -- SA_Regulator_Contacts
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SA_SEZ_SanctionsExchange_KeyProvisions.txt` -- SA_SEZ_SanctionsExchange
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SEZ_Act16_2014_KeyProvisions.txt` -- SEZ_Act16_2014
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SPLUMA_Act16_2013_KeyProvisions.txt` -- SPLUMA_Act16_2013
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/STT_Act25_2007_KeyProvisions.txt` -- STT_Act25_2007
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SectionalTitlesSchemes_Act8_2011_KeyProvisions.txt` -- SectionalTitlesSchemes_Act8_2011
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/ShortTermInsurance_Act53_1998_KeyProvisions.txt` -- ShortTermInsurance_Act53_1998
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SkillsDevLevies_Act9_1999_KeyProvisions.txt` -- SkillsDevLevies_Act9_1999
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/SkillsDev_Act97_1998_KeyProvisions.txt` -- SkillsDev_Act97_1998
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Standards_Act8_2008_KeyProvisions.txt` -- Standards_Act8_2008
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/TaxAdministration_Act28_2011_KeyProvisions.txt` -- TaxAdministration_Act28_2011
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/TradeMarks_Act194_1993_KeyProvisions.txt` -- TradeMarks_Act194_1993
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/TrustProperty_Act57_1988_KeyProvisions.txt` -- TrustProperty_Act57_1988
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/TrustProperty_Summary.txt` -- TrustProperty [Summary]
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/UIF_Act63_2001_KeyProvisions.txt` -- UIF_Act63_2001
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/UniformRulesOfCourt_KeyProvisions.txt` -- UniformRulesOfCourt
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/VAT_Act89_1991_KeyProvisions.txt` -- VAT_Act89_1991
+- `https://southafrica-legal-compliance-1257812465.cos.ap-shanghai.myqcloud.com/references/Waste_Act59_2008_KeyProvisions.txt` -- Waste_Act59_2008
