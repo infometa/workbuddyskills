@@ -105,6 +105,7 @@
 
 | 命令 | 用途 | 必填参数 | 路由提醒 |
 |------|------|----------|----------|
+| `workflow edit-example` | 获取编辑文档与 DSL 示例 | 无 | create/update 前优先调用，内容由服务端提供 |
 | `workflow create` | 创建并发布工作流 | `--base-id` `--dsl` | `--dsl` 为完整 workflow-dsl/v1；非幂等，不自动重试 |
 | `workflow update` | 更新并发布工作流 | `--base-id` `--workflow-id` `--dsl` | 全量替换，先 get 留底；检查 `data.valid/issues` |
 | `workflow list` | 列出 Base 下所有工作流 | `--base-id` | 支持 `--limit [1,100]` / `--offset >=0`；list 出参字段叫 `flowId` |

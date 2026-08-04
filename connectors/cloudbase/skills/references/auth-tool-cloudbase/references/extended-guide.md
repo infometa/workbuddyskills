@@ -122,7 +122,9 @@ Preferred MCP tool path: `manageAppAuth(action="patchLoginStrategy")`
 
 Use `patch.phone = true/false` for the login method itself.
 
-If SMS provider behavior also needs to change, keep using provider-side or raw API configuration for the extra fields such as `SmsVerificationConfig`.
+**Default SMS channel is ready out of the box.** After `patch.phone = true`, the CloudBase default SMS channel sends and receives verification codes without any extra setup — no SMS signature, template, or custom provider configuration is required. Frontend flow: `auth.getVerification({ phone_number })` to send the code, then `auth.signInWithSms({ verificationInfo, verificationCode, phoneNum })` to sign in. Note: SMS login is only supported in the `ap-shanghai` region, and phone numbers must include a country code (e.g. `+86 13800000000`).
+
+Only when you need custom SMS templates, custom signatures, or a different SMS vendor should you configure a custom SMS channel (or raw API fields such as `SmsVerificationConfig`). Do not block SMS login on provider/signature setup — the default channel already works.
 
 Short MCP example:
 
@@ -414,6 +416,14 @@ Use `listApiKeys` for a general key inventory view. It supports optional `keyTyp
 }
 ```
 `createApiKey` defaults to `publish_key` when `keyType` is omitted, but it can also create `api_key` for generic service-side access.
+
+The response carries a `created` flag verified against the server-side key inventory:
+
+- `created: true` — a genuinely new key was issued.
+- `created: false` — the backend returned an already-existing key (this is what happens for `publish_key`, which is unique per environment). In that case `keyName` / `expireIn` had no effect and a `warnings` array explains what was ignored.
+- `created` absent — the inventory read failed, so creation could not be verified.
+
+`keyName`, `expireAt`, and `createdAt` in the response are always the server-stored values, never an echo of the request parameters. Never treat a `created: false` result as a short-lived credential: it is the environment's long-lived publishable key, and revoking it affects all normal traffic. To provision a temporary credential, use `keyType: "api_key"` and confirm `created: true`.
 
 **Delete an API key**:
 ```json

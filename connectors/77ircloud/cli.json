@@ -1,0 +1,40 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=18"
+    },
+    "init": {
+        "darwin": "npm install -g https://oss-openclaw.77ircloud.com/cli_tools/workbuddy/npm/ircloud-cli-workbuddy-1.0.0.tgz",
+        "linux": "npm install -g https://oss-openclaw.77ircloud.com/cli_tools/workbuddy/npm/ircloud-cli-workbuddy-1.0.0.tgz",
+        "win32": "npm install -g https://oss-openclaw.77ircloud.com/cli_tools/workbuddy/npm/ircloud-cli-workbuddy-1.0.0.tgz"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "ircloud-cli version",
+            "linux": "ircloud-cli version",
+            "win32": "ircloud-cli.cmd version"
+        },
+        "minVersion": "1.0.0"
+    },
+    "auth": [
+        {
+            "command": {
+                "darwin": "ircloud-cli auth login",
+                "linux": "ircloud-cli auth login",
+                "win32": "ircloud-cli.cmd auth login"
+            },
+            "authUrlDomain": "openapi.77ircloud.com"
+        }
+    ],
+    "unAuth": {
+        "darwin": "ircloud-cli auth logout",
+        "linux": "ircloud-cli auth logout",
+        "win32": "ircloud-cli.cmd auth logout"
+    },
+    "status": {
+        "darwin": "ircloud-cli auth status",
+        "linux": "ircloud-cli auth status",
+        "win32": "ircloud-cli.cmd auth status"
+    },
+    "statusMatch": "已登录"
+}

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.0.0",
-  "lastUpdated": "2026-08-03T09:32:18Z",
+  "lastUpdated": "2026-08-04T15:12:48Z",
   "author": {
     "name": "AI Expert Center",
     "source": "https://github.com/msitarzewski/agency-agents",
@@ -26706,13 +26706,13 @@
         "zh": "鹅厂职业经纪人"
       },
       "description": {
-        "zh": "陪你梳理职业画像，讨论发展与转型方向，并推荐课程、经验文章、内部案例和活水机会。",
-        "en": "I help you clarify your career profile, discuss growth and transition directions, and recommend courses, experience articles, internal cases, and liveflow opportunities."
+        "zh": "陪你梳理职业画像，讨论发展与转型方向，并推荐课程、经验文章、内部案例和活水机会。（对话独立存储、特殊加密，仅你可见！）",
+        "en": "I help you clarify your career profile, discuss growth and transition directions, and recommend courses, experience articles, internal cases, and liveflow opportunities. (Conversations are stored separately and specially encrypted — visible only to you!)"
       },
       "promptFile": "/plugins/career-broker/agents/career-broker.md",
       "avatar": "/avatars/CareerBroker.png",
       "createdAt": "2026-07-27T03:12:52Z",
-      "updatedAt": "2026-07-27T03:12:52Z",
+      "updatedAt": "2026-08-04T15:12:48Z",
       "defaultInitPrompt": {
         "en": "As my career broker, what can you do for me?",
         "zh": "作为我的经纪人，你可以做什么事情？"
@@ -28304,7 +28304,7 @@
       "promptFile": "/plugins/sa-legal-compliance/agents/sa-legal-compliance.md",
       "avatar": "/avatars/SaLegalCompliance.png",
       "createdAt": "2026-08-03T09:24:54Z",
-      "updatedAt": "2026-08-03T09:32:18Z",
+      "updatedAt": "2026-08-03T09:24:54Z",
       "defaultInitPrompt": {
         "zh": "南非公司注册需要哪些步骤和文件？",
         "en": "What steps and documents are needed for company registration in South Africa?"
@@ -28343,6 +28343,138 @@
       "author": {
         "zh": "WorkBuddy",
         "en": "WorkBuddy"
+      }
+    },
+    {
+      "id": "MarketingGrowthTeam",
+      "displayName": {
+        "en": "Marketing Growth Team",
+        "zh": "营销增长专家团"
+      },
+      "profession": {
+        "en": "Marketing Growth Team",
+        "zh": "营销增长专家团"
+      },
+      "description": {
+        "en": "Full-stack marketing growth team with fCMO-level strategy, CRO, SEO, growth engineering, and analytics for SaaS products.",
+        "zh": "fCMO 级全栈营销增长团队：转化率优化、SEO 与内容策略、增长工程、数据归因分析与策略规划，全方位助力 SaaS 产品增长"
+      },
+      "promptFile": "/plugins/marketing-growth-team/agents/marketing-growth-team-lead.md",
+      "avatar": "/avatars/MarketingGrowthTeam.png",
+      "categoryId": "05-MarketingGrowth",
+      "expertType": "team",
+      "agentName": "marketing-growth-team-lead",
+      "plugin": "marketing-growth-team",
+      "defaultInitPrompt": {
+        "en": "Create a 90-day marketing plan for my SaaS product",
+        "zh": "为我的 SaaS 产品制定 90 天营销计划"
+      },
+      "tags": [
+        {
+          "en": "SaaS Growth Strategy",
+          "zh": "SaaS 增长策略"
+        },
+        {
+          "en": "Conversion Rate Optimization",
+          "zh": "转化率优化"
+        },
+        {
+          "en": "Full-Stack Marketing",
+          "zh": "全栈营销"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Create a 90-day marketing plan for my SaaS product",
+          "zh": "为我的 SaaS 产品制定 90 天营销计划"
+        },
+        {
+          "en": "Audit my landing page for conversion optimization",
+          "zh": "审计我的落地页并给出转化优化建议"
+        },
+        {
+          "en": "Give me 5 growth ideas based on my product and stage",
+          "zh": "根据我的产品和阶段推荐 5 个增长策略"
+        }
+      ],
+      "members": [
+        {
+          "id": "marketing-growth-team-lead",
+          "displayName": {
+            "en": "Sheng",
+            "zh": "盛全局"
+          },
+          "profession": {
+            "en": "Chief Marketing Strategist",
+            "zh": "首席营销策略师"
+          },
+          "avatar": "/avatars/MktGrowth-TeamLead.png",
+          "promptFile": "/plugins/marketing-growth-team/agents/marketing-growth-team-lead.md",
+          "role": "lead"
+        },
+        {
+          "id": "cro-specialist",
+          "displayName": {
+            "en": "Zhuan",
+            "zh": "专化率"
+          },
+          "profession": {
+            "en": "CRO & Conversion Specialist",
+            "zh": "转化率优化师"
+          },
+          "avatar": "/avatars/MktGrowth-CroSpecialist.png",
+          "promptFile": "/plugins/marketing-growth-team/agents/cro-specialist.md",
+          "role": "member"
+        },
+        {
+          "id": "seo-content-strategist",
+          "displayName": {
+            "en": "Suo",
+            "zh": "索引擎"
+          },
+          "profession": {
+            "en": "SEO & Content Strategist",
+            "zh": "搜索引擎与内容优化师"
+          },
+          "avatar": "/avatars/MktGrowth-SeoContentStrategist.png",
+          "promptFile": "/plugins/marketing-growth-team/agents/seo-content-strategist.md",
+          "role": "member"
+        },
+        {
+          "id": "growth-engineer",
+          "displayName": {
+            "en": "Zeng",
+            "zh": "曾长洋"
+          },
+          "profession": {
+            "en": "Growth Engineer & Acquisition Lead",
+            "zh": "增长与获客负责人"
+          },
+          "avatar": "/avatars/MktGrowth-GrowthEngineer.png",
+          "promptFile": "/plugins/marketing-growth-team/agents/growth-engineer.md",
+          "role": "member"
+        },
+        {
+          "id": "analytics-revops-lead",
+          "displayName": {
+            "en": "Shu",
+            "zh": "数据源"
+          },
+          "profession": {
+            "en": "Analytics & Revenue Operations Lead",
+            "zh": "数据分析与营收运营负责人"
+          },
+          "avatar": "/avatars/MktGrowth-AnalyticsRevopsLead.png",
+          "promptFile": "/plugins/marketing-growth-team/agents/analytics-revops-lead.md",
+          "role": "member"
+        }
+      ],
+      "createdAt": "2026-08-04T00:00:00Z",
+      "updatedAt": "2026-08-04T00:00:00Z",
+      "isOPC": false,
+      "author": {
+        "zh": "WorkBuddy团队",
+        "en": "WorkBuddy Team"
       }
     }
   ]

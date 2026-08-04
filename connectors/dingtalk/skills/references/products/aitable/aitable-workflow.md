@@ -7,6 +7,7 @@
 
 | 命令 | 用途 |
 |------|------|
+| `workflow edit-example` | 获取工作流编辑文档与 workflow-dsl/v1 示例 |
 | `workflow create` | 创建并发布自动化工作流 |
 | `workflow update` | 更新并发布已有自动化工作流 |
 | `workflow list` | 列出 Base 下所有工作流（含状态/创建人/最后修改时间），支持分页 |
@@ -14,11 +15,11 @@
 | `workflow enable` | 启用指定工作流（按配置的触发条件自动执行） |
 | `workflow disable` | 禁用指定工作流（高危，建议 `--yes` 二次确认） |
 
-> 所有子命令的 `--base-id` 必填（可用隐藏别名 `--base`）。
+> `workflow edit-example` 无参数；其他子命令的 `--base-id` 必填（可用隐藏别名 `--base`）。
 
 ## DSL 入参格式与最小 Demo
 
-`workflow create/update` 的 `--dsl` 接收完整的 `workflow-dsl/v1` JSON object，不是局部 patch。支持内联 JSON、`@文件路径` 或 `-` 从 stdin 读取。
+先运行 `workflow edit-example` 获取服务端提供的最新编辑文档和示例。`workflow create/update` 的 `--dsl` 接收完整的 `workflow-dsl/v1` JSON object，不是局部 patch。支持内联 JSON、`@文件路径` 或 `-` 从 stdin 读取。
 
 复杂工作流应先用 `table get` / `field get` / `view list` 确认真实 `sheetId`、`fieldId`、`viewId`，并检查所有 `next`、`loopEntry`、branch `to` 和 ref。下面是一个不依赖数据表字段的最小定时消息工作流：
 
@@ -52,6 +53,14 @@
 create 和 update 都必须同时满足 `status=success`、`data.valid=true`、`data.issues=[]` 才表示发布成功。
 
 ## 命令详情
+
+### workflow edit-example — 获取编辑文档与示例
+
+```bash
+dws aitable workflow edit-example --format json
+```
+
+该命令无业务参数，调用 `aitable/edit_workflow_example` 返回服务端提供的工作流编辑文档和示例。创建或更新复杂工作流前优先调用它，避免依赖可能过期的本地 DSL 结构。
 
 ### workflow create — 创建并发布工作流
 

@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**81** · 专家：**405** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**87** · 专家：**406** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-04
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-05
 
 ---
 ## 目录
@@ -367,7 +367,9 @@
 
 | 目录 | 用来做什么 | 前置条件 |
 |------|------------|----------|
+| [`77ircloud`](./connectors/77ircloud/) | 用途：Manage IRCloud Easy Order via CLI. | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`agentkey`](./connectors/agentkey/) | AgentKey 是 AI 助手获取可信工具和实时数据的能力市场。支持网页搜索、URL抓取、新闻、社交媒体、股票市场价格、电商产品数据、企业/公司数据、天气、地图和地理位置、旅行… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`ai-hive`](./connectors/ai-hive/) | 连接全球 100+ 顶尖 AI 模型，一键搞定文本、图像、视频创作。 | 可能需要启用对应 MCP / 连接器 |
 | [`anydev`](./connectors/anydev/) | 云研发的Skill服务，为大模型赋予AnyDev环境的全生命周期管理能力：支持查询和智能推荐环境模板、一键创建云研发环境，能够远程执行命令、上传文件、自动化部署，也可以按需开启 … | 需要登录 / OAuth / 扫码授权 |
 | [`archive-hospital-mcp`](./connectors/archive-hospital-mcp/) | 全周期管理平台机构端 AI 智能体的 MCP 连接器。基于原有全周期管理平台，通过 WorkBuddy 对话式入口，实现对全周期管理平台的操作 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`INVALID_TOKEN` |
 | [`awesun`](./connectors/awesun/) | 通过命令行管理远端设备，实时监测在线状态、秒级发起远程控制、快速传输文件及远程截屏。零部署、免更新，轻松实现智能批量运维。 | 需要登录 / OAuth / 扫码授权 |
@@ -375,6 +377,8 @@
 | [`bugly`](./connectors/bugly/) | 用途：View the product quality overview | 可能需要启用对应 MCP / 连接器 |
 | [`bugly-token`](./connectors/bugly-token/) | 查看产品的质量概览 包括崩溃率 anr率 foom（oom）率 启动耗时 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`BUGLY_ACCESS_TOKEN` |
 | [`canva`](./connectors/canva/) | 无缝调用Canva可画的设计能力。一句话生成海报、演示文稿、小红书封面等设计，通过文字描述调整尺寸、填充品牌模板及检索已有内容 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
+| [`chuhaijiang`](./connectors/chuhaijiang/) | 用途：Real-time TikTok Shop data, AI content workflows, and social media operations for cros… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`CHJ_API_KEY` |
+| [`cisp-mcp`](./connectors/cisp-mcp/) | 用途：Query multi-dimensional enterprise information via Zenicredit, including business regi… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`CISP_API_KEY` |
 | [`cloudbase`](./connectors/cloudbase/) | Use this skill when you develop, design, build, deploy, debug, migrate, or troubleshoot C… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`cnb-api`](./connectors/cnb-api/) | 用途：Manage CNB platform via CLI. | 无（可选 API/账号以增强能力） |
 | [`cnb-woa`](./connectors/cnb-woa/) | CNB 平台交互命令，支持代码仓库、Issue、PR、CI、制品库读写等操作。 | 无（可选 API/账号以增强能力） |
@@ -384,6 +388,7 @@
 | [`emr-query`](./connectors/emr-query/) | 用途：Query Elastic MapReduce (EMR) clusters, nodes, services, jobs, monitoring, YARN schedu… | 需要登录 / OAuth / 扫码授权 |
 | [`fbs-connector`](./connectors/fbs-connector/) | 福帮手人机协同连接器：面向 WorkBuddy 的身份识别、场景包查询、首值与继续使用记录、乐包状态确认和超级合伙人交接。 | 可能需要启用对应 MCP / 连接器 |
 | [`feishu`](./connectors/feishu/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
+| [`finenter`](./connectors/finenter/) | 用途：Finenter MCP covers public roadshow content from securities firms, listed companies, a… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`fyopen-lawsearch`](./connectors/fyopen-lawsearch/) | 用途：Support natural language to obtain accurate and currently effective regulatory provisi… | 可能需要启用对应 MCP / 连接器 |
 | [`gildata`](./connectors/gildata/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`GILDATA_TOKEN` |
 | [`github`](./connectors/github/) | 用途：Use github connector to access github MCP capabilities via github mcp server. | 可能需要启用对应 MCP / 连接器 |
@@ -398,6 +403,7 @@
 | [`jira`](./connectors/jira/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要环境变量：`ATLASSIAN_API_TOKEN`、`JIRA_API_TOKEN` |
 | [`kdocs`](./connectors/kdocs/) | 操作金山文档（WPS 云文档 / Kdocs / 365.kdocs.cn / www.kdocs.cn）云文档的官方 Skill。核心能力覆盖云端新建、读取、编辑、搜索、分享、… | 可能需要启用对应 MCP / 连接器 |
 | [`km`](./connectors/km/) | 用途：KM official MCP - discover the best of Tencent knowledge. | 可能需要启用对应 MCP / 连接器 |
+| [`kuaicha-search`](./connectors/kuaicha-search/) | 查询中国企业工商、股权投资、经营司法风险、知识产权、招投标及新闻舆情数据。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`KUAICHA_API_KEY` |
 | [`lemonclaw`](./connectors/lemonclaw/) | 用途：Query and operate Lemon Cloud accounting, SCM, ERP, and standalone invoicing through l… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权 |
 | [`lexiang`](./connectors/lexiang/) | 乐享知识库 MCP 全功能 Skill。当用户提到「乐享」「知识库」「lexiang」，或提供 lexiangla.com 链接，或涉及知识库的搜索/写入/编辑/文件/配置等操作… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`linkfox-product-selection`](./connectors/linkfox-product-selection/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`LINKFOX_AGENT_API_KEY` |
@@ -738,7 +744,7 @@
 | [`well-arch-expert`](./experts/well-arch-expert/) | [腾讯云卓越架构专家](./experts/well-arch-expert/) | 卓越架构专家。擅长架构可视化评估、资源拓扑梳理、Well-Architected 六支柱评估与架构风险识别，确保架构符合最佳实践。 | 可能需要启用对应 MCP / 连接器 |
 | [`yunzhi-qa-assistant`](./experts/yunzhi-qa-assistant/) | [腾讯云知识问答专家](./experts/yunzhi-qa-assistant/) | 基于腾讯云知（乐享）平台的检索增强问答专家。调用乐享 MCP 的语义向量检索多路并行召回；基于检索结果生成结构化回答； | 可能需要启用对应 MCP / 连接器；需要环境变量：`LEXIANG_TOKEN` |
 
-### 营销增长（35）
+### 营销增长（36）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -763,6 +769,7 @@
 | [`livestream-ecommerce-coach`](./experts/livestream-ecommerce-coach/) | [直播电商教练](./experts/livestream-ecommerce-coach/) | 精通直播带货全链路运营，从话术到投流帮助实现GMV突破 | 需要微信/企微相关凭证或扫码登录 |
 | [`market-analysis-cn`](./experts/market-analysis-cn/) | [市场分析专家](./experts/market-analysis-cn/) | 聚焦市场趋势、竞品对标与用户行为洞察，输出SWOT分析与战略建议，助力企业做出明智商业决策。 | 无 |
 | [`marketing-campaign-team`](./experts/marketing-campaign-team/) | [营销战役团队](./experts/marketing-campaign-team/) | 由营销总监领导的 4 人营销专家团队：内容创作者（博客/邮件/社媒/品牌声音）、活动策划师（战役策略/受众/渠道/预算）、SEO 专家（技术审计/内容优化/效果分析）和品牌分析师… | 需要微信/企微相关凭证或扫码登录 |
+| [`marketing-growth-team`](./experts/marketing-growth-team/) | [营销增长专家团](./experts/marketing-growth-team/) | fCMO 级全栈营销增长团队：转化率优化、SEO 与内容策略、增长工程、数据归因分析与策略规划，全方位助力 SaaS 产品增长 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`paid-media-auditor`](./experts/paid-media-auditor/) | [付费媒体审计师](./experts/paid-media-auditor/) | 深度审计广告投放数据和预算分配，找出被浪费的广告费 | 可能需要启用对应 MCP / 连接器 |
 | [`ppc-bidding-strategist`](./experts/ppc-bidding-strategist/) | [PPC竞价广告策略师](./experts/ppc-bidding-strategist/) | 精通Google Ads和百度竞价，以最低点击成本获取高质量流量 | 可能需要启用对应 MCP / 连接器 |
 | [`private-domain-marketing-expert`](./experts/private-domain-marketing-expert/) | [私域营销专家](./experts/private-domain-marketing-expert/) | 深谙私域运营增长，盘活现有数据资源、洞察营销机会、实现业绩增长 | 需要微信/企微相关凭证或扫码登录 |
@@ -820,7 +827,7 @@
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
-| [`career-broker`](./experts/career-broker/) | [鹅厂职业经纪人](./experts/career-broker/) | 陪你梳理职业画像，讨论发展与转型方向，并推荐课程、经验文章、内部案例和活水机会。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`career-broker`](./experts/career-broker/) | [鹅厂职业经纪人](./experts/career-broker/) | 陪你梳理职业画像，讨论发展与转型方向，并推荐课程、经验文章、内部案例和活水机会。（对话独立存储、特殊加密，仅你可见！） | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`corporate-training-designer`](./experts/corporate-training-designer/) | [企业培训设计师](./experts/corporate-training-designer/) | 设计系统化企业培训课程和学习路径，让员工技能快速提升 | 需要微信/企微相关凭证或扫码登录 |
 | [`customer-support-expert`](./experts/customer-support-expert/) | [客户支持专家](./experts/customer-support-expert/) | 将每次沮丧的用户互动转化为忠实拥护者，用卓越服务创口碑 | 无 |
 | [`hr-operations-team`](./experts/hr-operations-team/) | [HR 运营团队](./experts/hr-operations-team/) | 人力资源管理流程化，招聘筛选、薪酬体系设计、组织发展与HR运营流程化管理，助力企业人才战略落地 | 无 |
