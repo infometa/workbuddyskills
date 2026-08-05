@@ -1504,10 +1504,17 @@ def _tts_model_options(tts_config):
 
 
 def _filter_tts_voices_for_model(provider, voices, model):
-    if _tts_provider_name(provider) != "volcengine":
-        return voices
     model_key = _string_tts_value(model)
     if not model_key:
+        return voices
+    # Providers whose voices declare a resource_id (volcengine resources,
+    # tencent TextToVoice tiers) require the voice to match the selected
+    # model; providers without the annotation keep their full list. This
+    # mirrors the platform editor's filterTtsVoicesForModel behavior.
+    has_resource_annotations = any(
+        _string_tts_value(v.get("resource_id")) for v in voices
+    )
+    if not has_resource_annotations:
         return voices
     return [
         v for v in voices
@@ -1528,7 +1535,12 @@ def _select_platform_tts_defaults(speed, tts_config):
     """Mirror the platform editor's default provider/model/voice selection."""
     providers = _tts_providers_by_name(tts_config)
     model_options = _tts_model_options(tts_config)
-    default_model_option = model_options[0] if model_options else None
+    # Prefer the option the platform declares as default (is_default); older
+    # backends without the marker fall back to the first option.
+    default_model_option = next(
+        (o for o in model_options if o.get("is_default")),
+        model_options[0] if model_options else None,
+    )
     provider = ""
     model = ""
 

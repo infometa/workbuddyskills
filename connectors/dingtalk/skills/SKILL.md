@@ -93,7 +93,7 @@ cli_version: ">=1.0.15"
 | `mail`            | 邮箱：邮箱地址查询/邮件搜索(KQL)/邮件详情/发送邮件                        | [mail.md](./references/products/mail.md)                       |
 | `sheet`           | 在线电子表格(axls)：工作表 CRUD/区域读写/CSV 批量写入/行列增删/合并/查找替换/筛选视图/全局筛选/排序/下拉列表/条件格式/浮动图片/浮动图表/模板/导出 xlsx(单命令一站式) | [sheet.md](./references/products/sheet.md)                     |
 | `todo`            | 待办：创建(含优先级/截止时间/循环)/查询/修改/标记完成/删除                   | [todo.md](./references/products/todo.md)                       |
-| `wiki`            | 知识库：空间创建/详情/列表/搜索 + 成员管理                                | [wiki.md](./references/products/wiki.md)                       |
+| `wiki`            | 知识库：空间创建/详情/列表/搜索 + 成员管理 + 知识库动态查询                | [wiki.md](./references/products/wiki.md)                       |
 | `event`           | 个人 IM 事件：监听消息接收、指定发送人、已读、撤回、表情回应，NDJSON 输出（实时驱动 Agent）| [event.md](./references/products/event.md)                     |
 
 ## 意图判断决策树
@@ -166,6 +166,25 @@ Step 1 → 展示操作摘要（操作类型 + 目标对象 + 影响范围）
 Step 2 → 用户明确回复确认（如 "确认" / "好的"）
 Step 3 → 加 --yes 执行命令
 ```
+
+### 确认门禁的识别与重试协议
+
+非交互环境（Agent/CI，stdin 非 TTY）下，写命令不带 `--yes` 时 CLI **不打印交互提示语**，直接失败并输出结构化错误。识别方式：
+
+- `--format json` 输出（或 stderr）中 `error.reason == "confirmation_required"`，错误信息含「当前环境无法交互确认」
+
+遇到 `confirmation_required` 时按以下协议处理：
+
+1. **不要当普通错误放弃**：把命令、风险等级（`write` / `high-risk-write`）和关键参数展示给用户，明确告知这是写/高风险操作
+2. 用户显式同意 → 在**原始命令**末尾追加 `--yes` 重试（不改动任何业务参数）
+3. 用户拒绝 → 终止，不得改写参数绕过门禁
+4. 想先让用户 review 具体请求：加 `--dry-run` 重试——它**不触发确认门禁**，会输出完整调用预览（`invocation.params`），用户确认预览后再换 `--yes` 执行
+
+**禁止**：
+
+- 看到 `confirmation_required` 就未经用户同意自动追加 `--yes` 静默重试（等于禁用门禁）
+- 把 `confirmation_required` 当网络/权限错误处理或重试
+- 用 `echo yes | dws ...` 等管道方式喂答案代替 `--yes`（管道答案技术上会被接受，但违背了让用户显式知悉的设计意图）
 
 ## 核心流程
 作为一个智能助手，你的首要任务是**理解用户的真实、完整的意图**，而不是简单地执行命令。在选择 `dws` 的产品命令前，必须严格遵循以下四步流程：

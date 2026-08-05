@@ -30,8 +30,8 @@ Do not run Teaching Prompt generation or build `course_index` and `global_variab
 1. Normalize source ordering and merge the input material.
 2. Run Segmentation and retain its traceable segments and lesson-boundary candidates.
 3. Finalize lesson cuts with one core question per lesson.
-4. Finalize each lesson's teaching sequence, every required content slot's presence, placement, and teaching purpose, and, when applicable, exact slide count, slide order and placement, each slide's teaching purpose, content grouping, visual hierarchy, and semantic layout without using `teaching_prompt_personalization_level` as an input.
-5. Run Teaching Prompt generation for each lesson with that fixed skeleton and the normalized `teaching_prompt_personalization_level` passed unchanged across the course.
+4. Finalize an internal execution plan for each lesson: the teaching sequence, every required teaching action's presence, placement, and effect, interaction and feedback adjacency, close, and, when applicable, exact slide count and order, each slide's teaching function, content grouping, visual hierarchy, and semantic layout. Resolve this plan without using `teaching_prompt_personalization_level` as an input.
+5. Run Teaching Prompt generation for each lesson with that plan and the normalized `teaching_prompt_personalization_level` passed unchanged across the course. Materialize the plan as direct local runtime instructions in final execution order; the Teaching Prompt begins with the first learner-time teaching action, while the plan and personalization control remain in the in-memory authoring handoff.
 6. Build `course_index` and `global_variable_table` from the completed lesson set.
 7. Apply the gates below. Rerun the phase that owns each failed output rather than treating every failure as a lesson-only generation failure.
 8. After every affected Segmentation and Teaching Prompt rerun passes, rebuild both `course_index` and `global_variable_table`, then reapply the gates. Block handoff while any gate still fails.
@@ -39,11 +39,13 @@ Do not run Teaching Prompt generation or build `course_index` and `global_variab
 ## Mandatory Gates
 
 - Verify syntax and runtime results through the requirements loaded by `teaching-prompt.md`.
-- Verify each Teaching Prompt's content-expression specificity against `teaching-prompt.md#personalization-levels` and reject any level-driven change to its fixed teaching or slide structure, including changing a content slot's or slide's teaching purpose or adding, omitting, or relocating a content slot because of the level.
+- Recover each Teaching Prompt's execution signature from its actual ordered instructions and compare it with the internal execution plan. Verify teaching and slide order, slide count, local content and effects, content grouping and hierarchy, interaction-control-feedback adjacency, images, and the close from the artifact itself.
+- Verify each Teaching Prompt's content-expression specificity against `teaching-prompt.md#personalization-levels`. Across level variants, the recovered execution signature remains unchanged while only ordinary wording and already-permitted example detail vary.
 - Verify every learner-answer variable against `data-contracts.md#variable-table`.
 - Verify the selected teaching loop, interaction effects, variable-persistence decisions, and delivery-mode behavior against `pedagogy.md`.
 - Require Segmentation's preservation validation to pass.
 - Verify every required interaction effect and branch against `pedagogy.md#interaction-design`.
+- Verify that material selected for exact preservation appears directly at its resolved runtime position in the completed Teaching Prompt.
 
 Do not partially pass a phase or lesson.
 

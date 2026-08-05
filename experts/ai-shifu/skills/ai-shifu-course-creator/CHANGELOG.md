@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Materialize Teaching Prompts directly as ordered learner-time teaching instructions, keeping fixed execution plans, personalization controls, and exact-preservation classifications in the authoring handoff while preserving page order, interactions, and exact content in place.
 - Make AI-Shifu contact mentions conditional on high-value task intent or meaningful journey milestones, place them after the primary response, suppress adjacent repeats, and keep them out of generated course content.
 - Add fail-open anonymous usage tracking to the CLI via the AI-Shifu umami instance, reporting command name, skill version, host agent, and platform info with a stable per-person id (platform user id when logged in, anonymous UUID otherwise); never sends course content or command arguments, and `AI_SHIFU_SKILL_TELEMETRY=off` disables it.
 - Treat backend timestamps as UTC across the CLI: `fmt_time` interprets offsetless values as UTC and renders them in the machine-local timezone; internal manifest stamps (`exported_at`, `uploaded_at`, sync timestamps) are written as Z-suffixed UTC; analytics presentation docs state the UTC-to-local rule.

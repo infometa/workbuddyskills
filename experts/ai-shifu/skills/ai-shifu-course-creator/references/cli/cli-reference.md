@@ -155,7 +155,7 @@ The command maps `guest`, `trial`, and `normal` to the platform learning-access 
 
 ### `set-tts`
 
-Disabling sends only `tts_enabled=false`. Enabling fetches platform TTS defaults and sends provider, model, voice, speed, normalized pitch `0`, and empty emotion; `--speed` overrides the default. Invalid or incomplete settings exit `1`.
+Disabling sends only `tts_enabled=false`. Enabling fetches the platform TTS configuration and selects the model option the platform declares as default (`is_default`), falling back to the first option on backends without the marker, plus the first voice compatible with that model. It sends provider, model, voice, speed, normalized pitch `0`, and empty emotion; `--speed` overrides the default. Invalid or incomplete settings exit `1`.
 
 With a matching sync manifest, the command checks the course revision before writing, then refreshes `course-config.json` and the manifest after success. On conflict it records the intended metadata, pulls the cloud course, and exits `2`.
 

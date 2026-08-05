@@ -14,11 +14,13 @@ description_en: "Connect to QingFlow no-code platform for app creation, form dat
 
 ## 认证说明
 
-用户需提供轻流授权码（Token）进行认证。Token 通过 HTTP Header `Authorization: Bearer <token>` 传递。
+本连接器使用 OAuth 2.1 + PKCE 完成授权，由 WorkBuddy 自动管理登录与 Token，用户无需手动粘贴授权码。
 
-- Token 获取路径：登录轻流 → 左下角头像 → 个人中心 → 账户信息 → 安全信息 → 授权码
-- Token 格式以 `mcp_` 开头
-- 如遇认证失败，提示用户检查 Token 是否正确或是否已过期
+- 连接流程：用户点击「连接」→ WorkBuddy 打开轻流授权页 → 用户登录并同意授权 → 自动回跳完成本地绑定
+- 已认证后，WorkBuddy 会在 MCP 请求中自动携带 `Authorization: Bearer <access_token>`
+- access_token 过期时，WorkBuddy 使用 refresh_token 自动续期；若 refresh_token 也失效，提示用户重新授权
+- 如遇认证失败或权限不足，引导用户重新连接并完成浏览器授权
+- 每次会话开始建议先调用 `auth_whoami` 确认当前用户与工作空间状态
 
 ## 核心能力分类
 

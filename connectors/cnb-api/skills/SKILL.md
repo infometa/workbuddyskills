@@ -19,8 +19,6 @@ issues:
 - `cnb issues add-labels --labels bug --labels feature` — 添加标签
 - `cnb issues list-assignees` — 查看处理人
 - `cnb issues add-assignees --assignees username` — 添加处理人
-- `cnb issues create-upload-file --file 文件路径` — 创建 issue 时上传文件
-- `cnb issues create-upload-image --file 图片路径` — 创建 issue 时上传图片
 - `cnb issues get-imgs --img-path 图片路径` — 获取 issue 图片
 - `cnb issues get-files --file-path 附件路径` — 获取 issue 附件
 

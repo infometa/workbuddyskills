@@ -1,7 +1,7 @@
 ---
 name: postgresql-development-cloudbase
 description: "Use when building, debugging, or evaluating CloudBase PostgreSQL / CloudBase PG / PG mode apps, including Postgres schema setup, queryPgDatabase/managePgDatabase, JS SDK v3 app.rdb() CRUD/RPC, PG HTTP API fallback, RLS-style permissions, username-password auth, and Web CMS/admin CRUD flows backed by CloudBase PG."
-version: 2.25.5
+version: 2.25.7
 alwaysApply: false
 ---
 
@@ -82,14 +82,19 @@ CloudBase PG (`app.rdb()`, `app.storage.from('bucket')`) uses **different API me
 
    **Default schema-change workflow (local file first, then remote history):**
    1. Choose `migrationVersion` = 14-digit UTC timestamp `YYYYMMDDHHMMSS` and `migrationName` = snake_case (e.g. `add_users`).
-   2. Write local file `migrations/<migrationVersion>_<migrationName>.sql` with the DDL (and optional rollback SQL in comments or a paired file).
+   2. Write local file `cloudbase/migrations/<migrationVersion>_<migrationName>.sql` with the DDL (and optional rollback SQL in comments or a paired file). This path **must** match CloudBase CLI `MIGRATIONS_DIR` (`tcb db pg migration *`). If an older workspace still has root `migrations/`, move those files into `cloudbase/migrations/` before mixed MCP+CLI use.
    3. Optional preview: `managePgDatabase(action=planMigration, migrationName=..., migrationVersion=..., sql=...)`.
-   4. Apply: `managePgDatabase(action=applyMigration, migrationName=..., migrationVersion=..., sql=..., confirm=true)` — reuse the **same** version/name as the local file.
+   4. Apply: `managePgDatabase(action=applyMigration, migrationName=..., migrationVersion=..., sql=..., confirm=true)` — reuse the **same** version/name as the local file. If the local file is missing, MCP auto-writes `cloudbase/migrations/<version>_<name>.sql`; if an existing file's content differs from `sql`, apply fails closed (`LOCAL_MIGRATION_FILE_MISMATCH`) and does not Push. MCP waits for the async task by default (up to **10 minutes**, same as CLI); override with `taskPollTimeoutMs` or set `waitForTask=false` if the host tool-call timeout is short.
    5. Verify: `managePgDatabase(action=listMigrations)` and confirm the remote history records the same `migrationVersion`.
    6. Then write frontend CRUD / RLS checks.
 
+   **Out-of-order / backfill versions:** Prefer a `migrationVersion` strictly newer than `LatestVersion`. If you must apply a version older than Latest (branch merge / cherry-pick), pass `includeAll=true` on `planMigration` / `applyMigration` — same as CLI `tcb db pg migration up --include-all`. Do not use this for routine work.
+
+   **If applyMigration returns `MIGRATION_TASK_TIMEOUT` or `MIGRATION_TASK_PENDING`:** the task may still be running (large DDL / lock waits). Call `describeMigrationTask(taskId=...)` **first** for Status/Phase/Reason, then `listMigrations`. Do **not** re-push the same `migrationVersion`, and do **not** fall back to `execute` until the task is terminal and list confirms the version never landed.
+
    Other migration actions:
    - `managePgDatabase(action=migrationDetail, migrationVersion=...)` — inspect a single migration
+   - `managePgDatabase(action=fetchMigration)` — pull remote history SQL into `cloudbase/migrations/` (CLI `tcb db pg migration fetch` parity). Optional `migrationVersion` for one file; omit for full history. Existing local files are skipped unless `force=true` (overwrite / checksum realign). Prefer this over hand-copying SQL from `migrationDetail` to avoid checksum drift.
    - `managePgDatabase(action=rollbackMigration, lastN=..., confirm=true)` — roll back the last N applied migrations
    - `managePgDatabase(action=repairMigration, migrationVersion=..., migrationName=..., repairStatus=..., repairReason=...)` — repair history records
 
@@ -117,6 +122,7 @@ CloudBase PG (`app.rdb()`, `app.storage.from('bucket')`) uses **different API me
    - Insert a test row using `author_id = session.user.id`.
    - Read it back with `queryPgDatabase`.
    - If INSERT/SELECT fails, inspect the exact RLS error and fix the policy or switch to a server/RPC boundary. Do not leave browser-facing tables with broken RLS.
+   - **⚠️ `auth.uid()` returns `text`, not `uuid`.** Prefer owner columns as `varchar(64)` / `text`. If comparing to a `uuid` column, use `auth.uid()::uuid` (only when JWT `sub` is a valid UUID) or you will get `operator does not exist: uuid = text`. This differs from Supabase. See `references/auth-and-rls.md`.
    - **⚠️ Do NOT use `current_user` or `current_setting(...)` in RLS policies.** `current_user` in PostgreSQL returns the database role name (e.g. `authenticated`), NOT the CloudBase auth user ID. Always use `auth.uid()` for user identity checks. If you are unsure whether the auth helpers are available, run `SELECT proname FROM pg_proc WHERE pronamespace = 'auth'::regnamespace` to list all available `auth.*` functions.
 10. Use PG HTTP API only as a fallback after reading OpenAPI docs and verifying the auth model in the installed SDK. Do not guess URLs such as `/api/v1/rdb/rest`; the documented base is `https://<envId>.api.tcloudbasegateway.com/v1/rdb/rest/<table>` and auth is `Authorization: Bearer <Publishable Key | access_token | API Key>`.
 11. Keep cover images in CloudBase Storage. Store only the final file URL or file metadata in PG.
@@ -143,7 +149,7 @@ CloudBase PG (`app.rdb()`, `app.storage.from('bucket')`) uses **different API me
 - After DDL, query the table schema again and compare every column used by frontend code, insert/update payloads, filters, ordering, and RLS policies.
 - Backend permission must exist in the database or server/RPC layer. Hiding buttons in the UI is not enough.
 - Do not leave a browser-facing table with RLS enabled and zero policies. PostgreSQL denies user reads/writes by default in that state, so `app.rdb().from("articles").insert(...)` can fail while the UI only shows a generic save failure. If you enable RLS, create and verify SELECT/INSERT/UPDATE/DELETE policies before testing the app.
-- Use CloudBase PG's official SQL auth helpers in policies: `auth.uid()` (JWT `sub`), `auth.role()` (`anon` / `authenticated` / `service_role`), `auth.jwt()` (full claims), and `auth.email()` when relevant. Prefer owner columns such as `owner_id varchar(64) DEFAULT auth.uid()` so the database, not the browser, assigns ownership.
+- Use CloudBase PG's official SQL auth helpers in policies: `auth.uid()` (JWT `sub`, returns **`text`** not `uuid`), `auth.role()` (`anon` / `authenticated` / `service_role`), `auth.jwt()` (full claims), and `auth.email()` when relevant. Prefer owner columns such as `owner_id varchar(64) DEFAULT auth.uid()` so the database, not the browser, assigns ownership. If an owner column is already `uuid`, compare with `auth.uid()::uuid` (only when `sub` is a valid UUID).
 - If you need detailed GRANT/RLS rules, read `references/rls-patterns.md` before writing policies.
 - For admin/editor flows, make `admin` able to operate all rows and `editor` only rows where owner UID matches the current user.
 
