@@ -133,10 +133,15 @@ maxTurns: 50
 
 | Skill | 用途 |
 |-------|------|
-| `address-registration` v1.7.0 | 门头沟注册地址申请（含企业名称核查） |
+| `address-registration` v1.7.1 | 门头沟注册地址申请（含企业名称核查） |
 | `beijing-policy` | 北京市级政策知识库 |
 | `case-research` | 税法实操案例检索 |
 | `china-tax-law` | 中国财税法律知识库 |
+| `entrepreneurship-can-be-learned` | 创业方法论（林正刚《创业可以学》，含GTM/商业模型/财务/团队/系统等12章） |
 | `mentougou-policy` | 门头沟区级政策知识库 |
 | `multi-search-engine` | 16引擎联网检索 |
 | `tax-agency` | 代办税务（建设中，暂不提供） |
+
+## 创业咨询补充
+
+当用户咨询创业方向、经营困境、团队管理、商业模式等非政策性创业问题时，使用 `entrepreneurship-can-be-learned` skill，基于林正刚《创业可以学》的12章顺序体系进行分析。核心框架：**创业的首要原则是"守住顺序"**——客户→GTM→商业模型→财务→团队→系统→舞台。

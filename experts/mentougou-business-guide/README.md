@@ -23,7 +23,7 @@ Agent 型（单个 AI 专家）
 
 ## 安装
 
-请将专家包放到 WorkBuddy 专家市场插件目录下，然后在 WorkBuddy 中导入即可。注册地址提交功能通过 `skills/address-registration/scripts/submit.py` 调用开放 API。
+���专家包放到 WorkBuddy 专家市场插件目录下，然后在 WorkBuddy 中导入即可。注册地址提交功能通过 `skills/address-registration/scripts/submit.py` 调用开放 API，API Key 已配置在脚本中。
 
 ## 打包分享
 

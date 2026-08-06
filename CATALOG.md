@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**80** · 专家：**406** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**84** · 专家：**406** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-06
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-07
 
 ---
 ## 目录
@@ -405,6 +405,7 @@
 | [`mastergo-vibe-mcp`](./connectors/mastergo-vibe-mcp/) | 用途：Connect to the MasterGo canvas to allow AI to design, modify, synchronize, and retriev… | 可能需要启用对应 MCP / 连接器 |
 | [`moka`](./connectors/moka/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`mx-ds-mcp`](./connectors/mx-ds-mcp/) | 基于东方财富数据库，通过自然语言查询A股、基金、债券、指数/板块、美股、港股金融数据，宏观经济与行业经济指标数据，按条件筛选证券（股票、基金、债券等），以及新闻资讯和公告披露检索 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`mzl-trademark`](./connectors/mzl-trademark/) | 摩知轮商标查询技能 —— 按条件检索商标（文本）与以图搜图（图形近似），覆盖中国及 110+ 海外国家/地区 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`neo-crm`](./connectors/neo-crm/) | 用自然语言查客户、推商机、盘线索、领公海、写跟进，一句话打通销售工作闭环。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`netease-mail`](./connectors/netease-mail/) | 通过 IMAP/SMTP 连接邮箱，支持收发邮件、搜索、附件下载。支持 163、126、yeah.net 等网易邮箱及其他标准 IMAP/SMTP 邮箱。触发关键词：邮件、邮箱、… | 需要登录 / OAuth / 扫码授权；需要按 token-schema 配置凭证 |
 | [`notion`](./connectors/notion/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -417,6 +418,8 @@
 | [`qq-mail`](./connectors/qq-mail/) | QQ邮箱(QQ Mail)全功能操作技能。触发场景：看邮箱、查邮件、收件箱、看看邮件、有没有新邮件、未读邮件、帮我看看邮箱、打开邮箱、最近的邮件、邮件列表、发邮件、写邮件、发一封… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`region-insight`](./connectors/region-insight/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`REGION_INSIGHT_API_KEY` |
 | [`salesnail-instructor`](./connectors/salesnail-instructor/) | 通过 SalesNail Connector 自助开通讲师试用、维护商业 Profile、生成客户方案，并完成游戏创作、课程配置、实时课堂带教、课堂数据分析和证据化复盘。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`shanglv-mcp-gateway`](./connectors/shanglv-mcp-gateway/) | 企业级 MCP 授权网关技能 - 聚合财务发票查询与银行账户交易数据（客户/账户/余额/交易/对账单/回单/小时余额），统一走 Keycloak OAuth 2.1 + PKCE… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`shanlong-claw`](./connectors/shanlong-claw/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`supabase`](./connectors/supabase/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`tapd`](./connectors/tapd/) | TAPD 敏捷项目管理技能 - 管理需求、缺陷、任务、迭代、测试用例、Wiki、工时、评论和工作流 | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`tc-chengxin`](./connectors/tc-chengxin/) | 同程旅行官方旅游查询 Skill。用于机票、火车票、酒店、景区、汽车票、度假产品、行程规划、综合交通等实时查询，并提供 PC 预订入口、手机打开入口和微信扫码二维码。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；需要环境变量：`CHENGXIN_API_KEY` |
@@ -441,6 +444,7 @@
 | [`wk-workbuddy`](./connectors/wk-workbuddy/) | 用途：name: wk-mcp | 可能需要启用对应 MCP / 连接器 |
 | [`wps-knowledgebase`](./connectors/wps-knowledgebase/) | >- | 需要登录 / OAuth / 扫码授权 |
 | [`xiaoe-cloud-cli`](./connectors/xiaoe-cloud-cli/) | 小鹅通：使用当前登录账号和店铺上下文管理课程、内容资产、章节、直播、订单和素材。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`xingtu-claw-risk`](./connectors/xingtu-claw-risk/) | 星图Claw 企业风险分析技能 - 行业识别、企业间关联方关系分析 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`yingmi-mcp`](./connectors/yingmi-mcp/) | 盈米 MCP 金融工具使用技能，支持基金与市场数据查询、投研分析、组合诊断、财富规划和金融内容生成 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`YINGMI_API_KEY` |
 | [`youshu-bd-mate`](./connectors/youshu-bd-mate/) | 基于企业全维数据的对公营销智能助手，提供访前报告、营销话术、行业透视、关键人画像、金融产品匹配等展业闭环能力。所有报告生成工具为异步模式，需配合 get_report_run 轮… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
 | [`yuandian-mcp`](./connectors/yuandian-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -585,7 +589,7 @@
 | [`rapid-prototyping-engineer`](./experts/rapid-prototyping-engineer/) | [快速原型工程师](./experts/rapid-prototyping-engineer/) | 以极快速度将创意转化为可工作的原型，让团队快速验证想法 | 无（可选 API/账号以增强能力） |
 | [`rum-fullstack-team`](./experts/rum-fullstack-team/) | [腾讯云 RUM 全链路专家团](./experts/rum-fullstack-team/) | 腾讯云 RUM 全链路服务：10 大平台 aegis SDK 接入 + WebVitals/异常/接口/资源分析，支持 RUM-APM 联动 | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`RUM_TOKEN` |
 | [`security-engineer`](./experts/security-engineer/) | [安全工程师](./experts/security-engineer/) | 全方位保障系统安全，在黑客之前发现并修复安全漏洞 | 需要 GitHub Token 或 `gh auth login`；需要登录 / OAuth / 扫码授权；需要环境变量：`GITHUB_TOKEN` |
-| [`senior-developer`](./experts/senior-developer/) | [高级开发工程师](./experts/senior-developer/) | 10年以上全栈经验，精通多种语言和框架，是团队的技术中坚 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；需要环境变量：`BROWSER_USE_API_KEY` |
+| [`senior-developer`](./experts/senior-developer/) | [高级开发工程师](./experts/senior-developer/) | 10年以上全栈经验，精通多种语言和框架，以严谨的工程纪律交付可运行的高质量代码 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；需要环境变量：`BROWSER_USE_API_KEY`、`MINIMAX_API_KEY` |
 | [`site-reliability-engineer`](./experts/site-reliability-engineer/) | [站点可靠性工程师](./experts/site-reliability-engineer/) | 用软件工程方法论解决运维问题，确保99.99%可用性 | 无 |
 | [`software-architect`](./experts/software-architect/) | [软件架构师](./experts/software-architect/) | 站在全局高度设计可扩展高可用的软件架构，为技术团队指明方向 | 需要登录 / OAuth / 扫码授权 |
 | [`software-company`](./experts/software-company/) | [软件开发团队](./experts/software-company/) | 高效软件研发团队，产品经理定需求、架构师设计+拆任务、工程师批量实现代码、QA验证质量，小需求支持快速模式 | 无（可选 API/账号以增强能力） |

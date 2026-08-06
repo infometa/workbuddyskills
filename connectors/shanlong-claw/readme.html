@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商龙经营洞察 · WorkBuddy 连接器 — 集成手册</title>
+<style>
+:root { --blue: #1677ff; --green: #52c41a; --bg: #fafbfc; --card: #fff; --border: #e5e7eb; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.8; color: #1f2937; padding: 2rem; max-width: 860px; margin: 0 auto; background: var(--bg); }
+h1 { font-size: 1.6rem; margin-bottom: .5rem; }
+h2 { font-size: 1.2rem; margin: 2rem 0 .8rem; color: var(--blue); border-bottom: 1px solid var(--border); padding-bottom: .3rem; }
+h3 { font-size: 1rem; margin: 1.2rem 0 .5rem; color: #374151; }
+.subtitle { color: #6b7280; font-size: .9rem; margin-bottom: 2rem; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem 1.5rem; margin: .8rem 0; }
+pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem 1.2rem; border-radius: 6px; overflow-x: auto; margin: .6rem 0; font-size: 13px; line-height: 1.6; }
+pre .comment { color: #6a9955; }
+pre .highlight { color: #dcdcaa; }
+code { background: #f3f4f6; padding: 2px 5px; border-radius: 3px; font-size: 13px; color: #e11d48; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+.badge-req { background: #fef3c7; color: #92400e; }
+.badge-ok { background: #d1fae5; color: #065f46; }
+ol { padding-left: 1.5rem; }
+ol li { margin: .3rem 0; }
+.warn { background: #fffbeb; border-left: 3px solid #f59e0b; padding: .6rem 1rem; margin: .6rem 0; border-radius: 0 6px 6px 0; font-size: .9rem; }
+.info { background: #eff6ff; border-left: 3px solid #3b82f6; padding: .6rem 1rem; margin: .6rem 0; border-radius: 0 6px 6px 0; font-size: .9rem; }
+.tab { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+.tab-mac { background: #e0f2fe; color: #0369a1; }
+.tab-win { background: #ede9fe; color: #5b21b6; }
+</style>
+</head>
+<body>
+
+<h1>商龙经营洞察 · WorkBuddy 连接器</h1>
+<p class="subtitle">面向 WorkBuddy 对接方的集成手册 · v1.0.0 · CLI + Skill 方案</p>
+
+<!-- ==================== 前置条件 ==================== -->
+<h2>前置条件</h2>
+<div class="card">
+<p><span class="badge badge-req">必须</span> Node.js &gt;= 18（<code>node -v</code> 检查）</p>
+<p><span class="badge badge-req">必须</span> macOS / Linux / Windows 环境</p>
+<p><span class="badge badge-req">必须</span> 我方提供的 <code>slclaw-connector.zip</code> 包</p>
+<p><span class="badge badge-req">必须</span> 我方提供的 API Key（<code>sl-</code> 开头）</p>
+</div>
+
+<!-- ==================== 提交包结构 ==================== -->
+<h2>提交包结构（给 WorkBuddy 审核）</h2>
+<div class="card">
+<p>我方提供的 <code>slclaw-connector.zip</code> 即为 WorkBuddy 连接器提交物，解压后结构如下：</p>
+<pre>slclaw-connector/
+├── connector-meta.json     <span class="comment">← WorkBuddy 读取：市场展示信息</span>
+├── cli.json                <span class="comment">← WorkBuddy 读取：CLI 生命周期管理</span>
+├── icon.png                <span class="comment">← WorkBuddy 读取：图标</span>
+├── default.env             <span class="comment">← CLI 默认环境配置模板</span>
+├── skills/                 <span class="comment">← WorkBuddy 读取：AI 技能（WorkBuddy 加载给 AI）</span>
+│   └── starrocks-business-analysis-sly/
+│       ├── SKILL.md        <span class="comment">← 入口文件（AI 从这里理解能力）</span>
+│       ├── intents/        <span class="comment">← 78 个业务意图模板</span>
+│       ├── rules/          <span class="comment">← 安全规则、输出规范、参数补全</span>
+│       └── references/     <span class="comment">← 数据表结构参考</span>
+├── install.sh              <span class="comment">← init 脚本（macOS/Linux）</span>
+├── install.ps1             <span class="comment">← init 脚本（Windows）</span>
+├── package.json            <span class="comment">← CLI 依赖描述</span>
+└── dist/                   <span class="comment">← CLI 编译产物（运行时依赖已打包）</span></pre>
+</div>
+
+<div class="info">
+<strong>source 主键：</strong><code>connector-meta.json</code> 中 <code>source</code> 固定为 <code>shanlong-claw</code>，上架目录请使用 <code>connectors/shanlong-claw/</code>。zip 文件名仅作为交付物名称，不作为端侧持久化主键。
+</div>
+
+<div class="info">
+<strong>关于 Skills 的放置：</strong>Skills 在 zip 包内随连接器提交，WorkBuddy 平台负责加载 <code>skills/</code> 目录内容给 AI。<code>init</code> 命令（install.sh）只安装 CLI 程序本身，Skills 不需要安装到用户机器上。
+</div>
+
+<!-- ==================== 打包 ==================== -->
+<h2>打包（开发者操作）</h2>
+<div class="card">
+<pre><span class="comment"># 在 slclaw-cli 项目根目录执行（Mac / Linux / Windows 均可）</span>
+npm run pack:connector
+<span class="comment"># 等价：bash connector/pack.sh 或 node scripts/pack-connector.js</span>
+
+<span class="comment"># 产出：slclaw-connector.zip</span>
+<span class="comment"># 打包脚本保证：zip 内路径一律用 /、install.sh 为 LF、install.ps1 带 UTF-8 BOM</span></pre>
+</div>
+
+<!-- ==================== 安装 ==================== -->
+<h2>安装</h2>
+
+<h3><span class="tab tab-mac">macOS / Linux</span></h3>
+<div class="card">
+<pre><span class="comment"># 1. 解压（-o 覆盖已存在文件）</span>
+unzip -qo slclaw-connector.zip -d slclaw-install
+
+<span class="comment"># 2. 执行安装脚本</span>
+cd slclaw-install && bash install.sh
+
+<span class="comment"># 3. 如需在普通终端直接使用 sl，可手动添加 PATH</span>
+export PATH="$HOME/.slclaw/bin:$PATH"
+
+<span class="comment"># 4. 填入 API Key</span>
+sed -i.bak 's/^SL_API_KEY=.*/SL_API_KEY=<span class="highlight">你的Key</span>/' ~/.slclaw/.env && rm -f ~/.slclaw/.env.bak
+
+<span class="comment"># 5. 验证</span>
+sl connector status
+<span class="comment"># 输出 {"authenticated":true} 表示成功</span></pre>
+</div>
+
+<h3><span class="tab tab-win">Windows (PowerShell)</span></h3>
+<div class="card">
+<pre><span class="comment"># 1. 解压</span>
+Expand-Archive -Force slclaw-connector.zip -DestinationPath slclaw-install
+
+<span class="comment"># 2. 执行安装脚本</span>
+cd slclaw-install
+powershell -ExecutionPolicy Bypass -File install.ps1
+
+<span class="comment"># 3. 安装脚本不会自动修改用户 PATH；WorkBuddy 使用绝对路径调用</span>
+
+<span class="comment"># 4. 编辑 %USERPROFILE%\.slclaw\.env，填入 SL_API_KEY</span>
+notepad $env:USERPROFILE\.slclaw\.env
+
+<span class="comment"># 5. 验证</span>
+& "$env:USERPROFILE\.slclaw\bin\sl.cmd" connector status
+<span class="comment"># 输出 {"authenticated":true} 表示成功</span></pre>
+</div>
+
+<div class="warn">已安装过？直接再次执行安装脚本即可升级，已有的 API Key 和 Token 会保留。</div>
+
+<!-- ==================== 验证 ==================== -->
+<h2>验证调用</h2>
+
+<h3>认证状态</h3>
+<div class="card">
+<pre><span class="comment"># 检查连接器认证状态</span>
+sl connector status
+<span class="comment"># 输出 {"authenticated":true} 表示成功</span></pre>
+</div>
+
+<h3>StarRocks 数据仓库查询</h3>
+<div class="card">
+<pre><span class="comment"># 查询集团门店列表</span>
+sl starrocks read-query --query "SELECT store_code, store_name, brand_name \
+  FROM e000.dt_store_view \
+  WHERE group_code = '#{SL_UNIFIED_G_ID}' \
+    AND store_code IN (#{omShopCodes}) LIMIT 5"
+
+<span class="comment"># 查询营收汇总</span>
+sl starrocks read-query --query "SELECT store_name, SUM(recv_money) as recv \
+  FROM dm.v_pos_corp_sale_analysis_with_sly \
+  WHERE group_code = '#{SL_UNIFIED_G_ID}' \
+    AND store_code IN (#{omShopCodes}) \
+    AND settle_biz_date >= '2025-06-01' \
+  GROUP BY store_name ORDER BY recv DESC LIMIT 3"</pre>
+<p>正常返回 <code>"success": true</code> + <code>"rows"</code> 数组。</p>
+</div>
+
+<h3>CY7 餐饮收银</h3>
+<div class="card">
+<pre><span class="comment"># 获取门店列表</span>
+sl cysms getshops
+
+<span class="comment"># 获取 Access Token</span>
+sl cysms accesstoken</pre>
+<p>正常返回 <code>"shopList"</code> 数组 / <code>"msg": "success"</code>。</p>
+</div>
+
+<h3>CRM 会员管理</h3>
+<div class="card">
+<pre><span class="comment"># 查询优惠券列表</span>
+sl coupon get-coupon-list
+
+<span class="comment"># 按手机号查询会员</span>
+sl member member-query --mobile "手机号"</pre>
+<p>正常返回 <code>"total"</code> + <code>"list"</code> 数据。</p>
+</div>
+
+<h3>SCM 供应链</h3>
+<div class="card">
+<pre><span class="comment"># 查询物料列表</span>
+sl scm_archive_item get-item-select-list
+
+<span class="comment"># 按关键词搜索物料</span>
+sl scm_archive_item get-item-select-list --keyword "关键词"</pre>
+<p>正常返回物料 JSON 数组。</p>
+</div>
+
+<div class="info">
+<strong>注意：</strong>各产品线命令可以任意顺序调用，互不干扰。StarRocks 查询中的 <code>#{SL_UNIFIED_G_ID}</code> 和 <code>#{omShopCodes}</code> 是系统变量占位符，CLI 自动替换为当前认证用户的集团和门店信息。
+</div>
+
+<!-- ==================== 卸载 ==================== -->
+<h2>卸载</h2>
+
+<h3><span class="tab tab-mac">macOS / Linux</span></h3>
+<div class="card">
+<pre><span class="comment"># 方式一：用安装脚本卸载（推荐）</span>
+cd slclaw-install && bash install.sh --uninstall
+
+<span class="comment"># 方式二：手动删除</span>
+rm -rf ~/.slclaw</pre>
+</div>
+
+<h3><span class="tab tab-win">Windows (PowerShell)</span></h3>
+<div class="card">
+<pre><span class="comment"># 方式一：用安装脚本卸载</span>
+cd slclaw-install
+powershell -ExecutionPolicy Bypass -File install.ps1 -Uninstall
+
+<span class="comment"># 方式二：手动删除</span>
+Remove-Item -Recurse -Force $env:USERPROFILE\.slclaw</pre>
+</div>
+
+<!-- ==================== 重装 ==================== -->
+<h2>重复安装 / 重置</h2>
+<div class="card">
+<h3><span class="tab tab-mac">macOS / Linux</span></h3>
+<pre><span class="comment"># 覆盖安装（保留 Key 和 Token）</span>
+bash install.sh
+
+<span class="comment"># 完全重置（清除所有配置后重装）</span>
+bash install.sh --reset</pre>
+
+<h3><span class="tab tab-win">Windows</span></h3>
+<pre><span class="comment"># 覆盖安装</span>
+powershell -ExecutionPolicy Bypass -File install.ps1
+
+<span class="comment"># 完全重置</span>
+powershell -ExecutionPolicy Bypass -File install.ps1 -Reset</pre>
+<p>无论之前是否卸载干净，重新执行安装脚本都能正确安装。</p>
+</div>
+
+<!-- ==================== WorkBuddy 接入点 ==================== -->
+<h2>WorkBuddy 接入配置（cli.json）</h2>
+<div class="card">
+<pre><span class="comment"># WorkBuddy 使用 cli.json 管理 CLI 生命周期：</span>
+           darwin / linux              win32
+─────────────────────────────────────────────────────
+init       bash install.sh             powershell ... install.ps1
+auth       "$HOME/.slclaw/bin/sl" connector auth
+status     "$HOME/.slclaw/bin/sl" connector status
+unAuth     "$HOME/.slclaw/bin/sl" connector unauth
+version    "$HOME/.slclaw/bin/sl" --version
+
+win32 auth/status/unAuth/version:
+powershell -NoProfile -ExecutionPolicy Bypass -Command "&amp; &quot;$env:USERPROFILE\.slclaw\bin\sl.cmd&quot; ..."
+
+statusMatch: "\"authenticated\"\\s*:\\s*true"
+runtime:     { "type": "node", "version": ">=18" }
+
+<span class="comment"># WorkBuddy 从 zip 包中加载 skills/ 目录给 AI：</span>
+skills/starrocks-business-analysis-sly/SKILL.md  <span class="comment">← 入口</span>
+skills/starrocks-business-analysis-sly/intents/  <span class="comment">← 业务意图</span>
+skills/starrocks-business-analysis-sly/rules/    <span class="comment">← 规则</span>
+skills/starrocks-business-analysis-sly/references/ <span class="comment">← 参考</span></pre>
+</div>
+
+<div class="info">
+<strong>WorkBuddy 加载流程：</strong>用户点击「连接」→ WorkBuddy 执行 <code>init</code> 安装 CLI → 执行 <code>auth</code> 认证 → 轮询 <code>status</code> 确认已认证 → 加载 <code>skills/</code> 给 AI。Skills 由 WorkBuddy 从连接器包中读取，不依赖用户本机文件。
+</div>
+
+<!-- ==================== 跨平台 ==================== -->
+<h2>跨平台支持</h2>
+<div class="card">
+<table style="width:100%; font-size:.9rem; border-collapse:collapse;">
+<tr style="border-bottom:1px solid #e5e7eb; font-weight:600;"><td style="padding:.4rem 0;">平台</td><td>安装方式</td><td>入口命令</td><td>配置目录</td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:.4rem 0;">macOS (darwin)</td><td><code>bash install.sh</code></td><td><code>sl</code></td><td><code>~/.slclaw/</code></td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:.4rem 0;">Linux</td><td><code>bash install.sh</code></td><td><code>sl</code></td><td><code>~/.slclaw/</code></td></tr>
+<tr><td style="padding:.4rem 0;">Windows (win32)</td><td><code>install.ps1</code></td><td><code>sl.cmd</code></td><td><code>%USERPROFILE%\.slclaw\</code></td></tr>
+</table>
+<p style="margin-top:.6rem; font-size:.85rem; color:#6b7280;">WorkBuddy 规范要求至少支持 macOS + Linux，建议同时支持 Windows。本连接器三平台均已适配。</p>
+</div>
+
+<!-- ==================== 故障排查 ==================== -->
+<h2>常见问题</h2>
+<div class="card">
+<table style="width:100%; font-size:.9rem; border-collapse:collapse;">
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:.4rem 0; width:40%;"><strong>sl: command not found</strong></td><td>WorkBuddy 不依赖 PATH；手动终端使用时确认 <code>export PATH="$HOME/.slclaw/bin:$PATH"</code> 已添加</td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:.4rem 0;"><strong>缺少 SL_API_KEY_BASEURL</strong></td><td>用 <code>--reset</code> 重装恢复完整配置</td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:.4rem 0;"><strong>API Key 换 Token 失败</strong></td><td>确认 Key 正确且未过期</td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:.4rem 0;"><strong>查询返回空数据</strong></td><td>测试集团可能无交易数据，属正常</td></tr>
+<tr><td style="padding:.4rem 0;"><strong>Windows 执行策略报错</strong></td><td>使用 <code>-ExecutionPolicy Bypass</code></td></tr>
+</table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "init": {
+    "darwin": "bash \"$SL_CONNECTOR_HOME/install.sh\"",
+    "linux": "bash \"$SL_CONNECTOR_HOME/install.sh\"",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\install.ps1\""
+  },
+  "auth": {
+    "darwin": "\"$SL_CLI_HOME/bin/sl\" connector auth",
+    "linux": "\"$SL_CLI_HOME/bin/sl\" connector auth",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& \\\"%SL_CLI_HOME%\\bin\\sl.cmd\\\" connector auth\""
+  },
+  "unAuth": {
+    "darwin": "\"$SL_CLI_HOME/bin/sl\" connector unauth",
+    "linux": "\"$SL_CLI_HOME/bin/sl\" connector unauth",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& \\\"%SL_CLI_HOME%\\bin\\sl.cmd\\\" connector unauth\""
+  },
+  "status": {
+    "darwin": "\"$SL_CLI_HOME/bin/sl\" connector status",
+    "linux": "\"$SL_CLI_HOME/bin/sl\" connector status",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& \\\"%SL_CLI_HOME%\\bin\\sl.cmd\\\" connector status\""
+  },
+  "statusMatch": "\"authenticated\"\\s*:\\s*true",
+  "authWaitForExit": true,
+  "authUrlDomain": "sly.tcsl.com.cn",
+  "env": {
+    "SL_CLI_HOME": "$HOME/.slclaw",
+    "SL_CONNECTOR_HOME": "$HOME/.workbuddy/connectors-marketplace/connectors/shanlong-claw"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "\"$SL_CLI_HOME/bin/sl\" --version",
+      "linux": "\"$SL_CLI_HOME/bin/sl\" --version",
+      "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& \\\"%SL_CLI_HOME%\\bin\\sl.cmd\\\" --version\""
+    },
+    "minVersion": "1.0.141"
+  }
+}

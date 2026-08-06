@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "mzl-trademark": {
+      "type": "streamableHttp",
+      "url": "https://www.mozlen.com/mcp",
+      "timeout": 65000
+    }
+  }
+}
