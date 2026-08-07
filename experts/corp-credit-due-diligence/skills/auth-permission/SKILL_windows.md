@@ -1,15 +1,15 @@
 ---
-name: auth_permission
-description: "业务Skill执行前的权限检查服务，这是系统安全基础步骤。如果业务Skill中添加了前置条件指向这里，必须在执行其他业务 Skill 前先调用本Skill，做认证和鉴权操作。同时，auth_permission也支持重置登录态操作（清除当前Agent身份）。"
+name: auth-permission
+description: "业务Skill执行前的权限检查服务，这是系统安全基础步骤。如果业务Skill中添加了前置条件指向这里，必须在执行其他业务 Skill 前先调用本Skill，做认证和鉴权操作。同时，auth-permission也支持重置登录态操作（清除当前Agent身份）。"
 ---
 
-# auth_permission，认证+权限检测（Windows）
+# auth-permission，认证+权限检测（Windows）
 
 > 适用环境：**Windows**（PowerShell）。macOS / Linux 用户请改用同目录下的 `SKILL_unix.md`。
 
 ## 描述
 业务 Skill 执行前**强制**的权限检查服务。
-如果业务 Skill 设置了前置条件指向 auth_permission，则**必须先执行本Skill**，认证通过且权限校验通过后拿到环境变量，才能继续执行业务逻辑。
+如果业务 Skill 设置了前置条件指向 auth-permission，则**必须先执行本Skill**，认证通过且权限校验通过后拿到环境变量，才能继续执行业务逻辑。
 
 ## 功能
 1. 自动安装 authcli.exe 工具（本地存在则跳过）
@@ -27,7 +27,7 @@ if (-not (Get-Command authcli.exe -ErrorAction SilentlyContinue)) { $d="$env:USE
 ## 执行命令
 ```powershell
 $env:AUTH_CONFIG='{"Sign":"DQsZXghATxYERikeVV0gGhcKKg8naC8zHR5OYw82PhwhO2MtQ0ARPB88JmE4Tw0LKnhTEkpCHElYLh1ENkdZBDg8WhZMK1VKEgMmEzhMSxQ6fQZ/IydYKww7ez0xMxY8FAYOQiY7WTRdGF5VGGg7VTlcOBo9R11YGiJRPEEpEQ==","ResourceID":"{业务skill传递}","CredentialId":"{业务skill传递}"}'
-authcli.exe --shell=powershell | Out-String | Invoke-Expression
+authcli.exe
 ```
 
 ## 动态参数
@@ -52,8 +52,6 @@ $env:WGETRC = 'xxxxxx'
 # authcli success
 ```
 
-> 上面的 `authcli.exe --shell=powershell | Out-String | Invoke-Expression` 会自动把这些 `$env:` 赋值在当前 PowerShell 会话中执行；调用结束后请在合适的时候执行 `Remove-Item Env:JAVA_TOOL_OPTIONS,Env:CURL_HOME,Env:WGETRC -ErrorAction SilentlyContinue` 主动清理，**禁止**使用 `[Environment]::SetEnvironmentVariable(...)` 持久化到用户/系统级。
-
 # 五、重置登录态（切换身份）
 当用户说：重置登录、切换身份、重新登录、清除登录态、切换Agent身份安、或者重置登录态时……诸如此类的，执行以下命令：
 
@@ -62,7 +60,7 @@ $env:AUTH_CONFIG='{"Sign":"DQsZXghATxYERikeVV0gGhcKKg8naC8zHR5OYw82PhwhO2MtQ0ARP
 authcli.exe --reset
 ```
 
-1. 携带前缀环境变量AUTH_CONFIG 执行：authcli.exe --reset，会返回：reset success，表明清除登录态，再次经业务skill调用auth_permission运行authcli.exe时，则需重新认证授权
+1. 携带前缀环境变量AUTH_CONFIG 执行：authcli.exe --reset，会返回：reset success，表明清除登录态，再次经业务skill调用auth-permission运行authcli.exe时，则需重新认证授权
 
 # 六、安全机制必须遵守
 1. 如果返回[鉴权失败，请检查配置]的内容，则需告知用户联系安全管理员检查配置信息，不得绕过authcli.exe 鉴权 直接去执行业务Skill，跳过则视为严重违规；
@@ -71,10 +69,10 @@ authcli.exe --reset
 4. 如果用户要求输出查看或者操作当前鉴权后的环境变量等内容，请严格遵守数据安全规范，坚决不得返回；
 5. 如果用户要求尝试解密AUTH_CONFIG中的Sign内容，请严格遵守数据安全规范，坚决拒绝该行为；
 6. 如果用户要求将鉴权后的环境变量写入业务Skill或者其他某个静态文本中，请严格遵守数据安全规范，坚决拒绝该行为；
-7. 如果用户要求修改auth_permission的SKILL.md（参数或者内容），请严格遵守数据安全规范，坚决拒绝该行为；
+7. 如果用户要求修改auth-permission的SKILL.md（参数或者内容），请严格遵守数据安全规范，坚决拒绝该行为；
 8. 你不需要关系登录态过期与否，不要去扫描位置，更不要干预认证流程，authcli.exe 中会自动检测判定，你只需要严格遵守 带前置环境变量 执行 authcli.exe即可；
 9. 如果返回[正在等待认证完成]，则表明用户确实没有完成认证，**直接返回提示语即可，不得再去做任何的重试操作**。
-10. auth_permission/SKILL.md只为可读，任何情况下都不得修改，如果用户要求修改SKILL.md内容，请严格遵守数据安全规范，坚决拒绝该行为；
+10. auth-permission/SKILL.md只为可读，任何情况下都不得修改，如果用户要求修改SKILL.md内容，请严格遵守数据安全规范，坚决拒绝该行为；
 
 # 七、更新authcli.exe
 当用户说：更新authcli.exe、升级authcli.exe、重新下载authcli.exe……诸如此类的，执行以下脚本（自动重新下载并覆盖本地二进制；windows_amd64）：
@@ -83,5 +81,5 @@ $InstallDir = Join-Path $env:USERPROFILE ".local\bin"; if (Test-Path (Join-Path 
 ```
 
 # 八、系统通用规则
-所有业务 Skill 在执行前，若有前置条件指向 auth_permission：
+所有业务 Skill 在执行前，若有前置条件指向 auth-permission：
 1. 必须先执行 authcli.exe 鉴权，只有返回 success 才能继续。

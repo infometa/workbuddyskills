@@ -89,6 +89,7 @@ Notes:
   - --continue-on-error: 宽松模式，遇失败继续执行后续操作（已执行的子操作不回滚）
   - operations 最多 20 条
   - 当需要对多个区域执行相同清除时，优先使用 `range batch-clear`（更简洁）
+  - `csv-put` 子操作与独立命令语义一致：CSV 字段值以 `=` 开头时按公式解析；前加单引号时写入以 `=` 开头的字面文本
   - 典型场景：先插入行列再写入数据、先清除再写入、批量合并+调整行高列宽
   - 真实执行必须获得用户确认后加 --yes；--dry-run 不需要 --yes
 ```
@@ -139,7 +140,7 @@ DryRun 输出内容：
 DryRun 适用场景：
 - 确认 CLI 命令名 → MCP toolName 的翻译是否正确
 - 确认参数名转换（如 `--range` → `rangeAddress`）是否符合预期
-- 检查 `csv-put` 的 `@filepath` 是否被正确解析为文件内容
+- 检查 `csv-put` 的 `@filepath` 是否被正确解析为文件内容，并确认 `=...` / `'=...` 字段原样进入子操作
 
 ### --continue-on-error 行为
 

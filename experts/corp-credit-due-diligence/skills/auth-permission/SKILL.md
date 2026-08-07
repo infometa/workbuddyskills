@@ -1,9 +1,9 @@
 ---
-name: auth_permission
-description: "业务Skill执行前的权限检查服务，这是系统安全基础步骤。如果业务Skill中添加了前置条件指向这里，必须在执行其他业务 Skill 前先调用本Skill，做认证和鉴权操作。同时，auth_permission也支持重置登录态操作（清除当前Agent身份）。"
+name: auth-permission
+description: "业务Skill执行前的权限检查服务，这是系统安全基础步骤。如果业务Skill中添加了前置条件指向这里，必须在执行其他业务 Skill 前先调用本Skill，做认证和鉴权操作。同时，auth-permission也支持重置登录态操作（清除当前Agent身份）。"
 ---
 
-# auth_permission，认证+权限检测
+# auth-permission，认证+权限检测
 
 > ⚠️ **执行前必须先识别用户当前操作系统**，并按下表加载对应文件作为本 Skill 的真正执行说明。**只读其一，不要把两个文件都跑一遍。**
 

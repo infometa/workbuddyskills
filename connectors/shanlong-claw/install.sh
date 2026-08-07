@@ -284,15 +284,18 @@ verify_install() {
 
 do_full_install() {
   check_node
-  local tmp_tgz
-  tmp_tgz="$(mktemp "${TMPDIR:-/tmp}/slclaw-cli.XXXXXX.tgz")"
-  cleanup_tgz() { rm -f "$tmp_tgz"; }
+  # macOS/BSD mktemp：XXXXXX 必须在模板末尾，不能写 *.XXXXXX.tgz
+  # 不用 local：EXIT trap 在函数返回后仍会触发，local 会在 set -u 下变 unbound
+  _SL_TMP_TGZ="$(mktemp "${TMPDIR:-/tmp}/slclaw-cli.XXXXXX")"
+  cleanup_tgz() { rm -f "${_SL_TMP_TGZ:-}"; unset -v _SL_TMP_TGZ 2>/dev/null || true; }
   trap cleanup_tgz EXIT
-  download_tgz "$tmp_tgz"
-  install_from_tgz "$tmp_tgz"
+  download_tgz "$_SL_TMP_TGZ"
+  install_from_tgz "$_SL_TMP_TGZ"
   init_env
   setup_path
   verify_install
+  cleanup_tgz
+  trap - EXIT
 }
 
 do_ensure_latest() {

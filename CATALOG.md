@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**84** · 专家：**406** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**86** · 专家：**406** · 官方插件：**57** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-07
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-08
 
 ---
 ## 目录
@@ -375,7 +375,7 @@
 | [`baidu-netdisk`](./connectors/baidu-netdisk/) | 百度网盘文件管理与智能检索。支持浏览、关键词和语义搜索、文件整理、分享链接、容量查询，以及保存文本内容或通过 URL 转存文件。触发关键词：百度网盘、网盘、baidu、netdi… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`bugly-token`](./connectors/bugly-token/) | 查看 Bugly 产品质量概览（崩溃率、ANR 率、FOOM/OOM 率、启动耗时等）。当用户询问应用的大盘质量、版本质量、今日质量等指标时使用。 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`BUGLY_ACCESS_TOKEN` |
 | [`canva`](./connectors/canva/) | 用途：Use Canva's design capabilities: create and edit designs, manage assets and brand reso… | 可能需要启用对应 MCP / 连接器 |
-| [`chuhaijiang`](./connectors/chuhaijiang/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`CHJ_API_KEY` |
+| [`chuhaijiang`](./connectors/chuhaijiang/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`cisp-mcp`](./connectors/cisp-mcp/) | 用途：Query and verify Chinese company data. Supports business registration, shareholders, k… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`CISP_API_KEY` |
 | [`cloudbase`](./connectors/cloudbase/) | Use this skill when you develop, design, build, deploy, debug, migrate, or troubleshoot C… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`cnb-api`](./connectors/cnb-api/) | CNB 平台交互命令，支持代码仓库、Issue、PR、CI、制品库读写等操作。 | 无（可选 API/账号以增强能力） |
@@ -409,14 +409,16 @@
 | [`neo-crm`](./connectors/neo-crm/) | 用自然语言查客户、推商机、盘线索、领公海、写跟进，一句话打通销售工作闭环。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`netease-mail`](./connectors/netease-mail/) | 通过 IMAP/SMTP 连接邮箱，支持收发邮件、搜索、附件下载。支持 163、126、yeah.net 等网易邮箱及其他标准 IMAP/SMTP 邮箱。触发关键词：邮件、邮箱、… | 需要登录 / OAuth / 扫码授权；需要按 token-schema 配置凭证 |
 | [`notion`](./connectors/notion/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`opendata`](./connectors/opendata/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`REGION_INSIGHT_API_KEY` |
 | [`patsnap-search`](./connectors/patsnap-search/) | 用途：Search Patsnap patent and literature data through the Patsnap MCP connector. | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`PATSNAP_API_KEY` |
+| [`picset-commerce-images`](./connectors/picset-commerce-images/) | WorkBuddy 用户需要通过 Picset AI MCP 连接器生成电商主图、详情图或 Amazon A+ 图片时使用。 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
+| [`picset-video-generation`](./connectors/picset-video-generation/) | WorkBuddy 用户需要通过 Picset AI MCP 连接器生成电商短视频时使用。 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
 | [`pkulaw`](./connectors/pkulaw/) | 北大法宝官方法律检索 MCP Skill。涉及「法律」「法规」「法条」「司法解释」「判例」「类案」「案由」「合同审查」「合规清单」「裁判规则」「裁判依据」「争议焦点」「指导案例」… | 可能需要启用对应 MCP / 连接器 |
 | [`qcc-company`](./connectors/qcc-company/) | 用途：Query and verify corporate registration information. Supports shareholder structure, a… | 可能需要启用对应 MCP / 连接器 |
 | [`qcc-legal`](./connectors/qcc-legal/) | 通过企查查·法律数据 Connector 检索、研究与核验中国法律法规和司法案例。当用户的请求涉及查找法条依据、定位法规、调取法规/法条逐字原文、类案检索、援引指导性/公报/典型… | 可能需要启用对应 MCP / 连接器 |
 | [`qingflow`](./connectors/qingflow/) | 轻流无代码平台操作技能 - 创建应用、管理表单数据、处理审批流程、查询和导出数据 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`qixinhuiyan-mcp`](./connectors/qixinhuiyan-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`qq-mail`](./connectors/qq-mail/) | QQ邮箱(QQ Mail)全功能操作技能。触发场景：看邮箱、查邮件、收件箱、看看邮件、有没有新邮件、未读邮件、帮我看看邮箱、打开邮箱、最近的邮件、邮件列表、发邮件、写邮件、发一封… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
-| [`region-insight`](./connectors/region-insight/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`REGION_INSIGHT_API_KEY` |
 | [`salesnail-instructor`](./connectors/salesnail-instructor/) | 通过 SalesNail Connector 自助开通讲师试用、维护商业 Profile、生成客户方案，并完成游戏创作、课程配置、实时课堂带教、课堂数据分析和证据化复盘。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`shanglv-mcp-gateway`](./connectors/shanglv-mcp-gateway/) | 企业级 MCP 授权网关技能 - 聚合财务发票查询与银行账户交易数据（客户/账户/余额/交易/对账单/回单/小时余额），统一走 Keycloak OAuth 2.1 + PKCE… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`shanlong-claw`](./connectors/shanlong-claw/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
@@ -435,7 +437,7 @@
 | [`tencentads`](./connectors/tencentads/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`textin-xparse`](./connectors/textin-xparse/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`tmeet`](./connectors/tmeet/) | 腾讯会议 CLI（tmeet）：OAuth 授权登录/登出/状态查询、会议管理（创建/更新/取消/查询/受邀者）、录制管理（列表/下载地址/智能纪要/转写/录制权限申请）、会议报… | 需要登录 / OAuth / 扫码授权 |
-| [`tongzhou-fin-research`](./connectors/tongzhou-fin-research/) | 连接公开行情、研报检索、行业图谱与同舟投研材料，支持批量查询与事件窗口分析，为股市研究提供可复核证据。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`tongzhou-fin-research`](./connectors/tongzhou-fin-research/) | 连接公开行情、研报检索、行业图谱与同舟投研材料，为股市研究提供可复核证据。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`tyc-mcp`](./connectors/tyc-mcp/) | 天眼查企业数据查询技能 - 聚合式企业数据网关，覆盖企业锚定、基础画像、股权集团、董监高人员、司法风险、知识产权、经营财务、招投标等 160+ 项企业数据能力。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`wecom`](./connectors/wecom/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`weisheng-scrm`](./connectors/weisheng-scrm/) | 当用户需要查询或管理微盛企微管家（企业微信） SCRM 中的客户信息、客户标签、客户群、营销素材、活码、群发、跟进记录、聊天记录、会话存档、联系人、商机、汇报、抽奖、客户日程、客… | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SCRM_APP_KEY` |
@@ -782,7 +784,7 @@
 | [`trend-hunter`](./experts/trend-hunter/) | [自媒体热点雷达与内容增长官](./experts/trend-hunter/) | 追踪微博抖音小红书全网热搜，关键词过滤加竞品监控，从选题文案到视频与全平台分发，打通内容全链路 | 需要微信/企微相关凭证或扫码登录 |
 | [`wechat-channels-strategist`](./experts/wechat-channels-strategist/) | [微信视频号运营策略师](./experts/wechat-channels-strategist/) | 精通视频号社交推荐与生态联动，专注内容策划、直播带货、社交裂变与私域闭环，助力视频号从0到1增长 | 需要微信/企微相关凭证或扫码登录 |
 
-### 行业顾问（33）
+### 行业顾问（32）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -790,7 +792,6 @@
 | [`chaogeek-kongming`](./experts/chaogeek-kongming/) | [苏格拉底式AI思维搭子](./experts/chaogeek-kongming/) | 一人公司认知反缴械思维搭子：少问但问到根，补上下文、对齐意图，帮你驾驭智能体不外包判断力。 | 无（可选 API/账号以增强能力） |
 | [`chuangye-manor`](./experts/chuangye-manor/) | [创业伙伴](./experts/chuangye-manor/) | 林老师分身+读书伙伴。送《创业可以学》，陪创业者读书，从读书中听痛点，痛点匹配时自然引出课程咨询。擅长GTM落地、敢见客户情绪层突破、顺序判断。 | 需要微信/企微相关凭证或扫码登录 |
 | [`consulting-partners`](./experts/consulting-partners/) | [战略咨询合伙人](./experts/consulting-partners/) | 假设驱动的战略顾问，按需破题、取证、测算与撰写，产出证据扎实的决策报告与专业级PPT | 无 |
-| [`corp-credit-due-diligence`](./experts/corp-credit-due-diligence/) | [腾讯云天御对公信贷专家](./experts/corp-credit-due-diligence/) | 对公信贷全流程尽调助手，覆盖行业研究、财务核查、实控人画像与风险预警，依托腾讯云天御风控输出结构化信评报告，助力授信决策。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`family-education-ma`](./experts/family-education-ma/) | [家庭教育专家](./experts/family-education-ma/) | 腾讯未保营地8年一线实践，融合三大循证体系，为家长提供亲子沟通、沉迷干预、家庭成长咨询 | 无 |
 | [`fbsir-eight-seat-board`](./experts/fbsir-eight-seat-board/) | [独董会](./experts/fbsir-eight-seat-board/) | 福帮手经营决策独立审议专家团｜按案组建必要席位，独立判断、交叉质询、保留异议，交付可追溯行动备忘录 | 无（可选 API/账号以增强能力） |
 | [`fbsir-industry-scene-researcher`](./experts/fbsir-industry-scene-researcher/) | [行业场景研究员](./experts/fbsir-industry-scene-researcher/) | 围绕一个行业场景定位关键工作流缺口，并交付补位卡、3天行动计划、项目动作执行包和下一步建议。 | 可能需要启用对应 MCP / 连接器 |
@@ -839,7 +840,7 @@
 | [`study-abroad-consultant`](./experts/study-abroad-consultant/) | [留学顾问](./experts/study-abroad-consultant/) | 精通各国留学申请流程和院校信息 | 无（可选 API/账号以增强能力） |
 | [`supply-chain-strategist`](./experts/supply-chain-strategist/) | [供应链策略师](./experts/supply-chain-strategist/) | 优化供应链每个环节，实现成本效率韧性的最佳平衡 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；需要环境变量：`BROWSER_USE_API_KEY`、`TMAP_WEBSERVICE_KEY` |
 
-### 金融投资（37）
+### 金融投资（38）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -847,6 +848,7 @@
 | [`accounts-payable-agent`](./experts/accounts-payable-agent/) | [应付账款代理](./experts/accounts-payable-agent/) | 自动化处理应付账款流程，确保付款准确及时 | 无 |
 | [`believe-in-light`](./experts/believe-in-light/) | [相信光么](./experts/believe-in-light/) | 光模块产业链信号监控专家团。主理人 + 6位成员Agent 三端采集信号，因果验证+权重校准，三层嵌套输出景气度评级。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`citongshuopro`](./experts/citongshuopro/) | [刺桐说Pro-投资社群嘉宾团](./experts/citongshuopro/) | 模拟真实投资社群运作模式的多智能体投研系统，已接入社群嘉宾数字分身，可7*24为您提供投资咨询服务。 | 可能需要启用对应 MCP / 连接器 |
+| [`corp-credit-due-diligence`](./experts/corp-credit-due-diligence/) | [腾讯云天御对公信贷专家](./experts/corp-credit-due-diligence/) | 对公信贷尽调助手，覆盖行业研究、财务核查、实控人画像与风险预警，输出结构化信评报告。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`earnings-reviewer`](./experts/earnings-reviewer/) | [财报研究员](./experts/earnings-reviewer/) | 资深季报复核分析师,读财报电话会和公告更新覆盖模型,产出季报后记、方差表与估值调整,供研究部门沿用。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`equity-research`](./experts/equity-research/) | [股票研究专家](./experts/equity-research/) | 全面的股票研究工具集：财报分析、首次覆盖报告、DCF与可比估值、多空推介、投资备忘录、事件情景分析、组合风险管理，覆盖完整买方卖方研究工作流 | 无（可选 API/账号以增强能力） |
 | [`fin-research-expert`](./experts/fin-research-expert/) | [股市投研分析师](./experts/fin-research-expert/) | 连接同舟公开投研能力，稳定生成个股、行业、事件与研报的证据化简报和可复核投研案例页面 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要 GitHub Token 或 `gh auth login`；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |

@@ -1,9 +1,9 @@
 ---
 name: tongzhou-fin-research
-description: 连接公开行情、研报检索、行业图谱与同舟投研材料，支持批量查询与事件窗口分析，为股市研究提供可复核证据。
-description_zh: 连接公开行情、研报检索、行业图谱与同舟投研材料，支持批量查询与事件窗口分析，为股市研究提供可复核证据。
-description_en: Connects market data, research, industry graphs, and Tongzhou evidence with batch queries and event-window analysis for public-equity research.
-version: 0.20.7
+description: 连接公开行情、研报检索、行业图谱与同舟投研材料，为股市研究提供可复核证据。
+description_zh: 连接公开行情、研报检索、行业图谱与同舟投研材料，为股市研究提供可复核证据。
+description_en: Connects market data, research, industry graphs, and Tongzhou evidence for public-equity analysis.
+version: 0.21.2
 author: LingYue Tech
 ---
 

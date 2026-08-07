@@ -24,9 +24,26 @@
 1. **备齐素材（把文件送进出海匠存储）**：
    - 本地文件：upload_file(file_name) 拿预签名上传地址 → 用 shell 执行 PUT 上传（命令模板见 upload_file 工具说明）→ 记下返回的 bucket 字段
    - AI 生成的素材：check_task 返回的结果 URL **不能直接发布**，先下载到本地，再走上面的 upload_file + PUT
-2. **组装发布内容**：bucket 字段 + video_title + publications（账号、标题文案、话题标签、定时时间）；多文件/轮播用 media_items
-3. **发布前必须确认**：把账号、素材、文案、发布时间完整展示给用户，拿到明确同意再调 social_publish(action="upload_and_publish")——发布是不可撤回的外发动作
-4. **有限跟踪结果**：upload_and_publish 返回 session_token 后，先等 **10 秒**再调用 social_publish(action="session")；每次间隔至少 **10 秒**，本次发布流程最多查 **5 次**。一旦进入任一终态（成功、失败或取消）立刻停止。第 5 次仍非终态，就告知用户“发布已提交，平台仍在处理；你可以等一段时间后让我再查”，不要继续轮询或重发 upload_and_publish。用户之后明确要求查询状态时再单独查询；发布成功后，把每个成功发布目标返回的 `platform_url` 视频链接反馈给用户。**进行中的发布在 records 里查不到，不要用 records 判断"发没发出去"**。失败或取消时如实反馈状态；后续要查这条帖子的其他数据，用 session/records 里的 publication_id 或 platform_video_id 走 detail
+2. **组装发布内容**：bucket 字段 + video_title + publications（账号、标题文案、话题标签、定时时间）；多文件/轮播用 media_items。每个账号的 `platform_config` 都是独立的 **JSON 字符串**，不能传 JSON 对象
+3. **发布前必须确认**：把账号、素材、文案、发布时间和本次发布调用费用（1 credit/次，PAYG 为 ¥0.1；实际以账户 tier 为准）完整展示给用户，拿到明确同意再调 social_publish(action="upload_and_publish")——发布是不可撤回的外发动作
+4. **有限跟踪结果**：upload_and_publish 返回 session_token 后，建议等 **3–5 秒**再调用 social_publish(action="session")，后续每次间隔 **3–5 秒**；从发布提交起自动跟踪最长 **1 分钟**。一旦进入任一终态（成功、失败或取消）立刻停止。1 分钟仍非终态，就告知用户“发布已提交，平台仍在处理；你可以之后让我再查”，不要继续轮询或重发 upload_and_publish。用户之后明确要求查询状态时再单独查询；发布成功后，把每个成功发布目标返回的 `platform_url` 视频链接反馈给用户。**进行中的发布在 records 里查不到，不要用 records 判断"发没发出去"**。失败或取消时如实反馈状态；后续要查这条帖子的其他数据，用 session/records 里的 publication_id 或 platform_video_id 走 detail
+
+### TikTok 发布音乐策略
+
+适用范围是普通 TikTok 的 Business API 视频/图文发布；不适用于 TikTok Personal，也不适用于带 `product_id` 的 TikTok Shop 挂车发布。一个请求发多个账号时，每个 `publications[]` 目标可单独选择音乐和音量。
+
+1. **默认不搜索候选音乐**：用户只是要求发布内容、没有主动提到选歌/搜歌/复用音乐时，不调用 music_search 或 music_recent，不要额外给出一长串配乐让用户决策
+2. **图文默认推荐自动配乐**：发布普通 TikTok 图文且用户没有指定歌曲时，在发布方案中推荐 `{"auto_add_music":true}`，无需调用音乐查询接口；这是待确认的默认建议，仍要在最终发布清单中明确展示，不能静默添加。视频发布没有对应的自动配乐默认项，用户未提音乐就不添加音乐配置
+3. **用户明确提出音乐需求时才查询**：先用 social_accounts(action="list") 确认目标账号。复用曾用音乐时调用 social_tools(action="music_recent")（1 credit/次，可按 `platform_account_id` 筛选）；选歌/搜歌时调用 social_tools(action="music_search")（2 credits/次）。热门音乐是市场数据，用户未给国家时先确认 `country_code`。音乐查询消耗 API credits，调用前先查一次 account_info
+4. **查询后让用户选择**：展示歌曲名、艺术家、时长、风格和 `preview_url`，不要只凭标题替用户选。最终写入发布配置的是返回的 `song_clip_id`，**不是** `commercial_music_id`
+5. **组装每个发布目标的配置**：
+   - 视频指定音乐：`{"music_sound_id":"<song_clip_id>","music_sound_volume":80,"video_original_sound_volume":20}`
+   - 可选裁剪：`music_sound_start` / `music_sound_end` 均为毫秒且不得小于 0；两者同时传时 end 必须大于 start
+   - `music_sound_volume`、`video_original_sound_volume` 范围都是 0–100；音乐音量默认 100
+   - 图文默认推荐自动配乐：`{"auto_add_music":true}`；用户明确选择歌曲后改用 `{"music_sound_id":"<song_clip_id>"}`，二者不能同时传
+6. **纳入最终确认**：发布确认清单除账号、素材、文案和时间外，还要列出自动配乐开关，或已选音乐的名称/艺术家、裁剪区间、音乐音量和原声音量。用户确认后，才把上述对象序列化为 `publications[].platform_config` 的 JSON 字符串并发布
+
+如果同一个 `platform_config` 里带了 `product_id`，请求会进入 TikTok Shop 挂车链路，上述音乐参数以及 privacy、评论/合拍/合集、AI 内容声明均不生效；不要把“请求成功”表述成“音乐已应用”。
 
 ## 评论运营（social_comments）
 
@@ -65,7 +82,7 @@
 
 ## 辅助工具（social_tools）
 
-发布相关的辅助能力（如话题/音乐查询等），按工具返回的说明使用。
+发布相关的辅助能力（如话题/音乐查询等）。音乐查询触发条件与发布参数衔接按上面的“TikTok 发布音乐策略”执行。
 
 ## 注意
 

@@ -25,7 +25,7 @@
 1. search(entity="ads", country, keyword=类目词, filters={"ad_type": 1}) — 锁定 TikTok Shop 广告（其他 ad_type 取值见工具说明）
 2. get_detail(ads, id, country) — 单条广告的投放时长、消耗量级、互动数据
 3. search(entity="creatives", ...) + get_detail(creatives, id, country, include="analysis") — 素材层面的表现分析（GPM、完播、互动）
-4. 值得拆解的素材：ai_generate(type="script_breakdown", params={"video_id": 视频id}) 拆口播结构 → 给用户做二创参考。video_id 优先用素材结果里的视频 id 字段；拆解报 video_id 无效时，先 search(entity="videos") 定位对应视频拿 id 再拆
+4. 值得拆解的素材：ai_generate(type="script_breakdown", params={"video_id": 视频 id}) 拆口播结构 → 给用户做二创参考。video_id 优先用素材结果里的视频 id 字段；拆解报 video_id 无效时，先 search(entity="videos") 定位对应视频拿 id 再拆
 
 ## 产出
 

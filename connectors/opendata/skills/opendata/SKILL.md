@@ -1,9 +1,8 @@
 ---
-name: region-insight
-description: "区域洞察 — POI 检索与围栏分析"
-description_zh: "区域洞察 — POI 检索与围栏分析"
-description_en: "Region Insight — POI Search and Fence Analysis"
-version: "1.0.0"
+name: opendata
+description: 区域洞察 — POI 检索与围栏分析
+description_en: OpenData — POI Search and Fence Analysis
+version: 1.0.0
 tools:
   - post_region_insight_poi_location
   - post_region_insight_fence_poi_overview
@@ -60,7 +59,7 @@ tools:
 ## 鉴权和错误处理
 
 - WorkBuddy 使用用户配置的 `REGION_INSIGHT_API_KEY` 发起 Bearer Token 鉴权。
-- HTTP 401：提示用户前往 `https://data.isjike.com/console/keys` 重新生成 API Key，并在
+- HTTP 401：提示用户前往 `https://data.isjike.com/get-mcp` 重新生成 API Key，并在
   Connector 设置中替换旧值；不得要求用户在对话中发送 Key。
 - HTTP 429：提示调用频率超限，稍后重试。
 - 服务端错误或超时：说明查询未完成，可在避免重复并发调用的前提下重试一次。
@@ -73,5 +72,5 @@ tools:
 - Use `post_region_insight_fence_poi_list` when individual POI records are required.
 - Accept and pass only confirmed GCJ-02 coordinates using explicit `gcj02_*` field names.
 - Never ask the user to paste an API Key into the conversation. For HTTP 401, direct the user to
-  `https://data.isjike.com/console/keys` and the Connector settings.
+  `https://data.isjike.com/get-mcp` and the Connector settings.
 - All tools are read-only. Retry a server error or timeout at most once without creating concurrent duplicates.
