@@ -4,6 +4,12 @@
 
 ---
 
+## v3.5.14（2026-07-20）
+
+- 修复 CodeBuddy CN IDE 4.10.1 中斜杠命令无法发现：移除 `plugin.json` 里目录型 `commands` / `agents` 显式声明，改用插件默认目录自动发现，恢复 `/security-scan:project`、`/security-scan:diff` 和 `/security-scan:setup` 注册。
+
+---
+
 ## v3.5.13（2026-07-03）
 
 - 修复型 diff 误报治理：diff/增量扫描时，若本次提交本身修复了漏洞（如字符串拼接 SQL 改参数化、新增防御），不再将其误报为风险 finding

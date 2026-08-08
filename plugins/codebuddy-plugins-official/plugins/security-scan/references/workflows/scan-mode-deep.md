@@ -197,6 +197,8 @@ python3 "${CODEBUDDY_PLUGIN_ROOT}/scripts/orchestration_helper.py" summarize-pro
 
 ### 2.1 启动扫描 Agent（增量启动）
 
+> **headless / TCA 强约束**：Deep 模式的扫描 Agent 可以并行调度，但必须以前台同步方式完成。禁止启用后台运行参数，禁止只打印“已启动 / 等待回流 / 将继续监控”后返回。`--auto` 与 headless 场景中，**不得把 Agent 已启动当作 success**；若任一必需 Agent 产物未落盘，当前轮必须继续收敛或按错误处理降级，不能提前结束。
+
 根据 2.0 的门控结果，分阶段启动 Agent。每个 Agent 在输出中记录 `metadata.index_phase`，供 re-run 判断使用：
 
 ```
@@ -246,9 +248,9 @@ Task(red-team):
 > ```
 > 此字段使 `should-rerun-agent` 脚本能判断是否有新数据可用。
 
-### 2.2 等待期间前置工作 + 流式处理
+### 2.2 Agent 完成收敛 + 产物校验
 
-启动 Agent 后，编排器执行前置工作（不空等）：
+启动 Agent 后，编排器执行前置工作，并在当前会话内完成收敛：
 
 1. **导出 indexer findings**（密钥/配置/CVE 检测结果）：
 
@@ -258,7 +260,17 @@ python3 "${CODEBUDDY_PLUGIN_ROOT}/scripts/index_db.py" query --batch-dir "$batch
 
 2. **加载框架知识文件**（按技术栈）
 
-3. **等待扫描 Agent 完成**：编排器通过检查 `"$batch_dir"/agents/` 目录下各 Agent 的 JSON 产物是否落盘来判断完成状态。
+3. **等待同步 Agent 调用返回**：每个 Agent 返回后必须确认其 JSON 产物写入 `"$batch_dir"/agents/`。如果 Agent 返回成功但产物缺失，视为该 Agent 失败，进入错误处理；不得输出成功摘要。
+
+4. **强制产物完整性检查**：
+
+```bash
+python3 "${CODEBUDDY_PLUGIN_ROOT}/scripts/checkpoint_verify.py" verify-artifacts \
+  --batch-dir "$batch_dir" \
+  --agents vuln-scan,logic-scan,red-team
+```
+
+`verify-artifacts` 未通过时，禁止进入阶段3最终成功路径；可按“错误处理”使用已落盘的部分产物生成 partial 报告，但最终摘要必须明确 partial，不得宣称 completed。
 
 ### 2.3 续扫处理
 
@@ -273,6 +285,8 @@ python3 "${CODEBUDDY_PLUGIN_ROOT}/scripts/merge_findings.py" merge-scan \
   --batch-dir "$batch_dir" \
   --extra-agents indexer-findings,vuln-scan,logic-scan,red-team
 ```
+
+`merge-scan` 成功并生成 `merged-scan.json` 后才允许进入阶段3；缺失该文件时不得继续输出成功。
 
 ### 2.5 WebSearch 情报增强（Deep 模式专属）
 
@@ -300,6 +314,8 @@ python3 "${CODEBUDDY_PLUGIN_ROOT}/scripts/merge_findings.py" merge-scan \
 - **Stage 5（脚本评分）**：score → quality 评估
 - 最后通过 `merge_findings.py merge-verify` 汇总，生成 `finding-*.json` + `summary.json`
 
+阶段3完成条件：`merge-verify` 必须生成 `merged-verified.json` 和 `summary.json`。`--auto` / headless 下缺失任一文件都必须按错误处理返回 partial/failed，禁止把空批次包装成 clean success。
+
 ---
 
 ## 阶段 4: 修复
@@ -318,6 +334,7 @@ python3 "${CODEBUDDY_PLUGIN_ROOT}/scripts/merge_findings.py" merge-scan \
 2. **扫描 Agent 失败**：检查 `agents/{agent-name}.json` 是否有部分产物，有则纳入合并
 3. **verifier Agent 失败**：跳过该分片，使用脚本验证结果
 4. **确定性脚本失败（score/quality）**：脚本失败不阻断流程，仍可生成报告
+5. **headless 产物未收敛**：若 Agent 已启动但缺少 `agents/*.json`、`merged-scan.json`、`merged-verified.json`、`summary.json`、`security-scan-report.html` 或 `gate-result.json`，本次扫描不得返回 completed；可保留诊断并返回 partial/failed。
 
 产物完整性检查：
 

@@ -480,7 +480,7 @@ python3 "${CODEBUDDY_PLUGIN_ROOT}/scripts/index_db.py" query --batch-dir "$batch
 - **Light 模式**：编排器内联扫描，置信度上限 90。具体流程见 `scan-mode-light.md`。
 - **Deep 模式**：三 Agent 并行（vuln-scan + logic-scan + red-team）。
 
-> **Deep 模式关键**：并行启动 vuln-scan + logic-scan + red-team 三个 Agent。启动后主窗口**不空转等待**——先执行前置工作（导出 indexer findings、加载知识文件），再检查各 Agent 产物是否落盘。详见 `scan-mode-deep.md > 2.2 等待期间前置工作 + 流式处理`。
+> **Deep/headless 模式关键**：并行启动 vuln-scan + logic-scan + red-team 三个 Agent 时，必须使用前台同步 Agent 调用，禁止启用后台运行参数；TCA / `--auto` / headless 场景没有后续主会话可接收回流，**不得把 Agent 已启动当作 success**。只有 `verify-artifacts` 通过，且 `merge-scan`、`merge-verify`、报告生成、`gate-result.json` 均完成后，才允许输出最终成功摘要。详见 `scan-mode-deep.md > 2.2 Agent 完成收敛 + 产物校验`。
 
 ### 大仓分片分支（仅 `shard-plan.json > largeRepo == true`）
 

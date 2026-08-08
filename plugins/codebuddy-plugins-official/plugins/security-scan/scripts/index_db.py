@@ -717,14 +717,33 @@ def _memory_db_has_project_data(memory_db, project_path):
 
 
 def _memory_db_path(args, readonly=False):
-    """返回长期记忆库路径；读路径保留旧库 fallback，写路径统一使用 .codebuddy。"""
+    """返回长期记忆库路径。
+
+    默认使用项目内 .codebuddy，保留 IDE/CLI 的跨扫描记忆能力。
+    TCA/custom output-root 场景下项目根可能是只读挂载；写路径遇到不可创建的
+    项目级 memory 目录时，降级到批次输出根的 .memory，避免初始化阶段被阻断。
+    """
     new_path = get_memory_db_path(_project_root_for_memory(args))
     if readonly:
         project_path = getattr(args, 'project_path', None) or os.getcwd()
         legacy_path = get_legacy_memory_db_path(args.batch_dir)
         if legacy_path.exists() and not _memory_db_has_project_data(new_path, project_path):
             return legacy_path
+    elif not _can_write_or_create_path(new_path):
+        return get_legacy_memory_db_path(args.batch_dir)
     return new_path
+
+
+def _can_write_or_create_path(path):
+    """Conservatively check whether a path can be written or created."""
+    candidate = Path(path)
+    if candidate.exists():
+        return os.access(str(candidate), os.W_OK)
+
+    existing = candidate
+    while not existing.exists() and existing.parent != existing:
+        existing = existing.parent
+    return existing.exists() and os.access(str(existing), os.W_OK)
 
 
 # ─── 命令: init ────────────────────────────────────────────
