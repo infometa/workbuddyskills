@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WorkBuddy Skill Trusted Probe Results",
+  "type": "object",
+  "description": "第一层键为 dependency id，第二层键为 check id。",
+  "additionalProperties": {
+    "type": "object",
+    "additionalProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check_type", "target", "status", "reason_code", "checked_at"],
+      "properties": {
+        "check_type": {
+          "enum": ["auth_probe", "mcp_probe", "cli_probe"]
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": ["ready", "missing", "unavailable"]
+        },
+        "reason_code": {
+          "enum": ["ok", "auth_expired_or_invalid", "permission_denied", "quota_or_rate_limit", "service_error", "network_or_timeout", "version_incompatible", "configuration_invalid", "mcp_not_registered", "probe_failed"]
+        },
+        "checked_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "ready"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason_code": {
+                "const": "ok"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["missing", "unavailable"]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason_code": {
+                "not": {
+                  "const": "ok"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

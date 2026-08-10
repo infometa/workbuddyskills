@@ -15,6 +15,7 @@ INLONG_STREAM_ID='workbuddy_connector_expert'
 FCHANNEL='workbuddy'
 FSCENE='expert'
 REQUEST_TIMEOUT_S=3
+STALE_AFTER_MS=21600000
 STATE_DIR=Path.home()/'.westock-stock-partner'
 DEV_ID_FILE=STATE_DIR/'dev_id'
 def _session_key():
@@ -27,7 +28,18 @@ def _session_key():
 			if(C/'.git').exists():return str(C)
 		except OSError:break
 	return str(A)
-def _task_file():A=hashlib.md5(_session_key().encode(_A)).hexdigest()[:16];return STATE_DIR/f"task-{A}.json"
+def _task_prefix():return f"task-{hashlib.md5(_session_key().encode(_A)).hexdigest()[:16]}"
+def _new_task_file(start_ts):return STATE_DIR/f"{_task_prefix()}-{start_ts:013d}-{os.getpid()}-{uuid.uuid4().hex[:6]}.json"
+def _pending_task_files():
+	try:return sorted(STATE_DIR.glob(f"{_task_prefix()}-*.json"))
+	except Exception:return[]
+def _sweep(now_ms):
+	try:B=list(STATE_DIR.glob(f"{_task_prefix()}*"))
+	except Exception:return
+	for A in B:
+		try:
+			if now_ms-int(A.stat().st_mtime*1000)>STALE_AFTER_MS:A.unlink()
+		except OSError:pass
 def _atomic_write(path,text):
 	A=path;B=A.with_name(f"{A.name}.{os.getpid()}.tmp")
 	try:B.write_text(text,encoding=_A);os.replace(str(B),str(A))
@@ -61,24 +73,31 @@ def _post(fdata):
 		with urllib.request.urlopen(D,timeout=REQUEST_TIMEOUT_S):return
 	except Exception:return
 def cmd_start():
-	A=_dev_id()
-	try:STATE_DIR.mkdir(parents=_B,exist_ok=_B);_atomic_write(_task_file(),json.dumps({_C:int(time.time()*1000)}))
+	B=_dev_id();A=int(time.time()*1000)
+	try:STATE_DIR.mkdir(parents=_B,exist_ok=_B);_sweep(A);_atomic_write(_new_task_file(A),json.dumps({_C:A}))
 	except OSError:pass
-	_post({_D:FCHANNEL,_E:FSCENE,_F:'task_start',_G:A})
+	_post({_D:FCHANNEL,_E:FSCENE,_F:'task_start',_G:B})
 def cmd_complete():
-	A=_task_file()
-	try:C=A.read_text(encoding=_A)
-	except OSError:return
-	B={_D:FCHANNEL,_E:FSCENE,_F:'task_complete',_G:_dev_id(),'fsuccess':_B}
-	try:D=int(json.loads(C)[_C]);B['fcost_time']=int(time.time()*1000)-D
-	except(ValueError,KeyError,TypeError):pass
-	try:A.unlink()
-	except OSError:pass
-	_post(B)
+	B=None;G=int(time.time()*1000);A=B;E=False
+	for C in _pending_task_files():
+		D=C.with_name(f"{C.name}.claim.{os.getpid()}")
+		try:os.replace(str(C),str(D))
+		except OSError:continue
+		A=B
+		try:A=G-int(json.loads(D.read_text(encoding=_A))[_C])
+		except Exception:pass
+		try:D.unlink()
+		except OSError:pass
+		if A is not B and not 0<=A<=STALE_AFTER_MS:continue
+		E=_B;break
+	if not E:return
+	F={_D:FCHANNEL,_E:FSCENE,_F:'task_complete',_G:_dev_id(),'fsuccess':_B}
+	if A is not B:F['fcost_time']=A
+	_post(F)
 def main():
 	B='dev-id';A=sys.argv[1]if len(sys.argv)>1 else B
 	if A=='start':cmd_start()
 	elif A=='complete':cmd_complete()
 	elif A==B:print(_dev_id())
-	else:print('用法: init_task [start|complete|dev-id]',file=sys.stderr);raise SystemExit(2)
+	else:print('用法: python3 bin/init_task.py [start|complete|dev-id]',file=sys.stderr);raise SystemExit(2)
 if __name__=='__main__':main()

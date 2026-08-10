@@ -53,6 +53,12 @@
 - Rectangle = Company entity
 - Arrow = Shareholding relationship (with %)
 - Minimalist style: blue outlines + blue text, NO colored fills
+- Use 0-bend vertical lines for aligned nodes and H-shaped orthogonal
+  connectors for offset nodes
+- Use dashed lines only for non-equity relationships such as contractual
+  control, pledges, earn-outs, options, or pending steps
+- Follow `references/deal-structure-diagrams.md` for the complete drawing,
+  reconciliation, SVG, and escalation workflow
 
 ## Watermark Specification
 - **Applied to**: Type A-G reports, LinkedIn article PDFs (MAI proprietary research)
@@ -65,15 +71,15 @@
 ## File Output & Storage
 
 ### Report Files
-- **Format**: docx (generated via docx-js, NOT python-docx) + PDF (generated via WeasyPrint HTML→PDF)
-- **Storage**: `/MAI/reports/{client_folder}/`
-- **Naming**: `{客户简称}_{报告简名}_MAI.pdf`
-- **Process drafts**: keep in a local project drafts folder
+- **Canonical format**: `outputs/report-draft.md`
+- **QC record**: `outputs/report-qc.md`
+- **Optional derivatives**: `outputs/report-draft.docx` and `outputs/report-draft.pdf`
+- **Source files**: read-only; never overwrite a user-provided file
 
-### PDF Generation
-- Use WeasyPrint (HTML→PDF pipeline)
-- Do NOT use reportlab (Chinese/English mixed layout font issues)
-- HTML template → inject content → WeasyPrint → PDF with watermark
+### DOCX/PDF Generation
+- DOCX/PDF 是可选衍生产物，使用 WorkBuddy 当前可用的文档生成能力创建。
+- 只有文件确实存在并完成打开、页数、标题、正文、表格和中文显示检查后，才能宣称已经生成。
+- 无法生成时保留完整 Markdown 底稿，说明原因，不得声称已经生成。
 
 ## File Safety Rules
 - **Before editing**: `cp filename filename.backup.$(date +%Y%m%d-%H%M%S)`

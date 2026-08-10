@@ -1,7 +1,7 @@
 {
   "name": "skillhub-charity-expert-team",
   "version": "1.0.0",
-  "description": "SkillHub Charity Expert Team — 7-agent team for end-to-end skill creation, icon design, testing, social value evaluation, legal clearance, and deployment",
+  "description": "SkillHub Charity Expert Team — 7-agent team for end-to-end skill and Agent-type expert creation, icon/avatar design, testing, social value evaluation, legal clearance, and deployment",
   "author": {
     "name": "Tencent_SSV_Tech4Good",
     "email": "techforgood@tencent.com"
@@ -31,7 +31,9 @@
   "skills": [
     "./skills/skill-creator",
     "./skills/skill-tester",
-    "./skills/wenjuan-fallback-submit"
+    "./skills/wenjuan-fallback-submit",
+    "./skills/expert-creator",
+    "./skills/expert-reviewer"
   ],
   "displayName": {
     "en": "Tech for Good Expert Team",
@@ -42,8 +44,8 @@
     "zh": "技术公益专家团"
   },
   "displayDescription": {
-    "en": "Led by Chief Coordinator Star, a team of six experts covers the entire lifecycle of public-interest skills—spanning needs analysis, development, testing, and social value assessment, through to copyright confirmation and final packaging and delivery.",
-    "zh": "首席协调官星星带领六位专家，覆盖公益技能从需求分析、编写、测试、社会价值评审、版权确认和打包交付的全流程。"
+    "en": "Led by Chief Coordinator Star, a team of six experts covers the full lifecycle of public-interest skills and Agent-type experts—needs analysis, development, testing, social value review, copyright clearance, and packaging.",
+    "zh": "星星带领六位专家，覆盖公益技能或Agent专家的需求分析、编写、测试评审、版权确认与打包交付全流程。"
   },
   "avatar": "./avatars/team.png",
   "categoryId": "12-IndustryConsultant",
@@ -53,16 +55,16 @@
   },
   "tags": [
     {
+      "en": "social-value-assessment",
+      "zh": "社会价值评估"
+    },
+    {
       "en": "skill-creation",
       "zh": "技能创作"
     },
     {
-      "en": "charity",
-      "zh": "公益慈善"
-    },
-    {
-      "en": "quality-assurance",
-      "zh": "质量保障"
+      "en": "charity-support",
+      "zh": "公益支持"
     }
   ],
   "quickPrompts": [
@@ -71,12 +73,12 @@
       "zh": "帮我创建一个公益项目管理的技能"
     },
     {
-      "en": "I need a skill for volunteer hour tracking and reporting",
-      "zh": "我需要一个志愿者工时记录与报告的技能"
+      "en": "Help me turn this existing skill into an Agent-type expert",
+      "zh": "帮我把这个技能包装成一个专家"
     },
     {
-      "en": "Build a donation receipt management skill for my foundation",
-      "zh": "为我的基金会创建一个捐赠票据管理的技能"
+      "en": "What skill tasks are currently available to claim on Tencent Tech for Good?",
+      "zh": "腾讯技术公益现在有哪些技能任务可以领取？"
     }
   ],
   "members": [
@@ -100,8 +102,8 @@
         "zh": "帅帅"
       },
       "profession": {
-        "en": "Charity Solution Architect",
-        "zh": "公益解决方案专家"
+        "en": "Solution Architect",
+        "zh": "解决方案专家"
       },
       "avatar": "./avatars/member-solution.png",
       "role": "member"
@@ -126,8 +128,8 @@
         "zh": "胖虎"
       },
       "profession": {
-        "en": "Skill Security Tester",
-        "zh": "技能安全测试专家"
+        "en": "Security Tester",
+        "zh": "安全测试专家"
       },
       "avatar": "./avatars/member-tester.png",
       "role": "member"
@@ -172,5 +174,8 @@
       "role": "member"
     }
   ],
+  "dependencies": {
+    "mcpServers": "./.mcp.json"
+  },
   "plugin": "skillhub-charity-expert-team"
 }

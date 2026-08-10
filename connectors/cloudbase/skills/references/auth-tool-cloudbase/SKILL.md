@@ -1,18 +1,15 @@
 ---
 name: auth-tool-cloudbase
 description: CloudBase auth provider configuration and login-readiness guide. This skill should be used when users need to inspect, enable, disable, or configure auth providers, publishable-key prerequisites, login methods, SMS/email sender setup, or other provider-side readiness before implementing a client or backend auth flow.
-version: 2.25.7
+version: 2.25.10
 alwaysApply: false
 ---
 
-## Standalone Install Note
+## Sibling skills (local only)
 
-If this environment only installed the current skill, start from the CloudBase main entry and use the published `cloudbase/references/...` paths for sibling skills.
+Sibling CloudBase skills ship beside this skill. Use local relative paths such as `../auth-tool-cloudbase/SKILL.md`.
 
-- CloudBase main entry: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md`
-- Current skill raw source: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/auth-tool-cloudbase/SKILL.md`
-
-Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool-cloudbase` or `web-development`, use the standalone fallback URL shown next to that reference.
+If a referenced sibling skill file is missing from this environment, ask the user to install the full CloudBase plugin (or the missing skill). Do **not** HTTP-fetch remote skill or protocol markdown into the agent context.
 
 ## Activation Contract
 
@@ -29,10 +26,10 @@ Keep local `references/...` paths for files that ship with the current skill dir
 
 ### Then also read
 
-- Web auth UI -> `../auth-web-cloudbase/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/auth-web-cloudbase/SKILL.md`)
-- Mini program native auth -> `../auth-wechat-miniprogram/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/auth-wechat-miniprogram/SKILL.md`)
-- Node server-side identity / custom ticket -> `../auth-nodejs-cloudbase/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/auth-nodejs-cloudbase/SKILL.md`)
-- Native App / raw HTTP auth client -> `../http-api-cloudbase/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/http-api-cloudbase/SKILL.md`)
+- Web auth UI -> `../auth-web-cloudbase/SKILL.md`
+- Mini program native auth -> `../auth-wechat-miniprogram/SKILL.md`
+- Node server-side identity / custom ticket -> `../auth-nodejs-cloudbase/SKILL.md`
+- Native App / raw HTTP auth client -> `../http-api-cloudbase/SKILL.md`
 
 ### Do NOT use this as
 
@@ -53,7 +50,7 @@ Keep local `references/...` paths for files that ship with the current skill dir
 ### Minimal checklist
 
 - Read [Authentication Activation Checklist](checklist.md) before auth implementation.
-- Anonymous login is disabled by default. The SDK initialized with `accessKey` still creates a lightweight anonymous session for API access. If the app requires authentication (e.g. admin panels, personal dashboards), enforce access control through AuthGuard or RLS policies rather than relying on the login strategy toggle.
+- Anonymous login is disabled by default. Publishable `accessKey` alone does **not** create a gateway-authenticated anonymous session. With `@cloudbase/js-sdk` **3.x**, enable anonymous via this skill when needed, then clients must call `await auth.signInAnonymously()` (or an equivalent authenticated session) **before** NoSQL `app.database()` CRUD — otherwise the gateway returns **401**. For apps that require verified login (e.g. admin panels), enforce AuthGuard / RLS and reject `is_anonymous` rather than relying on the login strategy toggle alone.
 
 ## Overview
 

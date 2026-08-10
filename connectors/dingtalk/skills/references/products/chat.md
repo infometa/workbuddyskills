@@ -1411,11 +1411,11 @@ Usage:
   dws chat message list-favorites [flags]
 Example:
   dws chat message list-favorites
-  dws chat message list-favorites --size 50
+  dws chat message list-favorites --size 30
   dws chat message list-favorites --cursor 20 --size 20
 Flags:
       --cursor int   数字分页游标，默认 0；翻页时传上次返回的 nextCursor
-      --size int     一次拉取的收藏数量，默认 20，范围 1-100
+      --size int     一次拉取的收藏数量，默认 20，范围 1-30
 
 注意:
   - 首次请求可省略分页参数，CLI 会自动向 Open 服务传入 cursor=0、size="20"
@@ -1883,6 +1883,108 @@ Flags:
   - status 仅支持 AuditApprove(通过) 和 AuditDelete(删除)；AuditIgnore(忽略)、AuditRefuse(拒绝)、AuditBlock(拒绝且拉黑) 会被服务端拒绝报 unsupported audit status，属服务端限制
   - record-id、applicant、inviter 可通过 dws chat group list-join-validations 查询获得
 ```
+
+### toolbar (快捷栏管理)
+
+快捷栏（toolbar）是会话级快捷入口管理能力，支持查询、添加、隐藏、排序及自定义入口 CRUD。与 `internal/shortcut/` 下的智能快捷方式框架是两套独立能力。
+
+#### 查询快捷栏入口列表
+```
+Usage:
+  dws chat toolbar list [flags]
+Example:
+  dws chat toolbar list --conversation-id <cid>
+Flags:
+      --conversation-id string  会话 openConversationId (必填)
+```
+
+#### 将入口添加到快捷栏可见区
+```
+Usage:
+  dws chat toolbar add [flags]
+Example:
+  dws chat toolbar add --conversation-id <cid> --shortcut-ids 101,102
+Flags:
+      --conversation-id string  会话 openConversationId (必填)
+      --shortcut-ids string     入口 ID 列表，逗号分隔 (必填)
+```
+
+#### 将入口从快捷栏可见区隐藏
+```
+Usage:
+  dws chat toolbar hide [flags]
+Example:
+  dws chat toolbar hide --conversation-id <cid> --shortcut-ids 101,102
+Flags:
+      --conversation-id string  会话 openConversationId (必填)
+      --shortcut-ids string     入口 ID 列表，逗号分隔 (必填)
+```
+
+#### 排序快捷栏入口
+```
+Usage:
+  dws chat toolbar sort [flags]
+Example:
+  dws chat toolbar sort --conversation-id <cid> --sorted-ids 101,102,103
+  dws chat toolbar sort --conversation-id <cid> --sorted-ids 101,102 --unsorted-ids 103,104
+Flags:
+      --conversation-id string  会话 openConversationId (必填)
+      --sorted-ids string       排序后的入口 ID 列表，逗号分隔 (必填)
+      --unsorted-ids string     不参与排序放在末尾的入口 ID 列表，逗号分隔
+```
+注意：`--sorted-ids` 与 `--unsorted-ids` 不能有交集。
+
+#### 创建自定义快捷栏入口
+```
+Usage:
+  dws chat toolbar create-custom [flags]
+Example:
+  dws chat toolbar create-custom --conversation-id <cid> --title "周报" --url "https://example.com" --icon-url "https://example.com/icon.png" --pc-url "https://example.com"
+Flags:
+      --conversation-id string  会话 openConversationId (必填)
+      --title string            入口标题 (必填)
+      --url string              入口跳转链接 (必填)
+      --icon-url string         入口图标 URL (必填)
+      --pc-url string           PC 端跳转链接 (必填)
+      --extension stringArray   扩展信息，格式 key=value，可重复使用
+      --desc string             入口描述（为空时使用 --title）
+      --tag string              入口标签
+      --sort-index int          排序权重
+```
+
+#### 删除自定义快捷栏入口
+```
+Usage:
+  dws chat toolbar remove-custom [flags]
+Example:
+  dws chat toolbar remove-custom --conversation-id <cid> --shortcut-id 123
+Flags:
+      --conversation-id string  会话 openConversationId (必填)
+      --shortcut-id int         自定义入口 ID (必填)
+      --yes                     确认执行删除操作
+```
+注意：删除操作不可逆，必须先获得用户确认后加 `--yes` 执行。
+
+#### 更新自定义快捷栏入口
+```
+Usage:
+  dws chat toolbar update-custom [flags]
+Example:
+  dws chat toolbar update-custom --conversation-id <cid> --shortcut-id 123 --title "周报" --url "https://example.com" --icon-url "https://example.com/icon.png" --pc-url "https://example.com"
+Flags:
+      --conversation-id string  会话 openConversationId (必填)
+      --shortcut-id int         自定义入口 ID (必填)
+      --title string            入口标题 (必填)
+      --url string              入口跳转链接 (必填)
+      --icon-url string         入口图标 URL (必填)
+      --pc-url string           PC 端跳转链接 (必填)
+      --extension stringArray   扩展信息，格式 key=value，可重复使用
+      --desc string             入口描述
+      --tag string              入口标签
+      --sort-index int          排序权重
+```
+
+入口 ID 可通过 `dws chat toolbar list --conversation-id <cid>` 获取。
 
 ## 意图判断
 

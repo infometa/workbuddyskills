@@ -3,9 +3,8 @@ name: wenjuan-fallback-submit
 description: |
   SkillHub 运维专家的腾讯问卷提交通道：自动打开指定的腾讯问卷链接，
   把技能包（Skill）、材料包（Material）、meta.json 打包后的 Meta 三个 zip 字段依次
-  上传并提交。⏸️ 【2026-07-09 起】因 MCP Server 建设放缓暂停 MCP 直传，本技能当前是
-  运维专家的**主提交路径**（非应急通道）；MCP 恢复上线后本技能将改回"MCP 提交失败 1
-  次后才触发"的次选/应急定位。
+  上传并提交。本技能是运维专家 MCP 直传（首选）失败后的**次选降级通道**，仅在
+  `request_upload`/上传/`get_submission_status` 判定失败时才被调用。
   触发词：问卷提交、问卷兜底提交、腾讯问卷自动提交、wenjuan fallback、
   技能包上传、MCP backup。
   ⚠️ 不适用于：与 SkillHub 无关的其他问卷填报需求、需要人工登录/
@@ -22,7 +21,7 @@ author: Tencent_SSV_Tech4Good
 
 本技能是《SkillHub 公益专家团》运维专家（J）的腾讯问卷提交通道。它通过浏览器自动化打开指定的腾讯问卷链接，把 `Meta`（meta.json 打包为 zip）、`Material`（材料包 zip）、`Skill`（技能包 zip）三个必填的文件上传字段依次填好并提交，替代人工手动打开问卷上传，尽量保留"全自动"体验。设计背景与决策见 `charity/skillhub.md` 第 3.9 节。
 
-⏸️ **【2026-07-09 起 · 主提交路径】** 因 MCP Server 建设放缓，当前暂停 MCP 直传，本技能是运维专家的**主提交路径**（触发条件：读完 wb_user_id 后直接调用，不再要求"MCP 失败 1 次"）。MCP 恢复上线后，本文档内标注为"当前"的表述需改回"MCP 提交失败 1 次后才触发"的次选/应急定位，具体见下文各处 ⏸️ 标注。
+本技能是 **MCP 直传失败后的次选降级通道**（触发条件：`skillhub-ops-expert.md` 步骤 5 的 `request_upload`/上传 curl/`get_submission_status` 判定为不可自动重试的失败），不作为默认主路径调用。
 
 > ⚠️ **实测结论（2026-07-08）**：该问卷虽在后台配置了"仅允许指定手机号提交"，但**实测填答与提交全程未触发短信验证码或登录环节**，纯浏览器自动化即可无人值守完成提交。若后续问卷配置发生变化导致提交时出现验证提示，脚本会自动识别并返回 `manual_required` 状态（见「失败降级」），不会静默失败。
 
@@ -35,7 +34,7 @@ author: Tencent_SSV_Tech4Good
 - 识别"字段结构被改动"（字段数不为 3）、"意外出现手机验证/验证码"等异常场景，并明确分类返回，不伪装成功
 
 ### ❌ 不做什么（越界即拒绝）
-- ⏸️ **[MCP 暂停期间例外]** 常规定位是"不作为 MCP 的常规替代通道，仅在 MCP 提交失败后才由运维专家调用"；**但当前 MCP 暂停中，本技能是运维专家的主提交路径**，此条约束暂不生效，MCP 恢复后自动恢复原状
+- ❌ 不作为 MCP 的常规替代通道，**仅在 MCP 提交失败后才由运维专家调用**
 - ❌ 不负责打包技能包/材料包本身（那是 `pack_and_hash.sh` 的职责），只负责 meta.json → zip 的打包
 - ❌ 不处理需要人工登录 / 输入短信验证码才能继续的场景——遇到即返回 `manual_required`，交还人工，不代替用户接收验证码
 - ❌ 不修改、不重试上传逻辑之外的问卷内容（如问卷标题、题目结构），也不用于与 SkillHub 无关的其他问卷填报任务
@@ -62,7 +61,7 @@ author: Tencent_SSV_Tech4Good
 1. `--skill-zip`、`--material-zip` 指向的 zip 文件确实存在、非空、单文件 ≤ 10MB（问卷限制）
 2. `--meta-json` 指向的 `meta.json` 文件存在（脚本会自动打包为 `meta.zip`，无需提前手动打包）
 3. 首次使用时已执行依赖安装：`pip install -r requirements.txt && python3 -m playwright install chromium`（Windows 上 `python3` 命令可能不可用，改用 `python -m playwright install chromium`）
-4. ⏸️ **[MCP 暂停期间]** 当前直接调用本技能作为主提交路径；MCP 恢复后改回"仅当 MCP（`request_upload`）提交已失败 1 次时才调用"
+4. 确认本次调用确实是 MCP（`request_upload`/上传/`get_submission_status`）已判定失败后触发，而非默认主路径
 
 ## 工作流程
 
@@ -136,21 +135,12 @@ python3 {baseDir}/scripts/submit_via_wenjuan.py \
 
 ## 与 MCP 主通道的关系
 
-⏸️ **【MCP 暂停期间 · 当前生效】**
 ```
-运维专家读取 wb_user_id 后直接调用
-本技能：腾讯问卷自动填报提交（当前主提交路径）
-   ↓ manual_required（触发意外验证）/ failed
-引导用户/人工手动打开问卷完成提交，或本地导出兜底
-```
-
-**MCP 恢复上线后改回**：
-```
-运维专家提交 MCP（request_upload，首选）
-   ↓ 失败 1 次
+运维专家提交 MCP（request_upload → 上传 → get_submission_status，首选）
+   ↓ 失败（不可自动重试的错误码，或重试后仍失败）
 本技能：腾讯问卷自动填报提交（次选，本技能职责范围）
-   ↓ manual_required（触发意外验证）
-引导用户/人工手动打开问卷完成提交（最终兜底）
+   ↓ manual_required（触发意外验证）/ failed
+引导用户/人工手动打开问卷完成提交，或本地导出兜底（最终兜底）
 ```
 
 > 是否降级到本技能、以及本技能失败后如何处理，由 `skillhub-ops-expert` 按上述降级链路决定，不在本技能内部自行判断是否该被调用。

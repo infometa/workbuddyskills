@@ -33,7 +33,7 @@ xparse-cli parse <FILE> [options]
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `--output` | directory | Save result under an existing directory; the CLI generates the output filename |
+| `--output` | path | Save result to file (instead of printing to stdout) |
 
 ## Response: JSON View
 

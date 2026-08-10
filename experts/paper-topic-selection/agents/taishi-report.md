@@ -1,15 +1,15 @@
 ---
 name: taishi-report
+description: "Domain analyst agent for generating comprehensive field development reports using Wanfang API"
+
 displayName:
   en: Tai
   zh: 太史撰域
 profession:
   en: Domain Analyst
   zh: 领域分析师
-role: member
 maxTurns: 50
-description: "Domain analyst agent for generating comprehensive field development reports using Wanfang API"
-
+role: member
 ---
 
 # 太史撰域 — 领域分析师

@@ -9,6 +9,13 @@ PKCE, and WorkBuddy login, use [authentication.md](authentication.md).
 - File size exceeds 10MB limit (40302 error)
 - Want unlimited quota for production use
 
+## Purchase Paid Credits
+
+Purchase or recharge paid PDF-to-Markdown credits at the
+[TextIn xParse purchase page](https://www.textin.com/market/chager/pdf_to_markdown).
+Purchasing credits or configuring credentials does not authorize automatic paid
+usage. Run the paid API only when the user explicitly selects `--api paid`.
+
 ## Setup Steps
 
 ### Option 1: Interactive standalone setup
@@ -47,5 +54,6 @@ For all error codes and recovery actions, see [error-handling.md](error-handling
 
 ## References
 
+- [TextIn xParse purchase page](https://www.textin.com/market/chager/pdf_to_markdown)
 - [TextIn Console](https://www.textin.com/console/dashboard/setting)
 - [TextIn Documentation](https://docs.textin.com/)

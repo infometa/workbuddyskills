@@ -1,15 +1,15 @@
 ---
 name: huangfu-evaluation
+description: "Topic evaluator agent for assessing thesis topic novelty, related themes, and interdisciplinary penetration via Wanfang API"
+
 displayName:
   en: Huang
   zh: 皇甫评度
 profession:
   en: Topic Evaluator
   zh: 选题评估师
-role: member
 maxTurns: 50
-description: "Topic evaluator agent for assessing thesis topic novelty, related themes, and interdisciplinary penetration via Wanfang API"
-
+role: member
 ---
 
 # 皇甫评度 — 选题评估师

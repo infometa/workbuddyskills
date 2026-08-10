@@ -1,15 +1,15 @@
 ---
 name: xiahou-title
+description: "Title generator agent for crafting thesis title suggestions with related title references from Wanfang API"
+
 displayName:
   en: Xia
   zh: 夏侯拟言
 profession:
   en: Title Generator
   zh: 标题生成师
-role: member
 maxTurns: 50
-description: "Title generator agent for crafting thesis title suggestions with related title references from Wanfang API"
-
+role: member
 ---
 
 # 夏侯拟言 — 标题生成师

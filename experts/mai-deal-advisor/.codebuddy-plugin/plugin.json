@@ -1,41 +1,61 @@
 {
   "name": "mai-deal-advisor",
-  "version": "1.0.1",
-  "description": "MAI Lab M&A expert pack for WorkBuddy. Clarifies deal tasks, structures reports, verifies numbers and cap tables, monitors HKEX filings, and routes complex judgment calls to the MAI team.",
+  "version": "1.3.1",
+  "description": "MAI Lab M&A agent for project triage, structure diagrams, report drafting, and evidence and cap-table checks.",
   "author": {
     "name": "MAI Deal Inc.",
     "email": "admin@maideal.com"
   },
-  "agents": ["./agents/mai-deal-advisor.md"],
   "expertType": "agent",
   "agentName": "mai-deal-advisor",
-  "plugin": "mai-deal-advisor",
+  "agents": [
+    "./agents/mai-deal-advisor.md"
+  ],
   "displayName": {
-    "en": "MAI Lab M&A Expert Pack",
-    "zh": "MAI Lab并购专家包"
+    "en": "MAI Lab M&A Deal Agent",
+    "zh": "MAI Lab并购Agent"
   },
   "profession": {
-    "en": "For M&A, Ask MAI First",
-    "zh": "并购买卖，先问 MAI"
+    "en": "When a Deal Lands, Find the Path Forward",
+    "zh": "项目来了，先把路理清"
   },
   "displayDescription": {
-    "en": "Clarify the deal, build the report, verify the numbers and cap table, monitor HKEX filings, and bring complex judgment calls to the MAI team.",
-    "zh": "MAI帮你理清并购方向、搭建报告、核验数字与股权表、监控港股公告，复杂判断再转交专业团队"
+    "en": "Turn unstructured deal materials into a clear workplan, editable structure diagram, checked numbers and cap table, and a discussion-ready report draft.",
+    "zh": "客户材料不用先整理，帮你拆项目、画结构、核数字和股权、搭报告，并标出资料缺口和下一步。"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "08-FinanceInvestment",
   "defaultInitPrompt": {
-    "zh": "我有一个并购项目，先帮我理清",
-    "en": "Help me clarify an M&A project"
+    "zh": "客户刚发来这些材料，帮我判断这单先从哪里下手",
+    "en": "A client just sent these materials. Help me decide where to start"
   },
   "tags": [
-    { "en": "M&A Projects", "zh": "并购项目" },
-    { "en": "Data Verification", "zh": "数据核验" },
-    { "en": "HKEX Monitoring", "zh": "港股监控" }
+    {
+      "en": "Project Triage",
+      "zh": "项目拆解"
+    },
+    {
+      "en": "Deal Structure Diagrams",
+      "zh": "交易结构图"
+    },
+    {
+      "en": "Report and Data Checks",
+      "zh": "报告与数据核验"
+    }
   ],
   "quickPrompts": [
-    { "en": "Help me clarify an M&A project", "zh": "我有一个并购项目，先帮我理清" },
-    { "en": "Check this report and cap table", "zh": "帮我检查这份报告和股权表" },
-    { "en": "Monitor this company's HKEX announcements", "zh": "帮我盯这家公司的港股公告" }
-  ]
+    {
+      "en": "A client just sent these materials. Help me decide where to start",
+      "zh": "客户刚发来这些材料，帮我判断这单先从哪里下手"
+    },
+    {
+      "en": "Draw this deal as a structure diagram and check the equity split",
+      "zh": "把这套交易安排画成结构图，并检查股权比例"
+    },
+    {
+      "en": "This report is due tomorrow. Check the numbers and sources",
+      "zh": "这份报告明天要交，帮我检查数字和出处"
+    }
+  ],
+  "plugin": "mai-deal-advisor"
 }

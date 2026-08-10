@@ -1,11 +1,18 @@
 {
   "name": "cat-network-quality-analyst",
   "version": "1.0.1",
-  "description": "Tencent Cloud CAT network quality analyst — multi-dimensional performance analysis, anomaly localization, packet diagnostics, automated PDF reports",
+  "description": "Tencent Cloud CAT network quality analyst — multi-dimensional performance analysis, anomaly localization, packet diagnostics",
   "author": {
     "name": "CodeBuddy Teams"
   },
   "license": "MIT",
+  "keywords": [
+    "cat",
+    "tencent-cloud",
+    "network-quality",
+    "dialing-test",
+    "sre"
+  ],
   "expertType": "agent",
   "agentName": "cat-network-quality-analyst",
   "agents": [
@@ -20,8 +27,8 @@
     "zh": "网络质量分析专家"
   },
   "displayDescription": {
-    "en": "Proficient in multi-dimensional performance analysis, anomaly identification, packet capture diagnostics, and problem demarcation to quickly pinpoint root causes of network and service issues.",
-    "zh": "精通多维性能分析、异常定位、抓包诊断、问题定界，快速定位网络与服务异常根因"
+    "en": "Specializing in error analysis, performance analysis, overall analysis, packet-capture analysis, and multi-task comparison, automatically generating professional analysis reports.",
+    "zh": "精通错误分析、性能分析、整体分析、抓包分析、多任务对比分析，自动生成专业分析报告"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "02-Engineering",
@@ -29,21 +36,48 @@
     "zh": "帮分析一下云拨测任务task-xxxxxxxx最近24小时的错误情况",
     "en": "Please analyze the error status of the cloud probe task task-xxxxxxxx over the last 24 hours."
   },
-  "keywords": [
-    "cat",
-    "tencent-cloud",
-    "network-quality",
-    "dialing-test",
-    "sre"
-  ],
   "tags": [
-    { "zh": "网络诊断", "en": "Network Diagnostics" },
-    { "zh": "云拨测", "en": "Cloud Probe" },
-    { "zh": "性能分析", "en": "Performance Analysis" }
+    {
+      "zh": "网络诊断",
+      "en": "Network Diagnostics"
+    },
+    {
+      "zh": "云拨测",
+      "en": "Cloud Probe"
+    },
+    {
+      "zh": "性能分析",
+      "en": "Performance Analysis"
+    },
+    {
+      "zh": "错误分析",
+      "en": "Error Analysis"
+    },
+    {
+      "zh": "抓包分析",
+      "en": "Packet Capture Analysis"
+    },
+    {
+      "zh": "多任务对比",
+      "en": "Multi-Task Comparison"
+    }
   ],
   "quickPrompts": [
-    { "zh": "帮分析一下云拨测任务task-xxxxxxxx最近24小时的错误情况", "en": "Please analyze the error status of the cloud probe task task-xxxxxxxx over the last 24 hours." },
-    { "zh": "诊断网站访问慢的根因并给出优化建议", "en": "Diagnose the root cause of slow website access and provide optimization suggestions." },
-    { "zh": "对比不同运营商的网络质量数据", "en": "Compare network quality data across different ISPs." }
+    {
+      "zh": "帮分析一下云拨测任务task-xxxxxxxx最近24小时的错误情况",
+      "en": "Please analyze the error status of the cloud probe task task-xxxxxxxx over the last 24 hours."
+    },
+    {
+      "zh": "帮分析一下task-xxxxxxxx从2026年8月1日到2026年8月7日的性能情况",
+      "en": "Please analyze the performance status of the cloud probe task task-xxxxxxxx from August 1, 2026 to August 7, 2026."
+    },
+    {
+      "zh": "帮对任务task-xxxxxxxx北京移动进行抓包分析",
+      "en": "Please analyze the packet capture status of the cloud probe task task-xxxxxxxx for Beijing Mobile."
+    },
+    {
+      "zh": "帮以task-aaaabbbb为基准，task-aaaaaaaa、task-bbbbbbbb为对比，进行多任务对比分析",
+      "en": "Please analyze the multi-task comparison status of the cloud probe task task-aaaabbbb as the base, task-aaaaaaaa and task-bbbbbbbb as the comparison."
+    }
   ]
 }

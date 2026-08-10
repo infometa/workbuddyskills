@@ -1,22 +1,19 @@
 ---
 name: cloud-functions
 description: CloudBase function runtime guide for building, deploying, and debugging your own Event Functions or HTTP Functions. This skill should be used when users need application runtime code on CloudBase, not when they are merely calling CloudBase official platform APIs.
-version: 2.25.7
+version: 2.25.10
 alwaysApply: false
 ---
 
-## Standalone Install Note
+## Sibling skills (local only)
 
-If this environment only installed the current skill, start from the CloudBase main entry and use the published `cloudbase/references/...` paths for sibling skills.
+Sibling CloudBase skills ship beside this skill. Use local relative paths such as `../auth-tool-cloudbase/SKILL.md`.
 
-- CloudBase main entry: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md`
-- Current skill raw source: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloud-functions/SKILL.md`
+If a referenced sibling skill file is missing from this environment, ask the user to install the full CloudBase plugin (or the missing skill). Do **not** HTTP-fetch remote skill or protocol markdown into the agent context.
 
-Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool-cloudbase` or `web-development`, use the standalone fallback URL shown next to that reference.
-
-**Cross-cutting protocols** (required for public exposure and code changes):
-- Change Safety Protocol: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudbase-platform/references/protocols/change-safety-protocol.md`
-- Deployment Gate: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudbase-platform/references/protocols/deployment-gate.md`
+**Cross-cutting protocols** (required before code changes or deployments):
+- Change Safety Protocol: `../cloudbase-platform/references/protocols/change-safety-protocol.md`
+- Deployment Gate: `../cloudbase-platform/references/protocols/deployment-gate.md`
 
 # Cloud Functions Development
 
@@ -41,11 +38,11 @@ Keep local `references/...` paths for files that ship with the current skill dir
 ### Then also read
 
 - Detailed reference routing -> `./references.md`
-- Auth setup or provider-related backend work -> `../auth-tool-cloudbase/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/auth-tool-cloudbase/SKILL.md`)
-- CloudBase Integration Center generated WeChat Pay or Official Account functions -> `../cloudbase-wechat-integration/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudbase-wechat-integration/SKILL.md`; official docs: `https://docs.cloudbase.net/integration/introduce/index.md`)
-- AI in functions -> `../ai-model-nodejs/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ai-model-nodejs/SKILL.md`)
-- Long-lived container services or Agent runtimes -> `../cloudrun-development/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudrun-development/SKILL.md`)
-- Calling CloudBase official platform APIs from a client or script -> `../http-api-cloudbase/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/http-api-cloudbase/SKILL.md`)
+- Auth setup or provider-related backend work -> `../auth-tool-cloudbase/SKILL.md`
+- CloudBase Integration Center generated WeChat Pay or Official Account functions -> `../cloudbase-wechat-integration/SKILL.md` (official docs: `https://docs.cloudbase.net/integration/introduce/index.md`)
+- AI in functions -> `../ai-model-nodejs/SKILL.md`
+- Long-lived container services or Agent runtimes -> `../cloudrun-development/SKILL.md`
+- Calling CloudBase official platform APIs from a client or script -> `../http-api-cloudbase/SKILL.md`
 
 ### Do NOT use for
 
@@ -147,8 +144,9 @@ Use these rules whenever you are writing the function code itself:
    - Use `manageFunctions(action="updateFunctionConfig")` for config updates (timeout, memorySize, envVariables)
    - For a Custom Image HTTP Function, call `manageFunctions(action="createFunction")` with `func.runtime="CustomImage"` and `imageConfig` (`imageUri` with tag; `registryId` for enterprise TCR); iterate later with `manageFunctions(action="updateFunctionCode")` + `imageConfig`. No `functionRootPath` is needed because the code lives in the image. See `./references/http-functions-custom-image.md`.
    - Keep `functionRootPath` as the directory that directly contains function folders (e.g., `cloudfunctions/` or `functions/`), NOT the project root and NOT the function subdirectory itself
-   - **Prefer MCP tools over CLI** — when MCP tools are available, use `manageFunctions` and `queryFunctions` instead of CLI commands
-   - **Do NOT assume CLI is available from task wording alone** — if the available capabilities only include MCP tools, use MCP tools exclusively
+   - **Prefer MCP when available** — use `manageFunctions` and `queryFunctions` when those tools are in this session
+   - **CLI fallback when MCP is missing** — if function tools are not loaded (first session / pre-restart), configure MCP for next time, then use `tcb fn deploy` via `../cloudbase-cli/SKILL.md` (see guideline `tooling-fallback.md`). Do not stall waiting for restart.
+   - **Do NOT invent CLI when the runtime has no shell** — if only MCP exists and it works, stay on MCP; if neither works, report the gap
    - For batch updates (multiple functions), call `manageFunctions(action="updateFunctionConfig")` individually for each function — MCP does not have a `--all` batch parameter like CLI
    - If an HTTP Function uses `@cloudbase/node-sdk`, prefer a server API Key created with `manageAppAuth(action="createApiKey", keyType="api_key")` and inject it as `CLOUDBASE_APIKEY`; Tencent Cloud `SecretId` / `SecretKey` is also supported
    - If an HTTP Function uses `@cloudbase/manager-node`, inject Tencent Cloud `SecretId` / `SecretKey`; do not claim that a CloudBase API Key initializes the Manager SDK

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # scripts/deal_watch/hkexnews_fetch.py
 """拉某港股代号的披露易公告。对齐现有 pipeline：urllib 不用 requests。
 
@@ -15,7 +16,7 @@ parse_announcements 同时兼容 plan/test 的 {"app":[...]} 形态和真实的 
 两套字段名都识别，因此 verbatim 单测照常通过，而 fetch() 走真实接口也能拿到数据。
 """
 import datetime
-import json, sys, urllib.request, urllib.parse
+import json, re, sys, urllib.request, urllib.parse
 
 BASE = "https://www1.hkexnews.hk"
 # 披露易 titleSearch JSON 接口（公告搜索）
@@ -59,25 +60,43 @@ def parse_announcements(raw: str) -> list[dict]:
       - plan/test：{"app": [ {...}, ... ]}
     """
     data = json.loads(raw)
+    if not isinstance(data, dict):
+        raise ValueError("HKEX 响应结构异常：顶层不是对象")
 
-    rows = data.get("app")
-    if rows is None:
+    if "app" in data:
+        rows = data["app"]
+    elif "result" in data:
         # 真实接口：公告在 result（字符串）里，需二次解析；空结果时 result 可能是 "null"/""
         res = data.get("result")
         if isinstance(res, str) and res not in ("", "null"):
             try:
                 rows = json.loads(res)
-            except (ValueError, TypeError):
-                rows = []
+            except (ValueError, TypeError) as exc:
+                raise ValueError("HKEX result 字段无法解析") from exc
         elif isinstance(res, list):
             rows = res
         else:
             rows = []
+        try:
+            record_count = int(data["recordCnt"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError("HKEX 响应结构异常：缺少有效 recordCnt") from exc
+        if record_count > 0 and not rows:
+            raise ValueError("HKEX recordCnt 大于零但未解析到公告行")
+    else:
+        raise ValueError("HKEX 响应结构异常：缺少 app 或 result")
+
+    if not isinstance(rows, list):
+        raise ValueError("HKEX 响应结构异常：公告列表不是数组")
 
     out = []
     for a in rows or []:
-        if isinstance(a, dict):
-            out.append(_row_to_record(a))
+        if not isinstance(a, dict):
+            raise ValueError("HKEX 响应结构异常：公告行不是对象")
+        record = _row_to_record(a)
+        if not record["title"] or not record["date"] or not record["url"]:
+            raise ValueError("HKEX 响应结构异常：公告行缺少标题、日期或链接")
+        out.append(record)
     return out
 
 
@@ -103,8 +122,7 @@ def fetch(stock_code: str, from_date: str, to_date: str = "") -> list[dict]:
 
     internal_id = _resolve_stock_id(stock_code)
     if not internal_id:
-        print(f"Unable to resolve HKEX ticker {stock_code}. Please check the ticker code.", file=sys.stderr)
-        return []
+        raise LookupError(f"无法在披露易证券列表中解析代码 {stock_code}")
 
     params = {
         "sortDir": "0", "sortByOptions": "DateTime",
@@ -123,9 +141,46 @@ def fetch(stock_code: str, from_date: str, to_date: str = "") -> list[dict]:
         return parse_announcements(r.read().decode("utf-8"))
 
 
-if __name__ == "__main__":
-    code = sys.argv[1] if len(sys.argv) > 1 else "00700"
-    frm = sys.argv[2] if len(sys.argv) > 2 else default_from_date()
-    to = sys.argv[3] if len(sys.argv) > 3 else ""
-    for a in fetch(code, frm, to):
+def _parse_date(value: str) -> datetime.date:
+    return datetime.datetime.strptime(value, "%Y%m%d").date()
+
+
+def main(argv=None) -> int:
+    args = list(argv if argv is not None else sys.argv[1:])
+    code = args[0] if args else "00700"
+    frm = args[1] if len(args) > 1 else default_from_date()
+    to = args[2] if len(args) > 2 else datetime.date.today().strftime("%Y%m%d")
+
+    if not re.fullmatch(r"\d{1,5}", code) or not (1 <= int(code) <= 9999):
+        print(f"无效港股代码: {code}。请输入 00001 至 09999 的上市公司代码。", file=sys.stderr)
+        return 2
+    try:
+        start = _parse_date(frm)
+        end = _parse_date(to)
+    except ValueError:
+        print("无效日期区间：日期必须使用 YYYYMMDD。", file=sys.stderr)
+        return 2
+    if start > end or (end - start).days > 366:
+        print("无效日期区间：开始日期不得晚于结束日期，跨度不得超过 366 天。", file=sys.stderr)
+        return 2
+
+    try:
+        announcements = fetch(code.zfill(5), frm, to)
+    except Exception as exc:
+        print(f"查询未完成: {exc}", file=sys.stderr)
+        return 2
+
+    for a in announcements:
         print(f'{a["date"]}  {a["title"]}  {a["url"]}')
+    if not announcements:
+        print("[OK] 查询完成，0 条公告")
+    elif len(announcements) >= 100:
+        print("[UNVERIFIED] 返回达到 100 条上限，结果可能被截断。", file=sys.stderr)
+        return 2
+    else:
+        print(f"[OK] 查询完成，{len(announcements)} 条公告")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

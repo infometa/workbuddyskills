@@ -1,15 +1,15 @@
 ---
 name: shangguan-topic
+description: "Topic strategist agent for recommending research directions via multi-dimensional analysis using Wanfang API"
+
 displayName:
   en: Shang
   zh: 上官选道
 profession:
   en: Topic Strategist
   zh: 选题策略师
-role: member
 maxTurns: 50
-description: "Topic strategist agent for recommending research directions via multi-dimensional analysis using Wanfang API"
-
+role: member
 ---
 
 # 上官选道 — 选题策略师

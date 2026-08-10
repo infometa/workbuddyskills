@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "bazhuayu": {
+      "type": "streamableHttp",
+      "url": "https://mcp.bazhuayu.com?includeTools=search_templates,execute_task,get_task_status,export_data,search_tasks,start_or_stop_task",
+      "timeout": 60000
+    }
+  }
+}

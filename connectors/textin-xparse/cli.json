@@ -1,8 +1,8 @@
 {
   "init": {
-    "darwin": "curl -fsSL https://dllf.intsig.net/download/2026/Solution/xparse-cli/install.sh | sh && \"$HOME/.local/bin/xparse-cli\" --profile workbuddy config set base_url https://api.textin.com",
-    "linux": "curl -fsSL https://dllf.intsig.net/download/2026/Solution/xparse-cli/install.sh | sh && \"$HOME/.local/bin/xparse-cli\" --profile workbuddy config set base_url https://api.textin.com",
-    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"irm https://dllf.intsig.net/download/2026/Solution/xparse-cli/install.ps1 | iex; & \\\"$env:USERPROFILE\\.xparse-cli\\bin\\xparse-cli.exe\\\" --profile workbuddy config set base_url https://api.textin.com\""
+    "darwin": "curl -fsSL https://dllf.intsig.net/download/2026/Solution/xparse-cli/v2.2.0/install.sh | env XPARSER_VERSION=v2.2.0 sh && \"$HOME/.local/bin/xparse-cli\" --profile workbuddy config set base_url https://api.textin.com",
+    "linux": "curl -fsSL https://dllf.intsig.net/download/2026/Solution/xparse-cli/v2.2.0/install.sh | env XPARSER_VERSION=v2.2.0 sh && \"$HOME/.local/bin/xparse-cli\" --profile workbuddy config set base_url https://api.textin.com",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:XPARSER_VERSION='v2.2.0'; irm https://dllf.intsig.net/download/2026/Solution/xparse-cli/v2.2.0/install.ps1 | iex; & \\\"$env:USERPROFILE\\.xparse-cli\\bin\\xparse-cli.exe\\\" --profile workbuddy config set base_url https://api.textin.com\""
   },
   "auth": {
     "darwin": "\"$HOME/.local/bin/xparse-cli\" --profile workbuddy auth device --open-browser=always --output=jsonl",
@@ -34,7 +34,7 @@
       "linux": "\"$HOME/.local/bin/xparse-cli\" version",
       "win32": "\"%USERPROFILE%\\.xparse-cli\\bin\\xparse-cli.exe\" version"
     },
-    "minVersion": "2.1.0",
+    "minVersion": "2.2.0",
     "versionPattern": "xparse-cli version v?(\\d+\\.\\d+\\.\\d+)"
   },
   "authSuppressBrowser": true,

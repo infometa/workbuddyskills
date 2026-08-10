@@ -69,6 +69,8 @@ description: "分析目标 Skill 并设计全方位自测流程，验证其完�
 
 读取 `~/.workbuddy/skills/` 和 `{workspace}/.workbuddy/skills/` 目录，列出所有可用 Skill 作为选项。
 
+> ⚠️ **跨平台路径提醒**：`~` 在 Windows 上不一定能正确展开为用户目录——原生 PowerShell/CMD 环境请改用 `%USERPROFILE%\.workbuddy\skills\`（或 `$env:USERPROFILE\.workbuddy\skills\`）；若通过 Bash 工具在 WSL 环境下执行，`~` 会展开为 WSL 自己的虚拟家目录，并非 Windows 原生用户目录，需改用 `/mnt/c/Users/<用户名>/.workbuddy/skills/` 才能找到真实已安装的 Skill。读取为空时优先怀疑是否用了错误环境的路径，而非直接判定"没有可用 Skill"。
+
 #### 1.2 选择验证模式
 
 用 `AskUserQuestion` 让用户选择模式：
@@ -455,7 +457,7 @@ S4   | 🎓 专业  | 深度能力   | {N}（如适用）
 
 #### 3.4 结构性检查清单
 
-参考 `{baseDir}/references/test_dimensions.md` 中 S1-S4 维度，准备结构检查清单。
+参考 `{baseDir}/references/report_template.md` 中「结构性检查结果」章节的 S1-S4 维度（S1 文件完整性 / S2 元数据质量 / S3 基础安全 / S4 脚本可用性），准备结构检查清单。
 
 ---
 
@@ -679,8 +681,10 @@ T4  ← Skill 完整文本响应结束时间                       【完整响�
 T5  ← 本轮 AskUserQuestion 选项卡渲染时间（如有）
 ```
 
-**采集方法**：
-- 使用系统时间（精度到毫秒）：`date +%s.%N`（Linux/macOS）或 Python `time.time()`
+**采集方法**（按当前操作系统选命令，三端任选其一，禁止在一条命令失败后反复重试）：
+- macOS / Linux：`date +%s.%N`
+- Windows（PowerShell）：`[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()`
+- 跨平台通用（推荐，免去先判断 OS）：`python3 -c "import time; print(time.time())"`；Windows 上若无 `python3` 命令（只注册了 `python`），改用 `python -c "import time; print(time.time())"`
 - 在每轮对话前先记录 T0，每个事件触发时立即记录对应时间戳
 - 不打断仿真主流程；时间戳采集失败不影响功能测试
 

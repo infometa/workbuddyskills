@@ -25,23 +25,25 @@
 └── CHANGELOG.md              # 版本变更记录（推荐）
 ```
 
-> **辅助文档说明**：`README.md`、`GUIDE.md`、`CASES.md`、`Prompt.md`、`CHANGELOG.md` 与 SKILL.md 同存于 git 仓库；WorkBuddy 上架时仅识别 `SKILL.md`、`references/`、`scripts/` 作为标准上架内容。如需离线分发为 tar.gz，使用 `pack.sh` 会自动将辅助文档移到 `{skill-name}_上架材料/` 子目录。
+> **辅助文档说明**：WorkBuddy 上架时仅识别 `SKILL.md`、`references/`、`scripts/` 作为标准上架内容。
 
 ---
 
 ## 二、SKILL.md 完整模板
 
+> ⚠️ **本模板已内置 U1-U7 实战质量规则必备章节**（U1 description 负向排除 / U2 越界拒绝模板 / U3 工具能力契约 / U4 前置校验 / U5 失败降级阈值 / U6 数据真实性 / U7 完整交付保障）——按本模板生成即默认满足「一键检查清单」与解决方案专家步骤 4 的必含章节要求，**不得因"用户没要求"而删减这些章节**；仅标注「按需」的章节（🛠️ 工具能力契约）在技能确实不涉及受限工具/MCP/外部 API 时可省略。
+
 ```markdown
 ---
-name: tencent-ssv-techforgood
-display_name: 公益虾🦞 — 腾讯技术公益智能助手
-display_name_en: TechForGood Assistant 🦞
-description: 专注公益机构数字化赋能的智能助手，围绕腾讯技术公益数字工具箱（techforgood.qq.com）为社会组织匹配免费或低成本数字化产品，支持需求诊断、产品推荐、申领指引、数字化实施参考与必要的机构合规边界提示。当用户提到公益机构数字化、社会组织工具选型、技术公益工具箱、公益虾时使用。
-description_zh: 专注公益机构数字化赋能的智能助手，围绕腾讯技术公益数字工具箱（techforgood.qq.com）为社会组织匹配免费或低成本数字化产品。
-description_en: Tencent Tech for Good digital assistant for NGO empowerment. Matches nonprofits with free or low-cost digital tools.
-category: industry-consultant
-version: 1.0.0
-author: Tencent_SSV_Tech4Good
+name: {Skill 英文id标识}
+display_name: {Skill 中文名称}
+display_name_en: {Skill 英文名称}
+description: {Skill 中文描述：一句话说清定位 + 领域限定关键词 + 触发词；末尾必须附"⚠️ 不适用于：{相邻易混淆场景 1}、{相邻易混淆场景 2}、{相邻易混淆场景 3}"（U1 负向排除，至少 2-3 个）}
+description_zh: {Skill 中文描述}
+description_en: {Skill 英文描述}
+category: {Skill 分类}
+version: {Skill 版本}
+author: {Skill 作者}
 license: Tencent SSV Internal
 ---
 
@@ -51,7 +53,7 @@ license: Tencent SSV Internal
 
 本 Skill 是一段话描述：是什么、解决什么问题、产出物是什么。让用户和 AI 一目了然此 Skill 的定位。
 
-## 能力边界
+## 🎯 能力边界
 
 ### ✅ 能做什么
 
@@ -60,11 +62,24 @@ license: Tencent SSV Internal
 - {能力 3}
 - {能力 4}
 
-### ❌ 不做什么
+### ❌ 不做什么（越界即拒）
 
-- {边界 1：明确拒绝的场景}
-- {边界 2}
-- {边界 3}
+| 越界类型 | 示例 | 应答模板 |
+|---|---|---|
+| {高频误触发场景 1} | {示例} | "本 Skill 专注 {X}，不支持 {Y}。如您需要 {相关替代}，我可以帮上忙。" |
+| {高频误触发场景 2} | {示例} | ... |
+| {高频误触发场景 3} | {示例} | ... |
+
+**越界拒绝标准模板**：
+您好，您的需求 {简述意图} 超出本 Skill 能力范围。本 Skill 专注于 {X}，建议使用 {替代方案}。如有 {本领域} 相关需求（比如 {示例 1}、{示例 2}），我可以为您提供支持。
+
+## 🛠️ 工具能力契约（按需：技能依赖受限工具/MCP/外部 API 时必备）
+
+| 工具/依赖 | 可用范围 | 不可用时处置 | 禁止用途 |
+|---|---|---|---|
+| {工具或 MCP 服务名} | {可用功能/限定范围} | {降级方案} | ❌ {禁止的非标替代方式} |
+
+- 核心依赖（MCP/API）不可用时提供手动操作指引，**禁止绕过到非标方式**（如用 Python 脚本绕过受限 Bash、用浏览器自动化替代 MCP）
 
 ## 核心约束
 
@@ -80,11 +95,46 @@ license: Tencent SSV Internal
 
 **输入**：{用户提供的格式或字段}
 **输出**：{Skill 产出的格式或字段}
+**交互点**：{本步是否需要 AskUserQuestion 选项卡 / 纯文本继续}
 **降级**：{此步失败时的兜底方案}
 
 ### Step 2：{阶段名}
 
-（按需 3-6 步，每步明确输入/输出/降级）
+（按需 3-6 步，每步明确输入/输出/交互点/降级）
+
+## 🛡️ 实战质量规则（U4-U7 必备章节，不可删减）
+
+### ✅ 执行前置校验（U4）
+
+涉及外部资源（文件、API、MCP、网络）的步骤，必须"校验 → 告知 → 执行"：
+
+1. 先确认资源可访问（文件已上传？API 可达？MCP 已授权？）
+2. 校验失败立即告知用户具体问题 + 解决方案
+3. 仅校验通过后才执行实际操作；**禁止在前置条件未满足时编造或推测结果**
+
+### 🛡️ 失败降级机制（U5）
+
+| 失败类型 | 阈值 | 降级动作 |
+|---|---|---|
+| 工具调用失败 | 1 次 | 立即告知用户限制，切换到可行替代方案 |
+| 核心依赖（MCP/API）不可用 | 1 次 | 提供手动操作指引，禁止绕过到非标方式 |
+| 用户连续否定产出 | 2 次 | 暂停重写，追问具体维度 + 索取参考案例 |
+| 创意/方案类需求多轮无法满足 | 3 次 | 主动告知"非核心能力"，建议转用专业工具 |
+| API 限流（429） | 1 次 | 友好提示等待时长，指数退避自动重试 |
+
+- ❌ 反复重试同类工具（≥ 2 次同类失败视为缺陷）
+- ❌ 把原始 API 错误 JSON 直接展示给用户
+
+### 🚫 数据真实性约束（U6）
+
+- **提取型场景**（OCR/解析/读取）：未实际读取文件时禁止输出"提取结果"；禁止根据文件名、上下文猜测内容；多次失败时禁止反复输出相同的虚假数据
+- **生成型场景**（润色/改写/扩展）：禁止添加原文未提及的具体对象（人物、机构、合作方）；禁止编造数据、数字、覆盖范围；含新增事实时必须输出「新增内容标注表」，并设用户审核闸门（用户确认后才进入下一步）
+
+### 📦 完整交付保障（U7）
+
+- 单次输出预计 > 2500 字时**主动分段**（标注"第 N/M 部分"），用户确认后从断点继续，禁止重复已输出内容
+- 遇到外部错误（API 限流、超时、404 等）翻译为用户友好描述，**禁止直接展示原始 JSON 错误**
+- 结构化输出（Excel/JSON/表格）按本文件声明的格式规范自检（如 Excel 汇总行用公式而非硬编码数值、日期列用 datetime 类型）
 
 ## 参考资料
 
@@ -117,9 +167,9 @@ license: Tencent SSV Internal
 
 ## 安全要求
 
-- **API 密钥**：本 Skill {不直接处理 / 通过环境变量 OPENAI_API_KEY 引入 / 通过 MCP 配置 ...}；禁止在 SKILL.md 或 scripts 中硬编码
+- **API 密钥**：本 Skill {不直接处理 / 通过环境变量 XXX_API_KEY 引入 / 通过 MCP 配置 ...}；禁止在 SKILL.md 或 scripts 中硬编码
 - **敏感信息**：涉及身份证号、手机号、签字盖章件、AppSecret 时，必须以占位符或脱敏后形式处理
-- **文件读写**：仅在 {范围说明，如"用户工作目录"} 内读写文件
+- **文件读写**：仅在 {范围说明，如"用户工作目录"} 内读写文件；禁止读取 ~/.ssh、~/.aws 等敏感目录
 - **网络请求**：仅访问 {官方域名清单}；不向未声明域名发起请求
 - **数据可追溯**：涉及法规、案例、关键数字时附数据来源或快照日期；禁止编造事实
 
@@ -215,6 +265,16 @@ license: Tencent SSV Internal
 - ✅ 通过环境变量读取密钥
 - ✅ 在脚本头部注明：用途 / 输入 / 输出 / 依赖
 
+### 4.2.1 跨平台兼容约束（生成的脚本必须满足）
+
+Skill 的终端用户可能使用 macOS、Linux 或 Windows，生成的 `scripts/` 及 SKILL.md 中的调用命令必须保证三端可用：
+
+- ✅ **优先用 Python 实现**：同一份 `.py` 脚本三端行为一致，是最稳妥的跨平台方案；SKILL.md 中调用命令写 `python3 scripts/xxx.py` 时，必须同时注明"Windows 若无 `python3` 命令（只注册了 `python`），改用 `python scripts/xxx.py`"
+- ✅ 文件路径用 Python 的 `pathlib` 拼接，不手写 `/` 或 `\` 分隔符；文件读写显式指定 `encoding="utf-8"`（Windows 默认 GBK，不指定会乱码）
+- ❌ 避免把 `.sh` / bash 脚本作为唯一实现（Windows 原生不支持，用户需额外装 Git Bash/WSL）；如确需 bash，必须同时提供 Windows 可执行的替代（PowerShell 版或 Python 版）
+- ❌ 避免在脚本或 SKILL.md 正文中直接调用平台专属命令：`sips`（仅 macOS）、`cp`/`mv`/`grep`/`sed`（Windows 无）、`Copy-Item`（仅 PowerShell）；必须使用时需给出各平台替代命令
+- ✅ 依赖的外部命令行工具（如 ffmpeg、pandoc）需在 SKILL.md 中声明三端安装方式（如 `brew` / `apt` / `choco`）
+
 ### 4.3 调用示例
 
 ```python
@@ -262,7 +322,12 @@ if not API_KEY:
 ### 5.2 PNG 渲染脚本
 
 ```bash
-# 需要先安装：pip3 install cairosvg --break-system-packages
+# 1. 安装依赖（按你的环境选择）：
+#    通用（含 Windows）：pip install cairosvg
+#    macOS/Linux 若报 "externally-managed-environment"（PEP 668）：pip3 install cairosvg --break-system-packages
+#    注意：--break-system-packages 仅 macOS Homebrew / 新版 Debian-Ubuntu 需要，Windows 和不报 PEP 668 错误的环境不要加此 flag
+#
+# 2. 渲染（macOS/Linux 用 python3；Windows 若无 python3 命令改用 python）
 python3 -c "
 import cairosvg
 cairosvg.svg2png(
@@ -347,10 +412,16 @@ cairosvg.svg2png(
 @skill://{technical-name}
 \`\`\`
 
-或者本地手动安装：
+或者本地手动安装（按操作系统选对应命令）：
 
 \`\`\`bash
+# macOS / Linux
 cp -r {skill-name} ~/.workbuddy/skills/
+\`\`\`
+
+\`\`\`powershell
+# Windows（PowerShell）
+Copy-Item -Recurse {skill-name} "$env:USERPROFILE\.workbuddy\skills\"
 \`\`\`
 
 ## 快速上手
@@ -431,14 +502,3 @@ cp -r {skill-name} ~/.workbuddy/skills/
 ```
 
 ---
-
-## 九、生产参考样板
-
-完整可用的 Skill 样板：
-
-- 📂 `charity/skills/腾讯技术公益智能助手/` — 复杂工作流 + 完整 references/ + Playbook 案例 + 惰性更新机制
-- 📂 `charity/skills/公益文书助手/` — 多平台适配 + 模板加载器
-- 📂 `charity/skills/公益财会助手/` — OCR 脚本 + 复合工作流
-- 📂 `charity/expert-creator/` — 工具型 Skill 标准模板（适合作为 skill-creator 自身的参考）
-
-建议在创建新 Skill 时，先复制其中一个作为起点，再按需修改字段值。

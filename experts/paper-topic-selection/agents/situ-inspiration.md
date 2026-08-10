@@ -1,15 +1,15 @@
 ---
 name: situ-inspiration
+description: "Trend analyst agent for discovering topic inspiration from journal guides, funding directions, and annual hot keywords via Wanfang API"
+
 displayName:
   en: Si
   zh: 司徒启思
 profession:
   en: Trend Analyst
   zh: 趋势分析师
-role: member
 maxTurns: 50
-description: "Trend analyst agent for discovering topic inspiration from journal guides, funding directions, and annual hot keywords via Wanfang API"
-
+role: member
 ---
 
 # 司徒启思 — 趋势分析师

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.0.0",
-  "lastUpdated": "2026-08-04T00:00:00Z",
+  "lastUpdated": "2026-08-10T13:16:17Z",
   "author": {
     "name": "AI Expert Center",
     "source": "https://github.com/msitarzewski/agency-agents",
@@ -8835,7 +8835,7 @@
     },
     {
       "id": "CATNetworkQualityAnalyst",
-      "categoryId": "13-TencentZone",
+      "categoryId": "02-Engineering",
       "displayName": {
         "en": "Aaron",
         "zh": "亚伦"
@@ -8845,12 +8845,12 @@
         "zh": "网络质量分析专家"
       },
       "description": {
-        "en": "Proficient in multi-dimensional performance analysis, anomaly identification, packet capture diagnostics, and problem demarcation to quickly pinpoint root causes of network and service issues.",
-        "zh": "精通多维性能分析、异常定位、抓包诊断、问题定界，快速定位网络与服务异常根因"
+        "zh": "精通错误分析、性能分析、整体分析、抓包分析、多任务对比分析，自动生成专业分析报告",
+        "en": "Specializing in error analysis, performance analysis, overall analysis, packet-capture analysis, and multi-task comparison, automatically generating professional analysis reports."
       },
       "avatar": "/avatars/CATNetworkQualityAnalyst.png",
       "createdAt": "2026-04-20T11:32:00Z",
-      "updatedAt": "2026-05-01T08:05:34Z",
+      "updatedAt": "2026-08-10T13:16:17Z",
       "defaultInitPrompt": {
         "zh": "帮分析一下云拨测任务task-xxxxxxxx最近24小时的错误情况",
         "en": "Please analyze the error status of the cloud probe task task-xxxxxxxx over the last 24 hours."
@@ -8861,30 +8861,46 @@
       "plugin": "cat-network-quality-analyst",
       "tags": [
         {
+          "zh": "网络诊断",
+          "en": "Network Diagnostics"
+        },
+        {
           "zh": "云拨测",
-          "en": "Cloud Probe Testing"
+          "en": "Cloud Probe"
         },
         {
-          "zh": "网络分析",
-          "en": "Network Analysis"
+          "zh": "性能分析",
+          "en": "Performance Analysis"
         },
         {
-          "zh": "运维诊断",
-          "en": "SRE Diagnostics"
+          "zh": "错误分析",
+          "en": "Error Analysis"
+        },
+        {
+          "zh": "抓包分析",
+          "en": "Packet Capture Analysis"
+        },
+        {
+          "zh": "多任务对比",
+          "en": "Multi-Task Comparison"
         }
       ],
       "quickPrompts": [
         {
           "zh": "帮分析一下云拨测任务task-xxxxxxxx最近24小时的错误情况",
-          "en": "Analyze the error status of the cloud probe task task-xxxxxxxx over the last 24 hours"
+          "en": "Please analyze the error status of the cloud probe task task-xxxxxxxx over the last 24 hours."
         },
         {
-          "zh": "生成这个拨测任务的整体分析报告",
-          "en": "Generate an overall analysis report for this probe task"
+          "zh": "帮分析一下task-xxxxxxxx从2026年8月1日到2026年8月7日的性能情况",
+          "en": "Please analyze the performance status of the cloud probe task task-xxxxxxxx from August 1, 2026 to August 7, 2026."
         },
         {
-          "zh": "对指定错误记录做抓包深度分析",
-          "en": "Do a deep packet capture analysis for the specified error record"
+          "zh": "帮对任务task-xxxxxxxx北京移动进行抓包分析",
+          "en": "Please analyze the packet capture status of the cloud probe task task-xxxxxxxx for Beijing Mobile."
+        },
+        {
+          "zh": "帮以task-aaaabbbb为基准，task-aaaaaaaa、task-bbbbbbbb为对比，进行多任务对比分析",
+          "en": "Please analyze the multi-task comparison status of the cloud probe task task-aaaabbbb as the base, task-aaaaaaaa and task-bbbbbbbb as the comparison."
         }
       ]
     },
@@ -10340,7 +10356,7 @@
       "promptFile": "/plugins/stock-partner-team/agents/stock-partner-lead.md",
       "avatar": "/plugins/stock-partner-team/avatars/team.png",
       "createdAt": "2026-04-15T00:00:00Z",
-      "updatedAt": "2026-08-07T03:25:00Z",
+      "updatedAt": "2026-08-10T02:34:10Z",
       "defaultInitPrompt": {
         "zh": "算力 VS 人形机器人，2026 下半年哪条主线更值得关注？",
         "en": "Compute power vs. humanoid robots — which main theme is more worth watching in H2 2026?"
@@ -21617,54 +21633,54 @@
       "displayPosition": 4,
       "categoryId": "08-FinanceInvestment",
       "displayName": {
-        "en": "MAI Lab M&A Expert Pack",
-        "zh": "MAI Lab并购专家包"
+        "en": "MAI Lab M&A Deal Agent",
+        "zh": "MAI Lab并购Agent"
       },
       "profession": {
-        "en": "For M&A, Ask MAI First",
-        "zh": "并购买卖，先问 MAI"
+        "en": "When a Deal Lands, Find the Path Forward",
+        "zh": "项目来了，先把路理清"
       },
       "description": {
-        "zh": "MAI帮你理清并购方向、搭建报告、核验数字与股权表、监控港股公告，复杂判断再转交专业团队",
-        "en": "Clarify the deal, build the report, verify the numbers and cap table, monitor HKEX filings, and bring complex judgment calls to the MAI team."
+        "zh": "客户材料不用先整理，帮你拆项目、画结构、核数字和股权、搭报告，并标出资料缺口和下一步。",
+        "en": "Turn unstructured deal materials into a clear workplan, editable structure diagram, checked numbers and cap table, and a discussion-ready report draft."
       },
       "promptFile": "/plugins/mai-deal-advisor/agents/mai-deal-advisor.md",
       "avatar": "/avatars/MaiDealAdvisor.png",
       "createdAt": "2026-07-08T09:18:56Z",
-      "updatedAt": "2026-07-21T07:35:04Z",
+      "updatedAt": "2026-08-10T08:54:26Z",
       "defaultInitPrompt": {
-        "zh": "我有一个并购项目，先帮我理清",
-        "en": "Help me clarify an M&A project"
+        "zh": "客户刚发来这些材料，帮我判断这单先从哪里下手",
+        "en": "A client just sent these materials. Help me decide where to start"
       },
       "expertType": "agent",
       "agentName": "mai-deal-advisor",
       "plugin": "mai-deal-advisor",
       "tags": [
         {
-          "en": "M&A Projects",
-          "zh": "并购项目"
+          "en": "Project Triage",
+          "zh": "项目拆解"
         },
         {
-          "en": "Data Verification",
-          "zh": "数据核验"
+          "en": "Deal Structure Diagrams",
+          "zh": "交易结构图"
         },
         {
-          "en": "HKEX Monitoring",
-          "zh": "港股监控"
+          "en": "Report and Data Checks",
+          "zh": "报告与数据核验"
         }
       ],
       "quickPrompts": [
         {
-          "en": "Help me clarify an M&A project",
-          "zh": "我有一个并购项目，先帮我理清"
+          "en": "A client just sent these materials. Help me decide where to start",
+          "zh": "客户刚发来这些材料，帮我判断这单先从哪里下手"
         },
         {
-          "en": "Check this report and cap table",
-          "zh": "帮我检查这份报告和股权表"
+          "en": "Draw this deal as a structure diagram and check the equity split",
+          "zh": "把这套交易安排画成结构图，并检查股权比例"
         },
         {
-          "en": "Monitor this company's HKEX announcements",
-          "zh": "帮我盯这家公司的港股公告"
+          "en": "This report is due tomorrow. Check the numbers and sources",
+          "zh": "这份报告明天要交，帮我检查数字和出处"
         }
       ],
       "author": {
@@ -24063,7 +24079,7 @@
       "promptFile": "/plugins/paper-topic-selection/agents/zhuge-consultant.md",
       "avatar": "/avatars/PaperTopicSelection.png",
       "createdAt": "2026-07-20T11:18:52Z",
-      "updatedAt": "2026-08-05T03:00:00Z",
+      "updatedAt": "2026-08-10T02:23:22Z",
       "defaultInitPrompt": {
         "zh": "搜文献/找专家 → 搜 XX 方向的论文",
         "en": "Search papers/experts → Search papers in XX field"
@@ -24573,13 +24589,13 @@
         "zh": "技术公益专家团"
       },
       "description": {
-        "zh": "首席协调官星星带领六位专家，覆盖公益技能从需求分析、编写、测试、社会价值评审、版权确认和打包交付的全流程。",
-        "en": "Led by Chief Coordinator Star, a team of six experts covers the entire lifecycle of public-interest skills—spanning needs analysis, development, testing, and social value assessment, through to copyright confirmation and final packaging and delivery."
+        "zh": "星星带领六位专家，覆盖公益技能或Agent专家的需求分析、编写、测试评审、版权确认与打包交付全流程。",
+        "en": "Led by Chief Coordinator Star, a team of six experts covers the full lifecycle of public-interest skills and Agent-type experts—needs analysis, development, testing, social value review, copyright clearance, and packaging."
       },
       "promptFile": "/plugins/skillhub-charity-expert-team/agents/skillhub-manager.md",
       "avatar": "/avatars/SkillhubCharityExpertTeam.png",
       "createdAt": "2026-07-22T04:08:46Z",
-      "updatedAt": "2026-07-24T08:00:00Z",
+      "updatedAt": "2026-08-10T09:33:07Z",
       "defaultInitPrompt": {
         "en": "Create a charity project management skill for me",
         "zh": "帮我创建一个公益项目管理的技能"
@@ -24589,16 +24605,16 @@
       "plugin": "skillhub-charity-expert-team",
       "tags": [
         {
+          "en": "social-value-assessment",
+          "zh": "社会价值评估"
+        },
+        {
           "en": "skill-creation",
           "zh": "技能创作"
         },
         {
-          "en": "charity",
-          "zh": "公益慈善"
-        },
-        {
-          "en": "quality-assurance",
-          "zh": "质量保障"
+          "en": "charity-support",
+          "zh": "公益支持"
         }
       ],
       "quickPrompts": [
@@ -24607,12 +24623,12 @@
           "zh": "帮我创建一个公益项目管理的技能"
         },
         {
-          "en": "I need a skill for volunteer hour tracking and reporting",
-          "zh": "我需要一个志愿者工时记录与报告的技能"
+          "en": "Help me turn this existing skill into an Agent-type expert",
+          "zh": "帮我把这个技能包装成一个专家"
         },
         {
-          "en": "Build a donation receipt management skill for my foundation",
-          "zh": "为我的基金会创建一个捐赠票据管理的技能"
+          "en": "What skill tasks are currently available to claim on Tencent Tech for Good?",
+          "zh": "腾讯技术公益现在有哪些技能任务可以领取？"
         }
       ],
       "members": [
@@ -24637,8 +24653,8 @@
             "zh": "帅帅"
           },
           "profession": {
-            "en": "Charity Solution Architect",
-            "zh": "公益解决方案专家"
+            "en": "Solution Architect",
+            "zh": "解决方案专家"
           },
           "avatar": "/avatars/SkillhubCharityExpertTeam-SkillhubSolutionArchitect.png",
           "promptFile": "/plugins/skillhub-charity-expert-team/agents/skillhub-solution-architect.md",
@@ -24665,8 +24681,8 @@
             "zh": "胖虎"
           },
           "profession": {
-            "en": "Skill Security Tester",
-            "zh": "技能安全测试专家"
+            "en": "Security Tester",
+            "zh": "安全测试专家"
           },
           "avatar": "/avatars/SkillhubCharityExpertTeam-SkillhubSecurityTester.png",
           "promptFile": "/plugins/skillhub-charity-expert-team/agents/skillhub-security-tester.md",
@@ -28475,6 +28491,126 @@
       "author": {
         "zh": "WorkBuddy团队",
         "en": "WorkBuddy Team"
+      }
+    },
+    {
+      "id": "SkillSmith",
+      "categoryId": "12-IndustryConsultant",
+      "displayName": {
+        "en": "Skill Smith",
+        "zh": "技能匠人"
+      },
+      "profession": {
+        "en": "Skill Creation Coach",
+        "zh": "Skill 制作顾问"
+      },
+      "description": {
+        "zh": "陪制作者把重复工作流做成可用的 Skill：挖掘场景、确认需求、生成制作、实测验证、按标准审查打分。",
+        "en": "Turns repetitive workflows into working Skills: scope discovery, requirement confirmation, generation, hands-on testing, and standards-based review."
+      },
+      "promptFile": "/plugins/skill-smith/agents/skill-smith.md",
+      "avatar": "/avatars/SkillSmith.png",
+      "createdAt": "2026-08-10T06:31:46Z",
+      "updatedAt": "2026-08-10T06:31:46Z",
+      "defaultInitPrompt": {
+        "zh": "我每次写周报都要重新教 AI 我们团队的格式，能做成 Skill 吗",
+        "en": "I re-teach AI our team report format every week. Can this become a Skill?"
+      },
+      "expertType": "agent",
+      "agentName": "skill-smith",
+      "plugin": "skill-smith",
+      "tags": [
+        {
+          "en": "Skill Creation",
+          "zh": "Skill 制作"
+        },
+        {
+          "en": "Hands-on Testing",
+          "zh": "实测验证"
+        },
+        {
+          "en": "Quality Review",
+          "zh": "质量审查"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "I re-teach AI our team report format every week. Can this become a Skill?",
+          "zh": "我每次写周报都要重新教 AI 我们团队的格式，能做成 Skill 吗"
+        },
+        {
+          "en": "Here is my Skill. Review its quality and tell me what to fix.",
+          "zh": "这是我写的 Skill，帮我看看质量怎么样、哪里要改"
+        },
+        {
+          "en": "I want to enter the Skill contest but only have a vague idea. Help me shape it.",
+          "zh": "我想参加 Skill 制作大赛，但只有个模糊想法，帮我理一理"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "WorkBuddy 团队",
+        "en": "WorkBuddy 团队"
+      }
+    },
+    {
+      "id": "TencentCloudQuoteAssistant",
+      "categoryId": "13-TencentZone",
+      "displayName": {
+        "en": "Tencent Cloud Quote Assistant",
+        "zh": "腾讯云报价助手"
+      },
+      "profession": {
+        "en": "Tencent Cloud Quoting Advisor",
+        "zh": "腾讯云产品报价顾问"
+      },
+      "description": {
+        "zh": "面向销售与方案团队的腾讯云报价助手，支持产品咨询选型、实时刊例价查询比较、批量采购报价、友商 Mapping 与折扣推荐。",
+        "en": "Tencent Cloud quote assistant for product consultation and selection, real-time list-price quotes and comparisons, batch procurement quoting, competitor mapping, discount guidance, and official-offer lookup. Formal prices come from controlled real-time pricing workflows."
+      },
+      "promptFile": "/plugins/tencent-cloud-quote-assistant/agents/price-inquiry-assistant.md",
+      "avatar": "/avatars/TencentCloudQuoteAssistant.png",
+      "createdAt": "2026-08-10T07:02:06Z",
+      "updatedAt": "2026-08-10T07:02:06Z",
+      "defaultInitPrompt": {
+        "zh": "腾讯云报价助手可以帮我做什么？",
+        "en": "What can Tencent Cloud Quote Assistant help me with?"
+      },
+      "expertType": "agent",
+      "agentName": "price-inquiry-assistant",
+      "plugin": "tencent-cloud-quote-assistant",
+      "tags": [
+        {
+          "en": "Product Consultation",
+          "zh": "产品咨询"
+        },
+        {
+          "en": "Price Inquiry",
+          "zh": "刊例价查询"
+        },
+        {
+          "en": "Tencent Cloud",
+          "zh": "腾讯云"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "What can Tencent Cloud Quote Assistant help me with?",
+          "zh": "腾讯云报价助手可以帮我做什么？"
+        },
+        {
+          "en": "Compare the 1-year list prices of CVM 4C8G in Guangzhou and Shanghai",
+          "zh": "对比 CVM 4核8G 在广州和上海购买一年的刊例价"
+        },
+        {
+          "en": "Map this Alibaba Cloud bill to Tencent Cloud products and then quote it",
+          "zh": "把这份阿里云账单映射成腾讯云产品后继续询价"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "Corey",
+        "en": "Corey"
       }
     }
   ]

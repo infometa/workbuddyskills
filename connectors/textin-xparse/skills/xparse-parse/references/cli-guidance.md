@@ -65,6 +65,9 @@ xparse-cli parse document.pdf --view json
 
 # Save to directory (auto-names as <basename>.json/.md)
 xparse-cli parse document.pdf --output ./result/
+
+# Save to specific file (default view is markdown)
+xparse-cli parse document.pdf --output result.md
 ```
 
 ## Common Scenarios
@@ -76,6 +79,7 @@ xparse-cli parse document.pdf --output ./result/
 | Specific pages only | `xparse-cli parse doc.pdf --page-range 1-5` |
 | Encrypted document | `xparse-cli parse doc.pdf --password secret123` |
 | Save to directory | `xparse-cli parse doc.pdf --output ./result/` |
+| Save to specific file | `xparse-cli parse doc.pdf --output ./parsed.md` |
 
 ## Advanced Options
 
@@ -83,7 +87,7 @@ xparse-cli parse document.pdf --output ./result/
 |----------|---------|
 | Single page only | `xparse-cli parse doc.pdf --page-range 3` |
 | Multiple page ranges | `xparse-cli parse doc.pdf --page-range 1-2,5-10` |
-| Character details & coordinates | `xparse-cli parse doc.pdf --view json --include-char-details --output ./result/` |
+| Character details & coordinates | `xparse-cli parse doc.pdf --view json --include-char-details --output ./parsed.json` |
 | Force paid OAuth | `xparse-cli parse doc.pdf --api paid --auth-method oauth` |
 | Force paid AppKey | `xparse-cli parse doc.pdf --api paid --auth-method app-key` |
 

@@ -1,0 +1,37 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "miaoda --version",
+      "linux": "miaoda --version",
+      "win32": "miaoda.cmd --version"
+    },
+    "minVersion": "1.0.0"
+  },
+  "init": {
+    "darwin": "npm i -g miaoda-cli",
+    "linux": "npm i -g miaoda-cli",
+    "win32": "npm i -g miaoda-cli"
+  },
+  "auth": {
+    "darwin": "miaoda login",
+    "linux": "miaoda login",
+    "win32": "miaoda.cmd login"
+  },
+  "unAuth": {
+    "darwin": "miaoda logout",
+    "linux": "miaoda logout",
+    "win32": "miaoda.cmd logout"
+  },
+  "status": {
+    "darwin": "miaoda status",
+    "linux": "miaoda status",
+    "win32": "miaoda.cmd status"
+  },
+  "minWorkbuddyVersion": "5.0.0",
+  "authUrlDomain": "www.miaoda.cn",
+  "statusMatch": "Logged in"
+}

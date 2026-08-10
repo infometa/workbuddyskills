@@ -1,29 +1,20 @@
 # CAT Network Quality Analyst · 网络质量分析专家
 
-基于腾讯云 CAT（Cloud Automated Testing，云拨测）平台的网络质量分析专家，一键洞察全球网络健康状况。
-
-## 专家能力
-
-- **多维度性能分析**：可用性、响应时间、错误率等关键性能指标
-- **异常与错误分布定位**：按地域、运营商、时间维度交叉分析
-- **网络问题自动定界**：区分运营商链路异常与服务端自身问题
-- **抓包智能诊断**：深度解析 TCP / TLS / DNS / HTTP 协议层问题
-- **专业报告输出**：自动生成结构化 PDF 分析报告，含图表与可操作建议
+基于腾讯云 CAT（Cloud Automated Testing，云拨测）平台的网络质量分析专家，精通错误分析、性能分析、整体分析、抓包分析、多任务对比分析，自动生成专业分析报告。
 
 ## 典型对话
 
 - 帮分析一下云拨测任务 task-xxxxxxxx 最近 24 小时的错误情况
 - 生成这个拨测任务的整体分析报告
 - 对指定错误记录做抓包深度分析
+- 以任务 task-aaaabbbb 作为基准，task-ccccdddd、task-eeeeffff 为对比对象，进行多任务对比分析
 
 ## 依赖说明
 
 本专家在运行时依赖一个**外部 SkillHub 技能包**（不随本仓库分发）：
 
-- 技能包名：`cat-network-quality-analysis-v1-0-1`
-- 安装方式：专家会在首次需要时自动检测并安装，无需用户介入
-  - 主路径：`npx skillhub install cat-network-quality-analysis-v1-0-1`
-  - 备用：curl 下载 cos 包后解压到 `~/.workbuddy/skills/cat-network-quality-analysis`
+- 技能包名：`@tencent-adm/cat-network-quality-analysis-v1-0-1`
+- 安装方式：专家会在首次需要时自动检测并安装，无需用户介入：`npx skillhub install @tencent-adm/cat-network-quality-analysis-v1-0-1`
 
 ## 凭证配置
 
@@ -39,5 +30,5 @@
 ## 报告命名规范
 
 - 路径格式：`{task_id}/{task_id}_{report_type}_{timestamp}.pdf`
-- `report_type` 取值：`error_report` / `overall_report` / `pcap_report`
+- `report_type` 取值：`error_report` / `overall_report` / `pcap_report` / `performance_report` / `multi_task_report`
 - `timestamp` 格式：`YYYYMMDD_HHmmss`

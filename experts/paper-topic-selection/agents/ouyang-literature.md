@@ -1,15 +1,15 @@
 ---
 name: ouyang-literature
+description: "Literature scout agent for searching academic papers and scholars via Wanfang API"
+
 displayName:
   en: Ou
   zh: 欧阳搜文
 profession:
   en: Literature Scout
   zh: 文献侦察员
-role: member
 maxTurns: 50
-description: "Literature scout agent for searching academic papers and scholars via Wanfang API"
-
+role: member
 ---
 
 # 欧阳搜文 — 文献侦察员
