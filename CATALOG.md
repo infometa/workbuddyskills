@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**89** · 专家：**408** · 官方插件：**57** · 团队插件：**30**
+- 技能包：**295** · 连接器：**93** · 专家：**408** · 官方插件：**57** · 团队插件：**31**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-11
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-12
 
 ---
 ## 目录
@@ -384,10 +384,12 @@
 | [`dingtalk`](./connectors/dingtalk/) | 管理钉钉产品能力(AI表格/AI搜问/日历/通讯录/群聊与机器人/待办/审批/考勤/日志/DING消息/开放平台文档/钉钉文档/钉钉云盘/原生Markdown文件/AI听记/邮箱… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`edgeone-pages`](./connectors/edgeone-pages/) | 用途：edgeone-pages | 可能需要启用对应 MCP / 连接器 |
 | [`emr-query`](./connectors/emr-query/) | 腾讯云 EMR 只读查询技能 — 基于官方 tccli 的 48 个只读查询接口文档与调用模板 | 需要登录 / OAuth / 扫码授权 |
+| [`ezjoin-meeting`](./connectors/ezjoin-meeting/) | EzyJoin 智慧会议操作技能 - 预约会议室、创建/取消会议、查询会议日程与 AI 纪要、企业知识库检索 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`fbs-connector`](./connectors/fbs-connector/) | 福帮手人机协同连接器：身份、场景包、乐包、首值记录和超级合伙人交接。 | 可能需要启用对应 MCP / 连接器 |
 | [`feishu`](./connectors/feishu/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`finenter`](./connectors/finenter/) | 用途：Use the Finenter Investment Research MCP to query institutional insights, research rep… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`fyopen-lawsearch`](./connectors/fyopen-lawsearch/) | 法研·法律法规检索 MCP Skill。涉及「法律法规」「法条」「法规条文」「民法典」「现行有效法规」等关键词时使用。支持自然语言获取精准、现行有效的法规条文，将高质量、海量的法… | 可能需要启用对应 MCP / 连接器 |
+| [`gangtise-mcp`](./connectors/gangtise-mcp/) | 用途：Use Gangtise MCP tools for financial quotes, research reports, knowledge base, stock p… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`GTS_ACCESS_KEY`、`GTS_SECRET_KEY` |
 | [`gildata`](./connectors/gildata/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`GILDATA_TOKEN` |
 | [`github`](./connectors/github/) | 用途：Use github connector to access github MCP capabilities via github mcp server. | 可能需要启用对应 MCP / 连接器 |
 | [`github-remote`](./connectors/github-remote/) | 用途：Use github-remote connector to access github-remote MCP capabilities via github-remote… | 可能需要启用对应 MCP / 连接器 |
@@ -397,6 +399,7 @@
 | [`infimind-video`](./connectors/infimind-video/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SORA_MCP_TOKEN` |
 | [`jinshuju`](./connectors/jinshuju/) | 金数据（Jinshuju，jinshuju.net）操作技能 —— 创建/复制/编辑表单与主题，增删改查与批量修改表单数据，上传图片附件，查询账户套餐与团队成员。触发词：金数据、… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`jira`](./connectors/jira/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要环境变量：`ATLASSIAN_API_TOKEN`、`JIRA_API_TOKEN` |
+| [`jiushuyun`](./connectors/jiushuyun/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`kdocs`](./connectors/kdocs/) | 操作金山文档（WPS 云文档 / Kdocs / 365.kdocs.cn / www.kdocs.cn）云文档的官方 Skill。核心能力覆盖云端新建、读取、编辑、搜索、分享、… | 可能需要启用对应 MCP / 连接器 |
 | [`kuaicha-search`](./connectors/kuaicha-search/) | >- | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`KUAICHA_API_KEY` |
 | [`lemonclaw`](./connectors/lemonclaw/) | 通过 lemonclaw-cli 与内置独立开票工作流查询或操作柠檬云多产品业务数据。覆盖认证和账套、进销存 SCM、业财 ERP、财务 ACC、发票查询及独立开票；适用于客户、… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权 |
@@ -413,6 +416,7 @@
 | [`netease-mail`](./connectors/netease-mail/) | 通过 IMAP/SMTP 连接邮箱，支持收发邮件、搜索、附件下载。支持 163、126、yeah.net 等网易邮箱及其他标准 IMAP/SMTP 邮箱。触发关键词：邮件、邮箱、… | 需要登录 / OAuth / 扫码授权；需要按 token-schema 配置凭证 |
 | [`notion`](./connectors/notion/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`opendata`](./connectors/opendata/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`REGION_INSIGHT_API_KEY` |
+| [`pandadata`](./connectors/pandadata/) | 用途：Query and analyze financial data through the PandaData MCP Connector. Use whenever use… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`patsnap-search`](./connectors/patsnap-search/) | 用途：Search Patsnap patent and literature data through the Patsnap MCP connector. | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`PATSNAP_API_KEY` |
 | [`picset-commerce-images`](./connectors/picset-commerce-images/) | WorkBuddy 用户需要通过 Picset AI MCP 连接器生成电商主图、详情图或 Amazon A+ 图片时使用。 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
 | [`picset-video-generation`](./connectors/picset-video-generation/) | WorkBuddy 用户需要通过 Picset AI MCP 连接器生成电商短视频时使用。 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
@@ -940,7 +944,7 @@
 ## 4. 插件市场 `plugins/`
 
 - 官方插件 `plugins/codebuddy-plugins-official/plugins/`：**57**
-- 团队插件 `plugins/cb_teams_marketplace/plugins/`：**30**
+- 团队插件 `plugins/cb_teams_marketplace/plugins/`：**31**
 
 ### 官方插件
 
@@ -1033,6 +1037,7 @@
 | [`private-equity`](./plugins/cb_teams_marketplace/plugins/private-equity/) | 用途：Private equity deal sourcing and workflow tools: company discovery, CRM integration, a… |
 | [`product-management`](./plugins/cb_teams_marketplace/plugins/product-management/) | 产品管理插件覆盖完整的 PM 工作流程：编写功能规格、管理产品路线图、与利益相关者沟通、综合用户研究、分析竞品和审查产品指标。 |
 | [`remotion-video-generator`](./plugins/cb_teams_marketplace/plugins/remotion-video-generator/) | 用途：Automatically generate beautiful, production-quality videos using Remotion with minima… |
+| [`sheetagent`](./plugins/cb_teams_marketplace/plugins/sheetagent/) | 由腾讯文档团队出品的电子表格智能助手，支持通过自然语言创建、查询与编辑 xlsx 表格 |
 | [`skill-creator`](./plugins/cb_teams_marketplace/plugins/skill-creator/) | 提供创建高效 Claude 技能的指南,通过专业知识、工作流程和工具集成来扩展 AI 助手的能力 |
 | [`spglobal`](./plugins/cb_teams_marketplace/plugins/spglobal/) | 用途：S&P Global - Financial data and analytics skills including company tearsheets, earning… |
 | [`trading-agent`](./plugins/cb_teams_marketplace/plugins/trading-agent/) | 交易智能体插件：基于多角色辩论方法论的系统性投资分析，涵盖市场技术分析、基本面分析、新闻与情绪分析、多空辩论、交易决策与三方风险评估全流程，输出 BUY/SELL/HOLD 建议… |

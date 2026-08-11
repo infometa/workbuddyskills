@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "pandadata": {
+      "url": "https://pandadatamcp.pandaaiquant.com/mcp"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "jiushuyun": {
+      "type": "streamableHttp",
+      "url": "https://work.jiushuyun.com/mcp",
+      "timeout": 30000
+    }
+  }
+}

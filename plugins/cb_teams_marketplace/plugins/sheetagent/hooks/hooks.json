@@ -1,0 +1,21 @@
+{
+  "description": "SheetAgent plugin hooks",
+  "hooks": {
+    "SessionStart": [
+    ],
+    "UserPromptSubmit": [
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/save-on-subagent-stop.mjs\"",
+            "description": "子代理任务完成时通过上游 editorsdk 自动保存脏文件，避免数据丢失",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

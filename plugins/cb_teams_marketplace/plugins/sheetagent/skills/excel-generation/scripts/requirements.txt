@@ -1,0 +1,20 @@
+# Runtime dependencies for plugins/sheetagent/scripts/*.py
+#
+# Note:
+#   - create_blank_xlsx.py auto-installs openpyxl on first run if missing.
+#   - extract.py does NOT auto-install; it checks deps and exits with a
+#     pip-install hint if any of them are missing.
+#
+# This file is kept as a documentation-style declaration so dev/CI environments
+# can pre-install via:
+#     pip install -r plugins/sheetagent/scripts/requirements.txt
+
+# create_blank_xlsx.py
+openpyxl>=3.1.0
+
+# extract.py
+mammoth>=1.6.0
+pymupdf>=1.23.0
+python-pptx>=0.6.21
+Pillow>=10.0.0
+markdownify>=0.11.6

@@ -1,6 +1,7 @@
 {
   "name": "cb_teams_marketplace",
   "description": "CodeBuddy Teams Marketplace - 团队协作与文档处理插件集合",
+  "description_en": "CodeBuddy Teams Marketplace - A collection of team collaboration and document processing plugins",
   "owner": {
     "name": "Laurent Zhou",
     "email": "laurentzhou@tencent.com"
@@ -110,6 +111,7 @@
     {
       "name": "ppt-implement",
       "description": "智能 PPT 生成助手，一键将您的想法转化为精美演示文稿",
+      "description_en": "Intelligent PPT generator that transforms your ideas into polished presentations with one click.",
       "source": "./plugins/ppt-implement",
       "version": "1.0.13",
       "category": "productivity",
@@ -256,6 +258,7 @@
     {
       "name": "webapp-testing",
       "description": "Web 应用测试助手，引导用户启动、配置和测试 Web 应用",
+      "description_en": "Web application testing assistant that guides users through launching, configuring, and testing web apps.",
       "source": "./plugins/webapp-testing",
       "version": "1.0.0",
       "category": "development",
@@ -311,6 +314,7 @@
     {
       "name": "skill-creator",
       "description": "提供创建高效 Claude 技能的指南,通过专业知识、工作流程和工具集成来扩展 AI 助手的能力",
+      "description_en": "A guide for creating effective skills that extend AI assistant capabilities through domain expertise, workflows, and tool integrations.",
       "source": "./plugins/skill-creator",
       "license": "Apache-2.0"
     },
@@ -625,6 +629,34 @@
         "./plugins/ardot-design-generator/rules/design-rules.md",
         "./plugins/ardot-design-generator/rules/style-guide.md"
       ]
+    },
+    {
+      "name": "sheetagent",
+      "description": "由腾讯文档团队出品的电子表格智能助手，支持通过自然语言创建、查询与编辑 xlsx 表格",
+      "description_en": "An intelligent spreadsheet assistant by Tencent Docs team that supports creating, querying, and editing xlsx files via natural language.",
+      "source": "./plugins/sheetagent",
+      "version": "0.1.0",
+      "category": "productivity",
+      "author": {
+        "name": "Tencent Docs SheetAgent Team",
+        "url": "https://docs.qq.com"
+      },
+      "license": "Proprietary",
+      "keywords": [
+        "spreadsheet",
+        "excel",
+        "xlsx",
+        "tencent-docs",
+        "docs.qq.com"
+      ],
+      "skills": [
+        "./plugins/sheetagent/skills/excel-generation",
+        "./plugins/sheetagent/skills/excel-handler"
+      ],
+      "agents": [
+        "./plugins/sheetagent/agents/sheet-agent.md"
+      ],
+      "hooks": "./plugins/sheetagent/hooks/hooks.json"
     }
   ]
 }

@@ -6,8 +6,8 @@
 
 参数：
     <本地文件绝对路径>  必填，待上传文件路径。
-    <uploadUrl>         必填，预签名 PUT URL（由 generate_file_upload_url 工具返回）。
-    [publicUrl]         选填，上传成功后的公网访问地址（由 generate_file_upload_url 工具返回），
+    <uploadUrl>         必填，预签名 PUT URL（由 apply_storage_pre_signature_url 工具返回）。
+    [publicUrl]         选填，上传成功后的公网访问地址（由 apply_storage_pre_signature_url 工具返回），
                         不传则脚本会从上传响应中提取 Location 头。
 
 行为：

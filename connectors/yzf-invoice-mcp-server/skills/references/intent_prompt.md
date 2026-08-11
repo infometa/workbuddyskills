@@ -40,13 +40,36 @@
 - 出现"出货单""随货同行单""商品明细单""开票信息""开票信息录入"
 - 商品/货物具体明细（**包含名称、数量、单价、金额**）
 
+### ⚠️ 优先判断规则：意图 8（修改企业信息） vs 意图 5（改票）——判断意图 5 之前必读
+
+> **在判断意图 5（改票）之前，必须先检查是否命中意图 8（修改企业信息）。**
+> 核心区别：意图 5 修改的是**发票本身的内容**，意图 8 修改的是**销方/企业的开票主体资料**。
+
+**先检查以下关键词，命中任一 → 直接判定为意图 8，不再进入意图 5 判断**：
+
+| 关键词 | 说明 |
+|--------|------|
+| 销方 | 任何包含"销方"的表达（销方信息、销方抬头、修改销方…） |
+| 企业信息 / 公司信息 | 指向企业主体资料 |
+| 开票资料 | 开票主体资料 |
+| 抬头（无"购方"限定词） | "修改抬头信息""改一下抬头"——无"购方"前缀时默认指向销方抬头 |
+
+**以下关键词 → 意图 5（改票）**：
+
+| 关键词 | 说明 |
+|--------|------|
+| 购方 / 购方抬头 | 明确指向发票上的购买方 |
+| 金额 / 票种 / 项目 / 税率 | 发票内容字段 |
+
 ### 意图 5：修改发票信息（改票）
-补充、删减、修改已有发票信息（属蓝票流程，支持）：
+补充、删减、修改已有**发票内容**信息（属蓝票流程，支持）：
 - 改票种："专""普""普票"
 - 改购方："未来科技有限公司"
 - 改金额："金额改成 xx"
 - 增项目："再增加一个发票项目，钢材十万元"
 - 删信息："去掉发票的税率"
+
+> ⚠️ **边界**：意图 5 仅限修改**发票本身的内容**（票种、购方、金额、项目、税率等）。若命中上方优先判断规则的关键词（销方/企业信息/公司信息/开票资料/抬头无购方限定词）→ 归入**意图 8**，不在此处理。
 
 ### 意图 6：咨询发票相关问题（非开票）→ noIntent
 咨询发票相关但**不是开票**的内容：
@@ -58,6 +81,21 @@
 明确开票给个人（单张），包含姓名、身份证号、项目中**任一**：
 - "开给张三，身份证 320113199512251234，劳务费"
 - ⚠️ "开票给李四、王五"等多对象 → 归入**批量开票拦截**（见技能 12）
+
+### 意图 8：修改企业信息/销方信息（触发技能，但走 `company_management` 传 `returnUrl: true`）
+
+用户要求修改、更新**销方/企业开票信息**（而非发票本身内容）。这类意图**不属于改票（意图 5）**，而是要变更企业的开票主体资料。
+
+**典型表达**：
+- "修改企业信息""改一下公司信息""更新开票资料"
+- "修改销方的相关信息""修改销方信息""修改销方抬头信息""销方信息我要更新一下"
+- "修改抬头信息""改一下抬头"（无"购方"限定词时默认指向销方抬头）
+- "公司的开票资料不对，帮我处理一下"
+- "我要修改销方的基本信息和登录信息"
+
+> ⚠️ **意图 5 vs 意图 8 区分**：详见上方「优先判断规则」。
+> - 意图 5（改票）= 修改**发票内容**（票种、购方、金额、项目、税率）
+> - 意图 8（修改企业信息）= 修改**销方/企业开票资料**（企业名称、税号、银行账号、地址电话、登录信息等）
 
 ---
 
@@ -172,7 +210,7 @@
   "confidence": 0.0-1.0,
   "matchedIntents": [1, 5],
   "invoiceType": "1" | "2" | null,
-  "supported": true | false,
+  "supported": true | false | null,
   "unsupportedReason": "red_invoice" | "batch_invoice" | null,
   "intentSummary": "用户想开一张普票给云账房测试公司"
 }
@@ -183,8 +221,8 @@
 | `confidence` | 置信度 0.0-1.0 |
 | `matchedIntents` | 命中的意图编号数组 |
 | `invoiceType` | `"1"`=蓝票，`"2"`=红票，`null`=未提及/无法判断 |
-| `supported` | `true`=当前支持（蓝票且非批量）；`false`=暂不支持（红票或批量开票） |
-| `unsupportedReason` | `"red_invoice"`=红票拦截；`"batch_invoice"`=批量开票拦截；`null`=支持 |
+| `supported` | `true`=当前支持（蓝票且非批量）；`false`=暂不支持（红票或批量开票）；`null`=无意图/不适用（noIntent 时） |
+| `unsupportedReason` | `"red_invoice"`=红票拦截；`"batch_invoice"`=批量开票拦截；`null`=无拦截 |
 | `intentSummary` | 一句话意图摘要 |
 
 ---
@@ -270,7 +308,7 @@
   "confidence": 0.75,
   "matchedIntents": [10],
   "invoiceType": null,
-  "supported": true,
+  "supported": null,
   "unsupportedReason": null,
   "intentSummary": "用户对前序对话做出肯定回答，不是新的开票请求"
 }
@@ -287,7 +325,7 @@
   "confidence": 0.90,
   "matchedIntents": [10],
   "invoiceType": null,
-  "supported": true,
+  "supported": null,
   "unsupportedReason": null,
   "intentSummary": "用户主动取消开票请求，需记录"
 }
@@ -304,7 +342,7 @@
   "confidence": 0.95,
   "matchedIntents": [],
   "invoiceType": null,
-  "supported": true,
+  "supported": null,
   "unsupportedReason": null,
   "intentSummary": "用户只是提供开户行信息，无开票意图"
 }
@@ -361,11 +399,97 @@
 }
 ```
 
+## 示例 11：修改企业信息（意图 8，触发技能走 company_management）
+
+**输入**：
+> 修改销方抬头信息
+
+**输出**：
+```json
+{
+  "confidence": 0.95,
+  "matchedIntents": [8],
+  "invoiceType": null,
+  "supported": true,
+  "unsupportedReason": null,
+  "intentSummary": "用户要修改销方抬头信息，属修改企业信息，走 company_management 传 returnUrl=true"
+}
+```
+
+## 示例 12：修改企业信息（意图 8，触发技能走 company_management）
+
+**输入**：
+> 公司的开票资料不对，帮我处理一下
+
+**输出**：
+```json
+{
+  "confidence": 0.93,
+  "matchedIntents": [8],
+  "invoiceType": null,
+  "supported": true,
+  "unsupportedReason": null,
+  "intentSummary": "用户要修改公司开票资料，属修改企业信息，走 company_management 传 returnUrl=true"
+}
+```
+
+## 示例 13：修改销方信息（意图 8，触发技能走 company_management）
+
+**输入**：
+> 修改销方信息
+
+**输出**：
+```json
+{
+  "confidence": 0.95,
+  "matchedIntents": [8],
+  "invoiceType": null,
+  "supported": true,
+  "unsupportedReason": null,
+  "intentSummary": "用户要修改销方信息，命中优先判断规则关键词「销方」，走 company_management 传 returnUrl=true"
+}
+```
+
+## 示例 14：修改抬头信息（意图 8，触发技能走 company_management）
+
+**输入**：
+> 修改抬头信息
+
+**输出**：
+```json
+{
+  "confidence": 0.90,
+  "matchedIntents": [8],
+  "invoiceType": null,
+  "supported": true,
+  "unsupportedReason": null,
+  "intentSummary": "用户要修改抬头信息，无「购方」限定词，按优先判断规则默认指向销方抬头，走 company_management 传 returnUrl=true"
+}
+```
+
+## 示例 15：修改购方抬头（意图 5，改票，不误判为意图 8）
+
+**输入**：
+> 修改购方抬头
+
+**输出**：
+```json
+{
+  "confidence": 0.95,
+  "matchedIntents": [5],
+  "invoiceType": "1",
+  "supported": true,
+  "unsupportedReason": null,
+  "intentSummary": "用户要修改购方抬头，有「购方」限定词，属改票流程，正常处理"
+}
+```
+
 ---
 
 # 决策规则 (Decision Rules)
 
-1. **意图 1-5, 7 任一匹配（且未命中拦截）→ 触发 IssueInvoice-Service-Agent**（蓝票开票/改票）
+1. **意图 1-5, 7, 8 任一匹配（且未命中拦截）→ 触发 IssueInvoice-Service-Agent**（蓝票开票/改票/修改企业信息）
+   - ⚠️ 意图 8 虽然触发技能，但技能内第一步会识别为"修改企业信息"意图，走 `company_management` 传 `returnUrl: true`，**不进入开票主流程**
 2. **意图 9 → 输出 noIntent**（咨询 / 引导，非开票）
 3. **意图 10 否定回答（"不开了""先不开"等）→ 触发 IssueInvoice-Service-Agent**（取消尚未开具的发票，属蓝票流程）
 4. **意图 10 肯定/知晓回答（"开吧""好的""ok"等）→ 输出 noIntent**

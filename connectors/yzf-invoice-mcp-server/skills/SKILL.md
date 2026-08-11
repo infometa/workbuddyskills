@@ -14,13 +14,34 @@ author: "YunzhangFang"
 
 ---
 
+## 环境配置
+
+使用本技能前需完成以下配置：
+
+1. **激活 MCP Connector**：在 WorkBuddy 的「Connector 管理」页面找到 `yzf-invoice-mcp-server`，点击「信任」并激活。激活后所有 MCP 工具（`company_management` / `invoice_intent_process` / `poll_invoice` / `apply_storage_pre_signature_url`）才能正常调用。
+2. **云帐房账号登录**：首次使用时，后端会引导完成云帐房账号授权登录（如尚未登录）；登录状态由平台维护，后续无需重复操作。
+3. **CODEBUDDY_SESSION_ID**：由平台在每次对话中自动注入为环境变量，技能内默认优先读取该环境变量；若环境中不存在，技能会通过标准库 UUID v4 自动生成兜底值，**无需手动配置**。
+
+> ⚠️ 如果 MCP Connector 未激活，所有开票工具调用都会失败，技能无法正常使用。请务必先完成第 1 步。
+
+---
+
 ## 可用工具
 
 ### company_management — 企业开票信息校验（**每次激活必调**）
 
 > ⚠️ **铁律**：本技能被激活后，**必须最先调用此工具**校验当前用户的开票信息是否已维护完成，**未通过校验不得进入开票主流程**。
 
-此工具无入参，调用后返回当前用户默认企业的开票信息维护状态。
+**参数说明**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------:|------|------|
+| `codebuddySessionId` | string | ✅ | 当前会话 ID。按下方规则自动获取，调用时必须传入 |
+| `returnUrl` | boolean | 否 | 是否返回企业信息维护页面 URL。当用户表达**修改企业信息**意图时传 `true`；正常开票校验场景不传 |
+
+> `codebuddySessionId` 获取规则与 `invoice_intent_process` / `poll_invoice` 一致：优先读取 `CODEBUDDY_SESSION_ID`，不存在则生成 UUID v4 并持久化到系统临时目录下的 `.wb_invoice_session_id`（Python `tempfile.gettempdir()` / Node `os.tmpdir()`）。
+
+调用后返回当前用户默认企业的开票信息维护状态。
 
 **返回值**：
 
@@ -51,6 +72,18 @@ author: "YunzhangFang"
     "company_info": null
   }
 }
+
+// 3) 修改企业信息意图（传入 returnUrl=true 时返回，引导用户修改后重新发起开票任务，而非接续之前的开票流程）
+{
+  "code": "0",
+  "message": "success",
+  "cause": null,
+  "result": {
+    "invoice_info_filled": false,
+    "company_info_maintenance_url": "https://yunzhangfang.com/xxx/maintain",
+    "company_info": null
+  }
+}
 ```
 
 **字段说明**：
@@ -69,6 +102,7 @@ author: "YunzhangFang"
 
 - `invoice_info_filled = false` → 必须返回 `company_info_maintenance_url`，引导用户去页面补全开票信息，**停止**（不进入开票主流程）
 - `invoice_info_filled = true` → 不返回维护 URL，仅返回 `company_info` 和企业填写状态，**继续**进入开票主流程
+- **修改企业信息意图**（传入 `returnUrl: true`）→ 返回结构与 `invoice_info_filled = false` 相同（`company_info_maintenance_url` 有值），但话术不同：引导用户去维护页面修改信息后**重新发起开票任务（而非接续之前的开票流程）**，**结束本次技能流程**
 
 ### 开票意图主流程
 
@@ -87,7 +121,7 @@ author: "YunzhangFang"
 **codebuddySessionId 获取规则**：
 
 1. 优先读取 `CODEBUDDY_SESSION_ID`
-2. 如果不存在，则使用 Python/Node 标准库生成 **UUID v4**（随机 UUID），并持久化到临时文件 `/tmp/.wb_invoice_session_id` 作为兜底，保证同一调用链内会话 ID 一致。UUID v4 基于随机数生成，每个会话独立生成，不同用户、不同会话之间**绝不重复**
+2. 如果不存在，则使用 Python/Node 标准库生成 **UUID v4**（随机 UUID），并持久化到系统临时目录（Python `tempfile.gettempdir()` / Node `os.tmpdir()`）下的 `.wb_invoice_session_id` 作为兜底，保证同一调用链内会话 ID 一致。UUID v4 基于随机数生成，每个会话独立生成，不同用户、不同会话之间**绝不重复**
 
 **返回值**：
 
@@ -130,15 +164,15 @@ author: "YunzhangFang"
 # ⚠️ 所有文本消息必须以完整原文直接展示在对话正文中，禁止用 <details> 标签、代码块包裹、折叠面板等任何折叠手段
 ```
 
-> **⚠️ 消息不丢铁律**：每一轮返回的所有 `message` / `message_list`，无论在哪条 NDJSON 行、无论 `phase` 是什么，**必须逐条展示给客户**。即使后续要继续轮询（`mustContinue: true`）或切换任务，也必须**先展示完本轮全部消息**再进入等待。
+> ⚠️ 严格遵守 [展示铁律](#展示铁律消息不丢--不折叠)，消息不丢、不折叠。
 
 **最后一条可能的值**：
 
 | phase | 含义 | 动作 |
 |-------|------|------|
-| `"summary"`, `currentRoundFinished: false`, `mustContinue: true` | 轮次未结束 | **展示 message_list（如有）→ 继续轮询** |
-| `"summary"`, `currentRoundFinished: true`, `confirmFlag: "async_login"` / `"submit_invoice"` | 需要切换任务 | **展示 message_list（如有）→** 有 nextTaskId 则切换并重置计时；**无则用旧 taskId 继续轮询**，等下轮吐出新 taskId |
-| `"summary"`, `currentRoundFinished: true`, 无 confirmFlag | 本轮结束 | **展示 message_list（如有）→** 展示结果，**停止** ✅ |
+| `"summary"`, `current_round_finish_state: false`, `must_continue: true` | 轮次未结束 | **展示 message_list（如有）→ 继续轮询** |
+| `"summary"`, `current_round_finish_state: true`, `confirm_invoice_flag: "async_login"` / `"submit_invoice"` | 需要切换任务 | **展示 message_list（如有）→** 有 nextTaskId 则切换并重置计时；**无则用旧 taskId 继续轮询**，等下轮吐出新 taskId |
+| `"summary"`, `current_round_finish_state: true`, 无 `confirm_invoice_flag` | 本轮结束 | **展示 message_list（如有）→** 展示结果，**停止** ✅ |
 | `"completed"`, `finished: true` | 完全结束 | **展示 message_list（如有）→** 展示最终结果，**停止** ✅ |
 | `"completed"`, `taskTerminated: true` | 任务终止（E200/E400/E500/E800/CANCELED） | **先展示 message_list 给客户**，再根据不同 taskRec 告知结果，**停止** ✅ |
 | `"error"` | 网络错误 | **展示 message_list（如有）→** 输出错误，继续轮询 ❌ |
@@ -208,7 +242,9 @@ python3 scripts/upload_file.py <本地文件绝对路径> <uploadUrl> <publicUrl
 
 **执行步骤**：
 
-1. **立刻调用** `company_management`（无入参）
+1. **判断用户意图**：
+   - 若用户表达**修改企业信息**意图（如"修改企业信息""改一下公司信息""更新开票资料""修改销方的相关信息""修改销方抬头信息""销方信息我要更新一下""公司的开票资料不对，帮我处理一下""我要修改销方的基本信息和登录信息"等涉及销方/企业开票信息变更的表达）→ 调用 `company_management`，传入 `codebuddySessionId` + `returnUrl: true`，拿到 `company_info_maintenance_url` 后，引导用户去页面修改信息并**重新发起开票任务（而非接续之前的开票流程）**，**结束本次技能流程**（不进入第二步）
+   - 其他开票意图 → 调用 `company_management`，仅传入 `codebuddySessionId`（不传 `returnUrl`）
 2. **判断返回值**：
    - `result.invoice_info_filled = true` → 已维护完成，**直接进入下一步（意图拦截）**
    - `result.invoice_info_filled = false` → 未维护完成，向客户返回 `result.company_info_maintenance_url`，引导用户去页面补全开票信息，**结束本次技能流程**（不进入第二步、不调 `invoice_intent_process`、不轮询）
@@ -217,6 +253,10 @@ python3 scripts/upload_file.py <本地文件绝对路径> <uploadUrl> <publicUrl
 **向客户展示维护页面的示例话术**：
 
 > 「您当前的开票信息还未完善，请先点击链接补全开票信息：[维护地址]。补全后再次发起开票即可。」
+
+**修改企业信息意图的示例话术**：
+
+> 「请点击链接修改您的企业开票信息：[维护地址]。修改完成后请重新发起开票任务，不要继续之前的开票流程。」
 
 ### 第二步：意图拦截（提交前必做）
 
@@ -237,7 +277,7 @@ python3 scripts/upload_file.py <本地文件绝对路径> <uploadUrl> <publicUrl
 
 当客户发送了文件（图片、PDF、Excel、文档等），**不要解析或提取文件内容，不要转 Base64**，按以下步骤处理：
 
-1. **获取文件路径**：从对话上下文中获取客户发送的文件本地路径（如 `/Users/xxx/.workbuddy/blobs/xxx.jpg`）
+1. **获取文件路径**：从对话上下文中获取客户发送的文件本地路径（WorkBuddy 平台自动提供，无需手动拼接）
 2. **调 `apply_storage_pre_signature_url` 拿预签名地址**：传入 `fileName`（从文件路径提取文件名），获取 `uploadUrl`（预签名 PUT 地址）和 `publicUrl`（公网访问地址）
 3. **跑 `upload_file.py` 直传文件**：用 Bash 执行脚本，将文件 PUT 到 `uploadUrl`，文件从用户电脑直达 OBS，不经过 MCP Server：
 
@@ -275,14 +315,14 @@ python3 scripts/upload_file.py <本地文件绝对路径> <uploadUrl> <publicUrl
 **⚠️ 铁律：只有以下 4 种情况可以停止轮询，除此之外绝对不能停止！**
 
 1. 收到 `phase:"completed"`
-2. 收到 `current_round_finish_state` 为真值（`true` 或 `"1"`）且 **无 confirmFlag**（`confirm_invoice_flag` 为 `"0"` 或空）
+2. 收到 `current_round_finish_state` 为真值（`true` 或 `"1"`）且 **无 confirm_invoice_flag**（`confirm_invoice_flag` 为 `"0"` 或空）
 3. 总轮询时间超过 **1 小时**
 4. `taskRec` 返回终止状态值（E200/E400/E500/E800/CANCELED）—— **注意：此时 `message_list` 仍需正常发送给客户**
 
 > **⚠️ 关键澄清（防误判）**：
-> - `task_rec: E100` 表示"任务进行中"，**但不等于"必须继续轮询"**！E100 时仍需检查 `current_round_finish_state`：若为真值且无 confirmFlag → **停止轮询**。
+> - `task_rec: E100` 表示"任务进行中"，**但不等于"必须继续轮询"**！E100 时仍需检查 `current_round_finish_state`：若为真值且无 confirm_invoice_flag → **停止轮询**。
 > - `current_round_finish_state` 后端可能返回字符串 `"1"`/`"0"` 而非布尔 `true`/`false`。`"1"` = true（轮次结束），`"0"` = false（继续）。
-> - **判断优先级**：先看 `task_rec` 是否终止 → 若终止则停 → 若 E100 则看 `current_round_finish_state` → 若为真值且无 confirmFlag 则停，否则继续。
+> - **判断优先级**：先看 `task_rec` 是否终止 → 若终止则停 → 若 E100 则看 `current_round_finish_state` → 若为真值且无 confirm_invoice_flag 则停，否则继续。
 > - 详见 [Decision Flow](#decision-flow) 和 [taskRec 处理规则](#taskrec-处理规则)。
 
 ### ⛔ 绝对禁止的行为（触犯即 Bug）
@@ -298,24 +338,36 @@ python3 scripts/upload_file.py <本地文件绝对路径> <uploadUrl> <publicUrl
 
 **正确做法：展示消息 → 等 5s → 自动调用下一轮 `poll_invoice` → 展示消息 → 等 5s → ... 循环直到终态**
 
-> **⚠️ 消息不丢铁律**：每一轮 `poll_invoice` 返回的所有 `message` / `message_list`，无论在哪条 NDJSON 行、无论 `phase` 是什么，**必须逐条展示给客户，一条都不能丢、不能省略、不能合并**。即使 `mustContinue == true` 需要继续轮询，也**必须先把本轮全部消息展示完**，再进入 5s 等待。`deliveredMessages` 也要同步追加，确保下一轮不重复发送。
->
-> **⚠️ 客户消息展示不折叠铁律**：所有需要展示给客户的信息（`message` / `message_list` 中的每一条），**必须以完整内容直接展示在对话正文里，禁止任何形式的折叠**。具体要求：
-> - 文本消息：直接将原文输出到对话中，不截断、不省略、不用 `...` 代替
-> - 图片 URL 消息（以 `http` 开头，结尾为 `.png` / `.jpg` / `.jpeg` / `.gif` / `.webp` / `.bmp`）：必须用 Markdown 图片语法 `![](url)` 内联展示
-> - 链接类消息：直接输出链接文本，不折叠、不隐藏在折叠面板里
-> - 禁止使用 `<details>` / `<summary>` 标签、代码块（`` ` `` 或 ` ``` `）包裹消息内容、折叠面板、"点击展开"等任何需要客户额外操作才能看到内容的展示方式
-> - 每条消息独立展示，不合并多条为一条
+### 展示铁律（消息不丢 + 不折叠）
+
+> **最高优先级规则，覆盖所有轮询阶段。**
+
+1. **消息不丢**：每一轮 `poll_invoice` 返回的所有 `message` / `message_list`，无论在哪条 NDJSON 行、无论 `phase` 是什么，**必须逐条展示给客户，一条都不能丢、不能省略、不能合并**。即使需要继续轮询，也**必须先把本轮全部消息展示完**再进入 5s 等待。`deliveredMessages` 也要同步追加，确保下一轮不重复发送。
+
+2. **信息不折叠**：所有需要展示给客户的信息，**必须以完整内容直接展示在对话正文中，禁止任何形式的折叠**：
+   - 文本消息：直接将原文输出到对话中，不截断、不省略
+   - 图片 URL（以 `http` 开头，结尾为 `.png` / `.jpg` / `.jpeg` / `.gif` / `.webp` / `.bmp`）：必须用 Markdown 图片语法 `![](url)` 内联展示
+   - 链接类消息：直接输出链接文本
+   - 禁止使用 `<details>` / `<summary>` 标签、代码块包裹消息、"点击展开"等任何需要客户额外操作的手段
+   - 每条消息独立展示，不合并多条为一条
 
 **伪代码流程**：
 
 ```
 # 第一步：开票信息校验（必须最先做）
-companyCheck = company_management()
-if companyCheck.code != "0":
-    告知客户"开票信息校验失败，请稍后重试"，结束
-if companyCheck.result.invoice_info_filled == false:
-    告知客户"开票信息未完善，请先点击 [维护地址] 补全后再次发起开票"，结束
+# 判断是否为修改企业信息意图
+if 用户表达修改企业信息意图:
+    companyCheck = company_management(codebuddySessionId=会话ID, returnUrl=true)
+    if companyCheck.code != "0":
+        告知客户"开票信息校验失败，请稍后重试"，结束
+    # 返回 company_info_maintenance_url，引导用户修改后重新发起开票任务（非接续之前流程）
+    告知客户"请点击链接修改企业开票信息：[维护地址]。修改完成后请重新发起开票任务，不要继续之前的开票流程"，结束
+else:
+    companyCheck = company_management(codebuddySessionId=会话ID)
+    if companyCheck.code != "0":
+        告知客户"开票信息校验失败，请稍后重试"，结束
+    if companyCheck.result.invoice_info_filled == false:
+        告知客户"开票信息未完善，请先点击 [维护地址] 补全后再次发起开票"，结束
 
 # 第二步：意图拦截（已由 references/intent_prompt.md 完成判断）
 # 如果命中红票/批量开票 → 直接拦截，不进入主流程
@@ -337,7 +389,7 @@ if 客户发送了文件:
 else:
     fileList = None
 
-result = submit_invoice(userInput="用户原话", files=fileList)  # 对应工具：开票意图主流程
+result = invoice_intent_process(userInput="用户原话", files=fileList)  # 开票意图主流程
 
 if result.phase == "submitted":
     taskId = result.taskId
@@ -357,7 +409,7 @@ if result.phase == "submitted":
 
         # 逐行处理 NDJSON 输出
         for line in result.lines:
-            # ⚠️ 铁律：无论哪种类型的行，所有消息必须逐条展示给客户，不能丢！
+            # ⚠️ 严格遵守展示铁律，所有消息逐条完整展示
             #
             # NDJSON 每行可能是以下几类之一（不要依赖 phase 字段做分支，直接读实际字段）：
             #   1) 进度行：{"message":"...", "phase":"progress", ...}
@@ -393,46 +445,27 @@ if result.phase == "submitted":
             hasConfirmFlag = confirmFlagRaw in ("async_login", "submit_invoice")
             hasNextTask = bool(line.get("nextTaskId"))
 
-            # 1) taskRec 终止状态（E200/E400/E500/E800/CANCELED）→ 停止
-            if taskRec in ("E200", "E400", "E500", "E800", "CANCELED"):
-                if taskRec == "E200":
-                    告知客户「开票成功，请查收发票」
-                elif taskRec == "E400":
-                    告知客户「开票失败，请检查信息后重试」
-                elif taskRec in ("E500", "CANCELED"):
-                    告知客户「处理超时，请稍后重试」
-                elif taskRec == "E800":
-                    告知客户「开票已取消」
-                结束 ✅
-
-            # 2) 有 confirmFlag 且带 nextTaskId → 切换任务继续轮询
-            if hasConfirmFlag and hasNextTask:
-                taskId = line["nextTaskId"]
-                startTime = 当前时间
-                deliveredMessages = []
-                break  # 跳出 for 循环，进入 sleep(5秒) 后继续 while
-
-            # 3) 本轮结束 + 无 confirmFlag → 停止（即使 taskRec=E100 也停！）
-            if isRoundFinished and not hasConfirmFlag:
-                展示结果，结束 ✅
-
-            # 4) 本轮未结束（roundFinished=false/"0"）→ 继续轮询
-            #    注意：E100 + roundFinished=false → 下轮继续
-
-            # 5) 无状态字段的行（纯进度行等）→ 无操作，继续处理下一行
+            # 按 [状态判断表](#第五步状态判断表唯一退出继续依据) 优先级 ①→②→③ 判断：
+            #   ① taskRec 终止 → 按编码告知结果后停止
+            #   ② confirm_invoice_flag + nextTaskId → 切换 taskId/重置计时/继续
+            #   ③ roundFinished 真且无 confirm_invoice_flag → 停止（即使 taskRec=E100）；否则继续
 
         sleep(5秒)  # 等待 5 秒再轮下一次
 ```
 
-### 第五步：状态判断表
+### 第五步：状态判断表（唯一退出/继续依据）
 
-**⚠️ 以下表格是唯一的退出/继续判断依据，不要自己加判断！**
+> **⚠️ 按优先级①→②→③从上往下判断，命中即执行。不要自己加判断！**
 
-| summary 返回 | mustContinue | 动作                                                 |
-|-------------|-------------|----------------------------------------------------|
-| `currentRoundFinished: false` | `true` | **必须继续轮询**，等待 5s                                   |
-| `currentRoundFinished: true`, `confirmFlag` 有值 | `true` | 有 `nextTaskId` 则切换并重置计时；**无则用旧 taskId 继续轮询**，等待 5s |
-| `currentRoundFinished: true`, 无 confirmFlag | 不存在 | 本轮结束，展示结果 ✅ 停止                                     |
+| 优先级 | 条件 | 动作 |
+|:---:|------|------|
+| ① | `task_rec` = E200/E400/E500/E800/CANCELED（终止） | 展示 message_list → 按 [taskRec 处理规则](#taskrec-处理规则) 的客户提示语告知结果 → **停止** ✅ |
+| ② | `confirm_invoice_flag` = async_login/submit_invoice，**有** `nextTaskId` | 展示 message_list → 切换 taskId + 重置计时 → **继续轮询** |
+| ② | `confirm_invoice_flag` = async_login/submit_invoice，**无** `nextTaskId` | 展示 message_list → 用旧 taskId → **继续轮询** |
+| ③ | `current_round_finish_state` = false/"0" | 展示 message_list → **继续轮询** |
+| ③ | `current_round_finish_state` = true/"1"，`confirm_invoice_flag` = "0"/空 | 展示 message_list → 展示结果 → **停止** ✅ |
+
+> **⚠️ E100 特别注意**：`task_rec=E100` 只是"进行中"，非终止。必须继续向下判断 ②③。常见误判：看到 E100 就以为"继续"，但若 `current_round_finish_state` 已为真值且无 confirm_invoice_flag → 按优先级③停止！
 
 **一句话记住：技能激活 = 开票意图主流程 → 死循环 poll_invoice 展示 → 直到终态才停。中间不说话、不等客户、不停顿。**
 
@@ -449,6 +482,7 @@ if result.phase == "submitted":
 - "开 xxx 商品，普票/专票"
 - "改成专票""金额改一下""增加一个发票项目"（修改发票信息，属蓝票流程）
 - "不开了""先不开"（取消尚未开具的发票，属蓝票流程，需记录拒绝原因）
+- "修改企业信息""改一下公司信息""更新开票资料""修改销方的相关信息""修改销方抬头信息""销方信息我要更新一下""公司的开票资料不对，帮我处理一下""我要修改销方的基本信息和登录信息"（修改企业/销方开票信息，调 `company_management` 传 `returnUrl: true`）
 
 ### 暂不支持场景（激活后拦截，不调工具）
 
@@ -488,26 +522,19 @@ if result.phase == "submitted":
 | 字段 | 含义 |
 |------|------|
 | `current_round_finish_state` | `true`/`"1"`=当前轮次结束，`false`/`"0"`=继续。⚠️ 后端可能返回字符串 `"1"`/`"0"` |
-| `confirm_invoice_flag` | `"async_login"`=异步登录；`"submit_invoice"`=提交开票；`"0"`/空=无 confirmFlag |
+| `confirm_invoice_flag` | `"async_login"`=异步登录；`"submit_invoice"`=提交开票；`"0"`/空=无 confirm_invoice_flag |
 | `message_list` | 后端消息列表（字符串数组），逐条展示给客户。所有消息以完整原文直接展示在对话正文中，禁止折叠。若某条消息为图片 URL，用 `![](url)` 内联展示 |
 | `task_rec` | 任务终止标识（见下方）。E100=进行中（非终止），其余为终止 |
 
 ### Decision Flow
 
-> **⚠️ 核心原则：每一轮 poll_invoice 返回的 `message` / `message_list` 必须逐条展示给客户，无论后续是继续轮询还是终止。消息不能丢、不能省、不能合并。所有消息以完整内容直接展示在对话正文中，禁止折叠（禁止 `<details>` 标签、代码块包裹、"点击展开"等）。图片 URL 消息用 `![](url)` 内联展示。**
+> ⚠️ 严格遵守 [展示铁律](#展示铁律消息不丢--不折叠)，每轮先展示全部消息再判断状态。
 
 ```
-【每轮通用】先展示 message/message_list 给客户（逐条，不丢不省不合并，完整原文直接展示在对话正文中，禁止折叠；图片用 ![](url) 内联，不折叠），再判断状态 ↓
-
-task_rec 为终止状态（E200/E400/E500/E800/CANCELED） → 展示 message_list，根据 taskRec 告知结果，停止轮询
-task_rec 为 E100（进行中） → ⚠️ 不一定继续！必须按下方 current_round_finish_state 判断：
-  current_round_finish_state 为假值（false / "0"） → message_list 已展示，继续轮询
-  current_round_finish_state 为真值（true / "1"） + confirm_invoice_flag 为 "async_login" → message_list 已展示，有 nextTaskId 则切换并重置计时，无则用旧 taskId 继续轮询
-  current_round_finish_state 为真值（true / "1"） + confirm_invoice_flag 为 "submit_invoice" → message_list 已展示，有 nextTaskId 则切换并重置计时，无则用旧 taskId 继续轮询
-  current_round_finish_state 为真值（true / "1"） + confirm_invoice_flag 为 "0" / 空 / 其他 → message_list 已展示，⚠️ 终止轮询！
+【每轮通用】展示消息 → 按 [状态判断表](#第五步状态判断表唯一退出继续依据) 优先级 ①→②→③ 判断 → 停 / 继续轮询
 ```
 
-> **⚠️ 字段值类型说明**：后端返回的 `current_round_finish_state` 可能是字符串 `"1"`/`"0"` 而非布尔 `true`/`false`。`"1"` 等价于 true（轮次结束），`"0"` 等价于 false（继续）。`confirm_invoice_flag` 为 `"0"` 表示无 confirmFlag。
+> **⚠️ 字段值类型说明**：后端返回的 `current_round_finish_state` 可能是字符串 `"1"`/`"0"` 而非布尔 `true`/`false`。`"1"` 等价于 true（轮次结束），`"0"` 等价于 false（继续）。`confirm_invoice_flag` 为 `"0"` 表示无 confirm_invoice_flag。
 
 **易错示例**：
 ```
@@ -520,16 +547,16 @@ task_rec 为 E100（进行中） → ⚠️ 不一定继续！必须按下方 cu
 
 `taskRec` 是 **后端开票任务的终止标识**。E100 为唯一非终止状态；其余值（E200/E400/E500/E800/CANCELED）均为终止状态，触发轮询停止。**但即使为终止状态，`message_list` 仍需正常发送给客户。**
 
-> **⚠️ E100 ≠ 继续轮询**：E100 只表示"任务未终止"，是否继续轮询还需看 `current_round_finish_state`。若 `current_round_finish_state` 为真值且无 confirmFlag → 停止轮询。
+> **⚠️ E100 ≠ 继续轮询**：E100 只表示"任务未终止"，是否继续轮询还需看 `current_round_finish_state`。若 `current_round_finish_state` 为真值且无 confirm_invoice_flag → 停止轮询。
 
-| taskRec 值 | 含义 | 是否终止 | 轮询行为 |
-|-----------|------|---------|---------|
-| `"E100"` | 进行中 | ❌ 非终止 | **需结合 `current_round_finish_state` 判断**：真值+无confirmFlag→停；假值→继续 |
-| `"E200"` | 成功 | ✅ 终止 | 正常发送 message_list 给客户，**停止轮询** |
-| `"E400"` | 失败 | ✅ 终止 | 正常发送 message_list 给客户，**停止轮询** |
-| `"E500"` | 超时 | ✅ 终止 | 正常发送 message_list 给客户，**停止轮询** |
-| `"E800"` | 取消 | ✅ 终止 | 正常发送 message_list 给客户，**停止轮询** |
-| `"CANCELED"` | 超时 | ✅ 终止 | 正常发送 message_list 给客户，**停止轮询** |
+| taskRec 值 | 含义 | 是否终止 | 客户提示语 | 轮询行为 |
+|-----------|------|---------|-----------|---------|
+| `"E100"` | 进行中 | ❌ 非终止 | — | **需结合 `current_round_finish_state` 判断**：真值+无 confirm_invoice_flag→停；假值→继续 |
+| `"E200"` | 成功 | ✅ 终止 | 「开票成功，请查收发票」 | 正常发送 message_list 给客户，**停止轮询** |
+| `"E400"` | 失败 | ✅ 终止 | 「开票失败，请检查信息后重试」 | 正常发送 message_list 给客户，**停止轮询** |
+| `"E500"` | 超时 | ✅ 终止 | 「处理超时，请稍后重试」 | 正常发送 message_list 给客户，**停止轮询** |
+| `"E800"` | 取消 | ✅ 终止 | 「开票已取消」 | 正常发送 message_list 给客户，**停止轮询** |
+| `"CANCELED"` | 超时 | ✅ 终止 | 「处理超时，请稍后重试」 | 正常发送 message_list 给客户，**停止轮询** |
 
 ### 消息交付确认（deliveredMessages）
 
@@ -547,9 +574,7 @@ task_rec 为 E100（进行中） → ⚠️ 不一定继续！必须按下方 cu
 - **链接不影响轮询**：如果返回了验证链接，链接是给客户点的，AI 的轮询不能因此暂停
 - **超时兜底**：总轮询超过 1 小时仍未结束时，告知客户「处理超时，请稍后重试」
 - **多阶段跳转**：遇到 `async_login` 或 `submit_invoice` 标志时，自动切换新 `taskId` 继续轮询（最多跳转 5 次）
-- **消息不丢**：每一轮 `poll_invoice` 返回的 `message` / `message_list`，无论 `phase` 是什么、无论后续继续轮询还是终止，**必须逐条展示给客户，不能丢、不能省、不能合并**。展示完消息后再做状态判断和 5s 等待
-- **客户信息不折叠**：所有需要展示给客户的信息（`message` / `message_list`），**必须以完整内容直接展示在对话正文中，禁止任何形式的折叠**。禁止使用 `<details>`/`<summary>` 标签、代码块（` ``` `）包裹消息、"点击展开"等需要客户额外操作才能看到内容的展示方式。文本消息直接输出原文，图片 URL 用 `![](url)` 内联展示，让客户一眼就能看到全部内容
-- **图片内联展示**：如果消息内容是图片 URL（以 `http` 开头，结尾为 `.png` / `.jpg` / `.jpeg` / `.gif` / `.webp` / `.bmp`），**必须用 Markdown 图片语法 `![](url)` 直接展示图片**，禁止折叠、禁止只输出链接让客户自己点
+- **消息展示**：严格遵守 [展示铁律](#展示铁律消息不丢--不折叠)，消息不丢、不折叠、图片用 `![](url)` 内联
 - **taskId 不展示**：taskId 是内部技术标识，**绝不向客户展示**。展示消息时只输出 `message` / `message_list` 的内容，不输出 taskId 等技术字段
 - **跨平台兼容**：macOS 和 Windows 均可正常工作
 

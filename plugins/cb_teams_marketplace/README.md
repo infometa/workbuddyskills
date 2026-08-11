@@ -15,6 +15,7 @@ CodeBuddy Teams Marketplace - 团队协作、文档处理与开发工具插件�
 | **ppt-implement** | 1.0.10 | 一键生成PPT（10种演示风格、丰富模板库） | productivity |
 | **deep-research** | 1.0.0 | 深度研究插件（网络调研、信息综合、微信文章检索） | research |
 | **data** | 1.0.0 | 数据分析插件（SQL查询、数据探索、可视化、仪表板） | productivity |
+| **sheetagent** | 0.1.0 | 腾讯文档电子表格智能助手（自然语言创建、查询、编辑 xlsx） | productivity |
 
 ## 🚀 快速开始
 
@@ -259,6 +260,31 @@ codebuddy plugin install internal-comms@cb-teams
 分析这份销售数据，生成月度趋势图表和关键洞察
 ```
 
+---
+
+### 📗 sheetagent
+
+由腾讯文档团队出品的电子表格智能助手，支持通过自然语言创建、查询与编辑 xlsx 表格。
+
+**功能特性：**
+- 自然语言创建 Excel 表格
+- 智能查询与编辑已有表格
+- 公式、格式化支持
+- 内置 MCP 服务，无缝对接腾讯文档能力
+
+**包含组件：**
+- Agent: sheet-agent
+- Skills: excel-generation、excel-handler
+- Commands: /excel、/generation
+- Hooks: 子代理结束时自动保存
+- MCP Server: sheetagent（对接 docs.qq.com）
+
+**使用示例：**
+```
+帮我创建一个项目预算表，包含类别、预算金额、实际支出、差异列，
+并按差异从大到小排序
+```
+
 ## 📂 目录结构
 
 ```
@@ -274,7 +300,8 @@ cb_teams_marketplace/
 │   ├── modern-webapp/             # 现代Web应用开发
 │   ├── ppt-implement/             # PPT生成插件
 │   ├── deep-research/             # 深度研究插件
-│   └── data/                      # 数据分析插件（SQL、可视化、仪表板）
+│   ├── data/                      # 数据分析插件（SQL、可视化、仪表板）
+│   ├── sheetagent/                # 腾讯文档电子表格智能助手
 ├── CODEBUDDY.md                   # 项目记忆文件（已忽略）
 ├── plugins.md                     # CodeBuddy插件系统文档（已忽略）
 ├── plugin-marketplaces.md         # 插件市场文档（已忽略）
@@ -364,6 +391,10 @@ codebuddy plugin validate .
 - [插件参考文档](./plugins-reference.md)
 
 ## 📝 版本历史
+
+- **v1.0.2** (2026-07-20)
+  - ✅ 新增 sheetagent 插件（腾讯文档电子表格智能助手）
+  - ✅ 插件总数：10 个
 
 - **v1.0.1** (2026-02-06)
   - ✅ 新增 data 插件（数据分析、SQL 查询、可视化）

@@ -1,0 +1,35 @@
+{
+  "name": "sheetagent",
+  "version": "0.1.1784260829",
+  "description": "由腾讯文档团队出品的电子表格智能助手，支持通过自然语言创建、查询与编辑 xlsx 表格",
+  "author": {
+    "name": "Tencent Docs SheetAgent Team",
+    "url": "https://docs.qq.com"
+  },
+  "keywords": [
+    "spreadsheet",
+    "excel",
+    "xlsx",
+    "tencent-docs",
+    "docs.qq.com"
+  ],
+  "commands": "./commands",
+  "skills": "./skills",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": {
+    "sheetagent": {
+      "command": "node",
+      "args": [
+        "${CODEBUDDY_PLUGIN_ROOT}/mcp/start.mjs"
+      ],
+      "env": {
+        "SHEETAGENT_MCP_TRANSPORT": "stdio",
+        "SHEET_MCP_DEBUG": "0",
+        "SHEETAGENT_LOG_LEVEL": "info",
+        "SHEET_API_MODE": "local",
+        "SHEET_REMOTE_MCP_URL": "https://docs.qq.com/api/v6/sheet/mcp"
+      },
+      "defer_loading": true
+    }
+  }
+}

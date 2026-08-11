@@ -123,6 +123,37 @@
     "target": "all"
   },
   {
+    "id": 43,
+    "unified_id": 122,
+    "name": "Personal Workspace",
+    "icon": "tool-case",
+    "mode": "working",
+    "plugins": [],
+    "expert": {
+      "id": "workspace-builder",
+      "name": "小台",
+      "profession": "工作台搭建师",
+      "expertType": "agent",
+      "source": "expert-marketplace",
+      "expert_id": "ex_kXnGMfUfWS6d"
+    },
+    "prompts": [
+      "Create an integrated life-management workbench for a broad everyday audience and deliver it as a single HTML file. Inline all CSS, JavaScript, icons, and assets; use no external components; make it reliable on both desktop and mobile.\n\nThe workbench should include at least: a daily life score; personal finance tracking with income and expenses, budgets, monthly comparison, category filters, spending breakdown, and Excel export; habit tracking where users can add or delete habits and choose check, counter, or numeric tracking with a 30-day heatmap; weight-loss tracking with weight and body-fat entries, a 7-day average, BMI, goal progress, calorie deficit guidance, and customizable weekly plans; schedule planning; a shopping list; and a books/film/series/anime library with status, star rating, short review, wall/list views, and annual statistics.\n\nSave input immediately to localStorage so it remains after closing the page. Provide JSON backup export and unlimited import, remind users to back up after 20 new items, clearly report storage failures or corrupted data, and allow recovery. Include a small set of removable demo entries. Keep the visual direction restrained, polished, and warm rather than using a generic AI-card template.",
+      "Build a learning workspace called 'Baby Learning Playground' for a 4-year-old. Include 5 modules:\n1. Alphabet Park: 26 letter cards with tap-to-speak (Web Speech API), uppercase-lowercase matching game\n2. Poem Garden: 8 classic Chinese poems with pinyin annotation and read-aloud\n3. Number Kingdom: 0-20 number recognition + arithmetic within 10 + counting game\n4. Logic Challenge: pattern finding / shape matching / sorting, 3-4 options each\n5. Adventure Quest: mixed-topic quizzes + star rewards + badge wall\n\nUse rainbow candy colors (pink, teal, yellow, green, purple). Lively and cute style. PC sidebar nav + mobile bottom tabs. Data in localStorage with persistent progress. Buttons ≥ 44px for small hands. Deploy online for mobile scanning.",
+      "Create an offline personal dashboard named “Worker Ledger” as a single HTML/CSS/JS file. Inline every resource, use no CDN, backend, or online chart library, and make the file runnable by double-clicking it. Include: a real-hourly-wage calculator that combines take-home salary, pay months, work-related costs, office time, commuting, and overtime while showing the full formula; ten-second expense logging with amount, category, and note, immediately converting each expense into work time; the latest four entries on the home dashboard; monthly income plus fixed and flexible expense summaries; a freedom-fund goal with safety-buffer milestones; a native SVG savings chart; and commute, overtime, and salary-increase scenario simulations. Persist data in localStorage, support JSON import/export, and safely clear only sample data. Provide demonstration data relative to the current date and label it clearly as sample data. Use a refined, playful cream-and-mint journal aesthetic with a consistent inline SVG icon set and a piggy-bank illustration. Use a sidebar on desktop, bottom tabs on mobile, and touch-friendly controls throughout.",
+      "Build a learning-goal workspace specifically for finite, measurable goals such as learning 2,000 words or finishing a 440-page book, not endless habit tracking such as drinking water. Implement everything in one HTML file, with no external services and no user-provided materials.\n\nEach goal needs a name, unit, total amount, deadline, color, and two optional fields: the most likely obstacle and an If it happens, I will response. Calculate today's suggested amount as remaining amount divided by remaining days and prefill it during check-in while allowing edits. Show completion rate, streak, and estimated finish date. Estimate the finish date from the most recent seven-day average and compare it with the deadline to show days ahead or behind. When there is not enough activity, show No estimate instead of inventing a number.\n\nAllow one automatic rest day per Monday-to-Sunday week: the first missed day does not break the streak, while the second does. Put goals missed yesterday at the top today, using a gentle amber card when the rest day was used and a red card when work rolls into today. Show overdue days and provide Check in now and Adjust plan actions. Display the user's obstacle response on these cards. Allow multiple entries per day, optional minutes, and backdated entries within the previous six days. Mark backdated entries and use their real dates in streak and forecast calculations.\n\nUse four tabs. 1) Today: show New Goal in the first screen, a Today to Handle section, directly editable check-in cards, another prominent New Goal action at the bottom, plus edit and two-step delete. 2) Dashboard: show a progress ring, three key numbers, obstacle response, and the latest ten deletable records for each goal, plus a hand-written SVG 14-day stacked chart of minutes by goal without inventing minutes for entries that omitted them. 3) Weekly Review: summarize amount, active days, and minutes from Monday to Sunday, compare with the previous week using the same method, browse historical weeks, store Keep, Problem, Try, and Next-week response fields, and generate copyable review text containing comparisons and all four fields. 4) Me: export JSON, import after overwrite confirmation, migrate old backups, clear samples, clear all only after typing Clear, and show three steps for adding the page to the phone home screen.\n\nInclude three sample goals—English vocabulary, reading Sapiens, and a Python introductory course—with sample labels and several days of records covering backdated entries, a rest day, consecutive misses, and an obstacle response. After 20 check-in records, show a gentle export-ready backup banner at the top.\n\nUse a cool-white background, purple gradient, green for success, red for overdue, and amber for rest days. Celebrate completed goals with confetti. Use inline SVG icons and no emoji. Use four bottom tabs and one column on mobile, horizontal top navigation on tablet, and a fixed left sidebar with multi-column content on desktop. Persist all input immediately in localStorage. Deliver one fully self-contained offline HTML file with all resources inline and no external libraries.",
+      "Create a pure static exercise tracker website (HTML/CSS/JS) with responsive PC/mobile support. Requirements: 1) Multi-page structure (Home, Check-in, Dashboard, History); 2) Cyberpunk neon UI style with particle background and CSS entry animations; 3) localStorage data storage with Chart.js charts; 4) Mobile bottom tab bar, PC sidebar; 5) All resources inlined into a single HTML file, works offline."
+    ],
+    "promptTitles": [
+      "Life Workbench",
+      "Kids Learning Playground",
+      "Worker Ledger",
+      "Learning Goal Workspace",
+      "CyberFit Exercise Tracker"
+    ],
+    "target": "all"
+  },
+  {
     "id": 3,
     "unified_id": 103,
     "name": "Deep Research",
