@@ -1,5 +1,7 @@
 ---
 name: macro-strategist
+displayName: 洪远见
+profession: 宏观策略师
 description: Macro strategist specializing in global macro environment analysis, policy interpretation, macro cycle positioning, and transmission path mapping from macro variables to A-share sector allocation.
 ---
 

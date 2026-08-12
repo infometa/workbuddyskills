@@ -3,7 +3,7 @@
 腾讯云智能顾问 CloudQ SSE 流式调用脚本
 
 通过 TC3-HMAC-SHA256 签名调用 CloudQ 对话接口。
-支持 AK/SK 和 OAuth 两种鉴权方式，统一使用 CloudQChatCompletions 接口。
+支持 AK/SK、OAuth 和 Connector 三种鉴权方式，统一使用 CloudQChatCompletions 接口。
 
 支持同步（SSE 流式）和异步两种对话模式：
     - 同步（Async=false，默认）：SSE 流式返回，连接保持到对话结束
@@ -59,7 +59,7 @@
     )
     # result["data"]["session_id"] 可用于后续调用
 
-鉴权方式（二选一）:
+鉴权方式（三选一）:
     方式一：环境变量 AK/SK
         TENCENTCLOUD_SECRET_ID  - 腾讯云 SecretId
         TENCENTCLOUD_SECRET_KEY - 腾讯云 SecretKey
@@ -67,6 +67,9 @@
 
     方式二：OAuth 浏览器授权
         python3 scripts/login.py  # 登录后凭证自动保存
+
+    方式三：CloudQ Connector 临时密钥（OneId 方案）
+        由 Agent 通过 MCP Tool CloudQConnector_get_available_tmp_secret 获取并写入 credential.json
 
 输出格式（统一 JSON）:
     成功: {"success": true, "action": "...", "data": {...}, "requestId": "..."}
@@ -85,6 +88,7 @@ import time
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 import urllib.request
 from urllib.request import Request
 from urllib.error import URLError, HTTPError
@@ -196,7 +200,7 @@ def parse_sse_line(line: str):
 def call_sse_api(question: str, session_id: str,
                  secret_id: str = None, secret_key: str = None,
                  token: str = None, region: str = "ap-guangzhou",
-                 source: str = "", on_event=None,
+                 source: str = "workbuddy", on_event=None,
                  async_mode: bool = True) -> dict:
     """
     调用 CloudQ SSE 流式 API（统一使用 CloudQChatCompletions）。
@@ -222,6 +226,7 @@ def call_sse_api(question: str, session_id: str,
     """
     # ---- 凭证获取 ----
     cred_source = "env"  # 默认假设环境变量
+    audit_jwt = ""       # Connector 模式下的审计 JWT
 
     if secret_id and secret_key:
         # 显式传入凭证，使用 AK/SK 模式
@@ -237,6 +242,7 @@ def call_sse_api(question: str, session_id: str,
             secret_key = cred["secretKey"]
             token = cred.get("token", "")
             cred_source = cred.get("source", "env")
+            audit_jwt = cred.get("auditJwt", "")  # Connector 模式附带
         except ImportError:
             # credential_manager 不可用，回退到环境变量
             secret_id = os.environ.get("TENCENTCLOUD_SECRET_ID", "")
@@ -245,12 +251,13 @@ def call_sse_api(question: str, session_id: str,
         except CredentialExpiredError as e:
             return _make_error(
                 ACTION, "CredentialExpired",
-                f"OAuth 凭证已过期，需要重新授权登录。{e}"
+                f"凭证已过期。{e}"
             )
         except CredentialNotFoundError:
             return _make_error(
                 ACTION, "NeedAuth",
-                "未找到凭证，请先通过 OAuth 登录或配置 AK/SK 环境变量。"
+                "未找到凭证，请先通过 OAuth 登录、配置 AK/SK 环境变量，"
+                "或通过 Connector 获取临时密钥。"
             )
         except Exception as e:
             return _make_error(
@@ -260,21 +267,20 @@ def call_sse_api(question: str, session_id: str,
     if not secret_id or not secret_key:
         return _make_error(
             ACTION, "MissingCredentials",
-            "未配置凭证。请通过 OAuth 登录或配置 AK/SK 环境变量。\n"
-            "OAuth 登录: python3 scripts/login.py\n"
-            "密钥获取: https://console.cloud.tencent.com/cam/capi"
+            "当前授权方式的凭证缺失，无法调用 API。请检查凭证配置是否正确。"
+            "如需更换授权方式，请明确告知。"
         )
 
-    # 统一使用 CloudQChatCompletions 接口（AK/SK 和 OAuth 均支持）
+    # 统一使用 CloudQChatCompletions 接口（AK/SK、OAuth、Connector 均支持）
     action = ACTION
 
     payload = {"Question": question, "SessionID": session_id}
     if async_mode:
         payload["Async"] = True
-    # OAuth 模式下需要标记使用 CloudQ 控制台凭证
-    if cred_source == "oauth":
+    # OAuth / Connector 模式下需要标记使用 CloudQ 控制台凭证
+    if cred_source in ("oauth", "connector"):
         payload["UseCloudQCredential"] = True
-    # Source 字段统一发送（CloudQChatCompletions 两种鉴权方式均支持）
+    # Source 字段统一发送（CloudQChatCompletions 三种鉴权方式均支持）
     if source:
         payload["Source"] = source
     payload_str = json.dumps(payload, separators=(",", ":"))
@@ -421,14 +427,14 @@ def _parse_sse_stream(resp, on_event, action: str, cred_source: str = "env",
             break
 
     raw_content = "".join(content_parts)
-    # 免密链接替换仅在 AK/SK 模式下执行（login_url.py 需要 sts:AssumeRole 权限，OAuth 没有）
-    if cred_source != "oauth":
+    # 免密链接替换仅在 AK/SK 模式下执行（login_url.py 需要 sts:AssumeRole 权限，OAuth/Connector 没有）
+    if cred_source not in ("oauth", "connector"):
         processed = _replace_console_urls(raw_content)
         processed = _ensure_login_url(processed)
     else:
         processed = raw_content
-        # OAuth 模式下检测"未配置凭证"提示，引导用户到 CloudQ 控制台配置
-        if _is_credential_not_configured(processed):
+        # OAuth / Connector 模式下检测"未配置凭证"提示，引导用户到 CloudQ 控制台配置
+        if cred_source in ("oauth", "connector") and _is_credential_not_configured(processed):
             processed += (
                 "\n\n请前往 [CloudQ 控制台](https://console.cloud.tencent.com/advisor/cloudq) "
                 "完成凭证配置后再使用。"
@@ -444,7 +450,7 @@ def _parse_sse_stream(resp, on_event, action: str, cred_source: str = "env",
 
 
 # ---------------------------------------------------------------------------
-# OAuth 凭证未配置检测
+# CloudQ 凭证未配置检测（OAuth / Connector 模式下适用）
 # ---------------------------------------------------------------------------
 
 # CloudQChatCompletions 接口在用户未配置 CloudQ 凭证时返回的提示关键词
@@ -480,7 +486,7 @@ _SKIP_LOGIN_PATHS = re.compile(r'https://console\.cloud\.tencent\.com/advisor/cl
 _LOGIN_SCRIPT = Path(__file__).resolve().parent / "login_url.py"
 
 
-def _generate_login_url(target_url: str) -> str | None:
+def _generate_login_url(target_url: str) -> Optional[str]:
     """调用 login_url.py 生成免密登录链接，失败返回 None"""
     try:
         result = subprocess.run(
@@ -733,7 +739,7 @@ def main():
         sys.exit(1)
 
     question = parsed["question"]
-    source = "workbuddy"  # 该专家仅在WorkBuddy运行，硬编码避免大模型幻觉
+    source = "workbuddy"  # 专家插件强制 workbuddy
 
     # ---- SessionID ----
     if not parsed["session_id"]:

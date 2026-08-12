@@ -3,19 +3,20 @@ name: CloudQ
 description: 用户咨询腾讯云产品资源、AWS、阿里云等多云资源时，查看智能顾问架构图、架构目录、架构详情、架构评估结果、绘制架构图、开通智能顾问时、AI智能巡检、AI容量监测、AI混沌演练、AI云诊断、主动预警、架构健康度、云运维问答、云资源查询、云成本优化、安全合规、云资源盘点、闲置资源检查、云产品最佳实践等AIOps、ChatOps、CloudOps操作时使用。
 description_zh: "多云统一管理与智能顾问，支持架构可视化、风险评估与 AI 运维问答"
 description_en: "Multi-cloud management & smart advisor with architecture visualization, risk assessment & AI-powered O&M"
-version: 1.7.0
+version: 1.9.0
 allowed-tools: Read,Write,Bash,Grep
-metadata: {"openclaw": {"emoji": "☁️", "requires": {"bins": ["python3"]}, "permissions": ["network:https://*.tencentcloudapi.com", "network:https://cloud.tencent.com", "network:https://clawhub.ai", "network:https://cloudq.cloud.tencent.com", "fs:~/.tencent-cloudq/"], "security": {"iam_operations": ["cam:GetRole", "cam:CreateRole", "cam:AttachRolePolicy", "cam:DeleteRole", "cam:DescribeRoleList", "sts:AssumeRole", "sts:GetCallerIdentity", "advisor:CreateAdvisorAuthorization", "advisor:DescribeUserAuthorizationStatus"], "iam_note": "角色创建/删除为独立步骤，需用户明确同意后执行：create_role.py 创建角色（可选，仅影响免密登录），cleanup.py --cloud 删除角色；check_env.py 做环境检测（含智能顾问开通状态检测），--enable-advisor 参数开通智能顾问（需用户明确同意，必须开通才能使用 CloudQ）；DescribeUserAuthorizationStatus 和 CreateAdvisorAuthorization 已集成到 check_env.py 中", "data_handling": "OAuth 凭证保存在 ~/.tencent-cloudq/credential.json（权限600），临时密钥自动刷新；AK/SK 通过环境变量配置；配置文件仅保存角色 ARN，不保存长期密钥"}}}
+metadata: {"openclaw": {"emoji": "☁️", "requires": {"bins": ["python3"]}, "permissions": ["network:https://*.tencentcloudapi.com", "network:https://cloud.tencent.com", "network:https://clawhub.ai", "network:https://cloudq.cloud.tencent.com", "fs:~/.tencent-cloudq/"], "security": {"iam_operations": ["cam:GetRole", "cam:CreateRole", "cam:AttachRolePolicy", "cam:DeleteRole", "cam:DescribeRoleList", "sts:AssumeRole", "sts:GetCallerIdentity", "advisor:CreateAdvisorAuthorization", "advisor:DescribeUserAuthorizationStatus"], "iam_note": "角色创建/删除为独立步骤，需用户明确同意后执行：create_role.py 创建角色（可选，仅影响免密登录），cleanup.py --cloud 删除角色；check_env.py 做环境检测（含智能顾问开通状态检测），--enable-advisor 参数开通智能顾问（需用户明确同意，必须开通才能使用 CloudQ）；DescribeUserAuthorizationStatus 和 CreateAdvisorAuthorization 已集成到 check_env.py 中", "data_handling": "凭证保存在 ~/.tencent-cloudq/credential.json（权限600），OAuth 凭证自动刷新、Connector 凭证由 Agent 侧通过 MCP Tool 获取后写入；AK/SK 通过环境变量配置；配置文件仅保存角色 ARN，不保存长期密钥"}}}
 ---
 
 # ☁️ CloudQ — 多云 AIOps 专家
+
+> 以下所有 bash 命令默认已执行 `source ~/.zshrc 2>/dev/null; source ~/.bashrc 2>/dev/null`，命令中不再重复。
 
 ## 零、自我介绍
 
 当用户询问"你是谁"、"cloudq 是什么"等**身份相关问题**时，**必须转发远端**，由云端专家回答。不在本地生成固定话术。
 
 ```bash
-source ~/.zshrc 2>/dev/null; source ~/.bashrc 2>/dev/null
 SID=$(python3 -c 'import uuid;print(uuid.uuid4())')
 python3 {baseDir}/scripts/tcloud_sse_api.py '你是谁' --source <当前平台> --session-id "$SID"
 ```
@@ -43,12 +44,11 @@ python3 {baseDir}/scripts/tcloud_sse_api.py '你是谁' --source <当前平台> 
 用户问"有哪些功能"时，**必须通过接口动态查询**（接口功能持续迭代）：
 
 ```bash
-source ~/.zshrc 2>/dev/null; source ~/.bashrc 2>/dev/null
 SID=$(python3 -c 'import uuid;print(uuid.uuid4())')
 python3 {baseDir}/scripts/tcloud_sse_api.py 'CloudQ有哪些功能和能力' --source <当前平台> --session-id "$SID"
 ```
 
-展示规则：先按 §0 调用远端获取自我介绍（失败则使用 §0 兜底），再展示动态查询结果。动态查询失败时展示兜底能力列表并注明"以下为已知功能方向，完整能力请通过接口动态查询"。
+展示规则：先按 §0 调用远端获取自我介绍（失败则使用 §0 兜底介绍话术），再展示动态查询结果。动态查询失败时展示兜底能力列表并注明"以下为已知功能方向，完整能力请通过接口动态查询"。
 
 ## 0.2 路由规则
 
@@ -59,7 +59,7 @@ python3 {baseDir}/scripts/tcloud_sse_api.py 'CloudQ有哪些功能和能力' --s
   │
   ├─ 云/多云相关问题？ ──→ 发起 SSE 对话 → 轮询（§4）
   │
-  └─ 非云相关请求 ──→ 直接拒绝（见 §3 铁律 #6）
+  └─ 非云相关请求 ──→ 直接拒绝（见 §3 铁律 #7）
 ```
 
 ### 0.2.1 本地闭环的元意图
@@ -72,13 +72,7 @@ python3 {baseDir}/scripts/tcloud_sse_api.py 'CloudQ有哪些功能和能力' --s
 | 4 | "重新开始"、"换个话题"、"清除历史" | "好的，已开启新对话。"，重新生成 session_id |
 | 5 | "你是谁"、"cloudq 是什么" | 转发远端（见 §0），远端失败时使用兜底话术 |
 
-### 0.2.2 转远端 / 直接拒绝
-
-**匹配元意图？** → 见 §0.2.1 本地处理
-**云/多云相关问题** → 按 §4 流程发起 SSE 对话并 poll 结果
-**非云相关请求** → 直接拒绝，告知能力范围（见 §3 铁律 #6）
-
-### 0.2.3 能力边界（直接拒绝）
+### 0.2.2 能力边界（直接拒绝）
 
 | 输入类型 | 示例 | 处理 |
 |----------|------|------|
@@ -94,14 +88,14 @@ python3 {baseDir}/scripts/tcloud_sse_api.py 'CloudQ有哪些功能和能力' --s
 **每次对话首次操作前必须执行：**
 
 ```bash
-source ~/.zshrc 2>/dev/null; source ~/.bashrc 2>/dev/null; python3 {baseDir}/scripts/check_env.py
+python3 {baseDir}/scripts/check_env.py
 ```
 
 | 返回码 | 含义 | 处理 |
 |--------|------|------|
 | `0` | 就绪 | 正常使用 |
 | `1` | Python < 3.7 | 提示升级 |
-| `2` | 凭证未配置 | 引导用户选择 OAuth 或 AK/SK 配置（见 §2） |
+| `2` | 凭证未配置 | 引导用户选择 OAuth / Connector / AK/SK 配置（见 §2.4） |
 | `3` | 免密角色未配置 | 可选创建（不影响基本功能），见 §1.2 |
 | `4` | 智能顾问未开通 | **必须开通**，见 §1.3 |
 
@@ -124,13 +118,17 @@ python3 {baseDir}/scripts/create_role.py
 
 **AK/SK 模式**：等待用户同意后执行 `python3 {baseDir}/scripts/check_env.py --enable-advisor`。用户拒绝则无法使用。
 
-**OAuth 模式**：引导用户前往 [智能顾问控制台](https://console.cloud.tencent.com/advisor) 手动开通。
+**OAuth / 企业 OneID 模式**：引导用户前往 [智能顾问控制台](https://console.cloud.tencent.com/advisor) 手动开通。
 
 ---
 
 ## 2. 鉴权引导
 
-支持两种方式，凭证优先级：AK/SK 环境变量 > OAuth 凭证文件。
+支持三种方式，凭证优先级：OAuth 凭证文件 > Connector 临时密钥 > AK/SK 环境变量。
+
+> ⛔ **授权方式锁定（最高优先级）**：用户已使用哪种授权方式就用哪种，**严禁自动切换**。
+> 当前授权方式失败时**只能提示用户具体错误**，告知用户可手动选择其他方式，
+> **禁止 Agent 擅自更换授权方式**。更换授权方式必须经过用户明确同意。
 
 ### 2.1 OAuth（推荐）
 
@@ -140,7 +138,7 @@ python3 {baseDir}/scripts/create_role.py
 # Step 1: 获取授权 URL
 python3 {baseDir}/scripts/login.py --authorize-url
 
-# 以 Markdown 可点击链接展示给用户，用户授权后返回授权码
+# Step 2: 以 Markdown 可点击链接展示给用户，用户点击后完成授权，返回授权码
 
 # Step 3: 保存凭证
 python3 {baseDir}/scripts/login.py --save '<授权码>'
@@ -157,21 +155,54 @@ python3 {baseDir}/scripts/login.py --save '<授权码>'
 
 密钥获取：https://console.cloud.tencent.com/cam/capi。推荐子账号，关联 `ReadOnlyAccess` + `QcloudAdvisorAccessForCloudQ`。
 
-### 2.3 凭证未配置引导（返回码 2）
+### 2.3 Connector 临时密钥 — OneId 方案（CloudQ 托管环境，自动）
+
+在支持 Connector 的 Agent 环境中，通过 MCP Tool `CloudQConnector_get_available_tmp_secret` 获取临时密钥，写入 `credential.json`（`type: "connector"`）。
+连接成功后，Agent 无需在本地配置 OAuth 或 AK/SK。
+
+首次使用请在 [CloudQ 控制台](https://console.cloud.tencent.com/advisor/cloudq) 的「拓展」→「Channels 集成」→「OneID」完成配置，并将返回的 MCP 配置粘贴到 WorkBuddy「连接器」→「自定义连接器」→「配置 MCP」，保存后点击「连接」。
+
+**Agent 执行流程（每次首次 CloudQ 操作前自动执行）**：
+
+1. 调用 MCP Connector Tool 获取临时密钥：`secretId`、`secretKey`、`token`、`expiresAt`、`auditJwt`
+
+2. 写入 `credential.json`（Python 一行命令）：
+   ```bash
+   python3 -c "
+   import json, sys
+   sys.path.insert(0, '{baseDir}/scripts')
+   from credential_manager import _atomic_write_json, CREDENTIAL_FILE
+   from datetime import datetime, timezone
+   _atomic_write_json(CREDENTIAL_FILE, {
+       'type': 'connector',
+       'secretId': '<secretId>',
+       'secretKey': '<secretKey>',
+       'token': '<token>',
+       'expiresAt': <expiresAt>,
+       'auditJwt': '<auditJwt>',
+       'createdAt': datetime.now(timezone.utc).isoformat(),
+   })
+   "
+   ```
+
+3. 后续所有 CloudQ 调用（§4）自动使用 Connector 凭证。
+
+**凭证过期处理**：当 CloudQ 调用返回 `CredentialExpired` 错误时，
+Agent 重复执行步骤 1-2 刷新凭证后重试请求，**无需提示用户**。
+
+**Connector 调用失败处理**：当 Connector 模式下 SSE API 调用失败（如鉴权错误、网络异常等），
+**必须向用户展示具体错误信息**（错误码 + 错误消息），帮助用户排查问题。
+若为 MCP Tool 获取凭证失败，同样展示具体错误，禁止自动切换授权方式。
+
+### 2.4 凭证未配置引导（返回码 2）
 
 > 请选择以下方式之一配置凭证：
 >
 > **方式一：OAuth 浏览器授权（推荐）** — 按 §2.1 三步完成
 >
-> **方式二：AK/SK 环境变量**
-> 1. 前往 [API 密钥管理](https://console.cloud.tencent.com/cam/capi) 创建密钥
-> 2. 关联策略：`ReadOnlyAccess` + `QcloudAdvisorAccessForCloudQ`
-> 3. 设置环境变量：
-> ```bash
-> echo 'export TENCENTCLOUD_SECRET_ID="xxx"' >> ~/.zshrc
-> echo 'export TENCENTCLOUD_SECRET_KEY="xxx"' >> ~/.zshrc
-> source ~/.zshrc
-> ```
+> **方式二：AK/SK 环境变量** — 详见 §2.2
+>
+> **方式三：企业 OneID 授权** — 按 §2.3 配置 WorkBuddy Connector
 
 ---
 
@@ -184,32 +215,25 @@ python3 {baseDir}/scripts/login.py --save '<授权码>'
 | 3 | **超链接不动** | 后端返回的任何 URL 保持原样，禁止修改、省略或重新编码。后端返回的 URL 可能已包含 URL 编码（如 `%2F`、`%3A` 等），**严禁对其做任何形式的编码/解码转义**。但需以 Markdown 链接 `[url](url)` 格式输出，确保用户可点击，无需手动复制 |
 | 4 | **禁止编造** | 严禁虚构 archId、控制台链接或完成状态 |
 | 5 | **协议不代替** | 严禁自动发送"同意"，必须等用户明确回复 |
-| 6 | **能力边界** | 仅回答多云/云运维问题。以下类型直接拒绝并告知能力范围：写代码、闲聊、翻译、通用知识问答等。详细规则见 §0.2.3 能力边界表 |
-| 7 | **Poll 等待，禁止重复发送** | 发起对话后必须通过 `poll` 命令持续 poll 直至终态（详见 §4.2）。若终端超时导致进程退出，用同样的 `chat_id`+`session_id` 重新发起 `poll` 即可。期间**严禁发起新 SSE 对话**发送相同或类似的问题。仅当持续 poll 累计超过 **20 分钟** 仍为 `running` 时，重新发起 SSE 对话（回到 §4.1） |
-| 8 | **Poll 禁止后台执行** | 系统不具备异步通知能力。poll 必须由 Agent 主动同步调用并等待返回，严禁以 `&`、`nohup` 等任何方式后台执行 |
+| 6 | **授权不切换** | 用户已用哪种授权方式就用哪种，**严禁自动切换**。当前方式失败只提示具体错误，告知用户可手动更换，**禁止 Agent 擅自更换**。更换授权方式必须经过用户明确同意（详见 §2 授权方式锁定规则） |
+| 7 | **能力边界** | 仅回答多云/云运维问题。以下类型直接拒绝并告知能力范围：写代码、闲聊、翻译、通用知识问答等。详细规则见 §0.2.3 能力边界表 |
+| 8 | **Poll 等待，禁止重复发送** | 发起对话后必须通过 `poll` 命令持续 poll 直至终态（详见 §4.2）。若终端超时导致进程退出，用同样的 `chat_id`+`session_id` 重新发起 `poll` 即可。期间**严禁发起新 SSE 对话**发送相同或类似的问题。仅当持续 poll 累计超过 **20 分钟** 仍为 `running` 时，重新发起 SSE 对话（回到 §4.1） |
+| 9 | **Poll 禁止后台执行** | 系统不具备异步通知能力。poll 必须由 Agent 主动同步调用并等待返回，严禁以 `&`、`nohup` 等任何方式后台执行 |
 
 ---
 
 ## 4. 对话流程
 
-> **执行铁律**：发起对话后**必须通过 `poll` 命令持续 poll 直到终态**（`completed`/`failed`/`timeout`），期间**严禁重复发送**相同或类似的问题。仅当持续 poll 累计超过 **20 分钟** 仍为 `running` 状态时，重新发起 SSE 对话（回到 §4.1）。
-
 ### 4.1 第一步：发起对话
 
 ```bash
-source ~/.zshrc 2>/dev/null; source ~/.bashrc 2>/dev/null
 SID=$(python3 -c 'import uuid;print(uuid.uuid4())')
 python3 {baseDir}/scripts/tcloud_sse_api.py '<question>' --source <platform> --session-id "$SID"
 ```
 
 返回 accepted 帧，提取 `chat_id` 和 `session_id` 并**时刻记在上下文中**（后续每次 poll 都需要复用这两个值）。
 
-### 4.2 第二步：主动 Poll 轮询（❗同步阻塞，禁止后台执行）
-
-**系统不具备异步通知能力**，发起 SSE 后**必须主动同步执行 `poll`** 等待结果：
-
-⛔ **严禁后台执行**：poll 命令**不得**以 `&`、`nohup` 等任何方式后台执行。
-✅ **唯一正确方式**：Agent 主动调用 poll 命令并**等待其输出返回**，拿到终态结果后才能继续下一步。
+### 4.2 第二步：主动 Poll 轮询（同步阻塞，见 §3 铁律 #8、#9）
 
 ```bash
 python3 {baseDir}/scripts/tcloud_async_task.py poll <chat_id> <session_id> 1200
@@ -244,7 +268,7 @@ python3 {baseDir}/scripts/tcloud_async_task.py poll d8gn4jpjqshmudtgk3qf 27c5748
 
 ### 4.3 第三步：展示结果
 
-`Content` 由脚本自动完成免密链接替换（仅 AK/SK 模式生效，OAuth 模式不生成免密链接）。若 Content 中包含免密登录链接（`login/roleAccessCallback`），用 `preview_url` 自动预览。
+`Content` 由脚本自动完成免密链接替换（仅 AK/SK 模式生效，OAuth/Connector 模式不生成免密链接）。若 Content 中包含免密登录链接（`login/roleAccessCallback`），用 `preview_url` 自动预览。
 
 ### 4.4 取消任务
 
@@ -294,24 +318,22 @@ python3 {baseDir}/scripts/tcloud_async_task.py query <chat_id> <session_id> > /t
 
 | 错误码 | 话术模板 | 重试 |
 |--------|---------|------|
-| `NeedAuth` | 「未找到可用凭证。需要先配置凭证才能使用 CloudQ。」 → 按 §2.3 引导 | ❌ |
-| `MissingCredentials` | 「凭证缺失，无法调用 API。」 → 按 §2.3 引导 | ❌ |
-| `CredentialExpired` | 「OAuth 凭证已过期，需要重新授权。」 → 按 §2.1 三步重新登录 | ❌ |
+| `NeedAuth` | 「当前未找到可用凭证。需要先配置凭证才能使用 CloudQ。」 → 按 §2.4 引导配置 | ❌ |
+| `MissingCredentials` | 「当前授权方式的凭证缺失，无法调用 API。」 → **仅提示用户**当前方式失败，告知可手动切换，**禁止自动切换** | ❌ |
+| `CredentialExpired` | 「凭证已过期。」 → **OAuth**：提示用户重新授权，按 §2.1；**Connector（OneId）**：自动执行 §2.3 步骤 1-2 刷新后重试（同方式内刷新，非切换） | ✅ 同方式内 |
 | `AuthFailure.UnauthorizedOperation` | 「当前凭证权限不足。建议为子账号关联 `ReadOnlyAccess` + `QcloudAdvisorAccessForCloudQ`。需要我提供配置步骤吗？」 | ❌ |
-| `AuthFailure.SecretIdNotFound` | 「SecretId 无效。请检查 `TENCENTCLOUD_SECRET_ID` 是否正确。」 | ❌ |
-| `AuthFailure.SignatureFailure` | 「SecretKey 校验失败。请检查 `TENCENTCLOUD_SECRET_KEY` 是否正确。」 | ❌ |
+| `AuthFailure.SecretIdNotFound` | 「SecretId 无效。请检查当前授权方式的凭证是否正确。」 → 提示用户，**不切换** | ❌ |
+| `AuthFailure.SignatureFailure` | 「SecretKey 校验失败。请检查当前授权方式的凭证是否正确。」 → 提示用户，**不切换** | ❌ |
 | `NetworkError` | 「网络连接失败。要 30 秒后重试一次吗？」 | ✅ 1次 |
 | `HTTPError` | 「服务端异常（临时抖动或升级）。要我重试一次吗？」 | ✅ 1次 |
 | 空结果 | 「远端未返回具体结果。可能需要补充资源类型、地域等具体信息？」 | ⚠️ |
-| OAuth 未配置凭证 | 「请前往 [CloudQ 控制台](https://console.cloud.tencent.com/advisor/cloudq) 完成凭证配置后再使用。」 | ❌ |
+| OAuth / Connector 未配置凭证 | 「请前往 [CloudQ 控制台](https://console.cloud.tencent.com/advisor/cloudq) 完成凭证配置后再使用。」 | ❌ |
+
+> **⚠️ 两种"凭证"的区别**：
+> - **API 鉴权凭证**（AK/SK / OAuth / Connector（OneId））：用于签名调用 `CloudQChatCompletions` 接口。如果这些不对，接口直接返回鉴权错误（`AuthFailure.*`），根本走不到 CloudQ 服务逻辑。
+> - **CloudQ 服务凭证**：在 [CloudQ 控制台](https://console.cloud.tencent.com/advisor/cloudq) 里配置给 CloudQ 使用的云 API 调用凭证。接口调通后，如果返回"尚未配置腾讯云凭证"，说明 API 鉴权没问题，需要去控制台补配 **CloudQ 服务凭证**。
 
 > **重试上限**：`NetworkError` / `HTTPError` 最多 1 次，连续失败告知稍后再试。
-
-**兜底能力列表**（动态查询失败时展示）：
-- 腾讯云产品资源查询、多云问答
-- 架构图管理（列出/查看/绘制）、架构评估与巡检
-- 混沌演练、容量监测、云诊断、主动预警
-- 云资源盘点、闲置资源检查、云成本优化、安全合规
 
 ---
 
@@ -330,6 +352,6 @@ python3 {baseDir}/scripts/tcloud_async_task.py query <chat_id> <session_id> > /t
 | `sts:AssumeRole` | `login_url.py`（内部） | 敏感 |
 | `cam:CreateRole` / `cam:AttachRolePolicy` / `cam:DeleteRole` | `create_role.py` / `cleanup.py` | 写入（需同意） |
 
-- OAuth 凭证文件 `~/.tencent-cloudq/credential.json`（权限 600）
+- 凭证文件 `~/.tencent-cloudq/credential.json`（权限 600），存储 OAuth 或 Connector 凭证
 - 网络仅连接 `*.tencentcloudapi.com`、`cloud.tencent.com`、`cloudq.cloud.tencent.com`、`clawhub.ai`
 - 清理：`python3 {baseDir}/scripts/cleanup.py --all`（需 `--all` 参数）

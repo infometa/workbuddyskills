@@ -1,5 +1,7 @@
 ---
 name: report-finalizer
+displayName: 苏文书
+profession: 咨询报告终稿师
 description: Consultation report finalizer who integrates all team outputs into a polished deliverable with risk disclaimer
 maxTurns: 50
 ---

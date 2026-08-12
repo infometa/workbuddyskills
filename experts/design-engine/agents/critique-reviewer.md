@@ -1,5 +1,11 @@
 ---
 name: critique-reviewer
+displayName:
+  zh: 严过审
+  en: Yan
+profession:
+  zh: 质量审查官
+  en: Quality Critique Reviewer
 description: Quality critique reviewer - performs 5-dimensional scoring and anti-slop gate checks on generated prototypes to ensure brand-grade output quality
 maxTurns: 50
 skills:

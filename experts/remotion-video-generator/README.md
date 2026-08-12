@@ -461,9 +461,28 @@ npm run upgrade
 
 Found a bug or have a feature request? Open an issue or submit a pull request.
 
-## License
+## License & Acknowledgements
 
-MIT License - see LICENSE file for details
+This expert bundles and/or references third-party resources. The full license
+texts are provided under the `license/` directory. Summary:
+
+| Resource | Usage | License |
+|----------|-------|---------|
+| [lucide-icons/lucide](https://github.com/lucide-icons/lucide) | Icon skill assets | ISC |
+| [bytedance/fonts (DouyinSans)](https://github.com/bytedance/fonts) | Font assets | OFL-1.1 |
+| [wshuyi/remotion-video-skill](https://github.com/wshuyi/remotion-video-skill) | Best-practice reference | MIT |
+| [digitalsamba/claude-code-video-toolkit](https://github.com/digitalsamba/claude-code-video-toolkit) | Best-practice reference | MIT |
+| [remotion-dev/remotion](https://github.com/remotion-dev/remotion) & template-prompt-to-motion-graphics-saas | Core runtime / template reference | Remotion License (non-OSS, paid for larger companies) |
+| [JJenglert1/remotion-claude-video](https://github.com/JJenglert1/remotion-claude-video) | Inspiration reference only | **No license (All Rights Reserved)** — referenced for inspiration only, no code/assets redistributed |
+| ccMixter (background music library) | Audio references | CC BY / CC BY-SA (per-track; attribution required) |
+
+> Note: `JJenglert1/remotion-claude-video` ships without an open-source license
+> (All Rights Reserved). It is cited here only as an inspiration reference; this
+> expert does not copy or redistribute its code or assets.
+>
+> Remotion uses a custom license. Individuals, non-profits and small companies
+> may use it for free (including commercially); larger companies must purchase a
+> Company License from https://remotion.pro. See `license/Remotion-License.LICENSE`.
 
 ## Resources
 

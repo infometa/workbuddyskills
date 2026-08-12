@@ -2,8 +2,8 @@
 """
 腾讯云智能顾问环境检测脚本
 
-功能：检测 Python 版本、Skill 版本更新（含 changelog）、密钥/OAuth 凭证、智能顾问开通状态、角色配置状态，输出检测结果
-      支持 AK/SK 环境变量和 OAuth 浏览器授权两种鉴权方式
+功能：检测 Python 版本、Skill 版本更新（含 changelog）、AK/SK、OAuth、Connector 凭证、智能顾问开通状态、角色配置状态，输出检测结果
+      支持 AK/SK 环境变量、OAuth 浏览器授权和企业 OneID Connector 三种鉴权方式
       支持 --enable-advisor 参数开通智能顾问（写入操作，需用户明确同意）
 
 用法:
@@ -17,7 +17,7 @@
 返回码:
     0 - 环境就绪（凭证 + 智能顾问已开通 + 角色全部正常）/ 查询成功
     1 - Python 版本不满足 / 查询失败
-    2 - 凭证未配置或无效（AK/SK 和 OAuth 均不可用）
+    2 - 凭证未配置或无效（AK/SK、OAuth 和 Connector 均不可用）
     3 - 角色未配置（需要执行角色创建步骤，可选）
     4 - 智能顾问未开通（需要开通智能顾问后才能使用 CloudQ）
 
@@ -32,6 +32,7 @@ import sys
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 
 # scripts 目录（当前脚本所在目录）
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -229,11 +230,11 @@ def get_local_version() -> tuple:
     return None, None
 
 
-def _extract_version(data: dict) -> str | None:
+def _extract_version(data: dict) -> Optional[str]:
     return data.get("latestVersion", {}).get("version")
 
 
-def _get_info_via_urllib(api_url: str) -> dict | None:
+def _get_info_via_urllib(api_url: str) -> Optional[dict]:
     import urllib.request
     import ssl
     try:
@@ -246,7 +247,7 @@ def _get_info_via_urllib(api_url: str) -> dict | None:
         return None
 
 
-def _get_info_via_clawhub(slug: str) -> dict | None:
+def _get_info_via_clawhub(slug: str) -> Optional[dict]:
     import subprocess
     result = subprocess.run(
         ["clawhub", "inspect", slug, "--versions", "--json"],
@@ -257,7 +258,7 @@ def _get_info_via_clawhub(slug: str) -> dict | None:
     return json.loads(result.stdout)
 
 
-def get_remote_info(slug: str) -> dict | None:
+def get_remote_info(slug: str) -> Optional[dict]:
     api_url = f"https://clawhub.ai/api/v1/skills/{urllib.parse.quote(slug, safe='')}"
     strategies = [
         lambda: _get_info_via_urllib(api_url),
@@ -462,6 +463,7 @@ def main():
     secret_key = os.environ.get("TENCENTCLOUD_SECRET_KEY", "")
 
     using_oauth = False
+    using_connector = False
 
     if not secret_id or not secret_key:
         missing = []
@@ -471,9 +473,9 @@ def main():
             missing.append("TENCENTCLOUD_SECRET_KEY")
         log_warn(f"未配置环境变量: {', '.join(missing)}")
 
-        # ---- 3.1 检查 OAuth 凭证 ----
+        # ---- 3.1 检查本地凭证（OAuth / Connector）----
         log_info("")
-        log_info("  检查 OAuth 凭证...")
+        log_info("  检查本地凭证...")
         try:
             from credential_manager import (
                 load_credential, maybe_refresh_credential,
@@ -482,7 +484,9 @@ def main():
 
             oauth_cred = load_credential()
             if oauth_cred:
-                log_ok("OAuth 凭证文件已存在")
+                credential_type = oauth_cred.get("type", "oauth")
+                credential_label = "Connector 临时密钥" if credential_type == "connector" else "OAuth 凭证"
+                log_ok(f"{credential_label}文件已存在")
 
                 import time as _time
                 now = _time.time()
@@ -515,13 +519,14 @@ def main():
                     cred = get_credential()
                     secret_id = cred["secretId"]
                     secret_key = cred["secretKey"]
-                    using_oauth = True
-                    log_ok("将使用 OAuth 凭证继续")
+                    using_oauth = credential_type == "oauth"
+                    using_connector = credential_type == "connector"
+                    log_ok(f"将使用{credential_label}继续")
                 except Exception as e:
-                    log_fail(f"获取 OAuth 凭证失败: {e}")
+                    log_fail(f"获取本地凭证失败: {e}")
                     sys.exit(2)
             else:
-                log_warn("未找到 OAuth 凭证")
+                log_warn("未找到本地凭证")
                 log_info("")
                 log_info("  请选择以下方式之一配置凭证：")
                 log_info("")
@@ -531,6 +536,10 @@ def main():
                 log_info("  方式二：配置环境变量 AK/SK")
                 log_info('    export TENCENTCLOUD_SECRET_ID="your-secret-id"')
                 log_info('    export TENCENTCLOUD_SECRET_KEY="your-secret-key"')
+                log_info("")
+                log_info("  方式三：企业 OneID 授权")
+                log_info("    前往 CloudQ 控制台 → 拓展 → Channels 集成 → OneID，绑定 WorkBuddy OneID 应用后，")
+                log_info("    复制返回的 MCP 配置，在 WorkBuddy「连接器」→「自定义连接器」→「配置 MCP」中粘贴、保存并点击「连接」。")
                 log_info("")
                 log_info("  密钥获取地址: https://console.cloud.tencent.com/cam/capi")
                 sys.exit(2)
@@ -574,7 +583,9 @@ def main():
         ]
         if error_code in auth_failures:
             log_fail(f"凭证无效: {error_code}")
-            if using_oauth:
+            if using_connector:
+                log_info("  请在 WorkBuddy 中重新连接 CloudQ Connector")
+            elif using_oauth:
                 log_info(f"  请重新登录: python3 {SCRIPT_DIR}/login.py")
             else:
                 log_info("  请检查密钥是否正确: https://console.cloud.tencent.com/cam/capi")
@@ -640,9 +651,9 @@ def main():
     # ============== 6. 检查角色配置状态（仅 AK/SK 模式） ==============
     role_configured = False
 
-    if using_oauth:
+    if using_oauth or using_connector:
         log_section("6. 免密登录角色")
-        log_info("  OAuth 模式下跳过角色检测（OAuth 临时密钥无 cam/sts 权限）")
+        log_info("  OAuth / Connector 模式下跳过角色检测（临时密钥无 cam/sts 权限）")
         log_info("  免密登录链接功能仅在 AK/SK 模式下可用")
     else:
         log_section("6. 检查免密登录角色配置")
@@ -763,7 +774,12 @@ def main():
     # ============== 检测完成 ==============
     log_info("")
     log_info("=== 检测完成 ===")
-    cred_mode = "OAuth 凭证" if using_oauth else "AK/SK 密钥"
+    if using_connector:
+        cred_mode = "Connector 临时密钥"
+    elif using_oauth:
+        cred_mode = "OAuth 凭证"
+    else:
+        cred_mode = "AK/SK 密钥"
     if advisor_authorized and role_configured:
         log_ok("环境就绪，所有功能可用（智能顾问已开通 + API 查询 + 免密登录）")
         log_info("")

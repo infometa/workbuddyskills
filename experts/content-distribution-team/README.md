@@ -72,3 +72,15 @@ Phase 5: 综合报告
 ```bash
 zip -r content-distribution-team.zip content-distribution-team/
 ```
+
+## 致谢
+
+本专家团封装并引用了以下开源技能与第三方服务：
+
+- `humanizer` 技能：遵循 MIT License，内容基于 Wikipedia "Signs of AI writing"（CC BY-SA）。
+- `wechat-article-search`、`mp-draft-push` 技能：源自 [wechat-ai-publisher](https://github.com/bbwdadfg/wechat-ai-publisher)（MIT License, Copyright bbwdadfg）。
+- `multi-platform-distribution` 技能：本仓原创知识库。
+- `xiaohongshu` 技能：调用外部 `xiaohongshu-mcp` 服务。
+- `libtv-skill` 技能：封装 LibTV / LiblibAI OpenAPI（liblib.tv），受其服务条款约束。
+
+各许可证全文见 `license/` 目录。本专家团在原始内容基础上进行了适配与修改。

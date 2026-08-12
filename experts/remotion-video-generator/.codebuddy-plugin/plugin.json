@@ -1,6 +1,6 @@
 {
   "name": "remotion-video-generator",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Automatically generates beautiful videos using Remotion. Detects video creation requests, creates storyboards, handles environment setup, and outputs MP4 files with minimal user intervention. Supports explainer videos, product demos, social media content, and presentations.",
   "author": {
     "name": "CodeBuddy Plugin Creator",
@@ -13,6 +13,57 @@
     "content-creation",
     "react"
   ],
+  "expertType": "agent",
+  "agentName": "remotion-video-expert",
+  "agents": [
+    "./agents/remotion-video-expert.md"
+  ],
+  "displayName": {
+    "en": "Remy",
+    "zh": "视频匠"
+  },
+  "profession": {
+    "en": "Video Generation Expert",
+    "zh": "视频生成专家"
+  },
+  "displayDescription": {
+    "en": "Automatically generates production-quality videos with Remotion — from storyboard to rendered MP4, covering explainer videos, product demos, social media content, and presentations.",
+    "zh": "使用 Remotion 自动生成高质量视频，从分镜脚本到渲染 MP4，覆盖解说视频、产品演示、社交媒体内容与演示文稿。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "05-MarketingGrowth",
+  "defaultInitPrompt": {
+    "zh": "我想制作一支 60 秒的产品解说视频，请视频生成专家帮我规划分镜、生成 Remotion 代码并渲染成 MP4。",
+    "en": "I want to create a 60-second product explainer video. Please, Video Generation Expert, help me plan the storyboard, generate Remotion code, and render it to MP4."
+  },
+  "tags": [
+    {
+      "zh": "视频生成",
+      "en": "Video Generation"
+    },
+    {
+      "zh": "Remotion",
+      "en": "Remotion"
+    },
+    {
+      "zh": "动效制作",
+      "en": "Motion Graphics"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "我想制作一支 60 秒的产品解说视频，请视频生成专家帮我规划分镜、生成 Remotion 代码并渲染成 MP4。",
+      "en": "I want to create a 60-second product explainer video. Please, Video Generation Expert, help me plan the storyboard, generate Remotion code, and render it to MP4."
+    },
+    {
+      "zh": "帮我制作一支竖屏的社交媒体短视频，风格大胆吸睛。",
+      "en": "Help me create a vertical social media short video with a bold, eye-catching style."
+    },
+    {
+      "zh": "把我的季度报告转换成一支专业风格的视频演示。",
+      "en": "Convert my quarterly report into a professional-style video presentation."
+    }
+  ],
   "skills": [
     "./skills/video-generator",
     "./skills/scene-planner",
@@ -20,10 +71,5 @@
     "./skills/remotion-best-practices",
     "./skills/lucide-icons",
     "./skills/bgm-library"
-  ],
-  "expertType": "agent",
-  "agentName": "remotion-video-expert",
-  "agents": [
-    "./agents/remotion-video-expert.md"
   ]
 }

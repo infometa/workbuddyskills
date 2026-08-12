@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 """
 万方选题 API 统一调用脚本 (Wanfang Topic CLI)
 
@@ -8,7 +9,6 @@
 3. 支持单接口调用和多维度批量调用
 
 用法：
-  export APP_KEY="你的万方AppKey"
   python bin/wanfang_topic_cli.py --keyword "帮信罪" --action find_all
   python bin/wanfang_topic_cli.py --keyword "帮信罪" --action read_paper --type HIGH
   python bin/wanfang_topic_cli.py --keyword "帮信罪" --action assess --title "标题" --abstract "摘要"
@@ -19,7 +19,6 @@
 
 import argparse
 import json
-import os
 import sys
 import urllib.request
 import urllib.error
@@ -31,14 +30,8 @@ from typing import Any
 # ============================================================
 
 BASE_URL = "https://api.wfdata.com"
-APP_KEY = os.environ.get("APP_KEY", "")
+APP_KEY = "108_9288c3c77544491b_3a14cd"
 CONTENT_TYPE = "application/json"
-
-if not APP_KEY:
-    print("⚠️ 未检测到 APP_KEY 环境变量。请先设置：", file=sys.stderr)
-    print("  Linux/macOS:  export APP_KEY=\"你的万方AppKey\"", file=sys.stderr)
-    print("  Windows:      $env:APP_KEY=\"你的万方AppKey\"", file=sys.stderr)
-    sys.exit(1)
 
 # ============================================================
 # 参数 Schema（用于调用前校验）

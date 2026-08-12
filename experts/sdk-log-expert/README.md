@@ -98,3 +98,13 @@ cc --plugin-dir /path/to/sdk-log-expert
 zip -r sdk-log-expert.zip sdk-log-expert/ \
   -x "*/tmp/*" "*/node_modules/*" "*/.DS_Store"
 ```
+
+## 许可与致谢
+
+本专家由腾讯云 CloudQ 团队开发，`sdk-log-analysis` 技能的 Web 预览及相关能力集成了以下开源组件，特此致谢：
+
+- [art-template](https://github.com/aui/art-template) — MIT License，模板渲染组件。
+- [html-minifier](https://github.com/kangax/html-minifier) — MIT License，HTML 压缩组件。
+- [monaco-editor](https://github.com/microsoft/monaco-editor) — MIT License，Web 预览的代码编辑器组件。
+
+以上均为白名单开源协议。各依赖的完整许可文本见本目录 `license/` 下对应的 `.LICENSE` 文件。

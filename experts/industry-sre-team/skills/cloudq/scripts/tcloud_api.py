@@ -36,6 +36,7 @@ import ssl
 import sys
 import time
 from datetime import datetime, timezone
+from typing import Union
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
@@ -81,7 +82,7 @@ def _make_success(action: str, data: dict, request_id: str) -> dict:
 
 
 def call_api(service: str, host: str, action: str, version: str,
-             payload: dict | str = None, region: str = "ap-guangzhou",
+             payload: Union[dict, str] = None, region: str = "ap-guangzhou",
              secret_id: str = None, secret_key: str = None,
              token: str = None) -> dict:
     """

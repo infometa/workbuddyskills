@@ -11,17 +11,12 @@
 | 配置项 | 值 | 说明 |
 |--------|-----|------|
 | Base URL | `https://api.wfdata.com` | 不带 .cn 后缀 |
-| 认证头 | `X-Ca-AppKey: ${APP_KEY}` | 从环境变量 `APP_KEY` 读取 |
+| 认证头 | `X-Ca-AppKey: 108_9288c3c77544491b_3a14cd` | 主用密钥（已验证有效） |
+| 备用密钥 | `X-Ca-AppKey: 108_3fcefc21a2f14ef9_6fddcc` | 备用（主密钥失效时使用） |
 | Content-Type | `application/json` | 所有 POST 请求 |
 | 路径格式 | `/topic/{module}/{endpoint}` | 必须斜杠格式，下划线返回 403 |
 
-> ⚠️ **密钥获取**：联系万方数据（WANFANG）开放平台申请 `X-Ca-AppKey`，获得主用密钥与可选备用密钥。
->
-> **环境变量配置**：
-> - Linux/macOS：`export APP_KEY="你的万方AppKey"`
-> - Windows PowerShell：`$env:APP_KEY="你的万方AppKey"`
->
-> ⚠️ 旧版 30084_* 系列密钥已失效，请勿使用。
+> ⚠️ **已作废密钥**：`30084_b82d79d5e1154fcc_62c12f` 已失效，切勿使用。
 
 ---
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-CloudQ OAuth 登出脚本
+CloudQ 登出脚本
 
-清除本地 OAuth 凭证文件。
+清除本地凭证文件（OAuth / Connector）。
 
 用法:
     python3 logout.py
@@ -20,13 +20,13 @@ from credential_manager import CREDENTIAL_FILE, clear_credential  # noqa: E402
 def main():
     if not CREDENTIAL_FILE.exists():
         print()
-        print("  ℹ️  当前没有 OAuth 凭证，无需登出。")
+        print("  ℹ️  当前没有凭证，无需登出。")
         print()
         return
 
     clear_credential()
     print()
-    print("  ✅ 已清除 OAuth 凭证。")
+    print("  ✅ 已清除凭证。")
     print()
     print("  如需重新登录：python3 scripts/login.py")
     print()

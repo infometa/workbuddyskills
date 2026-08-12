@@ -51,7 +51,19 @@ cd skills/fortune-master && npm install   # iztro + lunar-typescript
 | ziwei-doushu | ClawHub `ziwei-doushu` |
 | meihua-yijing | ClawHub `meihua-yijing` |
 | tarot-reading | `eamanc-lab/fortune-telling-skills` (MIT) |
-| lunar-calendar | ClawHub `lunar-calendar` |
+| lunar-calendar | ClawHub `lunar-calendar`，实为 [xiamuciqing/lunar-birthday-reminder](https://github.com/xiamuciqing/lunar-birthday-reminder) (MIT, 作者 夏暮辞青) |
+
+## 开源许可与致谢
+
+本专家为白名单第三方专家，封装并引用了以下开源技能，在此致谢：
+
+- `lunar-calendar`：遵循 MIT License（作者 夏暮辞青 / xiamuciqing，[lunar-birthday-reminder](https://github.com/xiamuciqing/lunar-birthday-reminder)）。
+- `tarot-reading`：遵循 MIT License（[eamanc-lab/fortune-telling-skills](https://github.com/eamanc-lab/fortune-telling-skills)）。
+- `fortune-master`：遵循 MIT License（作者 MingLi Mentor Team，引用 iztro、lunar-typescript 均为 MIT）。
+- `cantian-bazi`、`ziwei-doushu`、`meihua-yijing`：来源于 ClawHub 技能注册表（clawhub.ai），依据其发布条款使用；`cantian-bazi` 依赖 npm 库 `cantian-tymext`。
+- `agent-mbti`：MBTI 性格测评辅助技能，作为附加能力集成。
+
+已落地的许可证全文见 `license/` 目录。本专家在原始内容基础上进行了适配与修改。
 
 ## 免责声明
 

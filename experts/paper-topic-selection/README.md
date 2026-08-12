@@ -1,6 +1,6 @@
-# 选题专家团队（WANFANG TOPIC）
+# 选题顾问（WANFANG TOPIC）
 
-基于万方数据学术资源的一站式论文选题专家团。
+基于万方数据学术资源的一站式论文选题顾问。
 
 ## 类型
 Team 型（多角色协作团队）
@@ -20,7 +20,7 @@ Team 型（多角色协作团队）
 
 本专家团的 `bin/wanfang_topic_cli.py`、`bin/wanfang_api_validator.py` 调用万方选题 API 时，需要万方开放平台的 **AppKey**。
 
-> ⚠️ AppKey 从环境变量 `APP_KEY` 读取，不随包内置。请按以下步骤配置后方可使用。
+> ⚠️ 包内已内置万方 AppKey（主用 `108_9288c3c77544491b_3a14cd`），开箱即可调用 API，无需设置环境变量。若对外分发此包，密钥会随包暴露；如需重新外部化，可改回从环境变量 `${APP_KEY}` 读取。
 
 ### 1. 获取 AppKey
 联系万方数据（WANFANG）开放平台 / 你的接口负责人申请 `X-Ca-AppKey`，获得主用密钥（与可选的备用密钥）。
@@ -44,9 +44,12 @@ python bin/wanfang_topic_cli.py --keyword "帮信罪" --action assess \
   --title "标题" --abstract "摘要"
 ```
 
+> 注：执行上述脚本时 `python` 与 `python3` 二选一即可，两者等价（取决于你的环境将哪个命令指向 Python 3）。
+```
+
 ### 4. 连通性验证
 ```bash
-python bin/wanfang_api_validator.py --keyword "帮信罪" --action read_paper --type HIGH
+python bin/wanfang_topic_cli.py --keyword "帮信罪" --action read_paper --type HIGH
 ```
-返回 HTTP 200 且含 `pageInfo` 即说明 `APP_KEY` 配置正确、网络可达。
+返回含 `pageInfo` 的论文列表，即说明 `APP_KEY` 配置正确、网络可达。
 

@@ -12,7 +12,7 @@
 
 清理范围:
     1. 配置目录  ~/.tencent-cloudq/（含 config.json）
-    2. OAuth 凭证  ~/.tencent-cloudq/credential.json
+    2. 凭证（OAuth / Connector）  ~/.tencent-cloudq/credential.json
     3. 临时缓存  {系统临时目录}/.tcloud_advisor_uin_cache
     4. 环境变量  TENCENTCLOUD_* 系列环境变量
     5. 云端角色  CAM 角色 advisor（可选，需 AK/SK）
@@ -167,8 +167,8 @@ def clean_config_dir(interactive: bool) -> bool:
 
 
 def clean_oauth_credential(interactive: bool) -> bool:
-    """清理 OAuth 凭证文件"""
-    print(f"\n{bold('2. OAuth 凭证')}")
+    """清理凭证文件（OAuth / Connector）"""
+    print(f"\n{bold('2. 凭证文件')}")
 
     if not CREDENTIAL_FILE.exists():
         print(f"  {dim('[-]')} {CREDENTIAL_FILE}: {dim('不存在，跳过')}")
@@ -184,11 +184,11 @@ def clean_oauth_credential(interactive: bool) -> bool:
     except (json.JSONDecodeError, OSError):
         pass
 
-    if interactive and not confirm(f"\n  确认删除 OAuth 凭证?"):
+    if interactive and not confirm(f"\n  确认删除凭证文件?"):
         print(f"  {yellow('[SKIP]')} 用户跳过")
         return False
 
-    return remove_file(CREDENTIAL_FILE, "OAuth 凭证")
+    return remove_file(CREDENTIAL_FILE, "凭证文件")
 
 
 def clean_cache_file(interactive: bool) -> bool:
@@ -391,7 +391,7 @@ def main():
     # 执行清理（注意：云端角色删除必须在环境变量清理之前，因为需要 AK/SK）
     results = []
     results.append(("配置目录", clean_config_dir(interactive)))
-    results.append(("OAuth 凭证", clean_oauth_credential(interactive)))
+    results.append(("凭证文件", clean_oauth_credential(interactive)))
     results.append(("临时缓存", clean_cache_file(interactive)))
 
     if include_cloud:

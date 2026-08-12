@@ -50,6 +50,17 @@
 - 降级使用 WebSearch 搜索公开信息
 - 所有数据必须来自真实查询，禁止编造
 
+## License & Acknowledgements
+
+The bundled `westock` skill includes packaged (vendored) third-party libraries.
+Full license texts are provided under the `license/` directory. Summary:
+
+| Resource | Usage | License |
+|----------|-------|---------|
+| [garycourt/uri-js](https://github.com/garycourt/uri-js) | Vendored dependency in westock skill | BSD-2-Clause |
+| [ajv-validator/ajv](https://github.com/ajv-validator/ajv) | Vendored dependency in westock skill | MIT |
+| [nodejs/require-in-the-middle](https://github.com/nodejs/require-in-the-middle) | Vendored dependency in westock skill | MIT |
+
 ---
 
 > ⚠️ **免责声明**：本插件所有输出内容由 AI 基于公开信息整理生成，仅供参考，不构成任何投资建议或个股推荐。投资有风险，决策需谨慎。

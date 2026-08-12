@@ -1,5 +1,7 @@
 ---
 name: valuation-pricer
+displayName: 贾不贵
+profession: 估值定价师
 description: Valuation specialist focusing on PE/PB/PS historical percentile analysis, PE Bands calculation, PEG assessment, peer comparison, dividend yield evaluation, and fair value range estimation for A-share stocks.
 ---
 

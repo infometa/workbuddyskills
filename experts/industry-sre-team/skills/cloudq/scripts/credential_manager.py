@@ -1,21 +1,30 @@
 #!/usr/bin/env python3
 """
-CloudQ 凭证统一管理模块 (Authorization Code 模式)
+CloudQ 凭证统一管理模块
 
 凭证获取优先级：
-    1. 环境变量 AK/SK（TENCENTCLOUD_SECRET_ID / TENCENTCLOUD_SECRET_KEY）
-    2. OAuth 凭证文件（~/.tencent-cloudq/credential.json）
-    3. 抛出 CredentialNotFoundError
+    1. OAuth 凭证文件（~/.tencent-cloudq/credential.json，type="oauth"）
+    2. Connector 凭证文件（~/.tencent-cloudq/credential.json，type="connector"）
+    3. 环境变量 AK/SK（TENCENTCLOUD_SECRET_ID / TENCENTCLOUD_SECRET_KEY）
+    4. 抛出 CredentialNotFoundError
+
+支持三种鉴权方式：
+    - OAuth 授权码模式          → source="oauth"    (credential.json type="oauth")
+    - CloudQ Connector 临时密钥 → source="connector" (credential.json type="connector")
+    - AK/SK 环境变量           → source="env"
+
+Connector 凭证由 Agent/SKILL.md 侧通过 MCP Tool 获取并写入 credential.json，
+本模块仅负责读取和校验，不负责获取和刷新 Connector 凭证。
 
 核心功能：
     - get_credential()            获取当前可用凭证
-    - maybe_refresh_credential()  自动刷新快过期的 OAuth 凭证
+    - maybe_refresh_credential()  自动刷新快过期的 OAuth 凭证（Connector 跳过）
     - get_authorize_url()         从服务端获取授权 URL
     - exchange_token()            用 authorization_code 换 token
-    - get_tmp_cred()              用 accessToken 换临时密钥
-    - refresh_access_token()      用 refreshToken 刷新 accessToken
-    - save_credential()           原子写入凭证文件
-    - clear_credential()          清除 OAuth 凭证
+    - get_tmp_cred()              用 accessToken 换临时密钥（OAuth）
+    - refresh_access_token()      用 refreshToken 刷新 accessToken（OAuth）
+    - save_credential()           保存 OAuth 凭证（原子写入）
+    - clear_credential()          清除凭证文件
 """
 
 import json
@@ -27,6 +36,7 @@ import time
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 from urllib.parse import quote
@@ -365,13 +375,13 @@ def save_credential(cred: dict, oauth_info: dict):
     _atomic_write_json(CREDENTIAL_FILE, data)
 
 
-def load_credential() -> dict | None:
-    """读取本地 OAuth 凭证文件，不存在或格式错误返回 None"""
+def load_credential() -> Optional[dict]:
+    """读取本地凭证文件，支持 oauth 和 connector 两种类型，不存在或格式错误返回 None"""
     if not CREDENTIAL_FILE.exists():
         return None
     try:
         data = json.loads(CREDENTIAL_FILE.read_text(encoding="utf-8"))
-        if data.get("type") != "oauth":
+        if data.get("type") not in ("oauth", "connector"):
             return None
         return data
     except (json.JSONDecodeError, IOError):
@@ -379,7 +389,7 @@ def load_credential() -> dict | None:
 
 
 def clear_credential():
-    """清除 OAuth 凭证文件"""
+    """清除凭证文件（OAuth 和 Connector 均适用）"""
     if CREDENTIAL_FILE.exists():
         CREDENTIAL_FILE.unlink()
 
@@ -388,12 +398,15 @@ def clear_credential():
 
 def maybe_refresh_credential(force: bool = False):
     """
-    检查 OAuth 凭证是否快过期，自动刷新。
+    检查凭证是否快过期，自动刷新。
+
+    OAuth 凭证：accessToken 快过期时用 refreshToken 刷新，再用新 accessToken 换临时密钥。
+    Connector 凭证：**不刷新**，凭证由 Agent 侧通过 MCP Tool 获取后重新写入 credential.json。
 
     Args:
         force: 强制刷新，忽略有效期检查（用户主动刷新时传 True）
 
-    刷新逻辑：
+    刷新逻辑（仅 OAuth）：
     1. 临时密钥剩余 > 5 分钟且非强制 → 不刷新
     2. accessToken 剩余 < 5 分钟 → 用 refreshToken + userOpenId 刷新
     3. 用 accessToken 换取新的临时密钥
@@ -401,6 +414,10 @@ def maybe_refresh_credential(force: bool = False):
     """
     cred_data = load_credential()
     if cred_data is None:
+        return
+
+    # Connector 凭证由 Agent 侧管理，程序不负责刷新
+    if cred_data.get("type") == "connector":
         return
 
     now = time.time()
@@ -438,25 +455,75 @@ def maybe_refresh_credential(force: bool = False):
 
 def get_credential() -> dict:
     """
-    获取可用凭证，支持 AK/SK 环境变量和 OAuth 双模式。
+    获取可用凭证，支持 OAuth、Connector 和 AK/SK 三种模式。
 
     优先级：
-    1. 环境变量 AK/SK
-    2. OAuth 凭证文件
+    1. credential.json（type="oauth"）
+    2. credential.json（type="connector"）
+    3. 环境变量 AK/SK
 
     Returns:
         {
             "secretId": "...",
             "secretKey": "...",
             "token": "...",
-            "source": "env" | "oauth"
+            "source": "oauth" | "connector" | "env",
+            "auditJwt": "..."  # 仅 Connector 模式返回
         }
 
     Raises:
         CredentialNotFoundError: 无任何可用凭证
-        CredentialExpiredError: OAuth 凭证已过期
+        CredentialExpiredError: OAuth/Connector 凭证已过期且无法刷新
     """
-    # 1. 环境变量 AK/SK
+    # 1. credential.json（优先 OAuth，其次 Connector）
+    cred_data = load_credential()
+    if cred_data is not None:
+        cred_type = cred_data.get("type", "")
+
+        # 1.1 OAuth 凭证（自动刷新）
+        if cred_type == "oauth":
+            try:
+                maybe_refresh_credential()
+                cred_data = load_credential()
+            except CredentialExpiredError:
+                raise
+            except Exception:
+                pass  # 刷新失败，下面会检查凭证是否仍然有效
+
+            if cred_data:
+                now = time.time()
+                if cred_data.get("expiresAt", 0) < now:
+                    raise CredentialExpiredError(
+                        "OAuth 临时密钥已过期且自动刷新失败，请重新授权登录。"
+                    )
+                return {
+                    "secretId": cred_data["secretId"],
+                    "secretKey": cred_data["secretKey"],
+                    "token": cred_data.get("token", ""),
+                    "source": "oauth",
+                }
+
+        # 1.2 Connector 凭证（由 Agent 侧通过 MCP Tool 写入）
+        if cred_type == "connector":
+            now = time.time()
+            if cred_data.get("expiresAt", 0) < now:
+                raise CredentialExpiredError(
+                    "Connector 临时密钥（OneId 方案）已过期，请通过 "
+                    "CloudQConnector_get_available_tmp_secret 重新获取。"
+                )
+            result = {
+                "secretId": cred_data["secretId"],
+                "secretKey": cred_data["secretKey"],
+                "token": cred_data.get("token", ""),
+                "source": "connector",
+            }
+            # Connector 模式下附带 auditJwt
+            audit_jwt = cred_data.get("auditJwt", "")
+            if audit_jwt:
+                result["auditJwt"] = audit_jwt
+            return result
+
+    # 2. 环境变量 AK/SK
     env_id = os.environ.get("TENCENTCLOUD_SECRET_ID", "")
     env_key = os.environ.get("TENCENTCLOUD_SECRET_KEY", "")
     if env_id and env_key:
@@ -466,32 +533,6 @@ def get_credential() -> dict:
             "token": os.environ.get("TENCENTCLOUD_TOKEN", ""),
             "source": "env",
         }
-
-    # 2. OAuth 凭证文件
-    cred_data = load_credential()
-    if cred_data is not None:
-        # 尝试自动刷新
-        try:
-            maybe_refresh_credential()
-            cred_data = load_credential()
-        except CredentialExpiredError:
-            raise
-        except Exception:
-            pass  # 刷新失败，下面会检查凭证是否仍然有效
-
-        if cred_data:
-            # 检查临时密钥是否已过期（刷新失败时可能返回过期凭证）
-            now = time.time()
-            if cred_data.get("expiresAt", 0) < now:
-                raise CredentialExpiredError(
-                    "OAuth 临时密钥已过期且自动刷新失败，请重新授权登录。"
-                )
-            return {
-                "secretId": cred_data["secretId"],
-                "secretKey": cred_data["secretKey"],
-                "token": cred_data.get("token", ""),
-                "source": "oauth",
-            }
 
     # 无凭证
     raise CredentialNotFoundError(

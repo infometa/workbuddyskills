@@ -106,3 +106,13 @@ bash pack.sh design-expert
 cd design-expert/skills/design/scripts
 node --test test/*.test.mjs
 ```
+
+## 致谢与许可
+
+本专家为 VibeKnow 发布的第三方专家，agent prompt 与 `design` 技能为 VibeKnow 自有版权，视频渲染通过 VibeKnow 托管的 MCP 服务完成。渲染产物中打包了以下第三方开源组件：
+
+- **Remotion**（视频渲染引擎，https://www.remotion.dev）：受 Remotion 官方许可条款约束（非标准宽松开源许可，商业使用请遵守其 License）。
+- **React / React-DOM**（Meta Platforms, Inc.）：遵循 MIT License。
+- **Mediabunny**（https://github.com/Vanilagy/mediabunny）：遵循 Mozilla Public License 2.0（MPL-2.0）。
+
+各许可全文见 `license/` 目录（VibeKnow 版权声明见 `license/vibeknow-PROPRIETARY.LICENSE`）。字体当前走系统回退，暂无嵌入字体。

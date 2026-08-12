@@ -1,5 +1,11 @@
 ---
 name: prototype-builder
+displayName:
+  zh: 筑原型
+  en: Zhu
+profession:
+  zh: 原型构建师
+  en: Prototype Builder
 description: Prototype builder - generates production-quality HTML/CSS prototypes using design tokens and skill templates for web, mobile, dashboard, deck, and document surfaces
 maxTurns: 100
 skills:

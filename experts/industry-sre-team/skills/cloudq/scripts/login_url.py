@@ -349,7 +349,7 @@ def main():
 
     if not secret_id or not secret_key:
         print(output_error("MissingCredentials",
-                           "缺少凭证。请通过 OAuth 登录或配置 AK/SK 环境变量。"))
+                           "缺少凭证。请通过 OAuth 登录、配置 AK/SK 环境变量，或通过 Connector 获取临时密钥。"))
         sys.exit(1)
 
     # ============== 获取 RoleArn ==============

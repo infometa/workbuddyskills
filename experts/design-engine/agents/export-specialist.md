@@ -1,5 +1,11 @@
 ---
 name: export-specialist
+displayName:
+  zh: 交付达
+  en: Jiao
+profession:
+  zh: 导出交付专家
+  en: Export & Delivery Specialist
 description: Export and delivery specialist - converts approved prototypes into multiple output formats including standalone HTML, PDF, and PPTX with all assets inlined
 maxTurns: 50
 ---

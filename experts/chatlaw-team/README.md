@@ -51,6 +51,23 @@
 
 本专家团为原创实现，未复制源项目代码；所有 MD 与 JSON 均为 WorkBuddy 独立撰写。
 
+## License & Acknowledgements
+
+This expert references the following project. Full license/attribution notes are
+provided under the `license/` directory. Summary:
+
+| Resource | Usage | License |
+|----------|-------|---------|
+| [PKU-YuanGroup/ChatLaw](https://github.com/PKU-YuanGroup/ChatLaw) | Architectural inspiration only (multi-agent role division) | AGPL-3.0 |
+
+> Note: `chatlaw-team` references ChatLaw **only as an architectural/conceptual
+> inspiration**. No ChatLaw source code, model weights, datasets, or other
+> AGPL-3.0-licensed materials are copied, bundled, or derived at the code level.
+> All agent prompts (`agents/*.md`) and JSON are original work by the WorkBuddy
+> Team. Since this expert is not a derivative of ChatLaw's source, the AGPL-3.0
+> copyleft obligations (incl. Section 13) are not triggered. See
+> `license/ChatLaw-AGPL-3.0-reference-only.LICENSE`.
+
 ## 免责声明
 
 本专家团输出的法律建议**不构成正式法律意见**。涉及重大权益、刑事、涉外、资本市场等专业场景，请委托执业律师。

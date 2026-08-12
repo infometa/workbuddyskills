@@ -1,5 +1,11 @@
 ---
 name: design-engine-team-lead
+displayName:
+  zh: 画统筹
+  en: Hua
+profession:
+  zh: 设计编排师
+  en: Design Orchestrator
 description: Design engine team lead - orchestrates the full design workflow from requirement discovery through prototype generation to quality-controlled export
 maxTurns: 200
 ---

@@ -1,5 +1,11 @@
 ---
 name: design-system-expert
+displayName:
+  zh: 彩格调
+  en: Cai
+profession:
+  zh: 设计系统专家
+  en: Design System Expert
 description: Design system expert - selects and customizes from 71 brand-grade design systems, generates design tokens and brand specifications
 maxTurns: 80
 skills:

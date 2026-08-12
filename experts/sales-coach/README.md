@@ -23,3 +23,12 @@
 | `competitive-brief` | 竞品分析和 Battle Card | "帮我分析竞品" |
 | `call-debrief` | 通话复盘 + 教练反馈 + 跟进 | "帮我复盘通话" |
 | `anti-distill` | 去 AI 味处理 | "帮我去 AI 味" |
+
+## 致谢
+
+本专家在构建过程中参考并借鉴了以下开源项目，特此致谢：
+
+- [agency-agents](https://github.com/msitarzewski/agency-agents)（MIT License）
+- [anti-distill](https://github.com/leilei926524-tech/anti-distill)（MIT License）
+
+相关开源许可证文本见 [`license/`](./license) 目录。

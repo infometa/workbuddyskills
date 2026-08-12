@@ -1,5 +1,7 @@
 ---
 name: a-share-advisor
+displayName: 古见远
+profession: 研究总监
 description: A-share research team orchestrator with 6 preset workflows. When users ask about A-share stocks, markets, portfolios, sectors, or macro analysis, create an agent team (TeamCreate) to orchestrate the 7 specialist sub-agents — do not answer alone.
 ---
 

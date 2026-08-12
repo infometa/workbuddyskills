@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**93** · 专家：**408** · 官方插件：**57** · 团队插件：**31**
+- 技能包：**295** · 连接器：**94** · 专家：**408** · 官方插件：**57** · 团队插件：**31**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-12
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-13
 
 ---
 ## 目录
@@ -401,6 +401,7 @@
 | [`jira`](./connectors/jira/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要环境变量：`ATLASSIAN_API_TOKEN`、`JIRA_API_TOKEN` |
 | [`jiushuyun`](./connectors/jiushuyun/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`kdocs`](./connectors/kdocs/) | 操作金山文档（WPS 云文档 / Kdocs / 365.kdocs.cn / www.kdocs.cn）云文档的官方 Skill。核心能力覆盖云端新建、读取、编辑、搜索、分享、… | 可能需要启用对应 MCP / 连接器 |
+| [`kling-ai`](./connectors/kling-ai/) | 用途：Create and monitor Kling AI image and video generations through the OAuth-protected Kl… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`kuaicha-search`](./connectors/kuaicha-search/) | >- | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`KUAICHA_API_KEY` |
 | [`lemonclaw`](./connectors/lemonclaw/) | 通过 lemonclaw-cli 与内置独立开票工作流查询或操作柠檬云多产品业务数据。覆盖认证和账套、进销存 SCM、业财 ERP、财务 ACC、发票查询及独立开票；适用于客户、… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权 |
 | [`lexiang`](./connectors/lexiang/) | 乐享知识库 MCP 全功能 Skill。当用户提到「乐享」「知识库」「lexiang」，或提供 lexiangla.com 链接，或涉及知识库的搜索/写入/编辑/文件/配置等操作… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
@@ -737,7 +738,7 @@
 | [`inspection-expert`](./experts/inspection-expert/) | [腾讯云风险巡检专家](./experts/inspection-expert/) | 云资源巡检专家。覆盖五维巡检（安全、性能、可靠性、成本、合规）、高危风险扫描与优先级处置、巡检趋势分析与可视化报告生成，主动发现潜在隐患，防患于未然。 | 可能需要启用对应 MCP / 连接器 |
 | [`migraq-team`](./experts/migraq-team/) | [腾讯云上云迁移专家团](./experts/migraq-team/) | 7位专家协作完成上云迁移：产品选型、Landing Zone、架构设计、交付实施、运维与FDE部署 | 无（可选 API/账号以增强能力） |
 | [`multi-cloud-expert`](./experts/multi-cloud-expert/) | [多云AIOps专家](./experts/multi-cloud-expert/) | 统一管理腾讯云、阿里云、AWS、Azure、GCP 等多云平台，一个智能体即可管多云。 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
-| [`multi-cloud-management-expert`](./experts/multi-cloud-management-expert/) | [腾讯云DevOps专家](./experts/multi-cloud-management-expert/) | 精通腾讯云、阿里云、AWS等多云架构治理、架构可视化、智能巡检、云成本优化和风险评估，一个专家管理所有云。 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；需要环境变量：`TENCENTCLOUD_SECRET_KEY` |
+| [`multi-cloud-management-expert`](./experts/multi-cloud-management-expert/) | [腾讯云DevOps专家](./experts/multi-cloud-management-expert/) | 精通腾讯云、阿里云、AWS等多云架构治理、可视化、智能巡检与成本优化，一个专家管理所有云。 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`TENCENTCLOUD_SECRET_KEY` |
 | [`nges-healthcare-marketing-team`](./experts/nges-healthcare-marketing-team/) | [腾讯健康NGES医药营销专家团](./experts/nges-healthcare-marketing-team/) | 由医药营销智能协调官统一调度的医药营销专家团，整合HCP客户洞察、互动病例生成、学术物料生成、合规审核四大能力，覆盖从客户情报分析到内容生产到合规检测的全流程。企业版提供完整功能… | 需要微信/企微相关凭证或扫码登录 |
 | [`patient-education-content-review-word-assistant`](./experts/patient-education-content-review-word-assistant/) | [腾讯健康药箱-私域患教内容审核助手](./experts/patient-education-content-review-word-assistant/) | 六维度审核患教内容并核对数据文献一致性，审核意见以 Word 批注+高亮直接标注在原文上输出。 | 需要微信/企微相关凭证或扫码登录 |
 | [`sdk-log-expert`](./experts/sdk-log-expert/) | [SDK 日志分析专家](./experts/sdk-log-expert/) | 解码客户端日志，还原 TRTC/IM/TUI 时间线，定位音视频与 IM 相关根因 | 需要微信/企微相关凭证或扫码登录 |
@@ -817,7 +818,7 @@
 | [`metamorphosis-practitioner`](./experts/metamorphosis-practitioner/) | [创业心态陪伴者](./experts/metamorphosis-practitioner/) | 不是导师，是走过你想走的路的人。通过分享创业经历帮创业者觉醒心态问题，不说教只分享，让用户自己感悟。 | 无（可选 API/账号以增强能力） |
 | [`opc-team`](./experts/opc-team/) | [一人公司专家团](./experts/opc-team/) | 基于由Easy创作的《一人企业方法论》，9位专家陪你走完从资源盘点、利基定位到MVP、转化、复盘的一人公司全流程共创 | 无（可选 API/账号以增强能力） |
 | [`panshi-customer-visit-agent`](./experts/panshi-customer-visit-agent/) | [跟进拜访助手](./experts/panshi-customer-visit-agent/) | 磐石官方AI助手，查询跟进与拜访打卡，将iWiki/腾讯文档/企微文档或粘贴文本同步录入磐石CRM。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`OMP_SERVICE_TOKEN`、`TENCENT_DOCS_TOKEN` |
-| [`paper-topic-selection`](./experts/paper-topic-selection/) | [选题专家团队（WANFANG TOPIC）](./experts/paper-topic-selection/) | 帮你做论文选题：检索文献、推荐方向、评估新颖性、生成标题、出领域报告。说学科方向即可。 | 需要环境变量：`APP_KEY` |
+| [`paper-topic-selection`](./experts/paper-topic-selection/) | [选题顾问（WANFANG TOPIC）](./experts/paper-topic-selection/) | 基于万方数据帮你做论文选题：检索文献、推荐方向、评估新颖性、生成标题、出领域报告。说学科方向即可。 | 需要环境变量：`APP_KEY` |
 | [`personal-fitness-coach`](./experts/personal-fitness-coach/) | [私人健身营养教练](./experts/personal-fitness-coach/) | 专业务实的私人健身教练，制定可执行的训练计划、动作指导与饮食宏量方案，安全第一，鼓励但不废话。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要环境变量：`DEMO_KEY`、`USDA_API_KEY` |
 | [`skill-smith`](./experts/skill-smith/) | [Skill 制作顾问](./experts/skill-smith/) | 陪制作者把重复工作流做成可用的 Skill：挖掘场景、确认需求、生成制作、实测验证、按标准审查打分。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要 GitHub Token 或 `gh auth login`；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`GH_TOKEN` |
 | [`skillhub-charity-expert-team`](./experts/skillhub-charity-expert-team/) | [技术公益专家团](./experts/skillhub-charity-expert-team/) | 星星带领六位专家，覆盖公益技能或Agent专家的需求分析、编写、测试评审、版权确认与打包交付全流程。 | 可能需要启用对应 MCP / 连接器；需要环境变量：`MCP_AUTH_TOKEN` |
