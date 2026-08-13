@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**94** · 专家：**408** · 官方插件：**57** · 团队插件：**31**
+- 技能包：**295** · 连接器：**97** · 专家：**408** · 官方插件：**57** · 团队插件：**31**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-13
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-14
 
 ---
 ## 目录
@@ -394,6 +394,7 @@
 | [`github`](./connectors/github/) | 用途：Use github connector to access github MCP capabilities via github mcp server. | 可能需要启用对应 MCP / 连接器 |
 | [`github-remote`](./connectors/github-remote/) | 用途：Use github-remote connector to access github-remote MCP capabilities via github-remote… | 可能需要启用对应 MCP / 连接器 |
 | [`gmail`](./connectors/gmail/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要环境变量：`EMAIL_PASSWORD` |
+| [`gongyi-open-mcp`](./connectors/gongyi-open-mcp/) | 腾讯公益机构服务平台连接器技能 - 通过 MCP 查询当前机构的用户、机构信息、成员、项目、进展、财务披露与数据字典等机构侧业务数据 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`ima-mcp`](./connectors/ima-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`infimind-ecommerce-image`](./connectors/infimind-ecommerce-image/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`MCP_TOKEN` |
 | [`infimind-video`](./connectors/infimind-video/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SORA_MCP_TOKEN` |
@@ -428,6 +429,7 @@
 | [`qixinhuiyan-mcp`](./connectors/qixinhuiyan-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`qq-mail`](./connectors/qq-mail/) | QQ邮箱(QQ Mail)全功能操作技能。触发场景：看邮箱、查邮件、收件箱、看看邮件、有没有新邮件、未读邮件、帮我看看邮箱、打开邮箱、最近的邮件、邮件列表、发邮件、写邮件、发一封… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`salesnail-instructor`](./connectors/salesnail-instructor/) | 通过 SalesNail Connector 自助开通讲师试用、维护商业 Profile、生成客户方案，并完成游戏创作、课程配置、实时课堂带教、课堂数据分析和证据化复盘。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`seeyon-office-marketing-suite`](./connectors/seeyon-office-marketing-suite/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`shanglv-mcp-gateway`](./connectors/shanglv-mcp-gateway/) | 企业级 MCP 授权网关技能 - 聚合财务发票查询与银行账户交易数据（客户/账户/余额/交易/对账单/回单/小时余额），统一走 Keycloak OAuth 2.1 + PKCE… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`shanlong-claw`](./connectors/shanlong-claw/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`supabase`](./connectors/supabase/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -452,6 +454,7 @@
 | [`westock-mcp`](./connectors/westock-mcp/) | 提供实时行情，支持条件选股、自选管理、股价提醒与模拟交易 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`wind-finance`](./connectors/wind-finance/) | 通过自然语言查询股票、基金、指数、债券、公告、财经新闻和宏观经济数据。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`WIND_API_KEY` |
 | [`wk-workbuddy`](./connectors/wk-workbuddy/) | 用途：name: wk-mcp | 可能需要启用对应 MCP / 连接器 |
+| [`woscli`](./connectors/woscli/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`wps-knowledgebase`](./connectors/wps-knowledgebase/) | >- | 需要登录 / OAuth / 扫码授权 |
 | [`xiaoe-cloud-cli`](./connectors/xiaoe-cloud-cli/) | 小鹅通：使用当前登录账号和店铺上下文管理课程、内容资产、章节、直播、订单和素材。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`xingtu-claw-risk`](./connectors/xingtu-claw-risk/) | 星图Claw 企业风险分析技能 - 行业识别、企业间关联方关系分析 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
@@ -553,9 +556,9 @@
 | [`tik-tok-strategist`](./experts/tik-tok-strategist/) | [TikTok策略师](./experts/tik-tok-strategist/) | 精通TikTok算法和海外短视频生态，帮助品牌在全球平台爆发 | 需要 GitHub Token 或 `gh auth login`；需要环境变量：`LIBTV_ACCESS_KEY` |
 | [`topic-evaluator`](./experts/topic-evaluator/) | [科技频道选题评估师](./experts/topic-evaluator/) | 双层级4维评分与5方向对比，全部评分详情、硬源清单、风险提示在对话中完整展示，报告可下载存档。 | 无 |
 | [`twitter-operations-expert`](./experts/twitter-operations-expert/) | [Twitter运营专家](./experts/twitter-operations-expert/) | 精通Twitter/X平台互动策略和话题运营，让品牌占据全球对话 | 需要 GitHub Token 或 `gh auth login` |
-| [`vibeknow-design-video`](./experts/vibeknow-design-video/) | [VibeKnow 视频专家](./experts/vibeknow-design-video/) | 给个文件或一篇文章，自动排版式、配图、配音，编排成一条动效流畅、有设计感的图文短视频。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
-| [`vibeknow-handdraw`](./experts/vibeknow-handdraw/) | [VibeKnow 手绘视频专家](./experts/vibeknow-handdraw/) | 老师讲历史、家长讲绘本、医生讲康复、理财博主讲避坑，专业内容边画边讲成手绘科普视频，51种风格随选。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`WB_TOKEN` |
-| [`vibeknow-ppt-explain`](./experts/vibeknow-ppt-explain/) | [VibeKnow PPT/PDF讲解大师](./experts/vibeknow-ppt-explain/) | 讲师做培训、医生讲科普、分析师讲研报、企业讲方案，PPT/PDF 逐页配音，一键成讲解视频。 | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权 |
+| [`vibeknow-design-video`](./experts/vibeknow-design-video/) | [VibeKnow 视频专家](./experts/vibeknow-design-video/) | 老师讲考点、销售讲方法、企业讲卖点，给个文件或说个主题，自动排版配图配音，成一条设计感横版视频。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`vibeknow-handdraw`](./experts/vibeknow-handdraw/) | [VibeKnow 手绘视频专家](./experts/vibeknow-handdraw/) | 老师讲考点、医生讲术后护理、工程师讲原理，专业内容边画边讲成手绘科普视频，51种风格随选。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`WB_TOKEN` |
+| [`vibeknow-ppt-explain`](./experts/vibeknow-ppt-explain/) | [VibeKnow PPT/PDF讲解大师](./experts/vibeknow-ppt-explain/) | 讲师做内训、医生讲病理、投标专员讲方案，PPT/PDF 逐页配音成讲解视频，原页原版式不用重做。 | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权 |
 | [`video-dissection`](./experts/video-dissection/) | [视频解剖专家团](./experts/video-dissection/) | 专业拆解火爆抖音视频拍摄手法的专家团。输入抖音链接，自动提取视频、转录文案、分析景别运镜、剪辑节奏、色调风格，生成完整拍摄脚本拆解文档，并提供可落地的仿拍建议。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；需要环境变量：`API_KEY`、`ARK_API_KEY`、`DOUYIN_API_KEY`、`SILICONFLOW_API_KEY` |
 | [`video-gen-team`](./experts/video-gen-team/) | [AI视频创作团队](./experts/video-gen-team/) | 三位一体的AI视频创作团队：灵阅负责采集AI/科技热点，灵枢负责策划选题与脚本，灵映负责渲染MP4视频成品（配音+字幕）。全流程自动化，60秒短视频一键生成。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要环境变量：`AZURE_TTS_KEY` |
 | [`viral-topic-master`](./experts/viral-topic-master/) | [爆款选题策划专家](./experts/viral-topic-master/) | 投热点出爆款。12 心法预筛+8 维打分+6 大形态产出，公众号视频号小红书 H5 通吃。 | 需要微信/企微相关凭证或扫码登录 |
@@ -805,11 +808,11 @@
 | [`fbsir-eight-seat-board`](./experts/fbsir-eight-seat-board/) | [独董会](./experts/fbsir-eight-seat-board/) | 福帮手经营决策独立审议专家团｜按案组建必要席位，独立判断、交叉质询、保留异议，交付可追溯行动备忘录 | 无（可选 API/账号以增强能力） |
 | [`fbsir-industry-scene-researcher`](./experts/fbsir-industry-scene-researcher/) | [行业场景研究员](./experts/fbsir-industry-scene-researcher/) | 围绕一个行业场景定位关键工作流缺口，并交付补位卡、3天行动计划、项目动作执行包和下一步建议。 | 可能需要启用对应 MCP / 连接器 |
 | [`fbsir-super-partner`](./experts/fbsir-super-partner/) | [超级合伙人|魔镜行动](./experts/fbsir-super-partner/) | 带上目标或真实材料，立即得到可使用成品；宿主能力可用且获授权时执行并回执，再做72小时裁决。 | 需要登录 / OAuth / 扫码授权 |
-| [`fbsir-super-partner-group`](./experts/fbsir-super-partner-group/) | [超级合伙人](./experts/fbsir-super-partner-group/) | 以AI+OPC智能化运营为底座，统筹战略、运营、增长与AI试点，输出诊断卡和下一步。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`fortune-consultant`](./experts/fortune-consultant/) | [赛博神算子](./experts/fortune-consultant/) | 传统命理参考工具——八字紫微排盘、塔罗梅花起卦、农历黄历查询，多体系交叉参考，仅供娱乐。 | 需要大模型 API Key（OpenAI/Anthropic 等） |
 | [`fortune-master`](./experts/fortune-master/) | [严谨专业的命理咨询师](./experts/fortune-master/) | 用规则引擎精确排盘八字、紫微、奇门、六爻，再由AI理性解读，助你审慎看待人生格局与运势决策。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`gaokao-advisor`](./experts/gaokao-advisor/) | [高考我帮你](./experts/gaokao-advisor/) | 辅助检索高考知识库并调用分数线、一分一段能力，整理带来源的真题、高校专业和志愿参考；同时提供全流程志愿填报引导，产出可转发的腾讯文档志愿报告 | 需要大模型 API Key（OpenAI/Anthropic 等） |
 | [`indie-founder-coach`](./experts/indie-founder-coach/) | [独立创业教练](./experts/indie-founder-coach/) | 信奉精益创业与自力更生理念，帮助独立创业者用最少资源从0到1构建可持续盈利事业，覆盖创业全旅程关键决策 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录 |
+| [`innovation-startup-mentor`](./experts/innovation-startup-mentor/) | [大学生创新创业导师](./experts/innovation-startup-mentor/) | 以落地五关与最小闭环法，帮大学生把双创项目从想法推到落地：痛点验证、商业补全、评委预检，步步可执行。 | 无 |
 | [`job-companion-team`](./experts/job-companion-team/) | [求职陪跑团](./experts/job-companion-team/) | 5 角色陪跑型专家团，7 阶段接力覆盖自我盘点、目标定位、简历打磨、面试陪练、谈薪决策与入职复盘全流程。 | 无 |
 | [`ket-prep-team`](./experts/ket-prep-team/) | [KET备考专家团](./experts/ket-prep-team/) | 剑桥认证考官领衔，为小学生提供KET全流程备考：学情测评、词汇语法地基、听说读写专项提分、考前冲刺模考，助力Merit（优秀）/Distinction（卓越）达标。 | 无 |
 | [`lazy-travel-planner`](./experts/lazy-travel-planner/) | [懒人出游规划师](./experts/lazy-travel-planner/) | 专注国内3-7天2-4人自由行，整合实时口碑与一手数据，一站式产出含地图、预算与防坑的可落地行程书。 | 需要 12306 账号登录 |

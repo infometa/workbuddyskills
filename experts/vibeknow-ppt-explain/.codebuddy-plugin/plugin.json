@@ -1,34 +1,36 @@
 {
   "name": "vibeknow-ppt-explain",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Document & slide explainer video expert by vibeknow",
   "author": {
     "name": "vibeknow",
     "email": "dev@vibeknow.com"
   },
-  "plugin": "vibeknow-ppt-explain",
   "expertType": "agent",
+  "agentName": "ppt-explainer",
   "agents": [
     "./agents/ppt-explainer.md"
   ],
-  "agentName": "ppt-explainer",
-  "avatar": "avatars/ppt-explainer.png",
-  "categoryId": "06-ContentCreative",
+  "skills": [
+    "./skills/ppt-explain"
+  ],
   "displayName": {
-    "zh": "vibeknow",
-    "en": "vibeknow"
+    "zh": "逐页讲解，一键成片",
+    "en": "Page-by-page, one click"
   },
   "profession": {
     "zh": "VibeKnow PPT/PDF讲解大师",
     "en": "VibeKnow PPT/PDF Explainer Master"
   },
   "displayDescription": {
-    "zh": "讲师做培训、医生讲科普、分析师讲研报、企业讲方案，PPT/PDF 逐页配音，一键成讲解视频。",
-    "en": "For trainers, doctors, analysts and businesses — turn a PPT or PDF into a page-by-page explainer video."
+    "zh": "讲师做内训、医生讲病理、投标专员讲方案，PPT/PDF 逐页配音成讲解视频，原页原版式不用重做。",
+    "en": "For trainers, doctors and bid specialists — turn a PPT or PDF into a page-by-page narrated explainer. Your original slides, untouched."
   },
+  "avatar": "avatars/ppt-explainer.png",
+  "categoryId": "06-ContentCreative",
   "defaultInitPrompt": {
-    "zh": "上传一份 PPT/PDF，帮你做成一条逐页讲解的视频。",
-    "en": "Upload a PPT/PDF and I'll turn it into a page-by-page explainer video."
+    "zh": "把这份培训 PPT 做成逐页讲解视频，配好讲师旁白和字幕",
+    "en": "Turn this training deck into a page-by-page explainer with narration and subtitles"
   },
   "tags": [
     {
@@ -40,25 +42,23 @@
       "en": "Doc to video"
     },
     {
-      "zh": "视频生成",
-      "en": "Video gen"
+      "zh": "培训视频",
+      "en": "Training video"
     }
   ],
   "quickPrompts": [
     {
-      "zh": "上传一份 PPT/PDF，帮你做成一条逐页讲解的视频。",
-      "en": "Upload a PPT/PDF and I'll turn it into a page-by-page explainer video."
+      "zh": "把这份培训 PPT 做成逐页讲解视频，配好讲师旁白和字幕",
+      "en": "Turn this training deck into a page-by-page explainer with narration and subtitles"
     },
     {
-      "zh": "把这份产品方案 PPT 做成 2 分钟讲解视频，配好旁白",
-      "en": "Turn this pitch deck into a 2-min narrated explainer"
+      "zh": "把这份投标方案 PDF 逐页讲清楚，配上旁白，做成能发给客户的视频",
+      "en": "Explain this bid proposal PDF page by page, add narration, make it client-ready"
     },
     {
-      "zh": "把这篇 PDF 报告逐页讲清楚，做成一条视频",
-      "en": "Explain this PDF report page by page as a video"
+      "zh": "把门店训练材料做成逐页讲解，配音加字幕，出竖版给新人在手机上看",
+      "en": "Turn store training material into a narrated, subtitled vertical explainer for new hires on mobile"
     }
   ],
-  "skills": [
-    "./skills/ppt-explain"
-  ]
+  "plugin": "vibeknow-ppt-explain"
 }

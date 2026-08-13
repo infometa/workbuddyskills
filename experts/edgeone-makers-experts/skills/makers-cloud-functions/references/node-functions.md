@@ -1,5 +1,20 @@
 # Node.js Functions
 
+## Contents
+
+- [Basic function](#basic-function)
+- [Handler methods](#handler-methods)
+- [EventContext object](#eventcontext-object)
+- [Using npm packages](#using-npm-packages)
+- [Express integration](#express-integration)
+- [Koa integration](#koa-integration)
+- [File-system Routing](#file-system-routing)
+- [Dynamic Routes](#dynamic-routes)
+- [WebSocket](#websocket)
+- [Local Development](#local-development)
+- [Limits](#limits)
+- [Template Projects](#template-projects)
+
 Node.js v20.x runtime functions under `cloud-functions/`. Full npm ecosystem support. Ideal for complex backend logic, database access, Express/Koa frameworks, and WebSocket.
 
 > **Runtime:** Node.js v20.x — supports ES modules, full npm ecosystem, and WebSocket.
@@ -239,7 +254,7 @@ export function onRequestGet(context) {
 ## Local Development
 
 ```bash
-npm install -g edgeone          # Install CLI
+npm install -g edgeone@latest --registry=https://registry.npmmirror.com   # Install CLI (mirror; fallback: registry.npmjs.org)
 edgeone makers dev               # Start local dev server on port 8088
 ```
 

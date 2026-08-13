@@ -15,12 +15,6 @@ const quiet = process.argv.includes("--quiet");
 const log = (...a) => { if (!quiet) console.log("[setup]", ...a); };
 const run = (cmd, args) => execFileSync(cmd, args, { stdio: quiet ? "ignore" : "inherit" });
 
-// Python 命令检测：优先 python3，Windows 上回退到 python
-const pythonCmd = (() => {
-  try { execFileSync("python3", ["--version"], { stdio: "ignore" }); return "python3"; }
-  catch { return "python"; }
-})();
-
 let did = false;
 
 // ① 渲染依赖 —— 装在 scripts 目录自身(而非独立的 render/ 子目录)。
@@ -48,11 +42,7 @@ try {
     try {
       run("curl", ["-fL", "--retry", "2", "--connect-timeout", "15", "-o", path.join(tmp, "chs.zip"), url]);
       mkdirSync(folder, { recursive: true });   // unzip 不建不存在的父目录,先建好
-      if (process.platform === "win32") {
-        run("tar", ["-xf", path.join(tmp, "chs.zip"), "-C", folder]);
-      } else {
-        run("unzip", ["-q", "-o", path.join(tmp, "chs.zip"), "-d", folder]);
-      }
+      run("unzip", ["-q", "-o", path.join(tmp, "chs.zip"), "-d", folder]);
       writeFileSync(verfile, ver);   // ⚠️ 必须写 VERSION,否则 remotion 判版本不符会重下官方源
       log("镜像安装完成(VERSION=" + ver + ")。"); did = true;
     } catch (e) {
@@ -76,13 +66,13 @@ try {
 
 // ③ edge-tts — 默认 TTS 引擎(微软免费音色)。幂等:已装则秒过。装失败不致命(仍可手动补装)。
 try {
-  execFileSync(pythonCmd, ["-m", "edge_tts", "--list-voices"], { stdio: "ignore" });
+  execFileSync("python3", ["-m", "edge_tts", "--list-voices"], { stdio: "ignore" });
   log("edge-tts 已就绪。");
 } catch {
   log("装 edge-tts(微软免费 TTS)…");
   try {
-    execFileSync(pythonCmd, ["-m", "pip", "install", "--user", "--quiet", "edge-tts"], { stdio: quiet ? "ignore" : "inherit" });
-    execFileSync(pythonCmd, ["-m", "edge_tts", "--list-voices"], { stdio: "ignore" }); // 装后自检
+    execFileSync("python3", ["-m", "pip", "install", "--user", "--quiet", "edge-tts"], { stdio: quiet ? "ignore" : "inherit" });
+    execFileSync("python3", ["-m", "edge_tts", "--list-voices"], { stdio: "ignore" }); // 装后自检
     log("edge-tts 安装完成。"); did = true;
   } catch (e) {
     log("⚠️ edge-tts 安装失败,旁白 TTS 暂不可用:", String((e && e.message) || e));

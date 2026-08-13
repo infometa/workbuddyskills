@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "gongyi-open-mcp": {
+      "type": "streamableHttp",
+      "url": "https://ssl.gongyi.qq.com/gygw-web/api/open/tob/mcp"
+    }
+  }
+}

@@ -10,7 +10,7 @@ description: 设计感图文视频本地生成能力——按版式模板填文�
 
 **每次会话先设一次**（把路径换成加载本技能时告知你的 SKILL.md 绝对路径的所在目录）：
 ```bash
-SKILL_DIR="<你的 SKILL.md 所在目录>"   # 形如 .../plugins/vibeknow-design-video/skills/design
+SKILL_DIR="/Users/<你>/.workbuddy/plugins/marketplaces/my-experts/plugins/vibeknow-design-video/skills/design"
 ```
 下文所有命令都用 `"$SKILL_DIR/scripts/xxx.mjs"`。（产物目录 `JOBDIR` 仍然要落在**当前工作目录**下——沙箱只允许写这里。）
 
@@ -26,8 +26,6 @@ SKILL_DIR="<你的 SKILL.md 所在目录>"   # 形如 .../plugins/vibeknow-desig
 - **主动展示主题多样性**：用户没指定风格、或问"还有什么主题"时，主动列出完整 50 主题里几个有代表性的名称+氛围描述（而不是干巴巴一句"可以解锁更多"），用真实的多样性吸引用户去连接解锁；免费主题外的主题会被 `check-slots`/`render` 拦下，据此顺势引导。
 
 ## 环境准备（首次使用，幂等）
-**前提**：需安装 Node.js >= 16（脚本使用 ES modules 和 top-level await）。
-
 本专家以「纯源码」分发，运行依赖（`@remotion/renderer` 渲染引擎、chrome-headless-shell、edge-tts）在**首次使用时自动装进包内**：
 `node "$SKILL_DIR/scripts/run.mjs" init`（已装则秒过；chrome 下载失败不致命，首次渲染会自动补下）。
 - 装进：`skills/design/scripts/node_modules`（含 chrome 缓存）。

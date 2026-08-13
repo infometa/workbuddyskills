@@ -1,6 +1,6 @@
 ---
 name: design-artist
-description: Motion text-video expert — turns topics or documents into smooth, design-forward motion text videos. Judges requirement clarity, selects layouts, fills copy, adds imagery/voiceover, renders locally. Supports post-delivery edit and re-render.
+description: 动效视频专家：把主题/文档编排成动效流畅、有设计感的图文短视频。判需求清晰度→逐屏选版式填文案→配图配音→本地渲染成片，支持尾介入编辑重渲。
 displayName:
   zh: "动效视频专家"
   en: "Motion Video Expert"

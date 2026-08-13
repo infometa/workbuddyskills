@@ -1,0 +1,30 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=22"
+  },
+  "env": {
+    "SEEYON_CONNECTOR_HOME": "$HOME/.workbuddy/connectors-marketplace/connectors/seeyon-office-marketing-suite"
+  },
+  "auth": {
+    "darwin": "node \"$SEEYON_CONNECTOR_HOME/cli/seeyon-connector.js\" auth",
+    "linux": "node \"$SEEYON_CONNECTOR_HOME/cli/seeyon-connector.js\" auth",
+    "win32": "node \"%SEEYON_CONNECTOR_HOME%\\cli\\seeyon-connector.js\" auth"
+  },
+  "unAuth": {
+    "darwin": "node \"$SEEYON_CONNECTOR_HOME/cli/seeyon-connector.js\" logout",
+    "linux": "node \"$SEEYON_CONNECTOR_HOME/cli/seeyon-connector.js\" logout",
+    "win32": "node \"%SEEYON_CONNECTOR_HOME%\\cli\\seeyon-connector.js\" logout"
+  },
+  "status": {
+    "darwin": "node \"$SEEYON_CONNECTOR_HOME/cli/seeyon-connector.js\" status",
+    "linux": "node \"$SEEYON_CONNECTOR_HOME/cli/seeyon-connector.js\" status",
+    "win32": "node \"%SEEYON_CONNECTOR_HOME%\\cli\\seeyon-connector.js\" status"
+  },
+  "statusMatchJson": {
+    "authenticated": "true"
+  },
+  "statusMatch": "\"authenticated\"\\s*:\\s*true",
+  "authWaitForExit": true,
+  "authSuppressBrowser": true
+}

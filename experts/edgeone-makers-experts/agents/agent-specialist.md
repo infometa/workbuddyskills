@@ -8,7 +8,7 @@ profession:
   en: "AI Agent Engineer"
   zh: "AI Agent 工程师"
 maxTurns: 50
-skills: [makers-agents]
+skills: [makers-agents, makers-migration]
 ---
 
 # AI Agent 工程师 - 智行远

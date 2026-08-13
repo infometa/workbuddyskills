@@ -1,0 +1,69 @@
+{
+  "skill_name": "seeyon-collaborative-office-loop-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "查询我在 2026 年 8 月已经发出的、标题包含工作计划的 OA 会议，并返回分页摘要。",
+      "expected_output": "选择 meeting-list 子命令，构造只读查询，不要求用户提供 Cookie。",
+      "expectations": [
+        "使用 meeting-list 和 send 列表类型",
+        "使用 OA 环境变量认证",
+        "不会调用任何写接口"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "查询指定单位的部门、人员和岗位，生成后续发会议可用的完整组织快照。",
+      "expected_output": "选择 organization all，汇总目标单位组织数据并标记完整性。",
+      "expectations": [
+        "使用 organization all",
+        "包含部门、人员和岗位数据",
+        "分页失败时不会宣称结果完整"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "明天下午 2:30 到 3:30 在 1303 直接发起工作安排会议，研发部和 lisi 参加，有冲突也继续创建并把人员详情列出来。",
+      "expected_output": "直接执行 meeting-create，选择普通会议分类，检查冲突并创建会议。",
+      "expectations": [
+        "不要求用户再次确认",
+        "不使用 --dry-run",
+        "默认选择服务端普通会议分类",
+        "冲突详情会展示且不会阻断创建",
+        "附件不是必填项"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "创建一个无附件的普通会议，参与人是 lisi，业务参数完整后直接发送。",
+      "expected_output": "未提供 dry-run 时直接执行会议写流程，无附件也能成功创建。",
+      "expectations": [
+        "不使用确认参数",
+        "无附件时不调用上传接口",
+        "只有获得会议 ID 才判断成功"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "把会议纪要作为自由协同并行发给 lisi 和 wanger，不带附件，直接发送。",
+      "expected_output": "直接执行 collaboration-send，以当前 OA 账号为发送人并生成并行流程。",
+      "expectations": [
+        "不要求用户再次确认",
+        "不使用 --dry-run",
+        "发送人默认来自 OA_AUTH_USERNAME",
+        "无附件时不会调用上传接口",
+        "取得明确业务 ID 后返回成功"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "先预览这个会议的参与人、普通会议分类和时间冲突，暂时不要创建。",
+      "expected_output": "使用 meeting-create --dry-run 完成只读校验和预览，不执行附件、正文或会议写入。",
+      "expectations": [
+        "显式使用 --dry-run",
+        "允许组织、分类和冲突只读查询",
+        "不会调用附件、正文或最终发送接口"
+      ]
+    }
+  ]
+}

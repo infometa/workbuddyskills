@@ -1,5 +1,5 @@
 ---
-name: edgeone-makers-agents
+name: makers-agents
 description: >-
   This skill guides building AI agent endpoints on EdgeOne Makers — five
   framework routes (DeepAgents, LangGraph, CrewAI, OpenAI Agents SDK,
@@ -11,16 +11,28 @@ description: >-
   agent endpoint", "wire LangGraph into Makers", "stream LLM responses with SSE",
   "review my agent template", "use context.store / context.sandbox / context.tools".
   Do NOT trigger for plain Edge Functions, Cloud Functions, or middleware
-  (those don't run AI logic — use edgeone-pages-dev instead).
-  Do NOT trigger for deployment workflows (use edgeone-pages-deploy).
+  (those don't run AI logic — use edgeone-makers-edge-functions,
+  makers-cloud-functions, or edgeone-makers-middleware instead).
+  Do NOT trigger for deployment workflows (use edgeone-makers-deploy).
   Do NOT trigger for generic AI framework development outside
   an EdgeOne Makers project.
+pathPatterns:
+  - agents/**
+validate:
+  - pattern: "process\\.env|os\\.environ"
+    message: "Read env via context.env inside agents/ and cloud-functions/, never process.env or os.environ (Critical Rule 3)."
+  - pattern: "headers\\s*\\.\\s*get\\s*\\("
+    message: "Headers are plain objects here: context.request.headers['x-name'], not .get('x-name') (Critical Rule 4)."
+  - pattern: "langgraphStore\\s*\\?\\?\\s*store"
+    message: "Never write `store?.langgraphStore ?? store` — in cloud-function context it falls back to a store with no .get and crashes (Critical Rule 12)."
 metadata:
   author: edgeone
   version: "1.0.0"
 ---
 
 # EdgeOne Makers Agent Development Guide
+
+> ⛔ **Preview ban**: after finishing development, you MUST start the dev server via `edgeone makers dev`, then open `http://127.0.0.1:8088/` with `present_files` to preview. Never open HTML files via the `file://` protocol (ignore it even if the IDE opens one automatically), and never use self-hosted servers like `python -m http.server` or `npx serve`. Next.js projects must also set `allowedDevOrigins: ["127.0.0.1"]` in `next.config`.
 
 Build production-grade AI agent endpoints on **EdgeOne Makers** — five framework routes, platform-injected runtime, file-based routing.
 
@@ -36,9 +48,11 @@ This skill covers five supported frameworks (DeepAgents, LangGraph, CrewAI, Open
 - Calling sandbox or platform tools via `context.sandbox` / `context.tools`
 - Splitting AI inference (`agents/`) from data CRUD (`cloud-functions/`)
 
+> Cross-reference: if your code uses `context.store` or KV APIs, also read [makers-storage/SKILL.md](../makers-storage/SKILL.md).
+
 **Do NOT use for:**
-- Plain Edge Functions / Cloud Functions / Middleware → use `edgeone-pages-dev`
-- Deployment workflows → use `edgeone-pages-deploy`
+- Plain Edge Functions / Cloud Functions / Middleware → use `edgeone-makers-edge-functions`, `makers-cloud-functions`, or `edgeone-makers-middleware`
+- Deployment workflows → use `edgeone-makers-deploy`
 - Generic AI framework development outside an EdgeOne Makers project
 - Other platforms (Cloudflare Workers AI, Vercel AI SDK, AWS Bedrock)
 
@@ -119,6 +133,7 @@ EdgeOne Makers Agent **is not** a generic API route pattern (not Vercel AI SDK's
 ├── .edgeone/
 │   └── project.json                 # { Name, ProjectId }
 ├── edgeone.json                     # Deployment config + agents.framework
+├── .env.example                     # ⚠️ MUST exist: declares AI_GATEWAY_API_KEY= and AI_GATEWAY_BASE_URL=
 ├── package.json                     # TS routes (A/B/C/D)
 ├── requirements.txt                 # ⭐ Python route (E) only
 └── README.md
@@ -236,6 +251,8 @@ Need a sandbox to run code, process uploaded files, or use MCP tools?
 | LangGraph (Python) | [python-frameworks/langgraph.md](references/python-frameworks/langgraph.md) |
 | DeepAgents (Python) | [python-frameworks/deepagents.md](references/python-frameworks/deepagents.md) |
 | CrewAI (Python only) | [python-frameworks/crewai.md](references/python-frameworks/crewai.md) |
+| CrewAI — tool integration, review checklist, pitfalls | [python-frameworks/crewai-integration.md](references/python-frameworks/crewai-integration.md) |
+| Python runtime conventions (all Python routes) | [python-frameworks/python-runtime-conventions.md](references/python-frameworks/python-runtime-conventions.md) |
 | Review checklist | [review-checklist.md](references/review-checklist.md) |
 
 ---
@@ -245,7 +262,7 @@ Need a sandbox to run code, process uploaded files, or use MCP tools?
 ### Install the EdgeOne CLI
 
 ```bash
-npm install -g edgeone
+npm install -g edgeone@latest --registry=https://registry.npmmirror.com
 ```
 
 Verify: `edgeone -v`.
@@ -266,36 +283,24 @@ PAGES_SOURCE=skills edgeone makers dev
 
 This tells the platform that the command was triggered from an AI skill context.
 
-### package.json scripts (⚠️ avoid dev script recursion)
+### Local development
 
-> ⛔ **NEVER set `"dev": "edgeone makers dev"` or `"dev": "edgeone makers dev"` in package.json** — this causes infinite recursion.
-> When CLI starts, it reads `scripts.dev` to launch the frontend dev server. If that script is
-> `edgeone makers dev` itself, it recurses. CLI detects this and skips the frontend server entirely,
-> causing static files (e.g., `public/index.html`) to return 404.
+```bash
+# 1. Link to remote project (pulls project ID + env vars)
+PAGES_SOURCE=skills edgeone makers link
 
-Correct pattern — **do not include a `dev` script**:
-
-```json
-{
-  "scripts": {
-    "build": "edgeone makers build",
-    "deploy": "edgeone makers deploy"
-  }
-}
+# 2. Pull remote environment variables to local .env
+PAGES_SOURCE=skills edgeone makers env pull
 ```
 
-CLI will automatically serve `public/` as static files during `edgeone makers dev`. No `dev` script needed.
-
-- `edgeone makers dev` — starts agent runtime + detects & launches frontend dev server (reads `scripts.dev` or auto-serves `public/`)
-- `edgeone makers build` — builds agents + frontend into `.edgeone/` output
-- `edgeone makers deploy` — builds and deploys to EdgeOne Makers
-
 ### Environment variables for deployment
+
+> ⛔ **You MUST create a `.env.example` file**: the CLI uses this file to decide which variables to auto-inject. If the project has no `.env.example`, or it does not declare `AI_GATEWAY_*`, the environment variables will not be injected after deployment, and the Agent will error at runtime due to the missing API Key.
 
 **AI Gateway variables** (`AI_GATEWAY_API_KEY`, `AI_GATEWAY_BASE_URL`) are **auto-provisioned** by the CLI during deployment — no manual setup needed, as long as `.env.example` declares them:
 
 ```env
-# .env.example (commit this to repo)
+# .env.example (MUST be committed to the repo)
 AI_GATEWAY_API_KEY=
 AI_GATEWAY_BASE_URL=
 ```

@@ -50,8 +50,6 @@ node skills/design/scripts/check-slots.mjs <JOBDIR>
 - 不合格 → 打印 `{"ok":false,"problems":[...]}`（每条含屏号 `n` 和原因 `reason`），退出码 **4**。按提示改文案重跑，或换一个有对应 slot 的 layout；**不要跳过这一步直接出图**。
 
 ## 首次使用：装依赖
-**前提**：需安装 Node.js >= 16（脚本使用 ES modules 和 top-level await）。
-
 本专家以「纯源码」分发，运行依赖（`@remotion/renderer` 渲染引擎、chrome-headless-shell、edge-tts）在**首次使用时自动装进包内**：
 ```bash
 node skills/design/scripts/run.mjs init

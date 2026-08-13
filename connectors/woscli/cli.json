@@ -1,0 +1,34 @@
+{
+    "init": {
+        "darwin": "curl -fsSL https://ipaas-huawei-cloud-1252328573.cos.ap-shanghai.myqcloud.com/wai/install.sh -o /tmp/woscli-install.sh && sh /tmp/woscli-install.sh",
+        "linux": "curl -fsSL https://ipaas-huawei-cloud-1252328573.cos.ap-shanghai.myqcloud.com/wai/install.sh -o /tmp/woscli-install.sh && sh /tmp/woscli-install.sh",
+        "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"irm https://ipaas-huawei-cloud-1252328573.cos.ap-shanghai.myqcloud.com/wai/install.ps1 | iex\""
+    },
+    "auth": {
+        "darwin": "$HOME/.woscli/woscli login",
+        "linux": "$HOME/.woscli/woscli login",
+        "win32": "\"%USERPROFILE%\\.woscli\\woscli.exe\" login"
+    },
+    "unAuth": {
+        "darwin": "$HOME/.woscli/woscli logout",
+        "linux": "$HOME/.woscli/woscli logout",
+        "win32": "\"%USERPROFILE%\\.woscli\\woscli.exe\" logout"
+    },
+    "status": {
+        "darwin": "$HOME/.woscli/woscli status",
+        "linux": "$HOME/.woscli/woscli status",
+        "win32": "\"%USERPROFILE%\\.woscli\\woscli.exe\" status"
+    },
+    "statusMatch": "已授权",
+    "authUrlDomain": "weimob.com",
+    "authSuppressBrowser": true,
+    "versionCheck": {
+        "command": {
+            "darwin": "$HOME/.woscli/woscli --version",
+            "linux": "$HOME/.woscli/woscli --version",
+            "win32": "\"%USERPROFILE%\\.woscli\\woscli.exe\" --version"
+        },
+        "minVersion": "0.0.0",
+        "versionPattern": "woscli version (v\\d+\\.\\d+\\.\\d+|v_\\d+_\\d+-[0-9]+-g[0-9a-f]+(?:-dirty)?)"
+    }
+}

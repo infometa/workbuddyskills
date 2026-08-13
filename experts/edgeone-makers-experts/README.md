@@ -1,6 +1,6 @@
 # Makers 开发专家团
 
-4 位专家协作完成基于 EdgeOne Makers 平台的 Web 全栈一站式开发与部署任务。
+4 位专家（1 位主理人 + 3 位团队成员）协作完成基于 EdgeOne Makers 平台的 Web 全栈一站式开发与部署任务。
 
 ## 类型
 
@@ -53,7 +53,7 @@ Skills 通过软链接引用自 [edgeone-makers-tools](https://github.com/Tencen
 
 | 工具 | 安装命令 | 备注 |
 |------|----------|------|
-| EdgeOne CLI（>= 1.6.7） | `npm install -g edgeone@latest` | 部署、本地预览、登录、项目管理。低于 1.6.7 在沙箱里会卡交互 prompt |
+| EdgeOne CLI（>= 1.6.7） | `npm install -g edgeone@latest --registry=https://registry.npmmirror.com` | 部署、本地预览、登录、项目管理。默认走淘宝镜像源（国内更快）；失败或版本仍偏低时改用 `--registry=https://registry.npmjs.org` 重试一次。低于 1.6.7 在沙箱里会卡交互 prompt |
 | Node.js | 参考 [nodejs.org](https://nodejs.org/) 或 `nvm install --lts` | 用于前端构建、Cloud Functions Node 运行时 |
 | Go（按需） | 参考 [go.dev/dl](https://go.dev/dl/) | 仅 Cloud Functions Go 运行时需要 |
 | Python（按需） | `python3 --version` | Cloud Functions Python / CrewAI 框架需要 |
@@ -80,8 +80,11 @@ Skills 通过软链接引用自 [edgeone-makers-tools](https://github.com/Tencen
 ### 常用安装/初始化命令速查
 
 ```bash
-# 1. 安装 / 升级 CLI（必须 >= 1.6.7）
-npm install -g edgeone@latest && edgeone -v
+# 1. 安装 / 升级 CLI（必须 >= 1.6.7）—— 默认淘宝镜像源
+npm install -g edgeone@latest --registry=https://registry.npmmirror.com && edgeone -v
+
+# 若镜像源失败或版本仍低于 1.6.7（淘宝源懒同步会滞后），改官方源重试一次
+# npm install -g edgeone@latest --registry=https://registry.npmjs.org
 
 # 2. 登录（推荐浏览器）
 edgeone login --site china --local        # 国内站

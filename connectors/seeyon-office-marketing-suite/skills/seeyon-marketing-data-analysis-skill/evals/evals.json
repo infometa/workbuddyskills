@@ -1,0 +1,68 @@
+{
+  "skill_name": "seeyon-marketing-data-analysis-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "查询当前销售订单，汇总订单金额、发货状态和未发货订单，不要把原始 JSON 整段贴出来。",
+      "expected_output": "使用 order-query 获取前 100 行并基于真实字段生成结构化分析。",
+      "expectations": [
+        "使用 OA 环境变量认证",
+        "保留重复订单和原始顺序",
+        "区分报表事实、计算结果和分析判断",
+        "不会查询销售出库报表"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "查一下销售订单查询报表，如果有多个同名报表就按接口顺序用第一个。",
+      "expected_output": "使用 order-query，取首个同名报表的 createMember 作为 bizId。",
+      "expectations": [
+        "名称完全匹配销售订单查询",
+        "只取首个匹配报表",
+        "固定第一页 100 条",
+        "createMember 缺失时不猜测"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "查询指定单位的部门、人员和岗位，为后续发送销售分析报告准备组织快照。",
+      "expected_output": "使用 organization all 查询完整组织数据并标记完整性。",
+      "expectations": [
+        "使用 organization all",
+        "包含部门、人员和岗位",
+        "分页失败不会宣称结果完整"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "把刚生成的销售订单分析作为并行自由协同发给 lisi 和 wanger，不带附件，直接发送。",
+      "expected_output": "直接使用 collaboration-send，以当前 OA 账号为发送人并生成并行流程。",
+      "expectations": [
+        "不额外要求用户确认",
+        "不使用 --dry-run",
+        "发送人来自 OA_AUTH_USERNAME",
+        "无附件时不调用上传接口"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "先预览销售分析协同的接收人和流程，暂时不要发送。",
+      "expected_output": "使用 collaboration-send --dry-run 校验人员和载荷，全部写接口零调用。",
+      "expectations": [
+        "显式使用 --dry-run",
+        "允许组织和人员只读查询",
+        "不上传附件、不保存正文、不发送协同"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "只分析订单数据，给我结论，不要发送任何 OA 协同。",
+      "expected_output": "只执行 order-query 并生成分析，不调用 collaboration-send。",
+      "expectations": [
+        "不会因为具备发送能力而自动发送",
+        "只基于 orders 生成结论",
+        "数据为空时不虚构"
+      ]
+    }
+  ]
+}

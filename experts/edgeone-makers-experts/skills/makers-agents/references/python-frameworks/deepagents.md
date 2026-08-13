@@ -1,5 +1,13 @@
 # DeepAgents (Python)
 
+## Contents
+
+- [Dependencies](#dependencies)
+- [When to Pick DeepAgents (Python)](#when-to-pick-deepagents-python)
+- [Core Pattern](#core-pattern)
+- [Memory](#memory)
+- [Review Checklist](#review-checklist)
+
 > Use when: long-running tasks with automatic context compression, sub-agent orchestration, middleware.
 > Core pattern: `create_deep_agent()` + `agent.astream()` → SSE.
 > Python runtime — see [../platform/python-entry.md](./../platform/python-entry.md) for entry signature, ctx object, and SSE conventions.
@@ -20,6 +28,7 @@ pydantic>=2.0.0
 pip install -r requirements.txt
 ```
 
+> **Note**: `deepagents` is a platform-provided package bundled with the EdgeOne Makers agent runtime. It is automatically available in the deployed environment.
 `edgeone.json`:
 ```json
 {
