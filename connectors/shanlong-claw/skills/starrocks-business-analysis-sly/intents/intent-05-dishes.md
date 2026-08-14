@@ -64,7 +64,7 @@ SELECT
     END AS 套餐类型,
     COUNT(DISTINCT id) AS 账单数,
     ROUND(SUM(busi_income), 2) AS 实收金额,
-    ROUND(SUM(busi_income) * 100.0 / SUM(SUM(busi_income)) OVER(), 2) AS 营收占比%
+    ROUND(SUM(busi_income) * 100.0 / SUM(SUM(busi_income)) OVER(), 2) AS 营收占比
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
@@ -102,11 +102,11 @@ SELECT
     COUNT(DISTINCT id) AS 总账单,
     COUNT(DISTINCT CASE WHEN is_member_bill = '会员消费账单' THEN id END) AS 会员账单,
     COUNT(DISTINCT CASE WHEN is_member_bill != '会员消费账单' THEN id END) AS 非会员账单,
-    ROUND(COUNT(DISTINCT CASE WHEN is_member_bill = '会员消费账单' THEN id END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 会员占比%,
+    ROUND(COUNT(DISTINCT CASE WHEN is_member_bill = '会员消费账单' THEN id END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 会员占比,
     ROUND(SUM(CASE WHEN is_member_bill = '会员消费账单' THEN busi_income ELSE 0 END), 2) AS 会员营收,
     ROUND(SUM(CASE WHEN is_member_bill != '会员消费账单' THEN busi_income ELSE 0 END), 2) AS 非会员营收,
     ROUND(SUM(busi_income), 2) AS 总营收,
-    ROUND(SUM(CASE WHEN is_member_bill = '会员消费账单' THEN busi_income ELSE 0 END) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 会员营收占比%
+    ROUND(SUM(CASE WHEN is_member_bill = '会员消费账单' THEN busi_income ELSE 0 END) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 会员营收占比
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
@@ -167,10 +167,10 @@ SELECT
     {{group_by:store_name}} AS 维度,
     COUNT(DISTINCT id) AS 总账单数,
     SUM(return_bills) AS 退菜账单数,
-    ROUND(SUM(return_bills) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 退菜账单率%,
+    ROUND(SUM(return_bills) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 退菜账单率,
     ROUND(SUM(ABS(return_real_income_negative) + return_real_income_positive), 2) AS 退菜总金额,
     ROUND(SUM(busi_income), 2) AS 总营收,
-    ROUND((SUM(ABS(return_real_income_negative) + return_real_income_positive)) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 退菜金额占比%
+    ROUND((SUM(ABS(return_real_income_negative) + return_real_income_positive)) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 退菜金额占比
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})

@@ -196,6 +196,45 @@ tccli cvm DescribeInstances --region ap-guangzhou
 
 避免并行调用：tccli 当前并行调用存在配置文件竞争问题，会导致响应失败。当前请逐个接口调用。
 
+### 本地参数强转陷阱（type coercion）
+
+部分 tccli 版本会按本地 schema 把某些参数强制类型转换后再发出，与云端期望不符，导致"永远 InvalidParameter"但用户参数其实填对了——这是**本地 tccli 的锅，不是用户的锅**：
+
+- **典型信号**：服务端返回 `InvalidParameter`，message 指向"参数 X 取值类型错误 / 应为 date"等，但你传入的值语义上是对的。例如 TRTC 某些日期参数被本地标成 `Timestamp` 强转整数时间戳，云端实际要 `YYYY-MM-DD` 纯日期。
+- **识别**：先 `tccli <svc> <Action> --help` 看参数类型标注；若本地类型是 Timestamp/Integer 而在线文档写的是 Date/String，基本可确诊。
+- **缓解（按优先级）**：
+  1. 查在线文档确认参数真实类型与格式（必要时用纯日期而非时间戳）；
+  2. 试 `--cli-unfold-arguments` 让 tccli 不再做本地合并/转换；
+  3. 若仍被本地强转卡死，绕过 tccli 用 Python SDK（`tencentcloud-sdk-python`）直连，把原始值（如纯日期字符串）原样赋给请求参数发出，即可通过云端类型校验。
+- **重要**：这类 `InvalidParameter` 是"假参数错"，不要甩锅给用户参数填错。
+
+### Step 3.5：输出解析规范（stdout/stderr 分流与 JSON 健壮性）
+
+tccli 的 stdout 与 stderr 是两条独立流，解析时必须严格区分，否则会把警告/错误文本当结果吞掉导致解析崩溃。
+
+**① 分流捕获，禁止盲目 `2>&1`**
+- 正常调用只解析 stdout；stderr 单独落盘便于诊断：
+  ```sh
+  tccli <service> <Action> [--region <地域>] 2>/tmp/tccli_err.log
+  ```
+- 不要把 `2>&1` 当作习惯写法——一旦 tccli 把 `WARNING` / `DeprecationWarning` / 版本提示吐到 stderr，合并流会让 stdout 前被塞入非 JSON 文本，导致 `json.loads` 直接崩溃。
+
+**② 解析前"抠 JSON"**
+- 即便做了分流，也先用正则提取首个 `{` 到末个 `}` 的闭区间（或 `[...]`）再 `json.loads`，避免前后缀文本（版本提示、空格、回车）导致失败：
+  ```python
+  import re, json
+  m = re.search(r'\{.*\}|\[.*\]', raw, re.DOTALL)
+  data = json.loads(m.group(0)) if m else None
+  ```
+
+**③ 解析失败兜底（不抛 Traceback）**
+- 若 stdout 无法解析为 JSON：提示"输出非预期 JSON"，并回显原始 stdout 前 N 字符供诊断，而非抛出 Python 堆栈。
+- 若 stdout 无 JSON 而 stderr 含异常信息，按以下规则解析：
+  - **锚点优先**：以 `[TencentCloudSDKException]` 为唯一权威锚点提取 `code` / `message` / `requestId`，**忽略同行 stderr 里 `usage:` 帮助块等噪音**（它们常与异常挤在同一段，不能"出现 usage 就判参数错"而误伤）。
+  - **区分本地错 vs 服务端错**：有 `requestId` → 服务端已受理并返回（如 `InvalidParameter` / `InternalError` / `UnauthorizedOperation`）；无 `requestId` 且只有 `usage:` → 本地 argparse 参数解析错，与云端无关。
+  - 优雅翻译为可读错误（见 Step 4 异常表），不要退化为崩溃。
+- 注意：服务端报错、权限拒绝、接口下线等异常大多落在 **stderr**，分离流是正确翻译错误码的前置条件。
+
 ### Step 4：异常处理
 
 调用失败时，tccli 会返回包含 `Error` 字段的 JSON：
@@ -224,6 +263,8 @@ tccli cvm DescribeInstances --region ap-guangzhou
 | `UnsupportedRegion` | 不支持的地域 | 查阅接口文档确认支持的地域列表 |
 | `ResourceInsufficient` | 资源不足 | 换可用区或调整规格重试 |
 | 网络超时 / 连接失败 | 网络不通 | 检查网络连通性，确认是否需要代理 |
+| `InternalError`（message 含 `nil pointer` / `nil pointer dereference`） | 接口云端已废弃 / 后端服务已拆除 | **不是服务端随机故障，停止重试**；检索在线文档确认真实情况，改用替代接口 |
+| `AuthFailure.TokenFailure` / `FailedOperation.RefreshTokenError` | OAuth token 已失效（浏览器授权过期或吊销） | 引导用户在浏览器重登：`tccli auth login --profile <name>`；完成后按"身份确认"规范回显当前账号再继续 |
 
 ### Step 5：tccli 不可用时的兜底方案
 

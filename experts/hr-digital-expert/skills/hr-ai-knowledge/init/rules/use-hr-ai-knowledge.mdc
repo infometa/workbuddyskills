@@ -1,0 +1,102 @@
+---
+description: 强制调用 use_skill("hr-ai-knowledge") 加载完整技能
+alwaysApply: true
+enabled: true
+version: 1
+updatedAt: 2026-07-23T00:00:00.000Z
+provider:
+---
+
+# HR AI Knowledge 技能强制加载规则
+
+## 🔴 第一硬性约束（不可跳过）
+
+**触发条件**：用户问题涉及 _以下任一关键词_ 时
+
+> HR / 人事 / 政策 / 制度 / 福利 / 薪酬 / 社保 / 公积金 / 安居 / 假期 / 年假 / 产假 / 婚假 / 陪产假 / 病假 / 事假 / 工伤 / 调休 / 绩效 / 晋升 / 职级 / 培训 / 劳动合同 / 试用期 / 竞业限制 / 加班 / 离职 / 调动 / 招聘 / 员工手册 / HiHR / hihr / 乐享HR / 知识库 / 检索文档 / 查公司制度 / search knowledge
+
+**强制动作**：**第一个工具调用必须是** `use_skill("hr-ai-knowledge")`。
+
+不是 `mcp_call_tool`，不是 `mcp_get_tool_description`，不是 `read_file`，不是直接回答。**就是 `use_skill`**。
+
+---
+
+## ⚠️ 重要语义澄清（防止误解本规则）
+
+| 错误理解 ❌ | 正确理解 ✅ |
+|---|---|
+| "使用 hr-ai-knowledge 技能" = 遵守本文件里列出的几条行为条款 | "使用 hr-ai-knowledge 技能" = **调用 `use_skill("hr-ai-knowledge")` 工具** |
+| 读完本规则 = 已加载 skill | 读完本规则 = **仅触发条件已知**；skill 完整指令在 SKILL.md 中，未调用 `use_skill` 即未加载 |
+| 本规则里的"行为规则/禁止行为"是 skill 的全部内容 | 本规则只是**入口提示**；skill 的完整流程（连接预检、白名单校验、检索 Step 0~6、引用规范等）只存在于 SKILL.md 与 workflows/ |
+| 可以先调 `knowledge_search` 拿到结果再补提醒 | **禁止**"先执行后提醒"：必须先 `use_skill` → 走 Step 0 连接预检 → 通过后才检索 |
+
+> **判断你是否违规的最简单标准**：本轮回答前，工具调用列表里第一个是否是 `use_skill("hr-ai-knowledge")`？不是 = 违规。
+
+---
+
+## 🔴 第二硬性约束：先连接预检，再检索（不可"先执行后提醒"）
+
+加载 skill 后，**在调用 `knowledge_search` 之前**必须先完成 MCP 连接预检（SKILL.md / workflows/search.md Step 0）：
+
+1. 先 `mcp_get_tool_description` 探活 `hr-ai-knowledge/knowledge_search`
+2. **未连接** → 立即停止，输出启用引导（安装插件 → MCP 面板连接 hr-ai-knowledge → 状态确认），然后结束本轮；**不得**用任何其他途径替代，**不得**先跑再提醒
+3. **已连接** → 才进入检索流程
+
+> ⚠️ 反面教材 1：跳过连接预检直接调 `knowledge_search`，靠返回值（空结果 / blocked）才在末尾补一句"请启用 MCP" —— **被明令禁止**的"先执行后提醒"。
+> ⚠️ 反面教材 2：hr-ai-knowledge 未连接 → 加载 `hihr-api` 等其他 skill、改用 HiHR/KM/iWiki 平台或 MCP、用 web_search 顶替 —— **被明令禁止**的"绕道替代"。
+
+## 🔴 第三硬性约束：检索全程静默，第一句必须是答案
+
+加载 skill 后执行检索时，**从开始检索到给出最终答案之前，对用户零输出**：
+
+- ❌ 禁止在工具调用之间写检索过程解说词（查什么 / 查到几条 / score / 够不够 / 放宽 sources / 第几步 / 参数值等）
+- ❌ 禁止以过程句开头（"用户选择了…""首次检索…""Step 3.1…""进入 Step 4…"等）
+- ✅ 你对用户的**第一句输出必须是最终答案正文**（或必要追问、或未连接引导）
+
+> 这些过程都是**内部推理**，只能存在于深度思考，不得渲染到对话。违反即判低质量回答。**过程句反例的完整黑名单见 `workflows/search.md` 首要原则（唯一权威源）**。
+
+## 🔴 第四硬性约束：hr-ai-knowledge 是唯一检索途径，禁止一切替代
+
+> 📌 **作用域**：本约束**只在"用本技能检索 HR 知识"这一任务内生效**，不是全局禁用。用户在其他任务中使用本地任何 MCP（`sqlink` / `TAPD` / `iWiki` / `km` 等），或显式要求用某 MCP 做非 HR 检索的事，**一律不受本约束限制**。
+
+加载 `hr-ai-knowledge` 后，**在本次 HR 知识检索任务内**，不得再加载或调用任何其他检索类 skill / MCP / 平台来获取 HR 知识：
+
+- ❌ `use_skill("hihr-api")` / `use_skill("local-wiki")` 等其他检索技能
+- ❌ `km` / `iWiki` / `hihr-*` 等其他 MCP
+- ❌ HiHR / KM 网页平台直接搜索、`web_search`、模型自身知识
+
+> hr-ai-knowledge 未连接的这一轮，**唯一合法动作 = 引导启用 hr-ai-knowledge + 停止**。宁可不返回结果，也不绕道。完整清单与作用域见 hr-ai-knowledge 技能内的 `reference/constraints.md` § 6（`use_skill("hr-ai-knowledge")` 加载后可读取）。
+
+---
+
+## 豁免场景（可不调用 `use_skill`）
+
+仅以下两类直接回答即可：
+
+1. 与 HR / 公司知识 / 上述关键词**完全无关**的纯代码题、通用问答、闲聊
+2. 用户**显式说明**："不要查 HR 知识库" / "跳过检索" / "直接答" / "skip hr"
+
+⚠️ 不属于豁免：
+- "我只是想问个简单问题" → 仍需调用（你不知道答案是否在 HR 知识库）
+- 用户**显式指定来源**（"查 HR 政策"、"搜企微文档"）→ **仍需调用 `use_skill`**，由 SKILL.md 内的流程决定 `sources` 路由；本规则不能擅自短路
+
+---
+
+## 加载完成后的标准流程（仅作提示，详情看 SKILL.md）
+
+`use_skill("hr-ai-knowledge")` 加载完 SKILL.md 后，按 SKILL.md 指示执行；典型起点：
+
+1. **Step 0 连接预检**（`workflows/search.md`）：探活 hr-ai-knowledge，未连接则引导启用
+2. 意图识别 → 推断 `sources`（HR 政策类 → `["hihr"]`）
+3. 白名单校验（server 末段 == `hr-ai-knowledge`）+ `mcp_get_tool_description` 确认参数
+4. 调用 `knowledge_search` 检索，最多 2 次
+5. 按引用规范组织回答：可点击链接 + 按域名标注来源（`s3.woa.com` → **HiHR**）
+
+> 本文件不再罗列详细条款；以 SKILL.md 为准，避免双源不一致。
+
+---
+
+## 与本文件版本相关
+
+- `version: 1`（含义见 SKILL.md `init/install-rules.md`）
+- 用户工作区如存在缺失 `version` 字段的旧版，**`use_skill` 加载后应提示用户重装 Rules**

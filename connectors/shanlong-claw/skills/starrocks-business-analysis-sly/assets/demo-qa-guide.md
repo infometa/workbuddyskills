@@ -35,11 +35,11 @@
 **生成 SQL**：
 ```sql
 SELECT
-    COUNT(DISTINCT store_code) AS 门店总数,
-    COUNT(DISTINCT CASE WHEN is_enable = '1' THEN store_code END) AS 营业门店数,
-    COUNT(DISTINCT CASE WHEN is_enable = '0' THEN store_code END) AS 停业门店数
-FROM e000.dt_store
-WHERE group_code = :group_code
+    COUNT(DISTINCT store_code) AS 门店总数
+FROM dm.v_pos_corp_sale_analysis_with_sly
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
+    AND settle_biz_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
 LIMIT 1;
 ```
 
@@ -65,9 +65,10 @@ SELECT
     province AS 省份,
     city AS 城市,
     COUNT(DISTINCT store_code) AS 门店数
-FROM e000.dt_store
-WHERE group_code = :group_code
-    AND is_enable = '1'
+FROM dm.v_pos_corp_sale_analysis_with_sly
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
+    AND settle_biz_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
 GROUP BY province, city
 ORDER BY 门店数 DESC
 LIMIT 50;
@@ -94,9 +95,10 @@ LIMIT 50;
 SELECT
     brand_name AS 品牌名称,
     COUNT(DISTINCT store_code) AS 门店数
-FROM e000.dt_store
-WHERE group_code = :group_code
-    AND is_enable = '1'
+FROM dm.v_pos_corp_sale_analysis_with_sly
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
+    AND settle_biz_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
 GROUP BY brand_name
 ORDER BY 门店数 DESC
 LIMIT 20;
@@ -129,9 +131,10 @@ SELECT
     SUM(recv_money) AS 本期营收,
     SUM(busi_income) AS 本期实收,
     SUM(real_income) AS 本期纯收,
-    COUNT(DISTINCT bill_id) AS 账单数
+    SUM(bill_count) AS 账单数
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-02-01'
     AND settle_biz_date < '2026-03-01'
 UNION ALL
@@ -140,9 +143,10 @@ SELECT
     SUM(recv_money),
     SUM(busi_income),
     SUM(real_income),
-    COUNT(DISTINCT bill_id)
+    SUM(bill_count)
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2025-02-01'
     AND settle_biz_date < '2025-03-01';
 ```
@@ -176,13 +180,14 @@ WHERE cy7_group_code = :group_code
 ```sql
 SELECT
     store_name AS 门店名称,
-    COUNT(DISTINCT bill_id) AS 账单数,
+    SUM(bill_count) AS 账单数,
     ROUND(SUM(recv_money), 2) AS 营收,
     ROUND(SUM(busi_income), 2) AS 实收,
     ROUND(SUM(real_income), 2) AS 纯收,
-    ROUND(SUM(busi_income) / COUNT(DISTINCT bill_id), 2) AS 客单价
+    ROUND(SUM(busi_income) / SUM(bill_count), 2) AS 客单价
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= :start_date
     AND settle_biz_date < :end_date_plus_1
 GROUP BY store_name, store_code
@@ -217,12 +222,13 @@ LIMIT 10;
 **生成 SQL**：
 ```sql
 SELECT
-    COUNT(DISTINCT bill_id) AS 账单数,
-    SUM(person_num) AS 用餐人数,
-    ROUND(SUM(person_num) / COUNT(DISTINCT bill_id), 2) AS 人均,
-    ROUND(SUM(busi_income) / SUM(person_num), 2) AS 客单价
+    SUM(bill_count) AS 账单数,
+    SUM(people_qty) AS 用餐人数,
+    ROUND(SUM(people_qty) / SUM(bill_count), 2) AS 人均,
+    ROUND(SUM(busi_income) / SUM(people_qty), 2) AS 客单价
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-02-01'
     AND settle_biz_date < '2026-03-01';
 ```
@@ -249,21 +255,23 @@ WHERE cy7_group_code = :group_code
 ```sql
 SELECT
     '本期' AS 期间,
-    COUNT(DISTINCT CASE WHEN is_applet_bill = '1' THEN bill_id END) AS 小程序账单数,
-    COUNT(DISTINCT bill_id) AS 总账单数,
-    ROUND(COUNT(DISTINCT CASE WHEN is_applet_bill = '1' THEN bill_id END) * 100.0 / COUNT(DISTINCT bill_id), 2) AS 小程序占比_pct
+    COUNT(DISTINCT CASE WHEN is_applet_bill = '1' THEN id END) AS 小程序账单数,
+    SUM(bill_count) AS 总账单数,
+    ROUND(COUNT(DISTINCT CASE WHEN is_applet_bill = '1' THEN id END) * 100.0 / SUM(bill_count), 2) AS 小程序占比_pct
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-02-01'
     AND settle_biz_date < '2026-03-01'
 UNION ALL
 SELECT
     '上期' AS 期间,
-    COUNT(DISTINCT CASE WHEN is_applet_bill = '1' THEN bill_id END),
-    COUNT(DISTINCT bill_id),
-    ROUND(COUNT(DISTINCT CASE WHEN is_applet_bill = '1' THEN bill_id END) * 100.0 / COUNT(DISTINCT bill_id), 2)
+    COUNT(DISTINCT CASE WHEN is_applet_bill = '1' THEN id END),
+    SUM(bill_count),
+    ROUND(COUNT(DISTINCT CASE WHEN is_applet_bill = '1' THEN id END) * 100.0 / SUM(bill_count), 2)
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-01-01'
     AND settle_biz_date < '2026-02-01';
 ```
@@ -296,13 +304,14 @@ WHERE cy7_group_code = :group_code
 **生成 SQL**：
 ```sql
 SELECT
-    COUNT(DISTINCT bill_id) AS 账单数,
+    SUM(bill_count) AS 账单数,
     ROUND(SUM(recv_money), 2) AS 应收总额,
     ROUND(SUM(busi_income), 2) AS 实收总额,
     ROUND(SUM(recv_money) - SUM(busi_income), 2) AS 优惠总额,
     ROUND((SUM(recv_money) - SUM(busi_income)) * 100.0 / SUM(recv_money), 2) AS 折扣率_pct
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-02-01'
     AND settle_biz_date < '2026-03-01';
 ```
@@ -329,13 +338,14 @@ WHERE cy7_group_code = :group_code
 **生成 SQL**：
 ```sql
 SELECT
-    COUNT(DISTINCT bill_id) AS 含套餐账单数,
-    COUNT(DISTINCT CASE WHEN setmeal_count > 0 THEN bill_id END) AS 含套餐账单,
-    ROUND(COUNT(DISTINCT CASE WHEN setmeal_count > 0 THEN bill_id END) * 100.0 / COUNT(DISTINCT bill_id), 2) AS 套餐渗透率_pct,
+    SUM(bill_count) AS 含套餐账单数,
+    COUNT(DISTINCT CASE WHEN setmeal_count > 0 THEN id END) AS 含套餐账单,
+    ROUND(COUNT(DISTINCT CASE WHEN setmeal_count > 0 THEN id END) * 100.0 / SUM(bill_count), 2) AS 套餐渗透率_pct,
     ROUND(SUM(setmeal_money), 2) AS 套餐营收,
     ROUND(SUM(setmeal_money) * 100.0 / SUM(busi_income), 2) AS 套餐营收占比_pct
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= :start_date
     AND settle_biz_date < :end_date_plus_1;
 ```
@@ -374,7 +384,8 @@ SELECT
     ROUND(SUM(actual_money), 2) AS 实收金额,
     ROUND(SUM(income_money), 2) AS 纯收金额
 FROM dm.v_item_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-02-01'
     AND settle_biz_date < '2026-03-01'
     AND last_qty > 0
@@ -423,7 +434,8 @@ SELECT
     ROUND(SUM(income_money) - SUM(cost_money), 2) AS 折后理论毛利,
     ROUND((SUM(income_money) - SUM(cost_money)) / NULLIF(SUM(income_money), 0) * 100, 2) AS 折后毛利率_pct
 FROM dm.v_item_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-02-01'
     AND settle_biz_date < '2026-03-01'
     AND last_qty > 0
@@ -469,7 +481,8 @@ SELECT
     ROUND(SUM(return_subtotal), 2) AS 退菜金额,
     ROUND(SUM(return_qty) * 100.0 / NULLIF(SUM(last_qty) + SUM(return_qty), 0), 2) AS 退菜率_pct
 FROM dm.v_item_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= :start_date
     AND settle_biz_date < :end_date_plus_1
     AND return_qty > 0
@@ -514,7 +527,8 @@ SELECT
     ROUND(SUM(cost_money), 2) AS 赠送成本,
     ROUND(SUM(present_money) * 100.0 / SUM(SUM(present_money)) OVER(), 2) AS 赠送金额占比_pct
 FROM dm.v_item_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-02-01'
     AND settle_biz_date < '2026-03-01'
     AND present_qty > 0
@@ -558,7 +572,8 @@ SELECT
     ROUND(SUM(open_table_count) / SUM(table_count * shift_count), 4) * 100 AS 开台率_pct,
     GREATEST(ROUND((SUM(open_table_count) / SUM(table_count * shift_count) - 1) * 100, 2), 0) AS 翻台率_pct
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= :start_date
     AND settle_biz_date < :end_date_plus_1
 GROUP BY CASE WHEN settle_biz_date BETWEEN :start_date AND :end_date_plus_1 THEN '全日' END;
@@ -594,25 +609,27 @@ GROUP BY CASE WHEN settle_biz_date BETWEEN :start_date AND :end_date_plus_1 THEN
 ```sql
 SELECT
     '本期(2月)' AS 期间,
-    COUNT(DISTINCT bill_id) AS 账单数,
-    ROUND(SUM(person_num), 2) AS 用餐人数,
+    SUM(bill_count) AS 账单数,
+    ROUND(SUM(people_qty), 2) AS 用餐人数,
     ROUND(SUM(recv_money), 2) AS 营收,
     ROUND(SUM(busi_income), 2) AS 实收,
-    ROUND(SUM(busi_income) / SUM(person_num), 2) AS 客单价
+    ROUND(SUM(busi_income) / SUM(people_qty), 2) AS 客单价
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-02-01'
     AND settle_biz_date < '2026-03-01'
 UNION ALL
 SELECT
     '上期(1月)' AS 期间,
-    COUNT(DISTINCT bill_id),
-    ROUND(SUM(person_num), 2),
+    SUM(bill_count),
+    ROUND(SUM(people_qty), 2),
     ROUND(SUM(recv_money), 2),
     ROUND(SUM(busi_income), 2),
-    ROUND(SUM(busi_income) / SUM(person_num), 2)
+    ROUND(SUM(busi_income) / SUM(people_qty), 2)
 FROM dm.v_pos_corp_sale_analysis_with_sly
-WHERE cy7_group_code = :group_code
+WHERE group_code = '#{SL_UNIFIED_G_ID}'
+    AND store_code IN (#{omShopCodes})
     AND settle_biz_date >= '2026-01-01'
     AND settle_biz_date < '2026-02-01';
 ```

@@ -28,12 +28,15 @@
 
 ### 2.1 CLI 命令
 
+> 🔧 **路径**：下文 `sl` 同 [`SKILL.md` CLI 入口](../SKILL.md#cli-入口)。**Bash 首选**自动选 Windows `sl.cmd` / macOS `sl`；**禁止** Bash 内写 `%USERPROFILE%\...`，**禁止**依赖 PATH / `which` / `where`。
+
 ```bash
-# 按名称精确查询
-sl store find --type crm --name "<门店关键词>" --format json
+# 按名称精确查询（Mac / Linux / Windows Git Bash 通用）
+SL="$HOME/.slclaw/bin/sl"; [ -f "$HOME/.slclaw/bin/sl.cmd" ] && SL="$HOME/.slclaw/bin/sl.cmd"
+"$SL" store find --type crm --name "<门店关键词>" --format json
 
 # 按关键词或门店 ID 模糊查询
-sl store find --type crm --keyword "<门店关键词或门店ID>" --format json
+"$SL" store find --type crm --keyword "<门店关键词或门店ID>" --format json
 ```
 
 ### 2.2 候选结果处理

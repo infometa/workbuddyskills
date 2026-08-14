@@ -116,11 +116,11 @@ SELECT
     SUM(bill_settle_deposit) AS 结账押金总额,
     SUM(bill_manual_return_deposit) AS 手动退押金,
     COUNT(DISTINCT id) AS 押金笔数,
-    ROUND(SUM(bill_forfeiture_deposit) / NULLIF(SUM(bill_add_deposit), 0) * 100, 2) AS 没收率%
+    ROUND(SUM(bill_forfeiture_deposit) / NULLIF(SUM(bill_add_deposit), 0) * 100, 2) AS 没收率
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
-AND settle_biz_date BETWEEN '{{start_date}}' AND '{{end_date}}'
+AND settle_biz_date >= :start_date AND settle_biz_date < :end_date_plus_1
     {{#if manage_type}} AND manage_type = '{{manage_type}}'
 {{#if region}} AND region = '{{region}}'
 GROUP BY {{group_by:store_name}}
@@ -154,11 +154,11 @@ SELECT
     SUM(signing_manager_money) AS 签单金额,
     COUNT(DISTINCT id) AS 签单笔数,
     SUM(busi_income) AS 关联营收,
-    ROUND(SUM(signing_manager_money) / NULLIF(SUM(busi_income), 0) * 100, 2) AS 签单占比%
+    ROUND(SUM(signing_manager_money) / NULLIF(SUM(busi_income), 0) * 100, 2) AS 签单占比
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
-AND settle_biz_date BETWEEN '{{start_date}}' AND '{{end_date}}'
+AND settle_biz_date >= :start_date AND settle_biz_date < :end_date_plus_1
     AND signing_manager_money > 0
     {{#if manage_type}} AND manage_type = '{{manage_type}}'
 {{#if region}} AND region = '{{region}}'
@@ -192,12 +192,12 @@ SELECT
     SUM(e_invoice_mny) AS 发票金额,
     SUM(invoice_num) AS 发票张数,
     COUNT(DISTINCT id) AS 总账单数,
-    ROUND(SUM(e_invoice_mny) / NULLIF(SUM(busi_income), 0) * 100, 2) AS 开票率%,
-    ROUND(SUM(invoice_num) / NULLIF(COUNT(DISTINCT id), 0) * 100, 2) AS 发票索取率%
+    ROUND(SUM(e_invoice_mny) / NULLIF(SUM(busi_income), 0) * 100, 2) AS 开票率,
+    ROUND(SUM(invoice_num) / NULLIF(COUNT(DISTINCT id), 0) * 100, 2) AS 发票索取率
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
-AND settle_biz_date BETWEEN '{{start_date}}' AND '{{end_date}}'
+AND settle_biz_date >= :start_date AND settle_biz_date < :end_date_plus_1
 GROUP BY {{group_by:store_name}}
 ORDER BY 发票金额 DESC
 LIMIT {{top_n:20}};

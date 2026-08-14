@@ -1,0 +1,29 @@
+FROM mirrors.tencent.com/hrit/oa-node-runtime:v1
+
+LABEL version="v1.0"
+
+WORKDIR /app
+
+# 先 COPY package.json，利用 Docker 层缓存
+COPY package.json ./
+RUN npm install
+
+# 拷贝源码（排除 node_modules、data/ 等运行时目录由 .dockerignore 处理）
+COPY . .
+
+# 给 prod-deploy.sh 可执行权限（作为 ENTRYPOINT 直接执行需要）
+RUN chmod +x /app/.agent/scripts/*.sh 2>/dev/null || true
+
+# 生产环境变量
+ENV PORT=3000
+ENV MONGO_URI=mongodb://{{PROJECT_ID}}-mongo:27017
+ENV AGENT_SVR_ENV=prod
+
+# 生产环境端口（固定！不要改动）
+EXPOSE 3000 9999
+
+# ENTRYPOINT：优先执行 prod-deploy.sh（启动 MCP Bridge + 注册 Agent），
+# 脚本不存在或 SKIP_PROD_DEPLOY=1 时直接 exec CMD（node server.js）
+# 注意：bash -c 必须用 -- 分隔脚本和 $@ 参数，否则 CMD 不会正确映射到 $@
+ENTRYPOINT ["bash", "-c", "if [ -f /app/.agent/scripts/prod-deploy.sh ] && [ \"${SKIP_PROD_DEPLOY}\" != 1 ]; then /app/.agent/scripts/prod-deploy.sh \"$@\"; else exec \"$@\"; fi", "--"]
+CMD ["node", "server.js"]

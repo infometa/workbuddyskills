@@ -1,7 +1,7 @@
 ---
 name: lemonclaw-workbuddy
-description: "通过 lemonclaw-cli 与内置独立开票工作流查询或操作柠檬云多产品业务数据。覆盖认证和账套、进销存 SCM、业财 ERP、财务 ACC、发票查询及独立开票；适用于客户、供应商、商品、采购、销售、库存、收付款、往来、凭证、账簿、资金与经营报表、进销项发票、立即开票、批量开票和开票反馈等场景。用户提到柠檬云、Lemon Cloud、LemonSCM、LemonERP、进销存、业财、财务或开票时使用。"
-version: "1.0.1"
+description: "用于查询或操作柠檬云 Lemon Cloud 业务数据，覆盖认证、账套、进销存 SCM、业财 ERP、财务 ACC 和独立开票 invoice。支持客户、供应商、商品、仓库等基础资料，以及采购、销售、库存、收付款、往来和经营报表；ERP 还支持销售报价、价格资料、订单汇总、库存账龄、暂估调整、应收应付预警及财务侧能力；ACC 支持独立财务账套的凭证、账簿、资金、发票和财务报表；invoice 支持立即开票、批量开票和问题反馈。用户提到柠檬云、LemonSCM、LemonERP、进销存、业财、财务、凭证、账簿、发票查询或开票操作时使用。"
+version: "1.0.2"
 author: "Ningmengyun"
 ---
 
@@ -12,9 +12,9 @@ author: "Ningmengyun"
 本连接器有两条执行路径：
 
 - 公共认证、账套以及 ACC、SCM、ERP 业务通过 `lemonclaw-cli` 执行。不要直接执行 bundled skill 中的 `action.py`，不要手写 HTTP 请求、URL、headers、认证信息或账套上下文。
-- 独立开票 `invoice` 不使用通用 `action search/show/run`；读取当前 runtime 中的 `invoice/SKILL.md`，按其立即开票、批量开票或反馈提交流程执行。
+- 独立开票 `invoice` 使用 `direct-script` 模式，不使用通用 `action search/show/run`，也不通过其他 `lemonclaw-cli` 命令包装开票脚本；读取当前 runtime 中的 `invoice/SKILL.md`，按其立即开票、批量开票或反馈提交流程直接执行脚本。
 
-WorkBuddy skill 负责产品路由、账套选择、action 选择、输入输出纪律和最终回复。具体 action 的字段、参数位置、返回结构和展示口径，以 `lemonclaw-cli action show <product> <action>` 返回的 `contract`、`ACTION.md`、`input.md`、`output.md` 为准。
+WorkBuddy skill 负责产品路由、账套选择、action 选择、输入输出纪律和最终回复。`lemonclaw-cli action show <product> <action>` 返回公开 `contract` 和实际存在的 `docs` 文档入口；具体 action 的字段、参数位置、返回结构和展示口径，必须通过对应节点的 `readCommand` 读取后确定。
 
 不要把 action 清单、接口路径、字段全集或运行时内部细节写进最终回复。不要向用户展示完整 CLI JSON，除非用户明确要求排查 CLI 协议。
 
@@ -98,12 +98,31 @@ lemonclaw-cli account select --product <product> --name "<账套名称>"
 
 命中独立开票、立即开票、批量开票、确认开票、开票预览、提交开票或开票问题反馈时：
 
-1. 执行 `lemonclaw-cli skill-root --check`，获取当前 runtime 的 bundled skill 根目录。
-2. 完整读取 `<skill-root>/invoice/SKILL.md`，并以 `<skill-root>/invoice/` 作为所有相对路径的基准。
-3. 立即开票只按 `references/immediate/flow.md` 执行；批量开票只按 `references/batch/flow.md` 执行；反馈提交只按 `invoice/SKILL.md` 指定的 shared 文档执行。
-4. 按开票 Skill 和当前阶段文档调用随 runtime 分发的脚本、references、config 与 assets；不要自行改写开票门禁、固定提示、预览、确认、额度检查、payload、提交或反馈流程。
-5. 独立开票不使用通用 `action search/show/run`，也不要用 ACC 或 ERP 的发票查询 action 代替开票流程。普通进项、销项发票查询仍按当前 ACC 或 ERP 产品执行。
-6. `invoice/SKILL.md`、当前流程文档和共享输出协议是独立开票的执行依据；与下文通用 CLI action 规则不同时，以开票工作流为准。
+1. `lemonclaw-cli skill-root --check` 仅用于发现并校验当前 runtime 的 bundled skill 根目录；不得通过该命令传递或执行任何开票业务参数。
+2. 根据返回路径建立并校验以下直接脚本运行上下文：
+
+   ```text
+   <runtime-root>   = 规范化后的 <skill-root>/../../..
+   Windows Python  = <runtime-root>/python/python.exe
+   macOS/Linux     = <runtime-root>/python/bin/python3
+   cwd             = <runtime-root>
+   PYTHONPATH      = <runtime-root>/app
+   SSL_CERT_FILE   = <runtime-root>/app/certifi/cacert.pem
+   PYTHONUTF8      = 1
+   PYTHONIOENCODING= utf-8
+   PYTHONNOUSERSITE= 1
+   PYTHONDONTWRITEBYTECODE=1
+   LEMONCLAW_RUNTIME_ROOT=<runtime-root>
+   ```
+
+   执行前确认 `<runtime-root>/runtime.json`、对应平台的 runtime Python 以及 `<runtime-root>/app` 都存在。以上环境变量只覆盖当前开票脚本进程，不修改用户的全局环境。
+3. 完整读取 `<skill-root>/invoice/SKILL.md`，并以 `<skill-root>/invoice/` 作为所有相对路径的基准。runtime 文档中的 <SkillsRoot> 即 <skill-root>/invoice/，二者同指 invoice 目录的绝对路径。
+4. 开票文档中的 `python`、`python3` 或 `<Python>` 解释器标记统一替换为上述 runtime Python；将脚本相对路径解析为 `<skill-root>/invoice/` 下的绝对路径，然后由 runtime Python 直接执行脚本。不要替换或包装成 `lemonclaw-cli` 命令，也不要使用系统 Python。
+5. 路径按当前平台解析，新版文档统一使用 `/` 表示目录层级。若已安装 runtime 的旧版文档仍含 PowerShell 反引号续行或 Windows 反斜杠，只保留原参数及其顺序，按当前平台重新解析路径和参数，不要原样交给 macOS/Linux shell。macOS/Linux 不执行 `.ps1`，预览服务启停直接调用对应 Python 脚本，临时目录清理由当前平台的文件操作完成。
+6. 立即开票只按 `references/immediate/flow.md` 执行；批量开票只按 `references/batch/flow.md` 执行；反馈提交只按 `invoice/SKILL.md` 指定的 shared 文档执行。
+7. 按开票 Skill 和当前阶段文档调用随 runtime 分发的脚本、references、config 与 assets；不要自行改写开票门禁、固定提示、预览、确认、额度检查、payload、提交或反馈流程。
+8. 独立开票不使用通用 `action search/show/run`，也不要用 ACC 或 ERP 的发票查询 action 代替开票流程。普通进项、销项发票查询仍按当前 ACC 或 ERP 产品执行。
+9. `invoice/SKILL.md`、当前流程文档和共享输出协议决定业务流程与输出；本节决定标准版的 Python、目录和进程环境。二者发生执行方式冲突时，以本节的标准版直接脚本运行上下文为准。
 
 ## Action 选择流程
 
@@ -113,15 +132,19 @@ lemonclaw-cli account select --product <product> --name "<账套名称>"
 1. lemonclaw-cli account current
 2. lemonclaw-cli action search "用户需求"
 3. lemonclaw-cli action show <product> <action>
-4. lemonclaw-cli action run <product> <action> --json-stdin
+4. 必要时读取合理候选的 docs.action，确定唯一 action
+5. 读取最终 action 的全部现有 docs 节点
+6. lemonclaw-cli action run <product> <action> --json-stdin
 ```
 
 选择规则：
 
 - `search` 只用于找候选，不生成参数、不执行业务请求。
-- `search` 结果不是最终 action。候选接近、名称相似或业务边界不清时，必须 `show` 多个候选，对比用途、输入和输出后再决定；仍不确定时向用户澄清。
+- `search` 结果不是最终 action，第一名或 `ambiguous=false` 都不表示已经选定。先 `show` 最合理候选；仍有合理候选时最多深入比较两个，无法排除时向用户澄清。
 - 第一次 `search` 没有候选时，不得直接判断当前产品不支持。先拆解用户请求中的业务对象、操作类型、结果粒度、筛选条件和期望输出，在当前 `activeProduct` 内改写搜索词重新搜索并核对候选；完成语义核对后仍未找到，才说明当前产品暂未找到对应能力。
-- `show` 返回当前 action 的 `contract`、`ACTION.md`、`input.md`、`output.md`。只能根据这些内容构造请求。
+- `show` 只返回当前 action 的公开 `contract` 和实际存在的 `docs` 节点，不代表该 action 已经成为唯一选择。文档只能执行对应节点的 `readCommand` 读取，不要根据 `path` 猜命令，也不要猜不存在的文档。
+- 比较候选时只在需要业务边界时读取候选的 `docs.action`。确定唯一 action 后，读取最终 action 的全部现有文档；如果此前读取过多个候选的 `ACTION.md`，先重新读取最终 action 的 `docs.action`，再读取 `docs.input` 和 `docs.output`。
+- `ACTION.md` 用于确认使用边界、前置步骤和依赖；`input.md` 用于构造请求；`output.md` 用于理解预期结果和展示约定。缺少 `input.md` 且 `contract` 不足以确定参数时，不得执行 `run`。
 - 不要根据 action 名称、响应字段、页面列名、旧记忆或相邻 action 臆造入参。
 - 不要为了找到更像的 action 自动跨产品搜索。跨产品前必须满足产品路由规则。
 - `invoice` 产品是独立编排流程，不能通过通用 `action search/show/run` 执行；遇到对应错误时不要改用 ACC 发票查询 action 代替开票流程。
@@ -143,9 +166,9 @@ lemonclaw-cli account select --product <product> --name "<账套名称>"
 - 顶层只允许 `query`、`body`、`_outputMode`。
 - 不要拍平 `query/body`，也不要让 CLI 根据字段名重新分流。
 - 不传 `context`、`_context`、headers、token、cookie、appasid、appAsId、accAppId 等运行时字段；CLI 从已选择账套加载上下文。
-- `bodyMode:none` 的 action 可省略 `body` 或传 `{}`，业务字段按 `show` 文档放入 `query`。
+- `bodyMode:none` 的 action 可省略 `body` 或传 `{}`，业务字段按 `contract.requestParamSchema` 和实际存在的 `docs.input` 放入 `query`。
 - `bodyMode:list` 的 action，`body` 必须是数组；其他公开 action 的 `body` 必须是对象。
-- 参数是否必填、字段类型、枚举值、日期格式、ID 串格式，以 `action show` 返回的 `input.md` 和 `contract.requestParamSchema` 为准。
+- 参数是否必填、字段类型、枚举值、日期格式、ID 串格式，以最终 action 的 `docs.input` 文档和 `contract.requestParamSchema` 为准。
 - 普通查看省略 `_outputMode`；也可显式传 `basic`。
 - 只有统计、分析、二次筛选、Top、核对、下游交接或需要完整结构化数据时才传 `_outputMode:"full"`。
 - `internal`、`raw-internal`、`system` 是内部编排模式，禁止从 WorkBuddy 传入。
@@ -162,16 +185,17 @@ lemonclaw-cli account select --product <product> --name "<账套名称>"
 - 在返回结果对象中读取 `mustDisplayVerbatim` 和 `primaryDisplayField`。
 - 当 `mustDisplayVerbatim=true` 时，按 `primaryDisplayField` 指定的字段原样展示；常见字段是 `displayMarkdown`、`reportMarkdown`、`markdown` 或 `content`。
 - 原样展示时不要改写 Markdown 表头、章节顺序、表格列、排序、金额格式、提示语或文件路径。
-- `primaryDisplayField` 不存在时，再依据该 action 的 `output.md` 解释结构化结果。
+- 最终回复直接输出 primaryDisplayField 的 Markdown 原文，让表格在消息中渲染；不得用三反引号代码块包裹、不得转义管道符 |、不得缩进或改成纯文本。
+- `primaryDisplayField` 不存在时，再依据已读取的 `docs.output` 文档解释结构化结果。
 - 面向用户优先输出中文业务结果和必要结论，不要直接贴完整 JSON、字段名清单、错误码堆栈或 CLI 调试过程。
 
 结构化读取：
 
-- 常见结构为 `data.数据`、`data.数据列表`、`data.总数`；具体以 `output.md` 为准。
-- 字段含义优先以 `action show` 返回的 `output.md` 为准；只有 CLI 明确返回了可读取的字段映射内容时才继续使用，不要根据 `fieldMap` 路径直接访问 runtime 内部文件。不要把内部 ID 当作普通展示列输出。
+- 常见结构为 `data.数据`、`data.数据列表`、`data.总数`；具体以已读取的 `docs.output` 文档为准。
+- `action run` 的实际返回是本次数据事实；`docs.output` 只解释实际存在字段的含义和展示约定，不覆盖真实响应。不要根据内部 `fieldMap` 路径直接访问 runtime 文件，也不要把内部 ID 当作普通展示列输出。
 - 如果结果包含文件路径、下载路径或导出信息，只在 action 成功且字段真实存在时告知用户。
 
-`basic` 返回的表格只代表默认展示列，不代表 action 的全部返回字段。用户点名查看、筛选、排序、统计或交接默认表格未展示的字段时，先检查 `output.md`；字段已经定义则使用 `_outputMode:"full"` 重新取数，确认未定义后才能说明当前 action 不支持该字段。
+`basic` 返回的表格只代表默认展示列，不代表 action 的全部返回字段。用户点名查看、筛选、排序、统计或交接默认表格未展示的字段时，先检查实际存在的 `docs.output`；字段已经定义则使用 `_outputMode:"full"` 重新取数，确认未定义后才能说明当前 action 不支持该字段。
 
 ## full 模式规则
 
@@ -192,6 +216,7 @@ lemonclaw-cli account select --product <product> --name "<账套名称>"
 
 - 资金日报、资金周报、资金月报等模板报表，最终正文必须来自对应 action 的 `displayMarkdown` 或文档指定字段。
 - 不得手写、摘要化、删章节、改标题、改顺序、改表格列、合并表格或只展示局部指标。
+- 报表正文（`displayMarkdown` 等）同样直接渲染为 Markdown 输出，不得用代码块包裹。
 - 展示前确认正文包含模板要求的固定章节；如果 action 返回显示正文不完整，应按错误或不完整结果处理。
 - 对应模板或 `output.md` 明确要求包含 `报告结束` 时，展示前必须核验；ACC/ERP 财务侧 statement query 不强制追加该标记，仍按其 `primaryDisplayField` 和输出契约原样展示。
 - ACC 的 `cashier-daily-report`、`cashier-weekly-report`、`cashier-monthly-report` 是 ACC 资金报表入口。
@@ -217,7 +242,7 @@ ACC、SCM、ERP 的 CLI 与账套错误按错误类型处理，不要把所有�
 - `account switch` 未找到匹配项且没有返回候选：执行 `account list`，用户确认候选后再执行 `account select`。
 - 账套命令返回认证、网络、权限或服务异常：按原错误处理，不要通过刷新候选规避错误。
 - action 未找到：在当前产品重新 `action search`。不要直接跨产品乱搜。
-- payload 或 request 参数校验失败：重新执行 `action show`，按 `input.md` 和 `contract` 修正 `query/body`。
+- payload 或 request 参数校验失败：重新执行最终 action 的 `show` 和 `docs.input.readCommand`，按 `input.md` 与 `contract` 修正 `query/body`。
 - 权限、业务规则、数据不存在、期间未启用等结构化业务错误：保持原业务含义，用中文说明下一步可操作建议。
 - 文件导出失败或返回错误文件：不要把错误文件当成 Excel 成果。
 - 不得因为接口报错、空数据、无权限、认证失效或服务不可用而自动切换产品、账套、服务或接口域名。先按当前上下文说明问题，只有用户明确要求后才能切换。
@@ -249,5 +274,8 @@ lemonclaw-cli account select --product <product> --asid <asid>
 lemonclaw-cli account select --product <product> --serviceid <serviceid> --name "<账套名称>"
 lemonclaw-cli action search "用户需求"
 lemonclaw-cli action show <product> <action>
+lemonclaw-cli action doc <product> <action> --doc action
+lemonclaw-cli action doc <product> <action> --doc input
+lemonclaw-cli action doc <product> <action> --doc output
 lemonclaw-cli action run <product> <action> --json-stdin
 ```

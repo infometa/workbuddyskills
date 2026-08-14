@@ -37,7 +37,7 @@ SELECT
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
-AND settle_biz_date BETWEEN '{{start_date}}' AND '{{end_date}}'
+AND settle_biz_date >= :start_date AND settle_biz_date < :end_date_plus_1
     AND waiter_code IS NOT NULL
     {{#if manage_type}} AND manage_type = '{{manage_type}}'
 GROUP BY waiter_code, waiter_name
@@ -76,7 +76,7 @@ SELECT
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
-AND settle_biz_date BETWEEN '{{start_date}}' AND '{{end_date}}'
+AND settle_biz_date >= :start_date AND settle_biz_date < :end_date_plus_1
     AND creator_code IS NOT NULL
 GROUP BY creator_code, creator_name
 HAVING SUM(busi_income) > 0
@@ -132,7 +132,7 @@ SELECT
     SUM(people_qty) AS 客流量,
     ROUND(SUM(busi_income), 2) AS 总营收,
     ROUND(SUM(busi_income) / NULLIF(COUNT(DISTINCT id), 0), 2) AS 单均消费,
-    ROUND(SUM(people_qty) * 100.0 / SUM(SUM(people_qty)) OVER(), 2) AS 客流贡献%
+    ROUND(SUM(people_qty) * 100.0 / SUM(SUM(people_qty)) OVER(), 2) AS 客流贡献
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})

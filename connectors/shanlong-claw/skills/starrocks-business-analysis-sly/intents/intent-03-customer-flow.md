@@ -156,7 +156,7 @@ SELECT
     COUNT(DISTINCT id) AS 总账单数,
     COUNT(DISTINCT CASE WHEN is_renew = '续单' THEN id END) AS 续单账单,
     COUNT(DISTINCT CASE WHEN is_renew != '续单' THEN id END) AS 首单账单,
-    ROUND(COUNT(DISTINCT CASE WHEN is_renew = '续单' THEN id END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 续单率%,
+    ROUND(COUNT(DISTINCT CASE WHEN is_renew = '续单' THEN id END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 续单率,
     ROUND(SUM(busi_income), 2) AS 总营收,
     ROUND(SUM(CASE WHEN is_renew = '续单' THEN busi_income ELSE 0 END), 2) AS 续单营收,
     ROUND(SUM(CASE WHEN is_renew != '续单' THEN busi_income ELSE 0 END), 2) AS 首单营收
@@ -168,7 +168,7 @@ AND settle_biz_date >= :start_date
     {{#if region}} AND region = :region
 GROUP BY {{group_by:store_code}}, {{group_by:store_name}}
 HAVING COUNT(DISTINCT id) >= 50
-ORDER BY 续单率% DESC
+ORDER BY 续单率 DESC
 LIMIT {{top_n:20}};
 ```
 
@@ -178,7 +178,7 @@ SELECT
     table_settle_shift_name AS 时段,
     COUNT(DISTINCT id) AS 总账单数,
     COUNT(DISTINCT CASE WHEN is_renew = '续单' THEN id END) AS 续单账单,
-    ROUND(COUNT(DISTINCT CASE WHEN is_renew = '续单' THEN id END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 续单率%,
+    ROUND(COUNT(DISTINCT CASE WHEN is_renew = '续单' THEN id END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 续单率,
     ROUND(SUM(busi_income) / NULLIF(COUNT(DISTINCT id), 0), 2) AS 单均消费
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
@@ -186,7 +186,7 @@ WHERE group_code = '#{SL_UNIFIED_G_ID}'
 AND settle_biz_date >= :start_date
     AND settle_biz_date < :end_date_plus_1
 GROUP BY table_settle_shift_name
-ORDER BY 续单率% DESC;
+ORDER BY 续单率 DESC;
 ```
 
 **输出格式**：排名表格（维度 / 总账单 / 续单率% / 续单营收 / 首单营收）

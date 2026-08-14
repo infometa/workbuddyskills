@@ -94,8 +94,8 @@ recv_money - real_income = 优惠合计 + 杂费合计
 - 描述: Execute a SELECT query or commands that return a ResultSet. db session already in default db `dm`
 - 参数: query:string(必填)，db:unknown
 - 必填: query
-- 示例命令:
-  - `sl starrocks read-query --query 'SELECT 1'`
+- 示例命令（Bash · Mac/Linux/Windows 通用，见 `SKILL.md`「CLI 入口」）:
+  - `SL="$HOME/.slclaw/bin/sl"; [ -f "$HOME/.slclaw/bin/sl.cmd" ] && SL="$HOME/.slclaw/bin/sl.cmd"; "$SL" starrocks read-query --query 'SELECT 1'`
 - 执行前请先结合当前业务场景补全参数，不要直接使用空字符串、0 或 false 作为最终值。
 
-当前 CLI 仅支持 `read-query --query`。多步骤分析需逐条执行 `sl starrocks read-query --query ...`，并遵守单轮最多 10 次查询上限。
+当前 CLI 仅支持 `read-query --query`。多步骤分析需逐条执行绝对路径下的 `sl starrocks read-query --query ...`，并遵守单轮最多 10 次查询上限。Bash 内禁止 `%USERPROFILE%\...` 写法。

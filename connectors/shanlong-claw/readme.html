@@ -32,7 +32,7 @@ ol li { margin: .3rem 0; }
 <body>
 
 <h1>商龙经营洞察 · WorkBuddy 连接器</h1>
-<p class="subtitle">面向 WorkBuddy 对接方的集成手册 · v1.0.0 · CLI + Skill 方案</p>
+<p class="subtitle">面向 WorkBuddy 对接方的集成手册 · v1.0.149 · CLI + Skill 方案</p>
 
 <!-- ==================== 前置条件 ==================== -->
 <h2>前置条件</h2>
@@ -60,8 +60,7 @@ ol li { margin: .3rem 0; }
 │       └── references/     <span class="comment">← 数据表结构参考</span>
 ├── install.sh              <span class="comment">← init 脚本（macOS/Linux）</span>
 ├── install.ps1             <span class="comment">← init 脚本（Windows）</span>
-├── package.json            <span class="comment">← CLI 依赖描述</span>
-└── dist/                   <span class="comment">← CLI 编译产物（运行时依赖已打包）</span></pre>
+└── install-url.conf        <span class="comment">← S1-only CLI 的 CDN 地址</span></pre>
 </div>
 
 <div class="info">
@@ -72,15 +71,26 @@ ol li { margin: .3rem 0; }
 <strong>关于 Skills 的放置：</strong>Skills 在 zip 包内随连接器提交，WorkBuddy 平台负责加载 <code>skills/</code> 目录内容给 AI。<code>init</code> 命令（install.sh）只安装 CLI 程序本身，Skills 不需要安装到用户机器上。
 </div>
 
+<div class="warn">
+<strong>安全边界：</strong>WorkBuddy 连接器只允许发布 S1 只读命令。S2、S3、S4 必须在 CLI tgz 构建阶段物理移除；即使原始数据标为 S1，PUT/DELETE/PATCH、action/auth 以及含新增、修改、删除、审核、充值等操作语义的接口也必须排除，不能仅依赖标签、Skill 提示词、用户配置或认证状态拦截。
+安装脚本会在替换现有 CLI 前对下载后的 tgz 再执行同一套校验；远端误传 full/旧包时会保留当前安装并立即失败，不允许静默降级。
+</div>
+
 <!-- ==================== 打包 ==================== -->
 <h2>打包（开发者操作）</h2>
 <div class="card">
 <pre><span class="comment"># 在 slclaw-cli 项目根目录执行（Mac / Linux / Windows 均可）</span>
-npm run pack:connector
-<span class="comment"># 等价：bash connector/pack.sh 或 node scripts/pack-connector.js</span>
 
-<span class="comment"># 产出：slclaw-connector.zip</span>
-<span class="comment"># 打包脚本保证：zip 内路径一律用 /、install.sh 为 LF、install.ps1 带 UTF-8 BOM</span></pre>
+<span class="comment"># 1. 生成连接器专用 S1-only CLI；脚本会在打包前后检查并拒绝任何 S2~S4</span>
+npm run pack:cli-tgz
+
+<span class="comment"># 2. 上传 slclaw-cli.tgz 与 slclaw-cli.version 到 install-url.conf 指定的 OSS/CDN</span>
+
+<span class="comment"># 3. 生成提交给 WorkBuddy 的轻量连接器 zip</span>
+npm run pack:connector
+
+<span class="comment"># 产出：slclaw-cli.tgz、slclaw-cli.version、slclaw-connector.zip</span>
+<span class="comment"># 注意：npm run pack / npm run build 是全量 CLI，禁止将其产物上传到连接器 CDN</span></pre>
 </div>
 
 <!-- ==================== 安装 ==================== -->

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{PAGE_TITLE}}</title>
+
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3.5.27/dist/vue.global.js"></script>
+  <!-- TDesign -->
+  <link rel="stylesheet" href="https://unpkg.com/tdesign-vue-next@1.18.0/dist/tdesign.min.css">
+  <script src="https://unpkg.com/tdesign-vue-next@1.18.0/dist/tdesign.min.js"></script>
+  <!-- HR-Vue-Next -->
+  <link rel="stylesheet" href="https://cdn.m.tencent.com/hr-web/hr-vue-next.min.css">
+  <script src="https://cdn.m.tencent.com/hr-web/hr-vue-next.min.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+    /* ========== Header ========== */
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 56px;
+    }
+    .brand-header__left { display: flex; align-items: center; gap: 12px; }
+    .brand-header__logo { height: 28px; width: auto; cursor: pointer; flex-shrink: 0; }
+    .brand-header__title { font-size: 16px; font-weight: 600; white-space: nowrap; }
+    .brand-header__right { display: flex; align-items: center; gap: 16px; }
+    .data-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 2px 10px; border-radius: 12px; font-size: 12px; line-height: 20px; white-space: nowrap;
+    }
+    .data-badge__dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .data-badge--static { background: #f5f5f5; color: #757575; }
+    .data-badge--static .data-badge__dot { background: #bdbdbd; }
+    .brand-header__user { display: flex; align-items: center; gap: 8px; }
+    .brand-header__avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+    .brand-header__username { font-size: 14px; white-space: nowrap; }
+
+    /* ========== Main ========== */
+    .page-main { padding: 24px; }
+
+    /* ========== Footer ========== */
+    .page-footer { text-align: center; padding: 24px; font-size: 12px; color: #999; }
+
+    /* ========== 响应式基线（方案三：手机/平板自适应） ========== */
+    /* 表格横向滚动，避免手机端撑破布局；业务填充表格时用 .table-wrap 包住 t-table */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    @media (max-width: 768px) {
+      .brand-header { padding: 0 12px; }
+      .brand-header__title { font-size: 15px; }
+      .brand-header__right { gap: 8px; }
+      /* 手机端隐藏用户名文字，仅保留头像，避免 header 溢出 */
+      .brand-header__username { display: none; }
+      .page-main { padding: 12px; }
+    }
+    @media (max-width: 480px) {
+      .data-badge { display: none; }
+      .brand-header__title { font-size: 14px; }
+    }
+
+    /* TODO: 页面业务样式 */
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <!-- Header -->
+    <header class="brand-header">
+      <div class="brand-header__left">
+        <a href="https://hrai.app.hrainative.woa.com/app-market" target="_blank" rel="noopener">
+          <img class="brand-header__logo" src="https://cdn.m.tencent.com/hrai/logo.svg" alt="HR AI">
+        </a>
+        <span class="brand-header__title">{{PAGE_TITLE}}</span>
+      </div>
+      <div class="brand-header__right">
+        <span class="data-badge data-badge--static">
+          <i class="data-badge__dot"></i>静态页面
+        </span>
+        <div class="brand-header__user" v-if="staffInfo">
+          <img class="brand-header__avatar" :src="staffInfo.avatarUrl" alt="avatar">
+          <span class="brand-header__username">{{ staffInfo.staffName }}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="page-main">
+      <!-- TODO: CRUD 界面（表格 + 表单） -->
+      <!-- 注意：in-DOM template 里自定义标签不能自闭合（<t-xxx />），必须显式闭合，否则会吞掉后面的兄弟节点导致 v-else 找不到 v-if -->
+      <t-loading v-if="loading"></t-loading>
+      <div v-else>
+        <!-- TODO: 数据列表 / 表单 -->
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">Copyright &copy; 1998-2026 Tencent. All Rights Reserved</footer>
+
+  </div>
+
+  <script>
+    const { createApp, ref, reactive, onMounted } = Vue;
+    window.HR_BUILD_ENV = 'prd';
+
+    // 响应式断点助手：返回 isMobile(ref<boolean>)，窗口尺寸跨过断点时自动更新
+    // 用法：const isMobile = useResponsive(); 模板中 v-if="!isMobile" 渲染表格 / v-else 渲染卡片列表
+    function useResponsive(bp = 768) {
+      const isMobile = Vue.ref(window.matchMedia(`(max-width: ${bp}px)`).matches);
+      const mq = window.matchMedia(`(max-width: ${bp}px)`);
+      const handler = (e) => { isMobile.value = e.matches; };
+      mq.addEventListener('change', handler);
+      return isMobile;
+    }
+
+    createApp({
+      setup() {
+        const staffInfo = ref(null);
+        // 响应式：手机端 (<=768px) 为 true，用于表格↔卡片列表等体验级切换
+        const isMobile = useResponsive();
+        const loading = ref(true);
+        const items = ref([]);
+
+        async function getStaffInfo() {
+          try {
+            const resp = await fetch(window.location.href, { method: 'HEAD' });
+            const staffName = resp.headers.get('X-Staff-Name');
+            if (!staffName) return null;
+            return {
+              staffName,
+              staffId: resp.headers.get('X-Staff-Id'),
+              avatarUrl: `https://r.hrc.woa.com/photo/150/${staffName}.png?default_when_absent=true`
+            };
+          } catch { return null; }
+        }
+
+        // TODO: CRUD 操作
+        async function fetchItems() {
+          loading.value = true;
+          try {
+            const resp = await fetch('/api/items');
+            items.value = await resp.json();
+          } finally {
+            loading.value = false;
+          }
+        }
+
+        async function createItem(data) {
+          await fetch('/api/items', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          await fetchItems();
+        }
+
+        async function deleteItem(id) {
+          await fetch(`/api/items/${id}`, { method: 'DELETE' });
+          await fetchItems();
+        }
+
+        onMounted(async () => {
+          staffInfo.value = await getStaffInfo();
+          await fetchItems();
+        });
+
+        return {
+          staffInfo,
+          loading,
+          items,
+          createItem,
+          deleteItem,
+          isMobile
+        };
+      }
+    })
+    .use(TDesign)
+    .use(window.HrVueNext)
+    .mount('#app');
+  </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 {
   "init": {
-    "darwin": "npm install -g @lovrabet/lovrabet-cli --registry=https://registry.npmmirror.com",
-    "linux": "npm install -g @lovrabet/lovrabet-cli --registry=https://registry.npmmirror.com",
-    "win32": "npm install -g @lovrabet/lovrabet-cli --registry=https://registry.npmmirror.com"
+    "darwin": "npm install -g @lovrabet/lovrabet-cli",
+    "linux": "npm install -g @lovrabet/lovrabet-cli",
+    "win32": "npm install -g @lovrabet/lovrabet-cli"
   },
   "auth": {
     "darwin": "lovrabet auth device --url-only --source workbuddy",
@@ -25,14 +25,12 @@
     "type": "node",
     "version": ">=20"
   },
-  "npmRegistries": ["https://registry.npmmirror.com"],
   "versionCheck": {
     "command": {
       "darwin": "lovrabet --version",
       "linux": "lovrabet --version",
       "win32": "lovrabet --version"
     },
-    "minVersion": "2.1.17",
-    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+    "minVersion": "2.2.2"
   }
 }

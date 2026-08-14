@@ -106,7 +106,7 @@
 
 ### 🏪 分类一：门店画像
 
-> 基于 `e000.dt_store` 表，静态基础信息
+> 基于 `e000.dt_store_view` 表，静态基础信息
 
 - [Intent 1: StoreListQuery](intent-01-store-profile.md#intent-1-storelistquery---门店列表查询)
 - [Intent 2: GeoDistribution](intent-01-store-profile.md#intent-2-geodistribution---地理分布分析)

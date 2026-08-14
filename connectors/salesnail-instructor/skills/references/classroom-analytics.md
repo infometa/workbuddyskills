@@ -12,7 +12,7 @@
 
 查询可按 team、round、opportunity、NPC、card、learner、auditStatus、messageKind、时间或 evidenceId 过滤。正式报告可使用 `anonymizeLearners=true`。普通用户不要请求 `includeRaw=true`。
 
-撰写正式轮次、结案、商机或学员报告前读取 `salesnail://analytics/report-templates`。该资源提炼了现有 AI Dashboard 的商机/小组提示词以及轮次、结案 Map-Reduce 提示词，并保留"日志缺失但状态有进展时以状态事实为准并标注数据缺口"的一致性规则。
+撰写正式轮次、结案、商机或学员报告前读取 `salesnail://analytics/report-templates`。该资源提炼了现有 AI Dashboard 的商机/小组提示词以及轮次、结案 Map-Reduce 提示词，并保留“日志缺失但状态有进展时以状态事实为准并标注数据缺口”的一致性规则。
 
 ## 分析工具
 

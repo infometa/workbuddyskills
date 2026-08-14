@@ -1,0 +1,36 @@
+FROM csighub.tencentyun.com/garen/base:tencentos4
+
+# 安装 Python 3.11
+RUN dnf install -y python3.11 python3.11-pip && \
+    ln -sf /usr/bin/python3.11 /usr/bin/python3 && \
+    ln -sf /usr/bin/python3.11 /usr/bin/python && \
+    ln -sf /usr/bin/pip3.11 /usr/bin/pip && \
+    python3 --version && pip --version && \
+    dnf clean all && rm -rf /var/cache/dnf
+
+# 预装公共依赖（与 AnyDev 镜像保持一致）
+RUN pip install --no-cache-dir \
+    flask \
+    gunicorn \
+    pymongo \
+    python-dotenv \
+    requests
+
+WORKDIR /app
+
+# 先 COPY requirements.txt，利用 Docker 层缓存
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 拷贝源码（排除 venv/、__pycache__/ 等由 .dockerignore 处理）
+COPY . .
+
+# 生产环境变量
+ENV PORT=3000
+ENV FLASK_ENV=production
+ENV PYTHONUNBUFFERED=1
+ENV MONGO_URI=mongodb://{{PROJECT_ID}}-mongo:27017
+
+# 生产环境端口（固定！不要改动）
+EXPOSE 3000
+CMD ["gunicorn", "--bind", "0.0.0.0:3000", "--workers", "2", "--timeout", "120", "app:app"]

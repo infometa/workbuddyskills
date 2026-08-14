@@ -3,7 +3,7 @@ name: starrocks-business-analysis-sly
 description: "该技能用于通过 MCP 查询餐饮企业门店经营数据，涵盖门店画像、营收客流、优惠结算、菜品套餐、渠道来源、员工绩效、运营效率、会员分析、供应链进销存等多维分析，支持跨品牌跨区域对比。典型场景：查门店列表/营收排名/客单价/翻台率/优惠占比/套餐占比/小程序渠道/服务员排名/环比同比/会员消费排行/复购留存/积分流转/优惠券核销/RFM分层/采购分析/耗用分差/毛利/进销存/盘点差异等。"
 description_zh: "商龙餐饮经营数据分析技能，覆盖门店画像、营收排名、客单价、翻台率、优惠占比、菜品分析、渠道占比、员工绩效、环比同比、会员消费排行、复购留存、积分流转、供应链原物料等 78 个分析意图"
 description_en: "Shanlong Catering Business Insights skill. Queries StarRocks data warehouse covering store profiles, revenue, customer flow, discounts, dishes, channels, staff performance, efficiency, member analytics, and supply chain across 78 analysis intents."
-version: "1.0.0"
+version: "1.0.149"
 author: "Shanlong Tech"
 ---
 
@@ -99,9 +99,9 @@ WHERE group_code = 'G137427'                              -- 禁止硬编码集�
 
 | 约束项 | 要求 |
 |--------|------|
-| **单轮查询上限** | 每轮最多执行 **10 次** `sl starrocks read-query`，超限立即停止并报告 |
+| **单轮查询上限** | 每轮最多执行 **10 次** `sl starrocks read-query`，超限立即停止并报告；命中 Intent 且槽位齐全时目标 ≤ **2** 次（含可选轻量探活） |
 | **空结果分类** | 类型 A（参数构造问题）允许修正后重试 **1 次**；类型 B（数据不存在）**强制停止** |
-| **MCP 健康检查** | 会话初始化必须先查 `COUNT(*) FROM dm.v_pos_corp_sale_analysis_with_sly`，cnt=0 立即报告异常 |
+| **MCP 探活** | **禁止**会话初全表 `COUNT(*)`；正常首问直接业务 SQL。仅当首条业务 SQL 报连接/表不存在类错误时，再跑带 `group_code`+`store_code`+近 30 天日期的 `SELECT 1 ... LIMIT 1`；POS 探活无行**不**判 MCP 空库 |
 | **group_code 强制注入** | **所有 SQL 的 WHERE 条件中必须包含 `group_code` 过滤**，具体值由机器人配置层通过 `#{SL_UNIFIED_G_ID}` 占位符注入，AI 不得省略、不得硬编码、不得跨集团查询 |
 | **group_code / store_code 值范围强制校验** ⚠️ | SQL 中出现的 `group_code` / `store_code` 值**必须 100% 来自 `#{SL_UNIFIED_G_ID}` / `#{omShopCodes}` 占位符的注入值**，AI 不得私自添加、枚举、或推断任何不在占位符范围内的值（含硬编码、额外 OR 条件、子查询返回非授权值） |
 | **store_code 始终启用** | 所有 SQL 的 WHERE 中**必须**包含 `store_code IN (#{omShopCodes})`（无例外）；`#{omShopCodes}` 的值分两种场景：① 用户未指定门店 → 取 token 默认全部门店码列表；② 用户明确指定门店 → 先 `sl store find` 获取 `omShopCode`，更新 `#{omShopCodes}` 值后再执行 SQL |
@@ -140,12 +140,16 @@ WHERE group_code = 'G137427'                              -- 禁止硬编码集�
 
 #### 命令格式
 
+> 路径见「CLI 入口」；Bash 下一键兼容：
+
 ```bash
+SL="$HOME/.slclaw/bin/sl"; [ -f "$HOME/.slclaw/bin/sl.cmd" ] && SL="$HOME/.slclaw/bin/sl.cmd"
+
 # 按名称查询
-sl store find --type crm --name "<门店关键词>" --format json
+"$SL" store find --type crm --name "<门店关键词>" --format json
 
 # 按关键词 / 门店 ID 混合查询
-sl store find --type crm --keyword "<门店关键词或门店ID>" --format json
+"$SL" store find --type crm --keyword "<门店关键词或门店ID>" --format json
 ```
 
 #### 返回结果判定规则
@@ -205,19 +209,30 @@ CLI 提示 token 缺门店清单（如 `token missing store list`）时：
 
 ---
 
+## 极简执行路径（积分优先）
+
+> ⚡ **首问默认走本路径。** WorkBuddy 积分按轮次/工具调用计费；禁止探索性绕路。
+
+对「已命中 Intent 且槽位齐全」的问法，强制：
+
+1. 用「CLI 入口」的 **Bash 一键兼容** 调用（自动选 Windows `sl.cmd` / macOS `sl`），**禁止** `which` / `where` / Bash 内 `%USERPROFILE%\...`
+2. 只打开 [`intents/_index.md`](intents/_index.md) → **对应 1 个** intent 文件（禁止扫全部分类文档）
+3. 套模板拼 **1 条** SQL（含 `group_code` / `store_code` / 日期 / LIMIT）
+4. 用上述绝对路径执行 **1 次** `starrocks read-query`（优先 Bash，勿先绕 PowerShell）
+5. 单轮目标：业务查询 ≤ **2** 次 CLI（第 2 次仅用于类型 A 修正重试，或连接失败后的轻量探活）
+
+**明确禁止**：找 path、Bash 写 `%USERPROFILE%\...`、未命中前通读全部 intent、会话初全表 `COUNT(*)`、用 Python/Node 脚本转发查询。
+
+---
+
 ## 执行流程
 
 ```
-会话初始化
-    ↓
-0️⃣ 权限配置检查（首次/切换时）
-    → 验证 group_code 唯一性（多集团取第一个）
-    → 验证 store_code 归属（过滤无效门店）
-    → 检查 `#{变量名}` 占位符可用性（见下方缺参处理）
+路径固定（Bash 一键兼容绝对路径，禁止 which/where / 禁止 %USERPROFILE%\...）
     ↓
 用户输入
     ↓
-1️⃣ 识别 Intent & 提取 Slot
+1️⃣ 识别 Intent & 提取 Slot（只读 _index → 1 个 intent 文件）
     ↓
 1.5️⃣ 门店识别（**用户明确指定门店名称/简称/别名/门店 ID 时必走**）
     → 调用 `sl store find` 把门店名 → omShopCode
@@ -229,20 +244,18 @@ CLI 提示 token 缺门店清单（如 `token missing store list`）时：
     ↓
 2️⃣ 日期范围检查（仅营业表，未指定则询问）
     ↓
-3️⃣ 参数按需补全检查
+3️⃣ 参数按需补全检查（仅占位符缺失时）
     → 构建 SQL 前检查当前 Intent 所需 `#{变量名}` 是否可用
     → 若缺失：执行对应预查 SQL 补全（见「🔗 编码预查规则」章节）
     → 补全失败：停止执行并按 `rules/param-fallback.md` 提示用户修复配置；不得去掉 `store_code` 过滤
     ↓
-4️⃣ 构建 SQL（**所有表统一使用 `SL_UNIFIED_G_ID` → `group_code` + `omShopCodes` → `store_code`**）
+4️⃣ 构建 SQL → 直接执行业务查询（正常首问不做全表健康检查）
     → ⚠️ WHERE 条件中必须包含 `group_code = '#{SL_UNIFIED_G_ID}'` AND `store_code IN (#{omShopCodes})`（两条均无条件始终启用）
-    → ⚠️ **值范围校验（C3-05）**：SQL 中出现的 group_code / store_code 值必须 100% 来自 #{SL_UNIFIED_G_ID} / #{omShopCodes} 占位符，不得私自添加/枚举/推断任何额外值（含硬编码、额外 OR 条件、子查询返回非授权值）
+    → ⚠️ **值范围校验（C3-05）**：SQL 中出现的 group_code / store_code 值必须 100% 来自 #{SL_UNIFIED_G_ID} / #{omShopCodes} 占位符
     ↓
-5️⃣ LIMIT 上限检查（仅营业表）
+5️⃣ 若业务 SQL 报连接/表不存在 → 轻量探活（见 security-rules）；POS 无行不判 MCP 空库
     ↓
-6️⃣ 执行查询 & 展示结果
-    ↓
-7️⃣ 提供分析建议
+6️⃣ 展示结果 & 简要建议
 ```
 
 > 💡 `#{变量名}` 选用规则详见「🔐 权限机制」章节。核心原则：**所有 7 张表统一使用 `#{SL_UNIFIED_G_ID}`（→ `group_code`）+`#{omShopCodes}`（→ `store_code`）**。
@@ -301,23 +314,62 @@ dm_crm_card_sum_day_p_store ←── group_code + store_code + mem_card_no ─�
 
 ## CLI 入口
 
-| 命令 | 用途 |
+### 🔧 CLI 可执行路径（强制 · Windows / macOS 兼容）
+
+> WorkBuddy / Agent 执行环境通常 **没有** 把 `~/.slclaw/bin` 加入 PATH。
+> 下文所有 `sl ...` 均指 `$HOME/.slclaw/bin` 下的绝对路径，**禁止**先 `which` / `where` / 搜索安装目录。
+>
+> ⚠️ WorkBuddy 在 Windows 上默认走 **PortableGit Bash**，不是 `cmd.exe`。`%USERPROFILE%\...` 与反斜杠路径会在 Bash 里触发 `fg: no job control` 等失败。
+
+| 平台 | 可执行文件 | 说明 |
+|------|------------|------|
+| macOS / Linux | `$HOME/.slclaw/bin/sl` | POSIX 入口 |
+| Windows（Bash / WorkBuddy） | `$HOME/.slclaw/bin/sl.cmd` | **必须**用 `.cmd`；裸 `sl` shebang 在 PortableGit 下常 exit 126 |
+| Windows（PowerShell 备用） | `$env:USERPROFILE\.slclaw\bin\sl.cmd` | 仅 Bash 不可用时使用 |
+
+#### ✅ 首选：Bash 一键兼容（Mac / Linux / Windows Git Bash）
+
+> 优先用 **Bash** 工具执行；一行内自动选 `sl.cmd`（Windows）或 `sl`（Mac/Linux）。
+
+```bash
+SL="$HOME/.slclaw/bin/sl"; [ -f "$HOME/.slclaw/bin/sl.cmd" ] && SL="$HOME/.slclaw/bin/sl.cmd"; "$SL" starrocks read-query --query 'SELECT 1'
+```
+
+业务查询把末尾换成真实 SQL 即可，例如：
+
+```bash
+SL="$HOME/.slclaw/bin/sl"; [ -f "$HOME/.slclaw/bin/sl.cmd" ] && SL="$HOME/.slclaw/bin/sl.cmd"; "$SL" starrocks read-query --query "SELECT 1"
+```
+
+| 命令形态 | 用途 |
+|----------|------|
+| `"$SL" starrocks read-query --query '...'` | 执行单个只读查询 |
+| `"$SL" store find --type crm --name '...' --format json` | 门店名 → omShopCode |
+
+#### Windows PowerShell 备用（仅 Bash 不可用时）
+
+```powershell
+& "$env:USERPROFILE\.slclaw\bin\sl.cmd" starrocks read-query --query 'SELECT 1'
+```
+
+> 必须让 stdout **直接打印**到工具结果。禁止只写 `$output = & ...` 却不 `Write-Output $output`（WorkBuddy 可能只回报 exit code、看不到 JSON）。
+
+#### ❌ 禁止（已实测踩坑）
+
+| 写法 | 问题 |
 |------|------|
-| `sl starrocks read-query --query 'SELECT 1'` | 执行单个只读查询 |
+| Bash 里用 `%USERPROFILE%\.slclaw\bin\sl.cmd` | cmd 变量/反斜杠在 Bash 不展开 → `fg: no job control` |
+| Windows Bash 直接跑 `$HOME/.slclaw/bin/sl`（无 `.cmd`） | PortableGit 下 node shebang 常失败（exit 126） |
+| 依赖 PATH / `which` / `where` / 搜索安装目录 | 环境无 PATH，浪费轮次 |
+| Python / Node 脚本转发查询 | 禁止；统一直接调绝对路径 CLI |
 
 ### 🔧 CLI 配置说明
 
 > ⚠️ **MCP 地址不在 skill 中硬编码**，而是由 `sl starrocks` 在运行时自动读取配置。
 
-**推荐命令**：
+当前 CLI 仅支持 `read-query --query`。多步骤分析需在单轮 10 次上限内逐条调用上述绝对路径下的 `sl starrocks read-query --query ...`。
 
-```bash
-sl starrocks read-query --query 'SELECT 1'
-```
-
-当前 CLI 仅支持 `read-query --query`。多步骤分析需在单轮 10 次上限内逐条调用 `sl starrocks read-query --query ...`。
-
-**禁止**使用 Python、Node/JS 脚本或其他中间脚本转发查询；统一使用 `sl starrocks read-query --query ...`。
+**禁止**使用 Python、Node/JS 脚本或其他中间脚本转发查询。
 
 ---
 

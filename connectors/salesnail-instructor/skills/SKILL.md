@@ -1,7 +1,7 @@
 ---
 name: salesnail-instructor
 description: 通过 SalesNail Connector 自助开通讲师试用、维护商业 Profile、生成客户方案，并完成游戏创作、课程配置、实时课堂带教、课堂数据分析和证据化复盘。
-version: "0.5.1"
+version: "0.6.5"
 author: "SalesNail Team"
 ---
 
@@ -39,20 +39,22 @@ author: "SalesNail Team"
 
 ## 总体原则
 
-1. 先读取真实资源，不猜测 gameId、scriptId、courseId、teamId、actionId 或对象 ID。
-2. 讲师生命周期分析或写入前先读 `salesnail://instructor/lifecycle-dictionary/zh-cn`；课堂分析另读课堂数据字典。
-3. Profile、客户、方案、交付、任务、Starter 课程，以及游戏修改、复用授权、材料提交、上下架、建课、课程配置和课堂控制都必须先 preview，再等待明确确认后 apply；OAuth 自动开通由浏览器明确同意覆盖。游戏生成启动/重试没有独立 preview，需先复述设计或原任务并取得明确同意。
-4. 每个 intended write 使用稳定且唯一的 `clientRequestId`；超时重试同一操作时复用原 ID。
-5. 重要课堂结论引用 actionId、messageId、npcId 或 opportunityId；商业工作区内容不是课堂表现证据。
-6. 区分接口事实、代理指标、方案草稿假设和 CLI 语义推断。高好感高互动联系人只能称为 champion candidate，除非消息显示内部推动证据。
-7. 学员分析只观察系统动作提交者，不代表完整个人绩效或团队贡献。
-8. 不提供删除、回退轮次、强制结束、代学员进组/出牌、支付充值或任意 API/数据库透传。
+1. 涉及产品定位、游戏/卡牌/课程设计、课堂策略、客户方案或分析框架时，必须先调用 `salesnail_get_product_context`，把 `content[0].text` 中完整的 `Salesnail产品说明.md` 作为权威上下文。若当前客户端没有该工具，才读取 `salesnail://product/overview/zh-cn`。不得只凭 capability 元数据补写产品定位，也不得把 SalesNail 改写成通用聊天机器人、CRM、通知系统或话术训练器。
+2. 先读取真实资源，不猜测 gameId、scriptId、courseId、teamId、actionId 或对象 ID。
+3. 讲师生命周期分析或写入前先读 `salesnail://instructor/lifecycle-dictionary/zh-cn`；课堂分析另读课堂数据字典。
+4. Profile、客户、方案、交付、任务、Starter 课程，以及游戏修改、复用授权、材料提交、上下架、建课、课程配置和课堂控制都必须先 preview，再等待明确确认后 apply；OAuth 自动开通由浏览器明确同意覆盖。游戏生成启动/重试没有独立 preview，需先复述设计或原任务并取得明确同意。
+5. 每个 intended write 使用稳定且唯一的 `clientRequestId`；超时重试同一操作时复用原 ID。
+6. 重要课堂结论引用 actionId、messageId、npcId 或 opportunityId；商业工作区内容不是课堂表现证据。
+7. 区分接口事实、代理指标、方案草稿假设和 CLI 语义推断。高好感高互动联系人只能称为 champion candidate，除非消息显示内部推动证据。
+8. 学员分析只观察系统动作提交者，不代表完整个人绩效或团队贡献。
+9. 不提供删除、回退轮次、强制结束、代学员进组/出牌、支付充值或任意 API/数据库透传。
 
 ## 工具目录
 
 ### 发现与身份
 
 - `salesnail_get_capabilities`
+- `salesnail_get_product_context`
 - `salesnail_get_teacher_context`
 - `salesnail_get_instructor_lifecycle_dictionary`
 - `salesnail_get_instructor_workspace`
@@ -84,6 +86,10 @@ author: "SalesNail Team"
 - `salesnail_retry_job`
 - `salesnail_get_game`
 - `salesnail_audit_game_readiness`
+- `salesnail_get_card_authoring_capabilities`
+- `salesnail_preview_card_change`
+- `salesnail_apply_card_change`
+- `salesnail_get_card_change_operation`
 - `salesnail_preview_game_patch`
 - `salesnail_apply_game_patch`
 - `salesnail_preview_game_reuse`
@@ -130,6 +136,7 @@ author: "SalesNail Team"
 - `salesnail_ensure_starter_course`
 - `salesnail_save_instructor_workspace`
 - `salesnail_update_instructor_task`
+- `salesnail_apply_card_change`
 - `salesnail_apply_game_patch`
 - `salesnail_apply_game_reuse`
 - `salesnail_commit_materials`

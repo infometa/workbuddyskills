@@ -28,6 +28,21 @@ function Write-OK($msg) { Write-Log "✓ $msg" }
 function Write-Err($msg) { Write-Log "✗ $msg" }
 function Write-Warn($msg) { Write-Log "→ $msg" }
 
+function Assert-SafeHome {
+    $resolved = [System.IO.Path]::GetFullPath($SL_HOME).TrimEnd('\')
+    $userRoot = [System.IO.Path]::GetFullPath($env:USERPROFILE).TrimEnd('\')
+    $driveRoot = [System.IO.Path]::GetPathRoot($resolved).TrimEnd('\')
+    if (-not $resolved -or $resolved -eq $userRoot -or $resolved -eq $driveRoot) {
+        throw "拒绝使用危险的 SL_CLI_HOME: $resolved"
+    }
+    if (Test-Path $SL_HOME) {
+        $item = Get-Item -Force $SL_HOME
+        if (($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
+            throw "SL_CLI_HOME 不允许是符号链接或重解析点: $SL_HOME"
+        }
+    }
+}
+
 function Do-Uninstall {
     Write-Warn "卸载商龙 CLI ..."
     if (Test-Path $SL_HOME) { Remove-Item -Recurse -Force $SL_HOME }
@@ -95,7 +110,7 @@ function Check-Node {
 }
 
 function Read-LocalVersion {
-    $pkg = Join-Path $INSTALL_DIR "package.json"
+    $pkg = Join-Path $INSTALL_DIR "dist\package.json"
     if (-not (Test-Path $pkg)) { return "" }
     try {
         $json = Get-Content -Raw -Path $pkg | ConvertFrom-Json
@@ -154,6 +169,23 @@ function Download-Tgz([string]$url, [string]$dest) {
     Write-OK "下载完成"
 }
 
+function Assert-S1Package([string]$distDir) {
+    $verifier = Join-Path $SCRIPT_DIR "verify-connector-package-scope.js"
+    if (-not (Test-Path $verifier)) {
+        $devVerifier = Join-Path (Split-Path -Parent $SCRIPT_DIR) "scripts\verify-connector-package-scope.js"
+        if (Test-Path $devVerifier) { $verifier = $devVerifier }
+    }
+    if (-not (Test-Path $verifier)) {
+        throw "连接器缺少 S1-only 安装校验器，拒绝安装"
+    }
+    Write-Warn "校验 CLI 包为 S1-only 只读版 ..."
+    & node $verifier $distDir
+    if ($LASTEXITCODE -ne 0) {
+        throw "CLI 包未通过 S1-only 只读校验，已保留当前安装"
+    }
+    Write-OK "S1-only 只读校验通过"
+}
+
 function Install-FromTgz([string]$tgzPath) {
     $tmpDir = Join-Path ([System.IO.Path]::GetTempPath()) ("slclaw-install-" + [guid]::NewGuid().ToString("n"))
     New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null
@@ -181,6 +213,9 @@ function Install-FromTgz([string]$tgzPath) {
             exit 1
         }
 
+        # 必须先完成物理包审计，再删除/替换现有安装；旧 full 包一律 fail-closed。
+        Assert-S1Package (Join-Path $pkgDir "dist")
+
         if (Test-Path $INSTALL_DIR) { Remove-Item -Recurse -Force $INSTALL_DIR }
         New-Item -ItemType Directory -Path $INSTALL_DIR -Force | Out-Null
         if (-not (Test-Path $SL_HOME)) { New-Item -ItemType Directory -Path $SL_HOME -Force | Out-Null }
@@ -196,9 +231,7 @@ function Install-FromTgz([string]$tgzPath) {
             ForEach-Object { Remove-Item -Recurse -Force $_.FullName }
 
         Copy-Item -Recurse (Join-Path $pkgDir "dist") (Join-Path $INSTALL_DIR "dist")
-        Copy-Item (Join-Path $pkgDir "package.json") (Join-Path $INSTALL_DIR "package.json")
         if (Test-Path (Join-Path $SCRIPT_DIR "default.env")) {
-            Copy-Item (Join-Path $SCRIPT_DIR "default.env") (Join-Path $INSTALL_DIR "default.env")
             Copy-Item (Join-Path $SCRIPT_DIR "default.env") (Join-Path $SL_HOME "default.env")
         }
         if (Test-Path $URL_CONF) {
@@ -208,6 +241,7 @@ function Install-FromTgz([string]$tgzPath) {
         $utf8NoBom = New-Object System.Text.UTF8Encoding $false
         $wrapper = @'
 #!/usr/bin/env node
+process.env.SL_MAX_SECURITY_LEVEL = 'S1';
 require('./dist/cli/src/index.js');
 '@
         [System.IO.File]::WriteAllText((Join-Path $INSTALL_DIR "sl"), ($wrapper.TrimEnd() + "`n"), $utf8NoBom)
@@ -221,27 +255,20 @@ set "SL_HOME=%BIN%.."
 set "PENDING=%SL_HOME%\pending-update"
 if not exist "%PENDING%\ready" goto :run
 if not exist "%PENDING%\dist" goto :discard_pending
-if not exist "%PENDING%\package.json" goto :discard_pending
+if not exist "%PENDING%\dist\package.json" goto :discard_pending
+node "%BIN%dist\cli\src\verify-connector-package-scope.js" "%PENDING%\dist" >nul 2>&1
+if errorlevel 1 goto :discard_pending
 rd /s /q "%BIN%dist.new" 2>nul
 rd /s /q "%BIN%dist.bak" 2>nul
-del /f /q "%BIN%package.json.new" 2>nul
-del /f /q "%BIN%package.json.bak" 2>nul
 xcopy /e /i /y "%PENDING%\dist" "%BIN%dist.new\" >nul
 if errorlevel 1 (
   rd /s /q "%BIN%dist.new" 2>nul
-  goto :discard_pending
-)
-copy /y "%PENDING%\package.json" "%BIN%package.json.new" >nul
-if errorlevel 1 (
-  rd /s /q "%BIN%dist.new" 2>nul
-  del /f /q "%BIN%package.json.new" 2>nul
   goto :discard_pending
 )
 if exist "%BIN%dist" (
   ren "%BIN%dist" dist.bak
   if errorlevel 1 (
     rd /s /q "%BIN%dist.new" 2>nul
-    del /f /q "%BIN%package.json.new" 2>nul
     goto :discard_pending
   )
 )
@@ -249,32 +276,22 @@ ren "%BIN%dist.new" dist
 if errorlevel 1 (
   if exist "%BIN%dist.bak" ren "%BIN%dist.bak" dist
   rd /s /q "%BIN%dist.new" 2>nul
-  del /f /q "%BIN%package.json.new" 2>nul
-  goto :discard_pending
-)
-if exist "%BIN%package.json" (
-  ren "%BIN%package.json" package.json.bak
-)
-ren "%BIN%package.json.new" package.json
-if errorlevel 1 (
-  if exist "%BIN%package.json.bak" ren "%BIN%package.json.bak" package.json
   goto :discard_pending
 )
 rd /s /q "%BIN%dist.bak" 2>nul
-del /f /q "%BIN%package.json.bak" 2>nul
 rd /s /q "%PENDING%" 2>nul
 goto :run
 :discard_pending
 rd /s /q "%PENDING%" 2>nul
 :run
+set "SL_MAX_SECURITY_LEVEL=S1"
 node "%BIN%dist\cli\src\index.js" %*
 '@
         [System.IO.File]::WriteAllText((Join-Path $INSTALL_DIR "sl.cmd"), ($bat.TrimEnd() + "`r`n"), $utf8NoBom)
 
-        if (Test-Path (Join-Path $SCRIPT_DIR "skills")) {
-            if (Test-Path (Join-Path $SL_HOME "skills")) { Remove-Item -Recurse -Force (Join-Path $SL_HOME "skills") }
-            Copy-Item -Recurse (Join-Path $SCRIPT_DIR "skills") (Join-Path $SL_HOME "skills")
-        }
+        # Skills 由 WorkBuddy 从连接器 zip 加载，不属于 CLI 运行目录；清理旧安装遗留副本。
+        if (Test-Path (Join-Path $SL_HOME "skills")) { Remove-Item -Recurse -Force (Join-Path $SL_HOME "skills") }
+        if (Test-Path (Join-Path $SL_HOME ".DS_Store")) { Remove-Item -Force (Join-Path $SL_HOME ".DS_Store") }
 
         Write-OK "文件安装完成"
     } finally {
@@ -351,7 +368,7 @@ function Invoke-EnsureLatest {
     }
     $local = Read-LocalVersion
 
-    if (-not (Test-Path (Join-Path $INSTALL_DIR "package.json")) -or (Test-VersionGreater $remote $local)) {
+    if (-not (Test-Path (Join-Path $INSTALL_DIR "dist\package.json")) -or (Test-VersionGreater $remote $local)) {
         $localLabel = if ($local) { $local } else { "无" }
         Write-Warn "检测到更新: 本地 $localLabel → 远端 $remote"
         Invoke-FullInstall $tgzUrl
@@ -365,6 +382,7 @@ function Invoke-EnsureLatest {
 }
 
 # === Main ===
+Assert-SafeHome
 if ($Uninstall) { Do-Uninstall }
 
 if ($EnsureLatest) {

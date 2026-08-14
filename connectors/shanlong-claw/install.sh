@@ -18,6 +18,23 @@ log_ok() { log "${GREEN}✓ $*${NC}"; }
 log_err() { log "${RED}✗ $*${NC}"; }
 log_warn() { log "${YELLOW}→ $*${NC}"; }
 
+validate_sl_home() {
+  local resolved="$SL_HOME"
+  if command -v node >/dev/null 2>&1; then
+    resolved="$(node -e 'process.stdout.write(require("path").resolve(process.argv[1]))' "$SL_HOME")"
+  fi
+  case "$resolved" in
+    ""|"/"|"$HOME"|"$HOME/"|"."|"..")
+      log_err "拒绝使用危险的 SL_CLI_HOME: $resolved"
+      exit 1
+      ;;
+  esac
+  if [ -L "$SL_HOME" ]; then
+    log_err "SL_CLI_HOME 不允许是符号链接: $SL_HOME"
+    exit 1
+  fi
+}
+
 usage() {
   echo "用法: bash install.sh [选项]"
   echo ""
@@ -38,18 +55,43 @@ do_uninstall() {
   exit 0
 }
 
+read_conf_value() {
+  local conf_file="$1" wanted_key="$2"
+  awk -v wanted="$wanted_key" '
+    {
+      line = $0
+      sub(/\r$/, "", line)
+      if (line ~ /^[[:space:]]*(#|$)/) next
+      eq = index(line, "=")
+      if (eq <= 1) next
+      key = substr(line, 1, eq - 1)
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", key)
+      if (key != wanted) next
+      value = substr(line, eq + 1)
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+      print value
+      exit
+    }
+  ' "$conf_file"
+}
+
 load_tgz_url() {
+  local conf_file=""
   if [ -n "${SL_CLI_TGZ_URL:-}" ]; then
     :
   elif [ -f "$URL_CONF" ]; then
-    # shellcheck disable=SC1090
-    source "$URL_CONF"
+    conf_file="$URL_CONF"
   elif [ -f "$SL_HOME/install-url.conf" ]; then
-    # shellcheck disable=SC1090
-    source "$SL_HOME/install-url.conf"
+    conf_file="$SL_HOME/install-url.conf"
   else
     log_err "缺少 install-url.conf，无法确定 CLI 下载地址"
     exit 1
+  fi
+  if [ -n "$conf_file" ]; then
+    SL_CLI_TGZ_URL="$(read_conf_value "$conf_file" SL_CLI_TGZ_URL)"
+    if [ -z "${SL_CLI_VERSION_URL:-}" ]; then
+      SL_CLI_VERSION_URL="$(read_conf_value "$conf_file" SL_CLI_VERSION_URL)"
+    fi
   fi
   if [ -z "${SL_CLI_TGZ_URL:-}" ]; then
     log_err "未设置 SL_CLI_TGZ_URL"
@@ -119,7 +161,7 @@ fetch_text() {
 }
 
 read_local_version() {
-  local pkg="$INSTALL_DIR/package.json"
+  local pkg="$INSTALL_DIR/dist/package.json"
   if [ -f "$pkg" ]; then
     node -e "const p=require(process.argv[1]); process.stdout.write(String(p.version||''))" "$pkg" 2>/dev/null || true
   fi
@@ -148,6 +190,24 @@ download_tgz() {
   log_ok "下载完成"
 }
 
+verify_package_scope() {
+  local dist_dir="$1"
+  local verifier="$SCRIPT_DIR/verify-connector-package-scope.js"
+  if [ ! -f "$verifier" ] && [ -f "$SCRIPT_DIR/../scripts/verify-connector-package-scope.js" ]; then
+    verifier="$SCRIPT_DIR/../scripts/verify-connector-package-scope.js"
+  fi
+  if [ ! -f "$verifier" ]; then
+    log_err "连接器缺少 S1-only 安装校验器，拒绝安装"
+    return 1
+  fi
+  log_warn "校验 CLI 包为 S1-only 只读版 ..."
+  if ! node "$verifier" "$dist_dir"; then
+    log_err "CLI 包未通过 S1-only 只读校验，已保留当前安装"
+    return 1
+  fi
+  log_ok "S1-only 只读校验通过"
+}
+
 install_from_tgz() {
   local tgz_path="$1"
   local tmp_dir
@@ -164,17 +224,22 @@ install_from_tgz() {
     exit 1
   fi
 
+  # 必须先完成物理包审计，再删除/替换现有安装；旧 full 包一律 fail-closed。
+  if ! verify_package_scope "$pkg_dir/dist"; then
+    rm -rf "$tmp_dir"
+    return 1
+  fi
+
   rm -rf "$INSTALL_DIR"
   mkdir -p "$INSTALL_DIR"
   mkdir -p "$SL_HOME"
+  chmod 700 "$SL_HOME"
   # 全量安装已写入最新 bin，丢弃陈旧 pending/锁，避免下次启动降级
   rm -rf "$SL_HOME/pending-update" "$SL_HOME/update-stage.lock"
   rm -rf "$SL_HOME"/tmp-update-* "$SL_HOME"/pending-update.staging-* 2>/dev/null || true
 
   cp -r "$pkg_dir/dist" "$INSTALL_DIR/dist"
-  cp "$pkg_dir/package.json" "$INSTALL_DIR/package.json"
   if [ -f "$SCRIPT_DIR/default.env" ]; then
-    cp "$SCRIPT_DIR/default.env" "$INSTALL_DIR/default.env"
     cp "$SCRIPT_DIR/default.env" "$SL_HOME/default.env"
   fi
   if [ -f "$URL_CONF" ]; then
@@ -187,46 +252,40 @@ set -euo pipefail
 BIN="$(cd "$(dirname "$0")" && pwd)"
 SL_HOME="$(cd "$BIN/.." && pwd)"
 PENDING="$SL_HOME/pending-update"
-if [ -f "$PENDING/ready" ] && [ -d "$PENDING/dist" ] && [ -f "$PENDING/package.json" ]; then
-  apply_pending() {
-    rm -rf "$BIN/dist.new" "$BIN/dist.bak"
-    rm -f "$BIN/package.json.new" "$BIN/package.json.bak"
-    cp -R "$PENDING/dist" "$BIN/dist.new" || return 1
-    cp "$PENDING/package.json" "$BIN/package.json.new" || return 1
-    if [ -d "$BIN/dist" ]; then
-      mv "$BIN/dist" "$BIN/dist.bak" || return 1
-    fi
-    if ! mv "$BIN/dist.new" "$BIN/dist"; then
-      if [ -d "$BIN/dist.bak" ]; then
-        mv "$BIN/dist.bak" "$BIN/dist" || true
+if [ -f "$PENDING/ready" ] && [ -d "$PENDING/dist" ] && [ -f "$PENDING/dist/package.json" ]; then
+  if ! node "$BIN/dist/cli/src/verify-connector-package-scope.js" "$PENDING/dist" >/dev/null 2>&1; then
+    rm -rf "$PENDING"
+  else
+    apply_pending() {
+      rm -rf "$BIN/dist.new" "$BIN/dist.bak"
+      cp -R "$PENDING/dist" "$BIN/dist.new" || return 1
+      if [ -d "$BIN/dist" ]; then
+        mv "$BIN/dist" "$BIN/dist.bak" || return 1
       fi
-      return 1
-    fi
-    if [ -f "$BIN/package.json" ]; then
-      mv "$BIN/package.json" "$BIN/package.json.bak" || true
-    fi
-    if ! mv "$BIN/package.json.new" "$BIN/package.json"; then
-      if [ -f "$BIN/package.json.bak" ]; then
-        mv "$BIN/package.json.bak" "$BIN/package.json" || true
+      if ! mv "$BIN/dist.new" "$BIN/dist"; then
+        if [ -d "$BIN/dist.bak" ]; then
+          mv "$BIN/dist.bak" "$BIN/dist" || true
+        fi
+        return 1
       fi
-      return 1
+      rm -rf "$BIN/dist.bak" "$PENDING"
+      return 0
+    }
+    if ! apply_pending; then
+      rm -rf "$BIN/dist.new" 2>/dev/null || true
     fi
-    rm -rf "$BIN/dist.bak" "$PENDING"
-    rm -f "$BIN/package.json.bak"
-    return 0
-  }
-  if ! apply_pending; then
-    rm -rf "$BIN/dist.new" 2>/dev/null || true
-    rm -f "$BIN/package.json.new" 2>/dev/null || true
   fi
 fi
+export SL_MAX_SECURITY_LEVEL=S1
 exec node "$BIN/dist/cli/src/index.js" "$@"
 WRAPPER
   chmod +x "$INSTALL_DIR/sl"
 
-  if [ -d "$SCRIPT_DIR/skills" ]; then
-    rm -rf "$SL_HOME/skills"
-    cp -r "$SCRIPT_DIR/skills" "$SL_HOME/skills"
+  # Skills 由 WorkBuddy 从连接器 zip 加载，不属于 CLI 运行目录；清理旧安装遗留副本。
+  rm -rf "$SL_HOME/skills"
+  rm -f "$SL_HOME/.DS_Store"
+  if [ -f "$SL_HOME/token.json" ]; then
+    chmod 600 "$SL_HOME/token.json"
   fi
 
   rm -rf "$tmp_dir"
@@ -262,6 +321,7 @@ init_env() {
   else
     log_ok "配置文件完整，保留原配置"
   fi
+  chmod 600 "$env_file"
 }
 
 setup_path() {
@@ -312,7 +372,7 @@ do_ensure_latest() {
   fi
   local_ver="$(read_local_version)"
 
-  if [ ! -f "$INSTALL_DIR/package.json" ] || version_gt "$remote" "$local_ver"; then
+  if [ ! -f "$INSTALL_DIR/dist/package.json" ] || version_gt "$remote" "$local_ver"; then
     log_warn "检测到更新: 本地 ${local_ver:-无} → 远端 $remote"
     do_full_install
     local_ver="$(read_local_version)"
@@ -324,6 +384,7 @@ do_ensure_latest() {
 }
 
 main() {
+  validate_sl_home
   case "${1:-}" in
     --help|-h) usage ;;
     --uninstall) do_uninstall ;;

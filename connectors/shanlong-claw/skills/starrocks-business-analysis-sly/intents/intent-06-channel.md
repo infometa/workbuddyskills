@@ -38,7 +38,7 @@ SELECT
     ROUND(SUM(CASE WHEN is_applet_bill = '小程序账单' THEN busi_income ELSE 0 END), 2) AS 小程序营收,
     ROUND(SUM(CASE WHEN is_applet_bill != '小程序账单' THEN busi_income ELSE 0 END), 2) AS POS营收,
     ROUND(SUM(busi_income), 2) AS 总营收,
-    ROUND(SUM(CASE WHEN is_applet_bill = '小程序账单' THEN busi_income ELSE 0 END) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 小程序占比%
+    ROUND(SUM(CASE WHEN is_applet_bill = '小程序账单' THEN busi_income ELSE 0 END) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 小程序占比
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
@@ -97,7 +97,7 @@ SELECT
     SUM(people_qty) AS 用餐人数,
     ROUND(SUM(busi_income), 2) AS 实收金额,
     ROUND(SUM(deliver_fee), 2) AS 配送费总额,
-    ROUND(SUM(deliver_fee) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 配送费占比%,
+    ROUND(SUM(deliver_fee) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 配送费占比,
     ROUND(SUM(busi_income) / NULLIF(COUNT(DISTINCT id), 0), 2) AS 单均消费
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'

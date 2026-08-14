@@ -1,0 +1,60 @@
+# SQL 模板目录与常量
+
+> 本文件由 agent-boost dw-qa 能力模块自动生成。
+> {{GENERATION_NOTE}}
+
+## 表常量映射
+
+填充 SQL 模板时，将 `{T_XXX}` 替换为以下完整表名：
+
+```
+{{TABLE_CONSTANTS}}
+```
+
+---
+
+## SQL 模板目录
+
+{{SQL_TEMPLATES}}
+
+<!-- 
+  生成规则（供 #inject 执行时参照）：
+  
+  按功能模块分组，每组用 ### 标题分隔。
+  
+  单条模板格式：
+  
+  ### 功能模块名
+  
+  #### N. {template_id} — {description}
+  **keywords**: {keyword1}, {keyword2}, {SQL字段1}, {SQL字段2}, ...
+  ```sql
+  {parameterized_sql}
+  ```
+  - 参数：
+    - {param1}: 固定值="1=1"（数仓自动行权限）
+    - {param2}: 候选值=[正式, 外包]（从页面身份筛选提取）
+    - {param3}: 条件参数，最新→T_LATEST / 快照→T_SNAPSHOT + AND snapshot_date='{date}'
+    - {param4}: 需starrocks_query查DISTINCT
+  - 来源：{source_function}（如有）
+  
+  keywords 来源：函数名 + 上方注释 + 功能模块名 + SQL 中 SELECT/WHERE 的字段名（字段名用原名，不翻译）。
+  
+  复合模板格式（多步查询 + 结果关联）：
+  
+  #### N. {template_id} — {description}
+  **keywords**: {keyword1}, {keyword2}, {SQL字段1}, {SQL字段2}, ...
+  **type**: composite
+  
+  Step 1: {step_description}
+  ```sql
+  {sql}
+  ```
+  Step 2: {step_description}
+  ```sql
+  {sql}
+  ```
+  ...
+  - 数据流转：{how results flow between steps}
+  - 来源：{source_function}
+-->

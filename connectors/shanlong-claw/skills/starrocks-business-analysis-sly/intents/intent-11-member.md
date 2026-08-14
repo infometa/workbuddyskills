@@ -248,10 +248,10 @@ SELECT
     cur.周期 AS 周期,
     cur.消费会员数 AS 本期会员数,
     prev.上期会员数 AS 上期会员数,
-    ROUND((cur.消费会员数 - prev.上期会员数) * 100.0 / NULLIF(prev.上期会员数, 0), 2) AS 会员环比%,
+    ROUND((cur.消费会员数 - prev.上期会员数) * 100.0 / NULLIF(prev.上期会员数, 0), 2) AS 会员环比,
     cur.实收金额 AS 本期实收,
     prev.上期实收 AS 上期实收,
-    ROUND((cur.实收金额 - prev.上期实收) * 100.0 / NULLIF(prev.上期实收, 0), 2) AS 营收环比%,
+    ROUND((cur.实收金额 - prev.上期实收) * 100.0 / NULLIF(prev.上期实收, 0), 2) AS 营收环比,
     ROUND(cur.实收金额 / NULLIF(cur.消费会员数, 0), 2) AS 本期人均
 FROM cur
 LEFT JOIN prev ON cur.周期 = prev.周期
@@ -403,7 +403,7 @@ SELECT
     COUNT(DISTINCT mem_code) AS 消费会员数,
     COUNT(DISTINCT CASE WHEN recharge_count > 0 THEN mem_code END) AS 储值会员数,
     ROUND(COUNT(DISTINCT CASE WHEN recharge_count > 0 THEN mem_code END) * 100.0 /
-        NULLIF(COUNT(DISTINCT mem_code), 0), 2) AS 充值渗透率%,
+        NULLIF(COUNT(DISTINCT mem_code), 0), 2) AS 充值渗透率,
     ROUND(SUM(recharge_real_amount), 2) AS 实充总金额,
     ROUND(SUM(recharge_real_amount) / NULLIF(COUNT(DISTINCT CASE WHEN recharge_count > 0 THEN mem_code END), 0), 2) AS 人均实充
 FROM dm.dm_crm_card_sum_day_p_store
@@ -412,7 +412,7 @@ WHERE group_code = '#{SL_UNIFIED_G_ID}'  -- 🔐 注入 SL_UNIFIED_G_ID（统一
 AND coupon_date >= :start_date
     AND coupon_date < :end_date_plus_1
 GROUP BY {{group_by:store_code}}, {{group_by:store_name}}
-ORDER BY 充值渗透率% DESC
+ORDER BY 充值渗透率 DESC
 LIMIT {{top_n:20}};
 ```
 
@@ -570,7 +570,7 @@ SELECT
     END AS 年龄段,
     COUNT(DISTINCT mem_code) AS 会员数,
     ROUND(COUNT(DISTINCT mem_code) * 100.0 /
-        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比%
+        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比
 FROM dm.v_crm_member_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'  -- 🔐 注入 SL_UNIFIED_G_ID（统一集团码，维表.group_code = 统一码）
  AND store_code IN (#{omShopCodes})
@@ -585,7 +585,7 @@ SELECT
     {{group_by:mem_sex}} AS 维度,
     COUNT(DISTINCT mem_code) AS 会员数,
     ROUND(COUNT(DISTINCT mem_code) * 100.0 /
-        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比%
+        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比
 FROM dm.v_crm_member_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'  -- 🔐 注入 SL_UNIFIED_G_ID（统一集团码，维表.group_code = 统一码）
     AND (mem_status IS NULL OR mem_status = '正常')
@@ -660,7 +660,7 @@ SELECT
     END AS 生命周期阶段,
     COUNT(DISTINCT mem_code) AS 会员数,
     ROUND(COUNT(DISTINCT mem_code) * 100.0 /
-        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比%
+        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比
 FROM dm.v_crm_member_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'  -- 🔐 注入 SL_UNIFIED_G_ID（统一集团码）
     AND (mem_status IS NULL OR mem_status = '正常')
@@ -723,7 +723,7 @@ SELECT
     '新注册会员' AS 群体,
     COUNT(*) AS 新会员总数,
     COUNT(CASE WHEN 消费月数 >= 1 THEN 1 END) AS 次月留存数,
-    ROUND(COUNT(CASE WHEN 消费月数 >= 1 THEN 1 END) * 100.0 / NULLIF(COUNT(*), 0), 2) AS 次月留存率%
+    ROUND(COUNT(CASE WHEN 消费月数 >= 1 THEN 1 END) * 100.0 / NULLIF(COUNT(*), 0), 2) AS 次月留存率
 FROM 周期;
 ```
 
@@ -752,11 +752,11 @@ SELECT
     COUNT(DISTINCT mem_code) AS 消费会员总数,
     COUNT(DISTINCT CASE WHEN 消费次数 >= 2 THEN mem_code END) AS 复购会员数,
     ROUND(COUNT(DISTINCT CASE WHEN 消费次数 >= 2 THEN mem_code END) * 100.0 /
-        NULLIF(COUNT(DISTINCT mem_code), 0), 2) AS 复购率%,
+        NULLIF(COUNT(DISTINCT mem_code), 0), 2) AS 复购率,
     ROUND(SUM(busi_income), 2) AS 总实收,
     ROUND(SUM(CASE WHEN 消费次数 >= 2 THEN busi_income ELSE 0 END), 2) AS 复购实收,
     ROUND(SUM(CASE WHEN 消费次数 >= 2 THEN busi_income ELSE 0 END) * 100.0 /
-        NULLIF(SUM(busi_income), 0), 2) AS 复购营收占比%
+        NULLIF(SUM(busi_income), 0), 2) AS 复购营收占比
 FROM (
     SELECT
         mem_code,
@@ -771,7 +771,7 @@ AND coupon_date >= :start_date
     GROUP BY mem_code, store_code
 ) t
 GROUP BY {{group_by:store_code}}, {{group_by:store_name}}
-ORDER BY 复购率% DESC
+ORDER BY 复购率 DESC
 LIMIT {{top_n:20}};
 ```
 
@@ -801,7 +801,7 @@ SELECT
     {{group_by:store_code}} AS 维度,
     COUNT(DISTINCT mem_code) AS 流失会员数,
     ROUND(COUNT(DISTINCT mem_code) * 100.0 /
-        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 流失占比%,
+        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 流失占比,
     ROUND(AVG(DATEDIFF(:as_of_date, last_consume_time)), 0) AS 平均流失天数,
     MAX(DATEDIFF(:as_of_date, last_consume_time)) AS 最长流失天数
 FROM dm.v_crm_member_with_sly
@@ -874,7 +874,7 @@ SELECT
     COUNT(DISTINCT CASE WHEN rfm.价值分层 = '流失风险' THEN m.mem_code END) AS 流失风险会员,
     COUNT(DISTINCT m.mem_code) AS 会员总数,
     ROUND(COUNT(DISTINCT CASE WHEN rfm.价值分层 = '重要价值' THEN m.mem_code END) * 100.0 /
-        NULLIF(COUNT(DISTINCT m.mem_code), 0), 2) AS 重要价值占比%
+        NULLIF(COUNT(DISTINCT m.mem_code), 0), 2) AS 重要价值占比
 FROM dm.v_crm_member_with_sly m
 LEFT JOIN (
     SELECT
@@ -911,7 +911,7 @@ WHERE m.group_code = '#{SL_UNIFIED_G_ID}'  -- 🔐 注入 SL_UNIFIED_G_ID（统�
  AND store_code IN (#{omShopCodes})
 AND (m.mem_status IS NULL OR m.mem_status = '正常')
 GROUP BY {{group_by:m.store_code}}
-ORDER BY 重要价值占比% DESC
+ORDER BY 重要价值占比 DESC
 LIMIT {{top_n:20}};
 ```
 
@@ -956,7 +956,7 @@ SELECT
     mem_card_type AS 卡类型,
     COUNT(DISTINCT mem_code) AS 会员数,
     ROUND(COUNT(DISTINCT mem_code) * 100.0 /
-        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比%,
+        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比,
     COUNT(DISTINCT CASE WHEN balance_principal > 0 THEN mem_code END) AS 有储值余额会员数,
     ROUND(SUM(balance_principal), 2) AS 储值本金余额总计,
     ROUND(AVG(balance_principal), 2) AS 人均储值本金,
@@ -1013,7 +1013,7 @@ SELECT
     card_num AS 持卡数量,
     COUNT(DISTINCT mem_code) AS 会员数,
     ROUND(COUNT(DISTINCT mem_code) * 100.0 /
-        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比%,
+        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比,
     ROUND(SUM(balance_principal), 2) AS 储值本金余额合计,
     ROUND(AVG(balance_principal), 2) AS 人均储值本金
 FROM dm.v_crm_member_with_sly
@@ -1030,7 +1030,7 @@ SELECT
     mem_card_type AS 持卡组合,
     COUNT(DISTINCT mem_code) AS 会员数,
     ROUND(COUNT(DISTINCT mem_code) * 100.0 /
-        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比%,
+        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比,
     ROUND(SUM(balance_principal), 2) AS 储值本金余额合计,
     ROUND(SUM(balance_score), 2) AS 积分余额合计
 FROM dm.v_crm_member_with_sly
@@ -1097,7 +1097,7 @@ SELECT
     END AS 余额分层,
     COUNT(DISTINCT mem_code) AS 会员数,
     ROUND(COUNT(DISTINCT mem_code) * 100.0 /
-        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比%,
+        SUM(COUNT(DISTINCT mem_code)) OVER(), 2) AS 占比,
     ROUND(SUM(balance_principal), 2) AS 储值本金总额,
     ROUND(SUM(balance_gift), 2) AS 储值赠送总额,
     ROUND(AVG(balance_principal), 2) AS 人均余额
@@ -1189,7 +1189,7 @@ SELECT
     ROUND(SUM(coupon_consume_amount), 2) AS 券消费金额,
     ROUND(SUM(busi_income), 2) AS 实收金额,
     ROUND(SUM(busi_income) / NULLIF(COUNT(DISTINCT mem_code), 0), 2) AS 人均实收,
-    ROUND(SUM(coupon_consume_amount) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 券消费占比%
+    ROUND(SUM(coupon_consume_amount) * 100.0 / NULLIF(SUM(busi_income), 0), 2) AS 券消费占比
 FROM dm.dm_crm_card_sum_day_p_store
 WHERE group_code = '#{SL_UNIFIED_G_ID}'  -- 🔐 注入 SL_UNIFIED_G_ID（统一集团码）
  AND store_code IN (#{omShopCodes})

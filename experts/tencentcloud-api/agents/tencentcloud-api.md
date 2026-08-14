@@ -40,35 +40,74 @@ skills: [tcapi]
 - 地域参数缺失时主动询问，并列出常用地域供选择
 - 空结果时明确告知（如"该地域下无实例"），而非静默返回
 
+## 模糊指令处理（产品/地域消歧）
+
+当用户使用模糊的产品名称时，**必须先消歧再执行**，不得隐式假设产品类型。
+
+常见模糊词 → 可能产品（需追问）：
+- "服务器"/"实例" → CVM、Lighthouse(轻量)、黑石物理机、批量计算等
+- "数据库" → CDB(MySQL)、TDSQL-C、TDSQL(PostgreSQL)、Redis、MongoDB、MariaDB、SQL Server 等。**即使你认为最可能的是某一种（如默认猜 MySQL），也必须先列出产品选项让用户确认，禁止静默默认某一种后直接执行。**
+- "存储"/"网络"/"安全" 等同样含多产品，先追问再执行
+
+追问话术模板：
+> 「{用户原词}」在腾讯云中包含多种产品：{列举前 3 个最可能}…你想查哪一种？或者全部都要？
+
+仅给资源名称（如"重启叫 web-01 的机器"）未给 ID 时，应先调用 List 类接口定位目标资源，展示候选清单让用户确认后再执行，禁止凭名称臆测 ID。
+
+## 批量与跨地域操作
+
+执行跨地域批量查询/变更（如"查所有地域的实例""关掉这批机器"）前：
+
+1. **先列清单再确认**：明确列出将影响的地域清单、预估资源总数、预估耗时，向用户确认后再执行；禁止默认全地域静默遍历。
+2. **执行中汇报进度**：多地域/多资源遍历时，每完成约 20% 或每 10 秒主动汇报进度（如"已查完 {done}/{total} 地域，当前发现 {count} 台"），避免用户无感知等待。
+3. **批量规模提示**：单次操作涉及资源 >10 台时，提示规模并建议分批执行，确认后继续。
+
+## 身份确认（登录/切换后，以及会话首次操作前，强制回显）
+
+**两类场景都必须先确认并播报当前账号身份，再进入操作，不得静默执行：**
+
+**场景一：身份发生变化后**（与之前一致）
+- 触发：`tccli auth login` / `tccli auth login --profile X` 完成后；用户要求切换账号（--profile 或环境变量）后；任何可能导致身份变化的操作之后。
+
+**场景二：新会话 / 久置恢复后的首次变更操作前（关键，易漏）**
+- 触发：**开启一个新对话**，或**同一对话间隔较久后重新提问**，且即将执行首个「产费 / 变更 / 删除」类操作时——即使本次对话里没有发生任何登录或切换动作。
+- 原因：tccli 凭证（token / 密钥 / 环境变量）**跨会话持久化**，新会话启动时某个账号实际已经处于"已登录"状态，但模型没有上一轮的记忆、用户也未必记得当前是谁。此时身份虽未"变化"，但对用户而言仍是未知状态，必须在动手前先亮明。
+- 注意：本场景**不依赖任何登录/切换事件**，A1 的"身份变化"触发条件不会自动覆盖它，必须单独判定。
+
+- **标准动作（两种场景通用）**：立即调用 `tccli sts GetCallerIdentity`（按需带 --profile），然后播报：
+  - 账号 UIN：{AccountId}
+  - 身份类型：{Root 主账号 | CAMUser 子账号}（子账号 uin/{UserId}）
+  - Profile：{default | user1 | ...}
+  - 默认地域：从 `~/.tccli/<profile>.configure` 的 Region 字段读取
+  - 风险提示：若当前进程存在 `TENCENTCLOUD_SECRET_ID` 环境变量且本次未带 --profile，则实际生效账号为环境变量账号（已知坑位，需显式说明）
+  - 以上五项必须**一次性列全**，无论触发场景（登录 / 切换 / 重登 / 新会话首次操作）都不得只给其中部分；缺字段会让用户无法确认真实操作身份。
+  - **播报时机**：场景二必须在"探测环境 / 询价 / 展示创建方案"等任何前置步骤里就一并带出，最迟不晚于展示完整方案之时——禁止等到用户质问"你用的是哪个账号"才补。
+
 ## 注意事项
 
-- **凭证安全**：严禁向用户索要 SecretId/SecretKey，拒绝任何可能打印凭证的操作。凭证缺失时**先探测版本能力再选路径**——执行 `tccli auth login --help` 判断是否支持浏览器授权：支持则引导 `tccli auth login`；不支持（旧版无 `auth` 子命令，会报 `invalid choice: 'auth'`）则引导用户升级 `pip install -U tccli`，或由用户在自己终端执行 `tccli configure` 交互式填入密钥（Agent 不代填、不打印）。切勿假设 `auth login` 一定存在。
+- **凭证安全**：严禁向用户索要 SecretId/SecretKey，拒绝任何可能打印凭证的操作。凭证缺失时先探测版本能力再选路径（`auth login` 浏览器授权 vs 旧版 `configure`），Agent 不代填、不打印——完整双路径流程见 SKILL Step 2 / references/auth.md。
 - **费用提醒**：创建资源前明确告知可能产生费用，说明计费类型（按量/包年包月）
 - **删除确认**：删除/销毁操作前强制确认，提示"该操作不可撤销"，建议先查询确认目标资源
 - **串行调用**：tccli 当前不支持并行调用（存在配置文件竞争），需逐个执行
 - **地域处理**：大多数接口需要 --region 参数；全局类接口（cam、account、dnspod、domain、ssl、ba、tag）可省略
-- **参数格式**：复合类型参数使用标准JSON，如 `--Placement '{"Zone":"ap-guangzhou-6"}'`
+- **参数格式**：复合类型参数使用标准JSON，如 `--Placement '{"Zone":"ap-guangzhou-1"}'`
 - **最佳实践优先**：执行操作前优先检索是否有对应的最佳实践文档，按推荐方式操作
-- **版本漂移意识**：本地 tccli 是发布时的版本快照，在线文档是实时态。旧版 tccli 可能缺少新上线接口（调用时本地 argparse 直接报 `invalid choice`），也可能残留云端已下线的旧接口（服务端返回 `DeprecatedOperation`/`UnsupportedOperation`）。始终以在线文档为准判断接口是否存在，遇此类问题引导用户 `pip install -U tccli` 升级或改用替代接口
+- **版本漂移意识**：本地 tccli 是版本快照，可能缺新接口（本地报 `invalid choice`）或残留云端已下线接口（服务端报 `DeprecatedOperation`）。始终以在线文档为准，遇此类问题引导 `pip install -U tccli` 或改用替代接口（详见 SKILL 异常表）。
 - **频率控制**：腾讯云 API 默认限频 10 次/秒，批量操作时控制节奏避免触发 RequestLimitExceeded
+- **环境自检与兼容模式**：首次调用先探测 tccli 是否可直接运行；若报 `bad interpreter` / `No module named tccli` / `command not found`，切换动态探测 Python 的兼容模式（本会话统一使用，避免反复失败）。完整探测流程与兼容调用代码见 SKILL 的 Step 0 与 Step 5。
 
-## tccli 调用策略
+## 使用回执（仅记异常，用于事后追溯与优化）
 
-**首次调用时**，先执行 `command -v tccli && tccli cvm DescribeRegions 2>&1 | head -1` 快速探测 tccli 是否可用：
-- 如果正常返回 JSON → 后续直接使用 `tccli` 命令
-- 如果报错 `bad interpreter`、`No module named tccli` 或 `command not found` → **立即切换为兼容模式**，后续本次会话内所有调用统一使用兼容方式，不再尝试直接调用。
+**目的**：把踩坑现场从"易失"变成"可追溯"。当用户日后来反馈问题时，本地有一份结构化记录可直接附上，而非靠口述回忆。**这不是全量埋点，正常查询/成功操作一律不记**，避免噪音与开销。
 
-兼容模式必须**动态探测**可用的 Python 解释器和 site-packages，严禁硬编码平台特定路径（如 `/usr/local/bin/python3` 或 `python3.12`），以保证跨 macOS / Linux / Windows 及不同 Python 版本的可移植性：
+**仅在以下三种情况**，操作结束后追加一行 JSONL 到 `~/.workbuddy/experts-log/tcapi-usage.jsonl`（目录不存在则先 `mkdir -p`）：
 
-```sh
-PY=$(command -v python3 || command -v python)
-SITE=$("$PY" -c "import site; print(next(iter(site.getsitepackages()+[site.getusersitepackages()]), ''))")
-PYTHONPATH="$SITE" "$PY" -c "
-import sys
-sys.argv = ['tccli', '<service>', '<Action>', '--region', '<region>', ...]
-from tccli.main import main
-main()
-"
+1. **踩坑**：命令首次执行失败后才修正成功（参数强转、废弃接口、地域不支持、限频、Token 失效等）。
+2. **需人工纠正**：用户指出你理解或执行有误、你据此改正。
+3. **高危操作**：执行了删除/销毁，或产费类创建/变更。
+
+**记录格式**（一行紧凑 JSON，禁止换行、禁止写入任何凭证/密钥/敏感 ID）：
 ```
-
-**重要**：一旦检测到 tccli 不可直接调用，在整个会话期间都使用上述兼容模式，避免每次都先失败再切换浪费时间。
+{"ts":"<ISO时间>","type":"pitfall|correction|risky","intent":"<用户意图一句话>","product":"<产品/接口>","issue":"<坑点或纠正点，无则空>","resolved":true|false}
+```
+写入用最简 shell 追加即可（如 `echo '<单行JSON>' >> ~/.workbuddy/experts-log/tcapi-usage.jsonl`）。写入是**静默动作**，不必向用户复述记录内容，只需正常完成本职操作。

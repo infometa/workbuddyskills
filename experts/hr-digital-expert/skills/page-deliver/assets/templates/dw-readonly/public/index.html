@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{PAGE_TITLE}}</title>
+
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3.5.27/dist/vue.global.js"></script>
+  <!-- TDesign -->
+  <link rel="stylesheet" href="https://unpkg.com/tdesign-vue-next@1.18.0/dist/tdesign.min.css">
+  <script src="https://unpkg.com/tdesign-vue-next@1.18.0/dist/tdesign.min.js"></script>
+  <!-- HR-Vue-Next -->
+  <link rel="stylesheet" href="https://cdn.m.tencent.com/hr-web/hr-vue-next.min.css">
+  <script src="https://cdn.m.tencent.com/hr-web/hr-vue-next.min.js"></script>
+  <!-- ECharts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+    /* ========== Header ========== */
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 56px;
+    }
+    .brand-header__left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-header__logo {
+      height: 28px;
+      width: auto;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .brand-header__title {
+      font-size: 16px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .brand-header__right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .data-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+    .data-badge__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .data-badge--live { background: #e8f5e9; color: #2e7d32; }
+    .data-badge--live .data-badge__dot { background: #4caf50; }
+    .brand-header__user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-header__avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .brand-header__username {
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    /* ========== Main ========== */
+    .page-main { padding: 24px; }
+
+    /* ========== 通用数据展示组件 ========== */
+    /* 卡片网格 */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    /* 统计卡片 */
+    .stat-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .stat-card__label {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .stat-card__value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.2;
+    }
+    .stat-card__unit {
+      font-size: 14px;
+      font-weight: 400;
+      color: #999;
+      margin-left: 4px;
+    }
+
+    /* 图表容器 */
+    .chart-section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .chart-section__title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .chart-container {
+      width: 100%;
+      height: 360px;
+    }
+
+    /* 表格容器 */
+    .table-section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .table-section__title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* 双图表布局 */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 900px) {
+      .charts-row { grid-template-columns: 1fr; }
+    }
+
+    /* ========== 状态页面 ========== */
+    .state-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .state-page__icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+    .state-page__title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    .state-page__desc {
+      font-size: 13px;
+      color: #999;
+      max-width: 400px;
+    }
+    .state-page__action {
+      margin-top: 20px;
+    }
+
+    /* ========== Footer ========== */
+    .page-footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: #999;
+    }
+
+    /* ========== 响应式基线（方案三：手机/平板自适应） ========== */
+    /* 表格横向滚动，避免手机端撑破布局；业务填充表格时用 .table-wrap 包住 t-table */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* 手机端表格降级为卡片列表时的容器样式（配合 isMobile 切换） */
+    .mobile-card-list { display: flex; flex-direction: column; gap: 12px; }
+    .mobile-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .mobile-card__row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+    .mobile-card__row dt { color: #999; flex-shrink: 0; }
+    .mobile-card__row dd { color: #1a1a1a; text-align: right; word-break: break-all; }
+    @media (max-width: 768px) {
+      .brand-header { padding: 0 12px; }
+      .brand-header__title { font-size: 15px; }
+      .brand-header__right { gap: 8px; }
+      /* 手机端隐藏用户名文字，仅保留头像，避免 header 溢出 */
+      .brand-header__username { display: none; }
+      .page-main { padding: 12px; }
+      /* 统计卡与图表/表格区块在手机端收紧内边距与字号 */
+      .stat-card { padding: 14px 16px; }
+      .stat-card__value { font-size: 22px; }
+      .chart-section, .table-section { padding: 16px; }
+    }
+    @media (max-width: 480px) {
+      .data-badge { display: none; }
+      .brand-header__title { font-size: 14px; }
+    }
+
+    /* TODO: 页面业务样式 */
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <!-- Header -->
+    <header class="brand-header">
+      <div class="brand-header__left">
+        <a href="https://hrai.app.hrainative.woa.com/app-market" target="_blank" rel="noopener">
+          <img class="brand-header__logo" src="https://cdn.m.tencent.com/hrai/logo.svg" alt="HR AI">
+        </a>
+        <span class="brand-header__title">{{PAGE_TITLE}}</span>
+      </div>
+      <div class="brand-header__right">
+        <span class="data-badge data-badge--live">
+          <i class="data-badge__dot"></i>实时数据
+        </span>
+        <div class="brand-header__user" v-if="staffInfo">
+          <img class="brand-header__avatar" :src="staffInfo.avatarUrl" alt="avatar">
+          <span class="brand-header__username">{{ staffInfo.staffName }}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main: 状态机驱动 -->
+    <main class="page-main">
+
+      <!-- 加载中 -->
+      <div v-if="pageState === 'loading'" class="state-page">
+        <!-- 注意：in-DOM template 里自定义标签不能自闭合（<t-xxx />），必须显式闭合，否则会吞掉后面的兄弟节点导致 v-else 找不到 v-if -->
+        <t-loading size="large"></t-loading>
+        <div class="state-page__title" style="margin-top:16px">正在加载数据...</div>
+      </div>
+
+      <!-- 加载失败 -->
+      <div v-else-if="pageState === 'error'" class="state-page">
+        <div class="state-page__icon">⚠️</div>
+        <div class="state-page__title">数据加载失败</div>
+        <div class="state-page__desc">{{ pageError }}</div>
+        <div class="state-page__action">
+          <t-button theme="primary" @click="initPage">重新加载</t-button>
+        </div>
+      </div>
+
+      <!-- 数据为空 -->
+      <div v-else-if="pageState === 'empty'" class="state-page">
+        <div class="state-page__icon">📭</div>
+        <div class="state-page__title">暂无数据</div>
+        <div class="state-page__desc">当前筛选条件下没有匹配的数据，请调整查询条件后重试</div>
+      </div>
+
+      <!-- 正常数据展示 -->
+      <div v-else-if="pageState === 'done'">
+        <!-- TODO: 在此处填充数据展示内容 -->
+        <!--
+        可用组件：
+        - 统计卡片：<div class="cards-grid"><div class="stat-card">...</div></div>
+        - 图表：<div class="chart-section"><div class="chart-container" id="chartId"></div></div>
+        - 表格：<div class="table-section"><div class="table-wrap"><t-table :data="tableData" :columns="tableColumns"></t-table></div></div>
+        - 双图表并排：<div class="charts-row">...</div>
+
+        响应式（方案三）：isMobile 在 setup 中已声明并暴露，手机端自动启用以下体验级切换——
+        1) 表格降级为卡片列表：用 isMobile 做条件渲染
+           <div class="table-wrap" v-if="!isMobile">
+             <t-table :data="tableData" :columns="tableColumns"></t-table>
+           </div>
+           <div v-else class="mobile-card-list">
+             <div class="mobile-card" v-for="row in tableData" :key="row.id">
+               <dl class="mobile-card__row" v-for="col in tableColumns" :key="col.colKey">
+                 <dt>{{ col.title }}</dt><dd>{{ row[col.colKey] }}</dd>
+               </dl>
+             </div>
+           </div>
+        2) 图表：useChart 在手机端自动降高(300px)，柱状图 x 轴标签自动旋转，无需额外处理
+        3) 区块内边距/字号已由响应式 CSS 基线自动收紧，无需手动处理
+        -->
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">Copyright &copy; 1998-2026 Tencent. All Rights Reserved</footer>
+
+  </div>
+
+  <script>
+    const { createApp, ref, reactive, onMounted, onUnmounted, nextTick } = Vue;
+
+    // 响应式断点助手：返回 isMobile(ref<boolean>)，窗口尺寸跨过断点时自动更新
+    // 用法：const isMobile = useResponsive(); 模板中 v-if="!isMobile" 渲染表格 / v-else 渲染卡片列表
+    function useResponsive(bp = 768) {
+      const isMobile = Vue.ref(window.matchMedia(`(max-width: ${bp}px)`).matches);
+      const mq = window.matchMedia(`(max-width: ${bp}px)`);
+      const handler = (e) => { isMobile.value = e.matches; };
+      mq.addEventListener('change', handler);
+      return isMobile;
+    }
+
+    createApp({
+      setup() {
+        // ================================================================
+        // 1. 基础状态
+        // ================================================================
+        const staffInfo = ref(null);
+
+        // 响应式：手机端 (<=768px) 为 true，用于图表降级、表格↔卡片列表等体验级切换
+        const isMobile = useResponsive();
+
+        // pageState: 'loading' | 'error' | 'empty' | 'done'
+        const pageState = ref('loading');
+        const pageError = ref('');
+
+        async function getStaffInfo() {
+          try {
+            const resp = await fetch(window.location.href, { method: 'HEAD' });
+            const staffName = resp.headers.get('X-Staff-Name');
+            if (!staffName) return null;
+            return {
+              staffName,
+              staffId: resp.headers.get('X-Staff-Id'),
+              avatarUrl: `https://r.hrc.woa.com/photo/150/${staffName}.png?default_when_absent=true`
+            };
+          } catch { return null; }
+        }
+
+        // ================================================================
+        // 2. 数仓查询封装（生产级：超时 + 重试 + 错误沉淀）
+        // ================================================================
+
+        /**
+         * 数仓查询 — 单次请求，带超时控制
+         *
+         * @param {string} sql  - SQL 语句
+         * @param {object} opts - 可选配置
+         * @param {number} opts.timeout - 超时毫秒数，默认 30000
+         * @returns {Promise<{data: Array, columns: Array, total: number}>}
+         */
+        async function queryDW(sql, opts = {}) {
+          const timeout = opts.timeout || 30000;
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), timeout);
+
+          try {
+            const resp = await fetch('https://dos-dataview-mcp.woa.com/api/query', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ sql }),
+              signal: controller.signal
+            });
+
+            if (!resp.ok) {
+              throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
+            }
+
+            const result = await resp.json();
+            if (result.code !== 0) {
+              throw new Error(result.message || `数仓返回错误码 ${result.code}`);
+            }
+
+            const rows = result.data || [];
+            const columns = result.columns || [];
+            return { data: rows, columns, total: rows.length };
+          } catch (e) {
+            if (e.name === 'AbortError') {
+              throw new Error(`数仓查询超时 (${timeout}ms)`);
+            }
+            throw e;
+          } finally {
+            clearTimeout(timer);
+          }
+        }
+
+        /**
+         * 带重试的数仓查询
+         *
+         * @param {string} sql       - SQL 语句
+         * @param {object} opts      - 可选配置
+         * @param {number} opts.retries  - 最大重试次数，默认 2（共 3 次尝试）
+         * @param {number} opts.retryDelay - 重试间隔 ms，默认 1000
+         * @returns {Promise<{data: Array, columns: Array, total: number}>}
+         */
+        async function queryDWWithRetry(sql, opts = {}) {
+          const maxRetries = opts.retries ?? 2;
+          const retryDelay = opts.retryDelay ?? 1000;
+          let lastError;
+
+          for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+              return await queryDW(sql, { timeout: opts.timeout });
+            } catch (e) {
+              lastError = e;
+              if (attempt < maxRetries) {
+                console.warn(`数仓查询重试 ${attempt + 1}/${maxRetries}:`, e.message);
+                await new Promise(r => setTimeout(r, retryDelay));
+              }
+            }
+          }
+          throw lastError;
+        }
+
+        /**
+         * 创建带状态的 DW 查询器（推荐在业务逻辑中使用）
+         *
+         * 每个查询实例维护独立的 loading / error / data 状态，
+         * 支持 Promise.all 并行执行多个查询。
+         *
+         * 用法：
+         *   const ageQuery = createDwQuery('ageDist');
+         *   await ageQuery.execute(`SELECT ...`);
+         *   // ageQuery.data  → 查询结果
+         *   // ageQuery.error → 错误信息（如有）
+         *   // ageQuery.loading → 是否加载中
+         *
+         * @param {string} name - 查询名称（用于日志和调试）
+         */
+        function createDwQuery(name) {
+          const loading = ref(false);
+          const error = ref('');
+          const data = ref(null);
+
+          async function execute(sql, opts = {}) {
+            loading.value = true;
+            error.value = '';
+            try {
+              const result = await queryDWWithRetry(sql, opts);
+              data.value = result.data;
+              return result;
+            } catch (e) {
+              error.value = e.message;
+              console.error(`[${name}] 查询失败:`, e.message);
+              return null;
+            } finally {
+              loading.value = false;
+            }
+          }
+
+          return { name, loading, error, data, execute };
+        }
+
+        /**
+         * 并行执行多个 DW 查询，任一失败不影响其他查询
+         *
+         * 用法：
+         *   const results = await batchQueryDW([
+         *     ['ageDist', `SELECT age_range, COUNT(*) cnt FROM ...`],
+         *     ['levelDist', `SELECT pro_position_level_name, COUNT(*) cnt FROM ...`],
+         *   ]);
+         *   // results = { ageDist: [...], levelDist: [...] }
+         *
+         * @param {Array<[string, string]>} queries - [[name, sql], ...]
+         * @returns {Promise<Object>} { name: data[] }
+         */
+        async function batchQueryDW(queries) {
+          const entries = await Promise.all(
+            queries.map(async ([name, sql]) => {
+              try {
+                const result = await queryDWWithRetry(sql);
+                return [name, result.data];
+              } catch (e) {
+                console.error(`[${name}] 查询失败:`, e.message);
+                return [name, []];
+              }
+            })
+          );
+          return Object.fromEntries(entries);
+        }
+
+        // ================================================================
+        // 3. ECharts 图表生命周期管理
+        // ================================================================
+
+        /**
+         * 创建图表实例管理器
+         *
+         * 自动处理 init / setOption / resize / dispose 全生命周期。
+         *
+         * 用法：
+         *   const ageChart = useChart('ageDistChart', { height: 360 });
+         *   ageChart.render(option);
+         *   // 组件卸载时自动调用 ageChart.dispose()
+         *
+         * @param {string} domId - 图表容器元素的 id
+         * @param {object} opts  - { height?: number, theme?: string }
+         */
+        function useChart(domId, opts = {}) {
+          let instance = null;
+          const domHeight = opts.height || (isMobile.value ? 300 : 360);
+
+          function getDom() {
+            return document.getElementById(domId);
+          }
+
+          function init() {
+            if (instance) return;
+            const dom = getDom();
+            if (!dom) {
+              console.warn(`[useChart] DOM #${domId} 未找到，可能尚未渲染`);
+              return;
+            }
+            dom.style.height = `${domHeight}px`;
+            instance = echarts.init(dom, opts.theme);
+          }
+
+          /**
+           * 渲染图表
+           * @param {object} option - ECharts 配置项
+           * @param {boolean} notMerge - 是否不合并，默认 true（全量替换）
+           */
+          function render(option, notMerge = true) {
+            if (!instance) init();
+            if (!instance) return;
+            instance.setOption(option, notMerge);
+          }
+
+          /**
+           * 销毁图表实例（用于组件卸载时清理）
+           */
+          function dispose() {
+            if (instance) {
+              instance.dispose();
+              instance = null;
+            }
+          }
+
+          return { init, render, dispose, getDom };
+        }
+
+        /**
+         * 统一注册所有图表的 resize 事件
+         * 用法：registerChartResize([chart1, chart2, chart3])
+         */
+        function registerChartResize(charts) {
+          const handler = () => {
+            for (const chart of charts) chart.instance?.resize?.();
+          };
+          window.addEventListener('resize', handler);
+          return () => window.removeEventListener('resize', handler);
+        }
+
+        // ================================================================
+        // 4. 图表渲染工具函数
+        // ================================================================
+
+        /**
+         * 创建标准柱状图 Option
+         * @param {string[]} labels - X 轴标签
+         * @param {{name: string, data: number[], color?: string}[]} seriesList
+         * @param {object} extra - 额外 echarts option（如 tooltip 格式、y轴名称等）
+         */
+        function buildBarOption(labels, seriesList, extra = {}) {
+          return {
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: { type: 'shadow' }
+            },
+            grid: { left: '3%', right: '4%', bottom: '10%', top: '10%', containLabel: true },
+            xAxis: {
+              type: 'category',
+              data: labels,
+              axisLabel: { rotate: (extra.rotateLabels || isMobile.value) ? 20 : 0 }
+            },
+            yAxis: { type: 'value' },
+            series: seriesList.map((s, i) => ({
+              name: s.name,
+              type: 'bar',
+              data: s.data,
+              itemStyle: {
+                color: s.color || new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: '#667eea' },
+                  { offset: 1, color: '#764ba2' }
+                ]),
+                borderRadius: [4, 4, 0, 0]
+              },
+              label: { show: true, position: 'top' },
+              ...(extra.seriesExtras?.[i] || {})
+            })),
+            ...extra
+          };
+        }
+
+        /**
+         * 创建标准饼图（环形图）Option
+         * @param {{name: string, value: number}[]} data
+         * @param {object} extra
+         */
+        function buildPieOption(data, extra = {}) {
+          return {
+            tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+            series: [{
+              type: 'pie',
+              radius: extra.radius || ['45%', '70%'],
+              center: ['50%', '55%'],
+              data,
+              label: { formatter: '{b}\n{d}%' },
+              emphasis: {
+                itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }
+              }
+            }]
+          };
+        }
+
+        /**
+         * 创建标准横向柱状图 Option
+         */
+        function buildHorizontalBarOption(labels, seriesList, extra = {}) {
+          return {
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '20%', right: '10%', bottom: '3%', top: '3%', containLabel: true },
+            yAxis: {
+              type: 'category',
+              data: labels,
+              inverse: true,
+              axisLabel: { width: 120, overflow: 'truncate' }
+            },
+            xAxis: { type: 'value' },
+            series: seriesList.map((s, i) => ({
+              name: s.name,
+              type: 'bar',
+              data: s.data,
+              itemStyle: {
+                color: s.color || new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                  { offset: 0, color: '#0052d9' },
+                  { offset: 1, color: '#00a870' }
+                ]),
+                borderRadius: [0, 4, 4, 0]
+              },
+              label: { show: true, position: 'right' },
+              ...(extra.seriesExtras?.[i] || {})
+            })),
+            ...extra
+          };
+        }
+
+        // ================================================================
+        // 5. 页面初始化编排
+        // ================================================================
+
+        /**
+         * 统一的页面初始化流程
+         *
+         * 1. 获取员工信息
+         * 2. 设置 pageState = 'loading'
+         * 3. 执行业务数据加载（由调用方传入）
+         * 4. 根据结果设置 pageState = 'done' / 'empty' / 'error'
+         *
+         * @param {Function} loadDataFn - 异步数据加载函数，返回 true 表示成功
+         */
+        async function initPage(loadDataFn) {
+          pageState.value = 'loading';
+          pageError.value = '';
+          try {
+            const hasData = await loadDataFn();
+            pageState.value = hasData ? 'done' : 'empty';
+          } catch (e) {
+            pageError.value = e.message || '未知错误';
+            pageState.value = 'error';
+          }
+        }
+
+        // ================================================================
+        // 6. 业务数据加载（TODO: 填充你的查询逻辑）
+        // ================================================================
+
+        /**
+         * 加载页面数据（仅负责拉取数据，不要在此函数中渲染图表！）
+         *
+         * 图表渲染请在 onMounted 中 initPage(loadData) 之后执行，
+         * 确保 pageState === 'done' 且图表 DOM 已就绪。
+         *
+         * 推荐使用 batchQueryDW 并行查询：
+         *
+         *   async function loadData() {
+         *     const data = await batchQueryDW([
+         *       ['ageDist', `SELECT age_range, COUNT(*) cnt
+         *         FROM catalog_dos_data_analysis_mcp_2.hrdw.Report_Wide_Public_Staff_Info
+         *         WHERE hr_status_name = '在职'
+         *           AND manage_unit_name = '腾讯集团本部'
+         *           AND staff_type_name = '正式'
+         *         GROUP BY age_range ORDER BY age_range`],
+         *       ['levelDist', `SELECT pro_position_level_name, COUNT(*) cnt
+         *         FROM catalog_dos_data_analysis_mcp_2.hrdw.Report_Wide_Public_Staff_Info
+         *         WHERE hr_status_name = '在职'
+         *           AND manage_unit_name = '腾讯集团本部'
+         *           AND staff_type_name = '正式'
+         *         GROUP BY pro_position_level_name ORDER BY cnt DESC`],
+         *     ]);
+         *
+         *     // data.ageDist  → [{ age_range: '25-30', cnt: 1234 }, ...]
+         *     // data.levelDist → [{ pro_position_level_name: 'T9', cnt: 567 }, ...]
+         *
+         *     // 存入响应式变量供模板和图表使用
+         *     ageData.value = data.ageDist;
+         *     levelData.value = data.levelDist;
+         *
+         *     return data.ageDist.length > 0;
+         *   }
+         *
+         * @returns {Promise<boolean>} true: 有数据, false: 无数据
+         */
+        async function loadData() {
+          // TODO: 在此处编写数仓查询逻辑，仅负责拉取数据
+          // 参考上方注释中的示例代码
+          // ⚠️ 不要在此函数中初始化或渲染图表！图表渲染在 onMounted 中执行
+          return false;
+        }
+
+        // ================================================================
+        // 7. 生命周期
+        // ================================================================
+
+        // 用于 onUnmounted 清理的图表实例列表
+        const chartInstances = [];
+
+        onMounted(async () => {
+          staffInfo.value = await getStaffInfo();
+          await initPage(loadData);
+
+          // initPage 已将 pageState 切换完毕，Vue 已渲染 done 状态下的 DOM
+          if (pageState.value === 'done') {
+            await nextTick();
+            // TODO: 在此处渲染图表
+            // 示例：
+            //   const chart1 = useChart('ageDistChart');
+            //   chart1.render(buildBarOption(
+            //     ageData.value.map(r => r.age_range),
+            //     [{ name: '人数', data: ageData.value.map(r => Number(r.cnt)) }]
+            //   ));
+            //   chartInstances.push(chart1);
+            //   registerChartResize([chart1]);
+          }
+        });
+
+        onUnmounted(() => {
+          // 清理所有 ECharts 实例
+          for (const chart of chartInstances) {
+            try { chart.dispose(); } catch {}
+          }
+        });
+
+        return {
+          staffInfo,
+          pageState,
+          pageError,
+          isMobile,
+          initPage: () => initPage(loadData),
+          // TODO: 暴露业务数据变量（如 ageData, levelData 等）
+        };
+      }
+    })
+    .use(TDesign)
+    .use(window.HrVueNext || { install() {} })
+    .mount('#app');
+  </script>
+</body>
+</html>

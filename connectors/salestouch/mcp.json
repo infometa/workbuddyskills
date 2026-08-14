@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "salestouch": {
+      "type": "streamableHttp",
+      "url": "https://touch.long-arena.com/mcp"
+    }
+  }
+}

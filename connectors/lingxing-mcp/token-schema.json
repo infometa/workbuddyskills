@@ -1,0 +1,22 @@
+{
+  "title": "领星ERP MCP 连接配置",
+  "title_en": "LingXing ERP MCP Connection",
+  "description": "连接您的领星ERP账号。X-Mcp-Key 仅存储在本机，由 WorkBuddy 在连接领星 MCP 服务时通过请求头注入。请勿向他人分享该密钥。",
+  "description_en": "Connect your LingXing ERP account. Your X-Mcp-Key is stored locally and injected by WorkBuddy into the request header when connecting to LingXing MCP. Do not share this key.",
+  "docUrl": "https://www.lingxing.com/help/article/mcp",
+  "docLabel": "如何获取领星 MCP 鉴权密钥？",
+  "docLabel_en": "How to get a LingXing MCP authentication key",
+  "fields": [
+    {
+      "key": "LINGXING_MCP_KEY",
+      "label": "X-Mcp-Key",
+      "label_en": "X-Mcp-Key",
+      "type": "password",
+      "required": true,
+      "placeholder": "在领星ERP AI助手的「管理MCP」页面复制鉴权密钥",
+      "placeholder_en": "Copy the authentication key from Manage MCP in LingXing ERP AI Assistant",
+      "description": "密钥与当前领星账号绑定，数据访问范围继承该账号权限；密钥泄露后请立即重新生成。",
+      "description_en": "The key is bound to your LingXing account and inherits its data permissions. Regenerate it immediately if exposed."
+    }
+  ]
+}

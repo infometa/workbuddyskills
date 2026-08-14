@@ -140,9 +140,9 @@ SELECT
         ROUND(SUM(return_qty), 2) AS 退菜数量,
         ROUND(SUM(cost_money), 2) AS 理论成本,
         ROUND(SUM(pre_discount_price) - SUM(cost_money), 2) AS 折前理论毛利,
-        ROUND((SUM(pre_discount_price) - SUM(cost_money)) * 100.0 / NULLIF(SUM(pre_discount_price), 0), 2) AS 折前毛利率%,
+        ROUND((SUM(pre_discount_price) - SUM(cost_money)) * 100.0 / NULLIF(SUM(pre_discount_price), 0), 2) AS 折前毛利率,
         ROUND(SUM(income_money) - SUM(cost_money), 2) AS 折后理论毛利,
-        ROUND((SUM(income_money) - SUM(cost_money)) * 100.0 / NULLIF(SUM(income_money), 0), 2) AS 折后毛利率%,
+        ROUND((SUM(income_money) - SUM(cost_money)) * 100.0 / NULLIF(SUM(income_money), 0), 2) AS 折后毛利率,
 FROM dm.v_item_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
     AND settle_biz_date >= :start_date
@@ -223,7 +223,7 @@ COUNT(DISTINCT item_id) AS 品项数,
     ROUND(SUM(last_qty), 2) AS 销售数量,
     ROUND(SUM(income_money), 2) AS 纯收金额,
     ROUND(SUM(pre_discount_price), 2) AS 应收金额,
-    ROUND(SUM(income_money) * 100.0 / SUM(SUM(income_money)) OVER(), 2) AS 纯收占比%
+    ROUND(SUM(income_money) * 100.0 / SUM(SUM(income_money)) OVER(), 2) AS 纯收占比
 FROM dm.v_item_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
     AND settle_biz_date >= :start_date
@@ -337,7 +337,7 @@ SELECT
     ROUND(SUM(last_qty), 2) AS 实售数量,
     ROUND(SUM(return_qty), 2) AS 退菜数量,
     ROUND(SUM(return_subtotal), 2) AS 退菜金额,
-    ROUND(SUM(return_qty) * 100.0 / NULLIF(SUM(last_qty) + SUM(return_qty), 0), 2) AS 退菜率%
+    ROUND(SUM(return_qty) * 100.0 / NULLIF(SUM(last_qty) + SUM(return_qty), 0), 2) AS 退菜率
 FROM dm.v_item_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
     AND settle_biz_date >= :start_date
@@ -391,11 +391,11 @@ big_class_name AS 大类,
     ROUND(SUM(pre_discount_price), 2) AS 应收金额,
     ROUND(SUM(cost_money), 2) AS 理论成本,
     ROUND(SUM(pre_discount_price) - SUM(cost_money), 2) AS 折前理论毛利,
-    ROUND((SUM(pre_discount_price) - SUM(cost_money)) * 100.0 / NULLIF(SUM(pre_discount_price), 0), 2) AS 折前毛利率%,
+    ROUND((SUM(pre_discount_price) - SUM(cost_money)) * 100.0 / NULLIF(SUM(pre_discount_price), 0), 2) AS 折前毛利率,
     -- 折后指标
     ROUND(SUM(income_money), 2) AS 纯收金额,
     ROUND(SUM(income_money) - SUM(cost_money), 2) AS 折后理论毛利,
-    ROUND((SUM(income_money) - SUM(cost_money)) * 100.0 / NULLIF(SUM(income_money), 0), 2) AS 折后毛利率%
+    ROUND((SUM(income_money) - SUM(cost_money)) * 100.0 / NULLIF(SUM(income_money), 0), 2) AS 折后毛利率
 FROM dm.v_item_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
     AND settle_biz_date >= :start_date
@@ -461,7 +461,7 @@ SELECT
     big_class_name AS 大类,
     ROUND(SUM(last_qty), 2) AS 销售数量,
     ROUND(SUM(income_money), 2) AS 纯收金额,
-    ROUND(SUM(income_money) * 100.0 / SUM(SUM(income_money)) OVER(PARTITION BY sale_type_name), 2) AS 渠道内占比%
+    ROUND(SUM(income_money) * 100.0 / SUM(SUM(income_money)) OVER(PARTITION BY sale_type_name), 2) AS 渠道内占比
 FROM dm.v_item_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
     AND settle_biz_date >= :start_date
@@ -534,8 +534,8 @@ big_class_name AS 大类,
     ROUND(SUM(present_qty), 2) AS 赠送数量,
     ROUND(SUM(present_money), 2) AS 赠送金额,
     ROUND(SUM(cost_money), 2) AS 赠送成本,
-    ROUND(SUM(present_money) * 100.0 / SUM(SUM(present_money)) OVER(), 2) AS 赠送金额占比%,
-    ROUND(SUM(present_qty) * 100.0 / NULLIF(SUM(last_qty) + SUM(present_qty), 0), 2) AS 赠送率%
+    ROUND(SUM(present_money) * 100.0 / SUM(SUM(present_money)) OVER(), 2) AS 赠送金额占比,
+    ROUND(SUM(present_qty) * 100.0 / NULLIF(SUM(last_qty) + SUM(present_qty), 0), 2) AS 赠送率
 FROM dm.v_item_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
     AND settle_biz_date >= :start_date
@@ -670,8 +670,8 @@ SELECT
 COUNT(DISTINCT item_id) AS 品项数,
     ROUND(SUM(last_qty), 2) AS 销售数量,
     ROUND(SUM(income_money), 2) AS 纯收金额,
-    ROUND(SUM(income_money) * 100.0 / SUM(SUM(income_money)) OVER(PARTITION BY sale_type_name), 2) AS 渠道内占比%,
-    ROUND(SUM(income_money) * 100.0 / SUM(SUM(income_money)) OVER(), 2) AS 全局占比%
+    ROUND(SUM(income_money) * 100.0 / SUM(SUM(income_money)) OVER(PARTITION BY sale_type_name), 2) AS 渠道内占比,
+    ROUND(SUM(income_money) * 100.0 / SUM(SUM(income_money)) OVER(), 2) AS 全局占比
 FROM dm.v_item_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
     AND settle_biz_date >= :start_date

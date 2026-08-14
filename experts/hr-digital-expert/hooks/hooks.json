@@ -1,0 +1,60 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/ensure-node.sh\" session-start",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/ensure-node.sh\" pre-tool",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/ensure-node.sh\" post-tool",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/ensure-node.sh\" stop",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/ensure-node.sh\" session-end",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -63,7 +63,7 @@ SELECT
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
-AND settle_biz_date BETWEEN '{{start_date}}' AND '{{end_date}}'
+AND settle_biz_date >= :start_date AND settle_biz_date < :end_date_plus_1
     {{#if city}} AND city = '{{city}}'
 GROUP BY {{group_by:dayweather}}
 ORDER BY 总营收 DESC;
@@ -84,7 +84,7 @@ SELECT
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
-AND settle_biz_date BETWEEN '{{start_date}}' AND '{{end_date}}'
+AND settle_biz_date >= :start_date AND settle_biz_date < :end_date_plus_1
     AND daytemperature IS NOT NULL
 GROUP BY 气温区间
 ORDER BY 总营收 DESC;
@@ -119,11 +119,11 @@ SELECT
     ROUND(AVG(make_duration), 2) AS 平均制作时长,
     ROUND(AVG(products_duration), 2) AS 平均出品时长,
     ROUND(AVG(overtime_duration), 2) AS 平均超时时长,
-    ROUND(SUM(CASE WHEN overtime_duration > 0 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS 超时订单率%
+    ROUND(SUM(CASE WHEN overtime_duration > 0 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS 超时订单率
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
-AND settle_biz_date BETWEEN '{{start_date}}' AND '{{end_date}}'
+AND settle_biz_date >= :start_date AND settle_biz_date < :end_date_plus_1
     AND make_duration IS NOT NULL
 GROUP BY {{group_by:store_code}}, {{group_by:store_name}}
 HAVING COUNT(DISTINCT id) >= 10
@@ -141,7 +141,7 @@ SELECT
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'
  AND store_code IN (#{omShopCodes})
-AND settle_biz_date BETWEEN '{{start_date}}' AND '{{end_date}}'
+AND settle_biz_date >= :start_date AND settle_biz_date < :end_date_plus_1
 GROUP BY {{group_by:store_code}}, {{group_by:store_name}}
 ORDER BY 平均制作时长分钟 ASC
 LIMIT {{top_n:20}};
@@ -220,9 +220,9 @@ SELECT
     {{group_by:store_name}} AS 维度,
     COUNT(DISTINCT id) AS 评价数,
     ROUND(AVG(star), 2) AS 平均评分,
-    ROUND(SUM(CASE WHEN star >= 16 THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 好评率%,
-    ROUND(SUM(CASE WHEN star >= 18 THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 高分率%,
-    ROUND(SUM(CASE WHEN star < 10 THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 低分率%,
+    ROUND(SUM(CASE WHEN star >= 16 THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 好评率,
+    ROUND(SUM(CASE WHEN star >= 18 THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 高分率,
+    ROUND(SUM(CASE WHEN star < 10 THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(DISTINCT id), 0), 2) AS 低分率,
     SUM(star) AS 总评分
 FROM dm.v_pos_corp_sale_analysis_with_sly
 WHERE group_code = '#{SL_UNIFIED_G_ID}'

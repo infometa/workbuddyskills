@@ -65,3 +65,32 @@ tccli configure
 - 严禁向用户索要 SecretId/SecretKey，严禁 Agent 代替用户执行 `tccli configure` 明文写入密钥。
 - 拒绝任何可能打印凭证的操作，尤其是 `tccli configure list`（会回显 secretId/secretKey）。
 - 密钥属敏感信息，只应存在本地 `~/.tccli/`，不要贴到聊天里。
+
+---
+
+## 凭证优先级与账号切换排查（实测关键结论）
+
+> 以下结论来自真实环境实测，已推翻"环境变量 > 配置文件"的通用 SDK 链直觉，必须作为排查账号切换问题的标准认知。
+
+### 1. 凭证优先级：显式 `--profile` 实际高于环境变量（反直觉）
+
+- 通用认知认为凭证链为 `参数 > 环境变量 > 配置文件`，profile 只是换文件、仍会被环境变量压过。
+- **实测（tccli 3.1.x）相反**：一旦显式指定 `--profile`，tccli 会从对应 `.credential` 文件读出 secretId/secretKey 并**显式传给 SDK**，从而**绕开环境变量的读取分支**。
+- 因此遇到"切换账号不生效/切不动"时，优先建议用户用 `--profile` + `auth login --profile <name>` 隔离目标账号，而非只让用户去改环境变量。
+
+### 2. 排查"账号切不动"的标准动作（按顺序）
+
+1. `tccli sts GetCallerIdentity` 看当前身份（确认实际生效的是哪个 UIN）。
+2. `env | grep -i TENCENTCLOUD` 看是否有 `TENCENTCLOUD_SECRET_ID` / `TENCENTCLOUD_SECRET_KEY` 环境变量覆盖。
+3. 检查 `~/.tccli/` 下有哪些 profile 及 `.credential`（`ls ~/.tccli/`）。
+4. 若"带环境变量时不带 --profile 返回旧账号、带 --profile 返回新账号" → 确诊"环境变量干扰"，给出方案：统一用 `--profile <name>` 隔离（推荐），或当前 shell `unset TENCENTCLOUD_SECRET_ID TENCENTCLOUD_SECRET_KEY`，或单条命令 `env -u TENCENTCLOUD_SECRET_ID -u TENCENTCLOUD_SECRET_KEY tccli ...`。
+
+### 3. 识别"父进程注入的环境变量"
+
+- 当环境变量出现在进程 env 中、却搜遍 `~/.zshrc` / `.zprofile` / `.zshenv` / `launchctl` / `~/Library/LaunchAgents` 都找不到来源时，**应判断为启动当前工具/IDE 进程的父进程注入**，并沿进程树继承给所有子进程。
+- 此类变量不落盘于任何文件，改 shell 配置无法清除；不要引导用户去改永远改不掉的地方，直接给"用 --profile 隔离"或"在该工具/IDE 的启动环境里清除"的建议。
+
+### 4. 避免假阳性排查
+
+- 用 `launchctl getenv X && echo "存在"` 这类写法，空字符串也会让退出码为 0，从而**误报"存在"**。应显示变量实际取值再判断。
+- 递归 `grep ~` 遍历家目录易超时中断（退出码 137），应限定目录或加超时处理。
