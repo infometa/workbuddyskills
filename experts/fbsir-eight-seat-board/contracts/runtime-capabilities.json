@@ -6,7 +6,7 @@
     "nameEn": "FBSir Independent Review Board",
     "brandZh": "福帮手",
     "brandEn": "FBSir",
-    "version": "26.7.20"
+    "version": "26.8.10"
   },
   "uiIdentity": {
     "cardTitleFields": ["displayName", "profession"],
@@ -19,7 +19,7 @@
     "authorFieldLocalizedBySpec": false,
     "authorLocalizationPolicy": "single_author_field_prioritizes_chinese_marketplace_byline_while_english_brand_remains_in_brand.en",
     "localMyExpertsBylineMayBeHidden": true,
-    "evidenceBasis": "WorkBuddy 2.3 validator plus local WorkBuddy 5.2.6 team-card and My Experts readback"
+    "evidenceBasis": "WorkBuddy 5.3.8.0 and WorkBuddyAI 5.2.7.0 validators executed independently against isolated local my-experts shadows; this is local package validation only"
   },
   "compliance": {
     "expertSpecVersion": "2.3",
@@ -51,19 +51,412 @@
     "overLimitPolicy": "split_by_dependency_risk_and_decision_time",
     "dailyMeetingLimitIntent": 1,
     "dailyMeetingLimitEnforcement": "not_implemented_requires_u3w_entitlement_service",
-    "commercialEntitlementStatus": "future_wave_not_claimed_by_26.7.20_package",
+    "commercialEntitlementStatus": "future_wave_not_claimed_by_26.8.10_package",
     "secretaryMode": "basic_process_support",
     "fullCapabilityBrokerRequiresVerifiedEntitlement": true
+  },
+  "workspaceAccess": {
+    "currentWritableTuple": {
+      "workspaceSchema": "fbsir.board-workspace/v2",
+      "eventSchema": "fbsir.board-event/v2",
+      "productVersion": "26.8.10",
+      "workspaceInstanceIdRequired": true
+    },
+    "predecessorReadOnlyTuple": {
+      "workspaceSchema": "fbsir.board-workspace/v2",
+      "eventSchema": "fbsir.board-event/v2",
+      "productVersion": "26.8.1",
+      "workspaceInstanceIdRequired": true
+    },
+    "legacyReadOnlyTuple": {
+      "workspaceSchema": "fbsir.board-workspace/v1",
+      "eventSchema": "fbsir.board-event/v1",
+      "productVersion": "26.7.20",
+      "workspaceInstanceIdAllowed": false
+    },
+    "classification": ["current_read_write", "predecessor_read_only", "legacy_read_only", "unsupported"],
+    "unknownTupleWriteFailure": "WORKSPACE_VERSION_UNSUPPORTED",
+    "predecessorWriteFailure": "WORKSPACE_PREDECESSOR_READ_ONLY",
+    "legacyWriteFailure": "WORKSPACE_LEGACY_READ_ONLY",
+    "semverRangeCompatibilityAllowed": false,
+    "legacyResumeDigest": {
+      "schema": "fbsir.legacy-resume-digest/v1",
+      "sourceAccessMode": "legacy_read_only",
+      "targetAccessMode": "current_read_write",
+      "receiptRelativePath": ".fbsir-board/predecessors/<targetRunId>.json",
+      "planReferenceSchema": "fbsir.predecessor-run-ref/v2",
+      "planReferenceFields": ["schema", "receiptRef", "receiptPayloadHash", "sourceRunIdHash", "resumeDigestSchema", "resumeDigest"],
+      "rawByteInventoryBoundButNotExported": true,
+      "contentExported": false,
+      "provesCurrentRunCompletion": false,
+      "concurrencyBoundary": "stable_handle_checks_and_cooperative_target_writer_only_not_hostile_atomic_snapshot_or_openat_proof",
+      "hostileConcurrentMutationProof": false
+    },
+    "predecessorResumeDigest": {
+      "schema": "fbsir.predecessor-resume-digest/v2",
+      "sourceAccessMode": "predecessor_read_only",
+      "sourceWorkspaceReleaseTuple": {
+        "workspaceSchema": "fbsir.board-workspace/v2",
+        "eventSchema": "fbsir.board-event/v2",
+        "productVersion": "26.8.1"
+      },
+      "targetAccessMode": "current_read_write",
+      "receiptRelativePath": ".fbsir-board/predecessors/<targetRunId>.json",
+      "planReferenceSchema": "fbsir.predecessor-run-ref/v2",
+      "rawByteInventoryBoundButNotExported": true,
+      "contentExported": false,
+      "provesCurrentRunCompletion": false
+    },
+    "resumeCard": {
+      "schema": "fbsir.case-resume-card/v1",
+      "builderCommand": "node skills/independent-board-core/scripts/board-resume.mjs card --workspace <path> --run <runId> --receipt-digest <hex>",
+      "expectedReceiptRequired": true,
+      "evidenceStates": ["verified_current_checkpoint", "verified_predecessor_resume_digest", "verified_legacy_resume_digest", "missing", "unsupported", "receipt_mismatch", "source_changed"],
+      "contentIncluded": false,
+      "writesPerformed": false,
+      "currentMilestoneSource": "verified_event_chain_not_checkpoint_state",
+      "currentMaterialProjection": "not_bound_by_checkpoint_no_independent_material_record_projection",
+      "terminalCurrentResumeActionPresented": false,
+      "predecessorProjection": "evidence_bindings_only_no_observed_milestones",
+      "legacyProjection": "evidence_bindings_only_no_observed_milestones",
+      "currentResumeTarget": "same_current_run",
+      "predecessorResumeTarget": "distinct_new_current_run",
+      "legacyResumeTarget": "distinct_new_current_run",
+      "inspectOnlyPresentationMode": true,
+      "inspectOnlyRevokesIndependentActionEnvelope": false,
+      "responsibilitySource": "not_present_in_receipt",
+      "evidenceBoundary": "read_only_expected_receipt_binding_and_content_free_operational_projection_only_not_body_truth_semantic_completion_host_execution_user_confirmation_or_product_credit"
+    }
   },
   "firstValue": {
     "deliverable": "decision_start_card",
     "teamCreationRequiresExplicitConfirmation": true,
-    "primaryCta": "确认议案卡并开始独立审议",
-    "questionsMax": 3,
+    "preConfirmationWorkspaceWriteAllowed": false,
+    "primaryCta": "按建议开始独立审议",
+    "secondaryBranches": ["补充关键事实", "切换审议模式"],
+    "primaryActionId": "confirm_review",
+    "secondaryActionIds": ["add_facts", "change_mode"],
+    "questionsMax": 2,
+    "questionsPolicy": "decisive_only",
+    "materialCardDraftSchema": "fbsir.material-card-draft/v1",
+    "materialCardBuildCommand": "node skills/independent-board-core/scripts/board-envelope.mjs material-card",
+    "materialCardReferencesMintedByPackage": true,
+    "materialCardCallerSuppliedReferencesAllowed": false,
+    "materialCardCallerSuppliedVerifiedStatusAllowed": false,
+    "materialCardInputStatuses": ["received_unverified", "received_conflicted"],
+    "materialCardBuildWritesWorkspace": false,
+    "directMaterialCommandEnabled": false,
+    "materialInspectionCommand": "node skills/independent-board-core/scripts/board-envelope.mjs material-inspect",
+    "materialInspectionReturnsNormalized": false,
+    "materialInspectionReadOnly": true,
+    "materialInspectionAllowedForDecisionStart": false,
     "seatProposalSchema": "fbsir.review-seat-proposal/v1",
     "seatProposalValidationCommand": "envelope.proposal.validate",
     "seatProposalWritesWorkspace": false,
     "seatProposalRequiresUserConfirmation": false
+  },
+  "hostActions": {
+    "schema": "fbsir.host-action-envelope/v1",
+    "catalogRef": "contracts/no-connector-action-contract.json",
+    "validatorCommand": "node skills/independent-board-core/scripts/board-envelope.mjs action",
+    "actionIds": [
+      "confirm_review",
+      "add_facts",
+      "change_mode",
+      "resume_case",
+      "confirm_decision_record"
+    ],
+    "envelopeVisibility": "host_metadata_or_explicit_debug_not_normal_user_body",
+    "connectorRequiredToPropose": false,
+    "validationProvesHostExecution": false,
+    "statePolicies": {
+      "confirm_review": {
+        "precondition": "decision_start_card_shown_plan_not_frozen",
+        "confirmation": "explicit_user_confirmation_required",
+        "apply": "freeze_plan_v2_with_exact_action_digest_then_request_team_create"
+      },
+      "add_facts": {
+        "precondition": "decision_or_material_card_shown",
+        "confirmation": "user_fact_submission_is_confirmation",
+        "apply": "recompute_card_without_workspace_plan_or_team_creation_and_use_new_run_if_plan_frozen"
+      },
+      "change_mode": {
+        "precondition": "decision_start_card_shown",
+        "confirmation": "explicit_user_confirmation_required",
+        "apply": "reject_same_mode_recompute_seat_proposal_and_use_new_run_if_plan_frozen"
+      },
+      "resume_case": {
+        "precondition": "verified_current_checkpoint_or_predecessor_or_legacy_resume_digest_exact_receipt",
+        "confirmation": "explicit_user_confirmation_required",
+        "apply": "revalidate_and_resume_exact_current_run_or_initialize_distinct_read_only_successor_bound_to_exact_resume_digest"
+      },
+      "confirm_decision_record": {
+        "precondition": "review_artifact_presented_and_user_decision_supplied",
+        "confirmation": "explicit_user_confirmation_required",
+        "apply": "blocked_external_until_decision_confirmation_gate_production_enabled"
+      }
+    }
+  },
+  "decisionConfirmationGate": {
+    "contractRef": "contracts/decision-confirmation-gate.json",
+    "pendingSchema": "fbsir.decision-record/v1",
+    "pendingValidatorCommand": "node skills/independent-board-core/scripts/board-envelope.mjs decision",
+    "pendingValidatorReturnsBody": false,
+    "genericAppendUserConfirmedAllowed": false,
+    "artifactPresentedPayloadHashRequired": true,
+    "userConfirmedPayloadHashRequired": true,
+    "dedicatedWriterEnabled": false,
+    "productionEnabled": false,
+    "targetRuntimeReceiptTrust": {
+      "schemaVersion": "fbsir.target-runtime-receipt-trust/v1",
+      "status": "unconfigured",
+      "authority": "reviewed_expert_contract",
+      "signatureAlgorithm": "ed25519-v1",
+      "keyId": null,
+      "publicKeySha256": null,
+      "validFrom": null,
+      "validUntil": null,
+      "maxReceiptAgeSeconds": 3600,
+      "maxFutureSkewSeconds": 300,
+      "revokedAt": null,
+      "allowReceipts": false
+    },
+    "ownerSurface": "fbs_expert_package",
+    "localServiceEvidence": {
+      "status": "candidate_proven_release_blocked",
+      "sourceOwnerSurface": "fbs_service_side",
+      "sourceSurface": "api2.u3w.com_service_candidate",
+      "receipts": [
+        {
+          "taskId": "DDH2681-SVC-ACK-002",
+          "receiptFile": "api2-svc-ack-002-repository-red-green.json",
+          "serviceCommit": "089ba6eae5ec876f20845b0bbd7a93595d43a03d",
+          "receiptSha256": "c039cdacb192864dd381aaf28450bcf11a11e79590df0fa7fa9be33fac7ba74e"
+        },
+        {
+          "taskId": "DDH2681-SVC-ACK-003",
+          "receiptFile": "api2-svc-ack-003-real-verifier-durable-retry.json",
+          "serviceCommit": "1913a17ba56633a2436afbfc7d87d3dc2ed70eb1",
+          "receiptSha256": "4cd2ce3b8b5c529e629d83b4c30c29127fb7fcc765bdab054ca229abbbf5539c"
+        },
+        {
+          "taskId": "DDH2681-SVC-ACK-004",
+          "receiptFile": "api2-svc-ack-004-two-phase-crash-recovery.json",
+          "serviceCommit": "9c3f184d6825c680bad2833dbe52fea9c4976139",
+          "receiptSha256": "9a44c8d116371fc433af5c5a05cc5ec20c7609c924e446fab3b9d27e654aeca7"
+        }
+      ],
+      "productionDeployed": false,
+      "productionRestarted": false,
+      "targetRuntimeReceiptObserved": false,
+      "doesNotProve": [
+        "target_runtime_receipt",
+        "trusted_external_confirmation_verifier",
+        "same_binding_nonce_claim_exact_retry",
+        "user_confirmation",
+        "dedicated_decision_writer",
+        "listed_runtime",
+        "production_deployment_or_restart",
+        "natural_traffic_or_product_credit"
+      ]
+    },
+    "localServiceFollowupEvidence": {
+      "status": "local_followups_complete_release_blocked",
+      "sourceOwnerSurface": "fbs_service_side",
+      "serviceHead": "04b937116eddb0d8caf8e1d4fc1b0a42b814c22c",
+      "serviceTree": "1f93e986bb6400e5c787857fb99b582a322ca93f",
+      "tasks": [
+        {
+          "taskId": "DDH2681-SVC-001",
+          "taskStatus": "done",
+          "receiptFile": "api2-p1-024-publisher-failure-watermark-successor-04b9371.json",
+          "receiptStatus": "local_successor_candidate_green_not_deployed",
+          "receiptSha256": "079aad55f0cd0ab094f5d8197469d80a2bd8bd746bc08e844c4823d7135dde1d"
+        },
+        {
+          "taskId": "DDH2681-SVC-002",
+          "taskStatus": "done",
+          "receiptFile": "api2-p1-025-observer-external-anchor-successor-04b9371.json",
+          "receiptStatus": "local_successor_candidate_green_not_target_runtime",
+          "receiptSha256": "f9a92bcfdf366dbe3ceb07dda40719379acd9b604109ddfebc92cfa2d7079722"
+        }
+      ],
+      "releaseGate": {
+        "taskId": "DDH2681-SVC-PST-002",
+        "taskStatus": "blocked_external",
+        "receiptFile": "api2-release-gate-status-accounting-04b9371.json",
+        "receiptStatus": "local_release_gate_accounting_fixed_known_blockers_preserved",
+        "receiptSha256": "af62d959f6090975b22355bbab4852524f43f075c5c0891b796f4bdb6b6d7d31",
+        "totalChecks": 110,
+        "passed": 100,
+        "warnings": 0,
+        "knownFailed": 10,
+        "newFailed": 0,
+        "invalidStatusCount": 0
+      },
+      "productionDeployed": false,
+      "productionRestarted": false,
+      "targetRuntimeReceiptObserved": false,
+      "listedRuntimeChanged": false,
+      "postReleaseObservationPerformed": false,
+      "doesNotProve": [
+        "target_runtime_receipt",
+        "trusted_external_confirmation_verifier",
+        "same_binding_nonce_claim_exact_retry",
+        "user_confirmation",
+        "dedicated_decision_writer",
+        "listed_runtime",
+        "production_deployment_or_restart",
+        "natural_traffic_or_product_credit"
+      ]
+    },
+    "serviceDeploymentEvidence": {
+      "status": "observe_only_deployment_attested_external_trust_gaps_open",
+      "sourceOwnerSurface": "fbs_service_side",
+      "currentServiceHead": "2c8da52cc68e8bbce31391fd3d94b59a771f852b",
+      "currentServiceTree": "95579c97fd1ee1c4f833ca8d0111d906bc2246b6",
+      "deployedServiceHead": "e9e652d53dc26167ec0aa2e4de09d187b3224ccc",
+      "releaseId": "20260805-093620",
+      "receiptFile": "ddh2681-26.8.1-release-and-manual-expert-observation-20260805T105026+0800.json",
+      "receiptSchemaVersion": "ddh2681.releaseAndManualExpertObservationReceipt.v1",
+      "receiptSha256": "acea32c199cd1250bf1100f22290f0066f751768173355abc3c6c1ed2fd89ec9",
+      "productionDeployed": true,
+      "productionRestarted": true,
+      "targetRuntimeReleaseAttested": true,
+      "listedRuntimeChanged": false,
+      "publicMcpTrafficCutoverPerformed": false,
+      "postReleaseObservationPerformed": true,
+      "productCreditPromoted": false,
+      "doesNotProve": [
+        "target_runtime_confirmation_event_receipt",
+        "trusted_external_confirmation_verifier",
+        "same_binding_nonce_claim_exact_retry",
+        "user_confirmation",
+        "dedicated_decision_writer",
+        "listed_runtime",
+        "public_mcp_traffic_cutover",
+        "natural_traffic_or_product_credit",
+        "full_writer_convergence"
+      ]
+    },
+    "serviceCurrentEvidence": {
+      "status": "ack_carrier_current_evidence_attested_submission_blocked",
+      "sourceOwnerSurface": "fbs_service_side",
+      "changeScopeId": "connector_ack_carrier_v1",
+      "currentServiceHead": "424c80895a688d0bc999f1259b89ac854172c0e2",
+      "currentServiceTree": "c5296ff1ea857797efbec8da6a054d3f8f96fe02",
+      "predecessorServiceHead": "e443fcb376732ea9d6ef908f4752b66096fd2a06",
+      "predecessorServiceTree": "359887262eeebdecb272ee8d89e3145a66c4adaf",
+      "deployedServiceHead": "e9e652d53dc26167ec0aa2e4de09d187b3224ccc",
+      "releaseId": "20260805-093620",
+      "receiptFile": "ddh2681-ack-carrier-current-evidence-successor-20260806T011055+0800.json",
+      "receiptSchemaVersion": "ddh2681.connectorAckCarrierCurrentEvidenceReceipt.v1",
+      "receiptSha256": "4c634ebce3bef0a001ac2600d02035484b6104f0e150c4589ca0e930537c768d",
+      "currentObservationReportSha256": "301357bdccff56cd46223e11ec6dc0924094457124208b171538cc3e7814a29e",
+      "publicMcpRouteReportSha256": "e4b72cd7f27f9fb5b27ba1c44b80e22926e11984282cdd7ad0cbbfbf25bb5c5e",
+      "pinnedRemoteTrackingRef": "refs/remotes/origin/codex/independent-board-26.8.1-service-takeover",
+      "changedPaths": [
+        "package.json",
+        "packages/fbs-connector/lib/cross-process-state-lock.mjs",
+        "packages/fbs-connector/lib/host-forwarding-ack-carrier.mjs",
+        "packages/fbs-connector/lib/host-forwarding-ack-contract.mjs",
+        "packages/fbs-connector/test/host-forwarding-ack-carrier.test.mjs",
+        "src/fbss-host-forwarding-ack-challenge-repository.js",
+        "src/fbss-host-forwarding-ack-verifier.js",
+        "tools/lib/api2-host-forwarding-ack-runtime-transaction.mjs",
+        "tools/lib/api2-host-forwarding-ack-verification.mjs",
+        "tools/serve-host-forwarding-ack-key-scope-config-e2e.test.mjs",
+        "tools/serve-host-forwarding-ack-windows-fail-closed-e2e.test.mjs",
+        "tools/serve.mjs",
+        "tools/service-host-forwarding-ack-transport-only-smoke.mjs",
+        "tools/service-host-forwarding-ack-verifier-smoke.mjs",
+        "tools/service-sp26715-host-ack-runtime-coupling-smoke.mjs"
+      ],
+      "connectorAckCarrierCandidateImplemented": true,
+      "currentEvidenceHeadDeployed": false,
+      "productionCodeChangedSincePredecessor": true,
+      "productionCutoverPerformed": false,
+      "productCreditPromoted": false,
+      "submissionReady": false,
+      "doesNotProve": [
+        "current_evidence_head_deployed_to_production",
+        "target_runtime_confirmation_event_receipt",
+        "trusted_external_confirmation_verifier",
+        "same_binding_nonce_claim_exact_retry",
+        "user_confirmation",
+        "dedicated_decision_writer",
+        "connector_26_8_1_release",
+        "independent_board_execution_through_connector",
+        "trusted_host_ack",
+        "same_binding_natural_chain",
+        "named_upstream_public_route_contract",
+        "listed_runtime",
+        "public_mcp_traffic_cutover",
+        "natural_traffic_or_product_credit",
+        "deterministic_review_zip",
+        "submission_readiness",
+        "full_writer_convergence"
+      ],
+      "predecessorCurrentEvidence": {
+        "status": "current_evidence_successor_attested_submission_blocked",
+        "sourceOwnerSurface": "fbs_service_side",
+        "currentServiceHead": "e443fcb376732ea9d6ef908f4752b66096fd2a06",
+        "currentServiceTree": "359887262eeebdecb272ee8d89e3145a66c4adaf",
+        "predecessorServiceHead": "2c8da52cc68e8bbce31391fd3d94b59a771f852b",
+        "predecessorServiceTree": "95579c97fd1ee1c4f833ca8d0111d906bc2246b6",
+        "deployedServiceHead": "e9e652d53dc26167ec0aa2e4de09d187b3224ccc",
+        "releaseId": "20260805-093620",
+        "receiptFile": "ddh2681-current-evidence-successor-boundary-20260805T132805+0800.json",
+        "receiptSchemaVersion": "ddh2681.connectorEdgeProofBoundaryReceipt.v1",
+        "receiptSha256": "13a3f2ec352b3fe48716a58892d26b0d93ee7ef5dd08497ffa9cb21691ab0b68",
+        "currentObservationReportSha256": "500bc81423c5b604050d5ed2ae049fc650e0a6e0ee8616c84c1dab4de873181f",
+        "publicMcpRouteReportSha256": "ae60282be0ab210f21aa8b90d2ac138a0b9ae7e0e52189749706d8b724b5aae7",
+        "pinnedRemoteTrackingRef": "refs/remotes/origin/codex/independent-board-26.8.1-service-takeover",
+        "changedPaths": [
+          "tools/cutover-api2-fbss-official-mcp.test.mjs"
+        ],
+        "currentEvidenceHeadDeployed": false,
+        "productionCodeChangedSincePredecessor": false,
+        "productionCutoverPerformed": false,
+        "productCreditPromoted": false,
+        "submissionReady": false,
+        "doesNotProve": [
+          "current_evidence_head_deployed_to_production",
+          "target_runtime_confirmation_event_receipt",
+          "trusted_external_confirmation_verifier",
+          "same_binding_nonce_claim_exact_retry",
+          "user_confirmation",
+          "dedicated_decision_writer",
+          "connector_26_8_1_release",
+          "independent_board_execution_through_connector",
+          "canonical_ack_mapping_source",
+          "trusted_host_ack",
+          "same_binding_natural_chain",
+          "named_upstream_public_route_contract",
+          "listed_runtime",
+          "public_mcp_traffic_cutover",
+          "natural_traffic_or_product_credit",
+          "deterministic_review_zip",
+          "submission_readiness",
+          "full_writer_convergence"
+        ]
+      }
+    },
+    "blockedBy": [
+      "service_repository_finalized_exact_retry",
+      "service_verifier_nonce_replay"
+    ],
+    "fallback": "fail_before_workspace_mutation",
+    "evidenceBoundary": "blocked_external_production_confirmation_gate_only_not_user_identity_confirmation_persistence_host_execution_or_product_credit"
+  },
+  "followupRecoveryGate": {
+    "contractRef": "contracts/followup-recovery-gate.json",
+    "status": "blocked_external",
+    "checkpointDecisionBindingEnabled": false,
+    "pendingDecisionRecordPersistenceEnabled": false,
+    "chatContextRecoveryAllowed": false,
+    "resumeFallback": "decision_state_not_bound_by_checkpoint",
+    "evidenceBoundary": "blocked_external_digest_only_recovery_gate_not_decision_body_recovery_user_confirmation_persistence_host_execution_or_product_credit"
   },
   "reviewModes": {
     "quick_review": {
@@ -132,10 +525,14 @@
       "asset.decision_card.hash",
       "asset.bundle.build",
       "asset.bundle.verify",
+      "envelope.material-card.build",
+      "envelope.material.inspect",
+      "envelope.action.validate",
       "envelope.proposal.validate",
       "envelope.plan.validate",
       "envelope.task.validate",
       "envelope.result.validate",
+      "envelope.support-handoff.validate",
       "envelope.delivery.validate",
       "envelope.failure.validate",
       "record.plan",
@@ -162,14 +559,14 @@
     "phaseTwoPolicy": "after_first_round_sealed_at_most_one_relevant_counterexample_or_case_with_new_revision",
     "phaseThreePolicy": "convener_method_bundle_cannot_replace_specialist_opinions",
     "binding": "exactly_one_matching_assetbundle_sha256_in_task_and_result_evidenceRefs",
-    "collectionGate": "replay_frozen_routing_and_verify_bundle_identity_phase_seat_build_date_current_source_effectivity_freshness_content_hash_and_budget_before_accepting_result",
+    "collectionGate": "replay_frozen_routing_verify_bundle_and_require_current_run_plan_task_dispatch_terminal_result_or_failure_and_pre_seal_exact_seat_event_bindings",
     "decisionCardContentPersistedByHashCommand": false,
     "externalFactStatus": "asset_cards_are_reasoning_scaffolds_not_external_fact_or_effect_proof",
     "installedExpertPackagesAreRuntimeDependencies": false
   },
   "resultRecovery": {
     "expectedCoverage": "N_of_N_selected_participants_per_agenda_with_at_least_one_accepted_professional_result",
-    "acceptedPair": ["validated_member_result", "hash_bound_member_observed_SendMessage_success"],
+    "acceptedPair": ["current_schema_writable_result_with_exact_task_evidence_refs", "hash_bound_member_observed_SendMessage_success"],
     "failureClosure": "one_retry_then_convener_records_unavailable_after_retry",
     "taskDispatchBinding": "exact_task_file_bytes_sha256_on_dispatch_requested_and_dispatched_or_dispatch_failed",
     "seatEventScope": "agendaItemId_plus_seatId_plus_revision",
@@ -181,7 +578,15 @@
     "failedResultEvent": "seat.result_failed_with_exact_failure_payload_hash",
     "collectionReadyEvent": "collection.ready_with_exact_collection_payload_hash_after_round_seal",
     "compiledArtifactEvent": "memo.compiled_with_exact_artifact_sha256_before_delivery_prepare",
+    "eventBindingRequiredForCollection": true,
+    "roundSealClosesSeatScope": true,
     "eventBindingRequiredForDelivery": true,
+    "deliveryStructureValidation": "first_and_unique_canonical_h1_plus_exact_ordered_top_level_numbered_sections_outside_fenced_appendices",
+    "quickReviewNumberedSectionCount": 6,
+    "standardAndDeepNumberedSectionCount": 10,
+    "standardAndDeepSummaryLabels": ["【表态统计】", "【一句话建议】"],
+    "quickReviewStandardSummaryAllowed": false,
+    "semanticContentDepthProvenByStructureGate": false,
     "defaultArtifacts": {
       "quick_review": "deliverables/独董会快速审议卡.md",
       "standard_review": "deliverables/独董会审议备忘录.md",
@@ -191,6 +596,20 @@
   "secretary": {
     "agentId": "board-secretary",
     "role": "capability_broker_and_delivery_coordinator",
+    "processSupportResultSchema": "fbsir.process-support-result/v1",
+    "processSupportHandoffSchema": "fbsir.process-support-handoff/v1",
+    "legacyMemberResultV1ProcessSupportReadable": true,
+    "legacyMemberResultV1ProcessSupportWriteAllowed": false,
+    "legacyMemberResultV1ProcessSupportAcceptedForCurrentCollection": false,
+    "processSupportMaterialLedgerMutationAllowed": false,
+    "processSupportMaterialChangeRoute": "return_to_convener_and_rebuild_material_card",
+    "processSupportEvidenceRefsPolicy": "exactly_one_dispatched_assetbundle_and_full_task_result_equality",
+    "processSupportReceiptId": "unavailable",
+    "processSupportDeliveryReceiptObserved": false,
+    "processSupportSelfReportedToolSuccessAllowed": false,
+    "processSupportSendMessagePayload": "validated_normalized_process_support_handoff_only",
+    "recordResultBindsPersistedTaskBeforeWrite": true,
+    "recordResultAtomicallyReturnsProcessSupportHandoff": true,
     "publicCoreCapabilities": [
       "authorized_material_index",
       "host_capability_discovery",
@@ -211,7 +630,7 @@
       "content_publication",
       "automation"
     ],
-    "availabilityBoundary": "26.7.20 exposes basic process support as a package-availability compromise; this does not prove or activate VIP entitlement",
+    "availabilityBoundary": "26.8.10 exposes basic process support as a package-availability compromise; this does not prove or activate VIP entitlement",
     "neverVotes": true,
     "neverWritesSpecialistOpinion": true,
     "externalWriteRequiresExplicitApproval": true
@@ -229,6 +648,8 @@
     "toolAvailabilityProvesInvocation": false,
     "scriptEventProvesHostInvocation": false,
     "seatProposalValidationProvesHostInvocation": false,
+    "hostActionEnvelopeValidationProvesHostInvocation": false,
+    "actionIdTextProvesExecution": false,
     "reviewPlanValidationProvesHostInvocation": false,
     "memberDeliveryObservationProvesHostSignedReceipt": false,
     "memberDeliveryObservationProvesLeadConsumption": false,

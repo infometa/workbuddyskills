@@ -1,0 +1,41 @@
+{
+  "init": {
+    "darwin": "npm install -g beisen-cli",
+    "linux": "npm install -g beisen-cli",
+    "win32": "npm install -g beisen-cli"
+  },
+  "auth": {
+    "darwin": "beisen-cli auth login",
+    "linux": "beisen-cli auth login",
+    "win32": "beisen-cli auth login"
+  },
+  "unAuth": {
+    "darwin": "beisen-cli auth logout",
+    "linux": "beisen-cli auth logout",
+    "win32": "beisen-cli auth logout"
+  },
+  "status": {
+    "darwin": "beisen-cli auth status",
+    "linux": "beisen-cli auth status",
+    "win32": "beisen-cli auth status"
+  },
+  "statusMatchJson": {
+    "status": "valid"
+  },
+  "authUrlDomain": "login.italent.cn",
+  "authWaitForExit": true,
+  "authSuppressBrowser": false,
+  "runtime": {
+    "type": "node",
+    "version": ">=22.20.0"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "beisen-cli version",
+      "linux": "beisen-cli version",
+      "win32": "beisen-cli version"
+    },
+    "minVersion": "1.0.3",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  }
+}

@@ -2,6 +2,7 @@ import { createHash, randomUUID } from 'node:crypto'
 import { lstat, mkdir, open, readFile, rename, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { inspectWorkspace, requireWritableWorkspace } from './workspace-access.mjs'
 
 export const CATALOG_SCHEMA = 'fbsir.cognitive-asset-manifest/v1'
 export const SOURCE_LEDGER_SCHEMA = 'fbsir.cognitive-source-ledger/v1'
@@ -586,12 +587,8 @@ async function validateWorkspaceRoot(workspaceRoot) {
   try { info = await lstat(resolved) }
   catch (error) { fail('ASSET_WORKSPACE_INVALID', 'Workspace root is unavailable', { cause: error.code }) }
   invariant(info.isDirectory() && !info.isSymbolicLink(), 'ASSET_WORKSPACE_INVALID')
-  const markerPath = path.join(resolved, '.fbsir-board', 'workspace.json')
-  ensureWithin(resolved, markerPath, 'ASSET_WORKSPACE_MARKER_PATH_INVALID')
-  await rejectExistingSymlinkSegments(resolved, markerPath, 'ASSET_WORKSPACE_MARKER_SYMLINK_FORBIDDEN')
-  await regularFile(markerPath, 'ASSET_WORKSPACE_MARKER_INVALID')
-  const marker = await readJson(markerPath, 'ASSET_WORKSPACE_MARKER_INVALID')
-  invariant(marker.schema === 'fbsir.board-workspace/v1' && marker.productVersion === '26.7.20', 'ASSET_WORKSPACE_MARKER_INVALID')
+  const inspected = await inspectWorkspace(resolved)
+  invariant(inspected.accessMode !== 'unsupported', 'ASSET_WORKSPACE_MARKER_INVALID')
   return resolved
 }
 
@@ -672,6 +669,7 @@ function validateBundleShape(bundle) {
 }
 
 export async function buildCognitiveAssetBundle({ assetRoot = DEFAULT_ASSET_ROOT, workspaceRoot, input }) {
+  await requireWritableWorkspace(workspaceRoot)
   const request = normalizeSelectionRequest(input)
   const loaded = await loadCatalog({ assetRoot, asOf: request.asOf, rejectStale: false })
   const selection = selectAssets(loaded, request)

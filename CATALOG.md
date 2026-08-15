@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**101** · 专家：**409** · 官方插件：**57** · 团队插件：**31**
+- 技能包：**295** · 连接器：**103** · 专家：**410** · 官方插件：**57** · 团队插件：**31**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-15
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-08-16
 
 ---
 ## 目录
@@ -374,6 +374,7 @@
 | [`awesun`](./connectors/awesun/) | 向日葵（AweSun）远程控制 CLI 工具。提供设备列表管理、远程会话管理、远程桌面控制、远程命令执行、远程文件传输、端口转发、远程关机/重启/唤醒等功能。用户提到向日葵、Aw… | 需要登录 / OAuth / 扫码授权 |
 | [`baidu-netdisk`](./connectors/baidu-netdisk/) | 百度网盘文件管理与智能检索。支持浏览、关键词和语义搜索、文件整理、分享链接、容量查询，以及保存文本内容或通过 URL 转存文件。触发关键词：百度网盘、网盘、baidu、netdi… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`bazhuayu`](./connectors/bazhuayu/) | 八爪鱼云采集 MCP 技能 - 搜索模板、启动与管理任务、查询进度、导出结构化数据 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`beisen-cli`](./connectors/beisen-cli/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`bugly-token`](./connectors/bugly-token/) | 查看 Bugly 产品质量概览（崩溃率、ANR 率、FOOM/OOM 率、启动耗时等）。当用户询问应用的大盘质量、版本质量、今日质量等指标时使用。 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`BUGLY_ACCESS_TOKEN` |
 | [`canva`](./connectors/canva/) | 用途：Use Canva's design capabilities: create and edit designs, manage assets and brand reso… | 可能需要启用对应 MCP / 连接器 |
 | [`canva-ai`](./connectors/canva-ai/) | 用途：Use Canva's design capabilities: create and edit designs, manage assets and brand reso… | 可能需要启用对应 MCP / 连接器 |
@@ -383,6 +384,7 @@
 | [`cnb-api`](./connectors/cnb-api/) | CNB 平台交互命令，支持代码仓库、Issue、PR、CI、制品库读写等操作。 | 无（可选 API/账号以增强能力） |
 | [`ctrip-wendao`](./connectors/ctrip-wendao/) | Trigger when user asks travel-related questions: hotel search, flight query, attraction r… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要按 token-schema 配置凭证；需要环境变量：`WENDAO_API_KEY` |
 | [`dingtalk`](./connectors/dingtalk/) | 管理钉钉产品能力(AI表格/AI搜问/日历/通讯录/群聊与机器人/待办/审批/考勤/日志/DING消息/开放平台文档/钉钉文档/钉钉云盘/原生Markdown文件/AI听记/邮箱… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`dknowc-mcp`](./connectors/dknowc-mcp/) | 使用深知可信工作台 MCP 工具进行可信问答和权威材料检索；仅在用户明确要求深度研究或复杂对比时调用深度搜索。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`edgeone-pages`](./connectors/edgeone-pages/) | 用途：edgeone-pages | 可能需要启用对应 MCP / 连接器 |
 | [`emr-query`](./connectors/emr-query/) | 腾讯云 EMR 只读查询技能 — 基于官方 tccli 的 48 个只读查询接口文档与调用模板 | 需要登录 / OAuth / 扫码授权 |
 | [`ezjoin-meeting`](./connectors/ezjoin-meeting/) | EzyJoin 智慧会议操作技能 - 预约会议室、创建/取消会议、查询会议日程与 AI 纪要、企业知识库检索 | 需要飞书应用凭证或用户登录授权；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
@@ -665,7 +667,7 @@
 | [`trend-researcher`](./experts/trend-researcher/) | [行业趋势专家](./experts/trend-researcher/) | 持续追踪行业和技术趋势，为产品战略提供前瞻性洞察 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；需要环境变量：`BROWSER_USE_API_KEY`、`IMA_OPENAPI_APIKEY` |
 | [`vocab-craft-expert`](./experts/vocab-craft-expert/) | [智能词汇教练](./experts/vocab-craft-expert/) | 融合间隔重复记忆科学与键盘输入训练的AI英语词汇教练，支持每日定时推送、错词强化、三种练习模式，让背单词更科学高效 | 无 |
 
-### 法务安全（26）
+### 法务安全（27）
 
 | 目录 | 名称 | 用来做什么 | 前置条件 |
 |------|------|------------|----------|
@@ -675,6 +677,7 @@
 | [`compliance-auditor`](./experts/compliance-auditor/) | [合规审计师](./experts/compliance-auditor/) | 全面审计企业运营合规性，确保符合行业标准 | 需要大模型 API Key（OpenAI/Anthropic 等） |
 | [`contract-expert`](./experts/contract-expert/) | [合同风控顾问](./experts/contract-expert/) | 覆盖合同起草、审查、谈判、背景评估与全生命周期管理；专业审查模式一键产出风险清单、审查报告与批注稿。 | 可能需要启用对应 MCP / 连接器 |
 | [`enterprise-legal-team`](./experts/enterprise-legal-team/) | [企业法务专家团](./experts/enterprise-legal-team/) | 面向企业法务的多角色专家团，覆盖合同、交易、隐私、产品、监管、AI 治理、雇佣与知识产权分诊。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
+| [`fbsir-aigc-compliance-red-team`](./experts/fbsir-aigc-compliance-red-team/) | [AIGC 营销合规审查官](./experts/fbsir-aigc-compliance-red-team/) | 福帮手 AIGC 发布前对抗审查：核验双标识、违禁词、虚假人设，输出风险等级、法条依据与安全改写。 | 可能需要启用对应 MCP / 连接器 |
 | [`fbsir-board-secretary-assistant`](./experts/fbsir-board-secretary-assistant/) | [董秘助手](./experts/fbsir-board-secretary-assistant/) | 面向公告、路演、投资者问答、互动回复和沟通稿，在对外使用前做合规红队审查并给出审批下一步。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`healthcare-marketing-compliance-expert`](./experts/healthcare-marketing-compliance-expert/) | [医疗营销合规专家](./experts/healthcare-marketing-compliance-expert/) | 确保医疗营销内容符合法规要求，守护信息准确性 | 无 |
 | [`huashu-doc-reviewer`](./experts/huashu-doc-reviewer/) | [合同与公文审稿](./experts/huashu-doc-reviewer/) | 为「一人公司」打造的 AI 审稿专家。直接在 .docx 原文里加批注气泡和追踪修订，不返回新文档、不破坏原格式。 | 无 |

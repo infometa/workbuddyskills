@@ -1,6 +1,6 @@
 {
   "schema": "fbsir.independent-review-commitment-traceability/v1",
-  "productVersion": "26.7.20",
+  "productVersion": "26.8.10",
   "evidenceBoundary": "package-contained traceability only; host invocation, official listing and product credit require separate receipts",
   "commitments": [
     {
@@ -17,6 +17,16 @@
       "id": "first-value-before-team",
       "promise": "首次响应先交付决策起手卡，用户明确确认前不得建团。",
       "evidenceFiles": [".codebuddy-plugin/plugin.json", "agents/board-convener.md", "references/review-protocol.md", "examples/acceptance-cases.json"]
+    },
+    {
+      "id": "stable-host-actions",
+      "promise": "`confirm_review` 必须经过用户明确确认、action envelope 绿灯与 plan v2 精确冻结；`add_facts`、`change_mode` 遇冻结计划必须终止旧 run 并使用新 run 重建。五动作（另含 `resume_case`、`confirm_decision_record`）统一引用同一 catalog、专属参数白名单与状态门；动作校验只证明包级提议，不证明宿主执行、连接器 ACK、正式上架或自然产品信用。",
+      "evidenceFiles": ["contracts/no-connector-action-contract.json", "contracts/runtime-capabilities.json", "agents/board-convener.md", "skills/independent-board-core/scripts/lib/core.mjs", "skills/independent-board-core/scripts/board-envelope.mjs"]
+    },
+    {
+      "id": "resume-card-read-only",
+      "promise": "续办卡必须绑定调用方已有的 exact receipt digest 且全程只读；current 先经完整工作空间事件门，只投影事件链观察，不读取 digest 未绑定的材料记录，terminal 不展示继续动作，其他 current 只续同一 run；legacy 只投影字节证据绑定并进入不同的新 run。缺少、失配、不支持或漂移不得发明节点、责任或正文真实性；inspect-only 只隐藏本次 CTA，不冒充全局动作撤销。",
+      "evidenceFiles": ["agents/board-convener.md", "contracts/runtime-capabilities.json", "examples/output-structures.md", "examples/acceptance-cases.json", "skills/independent-board-core/SKILL.md", "skills/independent-board-core/templates/case-resume-card.json", "skills/independent-board-core/scripts/board-resume.mjs", "skills/independent-board-core/scripts/lib/core.mjs", "tests/resume-card.test.mjs"]
     },
     {
       "id": "review-plan-gate",
@@ -55,7 +65,7 @@
     },
     {
       "id": "decision-quality-and-journal",
-      "promise": "最终交付检查决策框架、替代、信息、取舍、推理和执行承诺六链，并留下选择、指标、触发器、负责人和复审日期；不以流程质量保证结果。",
+      "promise": "最终交付逐项检查问题框架、可行替代、可靠信息、价值与取舍、推理和执行承诺六链，并留下最终选择、未选方案、可解析时的关键概率与截止日、领先指标、触发器、负责人和复审日期；不以流程质量保证结果。",
       "evidenceFiles": ["agents/board-convener.md", "agents/board-secretary.md", "references/review-protocol.md", "skills/independent-board-core/references/document-delivery.md", "examples/acceptance-cases.json"]
     },
     {
@@ -70,8 +80,8 @@
     },
     {
       "id": "default-artifact-delivery",
-      "promise": "收齐后默认生成模式对应的 Markdown 文件，并在结果/失败、收齐和成稿的精确哈希事件绑定、规范标题和文件哈希校验通过后向用户展示；聊天完成态或文件存在都不等于验收。",
-      "evidenceFiles": ["README.md", "agents/board-convener.md", "references/review-protocol.md", "examples/acceptance-cases.json", "skills/independent-board-core/scripts/board-delivery.mjs"]
+      "promise": "收齐后默认生成模式对应的 Markdown 文件；交付器忽略 fenced 附录内容后，强制首个且唯一规范 H1、快审精确六节或标准/深度精确十节标题与顺序，再复核结果/失败、收齐和成稿的精确哈希事件绑定及文件哈希，才向用户展示；结构门不证明正文深度，聊天完成态或文件存在也不等于验收。",
+      "evidenceFiles": ["README.md", "agents/board-convener.md", "contracts/runtime-capabilities.json", "references/review-protocol.md", "examples/acceptance-cases.json", "skills/independent-board-core/scripts/board-delivery.mjs", "skills/independent-board-core/scripts/lib/core.mjs"]
     },
     {
       "id": "proof-layer-separation",

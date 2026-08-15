@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.0.0",
-  "lastUpdated": "2026-08-14T13:21:08Z",
+  "lastUpdated": "2026-08-15T15:02:41Z",
   "author": {
     "name": "AI Expert Center",
     "source": "https://github.com/msitarzewski/agency-agents",
@@ -24174,13 +24174,17 @@
         "zh": "福帮手经营决策独立审议专家团｜按案组建必要席位，独立判断、交叉质询、保留异议，交付可追溯行动备忘录",
         "en": "Configurable FBSir AI decision-review team: frame the decision, convene only the necessary seats, surface dissent and deliver a traceable action memo."
       },
+      "displayDescription": {
+        "zh": "福帮手经营决策独立审议专家团｜按案组建必要席位，独立判断、交叉质询、保留异议，交付可追溯行动备忘录",
+        "en": "Configurable FBSir AI decision-review team: frame the decision, convene only the necessary seats, surface dissent and deliver a traceable action memo."
+      },
       "promptFile": "/plugins/fbsir-eight-seat-board/agents/board-convener.md",
       "avatar": "/avatars/FbsirEightSeatBoard.png",
       "createdAt": "2026-07-21T03:07:59Z",
-      "updatedAt": "2026-07-21T03:47:35Z",
+      "updatedAt": "2026-08-15T15:02:41Z",
       "defaultInitPrompt": {
-        "zh": "我正在面对一个重要经营决策。请先给我一张决策起手卡，说明真正要决定什么、还缺哪些关键事实，以及应该采用快审、标准审议还是深度审议；在我确认议案卡前不要建团。",
-        "en": "I am facing an important business decision. Start with a decision card: clarify the real decision, critical evidence gaps, and whether this needs a quick, standard, or deep review. Do not create a team until I confirm the card."
+        "zh": "我正在面对一个重要经营决策。请先给我一张紧凑决策起手卡，最多问 2 个决定性问题；末尾只给主动作“按建议开始独立审议”和次级分支“补充关键事实”“切换审议模式”。在我明确确认前不要写案卷，也不要建团。",
+        "en": "I am facing an important business decision. Start with a compact decision card and ask at most two decision-changing questions. End with one primary action, Start the independent review as recommended, and two secondary branches, Add critical facts and Change review mode. Do not write a case workspace or create a team before my explicit confirmation."
       },
       "expertType": "team",
       "agentName": "board-convener",
@@ -24201,16 +24205,16 @@
       ],
       "quickPrompts": [
         {
-          "en": "I am facing an important business decision. Start with a decision card: clarify the real decision, critical evidence gaps, and whether this needs a quick, standard, or deep review. Do not create a team until I confirm the card.",
-          "zh": "我正在面对一个重要经营决策。请先给我一张决策起手卡，说明真正要决定什么、还缺哪些关键事实，以及应该采用快审、标准审议还是深度审议；在我确认议案卡前不要建团。"
+          "en": "I am facing an important business decision. Start with a compact decision card and ask at most two decision-changing questions. End with one primary action, Start the independent review as recommended, and two secondary branches, Add critical facts and Change review mode. Do not write a case workspace or create a team before my explicit confirmation.",
+          "zh": "我正在面对一个重要经营决策。请先给我一张紧凑决策起手卡，最多问 2 个决定性问题；末尾只给主动作“按建议开始独立审议”和次级分支“补充关键事实”“切换审议模式”。在我明确确认前不要写案卷，也不要建团。"
         },
         {
-          "en": "Start with a decision card for this M&A or investment decision. Select at most three conclusion-changing specialist seats from strategy, finance, legal and integration, preserve dissent, and wait for my confirmation before creating a team.",
-          "zh": "请先为这个并购或投资决策形成决策起手卡，从战略、资本财务、法务和整合候选中最多选择三个会改变结论的专业席并保留异议；在我确认前不要建团。"
+          "en": "Start with a compact decision card for this M&A or investment decision. Ask at most two decision-changing questions, select no more than three relevant specialist seats, preserve dissent, and show the same one primary action and two secondary branches. Do not write a case workspace or create a team before my explicit confirmation.",
+          "zh": "请先为这个并购或投资决策形成紧凑决策起手卡，最多问 2 个决定性问题，从战略、资本财务、法务和整合候选中最多选择三个会改变结论的专业席并保留异议；仍只显示“按建议开始独立审议”“补充关键事实”“切换审议模式”，我明确确认前不要写案卷或建团。"
         },
         {
-          "en": "Our growth has stalled. Start with a decision card on deepening the core business, changing channels, or testing a second curve, and wait for my confirmation before creating a team.",
-          "zh": "公司增长停滞了，请先形成决策起手卡，比较深挖主业、变革渠道和小试第二曲线；在我确认前不要建团。"
+          "en": "Our growth has stalled. Start with a compact decision card comparing a deeper core business, channel change and a reversible second-curve test. Ask at most two decision-changing questions and show the same one primary action and two secondary branches. Do not write a case workspace or create a team before my explicit confirmation.",
+          "zh": "公司增长停滞了，请先形成紧凑决策起手卡，比较深挖主业、变革渠道和可逆的小试第二曲线，最多问 2 个决定性问题；仍只显示“按建议开始独立审议”“补充关键事实”“切换审议模式”，我明确确认前不要写案卷或建团。"
         }
       ],
       "members": [
@@ -24332,6 +24336,7 @@
           "role": "member"
         }
       ],
+      "visibility": "all",
       "author": {
         "zh": "福帮手",
         "en": "福帮手"
@@ -28571,7 +28576,7 @@
       "promptFile": "/plugins/hr-digital-expert/agents/hr-digital-expert.md",
       "avatar": "/avatars/HrDigitalExpert.png",
       "createdAt": "2026-08-14T12:43:21Z",
-      "updatedAt": "2026-08-14T13:21:08Z",
+      "updatedAt": "2026-08-14T12:43:41Z",
       "defaultInitPrompt": {
         "zh": "帮我查询我有HR数仓哪些权限",
         "en": "Help me check what HR data warehouse permissions I have"
@@ -28611,6 +28616,66 @@
       "author": {
         "zh": "nebula",
         "en": "nebula"
+      }
+    },
+    {
+      "id": "FbsirAigcComplianceRedTeam",
+      "categoryId": "11-SecurityCompliance",
+      "displayName": {
+        "en": "AIGC Compliance Red Team",
+        "zh": "AIGC 合规红队"
+      },
+      "profession": {
+        "en": "AIGC Marketing Compliance Reviewer",
+        "zh": "AIGC 营销合规审查官"
+      },
+      "description": {
+        "zh": "福帮手 AIGC 发布前对抗审查：核验双标识、违禁词、虚假人设，输出风险等级、法条依据与安全改写。",
+        "en": "FBSir AIGC Compliance Red Team: pre-publication adversarial review for AI-generated marketing content — dual-label verification, banned-word screening, fake persona detection, risk levels with legal basis and safe rewrites."
+      },
+      "promptFile": "/plugins/fbsir-aigc-compliance-red-team/agents/fbsir-aigc-compliance-red-team.md",
+      "avatar": "/avatars/FbsirAigcComplianceRedTeam.png",
+      "createdAt": "2026-08-15T08:32:10Z",
+      "updatedAt": "2026-08-15T08:32:10Z",
+      "defaultInitPrompt": {
+        "zh": "把这篇准备发布的小红书种草笔记贴给你，帮我出一张红队风险卡并给安全改写",
+        "en": "Review this Xiaohongshu promo note before publishing: give me a red-team risk card and a safe rewrite."
+      },
+      "expertType": "agent",
+      "agentName": "fbsir-aigc-compliance-red-team",
+      "plugin": "fbsir-aigc-compliance-red-team",
+      "tags": [
+        {
+          "en": "AIGC Labeling",
+          "zh": "AIGC 标识核验"
+        },
+        {
+          "en": "Ad Law Compliance",
+          "zh": "广告法合规"
+        },
+        {
+          "en": "Marketing Red Teaming",
+          "zh": "营销内容红队"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Review this Xiaohongshu promo note before publishing: give me a red-team risk card and a safe rewrite.",
+          "zh": "把这篇准备发布的小红书种草笔记贴给你，帮我出一张红队风险卡并给安全改写"
+        },
+        {
+          "en": "Check this AI-generated storefront poster for AI-fake imagery and missing AIGC labels.",
+          "zh": "检查这张 AI 生成的外卖店招海报有没有 AI 照骗和标识缺失风险"
+        },
+        {
+          "en": "Audit our study-tour enrollment script for guaranteed-admission claims under advertising law and produce a compliant version.",
+          "zh": "我们研学机构的招生话术有没有保过类违规承诺？请按广告法审查并给出合规版本"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "福帮手 FBSir",
+        "en": "福帮手 FBSir"
       }
     }
   ]

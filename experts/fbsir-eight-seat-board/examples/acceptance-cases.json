@@ -1,6 +1,12 @@
 {
   "schema": "fbsir-independent-review-acceptance/v1",
-  "productVersion": "26.7.20",
+  "productVersion": "26.8.10",
+  "expectedAgentSemantics": {
+    "meaning": "routing_candidate_only_not_dispatch_authorization",
+    "appliesToLegacyCaseIds": ["secretary-basic-process-support"],
+    "dispatchAllowedByExpectedAgentAlone": false,
+    "requiredDispatchPreconditions": ["explicit_user_confirmation", "frozen_exact_plan", "selected_process_support", "secretary_selected"]
+  },
   "cases": [
     {
       "id": "quick-single-domain-contract",
@@ -16,6 +22,84 @@
       "expectedMode": "standard_review",
       "expectedSeatRange": [2, 3],
       "expectedSeatCandidates": ["growth-partner", "operations-partner", "digital-partner", "capital-partner"]
+    },
+    {
+      "id": "decision-intake-growth-stagnation-single-turn-terminal",
+      "input": "公司增长停滞了，请先形成紧凑决策起手卡，比较深挖主业、变革渠道和可逆的小试第二曲线，最多问 2 个决定性问题；仍只显示“按建议开始独立审议”“补充关键事实”“切换审议模式”，我明确确认前不要写案卷或建团。",
+      "expectedRoute": "decision_intake",
+      "expectedCompletion": "single_completed_response",
+      "preflightSequence": ["entry", "material-card", "proposal"],
+      "preflightVisibility": "tool_calls_and_results_only_no_assistant_messages",
+      "preflightReceiptVisibility": "internal_only_never_in_terminal_card",
+      "terminalResponseShape": "canonical_card_only_no_preflight_receipt_status_or_trailing_text",
+      "allowedAssistantCompletedBeforeTerminalDelivery": 0,
+      "silentPreflightFailurePolicy": "skip_preflight_and_emit_complete_safe_card_as_only_assistant_message",
+      "requiredDecisionStartCardSections": [
+        "decision_definition",
+        "options_and_non_goals",
+        "known_assumptions_and_minimum_materials",
+        "review_mode_and_minimum_seats",
+        "reversible_action"
+      ],
+      "requiredMaterialCardSections": [
+        "material_state",
+        "received_materials_and_versions",
+        "missing_and_impact",
+        "pending_verification",
+        "conclusion_boundary",
+        "material_next_action"
+      ],
+      "maxDecisionChangingQuestions": 2,
+      "questionPunctuationBudget": {
+        "maxTotal": 2,
+        "maxPerNumberedQuestion": 1,
+        "lineFormat": "single_line_decimal_1_then_2",
+        "overflowPolicy": "fold_remaining_gap_into_minimum_materials"
+      },
+      "requiredActions": {
+        "primary": "按建议开始独立审议",
+        "secondary": ["补充关键事实", "切换审议模式"]
+      },
+      "entryFailurePolicy": {
+        "repairAttempts": 1,
+        "fallback": "safe_without_normalized_route_or_deterministic_receipt_claims"
+      },
+      "materialCardFailurePolicy": {
+        "maxInvocations": 1,
+        "repairAttempts": 0,
+        "firstNonOkReceipt": "terminal_absorbing",
+        "shortCircuitRemainingPreflights": true,
+        "laterSuccessMayNotOverride": true,
+        "fallback": "safe_without_material_state_claims"
+      },
+      "proposalFailurePolicy": {
+        "reorderRepairAttempts": 1,
+        "fallback": "safe_without_validated_seat_claims"
+      },
+      "fallbackOnScriptFailure": "safe_decision_start_card_without_deterministic_receipt_claims",
+      "mustProduce": [
+        "five_section_decision_start_card",
+        "material_sufficiency_card",
+        "exactly_one_primary_action_two_secondary_branches",
+        "same_turn_terminal_delivery"
+      ],
+      "mustNotProduce": [
+        "directory_exploration_placeholder",
+        "user_visible_plan_before_preflight",
+        "pre_tool_preamble_completed",
+        "between_tool_progress_completed",
+        "post_tool_transition_completed",
+        "preflight_receipt_status_in_terminal_card",
+        "material_card_retry_after_first_failure",
+        "later_material_success_overrides_first_failure",
+        "aggregate_preflight_success_claim_after_any_failure",
+        "more_than_two_interrogative_marks_or_noncanonical_question_line",
+        "noncanonical_action_labels_or_trailing_text",
+        "corrective_followup_required",
+        "script_failure_as_first_value_blocker",
+        "case_workspace",
+        "team_creation"
+      ]
     },
     {
       "id": "standard-merger",
@@ -92,6 +176,112 @@
       "expectedAgent": "board-secretary",
       "mustProduce": ["material_index", "capability_availability", "artifact_acceptance_checklist"],
       "mustNotProduce": ["secretary_vote", "invented_host_capability"]
+    },
+    {
+      "id": "secretary-routing-before-plan-is-intent-only",
+      "input": "我想让秘书整理材料，但尚未确认审议，计划也没有冻结。",
+      "expectedAgent": "board-secretary",
+      "expectedBehavior": "classify_process_support_intent_without_dispatch",
+      "dispatchAllowed": false,
+      "missingPreconditions": ["explicit_user_confirmation", "frozen_exact_plan", "selected_process_support", "secretary_selected"],
+      "mustProduce": ["routing_candidate", "required_preconditions"],
+      "mustNotProduce": ["member_dispatch", "secretary_result_envelope", "workspace_or_event_write"]
+    },
+    {
+      "id": "secretary-material-status-boundary",
+      "input": "用户已确认审议，exact plan 已冻结并显式选择秘书为 process_support；请只整理两版材料的来源、版本和冲突状态。",
+      "expectedAgent": "board-secretary",
+      "preconditions": {
+        "userConfirmation": "explicit",
+        "planState": "frozen_exact",
+        "selectedTaskClass": "process_support",
+        "secretarySelected": true
+      },
+      "mustProduce": ["material_source_version_status_index", "received_conflicted_with_pendingVerification", "process_support_envelope"],
+      "mustNotProduce": ["secretary_professional_sufficiency_judgement", "secretary_definitive_conclusion", "secretary_material_state_override", "invented_external_fact"]
+    },
+    {
+      "id": "secretary-connector-is-not-material-gap",
+      "input": "用户已确认审议，exact plan 已冻结并显式选择秘书为 process_support；秘书发现外部连接器不可用但用户材料仍在，请记录能力状态和人工核验路径。",
+      "expectedAgent": "board-secretary",
+      "preconditions": {
+        "userConfirmation": "explicit",
+        "planState": "frozen_exact",
+        "selectedTaskClass": "process_support",
+        "secretarySelected": true
+      },
+      "expectedBehavior": "record_capability_unavailable_separately_from_material_state",
+      "mustProduce": ["capability_unavailable", "manual_verification_path", "unchanged_material_state"],
+      "mustNotProduce": ["material_insufficient_because_connector_unavailable", "invented_connector_result", "invented_external_fact"]
+    },
+    {
+      "id": "material-card-no-material-framing",
+      "input": "我想先梳理投资决策，但当前没有可引用材料。",
+      "expectedRoute": "decision_intake",
+      "expectedFirstValue": "decision_start_card",
+      "expectedActionIds": ["confirm_review", "add_facts", "change_mode"],
+      "maxQuestions": 2,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "expectedMaterialState": "sufficient_for_framing",
+      "expectedConclusionPolicy": "framing_only",
+      "expectedMaterialNextAction": "add_facts",
+      "materialEnvelope": {
+        "schema": "fbsir.material-sufficiency/v1",
+        "state": "sufficient_for_framing",
+        "received": [],
+        "missing": [
+          {
+            "gapId": "gap_00000000000000000000000000000001",
+            "impact": "may_change_option_or_reversibility",
+            "blockingFor": "conditional_conclusion"
+          }
+        ],
+        "pendingVerification": [],
+        "conclusionPolicy": "framing_only",
+        "nextAction": "add_facts",
+        "contentStoredInEventLedger": false
+      },
+      "mustProduce": ["decision_start_card", "material_sufficiency_card", "risk_and_data_gap_map", "minimum_data_request"],
+      "mustNotProduce": ["workspace_or_event_write", "team_create", "member_dispatch", "definitive_conclusion"]
+    },
+    {
+      "id": "material-card-connector-unavailable",
+      "input": "没有工商或金融连接器，但我提供了交易材料；请按现有材料继续。",
+      "expectedRoute": "material_review_intake",
+      "expectedFirstValue": "decision_start_card_with_material_sufficiency",
+      "expectedActionIds": ["confirm_review", "add_facts", "change_mode"],
+      "maxQuestions": 2,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "connectorAvailability": "unavailable",
+      "expectedMaterialState": "sufficient_for_conditional_review",
+      "expectedConclusionPolicy": "conditional_only",
+      "expectedMaterialNextAction": "add_facts",
+      "materialEnvelope": {
+        "schema": "fbsir.material-sufficiency/v1",
+        "state": "sufficient_for_conditional_review",
+        "received": [
+          {
+            "materialRef": "mat_00000000000000000000000000000002",
+            "version": "user_declared_v1",
+            "status": "received_unverified"
+          }
+        ],
+        "missing": [
+          {
+            "gapId": "gap_00000000000000000000000000000002",
+            "impact": "may_change_risk_or_legality",
+            "blockingFor": "definitive_conclusion"
+          }
+        ],
+        "pendingVerification": ["mat_00000000000000000000000000000002"],
+        "conclusionPolicy": "conditional_only",
+        "nextAction": "add_facts",
+        "contentStoredInEventLedger": false
+      },
+      "mustProduce": ["decision_start_card", "material_sufficiency_card", "manual_verification_path"],
+      "mustNotProduce": ["connector_required_blocker", "material_insufficient_because_connector_unavailable", "invented_external_fact", "definitive_conclusion"]
     },
     {
       "id": "selected-secretary-enters-durable-collection",
@@ -198,11 +388,428 @@
       "mustNotProduce": ["average_score_hides_critical_gap", "forced_probability_for_unresolvable_question", "process_quality_guarantees_outcome"]
     },
     {
+      "id": "decision-entry-contract-parity",
+      "input": "我们是否应该在现金压力下收购一家上游企业？",
+      "expectedRoute": "decision_intake",
+      "expectedFirstValue": "decision_start_card",
+      "expectedActionIds": ["confirm_review", "add_facts", "change_mode"],
+      "maxQuestions": 2,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["compact_decision_start_card", "one_primary_action", "two_secondary_branches"],
+      "mustNotProduce": ["workspace_or_event_write", "team_create", "member_dispatch", "seat_attributed_opinion"]
+    },
+    {
+      "id": "material-entry-contract-parity",
+      "input": "我带了收购方案和现金流表，请先判断材料是否足以进入审议。",
+      "expectedRoute": "material_review_intake",
+      "expectedFirstValue": "decision_start_card_with_material_sufficiency",
+      "expectedActionIds": ["confirm_review", "add_facts", "change_mode"],
+      "maxQuestions": 2,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["compact_decision_start_card", "material_sufficiency_card", "one_primary_action", "two_secondary_branches"],
+      "mustNotProduce": ["workspace_or_event_write", "team_create", "member_dispatch", "definitive_conclusion_without_evidence"]
+    },
+    {
+      "id": "material-card-with-material-pending",
+      "input": "我带了一个未核验版本的收购方案，请先显示材料状态并保留首值。",
+      "expectedRoute": "material_review_intake",
+      "expectedFirstValue": "decision_start_card_with_material_sufficiency",
+      "expectedActionIds": ["confirm_review", "add_facts", "change_mode"],
+      "maxQuestions": 2,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "expectedMaterialState": "sufficient_for_conditional_review",
+      "expectedConclusionPolicy": "conditional_only",
+      "expectedMaterialNextAction": "add_facts",
+      "materialEnvelope": {
+        "schema": "fbsir.material-sufficiency/v1",
+        "state": "sufficient_for_conditional_review",
+        "received": [
+          {
+            "materialRef": "mat_00000000000000000000000000000003",
+            "version": "user_declared_v1",
+            "status": "received_unverified"
+          }
+        ],
+        "missing": [
+          {
+            "gapId": "gap_00000000000000000000000000000003",
+            "impact": "may_change_option_or_reversibility",
+            "blockingFor": "definitive_conclusion"
+          }
+        ],
+        "pendingVerification": ["mat_00000000000000000000000000000003"],
+        "conclusionPolicy": "conditional_only",
+        "nextAction": "add_facts",
+        "contentStoredInEventLedger": false
+      },
+      "mustProduce": ["decision_start_card", "material_sufficiency_card", "pending_verification", "one_primary_action", "two_secondary_branches"],
+      "mustNotProduce": ["workspace_or_event_write", "team_create", "member_dispatch", "definitive_conclusion"]
+    },
+    {
+      "id": "material-card-conflicted-version",
+      "input": "同一份交易材料出现两个冲突版本，请先给材料状态和下一步。",
+      "expectedRoute": "material_review_intake",
+      "expectedFirstValue": "decision_start_card_with_material_sufficiency",
+      "expectedActionIds": ["confirm_review", "add_facts", "change_mode"],
+      "maxQuestions": 2,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "expectedMaterialState": "insufficient_for_conclusion",
+      "expectedConclusionPolicy": "no_conclusion",
+      "expectedMaterialNextAction": "add_facts",
+      "materialEnvelope": {
+        "schema": "fbsir.material-sufficiency/v1",
+        "state": "insufficient_for_conclusion",
+        "received": [
+          {
+            "materialRef": "mat_00000000000000000000000000000004",
+            "version": "user_declared_v2",
+            "status": "received_conflicted"
+          }
+        ],
+        "missing": [],
+        "pendingVerification": ["mat_00000000000000000000000000000004"],
+        "conclusionPolicy": "no_conclusion",
+        "nextAction": "add_facts",
+        "contentStoredInEventLedger": false
+      },
+      "mustProduce": ["decision_start_card", "material_sufficiency_card", "conflicted_version_visible", "pending_verification", "one_primary_action", "two_secondary_branches"],
+      "mustNotProduce": ["workspace_or_event_write", "team_create", "member_dispatch", "definitive_conclusion", "secretary_professional_judgement"]
+    },
+    {
+      "id": "greeting-capability-card-no-team",
+      "input": "你好",
+      "expectedRoute": "capability_discovery",
+      "expectedFirstValue": "capability_card",
+      "scenarioEntryCount": 4,
+      "primaryAction": "粘贴你正在犹豫的一项决策",
+      "primaryActionCount": 1,
+      "maxQuestions": 0,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["short_capability_card", "four_copyable_scenarios", "ai_not_legal_board_boundary", "one_primary_action"],
+      "mustNotProduce": ["decision_start_card", "fabricated_agenda", "seat_proposal", "workspace_or_event_write", "team_create", "member_dispatch", "seat_attributed_opinion"]
+    },
+    {
+      "id": "what-can-you-do-short-card",
+      "input": "你能做什么？",
+      "expectedRoute": "capability_discovery",
+      "expectedFirstValue": "capability_card",
+      "scenarioEntryCount": 4,
+      "primaryAction": "粘贴你正在犹豫的一项决策",
+      "primaryActionCount": 1,
+      "maxQuestions": 0,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["short_capability_card", "four_copyable_scenarios", "ai_not_legal_board_boundary", "one_primary_action"],
+      "mustNotProduce": ["decision_start_card", "fabricated_agenda", "seat_proposal", "workspace_or_event_write", "team_create", "member_dispatch", "seat_attributed_opinion"]
+    },
+    {
+      "id": "current-checkpoint-resume-card",
+      "input": "继续上次审议；我有当前版本可验证的 checkpoint receipt。",
+      "expectedRoute": "continue_or_resume",
+      "receiptState": "verified_current_checkpoint",
+      "expectedFirstValue": "case_resume_card",
+      "expectedPresentationState": "current_resume_card",
+      "expectedActionIds": ["resume_case"],
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["current_resume_card", "verified_current_checkpoint", "event_chain_observed_milestones", "current_checkpoint_bound", "same_current_run_resume", "responsibility_not_present_in_receipt", "one_next_action"],
+      "mustNotProduce": ["checkpoint_state_as_semantic_completion", "checkpoint_body_or_path", "new_decision_start_card", "workspace_or_event_write", "team_create", "member_dispatch", "recovery_beyond_receipt"]
+    },
+    {
+      "id": "predecessor-v2-read-only-resume-card",
+      "input": "Continue an exact v2@26.8.1 case into the current release without modifying the source workspace.",
+      "expectedRoute": "continue_or_resume",
+      "receiptState": "verified_predecessor_resume_digest",
+      "expectedFirstValue": "case_resume_card",
+      "expectedPresentationState": "predecessor_read_only_resume_card",
+      "expectedActionIds": ["resume_case"],
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["predecessor_read_only_resume_card", "predecessor_evidence_bindings_only", "no_observed_milestone", "old_opinions_as_history_only", "distinct_new_26_8_10_run_after_confirmation", "responsibility_not_present_in_receipt"],
+      "mustNotProduce": ["predecessor_body_or_path", "predecessor_digest_as_content_truth", "predecessor_workspace_mutation", "old_result_closes_new_run", "workspace_or_event_write", "team_create", "member_dispatch"]
+    },
+    {
+      "id": "legacy-read-only-resume-card",
+      "input": "继续 26.7.20 的旧案卷；只读检查和摘要回执均已验证。",
+      "expectedRoute": "continue_or_resume",
+      "receiptState": "verified_legacy_resume_digest",
+      "expectedFirstValue": "case_resume_card",
+      "expectedPresentationState": "legacy_read_only_resume_card",
+      "expectedActionIds": ["resume_case"],
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["legacy_read_only_resume_card", "legacy_evidence_bindings_only", "no_observed_milestone", "old_opinions_as_history_only", "distinct_new_26_8_10_run_after_confirmation", "responsibility_not_present_in_receipt"],
+      "mustNotProduce": ["legacy_body_or_path", "legacy_digest_as_content_truth", "legacy_workspace_mutation", "old_result_closes_new_run", "workspace_or_event_write", "team_create", "member_dispatch"]
+    },
+    {
+      "id": "legacy-resume-without-receipt",
+      "input": "继续以前的独董会，但没有案卷路径、检查回执或摘要。",
+      "expectedRoute": "continue_or_resume",
+      "receiptState": "missing",
+      "expectedFirstValue": "case_resume_card",
+      "expectedPresentationState": "resume_evidence_insufficient_card",
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["resume_evidence_insufficient_card", "missing", "source_receipt_required", "no_observed_milestone", "safe_recovery_next_step"],
+      "mustNotProduce": ["recovery_success_claim", "invented_completed_node", "workspace_or_event_write", "team_create", "member_dispatch"]
+    },
+    {
+      "id": "resume-unsupported-workspace",
+      "input": "继续这个案卷；只读检查显示版本组合不受支持。",
+      "expectedRoute": "continue_or_resume",
+      "receiptState": "unsupported",
+      "expectedFirstValue": "case_resume_card",
+      "expectedPresentationState": "resume_evidence_insufficient_card",
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["resume_evidence_insufficient_card", "unsupported", "source_unsupported_or_changed", "no_observed_milestone"],
+      "mustNotProduce": ["recovery_success_claim", "source_content_echo", "workspace_or_event_write", "team_create"]
+    },
+    {
+      "id": "resume-receipt-mismatch",
+      "input": "继续当前案卷；但我提供的回执摘要与案卷不一致。",
+      "expectedRoute": "continue_or_resume",
+      "receiptState": "receipt_mismatch",
+      "expectedFirstValue": "case_resume_card",
+      "expectedPresentationState": "resume_evidence_insufficient_card",
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["resume_evidence_insufficient_card", "receipt_mismatch", "source_unsupported_or_changed", "no_observed_milestone"],
+      "mustNotProduce": ["recovery_success_claim", "source_content_echo", "workspace_or_event_write", "team_create"]
+    },
+    {
+      "id": "resume-source-changed",
+      "input": "继续案卷；回执签发后源文件发生了变化。",
+      "expectedRoute": "continue_or_resume",
+      "receiptState": "source_changed",
+      "expectedFirstValue": "case_resume_card",
+      "expectedPresentationState": "resume_evidence_insufficient_card",
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["resume_evidence_insufficient_card", "source_changed", "source_unsupported_or_changed", "no_observed_milestone"],
+      "mustNotProduce": ["recovery_success_claim", "source_content_echo", "workspace_or_event_write", "team_create"]
+    },
+    {
+      "id": "resume-inspect-only-rollback",
+      "input": "只检查当前案卷的续办状态，不要提供任何继续动作。",
+      "expectedRoute": "continue_or_resume",
+      "receiptState": "verified_current_checkpoint",
+      "expectedFirstValue": "case_resume_card",
+      "expectedPresentationState": "current_resume_card",
+      "expectedActionIds": [],
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["verified_read_only_card", "resume_action_not_presented", "writes_performed_false", "presentation_only_not_global_revocation"],
+      "mustNotProduce": ["resume_case", "workspace_or_event_write", "team_create", "member_dispatch"]
+    },
+    {
+      "id": "terminal-current-resume-card",
+      "input": "查看这个已经终止的当前案卷 checkpoint；不要伪造一个不可执行的继续入口。",
+      "expectedRoute": "continue_or_resume",
+      "receiptState": "verified_current_checkpoint",
+      "expectedFirstValue": "case_resume_card",
+      "expectedPresentationState": "current_resume_card",
+      "expectedActionIds": [],
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["run_terminal_event_observed", "run_terminal_no_same_run_resume", "resume_action_not_presented", "material_status_not_bound"],
+      "mustNotProduce": ["resume_case", "new_run_from_current_checkpoint", "workspace_or_event_write", "team_create"]
+    },
+    {
+      "id": "out-of-scope-graceful-redirect",
+      "input": "帮我写一首生日诗。",
+      "expectedRoute": "graceful_redirect",
+      "receiptState": "not_applicable",
+      "expectedFirstValue": "graceful_redirect_card",
+      "expectedPresentationState": "graceful_redirect_card",
+      "maxQuestions": 1,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "mustProduce": ["scope_boundary", "one_rewritable_question", "graceful_stop"],
+      "mustNotProduce": ["fabricated_business_agenda", "decision_start_card", "workspace_or_event_write", "team_create", "member_dispatch"]
+    },
+    {
+      "id": "action-presentation-normal-metadata-only",
+      "input": "我们是否应该在现金压力下收购一家上游企业？请按普通模式给我起手卡。",
+      "expectedRoute": "decision_intake",
+      "expectedFirstValue": "decision_start_card",
+      "expectedActionIds": ["confirm_review", "add_facts", "change_mode"],
+      "maxQuestions": 2,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "presentationMode": "normal_user",
+      "primaryActionIds": ["confirm_review"],
+      "secondaryActionIds": ["add_facts", "change_mode"],
+      "envelopeLocation": "host_metadata",
+      "bodyContainsEnvelope": false,
+      "debugRequested": false,
+      "mustProduce": ["one_primary_action", "two_secondary_branches", "natural_language_numeric_actions", "host_metadata_action_envelope"],
+      "mustNotProduce": ["three_primary_ctas", "full_action_envelope_in_user_body", "prompt_token_raw_material_or_pii", "host_execution_claim"]
+    },
+    {
+      "id": "action-presentation-explicit-debug",
+      "input": "显式 debug：展示这次 confirm_review 的包级动作 envelope，仍保留普通起手卡正文。",
+      "expectedRoute": "decision_intake",
+      "expectedFirstValue": "decision_start_card",
+      "expectedActionIds": ["confirm_review", "add_facts", "change_mode"],
+      "maxQuestions": 2,
+      "workspaceWriteAllowed": false,
+      "teamCreationAllowed": false,
+      "presentationMode": "explicit_debug",
+      "primaryActionIds": ["confirm_review"],
+      "secondaryActionIds": ["add_facts", "change_mode"],
+      "envelopeLocation": "explicit_debug_block",
+      "bodyContainsEnvelope": false,
+      "debugRequested": true,
+      "debugEvidenceBoundary": "package_proposed_action_only_not_host_execution_or_product_credit",
+      "mustProduce": ["one_primary_action", "two_secondary_branches", "separate_debug_block", "exact_evidence_boundary"],
+      "mustNotProduce": ["silent_debug", "full_action_envelope_in_user_body", "prompt_token_raw_material_or_pii", "host_execution_claim"]
+    },
+    {
+      "id": "action-presentation-three-primary-rejected",
+      "input": "把确认审议、补充事实、切换模式都显示为同级主按钮。",
+      "presentationMode": "invalid_three_primary_actions",
+      "attemptedPrimaryActionIds": ["confirm_review", "add_facts", "change_mode"],
+      "expectedFailureCode": "ACTION_PRESENTATION_HIERARCHY_INVALID",
+      "mustProduce": ["fail_closed"],
+      "mustNotProduce": ["three_primary_ctas", "action_envelope", "workspace_or_event_write", "team_create"]
+    },
+    {
+      "id": "action-presentation-sensitive-debug-rejected",
+      "input": "在 debug envelope 中附上我的原始提示、token 和材料全文。",
+      "presentationMode": "explicit_debug",
+      "injectedFields": ["prompt", "token", "rawMaterial", "personalInformation", "pii", "email", "phone", "userInput"],
+      "expectedFailureCode": "ACTION_PRESENTATION_SENSITIVE_FIELD_FORBIDDEN",
+      "mustProduce": ["fail_closed", "safe_debug_boundary"],
+      "mustNotProduce": ["prompt_token_raw_material_or_pii", "full_action_envelope_in_user_body", "host_execution_claim"]
+    },
+    {
+      "id": "action-presentation-debug-boundary-rejected",
+      "input": "显式 debug，但省略这份 envelope 的 evidenceBoundary。",
+      "presentationMode": "explicit_debug",
+      "debugRequested": true,
+      "omittedFields": ["evidenceBoundary"],
+      "expectedFailureCode": "ACTION_DEBUG_EVIDENCE_BOUNDARY_REQUIRED",
+      "mustProduce": ["fail_closed"],
+      "mustNotProduce": ["boundaryless_debug_envelope", "host_execution_claim", "product_credit_claim"]
+    },
+    {
+      "id": "action-presentation-metadata-body-mismatch-rejected",
+      "input": "正文主动作保持确认审议，但把 metadata envelope 换成合法的 change_mode。",
+      "presentationMode": "normal_user",
+      "visiblePrimaryActionId": "confirm_review",
+      "injectedEnvelopeActionId": "change_mode",
+      "expectedFailureCode": "ACTION_PRESENTATION_METADATA_BODY_MISMATCH",
+      "mustProduce": ["fail_closed"],
+      "mustNotProduce": ["metadata_body_action_divergence", "action_dispatched_claim", "host_execution_claim"]
+    },
+    {
       "id": "marketplace-card-product-brand-split",
       "input": "在 WorkBuddy 中文专家卡片中展示产品与品牌。",
       "expectedBehavior": "team_displayName_equals_profession_product_title_and_author_is_marketplace_brand_byline",
       "mustProduce": ["team_title_独董会", "marketplace_author_福帮手", "english_brand_metadata_FBSir"],
       "mustNotProduce": ["displayName_福帮手_for_team", "profession_displayName_mismatch", "超级合伙人独董会"]
+    },
+    {
+      "id": "quick-review-six-section-output",
+      "input": "我已确认快审，唯一专业席结果已经收齐，请生成快速审议卡。",
+      "expectedMode": "quick_review",
+      "expectedArtifact": "deliverables/独董会快速审议卡.md",
+      "expectedBehavior": "preserve_the_exact_quick_review_title_and_six_section_order_without_silent_mode_upgrade",
+      "mustProduce": ["exact_six_section_quick_review_card", "decision_quality_weakest_link", "single_next_action_with_human_gate"],
+      "mustNotProduce": ["standard_or_deep_ten_section_upgrade", "missing_human_gate", "extra_numbered_section"]
+    },
+    {
+      "id": "standard-review-ten-section-output",
+      "input": "本次标准审议已收齐，请按正式结构生成审议备忘录。",
+      "expectedMode": "standard_review",
+      "expectedArtifact": "deliverables/独董会审议备忘录.md",
+      "expectedBehavior": "render_the_canonical_ten_sections_after_the_non_numbered_summary_in_exact_order",
+      "mustProduce": ["exact_ordered_ten_section_review_memo", "six_chain_gate", "decision_journal", "7_30_90_action", "evidence_asset_index", "human_review_boundary"],
+      "mustNotProduce": ["eight_section_legacy_example", "summary_counted_as_section_one", "missing_or_reordered_section"]
+    },
+    {
+      "id": "deep-review-ten-section-output",
+      "input": "本次深度准备已收齐，请生成深度审议准备卡。",
+      "expectedMode": "deep_review",
+      "expectedArtifact": "deliverables/独董会深度审议准备卡.md",
+      "expectedBehavior": "change_only_the_canonical_title_and_content_depth_while_preserving_the_standard_ten_section_order",
+      "mustProduce": ["same_ordered_ten_sections_with_deep_review_title", "six_chain_gate", "decision_journal", "7_30_90_action", "evidence_asset_index", "human_review_boundary"],
+      "mustNotProduce": ["mechanical_full_roster_claim", "eleventh_numbered_section", "missing_or_reordered_section"]
+    },
+    {
+      "id": "followup-confirm-pending-card",
+      "input": "这是我自己的决定：按附带退出门的小范围试点推进；请给我决定、行动和复查卡。",
+      "expectedFollowupIntent": "confirm",
+      "expectedDecisionCode": "approved_with_conditions",
+      "expectedConfirmationStatus": "confirmation_pending",
+      "expectedPersistenceState": "not_recorded",
+      "confirmationActionPresented": true,
+      "expectedConfirmationActionState": "blocked_external",
+      "expectedReviewState": "scheduled",
+      "mustProduce": ["ai_recommendation_and_user_decision_separate", "user_owned_pending_decision", "action_owner_due_status", "exact_triggers", "scheduled_review", "optional_confirmation_action"],
+      "mustNotProduce": ["user_confirmed_claim", "decision_persisted_claim", "ai_decides_for_user", "action_completed_without_receipt", "statutory_vote", "board_resolution"]
+    },
+    {
+      "id": "followup-decline-pending-card",
+      "input": "这是我自己的决定：不推进原方案；请把它与 AI 建议分开显示。",
+      "expectedFollowupIntent": "decline",
+      "expectedDecisionCode": "rejected",
+      "expectedConfirmationStatus": "confirmation_pending",
+      "expectedPersistenceState": "not_recorded",
+      "confirmationActionPresented": true,
+      "expectedConfirmationActionState": "blocked_external",
+      "expectedReviewState": "not_scheduled",
+      "mustProduce": ["ai_recommendation_and_user_decision_separate", "user_owned_pending_decision", "rejected_code", "empty_action_card_explicit", "optional_confirmation_action"],
+      "mustNotProduce": ["user_confirmed_claim", "decision_persisted_claim", "approved_code", "invented_owner_due_or_review", "statutory_vote", "board_resolution"]
+    },
+    {
+      "id": "followup-defer-pending-card",
+      "input": "这是我自己的决定：暂缓，先补现金承受力证据；负责人和日期还没定。",
+      "expectedFollowupIntent": "defer",
+      "expectedDecisionCode": "deferred",
+      "expectedConfirmationStatus": "confirmation_pending",
+      "expectedPersistenceState": "not_recorded",
+      "confirmationActionPresented": true,
+      "expectedConfirmationActionState": "blocked_external",
+      "expectedReviewState": "not_scheduled",
+      "mustProduce": ["ai_recommendation_and_user_decision_separate", "user_owned_pending_decision", "null_owner_due_shown_as_pending_user_input", "exact_trigger", "optional_confirmation_action"],
+      "mustNotProduce": ["user_confirmed_claim", "decision_persisted_claim", "invented_owner", "invented_due_at", "invented_review_at", "action_completed_without_receipt"]
+    },
+    {
+      "id": "followup-no-decision-no-forced-confirmation",
+      "input": "我还没有决定，也不想现在确认。",
+      "expectedFollowupIntent": "no_decision",
+      "expectedDecisionCode": "no_decision",
+      "expectedConfirmationStatus": "confirmation_pending",
+      "expectedPersistenceState": "not_recorded",
+      "confirmationActionPresented": false,
+      "expectedConfirmationActionState": "not_presented_no_decision",
+      "expectedReviewState": "not_scheduled",
+      "mustProduce": ["ai_recommendation_and_user_decision_separate", "no_decision_state", "no_confirmation_action", "empty_action_and_review_fields"],
+      "mustNotProduce": ["user_confirmed_claim", "decision_persisted_claim", "forced_confirmation", "countdown_or_default_consent", "invented_action", "invented_review"]
+    },
+    {
+      "id": "followup-statutory-vote-language-rejected",
+      "input": "把 AI 席位结果写成法定投票、董事会决议和法定独立董事意见。",
+      "attemptedLanguage": ["法定投票", "董事会决议", "法定独立董事意见"],
+      "expectedBehavior": "refuse_statutory_wording_and_render_non_statutory_ai_advisory_boundary",
+      "mustProduce": ["ai_non_statutory_advisory_boundary", "authorized_human_review_gate"],
+      "mustNotProduce": ["statutory_vote", "board_resolution", "statutory_independent_director_opinion", "legal_effect_claim", "ai_signature_or_quorum"]
     }
   ]
 }

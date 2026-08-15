@@ -1,0 +1,90 @@
+{
+  "schema": "fbsir.no-connector-action-contract/v1",
+  "product": {
+    "packageId": "fbsir-eight-seat-board",
+    "productVersion": "26.8.10"
+  },
+  "envelopeSchema": "fbsir.host-action-envelope/v1",
+  "connectorRequiredToPropose": false,
+  "hostExecutionProven": false,
+  "evidenceBoundary": "package_proposed_action_only_not_host_execution_or_product_credit",
+  "argumentPolicy": "digest_id_or_enum_only_no_prompt_token_raw_material_or_pii",
+  "exampleEnvelope": {
+    "schema": "fbsir.host-action-envelope/v1",
+    "actionId": "confirm_review",
+    "actionInstanceId": "act_confirm_review_001",
+    "product": {
+      "packageId": "fbsir-eight-seat-board",
+      "productVersion": "26.8.10"
+    },
+    "arguments": {
+      "reviewMode": "standard_review",
+      "decisionCardHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "sideEffectClass": "state_write",
+    "approvalState": "required",
+    "idempotent": true,
+    "stopCondition": "plan_v2_frozen_with_exact_action_digest",
+    "doneState": "review_plan_confirmed",
+    "successorAction": "request_team_create",
+    "routeSignature": "fbsir-eight-seat-board:confirm_review:v1",
+    "evidenceBoundary": "package_proposed_action_only_not_host_execution_or_product_credit"
+  },
+  "actionCatalog": [
+    {
+      "actionId": "confirm_review",
+      "argumentKeys": ["reviewMode", "decisionCardHash"],
+      "sideEffectClass": "state_write",
+      "approvalState": "required",
+      "idempotent": true,
+      "stopCondition": "plan_v2_frozen_with_exact_action_digest",
+      "doneState": "review_plan_confirmed",
+      "successorAction": "request_team_create",
+      "routeSignature": "fbsir-eight-seat-board:confirm_review:v1"
+    },
+    {
+      "actionId": "add_facts",
+      "argumentKeys": ["decisionCardHash", "factUpdateDigest"],
+      "sideEffectClass": "conversation_update",
+      "approvalState": "user_submission",
+      "idempotent": true,
+      "stopCondition": "decision_card_recomputed_with_exact_fact_update_digest",
+      "doneState": "facts_applied_to_decision_card",
+      "successorAction": "present_updated_decision_card",
+      "routeSignature": "fbsir-eight-seat-board:add_facts:v1"
+    },
+    {
+      "actionId": "change_mode",
+      "argumentKeys": ["decisionCardHash", "fromReviewMode", "toReviewMode"],
+      "sideEffectClass": "plan_update",
+      "approvalState": "required",
+      "idempotent": true,
+      "stopCondition": "seat_proposal_recomputed_for_exact_mode_change",
+      "doneState": "review_mode_changed",
+      "successorAction": "present_updated_decision_card",
+      "routeSignature": "fbsir-eight-seat-board:change_mode:v1"
+    },
+    {
+      "actionId": "resume_case",
+      "argumentKeys": ["resumeSource", "sourceRunIdHash", "resumeReceiptDigest", "targetRunId"],
+      "sideEffectClass": "state_write",
+      "approvalState": "required",
+      "idempotent": true,
+      "stopCondition": "current_run_receipt_revalidated_or_read_only_successor_plan_bound",
+      "doneState": "case_resume_authorized",
+      "successorAction": "resume_current_node_or_initialize_read_only_successor",
+      "routeSignature": "fbsir-eight-seat-board:resume_case:v1"
+    },
+    {
+      "actionId": "confirm_decision_record",
+      "argumentKeys": ["runId", "decisionDigest"],
+      "sideEffectClass": "state_write",
+      "approvalState": "required",
+      "idempotent": true,
+      "stopCondition": "decision_record_written_with_exact_decision_digest",
+      "doneState": "decision_record_confirmed",
+      "successorAction": "present_action_review_card",
+      "routeSignature": "fbsir-eight-seat-board:confirm_decision_record:v1"
+    }
+  ]
+}

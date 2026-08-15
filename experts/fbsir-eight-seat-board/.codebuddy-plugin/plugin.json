@@ -1,6 +1,6 @@
 {
   "name": "fbsir-eight-seat-board",
-  "version": "26.7.20",
+  "version": "26.8.10",
   "description": "FBSir Independent Review Board is a configurable AI decision-review team for real-economy leaders, producing evidence-aware, dissent-preserving and action-oriented review memos.",
   "author": {
     "name": "福帮手",
@@ -34,7 +34,11 @@
     "principle": "configurable-role-pool-case-specific-panel",
     "defaultMode": "standard_review",
     "teamCreationRequiresExplicitConfirmation": true,
-    "primaryCta": "确认议案卡并开始独立审议",
+    "preConfirmationWorkspaceWriteAllowed": false,
+    "primaryCta": "按建议开始独立审议",
+    "secondaryBranches": ["补充关键事实", "切换审议模式"],
+    "questionsMax": 2,
+    "questionsPolicy": "decisive_only",
     "modes": ["quick_review", "standard_review", "deep_review"],
     "connectorRequired": false,
     "firstValue": "decision_start_card",
@@ -52,6 +56,22 @@
         "deep_review": "two_to_three_relevant_specialists_for_deep_review_preparation"
       }
     }
+  },
+  "entryContract": {
+    "schema": "fbsir.entry-contract/v1",
+    "routes": [
+      { "route": "capability_discovery", "firstValue": "capability_card", "maxQuestions": 0 },
+      { "route": "decision_intake", "firstValue": "decision_start_card", "maxQuestions": 2 },
+      { "route": "material_review_intake", "firstValue": "decision_start_card_with_material_sufficiency", "maxQuestions": 2 },
+      { "route": "continue_or_resume", "firstValue": "case_resume_card", "maxQuestions": 1 },
+      { "route": "graceful_redirect", "firstValue": "graceful_redirect_card", "maxQuestions": 1 }
+    ],
+    "actions": [
+      { "actionId": "confirm_review", "role": "primary", "labelZh": "按建议开始独立审议" },
+      { "actionId": "add_facts", "role": "secondary", "labelZh": "补充关键事实" },
+      { "actionId": "change_mode", "role": "secondary", "labelZh": "切换审议模式" },
+      { "actionId": "resume_case", "role": "resume", "labelZh": "确认继续案卷" }
+    ]
   },
   "keywords": ["福帮手", "FBSir", "独董会", "独立审议", "经营决策", "一号位决策", "实体企业"],
   "agents": [
@@ -85,7 +105,7 @@
   },
   "displayName": {
     "en": "Independent Review Board",
-    "zh": "福帮手"
+    "zh": "独董会"
   },
   "profession": {
     "en": "Independent Review Board",
@@ -98,8 +118,8 @@
   "avatar": "avatars/team.png",
   "categoryId": "12-IndustryConsultant",
   "defaultInitPrompt": {
-    "zh": "我正在面对一个重要经营决策。请先给我一张决策起手卡，说明真正要决定什么、还缺哪些关键事实，以及应该采用快审、标准审议还是深度审议；在我确认议案卡前不要建团。",
-    "en": "I am facing an important business decision. Start with a decision card: clarify the real decision, critical evidence gaps, and whether this needs a quick, standard, or deep review. Do not create a team until I confirm the card."
+    "zh": "我正在面对一个重要经营决策。请先给我一张紧凑决策起手卡，最多问 2 个决定性问题；末尾只给主动作“按建议开始独立审议”和次级分支“补充关键事实”“切换审议模式”。在我明确确认前不要写案卷，也不要建团。",
+    "en": "I am facing an important business decision. Start with a compact decision card and ask at most two decision-changing questions. End with one primary action, Start the independent review as recommended, and two secondary branches, Add critical facts and Change review mode. Do not write a case workspace or create a team before my explicit confirmation."
   },
   "plugin": "fbsir-eight-seat-board",
   "tags": [
@@ -109,16 +129,16 @@
   ],
   "quickPrompts": [
     {
-      "en": "I am facing an important business decision. Start with a decision card: clarify the real decision, critical evidence gaps, and whether this needs a quick, standard, or deep review. Do not create a team until I confirm the card.",
-      "zh": "我正在面对一个重要经营决策。请先给我一张决策起手卡，说明真正要决定什么、还缺哪些关键事实，以及应该采用快审、标准审议还是深度审议；在我确认议案卡前不要建团。"
+      "en": "I am facing an important business decision. Start with a compact decision card and ask at most two decision-changing questions. End with one primary action, Start the independent review as recommended, and two secondary branches, Add critical facts and Change review mode. Do not write a case workspace or create a team before my explicit confirmation.",
+      "zh": "我正在面对一个重要经营决策。请先给我一张紧凑决策起手卡，最多问 2 个决定性问题；末尾只给主动作“按建议开始独立审议”和次级分支“补充关键事实”“切换审议模式”。在我明确确认前不要写案卷，也不要建团。"
     },
     {
-      "en": "Start with a decision card for this M&A or investment decision. Select at most three conclusion-changing specialist seats from strategy, finance, legal and integration, preserve dissent, and wait for my confirmation before creating a team.",
-      "zh": "请先为这个并购或投资决策形成决策起手卡，从战略、资本财务、法务和整合候选中最多选择三个会改变结论的专业席并保留异议；在我确认前不要建团。"
+      "en": "Start with a compact decision card for this M&A or investment decision. Ask at most two decision-changing questions, select no more than three relevant specialist seats, preserve dissent, and show the same one primary action and two secondary branches. Do not write a case workspace or create a team before my explicit confirmation.",
+      "zh": "请先为这个并购或投资决策形成紧凑决策起手卡，最多问 2 个决定性问题，从战略、资本财务、法务和整合候选中最多选择三个会改变结论的专业席并保留异议；仍只显示“按建议开始独立审议”“补充关键事实”“切换审议模式”，我明确确认前不要写案卷或建团。"
     },
     {
-      "en": "Our growth has stalled. Start with a decision card on deepening the core business, changing channels, or testing a second curve, and wait for my confirmation before creating a team.",
-      "zh": "公司增长停滞了，请先形成决策起手卡，比较深挖主业、变革渠道和小试第二曲线；在我确认前不要建团。"
+      "en": "Our growth has stalled. Start with a compact decision card comparing a deeper core business, channel change and a reversible second-curve test. Ask at most two decision-changing questions and show the same one primary action and two secondary branches. Do not write a case workspace or create a team before my explicit confirmation.",
+      "zh": "公司增长停滞了，请先形成紧凑决策起手卡，比较深挖主业、变革渠道和可逆的小试第二曲线，最多问 2 个决定性问题；仍只显示“按建议开始独立审议”“补充关键事实”“切换审议模式”，我明确确认前不要写案卷或建团。"
     }
   ],
   "members": [

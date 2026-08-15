@@ -1,0 +1,29 @@
+{
+  "schema": "fbsir.followup-recovery-gate/v1",
+  "product": {
+    "packageId": "fbsir-eight-seat-board",
+    "productVersion": "26.8.10"
+  },
+  "status": "blocked_external",
+  "checkpointSchema": "fbsir.board-checkpoint/v1",
+  "checkpointDecisionBindingEnabled": false,
+  "pendingDecisionRecordPersistenceEnabled": false,
+  "decisionBodyInCheckpointAllowed": false,
+  "decisionFieldsInEventMetadataAllowed": false,
+  "taskboardDecisionBodyAllowed": false,
+  "chatContextRecoveryAllowed": false,
+  "createCheckpointInputKeys": ["workspaceRoot", "runId", "actorId", "state"],
+  "blockedBy": [
+    "decision_confirmation_gate_production_enabled",
+    "dedicated_decision_writer_enabled",
+    "durable_decision_record_bound_to_exact_user_confirmation"
+  ],
+  "localProofAllowed": [
+    "pending_record_shape_validation",
+    "checkpoint_undeclared_decision_field_zero_write_rejection",
+    "event_and_task_metadata_privacy_scan",
+    "taskboard_decision_body_privacy_scan"
+  ],
+  "resumeFallback": "decision_state_not_bound_by_checkpoint",
+  "evidenceBoundary": "blocked_external_digest_only_recovery_gate_not_decision_body_recovery_user_confirmation_persistence_host_execution_or_product_credit"
+}

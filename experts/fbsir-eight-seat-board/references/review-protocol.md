@@ -53,6 +53,12 @@ intake
 - 召集人每次被成员消息或团队终态唤醒都运行 N/N 收齐器。只有所有选定专业席及显式选中的流程支持席均为“有效结果 + 成功观察”或“一次重试后明确失败”，且至少保留一个有效专业结果，才能汇编。
 - 秘书只做流程支持和能力编排，不投票、不新增专业结论；一旦被计划选中，其任务、结果、失败和事件也必须进入同一案卷与收齐门，不能成为不可追溯旁路。
 
+### 3.1 续办卡只读门
+
+- current checkpoint 创建回执必须返回 `checkpointReceiptDigest`；生成 `fbsir.case-resume-card/v1` 时由调用方重新提供该 exact digest，并经过完整工作空间事件验证器后重放 marker、计划、事件链及最新 checkpoint 绑定。卡片只展示事件链可复算的操作里程碑，不解释 checkpoint 自由文本 `state`，也不投影该 digest 未绑定的材料记录；材料门固定显示未被 checkpoint 绑定。terminal run 不展示同 run 继续动作，其他 current run 确认后也只能继续同一 run。
+- predecessor 续办卡必须把调用方提供的 `predecessorResumeDigest` 与 exact `v2@26.8.1` 只读重算结果精确比较；legacy 续办卡同样精确比较 exact `v1@26.7.20` 的 `legacyResumeDigest`。两类卡都不展示已观察完成节点，只列实际存在组件的各自 `*_bound` 字节绑定。确认后必须进入与旧 run 不同的新 26.8.10 run，并经 exact predecessor receipt/plan v2 绑定。
+- digest 缺失、失配、版本不支持或源变化均失败关闭，不回显正文、路径、runId、文件名或成员意见；回执没有负责人、期限和复审日期时固定标明未提供。`--inspect-only` 只在本次返回卡中不展示 `resume_case`；它不写撤销状态，也不让 action validator 获得全局禁用能力。卡片不证明正文真实性、语义完成、宿主执行、用户确认或产品信用。
+
 ## 4. 认知资产与阶段隔离
 
 - 运行当日先校验认知资产目录，再对已确认的决策起手卡做瞬时规范化哈希；脚本只返回摘要和字符数，不保存起手卡正文。
@@ -62,7 +68,18 @@ intake
 - Phase 3 由召集人加载自己的汇编方法包；它只约束程序和质量门，不能替代专业席意见。
 - 资产包证明精选、范围和哈希绑定，不证明方法实际被采用、结论正确、宿主动作成功或业务效果。
 
-## 5. 专业席回传信封
+### 4.1 主张—证据与可见降级
+
+- 用户确认后，召集人以无引用 `material-card-draft/v1` 运行 `board-record.mjs material-card --workspace <目录> --run <runId> --actor board-convener`。writer 在同一工作空间重新 mint 引用并写入 digest-only 材料记录；首轮只可能是 `received_unverified/received_conflicted`，不得从历史 material JSON 或形似 `mat_<32hex>` 的字符串自报 provenance。
+- `board-event.mjs register-host-receipt` 只能建立与 workspace、run、事件类型、metadata 和 payloadHash 精确绑定的 `rcpt_<32hex>` 未核验观察记录。它只证明包记录了调用方提交的摘要，不是宿主签名或真实性证明；26.8.10 包内没有外部可信 verifier，因此该记录既不能把正文升级为事实，也不能作为 `host_runtime_receipt` 推进 `team.created/seat.dispatched/seat.result_received` 等状态，尝试时固定失败 `HOST_RECEIPT_EXTERNAL_VERIFIER_REQUIRED`。
+- 明确公共来源可用 `board-record.mjs public-source` 只登记 `sourceDigest`，得到 workspace-bound `src_<32hex>`；26.8.10 没有外部可信 verifier 时固定为 `registered_unverified`，不计入事实绑定率。
+- 正式 Markdown 中需审计的主张必须逐行使用 `【关键事实】/【事实】/【估计】/【假设】/【判断】/【未知】`。缺证、未核验或冲突的事实必须在用户可见正文改写为 `【关键事实（未核验，按假设处理）】`、`【事实（证据冲突，按未知处理）】` 或对应缺失标签；隐藏索引降级但正文仍写“事实”会失败关闭。
+- `board-record.mjs claim-index --artifact <deliverables内文件>` 从 fence 与 HTML 注释之外的显式标签直接计算 statementDigest 和 package-owned claimId；调用方只提供 ordinal 与 evidenceRefs，不得提交正文、claimId 或 digest。索引只保存摘要和不透明引用，不保存正文或文件名。
+- `board-delivery.mjs` 必须反查同一 workspace、run 与 artifact SHA 的 claim index，重算可见标签、分类、来源作用域和摘要；缺索引、换文件、篡改或来源记录丢失均不得进入 `ready_to_present`。该门只证明显式声明标签的完整覆盖，不证明未标记语句没有事实性含义，也不证明材料真实性或结论正确，S/P/C/B/G 与人工事实复核仍是必需门。
+
+## 5. 专业席与流程支持席回传信封
+
+### 5.1 专业席
 
 每席先返回一行元数据，再返回正文：
 
@@ -82,6 +99,23 @@ seatId=<id> | stance=<赞成/有条件赞成/反对/不具备表态条件> | con
 
 快审正文不超过 1000 个中文字符；标准/深度审议不超过 1600 个中文字符。法条、估值和测算证据附录不计入正文上限，但不得重复正文。
 
+### 5.2 流程支持席
+
+秘书只有在用户明确确认、exact plan 已冻结且被显式选为 `process_support` 后才能接收任务。acceptance 中的 `expectedAgent=board-secretary` 单独出现时只表示 routing candidate，不构成调度授权；缺少任一前置条件都必须保持 `dispatchAllowed=false`。26.8.10 新回传使用 `fbsir.process-support-result/v1`，必须固定为 `seatId=board-secretary`、`taskClass=process_support`、`stance=not_applicable`、`confidence=not_applicable`、`conclusionReady=false`；不得套用专业席正文模板。既有 `fbsir.member-result/v1 + process_support` 只允许历史只读解析/展示，不允许新写，也不得计入新运行的 accepted/resolved/收齐；专业席继续使用 `fbsir.member-result/v1`。
+
+`sections` 只能包含以下四个 exact 机械对象，任何自由文本 section、额外字段或嵌套的 judgement / summary / recommendation / approval / legalOpinion 均由核心校验器失败关闭：
+
+```text
+deliveryStatus={state:<completed|partial|blocked>,receiptObserved:false}
+sourceLedger={entries:[],pendingVerification:[],mutationAllowed:false}
+artifactChecklist={requiredCount,readyCount,pendingCount,humanAcceptanceRequired:true}
+capabilityStatus={state:<available|unavailable|not_authorized|accepted_without_result>,materialStateEffect:"none",externalFactProven:false,manualVerificationRequired:<boolean>}
+```
+
+MAT-002 只封闭首轮展示与秘书边界，不假装已经具备耐久来源账本：流程支持结果中的 `entries`、`pendingVerification` 必须为空，`mutationAllowed` 必须为 `false`。秘书在呈现层只能回显召集人已构建卡的材料/来源/版本状态；任何新材料、版本冲突或工具结果都退回召集人重新运行无引用 draft 的 `material-card` 构建，不得自行生成或持久化 `materialRef/version`。能力状态与材料状态正交，不能借 `capabilityStatus` 增删材料缺口、证明外部事实或形成专业结论。耐久来源账本必须等 workspace-bound 合同实现后再启用；哈希、自报回执或格式正确的 32hex 都不是 provenance。
+
+当前流程支持结果还必须固定 `receiptId=unavailable`、`deliveryStatus.receiptObserved=false`，`evidenceRefs` 只能是任务下发的唯一 `assetbundle:<sha256>`；记录器在写前、收齐器在接受前都复核任务与结果的完整 `evidenceRefs` 全等。`board-record.mjs result` 写入成功后原子返回 exact `fbsir.process-support-handoff/v1`（耐久 `resultTarget + resultPayloadHash` 及身份字段）；秘书不得自行构造或修改，只可原样经 `board-envelope.mjs support-handoff` 重验并发送，不得附加自由文本、材料、路径、PII 或建议。真实发送成功仅由后置 delivery observation 表达，不能在 result 或 handoff 中自报。
+
 ## 6. 质询协议
 
 - 只选择 2—4 个真正影响结论的冲突点。
@@ -97,24 +131,39 @@ seatId=<id> | stance=<赞成/有条件赞成/反对/不具备表态条件> | con
 
 ### 快速审议卡
 
-1. 一句话判断；
-2. 事实 / 估计 / 假设 / 判断 / 未知与最强反证；
-3. 本席立场；
-4. 最大风险；
-5. 决策质量最弱链；
-6. 下一步、触发器、负责人、复审日期与人工关卡。
+```text
+# 独董会快速审议卡
+一、一句话判断
+二、事实 / 估计 / 假设 / 判断 / 未知与最强反证
+三、专业席立场及成立条件
+四、最大风险与失效条件
+五、决策质量最弱链
+六、唯一下一步、触发器、负责人、复审日期与人工关卡
+```
 
-### 审议备忘录
+快审严格保持六节；不得因为深度不足而静默升级为标准/深度十节。需要升级时必须回到用户动作与模式确认。
 
-1. 表态统计与一句话建议；
-2. 议案、选项与 Non-goals；
-3. 证据、假设与关键缺口；
-4. 各席核心判断；
-5. 质询、修正与保留异议；
-6. 建议、成立条件与失效条件；
-7. 决策质量六链门禁：框架、替代、信息、取舍、推理、执行承诺；
-8. 决策日志：选择、可解析概率、领先指标、触发器、负责人、复审日期；
-9. 7/30/90 天行动；
-10. 证据台账、资产包索引、人工关卡与专业边界。
+### 标准/深度十节合同
+
+```text
+# 独董会审议备忘录
+【表态统计】赞成 X / 有条件赞成 Y / 反对 Z / 不具备表态条件 W
+【一句话建议】……
+
+一、议案、选项与 Non-goals
+二、证据、假设与关键缺口
+三、各席核心判断
+四、质询、修正与保留异议
+五、建议、成立条件与失效条件
+六、决策质量六链门禁（最弱链 / 缺口 / 状态）
+七、决策日志（选择 / 指标 / 触发器 / 负责人 / 复审日期）
+八、7/30/90 天行动（责任方向 / 人工关卡 / 验收标准）
+九、证据台账、席位回执与资产包索引
+十、专业边界与需人工复核事项
+```
+
+`standard_review` 使用上述规范标题；`deep_review` 只把首行替换为 `# 独董会深度审议准备卡`，其余使用同一十节标题与顺序。表态统计与一句话建议是十节前置摘要，不占用编号，也不能替代任一节。
+
+六链不得缩写为一个泛化分数，必须逐项覆盖问题框架、可行替代、可靠信息、价值与取舍、推理、执行承诺，并明确最弱链、缺口、状态和关闭责任人。决策日志必须保留最终选择、未选方案、可解析时的关键概率与截止日、领先指标、触发器、负责人、复审日期；不可解析的问题不强行赋概率，但不能因此删除其他日志字段。
 
 只有议案需要时才附加详细测算、法条、变量观察台或自动化建议。六链门禁不使用平均分掩盖关键短板；不可解析的问题不强行赋概率。高质量程序不等于保证正确结果。
