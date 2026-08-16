@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.0.0",
-  "lastUpdated": "2026-08-15T15:02:41Z",
+  "lastUpdated": "2026-08-16T09:21:03Z",
   "author": {
     "name": "AI Expert Center",
     "source": "https://github.com/msitarzewski/agency-agents",
@@ -24164,7 +24164,7 @@
       "categoryId": "12-IndustryConsultant",
       "displayName": {
         "en": "Independent Review Board",
-        "zh": "福帮手"
+        "zh": "独董会"
       },
       "profession": {
         "en": "Independent Review Board",
@@ -24181,10 +24181,10 @@
       "promptFile": "/plugins/fbsir-eight-seat-board/agents/board-convener.md",
       "avatar": "/avatars/FbsirEightSeatBoard.png",
       "createdAt": "2026-07-21T03:07:59Z",
-      "updatedAt": "2026-08-15T15:02:41Z",
+      "updatedAt": "2026-08-16T09:21:03Z",
       "defaultInitPrompt": {
         "zh": "我正在面对一个重要经营决策。请先给我一张紧凑决策起手卡，最多问 2 个决定性问题；末尾只给主动作“按建议开始独立审议”和次级分支“补充关键事实”“切换审议模式”。在我明确确认前不要写案卷，也不要建团。",
-        "en": "I am facing an important business decision. Start with a compact decision card and ask at most two decision-changing questions. End with one primary action, Start the independent review as recommended, and two secondary branches, Add critical facts and Change review mode. Do not write a case workspace or create a team before my explicit confirmation."
+        "en": "I am facing an important business decision. Start with a compact decision card and ask up to two decision-changing questions. End with one primary action and two secondary branches. Do not create a team before my explicit confirmation."
       },
       "expertType": "team",
       "agentName": "board-convener",
@@ -24205,16 +24205,16 @@
       ],
       "quickPrompts": [
         {
-          "en": "I am facing an important business decision. Start with a compact decision card and ask at most two decision-changing questions. End with one primary action, Start the independent review as recommended, and two secondary branches, Add critical facts and Change review mode. Do not write a case workspace or create a team before my explicit confirmation.",
+          "en": "I am facing an important business decision. Start with a compact decision card and ask up to two decision-changing questions. End with one primary action and two secondary branches. Do not create a team before my explicit confirmation.",
           "zh": "我正在面对一个重要经营决策。请先给我一张紧凑决策起手卡，最多问 2 个决定性问题；末尾只给主动作“按建议开始独立审议”和次级分支“补充关键事实”“切换审议模式”。在我明确确认前不要写案卷，也不要建团。"
         },
         {
-          "en": "Start with a compact decision card for this M&A or investment decision. Ask at most two decision-changing questions, select no more than three relevant specialist seats, preserve dissent, and show the same one primary action and two secondary branches. Do not write a case workspace or create a team before my explicit confirmation.",
-          "zh": "请先为这个并购或投资决策形成紧凑决策起手卡，最多问 2 个决定性问题，从战略、资本财务、法务和整合候选中最多选择三个会改变结论的专业席并保留异议；仍只显示“按建议开始独立审议”“补充关键事实”“切换审议模式”，我明确确认前不要写案卷或建团。"
+          "en": "Start with a compact decision card for this M&A or investment decision. Ask up to two decision-changing questions, select up to three relevant specialist seats, preserve dissent, and show the same one primary action and two secondary branches. Do not create a team before my explicit confirmation.",
+          "zh": "为这个并购或投资决策起手卡，问2个决定性问题，从战略、资本财务、法务和整合候选中选3个改变结论的专业席保留异议；只显示“按建议开始独立审议”“补充关键事实”“切换审议模式”，确认前不写案卷不建团。"
         },
         {
-          "en": "Our growth has stalled. Start with a compact decision card comparing a deeper core business, channel change and a reversible second-curve test. Ask at most two decision-changing questions and show the same one primary action and two secondary branches. Do not write a case workspace or create a team before my explicit confirmation.",
-          "zh": "公司增长停滞了，请先形成紧凑决策起手卡，比较深挖主业、变革渠道和可逆的小试第二曲线，最多问 2 个决定性问题；仍只显示“按建议开始独立审议”“补充关键事实”“切换审议模式”，我明确确认前不要写案卷或建团。"
+          "en": "Our growth has stalled. Start with a compact decision card comparing a deeper core business, channel change and a reversible second-curve test. Ask up to two decision-changing questions and show the same one primary action and two secondary branches. Do not create a team before my explicit confirmation.",
+          "zh": "公司增长停滞了，请先形成紧凑决策起手卡，比较深挖主业、变革渠道和可逆的小试第二曲线，最多问 2 个决定性问题；仍只显示“按建议开始独立审议”“补充关键事实”“切换审议模式”，确认前不要写案卷不建团。"
         }
       ],
       "members": [
@@ -24229,6 +24229,7 @@
             "zh": "独立审议召集人"
           },
           "avatar": "/avatars/FbsirEightSeatBoard-BoardConvener.png",
+          "promptFile": "/plugins/fbsir-eight-seat-board/agents/board-convener.md",
           "role": "lead"
         },
         {
@@ -24242,6 +24243,7 @@
             "zh": "独董会秘书"
           },
           "avatar": "/avatars/FbsirEightSeatBoard-BoardSecretary.png",
+          "promptFile": "/plugins/fbsir-eight-seat-board/agents/board-secretary.md",
           "role": "member"
         },
         {
@@ -24255,6 +24257,7 @@
             "zh": "战略独立审议席"
           },
           "avatar": "/avatars/FbsirEightSeatBoard-StrategyPartner.png",
+          "promptFile": "/plugins/fbsir-eight-seat-board/agents/strategy-partner.md",
           "role": "member"
         },
         {
@@ -24268,6 +24271,7 @@
             "zh": "资本财务独立审议席"
           },
           "avatar": "/avatars/FbsirEightSeatBoard-CapitalPartner.png",
+          "promptFile": "/plugins/fbsir-eight-seat-board/agents/capital-partner.md",
           "role": "member"
         },
         {
@@ -24281,6 +24285,7 @@
             "zh": "营销增长独立审议席"
           },
           "avatar": "/avatars/FbsirEightSeatBoard-GrowthPartner.png",
+          "promptFile": "/plugins/fbsir-eight-seat-board/agents/growth-partner.md",
           "role": "member"
         },
         {
@@ -24294,6 +24299,7 @@
             "zh": "制造运营独立审议席"
           },
           "avatar": "/avatars/FbsirEightSeatBoard-OperationsPartner.png",
+          "promptFile": "/plugins/fbsir-eight-seat-board/agents/operations-partner.md",
           "role": "member"
         },
         {
@@ -24307,6 +24313,7 @@
             "zh": "组织人力独立审议席"
           },
           "avatar": "/avatars/FbsirEightSeatBoard-OrgPartner.png",
+          "promptFile": "/plugins/fbsir-eight-seat-board/agents/org-partner.md",
           "role": "member"
         },
         {
@@ -24320,6 +24327,7 @@
             "zh": "法务风控独立审议席"
           },
           "avatar": "/avatars/FbsirEightSeatBoard-LegalPartner.png",
+          "promptFile": "/plugins/fbsir-eight-seat-board/agents/legal-partner.md",
           "role": "member"
         },
         {
@@ -24333,6 +24341,7 @@
             "zh": "数智化独立审议席"
           },
           "avatar": "/avatars/FbsirEightSeatBoard-DigitalPartner.png",
+          "promptFile": "/plugins/fbsir-eight-seat-board/agents/digital-partner.md",
           "role": "member"
         }
       ],

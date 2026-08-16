@@ -2,11 +2,11 @@ import { createHash } from 'node:crypto'
 import { lstat, readFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
 
-export const PACKAGE_VERSION = '26.8.10'
+export const PACKAGE_VERSION = '26.8.19'
 export const CURRENT_WORKSPACE_RELEASE = Object.freeze({
   workspaceSchema: 'fbsir.board-workspace/v2',
   eventSchema: 'fbsir.board-event/v2',
-  productVersion: '26.8.10',
+  productVersion: '26.8.19',
 })
 export const PREDECESSOR_WORKSPACE_RELEASE = Object.freeze({
   workspaceSchema: 'fbsir.board-workspace/v2',

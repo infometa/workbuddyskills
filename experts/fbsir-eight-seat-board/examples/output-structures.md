@@ -129,7 +129,7 @@
         "actionInstanceId": "act_confirm_review_001",
         "product": {
           "packageId": "fbsir-eight-seat-board",
-          "productVersion": "26.8.10"
+          "productVersion": "26.8.19"
         },
         "arguments": {
           "reviewMode": "standard_review",
@@ -167,7 +167,7 @@
         "actionInstanceId": "act_confirm_review_001",
         "product": {
           "packageId": "fbsir-eight-seat-board",
-          "productVersion": "26.8.10"
+          "productVersion": "26.8.19"
         },
         "arguments": {
           "reviewMode": "standard_review",
@@ -210,7 +210,7 @@
 【已观察里程碑】无；predecessor digest 只绑定字节，不把旧事件、checkpoint、collection 或 delivery 解释成真实完成
 【证据绑定】只列 predecessor_workspace/plan/event_chain 及实际存在的 checkpoint/collection/delivery/deliverable_inventory 的 `*_bound` 枚举
 【仍开关卡】显式继续确认、新 run 绑定、人工复核和旧内容真实性未核验
-【下一项主动作】resume_case；predecessor_read_only 必须选择与旧 run 不同的新 26.8.10 run，并在确认后走 exact predecessorRunRef v2
+【下一项主动作】resume_case；predecessor_read_only 必须选择与旧 run 不同的新 26.8.19 run，并在确认后走 exact predecessorRunRef v2
 【负责人 / 期限 / 复审日期】predecessor digest 不含这些字段，固定显示“回执未提供 / null / null”
 【恢复边界】旧意见仅作历史材料；绝不改写前序案卷，也不用旧结果关闭新 run
 ```
@@ -223,7 +223,7 @@
 【已观察里程碑】无；legacy digest 只绑定字节，不把旧事件、checkpoint、collection 或 delivery 解释成真实完成
 【证据绑定】只列 legacy_workspace/plan/event_chain 及实际存在的 checkpoint/collection/delivery/deliverable_inventory 的 `*_bound` 枚举
 【仍开关卡】显式继续确认、新 run 绑定、人工复核和旧内容真实性未核验
-【下一项主动作】resume_case；legacy_read_only 必须选择与旧 run 不同的新 26.8.10 run，并在确认后走 exact predecessorRunRef v2
+【下一项主动作】resume_case；legacy_read_only 必须选择与旧 run 不同的新 26.8.19 run，并在确认后走 exact predecessorRunRef v2
 【负责人 / 期限 / 复审日期】legacy digest 不含这些字段，固定显示“回执未提供 / null / null”
 【恢复边界】旧意见仅作历史材料；绝不改写旧案卷，也不用旧结果关闭新 run
 ```

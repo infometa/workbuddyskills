@@ -2429,7 +2429,7 @@ function validateSupportResultSections(sections) {
       && sourceLedger.entries.length === 0
       && sourceLedger.pendingVerification.length === 0,
     'RESULT_SUPPORT_LEDGER_MUTATION_FORBIDDEN',
-    '26.8.10 process-support results cannot create or persist material references; route material changes back to the convener',
+    '26.8.19 process-support results cannot create or persist material references; route material changes back to the convener',
   )
 
   const artifactChecklist = sections.artifactChecklist
@@ -2536,7 +2536,7 @@ export function validateWritableResultEnvelope(input) {
   invariant(
     normalized.taskClass !== 'process_support' || normalized.schema === PROCESS_SUPPORT_RESULT_SCHEMA,
     'RESULT_SUPPORT_LEGACY_READ_ONLY',
-    'Legacy fbsir.member-result/v1 process-support artifacts may be read but cannot be written by 26.8.10',
+    'Legacy fbsir.member-result/v1 process-support artifacts may be read but cannot be written by 26.8.19',
   )
   return normalized
 }

@@ -56,7 +56,7 @@ intake
 ### 3.1 续办卡只读门
 
 - current checkpoint 创建回执必须返回 `checkpointReceiptDigest`；生成 `fbsir.case-resume-card/v1` 时由调用方重新提供该 exact digest，并经过完整工作空间事件验证器后重放 marker、计划、事件链及最新 checkpoint 绑定。卡片只展示事件链可复算的操作里程碑，不解释 checkpoint 自由文本 `state`，也不投影该 digest 未绑定的材料记录；材料门固定显示未被 checkpoint 绑定。terminal run 不展示同 run 继续动作，其他 current run 确认后也只能继续同一 run。
-- predecessor 续办卡必须把调用方提供的 `predecessorResumeDigest` 与 exact `v2@26.8.1` 只读重算结果精确比较；legacy 续办卡同样精确比较 exact `v1@26.7.20` 的 `legacyResumeDigest`。两类卡都不展示已观察完成节点，只列实际存在组件的各自 `*_bound` 字节绑定。确认后必须进入与旧 run 不同的新 26.8.10 run，并经 exact predecessor receipt/plan v2 绑定。
+- predecessor 续办卡必须把调用方提供的 `predecessorResumeDigest` 与 exact `v2@26.8.1` 只读重算结果精确比较；legacy 续办卡同样精确比较 exact `v1@26.7.20` 的 `legacyResumeDigest`。两类卡都不展示已观察完成节点，只列实际存在组件的各自 `*_bound` 字节绑定。确认后必须进入与旧 run 不同的新 26.8.19 run，并经 exact predecessor receipt/plan v2 绑定。
 - digest 缺失、失配、版本不支持或源变化均失败关闭，不回显正文、路径、runId、文件名或成员意见；回执没有负责人、期限和复审日期时固定标明未提供。`--inspect-only` 只在本次返回卡中不展示 `resume_case`；它不写撤销状态，也不让 action validator 获得全局禁用能力。卡片不证明正文真实性、语义完成、宿主执行、用户确认或产品信用。
 
 ## 4. 认知资产与阶段隔离
@@ -71,8 +71,8 @@ intake
 ### 4.1 主张—证据与可见降级
 
 - 用户确认后，召集人以无引用 `material-card-draft/v1` 运行 `board-record.mjs material-card --workspace <目录> --run <runId> --actor board-convener`。writer 在同一工作空间重新 mint 引用并写入 digest-only 材料记录；首轮只可能是 `received_unverified/received_conflicted`，不得从历史 material JSON 或形似 `mat_<32hex>` 的字符串自报 provenance。
-- `board-event.mjs register-host-receipt` 只能建立与 workspace、run、事件类型、metadata 和 payloadHash 精确绑定的 `rcpt_<32hex>` 未核验观察记录。它只证明包记录了调用方提交的摘要，不是宿主签名或真实性证明；26.8.10 包内没有外部可信 verifier，因此该记录既不能把正文升级为事实，也不能作为 `host_runtime_receipt` 推进 `team.created/seat.dispatched/seat.result_received` 等状态，尝试时固定失败 `HOST_RECEIPT_EXTERNAL_VERIFIER_REQUIRED`。
-- 明确公共来源可用 `board-record.mjs public-source` 只登记 `sourceDigest`，得到 workspace-bound `src_<32hex>`；26.8.10 没有外部可信 verifier 时固定为 `registered_unverified`，不计入事实绑定率。
+- `board-event.mjs register-host-receipt` 只能建立与 workspace、run、事件类型、metadata 和 payloadHash 精确绑定的 `rcpt_<32hex>` 未核验观察记录。它只证明包记录了调用方提交的摘要，不是宿主签名或真实性证明；26.8.19 包内没有外部可信 verifier，因此该记录既不能把正文升级为事实，也不能作为 `host_runtime_receipt` 推进 `team.created/seat.dispatched/seat.result_received` 等状态，尝试时固定失败 `HOST_RECEIPT_EXTERNAL_VERIFIER_REQUIRED`。
+- 明确公共来源可用 `board-record.mjs public-source` 只登记 `sourceDigest`，得到 workspace-bound `src_<32hex>`；26.8.19 没有外部可信 verifier 时固定为 `registered_unverified`，不计入事实绑定率。
 - 正式 Markdown 中需审计的主张必须逐行使用 `【关键事实】/【事实】/【估计】/【假设】/【判断】/【未知】`。缺证、未核验或冲突的事实必须在用户可见正文改写为 `【关键事实（未核验，按假设处理）】`、`【事实（证据冲突，按未知处理）】` 或对应缺失标签；隐藏索引降级但正文仍写“事实”会失败关闭。
 - `board-record.mjs claim-index --artifact <deliverables内文件>` 从 fence 与 HTML 注释之外的显式标签直接计算 statementDigest 和 package-owned claimId；调用方只提供 ordinal 与 evidenceRefs，不得提交正文、claimId 或 digest。索引只保存摘要和不透明引用，不保存正文或文件名。
 - `board-delivery.mjs` 必须反查同一 workspace、run 与 artifact SHA 的 claim index，重算可见标签、分类、来源作用域和摘要；缺索引、换文件、篡改或来源记录丢失均不得进入 `ready_to_present`。该门只证明显式声明标签的完整覆盖，不证明未标记语句没有事实性含义，也不证明材料真实性或结论正确，S/P/C/B/G 与人工事实复核仍是必需门。
@@ -101,7 +101,7 @@ seatId=<id> | stance=<赞成/有条件赞成/反对/不具备表态条件> | con
 
 ### 5.2 流程支持席
 
-秘书只有在用户明确确认、exact plan 已冻结且被显式选为 `process_support` 后才能接收任务。acceptance 中的 `expectedAgent=board-secretary` 单独出现时只表示 routing candidate，不构成调度授权；缺少任一前置条件都必须保持 `dispatchAllowed=false`。26.8.10 新回传使用 `fbsir.process-support-result/v1`，必须固定为 `seatId=board-secretary`、`taskClass=process_support`、`stance=not_applicable`、`confidence=not_applicable`、`conclusionReady=false`；不得套用专业席正文模板。既有 `fbsir.member-result/v1 + process_support` 只允许历史只读解析/展示，不允许新写，也不得计入新运行的 accepted/resolved/收齐；专业席继续使用 `fbsir.member-result/v1`。
+秘书只有在用户明确确认、exact plan 已冻结且被显式选为 `process_support` 后才能接收任务。acceptance 中的 `expectedAgent=board-secretary` 单独出现时只表示 routing candidate，不构成调度授权；缺少任一前置条件都必须保持 `dispatchAllowed=false`。26.8.19 新回传使用 `fbsir.process-support-result/v1`，必须固定为 `seatId=board-secretary`、`taskClass=process_support`、`stance=not_applicable`、`confidence=not_applicable`、`conclusionReady=false`；不得套用专业席正文模板。既有 `fbsir.member-result/v1 + process_support` 只允许历史只读解析/展示，不允许新写，也不得计入新运行的 accepted/resolved/收齐；专业席继续使用 `fbsir.member-result/v1`。
 
 `sections` 只能包含以下四个 exact 机械对象，任何自由文本 section、额外字段或嵌套的 judgement / summary / recommendation / approval / legalOpinion 均由核心校验器失败关闭：
 
