@@ -3,3 +3,11 @@
 *.part
 *.log
 .downloaded_at
+
+# Rebuildable retrieval indexes. Source corpus stays; these can exceed GitHub's 100MB blob limit.
+**/tfidf_matrix.npz
+**/semantic_embeddings.npz
+**/faiss_index.bin
+**/*.npz
+**/*.faiss
+**/*.npy
