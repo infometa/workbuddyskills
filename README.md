@@ -169,3 +169,4 @@ cat connectors/westock-mcp/mcp.json
 ## 友情链接
 
 [linux.do](https://linux.do/)
+[awesome-workbuddy](https://github.com/sandbaseai/awesome-workbuddy) — 双语、安全审查的 WorkBuddy/CodeBuddy Skills、MCP、工作流与生态资源目录。
