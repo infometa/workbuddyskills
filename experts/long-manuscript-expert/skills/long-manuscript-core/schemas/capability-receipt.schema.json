@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/capability-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "capabilityId", "inputDigest", "contextDigest", "invocationDigest", "policyDigest", "resultDigest", "externalActionCount", "connectorRequired", "donorSkillUsed"],
+  "properties": {
+    "schemaVersion": { "const": "1.1.0" },
+    "capabilityId": { "type": "string" },
+    "inputDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "contextDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "invocationDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "policyDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "resultDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "externalActionCount": { "const": 0 },
+    "connectorRequired": { "const": false },
+    "donorSkillUsed": { "const": false }
+  }
+}

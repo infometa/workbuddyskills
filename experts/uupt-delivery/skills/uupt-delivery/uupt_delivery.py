@@ -2,19 +2,20 @@
 """
 UU跑腿同城配送服务 Agent Skill (Python 版本)
 提供订单询价、发单、订单查询、取消订单、跑男追踪等功能。
-支持跑腿配送(SEND)和帮忙服务(HELP)两种订单类型。
+支持跑腿配送(SEND)和帮帮服务(HELP)两种订单类型。
 
 用法：
     python uupt_delivery.py register --mobile="手机号" [--sms-code="验证码"]
     python uupt_delivery.py price --from-address="起始地址" --to-address="目的地址" [--city="城市名"] [--order-type="send|help"]
-    python uupt_delivery.py create --price-token="询价token" --receiver-phone="收件人电话" [--note="帮忙内容"]
+    python uupt_delivery.py create --price-token="询价token" --receiver-phone="收件人电话" [--note="帮帮内容"]
     python uupt_delivery.py detail --order-code="订单编号"
     python uupt_delivery.py cancel --order-code="订单编号" [--reason="取消原因"]
     python uupt_delivery.py track --order-code="订单编号"
+    python uupt_delivery.py coupon [--source="领取来源"]
 
 配置方式：
-    1. 预制配置：defaults.json（appId、appSecret，随 Skill 分发）
-    2. 用户配置：config.json（openId，注册后自动保存）
+    1. 预制配置：defaults.json（appId、apiUrl，随 Skill 分发）
+    2. 用户配置：~/.uupt-delivery/config.json（openId，注册后自动保存）
     3. 环境变量：UUPT_OPEN_ID（可选覆盖）
 """
 
@@ -24,7 +25,6 @@ import json
 import hashlib
 import time
 import argparse
-import tempfile
 from pathlib import Path
 from urllib.parse import quote
 
@@ -34,12 +34,19 @@ except ImportError:
     print("[错误] 缺少 requests 库，请运行: pip install requests")
     sys.exit(1)
 
-# 配置文件路径
-CONFIG_FILE = Path(__file__).parent / "config.json"
+# 配置文件保存在用户主目录，不受 skill 重装影响，且始终可写
+CONFIG_DIR = Path.home() / ".uupt-delivery"
+CONFIG_FILE = CONFIG_DIR / "config.json"
 DEFAULTS_FILE = Path(__file__).parent / "defaults.json"
 
-# 默认 API 地址
-DEFAULT_API_URL = "https://api-open.uupt.com/openapi/v3/"
+# 默认 API 地址（接口路径在调用处写全）
+DEFAULT_API_URL = "https://api-open.uupt.com"
+
+# skill 安装目录
+SKILL_DIR = Path(__file__).parent
+# 淡定星期四活动太阳码图片：远程链接（优先，Markdown 可直接渲染）与本地文件（兜底，配合平台图片发送机制）
+THURSDAY_QRCODE_URL = "https://otherfiles.uupt.com/skills/thursday-qrcode.jpg"
+THURSDAY_QRCODE_FILE = SKILL_DIR / "assets" / "thursday-qrcode.jpg"
 
 
 def read_config() -> dict:
@@ -69,6 +76,7 @@ def save_config(config: dict) -> bool:
     try:
         existing = read_config()
         merged = {**existing, **config}
+        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(merged, f, indent=2, ensure_ascii=False)
         print(f"[成功] 配置已保存到: {CONFIG_FILE}")
@@ -79,12 +87,11 @@ def save_config(config: dict) -> bool:
 
 
 def get_config() -> dict:
-    """获取配置（优先级：环境变量 > config.json > defaults.json）"""
+    """获取配置（优先级：环境变量 > config.json > defaults.json > 内置默认值）"""
     defaults = read_defaults()
     config = read_config()
     return {
         "app_id": os.environ.get("UUPT_APP_ID") or config.get("appId") or defaults.get("appId"),
-        "app_secret": os.environ.get("UUPT_APP_SECRET") or config.get("appSecret") or defaults.get("appSecret"),
         "open_id": os.environ.get("UUPT_OPEN_ID") or config.get("openId") or defaults.get("openId"),
         "api_url": os.environ.get("UUPT_API_URL") or config.get("apiUrl") or defaults.get("apiUrl") or DEFAULT_API_URL,
     }
@@ -94,9 +101,9 @@ def ensure_config() -> dict:
     """检查并确保配置完整"""
     config = get_config()
     
-    if not config["app_id"] or not config["app_secret"]:
-        print("\n[FATAL] 缺少应用凭证，请确认 defaults.json 文件完整")
-        raise ValueError("[FATAL] 缺少应用凭证 (appId/appSecret)，请确认 defaults.json 文件存在且内容完整")
+    if not config["app_id"]:
+        print("\n[FATAL] 缺少应用凭证，请确认 defaults.json 文件完整，或通过环境变量 UUPT_APP_ID 配置")
+        raise ValueError("[FATAL] 缺少应用凭证 (appId)，请确认 defaults.json 文件存在且内容完整，或配置环境变量 UUPT_APP_ID")
     
     if not config["open_id"]:
         print("\n[REGISTRATION_REQUIRED]")
@@ -118,7 +125,7 @@ def post_request(biz_params: dict, api_path: str) -> dict:
     timestamp = int(time.time())
     biz_json = json.dumps(biz_params, ensure_ascii=False, separators=(",", ":"))
     
-    sign_str = biz_json + config["app_secret"] + str(timestamp)
+    sign_str = biz_json + str(timestamp)
     sign = generate_md5(sign_str)
     
     payload = {
@@ -153,13 +160,13 @@ def post_unauthorized_request(biz_params: dict, api_path: str) -> dict:
     """发送无需 openId 的 API 请求（用于注册/授权接口）"""
     config = get_config()
     
-    if not config["app_id"] or not config["app_secret"]:
-        raise ValueError("[FATAL] 缺少应用凭证 (appId/appSecret)，请确认 defaults.json 文件存在且内容完整")
+    if not config["app_id"]:
+        raise ValueError("[FATAL] 缺少应用凭证 (appId)，请确认 defaults.json 文件存在且内容完整，或配置环境变量 UUPT_APP_ID")
     
     timestamp = int(time.time())
     biz_json = json.dumps(biz_params, ensure_ascii=False, separators=(",", ":"))
     
-    sign_str = biz_json + config["app_secret"] + str(timestamp)
+    sign_str = biz_json + str(timestamp)
     sign = generate_md5(sign_str)
     
     payload = {
@@ -230,7 +237,7 @@ def send_sms_code(user_mobile: str, user_ip: str, image_code: str = "") -> dict:
     }
     
     print("[注册] 正在发送短信验证码...")
-    return post_unauthorized_request(biz, "user/unauthorized/sendSmsCode")
+    return post_unauthorized_request(biz, "/openapi/v3/user/unauthorized/sendSmsCode")
 
 
 def user_auth(user_mobile: str, user_ip: str, sms_code: str) -> dict:
@@ -251,11 +258,14 @@ def user_auth(user_mobile: str, user_ip: str, sms_code: str) -> dict:
     }
     
     print("[注册] 正在进行商户授权...")
-    result = post_unauthorized_request(biz, "user/unauthorized/auth")
+    result = post_unauthorized_request(biz, "/openapi/v3/user/unauthorized/auth")
     
     if result and result.get("body") and result["body"].get("openId"):
-        save_config({"openId": result["body"]["openId"]})
-        print("[成功] 授权成功，openId 已保存")
+        result["configSaved"] = save_config({"openId": result["body"]["openId"]})
+        if result["configSaved"]:
+            print("[成功] 授权成功，openId 已保存")
+        else:
+            print("[警告] 授权成功，但 openId 保存失败")
     
     return result
 
@@ -271,10 +281,10 @@ def order_price(from_address: str, to_address: str, city_name: str = "郑州市"
     """订单询价
     
     Args:
-        from_address: 起始地址（帮忙订单时为帮忙地点）
-        to_address: 目的地址（帮忙订单时与from_address相同）
+        from_address: 起始地址（帮帮订单时为帮帮地点）
+        to_address: 目的地址（帮帮订单时与from_address相同）
         city_name: 城市名称
-        order_type: 订单类型，"send"为跑腿配送，"help"为帮忙服务
+        order_type: 订单类型，"send"为跑腿配送，"help"为帮帮服务
     """
     if not from_address or not to_address:
         raise ValueError("起始地址和目的地址为必填项")
@@ -296,9 +306,9 @@ def order_price(from_address: str, to_address: str, city_name: str = "郑州市"
     if is_help:
         biz["goodsType"] = "ALLHELP"
     
-    type_label = "帮忙服务" if is_help else "配送"
+    type_label = "帮帮服务" if is_help else "配送"
     print(f"[询价] 正在查询{type_label}价格...")
-    return post_request(biz, "order/orderPrice")
+    return post_request(biz, "/openapi/v3/order/orderPrice")
 
 
 def create_order(price_token: str, receiver_phone: str, channel: str = "", note: str = "") -> dict:
@@ -308,7 +318,7 @@ def create_order(price_token: str, receiver_phone: str, channel: str = "", note:
         price_token: 询价返回的 token
         receiver_phone: 收件人电话
         channel: 聊天渠道（wechat 渠道 specialChannel=4，其他渠道=2）
-        note: 帮忙内容描述（帮忙订单时必填，用于描述具体需要跑男提供的帮助服务）
+        note: 帮帮内容描述（帮帮订单时必填，用于描述具体需要跑男提供的帮助服务）
     """
     if not price_token:
         raise ValueError("priceToken 为必填项，请先调用订单询价接口")
@@ -332,7 +342,7 @@ def create_order(price_token: str, receiver_phone: str, channel: str = "", note:
         biz["note"] = note
     
     print("[下单] 正在创建订单...")
-    return post_request(biz, "order/addOrder")
+    return post_request(biz, "/openapi/v3/order/addOrder")
 
 
 def order_detail(order_code: str) -> dict:
@@ -343,7 +353,7 @@ def order_detail(order_code: str) -> dict:
     biz = {"order_code": order_code}
     
     print("[查询] 正在查询订单详情...")
-    return post_request(biz, "order/orderDetail")
+    return post_request(biz, "/openapi/v3/order/orderDetail")
 
 
 def cancel_order(order_code: str, reason: str = "") -> dict:
@@ -357,7 +367,7 @@ def cancel_order(order_code: str, reason: str = "") -> dict:
     }
     
     print("[取消] 正在取消订单...")
-    return post_request(biz, "order/cancelOrder")
+    return post_request(biz, "/openapi/v3/order/cancelOrder")
 
 
 def driver_track(order_code: str) -> dict:
@@ -368,7 +378,19 @@ def driver_track(order_code: str) -> dict:
     biz = {"order_code": order_code}
     
     print("[追踪] 正在查询跑男信息...")
-    return post_request(biz, "order/driverTrack")
+    return post_request(biz, "/openapi/v3/order/driverTrack")
+
+
+def receive_coupon_packages(source: int = 2) -> dict:
+    """领取优惠券包
+    
+    Args:
+        source: 领取来源（决定可领哪些券包）
+    """
+    biz = {"source": int(source)}
+    
+    print("[领券] 正在领取优惠券...")
+    return post_request(biz, "/openapiext/v3/aiagentcoupon/receiveCouponPackages")
 
 
 # ============ 结果格式化 ============
@@ -420,13 +442,13 @@ def format_create_result(result: dict, channel: str = "") -> None:
                 qrcode_url = f"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={quote(payment_url, safe='')}"
                 
                 try:
-                    script_dir = os.path.dirname(os.path.abspath(__file__))
-                    qr_file_name = "payment_qrcode.png"
-                    qr_file_path = os.path.join(script_dir, qr_file_name)
+                    # 写入用户主目录下的配置目录，skill 安装目录可能只读
+                    qr_file_path = str(CONFIG_DIR / "payment_qrcode.png")
                     
                     response = requests.get(qrcode_url, timeout=10)
                     response.raise_for_status()
                     
+                    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
                     with open(qr_file_path, 'wb') as f:
                         f.write(response.content)
                     
@@ -528,37 +550,60 @@ def format_track_result(result: dict) -> None:
             print(f"   距离目的地: {data['distance']} 米")
 
 
+def format_coupon_result(result: dict) -> None:
+    """格式化领券结果"""
+    print("[结果] 领券结果:")
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    
+    if result.get("body"):
+        data = result["body"]
+        coupon_list = data.get("couponList") or []
+        
+        print("\n[COUPON_RESULT]")
+        print(f"NEWLY_CLAIMED={'true' if data.get('newlyClaimed') is True else 'false'}")
+        print(f"COUPON_COUNT={len(coupon_list)}")
+        if data.get("thursdayJoinAble") is True:
+            print("THURSDAY_JOIN_ABLE=true")
+            print(f"THURSDAY_QRCODE_URL={THURSDAY_QRCODE_URL}")
+            print(f"THURSDAY_QRCODE_FILE={THURSDAY_QRCODE_FILE}")
+        print("\n[提示] Agent 请根据 SKILL.md 场景六的触发条件（newlyClaimed / couponList / thursdayJoinAble）选择对应话术模板回复用户。")
+    else:
+        print(f"\n[错误] 领券失败: {result.get('msg') or result.get('error') or '未知错误'}")
+
+
 # ============ 命令行入口 ============
 
 def print_usage():
     """打印使用说明"""
     usage = """
 UU跑腿同城配送服务 (Python 版本)
-支持跑腿配送(SEND)和帮忙服务(HELP)两种订单类型。
+支持跑腿配送(SEND)和帮帮服务(HELP)两种订单类型。
 
 用法:
   python uupt_delivery.py <命令> [参数]
 
 命令:
-  register  手机号注册/获取授权
-  price     订单询价（支持跑腿配送和帮忙服务）
-  create    创建订单
-  detail    查询订单详情
-  cancel    取消订单
-  track     跑男实时追踪
+  register     手机号注册/获取授权
+  price        订单询价（支持跑腿配送和帮帮服务）
+  create       创建订单
+  detail       查询订单详情
+  cancel       取消订单
+  track        跑男实时追踪
+  coupon       领取优惠券
 
 示例:
   python uupt_delivery.py register --mobile="13800138000"
-  python uupt_delivery.py register --mobile="13800138000" --sms-code="123456"
+  python uupt_delivery.py register --mobile="13800138000" --sms-code="1234"
   # 跑腿配送询价
   python uupt_delivery.py price --from-address="郑州市金水区农业路" --to-address="郑州市二七区德化街"
-  # 帮忙服务询价
+  # 帮帮服务询价
   python uupt_delivery.py price --from-address="郑州市金水区农业路" --order-type="help"
   python uupt_delivery.py create --price-token="xxx" --receiver-phone="13800138000"
   python uupt_delivery.py create --price-token="xxx" --receiver-phone="13800138000" --note="帮我搬一箱矿泉水到3楼"
   python uupt_delivery.py detail --order-code="UU123456789"
   python uupt_delivery.py cancel --order-code="UU123456789" --reason="用户改变主意"
   python uupt_delivery.py track --order-code="UU123456789"
+  python uupt_delivery.py coupon
 
 首次使用:
   运行任何命令时会自动检测是否需要注册。
@@ -600,6 +645,16 @@ def main():
                 auth_result = user_auth(args.mobile, user_ip, args.sms_code)
                 
                 if auth_result and auth_result.get("body") and auth_result["body"].get("openId"):
+                    if auth_result.get("configSaved") is False:
+                        open_id = auth_result["body"]["openId"]
+                        print("\n[CONFIG_SAVE_FAILED]")
+                        print("[错误] 授权成功，但 openId 保存到配置文件失败，需要 Agent 协助保存。")
+                        print(f"OPEN_ID={open_id}")
+                        print(f"CONFIG_FILE={CONFIG_FILE}")
+                        print("\n[提示] Agent 请直接使用文件写入工具，将以下 JSON 内容写入上述 CONFIG_FILE 路径（目录不存在则先创建）：")
+                        print(f'   {{"openId": "{open_id}"}}')
+                        print("   写入成功后即完成注册，可继续执行用户最初的功能，无需用户手动操作。")
+                        sys.exit(1)
                     print("\n[REGISTRATION_SUCCESS]")
                     print(f"[成功] 注册成功！openId 已保存到配置文件。")
                     print(f"   openId: {auth_result['body']['openId']}")
@@ -631,21 +686,21 @@ def main():
                 
                 if str(sms_result.get("code", "")) == "1":
                     print("\n[SMS_SENT]")
-                    print("[成功] 验证码已发送，请查看手机短信。")
-                    print("\n[提示] 收到验证码后，请运行:")
-                    print(f'   python uupt_delivery.py register --mobile="{args.mobile}" --sms-code="收到的验证码"')
+                    print("[成功] 4位短信验证码已发送，请查看手机短信。")
+                    print("\n[提示] 收到4位验证码后，请运行:")
+                    print(f'   python uupt_delivery.py register --mobile="{args.mobile}" --sms-code="收到的4位验证码"')
                 else:
                     print(f"\n[错误] 发送验证码失败: {sms_result.get('msg', '未知错误')}")
                     sys.exit(1)
         
         elif command == "price":
-            parser.add_argument("--from-address", required=True, help="起始地址（帮忙订单时为帮忙地点）")
-            parser.add_argument("--to-address", default="", help="目的地址（帮忙订单时无需填写，自动使用起始地址）")
+            parser.add_argument("--from-address", required=True, help="起始地址（帮帮订单时为帮帮地点）")
+            parser.add_argument("--to-address", default="", help="目的地址（帮帮订单时无需填写，自动使用起始地址）")
             parser.add_argument("--city", default="郑州市", help="城市名称")
-            parser.add_argument("--order-type", default="send", help="订单类型: send=跑腿配送, help=帮忙服务")
+            parser.add_argument("--order-type", default="send", help="订单类型: send=跑腿配送, help=帮帮服务")
             args = parser.parse_args(sys.argv[2:])
             
-            # 帮忙订单时 to_address 使用 from_address 的值
+            # 帮帮订单时 to_address 使用 from_address 的值
             to_addr = args.to_address if args.to_address else args.from_address
             result = order_price(args.from_address, to_addr, args.city, args.order_type)
             format_price_result(result)
@@ -654,7 +709,7 @@ def main():
             parser.add_argument("--price-token", required=True, help="询价返回的token")
             parser.add_argument("--receiver-phone", required=True, help="收件人电话")
             parser.add_argument("--channel", default="", help="聊天渠道（如 wechat、feishu、dingtalk 等）")
-            parser.add_argument("--note", default="", help="帮忙内容描述（帮忙订单时必填，描述具体需要跑男提供的帮助服务）")
+            parser.add_argument("--note", default="", help="帮帮内容描述（帮帮订单时必填，描述具体需要跑男提供的帮助服务）")
             args = parser.parse_args(sys.argv[2:])
             
             result = create_order(args.price_token, args.receiver_phone, args.channel, args.note)
@@ -682,9 +737,16 @@ def main():
             result = driver_track(args.order_code)
             format_track_result(result)
             
+        elif command == "coupon":
+            parser.add_argument("--source", type=int, default=2, help="领取来源（决定可领哪些券包，默认2）")
+            args = parser.parse_args(sys.argv[2:])
+            
+            result = receive_coupon_packages(args.source)
+            format_coupon_result(result)
+            
         else:
             print(f"[错误] 未知命令: {command}")
-            print("   支持的命令: register, price, create, detail, cancel, track")
+            print("   支持的命令: register, price, create, detail, cancel, track, coupon")
             print("   使用 -h 查看帮助")
             sys.exit(1)
             

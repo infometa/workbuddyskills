@@ -5,7 +5,7 @@
 ## 前置条件
 
 - `bff detail` 和 `bff exec` 使用当前 CLI 认证，默认推荐 **accessKey（client-ak）**
-- 需要个人脚本时使用 `personal-bff` 命令组，不要把平台正式 Backend Function 与 personal BFF 混成同一个资源
+- 需要个人脚本时使用 `personal-bff` 命令组，不要把平台正式 Backend Function 与 Personal Backend Function 混成同一个资源
 
 ## Backend Function 类型边界
 

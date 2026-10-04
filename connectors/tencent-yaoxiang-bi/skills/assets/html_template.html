@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<!--
+══════════════════════════════════════════════════════════════════
+  药企数据洞察报告 · HTML 可视化模板（黄金样例 / Golden Template）
+══════════════════════════════════════════════════════════════════
+  用途：生成任意药品的数据洞察网页版报告时，必须以此文件为骨架，
+        保证 CSS 设计系统、页面结构、交互、图表风格 100% 统一。
+
+  【样式统一三原则】
+  1. CSS（<style> 段）原样保留，不得改动配色变量、字号、圆角、间距。
+     统一设计系统见 references/html_report_spec.md。
+  2. 页面骨架（hero / navbar / main / footer / back-top）结构不变，
+     仅替换药品名、统计周期、hero 指标数值等文本数据。
+  3. JS 渲染引擎（renderSection / ensureChartsReady / bindMiniTabs / mk /
+     initCharts）与 ECharts 配色常量 C 原样保留，只改图表数据。
+
+  【数据点替换范围】
+  本文件当前是「<药品名>」的成品数据。生成其他药品时：
+  - hero 区（药品名 / sub 描述 / hero-meta 4 个指标）
+  - SECTIONS 三个 section 的全部文案、表格行、图表 data
+  - footer 的药品名与统计周期
+  - 信源清单 src-list（URL 与信源名）
+  全部替换为对应药品的真实数据。结构标签与 class 名保持不变。
+
+  【数据缺失降级（重要）】
+  某一部分数据缺失时「直接不展示该部分」，不编造、不留空壳。
+  具体降级规则见 references/html_report_spec.md 第 5 节。
+  - 整维度缺失 → 删除对应 block + 删除导航 subnav 锚点
+  - 子部分缺失 → 保留 block，用 .src-note 备注「暂未在公开渠道查询到 xxx 数据」
+  - 画像某维度缺失 → 删除该 mini-card
+  - 图表数据缺失 → 不渲染图表，仅保留表格或 src-note 说明
+
+  【生成单文件版】
+  本文件含占位符 <!--__ECHARTS__-->，发布前用脚本把 echarts.min.js
+  内容替换该占位符，产出「单文件版」供客户直接打开。命令见
+  references/html_report_spec.md 第 6 节。
+══════════════════════════════════════════════════════════════════
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title><药品名>· 数据分析洞察报告</title>
+<!--__ECHARTS__-->
+<style>
+:root{
+  --brand:#0F6FB5;
+  --brand-2:#1E88C7;
+  --brand-deep:#0B4E80;
+  --brand-soft:#EAF4FB;
+  --teal:#16A085;
+  --teal-2:#2FB8A0;
+  --gold:#16A085;
+  --ink:#1B2733;
+  --ink-2:#5A6B7B;
+  --ink-3:#8A99A8;
+  --line:#E4EBF1;
+  --bg:#F4F7FA;
+  --card:#FFFFFF;
+  --insight-bg:#F6FAFD;
+  --plan-bg:#EDF6FC;
+  --plan-line:#16A085;
+  --ent:#0F6FB5;
+  --box:#16A085;
+  --up:#D64545;
+  --up-bg:#FCECEC;
+  --down:#2E9E6B;
+  --down-bg:#E7F5EE;
+  --radius:16px;
+  --shadow:0 2px 14px rgba(20,50,80,.06);
+  --shadow-lg:0 8px 30px rgba(20,50,80,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.hero{background:linear-gradient(135deg,var(--brand-deep) 0%,var(--brand) 55%,var(--teal) 130%);color:#fff;padding:38px 0 30px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-80px;top:-80px;width:340px;height:340px;background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%);border-radius:50%}
+.hero .wrap{position:relative;z-index:2}
+.hero-top{display:flex;align-items:center;gap:12px;font-size:13px;opacity:.9;letter-spacing:.5px}
+.hero-badge{background:rgba(255,255,255,.16);padding:4px 12px;border-radius:20px;font-size:12px;backdrop-filter:blur(4px)}
+.hero h1{font-size:28px;font-weight:800;margin:16px 0 8px;letter-spacing:.5px}
+.hero .sub{font-size:15px;opacity:.92;font-weight:400;max-width:860px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:26px;margin-top:22px}
+.hero-meta .m{border-left:3px solid var(--teal-2);padding-left:12px}
+.hero-meta .m .v{font-size:22px;font-weight:800;line-height:1.2}
+.hero-meta .m .k{font-size:12px;opacity:.85;margin-top:2px}
+.navbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 2px 12px rgba(0,0,0,.03)}
+.nav-inner{display:flex;gap:4px;position:relative}
+.nav-item{position:relative}
+.nav-btn{border:none;background:none;cursor:pointer;font-family:inherit;padding:16px 20px;font-size:15px;font-weight:600;color:var(--ink-2);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.nav-btn .ix{width:22px;height:22px;border-radius:6px;background:var(--brand-soft);color:var(--brand);display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.nav-btn:hover{color:var(--brand)}
+.nav-item.active .nav-btn{color:var(--brand);border-bottom-color:var(--brand)}
+.nav-item.active .nav-btn .ix{background:linear-gradient(135deg,var(--brand),var(--teal));color:#fff}
+.subnav{position:absolute;top:100%;left:0;min-width:270px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);padding:8px;opacity:0;visibility:hidden;transform:translateY(6px);transition:all .2s;z-index:120}
+.nav-item:hover .subnav{opacity:1;visibility:visible;transform:translateY(4px)}
+.subnav-title{font-size:11px;color:var(--ink-3);padding:6px 12px 4px;letter-spacing:.5px}
+.subnav a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:500;transition:all .15s}
+.subnav a:hover{background:linear-gradient(90deg,#EAF4FB,#F0FAF6);color:var(--brand-deep)}
+.subnav a .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none}
+.section{padding:96px 0 24px;display:none;animation:fade .4s ease}
+.section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.sec-head .no{flex:none;width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--teal));color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;font-style:normal;line-height:1;box-shadow:0 4px 12px rgba(15,111,181,.28)}
+.sec-head h2{font-size:24px;font-weight:800;color:var(--ink)}
+.sec-head .en{font-size:12px;color:var(--ink-3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.sec-desc{color:var(--ink-2);font-size:14px;margin:6px 0 24px;padding-left:2px}
+.block{margin-bottom:40px;scroll-margin-top:80px}
+.block-title{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--brand-soft)}
+.block-title .bar{width:4px;height:18px;background:var(--brand);border-radius:2px}
+.block-title .tag{display:none}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
+.viz-insight{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:#fff;margin-bottom:22px}
+.viz-insight .viz-head{padding:14px 20px;background:linear-gradient(90deg,#fff,#fbfbfc);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.viz-insight .viz-head .ic{width:26px;height:26px;border-radius:7px;background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center}
+.viz-insight .viz-head h4{font-size:15px;font-weight:700}
+.viz-body{padding:20px}
+.chart{width:100%;height:320px}
+.chart.tall{height:360px}
+.chart.short{height:260px}
+.chart.mini{height:240px}
+.insight{background:linear-gradient(180deg,#FBFDFF,var(--insight-bg));border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:18px 20px;margin-top:4px}
+.insight .lbl{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--teal);letter-spacing:.5px;margin-bottom:10px;text-transform:uppercase}
+.insight .lbl::before{content:"◆";font-size:10px}
+.insight p{color:var(--ink-2);font-size:14px;margin-bottom:8px;white-space:pre-line}
+.insight p:last-child{margin-bottom:0}
+.insight b,.insight strong{color:var(--brand-deep);font-weight:700}
+.plan{background:linear-gradient(180deg,#F0F6F4,#EAF3F0);border:1px solid #D3E5DF;border-radius:var(--radius);padding:22px;margin-top:6px;position:relative;overflow:hidden}
+.plan::before{content:"";position:absolute;left:0;top:0;width:5px;height:100%;background:linear-gradient(180deg,var(--plan-line),#3E9B85)}
+.plan-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.plan-head .pic{width:30px;height:30px;border-radius:8px;background:var(--plan-line);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+.plan-head h4{font-size:16px;font-weight:800;color:#1E5245}
+.plan-head .hint{margin-left:auto;font-size:12px;color:#4B7A6E}
+.plan-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.plan-cols{grid-template-columns:1fr}}
+.plan-col{background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E0ECE8}
+.plan-col.ent{border-top:3px solid var(--ent)}
+.plan-col.box{border-top:3px solid var(--box)}
+.plan-col .who{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:800;margin-bottom:10px;padding:3px 10px;border-radius:6px}
+.plan-col.ent .who{color:var(--ent);background:#EAF1FA}
+.plan-col.box .who{color:var(--box);background:#E7F2EE}
+.plan-col .who .badge{font-size:11px;font-weight:600;opacity:.75}
+.plan-col p,.plan-col li{font-size:13.5px;color:var(--ink-2);white-space:pre-line}
+.plan-col ol,.plan-col ul{padding-left:18px;margin:4px 0}
+.plan-col li{margin-bottom:7px;line-height:1.65}
+.plan-col b{color:var(--ink);font-weight:700}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+@media(max-width:800px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;right:-20px;bottom:-20px;width:80px;height:80px;background:var(--brand-soft);border-radius:50%;opacity:.5}
+.kpi .v{font-size:26px;font-weight:800;color:var(--brand);line-height:1.1;position:relative;z-index:2}
+.kpi .v small{font-size:13px;font-weight:600}
+.kpi .k{font-size:13px;color:var(--ink-2);margin-top:6px;position:relative;z-index:2}
+.kpi .trend{font-size:12px;margin-top:4px;color:var(--ink-3);position:relative;z-index:2}
+.dtable{width:100%;border-collapse:collapse;font-size:13.5px}
+.dtable th{background:var(--brand-soft);color:var(--brand);font-weight:700;padding:11px 14px;text-align:left;border-bottom:2px solid #C9E1F2}
+.dtable td{padding:10px 14px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+.dtable tr:hover td{background:#FAFAFB}
+.dtable .num{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink)}
+.dtable .rank{width:34px;text-align:center;font-weight:800;color:var(--brand)}
+.dtable-nowrap1 td:first-child,.dtable-nowrap1 th:first-child{white-space:nowrap;font-weight:600;color:var(--ink)}
+.summary-hero{background:linear-gradient(135deg,#FFF,#FBF9F4);border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:var(--radius);padding:24px 26px;margin-bottom:24px;box-shadow:var(--shadow)}
+.summary-hero .bg-lbl{font-size:12px;color:var(--ink-3);letter-spacing:.5px;margin-bottom:8px}
+.summary-hero p{font-size:15px;color:var(--ink-2);white-space:pre-line}
+.summary-hero b{color:var(--brand)}
+.concl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:12px}
+@media(max-width:800px){.concl-grid{grid-template-columns:1fr}}
+.concl{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:var(--shadow);position:relative;padding-left:20px}
+.concl::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:4px;background:var(--brand)}
+.concl .h{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.concl .h .n{width:24px;height:24px;border-radius:7px;background:var(--brand);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none}
+.concl p{font-size:13.5px;color:var(--ink-2);white-space:pre-line}
+.concl b{color:var(--brand)}
+.concl.box-accent::before{background:var(--teal)}
+.concl.box-accent .h .n{background:var(--teal)}
+.strat-table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.strat-table th{background:var(--brand);color:#fff;padding:12px 14px;text-align:left;font-weight:700;font-size:13px}
+.strat-table td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-2);white-space:pre-line}
+.strat-table tr:last-child td{border-bottom:none}
+.strat-table .cat{font-weight:800;color:var(--brand);background:var(--brand-soft)}
+.strat-table .sub2{font-weight:600;color:var(--ink)}
+.strat-table td.ent-c{background:#F5F9FE}
+.strat-table td.box-c{background:#F1F8F5}
+sup.src{color:var(--brand);font-size:10px;font-weight:700;cursor:help;padding:0 1px;vertical-align:super}
+.src-list{margin-top:14px;padding:14px 16px;background:#F8FAFC;border:1px dashed var(--line);border-radius:10px;font-size:12px;color:var(--ink-2);line-height:1.9}
+.src-list .sl-t{font-size:12px;font-weight:800;color:var(--ink);margin-bottom:6px;letter-spacing:.3px}
+.src-list ol{margin:0;padding-left:20px}
+.src-list li{margin-bottom:4px}
+.src-list a{color:var(--brand);text-decoration:none;word-break:break-all}
+.src-list a:hover{text-decoration:underline}
+.src-list .badge-src{display:inline-block;min-width:16px;text-align:center;background:var(--brand-soft);color:var(--brand);border-radius:4px;font-weight:700;font-size:10px;padding:0 4px;margin-right:4px}
+.note{font-size:12.5px;color:var(--ink-3);margin-top:10px;display:flex;align-items:flex-start;gap:6px;line-height:1.6}
+.src-note{font-size:12px;color:var(--ink-3);background:#F8FAFC;border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin-top:14px;line-height:1.6}
+.mini-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.mini-tab{padding:7px 16px;border-radius:20px;background:#fff;border:1px solid var(--line);cursor:pointer;font-size:13px;font-weight:600;color:var(--ink-2);transition:all .2s}
+.mini-tab.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+.mini-pane{display:none}
+.mini-pane.active{display:block;animation:fade .3s}
+.flow{display:flex;align-items:stretch;gap:0;margin:6px 0 20px;flex-wrap:wrap}
+.flow-step{flex:1;min-width:150px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;position:relative;box-shadow:var(--shadow)}
+.flow-step .fs-t{font-size:13px;font-weight:800;color:var(--brand);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.flow-step .fs-d{font-size:12px;color:var(--ink-2);line-height:1.5}
+.flow-step .fs-n{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,var(--brand),var(--teal));color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:18px;padding:0 8px;flex:none}
+@media(max-width:800px){.flow-arrow{transform:rotate(90deg);width:100%;padding:6px 0}}
+.flow-step.teal .fs-t{color:var(--teal)}
+.signal-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 4px}
+@media(max-width:800px){.signal-row{grid-template-columns:repeat(2,1fr)}}
+.signal{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;box-shadow:var(--shadow);overflow:hidden}
+.signal .ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.signal .ico svg{width:20px;height:20px}
+.signal .sv{font-size:22px;font-weight:800;color:var(--ink);line-height:1.1}
+.signal .sv small{font-size:12px;font-weight:600;color:var(--ink-2)}
+.signal .sk{font-size:12.5px;color:var(--ink-2);margin-top:5px;line-height:1.5}
+.signal.up::after{content:"";position:absolute;right:-16px;top:-16px;width:60px;height:60px;border-radius:50%;background:#D64545;opacity:.12}
+.signal.down::after{content:"";position:absolute;right:-16px;top:-16px;width:60px;height:60px;border-radius:50%;background:var(--brand);opacity:.12}
+.signal .trendtag{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:8px}
+.signal .trendtag.pos{background:var(--up-bg);color:var(--up)}
+.signal .trendtag.neg{background:var(--brand-soft);color:var(--brand)}
+.signal .trendtag.neutral{background:#E7F2EE;color:var(--teal)}
+.legend-note{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink-3)}
+.legend-note span{display:inline-flex;align-items:center;gap:5px}
+.legend-note i{width:10px;height:10px;border-radius:2px;display:inline-block}
+footer{background:#20242A;color:#9AA0A8;padding:28px 0;margin-top:40px;font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer b{color:#fff}
+.back-top{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:12px;background:var(--brand);color:#fff;border:none;cursor:pointer;box-shadow:var(--shadow-lg);font-size:18px;opacity:0;transition:all .3s;z-index:200}
+.back-top.show{opacity:1}
+.mini-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.mini-card .mc-h{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.mini-card .mc-h .d{width:8px;height:8px;border-radius:2px;background:var(--brand)}
+@media print{.navbar,.back-top{display:none}.section{display:block!important;padding:20px 0}.viz-insight,.block{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <span class="hero-badge">数据分析洞察报告</span>
+      <span style="margin-left:auto">药箱数据统计周期：2026.01.01 — 2026.06.30｜市场数据口径：2025全年公开 + 2026预测</span>
+    </div>
+    <h1><药品名>· 数据分析洞察报告</h1>
+    <p class="sub">融合公开市场规模数据与健康药箱扫码私域行为数据，从「整体市场规模与药箱用户」到「药箱功能使用」两大维度全链路洞察，为企业侧与药箱侧协同运营提供策略指引。本品为<产品差异化定位>，<获批时间线>。</p>
+    <div class="hero-meta">
+      <div class="m"><div class="v">≈25–30<small> 亿元</small></div><div class="k">2025销售额（上市首年）· 跻身<企业名>TOP3产品</div></div>
+      <div class="m"><div class="v">≈15,378<small> 人/月</small></div><div class="k">药箱月均扫码人数</div></div>
+      <div class="m"><div class="v">≈92,414<small> 次/月</small></div><div class="k">药码页月均访问次数</div></div>
+      <div class="m"><div class="v">85%–93%</div><div class="k">新用户占比 · 老客回扫占比升至15%</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="navbar">
+  <div class="wrap">
+    <div class="nav-inner" id="navInner">
+      <div class="nav-item active" data-sec="s-summary">
+        <button class="nav-btn"><span class="ix">A</span>结论汇总</button>
+        <div class="subnav">
+          <div class="subnav-title">SECTION A · 结论与策略</div>
+          <a href="#b-conclusion"><span class="dot"></span>核心结论</a>
+          <a href="#b-strategy"><span class="dot"></span>策略引导总览</a>
+        </div>
+      </div>
+      <div class="nav-item" data-sec="s-market">
+        <button class="nav-btn"><span class="ix">1</span>整体市场规模和药箱用户分析</button>
+        <div class="subnav">
+          <div class="subnav-title">SECTION 1 · 市场规模与药箱用户</div>
+          <a href="#s1-1"><span class="dot"></span>1.1 市场规模和药箱用户规模</a>
+          <a href="#s1-2"><span class="dot"></span>1.2 月度销量和药箱扫码走势</a>
+          <a href="#s1-3"><span class="dot"></span>1.3 SKU销量和药箱扫码分布</a>
+          <a href="#s1-4"><span class="dot"></span>1.4 地域销量和药箱扫码分布</a>
+          <a href="#s1-5"><span class="dot"></span>1.5 竞品规模和关联用药分析</a>
+        </div>
+      </div>
+      <div class="nav-item" data-sec="s-func">
+        <button class="nav-btn"><span class="ix">2</span>药箱功能使用分析</button>
+        <div class="subnav">
+          <div class="subnav-title">SECTION 2 · 药箱功能使用</div>
+          <a href="#s2-1"><span class="dot"></span>2.1 药箱人群画像</a>
+          <a href="#s2-2"><span class="dot"></span>2.2 功能使用整体情况</a>
+          <a href="#s2-3"><span class="dot"></span>2.3 药箱科普访问情况</a>
+          <a href="#s2-4"><span class="dot"></span>2.4 药箱用药打卡情况</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="main"></main>
+
+<footer>
+  <div class="wrap">
+    <div>© <药品名>· 数据分析洞察报告 &nbsp;|&nbsp; 数据来源：公开市场数据（<企业名>年报/米内网/券商研报等）+ 健康药箱扫码私域行为数据</div>
+    <div>统计周期：2026.01.01 — 2026.06.30</div>
+  </div>
+</footer>
+
+<button class="back-top" id="backTop">↑</button>
+
+<script>
+const SECTIONS = {
+"s-summary": `
+  <div class="sec-head">
+    <span class="no">A</span>
+    <div><div class="en">Executive Summary</div><h2>结论汇总</h2></div>
+  </div>
+  <p class="sec-desc"><药品名>为<产品差异化定位>，<获批时间线>，上市首年销售额即达25–30亿元、跻身<企业名>TOP3产品。本报告围绕「整体市场规模与药箱用户」「药箱功能使用」两大维度，输出企业侧（自有销量/铺货/渠道）与药箱侧（产品功能×Agent能力）的协同策略。</p>
+
+  <div class="summary-hero" id="b-conclusion">
+    <div class="bg-lbl">■ 一句话结论</div>
+    <p>市场端本品<b>上市首年即高增、双靶点差异化卡位、减重为新增量</b>；而药箱整体<b>数字化渗透仍处起步阶段、老客回扫占比稳步提升</b>，正是把减重/降糖流量沉淀为私域长期用户的窗口期。</p>
+    <div class="signal-row">
+      <div class="signal up">
+        <div class="ico" style="background:var(--up-bg);color:var(--up)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></div>
+        <div class="sv">25–30<small> 亿元</small></div>
+        <div class="sk">2025销售额（上市首年），跻身<企业名>TOP3产品</div>
+        <span class="trendtag pos">▲ 首年高增</span>
+      </div>
+      <div class="signal down">
+        <div class="ico" style="background:var(--brand-soft);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="13" y="8" width="3" height="10"/></svg></div>
+        <div class="sv">≈6<small> %</small></div>
+        <div class="sk">电商GLP-1份额，仍处起步阶段</div>
+        <span class="trendtag neg">▼ 渗透待提升</span>
+      </div>
+      <div class="signal down">
+        <div class="ico" style="background:var(--brand-soft);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+        <div class="sv">85–93<small> %</small></div>
+        <div class="sk">新用户占比，老客回扫占比由7.8%升至15%</div>
+        <span class="trendtag neg">▼ 留存缺口</span>
+      </div>
+      <div class="signal down">
+        <div class="ico" style="background:#E7F2EE;color:var(--teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <div class="sv">50.7<small> %</small></div>
+        <div class="sk">科普阅读参与率，视频操作指导为核心需求</div>
+        <span class="trendtag neutral">◆ 视频主导</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-title" style="margin-top:8px"><span class="bar"></span>核心洞察</div>
+  <div class="viz-insight">
+    <div class="viz-head"><span class="ic">◱</span><h4>两大维度 · 9 项分析点洞察结论</h4></div>
+    <div class="viz-body" style="padding:0">
+      <table class="dtable dtable-nowrap1">
+        <thead><tr><th style="width:170px">一级维度</th><th>核心洞察结论</th></tr></thead>
+        <tbody>
+          <tr><td class="cat" rowspan="5" style="background:var(--brand-soft);color:var(--brand);font-weight:800;vertical-align:middle">整体市场规模<br>和药箱用户分析</td>
+            <td>扫码触达与老客留存均处于<b>起步阶段</b>；<b>GLP-1赛道高增</b>（2026年约230–450亿元）、本品上市首年25–30亿元，数字化运营正逢窗口期。</td></tr>
+          <tr>
+            <td>药箱扫码呈<b>节后回升、5月峰值</b>节奏（2月低谷-22%、3月+87%），<b>老客回扫占比由7.8%升至15%</b>。</td></tr>
+          <tr>
+            <td><b>2mg×2支为主力规格(34.6%)</b>，2支装小规格合计约60%，反映首购/试用为主。</td></tr>
+          <tr>
+            <td>扫码活跃集中在<b>华东沿海与华南</b>（苏粤浙居前），与减重消费人群方向吻合。</td></tr>
+          <tr>
+            <td>长效GLP-1竞品持续扩容，用户<b>多重代谢慢病特征明显</b>（血脂类、呼吸类、血糖类居前），关联扫码以降糖药为主、与糖尿病代谢人群高度重叠。</td></tr>
+          <tr><td class="cat" rowspan="4" style="background:#E7F2EE;color:var(--teal);font-weight:800;vertical-align:middle">药箱功能<br>使用分析</td>
+            <td>核心用户为<b>中青年女性、本科居多、育儿过半</b>（女56.6%、31-35岁25.3%、本科65.3%、育儿62.7%），减重诉求鲜明。</td></tr>
+          <tr>
+            <td>功能使用<b>科普与说明书主导</b>（疾病科普42152人、电子说明书30301人），<b>科学减重有基础、低频功能待曝光</b>。</td></tr>
+          <tr>
+            <td><b>视频操作指导为核心需求</b>（注射教学视频8.7万次访问），图文深度内容访问偏低。</td></tr>
+          <tr>
+            <td>提醒设置环节流失偏高（弹窗设置率9.2%），<b>打卡用户81.9%仅打卡1次</b>，持续依从待提升。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="block" id="b-strategy" style="margin-top:32px">
+    <div class="block-title"><span class="bar"></span>策略引导总览<span class="tag">企业侧 × 药箱侧</span></div>
+    <div class="flow">
+      <div class="flow-step"><div class="fs-t"><span class="fs-n">1</span>扫码验真</div><div class="fs-d">赋二维码提升扫码率，把院内处方流量引入药箱</div></div>
+      <div class="flow-arrow">➜</div>
+      <div class="flow-step"><div class="fs-t"><span class="fs-n">2</span>功能承接</div><div class="fs-d">科普/说明书页做枢纽，导流科学减重 / 提醒 / 打卡</div></div>
+      <div class="flow-arrow">➜</div>
+      <div class="flow-step teal"><div class="fs-t"><span class="fs-n">3</span>AI 问答</div><div class="fs-d">Agent 智能体承接咨询，建立长期使用心智</div></div>
+      <div class="flow-arrow">➜</div>
+      <div class="flow-step teal"><div class="fs-t"><span class="fs-n">4</span>留存复购</div><div class="fs-d">用药提醒 + 打卡激励沉淀私域，驱动依从与复购</div></div>
+    </div>
+    <div class="plan-cols">
+      <div class="plan-col ent">
+        <span class="who">◈ 企业侧 <span class="badge">自有数据 × 自有渠道</span></span>
+        <p style="margin-bottom:12px">依托药企自身的销量、铺货、终端等数据与自有渠道执行；或将内容与需求提供给药箱侧协同落地。</p>
+        <ul>
+          <li>以<b>双靶点循证差异与首年25–30亿地位</b>背书，推动包装<b>赋二维码</b>、联动零售与私立终端承接扫码。</li>
+          <li>按<b>3月、5月高峰</b>节奏前置铺货，围绕减重旺季做科普与活动营销。</li>
+          <li>以<b>2mg×2支主力规格</b>为核心配置资源，大规格在私立与零售加强导购。</li>
+          <li>营销铺货优先<b>苏浙粤等扫码高活跃省</b>，重点布局私立诊所与零售渠道。</li>
+          <li>以双靶点循证<b>正面卡位直接竞品</b>（<竞品A>/<竞品B>/<竞品D>），联合关联厂家做<b>共病管理组合营销</b>。</li>
+          <li>内容<b>适配中青年女性</b>（生活化、场景化、覆盖产后/妈妈减重），以"<b>科学减重、用药依从</b>"为核心价值主张对外传播。</li>
+        </ul>
+      </div>
+      <div class="plan-col box">
+        <span class="who">◉ 药箱侧 <span class="badge">合作共建 × 数据反哺优化</span></span>
+        <p style="margin-bottom:12px">在合作基础上根据数据反馈优化企业私域，围绕<b>产品功能</b>与 <b>Agent 能力</b>持续迭代，实现"洞察→功能→留存"闭环。</p>
+        <ul>
+          <li>升级<b>用药提醒引导、科学减重专题、健康日历</b>等功能，接入新规划 <b>Agent 问答</b>，承接扫码到留存闭环。</li>
+          <li>现有 <b>banner 运营位</b>配合企业营销节点做专题投放，重点规格精准触达。</li>
+          <li>在说明书底部加<b>关联科普推荐</b>，打通说明书→科普→减重功能路径。</li>
+          <li>科普<b>内容分层运营</b>（视频引流→图文深度），用 Agent 能力个性化推送提升阅读转化。</li>
+          <li><b>优化提醒弹窗设置路径</b>降流失，设计<b>打卡激励活动</b>，借 Agent 引导用户设置与持续打卡。</li>
+          <li>上架<b>减重/代谢专题</b>持续触达患者，借公域健康活动引导进入品牌私域。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note" style="margin-top:12px">◇ 下文各章节将围绕两大一级维度共9个分析点，展开详细数据表、图表、洞察与"企业侧 × 药箱侧"分工建议。</div>
+  </div>
+`,
+
+"s-market": `
+  <div class="sec-head"><span class="no">1</span>
+    <div><div class="en">Market Scale & Box Users</div><h2>整体市场规模和药箱用户分析</h2></div></div>
+  <p class="sec-desc">从市场规模、月度走势、SKU规格、地域分布到竞品与关联用药，对照公开市场数据与药箱扫码私域数据，识别增长窗口与渗透缺口。</p>
+
+  <div class="block" id="s1-1">
+    <div class="block-title"><span class="bar"></span>1.1 · 市场规模和药箱用户规模</div>
+
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>市场规模（口径：2025全年 + 2026预测）</h4></div>
+      <div class="viz-body">
+        <table class="dtable dtable-nowrap1">
+          <thead><tr><th>维度</th><th>指标</th><th>数值 / 表现</th><th>判断</th></tr></thead>
+          <tbody>
+            <tr><td>市场销量</td><td>年度销量</td><td><药品名>2025年销售额约 <b class="num">25–30亿元</b>，上市首年（<获批时间线>）<sup class="src" title="新浪财经·<企业名>2025年报">[1]</sup></td><td>上市首年即跻身<企业名>TOP3产品</td></tr>
+            <tr><td>背景地位</td><td>行业走势</td><td>中国GLP-1药物市场2026年整体约 <b class="num">230–450亿元</b>、周制剂为主流；减重细分2026年约 <b class="num">122亿元</b><sup class="src" title="头豹/伯恩斯坦/野村、中邮证券">[2][3]</sup></td><td>GLP-1赛道高增，减重为新增量</td></tr>
+            <tr><td></td><td>企业动态</td><td><企业名>2025全年产品收入 <b class="num">119亿元</b>(+44.6%)、总营收 <b class="num">130亿元</b>(+38.4%)，<药品名>被定位慢病战略基石；2026年与健之佳、老百姓大药房达成战略合作布局零售<sup class="src" title="<企业名>2025年报、pharnexcloud">[1][4]</sup></td><td><企业名>以<药品名>切入代谢大领域</td></tr>
+            <tr><td></td><td>市场份额</td><td>电商渠道GLP-1份额：<竞品B>约 <b class="num">44%</b>、<竞品A>约 <b class="num">40%</b>、<药品名>约 <b class="num">6%</b><sup class="src" title="Sandalwood×IQVIA，2026年4月">[5]</sup></td><td>电商份额仍处起步阶段</td></tr>
+            <tr><td>终端结构</td><td>渠道占比</td><td><企业名>构建"公立医院+零售药房+线上医疗平台+私立诊所"多元渠道；2025年减重药渠道增速电商 <b class="num">+102%</b>、院内 <b class="num">+11%</b>、药店 <b class="num">+88%</b>；定价2mg×4支约 <b class="num">1500–1600元</b><sup class="src" title="21经济网、公开渠道汇总">[6]</sup></td><td>渠道重心向零售/电商迁移</td></tr>
+            <tr><td>市场天花板</td><td>患者基数</td><td>中国成人超重和肥胖合并患病率约 <b class="num">51%</b>，超重/肥胖人群约 <b class="num">6亿</b><sup class="src" title="国家卫健委、中新网">[7]</sup></td><td>适应症人群基数庞大</td></tr>
+            <tr><td>竞争预警</td><td>市场发展</td><td>2026H1电商渠道或首超院内、<企业名>侧重零售渠道；2026年3月<竞品D>获批减重、减肥针网络销售受限、预计2029年 <b class="num">16款</b> GLP-1减重药上市<sup class="src" title="中新网、凤凰网、21经济网">[7][8]</sup></td><td>竞品扩容+监管趋严+渠道迁移，竞争加剧</td></tr>
+          </tbody>
+        </table>
+        <div class="src-list">
+          <div class="sl-t">◇ 数据来源（可追溯信源）</div>
+          <ol>
+            <li><span class="badge-src">1</span><b><企业名>2025年报</b>（新浪财经转引）：2025全年产品收入119亿元、同比+44.6%；<药品名>销售额约25–30亿元。<br><a href="https://www.sina.cn/news/detail/5280875211129640.html" target="_blank">sina.cn/news/detail/5280875211129640.html</a></li>
+            <li><span class="badge-src">2</span><b>东方财富</b>：中国GLP-1市场2026年规模预测（约230–450亿元）。<br><a href="https://emcreative.eastmoney.com/app_fortune/article/index.html?artCode=20260218095200526551110" target="_blank">emcreative.eastmoney.com</a></li>
+            <li><span class="badge-src">3</span><b>中邮证券</b>：GLP-1减重市场2026年约122亿元。<br><a href="https://www.sgpjbg.com/labelsyh/glp-1yaowushichangguimo.html" target="_blank">sgpjbg.com</a></li>
+            <li><span class="badge-src">4</span><b>pharnexcloud</b>：<企业名>2026年与健之佳、老百姓大药房战略合作。</li>
+            <li><span class="badge-src">5</span><b>Sandalwood×IQVIA</b>（2026年4月）：电商GLP-1份额——<竞品B>44%、<竞品A>40%、<药品名>6%。</li>
+            <li><span class="badge-src">6</span><b>21经济网 / 公开渠道汇总</b>：<企业名>多元渠道布局与定价（2mg×4支约1500–1600元）、2025年减重药渠道增速（电商+102%、院内+11%、药店+88%）。<br><a href="https://www.21jingji.com/article/20250919/herald/cfd211e568141d23edbb4db0b122a1a7.html" target="_blank">21jingji.com</a></li>
+            <li><span class="badge-src">7</span><b>国家卫健委 / 中新网</b>：中国成人超重肥胖合并患病率约51%、超重/肥胖人群约6亿；<竞品D>2026年3月获批减重。<br><a href="https://www.sh.chinanews.com.cn/swzx/2026-05-31/146830.shtml" target="_blank">sh.chinanews.com.cn</a></li>
+            <li><span class="badge-src">8</span><b>凤凰网</b>：减肥针网络销售限制政策。<br><a href="https://news.ifeng.com/c/8tBJEAlOn8L" target="_blank">news.ifeng.com/c/8tBJEAlOn8L</a></li>
+          </ol>
+          <div style="margin-top:6px;color:var(--ink-3)">注：市场数据为公开可查口径（2025全年/2026预测），分月度、分省、分规格精确销量暂无公开数据，相关结论待企业内部真实数据补充验证。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>药箱用户规模（统计周期：2026.1.1–2026.6.30）</h4></div>
+      <div class="viz-body">
+        <div class="kpi-row">
+          <div class="kpi"><div class="v">≈16,640<small>人/月</small></div><div class="k">访问人数</div><div class="trend">月度波动较大（峰谷差约2.2倍）</div></div>
+          <div class="kpi"><div class="v">≈92,414<small>次/月</small></div><div class="k">访问次数</div><div class="trend">人均月访问约5.6次</div></div>
+          <div class="kpi"><div class="v">≈15,378<small>人/月</small></div><div class="k">扫码人数</div><div class="trend">体量稳定，5月达峰值</div></div>
+          <div class="kpi"><div class="v">85%–93%</div><div class="k">新用户占比</div><div class="trend">老客回扫占比由7.8%升至15%</div></div>
+        </div>
+        <table class="dtable dtable-nowrap1">
+          <thead><tr><th>指标</th><th>表现</th><th>判断</th></tr></thead>
+          <tbody>
+            <tr><td>访问人数</td><td>10,038–21,677人/月，均值约16,640人/月</td><td>月度波动较大（峰谷差约2.2倍）</td></tr>
+            <tr><td>访问次数</td><td>55,715–121,869次/月，均值约92,414次/月</td><td>人均月访问约5.6次，交互较充分</td></tr>
+            <tr><td>深度访问次数</td><td>174,798–441,804次/月，均值约311,790次/月</td><td>人均深度交互约18.7次，交互充分</td></tr>
+            <tr><td>扫码人数</td><td>9,126–20,244人/月，均值约15,378人/月</td><td>扫码体量稳定，5月达峰值</td></tr>
+            <tr><td>新用户占比</td><td>85.0%–92.9%</td><td>新用户占多数，老用户回扫占比逐步提升</td></tr>
+            <tr><td>访问频次</td><td>5.44–5.62次/人/月</td><td>访问频次保持稳定</td></tr>
+          </tbody>
+        </table>
+        <div class="insight" style="margin-top:18px">
+          <div class="lbl">洞察分析</div>
+          <p>1、<b>药箱扫码量与市场体量存在量级差距</b>：<药品名>2025年销售额约25–30亿元，对应数十万真实使用者；同期药箱月均扫码约1.5万人、月均访问约1.7万人，数字化渗透处于起步阶段。
+2、<b>用户结构以新客为主</b>：月均新用户占比85%–93%，老用户回扫人数从1月920人增至6月2673人、占比由7.8%升至15%，存量用户开始沉淀。
+3、<b>访问深度较高</b>：月均访问频次5.4–5.6次，深度访问频次17–20次，用户单次到访交互充分。
+4、<b>市场环境</b>：GLP-1赛道2026年预计230–450亿元，竞品持续扩容，本品电商份额约6%。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="plan">
+      <div class="plan-head"><span class="pic">➜</span><h4>策略建议</h4><span class="hint">扫码率提升 · 留存机制建设</span></div>
+      <div class="plan-cols">
+        <div class="plan-col ent"><span class="who">◈ 企业侧 <span class="badge">循证背书 · 赋二维码 · 处方承接</span></span>
+          <p>1、把"全球首个双靶点、首年25–30亿"的循证与销量背书，用于<b>线下终端陈列、店员话术、药箱私域精准营销物料</b>。
+2、推动<b>一维码升级为二维码</b>，从源头提升扫码率；并将"引导扫码"纳入终端店员SOP与院内外患教材料。
+3、结合"公立医院+零售+线上+私立诊所"多元渠道，在零售与私立终端强化扫码引导与物料铺设，针对电商份额偏低的现状联动零售药房开展扫码科普与患者管理。</p>
+        </div>
+        <div class="plan-col box"><span class="who">◉ 药箱侧 <span class="badge">功能升级 · Agent留存抓手</span></span>
+          <p>1、<b>升级版本新增功能</b>：上线用药提醒引导、科学减重专题、健康日历等功能，增加患者科普内容，把一次性查询升级为长期用药管家。
+2、<b>接入Agent智能问答</b>：为减重/降糖患者提供个性化用药与生活方式指导，"扫码→AI问答→功能转化"形成闭环。
+3、针对老用户回扫占比提升趋势，用<b>健康日历、打卡激励</b>强化复访留存。</p>
+        </div>
+      </div>
+    </div>
+    <div class="src-note">◇ 说明：市场规模数据统计口径为2025全年公开数据（<企业名>年报、米内网、券商研报等）及2026年预测，分月度公开数据暂未查询到，可直接补充企业真实数据报告进行分析。</div>
+  </div>
+
+  <div class="block" id="s1-2">
+    <div class="block-title"><span class="bar"></span>1.2 · 月度销量和药箱扫码走势</div>
+
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>市场月度销量表现</h4></div>
+      <div class="viz-body">
+        <table class="dtable dtable-nowrap1">
+          <thead><tr><th>时间</th><th>数据表现</th><th>判断</th></tr></thead>
+          <tbody>
+            <tr><td>2025年（上市首年）</td><td>销售额约 <b class="num">25–30亿元</b><sup class="src" title="新浪财经·<企业名>2025年报">[1]</sup></td><td>上市首年即高增</td></tr>
+            <tr><td>2026全年（预测）</td><td>机构预测全年约 <b class="num">18亿元</b><sup class="src" title="腾讯新闻/21经济网">[2]</sup></td><td>放量爬坡期</td></tr>
+            <tr><td>分月度</td><td>暂未在公开渠道查询到分月度销量数据，可直接补充真实数据报告进行分析</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>药箱月度访问次数 / 扫码次数走势（节后回升 · 5月峰值）</h4></div>
+      <div class="viz-body">
+        <div id="chart-scale-trend" class="chart tall"></div>
+        <div class="legend-note">
+          <span><i style="background:#9DC3E0"></i>访问次数</span>
+          <span><i style="background:#0F6FB5"></i>扫码次数</span>
+          <span><i style="background:#D64545"></i>环比上涨</span>
+          <span><i style="background:#2E9E6B"></i>环比下跌</span>
+        </div>
+        <table class="dtable" style="margin-top:16px">
+          <thead><tr><th>月份</th><th>访问次数</th><th>扫码次数</th><th>环比 / 变化</th><th>特征</th></tr></thead>
+          <tbody>
+            <tr><td>2026-01</td><td class="num">70,098</td><td class="num">29,823</td><td>—</td><td>启动期</td></tr>
+            <tr><td>2026-02</td><td class="num">55,715</td><td class="num">23,274</td><td class="num" style="color:var(--down)">-22%</td><td>春节低谷</td></tr>
+            <tr><td>2026-03</td><td class="num">101,060</td><td class="num">43,497</td><td class="num" style="color:var(--up)">+87%</td><td>节后大幅回升</td></tr>
+            <tr><td>2026-04</td><td class="num">98,829</td><td class="num">43,579</td><td class="num">0%</td><td>高位企稳</td></tr>
+            <tr><td>2026-05</td><td class="num">121,869</td><td class="num">58,581</td><td class="num" style="color:var(--up)">+34%</td><td>上半年峰值</td></tr>
+            <tr><td>2026-06</td><td class="num">106,912</td><td class="num">51,345</td><td class="num" style="color:var(--down)">-12%</td><td>小幅回落</td></tr>
+          </tbody>
+        </table>
+        <div class="insight" style="margin-top:18px">
+          <div class="lbl">洞察分析</div>
+          <p>1、<b>药箱扫码月度走势</b>：1–6月扫码次数23,274–58,581次，2月春节低谷（-22%）、3月大幅回升（+87%）、5月达峰值（58,581次）、6月小幅回落（-12%），呈"节后回升—5月峰值—6月回落"节奏。
+2、<b>留存改善</b>：新用户占比从1月92.2%降至6月85.0%，老用户回扫占比由7.8%升至15%，留存持续改善。
+3、<b>市场月度</b>：<药品名>2025年7月上市，2026年机构预测全年约18亿元，上半年处放量爬坡期，与药箱扫码走势方向一致。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="plan">
+      <div class="plan-head"><span class="pic">➜</span><h4>策略建议</h4><span class="hint">分节点运营节奏</span></div>
+      <div class="plan-cols">
+        <div class="plan-col ent"><span class="who">◈ 企业侧 <span class="badge">前置铺货 · 分时营销</span></span>
+          <p>1、按<b>3月、5月扫码高峰</b>节奏前置铺货与营销资源，围绕减重旺季节点做科普与活动。
+2、针对春节后2月低谷，提前布局<b>节后减重需求启动</b>的内容与促销。</p>
+        </div>
+        <div class="plan-col box"><span class="who">◉ 药箱侧 <span class="badge">Banner运营位 · 提前触达</span></span>
+          <p>1、用<b>banner运营位</b>配合企业营销节点做专题活动传播。
+2、在扫码高峰前，借<b>订阅科普上新、科学减重专题</b>提前触达用户。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block" id="s1-3">
+    <div class="block-title"><span class="bar"></span>1.3 · SKU销量和药箱扫码分布</div>
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>各规格扫码人数占比</h4></div>
+      <div class="viz-body">
+        <div class="grid g2" style="align-items:center">
+          <div id="chart-sku" class="chart"></div>
+          <div>
+            <table class="dtable">
+              <thead><tr><th>规格</th><th>uv</th><th>pv</th><th>uv占比</th></tr></thead>
+              <tbody>
+                <tr><td>0.5ml：2mg 2支/盒</td><td class="num">406</td><td class="num">1,073</td><td class="num">34.6%</td></tr>
+                <tr><td>0.5ml：4mg 2支/盒</td><td class="num">293</td><td class="num">843</td><td class="num">24.9%</td></tr>
+                <tr><td>0.5ml：2mg 4支/盒</td><td class="num">178</td><td class="num">470</td><td class="num">15.2%</td></tr>
+                <tr><td>0.5ml：4mg 4支/盒</td><td class="num">118</td><td class="num">262</td><td class="num">10.0%</td></tr>
+                <tr><td>0.5ml：6mg 2支/盒</td><td class="num">109</td><td class="num">194</td><td class="num">9.3%</td></tr>
+                <tr><td>0.5ml：6mg 4支/盒</td><td class="num">71</td><td class="num">194</td><td class="num">6.0%</td></tr>
+              </tbody>
+            </table>
+            <div class="note" style="margin-top:12px;line-height:1.7">◇ <b style="color:var(--brand)">2支装小规格</b>合计约60%，<b style="color:var(--brand)">4支装大规格</b>约40%，首购/试用特征明显。</div>
+          </div>
+        </div>
+        <div class="insight" style="margin-top:18px">
+          <div class="lbl">洞察分析</div>
+          <p>1、<b>规格主力</b>：药箱扫码覆盖6个规格，2mg×2支/盒 uv 406（34.6%）为主力，4mg×2支/盒 293（24.9%）次之，2mg×4支/盒 178（15.2%），前三规格合计约74.7%。
+2、<b>规格结构</b>：2支装小规格合计约60%，4支装大规格约40%，反映用户以首购/试用为主。
+3、<b>数据缺口</b>：市场侧分规格销量/偏好暂未在公开渠道查询到。</p>
+        </div>
+      </div>
+    </div>
+    <div class="plan">
+      <div class="plan-head"><span class="pic">➜</span><h4>策略建议</h4><span class="hint">主力规格聚焦 · 精准投放</span></div>
+      <div class="plan-cols">
+        <div class="plan-col ent"><span class="who">◈ 企业侧 <span class="badge">主力规格聚焦</span></span>
+          <p>1、以<b>2mg×2支主力规格</b>为核心配置扫码资源与终端物料。
+2、针对<b>4mg、6mg大规格</b>（对应长期/高剂量治疗），在私立医院与零售终端加强导购。</p>
+        </div>
+        <div class="plan-col box"><span class="who">◉ 药箱侧 <span class="badge">运营位精准投放</span></span>
+          <p>针对主力规格扫码用户，<b>精准投放对应剂量的用药指导与减重科普内容</b>。</p>
+        </div>
+      </div>
+    </div>
+    <div class="src-note">◇ 说明：市场侧分规格销量/规格偏好度暂未查询到公开数据，上述规格偏好差异仅基于药箱扫码，结论待企业分规格销量/铺货数据补充验证。</div>
+  </div>
+
+  <div class="block" id="s1-4">
+    <div class="block-title"><span class="bar"></span>1.4 · 地域销量和药箱扫码分布</div>
+
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>市场分区域销量表现</h4></div>
+      <div class="viz-body">
+        <div class="src-note" style="margin-top:0">◇ 说明：<药品名><b>分区域（华东/华南等）销售占比，经公开渠道核查暂无可追溯的权威信源</b>——厂商未披露官方分区数据，公开文章亦未提供该品种的分区占比。为避免引用不可考证的信息，本处不再列示相关测算数据，分区域销售结构建议以企业内部真实数据为准。下方"药箱扫码地域分布"为药箱私域埋点真实数据，可作数字化渗透的地域参考。</div>
+      </div>
+    </div>
+
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>药箱扫码地域分布 Top6</h4></div>
+      <div class="viz-body">
+        <div class="grid g2" style="align-items:center">
+          <div id="chart-geo" class="chart"></div>
+          <table class="dtable">
+            <thead><tr><th class="rank">#</th><th>省份</th><th>访问次数</th><th>访问人数</th></tr></thead>
+            <tbody>
+              <tr><td class="rank">1</td><td>江苏省</td><td class="num">51,649</td><td class="num">8,596</td></tr>
+              <tr><td class="rank">2</td><td>广东省</td><td class="num">49,503</td><td class="num">7,648</td></tr>
+              <tr><td class="rank">3</td><td>浙江省</td><td class="num">45,034</td><td class="num">7,130</td></tr>
+              <tr><td class="rank">4</td><td>山东省</td><td class="num">33,178</td><td class="num">5,526</td></tr>
+              <tr><td class="rank">5</td><td>四川省</td><td class="num">30,780</td><td class="num">5,026</td></tr>
+              <tr><td class="rank">6</td><td>上海市</td><td class="num">32,381</td><td class="num">4,922</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="insight" style="margin-top:18px">
+          <div class="lbl">洞察分析</div>
+          <p>1、<b>扫码分布特征</b>：药箱扫码地域TOP6为江苏8,596人、广东7,648、浙江7,130、山东5,526、四川5,026、上海4,922——<b>华东沿海与华南集中</b>。（注：市场侧分区域销售占比暂无公开权威信源，此处仅基于药箱扫码私域数据分析。）
+2、<b>分布原因</b>：地域分布与减重/消费医疗人群特征方向一致——东部经济发达、健康消费意愿较高，且与本品"消费医疗、院外渠道为主"的属性匹配。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="plan">
+      <div class="plan-head"><span class="pic">➜</span><h4>策略建议</h4><span class="hint">资源精准倾斜 · 渠道布局</span></div>
+      <div class="plan-cols">
+        <div class="plan-col ent" style="grid-column:1/-1"><span class="who">◈ 企业侧 <span class="badge">高活跃省聚焦 · 私立零售布局</span></span>
+          <p>1、在扫码高活跃省份（<b>苏浙粤</b>）加强终端导购与私域物料铺设。
+2、结合华东沿海减重消费力，重点布局<b>私立诊所与零售渠道</b>，放大院外可及性。（相关判断建议结合企业分省销量/铺货真实数据验证。）</p>
+        </div>
+      </div>
+    </div>
+    <div class="src-note">◇ 说明：市场分省精确销量/铺货率暂无公开数据，上述对比基于药箱扫码分布，精确结论待企业分省数据补充验证。</div>
+  </div>
+
+  <div class="block" id="s1-5">
+    <div class="block-title"><span class="bar"></span>1.5 · 竞品规模和药箱扫码关联用药分析</div>
+
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>竞品市场规模（GLP-1 减重赛道）</h4></div>
+      <div class="viz-body">
+        <div id="chart-competitor" class="chart tall"></div>
+        <table class="dtable" style="margin-top:16px">
+          <thead><tr><th class="rank">#</th><th>品名</th><th>厂家</th><th>2025表现</th><th>电商份额</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td><竞品B></td><td><竞品企业A></td><td class="num">电商2025约7.57亿</td><td class="num">约44%</td><td>2026.1降糖版入医保，月费低至324元</td></tr>
+            <tr><td class="rank">2</td><td><竞品A></td><td><竞品企业B></td><td class="num">电商2025约16.26亿</td><td class="num">约40%</td><td>GLP-1标杆，率先降价</td></tr>
+            <tr><td class="rank">3</td><td><b><药品名>（本品）</b></td><td><企业名></td><td class="num">约25–30亿</td><td class="num">约6%</td><td><产品差异化定位></td></tr>
+            <tr><td class="rank">4</td><td><竞品D></td><td><竞品企业C></td><td class="num">—</td><td class="num">—</td><td>2026.3获批减重，48周平均减重15.4%</td></tr>
+            <tr><td class="rank">5</td><td><竞品E></td><td><竞品企业D></td><td class="num">—</td><td class="num">—</td><td>国产长效GLP-1</td></tr>
+            <tr><td class="rank">6</td><td><竞品C></td><td><竞品企业B>等</td><td class="num">—</td><td class="num">—</td><td>短效GLP-1，受长效替代</td></tr>
+            <tr><td class="rank">7</td><td><竞品F></td><td>多家企业</td><td class="num">—</td><td class="num">—</td><td>唯一OTC减肥药</td></tr>
+            <tr><td class="rank">8</td><td>在研管线</td><td>多家</td><td class="num">—</td><td class="num">—</td><td>预计2029年16款GLP-1减重药上市</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>药箱扫码关联用药：疾病领域分布</h4></div>
+      <div class="viz-body">
+        <div id="chart-disease" class="chart tall"></div>
+        <table class="dtable" style="margin-top:16px">
+          <thead><tr><th class="rank">#</th><th>疾病领域</th><th>访问人数</th><th>占比</th><th>代表药品（部分）</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td>血脂类</td><td class="num">380</td><td class="num">30.7%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">2</td><td>呼吸类</td><td class="num">343</td><td class="num">27.7%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">3</td><td>血糖类</td><td class="num">187</td><td class="num">15.1%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">4</td><td>心脏类</td><td class="num">120</td><td class="num">9.7%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">5</td><td>皮肤类</td><td class="num">106</td><td class="num">8.6%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">6</td><td>血压类</td><td class="num">70</td><td class="num">5.7%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">7</td><td>感染类</td><td class="num">38</td><td class="num">3.1%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">8</td><td>消化/肝胆类</td><td class="num">38</td><td class="num">3.1%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">9</td><td>代谢类</td><td class="num">30</td><td class="num">2.4%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">10</td><td>肿瘤类</td><td class="num">21</td><td class="num">1.7%</td><td><关联用药示例></td></tr>
+            <tr><td class="rank">-</td><td>其他（中医/免疫/神经等）</td><td class="num">78</td><td class="num">6.3%</td><td><关联用药示例></td></tr>
+          </tbody>
+        </table>
+        <div class="mini-tabs" style="margin-top:18px">
+          <div class="mini-tab active" data-pane="other">所有关联药品 Top7</div>
+          <div class="mini-tab" data-pane="comp">同类竞品扫码</div>
+        </div>
+        <div class="mini-pane active" data-pane="other">
+          <table class="dtable">
+            <thead><tr><th class="rank">#</th><th>药品名</th><th>访问人数</th><th>适应症方向</th></tr></thead>
+            <tbody>
+              <tr><td class="rank">1</td><td><关联药品A></td><td class="num">152人</td><td>呼吸（哮喘/COPD）</td></tr>
+              <tr><td class="rank">2</td><td><关联药品B></td><td class="num">147人</td><td>血脂/降脂</td></tr>
+              <tr><td class="rank">3</td><td><关联药品C></td><td class="num">131人</td><td>呼吸（哮喘）</td></tr>
+              <tr><td class="rank">4</td><td><关联药品D></td><td class="num">125人</td><td>血脂/降脂</td></tr>
+              <tr><td class="rank">5</td><td><关联药品E></td><td class="num">97人</td><td>皮肤/医美</td></tr>
+              <tr><td class="rank">6</td><td><关联药品F></td><td class="num">80人</td><td>血脂/降脂</td></tr>
+              <tr><td class="rank">7</td><td><关联药品G></td><td class="num">71人</td><td>血糖/降糖</td></tr>
+            </tbody>
+          </table>
+          <div class="note">◇ 关联药品集中于血脂（他汀）、呼吸、血糖——反映用户<b>多重代谢慢病与共病</b>用药结构。</div>
+        </div>
+        <div class="mini-pane" data-pane="comp">
+          <table class="dtable">
+            <thead><tr><th class="rank">#</th><th>药品名</th><th>访问人数</th><th>类别</th></tr></thead>
+            <tbody>
+              <tr><td class="rank">1</td><td><关联药品G></td><td class="num">71人</td><td>降糖药（SGLT2抑制）</td></tr>
+              <tr><td class="rank">2</td><td><竞品D>注射液</td><td class="num">46人</td><td>GLP-1同类竞品</td></tr>
+              <tr><td class="rank">3</td><td><关联药品H></td><td class="num">38人</td><td>降糖药</td></tr>
+              <tr><td class="rank">4</td><td><关联药品I></td><td class="num">28人</td><td>降糖药</td></tr>
+              <tr><td class="rank">5</td><td><关联药品J></td><td class="num">9人</td><td>降糖药（DPP-4抑制）</td></tr>
+              <tr><td class="rank">6</td><td><关联药品K></td><td class="num">7人</td><td>降糖药</td></tr>
+              <tr><td class="rank">7</td><td><关联药品L></td><td class="num">5人</td><td>降糖药</td></tr>
+            </tbody>
+          </table>
+          <div class="note">◇ 同类竞品扫码以<关联药品G>(71人)、<竞品D>(46人)、<关联药品H>(38人)等降糖药为主，<b>用户与2型糖尿病及代谢管理人群高度重叠</b>。</div>
+        </div>
+        <div class="insight" style="margin-top:18px">
+          <div class="lbl">洞察分析</div>
+          <p>1、<b>竞品格局</b>：国内获批长效GLP-1减重药主要为5款（<竞品A>、<竞品B>、<药品名>、<竞品E>、<竞品D>），2026年<竞品D>获批减重后竞争进一步加剧。
+2、<b>关联用药疾病领域</b>：<药品名>用户关联扫码药品中，血脂类30.7%、呼吸类27.7%、血糖类15.1%，提示多重代谢共病特征明显。
+3、<b>同类竞品分流</b>：用户关联扫码的同类竞品以<关联药品G>(71人)、<竞品D>(46人)、<关联药品H>(38人)等降糖药为主，与2型糖尿病及代谢管理人群高度重叠。</p>
+        </div>
+        <div class="src-note">◇ 注：关联用药按扫码药品所属疾病领域归类，同一用户可扫码多个领域药品，故各领域「访问人数」存在交叉、合计大于去重用户数。</div>
+      </div>
+    </div>
+
+    <div class="plan">
+      <div class="plan-head"><span class="pic">➜</span><h4>策略建议</h4><span class="hint">正面卡位 · 共病组合营销</span></div>
+      <div class="plan-cols">
+        <div class="plan-col ent"><span class="who">◈ 企业侧 <span class="badge">竞品卡位 · 组合营销</span></span>
+          <p>1、<b>重点关注竞品</b>：以"<产品差异化定位>"循证差异正面卡位直接竞品（<竞品A>、<竞品B>、<竞品D>）。
+2、<b>关联药品/疾病领域内容</b>：针对用户血脂/呼吸/血压/血糖多重用药特征，联合关联厂家开展<b>共病组合管理</b>（"减重+降脂""减重+控糖""减重+呼吸健康"），把多重用药用户转化为联合推广种子池。</p>
+        </div>
+        <div class="plan-col box"><span class="who">◉ 药箱侧 <span class="badge">专题上架 · Agent共病指导</span></span>
+          <p>1、<b>上架减重/代谢专题科普</b>，针对多重慢病人群做个性化内容推送。
+2、用<b>Agent能力</b>为用户提供共病用药指导，强化品牌粘性。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+`,
+
+"s-func": `
+  <div class="sec-head"><span class="no">2</span>
+    <div><div class="en">Box Feature Usage</div><h2>药箱功能使用分析</h2></div></div>
+  <p class="sec-desc">从人群画像、功能使用、科普访问到用药打卡，拆解药箱私域用户的行为结构，识别功能承接与留存断点。</p>
+
+  <div class="block" id="s2-1">
+    <div class="block-title"><span class="bar"></span>2.1 · 药箱人群画像</div>
+    <div class="summary-hero" style="border-left-color:var(--teal)">
+      <div class="bg-lbl">■ 人群画像概览</div>
+      <p>整体用户画像：以<b>25–35岁中青年为主</b>（31–35岁占25.3%最高）、<b>女性略多</b>（56.6%）、<b>本科及以上学历</b>（65.3%）、<b>商业/零售从业</b>（29.9%）、<b>育儿状态</b>（62.7%），地域集中于江苏、山东、河南等，与减重/代谢适应症及"体重管理年"消费医疗人群方向吻合。</p>
+    </div>
+    <div class="grid g3">
+      <div class="mini-card"><div class="mc-h"><span class="d"></span>性别分布</div><div id="chart-prof-gender" class="chart short"></div></div>
+      <div class="mini-card"><div class="mc-h"><span class="d"></span>年龄分布</div><div id="chart-prof-age" class="chart short"></div></div>
+      <div class="mini-card"><div class="mc-h"><span class="d"></span>学历分布</div><div id="chart-prof-edu" class="chart short"></div></div>
+      <div class="mini-card"><div class="mc-h"><span class="d"></span>行业分布 Top6</div><div id="chart-prof-industry" class="chart short"></div></div>
+      <div class="mini-card"><div class="mc-h"><span class="d"></span>人生状态</div><div id="chart-prof-life" class="chart short"></div></div>
+      <div class="mini-card"><div class="mc-h"><span class="d"></span>老家省份 Top8</div><div id="chart-prof-hometown" class="chart short"></div></div>
+    </div>
+    <div class="insight" style="margin-top:18px">
+      <div class="lbl">洞察分析</div>
+      <p>1、<b>核心人群</b>：以中青年女性为主，减重/身材管理诉求较强，内容宜生活化、场景化。
+2、<b>学历偏高</b>：本科占比65.3%，可承载专业化减重知识。
+3、<b>育儿状态</b>：育儿占比62.7%，可结合"产后/妈妈减重"场景做情感化触达。</p>
+    </div>
+    <div class="src-note">◇ 注：是否有车维度原始数据仅含"是"样本18,324人，占比暂无法计算（原始占比列为错误值），此处不展示该维度。</div>
+  </div>
+
+  <div class="block" id="s2-2">
+    <div class="block-title"><span class="bar"></span>2.2 · 药箱功能使用整体情况</div>
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>各功能使用情况（点击人数）</h4></div>
+      <div class="viz-body">
+        <div class="grid g2" style="align-items:center">
+          <div id="chart-func" class="chart tall"></div>
+          <table class="dtable">
+            <thead><tr><th>功能</th><th>点击次数</th><th>点击人数</th><th>洞察</th></tr></thead>
+            <tbody>
+              <tr><td>疾病科普</td><td class="num">60,961</td><td class="num">42,152</td><td>高频功能，用户核心需求</td></tr>
+              <tr><td>电子说明书</td><td class="num">60,223</td><td class="num">30,301</td><td>高频功能，用户核心需求</td></tr>
+              <tr><td>用药提醒</td><td class="num">156,706</td><td class="num">15,487</td><td>点击次数高，人均交互高</td></tr>
+              <tr><td>我的药箱</td><td class="num">23,507</td><td class="num">13,178</td><td>使用人数中等</td></tr>
+              <tr><td>用药打卡</td><td class="num">50,442</td><td class="num">11,864</td><td>使用人数中等</td></tr>
+              <tr><td>科学减重</td><td class="num">10,406</td><td class="num">8,107</td><td>本品特色功能，具备基础</td></tr>
+              <tr><td>附近医院</td><td class="num">708</td><td class="num">642</td><td>低频功能</td></tr>
+              <tr><td>订阅科普上新</td><td class="num">428</td><td class="num">376</td><td>低频功能</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="insight" style="margin-top:18px">
+          <div class="lbl">洞察分析</div>
+          <p>1、<b>高频功能</b>：疾病科普（42,152人）、电子说明书（30,301人）为高频功能，是用户核心需求。
+2、<b>人均交互</b>：用药提醒点击次数高（156,706次）但人数相对少（15,487人），说明设置后持续使用、人均交互高。
+3、<b>特色与低频</b>：科学减重（8,107人）作为本品特色功能具备基础，附近医院（642人）、订阅（376人）低频。</p>
+        </div>
+      </div>
+    </div>
+    <div class="plan">
+      <div class="plan-head"><span class="pic">➜</span><h4>策略建议</h4><span class="hint">高频入口 · 特色功能联动</span></div>
+      <div class="plan-cols">
+        <div class="plan-col ent"><span class="who">◈ 企业侧 <span class="badge">高频入口品牌教育</span></span>
+          <p>借<b>疾病科普与电子说明书高频入口</b>，嵌入减重/代谢专业内容做品牌教育。</p>
+        </div>
+        <div class="plan-col box"><span class="who">◉ 药箱侧 <span class="badge">路径打通 · Agent减重指导</span></span>
+          <p>1、在<b>电子说明书底部增加关联科普推荐</b>，打通说明书到科普的路径。
+2、强化<b>科学减重与用药提醒联动</b>，接入Agent提供个性化减重指导。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block" id="s2-3">
+    <div class="block-title"><span class="bar"></span>2.3 · 药箱科普访问情况</div>
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>内容运营——整体阅读量</h4></div>
+      <div class="viz-body">
+        <div class="kpi-row">
+          <div class="kpi"><div class="v">86,406<small>人</small></div><div class="k">总用户数</div></div>
+          <div class="kpi"><div class="v">43,791<small>人</small></div><div class="k">有阅读行为用户</div></div>
+          <div class="kpi"><div class="v">50.7<small>%</small></div><div class="k">整体阅读参与率</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>单篇文章访问数据（视频主导 · 图文深度内容访问低）</h4></div>
+      <div class="viz-body">
+        <div id="chart-article" class="chart tall"></div>
+        <table class="dtable" style="margin-top:16px">
+          <thead><tr><th>文章标题</th><th>形式</th><th>访问</th><th>平均浏览时长</th><th>分析</th></tr></thead>
+          <tbody>
+            <tr><td><药品名>注射教学视频</td><td>视频</td><td class="num">86,875次 / 42,308人</td><td class="num">269秒</td><td>操作指导核心内容，访问量最高</td></tr>
+            <tr><td><同企业其他品牌>预充式自动注射笔标准操作指导视频</td><td>视频</td><td class="num">40,878次 / 16,798人</td><td class="num">307秒</td><td>操作指导，访问量次高</td></tr>
+            <tr><td>什么是脂肪肝？该如何预防脂肪肝的发生？</td><td>视频</td><td class="num">6,283次 / 5,136人</td><td class="num">54秒</td><td>视频科普</td></tr>
+            <tr><td>揭晓<药品名>"智能化密码"！</td><td>视频</td><td class="num">6,123次 / 5,026人</td><td class="num">60秒</td><td>视频科普</td></tr>
+            <tr><td><关联用药示例>预充式自动注射笔标准操作指导</td><td>视频</td><td class="num">439次 / 182人</td><td class="num">243秒</td><td>操作指导</td></tr>
+            <tr><td>堵不如疏！现代人的肥胖困局，看"大禹治水"如何破解！</td><td>图文</td><td class="num">12次 / 9人</td><td class="num">737秒</td><td>图文深度内容，访问量低</td></tr>
+            <tr><td>肥胖糖尿病减肥会好吗</td><td>图文</td><td class="num">3次 / 3人</td><td class="num">217秒</td><td>图文内容</td></tr>
+            <tr><td>脂肪肝患者日常生活中该注意什么</td><td>图文</td><td class="num">3次 / 3人</td><td class="num">390秒</td><td>图文内容</td></tr>
+          </tbody>
+        </table>
+        <div class="insight" style="margin-top:18px">
+          <div class="lbl">洞察分析</div>
+          <p>1、<b>整体阅读</b>：整体阅读参与率50.7%（43,791/86,406），科普内容触达较好。
+2、<b>视频主导</b>：《<药品名>注射教学视频》86,875次访问/42,308人、《<同企业其他品牌>注射笔指导》40,878次/16,798人，操作指导类视频是核心需求。
+3、<b>图文错位</b>：图文科普访问偏低（多为个位数），深度内容供给与用户阅读习惯存在错位。</p>
+        </div>
+      </div>
+    </div>
+    <div class="plan">
+      <div class="plan-head"><span class="pic">➜</span><h4>策略建议</h4><span class="hint">内容分层 · 视频引流</span></div>
+      <div class="plan-cols">
+        <div class="plan-col ent"><span class="who">◈ 企业侧 <span class="badge">短视频供给</span></span>
+          <p>补充<b>注射教学、减重目标设定等短视频供给</b>，匹配用户操作需求。</p>
+        </div>
+        <div class="plan-col box"><span class="who">◉ 药箱侧 <span class="badge">分层运营 · Agent推送</span></span>
+          <p>1、<b>内容分层运营</b>，视频引流后打通图文深度路径。
+2、用<b>Agent能力做个性化科普推送</b>，提升阅读转化。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block" id="s2-4">
+    <div class="block-title"><span class="bar"></span>2.4 · 药箱用药打卡情况</div>
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>用药提醒转化漏斗</h4></div>
+      <div class="viz-body">
+        <div id="chart-funnel" class="chart tall"></div>
+        <table class="dtable" style="margin-top:16px">
+          <thead><tr><th>漏斗节点</th><th>人数</th><th>次数</th><th>比例</th></tr></thead>
+          <tbody>
+            <tr><td>药码页访问</td><td class="num">—</td><td class="num">—</td><td>—</td></tr>
+            <tr><td>用药提醒挽留弹窗曝光</td><td class="num">44,019</td><td class="num">50,271</td><td>—</td></tr>
+            <tr><td>弹窗-「设置用药提醒」</td><td class="num">4,057</td><td class="num">4,135</td><td class="num">9.2%</td></tr>
+            <tr><td>弹窗-「确认设置」</td><td class="num">1,991</td><td class="num">2,056</td><td class="num">49.1%</td></tr>
+            <tr><td>药码页用药提醒icon点击</td><td class="num">10,179</td><td class="num">14,882</td><td>—</td></tr>
+            <tr><td>用药提醒页-「确认设置」</td><td class="num">7,904</td><td class="num">11,812</td><td class="num">77.6%</td></tr>
+          </tbody>
+        </table>
+        <div class="insight" style="margin-top:18px">
+          <div class="lbl">洞察分析</div>
+          <p>1、<b>弹窗路径流失</b>：挽留弹窗曝光44,019人→设置4,057人（9.2%）→确认1,991人（49.1%），设置环节是主要流失点。
+2、<b>icon路径更优</b>：点击10,179人→确认7,904人（77.6%），确认率高于弹窗路径。
+3、<b>打卡依从</b>：打卡用户4,426人、总打卡6,072次，81.9%用户仅打卡1次，持续打卡用户较少；打卡集中在10:00时段。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="viz-insight">
+      <div class="viz-head"><span class="ic">◱</span><h4>用户打卡时间与持续周期（前20位高频用户）</h4></div>
+      <div class="viz-body">
+        <div id="chart-checkin-days" class="chart short"></div>
+        <table class="dtable" style="margin-top:16px">
+          <thead><tr><th class="rank">#</th><th>用户标识</th><th>持续天数</th><th>打卡次数</th><th>打卡时间</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td>***********</td><td class="num">3天</td><td class="num">48次</td><td>10:00 20:00 22:42</td></tr>
+            <tr><td class="rank">2</td><td>1494492166</td><td class="num">22天</td><td class="num">22次</td><td>10:00</td></tr>
+            <tr><td class="rank">3</td><td>1356021109</td><td class="num">11天</td><td class="num">20次</td><td>08:00 10:00</td></tr>
+            <tr><td class="rank">4</td><td>1607278376</td><td class="num">14天</td><td class="num">17次</td><td>10:00 11:00</td></tr>
+            <tr><td class="rank">5</td><td>38603255</td><td class="num">11天</td><td class="num">15次</td><td>08:00 10:00</td></tr>
+            <tr><td class="rank">6</td><td>2065935122</td><td class="num">12天</td><td class="num">12次</td><td>11:30 13:30</td></tr>
+            <tr><td class="rank">7</td><td>1009248880</td><td class="num">9天</td><td class="num">11次</td><td>18:09 12:47 13:30</td></tr>
+            <tr><td class="rank">8</td><td>164568594</td><td class="num">10天</td><td class="num">10次</td><td>00:06 12:00</td></tr>
+            <tr><td class="rank">9</td><td>2071028008</td><td class="num">9天</td><td class="num">10次</td><td>13:00 15:00</td></tr>
+            <tr><td class="rank">10</td><td>104744722</td><td class="num">9天</td><td class="num">9次</td><td>15:59</td></tr>
+            <tr><td class="rank">11</td><td>592622696</td><td class="num">8天</td><td class="num">9次</td><td>08:00 12:44</td></tr>
+            <tr><td class="rank">12</td><td>1793013683</td><td class="num">9天</td><td class="num">9次</td><td>12:00 03:30</td></tr>
+            <tr><td class="rank">13</td><td>208197407</td><td class="num">8天</td><td class="num">8次</td><td>22:20</td></tr>
+            <tr><td class="rank">14</td><td>506532888</td><td class="num">6天</td><td class="num">8次</td><td>21:15 21:00</td></tr>
+            <tr><td class="rank">15</td><td>797601449</td><td class="num">8天</td><td class="num">8次</td><td>16:30</td></tr>
+            <tr><td class="rank">16</td><td>1274862325</td><td class="num">8天</td><td class="num">8次</td><td>15:03</td></tr>
+            <tr><td class="rank">17</td><td>2059747276</td><td class="num">5天</td><td class="num">8次</td><td>11:48 10:13 10:48</td></tr>
+            <tr><td class="rank">18</td><td>1092754</td><td class="num">4天</td><td class="num">7次</td><td>22:30 10:40</td></tr>
+            <tr><td class="rank">19</td><td>272784389</td><td class="num">7天</td><td class="num">7次</td><td>11:20</td></tr>
+            <tr><td class="rank">20</td><td>394801655</td><td class="num">3天</td><td class="num">7次</td><td>22:00 08:00</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="plan">
+      <div class="plan-head"><span class="pic">➜</span><h4>策略建议</h4><span class="hint">依从性提升 · 打卡激励</span></div>
+      <div class="plan-cols">
+        <div class="plan-col ent"><span class="who">◈ 企业侧 <span class="badge">依从性主张 · 患者分层</span></span>
+          <p>以<b>用药依从性为核心主张</b>对外传播，借打卡数据反哺患者分层运营。</p>
+        </div>
+        <div class="plan-col box"><span class="who">◉ 药箱侧 <span class="badge">路径优化 · Agent引导</span></span>
+          <p>1、强化提醒入口引导，<b>优化挽留弹窗设置路径降低流失</b>。
+2、设计<b>打卡激励活动（积分/奖励）</b>，接入Agent引导用户完成设置与持续打卡。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+`
+};
+
+let currentSec = 's-summary';
+let chartsInited = {};
+const main = document.getElementById('main');
+
+function renderSection(sec){
+  main.innerHTML = SECTIONS[sec];
+  currentSec = sec;
+  document.querySelectorAll('.nav-item').forEach(it=>{
+    it.classList.toggle('active', it.dataset.sec===sec);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+  bindMiniTabs();
+  ensureChartsReady(sec);
+}
+function ensureChartsReady(sec, tries){
+  tries = tries || 0;
+  if(typeof echarts !== 'undefined' && echarts.init){
+    requestAnimationFrame(()=>{ initCharts(sec); });
+  } else if(tries < 100){
+    setTimeout(()=>ensureChartsReady(sec, tries+1), 100);
+  } else {
+    document.querySelectorAll('.chart').forEach(el=>{
+      if(!el.querySelector('canvas,svg')) el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#8A99A8;font-size:13px">图表加载失败，请检查网络或刷新页面</div>';
+    });
+  }
+}
+document.querySelectorAll('.nav-item').forEach(it=>{
+  it.querySelector('.nav-btn').addEventListener('click', ()=> renderSection(it.dataset.sec));
+});
+document.querySelectorAll('.subnav a').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault();
+    const sec = a.closest('.nav-item').dataset.sec;
+    const target = a.getAttribute('href');
+    if(sec!==currentSec){ renderSection(sec); }
+    setTimeout(()=>{
+      const el = document.querySelector(target);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    }, sec!==currentSec?280:0);
+  });
+});
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll',()=>{ backTop.classList.toggle('show', window.scrollY>400); });
+backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+window.addEventListener('resize',()=>{ Object.values(chartsInited).forEach(c=>c&&c.resize&&c.resize()); });
+
+function bindMiniTabs(){
+  document.querySelectorAll('.mini-tabs').forEach(group=>{
+    const tabs=group.querySelectorAll('.mini-tab');
+    tabs.forEach(t=>{
+      t.addEventListener('click',()=>{
+        const box=group.parentElement;
+        const key=t.dataset.pane;
+        group.querySelectorAll('.mini-tab').forEach(x=>x.classList.toggle('active',x===t));
+        box.querySelectorAll('.mini-pane').forEach(p=>{
+          p.classList.toggle('active',p.dataset.pane===key);
+        });
+        requestAnimationFrame(()=>{ Object.values(chartsInited).forEach(c=>c&&c.resize&&c.resize()); });
+      });
+    });
+  });
+}
+
+const C = { brand:'#0F6FB5', brand2:'#1E88C7', brandDeep:'#0B4E80', teal:'#16A085', teal2:'#2FB8A0', blue:'#5A9BD4', green:'#2E9E6B', up:'#D64545', warn:'#E8873A', purple:'#7B4FC9', ink:'#5A6B7B', ink3:'#8A99A8', line:'#E4EBF1', soft:'#9DC3E0' };
+const baseGrid = {left:'3%',right:'4%',bottom:'3%',top:'12%',containLabel:true};
+const axisStyle = { axisLine:{lineStyle:{color:C.line}}, axisLabel:{color:C.ink}, axisTick:{show:false}, splitLine:{lineStyle:{color:C.line,type:'dashed'}} };
+function mk(id){ const el=document.getElementById(id); if(!el) return null; const c=echarts.init(el); chartsInited[id]=c; return c; }
+
+function initCharts(sec){
+  chartsInited = {};
+
+  if(sec==='s-market'){
+    let c=mk('chart-scale-trend');
+    if(c){
+      const months=['2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];
+      const visit=[70098,55715,101060,98829,121869,106912];
+      const scan =[29823,23274,43497,43579,58581,51345];
+      c.setOption({
+        grid:{...baseGrid,top:'16%'}, tooltip:{trigger:'axis'},
+        legend:{data:['访问次数','扫码次数'],top:0,textStyle:{color:C.ink}},
+        xAxis:{type:'category',data:months,...axisStyle,axisLabel:{color:C.ink,rotate:0,fontSize:11}},
+        yAxis:{type:'value',name:'次数',...axisStyle,axisLabel:{formatter:v=>v>=10000?(v/10000)+'万':v}},
+        series:[{
+          name:'访问次数',type:'bar',data:visit,barWidth:'30%',itemStyle:{color:C.soft,borderRadius:[4,4,0,0]}
+        },{
+          name:'扫码次数',type:'bar',data:scan.map((v,i)=>({value:v,itemStyle:{color:(i===2||i===4)?C.up:(i===1||i===5)?C.green:C.brand,borderRadius:[4,4,0,0]}})),barWidth:'30%',
+          markLine:{silent:true,symbol:'none',lineStyle:{color:C.ink3,type:'dashed'},data:[{yAxis:23274,label:{formatter:'谷 23,274',color:C.ink3}},{yAxis:58581,label:{formatter:'峰 58,581',color:C.brand}}]}
+        }]
+      });
+    }
+    c=mk('chart-sku');
+    if(c) c.setOption({
+      tooltip:{trigger:'item',formatter:'{b}: {c}人 ({d}%)'},
+      legend:{orient:'vertical',right:'0%',top:'center',textStyle:{color:C.ink,fontSize:11}},
+      series:[{type:'pie',radius:['40%','68%'],center:['36%','50%'],avoidLabelOverlap:true,
+        itemStyle:{borderColor:'#fff',borderWidth:2},
+        label:{formatter:'{d}%',color:C.ink,fontSize:11},
+        data:[
+          {value:406,name:'2mg×2支',itemStyle:{color:C.brand}},
+          {value:293,name:'4mg×2支',itemStyle:{color:C.teal}},
+          {value:178,name:'2mg×4支',itemStyle:{color:C.blue}},
+          {value:118,name:'4mg×4支',itemStyle:{color:'#7FB0D6'}},
+          {value:109,name:'6mg×2支',itemStyle:{color:C.soft}},
+          {value:71,name:'6mg×4支',itemStyle:{color:C.line}}
+        ]}]
+    });
+    c=mk('chart-geo');
+    if(c) c.setOption({
+      grid:{...baseGrid,top:'8%',right:'8%'}, tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+      xAxis:{type:'value',...axisStyle,axisLabel:{formatter:v=>v>=10000?(v/10000)+'万':v}},
+      yAxis:{type:'category',data:['上海','四川','山东','浙江','广东','江苏'],...axisStyle,axisLabel:{color:C.ink,fontSize:11}},
+      series:[{type:'bar',data:[4922,5026,5526,7130,7648,8596],barWidth:'55%',
+        itemStyle:{color:p=>p.dataIndex===5?C.brand:'#7FB0D6',borderRadius:[0,4,4,0]},
+        label:{show:true,position:'right',formatter:'{c}人',color:C.ink,fontSize:11}}]
+    });
+    c=mk('chart-competitor');
+    if(c) c.setOption({
+      grid:{...baseGrid,top:'8%',right:'12%'}, tooltip:{trigger:'axis',axisPointer:{type:'shadow'},valueFormatter:v=>v+'%'},
+      xAxis:{type:'value',...axisStyle,axisLabel:{formatter:'{value}%',color:C.ink},max:50},
+      yAxis:{type:'category',data:['<药品名>(本品)','<竞品A>','<竞品B>'],...axisStyle,axisLabel:{color:C.ink,fontSize:11}},
+      series:[{type:'bar',data:[6,40,44],barWidth:'50%',
+        itemStyle:{color:p=>p.dataIndex===0?C.brand:'#7FB0D6',borderRadius:[0,4,4,0]},
+        label:{show:true,position:'right',formatter:'{c}%',color:C.ink,fontSize:11}}]
+    });
+    c=mk('chart-disease');
+    if(c){
+      const cats=['肿瘤类','代谢类','感染类','消化/肝胆类','血压类','其他','皮肤类','心脏类','血糖类','呼吸类','血脂类'];
+      const vals=[21,30,38,38,70,78,106,120,187,343,380];
+      const pcts=['1.7%','2.4%','3.1%','3.1%','5.7%','6.3%','8.6%','9.7%','15.1%','27.7%','30.7%'];
+      c.setOption({
+        grid:{...baseGrid,top:'6%',right:'10%'}, tooltip:{trigger:'axis',axisPointer:{type:'shadow'},
+          formatter:p=>{const i=p[0].dataIndex;return `<b>${p[0].axisValue}</b><br/>访问人数：<b>${p[0].value}</b>　占比：<b>${pcts[i]}</b>`;}},
+        xAxis:{type:'value',...axisStyle},
+        yAxis:{type:'category',data:cats,...axisStyle,axisLabel:{color:C.ink,fontSize:11}},
+        series:[{type:'bar',data:vals,barWidth:'58%',
+          itemStyle:{color:p=>p.dataIndex===10?C.brand:'#7FB0D6',borderRadius:[0,4,4,0]},
+          label:{show:true,position:'right',formatter:p=>pcts[p.dataIndex],color:C.ink,fontSize:11}}]
+      });
+    }
+  }
+
+  if(sec==='s-func'){
+    let c=mk('chart-prof-gender');
+    if(c) c.setOption({
+      tooltip:{trigger:'item',formatter:'{b}: {c}人 ({d}%)'},
+      series:[{type:'pie',radius:['46%','70%'],center:['50%','56%'],label:{formatter:'{b}\n{d}%',color:C.ink,fontSize:11},
+        data:[{value:48898,name:'女',itemStyle:{color:C.teal}},{value:37508,name:'男',itemStyle:{color:C.brand}}]}]
+    });
+    c=mk('chart-prof-age');
+    if(c) c.setOption({
+      grid:{left:'3%',right:'8%',bottom:'3%',top:'8%',containLabel:true},tooltip:{trigger:'axis',valueFormatter:v=>v+'%'},
+      xAxis:{type:'value',...axisStyle,axisLabel:{formatter:'{value}%',color:C.ink,fontSize:10}},
+      yAxis:{type:'category',data:['46岁+','41-45','36-40','31-35','25-30','19-24','18岁及以下'],...axisStyle,axisLabel:{color:C.ink,fontSize:10}},
+      series:[{type:'bar',data:[11.54,9.35,18.48,25.33,23.96,9.56,1.78],barWidth:'55%',
+        itemStyle:{color:p=>p.dataIndex===3?C.brand:'#9DC3E0',borderRadius:[0,3,3,0]},
+        label:{show:true,position:'right',formatter:'{c}%',color:C.ink,fontSize:10}}]
+    });
+    c=mk('chart-prof-edu');
+    if(c) c.setOption({
+      tooltip:{trigger:'item',formatter:'{b}: {d}%'},
+      series:[{type:'pie',radius:['0%','66%'],center:['50%','56%'],label:{formatter:'{b}\n{d}%',color:C.ink,fontSize:11},
+        data:[{value:55455,name:'本科',itemStyle:{color:C.brand}},{value:19585,name:'高中及以下',itemStyle:{color:C.teal}},
+        {value:8527,name:'大专',itemStyle:{color:'#9DC3E0'}},{value:1310,name:'硕士及以上',itemStyle:{color:C.blue}}]}]
+    });
+    c=mk('chart-prof-industry');
+    if(c) c.setOption({
+      grid:{left:'3%',right:'8%',bottom:'3%',top:'8%',containLabel:true},tooltip:{trigger:'axis',valueFormatter:v=>v+'%'},
+      xAxis:{type:'value',...axisStyle,axisLabel:{formatter:'{value}%',color:C.ink,fontSize:10}},
+      yAxis:{type:'category',data:['政府/事业','制造/加工','城市生活服务','医疗/护理/制药','学校/科研','商业/零售'],...axisStyle,axisLabel:{fontSize:10,color:C.ink}},
+      series:[{type:'bar',data:[7.45,9.81,11.86,12.88,15.27,29.9],barWidth:'55%',
+        itemStyle:{color:p=>p.dataIndex===5?C.brand:'#7FB0D6',borderRadius:[0,3,3,0]},
+        label:{show:true,position:'right',formatter:'{c}%',color:C.ink,fontSize:10}}]
+    });
+    c=mk('chart-prof-life');
+    if(c) c.setOption({
+      tooltip:{trigger:'item',formatter:'{b}: {d}%'},
+      series:[{type:'pie',radius:['46%','70%'],center:['50%','56%'],label:{formatter:'{b}\n{d}%',color:C.ink,fontSize:11},
+        data:[{value:53027,name:'育儿',itemStyle:{color:C.brand}},{value:28871,name:'未婚',itemStyle:{color:C.teal}},
+        {value:2634,name:'已婚',itemStyle:{color:'#9DC3E0'}}]}]
+    });
+    c=mk('chart-prof-hometown');
+    if(c) c.setOption({
+      grid:{left:'3%',right:'8%',bottom:'3%',top:'8%',containLabel:true},tooltip:{trigger:'axis',valueFormatter:v=>v+'%'},
+      xAxis:{type:'value',...axisStyle,axisLabel:{formatter:'{value}%',color:C.ink,fontSize:10}},
+      yAxis:{type:'category',data:['河北','云南','广东','四川','浙江','河南','山东','江苏'],...axisStyle,axisLabel:{color:C.ink,fontSize:10}},
+      series:[{type:'bar',data:[4.1,4.12,4.94,5.06,5.14,5.4,6.89,7.49],barWidth:'55%',
+        itemStyle:{color:p=>p.dataIndex===7?C.teal:'#9DC3E0',borderRadius:[0,3,3,0]},
+        label:{show:true,position:'right',formatter:'{c}%',color:C.ink,fontSize:10}}]
+    });
+    c=mk('chart-func');
+    if(c) c.setOption({
+      tooltip:{trigger:'item',formatter:'{b}: {c}人 ({d}%)'},
+      legend:{orient:'vertical',right:'0%',top:'center',textStyle:{color:C.ink,fontSize:11}},
+      series:[{type:'pie',radius:['38%','66%'],center:['34%','50%'],
+        label:{formatter:'{d}%',color:C.ink,fontSize:10},
+        data:[
+          {value:42152,name:'疾病科普',itemStyle:{color:C.brand}},
+          {value:30301,name:'电子说明书',itemStyle:{color:C.teal}},
+          {value:15487,name:'用药提醒',itemStyle:{color:C.blue}},
+          {value:13178,name:'我的药箱',itemStyle:{color:'#7FB0D6'}},
+          {value:11864,name:'用药打卡',itemStyle:{color:C.soft}},
+          {value:8107,name:'科学减重',itemStyle:{color:C.warn}},
+          {value:642,name:'附近医院',itemStyle:{color:C.line}},
+          {value:376,name:'订阅科普',itemStyle:{color:C.ink3}}
+        ]}]
+    });
+    c=mk('chart-article');
+    if(c){
+      const titles=['注射教学\n视频','注射笔\n指导','脂肪肝\n预防','<药品名>\n密码','匹康奇\n指导','肥胖困局\n图文','减肥会好\n图文','脂肪肝注意\n图文'];
+      const visits=[42308,16798,5136,5026,182,9,3,3];
+      const dur=[269,307,54,60,243,737,217,390];
+      c.setOption({
+        grid:{...baseGrid,top:'16%',right:'8%'}, tooltip:{trigger:'axis'},
+        legend:{data:['访问人数','平均浏览时长(秒)'],top:0,textStyle:{color:C.ink,fontSize:11}},
+        xAxis:{type:'category',data:titles,...axisStyle,axisLabel:{fontSize:9,color:C.ink,interval:0}},
+        yAxis:[
+          {type:'value',name:'访问人数',...axisStyle},
+          {type:'value',name:'时长(秒)',...axisStyle,splitLine:{show:false}}
+        ],
+        series:[
+          {name:'访问人数',type:'bar',data:visits,barWidth:'42%',itemStyle:{color:C.brand,borderRadius:[3,3,0,0]}},
+          {name:'平均浏览时长(秒)',type:'line',yAxisIndex:1,data:dur,smooth:true,symbolSize:7,lineStyle:{width:3,color:C.teal},itemStyle:{color:C.teal}}
+        ]
+      });
+    }
+    c=mk('chart-funnel');
+    if(c) c.setOption({
+      tooltip:{trigger:'item',formatter:'{b}<br/>人数：<b>{c}</b>'},
+      series:[{type:'funnel',left:'6%',right:'26%',top:20,bottom:20,minSize:'28%',maxSize:'100%',
+        sort:'descending',gap:3,
+        label:{show:true,position:'inside',formatter:p=>`${p.data.name}：${p.data.value}人`,color:'#fff',fontSize:12,fontWeight:'bold'},
+        labelLine:{show:false},
+        itemStyle:{borderColor:'#fff',borderWidth:2},
+        data:[
+          {value:44019,name:'挽留弹窗曝光',itemStyle:{color:C.brand}},
+          {value:4057,name:'弹窗-设置提醒',itemStyle:{color:C.brandDeep}},
+          {value:1991,name:'弹窗-确认设置',itemStyle:{color:C.teal}}
+        ]
+      },{
+        type:'funnel',left:'6%',right:'26%',top:20,bottom:20,minSize:'28%',maxSize:'100%',
+        sort:'descending',gap:3,z:5,
+        tooltip:{show:false},
+        itemStyle:{color:'transparent',borderColor:'transparent'},
+        label:{show:true,position:'right',color:C.ink,fontSize:12,fontWeight:'bold',
+          formatter:p=>funnelRate[p.dataIndex]},
+        labelLine:{show:true,length:8,lineStyle:{color:C.ink3}},
+        data:[
+          {value:44019,name:'挽留弹窗曝光'},
+          {value:4057,name:'弹窗-设置提醒'},
+          {value:1991,name:'弹窗-确认设置'}
+        ]
+      }]
+    });
+    c=mk('chart-checkin-days');
+    if(c){
+      // TOP20 持续天数分布
+      const buckets={'1-5天':0,'6-10天':0,'11-15天':0,'16-22天':0};
+      const days=[3,22,11,14,11,12,9,10,9,9,8,9,8,6,8,8,5,4,7,3];
+      days.forEach(d=>{ if(d<=5)buckets['1-5天']++; else if(d<=10)buckets['6-10天']++; else if(d<=15)buckets['11-15天']++; else buckets['16-22天']++; });
+      c.setOption({
+        grid:{left:'3%',right:'6%',bottom:'3%',top:'18%',containLabel:true},tooltip:{trigger:'axis'},
+        xAxis:{type:'category',data:Object.keys(buckets),...axisStyle},
+        yAxis:{type:'value',name:'用户数',...axisStyle},
+        series:[{type:'bar',data:Object.values(buckets),barWidth:'50%',
+          itemStyle:{color:p=>p.dataIndex===3?C.brand:C.soft,borderRadius:[4,4,0,0]},
+          label:{show:true,position:'top',formatter:'{c}人',color:C.ink}}]
+      });
+    }
+  }
+}
+
+const funnelRate=[
+  '占总曝光 100%',
+  '设置率 9.2%',
+  '确认率 49.1%'
+];
+
+renderSection('s-summary');
+</script>
+</body>
+</html>

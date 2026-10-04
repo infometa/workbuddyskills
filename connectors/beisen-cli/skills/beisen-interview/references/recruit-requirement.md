@@ -15,7 +15,7 @@ beisen-cli interview recruitRequirement bs_search_requirements_list --data '<jso
 | `requirementStatus` | integer | ❌ | 需求状态，默认不限：20=审批中、30=审批未通过、40=进行中、50=已关闭、60=已完成、70=已暂停、80=审批已终止 |
 | `requirementName` | string | ❌ | 需求名称，默认不限 |
 | `requirementCode` | integer | ❌ | 需求编号，默认不限 |
-| `createBy` | integer | ❌ | 需求提出人（即需求创建人）用户 ID，默认不限 |
+| `createBy` | string | ❌ | 需求提出人（即需求创建人），可以传入姓名或者邮箱，可选，默认不限 |
 
 ### 参数示例
 

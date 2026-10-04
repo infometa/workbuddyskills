@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/checkpoint/2.0",
+  "title": "Project Checkpoint",
+  "x-schema-version": "2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "checkpoint_id", "created_at", "status", "batch_id", "processed_source_ids", "outputs", "pending_items", "locked_chapters", "model_capabilities", "processing_parameters"],
+  "properties": {
+    "schema_version": {"const": "2.0"},
+    "checkpoint_id": {"type": "string", "pattern": "^CPK-[A-Z0-9_-]+$"},
+    "created_at": {"type": "string"},
+    "status": {"enum": ["initialized", "in_progress", "blocked", "ready_for_review", "complete"]},
+    "batch_id": {"type": "string", "pattern": "^BATCH-[A-Z0-9_-]+$"},
+    "processed_source_ids": {"type": "array", "items": {"type": "string", "pattern": "^SRC-[A-Z0-9]{12,64}$"}, "uniqueItems": true},
+    "outputs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "pending_items": {"type": "array", "items": {"type": "string"}},
+    "locked_chapters": {"type": "array", "items": {"type": "string", "pattern": "^CH-[A-Z0-9][A-Z0-9_-]{2,63}$"}, "uniqueItems": true},
+    "model_capabilities": {"type": "object"},
+    "processing_parameters": {"type": "object"},
+    "note": {"type": "string"}
+  }
+}

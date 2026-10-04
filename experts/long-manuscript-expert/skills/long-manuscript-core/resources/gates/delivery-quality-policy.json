@@ -1,0 +1,29 @@
+{
+  "allowedHumanDecision": "approved",
+  "allowedMachineStatuses": [
+    "passed"
+  ],
+  "artifactType": "delivery_quality_policy",
+  "binaryPolicy": {
+    "deterministicBytesRequired": true,
+    "docxRequiredEntries": [
+      "[Content_Types].xml",
+      "_rels/.rels",
+      "word/document.xml"
+    ],
+    "externalRelationshipsAllowed": false,
+    "formats": [
+      "docx",
+      "pdf"
+    ],
+    "pdfMinimumPageCount": 1,
+    "pdfTextRequired": true
+  },
+  "connectorRequired": false,
+  "exactGateSetRequired": true,
+  "humanGateCount": 1,
+  "machineGateCount": 32,
+  "missingOrUnknownBlocks": true,
+  "schemaVersion": "1.0.0",
+  "targetTransition": "delivery_ready"
+}

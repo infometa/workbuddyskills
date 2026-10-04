@@ -1,18 +1,20 @@
 ---
 name: beisen-interview
-version: 1.2.1
-description: "北森招聘面试一体化。本 Skill 覆盖招聘进展查询、面试官待办、面试质量分析、竞品情报分析、招聘需求查询与详情。当用户询问招聘进展、面试进展、面试官待办、待面试、待评价、offer审批、面试质量、竞品分析、招聘需求等面试一体化相关问题时触发。职位/候选人/人才库等招聘主流程问题请走 beisen-recruitment。"
+version: 1.2.5
+description: "北森招聘面试一体化。本 Skill 覆盖招聘进展查询、面试官待办、面试质量分析、竞品情报分析、招聘需求查询与详情。当用户询问招聘进展、面试进展、面试官待办、待面试、待评价、面试质量、竞品分析、招聘需求等面试一体化相关问题时触发。职位/候选人/人才库等招聘主流程问题请走 beisen-recruitment。"
 category: 人力资源/招聘面试
 author: beisen
 agent_created: false
 allowed-tools: Bash, Read
+requires-skills:
+  - beisen-shared
+  - beisen-recruitment
+requires-cli: ">=1.0.8"
 ---
 
 # 招聘面试一体化
 
 **CRITICAL — 开始前 MUST 读取 [../beisen-shared/SKILL.md](../beisen-shared/SKILL.md)**
-
-> CLI 版本要求：beisen-cli >= 0.2.5（低于该版本会提示升级，执行 `beisen-cli update` 更新）
 
 容易混淆的概念，先分清楚再回答：
 
@@ -20,8 +22,6 @@ allowed-tools: Bash, Read
 - **职位 vs 招聘需求**：需求（HC）是「要招几个人、招得怎么样了」，职位是对外发布的岗位与要求。问进度查需求，问职责要求查职位；两者可以关联，但不是一回事。
 - **招聘通知 vs 审批待办**：候选人推荐、面试变更这类提醒走招聘通知；员工自己发起或待办的审批与各类待办走审批清单。名字像，来源不同。
 - **人才推荐 ≠ 候选人**：人才推荐是按职位算出来的「可能合适的人」，不代表已进入招聘流程。
-- **月报 vs 逐日记录**：考勤月报是整月汇总，具体某天的打卡与单据细节要查逐日记录。两者是同一查询能力的两种模式：传 month 看月报，传 beginDate 看逐日。
-- **申请时长、打卡时长、结算时长**：加班的三个数字口径不同，以工具返回的说明为准，不要互相替代。
 
 ## 路由优先级
 
@@ -39,10 +39,12 @@ allowed-tools: Bash, Read
 | 查询招聘进展 | `beisen-cli interview recruitmentProgress getRecruitmentProgress` | 按时间范围/职位查询招聘进展 |
 | 下钻查询申请明细 | `beisen-cli recruitment apply bs_search_apply_list` | 用招聘进展返回的 `searchBatchId` + `jobId` 下钻查询具体申请列表 |
 | 查询面试官待办 | `beisen-cli interview interviewerTodo getInterviewerTodo` | 查询当前用户的面试待办、待评价等 |
-| 面试质量分析 | `beisen-cli interview interviewAnalysis analyzeInterviewQuality` | 面试官质量评估报告（异步） |
-| 竞品情报分析 | `beisen-cli interview interviewAnalysis analyzeCompetitorIntelligence` | 竞品公司情报分析报告（异步） |
+| 面试质量分析 | `beisen-cli interview_ai interviewAnalysis analyzeInterviewQuality` | 面试官质量评估报告（异步） |
+| 竞品情报分析 | `beisen-cli interview_ai interviewAnalysis analyzeCompetitorIntelligence` | 竞品公司情报分析报告（异步） |
 | 查询招聘需求列表 | `beisen-cli interview recruitRequirement bs_search_requirements_list` | 按状态/名称/编号/提出人查询招聘需求 |
 | 获取招聘需求详情 | `beisen-cli interview recruitRequirement getRecruitRequirementDetail` | 按 requirementId 获取需求详情 |
+
+> **跨域命令说明**：本 Skill 的下钻查询和异步任务轮询实际调用 `beisen-cli recruitment` / `beisen-cli recruitment_ai` 域的命令（`recruitment apply bs_search_apply_list`、`recruitment_ai async_task bs_get_async_task_status`）。相关命令的参数规则、L2 数据处理及异步轮询协议详见 [../beisen-recruitment/SKILL.md](../beisen-recruitment/SKILL.md)。
 
 ## 命令示例
 
@@ -69,10 +71,10 @@ beisen-cli interview interviewerTodo getInterviewerTodo --data '{}'
 beisen-cli interview interviewerTodo getInterviewerTodo --data '{"dateRange":2,"todoTypes":[2,3]}'
 
 # 面试质量分析（异步，需轮询）
-beisen-cli interview interviewAnalysis analyzeInterviewQuality --data '{"userIdName":"张三"}'
+beisen-cli interview_ai interviewAnalysis analyzeInterviewQuality --data '{"userIdName":"张三"}'
 
 # 竞品情报分析（异步，需轮询）
-beisen-cli interview interviewAnalysis analyzeCompetitorIntelligence --data '{"activeDimension":"人才策略","companyNames":["某科技公司"]}'
+beisen-cli interview_ai interviewAnalysis analyzeCompetitorIntelligence --data '{"activeDimension":"人才策略","companyNames":["某科技公司"]}'
 
 # 查询招聘需求列表
 beisen-cli interview recruitRequirement bs_search_requirements_list --data '{"requirementStatus":40}'
@@ -89,9 +91,9 @@ beisen-cli interview recruitRequirement getRecruitRequirementDetail --data '{"re
 
 2. **面试官待办**：用户问"我有什么面试待办/待面试/待评价/待处理简历"时，执行 `beisen-cli interview interviewerTodo getInterviewerTodo`。`todoTypes` 过滤待办类型：1=待筛选简历、2=待评价面试、3=待参加面试`dateRange`/`startDate`/`endDate` 控制统计范围。返回 `pendingInterviews` 列表及各类待办数量。
 
-3. **面试质量分析**：用户需要面试官质量评估报告时，执行 `beisen-cli interview interviewAnalysis analyzeInterviewQuality`。可用 `userIdName`（面试官 UserId 或姓名，有值时优先分析该面试官所有面试）、`jobIdCode`+`interviewType`（指定职位与面试轮次，必须同时有值）、`assessmentFocus`（考察重心）、`reviewDimensions`（自定义维度）。该接口为**异步任务**，返回 `taskId`，需轮询 `bs_get_async_task_status` 获取报告。
+3. **面试质量分析**：用户需要面试官质量评估报告时，执行 `beisen-cli interview_ai interviewAnalysis analyzeInterviewQuality`。可用 `userIdName`（面试官 UserId 或姓名，有值时优先分析该面试官所有面试）、`jobIdCode`+`interviewType`（指定职位与面试轮次，必须同时有值）、`assessmentFocus`（考察重心）、`reviewDimensions`（自定义维度）。该接口为**异步任务**，返回 `taskId`，需轮询 `bs_get_async_task_status` 获取报告。
 
-4. **竞品情报分析**：用户需要竞品公司分析时，执行 `beisen-cli interview interviewAnalysis analyzeCompetitorIntelligence --data '{"activeDimension":"<分析维度>","companyNames":["<公司名>"]}'`。`activeDimension` 和 `companyNames` 为必填。该接口为**异步任务**，返回 `taskId`，需轮询获取报告。
+4. **竞品情报分析**：用户需要竞品公司分析时，执行 `beisen-cli interview_ai interviewAnalysis analyzeCompetitorIntelligence --data '{"activeDimension":"<分析维度>","companyNames":["<公司名>"]}'`。`activeDimension` 和 `companyNames` 为必填。该接口为**异步任务**，返回 `taskId`，需轮询获取报告。
 
 5. **招聘需求**：用户问"有哪些招聘需求/需求进展"时，执行 `beisen-cli interview recruitRequirement bs_search_requirements_list`，可按 `requirementStatus`（20=审批中、30=审批未通过、40=进行中、50=已关闭、60=已完成、70=已暂停、80=审批已终止）、`requirementName`、`requirementCode`、`createBy` 筛选。查看详情用 `getRecruitRequirementDetail --data '{"requirementId":"<id>"}'`。
 
@@ -118,7 +120,7 @@ beisen-cli interview recruitRequirement getRecruitRequirementDetail --data '{"re
 | 面试官待办 | [references/interviewer-todo.md](references/interviewer-todo.md) | getInterviewerTodo |
 | 质量/情报分析 | [references/analytics.md](references/analytics.md) | analyzeInterviewQuality, analyzeCompetitorIntelligence |
 | 招聘需求 | [references/recruit-requirement.md](references/recruit-requirement.md) | bs_search_requirements_list, getRecruitRequirementDetail |
-| 异步任务 | [references/async-tasks.md](references/async-tasks.md) | 异步结果轮询（调用 beisen-recruitment async_task） |
+| 异步任务 | [references/async-tasks.md](references/async-tasks.md) | 异步结果轮询（调用 beisen-recruitment 域 recruitment_ai async_task） |
 
 ## Playbook 案例
 
@@ -159,7 +161,7 @@ beisen-cli interview recruitRequirement getRecruitRequirementDetail --data '{"re
 
 执行步骤：
 1. 前置检查
-2. 执行 `beisen-cli interview interviewAnalysis analyzeCompetitorIntelligence --data '{"activeDimension":"人才策略","companyNames":["XX公司"]}'`
+2. 执行 `beisen-cli interview_ai interviewAnalysis analyzeCompetitorIntelligence --data '{"activeDimension":"人才策略","companyNames":["XX公司"]}'`
 3. 提取 `taskId`，轮询 `bs_get_async_task_status` 直到 `isFinished == true`
 4. 从 `resultJson` 解析报告内容，向用户展示分析结论
 

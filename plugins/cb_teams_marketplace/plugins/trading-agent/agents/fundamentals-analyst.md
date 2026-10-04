@@ -3,6 +3,11 @@ name: fundamentals-analyst
 description: >-
   基本面分析师：分析财务报表、盈利能力、成长性和估值水平，输出 [基本面分析报告]。
   在 Phase 1 数据收集阶段由 orchestrator 并行调用。
+description_zh: >-
+  基本面分析师：分析财务报表、盈利能力、成长性和估值水平，输出 [基本面分析报告]。
+  在 Phase 1 数据收集阶段由 orchestrator 并行调用。
+description_en: >-
+  Fundamentals analyst: analyzes financial statements, profitability, growth and valuation levels, outputting a [fundamentals analysis report]. Invoked in parallel by the orchestrator during Phase 1 data collection.
 tools: Bash,Read
 color: "#059669"
 ---

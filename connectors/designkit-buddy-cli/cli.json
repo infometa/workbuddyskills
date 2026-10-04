@@ -1,0 +1,39 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18.0.0"
+  },
+  "init": {
+    "darwin": "npm install -g meitu-designkit-cli",
+    "linux": "npm install -g meitu-designkit-cli",
+    "win32": "npm install -g meitu-designkit-cli"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "designkit --version",
+      "linux": "designkit --version",
+      "win32": "designkit.cmd --version"
+    },
+    "minVersion": "1.0.24",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  },
+  "auth": {
+    "darwin": "designkit auth login",
+    "linux": "designkit auth login",
+    "win32": "designkit.cmd auth login"
+  },
+  "unAuth": {
+    "darwin": "designkit auth logout",
+    "linux": "designkit auth logout",
+    "win32": "designkit.cmd auth logout"
+  },
+  "status": {
+    "darwin": "designkit auth status --check",
+    "linux": "designkit auth status --check",
+    "win32": "designkit.cmd auth status --check"
+  },
+  "statusMatch": "connected",
+  "authUrlDomain": "www.designkit.cn",
+  "authWaitForExit": true,
+  "authSuppressBrowser": true
+}

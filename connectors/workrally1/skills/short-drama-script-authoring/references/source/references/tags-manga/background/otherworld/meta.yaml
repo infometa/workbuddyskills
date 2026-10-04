@@ -1,0 +1,89 @@
+# 异界（otherworld）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: otherworld
+name_cn: 异界
+category: background
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/adventure.md
+emotion_core:
+- 异世冒险
+- 力量成长
+- 认知降维
+- 世界探索
+- 热血争锋
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，男频侧重力量/冒险，女频侧重情感/经营
+  bg_desc: 异世界基底（魔法/兽人/精灵等），常与穿越/重生组合
+  weight: medium
+  bottom_line:
+  - 异界世界观自洽，力量/种族规则一致
+  - 穿越者认知差运用合理，不能全知全能
+  - 异界冒险有代价，成长非一蹴而就
+relations:
+  synergy:
+  - target: transmigration
+    effect_type: 裂变型
+    weight: high
+    effect: 穿越异界，现代认知降维+异界规则探索双爽感
+  - target: xuanhuan
+    effect_type: 增强型
+    weight: high
+    effect: 异界承载玄幻力量体系，修炼争锋空间大
+  - target: system
+    effect_type: 增强型
+    weight: medium
+    effect: 异界+系统，量化升级与玩法具象
+  - target: adventure
+    effect_type: 增强型
+    weight: medium
+    effect: 异界探索冒险，未知感拉满
+  mutex:
+  - target: 强写实都市
+    reason: 世界基底冲突，需穿越桥接
+combo_adapt:
+- combo: references/domestic/combos/adventure.md
+  rule: 异界探索冒险，强化未知与征服爽感
+  sub: 异界冒险型
+- combo: references/domestic/combos/counterattack.md
+  rule: 异界从弱到强逆袭，力量成长爽感
+  sub: 异界逆袭型
+- combo: references/domestic/combos/innovation.md
+  rule: 异界规则/经营创意，差异化卖点
+  sub: 异界创意型
+fusion:
+- recipe: fusion/recipes/isekai-growth.md
+  note: 穿越异界成长类，力量升级与世界探索，男频经典
+- recipe: fusion/recipes/isekai-business.md
+  note: 异界经营/种田类，差异化慢热爽感
+redlines:
+- code: AP-YJ01
+  name: 异界规则崩塌
+  severity: 高
+  dimension: 标签与逻辑
+  test: 种族/力量/世界规则前后矛盾，自洽性丧失
+- code: AP-YJ02
+  name: 穿越者全知开挂
+  severity: 中
+  dimension: 标签与逻辑
+  test: 穿越者无所不知无所不能，成长无张力，爽感廉价
+soft_warnings:
+- 避免异界设定堆砌，信息过载劝退
+- 避免照搬现实逻辑套异界，串味出戏
+- 避免冒险无代价，主角光环过重
+manga:
+  visual_signature: 奇幻异世界视觉体系 + 魔法/种族造型 + 宏大场景奇观
+  high_affinity: true
+  visual_hooks:
+  - 异世界奇观的视觉冲击
+  - 魔法/力量战斗特效
+  - 种族/世界设定的画面呈现

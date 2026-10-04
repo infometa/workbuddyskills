@@ -1,0 +1,672 @@
+{
+  "schemaVersion": 2,
+  "module": "okr",
+  "skill": "weaver-e10-okr-connector",
+  "generatedAt": "2026-09-15",
+  "sourceSet": {
+    "aggregateSha256": "f66d2c353e9e553d7e98ee1117c477964f437dcb9c101f2916cd921c5c852cb2",
+    "sourceRoots": [
+      "F:/笔记/E10标准okr和ebokr整合skill（new）/skill生成参考文件"
+    ],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/okr",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "skills/weaver-e10-okr-connector"
+    ],
+    "tests": [
+      "test/business/okr-*.test.ts"
+    ],
+    "docs": [
+      "docs/okr.md",
+      "skill-template/domains/okr.md"
+    ]
+  },
+  "sources": [
+    {
+      "path": "补充说明规则.txt",
+      "role": "rules-doc",
+      "size": 5697,
+      "sha256": "f633796993b5dce1f494893d2080ca0ae173c32c14a683c971bdec2cbe3043ec"
+    },
+    {
+      "path": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "role": "api-doc",
+      "size": 91980,
+      "sha256": "f0ede597e4fe2d0b6f55918574e55313881664131dd9829e16b5ab9bcae4b311"
+    },
+    {
+      "path": "e10标准版本OKR目标管理接口说明文档.docx",
+      "role": "api-doc",
+      "size": 22860,
+      "sha256": "f495e862dcfcefffa8fcf621e51f39bbf9c88b31cf63144c2b6c1434ff09ce24"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "okr.link.routing",
+      "sourcePath": "补充说明规则.txt",
+      "anchor": "OKR 链路判定规则",
+      "mapsToOperations": [
+        "okr.version.check"
+      ],
+      "mapsToReferences": [
+        "references/okr-link-routing.md"
+      ]
+    },
+    {
+      "id": "okr.eb.form.resolve",
+      "sourcePath": "补充说明规则.txt",
+      "anchor": "ebuilder 目标详情表单 id 获取",
+      "mapsToOperations": [
+        "okr.eb.form.resolve",
+        "okr.detail.link",
+        "okr.viewlink"
+      ],
+      "mapsToReferences": [
+        "references/okr-link-routing.md"
+      ]
+    },
+    {
+      "id": "POST /api/workrelate/goal/getSearchList",
+      "sourcePath": "e10标准版本OKR目标管理接口说明文档.docx",
+      "anchor": "分页查询目标",
+      "mapsToOperations": [
+        "okr.list"
+      ],
+      "mapsToReferences": [
+        "references/okr-query.md"
+      ]
+    },
+    {
+      "id": "GET /api/workrelate/goal/getObjectDetail/{id}",
+      "sourcePath": "e10标准版本OKR目标管理接口说明文档.docx",
+      "anchor": "查询目标详情",
+      "mapsToOperations": [
+        "okr.get"
+      ],
+      "mapsToReferences": [
+        "references/okr-query.md"
+      ]
+    },
+    {
+      "id": "POST /api/goal/common/comment/commentPage",
+      "sourcePath": "e10标准版本OKR目标管理接口说明文档.docx",
+      "anchor": "分页查询目标评论",
+      "mapsToOperations": [
+        "okr.get",
+        "okr.comment.list"
+      ],
+      "mapsToReferences": [
+        "references/okr-query.md"
+      ]
+    },
+    {
+      "id": "POST /api/workrelate/goal/create",
+      "sourcePath": "e10标准版本OKR目标管理接口说明文档.docx",
+      "anchor": "新建目标",
+      "mapsToOperations": [
+        "okr.create.prepare",
+        "okr.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/okr-write.md"
+      ]
+    },
+    {
+      "id": "POST /api/workrelate/goal/update",
+      "sourcePath": "e10标准版本OKR目标管理接口说明文档.docx",
+      "anchor": "编辑目标",
+      "mapsToOperations": [
+        "okr.update.prepare",
+        "okr.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/okr-write.md"
+      ]
+    },
+    {
+      "id": "POST /api/workrelate/goal/fs/krForm/saveForm",
+      "sourcePath": "e10标准版本OKR目标管理接口说明文档.docx",
+      "anchor": "关键成果保存",
+      "mapsToOperations": [
+        "okr.kr.save.prepare",
+        "okr.kr.save.apply"
+      ],
+      "mapsToReferences": [
+        "references/okr-keyresult.md"
+      ]
+    },
+    {
+      "id": "POST /api/ebuilder/form/formdata/v2/getFormDataList/okr_searchAppver",
+      "sourcePath": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "anchor": "查询应用版本",
+      "mapsToOperations": [
+        "okr.version.check"
+      ],
+      "mapsToReferences": [
+        "references/okr-link-routing.md"
+      ]
+    },
+    {
+      "id": "POST /api/ebuilder/form/formdata/v2/getFormDataList/okr_pageQueryGoal",
+      "sourcePath": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "anchor": "分页查询目标",
+      "mapsToOperations": [
+        "okr.list"
+      ],
+      "mapsToReferences": [
+        "references/okr-query.md"
+      ]
+    },
+    {
+      "id": "POST /api/ebuilder/form/formdata/v2/getFormDataByPk/okr_queryGoal",
+      "sourcePath": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "anchor": "查询目标详情",
+      "mapsToOperations": [
+        "okr.get",
+        "okr.update.prepare",
+        "okr.align.create.prepare"
+      ],
+      "mapsToReferences": [
+        "references/okr-query.md",
+        "references/okr-write.md"
+      ]
+    },
+    {
+      "id": "POST /api/ebuilder/form/formdata/v2/getFormDataList/okr_pageQueryGoalKeyResults",
+      "sourcePath": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "anchor": "分页查询关键成果",
+      "mapsToOperations": [
+        "okr.kr.list"
+      ],
+      "mapsToReferences": [
+        "references/okr-query.md"
+      ]
+    },
+    {
+      "id": "POST /api/ebuilder/form/formdata/v2/saveFormData/okr_createGoal",
+      "sourcePath": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "anchor": "新建目标",
+      "mapsToOperations": [
+        "okr.create.prepare",
+        "okr.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/okr-write.md"
+      ]
+    },
+    {
+      "id": "POST /api/ebuilder/form/formdata/v2/updateFormData/okr_updateGoal",
+      "sourcePath": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "anchor": "编辑目标",
+      "mapsToOperations": [
+        "okr.update.prepare",
+        "okr.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/okr-write.md"
+      ]
+    },
+    {
+      "id": "POST /api/ebuilder/form/formdata/v2/saveFormData/okr_createKeyResult",
+      "sourcePath": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "anchor": "新建关键成果",
+      "mapsToOperations": [
+        "okr.kr.save.prepare",
+        "okr.kr.save.apply"
+      ],
+      "mapsToReferences": [
+        "references/okr-keyresult.md"
+      ]
+    },
+    {
+      "id": "POST /api/ebuilder/form/formdata/v2/updateFormData/okr_updateKeyResult",
+      "sourcePath": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "anchor": "编辑关键成果",
+      "mapsToOperations": [
+        "okr.kr.save.prepare",
+        "okr.kr.save.apply"
+      ],
+      "mapsToReferences": [
+        "references/okr-keyresult.md"
+      ]
+    },
+    {
+      "id": "POST /api/ebuilder/form/formdata/v2/saveFormData/okr_createGoalAlign",
+      "sourcePath": "e10-ebuilder版本OKR目标自定义接口说明文档.zip",
+      "anchor": "添加目标对齐",
+      "mapsToOperations": [
+        "okr.align.create.prepare",
+        "okr.align.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/okr-align.md"
+      ]
+    }
+  ],
+  "operationImpact": {
+    "okr.version.check": {
+      "sourceChunkIds": [
+        "okr.link.routing",
+        "POST /api/ebuilder/form/formdata/v2/getFormDataList/okr_searchAppver"
+      ],
+      "schemaFields": [
+        "refresh"
+      ],
+      "references": [
+        "references/okr-link-routing.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "okr.eb.form.resolve": {
+      "sourceChunkIds": [
+        "okr.eb.form.resolve"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/okr-link-routing.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "okr.detail.link": {
+      "sourceChunkIds": [
+        "okr.eb.form.resolve",
+        "GET /api/workrelate/goal/getObjectDetail/{id}"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/okr-link-routing.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "okr.viewlink": {
+      "sourceChunkIds": [
+        "okr.eb.form.resolve",
+        "GET /api/workrelate/goal/getObjectDetail/{id}"
+      ],
+      "schemaFields": [
+        "ids",
+        "anchor"
+      ],
+      "references": [
+        "references/okr-query.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "okr.list": {
+      "sourceChunkIds": [
+        "POST /api/workrelate/goal/getSearchList",
+        "POST /api/ebuilder/form/formdata/v2/getFormDataList/okr_pageQueryGoal"
+      ],
+      "schemaFields": [
+        "query_scope",
+        "period_type",
+        "period_range",
+        "period_quarter",
+        "name",
+        "principalid",
+        "status",
+        "match",
+        "page_no",
+        "page_size"
+      ],
+      "references": [
+        "references/okr-query.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "okr.get": {
+      "sourceChunkIds": [
+        "GET /api/workrelate/goal/getObjectDetail/{id}",
+        "POST /api/ebuilder/form/formdata/v2/getFormDataByPk/okr_queryGoal",
+        "POST /api/goal/common/comment/commentPage"
+      ],
+      "schemaFields": [
+        "id",
+        "include_comment_count"
+      ],
+      "references": [
+        "references/okr-query.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "okr.kr.list": {
+      "sourceChunkIds": [
+        "POST /api/ebuilder/form/formdata/v2/getFormDataList/okr_pageQueryGoalKeyResults"
+      ],
+      "schemaFields": [
+        "object_id",
+        "page_no",
+        "page_size"
+      ],
+      "references": [
+        "references/okr-query.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "okr.comment.list": {
+      "sourceChunkIds": [
+        "POST /api/goal/common/comment/commentPage"
+      ],
+      "schemaFields": [
+        "target_id",
+        "page_no",
+        "page_size"
+      ],
+      "references": [
+        "references/okr-query.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "okr.create.prepare": {
+      "sourceChunkIds": [
+        "POST /api/workrelate/goal/create",
+        "POST /api/ebuilder/form/formdata/v2/saveFormData/okr_createGoal"
+      ],
+      "schemaFields": [
+        "name",
+        "period_type",
+        "period_range",
+        "period_quarter",
+        "principalid",
+        "partners",
+        "scope_id",
+        "scope_data_id",
+        "principal_dept",
+        "parent_id",
+        "category_id",
+        "remark",
+        "progress",
+        "status",
+        "m_status",
+        "wb_state",
+        "keyresult_list"
+      ],
+      "references": [
+        "references/okr-write.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "okr.create.apply": {
+      "sourceChunkIds": [
+        "POST /api/workrelate/goal/create",
+        "POST /api/ebuilder/form/formdata/v2/saveFormData/okr_createGoal"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/okr-write.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "okr.update.prepare": {
+      "sourceChunkIds": [
+        "POST /api/workrelate/goal/update",
+        "POST /api/ebuilder/form/formdata/v2/updateFormData/okr_updateGoal"
+      ],
+      "schemaFields": [
+        "id",
+        "name",
+        "status",
+        "m_status",
+        "progress",
+        "remark"
+      ],
+      "references": [
+        "references/okr-write.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "okr.update.apply": {
+      "sourceChunkIds": [
+        "POST /api/workrelate/goal/update",
+        "POST /api/ebuilder/form/formdata/v2/updateFormData/okr_updateGoal"
+      ],
+      "schemaFields": [
+        "id",
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/okr-write.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "okr.kr.save.prepare": {
+      "sourceChunkIds": [
+        "POST /api/workrelate/goal/fs/krForm/saveForm",
+        "POST /api/ebuilder/form/formdata/v2/saveFormData/okr_createKeyResult",
+        "POST /api/ebuilder/form/formdata/v2/updateFormData/okr_updateKeyResult"
+      ],
+      "schemaFields": [
+        "kr_id",
+        "object_id",
+        "name",
+        "target_value",
+        "actual_value",
+        "weight",
+        "progress",
+        "range"
+      ],
+      "references": [
+        "references/okr-keyresult.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "okr.kr.save.apply": {
+      "sourceChunkIds": [
+        "POST /api/workrelate/goal/fs/krForm/saveForm",
+        "POST /api/ebuilder/form/formdata/v2/saveFormData/okr_createKeyResult",
+        "POST /api/ebuilder/form/formdata/v2/updateFormData/okr_updateKeyResult"
+      ],
+      "schemaFields": [
+        "object_id",
+        "name",
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/okr-keyresult.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "okr.align.create.prepare": {
+      "sourceChunkIds": [
+        "POST /api/ebuilder/form/formdata/v2/saveFormData/okr_createGoalAlign"
+      ],
+      "schemaFields": [
+        "current_id",
+        "align_obj_id",
+        "cur_obj_principalid",
+        "ali_obj_principalid"
+      ],
+      "references": [
+        "references/okr-align.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "okr.align.create.apply": {
+      "sourceChunkIds": [
+        "POST /api/ebuilder/form/formdata/v2/saveFormData/okr_createGoalAlign"
+      ],
+      "schemaFields": [
+        "current_id",
+        "align_obj_id",
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/okr-align.md"
+      ],
+      "tests": [
+        "test/business/okr-*.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    }
+  },
+  "artifactBaseline": {
+    "aggregateSha256": "3cdb331cd2fc169d0546f68149fc9c0369cf139427de6ae099fd170a9600cfa0",
+    "files": [
+      {
+        "path": "src/shortcuts/okr/errors.ts",
+        "size": 3027,
+        "sha256": "63ebbbe48c40037a110c9a2fc099b92ed3bd8c3dafcde050afac0c62b4e43448"
+      },
+      {
+        "path": "src/shortcuts/okr/continuation.ts",
+        "size": 3242,
+        "sha256": "81a8e56440850924fa2355d5cff1c29b78a083b177d224956ee4fbbb0ea9ef96"
+      },
+      {
+        "path": "src/shortcuts/okr/host.ts",
+        "size": 8055,
+        "sha256": "91b35df368109b84077a42b937c8c47b606d0d272bb5d44481f1ad9c675aec6b"
+      },
+      {
+        "path": "src/shortcuts/okr/index.ts",
+        "size": 6949,
+        "sha256": "a636695533e47be36d8d5b13848378d3b8b17dd8ed3fa85374ae908a84d5bedd"
+      },
+      {
+        "path": "src/shortcuts/okr/manifest.ts",
+        "size": 3403,
+        "sha256": "48b3897ba979fe621eb72c51c70ee51a0716e026160a30b0531bd14f90e88ec0"
+      },
+      {
+        "path": "src/shortcuts/okr/operations.ts",
+        "size": 595,
+        "sha256": "072210d8ae06772f206c8d53ed5fd07feee22285c0bb343c8809d9d15bc16ac4"
+      },
+      {
+        "path": "src/shortcuts/okr/operations/types.ts",
+        "size": 5278,
+        "sha256": "0b61ee39cefc5719135d17a04e1dd8ef9ad76096a0ab88892feaf42f15b3de55"
+      },
+      {
+        "path": "src/shortcuts/okr/operations/shared.ts",
+        "size": 18033,
+        "sha256": "208bf07de8d331c6a1e93c73edcac161fe2c1f23f1e566af6a3367df0748a2a0"
+      },
+      {
+        "path": "src/shortcuts/okr/operations/link.ts",
+        "size": 12803,
+        "sha256": "68654ca81f12d0c05101f342c99d96eb6ede74a7f2e11d49e104567bcabdb01e"
+      },
+      {
+        "path": "src/shortcuts/okr/operations/read.ts",
+        "size": 22618,
+        "sha256": "3299a4e546f0c0c16a5caa8b1664a7506abcde6b42c875b504134c4a536988ca"
+      },
+      {
+        "path": "src/shortcuts/okr/operations/write.ts",
+        "size": 39228,
+        "sha256": "efe327e86e4778dd221d3884aaf838bfee5916bce0f616f107b38f2a39d4443d"
+      },
+      {
+        "path": "src/shortcuts/okr/operations/registry.ts",
+        "size": 1233,
+        "sha256": "ce3a9595096bbd6a95e09d8d4e13e2a9780452f94415f93508e8d183c45ddaf9"
+      },
+      {
+        "path": "test/business/okr-host.test.ts",
+        "size": 6098,
+        "sha256": "31a7a72d011a2a349d465cd4c6e02b9e25b2079c375827bd9ba01b167a84eb11"
+      },
+      {
+        "path": "test/business/okr-operations.test.ts",
+        "size": 44081,
+        "sha256": "f1b42d44913cde70680c8bbc974fa87a5243c5f605036c375261b3a787788a8d"
+      },
+      {
+        "path": "skills/weaver-e10-okr-connector/SKILL.md",
+        "size": 8856,
+        "sha256": "2e68cb18440ebf1902c3f3c3a6ed60aa380b035398e3b96f64a215f0f506dd05"
+      },
+      {
+        "path": "docs/okr.md",
+        "size": 7724,
+        "sha256": "e58478dfeafa11674161065d3742ac17623f711d793d86768f79e32be21dfeb5"
+      },
+      {
+        "path": "skill-template/domains/okr.md",
+        "size": 1898,
+        "sha256": "15c8dfe3eb9f4eedf66818257eff80fc0956196fa42517bc436731aeecb32b2f"
+      }
+    ]
+  },
+  "notes": [
+    "源资料为 e10 标准版 OKR 目标管理接口说明（docx）与 e10-ebuilder 版 OKR 目标自定义接口说明（zip，含 html 接口页），另有补充说明规则（txt）。",
+    "只记录源资料指纹与转换摘要，不保存 Cookie、Token 或大段源正文。",
+    "链路判定按 ver_name >= V2 走 ebuilder、否则走标准版；版本接口不可用时降级为标准版且不写缓存，依据补充说明规则实现。",
+    "eb 目标详情 eb 表单 id 的动态解析（getAppIds + getObjsByTag）源资料未给出完整响应样例，字段解析按描述实现，需实测确认；已知固定租户 tqasclatif 的表单 id 直接内置。",
+    "源资料未提供删除关键成果接口、标准版关键成果分页接口、标准版目标对齐接口、ebuilder 目标评论接口，故对应能力不予生成或限定链路。"
+  ]
+}

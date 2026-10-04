@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/quality-issue/2.0",
+  "title": "Quality Issue Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["relative_path", "issue", "status", "recorded_at"],
+  "properties": {
+    "relative_path": {"type": "string"},
+    "issue": {"type": "string", "minLength": 1},
+    "detail": {"type": "string"},
+    "status": {"enum": ["observed", "pending", "resolved", "ignored"]},
+    "recorded_at": {"type": "string"}
+  }
+}

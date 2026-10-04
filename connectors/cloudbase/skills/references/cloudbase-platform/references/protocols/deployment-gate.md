@@ -25,7 +25,7 @@ You must read and complete this gate before:
 | SSL certificate obtained + certificateId available | **New** domain bind fails        | Only when first-time `bindCustomDomain`; retrieve certificateId from SSL console |
 
 **Critical distinction**:
-- Security Domain (`envDomainManagement`) ≠ Custom Domain (`manageGateway` Domain/Route)
+- Security Domain (`manageEnv` action=addSecurityDomain/removeSecurityDomain; deprecated alias `envDomainManagement`) ≠ Custom Domain (`manageGateway` Domain/Route)
 - Reusing an existing custom domain = `createRoute` (no cert). Binding a brand-new custom domain = `bindCustomDomain` (needs certificateId).
 
 ### CloudRun (Container Services)
@@ -35,6 +35,7 @@ You must read and complete this gate before:
 | Application port matches Dockerfile / code | Startup failure or 502           | Confirm listening port (commonly 9000)       |
 | Health check path correctly configured | Frequent restarts / unhealthy     | Set correct path (e.g. `/` or `/health`)     |
 | Required environment variables and secrets injected | Runtime errors                 | Configure via console or MCP before deploy   |
+| No httpbin / header-echo / env-dump endpoints | `x-cloudbase-context` temporary credentials leak to callers | Follow `sensitive-runtime-data-protection.md`; health checks must return fixed non-secret payloads only |
 | TCP DB/cache dependency detected (`DATABASE_URL`, MySQL/PG/Redis host) | Deploy succeeds but runtime cannot reach DB | Set `serverConfig.VpcConf` to the DB's VPC/subnet; use private DB host; see `cloudrun-development/references/vpc-and-database.md` |
 | `OpenAccessTypes` vs `VpcConf` understood | Agent configures public ingress but omits private network | Ingress (`OpenAccessTypes`) ≠ egress VPC (`VpcConf`); both may be required |
 
@@ -58,6 +59,7 @@ You must read and complete this gate before:
 |-------------------------------------|-------------------------------------|----------------------------------------------|
 | Function security rule configured to allow required callers | `EXCEED_AUTHORITY` errors     | Configure via `managePermissions` immediately after creation |
 | Anonymous login status understood   | Public access unexpectedly blocked  | Explicitly inform user (disabled by default on new environments) |
+| Responses do not echo headers / env / `x-cloudbase-context` | Temporary credential leak     | Follow `sensitive-runtime-data-protection.md` before public exposure |
 | Non-native TCP DB/cache env (`DATABASE_URL`, MySQL/PG/Redis host) without `vpc` | Deploy succeeds but runtime cannot reach private DB | Set real `vpc.vpcId` + `vpc.subnetId` from DB console / resource detail / user — never invent IDs; see `cloud-functions/references/vpc-and-tcp-database.md`. Native `app.rdb()` / `app.database()` does not need VPC. |
 
 ## Mandatory Declaration Template
@@ -79,3 +81,9 @@ Before starting any deployment-related work, you must output something like this
 When the task involves deployment, publishing, custom domains, CloudRun, or public exposure:
 
 > Before any deployment or publish action, you must first complete the full checks in `cloudbase-platform/references/protocols/deployment-gate.md` and present the declaration template to the user.
+
+## Post-Deployment: Deployment Share (optional, non-intrusive)
+
+After a deployment is **verified successful** (public URL reachable, or mini program upload/publish done), you may — **at most once** — offer to generate anonymized, shareable deliverables (a visual card + paste-ready share copy). If the user declines or ignores, stop immediately. Publishing is always a manual user action; never post on the user's behalf.
+
+Full trigger/boundary rules, required information, anonymization red lines, and deliverable formats: `deployment-share.md` (same directory).

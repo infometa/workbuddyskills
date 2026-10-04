@@ -53,7 +53,7 @@ lovrabet <service> [...resourcePath] <action> [flags] --format compress
 
 Service Tree 精确命中时，先把已经绑定的执行入口只作为候选路由。取得与来源类型匹配的来源、新鲜度和兼容性证据，并确认与当前可信业务 Skill 或平台契约没有冲突后，才复用该入口。本地文件来源可以使用 `version`、`importedAt` 和 `source.hash`；后续来源使用各自适配器提供的证据，不把当前字段组合固化为永久门禁。无法确认来源或适用范围时，不得仅凭精确命中执行稳定规则。执行前仍要核对绑定目标、真实副作用和用户授权。
 
-出现弱命中、多个候选或术语边界不清时，先用 `kb search` 做语义消歧。KB 召回只生成候选；Service Tree 候选先用本地 `service detail` 核对绑定，再使用目标能力支持的可信契约验证通道。消歧后仍有多个合理候选时，再列给用户确认。
+出现弱命中、多个候选或术语边界不清时，先按[知识库工作流](lovrabet-kb-workflow.md)确认 KB Service 路由，再用 `kb search` 做语义消歧。KB 召回只生成候选；Service Tree 候选先用本地 `service detail` 核对绑定，再使用目标能力支持的可信契约验证通道。消歧后仍有多个合理候选时，再列给用户确认。
 
 Service Tree 未命中不是失败条件，也不代表业务能力不存在。本地 registry 可能只注册少量高频服务。没有合理匹配时：
 
@@ -184,6 +184,8 @@ Backend Function 动作示例：
   "params": { "source": "service-tree" }
 }
 ```
+
+SQL action 的运行态契约固定为 `sqlCode` + `params`。manifest 必须绑定可信契约对应的 `sqlCode`，`params` 只包含该 SQL 契约定义的业务参数；校验或执行失败时，报告真实错误并停止。
 
 ## flags 和 map
 

@@ -205,9 +205,9 @@ present_files("http://127.0.0.1:8088/")                                       # 
 present_files("https://my-app-w9t0lxe8.edgeone.cool?eo_token=...")            # after deploy (full URL with query params)
 
 # ❌ Wrong (IDE opens via file://, all APIs fail)
-present_files("/Users/foo/dist/index.html")
+present_files("/path/to/project/dist/index.html")
 present_files("./dist/index.html")
-present_files("file:///Users/foo/dist/index.html")
+present_files("file:///path/to/project/dist/index.html")
 
 # ❌ Wrong (truncated query params — the user gets a 401 when they open it)
 present_files("https://my-app-w9t0lxe8.edgeone.cool")                         # missing ?eo_token=...

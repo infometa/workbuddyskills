@@ -1,7 +1,7 @@
 ---
 name: cloud-functions
 description: CloudBase function runtime guide for building, deploying, and debugging your own Event Functions or HTTP Functions. This skill should be used when users need application runtime code on CloudBase, not when they are merely calling CloudBase official platform APIs.
-version: 2.26.0
+version: 2.34.8
 alwaysApply: false
 ---
 
@@ -14,6 +14,7 @@ If a referenced sibling skill file is missing from this environment, ask the use
 **Cross-cutting protocols** (required before code changes or deployments):
 - Change Safety Protocol: `../cloudbase-platform/references/protocols/change-safety-protocol.md`
 - Deployment Gate: `../cloudbase-platform/references/protocols/deployment-gate.md`
+- Sensitive Runtime Data Protection: `../cloudbase-platform/references/protocols/sensitive-runtime-data-protection.md`
 
 # Cloud Functions Development
 
@@ -39,7 +40,7 @@ If a referenced sibling skill file is missing from this environment, ask the use
 
 - Detailed reference routing -> `./references.md`
 - Auth setup or provider-related backend work -> `../auth-tool-cloudbase/SKILL.md`
-- CloudBase Integration Center generated WeChat Pay or Official Account functions -> `../cloudbase-wechat-integration/SKILL.md` (official docs: `https://docs.cloudbase.net/integration/introduce/index.md`)
+- CloudBase Integration Center generated WeChat Pay or Official Account functions -> `../cloudbase-wechat-integration/SKILL.md` (official docs: `https://docs.cloudbase.net/integration/introduce.md`)
 - AI in functions -> `../ai-model-nodejs/SKILL.md`
 - Long-lived container services or Agent runtimes -> `../cloudrun-development/SKILL.md`
 - Calling CloudBase official platform APIs from a client or script -> `../http-api-cloudbase/SKILL.md`
@@ -70,7 +71,9 @@ If a referenced sibling skill file is missing from this environment, ask the use
 - Assuming MCP covers the whole image pipeline. `manageFunctions` covers SCF image deploy (Stage B) via `runtime: "CustomImage"` + `imageConfig`, but the CloudApp custom build → TCR push (Stage A) is a raw Tencent Cloud API path — confirm action names and parameters from official docs before any `callCloudApi` fallback.
 - Making code or configuration changes without first following the Change Safety Protocol (`cloudbase-platform/references/protocols/change-safety-protocol.md`).
 - Exposing functions publicly or deploying without first completing the checks in `cloudbase-platform/references/protocols/deployment-gate.md`.
-- **Defaulting new CRUD to TCP DB clients** (`DATABASE_URL` / `mysql2` / `pg` / Redis) instead of native `app.rdb()` / `app.database()` or MCP SQL. TCP is exception-only for existing ORM migrations — see `references/vpc-and-tcp-database.md` only then.
+- **Returning `req.headers`, `process.env`, `event`, or `context` wholesale** — gateways may inject `x-cloudbase-context` (base64 temporary credentials). Never echo that header or dump credential env vars to clients. Follow `../cloudbase-platform/references/protocols/sensitive-runtime-data-protection.md`.
+- **Using a bare layer name (e.g. `common`) across environments.** SCF LayerName is an account-scoped shared namespace: same name → shared version sequence. Create new layers with fixed format `{layerName}_{当前envId}` (e.g. `common_cloud1-d9ghadgak3edf6b36`). Pass the full name as `layerName` — do not invent automatic suffixes. Treat MCP layer `warnings` as soft advisories (operation still succeeds). Details: `./references/operations-and-config.md`.
+- **Long-running MCP image deployments must complete the full workflow**: When using `manageFunctions` with `deployFunction` for a real `cloud` or `local` deployment, prefer `wait=false` to avoid blocking a single Tool Call for an extended period. If the tool returns a `taskId`, do not end the workflow, report success, or ask the user to wait while the status is `running`. Automatically call `queryFunctions(action="getFunctionDeployStatus", taskId="...")` and continue polling according to the reported progress until the status becomes `succeeded` or `failed`. Only after reaching a reasonable polling limit may you report that the deployment is still in progress; include the `taskId`, current stage, and latest progress. On success, report the image URI or build ID, function status, and Gateway URL. On failure, report the failed stage, error code, request ID, and diagnostic guidance. If the status is `expired`, explain that the local task record exceeded its retention window; the cloud deployment may still be running, so call `getFunctionDetail` to confirm the actual cloud-side status instead of treating it as a failure.
 
 ### Minimal checklist
 
@@ -78,12 +81,48 @@ If a referenced sibling skill file is missing from this environment, ask the use
 - Decide whether the task is Event Function, HTTP Function, or actually CloudRun.
 - Pick the detailed reference file in [references.md](references.md) before writing implementation code.
 
-## Overview
+## MCP image deployment with polling
 
-Use this skill when developing, deploying, and operating CloudBase cloud functions. CloudBase has two different programming models:
+For real `cloud` or `local` custom-image deployments, prefer:
 
-- **Event Functions**: serverless handlers driven by SDK calls, timers, and other events.
-- **HTTP Functions**: standard web services for HTTP endpoints, SSE, or WebSocket workloads. By default they run on a managed runtime (`scf_bootstrap` + zip); when they need custom system libraries or an arbitrary runtime they can instead run from a container image (`Runtime: CustomImage`, deployed from TCR — see `./references/http-functions-custom-image.md`).
+```json
+{
+  "action": "deployFunction",
+  "dryRun": false,
+  "confirm": true,
+  "wait": false,
+  "deployConfig": {}
+}
+```
+
+The `wait` field controls whether the current MCP Tool call waits for the complete deployment:
+
+- `wait=true`: wait for the manager deployment to reach a terminal result and return it.
+- `wait=false`: return a `taskId` promptly while the deployment continues in the MCP background.
+
+When `wait=false` returns a `taskId`, the deployment workflow is not complete. Automatically call `queryFunctions` with `action="getFunctionDeployStatus"` and that `taskId`; continue while the status is `running`, then stop only at `succeeded` or `failed`. Wait about 5 seconds before the first follow-up query and use the returned progress/`nextActions` to continue without aggressive polling. Do not tell the user to ask again or imply success before a terminal status is returned. An `expired` status means the task exceeded the maximum retention window and was force-terminated locally — the cloud deployment may still be in progress, so confirm the real state with `getFunctionDetail` instead of reporting failure.
+
+If a reasonable polling limit is reached, report only that the task is still running, including the `taskId`, current status, current stage, and latest progress. For a terminal result, report the deployment strategy, action, image URI/digest, build ID, function status, Gateway URL, or the failed stage, error code, request ID, and diagnostic next step.
+
+### Personal-tier TCR credentials — never put the password in tool arguments
+
+Personal-tier image builds (`imageConfig.imageType="personal"` with `local` / `cloud`) need a TCR push credential. Read it from the MCP process environment, not from tool arguments:
+
+- Leave `func.imageConfig.build.registryCredential` **out of the request** when `TCB_TCR_USERNAME` and `TCB_TCR_PASSWORD` are set in the MCP server `env` block — the MCP fills them in automatically, the same way `TENCENTCLOUD_SECRETID` works.
+- **Never ask the user to paste the password into chat, and never write it into tool arguments.** Anything placed in arguments enters the model context and the tool-call history.
+- If deployment fails with `CLOUD_REGISTRY_CREDENTIAL_MISSING` or `CLOUD_REGISTRY_CREDENTIAL_INVALID`, instruct the user to add these two variables to the `env` block of their MCP configuration and restart the MCP server. Do not work around it by passing the credential inline.
+- The username is the Tencent Cloud account UIN and is not itself a secret; it may be passed explicitly if needed. Explicit arguments take precedence per field, so username-in-argument plus password-from-environment is a valid combination.
+
+**Know when that environment channel does not exist.** It works only for a local stdio MCP server whose client configuration exposes a custom `env` block. Some GUI clients do not inherit shell exports, and IDE-embedded MCP servers usually inject credentials from a hard-coded allowlist (often only `TENCENTCLOUD_*`), leaving the user no way to set arbitrary variables. Telling those users to "set it in the MCP `env` block" is an instruction they cannot act on. Route them to an enterprise registry (`imageType="enterprise"`, which mints a short-lived TCR token instead of using a fixed password) or to `buildStrategy="image"` with an already-pushed image.
+
+### Enterprise-tier builds require a login state with CAM permission
+
+`cloud` / `local` builds against an enterprise registry mint a TCR token through CAM (as does `autoGrant`). Environment-level API Keys and OAuth-issued STS credentials carry no CAM policy, so those calls fail with `UnauthorizedOperation`. The MCP probes the login state before starting a real enterprise build and refuses up front rather than failing midway; treat that error as a routing signal, not a retryable fault:
+
+- Sign in with an account-level `TENCENTCLOUD_SECRETID` / `TENCENTCLOUD_SECRETKEY` pair, **or**
+- Switch to `buildStrategy="image"` and deploy an image that was pushed elsewhere, **or**
+- Use a personal-tier registry — its static password goes straight to `docker login` without touching CAM, which makes it the one build path that does work for API Key users.
+
 
 ## Writing mode at a glance
 
@@ -91,6 +130,7 @@ Use this skill when developing, deploying, and operating CloudBase cloud functio
 - If the request is for REST APIs, browser-facing endpoints, SSE, or WebSocket, write an **HTTP Function** with `req` / `res` on port `9000`.
 - For Node.js HTTP Functions, default to the native `http` module unless the user explicitly asks for Express, Koa, NestJS, or another framework.
 - If the HTTP Function needs custom system libraries or an arbitrary runtime but should still be SCF request-driven and scale to zero, deploy it as a **Custom Image HTTP Function** (`Runtime: CustomImage`) from a TCR image. The container still listens on the fixed port `9000`. See `./references/http-functions-custom-image.md`. This is distinct from a CloudRun container, which listens on the injected `PORT` and runs long-lived.
+- **有 Dockerfile 的 HTTP 无状态服务可优先考虑 HTTP 云函数，不必上云托管** — a Dockerfile alone does not mean CloudRun. If the service is stateless, request-driven HTTP without long connections / custom runtime / VPC database access, prefer an HTTP Function (or Custom Image HTTP Function) — faster to deploy, cheaper, and no CloudRun environment initialization needed. Route to CloudRun (`../cloudrun-development/SKILL.md`) only for WebSocket/SSE long connections, stable independent processes, custom system dependencies, or VPC DB access.
 - If the user mentions HTTP access for an existing Event Function, keep the Event Function code shape and add gateway access separately.
 
 ## HTTP Function authoring contract
@@ -114,6 +154,7 @@ Use these rules whenever you are writing the function code itself:
 - Keep gateway setup and security-rule changes separate from the runtime code. They affect access, not the HTTP Function programming model.
 - Do not add HTTP access service configuration when the task is only to create an HTTP Function itself. Gateway paths or custom domains are separate access-layer work; public invocation requirements should be handled through the function security rule workflow (note: anonymous login is disabled by default).
 - If the HTTP Function calls CloudBase through `@cloudbase/node-sdk` or `@cloudbase/manager-node`, complete the explicit credential gate in `./references/http-function-credentials.md` before deployment. Never hardcode credentials in the function package.
+- **Never echo sensitive runtime data.** Do not return `req.headers`, `process.env`, or `x-cloudbase-context` in responses. Debug endpoints must use an explicit non-sensitive allowlist. See `../cloudbase-platform/references/protocols/sensitive-runtime-data-protection.md`.
 
 ## Quick decision table
 
@@ -123,6 +164,7 @@ Use these rules whenever you are writing the function code itself:
 | Needs browser-facing HTTP endpoint? | HTTP Function |
 | Needs SSE or WebSocket service? | HTTP Function |
 | Needs custom system libraries / arbitrary runtime, but still SCF request-driven + scale-to-zero? | HTTP Function with `Runtime: CustomImage` (deploy from a TCR image) |
+| Has a Dockerfile but is a stateless HTTP service (no long connections / custom runtime / VPC DB)? | HTTP Function (or Custom Image HTTP Function) — **not** CloudRun |
 | Needs long-lived container runtime or custom system environment? | CloudRun |
 | Only needs HTTP access for an existing Event Function? | Event Function + gateway access |
 
@@ -162,7 +204,7 @@ Use these rules whenever you are writing the function code itself:
    - HTTP Function details -> `./references/http-functions.md`
    - HTTP Function CloudBase SDK credentials -> `./references/http-function-credentials.md`
    - HTTP Function from a container image (`Runtime: CustomImage`, TCR image pipeline) -> `./references/http-functions-custom-image.md`
-   - Logs, gateway, env vars, and legacy mappings -> `./references/operations-and-config.md`
+   - Logs, gateway, env vars, layers (`{layerName}_{当前envId}`), and legacy mappings -> `./references/operations-and-config.md`
 
 ## Database write reminder
 
@@ -189,10 +231,11 @@ Use these rules whenever you are writing the function code itself:
 
 ```js
 exports.main = async (event, context) => {
+  // Do not return event/context/process.env — they may contain platform secrets.
+  const name = typeof event?.name === "string" ? event.name : "world";
   return {
     ok: true,
-    message: "hello from event function",
-    event,
+    message: `hello ${name} from event function`,
   };
 };
 ```
@@ -295,6 +338,17 @@ The `scf_bootstrap` binary path must match the runtime — see the full mapping 
 - `manageFunctions(action="createFunction")`
 - `manageFunctions(action="updateFunctionCode")`
 - `manageFunctions(action="updateFunctionConfig")`
+
+### Layers (SCF Layer)
+
+Layers are **account-scoped**, not env-scoped. Align with MCP `manageFunctions` / `queryFunctions` layer guidance:
+
+- **Naming (required for new layers):** `{layerName}_{当前envId}` — example `common_cloud1-d9ghadgak3edf6b36`. Do not reuse a bare name like `common` in another env.
+- **Create:** `manageFunctions(action="createLayerVersion", layerName="…_{envId}", …)` after `queryFunctions(action="listLayers")` to check duplicates. MCP may return a soft `warnings` entry if the name lacks the current `envId`; it does **not** rewrite the name.
+- **Read:** `queryFunctions(action="listLayers"|"listLayerVersions"|"getLayerVersionDetail"|"listFunctionLayers")` — list results are an account-level view and may include layers created in other envs.
+- **Bind / unbind / replace:** `manageFunctions(action="attachLayer"|"detachLayer"|"updateFunctionLayers")`
+- **Delete version:** `manageFunctions(action="deleteLayerVersion")` — deleting a version can affect every env that binds that version.
+- Full contract and warning semantics → `./references/operations-and-config.md`
 
 ### Logs
 

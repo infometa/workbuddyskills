@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/claim-graph.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "claims", "edges"],
+  "properties": {
+    "schemaVersion": { "const": "1.1.0" },
+    "claims": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["id", "text", "status", "chapterRefs"], "properties": { "id": { "type": "string", "minLength": 1 }, "text": { "type": "string" }, "status": { "enum": ["supported", "unverified", "contradicted", "working_assumption"] }, "chapterRefs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } } } },
+    "edges": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["claimId", "sourceId", "relation"], "properties": { "claimId": { "type": "string" }, "sourceId": { "type": "string" }, "relation": { "enum": ["supported_by", "contradicted_by", "derived_from"] } } } }
+  }
+}

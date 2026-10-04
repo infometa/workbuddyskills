@@ -3,7 +3,8 @@ name: pdf-toolbox
 description: "PDF 文档的创建、内容读取、页数查询与页面提取操作。可浏览目录定位 PDF 文件。 当用户提到「PDF」、「读取 PDF」、「PDF 页数」、「提取 PDF 页面」、「PDF 拆分」时使用。 若需要操作其他文档类型，请使用 kdocs 或对应类型技能。
 "
 homepage: 
-version: 1.5.7
+version: 2.6.4
+metadata: {"openclaw":{"category":"kdocs","emoji":"📑"}}
 ---
 
 # PDF 工具箱
@@ -11,6 +12,12 @@ version: 1.5.7
 PDF 工具箱提供 PDF 文档的全面操作能力。
 
 > 本技能依赖 `kdocs` 技能的基础文档操作能力（认证、文件管理等），请确保已安装该技能。详见 `references/core/` 目录。
+
+## 严格规则
+
+### 禁止（NEVER）
+
+- 权限不足时禁止重试或绕过，立即告知用户无权限
 
 ---
 
@@ -21,10 +28,11 @@ PDF 工具箱提供 PDF 文档的全面操作能力。
 #### 文档创建与上传
 | 工具 | 用途 |
 |------|------|
-| [`create_file`](references/drive/create_and_upload.md) | 在云盘下新建文件 |
-| [`scrape_url`](references/drive/create_and_upload.md) | 网页剪藏，抓取网页内容并自动保存为智能文档 |
+| [`create_empty_file`](references/drive/create_and_upload.md) | 新建空白在线文档 |
 | [`scrape_progress`](references/drive/create_and_upload.md) | 查询网页剪藏任务进度 |
-| [`upload_file`](references/drive/create_and_upload.md) | 全量上传写入文件（更新已有 docx/pdf 或新建并上传本地文件） |
+| [`scrape_url`](references/drive/create_and_upload.md) | 网页剪藏，抓取网页内容并自动保存为智能文档 |
+| [`upload_new_file`](references/drive/create_and_upload.md) | 上传本地文件新建云文档 |
+| [`upload_replace_file`](references/drive/create_and_upload.md) | 通过上传本地文件全量覆盖已有云文档 |
 
 #### 文档读取与下载
 | 工具 | 用途 |
@@ -51,7 +59,7 @@ PDF 工具箱提供 PDF 文档的全面操作能力。
 #### 搜索
 | 工具 | 用途 |
 |------|------|
-| [`search_files`](references/drive/search.md) | 文件（夹）搜索 |
+| [`search_files`](references/drive/search.md) | 按关键词搜索云文档（文件/文件夹） |
 
 #### 页面查询
 | 工具 | 用途 |
@@ -95,7 +103,7 @@ PDF 工具箱提供 PDF 文档的全面操作能力。
 | 意图 | 路由 |
 |------|------|
 | 读取文档内容 | `read_file`（统一入口，按后缀自动返回 Markdown 或结构化数据） |
-| 创建/写入 | `create_file_with_content`（统一入口，新建文档并写入内容，返回 link_url） |
+| 创建/写入 | 新建并写入、上传本地文件、新建空白文档 → **见下方「创建/写入」** |
 | 局部更新 | 改块/改段/改单元格，已有目标文档上的修改 → 按「支持的文档类型」→ 对应 reference |
 | 类型专属能力 | 条件格式、导出转换、翻译、PDF 拆分、幻灯片主题、数据校验 | 按「支持的文档类型」→ 对应 reference 中的专属功能章节 |
 | 获取文件标识指南 | **必读** `references/file-locating-guide.md` |
@@ -150,15 +158,24 @@ PDF 工具箱提供 PDF 文档的全面操作能力。
 4. 任务需中止时调用 `pdf.cancel_translate(file_id=...)`
 
 **创建/上传 PDF**：
-- `upload_file(drive_id=..., parent_id=..., name="xxx.pdf", content_base64=...)` 直接上传
-- 更新已有 PDF：`upload_file(file_id=..., content_base64=...)` 全量覆盖
+- `upload_new_file(name="xxx.pdf", content_base64=...)` 直接上传
+- 更新已有 PDF：`upload_replace_file(file_id=..., content_base64=...)` 全量覆盖
 
 ---
 ## 风险控制
 
 以下工具不可逆，调用前必须向用户确认（详细约束见各工具参考文档的「操作约束」区）：
 
-`cancel_share`
+`cancel_share`、`cancel_collaborator_permissions`
+
+---
+
+
+## 错误速查
+
+| 错误特征 | 原因 | 处理方式 |
+|----------|------|----------|
+| `403` / 权限不足 / `无权访问` / `forbidden` | 当前凭据对目标文档、目录或资源无操作权限 | 停止操作，禁止重试或尝试其他接口绕过；告知用户当前账号无权限，并建议联系文档所有者开通权限、确认分享链接权限，或切换到有权限的账号 |
 
 ---
 

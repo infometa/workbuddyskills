@@ -1,53 +1,116 @@
 # AI-HIVE 错误代码字典（references/error-catalog.md）
 
-适用版本：AI-HIVE Connector 1.0.0 / `@infimind-next/ai-hive-mcp@0.2.1`
-更新日期：2026-07-31
+适用版本：AI-HIVE Connector 1.1.4 / `@infimind-next/ai-hive-mcp`（不锁版本，npx 运行时自动拉取最新）
+更新日期：2026-08-21
 
-## 错误响应通用结构
+## AI-HIVE 官方资源
 
-服务端工具失败时，会返回安全展示的 `errorCode` 与 `errorCategory`。Skill 不应回显原始堆栈、上游响应或内部凭证。
+- 官方网站：https://ai-hive.iclip.cn
+- 用户注册：直接访问 https://ai-hive.iclip.cn/login，进入注册页面后使用手机号注册
+- 充值中心：登录后 → 「账户中心」/「钱包」/「充值」
+- 价格参考：https://ai-hive.iclip.cn/pricing
+- 帮助文档：https://ai-hive.iclip.cn/docs
+- 客服：登录后 → 「设置」→「联系客服」
+
+## 错误与失败响应结构
+
+MCP 同步请求失败时，客户端会抛出服务端返回的可读 `message`。不要假设一定存在额外的错误分类或布尔重试字段。
+
+图片或视频任务进入 `FAILED` 后，`get_generation_task` 返回的失败条目可能包含：
 
 ```json
 {
-  "errorCode": "INSUFFICIENT_BALANCE",
-  "errorCategory": "billing",
-  "retryable": false,
-  "message": "账户余额不足，请充值后重试"
+  "status": "FAILED",
+  "errorMessage": "面向用户的失败摘要",
+  "failure": {
+    "code": "GEN_...",
+    "summary": "面向用户的失败摘要",
+    "suggestion": "可执行的下一步"
+  }
 }
 ```
 
-## 错误类别
+只向用户展示 `failure.code`、`failure.summary`、`failure.suggestion` 与工具明确返回的普通消息；不回显内部堆栈、上游原文、请求 ID、供应商密钥或诊断详情。
 
-| Category | 含义 | 是否 retry |
+## 任务状态
+
+| 状态 | 含义 | 处理 |
 |---|---|---|
-| `billing` | 余额不足、额度耗尽 | ❌（等待用户充值后由用户重试）|
-| `auth` | 凭证失效/撤销/过期 | ❌（需用户重新连接 Connector） |
-| `model` | 模型不存在或暂时下线 | ❌（建议用户切换模型） |
-| `validation` | 参数缺失/格式错误 | ❌（需向用户询问补齐） |
-| `upstream` | 上游模型/媒体服务商失败 | 部分 ✅（仅当 `retryable: true`） |
-| `timeout` | 请求超时或网络不明 | ✅（建议用户稍后重试） |
-| `internal` | 服务端内部异常 | ❌（建议用户重试或换时间） |
+| `PENDING` | 已创建，等待提交 | 查询同一 `taskId`，不要重复生成 |
+| `SUBMITTED` | 已提交上游 | 继续查询同一任务 |
+| `PROCESSING` | 正在生成 | 可报告真实进度；没有数字时不估算 |
+| `COMPLETED` | 已完成 | 返回所有可用结果与服务端明确给出的部分失败信息 |
+| `FAILED` | 已失败 | 展示安全失败字段并按建议处理 |
 
-## 常见错误码
+## 常见问题与下一步
 
-| `errorCode` | Category | 含义 | 推荐下一步 |
-|---|---|---|---|
-| `INSUFFICIENT_BALANCE` | billing | 余额不足或额度耗尽 | 提示用户在 AI-HIVE 完成充值后再试 |
-| `MODEL_UNAVAILABLE` | model | 模型不存在或暂时下线 | 提示切换到 `list_models` 中其他可用模型 |
-| `MODEL_DEPRECATED` | model | 模型已被废弃 | 提示切换到推荐模型替代 |
-| `TASK_NOT_FOUND` | validation | `taskId` 不属于当前用户或已被清理 | 重新调用 `generate_*` 拿新 `taskId` |
-| `TASK_PENDING` | validation | 任务尚未到达查询节奏 | 继续用同一 `taskId` 查询，避免重复创建 |
-| `UNAUTHORIZED` | auth | access token 失效或撤销 | 提示用户重新连接 AI-HIVE Connector |
-| `TOKEN_EXPIRED` | auth | access token 过期已自动刷新失败 | 提示用户重新连接 AI-HIVE Connector |
-| `UPLOAD_PATH_NOT_ALLOWED` | validation | `upload_media_from_path` 路径不可访问 | 请用户在对话中重新选择文件 |
-| `MEDIA_TYPE_MISMATCH` | validation | 上传媒体类型与请求不符 | 请用户提供正确类型的文件 |
-| `PROMPT_TOO_LONG` | validation | `prompt` 超过服务端限额 | 请用户拆分或精简提示词 |
-| `RATE_LIMITED` | upstream | 触发限流 | 建议稍后重试或降低并发 |
-| `UPSTREAM_TIMEOUT` | timeout | 上游响应超时 | 稍后重试；如持续失败建议用户换时间 |
-| `UPSTREAM_FAILED` | upstream | 上游模型/媒体异常 | 若 `retryable: true` 可重试，否则建议用户换时间或切换模型 |
+| 现象 | 推荐下一步 |
+|---|---|
+| 消息提示余额不足 | 停止创建任务，引导用户充值后由用户决定是否重试 |
+| 消息提示未授权、凭证失效或 401 | 在 WorkBuddy 中重新连接 AI-HIVE；不要要求用户粘贴 Token |
+| 模型未出现在 `list_models` | 说明当前不可用，询问是否改用返回列表中的其他模型 |
+| 参数校验失败 | 重新读取该模型当前配置，修正 `params` 的键、类型和值 |
+| 文件不存在、不可读、格式不支持或超限 | 请用户重新选择、转换或压缩文件 |
+| 音频超过 15MiB | 裁剪或压缩音频后重新上传；不要绕过客户端大小校验 |
+| 音频上传成功但模型拒绝 | 检查当前模型是否支持参考音频及该图片/视频/音频组合；不支持时保持 `audioMediaIds=[]` |
+| Seedance 2.0 仅提供参考音频 | 补充该模型当前配置要求的参考图片或视频；不要把参考音频作为唯一参考输入 |
+| 上游失败或超时 | 说明结果未确认；先查询已有任务，避免重复创建计费任务 |
+| 任务不存在 | 检查是否使用了当前用户生成工具真实返回的 `taskId` |
+
+## 账户与费用问题完整处理
+
+### 充值路径（账户已存在）
+
+1. 访问 https://ai-hive.iclip.cn → 登录 AI-HIVE 账户
+2. 进入「账户中心」/「钱包」/「充值」页面
+3. 选择充值套餐或自定义金额 → 完成支付
+4. 充值成功后回到 WorkBuddy，无需重新连接 Connector，直接重试任务
+
+### 注册路径（首次用户）
+
+1. 直接访问 https://ai-hive.iclip.cn/login，进入注册页面
+2. 使用手机号完成注册
+3. 登录 → 回到 WorkBuddy 重新连接 AI-HIVE Connector 即可
+
+### 价格透明机制
+
+- 每次调用前可调 `get_user_info` 查看当前余额
+- 调用后实际扣费以服务端 `pricingSnapshot` 为准
+- 若工具明确提示余额不足，应停止任务创建；不要假设固定错误码一定存在
+- 详细价格参考：https://ai-hive.iclip.cn/pricing
+
+### 常见扣费场景参考（具体以服务端为准）
+
+- 文本生成：按 token 数计费
+- 图片生成：按张数 + 分辨率计费
+- 视频生成：按秒数 + 分辨率计费
+
+### 其他账户类问题
+
+| 现象 | 可能原因 | 处理 |
+|---|---|---|
+| 任务被拒（非余额不足）| 账户被风控 | 联系 AI-HIVE 客服：https://ai-hive.iclip.cn → 登录 → 设置 → 联系客服 |
+| 任务被拒（非余额不足）| 模型临时不可用 | 稍后重试或换其他模型 |
+| 任务被拒（非余额不足）| 内容违规审核 | 调整 prompt 后重试（避免敏感内容）|
+| 扣费后任务失败 | 服务端异常 | 查询账单确认实际处理；如有争议联系 AI-HIVE 客服，不承诺自动退款 |
+
+### Skill 中处理余额不足的标准步骤
+
+1. **识别错误信息**：工具消息明确表示余额不足时不要重试
+2. **不要继续调用**：避免更多无意义的扣费尝试
+3. **告诉用户准确原因**：「AI-HIVE 账户余额不足，已停止创建任务」
+4. **给出具体解决路径**：
+   - 「请到 https://ai-hive.iclip.cn 充值」
+   - 「首次使用请先到 https://ai-hive.iclip.cn 注册」
+   - 「如对扣费有疑问，可在 AI-HIVE → 账户中心 → 账单查看明细」
+5. **提供后续选项**：
+   - 用户充值完成后 → 重新发起任务
+   - 用户选择不充值 → 提供文字/对话方式帮助（如不依赖 AI 生成）
+   - 用户希望了解价格 → 提供价格参考 URL
 
 ## 通用展示建议
 
-- 对用户**只展示** `errorCode`、**通用可读描述**与**明确下一步**。
+- 对用户只展示工具明确返回的普通 `message`，或任务失败条目的 `failure.code`、`failure.summary`、`failure.suggestion`，并给出明确下一步。
 - 不要展示：内部异常堆栈、远端完整响应、敏感凭证、原始 SQL/查询。
 - 鉴权类错误出现时，**优先**引导用户撤销失效 Token 或重建 Connector 连接，而不是反复重试扣费调用。
+- 余额类错误出现时，**必须停止任务创建**，只给用户充值/注册路径，不要默默重试。

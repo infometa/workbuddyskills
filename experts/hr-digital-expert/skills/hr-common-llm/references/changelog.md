@@ -7,6 +7,22 @@
 
 ---
 
+## [1.2.0] - 2026-08-19
+
+### 新增
+
+- **新增后端接口支持**：新增 `http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions`（ESB 网关），用于服务端（Java/Node.js/Python/Go 等）调用 LLM 代理服务
+  - 请求参数、请求体结构、响应结构与前端接口完全一致
+  - 服务端直连 ESB 网关，无需鉴权，无需 Authorization
+  - 新增代码模板：Node.js（axios/fetch，非流式与流式）、Python（requests，非流式与流式）、Java（HttpClient，非流式）、Go（net/http，非流式）
+
+### 变更
+
+- `SKILL.md` 基本信息表拆分为「前端接口」「后端接口」两列，明确两个地址各自的适用环境与不可混用规则
+- 更新 frontmatter `description`，同时覆盖前端与后端触发场景
+- 代码生成工作流新增「确定运行环境」步骤，用于选择正确的请求地址
+- `references/code_templates.md` 新增「接口常量」中的后端地址说明及第 9~12 节后端代码模板
+
 ## [1.1.0] - 2026-05-25
 
 ### 变更
@@ -14,7 +30,7 @@
 - **可用模型调整**：
   - 移除 `HY-2.0-instruct-20251111`（非思考模型）
   - 移除 `HY-2.0-thinking-20251109`（思考模型）
-  - 新增 `HY-3-Preview`（非思考模型），作为统一可用模型
+  - 新增 `HY-3`（非思考模型），作为统一可用模型
 - 同步更新 `SKILL.md` 中可用模型说明、代码生成工作流的模型选择规则、注意事项与示例代码
 - 同步更新 `references/code_templates.md` 中所有代码模板的默认模型与 TypeScript 类型定义
 - 移除「简单工具函数」章节中基于思考模型的 `think()` 工具函数

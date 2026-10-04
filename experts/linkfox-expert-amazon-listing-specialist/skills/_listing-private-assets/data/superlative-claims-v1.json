@@ -1,0 +1,87 @@
+{
+  "library": "superlative-claims-v1",
+  "version": "2026.08.28",
+  "locale": "en",
+  "severity_policy": "block = 平台明文禁止出现在 Listing 文案中的表述，属实与否都不许写；review = 属实且有证据即可保留，需人工确认证据。",
+  "escalation": "规则可带 escalate_in 字段列出需要提级为 block 的字段名——亚马逊对标题的主观宣称限制严于正文。",
+  "excludes": "受限品类词（大麻/枪械/尼古丁/成人/处方药/杀菌宣称）与 fda approved、cure、treat disease、diagnose 由 listing-core/scripts/restricted-content-v1.json 覆盖，本库不重复收录。",
+  "profiles": {
+    "block": [
+      {
+        "category": "ranking_claim",
+        "reason": "亚马逊禁止在 Listing 文案中宣称排名、畅销或平台标识，属实也不允许",
+        "replacement": "删除排名宣称，改为可验证的产品事实（具体规格、认证、使用场景）",
+        "terms": ["best seller", "bestseller", "best-seller", "best selling", "#1", "number one", "number 1", "no 1", "top seller", "top selling", "top rated", "highest rated", "amazon's choice", "amazons choice", "rated #1", "voted #1"]
+      },
+      {
+        "category": "promotional_claim",
+        "reason": "亚马逊禁止在 Listing 文案中出现价格、促销、发货优惠等交易性宣称",
+        "replacement": "删除促销与价格表述，价格与配送信息由平台字段承载",
+        "terms": ["free shipping", "free delivery", "free gift", "best price", "lowest price", "cheapest", "on sale", "sale price", "special offer", "limited time", "limited time offer", "buy now", "order now", "act now", "while supplies last", "clearance", "flash sale", "today only", "discount code", "coupon code"]
+      },
+      {
+        "category": "absolute_safety_claim",
+        "reason": "绝对安全宣称无法证实，属高风险表达，平台与广告法均可能判违规",
+        "replacement": "改为可证实的具体表述，如通过的检测标准、材质与适用年龄",
+        "terms": ["100% safe", "100 percent safe", "completely safe", "totally safe", "absolutely safe", "perfectly safe", "harmless", "zero risk", "risk free", "no risk", "no side effects"]
+      },
+      {
+        "category": "prohibited_health_outcome",
+        "reason": "指向治愈、预防疾病或逆转衰老的结果性宣称，属未经批准的药械宣称",
+        "replacement": "删除疾病与治愈表述，只描述产品本身的物理特性和使用方式",
+        "terms": ["cures cancer", "prevents cancer", "treats cancer", "cures disease", "prevents disease", "cure illness", "cures illness", "miracle cure", "guaranteed cure", "reverses aging"]
+      }
+    ],
+    "review": [
+      {
+        "category": "subjective_superlative",
+        "reason": "主观最高级表述无客观依据，属极限用语；标题中出现时亚马逊明确禁止",
+        "replacement": "换成可验证的具体表述，如用「3mm 加厚不锈钢」替代「premium quality」",
+        "escalate_in": ["title", "item_highlights"],
+        "terms": ["best", "finest", "greatest", "ultimate", "perfect", "amazing", "incredible", "unbeatable", "unmatched", "unrivaled", "world class", "world's best", "premium quality", "professional grade", "superior", "flawless", "magical", "miracle", "revolutionary", "extreme", "top quality", "highest quality", "most advanced"]
+      },
+      {
+        "category": "unsubstantiated_guarantee",
+        "reason": "保证与承诺类表述需有真实可执行的保修或退款政策支撑",
+        "replacement": "写明具体保修期限与承担方；无实际政策则删除",
+        "terms": ["guaranteed", "guarantee", "money back guarantee", "satisfaction guaranteed", "100% satisfaction", "lifetime warranty", "lifetime guarantee", "forever warranty", "no questions asked"]
+      },
+      {
+        "category": "unverified_authority_claim",
+        "reason": "检测、认证、专利、专业推荐类宣称需附机构名称、证书号或专利号",
+        "replacement": "补上具体证书号／检测机构／专利号；拿不出证据则删除",
+        "terms": ["clinically proven", "medically proven", "scientifically proven", "clinically tested", "lab tested", "dermatologist tested", "dermatologist recommended", "doctor recommended", "doctor approved", "award winning", "patented", "certified", "iso certified", "ce certified", "medical grade", "pharmaceutical grade", "hospital grade"]
+      },
+      {
+        "category": "health_effect_claim",
+        "reason": "功效性宣称需证据支撑，且可能被判定为药械宣称",
+        "replacement": "改为描述产品特性而非人体功效；有临床或检测证据时附出处",
+        "terms": ["heal", "heals", "healing", "remedy", "therapeutic", "treats", "relieves", "pain relief", "anti aging", "anti-aging", "detox", "detoxify", "boosts immunity", "immune boost", "weight loss", "fat burning", "burns fat", "improves circulation", "reduces inflammation"]
+      },
+      {
+        "category": "eco_material_claim",
+        "reason": "环保、材质与无害宣称需检测报告或认证；organic、food grade 在部分站点是受管制表述",
+        "replacement": "补上认证名称与编号，或改为「符合 XX 标准」这类可核验表述",
+        "terms": ["eco friendly", "eco-friendly", "environmentally friendly", "biodegradable", "compostable", "sustainable", "all natural", "100% natural", "organic", "chemical free", "toxin free", "non toxic", "non-toxic", "nontoxic", "food grade", "bpa free", "lead free", "hypoallergenic", "odorless"]
+      },
+      {
+        "category": "absolute_durability_claim",
+        "reason": "绝对化的耐久与防护宣称无法证实；waterproof 与 water-resistant 在平台上是两个等级",
+        "replacement": "改为具体等级与条件，如「IPX4 防泼溅」「实测承重 20kg」",
+        "terms": ["never breaks", "never fails", "never rusts", "lasts forever", "last forever", "unbreakable", "indestructible", "permanent", "unlimited", "waterproof"]
+      },
+      {
+        "category": "competitor_comparison_claim",
+        "reason": "对比性宣称需可验证依据，且不得贬低第三方品牌",
+        "replacement": "删除对比表述，或改为陈述自身可验证参数",
+        "terms": ["better than", "superior to", "outperforms", "unlike other brands", "compared to other brands", "beats the competition"]
+      },
+      {
+        "category": "instant_result_claim",
+        "reason": "即时见效类宣称需实测数据支撑",
+        "replacement": "改为写明实测条件与时长，如「静置 5 分钟后降温 8°C」",
+        "terms": ["instantly", "instant results", "immediate results", "overnight results", "works instantly"]
+      }
+    ]
+  }
+}

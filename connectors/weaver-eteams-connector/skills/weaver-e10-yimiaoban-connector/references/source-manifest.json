@@ -1,0 +1,2495 @@
+{
+  "schemaVersion": 2,
+  "module": "im",
+  "skill": "weaver-e10-yimiaoban-connector",
+  "generatedAt": "2026-09-17T08:16:19.161Z",
+  "sourceSet": {
+    "aggregateSha256": "bf8188db516993ceb0aafce0b105fdb8766385d85a168fafaff8cf9e3b420731",
+    "sourceRoots": [
+      "backend/business-apis/im/weaver-e10-yimiaoban",
+      "IM/weaver-im-api",
+      "imsdk",
+      "app_release/imsdk2.0/doc"
+    ],
+    "detectionStrength": "strong",
+    "git": {
+      "repository": "weaver-interface (易秒办 skill 资料) + Weaver IM 服务端/imsdk（消息免打扰接口）",
+      "modulePaths": [
+        "backend/business-apis/im/weaver-e10-yimiaoban",
+        "IM/weaver-im-api/src/logic",
+        "imsdk/protocol/data/proto"
+      ],
+      "sharedPaths": [],
+      "baseRef": "107f603",
+      "headRef": "15fcbeb",
+      "baseCommit": "107f60354dddc9d939c029e033c7adccdb831b3a",
+      "headCommit": "15fcbeb6b6df6acb53b1a4606d6e750d87ea55c8",
+      "comparedAt": "2026-09-17T00:00:00.000Z"
+    }
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/im",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "skills/weaver-e10-yimiaoban-connector"
+    ],
+    "tests": [
+      "test/business/im-command.test.ts",
+      "test/business/im-pagination.test.ts"
+    ],
+    "docs": [
+      "docs/im.md",
+      "skill-template/domains/yimiaoban.md"
+    ]
+  },
+  "sources": [
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/README.md",
+      "role": "api-doc",
+      "size": 8350,
+      "sha256": "c3053589c07ba938f1df02df53cbaf676f3978d6d8ce75d95389badf5b9c0956"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/SKILL.md",
+      "role": "api-doc",
+      "size": 65325,
+      "sha256": "3da07c42ffbcfe3f20a0f95396ac04183ea9da46b21025012f46b5a5ea388b0c"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/catalog.md",
+      "role": "api-doc",
+      "size": 3037,
+      "sha256": "9f57bddda0661a8339f9df550330cb88fb65b04c88c3a2dbcc7a050d9900230f"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/error-codes.md",
+      "role": "api-doc",
+      "size": 4302,
+      "sha256": "dc6dd50385f9f7396e7da8e1442e22617db2dc8987cb34dcf27850b18257ec94"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/field-resolution.md",
+      "role": "api-doc",
+      "size": 2517,
+      "sha256": "2a4cdd1112a9e795684a666c1b9e18f60c1138f1e6bda3f4ca2f519a4c3f0173"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-checkGroupExist.md",
+      "role": "api-doc",
+      "size": 1158,
+      "sha256": "003199e538cd52ab0ce50ca811738099400b219d5affc8a62714c32b500655c2"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-checkGroupUserExist.md",
+      "role": "api-doc",
+      "size": 1595,
+      "sha256": "1cba65c5d93fd290d0bc28eb79a11546c2c2121495c0be96fcd4d78b1ea51c5b"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-destroyGroup.md",
+      "role": "api-doc",
+      "size": 1146,
+      "sha256": "a06bb2753f7db9994a792a5e6f14d460e1a415873932eda7a4d41c63b7c69611"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-exitGroup.md",
+      "role": "api-doc",
+      "size": 1206,
+      "sha256": "f32f2729f15210586a43cd64a3df0d1ce9db6586eca6b16508c61e8c98a0a1d0"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-file-upload.md",
+      "role": "api-doc",
+      "size": 5163,
+      "sha256": "8127b57a480f9dc74fa85438611c9b96a33f5acf2bea2867c9abac9d0d0f3a02"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-getGroupAdminBatch.md",
+      "role": "api-doc",
+      "size": 1334,
+      "sha256": "372b3498947ade92604ae148b740a9b0de0f19d402411ae982c576963ff20e91"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-getGroupAnnounce.md",
+      "role": "api-doc",
+      "size": 1635,
+      "sha256": "49e281278eab8900d30074f02092971469045617eceb5ecd12804b6f7fca94e1"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-getGroupAnnounceList.md",
+      "role": "api-doc",
+      "size": 1708,
+      "sha256": "3f199388b01770c47cecb576ca9c1a311b176ed06ed772e5a794fd0d6266f8c5"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-getGroupMsgReadStatus.md",
+      "role": "api-doc",
+      "size": 2180,
+      "sha256": "8c82c594fcd596a7454db543ef883fc41b2bfd089783fba2179a1bdb2cc123ea"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-getGroupUsers.md",
+      "role": "api-doc",
+      "size": 3113,
+      "sha256": "c1b5751a6a0ba25f15c19ac68be1203f36e4d184759b9ddee80d554e89c78047"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-getSessionContext.md",
+      "role": "api-doc",
+      "size": 11033,
+      "sha256": "0753c8fbf4278b0703e103fd885ed0c56091b69c5257f25a6b2a42137fbc3b69"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-getSingleMsgReadStatus.md",
+      "role": "api-doc",
+      "size": 1902,
+      "sha256": "bdc04cdf2bf588378a7685cb5d414233858401bff7c0a4cf7cd39aee8116d6de"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-group-onoff-bits.md",
+      "role": "api-doc",
+      "size": 4308,
+      "sha256": "fbf13d3f612c3102df61bbf2739c932875cb87091b878471d861034250336fc0"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-groupCreate.md",
+      "role": "api-doc",
+      "size": 3378,
+      "sha256": "5bf93616b3c11e991c4d056b8983da4223f2d85ff03bd5f15cbd977c271ce770"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-i18nLabel.md",
+      "role": "api-doc",
+      "size": 4295,
+      "sha256": "96db3e089cb905f77b44633ed05273d4ece1ca18e71beeedfa3927fc15815ed6"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-img-preview.md",
+      "role": "api-doc",
+      "size": 7358,
+      "sha256": "6135843b0e260d55a6c41e300555c1bcf3d81b8713af1ffa93668cc5ed24581c"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-inviteGroupUsers.md",
+      "role": "api-doc",
+      "size": 1564,
+      "sha256": "3e1731415117abe4591a85093ec3d93acf58d76a046915e399cfae18f50d07f5"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-joinGroup.md",
+      "role": "api-doc",
+      "size": 3436,
+      "sha256": "0be0c7bb7e8abc4db49e7e20d44219d4a94d718208b1313e0d262a9286368abb"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-kickGroupUsers.md",
+      "role": "api-doc",
+      "size": 1469,
+      "sha256": "0f0ef8da2e350ec3f38a60dd95920378481a3157a374a9e3ac5b7093cda67d84"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-modGroupAnnounce.md",
+      "role": "api-doc",
+      "size": 2375,
+      "sha256": "471f646426c3e1372d077fe68d5900b82bf8c42118ee1c517bd7162b918f3082"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-modGroupInfo.md",
+      "role": "api-doc",
+      "size": 5531,
+      "sha256": "f0a8afb01927a8ba83ae83a791091e691073eee960730f4aa90f1f8955e7838d"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-modifyGroupInfo.md",
+      "role": "api-doc",
+      "size": 4812,
+      "sha256": "45300dff0add5f950c1f9f28fa771062b89cb103170cf8a8acc805f25805636d"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-msg-kind-mkind.md",
+      "role": "api-doc",
+      "size": 3652,
+      "sha256": "4d7ebe3f3fc9c4a16875350b632c8e8ba71b80c47a3bab183438902f22fe742b"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-queryGroupInfo.md",
+      "role": "api-doc",
+      "size": 3810,
+      "sha256": "b69d8d9e6819f72be481e515196b529ebb15430e282751d5dcd22086c8f8e5cb"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-querySysMsgInfo.md",
+      "role": "api-doc",
+      "size": 9235,
+      "sha256": "b66c10f888972cc78e4324fc5d5e13219a3a91c5d794b2b2cd014d35e518cd65"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-resolveUserByIds.md",
+      "role": "api-doc",
+      "size": 4899,
+      "sha256": "73810b611d0d7287118d796381bb19583fc418d8a44013e82999adb480c08d89"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-resolveUserCidUid.md",
+      "role": "api-doc",
+      "size": 3969,
+      "sha256": "e653cc8882c8eec1e174bedeb72a31eb2a46ec3e62d91b6baf8d44d16f1b7f3f"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-searchGroup.md",
+      "role": "api-doc",
+      "size": 11264,
+      "sha256": "6ea2cdddec41112b9c8861ca2b4c52c2ed7688781f361b4928b81d5d32c26978"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-searchSysMsgGroup.md",
+      "role": "api-doc",
+      "size": 3479,
+      "sha256": "04b97f4f8e34300952202159a2d9743d8543e7db0c41139ff2d105f92c55f9e3"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-sendDing.md",
+      "role": "api-doc",
+      "size": 6720,
+      "sha256": "a6ae6857843ef27fac80646db702d1ed0a09a3cf67632828a0c975b36320a3df"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-sendGroupMsg.md",
+      "role": "api-doc",
+      "size": 5585,
+      "sha256": "53e0e7c3198a04026465af9e0b61c2e1bcdce597051966e244059f19c84f88ba"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-sendSingleMsg.md",
+      "role": "api-doc",
+      "size": 5286,
+      "sha256": "662a8dc1120293313f021a17249ee03a1e3068ad9db8a7937d7c8757951a8cbc"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-setGroupTopMsg.md",
+      "role": "api-doc",
+      "size": 2219,
+      "sha256": "6b0a8a81251def44da66386925a542d3da6bcafcf7b6324da012596d0ed038cd"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-syncGroupMsg.md",
+      "role": "api-doc",
+      "size": 8816,
+      "sha256": "34c48599a563e737aa024a2a0fde0baf0b6efadd707240b56f650f4643ab15b6"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-syncGroupReadStatus.md",
+      "role": "api-doc",
+      "size": 2503,
+      "sha256": "12f1642ea8ab9160267234bd056ec3a5ea0837d8a0ff5eb587f7efe44112192b"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-syncGroupTopMsg.md",
+      "role": "api-doc",
+      "size": 2495,
+      "sha256": "3ae1815e530572ed93f73efc35d305bab0e101cccd5de1c97a9f52a83663fd31"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-syncGroupType.md",
+      "role": "api-doc",
+      "size": 3415,
+      "sha256": "59122cb6c8027f6a4824ebb2073b1b60c05285ba2c697c1e36c8e4d85e1b1998"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-syncSingleMsg.md",
+      "role": "api-doc",
+      "size": 7719,
+      "sha256": "3d2d682a1c50b6ec88d657f2c3186bc86671bfd90af49233de79314d176c1734"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-syncUserState.md",
+      "role": "api-doc",
+      "size": 2978,
+      "sha256": "e0a7b6bdfb80c8a7a0144cd766a2165dd13a1b3e79908a83de9732c193867ee3"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-sysmsg-fields.md",
+      "role": "api-doc",
+      "size": 7050,
+      "sha256": "81d8a95e052b816be8a64e342d53ee28714f9e185abd285d20eab29ca939a4bb"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/references/im-withdrawMsg.md",
+      "role": "api-doc",
+      "size": 4135,
+      "sha256": "601b501dbaa079741d74689e3c525ac0af89a2524b09fbd1db1e2a7c9768b1b6"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/checkGroupExist.js",
+      "role": "code",
+      "size": 2432,
+      "sha256": "e882b9fcc22808f2e575273ea86bd999c0b08eab667dea4d3e927746f392c5e5"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/checkGroupUserExist.js",
+      "role": "code",
+      "size": 2832,
+      "sha256": "ad0834fabaaafea1c46cf6d68bd76aba0ee4dc7c8b69563cfe01ecedcc2c9239"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/common.js",
+      "role": "code",
+      "size": 65253,
+      "sha256": "0259fe2b4567f88297855d4c94ae3e7820a70700594477c2ace2041008baa70b"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/destroyGroup.js",
+      "role": "code",
+      "size": 1055,
+      "sha256": "b689ca632926dc08585e09a388eec9f6725e4ffd785e4f3e45dcf276a8cabdb2"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/exitGroup.js",
+      "role": "code",
+      "size": 1040,
+      "sha256": "fb03f3e8a2329eef3fea8d1854d9f458ee107a48c384bbd8f4f27161d8c3798e"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/getGroupAdminBatch.js",
+      "role": "code",
+      "size": 3415,
+      "sha256": "ef91db6493262a715f076fffc1cad5ef8a118a44f7f4cb4924d03a84b41ca5bf"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/getGroupAnnounce.js",
+      "role": "code",
+      "size": 3026,
+      "sha256": "12a2fd1bb06702b32c85863a99a65b02708a5040420dc702f029968949705d61"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/getGroupAnnounceList.js",
+      "role": "code",
+      "size": 3799,
+      "sha256": "d2f6d676571f811863d705b1d1e0af3ee70fa49801331ea73aea5fc1ecf4f168"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/getGroupMsgReadStatus.js",
+      "role": "code",
+      "size": 3243,
+      "sha256": "cd4fc4e79d433e221b6d12ba4bcfed3fefd88056668425425d6db6493b8e8ebf"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/getGroupUsers.js",
+      "role": "code",
+      "size": 4500,
+      "sha256": "0e10b9643624ab328d0086d1a51b2e5f993c1728a511839e168935458c54c785"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/getSessionContext.js",
+      "role": "code",
+      "size": 16784,
+      "sha256": "c0174ae4a9355aa6d69a8cb31ff0ec256fb21a2ba6958c0cceda16480a6c913e"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/getSingleMsgReadStatus.js",
+      "role": "code",
+      "size": 3620,
+      "sha256": "7d22292e4c1fe573a3618180f7f3a74db47ff6bebd9658e1c4f5547bb6b506a9"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/groupCreate.js",
+      "role": "code",
+      "size": 7112,
+      "sha256": "007202a6e79c2e6b2d0ffeee42b80904424602df7965b7c36b12669974b6ee33"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/i18nLabel.js",
+      "role": "code",
+      "size": 1690,
+      "sha256": "08ba2262f2c2cf8cc8997b023ec57c439b1bd81168f1fb71068a5fb7a644cbbe"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/inviteGroupUsers.js",
+      "role": "code",
+      "size": 2451,
+      "sha256": "714e9d7c0ee638fab43056a306ba856352ed49b13239f81674dda1ac767f9f3b"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/joinGroup.js",
+      "role": "code",
+      "size": 2617,
+      "sha256": "10a91f5739854d5889e4b2f18dc1abc9e37af3f70e882bbb1f1fba1c29a040fa"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/kickGroupUsers.js",
+      "role": "code",
+      "size": 2438,
+      "sha256": "93eba17a1fc6c44e71dc5f2d67667e452ef908704a401d55b88922ced8833fbf"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/modGroupAnnounce.js",
+      "role": "code",
+      "size": 3209,
+      "sha256": "a5c45509f024b6514eacfcd4d88e5657c9814522009d116026953e33f19b21b5"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/modGroupInfo.js",
+      "role": "code",
+      "size": 7054,
+      "sha256": "cb9f5c7e4b084218ba53f4e9338b1d532061ccb24fe1f834a36e06665f0f00e1"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/modifyGroupInfo.js",
+      "role": "code",
+      "size": 5637,
+      "sha256": "18f4dc141f143fd3afc8f682deee4e3cf9935967c57b4572e483286f54bc68af"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/msgParser.js",
+      "role": "code",
+      "size": 20587,
+      "sha256": "58da3562e0b970cc18fb19044bb04727647ca624d532723104f92ed7eb38fe33"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/previewImg.js",
+      "role": "code",
+      "size": 3326,
+      "sha256": "265bdddcd303bc287c5818759005484b414cdc6591837518c98a594eada9db11"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/previewVideo.js",
+      "role": "code",
+      "size": 3004,
+      "sha256": "9650a14ed8ce1039f1926aebb9d29d8d2b0b678bf9873940a7dd44a03dadc81c"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/queryGroupInfo.js",
+      "role": "code",
+      "size": 3512,
+      "sha256": "5c61c04e6e8f8c62d0b38912f047e06d22d767a7b33cd85b1e3b427ee68c9e3b"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/querySysMsgInfo.js",
+      "role": "code",
+      "size": 13629,
+      "sha256": "f132ea5944e1871ef44ac620ff3a828e755825c645ddb071dcc540c84a1f2445"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/resolveUser.js",
+      "role": "code",
+      "size": 2910,
+      "sha256": "b70c5b4305322f380e7862d6ab5e5f3e85634f18b0fb02c7968fb0b34e11b864"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/resolveUserByIds.js",
+      "role": "code",
+      "size": 2413,
+      "sha256": "b65833046750bf74bcb170d956089aa34e71737a0ba723d5c06d8ed15395a93e"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/searchGroup.js",
+      "role": "code",
+      "size": 5633,
+      "sha256": "13df82f885c4dd9c164708b512253beaec3cd705b9a851448c076f0a5d9ac260"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/searchSysMsgGroup.js",
+      "role": "code",
+      "size": 2891,
+      "sha256": "20bd15f816b6c88661bf135910040edc0eb4827dc7ec25843815f0c8f065c75e"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/sendDing.js",
+      "role": "code",
+      "size": 16050,
+      "sha256": "76eaf3e8ed60db446ab80377e88b9da10632caf9fb46e5c74db666bf5fd9bcec"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/sendGroupMsg.js",
+      "role": "code",
+      "size": 2124,
+      "sha256": "d7771961eaf2add459f144e2972157e3ec528ae016804a96df654f3c2ebb5323"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/sendSingleMsg.js",
+      "role": "code",
+      "size": 2599,
+      "sha256": "74346911b4291d3c0d063e9d45eae72bacf43c9ace2016c58013404f31328ed5"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/setGroupTopMsg.js",
+      "role": "code",
+      "size": 2240,
+      "sha256": "bf5daca1407bf8e79578555385180b9dc9c64fbbd19b3ae9605bcfa465cd6bb1"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/syncGroupMsg.js",
+      "role": "code",
+      "size": 16852,
+      "sha256": "4e5ec851712e85768695fd2b90f42e364fb3a3aecf6410a1c48f724ca6d6a2b2"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/syncGroupReadStatus.js",
+      "role": "code",
+      "size": 3745,
+      "sha256": "46935fbaf6b81d4bf841d80f9a36f4c68646f174d257b48904228b505d12c7cc"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/syncGroupTopMsg.js",
+      "role": "code",
+      "size": 5422,
+      "sha256": "5961947701d4e0c005a2f6f7bee41167568458b2cf09c91db15080d033948c0c"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/syncGroupType.js",
+      "role": "code",
+      "size": 2707,
+      "sha256": "d76467148a115ada4082641685380f980db346b61486405a3c515e01074bcd8d"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/syncSingleMsg.js",
+      "role": "code",
+      "size": 15628,
+      "sha256": "b9bf6dbe9fbed73e29928ed4d63a92c126683010202c51edfe6738e58a221c98"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/syncUserState.js",
+      "role": "code",
+      "size": 5003,
+      "sha256": "1888c97c8102a4b2d6bbe129032641e10e1c776af5737cbac01b6fdd7e3cbeb1"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/uploadFile.js",
+      "role": "code",
+      "size": 1795,
+      "sha256": "aba89c689fd054d75d5e3ccb7cf95fe0c97af49a88ab0ef99f5262700d5036fc"
+    },
+    {
+      "path": "backend/business-apis/im/weaver-e10-yimiaoban/scripts/withdrawMsg.js",
+      "role": "code",
+      "size": 7809,
+      "sha256": "bac9bd1b30dc12483c39376c972ba1e0656b19a40dedff6b5ee0e4c15d7ae3f3"
+    },
+    {
+      "path": "IM/weaver-im-api/src/logic/path.go",
+      "role": "code",
+      "size": 39783,
+      "sha256": "defb1fdddb8d26c36209c87f3557023de2efb1fe816dcff8ff7e76a568de3c11"
+    },
+    {
+      "path": "IM/weaver-im-api/src/logic/route.go",
+      "role": "code",
+      "size": 32478,
+      "sha256": "db77f55e3082e33921abad16f9017b8bb3ced4515f764bda2f6609332517e967"
+    },
+    {
+      "path": "IM/weaver-im-api/src/logic/cmd_user_msg.go",
+      "role": "code",
+      "size": 3486,
+      "sha256": "20a17a79c36abe66285808816f23f6ac6b51646933007aff39999ed738e88e9a"
+    },
+    {
+      "path": "IM/weaver-im-api/src/model/msg.go",
+      "role": "code",
+      "size": 5730,
+      "sha256": "82e9e4db449e3ff6d7e559196ed6a9de1800b860fcc31f6d53f4b12267731cfa"
+    },
+    {
+      "path": "imsdk/protocol/data/proto/msg_remind.proto",
+      "role": "code",
+      "size": 6865,
+      "sha256": "1f269404485588b76ae9c6b793acd26fd2ec0d5d87cb08e8ad3f335ef6c24840"
+    },
+    {
+      "path": "imsdk/src/business/remind/set_msg_remind.cc",
+      "role": "code",
+      "size": 15231,
+      "sha256": "33aa04e31159148636c58d9f5492bb259e45fec9b42236edcc371ecad7c77795"
+    },
+    {
+      "path": "app_release/imsdk2.0/doc/2.业务功能/10.消息免打扰.md",
+      "role": "api-doc",
+      "size": 3286,
+      "sha256": "4059798c6a0b400e8057ce710d1fccebd8e5ed01c14e1867696dbd19c69f1af1"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "im.msg.sync.single",
+      "sourcePath": "references/im-syncSingleMsg.md",
+      "anchor": "references/im-syncSingleMsg.md + scripts/syncSingleMsg.js",
+      "sha256": "c94cc15500f4ba6bb1bcf6b7452abd32d85e09eb0f9c50fdbff4c418ce1c5aad",
+      "mapsToOperations": [
+        "im.msg.sync.single"
+      ],
+      "mapsToReferences": [
+        "references/msg-read.md"
+      ]
+    },
+    {
+      "id": "im.msg.sync.group",
+      "sourcePath": "references/im-syncGroupMsg.md",
+      "anchor": "references/im-syncGroupMsg.md + scripts/syncGroupMsg.js",
+      "sha256": "2e001a17e0a187d124366a7bfc9ab28253a1e3ac6a61490d9d9f2292b6af51d7",
+      "mapsToOperations": [
+        "im.msg.sync.group"
+      ],
+      "mapsToReferences": [
+        "references/msg-read.md"
+      ]
+    },
+    {
+      "id": "im.msg.sync.top",
+      "sourcePath": "references/im-syncGroupTopMsg.md",
+      "anchor": "references/im-syncGroupTopMsg.md + scripts/syncGroupTopMsg.js",
+      "sha256": "26ae611d9e49a7c09da19f2a7cd90ab719157a04ea62443705bf927353a38369",
+      "mapsToOperations": [
+        "im.msg.top.sync"
+      ],
+      "mapsToReferences": [
+        "references/msg-read.md"
+      ]
+    },
+    {
+      "id": "im.msg.top.set",
+      "sourcePath": "references/im-setGroupTopMsg.md",
+      "anchor": "references/im-setGroupTopMsg.md + scripts/setGroupTopMsg.js",
+      "sha256": "4adcb0080532e681937678ff1f5834afdc442aeba799733a7ca8bb76b18c2527",
+      "mapsToOperations": [
+        "im.msg.top.set.prepare",
+        "im.msg.top.set.apply"
+      ],
+      "mapsToReferences": [
+        "references/msg-write.md"
+      ]
+    },
+    {
+      "id": "im.msg.send.single",
+      "sourcePath": "references/im-sendSingleMsg.md",
+      "anchor": "references/im-sendSingleMsg.md + scripts/sendSingleMsg.js",
+      "sha256": "1680eb3c08bbbdbf12183d12e8e38310ed2d498eeb28bff4c3263ad02e13d555",
+      "mapsToOperations": [
+        "im.msg.send.single.prepare",
+        "im.msg.send.single.apply"
+      ],
+      "mapsToReferences": [
+        "references/msg-write.md"
+      ]
+    },
+    {
+      "id": "im.msg.send.group",
+      "sourcePath": "references/im-sendGroupMsg.md",
+      "anchor": "references/im-sendGroupMsg.md + scripts/sendGroupMsg.js",
+      "sha256": "9de9576f789f1d5ec60255a0f450b089a65bddd742dae77aa51c755e3d596906",
+      "mapsToOperations": [
+        "im.msg.send.group.prepare",
+        "im.msg.send.group.apply"
+      ],
+      "mapsToReferences": [
+        "references/msg-write.md"
+      ]
+    },
+    {
+      "id": "im.msg.withdraw",
+      "sourcePath": "references/im-withdrawMsg.md",
+      "anchor": "references/im-withdrawMsg.md + scripts/withdrawMsg.js",
+      "sha256": "2f37c9abe8583d04d863c6a90c2ce2a3031a6411343b6d14b65197ab1a707bbf",
+      "mapsToOperations": [
+        "im.msg.withdraw.prepare",
+        "im.msg.withdraw.apply"
+      ],
+      "mapsToReferences": [
+        "references/msg-write.md"
+      ]
+    },
+    {
+      "id": "im.msg.read.single",
+      "sourcePath": "references/im-getSingleMsgReadStatus.md",
+      "anchor": "references/im-getSingleMsgReadStatus.md + scripts/getSingleMsgReadStatus.js",
+      "sha256": "678a11b774dcd4126797f441b352e63503201bcec014c504eb02a073f72f4742",
+      "mapsToOperations": [
+        "im.msg.read.single"
+      ],
+      "mapsToReferences": [
+        "references/msg-read.md"
+      ]
+    },
+    {
+      "id": "im.msg.read.group",
+      "sourcePath": "references/im-getGroupMsgReadStatus.md",
+      "anchor": "references/im-getGroupMsgReadStatus.md + scripts/getGroupMsgReadStatus.js",
+      "sha256": "c4868f5a1c23ab0d2c9c227a79fdbf928e833f0e2b2497c85a901ac76cd016f5",
+      "mapsToOperations": [
+        "im.msg.read.group"
+      ],
+      "mapsToReferences": [
+        "references/msg-read.md"
+      ]
+    },
+    {
+      "id": "im.msg.read.group.detail",
+      "sourcePath": "references/im-syncGroupReadStatus.md",
+      "anchor": "references/im-syncGroupReadStatus.md + scripts/syncGroupReadStatus.js",
+      "sha256": "538adf231097d457e9376a58e767d335e5cdd528dea0f3419b7967a40e4b1907",
+      "mapsToOperations": [
+        "im.msg.read.group.detail"
+      ],
+      "mapsToReferences": [
+        "references/msg-read.md"
+      ]
+    },
+    {
+      "id": "im.msg.parse",
+      "sourcePath": "references/im-msg-kind-mkind.md",
+      "anchor": "references/im-msg-kind-mkind.md + scripts/msgParser.js",
+      "sha256": "9fbf55128fa4c2d30161c554a7df9bbc8c4f3b232f2dcac1980aaacc94cd7c2f",
+      "mapsToOperations": [
+        "im.msg.sync.single",
+        "im.msg.sync.group",
+        "im.msg.top.sync",
+        "im.sysmsg.query"
+      ],
+      "mapsToReferences": [
+        "references/msg-read.md"
+      ]
+    },
+    {
+      "id": "im.ding.send",
+      "sourcePath": "references/im-sendDing.md",
+      "anchor": "references/im-sendDing.md + scripts/sendDing.js",
+      "sha256": "738dcaabd2debd64b4cfc2918f354fa494a733356dd127a23d6662694ea7b956",
+      "mapsToOperations": [
+        "im.ding.send.prepare",
+        "im.ding.send.apply"
+      ],
+      "mapsToReferences": [
+        "references/ding-write.md"
+      ]
+    },
+    {
+      "id": "im.group.search",
+      "sourcePath": "references/im-searchGroup.md",
+      "anchor": "references/im-searchGroup.md + scripts/searchGroup.js",
+      "sha256": "e3e271e808be79b5855a6fbc60ed82973842d66ee1b0e979d43bf5b8ddcdf1a3",
+      "mapsToOperations": [
+        "im.group.search"
+      ],
+      "mapsToReferences": [
+        "references/group-read.md"
+      ]
+    },
+    {
+      "id": "im.group.info",
+      "sourcePath": "references/im-queryGroupInfo.md",
+      "anchor": "references/im-queryGroupInfo.md + scripts/queryGroupInfo.js",
+      "sha256": "6b886dcf34c2570efbc925a4f116270419d6549cfae29cb3eec2fdd11045f4eb",
+      "mapsToOperations": [
+        "im.group.info"
+      ],
+      "mapsToReferences": [
+        "references/group-read.md"
+      ]
+    },
+    {
+      "id": "im.group.users",
+      "sourcePath": "references/im-getGroupUsers.md",
+      "anchor": "references/im-getGroupUsers.md + scripts/getGroupUsers.js",
+      "sha256": "30e8ab6553302606909c4c4b17f3d6fb748749309e862ce09c8cafa7b13f8405",
+      "mapsToOperations": [
+        "im.group.users"
+      ],
+      "mapsToReferences": [
+        "references/group-read.md"
+      ]
+    },
+    {
+      "id": "im.group.admins",
+      "sourcePath": "references/im-getGroupAdminBatch.md",
+      "anchor": "references/im-getGroupAdminBatch.md + scripts/getGroupAdminBatch.js",
+      "sha256": "c692997ce5b92d789038b34c175012e46f4df822a9e52f030e745b76ac82e1b9",
+      "mapsToOperations": [
+        "im.group.admins"
+      ],
+      "mapsToReferences": [
+        "references/group-read.md"
+      ]
+    },
+    {
+      "id": "im.group.exist",
+      "sourcePath": "references/im-checkGroupExist.md",
+      "anchor": "references/im-checkGroupExist.md + scripts/checkGroupExist.js",
+      "sha256": "f6d586176f45900f78fd2376421ffede5764524b1df86bc71c4f1ff7d5a80a2c",
+      "mapsToOperations": [
+        "im.group.exist"
+      ],
+      "mapsToReferences": [
+        "references/group-read.md"
+      ]
+    },
+    {
+      "id": "im.group.userExist",
+      "sourcePath": "references/im-checkGroupUserExist.md",
+      "anchor": "references/im-checkGroupUserExist.md + scripts/checkGroupUserExist.js",
+      "sha256": "2718723d9516b1cc1dd1c3d9c8cfa1346f36ae14e816182f02d7ac272ae76738",
+      "mapsToOperations": [
+        "im.group.userExist"
+      ],
+      "mapsToReferences": [
+        "references/group-read.md"
+      ]
+    },
+    {
+      "id": "im.group.announce.get",
+      "sourcePath": "references/im-getGroupAnnounce.md",
+      "anchor": "references/im-getGroupAnnounce.md + scripts/getGroupAnnounce.js",
+      "sha256": "f56894666e3b8ddfa13b6113f74d3032a27817109cecd424269c668134137e9c",
+      "mapsToOperations": [
+        "im.group.announce.get"
+      ],
+      "mapsToReferences": [
+        "references/group-read.md"
+      ]
+    },
+    {
+      "id": "im.group.announce.list",
+      "sourcePath": "references/im-getGroupAnnounceList.md",
+      "anchor": "references/im-getGroupAnnounceList.md + scripts/getGroupAnnounceList.js",
+      "sha256": "e1332def995932384405f35f954bfb0022bfb604803d7daaad3fb375fa65c3cb",
+      "mapsToOperations": [
+        "im.group.announce.list"
+      ],
+      "mapsToReferences": [
+        "references/group-read.md"
+      ]
+    },
+    {
+      "id": "im.group.create",
+      "sourcePath": "references/im-groupCreate.md",
+      "anchor": "references/im-groupCreate.md + scripts/groupCreate.js",
+      "sha256": "42acaaa86a1a69227ac33d6c7f381f9e99557d9ead4dd3196b2b6ece2776e180",
+      "mapsToOperations": [
+        "im.group.create.prepare",
+        "im.group.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/group-write.md"
+      ]
+    },
+    {
+      "id": "im.group.invite",
+      "sourcePath": "references/im-inviteGroupUsers.md",
+      "anchor": "references/im-inviteGroupUsers.md + scripts/inviteGroupUsers.js",
+      "sha256": "962fcf7eb546aae26f33da6b0e4b52a626dbc6ef86b3876b37dbba08017bdef2",
+      "mapsToOperations": [
+        "im.group.invite.prepare",
+        "im.group.invite.apply"
+      ],
+      "mapsToReferences": [
+        "references/group-write.md"
+      ]
+    },
+    {
+      "id": "im.group.kick",
+      "sourcePath": "references/im-kickGroupUsers.md",
+      "anchor": "references/im-kickGroupUsers.md + scripts/kickGroupUsers.js",
+      "sha256": "a29c99537d57f73187db17a76f343a2da6edfd1942accced95311d75e35b392b",
+      "mapsToOperations": [
+        "im.group.kick.prepare",
+        "im.group.kick.apply"
+      ],
+      "mapsToReferences": [
+        "references/group-write.md"
+      ]
+    },
+    {
+      "id": "im.group.exit",
+      "sourcePath": "references/im-exitGroup.md",
+      "anchor": "references/im-exitGroup.md + scripts/exitGroup.js",
+      "sha256": "2c2e7aa0b87b4235ca5f3714aca0ac7e4097fefe187c069fe6fb14f445288885",
+      "mapsToOperations": [
+        "im.group.exit.prepare",
+        "im.group.exit.apply"
+      ],
+      "mapsToReferences": [
+        "references/group-write.md"
+      ]
+    },
+    {
+      "id": "im.group.destroy",
+      "sourcePath": "references/im-destroyGroup.md",
+      "anchor": "references/im-destroyGroup.md + scripts/destroyGroup.js",
+      "sha256": "da699450820e3e133898c5d36da028d2b0d86d17a32c9b6b1ca2dd046f52d56a",
+      "mapsToOperations": [
+        "im.group.destroy.prepare",
+        "im.group.destroy.apply"
+      ],
+      "mapsToReferences": [
+        "references/group-write.md"
+      ]
+    },
+    {
+      "id": "im.group.join",
+      "sourcePath": "references/im-joinGroup.md",
+      "anchor": "references/im-joinGroup.md + scripts/joinGroup.js",
+      "sha256": "bfa9d63593f0ea3c659c2e9e68289d47aa37351fe99a3d8f98e8dd9c2ef51ffe",
+      "mapsToOperations": [
+        "im.group.join.prepare",
+        "im.group.join.apply"
+      ],
+      "mapsToReferences": [
+        "references/group-write.md"
+      ]
+    },
+    {
+      "id": "im.group.modify",
+      "sourcePath": "references/im-modGroupInfo.md",
+      "anchor": "references/im-modGroupInfo.md + references/im-group-onoff-bits.md + scripts/modGroupInfo.js",
+      "sha256": "6e5ddaa7a48be8f40097631522cee0616497b6d2145a2a651ad76be8c1178885",
+      "mapsToOperations": [
+        "im.group.modify.prepare",
+        "im.group.modify.apply"
+      ],
+      "mapsToReferences": [
+        "references/group-write.md"
+      ]
+    },
+    {
+      "id": "im.group.rename",
+      "sourcePath": "references/im-modifyGroupInfo.md",
+      "anchor": "references/im-modifyGroupInfo.md + scripts/modifyGroupInfo.js",
+      "sha256": "093d8c3a7657f9d1debd59c075d10adecc69a6d1911da92c32372214f223aba9",
+      "mapsToOperations": [
+        "im.group.rename.prepare",
+        "im.group.rename.apply"
+      ],
+      "mapsToReferences": [
+        "references/group-write.md"
+      ]
+    },
+    {
+      "id": "im.group.announce.modify",
+      "sourcePath": "references/im-modGroupAnnounce.md",
+      "anchor": "references/im-modGroupAnnounce.md + scripts/modGroupAnnounce.js",
+      "sha256": "96e0dcf78bea6f45716ca4eda8f1dfd0ce9cbe2cca78013c5e8e5ea7ffe39fd0",
+      "mapsToOperations": [
+        "im.group.announce.modify.prepare",
+        "im.group.announce.modify.apply"
+      ],
+      "mapsToReferences": [
+        "references/group-write.md"
+      ]
+    },
+    {
+      "id": "im.session.list",
+      "sourcePath": "references/im-getSessionContext.md",
+      "anchor": "references/im-getSessionContext.md + scripts/getSessionContext.js",
+      "sha256": "426e168775c0418bfb5ea7e4adc92b7c7628afa76b9f7f98b33eb869fb6a12bc",
+      "mapsToOperations": [
+        "im.session.list"
+      ],
+      "mapsToReferences": [
+        "references/session-sysmsg.md"
+      ]
+    },
+    {
+      "id": "im.sysmsg.groupSearch",
+      "sourcePath": "references/im-searchSysMsgGroup.md",
+      "anchor": "references/im-searchSysMsgGroup.md + scripts/searchSysMsgGroup.js",
+      "sha256": "b1f9cbcfa4b11553c0c95c92b39529bf9022c4d55c70071ba57a793284bbd436",
+      "mapsToOperations": [
+        "im.sysmsg.groupSearch"
+      ],
+      "mapsToReferences": [
+        "references/session-sysmsg.md"
+      ]
+    },
+    {
+      "id": "im.sysmsg.typeSync",
+      "sourcePath": "references/im-syncGroupType.md",
+      "anchor": "references/im-syncGroupType.md + scripts/syncGroupType.js",
+      "sha256": "06b607e4f158442bc86aa99f6a028fb6732df3a3644a5521c8217a41cdd9fc3a",
+      "mapsToOperations": [
+        "im.sysmsg.typeSync"
+      ],
+      "mapsToReferences": [
+        "references/session-sysmsg.md"
+      ]
+    },
+    {
+      "id": "im.sysmsg.query",
+      "sourcePath": "references/im-querySysMsgInfo.md",
+      "anchor": "references/im-querySysMsgInfo.md + references/im-sysmsg-fields.md + scripts/querySysMsgInfo.js",
+      "sha256": "58ea0369ee0327d3dbeb683e5a41010692fc40cd3d5ac358185a0e6d05eccb67",
+      "mapsToOperations": [
+        "im.sysmsg.query"
+      ],
+      "mapsToReferences": [
+        "references/session-sysmsg.md"
+      ]
+    },
+    {
+      "id": "im.file.upload",
+      "sourcePath": "references/im-file-upload.md",
+      "anchor": "references/im-file-upload.md + scripts/uploadFile.js",
+      "sha256": "f2493b075917751da15885d4163019b79820dec3ac10acb2768b1d61b8fba0ac",
+      "mapsToOperations": [
+        "im.file.upload"
+      ],
+      "mapsToReferences": [
+        "references/file-user-i18n.md"
+      ]
+    },
+    {
+      "id": "im.file.preview",
+      "sourcePath": "references/im-img-preview.md",
+      "anchor": "references/im-img-preview.md + scripts/previewImg.js + scripts/previewVideo.js",
+      "sha256": "dbfa7b1ce6ce0a5670a002da0346a4528e2ad5ab7946f2cee7afc5b09b9d523a",
+      "mapsToOperations": [
+        "im.file.preview",
+        "im.file.download"
+      ],
+      "mapsToReferences": [
+        "references/file-user-i18n.md"
+      ]
+    },
+    {
+      "id": "im.user.state",
+      "sourcePath": "references/im-syncUserState.md",
+      "anchor": "references/im-syncUserState.md + scripts/syncUserState.js",
+      "sha256": "7ef55dee2755d840ca240d52bd34b2514352d976acd0d69112c34a84ca5a51a8",
+      "mapsToOperations": [
+        "im.user.state"
+      ],
+      "mapsToReferences": [
+        "references/file-user-i18n.md"
+      ]
+    },
+    {
+      "id": "im.i18n.labels",
+      "sourcePath": "references/im-i18nLabel.md",
+      "anchor": "references/im-i18nLabel.md + scripts/i18nLabel.js",
+      "sha256": "58336cb895b03b9cd498ae68f4d7225d4f216cacfc58258fd51605b8fd620d7f",
+      "mapsToOperations": [
+        "im.i18n.labels"
+      ],
+      "mapsToReferences": [
+        "references/file-user-i18n.md"
+      ]
+    },
+    {
+      "id": "im.person.resolve",
+      "sourcePath": "references/im-resolveUserCidUid.md",
+      "anchor": "references/im-resolveUserCidUid.md + scripts/resolveUser.js",
+      "sha256": "b06a5ea9793fb2723a5ca453d6acc73bddf0091cf140b60f1769c26cf89d5edf",
+      "mapsToOperations": [
+        "im.person.resolve"
+      ],
+      "mapsToReferences": [
+        "references/person.md"
+      ]
+    },
+    {
+      "id": "im.person.resolveByIds",
+      "sourcePath": "references/im-resolveUserByIds.md",
+      "anchor": "references/im-resolveUserByIds.md + scripts/resolveUserByIds.js",
+      "sha256": "edd36ce3c51eb339d04eb7b5b8473bb36decce2183ad8592c6e25d61bb86b623",
+      "mapsToOperations": [
+        "im.person.resolveByIds"
+      ],
+      "mapsToReferences": [
+        "references/person.md"
+      ]
+    },
+    {
+      "id": "im.shared.runtime",
+      "sourcePath": "scripts/common.js",
+      "anchor": "scripts/common.js",
+      "sha256": "7a2c1e79303060923f94300dc8a1122478dd8eddd1a3776cb3b2e822e1aac310",
+      "mapsToOperations": [
+        "im.msg.sync.single",
+        "im.msg.sync.group",
+        "im.sysmsg.query",
+        "im.group.search",
+        "im.msg.withdraw.prepare",
+        "im.ding.send.prepare"
+      ],
+      "mapsToReferences": [
+        "references/safety-boundaries.md"
+      ]
+    },
+    {
+      "id": "im.routing.redlines",
+      "sourcePath": "SKILL.md",
+      "anchor": "SKILL.md + README.md + references/catalog.md + references/field-resolution.md",
+      "sha256": "f093fe45708ac803afc595ad2809656ea0e50f426bd967b6ad7c01c6bcc439f3",
+      "mapsToOperations": [],
+      "mapsToReferences": [
+        "references/field-resolution.md",
+        "references/safety-boundaries.md"
+      ]
+    },
+    {
+      "id": "im.errors",
+      "sourcePath": "references/error-codes.md",
+      "anchor": "references/error-codes.md",
+      "sha256": "5404e40ed80f89d452545063ee120fd604778becb5b6e81060d23420b5974219",
+      "mapsToOperations": [],
+      "mapsToReferences": [
+        "references/error-codes.md"
+      ]
+    },
+    {
+      "id": "im.user.setRemind",
+      "sourcePath": "IM/weaver-im-api/src/logic/path.go",
+      "anchor": "IM/weaver-im-api/src/logic/path.go + IM/weaver-im-api/src/logic/route.go + IM/weaver-im-api/src/logic/cmd_user_msg.go + IM/weaver-im-api/src/model/msg.go + imsdk/protocol/data/proto/msg_remind.proto + imsdk/src/business/remind/set_msg_remind.cc + app_release/imsdk2.0/doc/2.业务功能/10.消息免打扰.md",
+      "sha256": "84cd00e5f1e57c7d2ed315be9592ee753d75cf967c7fc2c62e9d46e39f09aa3e",
+      "mapsToOperations": [
+        "im.user.setRemind.prepare",
+        "im.user.setRemind.apply"
+      ],
+      "mapsToReferences": [
+        "references/user-remind.md"
+      ]
+    }
+  ],
+  "operationImpact": {
+    "im.person.resolve": {
+      "sourceChunkIds": [
+        "im.person.resolve"
+      ],
+      "schemaFields": [
+        "name"
+      ],
+      "references": [
+        "references/person.md",
+        "references/field-resolution.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.person.resolveByIds": {
+      "sourceChunkIds": [
+        "im.person.resolveByIds"
+      ],
+      "schemaFields": [
+        "ids"
+      ],
+      "references": [
+        "references/person.md",
+        "references/field-resolution.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.msg.sync.single": {
+      "sourceChunkIds": [
+        "im.msg.sync.single",
+        "im.msg.parse",
+        "im.shared.runtime"
+      ],
+      "schemaFields": [
+        "fromUid",
+        "fromCid",
+        "num",
+        "latest",
+        "from",
+        "to",
+        "start",
+        "end",
+        "imgFormat"
+      ],
+      "references": [
+        "references/msg-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.msg.sync.group": {
+      "sourceChunkIds": [
+        "im.msg.sync.group",
+        "im.msg.parse",
+        "im.shared.runtime"
+      ],
+      "schemaFields": [
+        "groupId",
+        "num",
+        "latest",
+        "from",
+        "to",
+        "startId",
+        "endId",
+        "imgFormat"
+      ],
+      "references": [
+        "references/msg-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.msg.top.sync": {
+      "sourceChunkIds": [
+        "im.msg.sync.top",
+        "im.msg.parse"
+      ],
+      "schemaFields": [
+        "groupId",
+        "msgids",
+        "encType",
+        "imgFormat"
+      ],
+      "references": [
+        "references/msg-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.msg.read.single": {
+      "sourceChunkIds": [
+        "im.msg.read.single"
+      ],
+      "schemaFields": [
+        "toUid",
+        "toCid",
+        "msgids",
+        "recvMsgids"
+      ],
+      "references": [
+        "references/msg-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.msg.read.group": {
+      "sourceChunkIds": [
+        "im.msg.read.group"
+      ],
+      "schemaFields": [
+        "groupId",
+        "msgids",
+        "recvMsgids"
+      ],
+      "references": [
+        "references/msg-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.msg.read.group.detail": {
+      "sourceChunkIds": [
+        "im.msg.read.group.detail"
+      ],
+      "schemaFields": [
+        "groupId",
+        "msgid",
+        "pageSize",
+        "pageNum",
+        "ptype"
+      ],
+      "references": [
+        "references/msg-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.msg.send.single.prepare": {
+      "sourceChunkIds": [
+        "im.msg.send.single"
+      ],
+      "schemaFields": [
+        "toUid",
+        "toCid",
+        "txt",
+        "img",
+        "file"
+      ],
+      "references": [
+        "references/msg-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.msg.send.single.apply": {
+      "sourceChunkIds": [
+        "im.msg.send.single"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/msg-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.msg.send.group.prepare": {
+      "sourceChunkIds": [
+        "im.msg.send.group"
+      ],
+      "schemaFields": [
+        "groupId",
+        "txt",
+        "img",
+        "file"
+      ],
+      "references": [
+        "references/msg-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.msg.send.group.apply": {
+      "sourceChunkIds": [
+        "im.msg.send.group"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/msg-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.msg.withdraw.prepare": {
+      "sourceChunkIds": [
+        "im.msg.withdraw",
+        "im.shared.runtime"
+      ],
+      "schemaFields": [
+        "type",
+        "msgid",
+        "toUid",
+        "toCid",
+        "groupId"
+      ],
+      "references": [
+        "references/msg-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.msg.withdraw.apply": {
+      "sourceChunkIds": [
+        "im.msg.withdraw"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/msg-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.msg.top.set.prepare": {
+      "sourceChunkIds": [
+        "im.msg.top.set"
+      ],
+      "schemaFields": [
+        "groupId",
+        "msgid",
+        "type",
+        "cancel"
+      ],
+      "references": [
+        "references/msg-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.msg.top.set.apply": {
+      "sourceChunkIds": [
+        "im.msg.top.set"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/msg-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.ding.send.prepare": {
+      "sourceChunkIds": [
+        "im.ding.send",
+        "im.shared.runtime"
+      ],
+      "schemaFields": [
+        "groupId",
+        "toUid",
+        "toCid",
+        "txt",
+        "convertMsgid",
+        "unreadOnly",
+        "toUids",
+        "sendMsg",
+        "showType"
+      ],
+      "references": [
+        "references/ding-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.ding.send.apply": {
+      "sourceChunkIds": [
+        "im.ding.send"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/ding-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.search": {
+      "sourceChunkIds": [
+        "im.group.search",
+        "im.shared.runtime"
+      ],
+      "schemaFields": [
+        "name",
+        "precise",
+        "type",
+        "members",
+        "owner",
+        "creator",
+        "today",
+        "yesterday",
+        "createBegin",
+        "createEnd",
+        "pageSize"
+      ],
+      "references": [
+        "references/group-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.group.info": {
+      "sourceChunkIds": [
+        "im.group.info"
+      ],
+      "schemaFields": [
+        "groupIds",
+        "groupId"
+      ],
+      "references": [
+        "references/group-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.group.users": {
+      "sourceChunkIds": [
+        "im.group.users"
+      ],
+      "schemaFields": [
+        "groupId",
+        "mask",
+        "syncType",
+        "clientUc"
+      ],
+      "references": [
+        "references/group-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.group.admins": {
+      "sourceChunkIds": [
+        "im.group.admins"
+      ],
+      "schemaFields": [
+        "groupIds",
+        "mask"
+      ],
+      "references": [
+        "references/group-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.group.exist": {
+      "sourceChunkIds": [
+        "im.group.exist"
+      ],
+      "schemaFields": [
+        "groupIds"
+      ],
+      "references": [
+        "references/group-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.group.userExist": {
+      "sourceChunkIds": [
+        "im.group.userExist"
+      ],
+      "schemaFields": [
+        "groupId",
+        "users"
+      ],
+      "references": [
+        "references/group-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.group.announce.get": {
+      "sourceChunkIds": [
+        "im.group.announce.get"
+      ],
+      "schemaFields": [
+        "groupId",
+        "aid"
+      ],
+      "references": [
+        "references/group-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.group.announce.list": {
+      "sourceChunkIds": [
+        "im.group.announce.list"
+      ],
+      "schemaFields": [
+        "groupId",
+        "aid",
+        "pageSize"
+      ],
+      "references": [
+        "references/group-read.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.group.create.prepare": {
+      "sourceChunkIds": [
+        "im.group.create"
+      ],
+      "schemaFields": [
+        "users",
+        "name",
+        "names",
+        "admins",
+        "removeFailed"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.create.apply": {
+      "sourceChunkIds": [
+        "im.group.create"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.invite.prepare": {
+      "sourceChunkIds": [
+        "im.group.invite"
+      ],
+      "schemaFields": [
+        "groupId",
+        "users",
+        "removeFailed"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.invite.apply": {
+      "sourceChunkIds": [
+        "im.group.invite"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.kick.prepare": {
+      "sourceChunkIds": [
+        "im.group.kick"
+      ],
+      "schemaFields": [
+        "groupId",
+        "users",
+        "removeFailed"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.kick.apply": {
+      "sourceChunkIds": [
+        "im.group.kick"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.exit.prepare": {
+      "sourceChunkIds": [
+        "im.group.exit"
+      ],
+      "schemaFields": [
+        "groupId",
+        "acknowledgeOrphanRisk",
+        "removeFailed"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.exit.apply": {
+      "sourceChunkIds": [
+        "im.group.exit"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.destroy.prepare": {
+      "sourceChunkIds": [
+        "im.group.destroy"
+      ],
+      "schemaFields": [
+        "groupId",
+        "removeFailed"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.destroy.apply": {
+      "sourceChunkIds": [
+        "im.group.destroy"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.join.prepare": {
+      "sourceChunkIds": [
+        "im.group.join"
+      ],
+      "schemaFields": [
+        "groupId",
+        "token",
+        "mark",
+        "removeFailed"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.join.apply": {
+      "sourceChunkIds": [
+        "im.group.join"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.modify.prepare": {
+      "sourceChunkIds": [
+        "im.group.modify"
+      ],
+      "schemaFields": [
+        "groupId",
+        "num",
+        "switchs",
+        "rsonoff",
+        "history",
+        "admins",
+        "delAdmins",
+        "creator",
+        "copyGroupids",
+        "gtId",
+        "removeFailed"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.modify.apply": {
+      "sourceChunkIds": [
+        "im.group.modify"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.rename.prepare": {
+      "sourceChunkIds": [
+        "im.group.rename"
+      ],
+      "schemaFields": [
+        "groupId",
+        "name",
+        "history",
+        "host",
+        "display",
+        "msgSetting",
+        "mark",
+        "gtid",
+        "removeFailed"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.rename.apply": {
+      "sourceChunkIds": [
+        "im.group.rename"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.announce.modify.prepare": {
+      "sourceChunkIds": [
+        "im.group.announce.modify"
+      ],
+      "schemaFields": [
+        "groupId",
+        "annouce",
+        "aid",
+        "del",
+        "notice",
+        "fmark",
+        "related",
+        "removeFailed"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.group.announce.modify.apply": {
+      "sourceChunkIds": [
+        "im.group.announce.modify"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/group-write.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.session.list": {
+      "sourceChunkIds": [
+        "im.session.list"
+      ],
+      "schemaFields": [
+        "num",
+        "msgid",
+        "flag",
+        "type",
+        "around"
+      ],
+      "references": [
+        "references/session-sysmsg.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.sysmsg.groupSearch": {
+      "sourceChunkIds": [
+        "im.sysmsg.groupSearch",
+        "im.shared.runtime"
+      ],
+      "schemaFields": [
+        "name",
+        "type"
+      ],
+      "references": [
+        "references/session-sysmsg.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.sysmsg.typeSync": {
+      "sourceChunkIds": [
+        "im.sysmsg.typeSync",
+        "im.shared.runtime"
+      ],
+      "schemaFields": [
+        "gids",
+        "tids"
+      ],
+      "references": [
+        "references/session-sysmsg.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.sysmsg.query": {
+      "sourceChunkIds": [
+        "im.msg.parse",
+        "im.sysmsg.query",
+        "im.shared.runtime"
+      ],
+      "schemaFields": [
+        "group",
+        "type",
+        "num",
+        "flag",
+        "deal",
+        "from",
+        "to",
+        "latest",
+        "start",
+        "end"
+      ],
+      "references": [
+        "references/session-sysmsg.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.file.upload": {
+      "sourceChunkIds": [
+        "im.file.upload"
+      ],
+      "schemaFields": [
+        "file",
+        "filePath",
+        "name",
+        "shareGroup",
+        "shareGroups",
+        "shareUsers",
+        "permission"
+      ],
+      "references": [
+        "references/file-user-i18n.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "external-artifact",
+      "requiresConfirmationChain": false
+    },
+    "im.file.preview": {
+      "sourceChunkIds": [
+        "im.file.preview"
+      ],
+      "schemaFields": [
+        "kind",
+        "fileId",
+        "msgid",
+        "groupId",
+        "toUid",
+        "toCid",
+        "imgFormat"
+      ],
+      "references": [
+        "references/file-user-i18n.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.file.download": {
+      "sourceChunkIds": [
+        "im.file.preview"
+      ],
+      "schemaFields": [
+        "fileId",
+        "msgid",
+        "kind",
+        "groupId",
+        "toUid",
+        "toCid",
+        "imgFormat",
+        "output"
+      ],
+      "references": [
+        "references/file-user-i18n.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "local-file-write",
+      "requiresConfirmationChain": false
+    },
+    "im.user.state": {
+      "sourceChunkIds": [
+        "im.user.state"
+      ],
+      "schemaFields": [
+        "users",
+        "devType",
+        "mask",
+        "removeFailed"
+      ],
+      "references": [
+        "references/file-user-i18n.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.i18n.labels": {
+      "sourceChunkIds": [
+        "im.i18n.labels"
+      ],
+      "schemaFields": [
+        "ids"
+      ],
+      "references": [
+        "references/file-user-i18n.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "im.user.setRemind.prepare": {
+      "sourceChunkIds": [
+        "im.user.setRemind"
+      ],
+      "schemaFields": [
+        "sessionType",
+        "reminder",
+        "toUid",
+        "toCid",
+        "groupId",
+        "group"
+      ],
+      "references": [
+        "references/user-remind.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "im.user.setRemind.apply": {
+      "sourceChunkIds": [
+        "im.user.setRemind"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/user-remind.md"
+      ],
+      "tests": [
+        "test/business/im-command.test.ts",
+        "test/business/im-pagination.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    }
+  },
+  "artifactBaseline": {
+    "aggregateSha256": "071440130816f1f6c2592d29123c120f13d1741c15537b14ef6c24b287cd71c9",
+    "files": [
+      {
+        "path": "docs/im.md",
+        "role": "generated-cli",
+        "size": 7009,
+        "sha256": "85991a04995d1f94319b11925c456b403b1fed35b84c4f401009993db70ab510"
+      },
+      {
+        "path": "skill-template/domains/yimiaoban.md",
+        "role": "generated-cli",
+        "size": 3340,
+        "sha256": "51394f2dfa8a3762c6617d846dbe701046328e77acd86ff9cea989a13e404fc3"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/SKILL.md",
+        "role": "generated-reference",
+        "size": 11571,
+        "sha256": "869a943362e302679562ac86f2eea9e5dbc88b775846d3fa3dba339e67cac9f6"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/ding-write.md",
+        "role": "generated-reference",
+        "size": 4144,
+        "sha256": "676085c0bc7f5fe8f6b73c3ca722f0d0de0a4e90b023376dd39622cd689c9741"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/error-codes.md",
+        "role": "generated-reference",
+        "size": 6734,
+        "sha256": "7b74d635d186de7fbccaaa6924f746f4bc0398620bb3ba28ba039f3642d4bb9b"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/field-resolution.md",
+        "role": "generated-reference",
+        "size": 3507,
+        "sha256": "05be7c575a963c683d692b8aa275de776b7a879a053e7ade824dd97fb8d4710e"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/file-user-i18n.md",
+        "role": "generated-reference",
+        "size": 4439,
+        "sha256": "9d7a1e4d3757b15b51bec2020590e5dee7d9742c274c8db1ebc05b92c707543c"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/group-read.md",
+        "role": "generated-reference",
+        "size": 3240,
+        "sha256": "18683dd73e9d5ce4af72144a27126b0fb3394285eb4bc489c5eb6f9e19bd476d"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/group-write.md",
+        "role": "generated-reference",
+        "size": 5632,
+        "sha256": "5f14c405682b8b1e72493e08a14a6a17e2f4e83ae22a59e59442ece6e134eb1f"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/msg-read.md",
+        "role": "generated-reference",
+        "size": 5356,
+        "sha256": "1ff0dd805f194d4951b21d6b723b0e00f3c395c624fe42db1b7835044d783878"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/msg-write.md",
+        "role": "generated-reference",
+        "size": 4015,
+        "sha256": "3aee8f28564e189dbbb2ea50e5cc5c13d599a6672944031023ebd30ac7f336bb"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/person.md",
+        "role": "generated-reference",
+        "size": 2041,
+        "sha256": "97f98f1529e8e4f9e648629b27d784c00c662018a8df46e10085318a60204b6a"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/safety-boundaries.md",
+        "role": "generated-reference",
+        "size": 7826,
+        "sha256": "58721436d6b3e276f7cd231d67b154d2cf709251b224b1087a5f70984aa69859"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/session-sysmsg.md",
+        "role": "generated-reference",
+        "size": 3794,
+        "sha256": "4dcf0668518f171493879922bbc3841e7a9ec972a5e82ba2cce748804e4ea75d"
+      },
+      {
+        "path": "skills/weaver-e10-yimiaoban/references/user-remind.md",
+        "role": "generated-reference",
+        "size": 4424,
+        "sha256": "3c7f2f325f5da956eb41a97f8f9fe5142b09c8c2ddc1343eabee56d4c8509c12"
+      },
+      {
+        "path": "src/shortcuts/im/continuation.ts",
+        "role": "generated-cli",
+        "size": 3219,
+        "sha256": "e3ae35e19eca3129a396ce0403cd808ff186204512600159f885fd9dcf51945c"
+      },
+      {
+        "path": "src/shortcuts/im/errors.ts",
+        "role": "generated-cli",
+        "size": 2560,
+        "sha256": "998c47ec3262b444de792b3e54e53a530c95a513156181211db694df8b4c549b"
+      },
+      {
+        "path": "src/shortcuts/im/host.ts",
+        "role": "generated-cli",
+        "size": 23007,
+        "sha256": "94ad7e6903353915557460e0e86f143a80d8010670cd7776378b7bb6333e9bd5"
+      },
+      {
+        "path": "src/shortcuts/im/index.ts",
+        "role": "generated-cli",
+        "size": 12794,
+        "sha256": "8ca7bf11c42265be5f86016b00a31a1ca0f3d435d58c9dc648636df4c3aac294"
+      },
+      {
+        "path": "src/shortcuts/im/manifest.ts",
+        "role": "generated-cli",
+        "size": 1287,
+        "sha256": "941cfdf252da8111a09a8fe0bf0ea66a3b80ed3920d1c436ae5db936572a360e"
+      },
+      {
+        "path": "src/shortcuts/im/operations.ts",
+        "role": "generated-cli",
+        "size": 586,
+        "sha256": "99265bc1f1897f0584aa045a9afc073fa65066d48a52aae5abc004c278f5e098"
+      },
+      {
+        "path": "src/shortcuts/im/operations/file-user.ts",
+        "role": "generated-cli",
+        "size": 14828,
+        "sha256": "435340778d845e7c03c609ca56c61b63fb72459a8aa32266d6ce2063a4b45a51"
+      },
+      {
+        "path": "src/shortcuts/im/operations/group-read.ts",
+        "role": "generated-cli",
+        "size": 20208,
+        "sha256": "2473a41fd074876035acbe0be797212bf882ae08212a074122e0017c68ee1cf3"
+      },
+      {
+        "path": "src/shortcuts/im/operations/group-write.ts",
+        "role": "generated-cli",
+        "size": 29875,
+        "sha256": "e5181518743e40baebf46a4528432603f2067cebaf1e24543742c470a06a6080"
+      },
+      {
+        "path": "src/shortcuts/im/operations/msg-parse.ts",
+        "role": "generated-cli",
+        "size": 15523,
+        "sha256": "06ae6453177349c4f0c2c400fd62f5b78ed9d0236d151bfc3d92786cb51e7823"
+      },
+      {
+        "path": "src/shortcuts/im/operations/msg-sync.ts",
+        "role": "generated-cli",
+        "size": 24290,
+        "sha256": "12b81a2b7ca60f7edea0e685fc289760e8b144bc5c60c93d885023b5b2a75978"
+      },
+      {
+        "path": "src/shortcuts/im/operations/msg-write.ts",
+        "role": "generated-cli",
+        "size": 26719,
+        "sha256": "011c779a8019dbb675c2a5e051323c5b2709a520265cae29c17715c1d94c53cc"
+      },
+      {
+        "path": "src/shortcuts/im/operations/person.ts",
+        "role": "generated-cli",
+        "size": 4152,
+        "sha256": "05fe66b31e6d1aec716005df9cda721775e32bc3be9758a370236f660be136cc"
+      },
+      {
+        "path": "src/shortcuts/im/operations/registry.ts",
+        "role": "generated-cli",
+        "size": 1593,
+        "sha256": "88c854ceee2980a4e39b24fad603bce98a163eaba2875a35bc22e9f2d922b1e0"
+      },
+      {
+        "path": "src/shortcuts/im/operations/session.ts",
+        "role": "generated-cli",
+        "size": 18930,
+        "sha256": "8c065b2e0af2ff36f942cbdac7edba68f3cb06bcc9ec83d0ee3f88bc334b708d"
+      },
+      {
+        "path": "src/shortcuts/im/operations/shared.ts",
+        "role": "generated-cli",
+        "size": 19758,
+        "sha256": "44b4dd1bb1edaebd35105e83a885f4d4285173e41753b3e1b2f3e815e21f93eb"
+      },
+      {
+        "path": "src/shortcuts/im/operations/types.ts",
+        "role": "generated-cli",
+        "size": 3054,
+        "sha256": "c21b6ca4aeb4e44052f148de0cfe275cb59aed4999b13a032301d04e84ee4f07"
+      },
+      {
+        "path": "src/shortcuts/im/operations/user-remind.ts",
+        "role": "generated-cli",
+        "size": 8968,
+        "sha256": "4bdeb7d54e86a159acca8b7396e982bb415464eb9dbd843d81726892cd770ce2"
+      },
+      {
+        "path": "src/shortcuts/im/operations/write-util.ts",
+        "role": "generated-cli",
+        "size": 4935,
+        "sha256": "12b533dcad446cb1ff0ba6654aa4b3673b6a2284de44aab92c55a5b5bde2f1b9"
+      },
+      {
+        "path": "test/business/im-command.test.ts",
+        "role": "generated-cli",
+        "size": 35624,
+        "sha256": "075db02ff35c6ed2aec6db31ec2e32ccbdd199dfda16eb7ddfafd1ffb1041ad0"
+      },
+      {
+        "path": "test/business/im-pagination.test.ts",
+        "role": "generated-cli",
+        "size": 11862,
+        "sha256": "91fe6e5581e4fa6d58fd7d3bafaf1ddeff8d928fde86afcc476a56c481242e69"
+      }
+    ]
+  },
+  "notes": [
+    "CLI 命令后缀 im，Skill 后缀 yimiaoban；业务资料为 weaver-interface 的 backend/business-apis/im/weaver-e10-yimiaoban（源 skill 1.0.7）。",
+    "2026-09-15 对齐源提交 15fcbeb（优化拉取消息逻辑）：消息类每页默认/上限 50、有界区间自动循环翻页（MAX_AUTO_PAGES=100）、无界区间单页续拉、时间范围跨度 >7 天自动收敛为该范围最后 7 天且提示必须转述、本人 cid/uid 走 teamsCheck 懒加载且绝不入请求体。",
+    "2026-09-17 新增消息免打扰能力 im.user.setRemind（接口 POST /api/em/msg/executeIm/user/setMsgRemind），源资料为 weaver-im-api 的 path.go/route.go/cmd_user_msg.go/model/msg.go 与 imsdk 的 msg_remind.proto / set_msg_remind.cc / 业务文档；请求体按服务端契约带「修改者」，由 CLI 用当前登录人身份填充。",
+    "im.file.download 是 CLI 为“媒体需登录态、落地后才能查看”补充的本地落盘 operation（源 skill 只给预览/下载 URL），影响索引映射到 im.file.preview chunk。",
+    "只记录源资料指纹与转换摘要，不保存 Cookie、Token 或大段源正文。"
+  ]
+}

@@ -1,7 +1,7 @@
 ---
 name: page-deliver
-description: "You MUST use this skill for ANY task involving code generation, page creation, publishing, deployment, or going live. 触发词：HRClaw、部署、发布、生成看板、生成页面、page-deliver、上线、代码生成、写代码、创建页面、deploy、publish、anydev、生成应用、生成工具、生成系统、应用、工具、系统、工作台"
-version: 6.0.0
+description: "Use this skill for page-deliver application code generation, page creation, publishing, deployment, going live, MCP enablement, or runtime access/control of deployed HRClaw applications. 触发词（限 page-deliver 应用/部署语境）：HRClaw、部署、发布、生成看板、生成页面、page-deliver、上线、代码生成、写代码、创建页面、deploy、publish、anydev、生成应用、生成工具、生成系统、开启 MCP、MCP 化、暴露 REST API tools、restful.json、App Capability Gateway、接入 Agent、变成智能应用、访问已上线应用、控制应用、调用应用工具"
+version: 6.1.1
 skill-tag: "v5"
 ---
 
@@ -13,7 +13,38 @@ skill-tag: "v5"
 
 没有执行计划前， 不要做任何的代码生成和部署。
 
-## 启动序列（每次触发首先执行）
+## 运行控制意图路由（最先执行）
+
+用户手动调用 `page-deliver` skill 时，先判断是否只是要访问或控制一个已经上线的 HRClaw
+应用。该判断先于部署 preflight、数仓 MCP 预检、`state init` 和 Plan。
+
+**命中条件**：
+
+- 用户要查询、访问或调用某个已上线的 HRClaw 应用
+- 用户要通过已上线应用的现有能力执行查询或业务操作
+- 用户明确表达“访问 / 控制 / 操作 / 调用某个应用”，且不涉及页面代码、部署、发布或
+  `restful.json`
+
+**不命中条件**：
+
+- 用户要求生成、修改页面或业务代码
+- 用户要求部署、发布或上线应用
+- 用户要求开启 MCP、生成或修复 `restful.json`、维护 App Capability Gateway
+- 用户只是要在页面中添加 AI 聊天、AI 摘要等前端能力
+- 用户只是要求应用调用大模型或其他 MCP 工具完成自身功能
+- 目标语义无法判断时，先按需求澄清确认，不得直接路由
+
+**移交规则**：
+
+1. 命中后跳过部署路径的 Node preflight 和数仓 MCP 预检，不执行 `state init`，不写
+   `docs/plan.md`
+2. 通过宿主 skill 调用机制调用 `control-hr-claw-app`
+3. `control-hr-claw-app` 独立完成应用发现、工具契约读取和调用；其完成后本次任务结束，
+   不返回 page-deliver 做部署
+4. MCP 不可用、鉴权失败或应用调用失败由 `control-hr-claw-app` 按自身错误规则处理；
+   page-deliver 不回退到部署流程
+
+## 部署路径启动序列（仅未命中运行控制路由时执行）
 
 1. `SKILL_DIR` = 本 SKILL.md 所在目录的绝对路径
 2. preflight 保证 Node + npm 同时可用（按当前 OS 执行对应脚本）：
@@ -28,18 +59,49 @@ skill-tag: "v5"
 
 ---
 
+## MCP 能力供给路由（启动序列后执行）
+
+启动序列完成后再判定 MCP 意图；不得为路由跳过 preflight 或 MCP 服务预检。
+
+**命中条件**：
+
+- 用户明确要求 `对当前应用开启 MCP`、`将当前应用 MCP 化`、`暴露 REST API tools`、`生成或修复 restful.json`、`维护 App Capability Gateway`
+- 用户使用 `接入 Agent`、`变成智能应用` 等表达，且目标语义是让这个 page-deliver 应用或服务可被 Agent 调用
+
+**不命中条件**：
+
+- 用户只是要在页面中添加 AI 聊天、AI 摘要等前端能力
+- 用户只是要求应用调用大模型或其他 MCP 工具完成自身功能
+- 用户只是要查询、访问或调用已上线的 HRClaw 应用时，已在运行控制路由中移交
+  `control-hr-claw-app`，不应进入本路由
+- 目标语义无法判断时，先按需求澄清确认，不得直接路由
+
+**路由规则**：
+
+1. `page-deliver` 始终是主编排方，`enable-mcp` 只作为委托 skill，不能代替 `page-deliver`
+2. 命中 MCP 意图后仍必须遵守 plan 门控：已有项目先获取 context 并完成 `state init`；新建项目先在阶段 2 确定 `projectId` / `projectDir` 并完成 `state init`；随后把「委托 enable-mcp」写入 `docs/plan.md`，最后才能调用 skill
+3. 新建应用时，先创建应用和业务功能；混合迭代时，先完成页面或业务功能修改，再执行 MCP 化 task。若已有未完成 plan，在「迭代预览」前追加「委托 enable-mcp」task，保留既有 task 与完成状态，不得直接覆盖 plan
+4. 通过宿主的 skill 调用机制调用 `enable-mcp`
+5. `enable-mcp` 负责能力范围确认、元信息确认、API 路由生成、`public/restful.json` 生成和自查
+6. `enable-mcp` 完成后必须返回 `page-deliver`，由 `page-deliver` 继续执行 full-deploy、预览确认和 publish 门控
+7. 不新增 `needsMcp` 或 `mcpEnabled` state 字段；`public/restful.json` 是 MCP 能力的事实源
+8. `page-deliver` 不复制 restful 生成逻辑，也不绕过 `enable-mcp` 的确认检查点
+
 ## Checklist
 
 You MUST complete these items in order before taking action:
 
+- [ ] **运行控制意图路由**：先判定是否只是访问/控制已上线 HRClaw 应用；命中时委托
+  `control-hr-claw-app` 并结束任务，不执行部署 preflight、`state init` 或 Plan
 - [ ] **错误处理总规则**：遇到任何阻断（CLI 返回 `status:failed` / 工具不可用 / state 不一致 / 依赖缺失 / 用户操作时序不对等）→ **先翻 `${SKILL_DIR}/references/handbook.md`** 找匹配卡片，按"给用户的话"原文输出、按"后续动作"决定下一步；handbook 没覆盖的场景才走兜底。不要自由发挥话术，不要把 stderr 截掉。
 - [ ] **获取 Context**：项目目录是否明确？**无论有没有 `.deploy-state.json`，都先执行 `state init` 归一化**（不存在则创建，旧/异形结构则归一化为标准 schemaVersion=2），再据返回的 state 判断阶段
+- [ ] **MCP 能力供给路由**：按「MCP 能力供给路由」规则判定是否命中；命中时必须先写入包含「委托 enable-mcp」的 plan，再通过宿主 skill 调用机制委托执行
 - [ ] **判断阶段**：plan.md 是否存在？有 `[ ]` 未完成的 task 则断点续传，否则进入需求澄清
 - [ ] **需求澄清**：关键变量是否已确定（needs_dw / needs_db / 页面目标）？不确定则继续提问
 - [ ] **Plan 就绪**：`docs/plan.md` 是否已写入？无则按阶段 1 表生成，有则按状态走断点续传或重新规划。没有 plan 不做任何代码改动和部署
-- [ ] **Plan 完整**：Plan 最后两个 Task 是否为 `迭代预览`、`注册发布`？（详见 `references/writing-plans.md` → 迭代循环）
+- [ ] **Plan 完整**：Plan 最后三个 Task 是否为 `迭代预览`、`Dockerfile 检查/生成`、`注册发布`？（详见 `references/writing-plans.md` → 迭代循环）
 - [ ] **代码合规检查**：阶段4 全部 task 执行完、部署前，按 `${SKILL_DIR}/references/project-constraints.md` 自查并修复违规（C1 文件上传路径、C2 MongoDB 数据库名）
-- [ ] **预览门控**：每次 `full-deploy` 后是否已弹出确认按钮？用户点"确认发布"前禁止执行 `anydev publish`
+- [ ] **预览门控**：每次 `full-deploy` 后是否已弹出确认按钮？用户点"确认注册"前禁止执行 `anydev publish`
 - [ ] **⛔ 禁止本地启动**：预览**只能**通过 `anydev full-deploy` 在 AnyDev 容器内进行。**禁止**在本地执行 `node server.js` / `npm start` / `npm run dev` / `npm run serve` / `yarn dev` / `pnpm dev` / `python app.py` / `flask run` 等任何启动命令来"预览"页面。本地启动产生的 `localhost:xxxx` 无法被外网访问，绕过了 PM2 管理与健康检查，也无法走后续 `publish` 流程。违反此条等同 `anydev full-deploy` 未执行。
 
 ---
@@ -50,23 +112,44 @@ You MUST complete these items in order before taking action:
 digraph process {
     rankdir=TB;
 
+    "运行控制意图?" [shape=diamond];
+    "委托 control-hr-claw-app" [shape=box];
+    "结束任务" [shape=box style=filled fillcolor=lightgreen];
+    "部署路径启动序列" [shape=box];
     "获取 Context" [shape=box];
+    "MCP 化意图?" [shape=diamond];
+    "确认目标语义 / 补齐项目状态" [shape=box];
     "有未完成的 plan?" [shape=diamond];
     "需求澄清（多轮对话）" [shape=box];
     "需求是否明确?" [shape=diamond];
-    "编写 Plan" [shape=box];
+    "编写 Plan（MCP 时含委托 enable-mcp task）" [shape=box];
     "按 Plan 逐步执行" [shape=box];
+    "MCP task?" [shape=diamond];
+    "委托 enable-mcp" [shape=box];
+    "返回 page-deliver 部署验证" [shape=box];
     "全部步骤完成?" [shape=diamond];
     "标记 completed" [shape=box style=filled fillcolor=lightgreen];
 
+    "运行控制意图?" -> "委托 control-hr-claw-app" [label="是"];
+    "委托 control-hr-claw-app" -> "结束任务";
+    "运行控制意图?" -> "部署路径启动序列" [label="否"];
+    "部署路径启动序列" -> "获取 Context";
     "获取 Context" -> "有未完成的 plan?";
+    "获取 Context" -> "MCP 化意图?";
+    "MCP 化意图?" -> "确认目标语义 / 补齐项目状态" [label="是"];
+    "确认目标语义 / 补齐项目状态" -> "有未完成的 plan?";
+    "MCP 化意图?" -> "有未完成的 plan?" [label="否"];
     "有未完成的 plan?" -> "按 Plan 逐步执行" [label="是（断点续传）"];
     "有未完成的 plan?" -> "需求澄清（多轮对话）" [label="否"];
     "需求澄清（多轮对话）" -> "需求是否明确?";
     "需求是否明确?" -> "需求澄清（多轮对话）" [label="否，继续提问"];
-    "需求是否明确?" -> "编写 Plan" [label="是"];
-    "编写 Plan" -> "按 Plan 逐步执行";
-    "按 Plan 逐步执行" -> "全部步骤完成?";
+    "需求是否明确?" -> "编写 Plan（MCP 时含委托 enable-mcp task）" [label="是"];
+    "编写 Plan（MCP 时含委托 enable-mcp task）" -> "按 Plan 逐步执行";
+    "按 Plan 逐步执行" -> "MCP task?";
+    "MCP task?" -> "委托 enable-mcp" [label="是"];
+    "委托 enable-mcp" -> "返回 page-deliver 部署验证";
+    "返回 page-deliver 部署验证" -> "全部步骤完成?";
+    "MCP task?" -> "全部步骤完成?" [label="否"];
     "全部步骤完成?" -> "按 Plan 逐步执行" [label="否，下一步"];
     "全部步骤完成?" -> "标记 completed" [label="是"];
 }
@@ -149,8 +232,8 @@ digraph process {
 2. `needs_dw=true` 时额外读取：`${SKILL_DIR}/references/dw-readonly-guide.md`
 3. 参考 Task 清单：`${SKILL_DIR}/references/common-tasks.md`（非穷举，按需裁剪）
 4. 根据需求自行决定需要哪些 task、什么顺序
-3. 写入 `{project_dir}/docs/plan.md`（覆盖已有 plan）
-4. 执行 `state update` 标记进行中：
+5. 写入 `{project_dir}/docs/plan.md`（覆盖已有 plan）
+6. 执行 `state update` 标记进行中：
    ```bash
    echo '{"projectDir":"<project_dir_abs>","fields":{"state":"in_progress"}}' | node "$PD" state update --input -
    ```
@@ -217,13 +300,13 @@ digraph process {
 
 详见 `references/writing-plans.md` → **迭代循环**。简要流程：
 
-1. **迭代预览**：执行 `anydev full-deploy`（只传 `projectDir`）→ 输出预览确认模板 → `ask_followup_question` 弹"确认发布"按钮。如用户输入文字反馈，则修改代码、在 plan 中追加新 task、重新 full-deploy、重新弹确认按钮——循环直到用户点击"确认发布"。
+1. **迭代预览**：执行 `anydev full-deploy`（只传 `projectDir`）→ 输出预览确认模板 → `ask_followup_question` 弹"确认注册"按钮。如用户输入文字反馈，则修改代码、在 plan 中追加新 task、重新 full-deploy、重新弹确认按钮——循环直到用户点击"确认注册"。
 
-   ⚠️ **预览 = anydev full-deploy，不是本地启动。** 禁止用 `node server.js` / `npm start` / `npm run dev` 等本地命令"预览"。full-deploy 返回的 `ip`/`port` 是 AnyDev 容器地址，预览 URL 必须用该地址拼接，禁止填 `localhost`。
+   ⚠️ **预览 = anydev full-deploy，不是本地启动。** 禁止用 `node server.js` / `npm start` / `npm run dev` 等本地命令"预览"。预览地址按 `references/output-templates.md` → **预览确认模板** 的占位符来源取值（优先 full-deploy 返回的 `data.previewUrl`，无则用返回的 `ip`/`port` 拼接的 AnyDev 容器地址），禁止填 `localhost`。
   ```bash
   echo '{"projectDir":"<project_dir_abs>"}' | node "$PD" anydev full-deploy --input -
   ```
-2. **Dockerfile 检查/生成**（用户点确认发布后）：确保项目根目录存在合理的 Dockerfile（含 `{{PROJECT_ID}}` 占位符）和 `.dockerignore`。已有则校验修正，无则根据项目实际情况生成并**写入项目根目录**（full-deploy 阶段不再兜底生成），完成后把 projectType 持久化到 state。模板见 `${SKILL_DIR}/assets/templates/dockerfile/`。
+2. **Dockerfile 检查/生成**（用户点确认注册后）：确保项目根目录存在合理的 Dockerfile（含 `{{PROJECT_ID}}` 占位符）和 `.dockerignore`。已有则校验修正，无则根据项目实际情况生成并**写入项目根目录**（full-deploy 阶段不再兜底生成），完成后把 projectType 持久化到 state。模板见 `${SKILL_DIR}/assets/templates/dockerfile/`。
    ```bash
    echo '{"projectDir":"<project_dir_abs>","fields":{"projectType":"<node|python>"}}' | node "$PD" state update --input -
    ```

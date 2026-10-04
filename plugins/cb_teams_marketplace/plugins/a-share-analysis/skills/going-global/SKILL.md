@@ -1,6 +1,8 @@
 ---
 name: going-global
 description: 用于出海链投资分析，聚焦全球化投资、制造业研究、行业比较优势、中长期成长。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户关注中国企业出海、海外扩张、全球份额提升时，希望知道公司出海是真成长还是概念故事，哪些环节最容易兑现，哪些有地缘、汇率、渠道、认证等风险。
+description_zh: "用于出海链投资分析，聚焦全球化投资、制造业研究、行业比较优势、中长期成长。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户关注中国企业出海、海外扩张、全球份额提升时，希望知道公司出海是真成长还是概念故事，哪些环节最容易兑现，哪些有地缘、汇率、渠道、认证等风险。"
+description_en: "Use for investment analysis of Chinese companies expanding overseas, focusing on global investing, manufacturing research, comparative industry advantages, and medium- to long-term growth. Suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It evaluates whether overseas expansion represents genuine growth or merely a narrative, which links are most likely to deliver results, and where geopolitical, currency, channel, and certification risks lie."
 ---
 
 # 出海链投资

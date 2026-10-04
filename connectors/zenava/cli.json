@@ -1,0 +1,38 @@
+{
+  "init": {
+    "darwin": "python -m pip install --upgrade zenava",
+    "linux": "python -m pip install --upgrade zenava",
+    "win32": "python -m pip install --upgrade zenava tzdata"
+  },
+  "runtime": {
+    "type": "python",
+    "version": ">=3.12"
+  },
+  "status": {
+    "darwin": "zenava --version >/dev/null 2>&1; ZENAVA_AUTH=$(find \"$HOME/.workbuddy\" \\( -name binaries -o -name logs -o -name app -o -name cache \\) -prune -o -type f -path '*/zenava/scripts/auth_server.py' -print0 2>/dev/null | xargs -0 stat -f '%m %N' 2>/dev/null | sort -nr | awk 'NR==1{ $1=\"\"; sub(/^ /,\"\"); print }'); python \"$ZENAVA_AUTH\" --status",
+    "linux": "zenava --version >/dev/null 2>&1; ZENAVA_AUTH=$(find \"$HOME/.workbuddy\" \\( -name binaries -o -name logs -o -name app -o -name cache \\) -prune -o -type f -path '*/zenava/scripts/auth_server.py' -print0 2>/dev/null | xargs -0 stat -c '%Y %n' 2>/dev/null | sort -nr | awk 'NR==1{ $1=\"\"; sub(/^ /,\"\"); print }'); python \"$ZENAVA_AUTH\" --status",
+    "win32": "zenava --version >nul 2>&1 & powershell -NoProfile -Command \"$root = Join-Path $env:USERPROFILE '.workbuddy'; $skip = @('binaries','logs','app','cache'); $best = $null; $stack = New-Object System.Collections.Generic.Stack[string]; if (Test-Path -LiteralPath $root) { $stack.Push($root) }; while ($stack.Count -gt 0) { $dir = $stack.Pop(); try { $entries = [System.IO.Directory]::EnumerateFileSystemEntries($dir) } catch { continue }; foreach ($e in $entries) { if ([System.IO.Directory]::Exists($e)) { if ($skip -notcontains [System.IO.Path]::GetFileName($e)) { $stack.Push($e) } } elseif ([System.IO.Path]::GetFileName($e) -eq 'auth_server.py' -and [System.IO.Path]::GetFileName([System.IO.Path]::GetDirectoryName($e)) -eq 'scripts' -and [System.IO.Path]::GetFileName([System.IO.Path]::GetDirectoryName([System.IO.Path]::GetDirectoryName($e))) -eq 'zenava') { if (-not $best -or [System.IO.File]::GetLastWriteTimeUtc($e) -gt [System.IO.File]::GetLastWriteTimeUtc($best)) { $best = $e } } } }; if (-not $best) { exit 1 }; & python $best --status; exit $LASTEXITCODE\""
+  },
+  "statusMatch": "CONNECTED",
+  "unAuth": {
+    "darwin": "ZENAVA_AUTH=$(find \"$HOME/.workbuddy\" \\( -name binaries -o -name logs -o -name app -o -name cache \\) -prune -o -type f -path '*/zenava/scripts/auth_server.py' -print0 2>/dev/null | xargs -0 stat -f '%m %N' 2>/dev/null | sort -nr | awk 'NR==1{ $1=\"\"; sub(/^ /,\"\"); print }'); python \"$ZENAVA_AUTH\" --logout; python -m pip uninstall -y zenava || true",
+    "linux": "ZENAVA_AUTH=$(find \"$HOME/.workbuddy\" \\( -name binaries -o -name logs -o -name app -o -name cache \\) -prune -o -type f -path '*/zenava/scripts/auth_server.py' -print0 2>/dev/null | xargs -0 stat -c '%Y %n' 2>/dev/null | sort -nr | awk 'NR==1{ $1=\"\"; sub(/^ /,\"\"); print }'); python \"$ZENAVA_AUTH\" --logout; python -m pip uninstall -y zenava || true",
+    "win32": "powershell -NoProfile -Command \"$root = Join-Path $env:USERPROFILE '.workbuddy'; $skip = @('binaries','logs','app','cache'); $best = $null; $stack = New-Object System.Collections.Generic.Stack[string]; if (Test-Path -LiteralPath $root) { $stack.Push($root) }; while ($stack.Count -gt 0) { $dir = $stack.Pop(); try { $entries = [System.IO.Directory]::EnumerateFileSystemEntries($dir) } catch { continue }; foreach ($e in $entries) { if ([System.IO.Directory]::Exists($e)) { if ($skip -notcontains [System.IO.Path]::GetFileName($e)) { $stack.Push($e) } } elseif ([System.IO.Path]::GetFileName($e) -eq 'auth_server.py' -and [System.IO.Path]::GetFileName([System.IO.Path]::GetDirectoryName($e)) -eq 'scripts' -and [System.IO.Path]::GetFileName([System.IO.Path]::GetDirectoryName([System.IO.Path]::GetDirectoryName($e))) -eq 'zenava') { if (-not $best -or [System.IO.File]::GetLastWriteTimeUtc($e) -gt [System.IO.File]::GetLastWriteTimeUtc($best)) { $best = $e } } } }; if (-not $best) { exit 1 }; & python $best --logout; exit $LASTEXITCODE\" & python -m pip uninstall -y zenava & exit /b 0"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "python -c \"from importlib.metadata import version; print(version('zenava'))\"",
+      "linux": "python -c \"from importlib.metadata import version; print(version('zenava'))\"",
+      "win32": "python -c \"from importlib.metadata import version; print(version('zenava'))\""
+    },
+    "minVersion": "0.4.0",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  },
+  "auth": {
+    "darwin": "zenava --version >/dev/null 2>&1; ZENAVA_AUTH=$(find \"$HOME/.workbuddy\" \\( -name binaries -o -name logs -o -name app -o -name cache \\) -prune -o -type f -path '*/zenava/scripts/auth_server.py' -print0 2>/dev/null | xargs -0 stat -f '%m %N' 2>/dev/null | sort -nr | awk 'NR==1{ $1=\"\"; sub(/^ /,\"\"); print }'); python \"$ZENAVA_AUTH\"",
+    "linux": "zenava --version >/dev/null 2>&1; ZENAVA_AUTH=$(find \"$HOME/.workbuddy\" \\( -name binaries -o -name logs -o -name app -o -name cache \\) -prune -o -type f -path '*/zenava/scripts/auth_server.py' -print0 2>/dev/null | xargs -0 stat -c '%Y %n' 2>/dev/null | sort -nr | awk 'NR==1{ $1=\"\"; sub(/^ /,\"\"); print }'); python \"$ZENAVA_AUTH\"",
+    "win32": "zenava --version >nul 2>&1 & powershell -NoProfile -Command \"$root = Join-Path $env:USERPROFILE '.workbuddy'; $skip = @('binaries','logs','app','cache'); $best = $null; $stack = New-Object System.Collections.Generic.Stack[string]; if (Test-Path -LiteralPath $root) { $stack.Push($root) }; while ($stack.Count -gt 0) { $dir = $stack.Pop(); try { $entries = [System.IO.Directory]::EnumerateFileSystemEntries($dir) } catch { continue }; foreach ($e in $entries) { if ([System.IO.Directory]::Exists($e)) { if ($skip -notcontains [System.IO.Path]::GetFileName($e)) { $stack.Push($e) } } elseif ([System.IO.Path]::GetFileName($e) -eq 'auth_server.py' -and [System.IO.Path]::GetFileName([System.IO.Path]::GetDirectoryName($e)) -eq 'scripts' -and [System.IO.Path]::GetFileName([System.IO.Path]::GetDirectoryName([System.IO.Path]::GetDirectoryName($e))) -eq 'zenava') { if (-not $best -or [System.IO.File]::GetLastWriteTimeUtc($e) -gt [System.IO.File]::GetLastWriteTimeUtc($best)) { $best = $e } } } }; if (-not $best) { exit 1 }; & python $best; exit $LASTEXITCODE\""
+  },
+  "authUrlDomain": "127.0.0.1",
+  "authWaitForExit": true
+}

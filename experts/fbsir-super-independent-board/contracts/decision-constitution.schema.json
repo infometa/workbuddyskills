@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.fbsir.local/super-independent-board/decision-constitution.schema.json",
+  "title": "超级独董会决策宪章",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileVersion",
+    "defaultScope",
+    "entries"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "fbsir.super-independent-board.decision-constitution/v1"
+    },
+    "profileVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "defaultScope": {
+      "enum": [
+        "current_case",
+        "current_session"
+      ]
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "field",
+          "value",
+          "source",
+          "scope",
+          "confirmed",
+          "active"
+        ],
+        "properties": {
+          "field": {
+            "enum": [
+              "decisionRole",
+              "humanApprover",
+              "evidenceThreshold",
+              "riskPreference",
+              "decisionHorizon",
+              "challengeStrength",
+              "outputDensity",
+              "preferredArtifacts",
+              "stakeholderPriorities",
+              "redLines"
+            ]
+          },
+          "value": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "source": {
+            "enum": [
+              "explicit",
+              "inferred",
+              "unknown"
+            ]
+          },
+          "scope": {
+            "enum": [
+              "current_case",
+              "current_session",
+              "consented_long_term"
+            ]
+          },
+          "confirmed": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "source": {
+                  "const": "inferred"
+                },
+                "confirmed": {
+                  "const": false
+                }
+              },
+              "required": [
+                "source",
+                "confirmed"
+              ]
+            },
+            "then": {
+              "properties": {
+                "active": {
+                  "const": false
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

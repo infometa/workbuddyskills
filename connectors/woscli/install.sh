@@ -19,14 +19,21 @@ mkdir -p "$WOSCLI_HOME" || die "cannot create $WOSCLI_HOME"
 echo "==> Downloading woscli..."
 curl -fsSL "$ZIP_URL" -o "$TMP_DIR/woscli.zip" || die "download failed"
 
-# Integrity check. Set EXPECTED_SHA256 to the official release hash published by
-# Weimob; left empty on purpose so the connector still works before the hash is
-# published. Fill it to enable tamper protection.
-EXPECTED_SHA256=""
-if [ -n "$EXPECTED_SHA256" ]; then
-  ACTUAL_SHA256="$(sha256sum "$TMP_DIR/woscli.zip" 2>/dev/null | awk '{print $1}')"
-  [ "$ACTUAL_SHA256" != "$EXPECTED_SHA256" ] && die "checksum mismatch"
-fi
+# SHA256 of the official woscli.zip release. Keep this value in sync whenever
+# the published archive changes; installation must fail closed on mismatch.
+EXPECTED_SHA256="4d202e2617fd15de7d2f6f6096241136e020f0904d8b62fafc327522b4b38901"
+calculate_sha256() {
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$1" | awk '{print $1}'
+  elif command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$1" | awk '{print $1}'
+  else
+    return 1
+  fi
+}
+ACTUAL_SHA256="$(calculate_sha256 "$TMP_DIR/woscli.zip")" || \
+  die "SHA256 tool not found (install sha256sum or shasum and retry)"
+[ "$ACTUAL_SHA256" != "$EXPECTED_SHA256" ] && die "checksum mismatch"
 
 echo "==> Extracting..."
 unzip -o "$TMP_DIR/woscli.zip" -d "$TMP_DIR/woscli" >/dev/null 2>&1 || \
@@ -96,6 +103,9 @@ fi
 if command -v woscli >/dev/null 2>&1; then
   echo "==> woscli is ready: $(command -v woscli)"
   woscli --version 2>/dev/null || true
+  # Mark requests as originating from workbuddy (enables gateway plugins such as starcoin)
+  woscli config set http.headers.x-source-app workbuddy 2>/dev/null || \
+    echo "    (config set skipped - woscli may need a newer version)"
 else
   echo "==> woscli installed, but not on PATH in this session."
   echo "    To use now: export PATH=\"$WOSCLI_HOME:\$PATH\""

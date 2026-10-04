@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/story-card/2.0",
+  "title": "Story Card Metadata",
+  "x-schema-version": "2.0",
+  "x-storage": "markdown-frontmatter",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "story_id", "mother_relation", "source_ids", "segment_ids", "person_ids", "source_status", "visibility", "manuscript_use", "status"],
+  "properties": {
+    "schema_version": {"const": "2.0"},
+    "story_id": {"type": "string", "pattern": "^STY-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "mother_relation": {"enum": ["direct_experience", "relationship_story", "family_view", "shared_family_event", "growth_context", "indirect_material", "family_branch"]},
+    "source_ids": {"type": "array", "items": {"type": "string", "pattern": "^SRC-[A-Z0-9]{12,64}$"}, "minItems": 1, "uniqueItems": true},
+    "segment_ids": {"type": "array", "items": {"type": "string", "pattern": "^SEG-[A-Z0-9][A-Z0-9_-]{2,63}$"}, "uniqueItems": true},
+    "person_ids": {"type": "array", "items": {"type": "string", "pattern": "^PER-[A-Z0-9][A-Z0-9_-]{2,63}$"}, "uniqueItems": true},
+    "source_status": {"enum": ["observed", "stated", "metadata", "confirmed", "inferred", "disputed", "unknown", "pending"]},
+    "visibility": {"enum": ["private", "selected_family", "family", "public", "pending"]},
+    "manuscript_use": {"enum": ["pending", "no", "yes"]},
+    "status": {"enum": ["candidate", "confirmed", "disputed", "withdrawn"]},
+    "title": {"type": "string"}
+  }
+}

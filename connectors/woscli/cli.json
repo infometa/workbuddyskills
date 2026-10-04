@@ -5,30 +5,31 @@
         "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"irm https://ipaas-huawei-cloud-1252328573.cos.ap-shanghai.myqcloud.com/wai/install.ps1 | iex\""
     },
     "auth": {
-        "darwin": "$HOME/.woscli/woscli login",
-        "linux": "$HOME/.woscli/woscli login",
-        "win32": "\"%USERPROFILE%\\.woscli\\woscli.exe\" login"
+        "darwin": "~/.woscli/woscli login",
+        "linux": "~/.woscli/woscli login",
+        "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& (Join-Path $env:USERPROFILE '.woscli\\woscli.exe') login\""
     },
     "unAuth": {
-        "darwin": "$HOME/.woscli/woscli logout",
-        "linux": "$HOME/.woscli/woscli logout",
-        "win32": "\"%USERPROFILE%\\.woscli\\woscli.exe\" logout"
+        "darwin": "~/.woscli/woscli logout",
+        "linux": "~/.woscli/woscli logout",
+        "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& (Join-Path $env:USERPROFILE '.woscli\\woscli.exe') logout\""
     },
     "status": {
-        "darwin": "$HOME/.woscli/woscli status",
-        "linux": "$HOME/.woscli/woscli status",
-        "win32": "\"%USERPROFILE%\\.woscli\\woscli.exe\" status"
+        "darwin": "~/.woscli/woscli status",
+        "linux": "~/.woscli/woscli status",
+        "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& (Join-Path $env:USERPROFILE '.woscli\\woscli.exe') status\""
     },
     "statusMatch": "已授权",
     "authUrlDomain": "weimob.com",
     "authSuppressBrowser": true,
+    "authWaitForExit": true,
     "versionCheck": {
         "command": {
-            "darwin": "$HOME/.woscli/woscli --version",
-            "linux": "$HOME/.woscli/woscli --version",
-            "win32": "\"%USERPROFILE%\\.woscli\\woscli.exe\" --version"
+            "darwin": "~/.woscli/woscli --version",
+            "linux": "~/.woscli/woscli --version",
+            "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$exe=(Join-Path $env:USERPROFILE '.woscli\\woscli.exe'); if(-not(Test-Path $exe)){ Write-Host 'woscli version v0.0.0' } else { & $exe --version }\""
         },
-        "minVersion": "0.0.0",
-        "versionPattern": "woscli version (v\\d+\\.\\d+\\.\\d+|v_\\d+_\\d+-[0-9]+-g[0-9a-f]+(?:-dirty)?)"
+        "minVersion": "1.0.0",
+        "versionPattern": "woscli version v?(\\d+\\.\\d+\\.\\d+|v_\\d+_\\d+-[0-9]+-g[0-9a-f]+(?:-dirty)?)"
     }
 }

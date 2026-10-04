@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/delivery-gate-summary.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sceneId",
+    "operationMode",
+    "targetTransition",
+    "contentRiskClass",
+    "planDigest",
+    "requiredMachineGateCount",
+    "requiredHumanGateCount",
+    "machineResults",
+    "humanResults",
+    "blockers",
+    "deliveryReady",
+    "deliveryBlockedPendingGateEvaluation",
+    "summaryDigest",
+    "receipt"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "sceneId": {
+      "type": "string"
+    },
+    "operationMode": {
+      "type": "string"
+    },
+    "targetTransition": {
+      "const": "delivery_ready"
+    },
+    "contentRiskClass": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "restricted"
+      ]
+    },
+    "planDigest": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "requiredMachineGateCount": {
+      "type": "integer"
+    },
+    "requiredHumanGateCount": {
+      "type": "integer"
+    },
+    "machineResults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "gateKey",
+          "status",
+          "receiptDigest"
+        ],
+        "properties": {
+          "gateKey": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "receiptDigest": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "humanResults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "gateKey",
+          "status",
+          "receiptDigest"
+        ],
+        "properties": {
+          "gateKey": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "receiptDigest": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{80,96}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "deliveryReady": {
+      "type": "boolean"
+    },
+    "deliveryBlockedPendingGateEvaluation": {
+      "type": "boolean"
+    },
+    "summaryDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "sceneId",
+        "scenePackDigest",
+        "projectStateDigest",
+        "artifactSetDigest",
+        "evidenceSnapshotDigest",
+        "planDigest",
+        "machineReceiptDigests",
+        "humanReceiptDigests",
+        "decision",
+        "receiptDigest"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0.0"
+        },
+        "sceneId": {
+          "type": "string"
+        },
+        "scenePackDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectStateDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "artifactSetDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidenceSnapshotDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "planDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "machineReceiptDigests": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "uniqueItems": true
+        },
+        "humanReceiptDigests": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{80,96}$"
+              }
+            ]
+          },
+          "uniqueItems": true
+        },
+        "decision": {
+          "enum": [
+            "delivery_ready",
+            "blocked"
+          ]
+        },
+        "receiptDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

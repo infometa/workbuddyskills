@@ -1,0 +1,64 @@
+<div class="pcf-section">
+  <h3>工商基本信息</h3>
+  <div class="pcf-section__grid">
+    {{#bizInfo}}
+    <div class="pcf-section__field">
+      <div class="pcf-section__label">{{label}}</div>
+      <div class="pcf-section__value">{{value}}</div>
+    </div>
+    {{/bizInfo}}
+  </div>
+
+  <h3>主营业务</h3>
+  <div class="pcf-section__grid">
+    {{#mainBusiness}}
+    <div class="pcf-section__field">
+      <div class="pcf-section__label">{{label}}</div>
+      <div class="pcf-section__value">{{value}}</div>
+    </div>
+    {{/mainBusiness}}
+  </div>
+
+  <h3>客户标签</h3>
+  <div class="pcf-section__grid">
+    {{#customerTags}}
+    <div class="pcf-section__field">
+      <div class="pcf-section__label">{{label}}</div>
+      <div class="pcf-section__value">{{value}}</div>
+    </div>
+    {{/customerTags}}
+  </div>
+
+  <h3>资质与证书</h3>
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>名称</th><th>状态</th><th>备注</th></tr></thead>
+      <tbody>
+        {{#certifications}}
+        <tr><td>{{name}}</td><td>{{status}}</td><td>{{note}}</td></tr>
+        {{/certifications}}
+      </tbody>
+    </table>
+  </div>
+
+  <h3>知识产权</h3>
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>类型</th><th>数量</th><th>备注</th></tr></thead>
+      <tbody>
+        {{#intellectualProperty}}
+        <tr><td>{{type}}</td><td>{{count}}</td><td>{{note}}</td></tr>
+        {{/intellectualProperty}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

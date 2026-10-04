@@ -1,0 +1,77 @@
+{
+  "name": "digest",
+  "label": "今日导读型",
+  "description": "以“今日关注”或类似结构展示一个主标题和少量辅助信息。",
+  "background": "#FFFFFF",
+  "layers": [
+    {
+      "type": "rect",
+      "x": 40,
+      "y": 40,
+      "w": 200,
+      "h": 50,
+      "fill": "#1a1a1a"
+    },
+    {
+      "type": "text",
+      "text": "今日关注",
+      "x": 60,
+      "y": 46,
+      "size": 28,
+      "min_size": 22,
+      "max_width": 160,
+      "max_lines": 1,
+      "color": "#FFFFFF"
+    },
+    {
+      "type": "text",
+      "field": "masthead.text",
+      "text": "{masthead}  {date}",
+      "x": 40,
+      "y": 120,
+      "size": 32,
+      "min_size": 24,
+      "max_width": 1000,
+      "max_lines": 1,
+      "color": "#666666"
+    },
+    {
+      "type": "text",
+      "field": "headline.original",
+      "text": "{headline}",
+      "x": 40,
+      "y": 180,
+      "size": 68,
+      "min_size": 42,
+      "max_width": 1000,
+      "max_lines": 2,
+      "line_spacing": 10,
+      "color": "#000000"
+    },
+    {
+      "type": "image",
+      "field": "primary_photo.path",
+      "src": "{primary_photo_path}",
+      "x": 40,
+      "y": 430,
+      "w": 1000,
+      "h": 500,
+      "fit": "cover",
+      "allow_placeholder": true,
+      "placeholder": "图片占位：待确认核心新闻图片"
+    },
+    {
+      "type": "text",
+      "field": "sub_headline.text",
+      "text": "{sub_headline}",
+      "x": 40,
+      "y": 970,
+      "size": 36,
+      "min_size": 28,
+      "max_width": 1000,
+      "max_lines": 2,
+      "line_spacing": 8,
+      "color": "#444444"
+    }
+  ]
+}

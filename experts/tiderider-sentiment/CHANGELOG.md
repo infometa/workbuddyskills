@@ -5,6 +5,18 @@
 
 ---
 
+## [1.2.2] - 2026-08-13
+
+### 变更 / 方法论沉淀
+- **BigQuery 成本铁律补全（query-rules 第 2b 条）**：新增「时间分区 + UID 聚簇」双层裁剪与「单文本列」硬约束。游戏明确时必须按 `unified_edition_id` 聚簇过滤，实跑扫描再降 100–200x；明确提示 **dry-run 看不出聚簇收益（估算偏高、会误导），成本以实际 `total_bytes_billed` 为准**；禁止 `COALESCE` 双读文本列；取帖下评论时加 `comment_time` 宽松下界、不设上界（评论入库晚于发帖）。
+- **字段口径更正（Common Field Reference）**：
+  - `reviewer` = 作者昵称、约 100% 填充（更正早期"无作者字段"的误判），用于 KOL/作者聚合与引文归属；`follower_number` 取 `MAX` 不取 `SUM`。
+  - `comment_parent_id` 非 `-1` 时其值等于所回复主帖的 `comment_id`，可自连接构建「主帖 → 观众评论」评论树。
+  - `country='global'` 是**无地理信息兜底桶**（Discord/YouTube 等常无法定位发帖人），**非真实地区**——禁止当作第一大地区，应单列标注并按可定位行计算真实国别份额。
+
+### 说明
+- 本次为文档/方法论层面的知识沉淀，不改动任一 skill 的脚本行为；上述取数与口径规则同步存在于本地 `link-kol-sentiment-tracking` skill（link/kol/voice 三模式）的实测基准中。
+
 ## [1.2.1] - 2026-07-31
 
 ### 修复 / 合规

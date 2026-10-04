@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.0.0",
-  "lastUpdated": "2026-08-16T09:21:03Z",
+  "lastUpdated": "2026-08-18T03:00:00Z",
   "author": {
     "name": "AI Expert Center",
     "source": "https://github.com/msitarzewski/agency-agents",
@@ -32,6 +32,17 @@
       "description": {
         "en": "Product managers, UI/UX designers, interaction designers, user researchers",
         "zh": "产品经理、UI/UX设计师、交互设计师、用户研究员"
+      }
+    },
+    {
+      "id": "15-BackToSchool",
+      "name": {
+        "en": "Back to School",
+        "zh": "开学季"
+      },
+      "description": {
+        "en": "Back-to-school season experts: new semester planning, study supplies & education products, exam preparation, campus life preparation",
+        "zh": "开学季主题专家：新学期规划、学习用品与教育产品、备考升学、校园生活准备"
       }
     },
     {
@@ -8850,7 +8861,7 @@
       },
       "avatar": "/avatars/CATNetworkQualityAnalyst.png",
       "createdAt": "2026-04-20T11:32:00Z",
-      "updatedAt": "2026-08-10T12:42:45Z",
+      "updatedAt": "2026-08-24T04:05:45Z",
       "defaultInitPrompt": {
         "zh": "帮分析一下云拨测任务task-xxxxxxxx最近24小时的错误情况",
         "en": "Please analyze the error status of the cloud probe task task-xxxxxxxx over the last 24 hours."
@@ -8871,18 +8882,6 @@
         {
           "zh": "性能分析",
           "en": "Performance Analysis"
-        },
-        {
-          "zh": "错误分析",
-          "en": "Error Analysis"
-        },
-        {
-          "zh": "抓包分析",
-          "en": "Packet Capture Analysis"
-        },
-        {
-          "zh": "多任务对比",
-          "en": "Multi-Task Comparison"
         }
       ],
       "quickPrompts": [
@@ -8897,10 +8896,6 @@
         {
           "zh": "帮对任务task-xxxxxxxx北京移动进行抓包分析",
           "en": "Please analyze the packet capture status of the cloud probe task task-xxxxxxxx for Beijing Mobile."
-        },
-        {
-          "zh": "帮以task-aaaabbbb为基准，task-aaaaaaaa、task-bbbbbbbb为对比，进行多任务对比分析",
-          "en": "Please analyze the multi-task comparison status of the cloud probe task task-aaaabbbb as the base, task-aaaaaaaa and task-bbbbbbbb as the comparison."
         }
       ]
     },
@@ -9679,53 +9674,53 @@
       "id": "PptCreationExpert",
       "categoryId": "06-ContentCreative",
       "displayName": {
-        "en": "Slide",
-        "zh": "幻灯灯"
+        "en": "Tencent Yunzhi",
+        "zh": "腾讯云知（乐享）"
       },
       "profession": {
-        "en": "PPT Creation Expert",
-        "zh": "PPT制作专家"
+        "en": "Tencent Cloud PPT Creation Expert",
+        "zh": "腾讯云PPT制作专家"
       },
       "description": {
-        "en": "Intelligent PPT generation assistant, converts ideas into professional presentations with one click",
-        "zh": "智能 PPT 生成助手，一键将想法转化为精美演示文稿"
+        "zh": "基于腾讯云知（乐享）平台，整合通用汇报、面客方案、高拜材料与演讲讲稿生成的 PPT 制作专家",
+        "en": "A presentation expert built on the Tencent Cloud Zhi (Lexiang) platform, tailored to Tencent Cloud templates. It integrates streamlined workflows for general presentations, customer-facing solution decks, executive briefing materials, and speech script generation."
       },
       "avatar": "/avatars/PptCreationExpert.png",
       "createdAt": "2026-04-10T00:00:00Z",
-      "updatedAt": "2026-04-20T07:19:41Z",
+      "updatedAt": "2026-08-25T09:18:07Z",
       "defaultInitPrompt": {
-        "zh": "帮我制作一份项目汇报PPT",
-        "en": "Help me create a project report presentation"
+        "zh": "你好！我是 PPT 制作专家，可以帮你快速生成专业演示文稿。无论是通用主题汇报，还是面向客户的解决方案，把主题或资料发给我就行。你想做一份什么样的 PPT？",
+        "en": "Hi! I'm your PPT Creation Expert. I can quickly turn your topic or materials into a polished presentation — whether it's a general report or a customer-facing solution deck. What kind of PPT would you like to create?"
       },
       "expertType": "agent",
-      "agentName": "ppt-creation-expert",
-      "plugin": "ppt-implement",
+      "agentName": "ppt-creator",
+      "plugin": "ppt-creation-expert",
       "tags": [
         {
-          "zh": "PPT制作",
-          "en": "PPT Creation"
+          "en": "PPT Generation",
+          "zh": "PPT 生成"
         },
         {
-          "zh": "演示设计",
-          "en": "Presentation Design"
+          "en": "Solution Deck",
+          "zh": "解决方案"
         },
         {
-          "zh": "幻灯片生成",
-          "en": "Slide Generation"
+          "en": "Client-facing Materials",
+          "zh": "面客材料"
         }
       ],
       "quickPrompts": [
         {
-          "zh": "帮我制作一份项目汇报PPT",
-          "en": "Help me create a project report presentation"
+          "en": "Generate a customer-facing solution deck for the smart healthcare industry",
+          "zh": "帮我生成一份智慧医疗行业的面客解决方案 PPT"
         },
         {
-          "zh": "将大纲内容转化为演示幻灯片",
-          "en": "Convert outline content into presentation slides"
+          "en": "Create executive briefing materials for a client chairman meeting",
+          "zh": "帮我做一份拜访客户董事长的高拜材料"
         },
         {
-          "zh": "设计商业汇报PPT模板和排版",
-          "en": "Design business presentation PPT templates and layouts"
+          "en": "Turn this document into a presentation",
+          "zh": "把这份文档做成 PPT"
         }
       ],
       "promptFile": "/plugins/ppt-implement/agents/ppt-creation-expert.md"
@@ -10356,7 +10351,7 @@
       "promptFile": "/plugins/stock-partner-team/agents/stock-partner-lead.md",
       "avatar": "/plugins/stock-partner-team/avatars/team.png",
       "createdAt": "2026-04-15T00:00:00Z",
-      "updatedAt": "2026-08-14T09:30:03Z",
+      "updatedAt": "2026-08-17T05:39:28Z",
       "defaultInitPrompt": {
         "zh": "算力 VS 人形机器人，2026 下半年哪条主线更值得关注？",
         "en": "Compute power vs. humanoid robots — which main theme is more worth watching in H2 2026?"
@@ -12146,15 +12141,15 @@
         "zh": "数据建表专家"
       },
       "description": {
-        "en": "By Kingsoft Docs Turn group-chat jielong into structured tables, generate shareable info-collection forms, and beautify spreadsheets with rule enforcement (conditional formatting, data validation dropdowns, and range protection). Excels at jielong parsing, field inference, format normalization and deduplication.",
-        "zh": "金山文档出品将群聊接龙一键转为结构化表格，一句话生成可分享的信息收集表，智能美化表格并固化规则（条件格式高亮异常值、数据校验下拉约束、区域保护锁定表头）。擅长接龙识别、字段推断、格式规范与数据去重。"
+        "zh": "金山文档出品，专注接龙转表与智能表单，支持条件格式、数据校验和区域保护，省心好用。",
+        "en": "By Kingsoft Docs Turn group-chat jielong into structured tables, create shareable WPS smart forms, and beautify spreadsheets with rule enforcement (conditional formatting, data validation dropdowns, and range protection). Excels at jielong parsing, form design, format normalization and deduplication."
       },
       "avatar": "/avatars/KdocsDataTable.png",
       "createdAt": "2026-04-27T08:47:00Z",
-      "updatedAt": "2026-06-24T10:18:00Z",
+      "updatedAt": "2026-09-04T09:47:14Z",
       "defaultInitPrompt": {
-        "zh": "你好，我是数据建表专家。把接龙文本贴给我、告诉我要收集什么信息、或者把待美化的表格发给我，我来帮你整理。",
-        "en": "Hi, I am the Data Table Expert. Paste your jielong text, tell me what info to collect, or share a sheet that needs cleaning up — I'll handle it."
+        "zh": "帮我把这段接龙整理成表格：\n1. 张三 2份牛肉\n2. 李四 1份鸡排 3份牛肉\n3. 王五 5份鸡排",
+        "en": "Turn this jielong into a table: 1. Zhang San 2x beef 2. Li Si 1x chicken 3x beef 3. Wang Wu 5x chicken"
       },
       "expertType": "agent",
       "agentName": "kdocs-data-table",
@@ -12166,8 +12161,8 @@
           "zh": "接龙转表格"
         },
         {
-          "en": "Info Collection Form",
-          "zh": "信息收集表"
+          "en": "Smart Form",
+          "zh": "智能表单"
         },
         {
           "en": "Smart Sheet",
@@ -12201,15 +12196,15 @@
         "zh": "文档管家"
       },
       "description": {
-        "zh": "金山文档出品一站式管理金山文档全生命周期：新建各类在线文档、按关键词快速搜索定位、AI 按主题自动分类整理文件夹、批量移动重命名、生成分享链接与权限管理、读取文档内容输出为 Markdown。",
-        "en": "By Kingsoft Docs End-to-end Kingsoft Docs lifecycle management: create docs of any type, locate files by keyword, AI-classify folders by topic, batch move/rename, manage sharing links with permissions, and extract document content as Markdown."
+        "zh": "金山文档出品，覆盖新建搜索、分类整理与分享权限管理，助力文档全生命周期一站搞定。",
+        "en": "By Kingsoft Docs End-to-end Kingsoft Docs lifecycle management: create docs of any type, locate files by keyword, AI-classify folders by topic, batch move/rename, and manage sharing links with permissions."
       },
       "avatar": "/avatars/KdocsDocButler.png",
       "createdAt": "2026-04-27T08:47:00Z",
-      "updatedAt": "2026-06-24T10:18:00Z",
+      "updatedAt": "2026-09-04T09:47:16Z",
       "defaultInitPrompt": {
-        "zh": "你好，我是文档管家。告诉我要新建文档、找文档、整理文件夹，还是分享某份资料，我都搞定。",
-        "en": "Hi, I am the Doc Butler. Tell me whether you want to create a doc, find one, organize folders, or share a file — I've got you covered."
+        "zh": "帮我搜一下金山文档里有没有「合同」相关的文件",
+        "en": "Search my Kdocs for any files related to 'contract'"
       },
       "expertType": "agent",
       "agentName": "kdocs-doc-butler",
@@ -12256,15 +12251,15 @@
         "zh": "知识收藏专家"
       },
       "description": {
-        "zh": "金山文档出品把网页、消息、笔记等碎片内容沉淀为结构化知识资产：一键剪藏公众号与网页为云文档，AI 按主题聚合零散笔记生成整理稿，多份文档自动提炼摘要与要点，一键归档到个人知识库并智能整理已有内容。",
-        "en": "By Kingsoft Docs Turn scattered web articles, messages and notes into structured knowledge: one-click clipping to cloud docs, AI-powered note organization by topic, auto-summarization across multiple documents, one-click archiving to personal knowledge base with intelligent content restructuring."
+        "zh": "金山文档出品，支持网页剪藏、碎片笔记整理与多文档智能摘要，帮你沉淀云端知识资产。",
+        "en": "By Kingsoft Docs Turn scattered web articles, messages and notes into structured knowledge: one-click clipping to cloud docs, AI-powered note organization by topic, and auto-summarization across multiple documents."
       },
       "avatar": "/avatars/KdocsKnowledgeCollector.png",
       "createdAt": "2026-04-27T08:47:00Z",
-      "updatedAt": "2026-06-24T10:18:00Z",
+      "updatedAt": "2026-09-04T09:47:19Z",
       "defaultInitPrompt": {
-        "zh": "你好，我是知识收藏专家。把链接、笔记或者文档列表发给我，我帮你剪藏、整理或总结。",
-        "en": "Hi, I am the Knowledge Collector. Send me links, notes, or a list of docs and I'll clip, organize or summarize them for you."
+        "zh": "帮我整理一下这些碎片笔记：\n- AI大模型趋势\n- 下周要交季报\n- 新功能上线计划\n- 竞品分析要做\n- Agent是未来方向",
+        "en": "Organize these scattered notes: AI trends, quarterly report due, new feature plan, competitor analysis, Agent is the future"
       },
       "expertType": "agent",
       "agentName": "kdocs-knowledge-collector",
@@ -12282,10 +12277,6 @@
         {
           "en": "Knowledge Management",
           "zh": "知识管理"
-        },
-        {
-          "en": "Knowledge Base Archive",
-          "zh": "知识库归档"
         }
       ],
       "quickPrompts": [
@@ -12315,15 +12306,15 @@
         "zh": "PDF 处理专家"
       },
       "description": {
-        "en": "By Kingsoft Docs One-stop PDF processing: split by pages, merge multiple files, extract specific pages, convert to Word/Excel/PPT, full-text translation export (bilingual/target language), content reading and page count — ideal for contract splitting, report merging, format conversion, and cross-language document processing.",
-        "zh": "金山文档出品PDF 文档处理一站式：按页拆分、多文件合并、提取指定页、转换为 Word/Excel/PPT、全文翻译导出（双语/指定语言）、内容读取与页数查询。适用于合同拆分、报告合并、格式转换、跨语言文档处理等场景。"
+        "zh": "金山文档出品，支持PDF按页拆分合并、格式转换与全文翻译，覆盖常见文档处理场景。",
+        "en": "By Kingsoft Docs One-stop PDF processing: split by pages, merge multiple files, extract specific pages, convert to Word/Excel/PPT, full-text translation export (bilingual/target language), content reading and page count — ideal for contract splitting, report merging, format conversion, and cross-language document processing."
       },
       "avatar": "/avatars/KdocsPdfToolbox.png",
       "createdAt": "2026-04-27T08:47:00Z",
-      "updatedAt": "2026-06-24T10:18:00Z",
+      "updatedAt": "2026-09-04T09:47:21Z",
       "defaultInitPrompt": {
-        "zh": "你好，我是 PDF 处理专家。把 PDF 文档发给我，告诉我要拆分、合并、提取、转换格式还是全文翻译，我立刻开干。",
-        "en": "Hi, I am the PDF Toolbox Expert. Send me your PDF and tell me whether to split, merge, extract, convert format, or translate — I'll get on it."
+        "zh": "帮我把这三份PDF合并成一个，按顺序拼接",
+        "en": "Merge these three PDFs into one in order"
       },
       "expertType": "agent",
       "agentName": "kdocs-pdf-toolbox",
@@ -12362,23 +12353,23 @@
       "id": "KdocsPptCreator",
       "categoryId": "06-ContentCreative",
       "displayName": {
-        "en": "WPS AIPPT Creator Assistant",
-        "zh": "WPS AIPPT创作助手"
+        "en": "KDocs PPT Creator Assistant",
+        "zh": "金山文档PPT创作助手"
       },
       "profession": {
-        "en": "AIPPT Expert",
-        "zh": "AIPPT专家"
+        "en": "PPT Creator Expert",
+        "zh": "PPT 创作专家"
       },
       "description": {
-        "zh": "WPS官方出品一句话主题或一份参考文档，AI 自动设计大纲并生成包含标题页、内容页、总结页的完整 PPT，并按场景统一配色与排版。覆盖工作汇报、项目展示、培训课件、方案演示等高频场景。",
-        "en": "By WPS From a single-line topic or a source document, AI plans the outline and generates a complete deck with title/content/summary slides, styled for the target scenario — ideal for reports, project showcases, training and pitches."
+        "zh": "金山文档出品，一句话或参考文档即可生成完整PPT，自动完成大纲排版与场景配色方案。",
+        "en": "By Kingsoft Docs From a single-line topic or a source document, AI plans the outline and generates a complete deck with title/content/summary slides, styled for the target scenario — ideal for reports, project showcases, training and pitches."
       },
       "avatar": "/avatars/KdocsPptCreator.png",
       "createdAt": "2026-04-27T08:47:00Z",
-      "updatedAt": "2026-06-11T10:23:52Z",
+      "updatedAt": "2026-09-04T09:47:22Z",
       "defaultInitPrompt": {
-        "zh": "帮我生成一份 PPT，主题是「xxx」，目标听众是「xxx」，大致页数是「xxx」。如果需要，我也会提供参考文档。",
-        "en": "Generate a PPT with the topic \"xxx\", audience \"xxx\", and rough page count \"xxx\". If needed, I will also provide a reference document."
+        "zh": "帮我做一个「部门Q1工作总结」的PPT，包含业绩回顾、项目进展、下季度计划",
+        "en": "Create a Q1 department summary PPT covering performance review, project progress, and next quarter plan"
       },
       "expertType": "agent",
       "agentName": "kdocs-ppt-creator",
@@ -12387,29 +12378,29 @@
       "tags": [
         {
           "en": "One-line PPT",
-          "zh": "一句话生成PPT"
+          "zh": "一句话出PPT"
         },
         {
-          "en": "Doc to PPT",
-          "zh": "文档生成PPT"
+          "en": "AI PPT",
+          "zh": "AI PPT"
         },
         {
-          "en": "Smart Layout",
-          "zh": "智能布局"
+          "en": "Auto Layout",
+          "zh": "自动排版"
         }
       ],
       "quickPrompts": [
         {
-          "en": "Create a complete Q1 department summary PPT covering performance review, project progress, retrospective and next quarter plan, in business minimalist style.",
-          "zh": "帮我生成一份「部门 Q1 工作总结」完整 PPT，包含业绩回顾、项目进展、问题复盘和下季度计划，商务简约风。"
+          "en": "Create a Q1 department summary PPT covering performance review, project progress, and next quarter plan",
+          "zh": "帮我做一个「部门Q1工作总结」的PPT，包含业绩回顾、项目进展、下季度计划"
         },
         {
-          "en": "Generate a 10-15 page PPT from this document, suitable for a report presentation.",
-          "zh": "根据这份文档生成一份PPT，大概 10-15 页，适合做汇报。"
+          "en": "Generate a 15-page onboarding training presentation for new hires",
+          "zh": "帮我生成一个「新员工入职培训」的演示文稿，大概15页"
         },
         {
-          "en": "Generate a single slide on product competitive analysis, highlighting key comparisons, pros/cons and conclusions, suitable for inserting into an existing PPT.",
-          "zh": "帮我生成一页「产品竞品分析」幻灯片，突出核心对比、优劣势和结论，适合插入现有 PPT。"
+          "en": "Create a product competitive analysis PPT",
+          "zh": "帮我做一个关于「产品竞品分析」的PPT"
         }
       ]
     },
@@ -16131,7 +16122,7 @@
     },
     {
       "id": "YunzhiQaAssistant",
-      "categoryId": "13-TencentZone",
+      "categoryId": "04-DataAI",
       "displayName": {
         "en": "Tencent Yunzhi",
         "zh": "腾讯云知（乐享）"
@@ -16141,16 +16132,16 @@
         "zh": "腾讯云知识问答专家"
       },
       "description": {
-        "en": "A retrieval-augmented Q&A expert powered by the Tencent Yunzhi (Lexiang) knowledge base. Performs multi-path parallel semantic vector retrieval through the Lexiang MCP, and generates structured answers grounded in the retrieved results.",
-        "zh": "基于腾讯云知（乐享）平台的检索增强问答专家。调用乐享 MCP 的语义向量检索多路并行召回；基于检索结果生成结构化回答；"
+        "zh": "基于腾讯云知（乐享）知识库的检索增强问答专家，支持竞品对比与国际化海外检索，输出带引用的结构化答案。",
+        "en": "A retrieval-augmented Q&A expert built on the Tencent Yunzhi (Lexiang) knowledge base, supporting competitive analysis and overseas/international retrieval with citation-grounded answers."
       },
       "promptFile": "/plugins/yunzhi-qa-assistant/agents/yunzhi-qa-assistant.md",
       "avatar": "/avatars/YunzhiQaAssistant.png",
       "createdAt": "2026-05-18T00:00:00Z",
-      "updatedAt": "2026-05-19T06:50:45Z",
+      "updatedAt": "2026-08-29T08:35:51Z",
       "defaultInitPrompt": {
-        "zh": "你好！我是腾讯云知识问答专家。我会基于你绑定的乐享知识库进行语义检索，给出带引用、带原文链接的精准回答。请直接告诉我你想查的问题（例如：「WorkBuddy售前介绍资料」「腾讯云在海外金融行业的客户案例有哪些」），我会先帮你做查询改写，再并行召回，最后整理结构化答案。",
-        "en": "Hi! I am your Tencent Yunzhi Knowledge Q&A Expert. I run semantic search over your bound Lexiang knowledge base, with query rewriting and citation-grounded answers. Just ask me anything (e.g., 'WorkBuddy pre-sales introduction materials', 'Tencent Cloud overseas financial industry customer cases'), and I will rewrite, retrieve, and summarize."
+        "zh": "WorkBuddy售前介绍资料",
+        "en": "WorkBuddy pre-sales introduction materials"
       },
       "expertType": "agent",
       "agentName": "yunzhi-qa-assistant",
@@ -16170,24 +16161,16 @@
       ],
       "tags": [
         {
-          "en": "YunZhi",
-          "zh": "腾讯云知"
+          "en": "Knowledge Base Q&A",
+          "zh": "知识库问答"
         },
         {
-          "en": "Knowledge Base",
-          "zh": "知识库"
+          "en": "Competitive Analysis",
+          "zh": "竞品对比"
         },
         {
-          "en": "Semantic Search",
-          "zh": "语义检索"
-        },
-        {
-          "en": "RAG",
-          "zh": "检索增强"
-        },
-        {
-          "en": "Lexiang",
-          "zh": "腾讯乐享"
+          "en": "Overseas",
+          "zh": "国际化海外"
         }
       ],
       "plugin": "yunzhi-qa-assistant",
@@ -19026,12 +19009,12 @@
       },
       "description": {
         "zh": "把提纲、访谈、旧稿和零散素材整理成结构清晰的长文档，支持章节续写、限定范围改稿与成稿交付前检查。",
-        "en": "Creates, continues, revises, and finishes long-form manuscripts from user-provided materials without requiring connectors or external services."
+        "en": "Turns outlines, interviews, drafts, and scattered notes into structured long-form manuscripts, supports scoped revision and continuation, and prepares finished drafts for review."
       },
       "promptFile": "/plugins/long-manuscript-expert/agents/long-manuscript-expert.md",
       "avatar": "/avatars/LongManuscriptExpert.jpg",
       "createdAt": "2026-06-18T10:38:00Z",
-      "updatedAt": "2026-07-23T00:15:00Z",
+      "updatedAt": "2026-08-22T03:46:37Z",
       "defaultInitPrompt": {
         "zh": "请用这些材料启动一份长文档：先判断最合适的文档类型，再给出手稿启动卡，包含建议目录、章节任务、实质性开篇、主要风险、一个推荐的下一步和可复制的续写口令。",
         "en": "Use these materials to start a long-form manuscript. First identify the best-fit document type, then provide a manuscript starter card with a proposed outline, chapter tasks, a substantive opening, the main risks, one recommended next step, and a reusable continuation prompt."
@@ -19041,16 +19024,16 @@
       "plugin": "long-manuscript-expert",
       "tags": [
         {
-          "en": "Long-form Writing",
-          "zh": "长文写作"
+          "en": "Long-document Systems",
+          "zh": "长文档工程"
         },
         {
-          "en": "Scoped Revision",
-          "zh": "有界改稿"
+          "en": "Multi-scene Creation",
+          "zh": "多场景创作"
         },
         {
-          "en": "Draft Finishing",
-          "zh": "成稿收口"
+          "en": "Evidence and Review",
+          "zh": "证据与审校"
         }
       ],
       "quickPrompts": [
@@ -19201,7 +19184,7 @@
     },
     {
       "id": "ContractLegalExpert",
-      "categoryId": "13-TencentZone",
+      "categoryId": "11-SecurityCompliance",
       "displayName": {
         "en": "Tencent eSign Contract Legal Expert",
         "zh": "腾讯电子签合同法务专家"
@@ -19217,7 +19200,7 @@
       "promptFile": "/plugins/contract-legal-expert/agents/contract-legal-expert.md",
       "avatar": "/avatars/ContractLegalExpert.png",
       "createdAt": "2026-06-26T02:51:14Z",
-      "updatedAt": "2026-07-20T07:38:50Z",
+      "updatedAt": "2026-08-26T11:46:14Z",
       "defaultInitPrompt": {
         "zh": "帮我起草一份采购合同：甲方是A公司、乙方是B供应商，标的为办公电脑200台，含售后与违约条款。",
         "en": "Help me draft a procurement contract: Party A is Company A, Party B is Supplier B, scope is 200 office laptops, including after-sales and breach clauses."
@@ -19380,12 +19363,12 @@
       "id": "IhrConference",
       "categoryId": "09-OperationsHR",
       "displayName": {
-        "en": "LiTang AI Talker",
-        "zh": "利唐智语AI面谈官"
+        "en": "iHR-LiTangZhiYu AI Talker",
+        "zh": "i人事-利唐智语AI面谈官"
       },
       "profession": {
-        "en": "AI Talker",
-        "zh": "AI面谈官"
+        "en": "iHR-LiTangZhiYu AI Talker",
+        "zh": "i人事-利唐智语AI面谈官"
       },
       "description": {
         "zh": "提供九大智能面谈大纲与线上实时指引，基于云录制自动生成结构化纪要与待办，全周期辅助管理者高效沟通。",
@@ -19394,9 +19377,9 @@
       "promptFile": "/plugins/ihr-conference/agents/ihr-conference.md",
       "avatar": "/avatars/IhrConference.png",
       "createdAt": "2026-06-26T06:38:26Z",
-      "updatedAt": "2026-08-03T06:24:27Z",
+      "updatedAt": "2026-08-21T13:27:57Z",
       "defaultInitPrompt": {
-        "en": "Schedule a performance review with Zhang San ([email/phone number]) this Friday to discuss goal achievement and the improvement plan",
+        "en": "Schedule a performance review with Zhang San ([email/phone number]) this Friday, August 14, to discuss goal achievement and develop an improvement plan",
         "zh": "安排本周五与张三（[邮箱/手机号]）的绩效复盘，沟通目标达成与改进计划"
       },
       "expertType": "agent",
@@ -19418,15 +19401,15 @@
       ],
       "quickPrompts": [
         {
-          "en": "Schedule a performance review with Zhang San ([email/phone number]) this Friday to discuss goal achievement and the improvement plan",
+          "en": "Schedule a performance review with Zhang San ([email/phone number]) this Friday, August 14, to discuss goal achievement and develop an improvement plan",
           "zh": "安排本周五与张三（[邮箱/手机号]）的绩效复盘，沟通目标达成与改进计划"
         },
         {
-          "en": "Launch a coaching conversation with Li Si ([email/phone number]) next Monday to understand the difficulties and define support measures",
+          "en": "Initiate a coaching meeting with Li Si ([email/phone number]) next Monday, August 17, to understand their challenges and clarify support measures",
           "zh": "发起下周一与李四（[邮箱/手机号]）的辅导面谈，了解困难并明确支持措施"
         },
         {
-          "en": "Summarize conclusions from recent project meetings and clarify follow-up ownership and action plans",
+          "en": "Summarize the conclusions from recent project meetings and clarify the follow-up responsibilities and action plan",
           "zh": "总结近期项目会议结论，明确后续分工和行动计划"
         }
       ],
@@ -19496,7 +19479,7 @@
     },
     {
       "id": "EdgeoneMakersExperts",
-      "categoryId": "13-TencentZone",
+      "categoryId": "02-Engineering",
       "displayName": {
         "en": "Makers Dev Team",
         "zh": "Makers 开发专家团"
@@ -19506,13 +19489,13 @@
         "zh": "Makers 开发专家团"
       },
       "description": {
-        "zh": "在 EdgeOne Makers 上构建并部署 Web 应用 —— 涵盖前端页面、Serverless 后端（边缘函数/云函数）、AI Agent 开发（DeepAgents、LangGraph、Claude SDK、OpenAI Agents、CrewAI）及快速部署到全球加速网络",
+        "zh": "在 EdgeOne Makers 上构建并部署 Web 应用 —— 涵盖前端、Serverless 后端、AI Agent 开发及快速部署到全球加速网络",
         "en": "Build and deploy web apps on EdgeOne Makers — covering frontend, serverless backends (Edge/Cloud Functions), AI Agents (DeepAgents, LangGraph, Claude SDK, OpenAI Agents, CrewAI), and fast deployment to a global CDN"
       },
       "promptFile": "/plugins/edgeone-makers-experts/agents/edgeone-makers-team-lead.md",
       "avatar": "/avatars/EdgeoneMakersExperts.png",
       "createdAt": "2026-06-26T10:11:13Z",
-      "updatedAt": "2026-08-13T03:24:38Z",
+      "updatedAt": "2026-08-29T09:27:53Z",
       "defaultInitPrompt": {
         "zh": "开发个今天吃什么站点，并部署到Makers",
         "en": "Develop a \"What to Eat Today\" website and deploy it to Makers"
@@ -19536,7 +19519,7 @@
       ],
       "quickPrompts": [
         {
-          "en": "Develop a \"What to Eat Today\" website and deploy it to Makers.",
+          "en": "Develop a \"What to Eat Today\" website and deploy it to Makers",
           "zh": "开发个今天吃什么站点，并部署到Makers"
         },
         {
@@ -21514,20 +21497,20 @@
       "categoryId": "08-FinanceInvestment",
       "displayName": {
         "en": "MAI Lab M&A Deal Agent",
-        "zh": "MAI Lab并购Agent"
+        "zh": "MAI Lab并购交易Agent"
       },
       "profession": {
         "en": "When a Deal Lands, Find the Path Forward",
         "zh": "项目来了，先把路理清"
       },
       "description": {
-        "zh": "客户材料不用先整理，帮你拆项目、画结构、核数字和股权、搭报告，并标出资料缺口和下一步。",
+        "zh": "接住真实并购项目：拆解资料、画交易结构、核数字与股权，也梳理买方、资金与推进路径。",
         "en": "Turn unstructured deal materials into a clear workplan, editable structure diagram, checked numbers and cap table, and a discussion-ready report draft."
       },
       "promptFile": "/plugins/mai-deal-advisor/agents/mai-deal-advisor.md",
       "avatar": "/avatars/MaiDealAdvisor.png",
       "createdAt": "2026-07-08T09:18:56Z",
-      "updatedAt": "2026-08-10T08:54:26Z",
+      "updatedAt": "2026-08-20T12:13:44Z",
       "defaultInitPrompt": {
         "zh": "客户刚发来这些材料，帮我判断这单先从哪里下手",
         "en": "A client just sent these materials. Help me decide where to start"
@@ -21545,8 +21528,8 @@
           "zh": "交易结构图"
         },
         {
-          "en": "Report and Data Checks",
-          "zh": "报告与数据核验"
+          "en": "Buyer and Capital Access",
+          "zh": "买方与资金对接"
         }
       ],
       "quickPrompts": [
@@ -21559,8 +21542,8 @@
           "zh": "把这套交易安排画成结构图，并检查股权比例"
         },
         {
-          "en": "This report is due tomorrow. Check the numbers and sources",
-          "zh": "这份报告明天要交，帮我检查数字和出处"
+          "en": "This deal needs a buyer. Help me define the buyer profile and path forward",
+          "zh": "这单需要找买方，帮我梳理买方画像和推进路径"
         }
       ],
       "author": {
@@ -22862,7 +22845,7 @@
     },
     {
       "id": "NgesHealthcareMarketingTeam",
-      "categoryId": "13-TencentZone",
+      "categoryId": "05-MarketingGrowth",
       "displayName": {
         "en": "Pharmaceutical Marketing Intelligence Team (Powered by Tencent Healthcare NGES)",
         "zh": "腾讯健康NGES医药营销专家团"
@@ -22872,13 +22855,13 @@
         "zh": "腾讯健康NGES医药营销专家团"
       },
       "description": {
-        "zh": "由医药营销智能协调官统一调度的医药营销专家团，整合HCP客户洞察、互动病例生成、学术物料生成、合规审核四大能力，覆盖从客户情报分析到内容生产到合规检测的全流程。企业版提供完整功能，访问 [NGES 官网](https://nges.tencent.com/) 了解更多。",
-        "en": "A pharmaceutical marketing expert team coordinated by a Marketing Intelligence Coordinator, integrating HCP insight, interactive medical case generation, academic material creation, and compliance review — covering the full workflow from customer intelligence to content creation to compliance detection. The enterprise edition provides full capabilities. Visit [NGES Official Website](https://nges.tencent.com/) to learn more."
+        "zh": "由医药营销智能协调官统一调度的医药营销专家团，整合HCP客户洞察、互动病例生成、学术物料生成、医学内容二创、合规审核五大能力，覆盖从客户情报分析到内容生产到合规检测的全流程。企业版提供完整功能，访问 [NGES 官网](https://nges.tencent.com/) 了解更多。",
+        "en": "A pharmaceutical marketing expert team coordinated by a Marketing Intelligence Coordinator, integrating HCP insight, interactive medical case generation, academic material creation, medical content recreation (interactive HTML pages / flashcards / podcast audio), and compliance review — covering the full workflow from customer intelligence to content creation to compliance detection. The enterprise edition provides full capabilities. Visit [NGES Official Website](https://nges.tencent.com/) to learn more."
       },
       "promptFile": "/plugins/nges-healthcare-marketing-team/agents/nges-team-lead.md",
       "avatar": "/avatars/NgesHealthcareMarketingTeam.png",
       "createdAt": "2026-07-03T08:17:02Z",
-      "updatedAt": "2026-07-14T14:50:00Z",
+      "updatedAt": "2026-08-21T13:31:12Z",
       "defaultInitPrompt": {
         "zh": "明天要去见协和肿瘤科张教授，帮我做一个拜访前的准备分析",
         "en": "Help me analyze the academic profile of Dr. Zhang at Peking Union Oncology for a pre-visit briefing."
@@ -22983,6 +22966,20 @@
           },
           "avatar": "/avatars/NgesHealthcareMarketingTeam-NgesHealthcareComplianceLite.png",
           "promptFile": "/plugins/nges-healthcare-marketing-team/agents/nges-healthcare-compliance-lite.md",
+          "role": "member"
+        },
+        {
+          "id": "med-content-recreator",
+          "displayName": {
+            "en": "Tencent Health NGES Medical Content Recreator",
+            "zh": "腾讯健康NGES医学二创专家"
+          },
+          "profession": {
+            "en": "Medical Content Recreator (Powered by Tencent Healthcare NGES 医学内容二创智能体)",
+            "zh": "医学内容二创"
+          },
+          "avatar": "/avatars/NgesHealthcareMarketingTeam-MedContentRecreator.png",
+          "promptFile": "/plugins/nges-healthcare-marketing-team/agents/med-content-recreator.md",
           "role": "member"
         }
       ],
@@ -23176,7 +23173,7 @@
     },
     {
       "id": "Soe",
-      "categoryId": "11-SecurityCompliance",
+      "categoryId": "13-TencentZone",
       "displayName": {
         "en": "Security Operations Expert",
         "zh": "腾讯云安全运营专家"
@@ -23186,13 +23183,13 @@
         "zh": "腾讯云安全运营专家"
       },
       "description": {
-        "zh": "分析WAF/主机安全/云防火墙/SOC/御界/天幕的告警/事件等离线数据，含漏洞、攻击、溯源分析。",
-        "en": "Security Operations Expert covering vulnerability management, alert triage (CWP/WAF/Yujie/Tianmu/SOC), intrusion analysis, DDoS traffic analysis, ransomware analysis, and asset management. Automatically routes requests to the right sub-skill and orchestrates multi-skill pipelines (L0 parsing -> L1 product analysis -> L2 cross-product correlation)."
+        "zh": "分析WAF、主机安全、云防火墙、SOC、御界、天幕告警事件，覆盖漏洞、攻击、入侵溯源与iOA排障。",
+        "en": "Security Operations Expert covering vulnerability management, alert triage (CWP/WAF/Yujie/Tianmu/SOC), intrusion analysis, DDoS traffic analysis, ransomware analysis, asset management, and Tencent iOA zero-trust troubleshooting. Automatically routes requests to the right sub-skill and orchestrates multi-skill pipelines (L0 parsing -> L1 product analysis -> L2 cross-product correlation)."
       },
       "promptFile": "/plugins/soe/agents/soe.md",
       "avatar": "/avatars/Soe.png",
       "createdAt": "2026-07-16T09:09:57Z",
-      "updatedAt": "2026-07-22T03:28:48Z",
+      "updatedAt": "2026-08-25T04:11:31Z",
       "defaultInitPrompt": {
         "zh": "解析这份漏洞扫描报告",
         "en": "Parse this vulnerability scan report"
@@ -23220,12 +23217,12 @@
           "zh": "解析这份漏洞扫描报告"
         },
         {
-          "en": "Analyze this WAF attack log",
-          "zh": "分析这份WAF攻击日志"
-        },
-        {
           "en": "Investigate suspicious intrusion on this host",
           "zh": "排查这台主机是否存在入侵痕迹"
+        },
+        {
+          "en": "iOA client logged in but cannot access intranet business systems. Help me troubleshoot.",
+          "zh": "iOA客户端登录成功了，但访问不了内网业务系统，帮我排查一下。"
         }
       ],
       "author": {
@@ -24181,7 +24178,7 @@
       "promptFile": "/plugins/fbsir-eight-seat-board/agents/board-convener.md",
       "avatar": "/avatars/FbsirEightSeatBoard.png",
       "createdAt": "2026-07-21T03:07:59Z",
-      "updatedAt": "2026-08-16T09:21:03Z",
+      "updatedAt": "2026-08-16T04:24:34Z",
       "defaultInitPrompt": {
         "zh": "我正在面对一个重要经营决策。请先给我一张紧凑决策起手卡，最多问 2 个决定性问题；末尾只给主动作“按建议开始独立审议”和次级分支“补充关键事实”“切换审议模式”。在我明确确认前不要写案卷，也不要建团。",
         "en": "I am facing an important business decision. Start with a compact decision card and ask up to two decision-changing questions. End with one primary action and two secondary branches. Do not create a team before my explicit confirmation."
@@ -24363,16 +24360,16 @@
         "zh": "同城配送助手"
       },
       "description": {
-        "zh": "提供UU跑腿同城即时配送与现场帮忙服务，支持订单询价、发单下单、订单查询取消及跑男实时追踪。",
-        "en": "UU same-city instant delivery and on-site help: pricing, ordering, order tracking, cancellation, and real-time courier tracking."
+        "zh": "提供UU跑腿同城即时配送与现场帮帮服务，支持订单询价、发单下单、订单查询取消、跑男实时追踪及优惠券领取。",
+        "en": "UU same-city instant delivery and on-site help: pricing, ordering, order tracking, cancellation, real-time courier tracking, and coupon claiming."
       },
       "promptFile": "/plugins/uupt-delivery/agents/uupt-delivery.md",
       "avatar": "/avatars/UuptDelivery.png",
       "createdAt": "2026-07-21T09:21:15Z",
-      "updatedAt": "2026-07-21T09:21:15Z",
+      "updatedAt": "2026-08-29T09:05:06Z",
       "defaultInitPrompt": {
-        "zh": "帮我从金水区送个东西到二七区",
-        "en": "Help me deliver something from Jinshui to Erqi District"
+        "zh": "帮我从金水区送个东西到二七区，或者帮我领个UU跑腿优惠券",
+        "en": "Help me deliver something from Jinshui to Erqi District, or claim a UU Delivery coupon for me"
       },
       "expertType": "agent",
       "agentName": "uupt-delivery",
@@ -24387,8 +24384,8 @@
           "zh": "跑腿发单"
         },
         {
-          "en": "Courier Tracking",
-          "zh": "跑男追踪"
+          "en": "On-site Help",
+          "zh": "帮帮服务"
         }
       ],
       "quickPrompts": [
@@ -24401,8 +24398,8 @@
           "zh": "帮我在医院代排队取个号"
         },
         {
-          "en": "Check where my delivery order is now",
-          "zh": "查一下我的跑腿订单到哪了"
+          "en": "Claim a UU Delivery coupon for me",
+          "zh": "给我领个UU跑腿优惠券"
         }
       ],
       "isOPC": true,
@@ -24873,11 +24870,11 @@
       "categoryId": "09-OperationsHR",
       "displayName": {
         "en": "AI Interviewer",
-        "zh": "利唐智语AI面试官"
+        "zh": "AI面试官"
       },
       "profession": {
-        "en": "Digital Avatar Recruitment Interview Specialist",
-        "zh": "数字人招聘面试专家"
+        "en": "iHR-LiTangZhiYu AI Interviewer",
+        "zh": "i人事-利唐智语AI面试官"
       },
       "description": {
         "zh": "围绕岗位画像设计面试维度与题库，管理数字人面试模板，校验候选人信息并发起面试，回查面试记录与纪要。",
@@ -24886,10 +24883,10 @@
       "promptFile": "/plugins/ihr-ai-interviewer/agents/ihr-ai-interviewer.md",
       "avatar": "/avatars/IhrAiInterviewer.png",
       "createdAt": "2026-07-23T06:14:04Z",
-      "updatedAt": "2026-08-03T06:49:40Z",
+      "updatedAt": "2026-08-21T10:37:43Z",
       "defaultInitPrompt": {
-        "en": "Launch a digital-avatar interview for [Candidate Name] for the [Job Title] position, to be completed within 2 days.",
-        "zh": "给 [候选人姓名] 发起一场 [岗位名称] 的数字人面试，要求在 2 天内完成。"
+        "en": "Launch a digital-avatar interview for [Candidate Name] ([Email/Phone Number]) for the [Job Title] position, to be completed within 2 days.",
+        "zh": "给 [候选人姓名]（[邮箱/手机号]）发起一场 [岗位名称] 的数字人面试，要求在 2 天内完成。"
       },
       "expertType": "agent",
       "agentName": "ihr-ai-interviewer",
@@ -24910,16 +24907,16 @@
       ],
       "quickPrompts": [
         {
-          "en": "Launch a digital-avatar interview for [Candidate Name] for the [Job Title] position, to be completed within 2 days.",
-          "zh": "给 [候选人姓名] 发起一场 [岗位名称] 的数字人面试，要求在 2 天内完成。"
+          "en": "Launch a digital-avatar interview for [Candidate Name] ([Email/Phone Number]) for the [Job Title] position, to be completed within 2 days.",
+          "zh": "给 [候选人姓名]（[邮箱/手机号]）发起一场 [岗位名称] 的数字人面试，要求在 2 天内完成。"
         },
         {
-          "en": "Please set up a digital-avatar interview for [Candidate Name/Phone Number] for the [Job Title] position, focusing on [e.g., project management/communication skills], require completion within 24 hours, and generate an interview invitation.",
-          "zh": "请帮我给 [候选人姓名/手机号] 配置一场 [岗位名称] 的数字人面试，重点考察 [如：项目管理/沟通能力]，要求24小时内完成，并生成面试邀请"
+          "en": "Please set up a digital-avatar interview for [Candidate Name] ([Email/Phone Number]) for the [Job Title] position, focusing on [e.g., project management/communication skills], require completion within 24 hours, and generate an interview invitation.",
+          "zh": "请帮我给 [候选人姓名]（[邮箱/手机号]）配置一场 [岗位名称] 的数字人面试，重点考察 [如：项目管理/沟通能力]，要求24小时内完成，并生成面试邀请"
         },
         {
-          "en": "Please set up a digital-avatar interview for candidate [Name] ([Phone Number]) for the [Job Title] position. Use about six questions, focus on [e.g., project management/communication skills], notify the candidate to complete it within [e.g., 24 hours], and automatically generate an interview invitation SMS.",
-          "zh": "请帮我给候选人 [姓名]（[手机号]）配置一场 [岗位名称] 的数字人面试。6道题左右，重点考察 [如：项目管理/沟通能力]，通知候选人在 [如：24小时内] 完成，并自动生成面试邀请通知短信。"
+          "en": "Please set up a digital-avatar interview for candidate [Name] ([Email/Phone Number]) for the [Job Title] position. Use about six questions, focus on [e.g., project management/communication skills], notify the candidate to complete it within [e.g., 24 hours], and automatically generate an interview invitation SMS.",
+          "zh": "请帮我给候选人 [姓名]（[邮箱/手机号]）配置一场 [岗位名称] 的数字人面试。6道题左右，重点考察 [如：项目管理/沟通能力]，通知候选人在 [如：24小时内] 完成，并自动生成面试邀请通知短信。"
         }
       ],
       "author": {
@@ -24931,8 +24928,8 @@
       "id": "OmicsBioinfoExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Omics Bioinformatics Analysis Expert",
-        "zh": "腾讯组学生信分析专家"
+        "en": "omics-expert",
+        "zh": "组小学"
       },
       "profession": {
         "en": "Omics Bioinformatics Analysis Expert",
@@ -24945,40 +24942,40 @@
       "promptFile": "/plugins/omics-bioinfo-expert/agents/omics-bioinfo-expert.md",
       "avatar": "/avatars/OmicsBioinfoExpert.png",
       "createdAt": "2026-07-23T07:13:45Z",
-      "updatedAt": "2026-07-31T08:03:43Z",
+      "updatedAt": "2026-08-31T03:54:09Z",
       "defaultInitPrompt": {
-        "en": "Submit a WGS analysis task on the platform for me",
-        "zh": "帮我在平台上提交一个WGS分析任务"
+        "zh": "帮我在组学平台运行 WGS 质控公共应用，全程跟踪任务状态，生成一份专业级 HTML 任务运行报告",
+        "en": "Help me run the WGS QC public application on the omics platform, track the task status throughout, and generate a professional-grade HTML task run report"
       },
       "expertType": "agent",
       "agentName": "omics-bioinfo-expert",
       "plugin": "omics-bioinfo-expert",
       "tags": [
         {
-          "en": "Omics Data Analysis",
-          "zh": "组学数据分析"
+          "zh": "生科分析",
+          "en": "Bioinformatics Analysis"
         },
         {
-          "en": "Bioinformatics Task Management",
-          "zh": "生信任务管理"
+          "zh": "任务管理",
+          "en": "Task Management"
         },
         {
-          "en": "AI Intelligent Troubleshooting",
-          "zh": "AI智能排错"
+          "zh": "AI智能排错",
+          "en": "AI Intelligent Troubleshooting"
         }
       ],
       "quickPrompts": [
         {
-          "en": "Submit a WGS analysis task on the platform for me",
-          "zh": "帮我在平台上提交一个WGS分析任务"
+          "zh": "帮我在组学平台运行 WGS 质控公共应用，全程跟踪任务状态，生成一份专业级 HTML 任务运行报告",
+          "en": "Help me run the WGS QC public application on the omics platform, track the task status throughout, and generate a professional-grade HTML task run report"
         },
         {
-          "en": "My task failed, help me figure out why",
-          "zh": "我这个任务跑失败了，帮我看看为什么"
+          "zh": "编写一个最小化 FastQC 单端质控 WDL 流程，生成模拟测序数据并上传运行，跟踪到出结果并输出专业级 HTML 分析报告",
+          "en": "Write a minimal FastQC single-end QC WDL workflow, generate simulated sequencing data, upload and run it, track until results are ready, and output a professional-grade HTML analysis report"
         },
         {
-          "en": "Check the current running progress of my omics analysis task",
-          "zh": "帮我查看当前组学分析任务的运行进度"
+          "zh": "查询我失败的组学任务并诊断根因，生成一份批量失败任务的专业级 HTML 诊断报告",
+          "en": "Query my failed omics tasks, diagnose the root cause, and generate a professional-grade HTML diagnostic report for the batch of failed tasks"
         }
       ],
       "author": {
@@ -24990,51 +24987,54 @@
       "id": "OmicsCdgptExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "CD-GPT Bio-Sequence Modeling Expert",
-        "zh": "腾讯CD-GPT生物序列建模专家"
+        "en": "omics-expert",
+        "zh": "组小学"
       },
       "profession": {
-        "en": "CD-GPT Bio-Sequence Modeling Expert",
+        "en": "Tencent CD-GPT Biological Sequence Modeling Expert",
         "zh": "腾讯CD-GPT生物序列建模专家"
       },
       "description": {
         "zh": "基于腾讯CD-GPT多模态大模型，覆盖DNA、RNA、蛋白质序列，支持翻译、反向翻译、生成",
-        "en": "Expert in CD-GPT generative biological foundation model, providing DNA/RNA/protein sequence translation and reverse translation services"
+        "en": "Based on Tencent CD-GPT multimodal large model, covering DNA, RNA, protein sequences, supporting translation, reverse translation, and generation."
       },
       "promptFile": "/plugins/omics-cdgpt-expert/agents/omics-cdgpt-expert.md",
       "avatar": "/avatars/OmicsCdgptExpert.png",
       "createdAt": "2026-07-23T07:13:45Z",
-      "updatedAt": "2026-07-31T08:03:43Z",
+      "updatedAt": "2026-08-31T05:05:22Z",
       "defaultInitPrompt": {
-        "en": "What can this expert do for me?",
-        "zh": "这个专家能帮我做什么"
+        "zh": "把我的蛋白序列反向翻译成 DNA，直接生成\"五图版\"序列特征 HTML 报告：滑窗 GC 曲线、GC1/2/3 对比、64 密码子热图、同义密码子堆叠图、酶切位点+同碱基双轨道线性图",
+        "en": "Reverse translate my protein sequence into DNA and directly generate a five-chart sequence feature HTML report: sliding window GC curve, GC1/2/3 comparison, 64-codon heatmap, synonymous codon stacked chart, restriction site+same-base dual-track linear chart"
       },
       "expertType": "agent",
       "agentName": "omics-cdgpt-expert",
       "plugin": "omics-cdgpt-expert",
       "tags": [
         {
-          "zh": "序列翻译"
+          "zh": "正向翻译",
+          "en": "Forward Translation"
         },
         {
-          "zh": "序列生成"
+          "zh": "序列生成",
+          "en": "Sequence Generation"
         },
         {
-          "zh": "多模态生物序列建模"
+          "zh": "反向翻译",
+          "en": "Reverse Translation"
         }
       ],
       "quickPrompts": [
         {
-          "en": "What can this expert do for me?",
-          "zh": "这个专家能帮我做什么"
+          "zh": "把我的蛋白序列反向翻译成 DNA，直接生成\"五图版\"序列特征 HTML 报告：滑窗 GC 曲线、GC1/2/3 对比、64 密码子热图、同义密码子堆叠图、酶切位点+同碱基双轨道线性图",
+          "en": "Reverse translate my protein sequence into DNA and directly generate a five-chart sequence feature HTML report: sliding window GC curve, GC1/2/3 comparison, 64-codon heatmap, synonymous codon stacked chart, restriction site+same-base dual-track linear chart"
         },
         {
-          "en": "Generate a synthetic test CDS, use default template to run forward translation",
-          "zh": "生成一个合成测试CDS，使用默认模版运行正向翻译"
+          "zh": "用平台默认示例 DNA 序列跑一次 CD-GPT 正向翻译：翻译成蛋白质，并生成氨基酸组成与理化性质图文分析报告",
+          "en": "Run CD-GPT forward translation once with the platform default example DNA sequence: translate to protein and generate an amino acid composition and physicochemical properties analysis report"
         },
         {
-          "en": "Generate test protein sequence, use default template to run reverse translation",
-          "zh": "生成测试蛋白质序列，使用默认模版运行反向翻译"
+          "zh": "用平台默认示例蛋白序列反向翻译成 DNA，生成\"评分版\"表达适配性HTML报告：双物种 CAI 对比、位点风险、综合评分",
+          "en": "Reverse translate the platform default example protein sequence into DNA, generate a scoring version expression adaptability HTML report: dual-species CAI comparison, site risk, comprehensive scoring"
         }
       ],
       "author": {
@@ -25046,8 +25046,8 @@
       "id": "OmicsDiagnosisExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "Omics Task Intelligent Diagnosis Expert",
-        "zh": "腾讯组学任务分析智能诊断专家"
+        "en": "omics-expert",
+        "zh": "组小学"
       },
       "profession": {
         "en": "Omics Task Intelligent Diagnosis Expert",
@@ -25060,40 +25060,40 @@
       "promptFile": "/plugins/omics-diagnosis-expert/agents/omics-diagnosis-expert.md",
       "avatar": "/avatars/OmicsDiagnosisExpert.png",
       "createdAt": "2026-07-23T07:13:45Z",
-      "updatedAt": "2026-07-31T08:03:44Z",
+      "updatedAt": "2026-09-01T09:33:57Z",
       "defaultInitPrompt": {
-        "en": "My task failed, help me see why",
-        "zh": "我这个任务跑失败了，帮我看看为什么"
+        "zh": "我的组学任务 runId: xxx 跑失败了，帮我拉取日志做根因分析，输出一份结构化诊断报告（HTML）",
+        "en": "My omics task runId: xxx failed, help me pull the logs for root cause analysis and output a structured diagnostic report (HTML)"
       },
       "expertType": "agent",
       "agentName": "omics-diagnosis-expert",
       "plugin": "omics-diagnosis-expert",
       "tags": [
         {
-          "en": "Task Diagnosis",
-          "zh": "任务诊断"
+          "zh": "任务诊断",
+          "en": "Task Diagnosis"
         },
         {
-          "en": "Failure Root Cause Location",
-          "zh": "失败根因定位"
+          "zh": "根因定位",
+          "en": "Root Cause Analysis"
         },
         {
-          "en": "Fix Solution",
-          "zh": "修复方案"
+          "zh": "修复方案",
+          "en": "Fix Solutions"
         }
       ],
       "quickPrompts": [
         {
-          "en": "My task failed, help me see why",
-          "zh": "我这个任务跑失败了，帮我看看为什么"
+          "zh": "我的组学任务 runId: xxx 跑失败了，帮我拉取日志做根因分析，输出一份结构化诊断报告（HTML）",
+          "en": "My omics task runId: xxx failed, help me pull the logs for root cause analysis and output a structured diagnostic report (HTML)"
         },
         {
-          "en": "Output a diagnosis report for this failed task",
-          "zh": "帮我输出错误任务的诊断报告"
+          "zh": "帮我盘点当前项目所有失败的任务，逐个诊断根因，输出一份批量汇总诊断报告（HTML）",
+          "en": "Help me review all failed tasks in the current project, diagnose root causes one by one, and output a batch summary diagnostic report (HTML)"
         },
         {
-          "en": "Give me a fix solution for this error task",
-          "zh": "帮我给出这个错误任务的修复方案"
+          "zh": "我的任务 runId: xxx 跑了 3 小时还没结束，帮我在线查看运行状态和实时日志，判断是卡住了还是资源瓶颈",
+          "en": "My task runId: xxx has been running for 3 hours without finishing, help me check the running status and real-time logs online to determine if it's stuck or facing resource bottlenecks"
         }
       ],
       "author": {
@@ -25105,8 +25105,8 @@
       "id": "OmicsHpcExpert",
       "categoryId": "02-Engineering",
       "displayName": {
-        "en": "Omics HPC Cluster Ops Expert",
-        "zh": "腾讯组学HPC集群运维与作业管理专家"
+        "en": "omics-expert",
+        "zh": "组小学"
       },
       "profession": {
         "en": "Omics HPC Cluster Ops Expert",
@@ -25119,36 +25119,40 @@
       "promptFile": "/plugins/omics-hpc-expert/agents/omics-hpc-expert.md",
       "avatar": "/avatars/OmicsHpcExpert.png",
       "createdAt": "2026-07-23T07:13:45Z",
-      "updatedAt": "2026-07-31T08:03:44Z",
+      "updatedAt": "2026-09-01T08:04:03Z",
       "defaultInitPrompt": {
-        "zh": "列出我的集群/队列/节点的列表"
+        "zh": "帮我写一套 RNA-seq 分析流程的代码，先看看脚本怎么设计的",
+        "en": "Help me write a RNA-seq analysis pipeline code, let's first look at how the script is designed"
       },
       "expertType": "agent",
       "agentName": "omics-hpc-expert",
       "plugin": "omics-hpc-expert",
       "tags": [
         {
-          "en": "HPC O&M Management",
-          "zh": "HPC运维管理"
+          "zh": "HPC运维",
+          "en": "HPC Operations"
         },
         {
-          "en": "Job Management",
-          "zh": "作业管理"
+          "zh": "作业管理",
+          "en": "Job Management"
         },
         {
-          "en": "Elastic Scaling Management",
-          "zh": "弹性伸缩管理"
+          "zh": "弹性伸缩",
+          "en": "Elastic Scaling"
         }
       ],
       "quickPrompts": [
         {
-          "zh": "列出我的集群/队列/节点的列表"
+          "zh": "帮我写一套 RNA-seq 分析流程的代码，先看看脚本怎么设计的",
+          "en": "Help me write a RNA-seq analysis pipeline code, let's first look at how the script is designed"
         },
         {
-          "zh": "查看compute队列扩缩容配置，把最大节点数改成10"
+          "zh": "把 RNA-seq 流程投到集群上跑，给我一份好看的分析结果报告",
+          "en": "Submit the RNA-seq pipeline to the cluster for execution, and generate a beautiful analysis result report for me"
         },
         {
-          "zh": "查询作业状态"
+          "zh": "帮我出一张任务跟踪 + 集群运维监控大盘",
+          "en": "Help me create a task tracking + HPC cluster operations monitoring dashboard"
         }
       ],
       "author": {
@@ -25160,54 +25164,54 @@
       "id": "OmicsIggmExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "IgGM Antibody Drug R&D Expert",
-        "zh": "腾讯IgGM抗体药物研发专家"
+        "en": "omics-expert",
+        "zh": "组小学"
       },
       "profession": {
-        "en": "IgGM Antibody Drug R&D Expert",
+        "en": "Tencent IgGM Antibody Drug Development Expert",
         "zh": "腾讯IgGM抗体药物研发专家"
       },
       "description": {
         "zh": "精通腾讯IgGM生成式模型。覆盖CDR重设计、全链生成与人源化亲和力优化，输出可验证的抗体候选序列",
-        "en": "Expert in IgGM generative antibody model (ICLR 2025), providing de novo antibody/nanobody design, CDR redesign, affinity maturation, and 3D structure visualization services"
+        "en": "Expert in Tencent IgGM generative model, covering CDR redesign, full-chain generation and humanization affinity optimization."
       },
       "promptFile": "/plugins/omics-iggm-expert/agents/omics-iggm-expert.md",
       "avatar": "/avatars/OmicsIggmExpert.png",
       "createdAt": "2026-07-23T07:13:46Z",
-      "updatedAt": "2026-07-31T08:03:45Z",
+      "updatedAt": "2026-09-01T08:31:18Z",
       "defaultInitPrompt": {
-        "en": "What can this expert do for me?",
-        "zh": "这个专家能帮我做什么"
+        "zh": "针对默认的 PD-L1 靶点，按默认参数执行抗体从头设计（De Novo Design），输出候选序列表并 3D 展示代表结构",
+        "en": "For the default PD-L1 target, perform antibody de novo design with default parameters, output candidate sequence table and 3D display of representative structure"
       },
       "expertType": "agent",
       "agentName": "omics-iggm-expert",
       "plugin": "omics-iggm-expert",
       "tags": [
         {
-          "en": "Antibody/Nanobody Design",
-          "zh": "抗体/纳米抗体设计"
+          "zh": "抗体设计",
+          "en": "Antibody Design"
         },
         {
-          "en": "CDR Redesign",
-          "zh": "CDR 重设计"
+          "zh": "CDR重设计",
+          "en": "CDR Redesign"
         },
         {
-          "en": "Affinity Maturation",
-          "zh": "亲和力成熟"
+          "zh": "亲和力成熟",
+          "en": "Affinity Maturation"
         }
       ],
       "quickPrompts": [
         {
-          "en": "What can this expert do for me?",
-          "zh": "这个专家能帮我做什么"
+          "zh": "针对默认的 PD-L1 靶点，按默认参数执行抗体从头设计（De Novo Design），输出候选序列表并 3D 展示代表结构",
+          "en": "For the default PD-L1 target, perform antibody de novo design with default parameters, output candidate sequence table and 3D display of representative structure"
         },
         {
-          "en": "Use default template to generate antibody sequences in de novo design scenario",
-          "zh": "按照从头设计场景，使用默认模版，生成抗体序列"
+          "zh": "保持框架区不变，对我提供的抗 PD-L1 先导抗体执行 CDR-H3 重设计（CDR Redesign），输出前后序列对比和结构展示",
+          "en": "Keeping the framework region unchanged, perform CDR-H3 redesign on the anti-PD-L1 lead antibody I provide, output sequence comparison before and after and structure display"
         },
         {
-          "en": "View 3D structure",
-          "zh": "查看3D结构"
+          "zh": "针对默认的 PD-L1 体系，按默认参数执行 CDR-H3 条件设计（CDR-H3 Conditional Design），输出候选序列汇总表并 3D 展示代表结构",
+          "en": "For the default PD-L1 system, perform CDR-H3 conditional design with default parameters, output candidate sequence summary table and 3D display of representative structure"
         }
       ],
       "author": {
@@ -25219,54 +25223,54 @@
       "id": "OmicsOriExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "ORI Protein Design Expert",
-        "zh": "腾讯ORI蛋白设计专家"
+        "en": "omics-expert",
+        "zh": "组小学"
       },
       "profession": {
-        "en": "ORI Protein Design Expert",
-        "zh": "腾讯ORI蛋白设计专家"
+        "en": "Tencent ORI Multifunctional Enzyme Design Expert",
+        "zh": "腾讯ORI多功能酶设计专家"
       },
       "description": {
         "zh": "覆盖序列从头设计、USMFold结构预测与溶解性、热稳定性，打通从设计到可生产蛋白的关键决策",
-        "en": "Expert in ORI protein design system from Tencent Life Sciences Lab, providing sequence generation, structure prediction, solubility/thermostability analysis, and 3D visualization services"
+        "en": "Covers sequence de novo design, USMFold structure prediction, solubility and thermostability, bridging key decisions from design to producible proteins."
       },
       "promptFile": "/plugins/omics-ori-expert/agents/omics-ori-expert.md",
       "avatar": "/avatars/OmicsOriExpert.png",
       "createdAt": "2026-07-23T07:13:46Z",
-      "updatedAt": "2026-07-31T08:03:45Z",
+      "updatedAt": "2026-09-01T11:30:01Z",
       "defaultInitPrompt": {
-        "en": "Design enzyme with thermostability >60°C, EC number <EC:3.1.1.101>, generate 20 sequences",
-        "zh": "设计热稳定性大于60度的酶，编号<EC:3.1.1.101>，生成20条"
+        "zh": "用 USMFold 默认参数预测一下示例蛋白的结构，3D 展示给我，顺便给个 pLDDT 评价",
+        "en": "Predict the structure of the example protein with USMFold default parameters, show me in 3D, and give a pLDDT evaluation"
       },
       "expertType": "agent",
       "agentName": "omics-ori-expert",
       "plugin": "omics-ori-expert",
       "tags": [
         {
-          "en": "Protein Design",
-          "zh": "蛋白质设计"
+          "zh": "蛋白质设计",
+          "en": "Protein Design"
         },
         {
-          "en": "Structure Prediction",
-          "zh": "结构预测"
+          "zh": "结构预测",
+          "en": "Structure Prediction"
         },
         {
-          "en": "Solubility/Thermostability/Signal Peptide",
-          "zh": "溶解性/热稳定性"
+          "zh": "溶解性/热稳定性",
+          "en": "Solubility/Thermostability"
         }
       ],
       "quickPrompts": [
         {
-          "en": "Design enzyme with thermostability >60°C, EC number <EC:3.1.1.101>, generate 20 sequences",
-          "zh": "设计热稳定性大于60度的酶，编号<EC:3.1.1.101>，生成20条"
+          "zh": "用 USMFold 默认参数预测一下示例蛋白的结构，3D 展示给我，顺便给个 pLDDT 评价",
+          "en": "Predict the structure of the example protein with USMFold default parameters, show me in 3D, and give a pLDDT evaluation"
         },
         {
-          "en": "Predict structure of this sequence using USMFold",
-          "zh": "用 USMFold 预测这个序列的结构"
+          "zh": "按默认参数从头设计一批耐 60℃ 的双功能酶，候选排个序，最优那个做下结构预测",
+          "en": "De novo design a batch of bifunctional enzymes resistant to 60°C with default parameters, rank the candidates, and perform structure prediction on the best one"
         },
         {
-          "en": "View 3D structure",
-          "zh": "查看3D结构"
+          "zh": "用默认参数评估示例蛋白的热稳定性，Tm 能过 60℃ 吗？给我一份验证报告",
+          "en": "Evaluate the thermostability of the example protein with default parameters, can Tm exceed 60°C? Give me a validation report"
         }
       ],
       "author": {
@@ -25278,54 +25282,54 @@
       "id": "OmicsScbertExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "scBERT Single-Cell Pre-training Expert",
-        "zh": "腾讯scBert单细胞预训练专家"
+        "en": "omics-expert",
+        "zh": "组小学"
       },
       "profession": {
-        "en": "scBERT Single-Cell Pre-training Expert",
+        "en": "Tencent scBert Single-Cell Pre-training Expert",
         "zh": "腾讯scBert单细胞预训练专家"
       },
       "description": {
-        "zh": "基于腾讯scBERT模型，实现细胞精细注释、新亚群挖掘及Marker筛选，自适应多组织参数，助力肿瘤细胞研究",
-        "en": "Expert in scBERT single-cell pre-trained model, providing domain adaptation finetuning and cell type prediction services based on BERT paradigm"
+        "zh": "基于腾讯scBERT单细胞预训练大模型，实现细胞精细注释、新亚群挖掘及Marker筛选，自适应多组织参数，助力肿瘤细胞研究",
+        "en": "Based on Tencent scBERT model, enables refined cell annotation, novel subpopulation discovery and Marker selection, with multi-tissue adaptive parameters for tumor cell research."
       },
       "promptFile": "/plugins/omics-scbert-expert/agents/omics-scbert-expert.md",
       "avatar": "/avatars/OmicsScbertExpert.png",
       "createdAt": "2026-07-23T07:13:46Z",
-      "updatedAt": "2026-07-31T08:03:46Z",
+      "updatedAt": "2026-09-01T09:52:24Z",
       "defaultInitPrompt": {
-        "en": "What can this expert do for me?",
-        "zh": "这个专家能帮我做什么"
+        "zh": "介绍 scBERT 单细胞预训练模型的能力边界，查看默认输入模版",
+        "en": "Introduce the capability boundaries of the scBERT single-cell pre-training model and view the default input template"
       },
       "expertType": "agent",
       "agentName": "omics-scbert-expert",
       "plugin": "omics-scbert-expert",
       "tags": [
         {
-          "en": "Single-Cell Transcriptome",
-          "zh": "单细胞转录组"
+          "zh": "单细胞转录组",
+          "en": "Single-Cell Transcriptomics"
         },
         {
-          "en": "Cell Type Annotation",
-          "zh": "细胞类型注释"
+          "zh": "细胞类型注释",
+          "en": "Cell Type Annotation"
         },
         {
-          "en": "Novel Cell Type Discovery",
-          "zh": "新类发现"
+          "zh": "新类发现",
+          "en": "Novel Subpopulation Discovery"
         }
       ],
       "quickPrompts": [
         {
-          "en": "What can this expert do for me?",
-          "zh": "这个专家能帮我做什么"
+          "zh": "介绍 scBERT 单细胞预训练模型的能力边界，查看默认输入模版",
+          "en": "Introduce the capability boundaries of the scBERT single-cell pre-training model and view the default input template"
         },
         {
-          "en": "Use default template for FINETUNE cell type prediction",
-          "zh": "用默认模版进行FINETUNE细胞类型预测"
+          "zh": "运行细胞类型预测，使用panglao 单细胞测试数据，注释 1 万个细胞的类型，画细胞类型构成图并生成 HTML 分析报告",
+          "en": "Run cell type prediction using panglao single cell test data, annotate 10,000 cells, plot the cell type composition and generate an HTML analysis report"
         },
         {
-          "en": "Query task status",
-          "zh": "查询任务状态"
+          "zh": "讲解 scBERT 支持的 11 类免疫细胞及其在 PBMC 样本中的正常生物学占比",
+          "en": "Explain the 11 types of immune cells supported by scBERT and their normal biological proportions in PBMC samples"
         }
       ],
       "author": {
@@ -25337,54 +25341,54 @@
       "id": "OmicsScproteinExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "scPROTEIN Single-Cell Proteomics Expert",
-        "zh": "腾讯scPROTEIN单细胞蛋白组建模专家"
+        "en": "omics-expert",
+        "zh": "组小学"
       },
       "profession": {
-        "en": "scPROTEIN Single-Cell Proteomics Expert",
+        "en": "Tencent scPROTEIN Single-Cell Proteomics Modeling Expert",
         "zh": "腾讯scPROTEIN单细胞蛋白组建模专家"
       },
       "description": {
         "zh": "腾讯 scPROTEIN表征模型，实现对单细胞蛋白组的多肽不确定性估计，去除批次效应噪声以及单细胞蛋白组的细胞类型注释",
-        "en": "Expert in scPROTEIN GNN-based single-cell proteomics model, providing peptide uncertainty quantification and cell embedding services"
+        "en": "Tencent scPROTEIN representation model for peptide uncertainty estimation, batch effect denoising and cell type annotation of single-cell proteomics."
       },
       "promptFile": "/plugins/omics-scprotein-expert/agents/omics-scprotein-expert.md",
       "avatar": "/avatars/OmicsScproteinExpert.png",
       "createdAt": "2026-07-23T07:13:46Z",
-      "updatedAt": "2026-07-31T08:03:47Z",
+      "updatedAt": "2026-09-01T08:11:50Z",
       "defaultInitPrompt": {
-        "en": "What can this expert do for me?",
-        "zh": "这个专家能帮我做什么"
+        "zh": "按默认参数运行 Stage1 肽级不确定性定量，并给我不确定性分布图和低置信肽段复核清单",
+        "en": "Run Stage1 peptide-level uncertainty quantification with default parameters, and give me uncertainty distribution map and low-confidence peptide review checklist"
       },
       "expertType": "agent",
       "agentName": "omics-scprotein-expert",
       "plugin": "omics-scprotein-expert",
       "tags": [
         {
-          "en": "Uncertainty Estimation",
-          "zh": "不确定性估计"
+          "zh": "不确定性估计",
+          "en": "Uncertainty Estimation"
         },
         {
-          "en": "Cell Type Annotation",
-          "zh": "细胞类型注释"
+          "zh": "细胞类型注释",
+          "en": "Cell Type Annotation"
         },
         {
-          "en": "Batch Effect Removal & Data Denoising",
-          "zh": "去除批次效应和数据噪声"
+          "zh": "去除批次效应和数据噪声",
+          "en": "Batch Effect Removal and Data Denoising"
         }
       ],
       "quickPrompts": [
         {
-          "en": "What can this expert do for me?",
-          "zh": "这个专家能帮我做什么"
+          "zh": "按默认参数运行 Stage1 肽级不确定性定量，并给我不确定性分布图和低置信肽段复核清单",
+          "en": "Run Stage1 peptide-level uncertainty quantification with default parameters, and give me uncertainty distribution map and low-confidence peptide review checklist"
         },
         {
-          "en": "Evaluate peptide-level uncertainty quantification, use default template",
-          "zh": "评估肽级不确定性定量，使用默认模版"
+          "zh": "衔接 Stage1 结果运行 Stage2 细胞嵌入（默认参数），用 t-SNE 可视化细胞分群并推荐聚类数",
+          "en": "Connect Stage1 results to run Stage2 cell embedding (default parameters), visualize cell clustering with t-SNE and recommend cluster count"
         },
         {
-          "en": "Query task status",
-          "zh": "查询任务状态"
+          "zh": "汇总 Stage1 和 Stage2 结果，生成交互式 HTML 可视化报告（概览卡片、t-SNE 分群、不确定性分布、Top20 复核表、热图、聚类质量）并打开预览；结果缺失则按默认参数先跑全流程",
+          "en": "Summarize Stage1 and Stage2 results, generate interactive HTML visualization report (overview cards, t-SNE clustering, uncertainty distribution, Top20 review table, heatmap, clustering quality) and open preview; if results are missing, run the full process with default parameters first"
         }
       ],
       "author": {
@@ -25396,23 +25400,24 @@
       "id": "OmicsTfoldExpert",
       "categoryId": "04-DataAI",
       "displayName": {
-        "en": "tFold Antibody Structure Prediction Expert",
-        "zh": "腾讯tFold抗体结构预测专家"
+        "en": "omics-expert",
+        "zh": "组小学"
       },
       "profession": {
-        "en": "tFold Antibody Structure Prediction Expert",
+        "en": "Tencent tFold Antibody Structure Prediction Expert",
         "zh": "腾讯tFold抗体结构预测专家"
       },
       "description": {
         "zh": "腾讯tFold模型，专注单克隆抗体、纳米抗体与抗原复合物的高精度结合界面建模，辅助表位预测与亲和力改造",
-        "en": "Expert in tFold complex structure prediction system, providing antibody, antigen and TCR structure prediction services with interactive 3D visualization"
+        "en": "Tencent tFold model focusing on high-precision binding interface modeling of monoclonal antibodies, nanobodies and antigen complexes."
       },
       "promptFile": "/plugins/omics-tfold-expert/agents/omics-tfold-expert.md",
       "avatar": "/avatars/OmicsTfoldExpert.png",
       "createdAt": "2026-07-23T07:13:47Z",
-      "updatedAt": "2026-07-31T08:03:47Z",
+      "updatedAt": "2026-09-01T09:20:32Z",
       "defaultInitPrompt": {
-        "zh": "预测这个抗体和抗原的结合结构"
+        "zh": "预测抗体 Fv 结构，运行 tFold_ab_predict 默认参数，3D 展示 CDR-H3 构象",
+        "en": "Predict antibody Fv structure, run tFold_ab_predict with default parameters, 3D display CDR-H3 conformation"
       },
       "expertType": "agent",
       "agentName": "omics-tfold-expert",
@@ -25433,13 +25438,16 @@
       ],
       "quickPrompts": [
         {
-          "zh": "预测这个抗体和抗原的结合结构"
+          "zh": "预测抗体 Fv 结构，运行 tFold_ab_predict 默认参数，3D 展示 CDR-H3 构象",
+          "en": "Predict antibody Fv structure, run tFold_ab_predict with default parameters, 3D display CDR-H3 conformation"
         },
         {
-          "zh": "用 tFold 预测 TCR-pMHC 复合物"
+          "zh": "预测抗体-抗原复合物，运行 tFold_ag_predict 默认参数，定位表位与对位",
+          "en": "Predict antibody-antigen complex, run tFold_ag_predict with default parameters, locate epitope and paratope"
         },
         {
-          "zh": "把这个复合物的 PDB 结构转一圈看看"
+          "zh": "预测 TCR 结构，运行 tFold_tcr_predict 默认参数，分析 CDR3 环构象",
+          "en": "Predict TCR structure, run tFold_tcr_predict with default parameters, analyze CDR3 loop conformation"
         }
       ],
       "author": {
@@ -26616,13 +26624,13 @@
         "zh": "鹅厂职业经纪人"
       },
       "description": {
-        "zh": "陪你梳理职业画像，讨论发展与转型方向，并推荐课程、经验文章、内部案例和活水机会。（对话独立存储、特殊加密，仅你可见！）",
-        "en": "I help you clarify your career profile, discuss growth and transition directions, and recommend courses, experience articles, internal cases, and liveflow opportunities. (Conversations are stored separately and specially encrypted — visible only to you!)"
+        "zh": "陪你梳理职业画像，讨论发展与转型方向，并推荐课程、经验文章、内部案例和活水机会。",
+        "en": "I help you clarify your career profile, discuss growth and transition directions, and recommend courses, experience articles, internal cases, and liveflow opportunities."
       },
       "promptFile": "/plugins/career-broker/agents/career-broker.md",
       "avatar": "/avatars/CareerBroker.png",
       "createdAt": "2026-07-27T03:12:52Z",
-      "updatedAt": "2026-08-04T00:00:00Z",
+      "updatedAt": "2026-09-02T09:00:05Z",
       "defaultInitPrompt": {
         "en": "As my career broker, what can you do for me?",
         "zh": "作为我的经纪人，你可以做什么事情？"
@@ -26848,32 +26856,32 @@
       "id": "NgoChallengeAdvisor",
       "categoryId": "01-ProductDesign",
       "displayName": {
-        "en": "Tiko",
-        "zh": "题小策"
+        "en": "Kaazai",
+        "zh": "卡仔"
       },
       "profession": {
-        "en": "NGO Challenge Design Advisor",
-        "zh": "NGO 赛题设计专家"
+        "en": "NGO Co-creation Card Design Advisor",
+        "zh": "NGO 共創卡設計助手"
       },
       "description": {
-        "zh": "通过点击式访谈梳理 NGO 真实工作痛点，生成清晰可执行的赛题，并在发布前完成适配、边界与质量检查。",
-        "en": "Turns real NGO work pain points into clear, actionable challenge briefs through adaptive, click-first interviews and publication checks."
+        "zh": "通過點擊式訪談梳理 NGO 真實工作痛點，生成清晰可執行的共創卡，並在發佈前完成適配、邊界與質量檢查。",
+        "en": "Turns real NGO work pain points into clear, actionable co-creation cards through adaptive, click-first interviews and publication checks."
       },
       "promptFile": "/plugins/ngo-challenge-advisor/agents/ngo-challenge-advisor.md",
       "avatar": "/avatars/NgoChallengeAdvisor.png",
       "createdAt": "2026-07-28T06:30:35Z",
-      "updatedAt": "2026-07-28T06:30:35Z",
+      "updatedAt": "2026-08-18T01:30:39Z",
       "defaultInitPrompt": {
-        "zh": "我想把 NGO 的一个真实工作痛点整理成比赛赛题",
-        "en": "Help me turn an NGO work pain point into a competition challenge"
+        "zh": "我想把 NGO 的一個真實工作痛點整理成共創卡",
+        "en": "Help me turn an NGO work pain point into a co-creation card"
       },
       "expertType": "agent",
       "agentName": "ngo-challenge-advisor",
       "plugin": "ngo-challenge-advisor",
       "tags": [
         {
-          "en": "Challenge Design",
-          "zh": "赛题设计"
+          "en": "Co-creation Card Design",
+          "zh": "共創卡設計"
         },
         {
           "en": "NGO Needs",
@@ -26881,21 +26889,21 @@
         },
         {
           "en": "Guided Interview",
-          "zh": "引导访谈"
+          "zh": "引導訪談"
         }
       ],
       "quickPrompts": [
         {
-          "en": "Help me turn an NGO work pain point into a competition challenge",
-          "zh": "我想把 NGO 的一个真实工作痛点整理成比赛赛题"
+          "en": "Help me turn an NGO work pain point into a co-creation card",
+          "zh": "我想把 NGO 的一個真實工作痛點整理成共創卡"
         },
         {
-          "en": "Help me clarify which NGO pain point should become the challenge",
-          "zh": "帮我从几个 NGO 痛点中选出最适合发题的一个"
+          "en": "Help me clarify which NGO pain point should become the card",
+          "zh": "幫我從幾個 NGO 痛點中選出最適合發佈的一張"
         },
         {
-          "en": "Review whether this NGO challenge is ready to publish",
-          "zh": "帮我检查这道 NGO 赛题是否已经适合发布"
+          "en": "Review whether this NGO co-creation card is ready to publish",
+          "zh": "幫我檢查這張 NGO 共創卡是否已經適合發佈"
         }
       ],
       "author": {
@@ -27516,7 +27524,7 @@
       "promptFile": "/plugins/corp-credit-due-diligence/agents/corp-credit-due-diligence.md",
       "avatar": "/avatars/CorpCreditDueDiligence.png",
       "createdAt": "2026-07-30T01:52:53Z",
-      "updatedAt": "2026-08-07T02:09:51Z",
+      "updatedAt": "2026-08-20T00:00:00Z",
       "defaultInitPrompt": {
         "zh": "帮我调研下{企业名}。",
         "en": "Please conduct some research on {company name} for me."
@@ -28389,7 +28397,7 @@
     },
     {
       "id": "SkillSmith",
-      "categoryId": "12-IndustryConsultant",
+      "categoryId": "15-BackToSchool",
       "displayName": {
         "en": "Skill Smith",
         "zh": "技能匠人"
@@ -28405,7 +28413,7 @@
       "promptFile": "/plugins/skill-smith/agents/skill-smith.md",
       "avatar": "/avatars/SkillSmith.png",
       "createdAt": "2026-08-10T06:31:46Z",
-      "updatedAt": "2026-08-10T06:31:46Z",
+      "updatedAt": "2026-08-17T09:27:27Z",
       "defaultInitPrompt": {
         "zh": "我每次写周报都要重新教 AI 我们团队的格式，能做成 Skill 吗",
         "en": "I re-teach AI our team report format every week. Can this become a Skill?"
@@ -28579,13 +28587,13 @@
         "zh": "腾讯HR数智专家"
       },
       "description": {
-        "zh": "覆盖HR数仓查询、页面设计开发、一键部署上线和本地知识库管理的全链路HR数智专家",
+        "zh": "覆盖HR数仓查询、页面设计开发、一键部署上线和知识库管理的全链路HR数智专家",
         "en": "Full-chain HR IT expert covering data warehouse SQL queries, page development, one-click deployment, and knowledge management."
       },
       "promptFile": "/plugins/hr-digital-expert/agents/hr-digital-expert.md",
       "avatar": "/avatars/HrDigitalExpert.png",
       "createdAt": "2026-08-14T12:43:21Z",
-      "updatedAt": "2026-08-14T12:43:41Z",
+      "updatedAt": "2026-09-03T12:00:00Z",
       "defaultInitPrompt": {
         "zh": "帮我查询我有HR数仓哪些权限",
         "en": "Help me check what HR data warehouse permissions I have"
@@ -28685,6 +28693,1280 @@
       "author": {
         "zh": "福帮手 FBSir",
         "en": "福帮手 FBSir"
+      }
+    },
+    {
+      "id": "CampusConversationCoach",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "Campus Conversation Buddy",
+        "zh": "社交搭子"
+      },
+      "profession": {
+        "en": "Campus Communication Coach",
+        "zh": "校园社交表达教练"
+      },
+      "description": {
+        "zh": "帮助学生在破冰、面试和校园冲突中，通过递进情景、证据反馈与迁移练习提升自然表达和边界沟通能力。",
+        "en": "Builds natural campus communication through progressive scenarios, observable feedback, resistance practice, and transfer checks."
+      },
+      "promptFile": "/plugins/campus-conversation-coach/agents/campus-conversation-coach.md",
+      "avatar": "/avatars/CampusConversationCoach.png",
+      "createdAt": "2026-08-17T09:27:24Z",
+      "updatedAt": "2026-08-17T09:27:24Z",
+      "defaultInitPrompt": {
+        "zh": "帮我准备一段开学班会上的30秒自我介绍",
+        "en": "Help me prepare a 30-second introduction for my first class meeting."
+      },
+      "expertType": "agent",
+      "agentName": "campus-conversation-coach",
+      "plugin": "campus-conversation-coach",
+      "tags": [
+        {
+          "en": "Campus Icebreakers",
+          "zh": "开学破冰"
+        },
+        {
+          "en": "Communication Skills",
+          "zh": "沟通表达"
+        },
+        {
+          "en": "Progressive Practice",
+          "zh": "递进训练"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Help me prepare a 30-second introduction for my first class meeting.",
+          "zh": "帮我准备一段开学班会上的30秒自我介绍"
+        },
+        {
+          "en": "Run a club interview practice with feedback, retry, follow-up pressure, and a transfer question.",
+          "zh": "模拟一次社团面试，按反馈、重答、压力追问和迁移题完整训练"
+        },
+        {
+          "en": "Train me to address a noisy roommate with resistance practice and a transfer check.",
+          "zh": "室友经常外放声音，陪我完成一轮带阻力升级和迁移测试的沟通训练"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "Expert Marketplace",
+        "en": "Expert Marketplace"
+      }
+    },
+    {
+      "id": "CampusEventNavigator",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "Campus Event Navigator",
+        "zh": "活动操盘手"
+      },
+      "profession": {
+        "en": "Campus Event Planning and Operations Advisor",
+        "zh": "校园活动策划与执行顾问"
+      },
+      "description": {
+        "zh": "把校园活动从模糊想法推进为可执行方案，覆盖分工、预算、宣传、现场流程、应急预案与数据复盘。",
+        "en": "Turn campus event ideas into actionable plans covering roles, budgets, promotion, on-site workflows, contingencies, and review."
+      },
+      "promptFile": "/plugins/campus-event-navigator/agents/campus-event-navigator.md",
+      "avatar": "/avatars/CampusEventNavigator.png",
+      "createdAt": "2026-08-17T09:27:25Z",
+      "updatedAt": "2026-08-17T09:27:25Z",
+      "defaultInitPrompt": {
+        "zh": "帮我策划一场面向新生的社团招新活动",
+        "en": "Help me plan a club recruitment event for new students"
+      },
+      "expertType": "agent",
+      "agentName": "campus-event-navigator",
+      "plugin": "campus-event-navigator",
+      "tags": [
+        {
+          "en": "Event Planning",
+          "zh": "活动策划"
+        },
+        {
+          "en": "Event Operations",
+          "zh": "执行统筹"
+        },
+        {
+          "en": "Promotion and Review",
+          "zh": "宣传复盘"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Help me plan a club recruitment event for new students",
+          "zh": "帮我策划一场面向新生的社团招新活动"
+        },
+        {
+          "en": "Assign roles and build a timeline for our six-person team",
+          "zh": "根据6个人的特长安排活动分工和时间表"
+        },
+        {
+          "en": "Check this event plan for execution risks and missing items",
+          "zh": "帮我检查这份活动策划书的执行风险和遗漏"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "xinocwang",
+        "en": "xinocwang"
+      }
+    },
+    {
+      "id": "CampusJobSearchCoach",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "Career Sprint",
+        "zh": "求职冲刺"
+      },
+      "profession": {
+        "en": "Campus Job Search Coach",
+        "zh": "校园求职教练"
+      },
+      "description": {
+        "zh": "面向校园求职，支持真实经历梳理、应届简历成稿、岗位定制、面试训练、求职沟通与Offer决策。",
+        "en": "Helps students turn real experience into graduate resumes, tailor applications, practice interviews, write recruiting messages, and compare offers."
+      },
+      "promptFile": "/plugins/campus-job-search-coach/agents/campus-job-search-coach.md",
+      "avatar": "/avatars/CampusJobSearchCoach.png",
+      "createdAt": "2026-08-17T09:27:25Z",
+      "updatedAt": "2026-08-17T09:27:25Z",
+      "defaultInitPrompt": {
+        "zh": "我想从零制作一份应届生简历，请根据我的真实经历一步步帮我生成可投递版本。",
+        "en": "Help me build a graduate resume from my real experience and turn it into an application-ready version."
+      },
+      "expertType": "agent",
+      "agentName": "campus-job-search-coach",
+      "plugin": "campus-job-search-coach",
+      "tags": [
+        {
+          "en": "Resume Creation",
+          "zh": "简历制作"
+        },
+        {
+          "en": "Interview Practice",
+          "zh": "面试训练"
+        },
+        {
+          "en": "Offer Decisions",
+          "zh": "Offer决策"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Help me build a graduate resume from my real experience and turn it into an application-ready version.",
+          "zh": "我想从零制作一份应届生简历，请根据我的真实经历一步步帮我生成可投递版本。"
+        },
+        {
+          "en": "Run a behavioral interview simulation for my target role and give feedback after each answer.",
+          "zh": "请针对我的目标岗位做一轮行为面试模拟，并在每次回答后给我反馈。"
+        },
+        {
+          "en": "Help me compare these offers by compensation, role, growth, location, and personal priorities.",
+          "zh": "请从薪酬、岗位内容、成长、城市和个人偏好等维度帮我比较这些Offer。"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "Expert Marketplace",
+        "en": "Expert Marketplace"
+      }
+    },
+    {
+      "id": "CareerNavigator",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "Career Navigator",
+        "zh": "生涯领航员"
+      },
+      "profession": {
+        "en": "University Career Decision Advisor",
+        "zh": "大学生生涯决策顾问"
+      },
+      "description": {
+        "zh": "帮助大学生梳理兴趣、能力、价值观与现实约束，对比专业和发展路径，用低成本行动验证方向并形成阶段计划。",
+        "en": "Helps university students clarify interests, abilities, values, and constraints, compare study and career paths, and validate directions through low-cost actions."
+      },
+      "promptFile": "/plugins/career-navigator/agents/career-navigator.md",
+      "avatar": "/avatars/CareerNavigator.png",
+      "createdAt": "2026-08-17T09:27:25Z",
+      "updatedAt": "2026-08-17T09:27:25Z",
+      "defaultInitPrompt": {
+        "zh": "我在两个专业方向之间犹豫，帮我梳理差异并设计一个验证计划",
+        "en": "I am torn between two major directions. Help me compare them and design a validation plan."
+      },
+      "expertType": "agent",
+      "agentName": "career-navigator",
+      "plugin": "career-navigator",
+      "tags": [
+        {
+          "en": "Direction Exploration",
+          "zh": "方向探索"
+        },
+        {
+          "en": "Option Comparison",
+          "zh": "方案对比"
+        },
+        {
+          "en": "Action Validation",
+          "zh": "行动验证"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "I am torn between two major directions. Help me compare them and design a validation plan.",
+          "zh": "我在两个专业方向之间犹豫，帮我梳理差异并设计一个验证计划"
+        },
+        {
+          "en": "I have no idea which direction suits me. Can we start from one real experience and explore possible paths?",
+          "zh": "我完全不知道适合什么，能从一段真实经历开始帮我探索吗？"
+        },
+        {
+          "en": "I have tried or interviewed people about one direction. Help me update my judgment and next step from the results.",
+          "zh": "我已经体验或访谈过一个方向，帮我根据结果更新判断和下一步"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "王新超",
+        "en": "王新超"
+      }
+    },
+    {
+      "id": "ComputerOperationsAdvisor",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "Xiaoxiu",
+        "zh": "小修同学"
+      },
+      "profession": {
+        "en": "Computer Operations and Troubleshooting Advisor",
+        "zh": "电脑操作与排障顾问"
+      },
+      "description": {
+        "zh": "面向大学生提供电脑上手、安全装软件、流氓广告防护、校园网络、外设连接与常见故障的分步指导",
+        "en": "Helps students set up computers, install software safely, prevent unwanted apps, connect campus networks and peripherals, and troubleshoot common issues."
+      },
+      "promptFile": "/plugins/computer-operations-advisor/agents/computer-operations-advisor.md",
+      "avatar": "/avatars/ComputerOperationsAdvisor.png",
+      "createdAt": "2026-08-17T09:27:25Z",
+      "updatedAt": "2026-08-17T09:27:25Z",
+      "defaultInitPrompt": {
+        "zh": "我的电脑出现了问题，请先问我必要信息并一步步帮我排查",
+        "en": "My computer has a problem. Ask for the necessary details first and guide me through troubleshooting step by step."
+      },
+      "expertType": "agent",
+      "agentName": "computer-operations-advisor",
+      "plugin": "computer-operations-advisor",
+      "tags": [
+        {
+          "en": "Computer Setup",
+          "zh": "电脑上手"
+        },
+        {
+          "en": "Troubleshooting",
+          "zh": "故障排查"
+        },
+        {
+          "en": "Campus Computing",
+          "zh": "校园用机"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "zh": "我的电脑出现了问题，请先问我必要信息并一步步帮我排查",
+          "en": "My computer has a problem. Ask for the necessary details first and guide me through troubleshooting step by step."
+        },
+        {
+          "zh": "电脑总弹广告、首页也被改了，帮我判断来源并安全清理",
+          "en": "My computer keeps showing ads and my browser homepage changed. Help me identify the source and clean it up safely."
+        },
+        {
+          "zh": "校园网连不上，请根据我的系统和报错逐步排查",
+          "en": "I cannot connect to the campus network. Troubleshoot it step by step based on my system and error message."
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "xinocwang",
+        "en": "xinocwang"
+      }
+    },
+    {
+      "id": "EnglishWritingCoach",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "Evan",
+        "zh": "Evan老师"
+      },
+      "profession": {
+        "en": "College English Learning Coach",
+        "zh": "大学英语学习教练"
+      },
+      "description": {
+        "zh": "面向大学生诊断英语薄弱项，训练阅读、词汇、语法、翻译与写作，并按考试目标逐轮反馈和复盘。",
+        "en": "Diagnoses college English weaknesses and coaches writing, reading, vocabulary, grammar, translation, and CET text tasks through guided practice and review."
+      },
+      "promptFile": "/plugins/english-writing-coach/agents/english-writing-coach.md",
+      "avatar": "/avatars/EnglishWritingCoach.png",
+      "createdAt": "2026-08-17T09:27:26Z",
+      "updatedAt": "2026-08-17T09:27:26Z",
+      "defaultInitPrompt": {
+        "zh": "帮我做一次大学英语薄弱项诊断，并安排本次训练",
+        "en": "Diagnose my college English weaknesses and plan a focused practice session."
+      },
+      "expertType": "agent",
+      "agentName": "english-writing-coach",
+      "plugin": "english-writing-coach",
+      "tags": [
+        {
+          "en": "College English",
+          "zh": "大学英语训练"
+        },
+        {
+          "en": "CET Text Tasks",
+          "zh": "应试读写译"
+        },
+        {
+          "en": "Guided Practice",
+          "zh": "诊断反馈复盘"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "zh": "帮我做一次大学英语薄弱项诊断，并安排本次训练",
+          "en": "Diagnose my college English weaknesses and plan a focused practice session."
+        },
+        {
+          "zh": "带我练一篇 CET-4 阅读：先让我作答，再分析证据和错因",
+          "en": "Coach me through a CET-4 reading task: let me answer first, then analyze evidence and error causes."
+        },
+        {
+          "zh": "用这段材料带我练词汇、语法和英汉互译",
+          "en": "Use this passage to coach me in vocabulary, grammar, and English-Chinese translation."
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "xinocwang",
+        "en": "xinocwang"
+      }
+    },
+    {
+      "id": "ExamPreparationPlanner",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "Exam Strategist",
+        "zh": "备考军师"
+      },
+      "profession": {
+        "en": "Exam Preparation Planner",
+        "zh": "考试复习规划师"
+      },
+      "description": {
+        "zh": "为在校生制定贴合考试范围、剩余时间和掌握情况的复习计划，通过每日打卡、薄弱点复盘和滚动调整推进备考。",
+        "en": "Builds actionable exam plans for students from scope, time, and mastery, then adapts them through check-ins, weakness reviews, and replanning."
+      },
+      "promptFile": "/plugins/exam-preparation-planner/agents/exam-preparation-planner.md",
+      "avatar": "/avatars/ExamPreparationPlanner.png",
+      "createdAt": "2026-08-17T09:27:26Z",
+      "updatedAt": "2026-08-17T09:27:26Z",
+      "defaultInitPrompt": {
+        "zh": "我有三门期末考试，帮我根据考试时间和当前基础安排复习顺序",
+        "en": "I have three final exams. Help me prioritize and schedule my revision based on the dates and my current level."
+      },
+      "expertType": "agent",
+      "agentName": "exam-preparation-planner",
+      "plugin": "exam-preparation-planner",
+      "tags": [
+        {
+          "en": "Exam Planning",
+          "zh": "备考规划"
+        },
+        {
+          "en": "Task Breakdown",
+          "zh": "任务拆解"
+        },
+        {
+          "en": "Review and Adjustment",
+          "zh": "复盘纠偏"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "I have three final exams. Help me prioritize and schedule my revision based on the dates and my current level.",
+          "zh": "我有三门期末考试，帮我根据考试时间和当前基础安排复习顺序"
+        },
+        {
+          "en": "My CET exam is in 20 days and I can study two hours daily. Build me a sprint plan.",
+          "zh": "距离四六级还有20天，每天能学两小时，帮我制定冲刺计划"
+        },
+        {
+          "en": "Here are today's results and mistakes. Review them and adjust tomorrow's tasks.",
+          "zh": "这是我今天的完成情况和错题，帮我复盘并调整明天的任务"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "王新超",
+        "en": "王新超"
+      }
+    },
+    {
+      "id": "NoteClassRepresentative",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "NoteMate",
+        "zh": "小记同学"
+      },
+      "profession": {
+        "en": "Class Notes Representative",
+        "zh": "笔记课代表"
+      },
+      "description": {
+        "zh": "对齐课堂速记、课件与转写稿，区分来源、加工和核验状态，生成可追踪纠错、可直接复习的笔记与卡片。",
+        "en": "Aligns class materials with source, transformation, and verification labels into correctable notes and review assets."
+      },
+      "promptFile": "/plugins/note-class-representative/agents/note-class-representative.md",
+      "avatar": "/avatars/NoteClassRepresentative.png",
+      "createdAt": "2026-08-17T09:27:26Z",
+      "updatedAt": "2026-08-17T09:27:26Z",
+      "defaultInitPrompt": {
+        "zh": "我会上传课堂速记、课件和转写稿，请先盘点来源，再整理成带依据的结构化笔记",
+        "en": "I will upload class notes, slides, and transcripts. Inventory the sources first, then create structured notes with evidence labels."
+      },
+      "expertType": "agent",
+      "agentName": "note-class-representative",
+      "plugin": "note-class-representative",
+      "tags": [
+        {
+          "en": "Class Notes",
+          "zh": "课堂笔记"
+        },
+        {
+          "en": "Knowledge Structuring",
+          "zh": "知识结构"
+        },
+        {
+          "en": "Review Summarization",
+          "zh": "复习提炼"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "zh": "我会上传课堂速记、课件和转写稿，请先盘点来源，再整理成带依据的结构化笔记",
+          "en": "I will upload class notes, slides, and transcripts. Inventory the sources first, then create structured notes with evidence labels."
+        },
+        {
+          "zh": "根据这节课的材料生成一页纸复习总结，并标出证据不足和待确认内容",
+          "en": "Create a one-page review summary from these class materials and flag weak evidence and items needing confirmation."
+        },
+        {
+          "zh": "检查这份笔记的来源归属和易混概念，修正后生成对比表与自测题",
+          "en": "Check the source attribution and confusing concepts in these notes, then create a corrected comparison table and self-test questions."
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "xinocwang",
+        "en": "xinocwang"
+      }
+    },
+    {
+      "id": "StudyFortuneCompass",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "Academic Trend Reader",
+        "zh": "学运趋势解读师"
+      },
+      "profession": {
+        "en": "Academic Trend Reader",
+        "zh": "学运趋势解读师"
+      },
+      "description": {
+        "zh": "一数起卦，循本卦、互卦与变卦解析学习趋势与盲区，并结合现实信息给出可验证的观察和行动方向。",
+        "en": "Cast one number through a disclosed Mei Hua Yi Shu calculation, follow the primary, mutual, and changed hexagrams, then test the reading against your real study context."
+      },
+      "promptFile": "/plugins/study-fortune-compass/agents/study-fortune-compass.md",
+      "avatar": "/avatars/StudyFortuneCompass.png",
+      "createdAt": "2026-08-17T09:27:26Z",
+      "updatedAt": "2026-08-17T09:27:26Z",
+      "defaultInitPrompt": {
+        "zh": "我最近准备期末考试，选数字7，帮我看本周复习进度该把力气放在哪里",
+        "en": "I am preparing for finals and choose number 7. Read this week's study progress and show me where to focus."
+      },
+      "expertType": "agent",
+      "agentName": "study-fortune-compass",
+      "plugin": "study-fortune-compass",
+      "tags": [
+        {
+          "en": "Deterministic Casting",
+          "zh": "确定性起卦"
+        },
+        {
+          "en": "Study Reflection",
+          "zh": "学业象意"
+        },
+        {
+          "en": "Action Observation",
+          "zh": "行动观察"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "I am preparing for finals and choose number 7. Read this week's study progress and show me where to focus.",
+          "zh": "我最近准备期末考试，选数字7，帮我看本周复习进度该把力气放在哪里"
+        },
+        {
+          "en": "Give me today's study reading using number 7, and briefly show how the hexagram was calculated.",
+          "zh": "我选数字7，给我做一张今天的学运日签，并简要展示起卦依据"
+        },
+        {
+          "en": "I am torn between graduate school preparation and an internship. Help me view the choice through the compass.",
+          "zh": "我在考研和找实习之间犹豫，帮我换个视角看看"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "王新超",
+        "en": "王新超"
+      }
+    },
+    {
+      "id": "ThesisWritingMentor",
+      "categoryId": "15-BackToSchool",
+      "displayName": {
+        "en": "ThesisMate",
+        "zh": "论小舟"
+      },
+      "profession": {
+        "en": "Thesis Writing Mentor",
+        "zh": "论文写作导师"
+      },
+      "description": {
+        "zh": "基于可核验材料辅助论文结构、学术润色、期刊匹配与审稿回复，以证据状态和提交就绪度控制质量。",
+        "en": "Guides thesis structure, academic revision, journal fit, and reviewer responses with evidence and readiness tracking."
+      },
+      "promptFile": "/plugins/thesis-writing-mentor/agents/thesis-writing-mentor.md",
+      "avatar": "/avatars/ThesisWritingMentor.png",
+      "createdAt": "2026-08-17T09:27:27Z",
+      "updatedAt": "2026-08-17T09:27:27Z",
+      "defaultInitPrompt": {
+        "zh": "我的论文方向还很模糊，能帮我定题目、列提纲，并规划好写作顺序吗？",
+        "en": "My thesis direction is still vague. Can you help me settle on a topic, outline the chapters, and plan the writing order?"
+      },
+      "expertType": "agent",
+      "agentName": "thesis-writing-mentor",
+      "plugin": "thesis-writing-mentor",
+      "tags": [
+        {
+          "en": "Thesis Workflow",
+          "zh": "论文全流程"
+        },
+        {
+          "en": "Evidence and Argument",
+          "zh": "文献与论证"
+        },
+        {
+          "en": "Defense and Sharing",
+          "zh": "答辩与分享"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "My thesis direction is still vague. Can you help me settle on a topic, outline the chapters, and plan the writing order?",
+          "zh": "我的论文方向还很模糊，能帮我定题目、列提纲，并规划好写作顺序吗？"
+        },
+        {
+          "en": "I have a pile of references and citations but don't know how to organize them. Can you help me sort them out?",
+          "zh": "我攒了一堆文献和引用，但不知道怎么整理，能帮我理一理吗？"
+        },
+        {
+          "en": "I need to prepare for my defense or share my thesis. Can you help me with the slides and a short summary?",
+          "zh": "我要准备答辩或分享论文，能帮我做答辩PPT和一篇简短的研究摘要吗？"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "王新超",
+        "en": "王新超"
+      }
+    },
+    {
+      "id": "FbsirSuperIndependentBoard",
+      "categoryId": "12-IndustryConsultant",
+      "displayName": {
+        "en": "FBSir",
+        "zh": "福帮手"
+      },
+      "profession": {
+        "en": "Super Independent Review",
+        "zh": "超级独董会"
+      },
+      "description": {
+        "zh": "单一AI独立决策审议官，非法定董事会；挑战偏见、核验证据，交付可执行、可复审的决策产物。",
+        "en": "A single, non-statutory AI decision reviewer that tests assumptions, separates evidence from judgment, and turns important choices into actionable, reviewable artifacts."
+      },
+      "promptFile": "/plugins/fbsir-super-independent-board/agents/fbsir-super-independent-board.md",
+      "avatar": "/avatars/FbsirSuperIndependentBoard.png",
+      "createdAt": "2026-08-17T08:28:04Z",
+      "updatedAt": "2026-08-17T08:28:04Z",
+      "defaultInitPrompt": {
+        "zh": "我正在面对一个重要决定。请直接给我独立判断、最强反方、证据缺口、成立与失效条件，以及一个可逆的下一步；不要先给长问卷。",
+        "en": "I am facing an important decision. Give me an independent judgment, the strongest countercase, evidence gaps, validity and kill conditions, and one reversible next step without starting with a long questionnaire."
+      },
+      "expertType": "agent",
+      "agentName": "fbsir-super-independent-board",
+      "plugin": "fbsir-super-independent-board",
+      "tags": [
+        {
+          "en": "Independent Review",
+          "zh": "独立审议"
+        },
+        {
+          "en": "Important Decisions",
+          "zh": "重大决策"
+        },
+        {
+          "en": "Decision Delivery",
+          "zh": "决策交付"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "zh": "我正在面对一个重要决定。请直接给我独立判断、最强反方、证据缺口、成立与失效条件，以及一个可逆的下一步；不要先给长问卷。",
+          "en": "I am facing an important decision. Give me an independent judgment, the strongest countercase, evidence gaps, validity and kill conditions, and one reversible next step without starting with a long questionnaire."
+        },
+        {
+          "zh": "请审查这份材料，分开事实、推断和未知，指出什么证据会推翻当前建议，并做成一页决策图。",
+          "en": "Review this material, separate facts, inferences, and unknowns, identify what evidence would overturn the recommendation, and turn it into a one-page decision map."
+        },
+        {
+          "zh": "我在方案A与B之间犹豫。请选择最合适的决策方式，比较不可逆风险、可验证实验和停止条件，再给我一个行动包。",
+          "en": "I am choosing between options A and B. Select the right decision method, compare irreversible risks, testable experiments, and stop conditions, then give me an action packet."
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "福帮手",
+        "en": "福帮手"
+      }
+    },
+    {
+      "id": "WorkbuddyUniversalMentor",
+      "categoryId": "12-IndustryConsultant",
+      "displayName": {
+        "en": "Ou Mingzhi",
+        "zh": "欧明智"
+      },
+      "profession": {
+        "en": "WorkBuddy Universal Mentor",
+        "zh": "WorkBuddy 全能导师"
+      },
+      "description": {
+        "zh": "WorkBuddy实战教练：覆盖入门引导、场景匹配、实战案例、Skill开发与自动化答疑全链路。",
+        "en": "A hands-on coaching WorkBuddy mentor covering onboarding, scenarios, real-world cases, Skills development, automation workflows and troubleshooting — for every level."
+      },
+      "promptFile": "/plugins/workbuddy-universal-mentor/agents/workbuddy-universal-mentor.md",
+      "avatar": "/avatars/WorkbuddyUniversalMentor.png",
+      "createdAt": "2026-08-21T07:25:06Z",
+      "updatedAt": "2026-08-21T07:31:20Z",
+      "defaultInitPrompt": {
+        "zh": "我是 WorkBuddy 新手，从哪开始最快上手？",
+        "en": "I'm new to WorkBuddy — what's the fastest way to get started?"
+      },
+      "expertType": "agent",
+      "agentName": "workbuddy-universal-mentor",
+      "plugin": "workbuddy-universal-mentor",
+      "tags": [
+        {
+          "en": "Hands-on Coaching",
+          "zh": "实战教学"
+        },
+        {
+          "en": "Scenario Matching",
+          "zh": "场景匹配"
+        },
+        {
+          "en": "Automation Workflows",
+          "zh": "自动化工作流"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "I'm new to WorkBuddy — what's the fastest way to get started?",
+          "zh": "我是 WorkBuddy 新手，从哪开始最快上手？"
+        },
+        {
+          "en": "I work in the inspection industry — what real scenarios can WorkBuddy help with?",
+          "zh": "我是做检测业务的，WorkBuddy 能帮我解决哪些实际场景？"
+        },
+        {
+          "en": "I want to build my own Skill — how do I do it step by step?",
+          "zh": "我想开发一个自己的 Skill，怎么一步步做？"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "欧明智",
+        "en": "欧明智"
+      }
+    },
+    {
+      "id": "FbsirMomDialogueExpert",
+      "categoryId": "06-ContentCreative",
+      "displayName": {
+        "en": "FBSir",
+        "zh": "福帮手"
+      },
+      "profession": {
+        "en": "Mom Stories",
+        "zh": "妈妈问答"
+      },
+      "description": {
+        "zh": "整理与妈妈有关的照片、视频、录音、手稿和家庭资料，生成可追溯的故事卡、生活轨迹、追问与书稿。",
+        "en": "Organizes mother-centered family materials into source-linked stories, timelines, questions, and editable manuscripts."
+      },
+      "promptFile": "/plugins/fbsir-mom-dialogue-expert/agents/fbsir-mom-dialogue-expert.md",
+      "avatar": "/avatars/FbsirMomDialogueExpert.png",
+      "createdAt": "2026-08-27T10:07:04Z",
+      "updatedAt": "2026-08-27T10:07:04Z",
+      "defaultInitPrompt": {
+        "en": "Organize the family materials related to mothers in the current workspace. First inventory materials, identify people, relationships, and life trajectories, then create initial story cards, confirmation items, and follow-up questions.",
+        "zh": "整理当前工作区中与妈妈有关的生活资料，先盘点素材、识别人物关系和生活轨迹，再生成首批故事卡、待确认事项和下一步追问。"
+      },
+      "expertType": "agent",
+      "agentName": "fbsir-mom-dialogue-expert",
+      "plugin": "fbsir-mom-dialogue-expert",
+      "tags": [
+        {
+          "en": "Family Archive",
+          "zh": "家庭资料整理"
+        },
+        {
+          "en": "Mothers' Stories",
+          "zh": "妈妈故事"
+        },
+        {
+          "en": "Story Editing",
+          "zh": "故事编纂"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Organize the family materials related to mothers in the current workspace. First inventory materials, identify people, relationships, and life trajectories, then create initial story cards, confirmation items, and follow-up questions.",
+          "zh": "整理当前工作区中与妈妈有关的生活资料，先盘点素材、识别人物关系和生活轨迹，再生成首批故事卡、待确认事项和下一步追问。"
+        },
+        {
+          "en": "Analyze these photos, videos, or recordings. Organize source-linked people, dialogue, events, timecodes, uncertainties, and questions for family confirmation.",
+          "zh": "分析这些照片、视频或录音，按来源整理人物、对话、事件、时间码、待确认事项和家人追问。"
+        },
+        {
+          "en": "Turn confirmed materials into a mother-centered life trajectory, outline, and one editable sample chapter while preserving family additions and source references.",
+          "zh": "把已确认资料编成妈妈主轴的生活轨迹、大纲和一章可编辑样稿，保留家人补充与来源索引。"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "福帮手AI团队",
+        "en": "福帮手AI团队"
+      }
+    },
+    {
+      "id": "MibaoMediaArchivist",
+      "categoryId": "04-DataAI",
+      "displayName": {
+        "en": "MIBAO",
+        "zh": "秘宝"
+      },
+      "profession": {
+        "en": "AI Media Asset Archivist",
+        "zh": "AI影像资产整理专家"
+      },
+      "description": {
+        "zh": "在不改动原件的前提下，完成影像盘点、严格SHA-256、精确重复识别、本地索引检索与可验收报告",
+        "en": "Protects originals while building strict SHA-256 inventories, exact duplicate groups, local search indexes, and verifiable reports."
+      },
+      "promptFile": "/plugins/mibao-media-archivist/agents/mibao-media-archivist.md",
+      "avatar": "/avatars/MibaoMediaArchivist.png",
+      "createdAt": "2026-08-30T01:05:32Z",
+      "updatedAt": "2026-09-02T13:47:59Z",
+      "defaultInitPrompt": {
+        "en": "Scan the media folder I authorize, compute strict SHA-256 hashes, and generate exact duplicate groups, a local search index, and an openable inventory report.",
+        "zh": "扫描我授权的影像文件夹，执行严格 SHA-256，生成精确重复项清单、本地检索索引和可打开的盘点报告"
+      },
+      "expertType": "agent",
+      "agentName": "mibao-media-archivist",
+      "plugin": "mibao-media-archivist",
+      "tags": [
+        {
+          "en": "Media Inventory",
+          "zh": "影像盘点"
+        },
+        {
+          "en": "Exact Duplicate Detection",
+          "zh": "精确重复识别"
+        },
+        {
+          "en": "Local Index Search",
+          "zh": "本地索引检索"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Scan the media folder I authorize, compute strict SHA-256 hashes, and generate exact duplicate groups, a local search index, and an openable inventory report.",
+          "zh": "扫描我授权的影像文件夹，执行严格 SHA-256，生成精确重复项清单、本地检索索引和可打开的盘点报告"
+        },
+        {
+          "en": "Search an existing MIBAO project for my keywords and return relative paths, stable asset IDs, evidence references, and match summaries.",
+          "zh": "在已有秘宝项目中检索我指定的关键词。返回相对路径、稳定资产ID、证据引用和命中摘要"
+        },
+        {
+          "en": "Update an existing MIBAO project for new or changed files, refresh strict hashes, duplicate groups, the local index, and reports, without changing originals.",
+          "zh": "继续盘点我已有的秘宝项目，更新新增或变化文件的严格哈希、重复项、索引和报告，原件不动"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "Mibao Project Team",
+        "en": "Mibao Project Team"
+      }
+    },
+    {
+      "id": "TietuToutiao",
+      "categoryId": "06-ContentCreative",
+      "displayName": {
+        "en": "Tietu Toutiao",
+        "zh": "贴图头条"
+      },
+      "profession": {
+        "en": "Media Cover Editor",
+        "zh": "媒体头图编辑"
+      },
+      "description": {
+        "zh": "把单版或多版报纸转成手机头图：条目化综合选题、结构化编辑决策、自审门禁、四模板确定性渲染与版本回退。",
+        "en": "Turns one or many newspaper pages into mobile cover concepts, synthesizes selected items into one cover, and renders deterministic, versioned, review-gated PNGs."
+      },
+      "promptFile": "/plugins/tietu-toutiao/agents/tietu-toutiao.md",
+      "avatar": "/avatars/TietuToutiao.png",
+      "createdAt": "2026-09-01T01:48:35Z",
+      "updatedAt": "2026-09-01T01:48:35Z",
+      "defaultInitPrompt": {
+        "zh": "上传这张报纸版面，生成 3 个贴图头条方案",
+        "en": "Upload this newspaper page and create three Tietu Toutiao cover concepts."
+      },
+      "expertType": "agent",
+      "agentName": "tietu-toutiao",
+      "plugin": "tietu-toutiao",
+      "tags": [
+        {
+          "en": "Newspaper Layout Understanding",
+          "zh": "报纸版面理解"
+        },
+        {
+          "en": "Media Visual Communication",
+          "zh": "媒体视觉传播"
+        },
+        {
+          "en": "Chinese Headline Typesetting",
+          "zh": "中文标题排版"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Upload this newspaper page and create three Tietu Toutiao cover concepts.",
+          "zh": "上传这张报纸版面，生成 3 个贴图头条方案"
+        },
+        {
+          "en": "Synthesize this batch of newspaper pages into one cover with selected items.",
+          "zh": "把这批报纸综合成一份带条目清单的头图"
+        },
+        {
+          "en": "Revise the previous version: tell me what you are not happy with.",
+          "zh": "修改上一版：说哪里不满意就行"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "Expert Marketplace",
+        "en": "Expert Marketplace"
+      }
+    },
+    {
+      "id": "FbsirBeikeYi",
+      "categoryId": "09-OperationsHR",
+      "displayName": {
+        "en": "FBSir",
+        "zh": "福帮手"
+      },
+      "profession": {
+        "en": "Lesson Planning Decision and Delivery Expert",
+        "zh": "备课易"
+      },
+      "description": {
+        "zh": "在本地备课工作区读懂教材与旧稿，比较教学方案，写回可编辑成果并保留复核与复用线索。",
+        "en": "Reads teacher materials in a local workspace, compares a few teaching paths, and delivers editable, reviewable, reusable lesson assets."
+      },
+      "promptFile": "/plugins/fbsir-beike-yi/agents/fbsir-beike-yi.md",
+      "avatar": "/avatars/FbsirBeikeYi.png",
+      "createdAt": "2026-09-03T05:07:07Z",
+      "updatedAt": "2026-09-03T05:07:07Z",
+      "defaultInitPrompt": {
+        "zh": "我在本地备课工作区里有教材或旧教案。请先读取我指定的材料，告诉我你理解的教学问题，再给出不超过三个可比较的教学方案。",
+        "en": "I have textbooks or previous lesson plans in a local preparation workspace. Read only the materials I specify, explain the teaching problem you understood, then give me no more than three comparable teaching options."
+      },
+      "expertType": "agent",
+      "agentName": "fbsir-beike-yi",
+      "plugin": "fbsir-beike-yi",
+      "tags": [
+        {
+          "en": "Teaching Design Decisions",
+          "zh": "教学设计决策"
+        },
+        {
+          "en": "Local Material Understanding",
+          "zh": "本地材料理解"
+        },
+        {
+          "en": "Reviewable Delivery",
+          "zh": "可复核成果交付"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "zh": "我在本地备课工作区里有教材或旧教案。请先读取我指定的材料，告诉我你理解的教学问题，再给出不超过三个可比较的教学方案。",
+          "en": "I have textbooks or previous lesson plans in a local preparation workspace. Read only the materials I specify, explain the teaching problem you understood, then give me no more than three comparable teaching options."
+        },
+        {
+          "zh": "请根据我指定的教材页和旧教案，先做一张材料理解卡，再只改教学目标、课堂活动和评价不一致的一个关键环节，保留其他内容不动。",
+          "en": "Using only the textbook pages and previous lesson plan I specify, create a material-understanding card, then revise only the one key mismatch among objectives, activities, and assessment while keeping everything else unchanged."
+        },
+        {
+          "zh": "我已经选定教学方案，请生成一个可编辑的教案草稿、教师复核清单和唯一下一步，并写回本地工作区的新版本，不要覆盖原文件。",
+          "en": "I have selected a teaching option. Create one editable lesson-plan draft, a teacher review checklist, and one next step, then write a new version back to the local workspace without overwriting the original."
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "福帮手",
+        "en": "福帮手"
+      }
+    },
+    {
+      "id": "LinkfoxExpertAmazonListingSpecialist",
+      "categoryId": "07-SalesCommerce",
+      "displayName": {
+        "en": "Linkfox",
+        "zh": "Linkfox"
+      },
+      "profession": {
+        "en": "Amazon Listing Optimization Expert",
+        "zh": "亚马逊 Listing 优化专家"
+      },
+      "description": {
+        "zh": "聚焦亚马逊Listing全链路诊断与创作，结合竞品、关键词、评论和合规证据，输出可发布文案。",
+        "en": "Audits and creates Amazon Listings using product facts, competitor evidence, keyword research, review insights, compliance checks, and AI shopping readiness."
+      },
+      "promptFile": "/plugins/linkfox-expert-amazon-listing-specialist/agents/linkfox-expert-amazon-listing-specialist.md",
+      "avatar": "/avatars/LinkfoxExpertAmazonListingSpecialist.png",
+      "createdAt": "2026-09-03T06:16:27Z",
+      "updatedAt": "2026-09-03T06:16:27Z",
+      "defaultInitPrompt": {
+        "en": "Create or improve an Amazon Listing from product facts with keyword and compliance checks",
+        "zh": "请基于商品事实生成或优化亚马逊 Listing，并完成关键词与合规检查"
+      },
+      "expertType": "agent",
+      "agentName": "linkfox-expert-amazon-listing-specialist",
+      "plugin": "linkfox-expert-amazon-listing-specialist",
+      "tags": [
+        {
+          "en": "Amazon Listing",
+          "zh": "亚马逊 Listing"
+        },
+        {
+          "en": "Keyword Optimization",
+          "zh": "关键词优化"
+        },
+        {
+          "en": "Compliance Audit",
+          "zh": "合规审计"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Create or improve an Amazon Listing from product facts with keyword and compliance checks",
+          "zh": "请基于商品事实生成或优化亚马逊 Listing，并完成关键词与合规检查"
+        },
+        {
+          "en": "Audit this Amazon Listing and explain why it may not get traffic or conversions",
+          "zh": "请审计这条亚马逊 Listing，分析流量和转化问题"
+        },
+        {
+          "en": "Generate a compliant title, five bullets, description, and backend search terms",
+          "zh": "请生成合规的标题、五点、描述和后台搜索词"
+        }
+      ],
+      "author": {
+        "zh": "Linkfox",
+        "en": "Linkfox"
+      }
+    },
+    {
+      "id": "DdDueDiligenceTeam",
+      "categoryId": "08-FinanceInvestment",
+      "displayName": {
+        "en": "AI Due Diligence Team",
+        "zh": "AI尽调专家团"
+      },
+      "profession": {
+        "en": "AI Due Diligence Team",
+        "zh": "AI尽调专家团"
+      },
+      "description": {
+        "zh": "银行对公授信尽调专家团：主理人按七步流程统筹进件/核验/画像/财务/经营/行业/风险/报告八岗协同。",
+        "en": "Bank corporate-credit due diligence team: lead orchestrates the 7-step workflow across intake, finance verification, financial/business/profile/industry analysis, risk overview, and report writing specialists."
+      },
+      "promptFile": "/plugins/dd-due-diligence-team/agents/dd-due-diligence-lead.md",
+      "avatar": "/avatars/DdDueDiligenceTeam.png",
+      "createdAt": "2026-09-16T03:24:34Z",
+      "updatedAt": "2026-09-16T04:11:21Z",
+      "defaultInitPrompt": {
+        "zh": "帮我跑一遍对公授信尽调全流程：进件解析、财务核验、专项分析、风险总览，最后生成尽调报告",
+        "en": "Run the full corporate credit due diligence workflow for my current project: intake parsing, finance verification, specialist analyses, risk overview, and the final report"
+      },
+      "expertType": "team",
+      "agentName": "dd-due-diligence-lead",
+      "plugin": "dd-due-diligence-team",
+      "tags": [
+        {
+          "en": "Due Diligence",
+          "zh": "授信尽调"
+        },
+        {
+          "en": "Credit Risk",
+          "zh": "授信风控"
+        },
+        {
+          "en": "Risk Identification",
+          "zh": "风险识别"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "en": "Run the full corporate credit due diligence workflow for my current project: intake parsing, finance verification, specialist analyses, risk overview, and the final report",
+          "zh": "帮我跑一遍对公授信尽调全流程：进件解析、财务核验、专项分析、风险总览，最后生成尽调报告"
+        },
+        {
+          "en": "Check the status and material gaps of my current due diligence project, and list what to do next",
+          "zh": "查一下当前尽调项目的状态和材料缺口，列出下一步要做的事"
+        },
+        {
+          "en": "My intake materials are ready - parse and recognize them, check for missing items, then proceed to finance verification",
+          "zh": "进件材料齐了，帮我解析识别、查漏补缺，然后推进到财务核验"
+        }
+      ],
+      "members": [
+        {
+          "id": "dd-due-diligence-lead",
+          "displayName": {
+            "en": "Lead",
+            "zh": "尽调总控"
+          },
+          "profession": {
+            "en": "Due Diligence Orchestrator",
+            "zh": "尽调流程总控"
+          },
+          "avatar": "/avatars/DdDueDiligenceTeam-DdDueDiligenceLead.png",
+          "promptFile": "/plugins/dd-due-diligence-team/agents/dd-due-diligence-lead.md",
+          "role": "lead"
+        },
+        {
+          "id": "intake-material-custodian",
+          "displayName": {
+            "en": "Zhen",
+            "zh": "甄齐全"
+          },
+          "profession": {
+            "en": "Intake Material Custodian",
+            "zh": "进件材料管家"
+          },
+          "avatar": "/avatars/DdDueDiligenceTeam-IntakeMaterialCustodian.png",
+          "promptFile": "/plugins/dd-due-diligence-team/agents/intake-material-custodian.md",
+          "role": "member"
+        },
+        {
+          "id": "finance-verify-specialist",
+          "displayName": {
+            "en": "Verona",
+            "zh": "秦核真"
+          },
+          "profession": {
+            "en": "Finance Verification Specialist",
+            "zh": "财务核验专员"
+          },
+          "avatar": "/avatars/DdDueDiligenceTeam-FinanceVerifySpecialist.png",
+          "promptFile": "/plugins/dd-due-diligence-team/agents/finance-verify-specialist.md",
+          "role": "member"
+        },
+        {
+          "id": "financial-analysis-specialist",
+          "displayName": {
+            "en": "Cha",
+            "zh": "察盈亏"
+          },
+          "profession": {
+            "en": "Financial Analysis Specialist",
+            "zh": "财务分析专员"
+          },
+          "avatar": "/avatars/DdDueDiligenceTeam-FinancialAnalysisSpecialist.png",
+          "promptFile": "/plugins/dd-due-diligence-team/agents/financial-analysis-specialist.md",
+          "role": "member"
+        },
+        {
+          "id": "enterprise-profiling-expert",
+          "displayName": {
+            "en": "Zha",
+            "zh": "查明悉"
+          },
+          "profession": {
+            "en": "Enterprise Profiling Expert",
+            "zh": "企业画像专家"
+          },
+          "avatar": "/avatars/DdDueDiligenceTeam-EnterpriseProfilingExpert.png",
+          "promptFile": "/plugins/dd-due-diligence-team/agents/enterprise-profiling-expert.md",
+          "role": "member"
+        },
+        {
+          "id": "business-analysis-expert",
+          "displayName": {
+            "en": "Jian",
+            "zh": "鉴产销"
+          },
+          "profession": {
+            "en": "Business Analysis Expert",
+            "zh": "经营分析专家"
+          },
+          "avatar": "/avatars/DdDueDiligenceTeam-BusinessAnalysisExpert.png",
+          "promptFile": "/plugins/dd-due-diligence-team/agents/business-analysis-expert.md",
+          "role": "member"
+        },
+        {
+          "id": "industry-analysis-expert",
+          "displayName": {
+            "en": "Hang",
+            "zh": "杭知微"
+          },
+          "profession": {
+            "en": "Industry Analysis Expert",
+            "zh": "行业分析专家"
+          },
+          "avatar": "/avatars/DdDueDiligenceTeam-IndustryAnalysisExpert.png",
+          "promptFile": "/plugins/dd-due-diligence-team/agents/industry-analysis-expert.md",
+          "role": "member"
+        },
+        {
+          "id": "risk-compliance-expert",
+          "displayName": {
+            "en": "Fang",
+            "zh": "方守正"
+          },
+          "profession": {
+            "en": "Risk Overview Expert",
+            "zh": "风险总览专家"
+          },
+          "avatar": "/avatars/DdDueDiligenceTeam-RiskComplianceExpert.png",
+          "promptFile": "/plugins/dd-due-diligence-team/agents/risk-compliance-expert.md",
+          "role": "member"
+        },
+        {
+          "id": "report-writer",
+          "displayName": {
+            "en": "Reagan",
+            "zh": "文报章"
+          },
+          "profession": {
+            "en": "Report Writing Specialist",
+            "zh": "报告撰写专员"
+          },
+          "avatar": "/avatars/DdDueDiligenceTeam-ReportWriter.png",
+          "promptFile": "/plugins/dd-due-diligence-team/agents/report-writer.md",
+          "role": "member"
+        }
+      ],
+      "author": {
+        "zh": "Tencent FinCloud",
+        "en": "Tencent FinCloud"
+      }
+    },
+    {
+      "id": "TcChengxinTravelExpert",
+      "categoryId": "12-IndustryConsultant",
+      "displayName": {
+        "en": "Easy Travel",
+        "zh": "轻松出行"
+      },
+      "profession": {
+        "en": "Tongcheng Travel Assistant",
+        "zh": "同程旅行助手"
+      },
+      "description": {
+        "zh": "同程官方服务，可一键领取优惠券和红包，查询机票、火车、酒店、景点、规划旅行。我会结合实时旅行资源与账号权益，为您快速找到合适的出行选择，让每一次出发更简单、更省心。",
+        "en": "Tongcheng's official service lets you search flights, trains, hotels, attractions, plan trips, and claim hotel coupons in one sentence. I combine live travel resources with account benefits to make every departure simpler and easier."
+      },
+      "promptFile": "/plugins/tc-chengxin-travel-expert/agents/tongcheng-travel-advisor.md",
+      "avatar": "/avatars/TcChengxinTravelExpert.png",
+      "createdAt": "2026-09-23T10:15:49Z",
+      "updatedAt": "2026-09-23T10:15:49Z",
+      "defaultInitPrompt": {
+        "zh": "帮我领取同程优惠券",
+        "en": "Claim my coupons"
+      },
+      "expertType": "agent",
+      "agentName": "tongcheng-travel-advisor",
+      "plugin": "tc-chengxin-travel-expert",
+      "tags": [
+        {
+          "en": "Real-time Resource Search",
+          "zh": "实时资源查询"
+        },
+        {
+          "en": "Smart Itinerary Planning",
+          "zh": "智能行程规划"
+        },
+        {
+          "en": "Coupon Benefits",
+          "zh": "优惠券红包"
+        }
+      ],
+      "quickPrompts": [
+        {
+          "zh": "帮我领取同程优惠券",
+          "en": "Claim my coupons"
+        },
+        {
+          "zh": "上海到北京的特价机票",
+          "en": "Find cheap flights from Shanghai to Beijing"
+        },
+        {
+          "zh": "上海迪士尼附近的三星级酒店",
+          "en": "Find three-star hotels near Shanghai Disneyland"
+        },
+        {
+          "zh": "明天去杭州的高铁",
+          "en": "Find high-speed trains to Hangzhou tomorrow"
+        },
+        {
+          "zh": "帮我规划一个苏州两日游行程",
+          "en": "Plan a two-day trip to Suzhou"
+        }
+      ],
+      "isOPC": true,
+      "author": {
+        "zh": "同程网络科技股份有限公司",
+        "en": "同程网络科技股份有限公司"
       }
     }
   ]

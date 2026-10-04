@@ -217,13 +217,13 @@ This section groups error codes by handling intent. It is meant for CLI and skil
 
 | Code | Meaning | Action |
 |------|---------|--------|
-| 40003 | Insufficient balance | Purchase credits at the [TextIn xParse purchase page](https://www.textin.com/market/chager/pdf_to_markdown), or switch to the free API if applicable |
+| 40003 | Insufficient balance | Use the service-provided `upgrade_url` when present, contact the account's regional support when absent, or switch to the free API if applicable |
 
 #### Rate & Free-Tier Limits
 
 | Code | Meaning | Action |
 |------|---------|--------|
-| 40306 | Request rate limit exceeded | Retry later and reduce request frequency |
+| 40306 | Service-defined rate or per-request page limit | Follow structured `error_code`: retry `RATE_LIMITED`, reduce pages for `PAGE_LIMIT_EXCEEDED` |
 | 40307 | Daily free quota exhausted | Stop; ask whether to wait or explicitly retry with `--api paid` |
 
 #### Request & Parameter Errors
@@ -252,7 +252,6 @@ This section groups error codes by handling intent. It is meant for CLI and skil
 
 | Code | Meaning | Action |
 |------|---------|--------|
-| 40422 | Password required | Rerun with `--password <PWD>` |
 | 40423 | Password incorrect | Retry with the correct password |
 
 #### Processing & Service Errors
@@ -260,6 +259,7 @@ This section groups error codes by handling intent. It is meant for CLI and skil
 | Code | Meaning | Action |
 |------|---------|--------|
 | 30203 | Base service fault | Retry after a short delay |
+| 40422 | Service-defined file processing failure; the direct reason is in `message` | Keep `SERVICE_ERROR`, show `message`, follow `PROVIDE_FILE`, and preserve `request_id` |
 | 500 | Internal server error | Retry; contact support if persistent |
 | 50207 | Partial parse failure | Check `success_count` and inspect partial output |
 

@@ -1,0 +1,43 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=20"
+  },
+  "env": {
+    "WELIFE_HOME": "$HOME/.workbuddy/connectors-marketplace/connectors/welife-ai-workbench-connector"
+  },
+  "init": {
+    "darwin": "node \"$WELIFE_HOME/client.cjs\" --version",
+    "linux": "node \"$WELIFE_HOME/client.cjs\" --version",
+    "win32": "node \"%WELIFE_HOME%\\client.cjs\" --version"
+  },
+  "auth": {
+    "darwin": "node \"$WELIFE_HOME/client.cjs\" auth login",
+    "linux": "node \"$WELIFE_HOME/client.cjs\" auth login",
+    "win32": "node \"%WELIFE_HOME%\\client.cjs\" auth login"
+  },
+  "unAuth": {
+    "darwin": "node \"$WELIFE_HOME/client.cjs\" auth logout",
+    "linux": "node \"$WELIFE_HOME/client.cjs\" auth logout",
+    "win32": "node \"%WELIFE_HOME%\\client.cjs\" auth logout"
+  },
+  "status": {
+    "darwin": "node \"$WELIFE_HOME/client.cjs\" auth status",
+    "linux": "node \"$WELIFE_HOME/client.cjs\" auth status",
+    "win32": "node \"%WELIFE_HOME%\\client.cjs\" auth status"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "node \"$WELIFE_HOME/client.cjs\" --version",
+      "linux": "node \"$WELIFE_HOME/client.cjs\" --version",
+      "win32": "node \"%WELIFE_HOME%\\client.cjs\" --version"
+    },
+    "minVersion": "2.1.3",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  },
+  "statusMatchJson": {
+    "status": "authorized"
+  },
+  "authUrlDomain": "manage.acewill.net",
+  "authWaitForExit": true
+}

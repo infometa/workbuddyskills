@@ -1,0 +1,40 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18.0.0"
+  },
+  "init": {
+    "darwin": "npm install -g @co-ailit/ailit-cli",
+    "linux": "npm install -g @co-ailit/ailit-cli",
+    "win32": "npm install -g @co-ailit/ailit-cli"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "ailit --version",
+      "linux": "ailit --version",
+      "win32": "ailit --version"
+    },
+    "minVersion": "0.8.3"
+  },
+  "auth": {
+    "darwin": "ailit auth login --timeout 3m",
+    "linux": "ailit auth login --timeout 3m",
+    "win32": "ailit auth login --timeout 3m"
+  },
+  "unAuth": {
+    "darwin": "ailit auth logout",
+    "linux": "ailit auth logout",
+    "win32": "ailit auth logout"
+  },
+  "status": {
+    "darwin": "ailit auth status --format pretty",
+    "linux": "ailit auth status --format pretty",
+    "win32": "ailit auth status --format pretty"
+  },
+  "statusMatch": "corpToken:\\s+yes",
+  "authUrlDomain": "space.zhihuiji.cn",
+  "authWaitForExit": true,
+  "env": {
+    "CLIENT_INFO_PRODUCT_NAME": "WorkBuddy"
+  }
+}

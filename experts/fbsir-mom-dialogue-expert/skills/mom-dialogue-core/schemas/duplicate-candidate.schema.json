@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/duplicate-candidate/2.0",
+  "title": "Duplicate Candidate Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sha256", "duplicate_count", "status"],
+  "properties": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "duplicate_count": {"type": "string", "pattern": "^[2-9][0-9]*$"},
+    "paths": {"type": "string", "x-csvEncoding": "json-array"},
+    "source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "status": {"enum": ["candidate", "confirmed_duplicate", "distinct", "ignored"]}
+  }
+}

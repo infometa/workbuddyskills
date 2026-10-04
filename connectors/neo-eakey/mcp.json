@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "neo-eakey": {
+      "type": "streamableHttp",
+      "url": "https://buddy-ai.xiaoshouyi.com/mcp"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "name": "omics-ori-expert",
   "version": "1.0.0",
-  "description": "Tencent Health ORI Protein Design Expert - specializing in protein sequence generation, structure prediction (USMFold), solubility/thermostability assessment, signal peptide prediction, and 3D structure visualization from Tencent Life Sciences Lab",
+  "description": "Covers sequence de novo design, USMFold structure prediction, solubility and thermostability, bridging key decisions from design to producible proteins.",
   "author": {
     "name": "Tencent Health Omics Team",
     "email": "omics@tencent.com"
@@ -16,49 +16,49 @@
     "./skills/pdb-viewer-skill"
   ],
   "displayName": {
-    "en": "ORI Protein Design Expert",
-    "zh": "腾讯ORI蛋白设计专家"
+    "en": "omics-expert",
+    "zh": "组小学"
   },
   "profession": {
-    "en": "ORI Protein Design Expert",
-    "zh": "腾讯ORI蛋白设计专家"
+    "en": "Tencent ORI Multifunctional Enzyme Design Expert",
+    "zh": "腾讯ORI多功能酶设计专家"
   },
   "displayDescription": {
-    "en": "Expert in ORI protein design system from Tencent Life Sciences Lab, providing sequence generation, structure prediction, solubility/thermostability analysis, and 3D visualization services",
+    "en": "Covers sequence de novo design, USMFold structure prediction, solubility and thermostability, bridging key decisions from design to producible proteins.",
     "zh": "覆盖序列从头设计、USMFold结构预测与溶解性、热稳定性，打通从设计到可生产蛋白的关键决策"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "04-DataAI",
   "defaultInitPrompt": {
-    "en": "Design enzyme with thermostability >60°C, EC number <EC:3.1.1.101>, generate 20 sequences",
-    "zh": "设计热稳定性大于60度的酶，编号<EC:3.1.1.101>，生成20条"
+    "zh": "用 USMFold 默认参数预测一下示例蛋白的结构，3D 展示给我，顺便给个 pLDDT 评价",
+    "en": "Predict the structure of the example protein with USMFold default parameters, show me in 3D, and give a pLDDT evaluation"
   },
   "tags": [
     {
-      "en": "Protein Design",
-      "zh": "蛋白质设计"
+      "zh": "蛋白质设计",
+      "en": "Protein Design"
     },
     {
-      "en": "Structure Prediction",
-      "zh": "结构预测"
+      "zh": "结构预测",
+      "en": "Structure Prediction"
     },
     {
-      "en": "Solubility/Thermostability/Signal Peptide",
-      "zh": "溶解性/热稳定性"
+      "zh": "溶解性/热稳定性",
+      "en": "Solubility/Thermostability"
     }
   ],
   "quickPrompts": [
     {
-      "en": "Design enzyme with thermostability >60°C, EC number <EC:3.1.1.101>, generate 20 sequences",
-      "zh": "设计热稳定性大于60度的酶，编号<EC:3.1.1.101>，生成20条"
+      "zh": "用 USMFold 默认参数预测一下示例蛋白的结构，3D 展示给我，顺便给个 pLDDT 评价",
+      "en": "Predict the structure of the example protein with USMFold default parameters, show me in 3D, and give a pLDDT evaluation"
     },
     {
-      "en": "Predict structure of this sequence using USMFold",
-      "zh": "用 USMFold 预测这个序列的结构"
+      "zh": "按默认参数从头设计一批耐 60℃ 的双功能酶，候选排个序，最优那个做下结构预测",
+      "en": "De novo design a batch of bifunctional enzymes resistant to 60°C with default parameters, rank the candidates, and perform structure prediction on the best one"
     },
     {
-      "en": "View 3D structure",
-      "zh": "查看3D结构"
+      "zh": "用默认参数评估示例蛋白的热稳定性，Tm 能过 60℃ 吗？给我一份验证报告",
+      "en": "Evaluate the thermostability of the example protein with default parameters, can Tm exceed 60°C? Give me a validation report"
     }
   ],
   "plugin": "omics-ori-expert"

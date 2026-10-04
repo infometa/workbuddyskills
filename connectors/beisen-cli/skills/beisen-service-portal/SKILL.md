@@ -1,11 +1,14 @@
 ---
 name: beisen-service-portal
-version: 2.2.0
+version: 2.2.3
 description: "北森办事入口。本 Skill 用于根据用户自然语言输入，检索系统菜单并按意图匹配推荐功能入口，引导员工或管理者进入对应的业务办理页面。基于 `beisen-cli staffservice employeeWork menuSearch` 搜索菜单，以可点击 Markdown 链接形式输出菜单入口。当用户询问办事、办事入口、办理、业务入口、菜单、去哪办、功能入口位置、导航路径，或输入疑似功能/页面/报表/菜单的名称或描述时触发。本 Skill 涉及业务操作引导，非纯数据查询。员工和管理者均可使用。"
 category: 人力资源/办事入口
 author: beisen
 agent_created: false
 allowed-tools: Bash, Read
+requires-skills:
+  - beisen-shared
+requires-cli: ">=1.0.8"
 ---
 
 # 办事入口

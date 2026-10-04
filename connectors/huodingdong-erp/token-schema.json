@@ -1,0 +1,19 @@
+{
+  "title": "货叮咚 ERP MCP 连接配置",
+  "title_en": "Huodingdong ERP MCP Connection",
+  "description": "连接您的货叮咚 ERP 账号。X-Mcp-Key 仅存储在本机，由 WorkBuddy 在连接货叮咚 MCP 服务时通过请求头注入。请勿向他人分享该密钥。",
+  "description_en": "Connect your Huodingdong ERP account. X-Mcp-Key is stored only on this device and injected into the request header by WorkBuddy when connecting to the Huodingdong MCP service. Do not share this key with others.",
+  "fields": [
+    {
+      "key": "HDD_MCP_KEY",
+      "label": "X-Mcp-Key",
+      "label_en": "X-Mcp-Key",
+      "type": "password",
+      "required": true,
+      "placeholder": "在货叮咚「系统 → 开放平台 → MCP管理」页面复制访问密钥",
+      "placeholder_en": "Copy the access key from System > Open Platform > MCP Management in Huodingdong",
+      "description": "密钥与当前货叮咚账号绑定，数据访问范围继承该账号权限；密钥泄露后请立即撤销并重新签发。",
+      "description_en": "The key is bound to your current Huodingdong account, and data access follows that account's permissions. Revoke and reissue the key immediately if it is exposed."
+    }
+  ]
+}

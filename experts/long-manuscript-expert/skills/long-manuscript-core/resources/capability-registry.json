@@ -1,0 +1,372 @@
+{
+  "artifactType": "manuscriptos_capability_registry",
+  "entries": [
+    {
+      "completionBoundary": "adaptation_brief_only_no_channel_content_generation",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "quality_gate_required",
+        "fact_graph_reuse",
+        "platform_adaptation"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.asset-repurposing.quality_gate_required",
+        "shared.asset-repurposing.fact_graph_reuse",
+        "shared.asset-repurposing.platform_adaptation"
+      ],
+      "generatorExport": "run",
+      "id": "asset-repurposing",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/asset-repurposing.mjs"
+    },
+    {
+      "completionBoundary": "chapter_plan_state_only_no_text_generation",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "chapter_promise",
+        "approved_expansion_plan",
+        "measured_word_count"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.chapter-planning-expansion.chapter_promise",
+        "shared.chapter-planning-expansion.approved_expansion_plan",
+        "shared.chapter-planning-expansion.measured_word_count"
+      ],
+      "generatorExport": "run",
+      "id": "chapter-planning-expansion",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/chapter-planning-expansion.mjs"
+    },
+    {
+      "completionBoundary": "implemented_as_declared_by_runtime_status",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "same_session_continue",
+        "new_session_capsule",
+        "state_conflict"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.continuation-recovery.same_session_continue",
+        "shared.continuation-recovery.new_session_capsule",
+        "shared.continuation-recovery.state_conflict"
+      ],
+      "generatorExport": "run",
+      "id": "continuation-recovery",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/continuation-recovery.mjs"
+    },
+    {
+      "completionBoundary": "local_entity_event_and_cross_chapter_consistency",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "alias_resolution",
+        "timeline_conflict",
+        "cross_chapter_drift"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.entity-timeline-continuity.alias_resolution",
+        "shared.entity-timeline-continuity.timeline_conflict",
+        "shared.entity-timeline-continuity.cross_chapter_drift"
+      ],
+      "generatorExport": "run",
+      "id": "entity-timeline-continuity",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/entity-timeline-continuity.mjs"
+    },
+    {
+      "completionBoundary": "inventory_and_blocking_fact_only",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "sufficient_material",
+        "partial_material",
+        "one_blocking_fact"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.material-activation.sufficient_material",
+        "shared.material-activation.partial_material",
+        "shared.material-activation.one_blocking_fact"
+      ],
+      "generatorExport": "run",
+      "id": "material-activation",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/material-activation.mjs"
+    },
+    {
+      "completionBoundary": "implemented_as_declared_by_runtime_status",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "media_manifest",
+        "caption_link",
+        "rights_gap",
+        "missing_media"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.media-illustration-planning.media_manifest",
+        "shared.media-illustration-planning.caption_link",
+        "shared.media-illustration-planning.rights_gap",
+        "shared.media-illustration-planning.missing_media"
+      ],
+      "generatorExport": "run",
+      "id": "media-illustration-planning",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/media-illustration-planning.mjs"
+    },
+    {
+      "completionBoundary": "implemented_as_declared_by_runtime_status",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "file_openability",
+        "heading_structure",
+        "manifest_hash",
+        "format_degrade"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.multi-format-rendering.file_openability",
+        "shared.multi-format-rendering.heading_structure",
+        "shared.multi-format-rendering.manifest_hash",
+        "shared.multi-format-rendering.format_degrade"
+      ],
+      "generatorExport": "run",
+      "id": "multi-format-rendering",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/multi-format-rendering.mjs"
+    },
+    {
+      "completionBoundary": "descriptor_normalization_only_no_content_extraction",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "mixed_format_manifest",
+        "unsupported_format_degrade",
+        "ocr_uncertainty"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.multimodal-normalizer.mixed_format_manifest",
+        "shared.multimodal-normalizer.unsupported_format_degrade",
+        "shared.multimodal-normalizer.ocr_uncertainty"
+      ],
+      "generatorExport": "run",
+      "id": "multimodal-normalizer",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/multimodal-normalizer.mjs"
+    },
+    {
+      "completionBoundary": "receipt_binding_and_verification_plan_only_c5_quality_gate_pending",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "fresh_source",
+        "conflicting_sources",
+        "offline_degrade",
+        "stale_fact"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.research-verification.fresh_source",
+        "shared.research-verification.conflicting_sources",
+        "shared.research-verification.offline_degrade",
+        "shared.research-verification.stale_fact"
+      ],
+      "generatorExport": "run",
+      "id": "research-verification",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/research-verification.mjs"
+    },
+    {
+      "completionBoundary": "implemented_as_declared_by_runtime_status",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "pass",
+        "revise_then_pass",
+        "max_round_warning",
+        "reviewer_failure"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.review-revise-quality-loop.pass",
+        "shared.review-revise-quality-loop.revise_then_pass",
+        "shared.review-revise-quality-loop.max_round_warning",
+        "shared.review-revise-quality-loop.reviewer_failure"
+      ],
+      "generatorExport": "run",
+      "id": "review-revise-quality-loop",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/review-revise-quality-loop.mjs"
+    },
+    {
+      "completionBoundary": "validated_local_receipts_not_legal_advice",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "consent_present",
+        "consent_missing",
+        "private_person",
+        "rights_unknown"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.rights-privacy-consent.consent_present",
+        "shared.rights-privacy-consent.consent_missing",
+        "shared.rights-privacy-consent.private_person",
+        "shared.rights-privacy-consent.rights_unknown"
+      ],
+      "generatorExport": "run",
+      "id": "rights-privacy-consent",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/rights-privacy-consent.mjs"
+    },
+    {
+      "completionBoundary": "implemented_as_declared_by_runtime_status",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "legacy_album_composition",
+        "expert_book_casebook_composition",
+        "rfp_technical_docs_composition"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.scene-composer.legacy_album_composition",
+        "shared.scene-composer.expert_book_casebook_composition",
+        "shared.scene-composer.rfp_technical_docs_composition"
+      ],
+      "generatorExport": "run",
+      "id": "scene-composer",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/scene-composer.mjs"
+    },
+    {
+      "completionBoundary": "implemented_as_declared_by_runtime_status",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "unique_match",
+        "ambiguous_match",
+        "no_match",
+        "adversarial_trigger"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.scene-router.unique_match",
+        "shared.scene-router.ambiguous_match",
+        "shared.scene-router.no_match",
+        "shared.scene-router.adversarial_trigger"
+      ],
+      "generatorExport": "run",
+      "id": "scene-router",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/scene-router.mjs"
+    },
+    {
+      "completionBoundary": "implemented_as_declared_by_runtime_status",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "e1_scope_lock",
+        "unauthorized_change_reject",
+        "rollback"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.scope-lock-diff.e1_scope_lock",
+        "shared.scope-lock-diff.unauthorized_change_reject",
+        "shared.scope-lock-diff.rollback"
+      ],
+      "generatorExport": "run",
+      "id": "scope-lock-diff",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/scope-lock-diff.mjs"
+    },
+    {
+      "completionBoundary": "structured_source_evidence_and_claim_edges",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "claim_trace",
+        "unsupported_claim",
+        "projection_digest_parity"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.source-ledger-claim-graph.claim_trace",
+        "shared.source-ledger-claim-graph.unsupported_claim",
+        "shared.source-ledger-claim-graph.projection_digest_parity"
+      ],
+      "generatorExport": "run",
+      "id": "source-ledger-claim-graph",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/source-ledger-claim-graph.mjs"
+    },
+    {
+      "completionBoundary": "voice_profile_assessment_only_no_text_transformation",
+      "connectorRequired": false,
+      "declaredTestIds": [
+        "voice_fidelity",
+        "generic_ai_pattern",
+        "fact_preservation"
+      ],
+      "donorSkillRequired": false,
+      "evaluatorExport": "evaluate",
+      "externalDependencies": [],
+      "fixtureIds": [
+        "shared.voice-profile-humanizer.voice_fidelity",
+        "shared.voice-profile-humanizer.generic_ai_pattern",
+        "shared.voice-profile-humanizer.fact_preservation"
+      ],
+      "generatorExport": "run",
+      "id": "voice-profile-humanizer",
+      "implementationCheckpoint": "C2",
+      "lifecycle": "active",
+      "moduleRef": "../scripts/capabilities/voice-profile-humanizer.mjs"
+    }
+  ],
+  "entryCount": 16,
+  "runtime": "package_local",
+  "schemaVersion": "1.0.0"
+}

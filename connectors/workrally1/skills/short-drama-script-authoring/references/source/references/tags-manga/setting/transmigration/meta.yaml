@@ -1,0 +1,97 @@
+# 穿越（transmigration）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: transmigration
+name_cn: 穿越
+category: setting
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/transmigration.md
+emotion_core:
+- 新世界探索
+- 身份反差
+- 知识降维
+- 新奇感
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用
+  bg_desc: 古代、架空、异界、玄幻适配度最高
+  weight: medium
+  bottom_line:
+  - 穿越身份与原主有反差，形成戏剧张力
+  - 现代思维/知识需发挥作用，不能完全闲置
+  - 世界观适配合理，不能强行融入
+relations:
+  synergy:
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 现代知识/剧情预知为逆袭提供支撑，翻盘更有逻辑
+  - target: xuanhuan
+    effect_type: 增强型
+    weight: high
+    effect: 穿越到修仙世界，现代思维形成差异化优势
+  - target: ancient
+    effect_type: 增强型
+    weight: high
+    effect: 古代背景+现代知识，降维打击爽感强
+  - target: system
+    effect_type: 增强型
+    weight: medium
+    effect: 穿越绑定系统，金手指叠加成长更快
+  - target: 甜宠
+    effect_type: 增强型
+    weight: medium
+    effect: 跨时空恋爱，宿命感与新鲜感更强
+  mutex:
+  - target: 纯现代都市
+    reason: 无时空/世界观差异则穿越无法成立
+combo_adapt:
+- combo: references/domestic/combos/transmigration.md
+  rule: 对齐穿越核心规则，强化身份反差与知识差爽感
+  sub: 经典穿越型
+- combo: references/domestic/combos/counterattack.md
+  rule: 穿越驱动逆袭，知识降维赋能阶层翻盘
+  sub: 穿越逆袭型
+- combo: references/domestic/combos/cultivation.md
+  rule: 穿越到修仙世界，现代思维+修仙体系
+  sub: 修仙穿越型
+fusion:
+- recipe: fusion/recipes/book-transmigration.md
+  note: 穿书经典配方，预知剧情+规避悲剧，强代入感
+- recipe: fusion/recipes/ancient-concubine.md
+  note: 穿越后宫配方，宫斗+逆袭，适配女频高粘性内容
+redlines:
+- code: AP-CY01
+  name: 现代优势完全闲置
+  severity: 高
+  dimension: 标签与逻辑
+  test: 主角穿越后与本土人无差异，穿越核心爽点失效
+- code: AP-CY02
+  name: 身份无反差
+  severity: 中
+  dimension: 标签与逻辑
+  test: 穿越前后身份无差异，戏剧张力缺失
+- code: AP-CY03
+  name: 世界观融入生硬
+  severity: 中
+  dimension: 标签与逻辑
+  test: 无人怀疑主角异常，接受度过高，逻辑失真
+soft_warnings:
+- 避免现代知识滥用，超出时代背景过多导致出戏
+- 避免原主人设完全被覆盖，无遗留剧情线
+- 避免主角适应过快，完全无陌生感与过渡期
+manga:
+  visual_signature: 穿越瞬间的时空特效 + 古今服饰场景反差
+  high_affinity: false
+  visual_hooks:
+  - 穿越瞬间的时空隧道特效
+  - 现代与古代/异界的场景反差
+  - 知识降维破局的视觉化呈现

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "beike-yi.first-value/v1",
+  "purpose": "Ensures the first useful response advances a real teaching task without requiring file upload, external service setup, or a long intake form.",
+  "connectorRequired": false,
+  "questionBudgetMax": 1,
+  "primaryArtifactCount": 1,
+  "secondaryArtifactMax": 2,
+  "requiredFirstValueSections": [
+    "materialScope",
+    "teacherGoal",
+    "knownFactsAndAssumptions",
+    "teachingJudgmentOrMaterialUnderstanding",
+    "oneRecommendedNextStep"
+  ],
+  "allowedFirstValueArtifacts": [
+    "material_understanding_card",
+    "teaching_option_card",
+    "lesson_plan_fragment",
+    "bounded_revision_preview",
+    "review_card"
+  ],
+  "routingRules": [
+    "If the teacher has a confirmed workspace and material scope, start with material understanding.",
+    "If the teacher has only a topic, provide a narrow starter and ask at most one blocking question.",
+    "If optional external capability is unavailable, continue with a chat-level or local-first artifact.",
+    "Do not make a complete file package the first response unless the teacher explicitly asks for it."
+  ],
+  "stopConditions": [
+    "A missing fact would materially change the teaching option and cannot be safely assumed.",
+    "The selected material contains a high-risk issue that requires teacher or school review before proceeding.",
+    "The requested action would delete, overwrite, publish, share, or send material without explicit confirmation."
+  ]
+}

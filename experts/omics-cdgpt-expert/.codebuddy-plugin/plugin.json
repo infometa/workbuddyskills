@@ -1,7 +1,7 @@
 {
   "name": "omics-cdgpt-expert",
-  "version": "1.0.0",
-  "description": "Tencent Health CD-GPT Biological Sequence Modeling Expert - specializing in DNA/RNA/protein sequence translation and reverse translation using generative biological foundation model collection",
+  "version": "1.1.0",
+  "description": "Based on Tencent CD-GPT multimodal large model, covering DNA, RNA, protein sequences, supporting translation, reverse translation, and generation.",
   "author": {
     "name": "Tencent Health Omics Team",
     "email": "omics@tencent.com"
@@ -15,46 +15,49 @@
     "./skills/cdgpt-collection-skill"
   ],
   "displayName": {
-    "en": "CD-GPT Bio-Sequence Modeling Expert",
-    "zh": "腾讯CD-GPT生物序列建模专家"
+    "en": "omics-expert",
+    "zh": "组小学"
   },
   "profession": {
-    "en": "CD-GPT Bio-Sequence Modeling Expert",
+    "en": "Tencent CD-GPT Biological Sequence Modeling Expert",
     "zh": "腾讯CD-GPT生物序列建模专家"
   },
   "displayDescription": {
-    "en": "Expert in CD-GPT generative biological foundation model, providing DNA/RNA/protein sequence translation and reverse translation services",
+    "en": "Based on Tencent CD-GPT multimodal large model, covering DNA, RNA, protein sequences, supporting translation, reverse translation, and generation.",
     "zh": "基于腾讯CD-GPT多模态大模型，覆盖DNA、RNA、蛋白质序列，支持翻译、反向翻译、生成"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "04-DataAI",
   "defaultInitPrompt": {
-    "en": "What can this expert do for me?",
-    "zh": "这个专家能帮我做什么"
+    "zh": "把我的蛋白序列反向翻译成 DNA，直接生成\"五图版\"序列特征 HTML 报告：滑窗 GC 曲线、GC1/2/3 对比、64 密码子热图、同义密码子堆叠图、酶切位点+同碱基双轨道线性图",
+    "en": "Reverse translate my protein sequence into DNA and directly generate a five-chart sequence feature HTML report: sliding window GC curve, GC1/2/3 comparison, 64-codon heatmap, synonymous codon stacked chart, restriction site+same-base dual-track linear chart"
   },
   "tags": [
     {
-      "zh": "序列翻译"
+      "zh": "正向翻译",
+      "en": "Forward Translation"
     },
     {
-      "zh": "序列生成"
+      "zh": "序列生成",
+      "en": "Sequence Generation"
     },
     {
-      "zh": "多模态生物序列建模"
+      "zh": "反向翻译",
+      "en": "Reverse Translation"
     }
   ],
   "quickPrompts": [
     {
-      "en": "What can this expert do for me?",
-      "zh": "这个专家能帮我做什么"
+      "zh": "把我的蛋白序列反向翻译成 DNA，直接生成\"五图版\"序列特征 HTML 报告：滑窗 GC 曲线、GC1/2/3 对比、64 密码子热图、同义密码子堆叠图、酶切位点+同碱基双轨道线性图",
+      "en": "Reverse translate my protein sequence into DNA and directly generate a five-chart sequence feature HTML report: sliding window GC curve, GC1/2/3 comparison, 64-codon heatmap, synonymous codon stacked chart, restriction site+same-base dual-track linear chart"
     },
     {
-      "en": "Generate a synthetic test CDS, use default template to run forward translation",
-      "zh": "生成一个合成测试CDS，使用默认模版运行正向翻译"
+      "zh": "用平台默认示例 DNA 序列跑一次 CD-GPT 正向翻译：翻译成蛋白质，并生成氨基酸组成与理化性质图文分析报告",
+      "en": "Run CD-GPT forward translation once with the platform default example DNA sequence: translate to protein and generate an amino acid composition and physicochemical properties analysis report"
     },
     {
-      "en": "Generate test protein sequence, use default template to run reverse translation",
-      "zh": "生成测试蛋白质序列，使用默认模版运行反向翻译"
+      "zh": "用平台默认示例蛋白序列反向翻译成 DNA，生成\"评分版\"表达适配性HTML报告：双物种 CAI 对比、位点风险、综合评分",
+      "en": "Reverse translate the platform default example protein sequence into DNA, generate a scoring version expression adaptability HTML report: dual-species CAI comparison, site risk, comprehensive scoring"
     }
   ],
   "plugin": "omics-cdgpt-expert"

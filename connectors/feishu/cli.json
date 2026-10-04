@@ -14,7 +14,7 @@
             "linux": "lark-cli --version",
             "win32": "lark-cli.cmd --version"
         },
-        "minVersion": "1.0.86"
+        "minVersion": "1.0.97"
     },
     "auth": [
         {
@@ -33,9 +33,9 @@
         },
         {
             "command": {
-                "darwin": "lark-cli auth login --recommend",
-                "linux": "lark-cli auth login --recommend",
-                "win32": "lark-cli.cmd auth login --recommend"
+                "darwin": "lark-cli auth login --recommend || [ $? -eq 3 ]",
+                "linux": "lark-cli auth login --recommend || [ $? -eq 3 ]",
+                "win32": "lark-cli.cmd auth login --recommend & if errorlevel 4 exit /b 1 & if errorlevel 3 exit /b 0"
             },
             "authWaitForExit": true,
             "authUrlDomain": "accounts.feishu.cn"

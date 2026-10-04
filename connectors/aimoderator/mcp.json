@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "aimoderator": {
+      "type": "streamableHttp",
+      "url": "https://aimoderator.cn/api/mcp"
+    }
+  }
+}

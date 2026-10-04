@@ -1,6 +1,8 @@
 ---
 name: pdb-viewer-skill
-version: 1.1.0
+displayName: 腾讯组学蛋白质结构pdb文件可视化
+slug: pdb-viewer-skill
+version: 1.0.0
 description: 在 WorkBuddy 内置浏览器中以 3D 结构展示 PDB 文件，支持通过自然语言操控结构（高亮、隐藏链、测量距离/角度、相互作用分析、标签、透明度控制等）。Mol* 5.9.0 本地自托管，支持本地文件和腾讯健康组学平台 COS 路径。
 author: WorkBuddy
 tags:
@@ -52,38 +54,38 @@ triggers:
 
 ## 核心能力
 
-| 类别           | 能力                         | 用户示例                          |
-| -------------- | ---------------------------- | --------------------------------- |
-| **数据加载**   | 本地 PDB / COS URI / RCSB ID | "打开 xxx.pdb"                    |
-| **可视化控制** | 切换表示方式（8 种）         | "显示为球棍模型"                  |
-|                | 着色方案（8 种主题）         | "按二级结构着色" / "全部设为蓝色" |
-|                | 透明度控制                   | "蛋白表面设为 50% 透明"           |
-|                | 背景                         | "背景设为白色"                    |
-| **结构操作**   | 按单链精确隐藏/显示          | "隐藏 B 链" / "显示所有链"        |
-|                | 配体/水/氢原子显隐           | "去掉水分子" / "隐藏配体"         |
-|                | 隔离/恢复全部                | "只看 A 链" / "恢复全部显示"      |
-|                | 重置视图                     | "重置到默认状态"                  |
-| **选择器**     | 残基区间/离散列表            | "高亮 A 链 50-100 位残基"         |
-|                | 按原子名/元素/配体名         | "选中所有锌离子"                  |
-|                | 空间距离选择（X Å 内）       | "选中 ATP 周围 5 Å 的残基"        |
-|                | 按 B-factor 阈值             | "选中 B-factor > 50 的残基"       |
-| **标注**       | 残基文字标签                 | "标注 His57"                      |
-|                | 自定义标签文字               | "标注 His57 为活性位点"           |
-| **视角控制**   | 精确聚焦到链/选区            | "聚焦 A 链" / "聚焦 ATP 口袋"     |
-|                | 正交/透视投影切换            | "切换为正交投影"                  |
-|                | 视角快照保存/恢复            | "保存当前视角" / "恢复视角"       |
-| **测量分析**   | 距离测量（支持任意原子）     | "测量 Lys42 NZ 与 O3 距离"        |
-|                | 角度/二面角测量              | "测量 His57 NE2-N-CA 角度"        |
-|                | 清除测量                     | "删除所有测量线"                  |
-| **相互作用**   | 氢键/金属配位/盐桥/疏水      | "显示氢键" / "显示锌配位键"       |
-|                | 碰撞检测                     | "显示空间冲突"                    |
-| **结构清理**   | 视图侧隐藏水/配体/氢         | "去掉水分子"                      |
-|                | 导出过滤后结构（derive_file）| "删除 HOH 并导出"                 |
-| **动画与导出** | 自动旋转                     | "开始旋转" / "停止旋转"           |
-|                | 截图（支持透明背景）         | "截个图" / "透明背景截图"         |
-|                | 场景快照保存/恢复            | "保存当前场景"                    |
-| **信息查询**   | 结构概要/链列表/配体列表     | "这个蛋白有几条链"                |
-|                | B-factor 查询                | "查询 A 链 50 号残基的 B-factor"  |
+| 类别           | 能力                          | 用户示例                          |
+| -------------- | ----------------------------- | --------------------------------- |
+| **数据加载**   | 本地 PDB / COS URI / RCSB ID  | "打开 xxx.pdb"                    |
+| **可视化控制** | 切换表示方式（8 种）          | "显示为球棍模型"                  |
+|                | 着色方案（8 种主题）          | "按二级结构着色" / "全部设为蓝色" |
+|                | 透明度控制                    | "蛋白表面设为 50% 透明"           |
+|                | 背景                          | "背景设为白色"                    |
+| **结构操作**   | 按单链精确隐藏/显示           | "隐藏 B 链" / "显示所有链"        |
+|                | 配体/水/氢原子显隐            | "去掉水分子" / "隐藏配体"         |
+|                | 隔离/恢复全部                 | "只看 A 链" / "恢复全部显示"      |
+|                | 重置视图                      | "重置到默认状态"                  |
+| **选择器**     | 残基区间/离散列表             | "高亮 A 链 50-100 位残基"         |
+|                | 按原子名/元素/配体名          | "选中所有锌离子"                  |
+|                | 空间距离选择（X Å 内）        | "选中 ATP 周围 5 Å 的残基"        |
+|                | 按 B-factor 阈值              | "选中 B-factor > 50 的残基"       |
+| **标注**       | 残基文字标签                  | "标注 His57"                      |
+|                | 自定义标签文字                | "标注 His57 为活性位点"           |
+| **视角控制**   | 精确聚焦到链/选区             | "聚焦 A 链" / "聚焦 ATP 口袋"     |
+|                | 正交/透视投影切换             | "切换为正交投影"                  |
+|                | 视角快照保存/恢复             | "保存当前视角" / "恢复视角"       |
+| **测量分析**   | 距离测量（支持任意原子）      | "测量 Lys42 NZ 与 O3 距离"        |
+|                | 角度/二面角测量               | "测量 His57 NE2-N-CA 角度"        |
+|                | 清除测量                      | "删除所有测量线"                  |
+| **相互作用**   | 氢键/金属配位/盐桥/疏水       | "显示氢键" / "显示锌配位键"       |
+|                | 碰撞检测                      | "显示空间冲突"                    |
+| **结构清理**   | 视图侧隐藏水/配体/氢          | "去掉水分子"                      |
+|                | 导出过滤后结构（derive_file） | "删除 HOH 并导出"                 |
+| **动画与导出** | 自动旋转                      | "开始旋转" / "停止旋转"           |
+|                | 截图（支持透明背景）          | "截个图" / "透明背景截图"         |
+|                | 场景快照保存/恢复             | "保存当前场景"                    |
+| **信息查询**   | 结构概要/链列表/配体列表      | "这个蛋白有几条链"                |
+|                | B-factor 查询                 | "查询 A 链 50 号残基的 B-factor"  |
 
 ## 架构
 
@@ -223,103 +225,103 @@ curl http://localhost:8789/api/status
 
 ### 数据加载
 
-| `op`      | 参数                          | 说明                                                       |
-| --------- | ----------------------------- | ---------------------------------------------------------- |
-| `get_pdb` | `id`/`pdb` (str), `url` (str) | 从 RCSB ID / URL / 本地路径加载 PDB                        |
+| `op`      | 参数                          | 说明                                |
+| --------- | ----------------------------- | ----------------------------------- |
+| `get_pdb` | `id`/`pdb` (str), `url` (str) | 从 RCSB ID / URL / 本地路径加载 PDB |
 
 ### 可视化控制
 
-| `op`                    | 参数                          | 说明                                                                                       |
-| ----------------------- | ----------------------------- | ------------------------------------------------------------------------------------------ |
-| `set_repr`              | `repr` (str)                  | cartoon / ball-and-stick / spacefill / gaussian-surface / putty / sticks / trace / dots    |
-| `set_repr_by_component` | `polymer`/`ligand`/`water`    | 分组件差异化表示                                                                           |
-| `set_color`             | `theme` (str), `value` (hex)  | chain-id / element-symbol / secondary-structure / b-factor / uniform / residue-type / occupancy / plddt |
-| `set_color_selection`   | `value` (hex)                 | 对当前选区单独染色                                                                         |
-| `set_opacity`           | `target`, `alpha` (0-1)       | 设置透明度                                                                                 |
-| `set_bg`                | `color` (str)                 | CSS 颜色名或 hex                                                                           |
-| `set_water`             | `visible` (bool)              | 水分子显隐                                                                                 |
+| `op`                    | 参数                         | 说明                                                                                                    |
+| ----------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `set_repr`              | `repr` (str)                 | cartoon / ball-and-stick / spacefill / gaussian-surface / putty / sticks / trace / dots                 |
+| `set_repr_by_component` | `polymer`/`ligand`/`water`   | 分组件差异化表示                                                                                        |
+| `set_color`             | `theme` (str), `value` (hex) | chain-id / element-symbol / secondary-structure / b-factor / uniform / residue-type / occupancy / plddt |
+| `set_color_selection`   | `value` (hex)                | 对当前选区单独染色                                                                                      |
+| `set_opacity`           | `target`, `alpha` (0-1)      | 设置透明度                                                                                              |
+| `set_bg`                | `color` (str)                | CSS 颜色名或 hex                                                                                        |
+| `set_water`             | `visible` (bool)             | 水分子显隐                                                                                              |
 
 ### 结构操作
 
-| `op`                 | 参数                            | 说明                                  |
-| -------------------- | ------------------------------- | ------------------------------------- |
-| `chain_visibility`   | `chain` (str), `visible` (bool) | 按单链精确隐藏/显示（v1.1 已修复）    |
-| `ligand_visibility`  | `visible` (bool)                | 配体整体显隐                          |
-| `isolate`            | `target` (str)                  | 隔离模式（如 target=chain:A）         |
-| `show_all`           | —                               | 恢复全部显示                          |
-| `hide_hydrogens`     | `visible` (bool)                | 氢原子显隐                            |
-| `show_backbone_only` | —                               | 仅显示主链骨架                        |
-| `focus_chain`        | `chain` (str)                   | 精确聚焦到链（v1.1 已修复）           |
-| `focus_selection`    | —                               | 聚焦到最近选区                        |
-| `reset_view`         | —                               | 重置视角                              |
-| `save_view`          | `name` (str)                    | 保存视角快照                          |
-| `restore_view`       | `name` (str)                    | 恢复视角快照                          |
-| `set_projection`     | `mode` (orthographic/perspective) | 切换投影模式                        |
+| `op`                 | 参数                              | 说明                               |
+| -------------------- | --------------------------------- | ---------------------------------- |
+| `chain_visibility`   | `chain` (str), `visible` (bool)   | 按单链精确隐藏/显示（v1.1 已修复） |
+| `ligand_visibility`  | `visible` (bool)                  | 配体整体显隐                       |
+| `isolate`            | `target` (str)                    | 隔离模式（如 target=chain:A）      |
+| `show_all`           | —                                 | 恢复全部显示                       |
+| `hide_hydrogens`     | `visible` (bool)                  | 氢原子显隐                         |
+| `show_backbone_only` | —                                 | 仅显示主链骨架                     |
+| `focus_chain`        | `chain` (str)                     | 精确聚焦到链（v1.1 已修复）        |
+| `focus_selection`    | —                                 | 聚焦到最近选区                     |
+| `reset_view`         | —                                 | 重置视角                           |
+| `save_view`          | `name` (str)                      | 保存视角快照                       |
+| `restore_view`       | `name` (str)                      | 恢复视角快照                       |
+| `set_projection`     | `mode` (orthographic/perspective) | 切换投影模式                       |
 
 ### 选择器
 
-| `op`               | 参数                                    | 说明                     |
-| ------------------ | --------------------------------------- | ------------------------ |
-| `highlight_range`  | `chain`, `start`, `end`, `color`        | 区间高亮残基             |
-| `highlight_list`   | `chain`, `residues` (list[int]), `color`| 离散残基高亮             |
-| `select_by_atom`   | `atom_name` (str)                       | 按原子名选择（如 CA）    |
-| `select_by_element`| `element` (str)                         | 按元素符号选择（如 ZN）  |
-| `select_ligand`    | `component_id` (str)                    | 按配体名称选择（如 ATP） |
-| `select_within`    | `anchor_ligand`, `distance` (Å)         | 空间距离选择             |
-| `select_by_bfactor`| `op` (gt/lt/gte/lte), `value`           | 按 B-factor 阈值选择     |
-| `clear_highlights` | —                                       | 清除所有高亮             |
+| `op`                | 参数                                     | 说明                     |
+| ------------------- | ---------------------------------------- | ------------------------ |
+| `highlight_range`   | `chain`, `start`, `end`, `color`         | 区间高亮残基             |
+| `highlight_list`    | `chain`, `residues` (list[int]), `color` | 离散残基高亮             |
+| `select_by_atom`    | `atom_name` (str)                        | 按原子名选择（如 CA）    |
+| `select_by_element` | `element` (str)                          | 按元素符号选择（如 ZN）  |
+| `select_ligand`     | `component_id` (str)                     | 按配体名称选择（如 ATP） |
+| `select_within`     | `anchor_ligand`, `distance` (Å)          | 空间距离选择             |
+| `select_by_bfactor` | `op` (gt/lt/gte/lte), `value`            | 按 B-factor 阈值选择     |
+| `clear_highlights`  | —                                        | 清除所有高亮             |
 
 ### 标注
 
-| `op`                   | 参数                              | 说明                       |
-| ---------------------- | --------------------------------- | -------------------------- |
-| `add_label`            | `chain`, `residue`, `text` (可选) | 为残基添加文字标签         |
-| `auto_label_selection` | —                                 | 对当前选区批量添加标签     |
-| `clear_labels`         | —                                 | 清除所有文字标签           |
+| `op`                   | 参数                              | 说明                   |
+| ---------------------- | --------------------------------- | ---------------------- |
+| `add_label`            | `chain`, `residue`, `text` (可选) | 为残基添加文字标签     |
+| `auto_label_selection` | —                                 | 对当前选区批量添加标签 |
+| `clear_labels`         | —                                 | 清除所有文字标签       |
 
 ### 测量
 
-| `op`                 | 参数                                               | 说明                       |
-| -------------------- | -------------------------------------------------- | -------------------------- |
-| `measure_dist`       | `chain1`, `res1`, `atom1`(可选), `chain2`, `res2`, `atom2`(可选) | 距离测量（支持任意原子）   |
-| `measure_angle`      | `loci1`, `loci2`, `loci3` (chain:res:atom)        | 三原子角度测量             |
-| `measure_dihedral`   | `loci1`~`loci4` (chain:res:atom)                  | 四原子二面角测量           |
-| `clear_measurements` | —                                                  | 清除所有测量               |
+| `op`                 | 参数                                                             | 说明                     |
+| -------------------- | ---------------------------------------------------------------- | ------------------------ |
+| `measure_dist`       | `chain1`, `res1`, `atom1`(可选), `chain2`, `res2`, `atom2`(可选) | 距离测量（支持任意原子） |
+| `measure_angle`      | `loci1`, `loci2`, `loci3` (chain:res:atom)                       | 三原子角度测量           |
+| `measure_dihedral`   | `loci1`~`loci4` (chain:res:atom)                                 | 四原子二面角测量         |
+| `clear_measurements` | —                                                                | 清除所有测量             |
 
 ### 相互作用分析
 
-| `op`                | 参数            | 说明                                     |
-| ------------------- | --------------- | ---------------------------------------- |
-| `show_hbonds`       | —               | 显示候选氢键（基于几何阈值）             |
-| `show_metal_coord`  | `element`(可选) | 显示金属配位键                           |
-| `show_salt_bridges` | —               | 显示盐桥                                 |
-| `show_hydrophobic`  | —               | 显示疏水接触                             |
-| `show_clashes`      | —               | 显示空间碰撞冲突                         |
-| `clear_interactions`| —               | 清除所有相互作用标注                     |
+| `op`                 | 参数            | 说明                         |
+| -------------------- | --------------- | ---------------------------- |
+| `show_hbonds`        | —               | 显示候选氢键（基于几何阈值） |
+| `show_metal_coord`   | `element`(可选) | 显示金属配位键               |
+| `show_salt_bridges`  | —               | 显示盐桥                     |
+| `show_hydrophobic`   | —               | 显示疏水接触                 |
+| `show_clashes`       | —               | 显示空间碰撞冲突             |
+| `clear_interactions` | —               | 清除所有相互作用标注         |
 
 ### 信息查询
 
-| `op`           | 参数               | 说明                                          |
-| -------------- | ------------------ | --------------------------------------------- |
-| `get_info`     | —                  | 返回链数/残基数/原子数                        |
-| `list_chains`  | —                  | 枚举所有链 ID（结果通过 /api/query-result 读取）|
-| `list_ligands` | —                  | 枚举配体列表及实例数                          |
-| `list_models`  | —                  | 枚举 NMR 模型列表                             |
-| `get_bfactor`  | `chain`, `residue` | 查询指定残基各原子 B-factor                   |
+| `op`           | 参数               | 说明                                             |
+| -------------- | ------------------ | ------------------------------------------------ |
+| `get_info`     | —                  | 返回链数/残基数/原子数                           |
+| `list_chains`  | —                  | 枚举所有链 ID（结果通过 /api/query-result 读取） |
+| `list_ligands` | —                  | 枚举配体列表及实例数                             |
+| `list_models`  | —                  | 枚举 NMR 模型列表                                |
+| `get_bfactor`  | `chain`, `residue` | 查询指定残基各原子 B-factor                      |
 
 ### 动画与导出
 
-| `op`                    | 参数                                           | 说明                           |
-| ----------------------- | ---------------------------------------------- | ------------------------------ |
-| `spin`                  | `active` (bool), `speed` (number)              | 自动旋转 ON/OFF                |
-| `screenshot`            | `width`/`height` (可选)                        | 截图下载 PNG（支持自定义分辨率）|
-| `screenshot_transparent`| —                                              | 透明背景截图                   |
-| `save_pdb`              | `confirm_required`, `confirmed`, `path` (可选) | 保存 PDB（需确认弹窗）         |
-| `export_selection`      | `path` (str)                                   | 导出选区为新 PDB 文件          |
-| `export_filtered`       | `path`, `remove`, `keep_chains`, `keep_altloc` | 过滤后导出（derive_file 模式） |
-| `save_scene`            | `name` (str)                                   | 保存完整场景状态快照           |
-| `load_scene`            | `name` (str)                                   | 恢复场景状态快照               |
-| `record_video`          | —                                              | 引导使用 Mol\* 内置录制 UI     |
+| `op`                     | 参数                                           | 说明                             |
+| ------------------------ | ---------------------------------------------- | -------------------------------- |
+| `spin`                   | `active` (bool), `speed` (number)              | 自动旋转 ON/OFF                  |
+| `screenshot`             | `width`/`height` (可选)                        | 截图下载 PNG（支持自定义分辨率） |
+| `screenshot_transparent` | —                                              | 透明背景截图                     |
+| `save_pdb`               | `confirm_required`, `confirmed`, `path` (可选) | 保存 PDB（需确认弹窗）           |
+| `export_selection`       | `path` (str)                                   | 导出选区为新 PDB 文件            |
+| `export_filtered`        | `path`, `remove`, `keep_chains`, `keep_altloc` | 过滤后导出（derive_file 模式）   |
+| `save_scene`             | `name` (str)                                   | 保存完整场景状态快照             |
+| `load_scene`             | `name` (str)                                   | 恢复场景状态快照                 |
+| `record_video`           | —                                              | 引导使用 Mol\* 内置录制 UI       |
 
 ## 腾讯健康组学平台 COS 支持
 
@@ -434,6 +436,7 @@ coscli config init
 ```
 
 按交互提示输入：
+
 1. **Secret ID**: 腾讯云 API 密钥 ID（建议使用子账号密钥，遵循最小权限原则）
 2. **Secret Key**: 腾讯云 API 密钥 Key
 3. **Session Token**: 直接回车跳过（当前仅支持永久密钥模式）
@@ -466,16 +469,16 @@ cos:
     sessiontoken: ""
     protocol: https
   buckets:
-  - name: mybucket-1250000000    # 存储桶全称
-    alias: mybucket              # 别名（可选）
-    region: ap-guangzhou         # 地域
-    endpoint: cos.ap-guangzhou.myqcloud.com
-    ofs: false
-  - name: another-bucket-123456789
-    alias: another
-    region: ap-beijing
-    endpoint: cos.ap-beijing.myqcloud.com
-    ofs: false
+    - name: mybucket-1250000000 # 存储桶全称
+      alias: mybucket # 别名（可选）
+      region: ap-guangzhou # 地域
+      endpoint: cos.ap-guangzhou.myqcloud.com
+      ofs: false
+    - name: another-bucket-123456789
+      alias: another
+      region: ap-beijing
+      endpoint: cos.ap-beijing.myqcloud.com
+      ofs: false
 ```
 
 ### 使用方式
@@ -495,8 +498,8 @@ present_files(["http://127.0.0.1:8789?pdb=cos://mybucket-1250000000/path/to/stru
 
 coscli 通道只执行以下操作：
 
-| 操作 | 用途 |
-|------|------|
+| 操作                               | 用途                               |
+| ---------------------------------- | ---------------------------------- |
 | `coscli cp <cos_url> <local_file>` | 从 COS 下载 PDB 文件到本地临时目录 |
 
 **不允许通过此 SKILL 调用 coscli 的其他命令**（如 mb/rm/sync 等）。
@@ -804,6 +807,7 @@ A: 请执行 `cosli config init` 初始化配置文件。配置完成后，目�
 
 **Q: 通用 COS 桶加载失败，提示 "coscli cp 失败"。**
 A: 可能原因：
+
 1. bucket 名称或 key 路径不正确
 2. 当前密钥没有该桶的读取权限（需要 `cos:GetObject` 权限）
 3. 网络连接问题

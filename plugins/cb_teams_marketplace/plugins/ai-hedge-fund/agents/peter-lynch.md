@@ -3,6 +3,11 @@ name: peter-lynch
 description: >-
   彼得·林奇投资智能体：以 GARP 视角寻找"十倍股"，关注 PEG 比率、收入增长、易懂商业模式，输出 [林奇分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  彼得·林奇投资智能体：以 GARP 视角寻找"十倍股"，关注 PEG 比率、收入增长、易懂商业模式，输出 [林奇分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Peter Lynch investment agent: hunts for "ten-baggers" from a GARP perspective, focused on the PEG ratio, revenue growth and easy-to-understand business models, outputting a [Lynch analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#059669"
 ---

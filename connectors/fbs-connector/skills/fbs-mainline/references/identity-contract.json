@@ -1,0 +1,1425 @@
+{
+  "schemaVersion": "fbs.connectorIdentityContract/v5",
+  "connectorSource": "fbs-connector",
+  "connectorPackageVersion": "2026.9.25-r7",
+  "supportReadiness": "candidate_local_validated_requires_current_service_admission_and_native_host_proof",
+  "identityFields": [
+    "productId",
+    "packageName",
+    "expertEntryId",
+    "packageVersion"
+  ],
+  "knownExpertTuples": [
+    {
+      "productId": "fbsir-aigc-compliance-red-team",
+      "packageName": "fbsir-aigc-compliance-red-team",
+      "expertEntryId": "fbsir-aigc-compliance-red-team"
+    },
+    {
+      "productId": "fbsir-beike-yi",
+      "packageName": "fbsir-beike-yi",
+      "expertEntryId": "fbsir-beike-yi"
+    },
+    {
+      "productId": "fbsir-board-secretary-assistant",
+      "packageName": "fbsir-board-secretary-assistant",
+      "expertEntryId": "fbsir-board-secretary-assistant"
+    },
+    {
+      "productId": "fbsir-eight-seat-board",
+      "packageName": "fbsir-eight-seat-board",
+      "expertEntryId": "board-convener"
+    },
+    {
+      "productId": "fbsir-industry-scene-researcher",
+      "packageName": "fbsir-industry-scene-researcher",
+      "expertEntryId": "fbsir-industry-scene-researcher"
+    },
+    {
+      "productId": "fbsir-internship",
+      "packageName": "fbsir-internship",
+      "expertEntryId": "fbsir-internship"
+    },
+    {
+      "productId": "fbsir-mom-dialogue-expert",
+      "packageName": "fbsir-mom-dialogue-expert",
+      "expertEntryId": "fbsir-mom-dialogue-expert"
+    },
+    {
+      "productId": "fbsir-super-independent-board",
+      "packageName": "fbsir-super-independent-board",
+      "expertEntryId": "fbsir-super-independent-board"
+    },
+    {
+      "productId": "fbsir-super-partner",
+      "packageName": "fbsir-super-partner",
+      "expertEntryId": "fbsir-super-partner"
+    },
+    {
+      "productId": "industrial-park-investment-attraction-expert",
+      "packageName": "industrial-park-investment-attraction-expert",
+      "expertEntryId": "industrial-park-investment-attraction-expert"
+    },
+    {
+      "productId": "liuxue-yanxue-expert",
+      "packageName": "liuxue-yanxue-expert",
+      "expertEntryId": "liuxue-yanxue-expert"
+    },
+    {
+      "productId": "long-manuscript-expert",
+      "packageName": "long-manuscript-expert",
+      "expertEntryId": "long-manuscript-expert"
+    },
+    {
+      "productId": "mibao-media-archivist",
+      "packageName": "mibao-media-archivist",
+      "expertEntryId": "mibao-media-archivist"
+    },
+    {
+      "productId": "tietu-toutiao",
+      "packageName": "tietu-toutiao",
+      "expertEntryId": "tietu-toutiao"
+    }
+  ],
+  "identitySource": {
+    "allowed": [
+      "active_session_package_context",
+      "active_loaded_manifest"
+    ],
+    "versionSource": "actual_loaded_package_version",
+    "catalogIsRuntimeProof": false,
+    "connectorVersionIsExpertVersion": false,
+    "memoryIsRuntimeProof": false,
+    "claimedIdentityTrust": "client_declared",
+    "localValidationAttestsHostOrAccount": false
+  },
+  "transport": {
+    "inspectActualSdkArguments": true,
+    "identityAtToolSchemaTopLevel": true,
+    "identifiedKnownExpertRequiresAllFourFields": false,
+    "trueAnonymousEntryAllowed": true,
+    "partialIdentityMayDowngradeToAnonymous": false,
+    "nextToolArgumentsMustRemainExact": true,
+    "sendOnlyAdvertisedSchemaFields": true,
+    "outputOnlyFields": [
+      "identityTrust",
+      "productTrustedForAttribution",
+      "canPromoteNatural",
+      "canPromoteProductCredit",
+      "teamId",
+      "canonicalTeamId",
+      "primaryExpertId",
+      "expertIds"
+    ],
+    "appliesToResourceProfile": "legacyApi2"
+  },
+  "correction": {
+    "code": "FBS_ATTRIBUTION_FIELDS_MISSING",
+    "maxAttempts": 1,
+    "readOnlyTools": [
+      "skill_whoami",
+      "fbs_scene_pack_query"
+    ],
+    "serviceRequestAcceptedMustBe": false,
+    "retryAllowedAfterIdentityCorrectionMustBe": true,
+    "errorFields": [
+      "code",
+      "missingFields",
+      "requiredFields"
+    ],
+    "automaticWriteRetry": false,
+    "sceneCorrectionRequiresCompleteOriginalEnvelope": true,
+    "missingRuntimeEvidenceRequiresStop": true,
+    "newOperationKeyAllowed": false,
+    "appliesToResourceProfile": "legacyApi2"
+  },
+  "textAttribution": {
+    "field": "attribution",
+    "requiredFields": [
+      "productId",
+      "packageName",
+      "expertEntryId",
+      "packageVersion",
+      "identityTrust",
+      "productTrustedForAttribution",
+      "canPromoteNatural",
+      "canPromoteProductCredit"
+    ],
+    "identityTrustValues": [
+      "server_registered_route",
+      "source_bound_route_unverified",
+      "server_registered_identity_no_route",
+      "untrusted_or_unknown"
+    ],
+    "identityNullMeansUnknown": true,
+    "serviceEchoAttestsHostOrAccount": false,
+    "unknownPromotionFlagsAreFalse": true,
+    "separateProofRequiredForPromotion": true,
+    "appliesToResourceProfile": "legacyApi2"
+  },
+  "teamClaims": {
+    "schemaAvailabilityRequired": true,
+    "optionalFields": [
+      "participantExpertIds",
+      "collaborationMode",
+      "handoffFrom",
+      "handoffTo"
+    ],
+    "participantMaxItems": 16,
+    "participantIdsUnique": true,
+    "participantIdsExcludePrimary": true,
+    "participantSource": "actual_participation_in_current_run",
+    "rosterIsParticipation": false,
+    "collaborationModes": [
+      "single",
+      "parallel",
+      "sequential",
+      "delegated",
+      "handoff",
+      "unknown"
+    ],
+    "defaultCollaborationMode": "unknown",
+    "singleRequiresNoAdditionalParticipants": true,
+    "coordinatedModesRequireParticipants": [
+      "parallel",
+      "sequential",
+      "delegated"
+    ],
+    "handoffRequiresBothEndpoints": true,
+    "handoffEndpointsMustDiffer": true,
+    "handoffEndpointsMustBelongToPrimaryOrParticipants": true,
+    "handoffRequiresHandoffMode": true,
+    "claimGrantsTrust": false,
+    "perMemberBusinessWriteAllowed": false
+  },
+  "userToolPolicy": {
+    "currentUserToolLimitsApply": true,
+    "packageHabitsOverrideUserLimits": false,
+    "memoryWriteIsImplicitTaskRequirement": false,
+    "memoryWriteRequiresCurrentUserAuthorization": true,
+    "permissionToReadMetadataImpliesWritePermission": false,
+    "largeToolResultPermitsShellFallback": false
+  },
+  "relationshipPolicy": {
+    "mandatoryThreeExpertPipeline": false,
+    "visitorIsAuthenticatedOrVerifiedPerson": false,
+    "usageImpliesOrganizationRole": false,
+    "organizationRoleImpliesResourceAccess": false,
+    "resourceAccessImpliesServiceEntitlement": false,
+    "profileConsentImpliesContactPermission": false,
+    "personalWecomCredentialSharingAllowed": false,
+    "externalMessagingEnabledByThisContract": false,
+    "publicAppOrPricingCommitted": false
+  },
+  "resourceProfiles": {
+    "selectionSource": "configured_resource_and_actual_tool_schema_and_current_authorization_metadata",
+    "skillMayModifyTransportConfiguration": false,
+    "legacyApi2": {
+      "configuredByCanonicalMcpJson": true,
+      "url": "https://api2.u3w.com/fbs-mcp/mcp",
+      "existingContractSections": [
+        "transport",
+        "textAttribution",
+        "correction"
+      ],
+      "toolNames": [
+        "skill_whoami",
+        "fbs_scene_pack_query",
+        "skill_consume",
+        "skill_activate",
+        "skill_precheck",
+        "skill_finish",
+        "skill_logout",
+        "lebao_status",
+        "lebao_claim",
+        "lebao_redeem",
+        "lebao_drop"
+      ],
+      "disabledTools": [
+        "lebao_drop"
+      ],
+      "anonymousOnlyUnderExistingLegacyContract": true,
+      "freshAdmissionReceiptRequired": true,
+      "scope": "canonical_legacy_tools_only_not_oauth_profile_tools"
+    },
+    "historicalPreviewGateway": {
+      "configuredByCanonicalMcpJson": false,
+      "sourceImplemented": true,
+      "isolatedDeploymentCandidate": true,
+      "packageClaimsPublicProductionSupport": false,
+      "packageClaimsHostValidation": false,
+      "reviewedResourceCandidate": "https://api2.u3w.com/cjddh920-preview/fbs-mcp/oauth/mcp",
+      "sourceReview": {
+        "repository": "fubangshou/fbs-member-platform",
+        "revision": "172a42582630c3941976da534408378c0dcc675a",
+        "filesSha256": {
+          "backend/ruoyi-fbs-member/src/main/java/com/ruoyi/member/gateway/ProfileGatewayController.java": "0fe9f17150e0496da4ca4310d421b335a75056e02b8b1f39262b07b2aac0717e",
+          "backend/ruoyi-fbs-member/src/main/java/com/ruoyi/member/gateway/GatewayAttribution.java": "4ca37c1220f09d37487178f0881e583b115408efbd1280372d5883a6be676a21",
+          "backend/ruoyi-fbs-member/src/main/java/com/ruoyi/member/gateway/LegacyGatewayAdapter.java": "3265941afb7f3e910645bb22b6e3d41506738d3e0ad46193a574a9b7fa1c126c",
+          "backend/ruoyi-fbs-member/src/main/java/com/ruoyi/member/profile/ProfileToolService.java": "a2a41b096dc2c4be0362dc8bb6f3c54422d9b67d477d91558d3a3a4eb87a3dd4",
+          "backend/ruoyi-fbs-member/src/main/java/com/ruoyi/member/profile/ProfileService.java": "ba3b495c26b663f68d9a206c7c07b8e34b6a77554b1877dcda006a1ffd24642f",
+          "backend/ruoyi-fbs-member/src/main/java/com/ruoyi/member/profile/ProfilePolicy.java": "95fd0847fd4f76d64f3fae08902bb7031a2b8b54fe47bf74762aa67a2eccf9eb",
+          "backend/ruoyi-fbs-member/src/main/java/com/ruoyi/member/profile/ProfilePortalController.java": "f17606ce748788a7fba161f96add153b5b7cdab5ab8a4efb08cc467e0660434e"
+        },
+        "isDeploymentProof": false
+      },
+      "activationRequires": [
+        "maintainer_reviewed_resource_configuration",
+        "current_tools_list_and_matching_schema",
+        "current_resource_audience_oauth",
+        "required_scope",
+        "profile_or_legacy_synthetic_account_allowlist",
+        "separate_preview_configuration_not_canonical_inference"
+      ],
+      "hostManagesOauth": true,
+      "bearerRequiredForEveryRequest": true,
+      "anonymousEntryAllowed": false,
+      "tokenPassthroughAllowed": false,
+      "acceptedProtocolVersions": [
+        "2025-03-26",
+        "2025-06-18",
+        "2025-11-25"
+      ],
+      "serverDiscover20260728Supported": false,
+      "sdkNamespaceMayVary": true,
+      "canonicalProductTupleMayVaryByNamespace": false,
+      "identityFields": [
+        "productId",
+        "packageName",
+        "expertEntryId",
+        "packageVersion"
+      ],
+      "partialIdentityOrCollaborationRequiresCompleteTuple": true,
+      "knownExpertMayHideIdentity": false,
+      "acceptedExpertVersions": {
+        "fbsir-super-independent-board": [
+          "2026.9.11",
+          "2026.9.20"
+        ],
+        "fbsir-super-partner": [
+          "26.9.15",
+          "2026.9.20"
+        ],
+        "fbsir-eight-seat-board": [
+          "26.9.9",
+          "2026.9.17",
+          "2026.9.20"
+        ]
+      },
+      "sharedOptionalCollaborationFields": [
+        "participantExpertIds",
+        "collaborationMode",
+        "handoffFrom",
+        "handoffTo"
+      ],
+      "newTools": {
+        "member_whoami": {
+          "scope": "account:read",
+          "required": [],
+          "optional": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": false,
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "fbs_capabilities": {
+          "scope": "account:read",
+          "required": [],
+          "optional": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": false,
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "profile_status": {
+          "scope": "account:read",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo",
+            "contextRef"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "profile_read": {
+          "scope": "profile:read",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "contextRef"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo",
+            "fieldKeys",
+            "afterFactId"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": true,
+          "idempotentHint": false,
+          "additionalProperties": false
+        },
+        "profile_propose": {
+          "scope": "profile:propose",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "operationId",
+            "contextRef",
+            "fieldKey",
+            "value",
+            "evidence",
+            "claimKind"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": false,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "profile_manage_entry": {
+          "scope": "profile:manage",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "operationId",
+            "contextType",
+            "contextId",
+            "purposeCode"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": false,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "profile_operation_receipt": {
+          "scope": "profile:manage",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "operationId"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "additionalProperties": false
+        }
+      },
+      "conditionalLegacyCore": {
+        "requiresAdvertisedToolsAndAvailableBridge": true,
+        "syntheticUpstreamOnly": true,
+        "memberBillingInvoked": false,
+        "scopes": {
+          "skill_whoami": "account:read",
+          "fbs_scene_pack_query": "account:read",
+          "skill_consume": "work:write"
+        },
+        "ownerBoundToCurrentAccountClientGrantEpochs": true,
+        "exactIssuedNextHopRequired": true,
+        "upstreamAndGatewayAreDistributedTransaction": false
+      },
+      "unavailableLegacyAdvanced": [
+        "skill_activate",
+        "skill_precheck",
+        "skill_finish",
+        "skill_logout",
+        "lebao_redeem",
+        "lebao_status",
+        "lebao_claim"
+      ],
+      "unexposedDomains": [
+        "member_entitlements_and_credits",
+        "member_billing",
+        "member_case_crud",
+        "member_requests",
+        "member_enterprise",
+        "service_catalog_mcp",
+        "organization_discovery_mcp"
+      ],
+      "purposeContexts": {
+        "PERSONAL": {
+          "contextId": "personal",
+          "purposeCode": "expert-personalization",
+          "fields": [
+            "work_role",
+            "industry",
+            "experience",
+            "goals",
+            "constraints",
+            "decision_style",
+            "preferred_language",
+            "output_preference",
+            "delivery_preference",
+            "collaboration_preference"
+          ]
+        },
+        "CASE": {
+          "contextIdSource": "existing_owned_personal_case",
+          "purposeCode": "decision-support",
+          "fields": [
+            "objective",
+            "constraint",
+            "decision",
+            "success_criteria",
+            "deadline"
+          ]
+        }
+      },
+      "organizationProfilesSupported": false,
+      "contextRefSource": "service_issued_same_owner_resource_client_grant_epochs_context_purpose",
+      "separateConsentRequiredPerGrant": true,
+      "sameOwnerSamePurposeFactsCanBeSharedAfterIndependentConsent": true,
+      "purposeConsentSeconds": 86400,
+      "profileStatusContextLimit": 10,
+      "profileStatusHasPaginationParameter": false,
+      "read": {
+        "fieldKeysMin": 1,
+        "fieldKeysMax": 5,
+        "fieldKeysUnique": true,
+        "fieldKeysMustBelongToPurpose": true,
+        "pageSize": 2,
+        "nextPageInput": "afterFactId",
+        "nextPageOutput": "nextAfterFactId",
+        "continuationSignal": "hasMore",
+        "paginationConsistency": "CURRENT_VERSIONS_PER_REQUEST",
+        "callerOperationIdAccepted": false,
+        "operationIdAccepted": false,
+        "purposeArgumentAccepted": false,
+        "unconfirmedProposalsReturned": false,
+        "factVersionField": "revision",
+        "factTimestampField": "confirmedAt",
+        "factClaimKindField": "source.claimKind",
+        "perFactExpiresAtReturned": false,
+        "refreshBeforeEachNewTask": true,
+        "refreshAfterCorrectionOrWithdrawal": true,
+        "persistentValueOrEvidenceCacheAllowed": false,
+        "persistentReferencesRequireUserWriteAuthorization": true,
+        "allowedPersistentReferences": [
+          "contextRef",
+          "purposeCode",
+          "consentVersion",
+          "factId",
+          "revision",
+          "operationId",
+          "auditOperationId"
+        ]
+      },
+      "proposal": {
+        "claimKindRequired": true,
+        "claimKinds": [
+          "user_statement",
+          "artifact_observation",
+          "expert_inference"
+        ],
+        "sourceEvidenceTrust": "client_declared_unverified",
+        "confirmationPromotesEvidenceTrust": false,
+        "valueMaxUtf16CodeUnits": 256,
+        "evidenceMaxUtf16CodeUnits": 256,
+        "oneFactPerCall": true,
+        "callerOperationIdAccepted": false,
+        "expectedVersionAccepted": false,
+        "amendAccepted": false,
+        "purposeArgumentAccepted": false,
+        "sameKeySamePayloadIsIdempotent": true,
+        "sameKeyDifferentOwnerSourceVersionOrPayloadConflicts": true
+      },
+      "operationIdPattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
+      "mcpReceipt": {
+        "tool": "profile_operation_receipt",
+        "lookupField": "operationId",
+        "ownerCurrentClientGrantOnly": true,
+        "portalOperationsIncluded": false,
+        "responseFields": [
+          "operationId",
+          "action",
+          "status",
+          "result",
+          "replayed",
+          "completedAt"
+        ],
+        "completedStatus": "COMPLETED"
+      },
+      "readAudit": {
+        "operationIdSource": "server_generated_per_successful_read",
+        "responseReference": "auditOperationId",
+        "action": "READ_AUDIT",
+        "deliveryStage": "SERVICE_RESULT_PREPARED",
+        "storesFactValueEvidenceOrCredentials": false,
+        "recordsReaderSeparatelyFromFactOrigin": true,
+        "provesHostReceiptOrConsumption": false,
+        "businessTransaction": false
+      },
+      "portal": {
+        "purposeConsentAndFactConfirmationSeparate": true,
+        "memberCookieRequired": true,
+        "fixedOriginRequired": true,
+        "profileHeaderRequired": true,
+        "expectedVersionSource": {
+          "CONSENT": "context.version",
+          "WITHDRAW_PURPOSE": "context.version",
+          "CONFIRM": "proposal.version",
+          "CORRECT": "fact.revision",
+          "WITHDRAW_FACT": "fact.revision"
+        },
+        "mcpMayApproveFacts": false,
+        "exposedOneTimeChallengeParameter": false,
+        "ownerCanCorrectOrWithdrawAfterClientUnbind": true,
+        "withdrawalMode": "versioned_tombstone",
+        "purposeWithdrawalAppliesAcrossGrantsOfOwnerContextPurpose": true,
+        "reconsentRevivesOldFacts": false,
+        "hardDeleteImplemented": false,
+        "exportImplemented": false
+      },
+      "trust": {
+        "newToolProductIdentityTrustValues": [
+          "client_declared",
+          "unknown"
+        ],
+        "accountSignal": [
+          "accountAuthenticationProven",
+          "accountIdentityTrust"
+        ],
+        "authenticatedAccountTrustValue": "oauth_resource_verified",
+        "profileStatusAccountTrustValue": "oauth_authenticated",
+        "legacyCoreOwnershipMetadataField": "_meta.fbs.gateway/ownership",
+        "upstreamAnonymousBindingProvesAccount": false,
+        "productDeclarationProvesHostExecution": false,
+        "userConfirmationValue": "ACCOUNT_OWNER",
+        "naturalCredit": false,
+        "productCredit": false
+      },
+      "response": {
+        "textBudgetBytes": 12288,
+        "textAndStructuredContentMustAgree": true,
+        "limitCode": "FBS_RESPONSE_LIMIT",
+        "acceptedLimitResponseMeansNotExecuted": false,
+        "receiptReferenceFields": [
+          "operationId",
+          "auditOperationId"
+        ],
+        "legacyUnknownOutcomeCode": "FBS_LEGACY_OUTCOME_UNCONFIRMED",
+        "missingReceiptPermitsNewOperationId": false
+      },
+      "hostNegotiationMethod": "initialize",
+      "serverRequiresStoredInitializeSession": false,
+      "deploymentObservation": {
+        "state": "isolated_active_basic_routes_verified",
+        "isCurrentRuntimeAuthority": false,
+        "profileBusinessMatrixVerified": false,
+        "hostExecutionVerified": false
+      },
+      "runtimeConnectorActivationRequired": true,
+      "newToolArgumentTypes": {
+        "productId": "string",
+        "packageName": "string",
+        "expertEntryId": "string",
+        "packageVersion": "string",
+        "collaborationMode": "string",
+        "handoffFrom": "string",
+        "handoffTo": "string",
+        "contextRef": "string",
+        "operationId": "string",
+        "contextType": "string",
+        "contextId": "string",
+        "purposeCode": "string",
+        "afterFactId": "string",
+        "fieldKey": "string",
+        "value": "string",
+        "evidence": "string",
+        "claimKind": "string",
+        "participantExpertIds": "array_of_strings",
+        "fieldKeys": "array_of_strings"
+      },
+      "historicalOnly": true,
+      "supersededForCanonicalDecisions": true
+    },
+    "canonicalProfileGateway": {
+      "configuredByCanonicalMcpJson": true,
+      "sourceImplemented": true,
+      "isolatedDeploymentCandidate": false,
+      "packageClaimsPublicProductionSupport": false,
+      "packageClaimsHostValidation": false,
+      "activationRequires": [
+        "configured_canonical_resource",
+        "current_host_tools_and_matching_schema",
+        "connector_version_admission",
+        "current_resource_audience_oauth",
+        "required_scope",
+        "current_account_access_policy",
+        "current_expert_tuple_admission_when_declared"
+      ],
+      "hostManagesOauth": true,
+      "bearerRequiredForEveryRequest": false,
+      "anonymousEntryAllowed": false,
+      "tokenPassthroughAllowed": false,
+      "acceptedProtocolVersions": [
+        "2025-03-26",
+        "2025-06-18",
+        "2025-11-25"
+      ],
+      "serverDiscover20260728Supported": false,
+      "sdkNamespaceMayVary": true,
+      "canonicalProductTupleMayVaryByNamespace": false,
+      "identityFields": [
+        "productId",
+        "packageName",
+        "expertEntryId",
+        "packageVersion"
+      ],
+      "partialIdentityOrCollaborationRequiresCompleteTuple": true,
+      "knownExpertMayHideIdentity": false,
+      "acceptedExpertVersions": {
+        "fbsir-super-independent-board": [
+          "2026.9.11",
+          "2026.9.20"
+        ],
+        "fbsir-super-partner": [
+          "26.9.15",
+          "2026.9.20"
+        ],
+        "fbsir-eight-seat-board": [
+          "26.9.9",
+          "2026.9.17",
+          "2026.9.20"
+        ],
+        "fbsir-industry-scene-researcher": [
+          "26.9.14"
+        ]
+      },
+      "sharedOptionalCollaborationFields": [
+        "participantExpertIds",
+        "collaborationMode",
+        "handoffFrom",
+        "handoffTo"
+      ],
+      "newTools": {
+        "member_whoami": {
+          "scope": "account:read",
+          "required": [],
+          "optional": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": false,
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "fbs_capabilities": {
+          "scope": "account:read",
+          "required": [],
+          "optional": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": false,
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "profile_status": {
+          "scope": "account:read",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo",
+            "contextRef"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "profile_read": {
+          "scope": "profile:read",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "contextRef"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo",
+            "fieldKeys",
+            "afterFactId"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": true,
+          "idempotentHint": false,
+          "additionalProperties": false
+        },
+        "profile_propose": {
+          "scope": "profile:propose",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "operationId",
+            "contextRef",
+            "fieldKey",
+            "value",
+            "evidence",
+            "claimKind"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": false,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "profile_manage_entry": {
+          "scope": "profile:manage",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "operationId",
+            "contextType",
+            "contextId",
+            "purposeCode"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": false,
+          "idempotentHint": true,
+          "additionalProperties": false
+        },
+        "profile_operation_receipt": {
+          "scope": "profile:manage",
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "operationId"
+          ],
+          "optional": [
+            "participantExpertIds",
+            "collaborationMode",
+            "handoffFrom",
+            "handoffTo"
+          ],
+          "identityFieldsRequired": true,
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "additionalProperties": false
+        }
+      },
+      "unexposedDomains": [
+        "member_entitlements_and_credits",
+        "member_billing",
+        "member_case_crud",
+        "member_requests",
+        "member_enterprise",
+        "service_catalog_mcp",
+        "organization_discovery_mcp"
+      ],
+      "purposeContexts": {
+        "PERSONAL": {
+          "contextId": "personal",
+          "purposeCode": "expert-personalization",
+          "fields": [
+            "work_role",
+            "industry",
+            "experience",
+            "goals",
+            "constraints",
+            "decision_style",
+            "preferred_language",
+            "output_preference",
+            "delivery_preference",
+            "collaboration_preference"
+          ],
+          "contextIdSource": "fixed"
+        },
+        "CASE": {
+          "contextIdSource": "existing_personal_case",
+          "purposeCode": "decision-support",
+          "fields": [
+            "objective",
+            "constraint",
+            "decision",
+            "success_criteria",
+            "deadline"
+          ],
+          "contextIdPrefix": "case-",
+          "contextIdMustExist": true
+        }
+      },
+      "organizationProfilesSupported": false,
+      "contextRefSource": "service_issued_same_owner_resource_client_grant_epochs_context_purpose",
+      "separateConsentRequiredPerGrant": true,
+      "sameOwnerSamePurposeFactsCanBeSharedAfterIndependentConsent": true,
+      "purposeConsentSeconds": 86400,
+      "profileStatusContextLimit": 10,
+      "profileStatusHasPaginationParameter": false,
+      "read": {
+        "fieldKeysMin": 1,
+        "fieldKeysMax": 5,
+        "fieldKeysUnique": true,
+        "fieldKeysMustBelongToPurpose": true,
+        "pageSize": 2,
+        "nextPageInput": "afterFactId",
+        "nextPageOutput": "nextAfterFactId",
+        "continuationSignal": "hasMore",
+        "paginationConsistency": "CURRENT_VERSIONS_PER_REQUEST",
+        "callerOperationIdAccepted": false,
+        "operationIdAccepted": false,
+        "purposeArgumentAccepted": false,
+        "unconfirmedProposalsReturned": false,
+        "factVersionField": "revision",
+        "factTimestampField": "confirmedAt",
+        "factClaimKindField": "source.claimKind",
+        "perFactExpiresAtReturned": false,
+        "refreshBeforeEachNewTask": true,
+        "refreshAfterCorrectionOrWithdrawal": true,
+        "persistentValueOrEvidenceCacheAllowed": false,
+        "persistentReferencesRequireUserWriteAuthorization": true,
+        "allowedPersistentReferences": [
+          "contextRef",
+          "purposeCode",
+          "consentVersion",
+          "factId",
+          "revision",
+          "operationId",
+          "auditOperationId"
+        ]
+      },
+      "proposal": {
+        "claimKindRequired": true,
+        "claimKinds": [
+          "user_statement",
+          "artifact_observation",
+          "expert_inference"
+        ],
+        "sourceEvidenceTrust": "client_declared_unverified",
+        "confirmationPromotesEvidenceTrust": false,
+        "valueMaxUtf16CodeUnits": 256,
+        "evidenceMaxUtf16CodeUnits": 256,
+        "oneFactPerCall": true,
+        "callerOperationIdAccepted": false,
+        "expectedVersionAccepted": false,
+        "amendAccepted": false,
+        "purposeArgumentAccepted": false,
+        "sameKeySamePayloadIsIdempotent": true,
+        "sameKeyDifferentOwnerSourceVersionOrPayloadConflicts": true
+      },
+      "operationIdPattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
+      "mcpReceipt": {
+        "tool": "profile_operation_receipt",
+        "lookupField": "operationId",
+        "ownerCurrentClientGrantOnly": true,
+        "portalOperationsIncluded": false,
+        "responseFields": [
+          "operationId",
+          "action",
+          "status",
+          "result",
+          "replayed",
+          "completedAt"
+        ],
+        "completedStatus": "COMPLETED"
+      },
+      "readAudit": {
+        "operationIdSource": "server_generated_per_successful_read",
+        "responseReference": "auditOperationId",
+        "action": "READ_AUDIT",
+        "deliveryStage": "SERVICE_RESULT_PREPARED",
+        "storesFactValueEvidenceOrCredentials": false,
+        "recordsReaderSeparatelyFromFactOrigin": true,
+        "provesHostReceiptOrConsumption": false,
+        "businessTransaction": false
+      },
+      "portal": {
+        "purposeConsentAndFactConfirmationSeparate": true,
+        "memberCookieRequired": true,
+        "fixedOriginRequired": true,
+        "profileHeaderRequired": true,
+        "expectedVersionSource": {
+          "CONSENT": "context.version",
+          "WITHDRAW_PURPOSE": "context.version",
+          "CONFIRM": "proposal.version",
+          "CORRECT": "fact.revision",
+          "WITHDRAW_FACT": "fact.revision"
+        },
+        "mcpMayApproveFacts": false,
+        "exposedOneTimeChallengeParameter": false,
+        "ownerCanCorrectOrWithdrawAfterClientUnbind": true,
+        "withdrawalMode": "versioned_tombstone",
+        "purposeWithdrawalAppliesAcrossGrantsOfOwnerContextPurpose": true,
+        "reconsentRevivesOldFacts": false,
+        "hardDeleteImplemented": false,
+        "exportImplemented": false
+      },
+      "trust": {
+        "newToolProductIdentityTrustValues": [
+          "client_declared",
+          "unknown"
+        ],
+        "accountSignal": [
+          "accountAuthenticationProven",
+          "accountIdentityTrust"
+        ],
+        "authenticatedAccountTrustValue": "oauth_resource_verified",
+        "profileStatusAccountTrustValue": "oauth_authenticated",
+        "legacyCoreOwnershipMetadataField": "_meta.fbs.gateway/ownership",
+        "upstreamAnonymousBindingProvesAccount": false,
+        "productDeclarationProvesHostExecution": false,
+        "userConfirmationValue": "ACCOUNT_OWNER",
+        "naturalCredit": false,
+        "productCredit": false
+      },
+      "response": {
+        "textBudgetBytes": 12288,
+        "textAndStructuredContentMustAgree": true,
+        "limitCode": "FBS_RESPONSE_LIMIT",
+        "acceptedLimitResponseMeansNotExecuted": false,
+        "receiptReferenceFields": [
+          "operationId",
+          "auditOperationId"
+        ],
+        "legacyUnknownOutcomeCode": "FBS_LEGACY_OUTCOME_UNCONFIRMED",
+        "missingReceiptPermitsNewOperationId": false
+      },
+      "hostNegotiationMethod": "initialize",
+      "serverRequiresStoredInitializeSession": false,
+      "deploymentObservation": {
+        "state": "isolated_active_basic_routes_verified",
+        "isCurrentRuntimeAuthority": false,
+        "profileBusinessMatrixVerified": false,
+        "hostExecutionVerified": false
+      },
+      "runtimeConnectorActivationRequired": true,
+      "newToolArgumentTypes": {
+        "productId": "string",
+        "packageName": "string",
+        "expertEntryId": "string",
+        "packageVersion": "string",
+        "collaborationMode": "string",
+        "handoffFrom": "string",
+        "handoffTo": "string",
+        "contextRef": "string",
+        "operationId": "string",
+        "contextType": "string",
+        "contextId": "string",
+        "purposeCode": "string",
+        "afterFactId": "string",
+        "fieldKey": "string",
+        "value": "string",
+        "evidence": "string",
+        "claimKind": "string",
+        "participantExpertIds": "array_of_strings",
+        "fieldKeys": "array_of_strings"
+      },
+      "resource": "https://api2.u3w.com/fbs-mcp/mcp",
+      "sourceBaselineRevision": "54817d7b3a26b7d54fe6d8e49241bb551a0f0349",
+      "runtimeSelection": "canonical_resource_plus_actual_tool_name_never_url_only_legacy_classification",
+      "bearerRequiredForProtectedToolCalls": true,
+      "anonymousCatalogIsAuthorization": false,
+      "accountAccessPolicy": {
+        "serverOwnsPolicy": true,
+        "syntheticModeRequiresAllowlist": true,
+        "noUniversalSyntheticOnlyClaim": true,
+        "consentedAccountModeStillRequiresEnabledNormalAccountAndValidGrant": true,
+        "sourceConfiguredModes": [
+          "synthetic",
+          "consented-account"
+        ]
+      },
+      "acceptedExpertVersionsStatus": "source_snapshot_only_current_admission_required_no_version_downgrade",
+      "legacyToolsShareUrlButNotThisOAuthProfileContract": true,
+      "optionalInteropReceipt": {
+        "schemaVersion": "fbs.interopReceipt/v1",
+        "inputArgument": false,
+        "absenceIsBusinessFailure": false,
+        "sameFlowIsHostProof": false,
+        "businessReceipt": false,
+        "knownCorrelation": "same_oauth_authorization_flow",
+        "knownScope": "single_process_ttl",
+        "completeBehaviorCoverage": false,
+        "storeOnlyIfCurrentUserAllowsDiagnosticReferences": true
+      },
+      "intentSignalInputSupported": false,
+      "sourceSnapshotStatus": "bound_current_committed_local_build",
+      "profileContextContract": {
+        "supportedContexts": [
+          {
+            "contextType": "PERSONAL",
+            "contextId": "personal",
+            "contextIdSource": "fixed",
+            "purposeCode": "expert-personalization"
+          },
+          {
+            "contextType": "CASE",
+            "contextIdSource": "existing_personal_case",
+            "contextIdPrefix": "case-",
+            "contextIdMustExist": true,
+            "purposeCode": "decision-support"
+          }
+        ],
+        "contextIdIsOperationId": false,
+        "callerInventedContextIdAllowed": false,
+        "autoRewriteRejectedArguments": false,
+        "caseOwnershipAuthority": "current_service_policy",
+        "unsupportedErrorCode": "PROFILE_CONTEXT_UNSUPPORTED",
+        "unsupportedNextAction": "review_context_contract",
+        "unsupportedMeansProductUnavailable": false,
+        "errorMayProveOriginalOperationNeverExisted": false,
+        "writeRetryAfterCorrectionAutomatic": false,
+        "unknownOutcomeRecovery": "query_original_operationId_keep_payload_do_not_replace_id",
+        "purposeCatalog": [
+          {
+            "contextType": "PERSONAL",
+            "contextId": "personal",
+            "contextIdSource": "fixed",
+            "code": "expert-personalization",
+            "label": "个人工作偏好",
+            "fields": [
+              "collaboration_preference",
+              "constraints",
+              "decision_style",
+              "delivery_preference",
+              "experience",
+              "goals",
+              "industry",
+              "output_preference",
+              "preferred_language",
+              "work_role"
+            ]
+          },
+          {
+            "contextIdPrefix": "case-",
+            "contextIdMustExist": true,
+            "contextIdSource": "existing_personal_case",
+            "contextType": "CASE",
+            "code": "decision-support",
+            "label": "同一决策事项接续",
+            "fields": [
+              "constraint",
+              "deadline",
+              "decision",
+              "objective",
+              "success_criteria"
+            ]
+          }
+        ],
+        "toolInputSchema": {
+          "required": [
+            "productId",
+            "packageName",
+            "expertEntryId",
+            "packageVersion",
+            "operationId",
+            "contextType",
+            "contextId",
+            "purposeCode"
+          ],
+          "type": "object",
+          "properties": {
+            "productId": {
+              "maxLength": 160,
+              "type": "string",
+              "minLength": 1
+            },
+            "packageName": {
+              "maxLength": 160,
+              "type": "string",
+              "minLength": 1
+            },
+            "expertEntryId": {
+              "maxLength": 160,
+              "type": "string",
+              "minLength": 1
+            },
+            "packageVersion": {
+              "maxLength": 160,
+              "type": "string",
+              "minLength": 1
+            },
+            "participantExpertIds": {
+              "uniqueItems": true,
+              "items": {
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/+-]{0,159}$",
+                "type": "string",
+                "maxLength": 160
+              },
+              "type": "array",
+              "maxItems": 16
+            },
+            "collaborationMode": {
+              "enum": [
+                "single",
+                "parallel",
+                "sequential",
+                "delegated",
+                "handoff",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            "handoffFrom": {
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/+-]{0,159}$",
+              "type": "string",
+              "maxLength": 160
+            },
+            "handoffTo": {
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/+-]{0,159}$",
+              "type": "string",
+              "maxLength": 160
+            },
+            "contextType": {
+              "enum": [
+                "PERSONAL",
+                "CASE"
+              ],
+              "type": "string",
+              "description": "PERSONAL须搭配contextId=personal和purposeCode=expert-personalization；CASE须搭配本人已有case-编号和decision-support。"
+            },
+            "operationId": {
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
+              "type": "string",
+              "maxLength": 64
+            },
+            "contextId": {
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
+              "type": "string",
+              "maxLength": 64,
+              "description": "PERSONAL固定填写personal，不是新建操作号、测试标签或调用方自取别名；CASE填写本人已有事项的case-编号，不得猜测或新建编号。",
+              "examples": [
+                "personal"
+              ]
+            },
+            "purposeCode": {
+              "enum": [
+                "expert-personalization",
+                "decision-support"
+              ],
+              "type": "string",
+              "description": "PERSONAL仅支持expert-personalization；CASE仅支持decision-support。用途同意须另由本人网页完成。"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "temporaryCandidateExpertAdmission": {
+        "versions": [
+          "2026.9.24",
+          "2026.9.25",
+          "2026.9.25-r2",
+          "2026.9.25-r3",
+          "2026.9.25-r4",
+          "2026.9.25-r6",
+          "2026.9.25-r7",
+          "2026.9.25-r8"
+        ],
+        "deadlineRequired": true,
+        "sourceSnapshotOnly": true,
+        "runtimeAdmittedByThisPackage": false
+      }
+    }
+  },
+  "packageIdentityPolicy": {
+    "appliesToResource": "legacyApi2",
+    "primaryKey": "packageName",
+    "sourceField": ".codebuddy-plugin/plugin.json:name",
+    "productIdMayCarryPackageId": true,
+    "versionIsAdmissionKey": false,
+    "missingVersion": "unknown_do_not_fill",
+    "explicitIdentityConflicts": "reject",
+    "teamMemberIdRole": "entry_within_package_not_product_identity",
+    "identityMatchGrantsAccountOrHostAuthority": false,
+    "oauthPreviewPolicyUnchanged": true,
+    "knownPackages": [
+      {
+        "packageId": "fbsir-aigc-compliance-red-team",
+        "entryIds": [
+          "fbsir-aigc-compliance-red-team"
+        ]
+      },
+      {
+        "packageId": "fbsir-beike-yi",
+        "entryIds": [
+          "fbsir-beike-yi"
+        ]
+      },
+      {
+        "packageId": "fbsir-board-secretary-assistant",
+        "entryIds": [
+          "fbsir-board-secretary-assistant"
+        ]
+      },
+      {
+        "packageId": "fbsir-eight-seat-board",
+        "entryIds": [
+          "board-convener",
+          "board-secretary",
+          "strategy-partner",
+          "capital-partner",
+          "growth-partner",
+          "operations-partner",
+          "org-partner",
+          "legal-partner",
+          "digital-partner"
+        ]
+      },
+      {
+        "packageId": "fbsir-industry-scene-researcher",
+        "entryIds": [
+          "fbsir-industry-scene-researcher"
+        ]
+      },
+      {
+        "packageId": "fbsir-internship",
+        "entryIds": [
+          "fbsir-internship"
+        ]
+      },
+      {
+        "packageId": "fbsir-mom-dialogue-expert",
+        "entryIds": [
+          "fbsir-mom-dialogue-expert"
+        ]
+      },
+      {
+        "packageId": "fbsir-super-independent-board",
+        "entryIds": [
+          "fbsir-super-independent-board"
+        ]
+      },
+      {
+        "packageId": "fbsir-super-partner",
+        "entryIds": [
+          "fbsir-super-partner"
+        ]
+      },
+      {
+        "packageId": "industrial-park-investment-attraction-expert",
+        "entryIds": [
+          "industrial-park-investment-attraction-expert"
+        ]
+      },
+      {
+        "packageId": "liuxue-yanxue-expert",
+        "entryIds": [
+          "liuxue-yanxue-expert"
+        ]
+      },
+      {
+        "packageId": "long-manuscript-expert",
+        "entryIds": [
+          "long-manuscript-expert"
+        ]
+      },
+      {
+        "packageId": "mibao-media-archivist",
+        "entryIds": [
+          "mibao-media-archivist"
+        ]
+      },
+      {
+        "packageId": "tietu-toutiao",
+        "entryIds": [
+          "tietu-toutiao"
+        ]
+      }
+    ],
+    "canonicalProfilePolicy": "complete_registered_tuple_and_current_version_admission_when_declared"
+  },
+  "connectorContractVersion": "1.3.0",
+  "pluginDistributionVersion": "0.0.0+wb.857f1d739c16ff85.zn925v10"
+}

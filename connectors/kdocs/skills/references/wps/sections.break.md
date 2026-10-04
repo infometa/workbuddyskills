@@ -1,0 +1,50 @@
+# wps.sections.break
+
+## 1. wps.sections.break
+
+#### 功能说明
+
+删除在线文字文档节的分节符。
+
+**幂等性**：是 — safe
+
+> 参数为 section_index（1-based），不是历史字段 n。
+> 删除分节前确认 wps.sections.count ≥ 1，避免删空文档唯一节。
+
+#### 调用示例
+
+文档删除：
+
+```json
+{
+  "file_id": "<FILE_ID>",
+  "break_type": 7,
+  "n": 1
+}
+```
+
+#### 参数说明
+
+- `break_type` (number, 可选): break type
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 id；与 url、link_id 三选一
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享 id；与 url、file_id 三选一
+- `n` (number, 可选): n
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL；与 link_id、file_id 三选一
+
+#### 返回值说明
+
+```json
+{
+  "code": 0,
+  "message": "成功",
+  "data": {
+    "deleted_section": 1
+  }
+}
+```
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `code` | number | 0 表示成功 |
+| `data` | object | 业务数据 |
+| `message` | string | 结果说明 |

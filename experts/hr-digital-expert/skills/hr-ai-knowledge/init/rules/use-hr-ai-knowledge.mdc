@@ -2,8 +2,8 @@
 description: 强制调用 use_skill("hr-ai-knowledge") 加载完整技能
 alwaysApply: true
 enabled: true
-version: 1
-updatedAt: 2026-07-23T00:00:00.000Z
+version: 2
+updatedAt: 2026-08-25T00:00:00.000Z
 provider:
 ---
 
@@ -13,7 +13,7 @@ provider:
 
 **触发条件**：用户问题涉及 _以下任一关键词_ 时
 
-> HR / 人事 / 政策 / 制度 / 福利 / 薪酬 / 社保 / 公积金 / 安居 / 假期 / 年假 / 产假 / 婚假 / 陪产假 / 病假 / 事假 / 工伤 / 调休 / 绩效 / 晋升 / 职级 / 培训 / 劳动合同 / 试用期 / 竞业限制 / 加班 / 离职 / 调动 / 招聘 / 员工手册 / HiHR / hihr / 乐享HR / 知识库 / 检索文档 / 查公司制度 / search knowledge
+> HR / 人事 / 政策 / 制度 / 福利 / 薪酬 / 社保 / 公积金 / 安居 / 假期 / 年假 / 产假 / 婚假 / 陪产假 / 病假 / 事假 / 工伤 / 调休 / 绩效 / 晋升 / 职级 / 培训 / 劳动合同 / 试用期 / 竞业限制 / 加班 / 离职 / 调动 / 招聘 / 员工手册 / 公司发文 / 公文 / 红头文件 / 公告 / 通知 / iwiki / iWiki / 团队空间 / 我上传的文档 / HiHR / hihr / 乐享HR / 知识库 / 检索文档 / 查公司制度 / search knowledge
 
 **强制动作**：**第一个工具调用必须是** `use_skill("hr-ai-knowledge")`。
 
@@ -87,7 +87,7 @@ provider:
 `use_skill("hr-ai-knowledge")` 加载完 SKILL.md 后，按 SKILL.md 指示执行；典型起点：
 
 1. **Step 0 连接预检**（`workflows/search.md`）：探活 hr-ai-knowledge，未连接则引导启用
-2. 意图识别 → 推断 `sources`（HR 政策类 → `["hihr"]`）
+2. 意图识别 → 推断 `sources`（HR 政策类 → `["hihr"]`；公司发文 → `["policy"]`；iWiki → `["iwiki"]`；我上传的/团队空间文档 → `["space"]`；企微 → `["wecom"]`；多来源接近则全源不传）
 3. 白名单校验（server 末段 == `hr-ai-knowledge`）+ `mcp_get_tool_description` 确认参数
 4. 调用 `knowledge_search` 检索，最多 2 次
 5. 按引用规范组织回答：可点击链接 + 按域名标注来源（`s3.woa.com` → **HiHR**）
@@ -98,5 +98,5 @@ provider:
 
 ## 与本文件版本相关
 
-- `version: 1`（含义见 SKILL.md `init/install-rules.md`）
-- 用户工作区如存在缺失 `version` 字段的旧版，**`use_skill` 加载后应提示用户重装 Rules**
+- `version: 2`（含义见 SKILL.md `init/install-rules.md`）
+- 用户工作区如存在缺失 `version` 字段或版本 < 2 的旧版，**`use_skill` 加载后应提示用户重装 Rules**

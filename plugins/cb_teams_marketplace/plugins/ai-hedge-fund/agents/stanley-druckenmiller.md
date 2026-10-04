@@ -3,6 +3,11 @@ name: stanley-druckenmiller
 description: >-
   斯坦利·德鲁肯米勒投资智能体：宏观投资大师，关注非对称风险收益、增长动量、市场情绪和资本保全，输出 [德鲁肯米勒分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  斯坦利·德鲁肯米勒投资智能体：宏观投资大师，关注非对称风险收益、增长动量、市场情绪和资本保全，输出 [德鲁肯米勒分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Stanley Druckenmiller investment agent: a macro investing master focused on asymmetric risk/reward, growth momentum, market sentiment and capital preservation, outputting a [Druckenmiller analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#1D4ED8"
 ---

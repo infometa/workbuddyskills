@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "content-state.v1",
+  "title": "Tietu Toutiao content state",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_image",
+    "masthead",
+    "date",
+    "headline",
+    "primary_photo",
+    "selected_template",
+    "locked_fields",
+    "rejected_styles",
+    "revision_id",
+    "parent_revision_id"
+  ],
+  "properties": {
+    "schema_version": { "const": "content-state.v1" },
+    "source_image": { "type": "string", "minLength": 1 },
+    "masthead": { "$ref": "#/$defs/extractedText" },
+    "date": { "$ref": "#/$defs/extractedText" },
+    "headline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["original", "confidence", "confirmed"],
+      "properties": {
+        "original": { "type": "string", "minLength": 1 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confirmed": { "type": "boolean" }
+      }
+    },
+    "sub_headline": { "$ref": "#/$defs/optionalExtractedText" },
+    "primary_photo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "crop", "focal_point", "confidence", "confirmed"],
+      "properties": {
+        "path": { "type": "string" },
+        "crop": { "$ref": "#/$defs/rect" },
+        "focal_point": { "$ref": "#/$defs/point" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confirmed": { "type": "boolean" }
+      }
+    },
+    "selected_template": { "type": ["string", "null"], "enum": ["authoritative", "visual", "digest", null] },
+    "locked_fields": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "rejected_styles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "revision_id": { "type": "string", "minLength": 1 },
+    "parent_revision_id": { "type": ["string", "null"] },
+    "notes": { "type": "string" }
+  },
+  "$defs": {
+    "extractedText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "confidence", "confirmed"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confirmed": { "type": "boolean" },
+        "bbox": { "$ref": "#/$defs/rect" }
+      }
+    },
+    "optionalExtractedText": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["text", "confidence", "confirmed"],
+      "properties": {
+        "text": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confirmed": { "type": "boolean" },
+        "bbox": { "$ref": "#/$defs/rect" }
+      }
+    },
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0 },
+        "y": { "type": "number", "minimum": 0 },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "jufa-mcp-server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "jufa-mcp-server@latest"
+      ],
+      "env": {
+        "JUFA_API_KEY": "${JUFA_API_KEY}"
+      },
+      "runtime": {
+        "type": "node",
+        "version": ">=20"
+      },
+      "timeout": 120000
+    }
+  }
+}

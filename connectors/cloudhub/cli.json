@@ -1,0 +1,37 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": "20"
+  },
+  "init": {
+    "darwin": "npm install -g @yunzhijia/cli",
+    "linux": "npm install -g @yunzhijia/cli",
+    "win32": "npm install -g @yunzhijia/cli"
+  },
+  "auth": {
+    "darwin": "yzj-cli auth login",
+    "linux": "yzj-cli auth login --device",
+    "win32": "yzj-cli.cmd auth login"
+  },
+  "unAuth": {
+    "darwin": "yzj-cli auth logout",
+    "linux": "yzj-cli auth logout",
+    "win32": "yzj-cli.cmd auth logout"
+  },
+  "status": {
+    "darwin": "yzj-cli contact user get",
+    "linux": "yzj-cli contact user get",
+    "win32": "yzj-cli.cmd contact user get"
+  },
+  "statusMatch": "\"success\":\\s*true",
+  "authUrlDomain": "yunzhijia.com",
+  "authWaitForExit": true,
+  "versionCheck": {
+    "command": {
+      "darwin": "yzj-cli --version",
+      "linux": "yzj-cli --version",
+      "win32": "yzj-cli.cmd --version"
+    },
+    "minVersion": "0.1.5"
+  }
+}

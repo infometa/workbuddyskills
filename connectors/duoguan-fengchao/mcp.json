@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "duoguan-fengchao": {
+      "type": "streamableHttp",
+      "url": "https://fc.duoguan.com/mcp",
+      "timeout": 30000
+    }
+  }
+}

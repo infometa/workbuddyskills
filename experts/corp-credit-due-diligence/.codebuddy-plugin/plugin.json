@@ -1,22 +1,24 @@
 {
   "name": "corp-credit-due-diligence",
-  "version": "1.0.1",
+  "version": "1.3.3",
   "description": "End-to-end corporate credit due diligence: industry research, financial verification, ultimate controller profiling, risk early-warning, and 90+ credit rating reports.",
   "author": {
     "name": "Leo",
     "email": "leoygao@tencent.com"
   },
-  "expertType": "agent",
-  "agentName": "corp-credit-due-diligence",
-  "agents": [
-    "./agents/corp-credit-due-diligence.md"
-  ],
+  "agents": ["./agents/corp-credit-due-diligence.md"],
   "skills": [
+    "./skills/pre-execution-kyc",
     "./skills/credit-industry-research",
+    "./skills/standard-credit-report",
     "./skills/auth-permission",
     "./skills/md2pdf",
     "./skills/due-diligence"
   ],
+
+  "expertType": "agent",
+  "agentName": "corp-credit-due-diligence",
+
   "displayName": {
     "en": "Tianyu Corporate Credit",
     "zh": "天御对公信贷"
@@ -35,19 +37,11 @@
     "zh": "帮我调研下{企业名}。",
     "en": "Please conduct some research on {company name} for me."
   },
+  "plugin": "corp-credit-due-diligence",
   "tags": [
-    {
-      "en": "Industry Research",
-      "zh": "行业研究"
-    },
-    {
-      "en": "Financial Verification",
-      "zh": "财务核查"
-    },
-    {
-      "en": "Credit Rating Report",
-      "zh": "信评报告"
-    }
+    { "en": "Industry Research", "zh": "行业研究" },
+    { "en": "Financial Verification", "zh": "财务核查" },
+    { "en": "Credit Rating Report", "zh": "信评报告" }
   ],
   "quickPrompts": [
     {
@@ -62,6 +56,5 @@
       "zh": "对XX公司开展财务核查，重点识别民企财务偏差与关联交易风险。",
       "en": "Conduct financial verification on XX, focusing on private-firm accounting biases and related-party transaction risks."
     }
-  ],
-  "plugin": "corp-credit-due-diligence"
+  ]
 }

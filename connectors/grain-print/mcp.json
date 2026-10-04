@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "grain-print": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "grain-print-mcp@1.0.1"],
+      "runtime": {
+        "type": "node",
+        "version": "20"
+      },
+      "npmRegistry": "https://registry.npmjs.org",
+      "env": {
+        "GRAIN_TOKEN": "${GRAIN_TOKEN}",
+        "GRAIN_API_URL": "${GRAIN_API_BASE}",
+        "GRAIN_TLS_INSECURE": "0"
+      }
+    }
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "artifactType": "capability_port_adapter_registry",
+  "connectorRequired": false,
+  "entries": [
+    {
+      "adapterRef": "../scripts/adapter-runtime.mjs",
+      "connectorRequired": false,
+      "description": "optional capability port; WeCom and FBS are adapters, not product prerequisites",
+      "fallback": "local_workflow_without_connector",
+      "id": "CollaborationPort",
+      "implementationCheckpoint": "C4",
+      "lifecycle": "implemented",
+      "operations": [
+        "create_task",
+        "schedule_event"
+      ],
+      "providerBindings": [
+        {
+          "adapterId": "wecom",
+          "adapterOperation": "todo.create",
+          "approvalRequired": true,
+          "bindingScope": "scene_optional_binding",
+          "freshTargetResolutionRequired": true,
+          "operation": "create_task",
+          "portId": "CollaborationPort",
+          "publicResultFields": [
+            "title",
+            "status",
+            "assigneeLabel"
+          ],
+          "readbackRequired": true,
+          "writeMode": "external_write"
+        },
+        {
+          "adapterId": "wecom",
+          "adapterOperation": "calendar.create",
+          "approvalRequired": true,
+          "bindingScope": "scene_optional_binding",
+          "freshTargetResolutionRequired": true,
+          "operation": "schedule_event",
+          "portId": "CollaborationPort",
+          "publicResultFields": [
+            "title",
+            "status",
+            "timeLabel"
+          ],
+          "readbackRequired": true,
+          "writeMode": "external_write"
+        }
+      ],
+      "required": false
+    },
+    {
+      "adapterRef": "../scripts/adapter-runtime.mjs",
+      "connectorRequired": false,
+      "description": "optional capability port; WeCom and FBS are adapters, not product prerequisites",
+      "fallback": "local_workflow_without_connector",
+      "id": "DeliveryPort",
+      "implementationCheckpoint": "C4",
+      "lifecycle": "implemented",
+      "operations": [
+        "create_private_preview",
+        "store_artifact"
+      ],
+      "providerBindings": [
+        {
+          "adapterId": "wecom",
+          "adapterOperation": "smartpage.private_preview.create",
+          "approvalRequired": true,
+          "bindingScope": "scene_optional_binding",
+          "freshTargetResolutionRequired": true,
+          "operation": "create_private_preview",
+          "portId": "DeliveryPort",
+          "publicResultFields": [
+            "title",
+            "status",
+            "previewLabel",
+            "artifactDigest"
+          ],
+          "readbackRequired": true,
+          "writeMode": "external_write"
+        },
+        {
+          "adapterId": "wecom",
+          "adapterOperation": "document.artifact.store",
+          "approvalRequired": true,
+          "bindingScope": "scene_optional_binding",
+          "freshTargetResolutionRequired": true,
+          "operation": "store_artifact",
+          "portId": "DeliveryPort",
+          "publicResultFields": [
+            "title",
+            "status",
+            "artifactLabel",
+            "artifactDigest"
+          ],
+          "readbackRequired": true,
+          "writeMode": "external_write"
+        }
+      ],
+      "required": false
+    },
+    {
+      "adapterRef": "../scripts/adapter-runtime.mjs",
+      "connectorRequired": false,
+      "description": "optional capability port; WeCom and FBS are adapters, not product prerequisites",
+      "fallback": "local_workflow_without_connector",
+      "id": "EntitlementPort",
+      "implementationCheckpoint": "C4",
+      "lifecycle": "implemented",
+      "operations": [
+        "check_entitlement"
+      ],
+      "providerBindings": [
+        {
+          "adapterId": "fbs",
+          "adapterOperation": "skill_whoami",
+          "approvalRequired": false,
+          "bindingScope": "product_control_binding",
+          "freshTargetResolutionRequired": false,
+          "operation": "check_entitlement",
+          "portId": "EntitlementPort",
+          "publicResultFields": [
+            "productLabel",
+            "entitlementStatus",
+            "bindingDigest"
+          ],
+          "readbackRequired": false,
+          "writeMode": "read_only"
+        }
+      ],
+      "required": false
+    },
+    {
+      "adapterRef": "../scripts/adapter-runtime.mjs",
+      "connectorRequired": false,
+      "description": "optional capability port; WeCom and FBS are adapters, not product prerequisites",
+      "fallback": "local_workflow_without_connector",
+      "id": "MaterialSourcePort",
+      "implementationCheckpoint": "C4",
+      "lifecycle": "implemented",
+      "operations": [
+        "import_material_reference"
+      ],
+      "providerBindings": [
+        {
+          "adapterId": "wecom",
+          "adapterOperation": "material.reference.read",
+          "approvalRequired": false,
+          "bindingScope": "scene_optional_binding",
+          "freshTargetResolutionRequired": false,
+          "operation": "import_material_reference",
+          "portId": "MaterialSourcePort",
+          "publicResultFields": [
+            "title",
+            "name",
+            "summary",
+            "sourceType",
+            "modifiedAt",
+            "contentDigest"
+          ],
+          "readbackRequired": false,
+          "writeMode": "read_only"
+        }
+      ],
+      "required": false
+    },
+    {
+      "adapterRef": "../scripts/adapter-runtime.mjs",
+      "connectorRequired": false,
+      "description": "optional capability port; WeCom and FBS are adapters, not product prerequisites",
+      "fallback": "local_workflow_without_connector",
+      "id": "NotificationPort",
+      "implementationCheckpoint": "C4",
+      "lifecycle": "implemented",
+      "operations": [
+        "send_notification"
+      ],
+      "providerBindings": [
+        {
+          "adapterId": "wecom",
+          "adapterOperation": "message.send",
+          "approvalRequired": true,
+          "bindingScope": "scene_optional_binding",
+          "freshTargetResolutionRequired": true,
+          "operation": "send_notification",
+          "portId": "NotificationPort",
+          "publicResultFields": [
+            "title",
+            "status",
+            "targetLabel"
+          ],
+          "readbackRequired": true,
+          "writeMode": "external_write"
+        }
+      ],
+      "required": false
+    },
+    {
+      "adapterRef": "../scripts/adapter-runtime.mjs",
+      "connectorRequired": false,
+      "description": "optional capability port; WeCom and FBS are adapters, not product prerequisites",
+      "fallback": "local_workflow_without_connector",
+      "id": "ReceiptPort",
+      "implementationCheckpoint": "C4",
+      "lifecycle": "implemented",
+      "operations": [
+        "read_receipt",
+        "record_receipt"
+      ],
+      "providerBindings": [
+        {
+          "adapterId": "fbs",
+          "adapterOperation": "lebao_status",
+          "approvalRequired": false,
+          "bindingScope": "product_control_binding",
+          "freshTargetResolutionRequired": false,
+          "operation": "read_receipt",
+          "portId": "ReceiptPort",
+          "publicResultFields": [
+            "productLabel",
+            "receiptStatus",
+            "receiptDigest"
+          ],
+          "readbackRequired": false,
+          "writeMode": "read_only"
+        },
+        {
+          "adapterId": "fbs",
+          "adapterOperation": "skill_consume",
+          "approvalRequired": true,
+          "bindingScope": "product_control_binding",
+          "freshTargetResolutionRequired": true,
+          "operation": "record_receipt",
+          "portId": "ReceiptPort",
+          "publicResultFields": [
+            "productLabel",
+            "receiptStatus",
+            "receiptDigest"
+          ],
+          "readbackRequired": true,
+          "sameBindingRequired": true,
+          "writeMode": "external_write"
+        }
+      ],
+      "required": false
+    },
+    {
+      "adapterRef": "../scripts/adapter-runtime.mjs",
+      "connectorRequired": false,
+      "description": "optional capability port; WeCom and FBS are adapters, not product prerequisites",
+      "fallback": "local_workflow_without_connector",
+      "id": "ReviewPort",
+      "implementationCheckpoint": "C4",
+      "lifecycle": "implemented",
+      "operations": [
+        "configure_review_access",
+        "request_review"
+      ],
+      "providerBindings": [
+        {
+          "adapterId": "wecom",
+          "adapterOperation": "document.review_access.configure",
+          "approvalRequired": true,
+          "bindingScope": "scene_optional_binding",
+          "freshTargetResolutionRequired": true,
+          "operation": "configure_review_access",
+          "portId": "ReviewPort",
+          "publicResultFields": [
+            "title",
+            "status",
+            "accessLabel"
+          ],
+          "readbackRequired": true,
+          "writeMode": "external_write"
+        },
+        {
+          "adapterId": "wecom",
+          "adapterOperation": "review.request",
+          "approvalRequired": true,
+          "bindingScope": "scene_optional_binding",
+          "freshTargetResolutionRequired": true,
+          "operation": "request_review",
+          "portId": "ReviewPort",
+          "publicResultFields": [
+            "title",
+            "status",
+            "reviewerLabel"
+          ],
+          "readbackRequired": true,
+          "writeMode": "external_write"
+        }
+      ],
+      "required": false
+    },
+    {
+      "adapterRef": "../scripts/adapter-runtime.mjs",
+      "connectorRequired": false,
+      "description": "optional capability port; WeCom and FBS are adapters, not product prerequisites",
+      "fallback": "local_workflow_without_connector",
+      "id": "StructuredIntakePort",
+      "implementationCheckpoint": "C4",
+      "lifecycle": "implemented",
+      "operations": [
+        "append_intake_submission"
+      ],
+      "providerBindings": [
+        {
+          "adapterId": "wecom",
+          "adapterOperation": "smartsheet.record.append",
+          "approvalRequired": true,
+          "bindingScope": "scene_optional_binding",
+          "freshTargetResolutionRequired": true,
+          "operation": "append_intake_submission",
+          "portId": "StructuredIntakePort",
+          "publicResultFields": [
+            "title",
+            "status",
+            "rowLabel"
+          ],
+          "readbackRequired": true,
+          "writeMode": "external_write"
+        }
+      ],
+      "required": false
+    }
+  ],
+  "entryCount": 8,
+  "operationCount": 12,
+  "schemaVersion": "1.1.0"
+}

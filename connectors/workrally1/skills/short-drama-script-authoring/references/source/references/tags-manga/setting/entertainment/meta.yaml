@@ -1,0 +1,92 @@
+# 娱乐圈（entertainment）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: entertainment
+name_cn: 娱乐圈
+category: setting
+carrier: manga
+audience: female
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/entertainment.md
+emotion_core:
+- 成名爽感
+- 娱乐圈打脸
+- 星光璀璨
+- 情感拉扯
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 女频为主，男女频通用
+  bg_desc: 现代都市为唯一基底
+  weight: medium
+  bottom_line:
+  - 行业逻辑基本自洽，不能严重脱离现实
+  - 成名有铺垫，不能强行开挂爆红
+  - 娱乐圈冲突符合行业场景，不能悬浮
+relations:
+  synergy:
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 从十八线到顶流的成长，逆袭爽感具象化
+  - target: rebirth
+    effect_type: 增强型
+    weight: high
+    effect: 重生预知行业走向，精准踩中机遇爆红
+  - target: 打脸
+    effect_type: 增强型
+    weight: high
+    effect: 黑料反转、实力打脸，娱乐圈场景爽感更强
+  - target: 甜宠
+    effect_type: 增强型
+    weight: high
+    effect: 顶流恋爱/隐婚，职业与情感的拉扯感
+  - target: system
+    effect_type: 增强型
+    weight: medium
+    effect: 系统赋能专业能力，成长量化更清晰
+  mutex:
+  - target: 古代/民国
+    reason: 无现代娱乐产业基础则设定不成立
+combo_adapt:
+- combo: references/domestic/combos/entertainment.md
+  rule: 对齐娱乐圈行业规则，强化成名逻辑与行业真实感
+  sub: 经典娱乐圈型
+- combo: references/domestic/combos/counterattack.md
+  rule: 娱乐圈成长绑定逆袭，从底层到顶流
+  sub: 娱乐圈逆袭型
+- combo: references/domestic/combos/sweet-romance.md
+  rule: 娱乐圈+甜宠，顶流恋爱拉扯感拉满
+  sub: 娱乐圈甜宠型
+fusion:
+- recipe: fusion/recipes/entertainment-comeback.md
+  note: 娱乐圈重生逆袭配方，强复仇强爽感，适配女频高转化内容
+- recipe: fusion/recipes/top-secret-love.md
+  note: 顶流隐恋配方，职业与情感双线拉扯，适配高粘性内容
+redlines:
+- code: AP-YL01
+  name: 行业逻辑严重失真
+  severity: 高
+  dimension: 标签与逻辑
+  test: 完全违背娱乐圈基本规则，成名全靠开挂，悬浮出戏
+- code: AP-YL02
+  name: 专业能力缺失
+  severity: 高
+  dimension: 人物与人设
+  test: 主角无对应演技/唱功，强行爆红缺乏支撑
+soft_warnings:
+- 避免行业内容过于阴暗，价值观偏差
+- 避免感情线完全盖过事业线，娱乐圈沦为纯背景板
+- 避免配角全是工具人，只为给主角送资源/使绊子
+manga:
+  visual_signature: 舞台/红毯/聚光灯的星光视觉场景
+  high_affinity: false
+  visual_hooks:
+  - 舞台聚光灯的高光场景
+  - 红毯/颁奖的星光定格
+  - 黑料反转的舞台名场面

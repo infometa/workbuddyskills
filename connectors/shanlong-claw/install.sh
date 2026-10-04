@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MIN_NODE_VERSION=18
 SL_HOME="${SL_CLI_HOME:-$HOME/.slclaw}"
 INSTALL_DIR="$SL_HOME/bin"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 URL_CONF="$SCRIPT_DIR/install-url.conf"
 ENSURE_LATEST=0
+SEA_NAME="sl-sea"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -22,6 +22,8 @@ validate_sl_home() {
   local resolved="$SL_HOME"
   if command -v node >/dev/null 2>&1; then
     resolved="$(node -e 'process.stdout.write(require("path").resolve(process.argv[1]))' "$SL_HOME")"
+  elif command -v python3 >/dev/null 2>&1; then
+    resolved="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$SL_HOME")"
   fi
   case "$resolved" in
     ""|"/"|"$HOME"|"$HOME/"|"."|"..")
@@ -42,7 +44,7 @@ usage() {
   echo "  --ensure-latest  对比 OSS 版本，有更新则覆盖安装；stdout 仅输出当前版本号"
   echo "  --uninstall      完全卸载（删除程序、配置、Token）"
   echo "  --reset          重置安装（清除所有数据后重新安装）"
-  echo "  (无参数)         从 OSS/CDN 下载 CLI tgz 并安装（保留已有配置和 Token）"
+  echo "  (无参数)         从 OSS/CDN 下载平台 SEA 二进制并安装（保留已有配置和 Token）"
   exit 0
 }
 
@@ -75,9 +77,52 @@ read_conf_value() {
   ' "$conf_file"
 }
 
-load_tgz_url() {
+normalize_base_url() {
+  local base="$1"
+  case "$base" in
+    */) ;;
+    *) base="${base}/" ;;
+  esac
+  printf '%s' "$base"
+}
+
+resolve_sea_target() {
+  local os arch
+  os="$(uname -s | tr '[:upper:]' '[:lower:]')"
+  arch="$(uname -m)"
+  case "$arch" in
+    x86_64|amd64) arch="x64" ;;
+    aarch64|arm64) arch="arm64" ;;
+    i386|i686) arch="x86" ;;
+  esac
+  case "$os" in
+    darwin)
+      case "$arch" in
+        arm64) SEA_ARTIFACT="sl-darwin-arm64" ;;
+        x64) SEA_ARTIFACT="sl-darwin-x64" ;;
+        *) SEA_ARTIFACT="" ;;
+      esac
+      ;;
+    linux)
+      case "$arch" in
+        arm64) SEA_ARTIFACT="sl-linux-arm64" ;;
+        x64) SEA_ARTIFACT="sl-linux-x64" ;;
+        *) SEA_ARTIFACT="" ;;
+      esac
+      ;;
+    *)
+      SEA_ARTIFACT=""
+      ;;
+  esac
+  if [ -z "$SEA_ARTIFACT" ]; then
+    log_err "不支持的平台: $(uname -s) $(uname -m)"
+    exit 1
+  fi
+}
+
+load_base_url() {
   local conf_file=""
-  if [ -n "${SL_CLI_TGZ_URL:-}" ]; then
+  if [ -n "${SL_CLI_BASE_URL:-}" ]; then
     :
   elif [ -f "$URL_CONF" ]; then
     conf_file="$URL_CONF"
@@ -88,60 +133,73 @@ load_tgz_url() {
     exit 1
   fi
   if [ -n "$conf_file" ]; then
-    SL_CLI_TGZ_URL="$(read_conf_value "$conf_file" SL_CLI_TGZ_URL)"
+    SL_CLI_BASE_URL="$(read_conf_value "$conf_file" SL_CLI_BASE_URL)"
     if [ -z "${SL_CLI_VERSION_URL:-}" ]; then
       SL_CLI_VERSION_URL="$(read_conf_value "$conf_file" SL_CLI_VERSION_URL)"
     fi
+    if [ -z "${SL_CLI_MANIFEST_URL:-}" ]; then
+      SL_CLI_MANIFEST_URL="$(read_conf_value "$conf_file" SL_CLI_MANIFEST_URL)"
+    fi
+    if [ -z "${SL_CLI_BASE_URL:-}" ]; then
+      local legacy
+      legacy="$(read_conf_value "$conf_file" SL_CLI_TGZ_URL)"
+      if [ -n "$legacy" ]; then
+        log_err "install-url.conf 仍使用已废弃的 SL_CLI_TGZ_URL，请改为 SL_CLI_BASE_URL"
+        exit 1
+      fi
+    fi
   fi
-  if [ -z "${SL_CLI_TGZ_URL:-}" ]; then
-    log_err "未设置 SL_CLI_TGZ_URL"
+  if [ -z "${SL_CLI_BASE_URL:-}" ]; then
+    log_err "未设置 SL_CLI_BASE_URL"
     exit 1
   fi
+  SL_CLI_BASE_URL="$(normalize_base_url "$SL_CLI_BASE_URL")"
 }
 
 resolve_version_url() {
   if [ -n "${SL_CLI_VERSION_URL:-}" ]; then
     return 0
   fi
-  if [[ "$SL_CLI_TGZ_URL" == *.tgz ]]; then
-    SL_CLI_VERSION_URL="${SL_CLI_TGZ_URL%.tgz}.version"
-  else
-    SL_CLI_VERSION_URL="${SL_CLI_TGZ_URL}.version"
-  fi
+  SL_CLI_VERSION_URL="${SL_CLI_BASE_URL}slclaw-cli.version"
 }
 
-check_tgz_url() {
-  if [[ "$SL_CLI_TGZ_URL" == *REPLACE_WITH_YOUR_OSS_HOST* ]]; then
+resolve_manifest_url() {
+  if [ -n "${SL_CLI_MANIFEST_URL:-}" ]; then
+    return 0
+  fi
+  SL_CLI_MANIFEST_URL="${SL_CLI_BASE_URL}slclaw-cli.manifest.json"
+}
+
+resolve_artifact_url() {
+  resolve_sea_target
+  SL_CLI_ARTIFACT_URL="${SL_CLI_BASE_URL}${SEA_ARTIFACT}"
+}
+
+check_base_url() {
+  if [[ "$SL_CLI_BASE_URL" == *REPLACE_WITH_YOUR_OSS_HOST* ]]; then
     log_err "尚未配置真实 OSS/CDN 地址"
     log "  请编辑: $URL_CONF"
-    log "  或导出环境变量 SL_CLI_TGZ_URL 后重试"
+    log "  或导出环境变量 SL_CLI_BASE_URL 后重试"
     exit 1
-  fi
-}
-
-check_node() {
-  if ! command -v node &>/dev/null; then
-    log_err "未检测到 Node.js，请先安装 Node.js >= ${MIN_NODE_VERSION}"
-    exit 1
-  fi
-  local node_version
-  node_version=$(node -v | sed 's/v//' | cut -d. -f1)
-  if [ "$node_version" -lt "$MIN_NODE_VERSION" ]; then
-    log_err "Node.js 版本过低: $(node -v)，需要 >= ${MIN_NODE_VERSION}"
-    exit 1
-  fi
-  if [ "$ENSURE_LATEST" -eq 0 ]; then
-    log_ok "Node.js $(node -v)"
   fi
 }
 
 fetch_to_file() {
   local url="$1"
   local dest="$2"
+  if [[ "$url" == file://* ]]; then
+    local src="${url#file://}"
+    # file:///C:/... on some systems; strip extra leading slash for Windows-style if needed
+    if [[ "$src" == /* ]] && [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* || "$(uname -s)" == CYGWIN* ]]; then
+      src="${src:1}"
+    fi
+    cp "$src" "$dest"
+    return 0
+  fi
   if command -v curl &>/dev/null; then
-    curl -fsSL --connect-timeout 5 --max-time 60 "$url" -o "$dest"
+    curl -fsSL --connect-timeout 5 --max-time 300 "$url" -o "$dest"
   elif command -v wget &>/dev/null; then
-    wget -q --timeout=60 -O "$dest" "$url"
+    wget -q --timeout=300 -O "$dest" "$url"
   else
     log_err "未找到 curl 或 wget，无法下载"
     exit 1
@@ -150,6 +208,14 @@ fetch_to_file() {
 
 fetch_text() {
   local url="$1"
+  if [[ "$url" == file://* ]]; then
+    local src="${url#file://}"
+    if [[ "$src" == /* ]] && [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* || "$(uname -s)" == CYGWIN* ]]; then
+      src="${src:1}"
+    fi
+    tr -d '\r' < "$src"
+    return 0
+  fi
   if command -v curl &>/dev/null; then
     curl -fsSL --connect-timeout 5 --max-time 30 "$url"
   elif command -v wget &>/dev/null; then
@@ -161,8 +227,14 @@ fetch_text() {
 }
 
 read_local_version() {
+  local ver_file="$INSTALL_DIR/version"
+  if [ -f "$ver_file" ]; then
+    tr -d '[:space:]' < "$ver_file"
+    return 0
+  fi
+  # 兼容旧 tgz 布局
   local pkg="$INSTALL_DIR/dist/package.json"
-  if [ -f "$pkg" ]; then
+  if [ -f "$pkg" ] && command -v node >/dev/null 2>&1; then
     node -e "const p=require(process.argv[1]); process.stdout.write(String(p.version||''))" "$pkg" 2>/dev/null || true
   fi
 }
@@ -178,11 +250,11 @@ version_gt() {
   [ "$first" = "$b" ]
 }
 
-download_tgz() {
+download_sea() {
   local dest="$1"
-  log_warn "下载 CLI 包 ..."
-  log "  $SL_CLI_TGZ_URL"
-  fetch_to_file "$SL_CLI_TGZ_URL" "$dest"
+  log_warn "下载 CLI 二进制 ..."
+  log "  $SL_CLI_ARTIFACT_URL"
+  fetch_to_file "$SL_CLI_ARTIFACT_URL" "$dest"
   if [ ! -s "$dest" ]; then
     log_err "下载失败或文件为空"
     exit 1
@@ -190,138 +262,234 @@ download_tgz() {
   log_ok "下载完成"
 }
 
-verify_package_scope() {
-  local dist_dir="$1"
-  local verifier="$SCRIPT_DIR/verify-connector-package-scope.js"
-  if [ ! -f "$verifier" ] && [ -f "$SCRIPT_DIR/../scripts/verify-connector-package-scope.js" ]; then
-    verifier="$SCRIPT_DIR/../scripts/verify-connector-package-scope.js"
-  fi
-  if [ ! -f "$verifier" ]; then
-    log_err "连接器缺少 S1-only 安装校验器，拒绝安装"
+sha256_file() {
+  local file="$1"
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$file" | awk '{print tolower($1)}'
+  elif command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$file" | awk '{print tolower($1)}'
+  elif command -v openssl >/dev/null 2>&1; then
+    openssl dgst -sha256 "$file" | awk '{print tolower($NF)}'
+  else
+    log_err "未找到 sha256sum、shasum 或 openssl，无法校验 SEA"
     return 1
   fi
-  log_warn "校验 CLI 包为 S1-only 只读版 ..."
-  if ! node "$verifier" "$dist_dir"; then
-    log_err "CLI 包未通过 S1-only 只读校验，已保留当前安装"
-    return 1
-  fi
-  log_ok "S1-only 只读校验通过"
 }
 
-install_from_tgz() {
-  local tgz_path="$1"
-  local tmp_dir
-  tmp_dir="$(mktemp -d "${TMPDIR:-/tmp}/slclaw-install.XXXXXX")"
+verify_sea_manifest() {
+  local sea_path="$1" expected_version="$2" manifest artifact_line
+  manifest="$(fetch_text "$SL_CLI_MANIFEST_URL")"
 
-  log_warn "解压并安装到 ${INSTALL_DIR} ..."
-  tar -xzf "$tgz_path" -C "$tmp_dir"
-
-  local pkg_dir
-  pkg_dir="$(find "$tmp_dir" -maxdepth 2 -type f -name package.json | head -1 | xargs dirname)"
-  if [ -z "$pkg_dir" ] || [ ! -d "$pkg_dir/dist" ]; then
-    rm -rf "$tmp_dir"
-    log_err "tgz 内容无效：未找到 package.json 或 dist/"
-    exit 1
+  local schema scope manifest_version expected_size expected_hash
+  schema="$(printf '%s\n' "$manifest" | awk -F: '/"schemaVersion"/ { gsub(/[ ,]/, "", $2); print $2; exit }')"
+  scope="$(printf '%s\n' "$manifest" | awk -F: '/"scope"/ { gsub(/[", ]/, "", $2); print $2; exit }')"
+  manifest_version="$(printf '%s\n' "$manifest" | awk -F: '/"version"/ { gsub(/[", ]/, "", $2); print $2; exit }')"
+  artifact_line="$(printf '%s\n' "$manifest" | awk -v name="$SEA_ARTIFACT" 'index($0, "\"" name "\"") { print NR; exit }')"
+  if [ -n "$artifact_line" ]; then
+    expected_size="$(printf '%s\n' "$manifest" | tail -n "+$artifact_line" | awk -F: '/"size"/ { gsub(/[ ,]/, "", $2); print $2; exit }')"
+    expected_hash="$(printf '%s\n' "$manifest" | tail -n "+$artifact_line" | awk -F: '/"sha256"/ { gsub(/[", ]/, "", $2); print tolower($2); exit }')"
   fi
 
-  # 必须先完成物理包审计，再删除/替换现有安装；旧 full 包一律 fail-closed。
-  if ! verify_package_scope "$pkg_dir/dist"; then
-    rm -rf "$tmp_dir"
+  if [ "$schema" != "1" ] || [ "$scope" != "S1-only" ]; then
+    log_err "SEA manifest 无效或不是 S1-only"
+    return 1
+  fi
+  if [ "$manifest_version" != "$expected_version" ]; then
+    log_err "SEA manifest 版本不匹配: manifest=$manifest_version, version=$expected_version"
+    return 1
+  fi
+  if [ -z "${expected_size:-}" ] || [ -z "${expected_hash:-}" ]; then
+    log_err "SEA manifest 缺少当前平台产物: $SEA_ARTIFACT"
     return 1
   fi
 
-  rm -rf "$INSTALL_DIR"
-  mkdir -p "$INSTALL_DIR"
+  local actual_size actual_hash
+  actual_size="$(wc -c < "$sea_path" | tr -d '[:space:]')"
+  actual_hash="$(sha256_file "$sea_path")"
+  if [ "$actual_size" != "$expected_size" ]; then
+    log_err "SEA 文件大小不匹配: expected=$expected_size, actual=$actual_size"
+    return 1
+  fi
+  if [ "$actual_hash" != "$expected_hash" ]; then
+    log_err "SEA SHA-256 校验失败"
+    return 1
+  fi
+}
+
+assert_sea_runnable() {
+  local sea_path="$1" expected_version="$2" self_check compact
+  chmod +x "$sea_path"
+  if ! self_check="$(SL_CLI_SKIP_UPDATE=1 "$sea_path" --sl-sea-self-check 2>/dev/null)"; then
+    log_err "SEA self-check 执行失败"
+    return 1
+  fi
+  compact="$(printf '%s' "$self_check" | tr -d '[:space:]')"
+  case "$compact" in
+    *'"ok":true'*'"version":"'"$expected_version"'"'*) ;;
+    *)
+      log_err "SEA self-check 结果无效或版本不匹配: expected=$expected_version"
+      return 1
+      ;;
+  esac
+}
+
+cleanup_legacy_program_assets() {
+  local target
+  for target in \
+    "$SL_HOME/sea" \
+    "$INSTALL_DIR/.sea-cache" \
+    "$INSTALL_DIR/dist" \
+    "$INSTALL_DIR/node_modules"
+  do
+    if [ -e "$target" ]; then
+      rm -rf -- "$target" || log_warn "旧程序资产清理失败，将在后续安装时重试: $target"
+    fi
+  done
+}
+
+write_unix_wrapper() {
+  local target_dir="${1:-$INSTALL_DIR}"
+  cat > "$target_dir/sl" <<'WRAPPER'
+#!/usr/bin/env bash
+set -euo pipefail
+BIN="$(cd "$(dirname "$0")" && pwd)"
+SL_HOME="$(cd "$BIN/.." && pwd)"
+PENDING="$SL_HOME/pending-update"
+SEA="$BIN/sl-sea"
+export SL_MAX_SECURITY_LEVEL=S1
+
+if [ -f "$PENDING/ready" ]; then
+  if [ -f "$PENDING/sl-sea" ] && [ -s "$PENDING/sl-sea" ]; then
+    apply_pending() {
+      rm -f "$SEA.new" "$SEA.bak"
+      cp "$PENDING/sl-sea" "$SEA.new" || return 1
+      chmod +x "$SEA.new" || return 1
+      if [ -f "$SEA" ]; then
+        mv "$SEA" "$SEA.bak" || return 1
+      fi
+      if ! mv "$SEA.new" "$SEA"; then
+        if [ -f "$SEA.bak" ]; then
+          mv "$SEA.bak" "$SEA" || true
+        fi
+        return 1
+      fi
+      local expected_version self_check compact
+      expected_version="$(tr -d '[:space:]' < "$PENDING/ready")"
+      if ! self_check="$(SL_CLI_SKIP_UPDATE=1 "$SEA" --sl-sea-self-check 2>/dev/null)"; then
+        rm -f "$SEA"
+        if [ -f "$SEA.bak" ]; then
+          mv "$SEA.bak" "$SEA" || true
+        fi
+        return 1
+      fi
+      compact="$(printf '%s' "$self_check" | tr -d '[:space:]')"
+      case "$compact" in
+        *'"ok":true'*'"version":"'"$expected_version"'"'*) ;;
+        *)
+          rm -f "$SEA"
+          if [ -f "$SEA.bak" ]; then
+            mv "$SEA.bak" "$SEA" || true
+          fi
+          return 1
+          ;;
+      esac
+      local config_result
+      if ! config_result="$("$SEA" --sl-config-migrate --home "$SL_HOME")" || [[ "$config_result" != *'"ok":true'* ]]; then
+        rm -f "$SEA"
+        if [ -f "$SEA.bak" ]; then mv "$SEA.bak" "$SEA" || true; fi
+        return 1
+      fi
+      if [[ "$config_result" == *'"status":"conflict"'* ]]; then printf '%s\n' "$config_result" >&2; fi
+      if [ -f "$PENDING/ready" ]; then
+        cp "$PENDING/ready" "$BIN/version" || true
+      fi
+      rm -rf "$SEA.bak" "$PENDING"
+      rm -rf -- "$SL_HOME/sea" "$BIN/.sea-cache" "$BIN/dist" "$BIN/node_modules"
+      return 0
+    }
+    if ! apply_pending; then
+      rm -f "$SEA.new" 2>/dev/null || true
+      rm -rf "$PENDING"
+    fi
+  else
+    rm -rf "$PENDING"
+  fi
+fi
+
+if [ ! -x "$SEA" ]; then
+  echo "sl-sea binary missing: $SEA" >&2
+  exit 1
+fi
+exec "$SEA" "$@"
+WRAPPER
+  chmod +x "$target_dir/sl"
+}
+
+install_from_sea() {
+  local sea_path="$1"
+  local remote_version="${2:-}"
+  local new_dir="${INSTALL_DIR}.new"
+  local backup_dir="${INSTALL_DIR}.bak"
+
+  log_warn "安装到 ${INSTALL_DIR} ..."
+
   mkdir -p "$SL_HOME"
   chmod 700 "$SL_HOME"
   # 全量安装已写入最新 bin，丢弃陈旧 pending/锁，避免下次启动降级
   rm -rf "$SL_HOME/pending-update" "$SL_HOME/update-stage.lock"
   rm -rf "$SL_HOME"/tmp-update-* "$SL_HOME"/pending-update.staging-* 2>/dev/null || true
 
-  cp -r "$pkg_dir/dist" "$INSTALL_DIR/dist"
-  if [ -f "$SCRIPT_DIR/default.env" ]; then
-    cp "$SCRIPT_DIR/default.env" "$SL_HOME/default.env"
+  rm -rf "$new_dir" "$backup_dir"
+  mkdir -p "$new_dir"
+
+  cp "$sea_path" "$new_dir/$SEA_NAME"
+  chmod +x "$new_dir/$SEA_NAME"
+
+  if [ -n "$remote_version" ]; then
+    printf '%s\n' "$remote_version" > "$new_dir/version"
+  elif [ -n "${SL_CLI_VERSION_URL:-}" ]; then
+    fetch_text "$SL_CLI_VERSION_URL" | tr -d '[:space:]' > "$new_dir/version" || true
+    if [ -s "$new_dir/version" ]; then
+      printf '\n' >> "$new_dir/version"
+    fi
   fi
+
+  write_unix_wrapper "$new_dir"
+
+  if [ -d "$INSTALL_DIR" ]; then
+    mv "$INSTALL_DIR" "$backup_dir"
+  fi
+  if ! mv "$new_dir" "$INSTALL_DIR"; then
+    if [ -d "$backup_dir" ]; then
+      mv "$backup_dir" "$INSTALL_DIR" || true
+    fi
+    return 1
+  fi
+
   if [ -f "$URL_CONF" ]; then
     cp "$URL_CONF" "$SL_HOME/install-url.conf"
   fi
 
-  cat > "$INSTALL_DIR/sl" <<'WRAPPER'
-#!/usr/bin/env bash
-set -euo pipefail
-BIN="$(cd "$(dirname "$0")" && pwd)"
-SL_HOME="$(cd "$BIN/.." && pwd)"
-PENDING="$SL_HOME/pending-update"
-if [ -f "$PENDING/ready" ] && [ -d "$PENDING/dist" ] && [ -f "$PENDING/dist/package.json" ]; then
-  if ! node "$BIN/dist/cli/src/verify-connector-package-scope.js" "$PENDING/dist" >/dev/null 2>&1; then
-    rm -rf "$PENDING"
-  else
-    apply_pending() {
-      rm -rf "$BIN/dist.new" "$BIN/dist.bak"
-      cp -R "$PENDING/dist" "$BIN/dist.new" || return 1
-      if [ -d "$BIN/dist" ]; then
-        mv "$BIN/dist" "$BIN/dist.bak" || return 1
-      fi
-      if ! mv "$BIN/dist.new" "$BIN/dist"; then
-        if [ -d "$BIN/dist.bak" ]; then
-          mv "$BIN/dist.bak" "$BIN/dist" || true
-        fi
-        return 1
-      fi
-      rm -rf "$BIN/dist.bak" "$PENDING"
-      return 0
-    }
-    if ! apply_pending; then
-      rm -rf "$BIN/dist.new" 2>/dev/null || true
-    fi
-  fi
-fi
-export SL_MAX_SECURITY_LEVEL=S1
-exec node "$BIN/dist/cli/src/index.js" "$@"
-WRAPPER
-  chmod +x "$INSTALL_DIR/sl"
-
-  # Skills 由 WorkBuddy 从连接器 zip 加载，不属于 CLI 运行目录；清理旧安装遗留副本。
+  # Skills 由 WorkBuddy 从连接器 zip 加载；旧程序资产在新二进制验证成功后清理。
   rm -rf "$SL_HOME/skills"
   rm -f "$SL_HOME/.DS_Store"
   if [ -f "$SL_HOME/token.json" ]; then
     chmod 600 "$SL_HOME/token.json"
   fi
 
-  rm -rf "$tmp_dir"
   log_ok "文件安装完成"
 }
 
 init_env() {
-  local env_file="$SL_HOME/.env"
-  local default_env_file="$SCRIPT_DIR/default.env"
-  local needs_init=false
-  local saved_key=""
-
-  if [ ! -f "$env_file" ]; then
-    needs_init=true
-  elif ! grep -q 'SL_SLY_BASEURL' "$env_file" 2>/dev/null; then
-    needs_init=true
-    saved_key=$(grep '^SL_API_KEY=' "$env_file" 2>/dev/null | head -1 | cut -d= -f2- || true)
+  if [ -f "$SL_HOME/pending-update/ready" ]; then
+    log_warn '配置迁移随 pending-update 激活执行，当前配置保持不变'
+    return 0
   fi
-
-  if [ "$needs_init" = true ]; then
-    if [ ! -f "$default_env_file" ]; then
-      log_err "缺少 default.env，无法初始化连接器配置"
-      exit 1
-    fi
-    cp "$default_env_file" "$env_file"
-    chmod 600 "$env_file"
-    if [ -n "${saved_key:-}" ]; then
-      sed -i.bak "s/^SL_API_KEY=.*/SL_API_KEY=${saved_key}/" "$env_file" && rm -f "${env_file}.bak"
-      log_ok "配置已修复（保留原 API Key）"
-    else
-      log_ok "默认配置已初始化"
-    fi
-  else
-    log_ok "配置文件完整，保留原配置"
-  fi
-  chmod 600 "$env_file"
+  local result
+  result="$("$INSTALL_DIR/$SEA_NAME" --sl-config-migrate --home "$SL_HOME")" || return 1
+  if [[ "$result" != *'"ok":true'* ]]; then log_err 'config-migration-invalid-result'; return 1; fi
+  # The internal command emits field names and status only, never values.
+  log_ok "配置迁移: $result"
 }
 
 setup_path() {
@@ -336,33 +504,67 @@ setup_path() {
 }
 
 verify_install() {
-  local version
+  local version entry_version
+  if [ ! -x "$INSTALL_DIR/sl" ]; then
+    log_err "安装验证失败: sl 启动脚本缺失或不可执行"
+    return 1
+  fi
   version="$(read_local_version)"
   [ -n "$version" ] || version="unknown"
-  log_ok "安装成功: sl v${version}"
+  if [ -x "$INSTALL_DIR/$SEA_NAME" ]; then
+    if assert_sea_runnable "$INSTALL_DIR/$SEA_NAME" "$version"; then
+      if ! entry_version="$(SL_CLI_SKIP_UPDATE=1 "$INSTALL_DIR/sl" --version)" || [ "$entry_version" != "$version" ]; then
+        log_err "安装验证失败: sl 启动入口版本不匹配"
+        return 1
+      fi
+      log_ok "安装成功: sl v${version}"
+      return 0
+    fi
+  fi
+  log_err "安装验证失败: SEA self-check 未通过"
+  return 1
 }
 
 do_full_install() {
-  check_node
-  # macOS/BSD mktemp：XXXXXX 必须在模板末尾，不能写 *.XXXXXX.tgz
-  # 不用 local：EXIT trap 在函数返回后仍会触发，local 会在 set -u 下变 unbound
-  _SL_TMP_TGZ="$(mktemp "${TMPDIR:-/tmp}/slclaw-cli.XXXXXX")"
-  cleanup_tgz() { rm -f "${_SL_TMP_TGZ:-}"; unset -v _SL_TMP_TGZ 2>/dev/null || true; }
-  trap cleanup_tgz EXIT
-  download_tgz "$_SL_TMP_TGZ"
-  install_from_tgz "$_SL_TMP_TGZ"
-  init_env
+  resolve_artifact_url
+  _SL_TMP_SEA="$(mktemp "${TMPDIR:-/tmp}/slclaw-cli.XXXXXX")"
+  cleanup_sea() {
+    rm -f "${_SL_TMP_SEA:-}"
+    unset -v _SL_TMP_SEA 2>/dev/null || true
+  }
+  trap cleanup_sea EXIT
+  download_sea "$_SL_TMP_SEA"
+  local remote_ver=""
+  if [ -n "${SL_CLI_VERSION_URL:-}" ]; then
+    remote_ver="$(fetch_text "$SL_CLI_VERSION_URL" | tr -d '[:space:]' || true)"
+  fi
+  if [ -z "$remote_ver" ]; then
+    log_err "无法读取远端版本: $SL_CLI_VERSION_URL"
+    return 1
+  fi
+  verify_sea_manifest "$_SL_TMP_SEA" "$remote_ver"
+  assert_sea_runnable "$_SL_TMP_SEA" "$remote_ver"
+  install_from_sea "$_SL_TMP_SEA" "$remote_ver"
   setup_path
-  verify_install
-  cleanup_tgz
+  if ! verify_install || ! init_env; then
+    rm -rf "$INSTALL_DIR"
+    if [ -d "${INSTALL_DIR}.bak" ]; then
+      mv "${INSTALL_DIR}.bak" "$INSTALL_DIR"
+    fi
+    return 1
+  fi
+  cleanup_legacy_program_assets || log_warn '安装已完成；旧程序资产清理失败'
+  rm -rf "${INSTALL_DIR}.bak" || log_warn '安装已完成；旧版本备份清理失败'
+  cleanup_sea
   trap - EXIT
 }
 
 do_ensure_latest() {
-  load_tgz_url
-  check_tgz_url
+  load_base_url
+  check_base_url
   resolve_version_url
-  check_node
+  resolve_manifest_url
+  resolve_artifact_url
 
   local remote local_ver
   remote="$(fetch_text "$SL_CLI_VERSION_URL" | tr -d '[:space:]')"
@@ -372,11 +574,15 @@ do_ensure_latest() {
   fi
   local_ver="$(read_local_version)"
 
-  if [ ! -f "$INSTALL_DIR/dist/package.json" ] || version_gt "$remote" "$local_ver"; then
+  if [ ! -f "$INSTALL_DIR/$SEA_NAME" ] || [ -d "$INSTALL_DIR/dist" ] || version_gt "$remote" "$local_ver"; then
     log_warn "检测到更新: 本地 ${local_ver:-无} → 远端 $remote"
     do_full_install
     local_ver="$(read_local_version)"
   else
+    if [ ! -x "$INSTALL_DIR/sl" ]; then write_unix_wrapper; fi
+    chmod +x "$INSTALL_DIR/$SEA_NAME"
+    verify_install
+    init_env
     log_ok "已是最新: v${local_ver}"
   fi
 
@@ -408,8 +614,10 @@ main() {
   log "║  商龙 CLI 连接器安装                  ║"
   log "╚═══════════════════════════════════════╝"
   log ""
-  load_tgz_url
-  check_tgz_url
+  load_base_url
+  check_base_url
+  resolve_version_url
+  resolve_manifest_url
   do_full_install
   log ""
   log "下一步："

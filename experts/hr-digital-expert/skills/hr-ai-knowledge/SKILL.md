@@ -31,7 +31,7 @@ description: HR AI 知识检索。基于 hr-ai-knowledge MCP 的 knowledge_searc
    | `{当前工作目录}/.codebuddy/rules/use-hr-ai-knowledge.mdc` | 由 `/enable-hr-ai-knowledge` 命令安装 |
    | `{当前工作目录}/.workbuddy/rules/use-hr-ai-knowledge.mdc` | 同上（WorkBuddy 副本） |
 
-   - **任一存在的路径**缺失 `version` 字段或 `version < 1` → 🤝 提示用户重装 Rules（征得同意后按 [init/install-rules.md](init/install-rules.md) 覆盖拷贝**全部相关路径**）
+   - **任一存在的路径**缺失 `version` 字段或 `version < 2` → 🤝 提示用户重装 Rules（征得同意后按 [init/install-rules.md](init/install-rules.md) 覆盖拷贝**全部相关路径**）
    - 不存在的路径不报错（首次使用时可能都无文件）；若两处都无文件，**不在此处静默写盘**（安装 Rules 属有副作用操作，只能由命令或用户明确同意触发，详见 [init/install-rules.md](init/install-rules.md)）。此时若要提示用户，**只能作为可选建议**，且必须说明"不装也能用"——**禁止**包装成"必须先启用/先运行命令才能用"。推荐话术：
 
      > 💡 想让 HR 问题自动识别、免去每次手动检索？可运行 `/enable-hr-ai-knowledge`（会在当前目录写入一个规则文件）。**不运行也能用**，直接问我即可。
@@ -40,7 +40,7 @@ description: HR AI 知识检索。基于 hr-ai-knowledge MCP 的 knowledge_searc
 
 ## Overview
 
-基于 hr-ai-knowledge MCP 的 `knowledge_search` 工具，为 HR 政策及公司内部知识查询提供语义检索能力。支持三类来源：本地团队空间（`space`）、HR 知识库（`hihr`）、企微文档（`wecom`）。**不处理**纯技术、竞对分析、通用常识等非公司知识问题（见 [负向边界](reference/knowledge-search-guide.md#不适用场景负向边界)）。
+基于 hr-ai-knowledge MCP 的 `knowledge_search` 工具，为 HR 政策及公司内部知识查询提供语义检索能力。支持五类来源：个人/团队空间（`space`，即"我上传的文档"）、HR 知识库（`hihr`）、企微文档（`wecom`）、公司发文（`policy`）、iWiki（`iwiki`，特指 `iwiki.woa.com`）。**不处理**纯技术、竞对分析、通用常识等非公司知识问题（见 [负向边界](reference/knowledge-search-guide.md#不适用场景负向边界)）。
 
 ## 🔴 核心硬约束
 
@@ -76,18 +76,21 @@ description: HR AI 知识检索。基于 hr-ai-knowledge MCP 的 knowledge_searc
 | 识别意图 | 提取用户问题中的检索关键词，推断 `sources` |
 | 检索知识 | 按需调用 `hr-ai-knowledge/knowledge_search` |
 | 组织回答 | 基于检索结果回答，标注来源，不臆测 |
-| 来源标注 | 每条信息标注 hihr / space / wecom 来源 |
+| 来源标注 | 每条信息标注 hihr / space / wecom / policy / iwiki 来源 |
 
 ## Quick Reference
 
 | 用户意图 | `sources` 参数 | 说明 |
 |----------|---------------|------|
-| HR 政策/制度/福利 | `["hihr"]` | 仅 HR 知识库 |
+| HR 政策/制度/福利 | `["hihr"]` | 仅 HR 知识库 🔒 需内部模型 |
 | 企微文档 | `["wecom"]` | 仅企微文档 |
-| 团队空间内文档 | `["space"]` | 仅本地团队空间 |
-| 综合查询 / 多来源命中 | 不传 | 全部来源 |
+| 公司发文/公文/红头文件 | `["policy"]` | 仅公司发文 🔒 需内部模型 |
+| iWiki（iwiki.woa.com） | `["iwiki"]` | 仅 iWiki |
+| 我上传的/团队空间文档 | `["space"]` | 仅个人/团队空间（对外称"团队空间"，勿说"本地/space"） |
+| 综合查询 / 多来源命中 | 不传 | 全部来源（space + hihr + wecom + policy + iwiki） |
 
 > 💡 `sources` 按**命中分数**决策（关键词去重数 × 来源优先级），单一来源分数明显最高才收窄，多来源接近则全源。完整算法见 [knowledge-search-guide.md — sources 路由规则](reference/knowledge-search-guide.md#sources-路由规则优先级--命中分数)。
+> 🔒 `hihr` / `policy` 为**司内敏感来源，仅内部模型（混元）可查**，外部模型命中会返回 blocked → 引导切换混元；降级兜底仅限 space / wecom / iwiki。
 
 ## Per-turn Checklist
 
@@ -95,10 +98,10 @@ description: HR AI 知识检索。基于 hr-ai-knowledge MCP 的 knowledge_searc
 
 - [ ] **① 探活 + 白名单**：探测优先用完整名 `mcp_get_tool_description([["HRIT/hr-ai-knowledge/hr-ai-knowledge", "knowledge_search"]])`，探测不到再试短名，仍不到则按 [search.md 0.0 三级探测链](workflows/search.md#00-三级探测链首检与复检的唯一定义) 兜底；确认 server 末段=`hr-ai-knowledge`、tool=`knowledge_search`
 - [ ] **② 空 query 校验**：提取不到有效实体则先追问，不盲调
-- [ ] **③ sources 打分**：收窄前**在内部**完成打分决策（`hihr=X | wecom=Y | space=Z → 决策`）——🔴 仅内部推理，**不渲染**到对话（见 [search.md Step 1.2 推断 sources](workflows/search.md#12-推断-sources-按命中分数决策--内部推理不输出)）
+- [ ] **③ sources 打分**：收窄前**在内部**完成打分决策（`hihr=X | policy=Y | wecom=Z | space=W | iwiki=V → 决策`）——🔴 仅内部推理，**不渲染**到对话（见 [search.md Step 1.2 推断 sources](workflows/search.md#12-推断-sources-按命中分数决策--内部推理不输出)）
 - [ ] **④ 地域追问**：命中地域敏感词且未指定城市 → 先追问再检索
 - [ ] **⑤ 充分性二维判定**：数量≥3 + 有高分(score≥0.9) + 覆盖全部子要点，任一不满足进二次检索
-- [ ] **⑥ 异常态识别**：返回 `hihr_blocked`/鉴权错 → 按 [Step 3.2](workflows/search.md#32-返回异常态识别区分空结果与被拦截无权限) 提示切模型/重授权（不当空结果空转）；用户切换模型后回复"已切换"→ 按 [Step 3.3](workflows/search.md#33-模型切换后重试机制不要求用户新建会话) 重新检索，回复"跳过"→ 降级 space/wecom；不要求新建会话
+- [ ] **⑥ 异常态识别**：返回 `hihr_blocked`（hihr / policy 等司内敏感来源被拦截）/鉴权错 → 按 [Step 3.2](workflows/search.md#32-返回异常态识别区分空结果与被拦截无权限) 提示切模型/重授权（不当空结果空转）；用户切换模型后回复"已切换"→ 按 [Step 3.3](workflows/search.md#33-模型切换后重试机制不要求用户新建会话) 重新检索，回复"跳过"→ 降级 space/wecom/iwiki（不含 hihr/policy）；不要求新建会话
 - [ ] **⑦ 结果清洗**：按 `score` 降序 + 同文档去重 + 低分(<0.85)标注"相关性较低"
 - [ ] **⑧ 引用输出**：按 URL 域名标来源（`s3.woa.com`→HiHR）+ 可点击链接 + 检索路径展示
 

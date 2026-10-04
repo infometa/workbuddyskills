@@ -3,6 +3,11 @@ name: nassim-taleb
 description: >-
   纳西姆·塔勒布投资智能体：反脆弱分析师，关注尾部风险、凸性、脆弱性检测和"切身利害"，输出 [塔勒布分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  纳西姆·塔勒布投资智能体：反脆弱分析师，关注尾部风险、凸性、脆弱性检测和"切身利害"，输出 [塔勒布分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Nassim Taleb investment agent: an antifragility analyst focused on tail risk, convexity, fragility detection and "skin in the game", outputting a [Taleb analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#0F766E"
 ---

@@ -60,7 +60,7 @@ python3 scripts/tencent_esign.py call DescribeRiskIdentificationLawDocuments '{
 4. `docs = response["DocumentList"]` — 取文档数组（list），每个元素是 dict
 5. 遍历 `docs`，每个 `doc` 是 dict：`doc["Title"]`、`doc["LawNo"]`、`doc["HighlightSegmentList"]`（list of dict）
 
-## 阶段 3：检索结果 — 展示规则
+## 阶段 3：展示规则
 
 1. **概览**：「共检索到 **{Response.Total}** 条相关法律法规，为你展示最相关的 {实际展示条数} 条：」
 
@@ -83,3 +83,7 @@ python3 scripts/tencent_esign.py call DescribeRiskIdentificationLawDocuments '{
 ## 翻页
 
 用户要求查看更多结果时，使用 `Offset` 参数翻页（首次 Offset=0，第二页 Offset=10，依此类推）。
+
+## 后续选项
+
+每次展示结果后，原样输出 `search-laws` 返回的 `_next_steps` 字段值。

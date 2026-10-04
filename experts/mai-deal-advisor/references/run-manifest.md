@@ -15,7 +15,7 @@
 | 字段 | 含义 |
 |---|---|
 | `schema_version` | 运行清单结构版本，当前为 `1.0` |
-| `package_version` | 专家包版本，当前为 `1.3.1` |
+| `package_version` | 专家包版本，当前为 `1.3.4` |
 | `workflow_id` | 来自问题路由表的稳定工作流编号 |
 | `artifacts` | 本次创建或更新的文件及其类型和状态 |
 | `source_status` | 信息截止日、报告期和来源定位记录 |
@@ -33,7 +33,7 @@
 ```json
 {
   "schema_version": "1.0",
-  "package_version": "1.3.1",
+  "package_version": "1.3.4",
   "workflow_id": "project_triage",
   "artifacts": [
     {

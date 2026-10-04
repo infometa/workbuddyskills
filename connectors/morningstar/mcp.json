@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "morningstar": {
+      "type": "streamableHttp",
+      "url": "https://mcp.morningstar.cn/mcp",
+      "timeout": 30000
+    }
+  }
+}

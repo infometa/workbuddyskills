@@ -1,0 +1,47 @@
+{
+  "name": "案件可视化",
+  "name_en": "case-visuals",
+  "description": "将中国民商事案件、交易、证据与程序材料整理成可直接展示的法律图表，支持时间线、主体关系、证据链、争议焦点、流程、资金和金额结构等视觉表达。",
+  "version": "1.3.0",
+  "blueprint": "bp-fact-evidence-organization-v1",
+  "risk_level": "L1",
+  "release_level": "LIMITED",
+  "knowledge_cutoff": "2026-04-28",
+  "created": "2026-04-24",
+  "author": "深圳法大大网络科技有限公司",
+  "target_users": ["执业律师", "律师助理", "法务人员"],
+  "applicable_scope": {
+    "jurisdiction": "中华人民共和国",
+    "practice_area": "民商事诉讼",
+    "case_types": ["合同纠纷", "侵权纠纷", "公司纠纷", "劳动争议", "房产纠纷"]
+  },
+  "output_types": ["mixed-text-image", "png", "svg", "mermaid", "markdown", "json"],
+  "legal_basis": [
+    "民事诉讼法第66-73条（证据种类与举证）",
+    "民事诉讼法第144条（证据保全）",
+    "民诉法解释第104-106条（证据审核认定）",
+    "民事诉讼证据规定第85-88条（证明力大小）"
+  ],
+  "governance": {
+    "risk_level": "L1",
+    "degrade_mechanism": "SOFT_DEGRADED",
+    "legal_review_required": false
+  },
+  "files": [
+    "SKILL.md",
+    "agents/openai.yaml",
+    "assets/mermaid.min.js",
+    "meta/manifest.json",
+    "meta/dependencies.md",
+    "meta/known-limitations.md",
+    "references/input-spec.md",
+    "references/inline-render-adapter.md",
+    "references/output-spec.md",
+    "references/workflow-detail.md",
+    "references/legal-references.md",
+    "rules/chart-selection-rules.md",
+    "rules/mermaid-style-rules.md",
+    "rules/evidence-strength-framework.md",
+    "templates/chart-templates.md"
+  ]
+}

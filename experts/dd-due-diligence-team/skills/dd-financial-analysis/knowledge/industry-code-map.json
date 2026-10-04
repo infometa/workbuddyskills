@@ -1,0 +1,364 @@
+{
+  "$comment": [
+    "企业档案 company_info.industry 是中文层级文本（如 制造业>电气机械和器材制造业>电池制造），",
+    "不含 GB/T 4754 代码；而 finance_benchmark_sets.classification_code 是 NOT NULL 字段。",
+    "本表负责「中文小类名 → GB/T 4754-2017 代码」映射，并提供 akshare/东财板块别名用于取成分股。",
+    "",
+    "匹配策略（由 finance-benchmark-resolver.service.ts 实现）：",
+    "  1. 取 industry 最细分段（末段）在 industries[].name / aliases 中精确匹配 → match_level=exact",
+    "  2. 未命中则取倒数第二段匹配 majorCategories → match_level=fallback-major",
+    "  3. 仍未命中则取首段匹配 sections → match_level=fallback-section",
+    "  4. 全部未命中 → match_level=not-found，P4 标 limited，不做数值对标",
+    "",
+    "boardKeywords 用于 akshare ak.stock_board_industry_cons_em 取行业成分股；",
+    "东财板块命名与 GB/T 不一致（如 GB/T「电池制造」对应东财「电池」板块），故需别名。"
+  ],
+  "standard": "GB_T_4754_2017",
+  "version": "1.0.0",
+  "updatedAt": "2026-09-01",
+  "sections": {
+    "A": "农、林、牧、渔业",
+    "B": "采矿业",
+    "C": "制造业",
+    "D": "电力、热力、燃气及水生产和供应业",
+    "E": "建筑业",
+    "F": "批发和零售业",
+    "G": "交通运输、仓储和邮政业",
+    "H": "住宿和餐饮业",
+    "I": "信息传输、软件和信息技术服务业",
+    "J": "金融业",
+    "K": "房地产业",
+    "L": "租赁和商务服务业",
+    "M": "科学研究和技术服务业",
+    "N": "水利、环境和公共设施管理业",
+    "P": "教育",
+    "Q": "卫生和社会工作",
+    "R": "文化、体育和娱乐业"
+  },
+  "majorCategories": {
+    "C38": "电气机械和器材制造业",
+    "C39": "计算机、通信和其他电子设备制造业",
+    "C27": "医药制造业",
+    "C26": "化学原料和化学制品制造业",
+    "C35": "专用设备制造业",
+    "C34": "通用设备制造业",
+    "C36": "汽车制造业",
+    "C13": "农副食品加工业",
+    "C17": "纺织业",
+    "C31": "黑色金属冶炼和压延加工业",
+    "C32": "有色金属冶炼和压延加工业",
+    "C30": "非金属矿物制品业",
+    "I65": "软件和信息技术服务业",
+    "E47": "房屋建筑业",
+    "E48": "土木工程建筑业",
+    "K70": "房地产业",
+    "F51": "批发业",
+    "F52": "零售业"
+  },
+  "industries": [
+    {
+      "code": "C384",
+      "name": "电池制造",
+      "majorCategory": "C38",
+      "section": "C",
+      "aliases": ["电池", "锂电池", "锂离子电池制造", "动力电池", "储能电池", "电池行业"],
+      "boardKeywords": ["电池", "电源设备"]
+    },
+    {
+      "code": "C381",
+      "name": "电机制造",
+      "majorCategory": "C38",
+      "section": "C",
+      "aliases": ["电机", "发电机及发电机组制造"],
+      "boardKeywords": ["电机"]
+    },
+    {
+      "code": "C382",
+      "name": "输配电及控制设备制造",
+      "majorCategory": "C38",
+      "section": "C",
+      "aliases": ["输配电设备", "电网设备", "变压器制造"],
+      "boardKeywords": ["电网设备", "输变电设备"]
+    },
+    {
+      "code": "C383",
+      "name": "电线、电缆、光缆及电工器材制造",
+      "majorCategory": "C38",
+      "section": "C",
+      "aliases": ["电线电缆", "光缆制造", "电工器材"],
+      "boardKeywords": ["电网设备", "通信设备"]
+    },
+    {
+      "code": "C385",
+      "name": "家用电力器具制造",
+      "majorCategory": "C38",
+      "section": "C",
+      "aliases": ["家电", "白色家电", "家用电器制造"],
+      "boardKeywords": ["家电行业", "白色家电"]
+    },
+    {
+      "code": "C387",
+      "name": "照明器具制造",
+      "majorCategory": "C38",
+      "section": "C",
+      "aliases": ["照明", "LED 照明", "灯具制造"],
+      "boardKeywords": ["照明设备"]
+    },
+    {
+      "code": "C390",
+      "name": "计算机制造",
+      "majorCategory": "C39",
+      "section": "C",
+      "aliases": ["计算机设备", "计算机整机制造"],
+      "boardKeywords": ["计算机设备"]
+    },
+    {
+      "code": "C392",
+      "name": "通信设备制造",
+      "majorCategory": "C39",
+      "section": "C",
+      "aliases": ["通信设备", "通讯设备制造"],
+      "boardKeywords": ["通信设备"]
+    },
+    {
+      "code": "C397",
+      "name": "电子元件及电子专用材料制造",
+      "majorCategory": "C39",
+      "section": "C",
+      "aliases": ["电子元件", "电子元器件", "被动元件"],
+      "boardKeywords": ["电子元件", "元件"]
+    },
+    {
+      "code": "C398",
+      "name": "半导体分立器件及集成电路制造",
+      "majorCategory": "C39",
+      "section": "C",
+      "aliases": ["半导体", "集成电路", "芯片制造", "集成电路制造"],
+      "boardKeywords": ["半导体", "半导体及元件"]
+    },
+    {
+      "code": "C271",
+      "name": "化学药品原料药制造",
+      "majorCategory": "C27",
+      "section": "C",
+      "aliases": ["原料药", "化学原料药"],
+      "boardKeywords": ["化学制药", "医药制造"]
+    },
+    {
+      "code": "C272",
+      "name": "化学药品制剂制造",
+      "majorCategory": "C27",
+      "section": "C",
+      "aliases": ["化学制剂", "药品制剂"],
+      "boardKeywords": ["化学制药", "医药制造"]
+    },
+    {
+      "code": "C274",
+      "name": "中成药生产",
+      "majorCategory": "C27",
+      "section": "C",
+      "aliases": ["中药", "中成药", "中药制造"],
+      "boardKeywords": ["中药"]
+    },
+    {
+      "code": "C276",
+      "name": "生物药品制品制造",
+      "majorCategory": "C27",
+      "section": "C",
+      "aliases": ["生物制品", "生物医药", "疫苗制造"],
+      "boardKeywords": ["生物制品"]
+    },
+    {
+      "code": "C261",
+      "name": "基础化学原料制造",
+      "majorCategory": "C26",
+      "section": "C",
+      "aliases": ["基础化工", "无机盐制造", "有机化学原料"],
+      "boardKeywords": ["化学原料", "化工行业"]
+    },
+    {
+      "code": "C262",
+      "name": "肥料制造",
+      "majorCategory": "C26",
+      "section": "C",
+      "aliases": ["化肥", "磷肥", "氮肥"],
+      "boardKeywords": ["化肥行业"]
+    },
+    {
+      "code": "C265",
+      "name": "合成材料制造",
+      "majorCategory": "C26",
+      "section": "C",
+      "aliases": ["合成树脂", "合成橡胶", "高分子材料"],
+      "boardKeywords": ["化学制品", "塑料制品"]
+    },
+    {
+      "code": "C351",
+      "name": "采矿、冶金、建筑专用设备制造",
+      "majorCategory": "C35",
+      "section": "C",
+      "aliases": ["工程机械", "矿山机械", "建筑专用设备"],
+      "boardKeywords": ["工程机械", "专用设备"]
+    },
+    {
+      "code": "C356",
+      "name": "电子和电工机械专用设备制造",
+      "majorCategory": "C35",
+      "section": "C",
+      "aliases": ["锂电设备", "光伏设备", "电子专用设备"],
+      "boardKeywords": ["专用设备"]
+    },
+    {
+      "code": "C341",
+      "name": "锅炉及原动设备制造",
+      "majorCategory": "C34",
+      "section": "C",
+      "aliases": ["锅炉", "原动设备"],
+      "boardKeywords": ["通用设备"]
+    },
+    {
+      "code": "C346",
+      "name": "轴承、齿轮和传动部件制造",
+      "majorCategory": "C34",
+      "section": "C",
+      "aliases": ["轴承", "齿轮", "传动部件"],
+      "boardKeywords": ["通用设备"]
+    },
+    {
+      "code": "C361",
+      "name": "汽车整车制造",
+      "majorCategory": "C36",
+      "section": "C",
+      "aliases": ["汽车整车", "乘用车制造", "整车"],
+      "boardKeywords": ["汽车整车", "乘用车"]
+    },
+    {
+      "code": "C367",
+      "name": "汽车零部件及配件制造",
+      "majorCategory": "C36",
+      "section": "C",
+      "aliases": ["汽车零部件", "汽车配件", "零部件"],
+      "boardKeywords": ["汽车零部件"]
+    },
+    {
+      "code": "C301",
+      "name": "水泥、石灰和石膏制造",
+      "majorCategory": "C30",
+      "section": "C",
+      "aliases": ["水泥", "石灰", "石膏"],
+      "boardKeywords": ["水泥建材"]
+    },
+    {
+      "code": "C307",
+      "name": "陶瓷制品制造",
+      "majorCategory": "C30",
+      "section": "C",
+      "aliases": ["陶瓷", "建筑陶瓷"],
+      "boardKeywords": ["装修建材"]
+    },
+    {
+      "code": "C311",
+      "name": "炼铁",
+      "majorCategory": "C31",
+      "section": "C",
+      "aliases": ["钢铁", "炼铁业"],
+      "boardKeywords": ["钢铁行业"]
+    },
+    {
+      "code": "C321",
+      "name": "常用有色金属冶炼",
+      "majorCategory": "C32",
+      "section": "C",
+      "aliases": ["有色金属", "铜冶炼", "铝冶炼"],
+      "boardKeywords": ["有色金属", "小金属"]
+    },
+    {
+      "code": "C131",
+      "name": "谷物磨制",
+      "majorCategory": "C13",
+      "section": "C",
+      "aliases": ["粮食加工", "谷物加工"],
+      "boardKeywords": ["食品饮料", "农产品加工"]
+    },
+    {
+      "code": "C136",
+      "name": "屠宰及肉类加工",
+      "majorCategory": "C13",
+      "section": "C",
+      "aliases": ["肉制品", "屠宰", "肉类加工"],
+      "boardKeywords": ["食品饮料"]
+    },
+    {
+      "code": "C171",
+      "name": "棉纺织及印染精加工",
+      "majorCategory": "C17",
+      "section": "C",
+      "aliases": ["棉纺织", "印染", "纺织"],
+      "boardKeywords": ["纺织服装"]
+    },
+    {
+      "code": "I651",
+      "name": "软件开发",
+      "majorCategory": "I65",
+      "section": "I",
+      "aliases": ["软件", "软件开发业", "应用软件"],
+      "boardKeywords": ["软件开发", "软件服务"]
+    },
+    {
+      "code": "I653",
+      "name": "集成电路设计",
+      "majorCategory": "I65",
+      "section": "I",
+      "aliases": ["IC 设计", "芯片设计"],
+      "boardKeywords": ["半导体"]
+    },
+    {
+      "code": "I655",
+      "name": "信息技术咨询服务",
+      "majorCategory": "I65",
+      "section": "I",
+      "aliases": ["IT 咨询", "信息技术服务"],
+      "boardKeywords": ["IT服务", "软件服务"]
+    },
+    {
+      "code": "E471",
+      "name": "住宅房屋建筑",
+      "majorCategory": "E47",
+      "section": "E",
+      "aliases": ["房屋建筑", "住宅建筑", "建筑施工"],
+      "boardKeywords": ["工程建设", "房屋建设"]
+    },
+    {
+      "code": "E481",
+      "name": "铁路、道路、隧道和桥梁工程建筑",
+      "majorCategory": "E48",
+      "section": "E",
+      "aliases": ["基建", "道路桥梁工程", "土木工程"],
+      "boardKeywords": ["工程建设", "基础建设"]
+    },
+    {
+      "code": "K701",
+      "name": "房地产开发经营",
+      "majorCategory": "K70",
+      "section": "K",
+      "aliases": ["房地产开发", "地产开发", "房地产"],
+      "boardKeywords": ["房地产开发", "房地产服务"]
+    },
+    {
+      "code": "F517",
+      "name": "医药及医疗器材批发",
+      "majorCategory": "F51",
+      "section": "F",
+      "aliases": ["医药批发", "医药商业", "医疗器材批发"],
+      "boardKeywords": ["医药商业"]
+    },
+    {
+      "code": "F521",
+      "name": "综合零售",
+      "majorCategory": "F52",
+      "section": "F",
+      "aliases": ["零售", "商业百货", "综合商场"],
+      "boardKeywords": ["商业百货", "贸易行业"]
+    }
+  ]
+}

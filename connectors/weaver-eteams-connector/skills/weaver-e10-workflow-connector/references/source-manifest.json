@@ -1,0 +1,1061 @@
+{
+  "schemaVersion": 2,
+  "module": "workflow",
+  "skill": "weaver-e10-workflow-connector",
+  "generatedFrom": {
+    "sourceSkill": "weaver-e10-workflow-connector",
+    "version": "1.0.105",
+    "path": "weaver-e10-workflow-connector",
+    "kind": "workbuddy-script-skill",
+    "availability": "local-installed-skill"
+  },
+  "generatedAt": "2026-09-19T08:25:42Z",
+  "sourceSet": {
+    "aggregateSha256": "5bf1b914f284a8da850aab749bdee077070d8591f9a9fb658e5b10c5db923bbb",
+    "sourceRoots": [
+      "weaver-e10-workflow-connector"
+    ],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/workflow",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "skills/weaver-e10-workflow-connector"
+    ],
+    "tests": [
+      "test/business/workflow-operations.test.ts",
+      "test/business/workflow-form-fields.test.ts",
+      "test/business/workflow-continuation.test.ts"
+    ],
+    "docs": [
+      "skill-template/domains/workflow.md"
+    ]
+  },
+  "sources": [
+    {
+      "path": "weaver-e10-workflow-connector/agents/openai.yaml",
+      "role": "metadata",
+      "size": 382,
+      "sha256": "8d17aeafa844847aa8e2bec00ae963519e478bb3c31df83d4355ceca96f47e4b"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/memory-rules.md",
+      "role": "api-doc",
+      "size": 10333,
+      "sha256": "4e60eea59eb4ca6f2a1a425b85077741ef3af2dc25b9326e75c1f9c56573465d"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/page-open.md",
+      "role": "api-doc",
+      "size": 2243,
+      "sha256": "1a39d7222243a3078698ef873809ad5c09d62a7578a9e111f22fc40b7196eae1"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/rendering.md",
+      "role": "api-doc",
+      "size": 8755,
+      "sha256": "1e33880dcf9186a6f7a3db92cbd8625d69692c643257eebbd3f8b3890169eb89"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/workflow-batch.md",
+      "role": "api-doc",
+      "size": 10923,
+      "sha256": "4d1b0b45fda332a7961b38970237f5d6730b0bfe2063e6401942bf2e539e0765"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/workflow-create.md",
+      "role": "api-doc",
+      "size": 24894,
+      "sha256": "be249e2a23d80d960a7fadd754d4f1a2e11d113cb70daadf3e4203089a6e8f2e"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/workflow-edit.md",
+      "role": "api-doc",
+      "size": 3870,
+      "sha256": "ee850b9574679597468b9864b85253cecc3e331f92423e263edde6fd095cd569"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/workflow-operate.md",
+      "role": "api-doc",
+      "size": 6351,
+      "sha256": "1f5e9e89a21441ac78b3733526fd0e75362d2e02bbafa6cae215ec1a5126f0a5"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/workflow-search.md",
+      "role": "api-doc",
+      "size": 77856,
+      "sha256": "acbdd374f90d49fc4f814787841c7277d751285b6cc4e3d67dbad1242bf98515"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/workflow-share.md",
+      "role": "api-doc",
+      "size": 3421,
+      "sha256": "6d41286307c60fbdbd4627abcf2bfa5359646c9adf491ce20679672703f4f3f9"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/workflow-todo-stat.md",
+      "role": "api-doc",
+      "size": 14806,
+      "sha256": "8e2e5390df1a589a425c45eb1a8daa496afafe242233f5c23c3f6594a9cb184c"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/references/workflow-view.md",
+      "role": "api-doc",
+      "size": 4804,
+      "sha256": "d786c8372d475db89873f8bd4f3dee6db7753dab8b68d9fb23464e04cb2a8428"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/scripts/cli_tool.py",
+      "role": "implementation",
+      "size": 169,
+      "sha256": "54ad38eeb468895f84dc99dc7c1fb8c71bdc39239fdf8bd235aa95e56c7fa33e"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/scripts/e10_workflow_create.py",
+      "role": "implementation",
+      "size": 257958,
+      "sha256": "5d415e2baf4f1bc825e451fccf59390c13138f765af8baaac241f5d9c61b4fb2"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/scripts/e10_workflow.py",
+      "role": "implementation",
+      "size": 825804,
+      "sha256": "52909ab1e16a865a578e29803bb1dee8df92f46887421635ea2209561afc5db3"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/scripts/requirements.txt",
+      "role": "implementation",
+      "size": 96,
+      "sha256": "c29bebfd85796f2854c659339c711815dfb11cba2fb3fa6e10d334d3938361e0"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/SKILL.md",
+      "role": "existing-skill",
+      "size": 11278,
+      "sha256": "d736762986bed77a1d2b9a9eda02f15cd7a8d0c28f4754c0fcee67ac60434f48"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/query_cases.md",
+      "role": "test-fixture",
+      "size": 5002,
+      "sha256": "3f0ec7188ba3abc46f555824e60fd77ae0c958b14cb47900e9c3bd241ec59dec"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/query_cases.py",
+      "role": "test-fixture",
+      "size": 51161,
+      "sha256": "556d66c92011a04694b902b839e73138a3dc4beaa469564b1108a26af3da7130"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/test_count_details_new_fields.py",
+      "role": "test-fixture",
+      "size": 11062,
+      "sha256": "d2d9162fdd91d36ff546660f0c4a6883a4ac3f47de272101a54120e1040e26ef"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/test_e10_login_bin_discovery.py",
+      "role": "test-fixture",
+      "size": 6142,
+      "sha256": "b98f8dee8b7da8890fb2c44277bbfc6c61361a0fbc9afec25bc312f284a0441f"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/test_e10_login_module_missing.py",
+      "role": "test-fixture",
+      "size": 5373,
+      "sha256": "e476ea2d424ae68971801f0d62a3e4d7c03799c9176867ae1f7d57020ee7da9d"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/test_memory_query_groups.py",
+      "role": "test-fixture",
+      "size": 6049,
+      "sha256": "7bb95283f472e7e2f0f058f6470ea50f6dd7fb965f0ff6cbf5b0af21f96d990f"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/test_plan_draft_folding.py",
+      "role": "test-fixture",
+      "size": 5644,
+      "sha256": "1ca2764841ba3542707b5371de2708eb9b82df6d57338089098873cb27df6fb7"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/test_session_map_resolve.py",
+      "role": "test-fixture",
+      "size": 5643,
+      "sha256": "d5fcd26ee18b3fae72b0bf6a38bf39ff0cb1ae85e43423c4b6ab4024548aa217"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/test_unified_workflow_query.py",
+      "role": "test-fixture",
+      "size": 2928,
+      "sha256": "1904847ae9b69310a696dd1ba27fa2c9c66b752df64e9a0dea4806769d8b0f08"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/test_workflow_create.py",
+      "role": "test-fixture",
+      "size": 60102,
+      "sha256": "3c79fbae97b100543fdbfe7165adda9ec6a317b066386726cf5bb7afec98f753"
+    },
+    {
+      "path": "weaver-e10-workflow-connector/tests/test_workflow_summary.py",
+      "role": "test-fixture",
+      "size": 4027,
+      "sha256": "b0ec31bc3917dab70737abe0abc3cd5760c9cdd6ab8a68c134cfc59c8429e8c5"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "workflow.search",
+      "sourcePath": "weaver-e10-workflow-connector/references/workflow-search.md",
+      "mapsToOperations": [
+        "workflow.search",
+        "workflow.todoStat"
+      ],
+      "mapsToReferences": [
+        "references/workflow-query.md"
+      ]
+    },
+    {
+      "id": "workflow.todoStat",
+      "sourcePath": "weaver-e10-workflow-connector/references/workflow-todo-stat.md",
+      "mapsToOperations": [
+        "workflow.search",
+        "workflow.todoStat"
+      ],
+      "mapsToReferences": [
+        "references/workflow-query.md"
+      ]
+    },
+    {
+      "id": "workflow.rendering",
+      "sourcePath": "weaver-e10-workflow-connector/references/rendering.md",
+      "mapsToOperations": [
+        "workflow.memoryPrompt",
+        "workflow.pageOpen",
+        "workflow.search",
+        "workflow.todoStat"
+      ],
+      "mapsToReferences": [
+        "references/workflow-query.md",
+        "references/workflow-agent-entry.md"
+      ]
+    },
+    {
+      "id": "workflow.view",
+      "sourcePath": "weaver-e10-workflow-connector/references/workflow-view.md",
+      "mapsToOperations": [
+        "workflow.detail",
+        "workflow.open",
+        "workflow.pageOpen",
+        "workflow.requestLog",
+        "workflow.summary"
+      ],
+      "mapsToReferences": [
+        "references/workflow-view.md"
+      ]
+    },
+    {
+      "id": "workflow.pageOpen",
+      "sourcePath": "weaver-e10-workflow-connector/references/page-open.md",
+      "mapsToOperations": [
+        "workflow.detail",
+        "workflow.open",
+        "workflow.pageOpen",
+        "workflow.requestLog",
+        "workflow.summary"
+      ],
+      "mapsToReferences": [
+        "references/workflow-view.md"
+      ]
+    },
+    {
+      "id": "workflow.operate",
+      "sourcePath": "weaver-e10-workflow-connector/references/workflow-operate.md",
+      "mapsToOperations": [
+        "workflow.operateApply",
+        "workflow.operatePrepare"
+      ],
+      "mapsToReferences": [
+        "references/workflow-operate.md"
+      ]
+    },
+    {
+      "id": "workflow.batch",
+      "sourcePath": "weaver-e10-workflow-connector/references/workflow-batch.md",
+      "mapsToOperations": [
+        "workflow.batchForward",
+        "workflow.batchRead",
+        "workflow.batchReject",
+        "workflow.batchShare",
+        "workflow.batchSubmit",
+        "workflow.batchSupervise"
+      ],
+      "mapsToReferences": [
+        "references/workflow-batch.md"
+      ]
+    },
+    {
+      "id": "workflow.share",
+      "sourcePath": "weaver-e10-workflow-connector/references/workflow-share.md",
+      "mapsToOperations": [
+        "workflow.shareApply",
+        "workflow.sharePrepare"
+      ],
+      "mapsToReferences": [
+        "references/workflow-share.md"
+      ]
+    },
+    {
+      "id": "workflow.create",
+      "sourcePath": "weaver-e10-workflow-connector/references/workflow-create.md",
+      "mapsToOperations": [
+        "workflow.createApply",
+        "workflow.createForm",
+        "workflow.createList",
+        "workflow.createPrepare"
+      ],
+      "mapsToReferences": [
+        "references/workflow-create.md"
+      ]
+    },
+    {
+      "id": "workflow.edit",
+      "sourcePath": "weaver-e10-workflow-connector/references/workflow-edit.md",
+      "mapsToOperations": [
+        "workflow.editApply",
+        "workflow.editLoad",
+        "workflow.editPrepare"
+      ],
+      "mapsToReferences": [
+        "references/workflow-edit.md"
+      ]
+    },
+    {
+      "id": "workflow.memory",
+      "sourcePath": "weaver-e10-workflow-connector/references/memory-rules.md",
+      "mapsToOperations": [
+        "workflow.memoryExtract",
+        "workflow.memoryPrompt"
+      ],
+      "mapsToReferences": [
+        "references/workflow-memory.md"
+      ]
+    }
+  ],
+  "operationImpact": {
+    "workflow.search": {
+      "sourceChunkIds": [
+        "workflow.rendering",
+        "workflow.search",
+        "workflow.todoStat"
+      ],
+      "schemaFields": [
+        "category",
+        "tabid",
+        "tabName",
+        "subCategory",
+        "creator",
+        "creatorDept",
+        "creatorSubcom",
+        "workflowType",
+        "workflow",
+        "workflowTerm",
+        "requestName",
+        "requestNameTerm",
+        "requestMark",
+        "requestMarkTerm",
+        "requestLevel",
+        "requestId",
+        "exRequestId",
+        "nodeId",
+        "nodeIdTerm",
+        "flowStatus",
+        "flowStatusTerm",
+        "createTime",
+        "operateTime",
+        "receiveTime",
+        "finishTime",
+        "filterFields",
+        "sort",
+        "current",
+        "pageSize",
+        "conditionType",
+        "totalOnly",
+        "batchType",
+        "planJson",
+        "queryJson"
+      ],
+      "references": [
+        "references/workflow-query.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.todoStat": {
+      "sourceChunkIds": [
+        "workflow.rendering",
+        "workflow.search",
+        "workflow.todoStat"
+      ],
+      "schemaFields": [
+        "category",
+        "subCategory",
+        "tabid",
+        "tabName",
+        "creator",
+        "creatorDept",
+        "workflowType",
+        "workflow",
+        "requestLevel",
+        "requestName",
+        "requestMark",
+        "createTime",
+        "receiveTime",
+        "finishTime",
+        "filterFields",
+        "nodeId",
+        "requestId",
+        "exRequestId",
+        "conditionType",
+        "sort"
+      ],
+      "references": [
+        "references/workflow-query.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.detail": {
+      "sourceChunkIds": [
+        "workflow.pageOpen",
+        "workflow.view"
+      ],
+      "schemaFields": [
+        "requestId",
+        "index",
+        "group",
+        "requestLogCurrent",
+        "requestLogPageSize"
+      ],
+      "references": [
+        "references/workflow-view.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.summary": {
+      "sourceChunkIds": [
+        "workflow.pageOpen",
+        "workflow.view"
+      ],
+      "schemaFields": [
+        "requestId",
+        "index",
+        "group",
+        "summaryFields"
+      ],
+      "references": [
+        "references/workflow-view.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.open": {
+      "sourceChunkIds": [
+        "workflow.pageOpen",
+        "workflow.view"
+      ],
+      "schemaFields": [
+        "requestId",
+        "index",
+        "group",
+        "openMode",
+        "noOpen"
+      ],
+      "references": [
+        "references/workflow-view.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.requestLog": {
+      "sourceChunkIds": [
+        "workflow.pageOpen",
+        "workflow.view"
+      ],
+      "schemaFields": [
+        "requestId",
+        "current",
+        "pageSize"
+      ],
+      "references": [
+        "references/workflow-view.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.pageOpen": {
+      "sourceChunkIds": [
+        "workflow.pageOpen",
+        "workflow.rendering",
+        "workflow.view"
+      ],
+      "schemaFields": [
+        "page",
+        "workflowId",
+        "requestId",
+        "openMode",
+        "noOpen"
+      ],
+      "references": [
+        "references/workflow-view.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.memoryPrompt": {
+      "sourceChunkIds": [
+        "workflow.memory",
+        "workflow.rendering"
+      ],
+      "schemaFields": [
+        "workflowId"
+      ],
+      "references": [
+        "references/workflow-memory.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.createList": {
+      "sourceChunkIds": [
+        "workflow.create"
+      ],
+      "schemaFields": [
+        "name",
+        "workflowId"
+      ],
+      "references": [
+        "references/workflow-create.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.createForm": {
+      "sourceChunkIds": [
+        "workflow.create"
+      ],
+      "schemaFields": [
+        "workflowId",
+        "relatesTo"
+      ],
+      "references": [
+        "references/workflow-create.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.createPrepare": {
+      "sourceChunkIds": [
+        "workflow.create"
+      ],
+      "schemaFields": [
+        "context",
+        "data",
+        "requestName",
+        "requestLevel",
+        "secLevel",
+        "remark",
+        "intent"
+      ],
+      "references": [
+        "references/workflow-create.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.createApply": {
+      "sourceChunkIds": [
+        "workflow.create"
+      ],
+      "schemaFields": [
+        "context",
+        "confirm",
+        "intent",
+        "question",
+        "verificationConfirmed"
+      ],
+      "references": [
+        "references/workflow-create.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.editLoad": {
+      "sourceChunkIds": [
+        "workflow.edit"
+      ],
+      "schemaFields": [
+        "requestId"
+      ],
+      "references": [
+        "references/workflow-edit.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "workflow.editPrepare": {
+      "sourceChunkIds": [
+        "workflow.edit"
+      ],
+      "schemaFields": [
+        "context",
+        "data"
+      ],
+      "references": [
+        "references/workflow-edit.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.editApply": {
+      "sourceChunkIds": [
+        "workflow.edit"
+      ],
+      "schemaFields": [
+        "context",
+        "confirm"
+      ],
+      "references": [
+        "references/workflow-edit.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.operatePrepare": {
+      "sourceChunkIds": [
+        "workflow.operate"
+      ],
+      "schemaFields": [
+        "requestId",
+        "group",
+        "index",
+        "action",
+        "opinion",
+        "receiverName",
+        "agent",
+        "rejectType",
+        "nodeid",
+        "deleteType",
+        "otherParamJson"
+      ],
+      "references": [
+        "references/workflow-operate.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.operateApply": {
+      "sourceChunkIds": [
+        "workflow.operate"
+      ],
+      "schemaFields": [
+        "requestId",
+        "group",
+        "index",
+        "action",
+        "opinion",
+        "receiverName",
+        "agent",
+        "rejectType",
+        "nodeid",
+        "deleteType",
+        "otherParamJson",
+        "continuation",
+        "confirm"
+      ],
+      "references": [
+        "references/workflow-operate.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.sharePrepare": {
+      "sourceChunkIds": [
+        "workflow.share"
+      ],
+      "schemaFields": [
+        "requestId",
+        "group",
+        "index",
+        "shareObjects",
+        "minSeclevel",
+        "maxSeclevel"
+      ],
+      "references": [
+        "references/workflow-share.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.shareApply": {
+      "sourceChunkIds": [
+        "workflow.share"
+      ],
+      "schemaFields": [
+        "requestId",
+        "group",
+        "index",
+        "shareObjects",
+        "minSeclevel",
+        "maxSeclevel",
+        "continuation",
+        "confirm"
+      ],
+      "references": [
+        "references/workflow-share.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.batchSubmit": {
+      "sourceChunkIds": [
+        "workflow.batch"
+      ],
+      "schemaFields": [
+        "requestIds",
+        "remark",
+        "batchSize",
+        "category",
+        "confirm"
+      ],
+      "references": [
+        "references/workflow-batch.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.batchRead": {
+      "sourceChunkIds": [
+        "workflow.batch"
+      ],
+      "schemaFields": [
+        "requestIds",
+        "batchSize",
+        "confirm"
+      ],
+      "references": [
+        "references/workflow-batch.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.batchSupervise": {
+      "sourceChunkIds": [
+        "workflow.batch"
+      ],
+      "schemaFields": [
+        "requestIds",
+        "remark",
+        "currentOperator",
+        "messageRemind",
+        "emailRemind",
+        "doneOperator",
+        "ccOperator",
+        "submitOperator",
+        "otherReminder",
+        "batchSize",
+        "confirm"
+      ],
+      "references": [
+        "references/workflow-batch.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.batchShare": {
+      "sourceChunkIds": [
+        "workflow.batch"
+      ],
+      "schemaFields": [
+        "requestIds",
+        "shareObjects",
+        "minSeclevel",
+        "maxSeclevel",
+        "batchSize",
+        "confirm"
+      ],
+      "references": [
+        "references/workflow-batch.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.batchForward": {
+      "sourceChunkIds": [
+        "workflow.batch"
+      ],
+      "schemaFields": [
+        "requestIds",
+        "receiveTargets",
+        "remark",
+        "batchSize",
+        "confirm"
+      ],
+      "references": [
+        "references/workflow-batch.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.batchReject": {
+      "sourceChunkIds": [
+        "workflow.batch"
+      ],
+      "schemaFields": [
+        "requestIds",
+        "remark",
+        "batchSize",
+        "confirm"
+      ],
+      "references": [
+        "references/workflow-batch.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "workflow.memoryExtract": {
+      "sourceChunkIds": [
+        "workflow.memory"
+      ],
+      "schemaFields": [
+        "msgList",
+        "userMessage",
+        "assistantMessage",
+        "dynamicContext",
+        "workflowId",
+        "memoryAppId",
+        "async"
+      ],
+      "references": [
+        "references/workflow-memory.md"
+      ],
+      "tests": [
+        "test/business/workflow-operations.test.ts"
+      ],
+      "risk": "write",
+      "requiresConfirmationChain": false
+    }
+  },
+  "artifactBaseline": {
+    "aggregateSha256": "e22def78f08091ad81f73353c9b2809d7b76bdf6fb89753d7b5f2135fed866b4",
+    "files": [
+      {
+        "path": "skills/weaver-e10-workflow-connector/references/workflow-agent-entry.md",
+        "size": 6219,
+        "sha256": "efca299506e0dc27aa8b6ce22a530dbfc4c91a0953b2cfdea4adfb771709cce5"
+      },
+      {
+        "path": "skills/weaver-e10-workflow-connector/references/workflow-batch.md",
+        "size": 18134,
+        "sha256": "4ac6e143e92f974b5bcfb60bb263488004703715ffc6c43a1d960c174e15b059"
+      },
+      {
+        "path": "skills/weaver-e10-workflow-connector/references/workflow-create.md",
+        "size": 24776,
+        "sha256": "61d97b517ff53e44245e3926e945f40aeb157b8b79a9b77286d2b71b9accf0c9"
+      },
+      {
+        "path": "skills/weaver-e10-workflow-connector/references/workflow-edit.md",
+        "size": 6406,
+        "sha256": "edfd681aece47c0dab0d95ded7de2214be224cfeb9b26e26d83e1197323ce1b3"
+      },
+      {
+        "path": "skills/weaver-e10-workflow-connector/references/workflow-memory.md",
+        "size": 11606,
+        "sha256": "0617b81088d13661ff8a817f515849d211dd7146b9afb571589e11558d747989"
+      },
+      {
+        "path": "skills/weaver-e10-workflow-connector/references/workflow-operate.md",
+        "size": 9775,
+        "sha256": "8ac515d85edee9c207a11a3b98d3cad9832075b5b809657970bdec88e9ac905e"
+      },
+      {
+        "path": "skills/weaver-e10-workflow-connector/references/workflow-query.md",
+        "size": 105608,
+        "sha256": "f4211fbf8e3a53a07878da5fad03a85779886ea9aed1e5ee68787f345cee8a75"
+      },
+      {
+        "path": "skills/weaver-e10-workflow-connector/references/workflow-share.md",
+        "size": 6432,
+        "sha256": "1c756895a23b194e49cef80c77a01d3aab03bf5fc71ecd76d50d253bb49837d6"
+      },
+      {
+        "path": "skills/weaver-e10-workflow-connector/references/workflow-view.md",
+        "size": 11116,
+        "sha256": "1ed4a2eef798480bd570609f941117ece924386b8e0e4d4dcf9f5867245980a1"
+      },
+      {
+        "path": "skills/weaver-e10-workflow-connector/SKILL.md",
+        "size": 36505,
+        "sha256": "b84e32642ae49054afa6062fa59f70f8f3a1fd31b1af3f8e3d97e939407d39a4"
+      },
+      {
+        "path": "src/shortcuts/workflow/continuation.ts",
+        "size": 30337,
+        "sha256": "5e0f18be2f792dfc551ad496c787d2de68024b560e7157487a494bb080623684"
+      },
+      {
+        "path": "src/shortcuts/workflow/endpoints.ts",
+        "size": 8746,
+        "sha256": "490feb006934f5994ff64f69b517cf99e81b9bd324315d68f31f37e1e3eac873"
+      },
+      {
+        "path": "src/shortcuts/workflow/errors.ts",
+        "size": 6772,
+        "sha256": "674e865d661f686687103d93fbc92806fddfafbd1969d0b11366b9f41f9e9114"
+      },
+      {
+        "path": "src/shortcuts/workflow/host.ts",
+        "size": 10388,
+        "sha256": "7bf8bd3baea6400c278becfca0b2f144b505de8dab6e71c0005ad5d59eec86e8"
+      },
+      {
+        "path": "src/shortcuts/workflow/index.ts",
+        "size": 4833,
+        "sha256": "32940c87aa81111457e403b840afde29a777434b58a85e7224c78c01d57608c6"
+      },
+      {
+        "path": "src/shortcuts/workflow/manifest.ts",
+        "size": 1304,
+        "sha256": "61667c88d1e87d9ffac4657e6b3e1775df9bae2991f00023de1009fb3c6c2e9f"
+      },
+      {
+        "path": "src/shortcuts/workflow/operations.ts",
+        "size": 7416,
+        "sha256": "430a4325b0273786bbd51def861461bac75db336d136e516f3b1fc7bc4e68780"
+      },
+      {
+        "path": "src/shortcuts/workflow/operations/form.ts",
+        "size": 194756,
+        "sha256": "40d0dda7b264bb9caa7022745e1fb467feee8a966a58797f94730caa74cbeb5b"
+      },
+      {
+        "path": "src/shortcuts/workflow/operations/read.ts",
+        "size": 196999,
+        "sha256": "b70d73ceef40c06b1044fea324eb600584986e07f86f0cf3f6c2358af468ba2b"
+      },
+      {
+        "path": "src/shortcuts/workflow/operations/registry.ts",
+        "size": 1412,
+        "sha256": "60072ec96bc88202b98cf86d2487219e7369d1bd8d161c08aaac914152a829ec"
+      },
+      {
+        "path": "src/shortcuts/workflow/operations/shared.ts",
+        "size": 8206,
+        "sha256": "7517b587bd6c08d6a0ad6003a0fdd786e36e0eebb3beef922ab2650c5d9612a7"
+      },
+      {
+        "path": "src/shortcuts/workflow/operations/types.ts",
+        "size": 4238,
+        "sha256": "e5c24cedeb00510fe58617a4121c6439dbeba44f0d511dcf046f6dbae444a5a3"
+      },
+      {
+        "path": "src/shortcuts/workflow/operations/write.ts",
+        "size": 103697,
+        "sha256": "78175dfa0168477efe3f3ebd8f1bad305d4f556e66c11724622bc2ce666ab2ee"
+      },
+      {
+        "path": "src/shortcuts/workflow/state.ts",
+        "size": 8625,
+        "sha256": "4e3d9a3848574269a64f891a06edf04c185fda5ebd4bc4fc394f151a02d26c6c"
+      }
+    ]
+  },
+  "notes": [
+    "源资料为本机已安装的 Python 脚本型 skill weaver-e10-workflow-connector 1.0.105（SKILL.md + 11 个 references + scripts/ + tests/）。",
+    "原 Python 认证线（e10-login subprocess + state/runtime-cache.json 缓存）整段丢弃，改由 weaver-work-cli 托管认证；state/ 目录不纳入源基线。",
+    "原脚本用磁盘文件保存表单 context 与会话序号映射，CLI 改为 continuation **短句柄** + CLI 托管本地状态：载荷落 ~/.weaver-work-cli/state/workflow/continuation-pending/，模型只原样回传 wc-… 句柄（19 字符），不搬运载荷；V12.1.11 及更早签发的自包含签名令牌仍兼容。消费标记记录**执行阶段**（claimed 只抢到句柄未写入 / saving 已发出写入 / committed 服务端已成功回执 → succeeded 已回写结果）：Apply 被重复执行时按阶段分流——已成功或已成功回执 → 幂等回报 ok:true + status=ALREADY_APPLIED（带 requestId/previousResult）；已发出写入未确认 → partial/write_uncertain；只抢到句柄且进程已不在、超过宽限期 → 允许**安全重占**同句柄重试（validation/continuation_busy 表示仍在占用）；旧版无数值标记 → continuation_consumed。一次性抢占以落盘创建本身为唯一判据（消除先查存在再写的 TOCTOU 重复写入窗口）。",
+    "批量操作门禁的放行判据 = **最近一次查询结果的快照**（本地索引 search-index.json，对应 Python session_maps.json 的 latestQueryId.items），与 V11.3 cmd_batch_submit/load_session_maps 同源，门禁阶段**不查服务端**；实时批量端点（TODO_LIST_BATCH_<TYPE>，请求体 tabid 固定 '0'）只用于补齐快照缺字段（典型是 userid），不参与放行判据——避免\"查询口径（workflow.search --batchType 解析出的 tabid）与门禁口径分叉\"把模型刚查到的流程判成不存在。",
+    "批量写操作（2026-09-17）：`workflow.batchSubmit` / `batchRead` / `batchSupervise` / `batchShare` / `batchForward` / `batchReject` 六个操作**全部改为一命令完成**，不再有 `xxxPrepare` + `xxxApply` 两阶段，因此也没有 `continuation` 字段。防重复写入改由「确定性幂等键（操作 + 租户 + 账号 + 这批 requestId + 写向对象）+ 60 秒有界保护窗口」的一次性写入闸门承担（`batchIdempotencyKey` / `claimBatchWrite`），`remark` / `batchSize` 不参与该判据，换收件人 / 共享对象 / 提醒人视为另一次操作。",
+    "只读图表、人员姓名→ID 解析等能力不在本模块范围，分别由 weaver-e10-hrm 提供。",
+    "表单字段判定与取值（2026-09-16 修复）：① 字段元数据缺省 browserType 归一化为 {} 后，Python 的 bool({}) 为假、JS 的 Boolean({}) 恒真——照抄会让**每个字段**都被判成浏览按钮字段，文本/富文本字段随之走名称→ID 解析并报 BROWSER NOT FOUND（富文本内容永远写不进去）；现改为判「非空对象」。② 人员范围（EmployeeScope）名称→ID 整段移植：按 type 调 /api/hrm/common/browser/complete/{resource|department|subcompany|channel|role|position|external} 解析，all/allExternal 走固定结构；0 命中剥离口语后缀重试一次；解析失败挂 ambiguities（NOT_FOUND/MULTIPLE_MATCHES/NOT_RESOLVED）原样上报，**绝不静默丢空 optionId**（空 optionId 会被 hasDetailValue 判为无值，整条值从保存体里消失）。③ prepare 签发的载荷是 payload:{context,prepared}（**平级**），buildCreateBody/buildEditSaveBody 曾误读 context.prepared（恒 undefined）⇒ flow/create 请求体构造抛 TypeError（流程创建不出来）、editSave 的 dataDetails 恒为空（改了字段却什么都没存）；现统一走 resolvePrepared。",
+    "产物基线（artifactBaseline）刷新规则：文件级 `path + size + sha256` 按实际产物复算，聚合指纹 = 上述列表按 path 排序后的稳定 JSON 的 sha256（与 test/skills/layout.test.ts 的 aggregateEntries 同一算法）。**基线不包含 source-manifest.json 自身**——记录自身哈希在数学上无法自洽（写入新哈希又改变文件内容），weaver-e10-yepiaotong 基线同样不含自身。"
+  ]
+}

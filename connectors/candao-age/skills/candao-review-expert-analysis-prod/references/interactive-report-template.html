@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外卖评价口碑报告</title>
+<style>
+  :root{
+    --bg:#f5f7fa; --card:#fff; --ink:#1f2933; --muted:#7b8794; --line:#e4e7eb;
+    --good:#2f9e44; --bad:#e03131; --mid:#f08c00; --accent:#1971c2; --soft:#e7f5ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);padding:20px;line-height:1.55;overflow-x:hidden;}
+  .wrap{max-width:1120px;margin:0 auto;}
+  h1{font-size:22px;margin-bottom:4px;}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:14px;}
+  h2.sec{font-size:17px;margin:22px 0 10px;border-left:4px solid var(--accent);padding-left:8px;}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:14px;min-width:0;}
+  .note{font-size:11px;color:var(--muted);margin-top:8px;}
+  .clr{color:#e03131;cursor:pointer;font-size:11px;font-weight:400;margin-left:6px;border:1px solid #f1aeb5;border-radius:4px;padding:0 5px;}
+  .clr:hover{background:#fff0f0;}
+  .tag2{display:inline-block;font-size:10px;background:#fff4e6;color:#e8590c;border:1px solid #ffd8a8;border-radius:4px;padding:1px 5px;margin-left:4px;}
+  .tag{display:inline-block;font-size:10px;background:#f1f3f5;color:#495057;border:1px solid #dee2e6;border-radius:4px;padding:1px 5px;margin-left:4px;}
+  .tag.rep{background:#ebfbee;color:#2b8a3e;border-color:#b2f2bb;}
+  .tag.norep{background:#fff5f5;color:#c92a2a;border-color:#ffc9c9;}
+  .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;}
+  .card .k{font-size:12px;color:var(--muted);}
+  .card .v{font-size:25px;font-weight:700;margin-top:3px;}
+  .card .d{font-size:12px;margin-top:3px;}
+  .card .d.good{color:#2f9e44;font-weight:600;}  /* 改善：绿（好评涨/差评跌/回复率涨） */
+  .card .d.bad{color:#e03131;font-weight:600;}   /* 恶化：红（好评跌/差评涨/回复率跌） */
+  .card .d.flat{color:#8c8c8c;}                  /* 无变化/中性：灰 */
+  .reply{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px;}
+  .reply .row{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;}
+  .reply .pill{background:#fff5f5;border:1px solid #ffc9c9;color:var(--bad);border-radius:20px;padding:4px 12px;font-weight:600;}
+  .grid2{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;}
+  .panel h4{font-size:14px;margin-bottom:10px;}
+
+  /* 筛选器（可折叠 + 下拉） */
+  .filters{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:14px;position:relative;}
+  .fhead{display:flex;align-items:center;cursor:pointer;padding:12px 16px;background:#f8f9fa;border-radius:12px 12px 0 0;}
+  .fhead .ft{font-size:14px;font-weight:700;}
+  .fhead .fsum{font-size:12px;color:var(--muted);margin-left:10px;}
+  .fhead .ftoggle{margin-left:auto;color:var(--muted);font-size:12px;}
+  .fbody{padding:14px 16px;display:block;border-radius:0 0 12px 12px;}
+  .filters.collapsed{border-radius:12px;}
+  .filters.collapsed .fhead{border-radius:12px;}
+  .filters.collapsed .fbody{display:none;}
+  .frow{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+  .flab{font-size:12px;color:var(--muted);font-weight:600;width:70px;flex:none;padding-top:6px;}
+  .fctr{flex:1;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .qbtn{font-size:12px;padding:4px 11px;border:1px solid var(--line);border-radius:6px;background:#fff;cursor:pointer;}
+  .qbtn.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .datein{font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;}
+  /* 多选下拉 */
+  .ms{position:relative;min-width:220px;}
+  .ms.open{z-index:1000;}
+  .ms-box{font-size:12px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+  .ms-box .cnt{color:var(--accent);font-weight:600;}
+  .ms-panel{position:absolute;top:100%;left:0;right:0;margin-top:4px;background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.08);z-index:999;display:none;max-height:260px;overflow:auto;}
+  .ms.open .ms-panel{display:block;}
+  .ms-tools{display:flex;flex-direction:column;gap:8px;padding:8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;}
+  .ms-tools input{font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;width:100%;box-sizing:border-box;}
+  .ms-btn{flex:1;text-align:center;font-size:12px;padding:5px 11px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--accent);cursor:pointer;white-space:nowrap;font-weight:600;transition:background .15s;}
+  .ms-btn:hover{background:var(--soft);}
+  .ms-btns{display:flex;gap:8px;}
+  .ms-opt{display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:13px;cursor:pointer;}
+  .tag3{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;background:#fff0f6;border:1px solid #faa2c1;color:#c2255c;margin-left:4px;}
+  .pager{display:flex;gap:6px;align-items:center;margin-top:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);}
+  .pager button{font-size:12px;padding:4px 9px;border:1px solid var(--line);border-radius:6px;background:#fff;cursor:pointer;}
+  .pager button.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .pager button:disabled{opacity:.45;cursor:not-allowed;}
+  .pager .dots{padding:0 4px;}
+  .ms-opt:hover{background:var(--soft);}
+  .ms-opt input{accent-color:var(--accent);}
+  .reset{font-size:12px;color:var(--accent);cursor:pointer;text-decoration:underline;}
+
+  .bar-row{display:flex;align-items:center;font-size:13px;margin-bottom:9px;transition:opacity .15s;}
+  .bar-row.dim{opacity:.32;}
+  .bar-row .name{width:84px;flex:none;cursor:pointer;}
+  .bar-row .name.sel{font-weight:700;color:var(--accent);}
+  .bar-track{flex:1;background:var(--soft);border-radius:6px;height:18px;overflow:hidden;}
+  .bar-fill{height:100%;background:var(--accent);border-radius:6px;transition:width .2s;}
+  .bar-fill.other{background:#868e96;}
+  .bar-row .cnt{width:96px;flex:none;text-align:right;color:var(--muted);font-size:12px;}
+  .legend-item{display:flex;align-items:center;font-size:13px;margin-bottom:7px;}
+  .legend-item .dot{width:12px;height:12px;border-radius:3px;flex:none;margin-right:8px;}
+  .legend-item .lab{width:54px;flex:none;font-weight:600;}
+  .legend-item .num{color:var(--muted);}
+  svg{display:block;width:100%;height:auto;}
+  .taglegend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:12px;color:#495057;}
+  .taglegend .ti{display:flex;align-items:center;}
+  .taglegend .sw{width:11px;height:11px;border-radius:3px;margin-right:5px;flex:none;}
+  .tooltip{position:fixed;pointer-events:none;background:#1f2933;color:#fff;font-size:12px;padding:5px 9px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:99;white-space:nowrap;}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px;}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);}
+  th{color:var(--muted);font-weight:600;font-size:12px;}
+  .quote{font-size:12px;color:#495057;background:#fff9db;border-left:3px solid var(--mid);padding:8px 10px;border-radius:4px;margin:6px 0;}
+  .quote b{color:var(--ink);}
+  .warn{background:#fff5f5;border:1px solid #ffc9c9;color:#c92a2a;font-size:12px;padding:8px 10px;border-radius:6px;margin-top:8px;}
+  ul{padding-left:18px;} li{font-size:13px;margin-bottom:3px;}
+  @media(max-width:760px){.cards{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}.flab{width:auto;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>外卖评价口碑报告</h1>
+  <div class="sub" id="subTxt">统计周期加载中…｜日期 / 门店 / 渠道 三维度全模块联动；「差评原因」维度仅作用于差评明细类模块</div>
+
+  <!-- 筛选器 -->
+  <div class="filters" id="filters">
+    <div class="fhead" onclick="document.getElementById('filters').classList.toggle('collapsed')">
+      <span class="ft">筛选</span>
+      <span class="fsum" id="fsum"></span>
+      <span class="ftoggle">展开/收起 ▾</span>
+    </div>
+    <div class="fbody">
+      <div class="frow">
+        <div class="flab">日期</div>
+        <div class="fctr">
+          <span class="qbtn on" data-q="all" onclick="qDate(this)">全部</span>
+          <span class="qbtn" data-q="week" onclick="qDate(this)">本周</span>
+          <span class="qbtn" data-q="7" onclick="qDate(this)">近7天</span>
+          <input type="date" class="datein" id="dStart" value="" onchange="customDate()">
+          <span style="color:var(--muted);font-size:12px;">至</span>
+          <input type="date" class="datein" id="dEnd" value="" onchange="customDate()">
+        </div>
+      </div>
+      <!-- 差评类型筛选已移除：一级分类改由「差评原因分布」条形图标签点击联动 -->
+      <div class="frow">
+        <div class="flab">门店</div>
+        <div class="fctr" id="storeMs"></div>
+        <span class="reset" onclick="clearSel('store')">清空</span>
+        <span class="reset" onclick="resetAll()" style="margin-left:6px;">重置全部</span>
+      </div>
+      <div class="frow">
+        <div class="flab">渠道</div>
+        <div class="fctr" id="channelMs"></div>
+        <span class="reset" onclick="clearSel('channel')">清空</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn" id="scopeNote" style="display:none;margin-bottom:14px;"></div>
+
+  <div class="panel" id="summaryPanel">
+    <h4>当前筛选条件下总结分析</h4>
+    <div id="summaryBody"></div>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h4>差评原因分布（一级 → 二级 下钻）</h4>
+      <div id="barChart"></div>
+      <div id="bar2Wrap" style="margin-top:6px;display:none;">
+        <h5 style="margin:6px 0 4px;font-size:13px;color:#1f2933;">二级细分（点上方一级分类名后加载，可继续点选联动 ↓）</h5>
+        <div id="barChart2"></div>
+      </div>
+      <div id="tagLegend" class="taglegend"></div>
+      <h5 style="margin:14px 0 4px;font-size:13px;color:#1f2933;">选中分类后的命中门店分布</h5>
+      <div id="tag2Wrap" style="width:100%;overflow-x:auto;overflow-y:hidden;max-width:100%;border:1px solid var(--line,#eef1f4);border-radius:8px;padding:6px 4px;background:#fff;-webkit-overflow-scrolling:touch;">
+        <svg id="tag2" style="display:block;height:190px;"></svg>
+      </div>
+      <div class="note">① 上方「一级原因」柱状图（原因一级大类，按命中降序、"其他原因"置底），<b>点一级分类名</b>即下钻出「二级细分」柱状图；② <b>点二级细分名</b>继续联动：下方命中门店分布、每日命中趋势、差评明细、总结同步按该二级分类过滤；③ 点已选中的分类名可取消，回到上一级。门店多时下方出现横向滚动条，左右拖动即可看清店名。</div>
+    </div>
+    <div class="panel">
+      <h4>评分分布（悬停色块看详情）</h4>
+      <div class="note" id="scoreScope" style="margin:2px 0 8px;"></div>
+      <svg viewBox="0 0 200 200" id="donut">
+        <circle cx="100" cy="100" r="70" fill="none" stroke="#e9ecef" stroke-width="26"/>
+        <g id="donutG"></g>
+        <text x="100" y="95" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2933" id="donutAvg">—</text>
+        <text x="100" y="116" text-anchor="middle" font-size="11" fill="#7b8794">平均分（1-5分）</text>
+      </svg>
+      <div style="margin-top:10px;" id="donutLegend"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h4 id="dailyTitle">每日评价趋势（随日期筛选重算）</h4>
+    <svg viewBox="0 0 680 220" id="daily"></svg>
+    <div class="note">未选分类时：蓝色棒棒糖图=每日评价数，绿线=好评率，红线=差评率，紫色虚线+药丸=24h差评回复率（周期级参考，无逐日数据，不随日期筛选）。选中上方分类后，本图联动展示该分类的每日命中趋势（同款棒棒糖图=当日命中合计，折线=各选中分类每日命中，按分类色）。</div>
+  </div>
+
+  <div class="panel">
+    <h4 id="quoteTitle">差评原文抽样（随类型/门店/渠道筛选）</h4>
+    <div id="quotes"></div>
+    <div id="quotePager" class="pager"></div>
+  </div>
+
+  <div class="sub" style="text-align:center;margin-top:10px;">数据来源：餐道评论专家分析（新版 schema，2026-09 起）· 口径 5 分好评 / 3-4 分中评 / 0-2 分差评（其中 0 分 = 原始评分缺失，按差评计）· 比例一律分子分母分别汇总后再相除 · 本页为前端交互筛选，不依赖联网</div>
+</div>
+
+<div class="tooltip" id="tip"></div>
+<script>
+/* =========================================================================
+ * 餐道外卖评价交互式报告模板（脚本化生成版）
+ * 本文件是"可复用骨架"，数据由 scripts/gen_report.py 注入：
+ *   生成时把工具返回的 JSON 映射为 REPORT_DATA 并替换注入标记（__DATA__），
+ *   LLM 不再手写 HTML，只负责调工具取数 + 跑脚本。
+ * REPORT_DATA 字段（适配连接器 2026-09 改版后的新版 schema）：
+ *   PERIOD / DATES / STORES / CHANNELS / DAILY / SCORES / QUOTES /
+ *   TAG1ORDER / TAG2MAP / TAGCOLOR / METRICS / BUSINESS / META
+ *   DAILY 元素：{date,store,ch,total,pos,neg,relig,rep24}  —— 源 dailyCommentTrends（含门店/渠道维度，无 reply 字段）
+ *   SCORES 元素：{date,store,ch,score,count}               —— 源 commentScoreDistribution（评分分布，含门店/渠道维度，无 date）
+ *   QUOTES 元素：{id,date,store,ch,score,text,tags1[],tags2[],tags2full[],pairs[],replied} —— 源 commentDetails（level=='差评' 的全量差评）
+ *     tags1 = 一级（badCommentTags 中 '-' 前），tags2 = 二级（'-' 后，与 tags1 同序对齐），tags2full = 原始「一级-二级」整串（卡片 chip 用），pairs = [一级,二级] 配对（计数用）；两级下钻、不做父子归属推断以外的再拆
+ *   比例一律分子分母分别汇总后再相除，不得直接平均各行比例；上期无逐日数据（reviewMetricSummary 的 preXxx 字段）
+ * 状态对象 sel={dates,t1,t2,stores,channels,subStore} 与 render* 函数链、
+ * 联动优先级（二级门店 > 二级细类 > 一级分类 > 整体）均已内置。
+ * ========================================================================= */
+/* ===== 数据（由 gen_report.py 注入，勿手改此处；改数据请重跑脚本） ===== */
+const REPORT_DATA = /*__DATA__*/{};
+var R = REPORT_DATA;
+var DATES=R.DATES, DAILY=R.DAILY, TAG1ORDER=R.TAG1ORDER||[], TAG2MAP=R.TAG2MAP||{},
+    SCORES=R.SCORES||[], QUOTES=R.QUOTES, STORES=R.STORES, CHANNELS=R.CHANNELS,
+    TAGCOLOR=R.TAGCOLOR, METRICS=R.METRICS||[],
+    BUSINESS=R.BUSINESS||[], META=R.META||{}, PERIOD=R.PERIOD;
+
+/* 差评原因分布统一用 badCommentTags，按「一级-二级」两层下钻：
+   TAG1ORDER = 一级顺序（badCommentTags 中 '-' 前部分，按命中降序，其他原因末位）；
+   TAG2MAP   = { 一级: [二级降序] }（'-' 后部分）；
+   TAGCOLOR  = 一级（即大类前缀）配色，两级同色，保证同类同色、可读。 */
+function t1color(t){ return TAGCOLOR[t]||'#868e96'; }
+
+/* ===== 状态 ===== */
+var sel={dates:new Set(DATES), t1:null, t2:null, stores:new Set(), channels:new Set(), subStore:null, page:1};
+/* 上期指标来自 reviewMetricSummary 的 preXxx 字段（按门店×渠道给出），故环比已支持门店/渠道筛选；
+   但上期无逐日数据，日期非全选时子集环比不可得 */
+/* 完整口径 = 日期全选（门店/渠道可任意筛选，环比照常可用） */
+function isFullRange(){ return DATES.every(function(x){return sel.dates.has(x);}); }
+/* 转义：评价正文/门店名等来自接口、属不可信内容，拼 innerHTML 前必须转义，防布局破坏与脚本注入 */
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+/* 专用于 onclick 内单引号 JS 字符串（先转 HTML 实体，再转义反斜杠与单引号） */
+function escJS(s){ return esc(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function momInt(cur,prev,unit){
+  if(!isFullRange()) return '环比：仅完整周期可比对';
+  var diff=cur-prev, pct=prev?diff/prev*100:0;
+  return '环比 '+(pct>=0?'+':'')+pct.toFixed(1)+'%';
+}
+/* 率指标环比统一为「百分点变化（pp）」：curFrac/prevFrac 均为 0~1 小数，
+   百分点差 = (cur-prev)*100；好评率等率指标用 pp 而非相对 %（与 MCP positiveRate 口径统一） */
+function momRate(curFrac,prevFrac){
+  if(!isFullRange()) return '环比：仅完整周期可比对';
+  var pp=(curFrac-prevFrac)*100;
+  return '环比 '+(pp>=0?'+':'')+pp.toFixed(1)+'pp';
+}
+
+/* ===== 多选下拉组件 ===== */
+function buildMS(containerId, options, set, placeholder){
+  var box=document.createElement('div');box.className='ms';
+  var head=document.createElement('div');head.className='ms-box';
+  var label=document.createElement('span');label.textContent=placeholder;
+  var cnt=document.createElement('span');cnt.className='cnt';
+  head.appendChild(label);head.appendChild(cnt);
+  var panel=document.createElement('div');panel.className='ms-panel';
+  var tools=document.createElement('div');tools.className='ms-tools';
+  var search=document.createElement('input');search.placeholder='搜索…';
+  var all=document.createElement('a');all.className='ms-btn';all.textContent='全选';
+  var none=document.createElement('a');none.className='ms-btn';none.textContent='清空';
+  var btns=document.createElement('span');btns.className='ms-btns';btns.appendChild(all);btns.appendChild(none);
+  tools.appendChild(search);tools.appendChild(btns);
+  panel.appendChild(tools);
+  var list=document.createElement('div');panel.appendChild(list);
+  function refreshList(){
+    list.innerHTML='';
+    var kw=search.value.trim();
+    options.forEach(function(o){
+      if(kw && o.indexOf(kw)<0)return;
+      var row=document.createElement('label');row.className='ms-opt';
+      var cb=document.createElement('input');cb.type='checkbox';cb.checked=set.has(o);
+      cb.onchange=function(){ if(cb.checked)set.add(o);else set.delete(o); updateCount(); render(); };
+      var sp=document.createElement('span');sp.textContent=o;
+      row.appendChild(cb);row.appendChild(sp);list.appendChild(row);
+    });
+  }
+  function updateCount(){
+    var n=options.filter(function(o){return set.has(o);}).length;
+    cnt.textContent= n===0? '全部' : ('已选 '+n+'/'+options.length);
+  }
+  head.onclick=function(e){ e.stopPropagation(); box.classList.toggle('open'); };
+  search.onclick=function(e){e.stopPropagation();};
+  all.onclick=function(e){e.stopPropagation();options.forEach(function(o){set.add(o);});refreshList();updateCount();render();};
+  none.onclick=function(e){e.stopPropagation();set.clear();refreshList();updateCount();render();};
+  search.oninput=refreshList;
+  document.addEventListener('click',function(){box.classList.remove('open');});
+  panel.onclick=function(e){e.stopPropagation();};  // 点击面板内部（含复选项）不冒泡到 document，避免选中一个即关闭面板
+  box.appendChild(head);box.appendChild(panel);
+  document.getElementById(containerId).appendChild(box);
+  refreshList();updateCount();
+  return {refreshList:refreshList,updateCount:updateCount};
+}
+var msStore, msChannel;
+
+/* 日期快捷 */
+function qDate(el){
+  document.querySelectorAll('.qbtn').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');
+  var q=el.dataset.q;
+  if(q==='all'){sel.dates=new Set(DATES);}
+  else if(q==='week'){sel.dates=new Set(DATES.slice(-7));} // 取数据范围末尾 7 天（近一周）
+  else if(q==='7'){sel.dates=new Set(DATES.slice(-7));}
+  syncDateInput();render();
+}
+/* 日期筛选框约束：把可选区间夹到当前数据范围 [PERIOD.start, PERIOD.end]，
+   日历面板中范围外日期自动置灰且不可点（min/max）；此处再兜底夹回手输/越界值 */
+function initDateBounds(){
+  var s=document.getElementById('dStart'), e=document.getElementById('dEnd');
+  if(PERIOD && PERIOD.start){ s.min=PERIOD.start; e.min=PERIOD.start; }
+  if(PERIOD && PERIOD.end){ s.max=PERIOD.end; e.max=PERIOD.end; }
+}
+function customDate(){
+  document.querySelectorAll('.qbtn').forEach(function(b){b.classList.remove('on');});
+  var s=document.getElementById('dStart').value, e=document.getElementById('dEnd').value;
+  if(PERIOD){
+    if(s && PERIOD.start && s<PERIOD.start) s=PERIOD.start;   // 早于数据起点 → 夹回起点
+    if(e && PERIOD.end  && e>PERIOD.end ) e=PERIOD.end;        // 晚于数据终点 → 夹回终点
+    if(s && PERIOD.end  && s>PERIOD.end ) s=PERIOD.end;
+    if(e && PERIOD.start && e<PERIOD.start) e=PERIOD.start;
+  }
+  if(s && e && s>e){ var t=s; s=e; e=t; }                     // 起止颠倒 → 交换
+  if(s) document.getElementById('dStart').value=s;
+  if(e) document.getElementById('dEnd').value=e;
+  sel.dates=new Set(DATES.filter(function(d){return d>=s && d<=e;}));
+  render();
+}
+function syncDateInput(){
+  // 取所选最小/最大
+  var arr=Array.from(sel.dates).sort();
+  if(arr.length){document.getElementById('dStart').value=arr[0];document.getElementById('dEnd').value=arr[arr.length-1];}
+}
+
+function clearSel(kind){
+  if(kind==='store'){sel.stores.clear();msStore.refreshList();msStore.updateCount();}
+  if(kind==='channel'){sel.channels.clear();msChannel.refreshList();msChannel.updateCount();}
+  render();
+}
+function resetAll(){
+  sel.dates=new Set(DATES);sel.t1=null;sel.t2=null;sel.stores.clear();sel.channels.clear();sel.subStore=null;
+  document.querySelectorAll('.qbtn').forEach(function(b){b.classList.toggle('on',b.dataset.q==='all');});
+  syncDateInput();msStore.refreshList();msStore.updateCount();msChannel.refreshList();msChannel.updateCount();
+  render();
+}
+
+/* ===== 工具 ===== */
+/* 日指标：DAILY 已含门店/渠道维度，故四维均可过滤（原仅日期） */
+function filteredDaily(){
+  return DAILY.filter(function(d){
+    if(!sel.dates.has(d.date))return false;
+    if(sel.stores.size && !sel.stores.has(d.store))return false;
+    if(sel.channels.size && !sel.channels.has(d.ch))return false;
+    return true;
+  });
+}
+/* 本期/上期指标（按筛选的门店/渠道汇总，用于环比；上期无逐日数据故不受日期影响） */
+function aggMetrics(side){
+  var m={total:0,pos:0,neg:0,relig:0,rep24:0};
+  METRICS.forEach(function(x){
+    if(sel.stores.size && !sel.stores.has(x.store))return;
+    if(sel.channels.size && !sel.channels.has(x.ch))return;
+    var s=x[side]||{};
+    m.total+=s.total||0; m.pos+=s.pos||0; m.neg+=s.neg||0;
+    m.relig+=s.relig||0; m.rep24+=s.rep24||0;
+  });
+  return m;
+}
+/* 经营指标（订单/实收）：orderAndReceiptSummary 仅按门店×渠道给出、无逐日数据，故只随门店/渠道联动，不随日期联动 */
+function aggBusiness(side){
+  var o=0,a=0;
+  BUSINESS.forEach(function(x){
+    if(sel.stores.size && !sel.stores.has(x.store))return;
+    if(sel.channels.size && !sel.channels.has(x.ch))return;
+    o+=x[side+'Order']||0; a+=x[side+'Amt']||0;
+  });
+  return {order:o, amt:a};
+}
+function filteredQuotes(){
+  return QUOTES.filter(function(q){
+    if(!sel.dates.has(q.date))return false;            /* 全量跟随：日期维度也纳入统一过滤 */
+    if(sel.stores.size && !sel.stores.has(q.store))return false;
+    if(sel.subStore && q.store!==sel.subStore)return false;
+    if(sel.channels.size && !sel.channels.has(q.ch))return false;
+    if(sel.t2){ if((q.tags2||[]).indexOf(sel.t2)<0) return false; }
+    else if(sel.t1){ if((q.tags1||[]).indexOf(sel.t1)<0) return false; }
+    return true;
+  });
+}
+/* 从已过滤的差评明细实时重算各标签命中数 —— 随门店/渠道/类型/日期四维度全量联动 */
+function aggTag1Count(qs){
+  /* 一级原因分布计数：按 q.tags1（badCommentTags '-' 前）。
+     每评论去重：一条差评若带多个同大类二级标签（如 口味问题-味道异常;口味问题-温度异常），
+     tags1 中该大类会出现多次，但本条只应计 1 次——否则「命中条数」会超过差评总条数，
+     使「占差评比例」>100%。用 seen 在同一条内去重，保证 tc[t]≤评论条数、比例恒 ≤100%。
+     与二级柱状图(aggTag2Count，按 (一级,二级) 配对去重)、命中门店分布(renderTag2，按评论去重)口径统一。 */
+  var m={};TAG1ORDER.forEach(function(t){m[t]=0;});
+  qs.forEach(function(q){ var seen={}; (q.tags1||[]).forEach(function(t){ if(t in m && !seen[t]){ m[t]++; seen[t]=1; } }); });
+  return m;
+}
+function aggTag2Count(qs, t1){
+  /* 二级原因分布计数：仅统计 一级==t1 的配对（q.pairs 中 pair[0]==t1 的 pair[1]） */
+  var m={};(TAG2MAP[t1]||[]).forEach(function(t){m[t]=0;});
+  qs.forEach(function(q){ (q.pairs||[]).forEach(function(p){ if(p[0]===t1) m[p[1]]=(m[p[1]]||0)+1; }); });
+  return m;
+}
+function updateSum(){
+  var dayN=sel.dates.size, t=(sel.t1?1:0)+(sel.t2?1:0), s=sel.stores.size, c=sel.channels.size;
+  document.getElementById('fsum').textContent='日期 '+dayN+' 天 · 原因 '+(sel.t1?(sel.t2?('二级 '+sel.t2):('一级 '+sel.t1)):'全部')+' · 门店 '+(s?s+'选':'全部')+' · 渠道 '+(c?c+'选':'全部');
+  /* 诚实边界（新版 schema）：
+     —— 日期/门店/渠道 三个维度：指标卡、评分分布、每日趋势、差评原因、原文、总结 全部联动；
+     —— 原因（标签）维度：工具未给标签级的评分/订单/回复数据，故只影响「差评原因分布 / 命中门店 / 原文 / 总结」等明细类，
+        不影响「指标卡 / 评分分布 / 每日趋势（整体分支）」；
+     —— 环比：上期数据按门店×渠道给出、无逐日数据，故日期非全选时子集环比不可得。 */
+  var sn=document.getElementById('scopeNote'), msg=[];
+  if(t){
+    msg.push('已按<b>差评原因</b>'+(sel.t2?('二级「'+sel.t2+'」'):('一级「'+sel.t1+'」'))+'筛选：该维度仅作用于「差评原因分布 / 命中门店 / 每日命中趋势 / 差评明细 / 总结」等明细类模块；<b>指标卡、评分分布、每日整体趋势</b>因接口未提供标签级的评分与回复数据，仍为当前日期+门店+渠道口径，不随原因下钻。');
+  }
+  if(!isFullRange()){
+    var df = DATES.length ? Math.round(sel.dates.size/DATES.length*100) : 100;
+    msg.push('已按<b>日期子集</b>筛选：① 上期数据仅按门店×渠道汇总、无逐日明细，<b>环比暂不可得</b>；指标卡本期数值按所选日期重算；② 底部「业务结论」差评↔经营相关性亦按所选窗口重算（订单量/实收按所选天数占比 '+df+'% 折算，门店×渠道组合不足 3 个时仍提示样本不足）。');
+  }
+  if(msg.length){ sn.style.display='block'; sn.innerHTML=msg.join('<br><br>'); }
+  else { sn.style.display='none'; }
+}
+
+/* ===== 渲染 ===== */
+function render(){
+  sel.page=1;
+  updateSum();renderCards();renderBars1();renderBars2();renderTag2();renderDaily();renderQuotes();renderTagLegend();renderDonut();renderSummary();
+}
+function renderSummary(){
+  var d=filteredDaily();
+  var body=document.getElementById('summaryBody');
+  if(!d.length){body.innerHTML='<div class="note">当前日期筛选条件下无数据。</div>';return;}
+
+  var total=d.reduce(function(s,x){return s+x.total;},0);
+  var pos=d.reduce(function(s,x){return s+x.pos;},0);
+  var neg=d.reduce(function(s,x){return s+x.neg;},0);
+  var pr=total?(pos/total*100):0;
+  var nr=total?(neg/total*100):0;
+  /* 平均分：工具不再返回 averageScore，改由评分分布 SCORES 按 1~5 分加权自算；
+     0 分档 = 原始评分缺失，不计入分子分母（分母也因此与总评论数不同，须单独标注） */
+  var wsum=0, wcnt=0;
+  scoreDist().forEach(function(x){ if(x.score>0){ wsum+=x.score*x.count; wcnt+=x.count; } });
+  var avg=wcnt?(wsum/wcnt):0;
+  var tc=aggTag1Count(filteredQuotes());
+  /* TOP 原因用一级标签 badCommentTags（'-' 前） */
+  var topTags=TAG1ORDER.filter(function(t){return tc[t]>0;})
+    .sort(function(a,b){return tc[b]-tc[a];})
+    .slice(0,3).map(function(t){return t+'（'+tc[t]+' 条）';}).join('、')||'无';
+  var dDays=new Set(d.map(function(x){return x.date;})).size;   // 唯一日期数（d 为 date×store×channel 行集合，不能用 d.length 当天数）
+  var scopeTxt='日期 '+dDays+' 天'+( (sel.t1||sel.t2) ? (' · 原因 '+(sel.t2?('二级 '+sel.t2):('一级 '+sel.t1))) : '' )+(sel.stores.size?(' · 门店 '+sel.stores.size+' 选'):'');
+
+  var html='';
+  html+='<div style="font-size:13px;line-height:1.85;">';
+  html+='<b>当前范围：</b>'+scopeTxt+'。<br>';
+  html+='<b>整体表现：</b>评价 <b>'+total+' 条</b>，好评 <b>'+pos+' 条</b>（好评率 '+pr.toFixed(1)+'%），差评 <b>'+neg+' 条</b>（差评率 '+nr.toFixed(1)+'%）；平均分 <b>'+(wcnt?avg.toFixed(2)+' 分':'—')+'</b>'+(wcnt?('（基于 '+wcnt+' 条有效评分，'+ (total-wcnt) +' 条评分缺失不计入）'):'')+'。<br>';
+  html+='<b>差评集中：</b>'+topTags+'。';
+  /* 经营对照已按用户要求移除：差评 vs 订单/实收的相关性结论已改写为业务话术，移至改进建议下方红框（见 nlBiz） */
+  /* 相关性分析：差评(率/密度) ↔ 订单量/实收，门店×渠道粒度，随门店/渠道筛选联动（orderAndReceiptSummary 无逐日，故不随日期联动） */
+  function pearson(a,b){
+    var n=a.length; if(n<3) return null;
+    var ma=0,mb=0,i; for(i=0;i<n;i++){ma+=a[i];mb+=b[i];} ma/=n;mb/=n;
+    var num=0,da=0,db=0;
+    for(i=0;i<n;i++){var xa=a[i]-ma,xb=b[i]-mb;num+=xa*xb;da+=xa*xa;db+=xb*xb;}
+    if(da===0||db===0) return null;
+    return num/Math.sqrt(da*db);
+  }
+  function corrTxt(r){
+    if(r===null) return '样本不足，无法计算';
+    var a=Math.abs(r);
+    return (a<0.3?'无显著线性关联':(a<0.6?(r>0?'中等正相关':'中等负相关'):(r>0?'强正相关':'强负相关')))+'（r='+r.toFixed(2)+'）';
+  }
+  /* 非线性分析辅助：① Spearman 秩相关（捕捉单调型非线性） ② 分位桶（捕捉 U 型/阈值型非单调） */
+  function rankArr(arr){
+    var idx=arr.map(function(v,i){return {v:v,i:i};}).sort(function(a,b){return a.v-b.v;});
+    var r=new Array(arr.length), i=0;
+    while(i<idx.length){
+      var j=i; while(j+1<idx.length && idx[j+1].v===idx[i].v) j++;
+      var avg=(i+j)/2+1; // 平均秩（1-based，平局取中）
+      for(var k=i;k<=j;k++) r[idx[k].i]=avg;
+      i=j+1;
+    }
+    return r;
+  }
+  function spearman(a,b){ if(a.length<3) return null; return pearson(rankArr(a),rankArr(b)); }
+  function bucketMeans(sorted){
+    var n=sorted.length; if(n<3) return null;
+    var base=Math.floor(n/3), rem=n-3*base, sizes=[], start=0, out=[], lbls=['低','中','高'];
+    for(var b=0;b<3;b++) sizes.push(base+(b<rem?1:0));
+    for(var b=0;b<3;b++){
+      var sl=sorted.slice(start,start+sizes[b]); start+=sizes[b];
+      var mo=0,ma=0,mr=0,md=0,cnt=sl.length;
+      sl.forEach(function(s){mo+=s.order;ma+=s.amt;mr+=s.rate;md+=(s.order?s.neg/s.order*10000:0);});
+      out.push({label:lbls[b],order:mo/cnt,amt:ma/cnt,rate:mr/cnt,dens:md/cnt,n:cnt});
+    }
+    return out;
+  }
+  /* 相关性：门店×渠道粒度。DAILY 随 日期/门店/渠道 联动（故日期子集亦纳入，结论随所选窗口重算）；
+     BUSINESS 无逐日数据，按所选天数占比 dateFrac 折算订单量/实收，使「窗口差评率」与「窗口当量订单量」口径对齐 */
+  var dateFrac = DATES.length ? (sel.dates.size / DATES.length) : 1;
+  var mat={};
+  DAILY.forEach(function(x){
+    if(!sel.dates.has(x.date))return;
+    if(sel.stores.size && !sel.stores.has(x.store))return;
+    if(sel.channels.size && !sel.channels.has(x.ch))return;
+    var k=x.store+'||'+x.ch;
+    if(!mat[k])mat[k]={store:x.store,ch:x.ch,total:0,neg:0,order:0,amt:0};
+    mat[k].total+=x.total; mat[k].neg+=x.neg;
+  });
+  BUSINESS.forEach(function(x){
+    if(sel.stores.size && !sel.stores.has(x.store))return;
+    if(sel.channels.size && !sel.channels.has(x.ch))return;
+    var k=x.store+'||'+x.ch;
+    if(!mat[k])mat[k]={store:x.store,ch:x.ch,total:0,neg:0,order:0,amt:0};
+    mat[k].order+=x.curOrder*dateFrac; mat[k].amt+=x.curAmt*dateFrac;
+  });
+  var rows=Object.keys(mat).map(function(k){var m=mat[k];m.rate=m.total?m.neg/m.total:0;return m;});
+  var nlBiz='';
+  if(rows.length>=3){
+    var rates=rows.map(function(r){return r.rate;});
+    var dens=rows.map(function(r){return r.order?r.neg/r.order*10000:0;});
+    var ords=rows.map(function(r){return r.order;});
+    var amts=rows.map(function(r){return r.amt;});
+    var rr_o=pearson(rates,ords), rr_a=pearson(rates,amts), rd_o=pearson(dens,ords), rd_a=pearson(dens,amts);
+    var sr_o=spearman(rates,ords), sr_a=spearman(rates,amts), sd_o=spearman(dens,ords), sd_a=spearman(dens,amts);
+    var bkO=bucketMeans(rows.slice().sort(function(x,y){return x.order-y.order;}));
+    var bkA=bucketMeans(rows.slice().sort(function(x,y){return x.amt-y.amt;}));
+    /* 业务结论：按三分位「形状」判定，结论永远与表格数字一致
+       （修复旧版二元分支把任意非单调形状一律写成『中等门店最多/两头低中间高』的 bug） */
+    function bizConclusionText(bk){
+      var r0=bk[0].rate, r1=bk[1].rate, r2=bk[2].rate;
+      var hi=(r2>=r1&&r2>=r0)?2:(r0>=r1&&r0>=r2)?0:1;   // 差评率最高桶：2=高单量 0=低单量 1=中单量
+      var gap=Math.max(r0,r1,r2)-Math.min(r0,r1,r2);
+      var rs=[rr_o,sr_o].map(Math.abs).filter(function(v){return v!=null && !isNaN(v);});
+      var maxR=rs.length?Math.max.apply(null,rs):0;
+      var strength=maxR>=0.6?'强':(maxR>=0.3?'一定':'弱');
+      var nlData='（按订单量三分位，差评率分别为 '+(r0*100).toFixed(1)+'%、'+(r1*100).toFixed(1)+'%、'+(r2*100).toFixed(1)+'% — 低/中/高）';
+      var lead,body;
+      if(gap<0.03){
+        lead='从本期数据看，门店的差评率与订单量（生意规模）<b>没有明显关联</b>';
+        body='——三个分位差评率接近（极差 '+(gap*100).toFixed(1)+'pp），差评主要源于具体菜品的口味、分量、异物等<b>品质问题</b>而非规模问题，建议按差评标签逐店逐项整改。';
+      } else if(hi===2){
+        lead='本期呈现「<b>订单量越高、差评率越高</b>」的趋势';
+        body='：高单量门店差评率最高（'+(r2*100).toFixed(1)+'%），明显高于低/中单量门店（'+(r0*100).toFixed(1)+'%/'+(r1*100).toFixed(1)+'%），高单量门店在出餐一致性、品控上的差评管控压力更大，建议优先排查高单量门店的菜品稳定性与服务峰值应对。';
+      } else if(hi===0){
+        lead='本期呈现「<b>低单量门店差评率反而最高</b>」';
+        body='：低单量门店差评率 '+(r0*100).toFixed(1)+'%，高于中/高单量门店（'+(r1*100).toFixed(1)+'%/'+(r2*100).toFixed(1)+'%），小店在品控或服务环节更易出问题，建议针对性帮扶低单量门店。';
+      } else {
+        lead='本期有个值得注意的现象：<b>生意中等的门店，差评反而比生意好、生意差的门店都多</b>（呈「两头低、中间高」）';
+        body='：中等门店差评率 '+(r1*100).toFixed(1)+'%，高于低/高单量门店（'+(r0*100).toFixed(1)+'%/'+(r2*100).toFixed(1)+'%），说明中等规模门店在品控或服务上出现波动，建议优先排查这部分门店的菜品口味、分量与出餐一致性。';
+      }
+      return lead+body+nlData+'。（订单量↔差评率'+strength+'相关，r≈'+(rr_o!=null && !isNaN(rr_o)?rr_o.toFixed(2):'—')+'）';
+    }
+    function bucketTable(title,bk){
+      if(!bk) return '';
+      var s='<br><b>'+title+'</b>（低/中/高三分位，每桶约 '+bk[0].n+' 个组合）：'
+        +'<table style="border-collapse:collapse;font-size:11px;margin:3px 0 2px;"><tr style="color:#868e96;">'
+        +'<th style="padding:1px 8px;border-bottom:1px solid #dee2e6;">分位</th><th style="padding:1px 8px;border-bottom:1px solid #dee2e6;">订单量</th>'
+        +'<th style="padding:1px 8px;border-bottom:1px solid #dee2e6;">实收</th><th style="padding:1px 8px;border-bottom:1px solid #dee2e6;">差评率</th>'
+        +'<th style="padding:1px 8px;border-bottom:1px solid #dee2e6;">差评密度</th></tr>';
+      bk.forEach(function(b){ s+='<tr><td style="padding:1px 8px;border-bottom:1px solid #f1f3f5;">'+b.label+'</td>'
+        +'<td style="padding:1px 8px;border-bottom:1px solid #f1f3f5;">'+Math.round(b.order)+'</td>'
+        +'<td style="padding:1px 8px;border-bottom:1px solid #f1f3f5;">'+Math.round(b.amt)+'</td>'
+        +'<td style="padding:1px 8px;border-bottom:1px solid #f1f3f5;">'+(b.rate*100).toFixed(1)+'%</td>'
+        +'<td style="padding:1px 8px;border-bottom:1px solid #f1f3f5;">'+b.dens.toFixed(1)+'</td></tr>'; });
+      return s+'</table>';
+    }
+    nlBiz = bizConclusionText(bkO);
+    nlBiz += '（基于 '+rows.length+' 个门店×渠道组合'+(rows.length<=4?'，样本量偏小、相关性仅供参考':'')+'）';
+  } else {
+    nlBiz='（当前筛选下门店×渠道组合不足 3 个，暂无法给出差评与经营相关性的业务结论）';
+  }
+  html+='</div>';
+
+  /* 重点问题（双项）：① 食安预警（结论「跟随筛选」：基于 filteredQuotes()，随日期/门店/渠道/原因筛选实时变化；仅下方举例抽样） ② 差评24h回复效率（周期级指标，随门店/渠道筛选、不随日期；无逐日 reply 数据）；仅两项均无问题才判定整体OK */
+  /* 食安红线：一级标签命中「异物问题」（badCommentTags '-' 前，如 异物问题-毛发人体异物） */
+  var fsItems=filteredQuotes().filter(function(q){return (q.tags1||[]).indexOf('异物问题')>=0;});   // 跟随筛选：与命中门店/每日趋势/明细同口径
+  var fsUnreplied=fsItems.filter(function(q){return !q.replied;}).length;
+
+  /* 差评回复效率：与指标卡「24h差评回复率」同一口径（replyMetric，单一数据源；周期级：分子 replyWithin24Hours、分母 badCommentCount，来自 reviewMetricSummary，与服务端 replyWithin24HoursPer 一致；无逐日数据） */
+  var rm=replyMetric();
+
+  var fsOK=fsItems.length===0;
+  var repNoData = rm.total===0;                 /* 无差评：回复率不适用，非「达标」 */
+  var repOK = !repNoData && rm.unreplied===0;   /* 有差评且全部已回复 */
+  var repBad = !repNoData && rm.unreplied>0;    /* 有差评且有未回复 */
+  var allOK = fsOK && repOK;
+  var pending = (!fsOK?1:0) + (repBad?1:0);     /* 待处置仅计真实问题，不含「无差评」 */
+
+  if(allOK){
+    html+='<div style="margin-top:10px;padding:10px 12px;background:#ebfbee;border:1px solid #b2f2bb;border-radius:8px;font-size:13px;line-height:1.9;">';
+    html+='<b style="color:#2b8a3e;font-size:14px;">重点问题 · 整体良好 ✅</b><br>';
+    html+='本期 <b>食安红线</b> 与 <b>差评回复效率</b> 两项重点问题均未触发，整体处置到位，请继续保持当前标准。';
+    html+='</div>';
+  } else {
+    html+='<div style="margin-top:10px;padding:10px 12px;background:#fff5f5;border:1px solid #ffc9c9;border-radius:8px;font-size:13px;line-height:1.9;">';
+    html+='<b style="color:#c92a2a;font-size:14px;">重点问题 · 存在待处置项（'+pending+' 项）</b><br>';
+    /* ① 食安 */
+    if(!fsOK){
+      html+='① <b style="color:#c92a2a;">食安预警</b>：本期（当前筛选）<b>'+fsItems.length+' 条</b>命中「异物问题（食安红线）」，其中 <b>'+fsUnreplied+' 条未回复</b>，属高风险，须立即处置（下方为抽样举例，重点列未回复 / 高风险条目）：<br>';
+      /* 排序：未回复优先 → 日期倒序，最多展示 FS_SAMPLE 条；超出以「…等共 N 条」概括，避免刷屏失去重点 */
+      var fsShow=fsItems.slice().sort(function(a,b){
+        var au=a.replied?0:1, bu=b.replied?0:1; if(au!==bu) return bu-au;
+        return (a.date<b.date)?1:-1;
+      }).slice(0,FS_SAMPLE);
+      fsShow.forEach(function(q){
+        var t=q.text.length>60?q.text.slice(0,60)+'…':q.text;
+        html+='&nbsp;&nbsp;· '+esc(t)+' —— <b>'+esc(q.date)+'，'+esc(q.store)+'</b>'+(q.replied?'':' <span style="color:#c92a2a;">未回复</span>')+'<br>';
+      });
+      if(fsItems.length>FS_SAMPLE) html+='&nbsp;&nbsp;…等共 <b>'+fsItems.length+' 条</b>食安红线命中（未回复 '+fsUnreplied+' 条），请逐一追溯闭环。<br>';
+    } else {
+      html+='① <b style="color:#2b8a3e;">食安预警 ✅</b>：本期未命中「异物问题」等食品安全红线，食品安全管控到位。<br>';
+    }
+    /* ② 差评24h回复效率（即下方指标卡「24h差评回复率」，不再单独重算；分母为 0 显示「—」不适用） */
+    if(repBad){
+      html+='② <b style="color:#c92a2a;">差评24h回复效率</b>：本期 <b>24h差评回复率 '+fmtRate(rm.rate)+'</b>（全量口径 '+rm.replied+'/'+rm.total+' 在24h内已回复，<b>'+rm.unreplied+' 条未达「24h内回复」</b>），未达 SLA 目标，须提升响应速度：<br>';
+      /* 两套回复口径必须显式区分，避免与下方「至今未回复」混淆：
+         —— rm.unreplied = 工具口径「24h内未回复」（replyWithin24Hours/badCommentCount，周期级，store/channel 跟随筛选）；
+         —— anyUnrep = 逐条口径「至今未回复」（replyTime/replyContent 非空，任意时间，跟随全四维筛选）；
+         两者定义不同（24h vs 任意时间），本报告同时呈现并桥接：anyUnrep(至今未回复) + lateUnrep(已回复但超24h) = rm.unreplied(未达24h)。 */
+      var anyUnrep=filteredQuotes().filter(function(q){return !q.replied;}).length;
+      var lateUnrep=Math.max(0,rm.unreplied-anyUnrep);
+      filteredQuotes().filter(function(q){return !q.replied;}).slice(0,5).forEach(function(q){
+        var t=q.text.length>46?q.text.slice(0,46)+'…':q.text;
+        html+='&nbsp;&nbsp;· 至今未回复：'+esc(t)+' —— <b>'+esc(q.store)+'</b><br>';
+      });
+      if(anyUnrep>5) html+='&nbsp;&nbsp;…等共 '+anyUnrep+' 条至今未回复';
+      if(lateUnrep>0) html+='（另有 '+lateUnrep+' 条已回复但超24h，合计 '+rm.unreplied+' 条未达「24h内回复」SLA）';
+    } else if(repOK){
+      html+='② <b style="color:#2b8a3e;">差评24h回复效率 ✅</b>：本期 <b>24h差评回复率 '+fmtRate(rm.rate)+'</b>，差评均已回复，回复效率达标。';
+    } else { /* repNoData：本范围无差评，回复率不适用 */
+      html+='② <b style="color:#868e96;">差评24h回复效率</b>：本范围无差评，回复率不适用（—），无需处置。';
+    }
+    html+='</div>';
+  }
+
+  /* 改进建议（数据驱动）：仅展示本期实际暴露的问题；「其他原因」为兜底标签、无可 actionable 归因，直接从改进建议中剔除 */
+  var fq=filteredQuotes();
+  var sug=[];
+  if(fsItems.length){
+    sug.push('① <b>食安红线处置</b>：本期（全量）命中「异物问题（食安红线）」'+fsItems.length+' 条（其中 '+fsUnreplied+' 条未回复），立即追溯后厨卫生与供应链，限时闭环并跟进回复。');
+  }
+  /* 改进建议映射：按一级标签 badCommentTags（'-' 前）给建议（与 TAGCOLOR 同口径） */
+  var adviceMap={
+    '口味问题':'复盘核心菜品配方与投料标准化（克重、验收），重点核查味道异常/温度/变质问题',
+    '分量问题':'核查出餐份量与宣传一致性，杜绝中虚假标、结块异常',
+    '制作/错漏送':'落实出餐「核对清单」，杜绝做错货/漏做少给/备注票据遗漏',
+    '异物问题':'追溯后厨卫生与供应链（食安红线），限时闭环并跟进回复',
+    '缺餐具':'落实随单餐具/吸管核对，避免漏送',
+    '服务态度':'强化服务礼仪与售后响应培训，建立差评即时安抚补偿机制',
+    '配送超时':'排查出餐效率与骑手召唤节奏，缩短送达时长',
+    '包装/撒漏':'强化出餐打包与封装保温/防撒漏核对',
+    '笼统差评':'结合原文情感做专项回访，定位具体可改进点'
+  };
+  /* 改进建议聚焦：仅展示命中数 Top TOP_SUG 的一级标签（跳过食安红线「异物问题」与兜底「其他原因」）；
+     其余长尾合并为一条概括，避免大量低频数标签稀释重点；每条门店列表限长 STORE_SHOW，超出「等 N 家」 */
+  var sugTags=TAG1ORDER.filter(function(t){return tc[t]>0 && t!=='异物问题' && t!=='其他原因';})
+                       .sort(function(a,b){return tc[b]-tc[a];});
+  var showTags=sugTags.slice(0,TOP_SUG);
+  var tailTags=sugTags.slice(TOP_SUG);
+  showTags.forEach(function(t){
+    var c=tc[t];
+    /* 分母必须与分子同源：分子 c 来自 filteredQuotes()（随日期/门店/渠道/原因四维度），
+       故分母也用 fq.length；不可用 neg（来自 DAILY，只随日期/门店/渠道，不含原因维度），否则口径错位 */
+    var r=fq.length?Math.round(c/fq.length*100):0;
+    var st={};                                     // 命中该一级标签的门店及条数（随筛选联动）
+    fq.forEach(function(q){ if((q.tags1||[]).indexOf(t)>=0) st[q.store]=(st[q.store]||0)+1; });
+    var stKeys=Object.keys(st).sort(function(a,b){return st[b]-st[a];});
+    var stTxt=stKeys.slice(0,STORE_SHOW).map(function(s){return esc(s)+'('+st[s]+')';}).join('、');
+    if(stKeys.length>STORE_SHOW) stTxt+=' 等 '+stKeys.length+' 家';
+    var advice=adviceMap[t]||'结合本期数据做针对性整改';
+    sug.push((sug.length+1)+' <b>'+t+'</b>：本期命中 '+c+' 条（占差评 '+r+'%）'+(stTxt?('，集中在 '+stTxt):'')+'，建议'+advice+'。');
+  });
+  if(tailTags.length){
+    var tailC=tailTags.reduce(function(s,t){return s+tc[t];},0);
+    var tailTxt=tailTags.map(function(t){return t+'（'+tc[t]+'）';}).join('、');
+    sug.push((sug.length+1)+' <b>长尾问题</b>（'+tailTags.length+' 类，共 '+tailC+' 条，占差评 '+(fq.length?Math.round(tailC/fq.length*100):0)+'%）：'+tailTxt+'，属低频长尾，建议按标签常规整改并纳入下期复盘。');
+  }
+  var fqUnrep=fq.filter(function(q){return !q.replied;}).length;
+  if(fq.length){
+    sug.push((sug.length+1)+' <b>渠道服务 SLA</b>：本期差评明细 '+fq.length+' 条中 '+fqUnrep+' 条至今未回复，建议建立「差评 24 小时内回复」机制（先清零至今未回复，再压超24h回复），先止血再谈优化。');
+  }
+  html+='<div style="margin-top:10px;padding:10px 12px;background:#e7f5ff;border:1px solid #a5d8ff;border-radius:8px;font-size:13px;line-height:1.9;">';
+  html+='<b style="color:#1971c2;font-size:14px;">改进建议（数据驱动）</b><br>';
+  html+=(sug.length?sug.join('<br>'):'当前筛选范围无差评暴露，维持现有标准即可。');
+  html+='</div>';
+
+  /* 业务结论红框：业务话术结论（已内含一点点数据锚点 nlData），不再单列「数据说明」技术脚注 */
+  html+='<span class="warn" style="margin-top:8px;display:block;">'+
+        '<b style="font-size:13px;color:#c92a2a;">业务结论</b><br>'+nlBiz+'</span>';
+
+  body.innerHTML=html;
+}
+function renderTagLegend(){
+  /* 图例跟随一级原因分布：按一级标签 badCommentTags 着色 */
+  var html=TAG1ORDER.map(function(t){
+    return '<span class="ti"><span class="sw" style="background:'+t1color(t)+'"></span>'+t+'</span>';
+  }).join('');
+  document.getElementById('tagLegend').innerHTML=html;
+}
+function momArrow(mom){
+  if(mom.indexOf('+')>=0) return '▲ ';
+  if(mom.indexOf('-')>=0) return '▼ ';
+  return '';
+}
+/* 差评回复指标（单一数据源）：指标卡「24h差评回复率」与重点问题② 共用，避免口径不一致
+   —— 周期级口径：dailyCommentTrends 无 reply 字段，故从 reviewMetricSummary 按门店×渠道(current)聚合；
+      分母 = 差评总数(badCommentCount)，与服务端 replyWithin24HoursPer 口径一致（已核验）；
+      分子 = repliedWithin24Hours（工具已提供）。
+   —— 无逐日回复数据，故日期维度不参与（日期筛选下该率保持周期级，不随日期重算）；
+      门店/渠道维度参与汇总；类型维度不影响该率（接口未给标签级回复数据）。 */
+function replyMetric(){
+  var relig=0, rep24=0;
+  METRICS.forEach(function(x){
+    if(sel.stores.size && !sel.stores.has(x.store))return;
+    if(sel.channels.size && !sel.channels.has(x.ch))return;
+    var s=x.cur||{};
+    relig+=(s.relig||0); rep24+=(s.rep24||0);
+  });
+  /* rate 保留原始浮点（与好评率一致在展示层 toFixed(1)），避免中间取整导致环比失真
+     分母为 0（无差评）时返回 null（不适用），绝不显示为 0% 假阳性 */
+  return {total:relig, replied:rep24, unreplied:Math.max(0,relig-rep24),
+          rate: relig?(rep24/relig*100):null};
+}
+/* 回复率展示：分母为 0（无差评）显示「—」而非 0%（规避假 0% 误导） */
+function fmtRate(r){ return (r==null) ? '—' : r.toFixed(1)+'%'; }
+/* 指标色调：按指标「向好方向」判定颜色——与股市涨跌色相反，业务评价以好坏定色。
+   pol: 'good'（涨=改善/绿, 跌=恶化/红）| 'bad'（涨=恶化/红, 跌=改善/绿）| 'neutral'（恒灰）。
+   up on good-metric 或 down on bad-metric = 改善(good,绿)；反之为 恶化(bad,红)。 */
+function momTone(mom, pol){
+  var dir = mom.indexOf('+')>=0 ? 'up' : (mom.indexOf('-')>=0 ? 'down' : 'flat');
+  if(pol==='neutral' || dir==='flat') return 'flat';
+  var good = (dir==='up') ? (pol==='good') : (pol==='bad');
+  return good ? 'good' : 'bad';
+}
+function card(k,v,mom,sub,pol){
+  var tone='', arr='';
+  if(mom){ tone=momTone(mom,pol||'neutral'); arr=momArrow(mom); }
+  return '<div class="card"><div class="k">'+k+'</div><div class="v">'+v+'</div>'+
+    (mom?'<div class="d '+tone+'">'+arr+mom+'</div>':'')+
+    (sub?'<div class="note">'+sub+'</div>':'')+'</div>';
+}
+function renderCards(){
+  var d=filteredDaily();
+  var total=d.reduce(function(s,x){return s+x.total;},0);
+  var pos=d.reduce(function(s,x){return s+x.pos;},0);
+  /* 本期：分子分母分别随日期/门店/渠道汇总；上期：按门店/渠道汇总（无逐日数据） */
+  var cur={total:0,pos:0,neg:0,relig:0,rep24:0};
+  d.forEach(function(x){cur.total+=x.total;cur.pos+=x.pos;cur.neg+=x.neg;cur.relig+=x.relig;cur.rep24+=x.rep24;});
+  var pv=aggMetrics('prev');
+  var pr=cur.total?(cur.pos/cur.total*100):0;
+  var prPrev=pv.total?(pv.pos/pv.total):0;
+  var rm=replyMetric();
+  var r24Prev=pv.relig?(pv.rep24/pv.relig*100):null;
+  var r24mom=(rm.rate==null||r24Prev==null)?null:momRate(rm.rate/100,r24Prev/100);
+  var r24sub = rm.rate==null
+      ? '本范围无差评（回复率不适用 —）'
+      : (rm.unreplied===0
+          ? '真实口径 '+rm.replied+'/'+rm.total+' 条差评均在24h内已回复（达标）'
+          : '真实口径 '+rm.replied+'/'+rm.total+' 条已在24h内回复，'+rm.unreplied+' 条未回复');
+  /* 周期级指标无 date 字段：日期子集下分母仍是全周期，显式标注消除「差评数随日期、回复率不随日期」的口径矛盾 */
+  if(rm.rate!=null && sel.dates.size < DATES.length) r24sub += '（按全周期，不随日期筛选）';
+  document.getElementById('cards').innerHTML=
+    card('总评论数',cur.total, momInt(cur.total,pv.total),'','neutral')+
+    card('好评数',cur.pos, momInt(cur.pos,pv.pos),'','good')+
+    card('差评数',cur.neg, momInt(cur.neg,pv.neg),'','bad')+
+    card('好评率',pr.toFixed(1)+'%', momRate(pr/100,prPrev),'','good')+
+    card('24h差评回复率', fmtRate(rm.rate), r24mom, r24sub, 'good');
+}
+function renderBars1(){
+  /* 一级原因分布：badCommentTags 中「-」前大类（TAG1ORDER），随四维全量联动；点一级名 → toggleT1 下钻二级 */
+  var counts=aggTag1Count(filteredQuotes());
+  var max=Math.max.apply(null,TAG1ORDER.map(function(t){return counts[t];}).concat([1]));
+  var html='';
+  TAG1ORDER.forEach(function(t){
+    var c=counts[t];
+    var selc=(sel.t1===t)?'sel':'';
+    var w=max?(c/max*100):0;
+    var col=t1color(t);
+    html+='<div class="bar-row"><div class="name '+selc+'" onclick="toggleT1(\''+escJS(t)+'\')">'+esc(t)+(sel.t1===t?' ▾':'')+'</div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:'+w+'%;background:'+col+'"></div></div>'+
+      '<div class="cnt">'+c+' 条</div></div>';
+  });
+  document.getElementById('barChart').innerHTML=html;
+}
+function renderBars2(){
+  /* 二级细分：仅当已选一级分类时加载（TAG2MAP[sel.t1]，随筛选联动）；点二级名 → toggleT2 联动门店/趋势/明细 */
+  var wrap=document.getElementById('bar2Wrap');
+  var box=document.getElementById('barChart2');
+  if(!sel.t1){ wrap.style.display='none'; box.innerHTML=''; return; }
+  wrap.style.display='block';
+  var subs=TAG2MAP[sel.t1]||[];
+  var fq=filteredQuotes();
+  var counts={};
+  fq.forEach(function(q){ (q.pairs||[]).forEach(function(p){ if(p[0]===sel.t1) counts[p[1]]=(counts[p[1]]||0)+1; }); });
+  if(!subs.length){ box.innerHTML='<div class="note">该一级分类下无二级细分标签</div>'; return; }
+  var max=Math.max.apply(null,subs.map(function(t){return counts[t]||0;}).concat([1]));
+  var col=t1color(sel.t1);
+  var html='';
+  subs.forEach(function(t){
+    var c=counts[t]||0;
+    var selc=(sel.t2===t)?'sel':'';
+    var w=max?(c/max*100):0;
+    html+='<div class="bar-row"><div class="name '+selc+'" onclick="toggleT2(\''+escJS(t)+'\')">'+esc(t)+(sel.t2===t?' ▾':'')+'</div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:'+w+'%;background:'+col+'"></div></div>'+
+      '<div class="cnt">'+c+' 条</div></div>';
+  });
+  box.innerHTML=html;
+}
+function toggleT1(t){
+  if(sel.t1===t){ sel.t1=null; sel.t2=null; }
+  else { sel.t1=t; sel.t2=null; }
+  sel.subStore=null;   /* 切换一级分类时清空二级选中门店，避免父子错位 */
+  render();
+}
+function toggleT2(t){
+  if(sel.t2===t){ sel.t2=null; }
+  else { sel.t2=t; }
+  sel.subStore=null;
+  render();
+}
+function toggleSubStore(s){
+  sel.subStore=(sel.subStore===s)?null:s;
+  render();
+}
+function renderTag2(){
+  var svg=document.getElementById('tag2');
+  var active=sel.t2||sel.t1;
+  if(!active){
+    sel.subStore=null;
+    svg.setAttribute('viewBox','0 0 680 190'); svg.style.width='680px'; svg.style.maxWidth='none'; svg.style.height='190px';
+    svg.innerHTML='<text x="340" y="100" text-anchor="middle" font-size="12" fill="#7b8794">请点上方一级 / 二级分类，查看其命中门店分布</text>';
+    return;
+  }
+  var t=active;
+  /* 选中分类命中的门店分布：filteredQuotes() 已按 sel.t1/sel.t2 过滤，按门店聚合（各门店条数之和 == 该分类命中数，口径自洽）；随门店/渠道/日期全量联动 */
+  var perStore={};
+  filteredQuotes().forEach(function(q){ perStore[q.store]=(perStore[q.store]||0)+1; });
+  var stores=Object.keys(perStore);
+  if(!stores.length){svg.setAttribute('viewBox','0 0 680 190'); svg.style.width='680px'; svg.style.maxWidth='none'; svg.style.height='190px'; svg.innerHTML='<text x="340" y="100" text-anchor="middle" font-size="12" fill="#7b8794">该分类暂无命中原文</text>';return;}
+  var col=t1color(sel.t1||active);
+  /* 横向滚动：每家固定舒适宽度（按店名长度），SVG 自然像素宽随门店数增长，外层 #tag2Wrap overflow-x:auto 滚动；覆盖全局 svg{width:100%} */
+  var H=190,padL=40,padB=64,top=16,gap=16;
+  var n=stores.length;
+  /* 柱状图固定舒适宽度，不再随店名长度膨胀（避免少数门店时单根柱过胖显丑）；店名过长截断显示，完整名见 hover tip */
+  var bw=42;
+  var clusterW=bw*n+gap*(n-1);
+  var W=Math.max(680, padL*2+clusterW);
+  var startX=padL+(W-padL*2-clusterW)/2;
+  var maxC=Math.max.apply(null,stores.map(function(s){return perStore[s];}).concat([0]));
+  var axisMax=Math.max(3,maxC);
+  var x=i=> startX + i*(bw+gap);
+  var y=v=> (H-padB) - (H-top-padB)*(v/axisMax);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  svg.style.width=W+'px'; svg.style.maxWidth='none'; svg.style.height=H+'px';
+  var bars='<line x1="'+padL+'" y1="'+y(axisMax)+'" x2="'+(W-padL)+'" y2="'+y(axisMax)+'" stroke="#f1f3f5" stroke-dasharray="3 3"/>';
+  // 选中高亮：参照一级分布——未选中明显变淡，选中柱加高亮底块+加粗描边+加粗底标
+  stores.forEach(function(s,i){
+    var c=perStore[s];
+    var isSel=(sel.subStore===s);
+    var hasSel=(sel.subStore!==null);
+    var bh=(H-top-padB)*(c/axisMax);
+    var bx=x(i), bxx=bx+bw/2, by=y(c);
+    if(isSel){ // 选中柱背后的高亮底块
+      var hpad=6;
+      bars+='<rect x="'+(bx-hpad)+'" y="'+(top-4)+'" width="'+(bw+hpad*2)+'" height="'+(H-padB-top+8)+'" fill="'+col+'" opacity="0.14" rx="5"/>';
+    }
+    var op = hasSel ? (isSel?1:0.28) : 0.85;
+    bars+='<rect class="tt substbar" data-store="'+s+'" x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+bh+'" fill="'+col+'" opacity="'+op+'" rx="3" stroke="'+(isSel?'#1f2933':'none')+'" stroke-width="'+(isSel?2.5:0)+'" data-tip="'+t+' / '+s+'：'+c+' 条（点击联动每日趋势与原文抽样）"/>';
+    bars+='<text x="'+bxx+'" y="'+(by-7)+'" font-size="'+(isSel?13:11)+'" fill="#1f2933" text-anchor="middle" font-weight="'+(isSel?'700':'400')+'">'+c+'</text>';
+    bars+='<text transform="rotate(-32 '+bxx+' '+(H-padB+4)+')" x="'+bxx+'" y="'+(H-padB+4)+'" font-size="'+(isSel?11:10)+'" fill="'+(hasSel?(isSel?col:'#adb5bd'):'#495057')+'" text-anchor="end" font-weight="'+(isSel?'700':'400')+'">'+(s.length>7? s.slice(0,7)+'…' : s)+'</text>';
+  });
+  svg.innerHTML='<line x1="'+padL+'" y1="'+(H-padB)+'" x2="'+(W-padL)+'" y2="'+(H-padB)+'" stroke="#e4e7eb"/>'+bars;
+  svg.querySelectorAll('.substbar').forEach(function(r){
+    r.style.cursor='pointer';
+    var s=r.getAttribute('data-store');
+    r.addEventListener('click',function(){toggleSubStore(s);});
+    r.addEventListener('mousemove',function(e){tip.textContent=r.getAttribute('data-tip');tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';tip.style.opacity=1;});
+    r.addEventListener('mouseleave',function(){tip.style.opacity=0;});
+  });
+}
+function renderDaily(){
+  var svg=document.getElementById('daily');
+  var title=document.getElementById('dailyTitle');
+  /* DAILY 为 date×store×channel 粒度，趋势图先按日期聚合（分子分母分别求和后再算比例） */
+  var byDate={};
+  filteredDaily().forEach(function(x){
+    if(!byDate[x.date])byDate[x.date]={date:x.date,total:0,pos:0,neg:0,relig:0,rep24:0};
+    var g=byDate[x.date];
+    g.total+=x.total; g.pos+=x.pos; g.neg+=x.neg; g.relig+=x.relig; g.rep24+=x.rep24;
+  });
+  var d=DATES.filter(function(dt){return sel.dates.has(dt);})
+             .map(function(dt){return byDate[dt]||{date:dt,total:0,pos:0,neg:0,relig:0,rep24:0};});
+  if(!d.length){svg.innerHTML='<text x="340" y="110" text-anchor="middle" font-size="12" fill="#7b8794">当前日期筛选条件下无数据</text>';title.textContent='每日评价趋势（随日期筛选重算）';return;}
+  var W=680,H=232,padL=45,padB=40,top=30; var headGap=20, bottom=H-padB, pv=top+headGap, scal=bottom-pv;
+  var slot=(W-padL-20)/d.length;
+  var bw=Math.min(36, slot*0.62);
+  var x=i=> padL + slot*(i+0.5);
+  var xt=d.map(function(r,i){return '<text x="'+x(i)+'" y="'+(H-18)+'" font-size="10" fill="#7b8794" text-anchor="middle">'+r.date.slice(5)+'</text>';}).join('');
+  var base='<line x1="'+padL+'" y1="'+bottom+'" x2="'+(W-20)+'" y2="'+bottom+'" stroke="#e4e7eb"/>'+
+           '<line x1="'+padL+'" y1="'+pv+'" x2="'+padL+'" y2="'+bottom+'" stroke="#e4e7eb"/>'+xt;
+
+  /* 联动优先级：二级门店 > 二级细分 > 一级分类 > 整体 */
+  if(sel.subStore && (sel.t1||sel.t2)){
+    var sub=sel.subStore, pcol=t1color(sel.t1);
+    title.innerHTML='每日评价趋势（联动门店：'+sub+' <span class="clr" onclick="toggleSubStore(\''+sub+'\')">✕清除</span>）';
+    /* 差评明细口径：当前筛选集合内该门店的每日命中（随门店/渠道/类型/日期全量联动，非工具原生门店趋势序列） */
+    var cntByDate={};
+    filteredQuotes().forEach(function(q){ cntByDate[q.date]=(cntByDate[q.date]||0)+1; });
+    var total2=d.reduce(function(s,r){return s+(cntByDate[r.date]||0);},0);
+    if(!total2){
+      svg.innerHTML='<text x="340" y="110" text-anchor="middle" font-size="12" fill="#7b8794">该门店本期内该分类无可抽样原文，日趋势暂不可得（命中数见上方二级条形图）</text>';
+    } else {
+      var maxC2=Math.max.apply(null,d.map(function(r){return cntByDate[r.date]||0;}).concat([1]));
+      var yC=v=> pv + scal*(1 - v/maxC2);
+      var bars2='',line='',extra='',g2='';
+      /* 横向网格线 */
+      [0,0.5,1].forEach(function(f){ var yy=yC(maxC2*f); g2+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-20)+'" y2="'+yy+'" stroke="#f1f3f5"/>'; });
+      d.forEach(function(r,i){
+        var c=cntByDate[r.date]||0;
+        var yc=yC(c);
+        /* 命中数 → 棒棒糖图（lollipop） */
+        bars2+='<line x1="'+x(i)+'" y1="'+(H-padB)+'" x2="'+x(i)+'" y2="'+yc+'" stroke="'+pcol+'" stroke-width="3" stroke-linecap="round" opacity="0.45" data-tip="'+r.date.slice(5)+' '+sub+' 命中 '+c+' 条" class="tt"/>';
+        bars2+='<circle cx="'+x(i)+'" cy="'+yc+'" r="6.5" fill="'+pcol+'" data-tip="'+r.date.slice(5)+' '+sub+' 命中 '+c+' 条" class="tt"/>';
+        bars2+='<circle cx="'+x(i)+'" cy="'+yc+'" r="2.4" fill="#fff"/>';
+        if(c)bars2+='<text x="'+x(i)+'" y="'+(yc-13)+'" font-size="10" fill="'+pcol+'" text-anchor="middle" font-weight="600">'+c+'</text>';
+        line+=(i?' ':'')+x(i)+','+yc;
+        if(c)extra+='<circle cx="'+x(i)+'" cy="'+yc+'" r="3.4" fill="'+pcol+'" data-tip="'+r.date.slice(5)+' '+sub+' 命中 '+c+' 条" class="tt"/>';
+      });
+      svg.innerHTML=g2+base+
+        '<text x="38" y="'+yC(maxC2)+'" font-size="10" fill="#7b8794" text-anchor="end">'+maxC2+'</text>'+
+        '<text x="38" y="'+yC(maxC2/2)+'" font-size="10" fill="#7b8794" text-anchor="end">'+(maxC2/2).toFixed(1)+'</text>'+
+        '<text x="38" y="'+yC(0)+'" font-size="10" fill="#7b8794" text-anchor="end">0</text>'+bars2+
+        '<polyline fill="none" stroke="'+pcol+'" stroke-width="3" points="'+line+'"/>'+extra;
+    }
+  } else if(!sel.t1 && !sel.t2){
+    title.textContent='每日评价趋势（整体 · 随日期/门店/渠道筛选重算）';
+    var maxT=Math.max.apply(null,d.map(function(x){return x.total;}).concat([1]));
+    var yB=v=> pv + scal*(1 - v/maxT);
+    var yP=v=> pv + scal*(1 - v);
+    var rateOf=function(r,k){ return r.total? (r[k]/r.total) : 0; };
+    var lol='',pr='',nr='',pts='',grids='',rAxis='',leg='';
+    /* 横向网格线（按比率轴 0/50/100%） */
+    [0,0.5,1].forEach(function(f){ var yy=yP(f); grids+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-20)+'" y2="'+yy+'" stroke="#eef1f4"/>'; });
+    /* 右轴：评价数刻度 */
+    [0,0.5,1].forEach(function(f){ var v=Math.round(maxT*f); var yy=yP(f); rAxis+='<text x="'+(W-18)+'" y="'+(yy+3)+'" font-size="10" fill="#adb5bd" text-anchor="start">'+v+'</text>'; });
+    rAxis+='<text x="'+(W-4)+'" y="'+(pv-8)+'" font-size="10" fill="#868e96" text-anchor="end">评价数</text>';
+    d.forEach(function(r,i){
+      var rPr=rateOf(r,'pos'), rNr=rateOf(r,'neg');
+      /* 评价数 → 棒棒糖图（lollipop）：细杆 + 圆点 + 数值 */
+      var yb=yB(r.total);
+      lol+='<line x1="'+x(i)+'" y1="'+(H-padB)+'" x2="'+x(i)+'" y2="'+yb+'" stroke="#a5d8ff" stroke-width="3" stroke-linecap="round" data-tip="'+r.date.slice(5)+' 评价 '+r.total+' 条" class="tt"/>';
+      lol+='<circle cx="'+x(i)+'" cy="'+yb+'" r="6.5" fill="#1971c2" data-tip="'+r.date.slice(5)+' 评价 '+r.total+' 条" class="tt"/>';
+      lol+='<circle cx="'+x(i)+'" cy="'+yb+'" r="2.4" fill="#fff"/>';
+      lol+='<text x="'+x(i)+'" y="'+(yb-13)+'" font-size="10" fill="#1971c2" text-anchor="middle" font-weight="600">'+r.total+'</text>';
+      pr+=(i?' ':'')+x(i)+','+yP(rPr); nr+=(i?' ':'')+x(i)+','+yP(rNr);
+      pts+='<circle cx="'+x(i)+'" cy="'+yP(rPr)+'" r="3" fill="#2f9e44" data-tip="'+r.date.slice(5)+' 好评率 '+(rPr*100).toFixed(1)+'%（'+r.pos+'/'+r.total+'）" class="tt"/>'+
+           '<circle cx="'+x(i)+'" cy="'+yP(rNr)+'" r="3" fill="#e03131" data-tip="'+r.date.slice(5)+' 差评率 '+(rNr*100).toFixed(1)+'%（'+r.neg+'/'+r.total+'）" class="tt"/>';
+    });
+    var area=function(ps){ var arr=ps.trim().split(' '); var poly=x(0)+','+bottom; arr.forEach(function(p){poly+=' '+p;}); poly+=' '+x(d.length-1)+','+bottom; return poly; };
+    /* 周期级 24h 差评回复率参考线（来自 reviewMetricSummary，无逐日拆分）：干净虚线 + 末端百分比药丸 */
+    var r24info=replyMetric();
+    var dateFiltered = sel.dates.size < DATES.length;
+    var r24lines='';
+    if(r24info.rate!=null){
+      var ry=yP(r24info.rate/100);
+      r24lines='<line x1="'+padL+'" y1="'+ry+'" x2="'+(W-20)+'" y2="'+ry+'" stroke="#7048e8" stroke-width="2" stroke-dasharray="5 3"/>'+
+        '<rect x="'+(W-20-44)+'" y="'+(ry-11)+'" width="42" height="16" rx="8" fill="#7048e8"/>'+
+        '<text x="'+(W-20-23)+'" y="'+(ry+1)+'" font-size="10" fill="#fff" text-anchor="middle" font-weight="500">'+(r24info.rate).toFixed(0)+'%</text>'+
+        (dateFiltered?'<text x="'+(W-20-23)+'" y="'+(Math.max(ry-15,pv+12))+'" font-size="9" fill="#7048e8" text-anchor="middle">按全周期·不随日期</text>':'');
+    }
+    /* 图上图例 */
+    var lx=padL, ly=14;
+    function chip(col,label,dash){ var seg='<rect x="'+lx+'" y="'+(ly-9)+'" width="12" height="12" rx="3" fill="'+col+'"'+(dash?' opacity="0.55"':'')+'/>'; var t='<text x="'+(lx+17)+'" y="'+ly+'" font-size="11" fill="#495057" text-anchor="start">'+label+'</text>'; lx+=17+label.length*12+12; return seg+t; }
+    leg+=chip('#1971c2','评价数'); leg+=chip('#2f9e44','好评率'); leg+=chip('#e03131','差评率'); leg+=chip('#7048e8','24h回复率',true);
+    svg.innerHTML=grids+
+      '<line x1="'+padL+'" y1="'+pv+'" x2="'+padL+'" y2="'+bottom+'" stroke="#e4e7eb"/>'+
+      '<line x1="'+(W-20)+'" y1="'+pv+'" x2="'+(W-20)+'" y2="'+bottom+'" stroke="#e4e7eb"/>'+
+      '<line x1="'+padL+'" y1="'+bottom+'" x2="'+(W-20)+'" y2="'+bottom+'" stroke="#e4e7eb"/>'+
+      xt+ rAxis+
+      '<text x="38" y="'+yP(1)+'" font-size="10" fill="#7b8794" text-anchor="end">100%</text>'+
+      '<text x="38" y="'+yP(0.5)+'" font-size="10" fill="#7b8794" text-anchor="end">50%</text>'+
+      '<text x="38" y="'+yP(0)+'" font-size="10" fill="#7b8794" text-anchor="end">0%</text>'+
+      '<polygon points="'+area(pr)+'" fill="#2f9e44" opacity="0.08"/>'+
+      '<polygon points="'+area(nr)+'" fill="#e03131" opacity="0.08"/>'+
+      lol+
+      '<polyline fill="none" stroke="#2f9e44" stroke-width="2.5" points="'+pr+'"/>'+
+      '<polyline fill="none" stroke="#e03131" stroke-width="2.5" points="'+nr+'"/>'+
+      pts+ r24lines+ leg;
+  } else {
+    var activeCat=sel.t2||sel.t1;
+    title.innerHTML='每日评价趋势（联动：'+esc(activeCat)+' <span class="clr" onclick="sel.t2=null;sel.t1=null;render();">✕清除</span>）';
+    /* 差评明细口径：filteredQuotes() 已按 sel.t1/sel.t2 过滤，按日期聚合即每日命中；随门店/渠道/日期全量联动 */
+    var fq=filteredQuotes();
+    var cntByDate={};
+    fq.forEach(function(q){ cntByDate[q.date]=(cntByDate[q.date]||0)+1; });
+    var dailySums=d.map(function(r){return cntByDate[r.date]||0;});
+    var maxC=Math.max.apply(null,dailySums.concat([1]));
+    var yC=v=> pv + scal*(1 - v/maxC);
+    var bars2='',lines='',g2='';
+    var col=t1color(sel.t1||activeCat);
+    /* 横向网格线 */
+    [0,0.5,1].forEach(function(f){ var yy=yC(maxC*f); g2+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-20)+'" y2="'+yy+'" stroke="#f1f3f5"/>'; });
+    d.forEach(function(r,i){
+      var s=cntByDate[r.date]||0;
+      var yc=yC(s);
+      /* 选中分类命中数 → 棒棒糖图（lollipop） */
+      bars2+='<line x1="'+x(i)+'" y1="'+(H-padB)+'" x2="'+x(i)+'" y2="'+yc+'" stroke="'+col+'" stroke-width="3" stroke-linecap="round" opacity="0.45" data-tip="'+r.date.slice(5)+' 选中分类命中 '+s+' 条" class="tt"/>';
+      bars2+='<circle cx="'+x(i)+'" cy="'+yc+'" r="6.5" fill="'+col+'" data-tip="'+r.date.slice(5)+' 选中分类命中 '+s+' 条" class="tt"/>';
+      bars2+='<circle cx="'+x(i)+'" cy="'+yc+'" r="2.4" fill="#fff"/>';
+      if(s)bars2+='<text x="'+x(i)+'" y="'+(yc-13)+'" font-size="10" fill="'+col+'" text-anchor="middle" font-weight="600">'+s+'</text>';
+    });
+    var pts=d.map(function(r,i){return x(i)+','+yC(cntByDate[r.date]||0);}).join(' ');
+    lines+='<polyline fill="none" stroke="'+col+'" stroke-width="3" points="'+pts+'"/>';
+    d.forEach(function(r,i){var c=cntByDate[r.date]||0;if(c)lines+='<circle cx="'+x(i)+'" cy="'+yC(c)+'" r="3.4" fill="'+col+'" data-tip="'+esc(activeCat)+'：'+r.date.slice(5)+' 命中 '+c+' 条" class="tt"/>';});
+    svg.innerHTML=g2+base+
+      '<text x="38" y="'+yC(maxC)+'" font-size="10" fill="#7b8794" text-anchor="end">'+maxC+'</text>'+
+      '<text x="38" y="'+yC(maxC/2)+'" font-size="10" fill="#7b8794" text-anchor="end">'+(maxC/2).toFixed(1)+'</text>'+
+      '<text x="38" y="'+yC(0)+'" font-size="10" fill="#7b8794" text-anchor="end">0</text>'+bars2+lines;
+  }
+  svg.querySelectorAll('.tt').forEach(function(c){
+    c.style.cursor='pointer';
+    c.addEventListener('mousemove',function(e){tip.textContent=c.getAttribute('data-tip');tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';tip.style.opacity=1;});
+    c.addEventListener('mouseleave',function(){tip.style.opacity=0;});
+  });
+}
+/* 差评明细：展示当前筛选条件下全量差评，分页展示，每页 PAGE_SIZE 条 */
+var PAGE_SIZE=10;
+/* 重点问题·食安预警：逐条展示上限（未回复优先），超出以「…等共 N 条」概括，避免一份报告刷满食安条目 */
+var FS_SAMPLE=5;
+/* 改进建议：仅展示命中数 Top TOP_SUG 的一级标签（聚焦核心问题），其余长尾合并为一条概括 */
+var TOP_SUG=5;
+/* 改进建议每条：门店列表展示上限，超出以「等 N 家」概括，避免大量门店刷屏 */
+var STORE_SHOW=3;
+function gotoQuotePage(p){
+  var q=filteredQuotes();
+  var tp=Math.max(1,Math.ceil(q.length/PAGE_SIZE));
+  if(p<1)p=1; if(p>tp)p=tp;
+  sel.page=p; renderQuotes();
+}
+function buildQuotePager(cur,tp){
+  if(tp<=1)return '';
+  var p=[];
+  p.push('<button '+(cur<=1?'disabled':'onclick="gotoQuotePage('+(cur-1)+')"')+'>上一页</button>');
+  var nums=[];
+  if(tp<=7){ for(var i=1;i<=tp;i++)nums.push(i); }
+  else{
+    nums.push(1);
+    var s=Math.max(2,cur-1), e=Math.min(tp-1,cur+1);
+    if(s>2)nums.push('…');
+    for(var i=s;i<=e;i++)nums.push(i);
+    if(e<tp-1)nums.push('…');
+    nums.push(tp);
+  }
+  nums.forEach(function(i){
+    if(i==='…')p.push('<span class="dots">…</span>');
+    else p.push('<button class="'+(i===cur?'on':'')+'" onclick="gotoQuotePage('+i+')">'+i+'</button>');
+  });
+  p.push('<button '+(cur>=tp?'disabled':'onclick="gotoQuotePage('+(cur+1)+')"')+'>下一页</button>');
+  p.push('<span style="margin-left:8px;color:#868e96;">第 '+cur+' / '+tp+' 页</span>');
+  return p.join('');
+}
+function renderQuotes(){
+  /* 新接口：commentDetails 过滤 commentLevel=='差评' 即全量差评明细（无 200 条上限）；
+     排序：未回复优先 → 命中「异物问题」食安红线优先（二级标签前缀） → 日期倒序 → 文本长度，
+     使最需处置条目优先露出；全量分页展示，每页 PAGE_SIZE 条 */
+  var q=filteredQuotes().slice().sort(function(a,b){
+    var au=a.replied?0:1, bu=b.replied?0:1;
+    if(au!==bu) return bu-au;
+    /* 食安红线优先：二级标签命中「异物问题」前缀即视为食安风险 */
+    var af=(a.tags2||[]).some(function(x){return x.indexOf('异物问题')>=0;})?1:0;
+    var bf=(b.tags2||[]).some(function(x){return x.indexOf('异物问题')>=0;})?1:0;
+    if(af!==bf) return bf-af;
+    if(a.date!==b.date) return a.date<b.date?1:-1;
+    return b.text.length-a.text.length;
+  });
+  var sub=sel.subStore?('（筛选门店：'+esc(sel.subStore)+' <span class="clr" onclick="toggleSubStore(\''+escJS(sel.subStore)+'\')">✕清除</span>）'):'';
+  var n=q.length;
+  var truncTxt=(META && META.truncated)
+    ? ('，受接口上限约束仅取到 '+META.returnedCount+' / '+META.totalCount+' 条')
+    : '';
+  var tp=Math.max(1,Math.ceil(n/PAGE_SIZE));
+  if(sel.page>tp)sel.page=tp; if(sel.page<1)sel.page=1;
+  var start=(sel.page-1)*PAGE_SIZE;
+  var list=q.slice(start,start+PAGE_SIZE);
+  document.getElementById('quoteTitle').innerHTML='差评明细（当前筛选共匹配 '+n+' 条'+truncTxt+'，每页 '+PAGE_SIZE+' 条）'+sub;
+  var box=document.getElementById('quotes'), pg=document.getElementById('quotePager');
+  if(!n){box.innerHTML='<div class="note">当前筛选条件下无匹配差评明细。</div>';pg.innerHTML='';return;}
+  box.innerHTML=list.map(function(x){
+    var t1=x.tags1.map(function(t){
+      var c=TAGCOLOR[t]||'#868e96';
+      return '<span class="tag" style="background:'+c+'1a;color:'+c+';border-color:'+c+'55">'+esc(t)+'</span>';
+    }).join('');
+    var t2=(x.tags2||[]).map(function(t){return '<span class="tag2">'+esc(t)+'</span>';}).join('');
+    var ch=x.ch?'<span class="tag3">'+esc(x.ch)+'</span>':'';
+    var rep=x.replied?'<span class="tag rep">已回复</span>':'<span class="tag norep">未回复</span>';
+    return '<div class="quote">'+rep+ch+t1+t2+'<div style="margin-top:5px;">“'+esc(x.text)+'”</div>'+
+           '<div style="margin-top:3px;color:#7b8794;font-size:11px;">—— <b>'+esc(x.date)+'，'+esc(x.store)+'</b>'+(x.score!=null?('，'+x.score+' 分'):'')+'</div></div>';
+  }).join('');
+  /* 分页器 */
+  pg.innerHTML=buildQuotePager(sel.page,tp);
+}
+
+/* 评分分布：SCORES 已含门店/渠道维度，随日期/门店/渠道联动；
+   0 分档表示原始评分缺失（按业务口径计入差评），图例须标注为「评分缺失」而非「0分体验」 */
+function scoreDist(){
+  var m={0:0,1:0,2:0,3:0,4:0,5:0};
+  SCORES.forEach(function(x){
+    /* commentScoreDistribution 为门店×渠道×评分的整周期汇总，无 date 字段，故不按日期过滤（仅按门店/渠道联动） */
+    if(sel.stores.size && !sel.stores.has(x.store))return;
+    if(sel.channels.size && !sel.channels.has(x.ch))return;
+    m[x.score]=(m[x.score]||0)+x.count;
+  });
+  return Object.keys(m).map(function(s){return {score:+s,count:m[s]};})
+                      .filter(function(x){return x.count>0;});
+}
+function renderDonut(){
+  var g=document.getElementById('donutG');
+  var legend=document.getElementById('donutLegend');
+  var dist=scoreDist();
+  var total=dist.reduce(function(s,x){return s+x.count;},0)||1;
+  var colors={5:'#2f9e44',4:'#fab005',3:'#f08c00',2:'#c92a2a',1:'#e03131',0:'#adb5bd'};
+  var C=2*Math.PI*70;
+  var acc=0, segs='', leg='';
+  dist.slice().sort(function(a,b){return b.score-a.score;}).forEach(function(x){
+    var frac=x.count/total, len=frac*C, off=-acc;
+    var col=colors[x.score]||'#adb5bd';                 /* 兜底：score 非 0~5（如脏数据/缺失）时灰显，避免整段不可见 */
+    var lab=(x.score===0)?'评分缺失':((typeof x.score!=='number'||isNaN(x.score))?'未知评分':(x.score+'分'));
+    segs+='<circle class="seg" data-tip="'+lab+'：'+x.count+' 条，占 '+(frac*100).toFixed(1)+'%" cx="100" cy="100" r="70" fill="none" stroke="'+col+'" stroke-width="26" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+off+'" transform="rotate(-90 100 100)"/>';
+    acc+=len;
+    leg+='<div class="legend-item"><span class="dot" style="background:'+col+'"></span><span class="lab">'+lab+'</span><span class="num">—— '+x.count+' 条</span></div>';
+  });
+  g.innerHTML=segs;
+  legend.innerHTML=leg;
+  /* 平均分自算：工具不再返回 averageScore，按 1~5 分加权（0 分为缺失，不计入分子分母） */
+  var wsum=0, wcnt=0;
+  dist.forEach(function(x){ if(x.score>0){ wsum+=x.score*x.count; wcnt+=x.count; } });
+  document.getElementById('donutAvg').textContent=wcnt?(wsum/wcnt).toFixed(2):'—';
+  var sc=document.getElementById('scoreScope');
+  if(sc){
+    sc.innerHTML='随日期 / 门店 / 渠道筛选联动；0 分档为原始评分缺失';
+    sc.style.color='#7b8794';
+  }
+  g.querySelectorAll('.seg').forEach(function(s){
+    s.style.cursor='pointer';
+    s.addEventListener('mousemove',function(e){tip.textContent=s.getAttribute('data-tip');tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';tip.style.opacity=1;});
+    s.addEventListener('mouseleave',function(){tip.style.opacity=0;});
+  });
+}
+
+/* init */
+var tip=document.getElementById('tip');   /* 显式取 tooltip 节点（勿依赖浏览器 id→全局变量的隐式行为） */
+document.title='外卖评价口碑报告 '+PERIOD.start+'~'+PERIOD.end;
+var subEl=document.getElementById('subTxt');
+if(subEl) subEl.textContent='统计周期：'+PERIOD.start+' ~ '+PERIOD.end+'（数据完整至 '+PERIOD.through+'）｜日期 / 门店 / 渠道 三维度全模块联动；「差评原因」维度仅作用于差评明细类模块';
+initDateBounds();  /* 给日期框设 min/max，范围外日期在日历中置灰不可选 */
+document.getElementById('dStart').value=PERIOD.start;
+document.getElementById('dEnd').value=PERIOD.end;
+msStore=buildMS('storeMs',STORES,sel.stores,'选择门店');
+msChannel=buildMS('channelMs',CHANNELS,sel.channels,'选择渠道');
+render();  /* render() 内部已含 renderDonut()，评分分布随筛选联动 */
+</script>
+</body>
+</html>

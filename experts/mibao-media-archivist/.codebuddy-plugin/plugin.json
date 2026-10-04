@@ -1,0 +1,77 @@
+{
+  "name": "mibao-media-archivist",
+  "version": "26.9.2",
+  "description": "Local-first media inventory expert for read-only scanning, strict SHA-256, exact duplicate detection, local indexing, search, and openable reports.",
+  "author": {
+    "email": "unique@u3w.com",
+    "name": "MIBAO Team"
+  },
+  "license": "Proprietary",
+  "keywords": [
+    "media",
+    "photo",
+    "video",
+    "inventory",
+    "hash",
+    "duplicate",
+    "local-search"
+  ],
+  "expertType": "agent",
+  "agentName": "mibao-media-archivist",
+  "agents": [
+    "./agents/mibao-media-archivist.md"
+  ],
+  "skills": [
+    "./skills/mibao",
+    "./skills/mibao-index-policy",
+    "./skills/mibao-safety-qa"
+  ],
+  "displayName": {
+    "en": "MIBAO",
+    "zh": "秘宝"
+  },
+  "profession": {
+    "en": "AI Media Asset Archivist",
+    "zh": "AI影像资产整理专家"
+  },
+  "displayDescription": {
+    "en": "Protects originals while building strict SHA-256 inventories, exact duplicate groups, local search indexes, and verifiable reports.",
+    "zh": "在不改动原件的前提下，完成影像盘点、严格SHA-256、精确重复识别、本地索引检索与可验收报告"
+  },
+  "avatar": "avatars/mibao.jpg",
+  "categoryId": "04-DataAI",
+  "defaultInitPrompt": {
+    "en": "Scan the media folder I authorize, compute strict SHA-256 hashes, and generate exact duplicate groups, a local search index, and an openable inventory report.",
+    "zh": "扫描我授权的影像文件夹，执行严格 SHA-256，生成精确重复项清单、本地检索索引和可打开的盘点报告"
+  },
+  "tags": [
+    {
+      "en": "Media Inventory",
+      "zh": "影像盘点"
+    },
+    {
+      "en": "Exact Duplicate Detection",
+      "zh": "精确重复识别"
+    },
+    {
+      "en": "Local Index Search",
+      "zh": "本地索引检索"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Scan the media folder I authorize, compute strict SHA-256 hashes, and generate exact duplicate groups, a local search index, and an openable inventory report.",
+      "zh": "扫描我授权的影像文件夹，执行严格 SHA-256，生成精确重复项清单、本地检索索引和可打开的盘点报告"
+    },
+    {
+      "en": "Search an existing MIBAO project for my keywords and return relative paths, stable asset IDs, evidence references, and match summaries.",
+      "zh": "在已有秘宝项目中检索我指定的关键词。返回相对路径、稳定资产ID、证据引用和命中摘要"
+    },
+    {
+      "en": "Update an existing MIBAO project for new or changed files, refresh strict hashes, duplicate groups, the local index, and reports, without changing originals.",
+      "zh": "继续盘点我已有的秘宝项目，更新新增或变化文件的严格哈希、重复项、索引和报告，原件不动"
+    }
+  ],
+  "defaultEnabled": true,
+  "plugin": "mibao-media-archivist"
+}

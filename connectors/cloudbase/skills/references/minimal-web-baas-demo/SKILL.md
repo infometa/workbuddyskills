@@ -1,7 +1,7 @@
 ---
 name: minimal-web-baas-demo
 description: "Fast path for a minimal CloudBase Web + database demo (最小前后端 / 最小可用 fullstack / Lovable-like BaaS). Defaults to @cloudbase/js-sdk client CRUD (NoSQL app.database / PG app.rdb), MCP-only schema, preview-first, and forbids cloud functions unless secrets, cron/background jobs, or logic that security rules/RLS cannot express. Use for 搭一套 demo、留言板、Todo、Notes、Kanban, or when users say 带云函数+云数据库 but only need CRUD. NOT for production multi-service backends, CloudRun, WeChat Mini Programs, or tasks that truly need server secrets."
-version: 2.26.0
+version: 2.34.8
 alwaysApply: false
 ---
 
@@ -81,7 +81,7 @@ Use this order for every minimal Web + DB demo. **Do not reorder.** Cloud functi
 ```text
 0. Connector pre-enabled (or shortest Trust path)     ← host / partner packaging
 1. Template warmup // parallel with credential wait   ← downloadTemplate + install
-2. envQuery(action="info")                            ← sniff env + RuntimeBackends
+2. queryEnv(action="info")                            ← sniff env + RuntimeBackends
 3. Lock ONE DB plane (NoSQL | PG | MySQL)             ← no mid-flight thrash
 4. MCP schema + minimal permissions                   ← writeNoSql* / PG migrate / MySQL manage
 5. Browser @cloudbase/js-sdk CRUD                     ← app.database() / app.rdb()
@@ -94,7 +94,7 @@ Stack priority for this path: **Web SDK CRUD > MCP schema > template warmup > cl
 ## Standard playbook
 
 1. **Warm template in parallel with credentials** (see partner notes below): `downloadTemplate` (`react` default, `vue` if requested) → `npm install` / `pnpm install`.
-2. `envQuery(action="info")` → lock **one** DB plane (NoSQL **or** PG **or** MySQL). Do not thrash between them.
+2. `queryEnv(action="info")` → lock **one** DB plane (NoSQL **or** PG **or** MySQL). Do not thrash between them.
 3. MCP: create the collection/table + minimal permissions.
 4. Frontend: ensure session (`auth.signInAnonymously()` or equivalent), then wire list + create with `@cloudbase/js-sdk` (see Hard rule 6).
 5. Start / report preview URL; ask before deploy.
@@ -117,10 +117,9 @@ Any partner host (WorkBuddy, CodeBuddy connectors, vertical expert prompts, ISV 
 
 | Host capability | Recommended packaging |
 | --- | --- |
-| Full CloudBase Sites plugin | Rely on SessionStart Rule 5 injection + this skill on demand for non-Sites cwd demos. |
-| WorkBuddy with SessionStart (supported) | Prefer `plugin/workbuddy-template-prewarm` (or enable Sites with `CLOUDBASE_SITES_AUTO_INIT=1`): background React zip + install + Sites `preview` (ports 17173..17272) overlaps credential/Trust wait; inject this skill pointer via `additionalContext`. Never guess 5173 — read `.cloudbase-sites/preview.json`. |
-| WorkBuddy / connector without hooks | **Pre-enable** the CloudBase MCP connector for the tenant when possible; inject a short system brief that points here; warm `downloadTemplate` + `npm install` **during** credential/Trust wait (do not idle). |
-| Expert / vertical prompts (XDF or other ISVs) | Ship a thin pack: expert Agent markdown (**no** frontmatter hooks) + settings/hooks merge for SessionStart prewarm. Reference example: `plugin/xdf-workbuddy-expert-pack` + sibling prewarm plugin. Replace any "必须云函数中转 / 前端绝不直连库" language with this BaaS-first contract. |
+| Full CloudBase Sites plugin | Rely on SessionStart Rule 5 injection + this skill on demand for non-Sites cwd demos. Prefer Sites with `CLOUDBASE_SITES_AUTO_INIT=1` for empty-cwd preview. Never guess 5173 — read `.cloudbase-sites/preview.json`. |
+| WorkBuddy / connector hosts | **Pre-enable** the CloudBase MCP connector for the tenant when possible; inject a short system brief that points here; warm `downloadTemplate` + `npm install` **during** credential/Trust wait (do not idle). Optional SessionStart `additionalContext` can point at this skill — do not ship a separate template-prewarm plugin. |
+| Expert / vertical prompts (ISVs) | Ship a thin pack: expert Agent markdown (**no** frontmatter hooks) + optional settings/hooks. Replace any "必须云函数中转 / 前端绝不直连库" language with this BaaS-first contract. |
 
 WorkBuddy SessionStart: https://www.workbuddy.ai/docs/cli/hooks (same `additionalContext` schema as CodeBuddy/Claude Code). Empty-dir Sites auto-init stays passive unless opted in — do not assume enabling Sites alone warms templates during credential wait.
 
@@ -132,7 +131,7 @@ WorkBuddy SessionStart: https://www.workbuddy.ai/docs/cli/hooks (same `additiona
 For 最小前后端 / Lovable-like demos: FIRST call
 searchKnowledgeBase(mode="skill", skillName="minimal-web-baas-demo"), then Read.
 Do not rely only on ad-hoc expert-prompt brief text.
-Order: connector ready → template warmup during credential wait → envQuery →
+Order: connector ready → template warmup during credential wait → queryEnv →
 lock one DB → MCP schema → auth.signInAnonymously() (or session) →
 @cloudbase/js-sdk CRUD → preview.
 Do not dump all CloudBase skills. Do not create cloud functions for CRUD.

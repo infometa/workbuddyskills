@@ -1,5 +1,14 @@
 ---
 description: Use the init-cbc-sdk-web skill to create web-based chat applications. This rule MUST be applied when the user says any of these trigger phrases - Chinese "帮我创建一个 Agent Web 应用", "初始化一个聊天应用", "搭建一个 Web Agent", "创建 SDK Web 项目" or English "create an agent web app", "initialize a chat application", "build a web agent", "scaffold an SDK web project". The skill uses templates and must copy from template directory, never write code from scratch.
+description_zh: >-
+  使用 init-cbc-sdk-web skill 创建基于 Web 的聊天应用。当用户说出"帮我创建一个 Agent Web 应用""初始化一个聊天应用"
+  "搭建一个 Web Agent""创建 SDK Web 项目"等触发语时必须应用本规则。该 skill 基于模板实现，必须从模板目录复制，
+  不允许从零手写代码。
+description_en: >-
+  Use the init-cbc-sdk-web skill to create web-based chat applications. This rule MUST be applied when the user says
+  trigger phrases such as "create an agent web app", "initialize a chat application", "build a web agent", or
+  "scaffold an SDK web project". The skill is template-based and must copy from the template directory, never write
+  code from scratch.
 alwaysApply: true
 enabled: true
 updatedAt: 2026-02-07T00:00:00.000Z

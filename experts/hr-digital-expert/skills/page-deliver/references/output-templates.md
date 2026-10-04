@@ -17,9 +17,18 @@
 | | |
 |---|---|
 | 项目ID | {projectId} |
-| 预览地址 | [点击预览](http://{ip}:{port}) |
+| 预览地址 | [点击预览]({previewAddress}) |
 | 状态 | 🟢 预览中 |
 ```
+
+### 占位符来源
+
+| 占位符 | 来源 |
+|--------|------|
+| `{projectId}` | `.deploy-state.json` 的 `projectId` 字段 |
+| `{previewAddress}` | **优先**：`full-deploy` 返回的 `data.previewUrl`（存在且非空时**直接原样使用**）；**否则**：用 `http://{data.ip}:{data.port}` 拼接 |
+
+> `data.previewUrl` 是已 `publish` 过的项目才有的公开预览域名，由 `publish` 写入 `.deploy-state.json`、`full-deploy` 读出后回传。首次 `publish` 之前不存在，此时才走 `ip:port`。
 
 ### 后续动作
 
@@ -39,6 +48,8 @@
 ### 硬性约束
 
 - 预览地址**必须以 markdown 超链接形式输出**（`[点击预览](http://...)`），方便用户直接点击
+- **禁止**自行拼接 / 猜测预览域名：`{previewAddress}` 只能取自 `full-deploy` 返回的 `data.previewUrl`，或用 `data.ip` / `data.port` 拼接
+- `data.previewUrl` 存在时**禁止**再退回 `ip:port` 形式
 - 确认按钮**紧跟**模板之后，不插入其他内容
 
 ---

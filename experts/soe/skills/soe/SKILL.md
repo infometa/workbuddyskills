@@ -1,12 +1,14 @@
 ---
 name: soe
-description: This skill should be used when the user asks to "analyze security alerts", "parse vulnerability scan report", "analyze vulnerability scan report", "verify CVE fix", "analyze WAF attack log", "analyze CFW firewall log", "analyze cloud firewall alert", "investigate host intrusion", "analyze DDoS traffic", "check host asset", "troubleshoot application logs", or needs security operations analysis covering CWP/WAF/Yujie(NDR)/Tianmu/CFW/SOC platform alerts, vulnerability management, intrusion forensics, or DDoS PCAP analysis.
+description: This skill should be used when the user asks to "analyze security alerts", "parse vulnerability scan report", "analyze vulnerability scan report", "verify CVE fix", "analyze WAF attack log", "analyze CFW firewall log", "analyze cloud firewall alert", "investigate host intrusion", "analyze DDoS traffic", "check host asset", "troubleshoot application logs", "troubleshoot Tencent iOA", "iOA login or intranet access", "iOA policy delivery", or needs security operations analysis covering CWP/WAF/Yujie(NDR)/Tianmu/CFW/SOC platform alerts, vulnerability management, intrusion forensics, DDoS PCAP analysis, or iOA zero-trust endpoint-security troubleshooting.
 version: 1.0.0
 ---
 
 # 腾讯云安全运营专家技能 (Security Operations Expert Skill)
 
-安全运营全栈能力集，覆盖漏洞管理、多产品告警研判、入侵溯源、DDoS流量分析、勒索病毒分析、资产管理、通用日志排查七大领域。本文件为入口索引，按需渐进加载 `references/` 下对应子领域的完整能力说明。
+安全运营全栈能力集，覆盖漏洞管理、多产品告警研判、入侵溯源、DDoS流量分析、勒索病毒分析、资产管理、通用日志排查、iOA排障八大领域。本文件为入口索引，按需渐进加载 `references/` 下对应子领域的完整能力说明。
+
+> iOA 排障领域采用二级路由：本表路由到领域入口 `references/ioa-troubleshooting/SKILL.md`，再由其内部意图路由表分发到可信接入/终端资产/策略管控/安全检测/平台运维/咨询判断/接口调用/只读查询 8 个子能力。
 
 ## 意图路由表
 
@@ -30,10 +32,13 @@ version: 1.0.0
 | 攻击分析 | `ransomware-analysis` | 勒索病毒、勒索信、勒索软件、ransomware、文件被加密、勒索家族识别、解密工具 | 勒索信文本 / 加密文件扩展名 / IOC 指标 | `references/attack-analysis/ransomware-analysis/SKILL.md` |
 | 资产管理 | `asset-manager` | 资产查询、主机资产、IP归属、资产纳管、主机映射 | 资产CSV / IP列表 | `references/asset-management/asset-manager/SKILL.md` |
 | 通用排查 | `log-analysis-troubleshooting` | 应用日志、错误日志、访问日志、排障、故障排查、日志分析 | 通用应用日志文件 | `references/general/log-analysis-troubleshooting/SKILL.md` |
+| iOA排障 | `ioa-troubleshoot-expert` | iOA、腾讯iOA、零信任、客户端登录失败、登录后内网不通、策略下发、终端管控、软件下发、无端接入、网络准入、病毒库、实时防护、iOA接口调用、iOA只读查询 | 现象描述/报错截图/配置信息（问答式排障，无固定数据文件） | `references/ioa-troubleshooting/SKILL.md` |
+
+> 关键词冲突消解：用户提到"排障/故障排查"但同时出现 iOA/零信任/终端管控等词时，优先路由到 iOA 排障领域；无 iOA 语境的通用排障才走 `log-analysis-troubleshooting`。
 
 ### 入侵分析采集脚本
 
-入侵分析需要标准化的主机日志。采集脚本源文件位于专家包内 `references/intrusion-analysis/host-intrusion-analysis/scripts/<linux|windows>/` 目录，AI 运行时通过 `find ~/.workbuddy/plugins -name "get_log_all_in_one.*"` 定位实际绝对路径，并通过 `present_files` 工具把脚本文件本身展示给用户下载。
+入侵分析需要标准化的主机日志。采集脚本源文件位于本 skill 的 `references/intrusion-analysis/host-intrusion-analysis/scripts/<linux|windows>/` 目录（相对 `skills/soe/` 根路径，运行时由 skill 加载上下文解析为绝对路径），AI 通过 `present_files` 工具把脚本文件本身展示给用户下载。
 
 | 平台 | 脚本路径（专家包内源路径） | 运行方式 | 输出文件 |
 |------|---------|---------|---------|
@@ -56,13 +61,13 @@ version: 1.0.0
 - **安全事件类型**：漏洞 / 入侵 / DDoS / 告警 / 资产 / 排障
 - **数据类型**：扫描报告 / 日志文件 / 流量包 / 样本文件
 - **操作目标**：分析 / 修复 / 验证 / 溯源 / 防护 / 研判
-- **产品来源**：WAF / CWP / 御界 / 天幕 / CFW / SOC / 通用
+- **产品来源**：WAF / CWP / 御界 / 天幕 / CFW / SOC / iOA / 通用
 
 ### Step 2: 能力匹配
 
 按优先级匹配：
 
-1. **精确匹配** — 用户明确指定产品或能力名称 → 直接加载对应 `references/` 子目录
+1. **精确匹配** — 用户明确指定产品或能力名称 → 直接加载对应 `references/` 子目录（iOA 相关问题先加载 `references/ioa-troubleshooting/SKILL.md` 领域入口，再由其内部路由表分发到具体子能力）
 2. **数据驱动** — 根据用户提供的文件类型匹配：
    - `.pcap`/`.cap` → `ddos-analysis`
    - SOC导出xlsx(含 raw_log) → `soc-alert-pipeline`（L0），再按 product 字段分发到对应 L1
@@ -147,8 +152,19 @@ skills/soe/
     │   └── ransomware-analysis/
     ├── asset-management/                      # 资产管理
     │   └── asset-manager/
-    └── general/                               # 通用排查
-        └── log-analysis-troubleshooting/
+    ├── general/                               # 通用排查
+    │   └── log-analysis-troubleshooting/
+    └── ioa-troubleshooting/                   # iOA 排障（领域入口 + 9 个子目录）
+        ├── SKILL.md                           # iOA 领域入口（8 个子能力路由）
+        ├── common/                            # 公共响应与安全规范
+        ├── trusted-access/                    # 可信接入
+        ├── endpoint-management/               # 终端资产
+        ├── policy-management/                 # 策略管控
+        ├── security-protection/               # 安全检测
+        ├── platform-operations/               # 平台运维
+        ├── consulting/                        # 咨询判断
+        ├── ioa-openapi-invoke/                # iOA 开放接口调用
+        └── ioa-sql-query-generator/           # 只读 SQL 查询生成
 ```
 
 每个能力目录下均包含独立的 `SKILL.md`（角色定位/能力范围/工作流程/输出格式）以及可选的 `scripts/`（工具脚本）、`references/`（该能力专属参考资料和示例）。新增能力需遵循 [SKILL_SPEC.md](../../SKILL_SPEC.md) 中的规范约定。

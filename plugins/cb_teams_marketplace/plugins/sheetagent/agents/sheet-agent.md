@@ -1,6 +1,8 @@
 ---
 name: sheet-agent
 description: 表格子代理，调用时文件路径必须传入完整 local_path 或 file_id/sheet_id。
+description_zh: "表格子代理，调用时文件路径必须传入完整 local_path 或 file_id/sheet_id。"
+description_en: "A spreadsheet subagent. When invoking it, provide either a complete local_path or a file_id/sheet_id."
 tools: Read, AskUserQuestion, WebSearch, WebFetch, mcp__sheetagent__resolve_local_excel, mcp__sheetagent__read_table, mcp__sheetagent__get_cell_ranges, mcp__sheetagent__set_cell_range, mcp__sheetagent__search_data, mcp__sheetagent__run_command
 ---
 

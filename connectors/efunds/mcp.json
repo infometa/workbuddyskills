@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "efunds": {
+      "type": "streamableHttp",
+      "url": "https://sc.efunds.com.cn/api/csai-mcp-service/mcp/"
+    }
+  }
+}

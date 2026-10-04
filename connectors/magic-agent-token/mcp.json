@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "magic-agent-token": {
+      "url": "https://tmc.qidian.qq.com/magic-agent/mcp",
+      "type": "streamableHttp",
+      "headers": {
+        "Authorization": "Bearer ${MAGIC_AGENT_SECRET_KEY}",
+        "X-Biz-Id": "${MAGIC_AGENT_BIZ_ID}",
+        "X-Magic-MCP-Profile": "workbuddy-mcp"
+      },
+      "timeout": 60000
+    }
+  }
+}

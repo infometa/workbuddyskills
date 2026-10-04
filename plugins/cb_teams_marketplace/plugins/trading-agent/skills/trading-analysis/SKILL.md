@@ -9,6 +9,17 @@ description: >
   该不该买、能不能卖、要不要持有、看好看空、仓位建议、加仓减仓、
   投资价值、值不值得买、完整分析、深度分析、
   trading analysis、investment decision、buy sell hold。
+description_zh: >
+  多角色辩论式交易智能体 — 主协调器（Orchestrator）。调度11个专业角色 Agent，
+  通过并行 Agent Team 执行系统性投资分析，输出 BUY/SELL/HOLD 建议。
+  数据源：NeoData 金融数据服务（neodata-financial-search skill）。
+  触发词：交易分析、投资分析、股票分析、买卖决策、多空分析、风险评估、
+  技术分析、基本面分析、投资建议、买入卖出、持有建议、投资决策、
+  该不该买、能不能卖、要不要持有、看好看空、仓位建议、加仓减仓、
+  投资价值、值不值得买、完整分析、深度分析、
+  trading analysis、investment decision、buy sell hold。
+description_en: >-
+  Multi-persona debate-driven trading agent - the main orchestrator. It coordinates 11 specialist role agents and runs systematic investment analysis through a parallel agent team, outputting BUY/SELL/HOLD recommendations. Data source: the NeoData financial data service (neodata-financial-search skill). Triggers: trading analysis, investment analysis, stock analysis, buy/sell decisions, bull-bear analysis, risk assessment, technical analysis, fundamental analysis, investment advice, buy or sell, hold advice, investment decision, whether to buy, whether to sell, whether to hold, bullish or bearish, position sizing advice, adding or trimming positions, investment value, worth buying, full analysis, in-depth analysis, trading analysis, investment decision, buy sell hold.
 allowed-tools: Read,Bash
 ---
 

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/media-plan.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "items", "mediaGenerated"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "items": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "kind", "purpose", "caption", "source", "rightsStatus", "placement"], "properties": { "id": { "type": "string" }, "kind": { "type": "string" }, "purpose": { "type": ["string", "null"] }, "caption": { "type": ["string", "null"] }, "source": { "type": ["string", "null"] }, "rightsStatus": { "enum": ["cleared", "unknown", "restricted"] }, "placement": { "type": ["string", "null"] } } } },
+    "mediaGenerated": { "const": false }
+  }
+}

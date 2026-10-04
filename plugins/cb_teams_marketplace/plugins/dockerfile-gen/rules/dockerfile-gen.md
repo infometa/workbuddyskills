@@ -1,5 +1,12 @@
 ---
 description: Dockerfile Generator. Activate when user mentions "dockerfile generator", "生成 Dockerfile", "创建 Dockerfile", "容器化", "containerize", "docker build", or asks about Dockerfile patterns and best practices. Provides automated Dockerfile generation with production-ready configurations.
+description_zh: >-
+  Dockerfile 生成器。当用户提到"生成 Dockerfile""创建 Dockerfile""容器化""docker build"，
+  或询问 Dockerfile 写法与最佳实践时启用。自动生成可用于生产环境的 Dockerfile 配置。
+description_en: >-
+  Dockerfile Generator. Activate when the user mentions "dockerfile generator", "generate Dockerfile",
+  "create Dockerfile", "containerize", "docker build", or asks about Dockerfile patterns and best practices.
+  Provides automated Dockerfile generation with production-ready configurations.
 alwaysApply: true
 enabled: true
 ---

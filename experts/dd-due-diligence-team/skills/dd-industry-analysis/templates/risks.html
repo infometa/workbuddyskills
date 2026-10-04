@@ -1,0 +1,57 @@
+<!-- 行业分析 · 风险要点 · HTML 模板（表格形态） -->
+<!--
+  ⚠️⚠️⚠️ 强制约束 — 必须严格遵守 ⚠️⚠️⚠️
+  1. 必须使用 <table> 表格结构，严禁使用 <ul>/<li> 列表
+  2. 表头固定为：等级 | 类别 | 标题 | 证据 | 建议（5列，顺序不可变）
+  3. 每行 <tr> 必须带两个 class：analysis-risk-points__row + 等级修饰符（--high/--medium/--low/--note）
+  4. 等级单元格内的 <span> 必须带两个 class：analysis-risk-points__level + 等级修饰符
+  5. 高=--high  中=--medium  低=--low  提示=--note
+  6. 不要生成采用/不采用按钮、不要生成展开按钮
+  7. 本模板不包含 <style>，样式由宿主页面统一定义，只用 class 名
+  8. 风险要点从 E1-E8 提炼 3-8 条
+  9. 将下面的占位符替换为实际内容（保留结构不变）
+-->
+<div class="analysis-risk-points">
+  <div class="analysis-risk-points__header">
+    <span class="analysis-risk-points__title">风险要点</span>
+    <div class="analysis-risk-points__badges">
+      <span class="analysis-risk-points__badge analysis-risk-points__badge--high">高风险 {{HIGH_COUNT}}</span>
+      <span class="analysis-risk-points__badge analysis-risk-points__badge--medium">中风险 {{MEDIUM_COUNT}}</span>
+      <span class="analysis-risk-points__badge analysis-risk-points__badge--low">低风险 {{LOW_COUNT}}</span>
+    </div>
+  </div>
+  <table class="analysis-risk-points__table">
+    <thead>
+      <tr>
+        <th>等级</th>
+        <th>类别</th>
+        <th>标题</th>
+        <th>证据</th>
+        <th>建议</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="analysis-risk-points__row analysis-risk-points__row--high">
+        <td><span class="analysis-risk-points__level analysis-risk-points__level--high">高</span></td>
+        <td>{{RISK_1_CATEGORY}}</td>
+        <td>{{RISK_1_TITLE}}</td>
+        <td>{{RISK_1_DETAIL}}</td>
+        <td>{{RISK_1_SUGGEST}}</td>
+      </tr>
+      <tr class="analysis-risk-points__row analysis-risk-points__row--medium">
+        <td><span class="analysis-risk-points__level analysis-risk-points__level--medium">中</span></td>
+        <td>{{RISK_2_CATEGORY}}</td>
+        <td>{{RISK_2_TITLE}}</td>
+        <td>{{RISK_2_DETAIL}}</td>
+        <td>{{RISK_2_SUGGEST}}</td>
+      </tr>
+      <tr class="analysis-risk-points__row analysis-risk-points__row--low">
+        <td><span class="analysis-risk-points__level analysis-risk-points__level--low">低</span></td>
+        <td>{{RISK_3_CATEGORY}}</td>
+        <td>{{RISK_3_TITLE}}</td>
+        <td>{{RISK_3_DETAIL}}</td>
+        <td>{{RISK_3_SUGGEST}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

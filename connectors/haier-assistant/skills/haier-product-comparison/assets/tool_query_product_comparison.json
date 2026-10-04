@@ -1,0 +1,100 @@
+{
+  "name": "query_product_comparison",
+  "description": "产品对比接口。按产品名称（型号）列表查询各产品的参数，由后端完成同名参数对齐与差异提取，返回相同参数列表与差异参数列表。可选择只对比指定的参数名。所有参数必须包在 request 对象里。",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "request": {
+        "type": "object",
+        "description": "产品对比请求参数",
+        "properties": {
+          "productNames": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "要对比的产品名称（型号）集合，必填。按用户表达顺序给出；宿主会忽略大小写去重并最多取前 5 个。去重后不足 2 个时不会调用下游，直接返回错误码 3002（走场景1 引导补充型号）"
+          },
+          "attributeNames": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "指定对比的参数/槽位名集合，非必填。为空或省略则对比产品下所有有值参数。仅在用户点名要看某些参数时填写（如「就看能效和噪音」→ [\"能效等级\",\"噪音\"]），参数名需与 comparison_attributes.json 的标准槽位名一致；不确定就省略，让后端返回全部参数"
+          }
+        },
+        "required": ["productNames"]
+      }
+    },
+    "required": ["request"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "ok": {"type": "boolean", "description": "true=查询成功；false 时看 error/message"},
+      "maxProducts": {"type": "integer", "description": "对比产品上限（默认 5）"},
+      "comparedProductNames": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "去重截断后实际参与对比的产品名，按顺序返回"
+      },
+      "truncatedProductNames": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "超出上限、未参与对比的产品名；非空时必须在开头输出场景5 截断提示"
+      },
+      "truncated": {"type": "boolean", "description": "是否发生截断，等价于 truncatedProductNames 非空"},
+      "sameAttributeList": {
+        "type": "array",
+        "description": "各产品取值一致的参数（用于「共同优势」，不再单独成段列清单）。**「渠道」已由宿主剔除**，不会出现在本数组里",
+        "items": {"$ref": "#/definitions/ProductAttribute"}
+      },
+      "differentAttributeList": {
+        "type": "array",
+        "description": "存在差异的参数（每个产品一条，同一 attributeName 下对应各产品的取值）。据此总结「各自优点」，**不输出对比表格**。「渠道」已由宿主剔除，不会出现在本数组里",
+        "items": {"$ref": "#/definitions/ProductAttribute"}
+      },
+      "productList": {
+        "type": "array",
+        "description": "参与对比的产品清单。**除 matchType 外都不参与文本输出**：brand/image/prodCate/spectrum 供宿主渠道决定产品卡片如何展示，不要写进正文；对比参数只认 sameAttributeList / differentAttributeList，不要拿本数组当参数来源。**唯一要读的是 matchType**：为 \"2\" 说明该款是模糊匹配命中的，需在对比正文前加模糊匹配提示（顶层 fuzzyMatched 给出整体判定）。",
+        "items": {
+          "type": "object",
+          "properties": {
+            "brand": {"type": "string", "description": "品牌"},
+            "productName": {"type": "string", "description": "产品名称（型号）。模糊匹配提示里的「已为您挑选了[具体型号]」用它"},
+            "image": {"type": "string", "description": "产品主图URL，可能为 null。**供宿主渠道挂卡用，不参与文本输出**：既不展示也不提及，不得写成 Markdown 图片或链接"},
+            "prodCate": {"type": "string", "description": "品类，可能为 null。**展示元数据，不参与文本输出**：由宿主渠道决定产品卡片如何展示，你无需关注、不要写进正文、不要当作对比参数或优点讲，也不作为选购建议依据"},
+            "spectrum": {"type": "string", "description": "套系，可能为 null。**展示元数据，不参与文本输出**：由宿主渠道决定产品卡片如何展示，你无需关注、不要写进正文、不要当作对比参数或优点讲，也不作为选购建议依据"},
+            "matchType": {"type": "string", "description": "匹配方式：\"1\" 精准匹配（命中产品名称与入参完全一致）、\"2\" 模糊匹配（前缀命中，名称与入参不一致），可能为 null。**与其它字段不同，它参与文本输出**：只要有任一款为 \"2\"，就必须先输出模糊匹配提示再输出原对比话术，见 comparison_scenarios.json 的 fuzzy_match_notice"}
+          }
+        }
+      },
+      "fuzzyMatched": {"type": "boolean", "description": "是否存在模糊匹配（等价于 productList 里任一款 matchType==\"2\"）。**true 时必须在原对比话术之前先加一段模糊匹配提示**，见 comparison_scenarios.json 的 fuzzy_match_notice；false 保持原输出模式不变"},
+      "error": {"type": "string", "description": "错误码：3001 无可对比参数 / 3002 有效产品不足2个 / 3003 跨品类无法对比 / 3004 服务繁忙 / 3005 响应超时"},
+      "message": {"type": "string", "description": "面向用户的稳定错误提示，禁止在错误时编造对比结果"}
+    }
+  },
+  "definitions": {
+    "ProductAttribute": {
+      "type": "object",
+      "properties": {
+        "productName": {"type": "string", "description": "产品名称（型号）"},
+        "priority": {"type": "integer", "description": "参数影响力排序，数字越小优先级越高。下游当前恒为 null（预留字段）；为空时按 comparison_attributes.json 的 priority_order.fallback_rank 兜底排序"},
+        "attributeName": {"type": "string", "description": "产品槽位名/属性名/参数名"},
+        "attributeValue": {"type": "string", "description": "产品槽位值/属性值/参数值"}
+      }
+    }
+  },
+  "usage_rules": [
+    "仅在去重后产品名 ≥2 时调用；≤1 个先走场景1 引导补充型号，不要试探性调用。",
+    "一轮对话只调用一次；用户增删型号后重新调用，入参为合并后的完整产品名列表。",
+    "attributeNames 只在用户点名要看某些参数时填写；不确定就省略，不要为了「少返回点」而猜参数名。",
+    "sameAttributeList 与 differentAttributeList 是唯一参数来源；不得自行推断、补齐或跨产品复制参数值，**禁止虚假补充与发散**（参数没给的卖点不写，不推断使用体验，不引入未在参数中出现的说法）。",
+    "**正文只输出各自优点 + 选购建议**：不出对比表格、不列相同点清单、不附参数摘要。参数只作为优点的论据出现（如「能效更优（1级 vs 2级）」），不单独成段复述；用户想看某型号完整参数会直接问，由产品咨询能力承接。",
+    "**渠道永远不作为对比参数**，已由宿主在下发前剔除；即便出现也不得写进优点或选购建议。",
+    "**总结顺序**：attributeNames 非空时优先按用户指定的参数总结优点与建议（顺序即用户提问顺序）；为空时按参数影响力 价格 > 功能 > 能效 > 容量 > 尺寸 > 附加。",
+    "**价格对用户一律称「官方指导价」**：返参里 attributeName 为「价格」「价格区间」的那条，写进优点或建议时说「官方指导价更低（5299 元 vs 6099 元）」，不说「价格/售价/参考价/到手价」；只换展示用词，数值、单位与判读方向（越低越省）都不变。**送出侧不变**：attributeNames 仍填标准槽位名「价格」，把「官方指导价」当参数名下发会匹配不到、返回空参数。",
+    "**有效产品型号 = 排除渠道参数后其它参数仍有有值的型号**；只有渠道参数有值、其它全空的型号是无效型号。该判定由宿主完成：有效型号不足 2 个时返回 error=3002，你按场景1 引导补充即可，不必自行判断型号有效性。",
+    "truncated=true 时必须先输出截断提示，再输出对比正文。",
+    "**productList 除 matchType 外不参与文本输出**：brand、image（主图URL）、prodCate（品类）、spectrum（套系）都供宿主渠道决定卡片展示，不要写进正文、不要当作对比参数或优点讲、不参与影响力排序；为 null 时同样不必提。**image 尤其不得展示或提及，不得写成 Markdown 图片或链接**。对比参数只认 sameAttributeList 与 differentAttributeList。",
+    "**fuzzyMatched=true（即 productList 里任一款 matchType=\"2\"）时，先输出一段模糊匹配提示，再接原本的对比话术**：「您的【用户输入的型号，逗号分隔】有多款产品，已为您挑选了[命中型号1] 与 [命中型号2] 进行对比，如与您意向产品不同，请告诉我准确的型号名称哦~」。用户输入的型号取 comparedProductNames，命中型号取 productList[].productName。提示只加这一句，接着照场景3/场景4 原样输出，不改动原话术。fuzzyMatched=false 或字段缺失时保持原输出模式，不加这句。",
+    "ok=false 时按 error 码套用对应场景话术，禁止编造参数或对比结论。",
+    "型号与要点全部写进正文，正文必须自身可读懂。"
+  ]
+}

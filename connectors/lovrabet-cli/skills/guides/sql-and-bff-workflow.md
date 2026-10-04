@@ -8,6 +8,10 @@
 
 `sql` 命令组用于消费 Custom SQL；Custom SQL 和 Backend Function 都不是“先猜再试”的能力。
 
+通过 `lovrabet sql exec` 直接执行 Custom SQL 时，唯一执行契约仍是 `sqlCode` + `params`，其中 `params` 只包含当前能力契约定义的业务参数。标识无法唯一确认、参数无效或执行失败时，报告真实错误并停止；只有可信业务契约或用户明确指示要求时，才切换到其他可信契约绑定的能力。
+
+写当前应用内的 Personal Backend Function 或 Backend Function 时，资源访问可优先使用 `context.client.models.byTable(tableName, { dblinkId? })` 和 `context.client.sql.byName(sqlName).execute({ params })`。表名或 SQL 名不能唯一解析时会返回明确错误，不自动选择候选；其中 `dblinkId` 只用于收敛同名物理表的 Dataset。既有 `datasetCode` / `sqlCode` 写法继续兼容，详见 [Personal Backend Function 工作流](../references/lovrabet-personal-bff-workflow.md)。这不改变外部 `lovrabet sql exec --sqlcode` 的参数契约。
+
 运行时复用既有能力的标准顺序：
 
 1. 先判断 app 是否明确
@@ -43,6 +47,8 @@ lovrabet sql detail --sqlcode <code>
 ```bash
 lovrabet sql exec --sqlcode <code> --params '<json>'
 ```
+
+普通只读查询在平台 `sqlCode` 权限满足且不需要额外业务授权时，可按可信契约直接执行对应的 Custom SQL。可信业务契约明确要求按当前用户、角色、数据范围或业务规则额外控制时，使用已有 Backend Function，由 Backend Function 完成业务校验后，按可信契约执行对应的 `sqlCode`。
 
 ## Backend Function 工作流
 
@@ -80,9 +86,9 @@ lovrabet app-config get example_api_key --format compress
 
 示例 key 仅用于说明；实际执行必须使用用户或业务 Skill 明确给出的 key，不能猜测或默认使用示例 key。Agent 执行 Skill 时同样调用该 CLI 获取 value，不创建取配置 Backend Function；value 只在当前任务内消费，除非用户明确要求，否则最终答复不重复展示。
 
-## personal BFF 工作流
+## Personal Backend Function 工作流
 
-personal BFF 是当前用户在当前应用下维护的个人脚本，适合做轻量数据编排，或先验证一个临时业务接口的返回形状。
+Personal Backend Function 是当前用户在当前应用下维护的个人脚本，适合做轻量数据编排，或先验证一个临时业务接口的返回形状。
 
 标准顺序：
 
@@ -90,7 +96,7 @@ personal BFF 是当前用户在当前应用下维护的个人脚本，适合做�
 2. `lovrabet personal-bff detail --id <id>` 查看现有脚本后再更新
 3. 从本地脚本文件 `create` 或 `update`
 4. `lovrabet personal-bff exec --id <id> --params '<json>' --format compress` 确认返回形状
-5. 再把结果形状用于下游调用或交付说明
+5. 页面接入时使用 `client.personal.bff.execute({ scriptId, params })`，并按 [Personal Backend Function 工作流](../references/lovrabet-personal-bff-workflow.md) 做能力检测、认证隔离和返回形状校验
 
 ```bash
 lovrabet personal-bff create --name loadOrders --file ./load-orders.js --dry-run
@@ -123,10 +129,11 @@ Backend Function 返回值应包含 handoff 所需结果：已创建记录、已
 - 不要在不知道 `sqlCode` 的情况下直接跑 `sql exec`
 - 不要在不知道函数名的情况下直接跑 `bff exec`
 - 不要在 app 未明确时直接默认当前 app 一定对
+- `--params` 只传当前 Custom SQL 契约定义的业务参数
 
 ## 推荐配合命令
 
 - app 决议：`lovrabet app list`
 - Custom SQL 标识来源：用户明确输入、业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选
 - Backend Function 标识来源：用户明确输入、业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选
-- personal BFF：`lovrabet personal-bff list/detail/create/update/exec`
+- Personal Backend Function：`lovrabet personal-bff list/detail/create/update/exec`

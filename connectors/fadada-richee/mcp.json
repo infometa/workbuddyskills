@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "richee-mcp-server": {
+      "type": "streamableHttp",
+      "url": "https://claw.richee.cn/claw-api/mcp/workbuddy",
+      "timeout": 30000
+    }
+  }
+}

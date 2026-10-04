@@ -1,28 +1,29 @@
 {
   "name": "ihr-ai-interviewer",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A digital-human recruitment interviewer for job-specific interview design, launch, and evidence-based review through ihr-cli.",
   "author": {
     "name": "利唐智语团队",
     "email": "olivia.zhang@ihr360.com"
   },
+  "expertType": "agent",
+  "agentName": "ihr-ai-interviewer",
   "agents": [
     "./agents/ihr-ai-interviewer.md"
   ],
   "skills": [
+    "./skills/ihr-bootstrap",
     "./skills/ihr-shared",
     "./skills/ihr-base",
     "./skills/ihr-conference"
   ],
-  "expertType": "agent",
-  "agentName": "ihr-ai-interviewer",
   "displayName": {
     "en": "AI Interviewer",
-    "zh": "利唐智语AI面试官"
+    "zh": "AI面试官"
   },
   "profession": {
-    "en": "Digital Avatar Recruitment Interview Specialist",
-    "zh": "数字人招聘面试专家"
+    "en": "iHR-LiTangZhiYu AI Interviewer",
+    "zh": "i人事-利唐智语AI面试官"
   },
   "displayDescription": {
     "en": "Builds job-specific interview dimensions and question sets, reuses or creates digital-human interview templates, validates candidate information before launch, and reviews interview records, minutes, action items, and transcripts with permission-aware evidence.",
@@ -31,10 +32,9 @@
   "avatar": "avatars/expert.png",
   "categoryId": "09-OperationsHR",
   "defaultInitPrompt": {
-    "en": "Launch a digital-avatar interview for [Candidate Name] for the [Job Title] position, to be completed within 2 days.",
-    "zh": "给 [候选人姓名] 发起一场 [岗位名称] 的数字人面试，要求在 2 天内完成。"
+    "en": "Launch a digital-avatar interview for [Candidate Name] ([Email/Phone Number]) for the [Job Title] position, to be completed within 2 days.",
+    "zh": "给 [候选人姓名]（[邮箱/手机号]）发起一场 [岗位名称] 的数字人面试，要求在 2 天内完成。"
   },
-  "plugin": "ihr-ai-interviewer",
   "tags": [
     {
       "en": "Digital Avatar Interview",
@@ -51,16 +51,17 @@
   ],
   "quickPrompts": [
     {
-      "en": "Launch a digital-avatar interview for [Candidate Name] for the [Job Title] position, to be completed within 2 days.",
-      "zh": "给 [候选人姓名] 发起一场 [岗位名称] 的数字人面试，要求在 2 天内完成。"
+      "en": "Launch a digital-avatar interview for [Candidate Name] ([Email/Phone Number]) for the [Job Title] position, to be completed within 2 days.",
+      "zh": "给 [候选人姓名]（[邮箱/手机号]）发起一场 [岗位名称] 的数字人面试，要求在 2 天内完成。"
     },
     {
-      "en": "Please set up a digital-avatar interview for [Candidate Name/Phone Number] for the [Job Title] position, focusing on [e.g., project management/communication skills], require completion within 24 hours, and generate an interview invitation.",
-      "zh": "请帮我给 [候选人姓名/手机号] 配置一场 [岗位名称] 的数字人面试，重点考察 [如：项目管理/沟通能力]，要求24小时内完成，并生成面试邀请"
+      "en": "Please set up a digital-avatar interview for [Candidate Name] ([Email/Phone Number]) for the [Job Title] position, focusing on [e.g., project management/communication skills], require completion within 24 hours, and generate an interview invitation.",
+      "zh": "请帮我给 [候选人姓名]（[邮箱/手机号]）配置一场 [岗位名称] 的数字人面试，重点考察 [如：项目管理/沟通能力]，要求24小时内完成，并生成面试邀请"
     },
     {
-      "en": "Please set up a digital-avatar interview for candidate [Name] ([Phone Number]) for the [Job Title] position. Use about six questions, focus on [e.g., project management/communication skills], notify the candidate to complete it within [e.g., 24 hours], and automatically generate an interview invitation SMS.",
-      "zh": "请帮我给候选人 [姓名]（[手机号]）配置一场 [岗位名称] 的数字人面试。6道题左右，重点考察 [如：项目管理/沟通能力]，通知候选人在 [如：24小时内] 完成，并自动生成面试邀请通知短信。"
+      "en": "Please set up a digital-avatar interview for candidate [Name] ([Email/Phone Number]) for the [Job Title] position. Use about six questions, focus on [e.g., project management/communication skills], notify the candidate to complete it within [e.g., 24 hours], and automatically generate an interview invitation SMS.",
+      "zh": "请帮我给候选人 [姓名]（[邮箱/手机号]）配置一场 [岗位名称] 的数字人面试。6道题左右，重点考察 [如：项目管理/沟通能力]，通知候选人在 [如：24小时内] 完成，并自动生成面试邀请通知短信。"
     }
-  ]
+  ],
+  "plugin": "ihr-ai-interviewer"
 }

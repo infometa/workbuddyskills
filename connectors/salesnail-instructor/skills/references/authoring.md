@@ -5,6 +5,8 @@
 
 依次调用：模板列表 → 设计 Schema → 设计校验 → 启动生成 → 轮询任务 → 读取游戏 → 质量审计。
 
+模板路由：项目型模板（`business`、`medical`、`fmcg`、`english`）训练新客户、项目型赢单；份额型模板（`recurring`、`medicalRecurring`、`englishRecurring`、`englishMedicalRecurring`）训练老客户既有份额的攻守经营。用户要求英文时选择 `englishRecurring` 或 `englishMedicalRecurring`；中文则选择对应中文模板。先按客户关系、再按语言判断，不要只按行业判断。
+
 常规商务游戏默认 `decisionMakerCounts=[5,3,3,3,3]`，预期五个商机和 22 个 NPC。只有用户明确要求其他结构时才调整。
 
 生成失败或取消后使用 `salesnail_retry_job`，不要用新的随机参数重复启动同一意图。
@@ -22,8 +24,10 @@ WorkBuddy 里的大模型只负责把用户的人话整理为 `CardIntent`，不
 ```text
 salesnail_get_product_context
 salesnail_get_card_authoring_capabilities
+salesnail_get_default_card_catalog
 salesnail_get_game
-只根据本轮用户原话整理 CardIntent；有关键歧义时向用户确认，不调用 preview
+salesnail_prepare_card_change
+只根据一条完整的本轮用户原话整理 CardIntent；缺少字段时要求用户发送一条汇总后的最终需求，不拼接历史消息
 salesnail_preview_card_change
 向用户说明 summary、assumptions、willNotDo、warnings 和 simulations
 用户明确确认
@@ -31,6 +35,8 @@ salesnail_apply_card_change
 salesnail_get_card_change_operation
 salesnail_get_game
 ```
+
+系统默认卡牌目录是唯一的卡牌结构和规则语义参考。当前游戏、其他游戏、仓库导入记录和历史卡牌只允许用于编号、名称和冲突检查，不得作为描述、效果、点数、轮次、审批或规则配置范例。默认目录也不能替代用户当前消息中的明确证据。
 
 当前 `CardIntent 1.1` 一次新增一张卡牌，支持四类经过验证的行为：
 
@@ -64,7 +70,7 @@ salesnail_get_game
 
 - 用户没有说明客户活动是否影响好感度、选几位客户、是否审批或消耗多少点。
 - 用户要求通知现场讲师、生成讲师回复、自动修改商机/方案、执行任意脚本或数据库操作。
-- 用户要求编辑/删除现有卡牌、创建任意规则组；当前语义能力只支持新增，需明确说明边界。
+- 用户要求编辑现有卡牌机制、删除卡牌或创建任意规则组；当前语义能力只支持新增，需明确说明边界。若仅修正已有卡牌的名称、描述或备注，可改走 `salesnail_preview_game_patch` 的 `update_card_copy`，确认后 apply 并回读验证。
 - preview 返回 `CARD_INTENT_AMBIGUOUS`、`CARD_BEHAVIOR_UNSUPPORTED` 或模拟失败。
 
 提交超时或返回 `CARD_CHANGE_STATUS_UNKNOWN` 后，先用原 `clientRequestId` 调用 `salesnail_get_card_change_operation` 查询；也可用完全相同的 `confirmationId + clientRequestId` 重试 apply。不得换 ID 重复创建。
@@ -74,15 +80,18 @@ salesnail_get_game
 `salesnail_preview_game_patch` 只支持严格字段的：
 
 - update_game
+- update_card_copy（仅 `name`、`describeText`、`remarks`）
 - add_round / update_round
 - add_npc / update_npc
 - add_chance / update_chance
 
-不支持卡牌、卡牌规则或删除操作。优先一次确认一个聚焦变更；跨实体操作不是数据库事务。
+不支持卡牌机制、卡牌规则或删除操作。优先一次确认一个聚焦变更；跨实体操作不是数据库事务。apply 遇到上游失败时，原 confirmation 在过期前保持可重试；成功后才消费。
+
+修改 `npcTextList` 时，`textType` 和 `isBusinessChance` 是运行时路由元数据，不是根据文案语义重新推断的标签。普通改写应省略这两个字段，由服务端保留原值；无商机关联的 NPC 不允许出现 `isBusinessChance=1`。历史孤立标记只能通过 `mode=repair_readiness` 清除，不能在普通润色中顺带改动。
 
 ## 质量和上架
 
-上架前调用 `salesnail_audit_game_readiness`。阻断项包括结构缺失、NPC/卡牌/商机字段不完整、语言泄漏、不安全材料、名称/简介/封面缺失。警告也应向用户说明。
+上架前调用 `salesnail_audit_game_readiness`。阻断项包括结构缺失、NPC/卡牌/商机字段不完整、语言泄漏、不安全材料、名称/简介/封面缺失。医疗场景中，含宴请、晚宴、午餐会、旅游、娱乐、礼品、礼金、红包、回扣或个人赞助等措辞的卡牌也会阻断。警告也应向用户说明。
 
 首次上架可能收费人民币 9.90 元，必须展示 preview 返回的实际金额。下架通过 game reuse 的 unpublish 操作完成，不删除已有课程。
 

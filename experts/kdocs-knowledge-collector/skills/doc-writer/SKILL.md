@@ -3,7 +3,8 @@ name: doc-writer
 description: "搜索多份云文档，提取信息并自动生成总结报告或新文档内容。可浏览目录定位目标文档。 当用户要求「汇总报告」、「多文档总结」、「定期播报」、「内容整合」时使用。 若只需读取单篇文档，请使用 doc-to-markdown 技能。
 "
 homepage: 
-version: 1.5.7
+version: 2.6.4
+metadata: {"openclaw":{"category":"kdocs","emoji":"✍"}}
 ---
 
 # 文档总结与内容生成
@@ -11,6 +12,12 @@ version: 1.5.7
 文档总结与内容生成技能支持多文档信息提取和智能写作。
 
 > 本技能依赖 `kdocs` 技能的基础文档操作能力（认证、文件管理等），请确保已安装该技能。详见 `references/core/` 目录。
+
+## 严格规则
+
+### 禁止（NEVER）
+
+- 权限不足时禁止重试或绕过，立即告知用户无权限
 
 ---
 
@@ -32,7 +39,7 @@ version: 1.5.7
 | 意图 | 路由 |
 |------|------|
 | 读取文档内容 | `read_file`（统一入口，按后缀自动返回 Markdown 或结构化数据） |
-| 创建/写入 | `create_file_with_content`（统一入口，新建文档并写入内容，返回 link_url） |
+| 创建/写入 | 新建并写入、上传本地文件、新建空白文档 → **见下方「创建/写入」** |
 | 局部更新 | 改块/改段/改单元格，已有目标文档上的修改 → 按「支持的文档类型」→ 对应 reference |
 | 类型专属能力 | 条件格式、导出转换、翻译、PDF 拆分、幻灯片主题、数据校验 | 按「支持的文档类型」→ 对应 reference 中的专属功能章节 |
 | 获取文件标识指南 | **必读** `references/file-locating-guide.md` |
@@ -43,9 +50,9 @@ version: 1.5.7
 
 | 用户意图 | 工具 | 适用后缀 |
 |----------|------|----------|
-| 对话中已有要写的内容 | `create_file_with_content` | .otl .docx .pdf .xlsx .ksheet .dbt |
-| 上传本地已有文件 | `upload_file` | .doc .docx .xls .xlsx .ppt .pptx .pdf .md .txt |
-| 新建空白文档（不写内容） | `create_file` | .doc .docx .otl .dbt .xlsx .xls .ksheet .pptx .ppt |
+| 仅需空白文档 | `create_empty_file` | .doc .docx .otl .dbt .xlsx .xls .ksheet .pptx .ppt |
+| 已有正文或表格数据要写入 | `create_file_with_content` | .otl .docx .pdf .xlsx .ksheet .dbt |
+| 通过上传本地文件新建云文档 | `upload_new_file` | .doc .docx .xls .xlsx .ppt .pptx .pdf .md .txt .html .zip .png .jpg .jpeg .csv .json .dps .et .wps .gif |
 | AI 生成 PPT | `aippt.execute` | .pptx |
 
 后缀不确定时默认 `.otl`。指定文件夹时先按 `references/file-locating-guide.md` 取 `drive_id`、`parent_id`。
@@ -54,14 +61,14 @@ version: 1.5.7
 
 #### 搜索-读取-汇报撰写
 
-`search_files` → `read_file`（多次）→ AI 分析 → `create_file_with_content` → 返回 link_url
+`search_files` → `read_file`（多次）→ AI 分析 → `create_file_with_content` → `get_file_link`
 
 
 > 场景：搜索多份文档、提取信息、汇总撰写新报告
 
 #### 定期读取与播报
 
-`search_files` → `read_file` → AI 摘要
+`search_files` → `read_file` → AI 摘要 → `get_file_link`
 
 
 > 场景：定期读取指定文档，提取关键信息生成摘要
@@ -71,7 +78,16 @@ version: 1.5.7
 
 以下工具不可逆，调用前必须向用户确认（详细约束见各工具参考文档的「操作约束」区）：
 
-`otl.block_delete`、`cancel_share`
+`otl.block_delete`、`cancel_share`、`cancel_collaborator_permissions`
+
+---
+
+
+## 错误速查
+
+| 错误特征 | 原因 | 处理方式 |
+|----------|------|----------|
+| `403` / 权限不足 / `无权访问` / `forbidden` | 当前凭据对目标文档、目录或资源无操作权限 | 停止操作，禁止重试或尝试其他接口绕过；告知用户当前账号无权限，并建议联系文档所有者开通权限、确认分享链接权限，或切换到有权限的账号 |
 
 ---
 
@@ -80,5 +96,5 @@ version: 1.5.7
 | 用户需求 | 推荐工具组合 |
 |----------|-------------|
 | 创建/写入 | `create_file_with_content` |
-| 搜索多份文档、提取信息、汇总撰写新报告 | `search_files` → `read_file`（多次）→ AI 分析 → `create_file_with_content` → 返回 link_url |
-| 定期读取指定文档，提取关键信息生成摘要 | `search_files` → `read_file` → AI 摘要 |
+| 搜索多份文档、提取信息、汇总撰写新报告 | `search_files` → `read_file`（多次）→ AI 分析 → `create_file_with_content` → `get_file_link` |
+| 定期读取指定文档，提取关键信息生成摘要 | `search_files` → `read_file` → AI 摘要 → `get_file_link` |

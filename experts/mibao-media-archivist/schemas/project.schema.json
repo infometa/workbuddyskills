@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mibao.local/schemas/project.schema.json",
+  "title": "MIBAO project manifest v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project_id",
+    "display_name",
+    "privacy_mode",
+    "state",
+    "created_at",
+    "updated_at",
+    "project_root",
+    "database"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "project_id": {
+      "type": "string",
+      "pattern": "^MB-[0-9a-f]{32}$"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "privacy_mode": {
+      "enum": [
+        "local-private",
+        "hybrid",
+        "deep-understanding"
+      ]
+    },
+    "state": {
+      "const": "active"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "project_root": {
+      "const": "."
+    },
+    "database": {
+      "const": "database/mibao.sqlite"
+    }
+  },
+  "additionalProperties": false
+}

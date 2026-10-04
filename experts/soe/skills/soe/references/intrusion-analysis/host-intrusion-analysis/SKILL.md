@@ -49,7 +49,7 @@ run_command("cat templates/analysis_report_template.md")
 5. **报告是独立文档且必须落盘**。禁止对话式语言，可直接交付安全团队。报告必须写入工作空间的 `.md` 文件并通过 `present_files` 展示给用户，禁止仅在对话中输出而不落盘。唯一提问场景：输入不是日志报告。
 6. **严格遵循模板结构**。禁止新增模板未定义的顶级章节。补充信息内嵌到对应的模板章节中。
 7. **预分析脚本是唯一脚本**。只存在 `scripts/analysis/preanalyze.py` 唯一脚本，不存在其他任何脚本，报告的编写需要由 AI+模板 完成，不存在报告编写脚本。
-8. **采集脚本位于专家包内**。`scripts/linux/` 和 `scripts/windows/` 直接位于本 skill 的 scripts 目录，AI 运行时通过 `find ~/.workbuddy/plugins -name "get_log_all_in_one.*"` 定位实际绝对路径，并通过 `present_files` 工具把脚本文件本身展示给用户下载。
+8. **采集脚本位于本 skill 内**。`scripts/linux/` 和 `scripts/windows/` 直接位于本 skill 的 `references/intrusion-analysis/host-intrusion-analysis/scripts/` 目录（相对 `skills/soe/` 根路径，运行时由 skill 加载上下文解析为绝对路径），AI 通过 `present_files` 工具把脚本文件本身展示给用户下载。
 
 ## 步骤 0：确认日志来源（用户未提供日志文件时触发）
 

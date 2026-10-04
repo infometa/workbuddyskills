@@ -4,6 +4,12 @@ description: >-
   主题投资猎手：从市场主线出发，沿产业链寻找投资标的，叠加主题策略筛选，
   输出带估值判断的标的池。串行执行主线识别 → 产业链映射 → 主题策略筛选 → 估值过滤。
   触发词：找标的、主题投资、产业链挖掘、沿着主线找机会、标的池。
+description_zh: >-
+  主题投资猎手：从市场主线出发，沿产业链寻找投资标的，叠加主题策略筛选，
+  输出带估值判断的标的池。串行执行主线识别 → 产业链映射 → 主题策略筛选 → 估值过滤。
+  触发词：找标的、主题投资、产业链挖掘、沿着主线找机会、标的池。
+description_en: >-
+  Thematic investing hunter: starts from the market mainline, searches along the industry chain for candidates, applies thematic strategy screening, and outputs a candidate pool with valuation judgements. Runs mainline identification, industry-chain mapping, thematic screening and valuation filtering in sequence. Triggers: find candidates, thematic investing, industry-chain mining, hunting along the mainline, candidate pool.
 tools: Bash,Read,Write,WebSearch,WebFetch
 color: "#8B5CF6"
 ---

@@ -1,18 +1,19 @@
 ---
 name: beisen-recruitment
-version: 2.2.0
+version: 2.2.3
 description: "北森招聘主流程。本 Skill 覆盖职位搜索与详情、AI推荐人才、候选人申请详情与申请列表、人才库推荐候选人搜索、异步任务管理与轮询。当用户询问职位、招聘岗位、候选人、申请、人才库、简历推荐、JD 等招聘主流程问题时触发。面试相关（招聘进展、面试官待办、面试质量分析、竞品情报、招聘需求）请走 beisen-interview。"
 category: 人力资源/招聘
 author: beisen
 agent_created: false
 allowed-tools: Bash, Read
+requires-skills:
+  - beisen-shared
+requires-cli: ">=1.0.8"
 ---
 
 # 招聘主流程
 
 **CRITICAL — 开始前 MUST 读取 [../beisen-shared/SKILL.md](../beisen-shared/SKILL.md)**
-
-> CLI 版本要求：beisen-cli >= 0.2.13（低于该版本会提示升级，执行 `beisen-cli update` 更新）
 
 容易混淆的概念，先分清楚再回答：
 
@@ -20,8 +21,6 @@ allowed-tools: Bash, Read
 - **职位 vs 招聘需求**：需求（HC）是「要招几个人、招得怎么样了」，职位是对外发布的岗位与要求。问进度查需求，问职责要求查职位；两者可以关联，但不是一回事。
 - **招聘通知 vs 审批待办**：候选人推荐、面试变更这类提醒走招聘通知；员工自己发起或待办的审批与各类待办走审批清单。名字像，来源不同。
 - **人才推荐 ≠ 候选人**：人才推荐是按职位算出来的「可能合适的人」，不代表已进入招聘流程。
-- **月报 vs 逐日记录**：考勤月报是整月汇总，具体某天的打卡与单据细节要查逐日记录。两者是同一查询能力的两种模式：传 month 看月报，传 beginDate 看逐日。
-- **申请时长、打卡时长、结算时长**：加班的三个数字口径不同，以工具返回的说明为准，不要互相替代。
 
 ## 路由优先级
 
@@ -38,12 +37,12 @@ allowed-tools: Bash, Read
 |------|---------|------|
 | 搜索职位 | `beisen-cli recruitment job searchJobs` | 按职位名称/编码/状态/招聘分类分页查询 |
 | 查询职位详情 | `beisen-cli recruitment job getJobDetail` | 按 jobId 获取职位完整信息 |
-| AI 推荐人才 | `beisen-cli recruitment job bs_recommend_candidates_by_job` | 按职位批量查询 AI 推荐候选人 |
+| AI 推荐人才 | `beisen-cli recruitment_ai job bs_recommend_candidates_by_job` | 按职位批量查询 AI 推荐候选人 |
 | 查询应聘者申请列表 | `beisen-cli recruitment apply bs_search_apply_list` | 按职位/姓名/状态/筛选结果等查询申请列表 |
 | 查询候选人申请详情 | `beisen-cli recruitment apply bs_get_apply_detail` | 按 applyId 批量查询申请详情 |
-| 搜索人才库候选人 | `beisen-cli recruitment talentPool bs_search_candidates_in_talentpool` | 按职位要求搜索推荐候选人（异步） |
-| 查询异步任务结果 | `beisen-cli recruitment async_task bs_get_async_task_status` | 轮询异步任务执行结果 |
-| 取消异步任务 | `beisen-cli recruitment async_task bs_cancel_async_task` | 取消进行中的异步任务 |
+| 搜索人才库候选人 | `beisen-cli recruitment_ai talentPool bs_search_candidates_in_talentpool` | 按职位要求搜索推荐候选人（异步） |
+| 查询异步任务结果 | `beisen-cli recruitment_ai async_task bs_get_async_task_status` | 轮询异步任务执行结果 |
+| 取消异步任务 | `beisen-cli recruitment_ai async_task bs_cancel_async_task` | 取消进行中的异步任务 |
 
 ## 命令示例
 
@@ -58,7 +57,7 @@ beisen-cli recruitment job searchJobs --data '{"jobStatus":1,"page":0,"pageSize"
 beisen-cli recruitment job getJobDetail --data '{"jobId":"<jobId>"}'
 
 # AI 推荐人才（支持批量职位）
-beisen-cli recruitment job bs_recommend_candidates_by_job --data '{"jobIds":["<jobId>"],"pageIndex":0,"pageSize":30}'
+beisen-cli recruitment_ai job bs_recommend_candidates_by_job --data '{"jobIds":["<jobId>"],"pageIndex":0,"pageSize":30}'
 
 # 查询应聘者申请列表（某职位）
 beisen-cli recruitment apply bs_search_apply_list --data '{"jobId":"<jobId>","pageIndex":0,"pageSize":30}'
@@ -70,10 +69,10 @@ beisen-cli recruitment apply bs_search_apply_list --data '{"jobId":"<jobId>","ai
 beisen-cli recruitment apply bs_get_apply_detail --data '{"applyIds":["<applyId>"]}'
 
 # 搜索人才库推荐候选人（异步任务，需轮询结果）
-beisen-cli recruitment talentPool bs_search_candidates_in_talentpool --data '{"jobRequirements":"3-5年Java开发经验，本科及以上","pageIndex":0,"pageSize":10}'
+beisen-cli recruitment_ai talentPool bs_search_candidates_in_talentpool --data '{"jobRequirements":"3-5年Java开发经验，本科及以上","pageIndex":0,"pageSize":10}'
 
 # 查询异步任务结果
-beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<taskId>"}'
+beisen-cli recruitment_ai async_task bs_get_async_task_status --data '{"taskId":"<taskId>"}'
 ```
 
 ## 工作流程
@@ -82,13 +81,13 @@ beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<t
 
 2. **职位详情**：用户需要查看某个职位的完整信息时，先通过 `searchJobs` 获取 `jobId`，再执行 `beisen-cli recruitment job getJobDetail --data '{"jobId":"<id>"}'`。展示职位名称、部门、招聘人数、薪资范围、工作地点、工作年限、学历要求、工作职责、任职资格、负责人、招聘流程、申请情况等。
 
-3. **AI 推荐人才**：用户需要某职位的 AI 推荐候选人时，执行 `beisen-cli recruitment job bs_recommend_candidates_by_job --data '{"jobIds":["<jobId>"],"pageIndex":0,"pageSize":30}'`。展示推荐候选人摘要（应聘者姓名、性别、年龄、工作年限、学历、毕业学校、专业、最近任职公司、最近任职职位、匹配度星级、推荐亮点），以上列出的字段必须全部展示，即使值为空也不省略。候选人属于 **L2 敏感数据**，不回显原始 JSON。
+3. **AI 推荐人才**：用户需要某职位的 AI 推荐候选人时，执行 `beisen-cli recruitment_ai job bs_recommend_candidates_by_job --data '{"jobIds":["<jobId>"],"pageIndex":0,"pageSize":30}'`。展示推荐候选人摘要（应聘者姓名、性别、年龄、工作年限、学历、毕业学校、专业、最近任职公司、最近任职职位、匹配度星级、推荐亮点），以上列出的字段必须全部展示，即使值为空也不省略。候选人属于 **L2 敏感数据**，不回显原始 JSON。
 
 4. **应聘者申请列表**：用户需要查某职位下候选人申请列表（如待筛选简历、按阶段/状态/筛选结果过滤）时，执行 `beisen-cli recruitment apply bs_search_apply_list --data '{"jobId":"<jobId>",...}'`。常用过滤条件：`searchType`（0=全部, 1=待处理/未处理，用户说"待处理""未处理""待处理的简历"时设为 1）、`phaseName`（阶段名称，如"简历初筛""面试""Offer环节"等）、`statusName`（状态名称，如"未处理""进行中""本轮通过""本轮淘汰"等）、`filterResults`（筛选结果：1=通过,2=待定,3=淘汰,4=未筛选）、`aiEvaluateResults`（AI 评估：0=未发起,1=评估中,2=评估失败,3=非常符合,4=不符合,5=基本符合,6=信息不足）、`interviewStatuses`（面试状态：0=未安排,1=已安排）、`offerStatuses`（Offer 状态）、`entryStatuses`（入职状态）、`signInStates`（签到状态：1=未签到,2=已签到,3=未到场）。候选人信息属于 **L2 敏感数据**，仅展示摘要（姓名、性别、年龄、工作年限、学历、毕业学校、专业、最近任职公司、最近任职职位、AI评估简历结果、AI评估简历理由、最初投递渠道、申请创建时间、所在阶段状态），以上列出的字段必须全部展示，即使值为空也不省略。
 
 5. **候选人申请详情**：用户需要查看某位候选人的申请详情时，先通过 `bs_search_apply_list` 获取 `applyId`，再执行 `beisen-cli recruitment apply bs_get_apply_detail --data '{"applyIds":[...]}'`。
 
-6. **人才库搜索**：用户需要按职位要求推荐人才库候选人时，执行 `beisen-cli recruitment talentPool bs_search_candidates_in_talentpool --data '{"jobRequirements":"<职位要求>","pageIndex":0,"pageSize":10}'`。该接口为**异步任务**，需按 [references/recruitment-demand.md](references/recruitment-demand.md) 的轮询流程处理。
+6. **人才库搜索**：用户需要按职位要求推荐人才库候选人时，执行 `beisen-cli recruitment_ai talentPool bs_search_candidates_in_talentpool --data '{"jobRequirements":"<职位要求>","pageIndex":0,"pageSize":10}'`。该接口为**异步任务**，需按 [references/recruitment-demand.md](references/recruitment-demand.md) 的轮询流程处理。
 
 7. **异步任务**：当人才库搜索、面试质量分析、竞品情报等返回 `taskId` 时，用 `bs_get_async_task_status` 轮询直到 `isFinished == true`，从 `resultJson` 解析结果。
 
@@ -143,7 +142,7 @@ beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<t
 
 执行步骤：
 1. 前置检查
-2. 执行 `beisen-cli recruitment talentPool bs_search_candidates_in_talentpool --data '{"jobRequirements":"<用户描述的职位要求>","pageIndex":0,"pageSize":10}'`
+2. 执行 `beisen-cli recruitment_ai talentPool bs_search_candidates_in_talentpool --data '{"jobRequirements":"<用户描述的职位要求>","pageIndex":0,"pageSize":10}'`
 3. 提取返回的 `taskId`，轮询 `bs_get_async_task_status` 直到 `isFinished == true`
 4. 从 `resultJson` 解析候选人列表，展示摘要（姓名、当前职位、匹配度等 L2 摘要信息）
 

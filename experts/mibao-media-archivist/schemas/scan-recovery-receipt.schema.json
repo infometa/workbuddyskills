@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mibao.local/schemas/scan-recovery-receipt.schema.json",
+  "title": "MIBAO scanner recovery attempt receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "attempt_id",
+    "attempt_number",
+    "fence_epoch",
+    "scan_spec_sha256",
+    "started_at",
+    "prior_job_status",
+    "recovery_mode",
+    "prior_durable_operation_count",
+    "prior_operation_set_sha256",
+    "recovered_abandoned_running_state",
+    "database_integrity_check",
+    "foreign_key_violation_count",
+    "journal_mode",
+    "synchronous",
+    "source_state_at_attempt_start"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "attempt_id": {"type": "string", "pattern": "^RUN-SCAN-[0-9a-f]{32}$"},
+    "attempt_number": {"type": "integer", "minimum": 1},
+    "fence_epoch": {"type": "integer", "minimum": 1},
+    "scan_spec_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "prior_job_status": {
+      "type": ["string", "null"],
+      "enum": [null, "queued", "running", "succeeded", "failed", "cancelled", "interrupted"]
+    },
+    "recovery_mode": {
+      "enum": [
+        "fresh",
+        "queued_resume",
+        "abandoned_running_resume",
+        "repeat_completed",
+        "failed_resume",
+        "cancelled_resume",
+        "controlled_resume",
+        "source_offline_observation"
+      ]
+    },
+    "prior_durable_operation_count": {"type": "integer", "minimum": 0},
+    "prior_operation_set_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "recovered_abandoned_running_state": {"type": "boolean"},
+    "database_integrity_check": {"const": "ok"},
+    "foreign_key_violation_count": {"const": 0},
+    "journal_mode": {"const": "delete"},
+    "synchronous": {"const": "full"},
+    "source_state_at_attempt_start": {"enum": ["active", "offline"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"recovery_mode": {"const": "abandoned_running_resume"}}},
+      "then": {
+        "properties": {
+          "attempt_number": {"type": "integer", "minimum": 2},
+          "fence_epoch": {"type": "integer", "minimum": 2},
+          "prior_job_status": {"const": "running"},
+          "recovered_abandoned_running_state": {"const": true},
+          "source_state_at_attempt_start": {"const": "active"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"recovery_mode": {"const": "fresh"}}},
+      "then": {
+        "properties": {
+          "attempt_number": {"const": 1},
+          "fence_epoch": {"const": 1},
+          "prior_job_status": {"type": "null"},
+          "prior_durable_operation_count": {"const": 0},
+          "recovered_abandoned_running_state": {"const": false},
+          "source_state_at_attempt_start": {"const": "active"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"recovery_mode": {"const": "queued_resume"}}},
+      "then": {
+        "properties": {
+          "attempt_number": {"type": "integer", "minimum": 2},
+          "fence_epoch": {"type": "integer", "minimum": 2},
+          "prior_job_status": {"const": "queued"},
+          "recovered_abandoned_running_state": {"const": false},
+          "source_state_at_attempt_start": {"const": "active"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"recovery_mode": {"const": "repeat_completed"}}},
+      "then": {
+        "properties": {
+          "attempt_number": {"type": "integer", "minimum": 2},
+          "fence_epoch": {"type": "integer", "minimum": 2},
+          "prior_job_status": {"const": "succeeded"},
+          "recovered_abandoned_running_state": {"const": false},
+          "source_state_at_attempt_start": {"const": "active"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"recovery_mode": {"const": "failed_resume"}}},
+      "then": {
+        "properties": {
+          "attempt_number": {"type": "integer", "minimum": 2},
+          "fence_epoch": {"type": "integer", "minimum": 2},
+          "prior_job_status": {"const": "failed"},
+          "recovered_abandoned_running_state": {"const": false},
+          "source_state_at_attempt_start": {"const": "active"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"recovery_mode": {"const": "cancelled_resume"}}},
+      "then": {
+        "properties": {
+          "attempt_number": {"type": "integer", "minimum": 2},
+          "fence_epoch": {"type": "integer", "minimum": 2},
+          "prior_job_status": {"const": "cancelled"},
+          "recovered_abandoned_running_state": {"const": false},
+          "source_state_at_attempt_start": {"const": "active"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"recovery_mode": {"const": "controlled_resume"}}},
+      "then": {
+        "properties": {
+          "attempt_number": {"type": "integer", "minimum": 2},
+          "fence_epoch": {"type": "integer", "minimum": 2},
+          "prior_job_status": {"const": "interrupted"},
+          "recovered_abandoned_running_state": {"const": false},
+          "source_state_at_attempt_start": {"const": "active"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"recovery_mode": {"const": "source_offline_observation"}}},
+      "then": {
+        "properties": {
+          "attempt_number": {"type": "integer", "minimum": 2},
+          "fence_epoch": {"type": "integer", "minimum": 2},
+          "prior_job_status": {
+            "enum": ["queued", "running", "succeeded", "failed", "cancelled", "interrupted"]
+          },
+          "recovered_abandoned_running_state": {"const": false},
+          "source_state_at_attempt_start": {"const": "offline"}
+        }
+      }
+    }
+  ]
+}

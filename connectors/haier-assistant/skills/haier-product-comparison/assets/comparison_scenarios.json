@@ -1,0 +1,113 @@
+{
+  "_note": "产品对比场景判定与话术（PRD 3.3.1.4）。占位符由宿主用真实数据替换：{model_A}/{model_B}/{model_1..5}/{n}/{参数名}/{统一值}。所有参数值只能来自 query_product_comparison 返回，不得编造。判定按 order 从小到大，第一个命中的场景胜出。模糊匹配时先输出 fuzzy_match_notice，再接场景话术。",
+
+  "fuzzy_match_notice": {
+    "_note": "模糊匹配提示：**只在 query_product_comparison 返回 fuzzyMatched=true（即 productList 里任一款 matchType=\"2\"）时，加在原对比话术之前**。它是前置的一段独立话术，不替代、不改写任何场景话术；全部精准匹配（matchType 均为 \"1\"）或字段缺失时都不输出这句。",
+    "condition": "query_product_comparison 返回 fuzzyMatched=true，或 productList 里任一款 matchType=\"2\"",
+    "applies_to": ["场景3（默认对比）", "场景4（逐项参数详解）", "场景5（截断，提示排在截断提示之后、对比正文之前）"],
+    "not_applies_to": ["场景1（有效型号不足2款，未调用工具）", "场景2（跨品类无法对比）", "所有 ok=false 的错误码话术"],
+    "position": "对比正文之前；与场景5 同时命中时排在截断提示之后、对比正文之前。与随后的正文之间空一行",
+    "reply": "您的【{input_models}】有多款产品，已为您挑选了{matched_models} 进行对比，如与您意向产品不同，请告诉我准确的型号名称哦~",
+    "placeholders": {
+      "{input_models}": "用户本轮输入的型号，取 comparedProductNames，多个之间用「、」分隔；不得用命中型号顶替",
+      "{matched_models}": "下游实际命中的型号，取 productList[].productName，两款时写「[型号1] 与 [型号2]」，多于两款时用「、」分隔、最后两个之间用「与」"
+    },
+    "rules": [
+      "只加这一句，随后照原场景（场景3/场景4）原样输出，原话术一个字不改",
+      "两组型号都必须回填真实值：前者是用户输入的型号，后者是实际命中的型号，二者不同才是这句提示的意义所在",
+      "不解释「为什么是模糊匹配」、不描述前缀命中规则、不追问用户确认——话术里的「请告诉我准确的型号名称哦~」已是引导",
+      "只要有**任一款**是模糊匹配就输出这一句（不必逐款判断、不必只列模糊的那几款）：提示里的命中型号写全部参与对比的型号，与正文对比的型号一致",
+      "fuzzyMatched=false / matchType 均为 \"1\" / 字段缺失时**保持原输出模式**，不加这句、不加任何替代说明"
+    ]
+  },
+
+  "scene1_insufficient_models": {
+    "order": 1,
+    "id": "场景1",
+    "condition": "去重后有效产品名 < 2 款；或工具返回 error=3002",
+    "call_tool": false,
+    "max_sentences": 3,
+    "text_with_one_model": "已识别到「{model_A}」，再提供至少 1 款型号即可对比~ 比如「{model_A} 和 {model_B} 哪个好？」",
+    "text_without_model": "请告诉我您想对比哪两款产品，比如「BCD-510WDPZ 和 BCD-470WLMDZ 哪个更好？」",
+    "rules": [
+      "示例型号只能用用户已提供的型号或话术里给定的示例型号，不得凭空生成海尔在售型号。",
+      "不要在此场景调用 query_product_comparison。"
+    ]
+  },
+
+  "scene2_cross_category": {
+    "order": 2,
+    "id": "场景2",
+    "condition": "工具返回 error=3003（无同一类别下的有效产品）",
+    "text": "这几款产品属于不同品类，无法直接逐项对比。换个角度帮您分析：\n\n1. **同品类对比**：选一个品类，我推荐同品类热门型号重新对比\n2. **选购优先级**：根据使用场景分析哪类产品更值得先买\n3. **预算分配**：根据您的预算规划各品类投入比例\n\n您更想了解哪个方向？",
+    "rules": [
+      "不得强行把跨品类参数放进同一张对比表。",
+      "用户选「同品类对比」且没有具体型号时，转由产品推荐能力给出候选型号后再回到本技能。"
+    ]
+  },
+
+  "scene5_truncated": {
+    "order": 3,
+    "id": "场景5",
+    "condition": "工具返回 truncated=true（用户提供产品 > 5 款）",
+    "text": "您共提供{n}款产品，为方便展示取前5款对比：\n✅ {model_1}、{model_2}、{model_3}、{model_4}、{model_5}\n⏭ 未包含：{model_6}、{model_7}...\n如需对比其他组合请重新告诉我~",
+    "then": "输出该提示后，继续按 scene4_itemized（用户要求逐项）或 scene3_default 输出正文；若同时命中模糊匹配（fuzzyMatched=true），顺序为「截断提示 → fuzzy_match_notice → 对比正文」",
+    "rules": [
+      "实际对比型号取 comparedProductNames，未包含型号取 truncatedProductNames，均不得改写或补齐。"
+    ]
+  },
+
+  "scene4_itemized": {
+    "order": 4,
+    "id": "场景4",
+    "condition": "ok=true 且用户要求「详细对比 / 逐项对比 / 再详细点」（见 trigger_dict.grain）",
+    "mode": "各自优点 + 选购建议（覆盖面更全，仍不出表格）",
+    "template_ref": "references/output_templates.md#场景4-逐项参数详解",
+    "category_groups": [
+      {"index": 1, "name": "基本信息", "examples": "品牌/型号/上市时间/价格"},
+      {"index": 2, "name": "容量与尺寸", "examples": "总容量/各室容量/外形尺寸/重量"},
+      {"index": 3, "name": "性能与能效", "examples": "能效/功率/制冷方式/变频/噪音"},
+      {"index": 4, "name": "核心功能", "examples": "逐项 ✅/❌"},
+      {"index": 5, "name": "附加功能", "examples": "WiFi互联/儿童锁/报警等，逐项 ✅/❌"},
+      {"index": 6, "name": "售后保障", "examples": "整机质保/核心部件质保/上门服务"}
+    ],
+    "rules": [
+      "**不输出任何表格**（既不出分组参数表，也不出逐项胜出统计表）：只输出各自优点 + 选购建议。",
+      "与场景3 的区别只在覆盖面：场景3 讲影响力最高的几项差异，场景4 把有值的差异项基本讲全。",
+      "各自优点每条标注对应参数项与对比值；禁止虚假补充与发散。",
+      "胜出结论可在选购建议里用一句话表达（如「A 在能效与噪音上更优，B 胜在容量」），不列统计表。",
+      "渠道不作为对比参数，不出现在任何位置。",
+      "与 scene3_default 互斥，不叠加输出。"
+    ]
+  },
+
+  "scene3_default": {
+    "order": 5,
+    "id": "场景3",
+    "condition": "ok=true 且未要求逐项（默认模式），对比型号 2~5 款",
+    "mode": "提炼总结：各自优点 + 选购建议",
+    "template_ref": "references/output_templates.md#场景3-默认对比",
+    "limits": {
+      "advantages_per_product": "3-5",
+      "buying_advice_max_chars": 100
+    },
+    "rules": [
+      "**只输出两段：各自优点、选购建议**。不出对比表格、不单独列相同点清单、不附参数摘要。",
+      "各自优点每款 3-5 条，逐条对应一条真实参数差异（或共同项）并标注对比值；可对应差异不足 3 条时如实少写。",
+      "**排序**：attributeNames 非空时优先按用户指定参数总结；为空时按影响力 价格>功能>能效>容量>尺寸>附加（priority 恒为空，按 comparison_attributes.priority_order.fallback_rank 兜底）。",
+      "**价格对用户称「官方指导价」**：写成「官方指导价更低（5299 元 vs 6099 元）」，不写「价格/售价/参考价/到手价」；只换展示用词，数值与判读方向不变，送出侧 attributeNames 仍填「价格」（见 comparison_attributes.display_name_overrides）。",
+      "**渠道永远不作为对比参数**，不出现在优点、建议或任何位置。",
+      "完全基于工具返回参数总结，**禁止虚假补充与发散**：参数没给的卖点不写，不推断使用体验。",
+      "共同点不单独成段，可在建议里一句话带过（如「两款能效与容量接近，差别主要在价格」）。",
+      "选购建议 ≤100 字，按使用场景推荐，不强行指定唯一答案。",
+      "与 scene4_itemized 互斥，不叠加输出。"
+    ]
+  },
+
+  "error_fallback": {
+    "_note": "非有效性校验类错误：不输出任何对比内容，只输出稳定提示。",
+    "3001": "暂未查询到可对比的产品参数，麻烦您核对一下产品型号是否准确~",
+    "3004": "对比服务当前比较繁忙，请稍后再试~",
+    "3005": "对比服务响应超时了，请稍后再试~"
+  }
+}

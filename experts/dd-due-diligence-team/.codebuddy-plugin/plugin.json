@@ -1,0 +1,220 @@
+{
+  "name": "dd-due-diligence-team",
+  "version": "1.0.7",
+  "description": "Bank corporate-credit due diligence expert team: lead orchestrates the 7-step workflow (project, intake, finance verification, analysis, special reports, risk overview, final report) across 8 specialists with traceable conclusions",
+  "author": {
+    "name": "Tencent FinCloud",
+    "email": "kyrieyuan@tencent.com"
+  },
+  "agents": [
+    "./agents/dd-due-diligence-lead.md",
+    "./agents/intake-material-custodian.md",
+    "./agents/finance-verify-specialist.md",
+    "./agents/financial-analysis-specialist.md",
+    "./agents/enterprise-profiling-expert.md",
+    "./agents/business-analysis-expert.md",
+    "./agents/industry-analysis-expert.md",
+    "./agents/risk-compliance-expert.md",
+    "./agents/report-writer.md"
+  ],
+  "skills": [
+    "./skills/dd-full-process",
+    "./skills/dd-onboarding",
+    "./skills/dd-project-manager",
+    "./skills/ai-due-diligence-workflow-map",
+    "./skills/dd-intake-manager",
+    "./skills/dd-intake-recognition",
+    "./skills/dd-finance-verify",
+    "./skills/dd-financial-analysis",
+    "./skills/dd-profile-analysis",
+    "./skills/dd-business-analysis",
+    "./skills/dd-industry-analysis",
+    "./skills/dd-risk-overview",
+    "./skills/dd-report"
+  ],
+  "expertType": "team",
+  "agentName": "dd-due-diligence-lead",
+  "teamInfo": {
+    "leadAgent": "dd-due-diligence-lead",
+    "memberAgents": [
+      "intake-material-custodian",
+      "finance-verify-specialist",
+      "financial-analysis-specialist",
+      "enterprise-profiling-expert",
+      "business-analysis-expert",
+      "industry-analysis-expert",
+      "risk-compliance-expert",
+      "report-writer"
+    ]
+  },
+  "displayName": {
+    "en": "AI Due Diligence Team",
+    "zh": "AI尽调专家团"
+  },
+  "profession": {
+    "en": "AI Due Diligence Team",
+    "zh": "AI尽调专家团"
+  },
+  "displayDescription": {
+    "en": "Bank corporate-credit due diligence team: lead orchestrates the 7-step workflow across intake, finance verification, financial/business/profile/industry analysis, risk overview, and report writing specialists.",
+    "zh": "银行对公授信尽调专家团：主理人按七步流程统筹进件/核验/画像/财务/经营/行业/风险/报告八岗协同。"
+  },
+  "avatar": "avatars/team.png",
+  "categoryId": "08-FinanceInvestment",
+  "defaultInitPrompt": {
+    "zh": "帮我跑一遍对公授信尽调全流程：进件解析、财务核验、专项分析、风险总览，最后生成尽调报告",
+    "en": "Run the full corporate credit due diligence workflow for my current project: intake parsing, finance verification, specialist analyses, risk overview, and the final report"
+  },
+  "plugin": "dd-due-diligence-team",
+  "tags": [
+    {
+      "en": "Due Diligence",
+      "zh": "授信尽调"
+    },
+    {
+      "en": "Credit Risk",
+      "zh": "授信风控"
+    },
+    {
+      "en": "Risk Identification",
+      "zh": "风险识别"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Run the full corporate credit due diligence workflow for my current project: intake parsing, finance verification, specialist analyses, risk overview, and the final report",
+      "zh": "帮我跑一遍对公授信尽调全流程：进件解析、财务核验、专项分析、风险总览，最后生成尽调报告"
+    },
+    {
+      "en": "Check the status and material gaps of my current due diligence project, and list what to do next",
+      "zh": "查一下当前尽调项目的状态和材料缺口，列出下一步要做的事"
+    },
+    {
+      "en": "My intake materials are ready - parse and recognize them, check for missing items, then proceed to finance verification",
+      "zh": "进件材料齐了，帮我解析识别、查漏补缺，然后推进到财务核验"
+    }
+  ],
+  "dependencies": {
+    "mcpServers": "./.mcp.json"
+  },
+  "members": [
+    {
+      "id": "dd-due-diligence-lead",
+      "name": {
+        "en": "Lead",
+        "zh": "尽调总控"
+      },
+      "profession": {
+        "en": "Due Diligence Orchestrator",
+        "zh": "尽调流程总控"
+      },
+      "avatar": "avatars/dd-due-diligence-lead.png",
+      "role": "lead"
+    },
+    {
+      "id": "intake-material-custodian",
+      "name": {
+        "en": "Zhen",
+        "zh": "甄齐全"
+      },
+      "profession": {
+        "en": "Intake Material Custodian",
+        "zh": "进件材料管家"
+      },
+      "avatar": "avatars/intake-material-custodian.png",
+      "role": "member"
+    },
+    {
+      "id": "finance-verify-specialist",
+      "name": {
+        "en": "Verona",
+        "zh": "秦核真"
+      },
+      "profession": {
+        "en": "Finance Verification Specialist",
+        "zh": "财务核验专员"
+      },
+      "avatar": "avatars/finance-verify-specialist.png",
+      "role": "member"
+    },
+    {
+      "id": "financial-analysis-specialist",
+      "name": {
+        "en": "Cha",
+        "zh": "察盈亏"
+      },
+      "profession": {
+        "en": "Financial Analysis Specialist",
+        "zh": "财务分析专员"
+      },
+      "avatar": "avatars/financial-analysis-specialist.png",
+      "role": "member"
+    },
+    {
+      "id": "enterprise-profiling-expert",
+      "name": {
+        "en": "Zha",
+        "zh": "查明悉"
+      },
+      "profession": {
+        "en": "Enterprise Profiling Expert",
+        "zh": "企业画像专家"
+      },
+      "avatar": "avatars/enterprise-profiling-expert.png",
+      "role": "member"
+    },
+    {
+      "id": "business-analysis-expert",
+      "name": {
+        "en": "Jian",
+        "zh": "鉴产销"
+      },
+      "profession": {
+        "en": "Business Analysis Expert",
+        "zh": "经营分析专家"
+      },
+      "avatar": "avatars/business-analysis-expert.png",
+      "role": "member"
+    },
+    {
+      "id": "industry-analysis-expert",
+      "name": {
+        "en": "Hang",
+        "zh": "杭知微"
+      },
+      "profession": {
+        "en": "Industry Analysis Expert",
+        "zh": "行业分析专家"
+      },
+      "avatar": "avatars/industry-analysis-expert.png",
+      "role": "member"
+    },
+    {
+      "id": "risk-compliance-expert",
+      "name": {
+        "en": "Fang",
+        "zh": "方守正"
+      },
+      "profession": {
+        "en": "Risk Overview Expert",
+        "zh": "风险总览专家"
+      },
+      "avatar": "avatars/risk-compliance-expert.png",
+      "role": "member"
+    },
+    {
+      "id": "report-writer",
+      "name": {
+        "en": "Reagan",
+        "zh": "文报章"
+      },
+      "profession": {
+        "en": "Report Writing Specialist",
+        "zh": "报告撰写专员"
+      },
+      "avatar": "avatars/report-writer.png",
+      "role": "member"
+    }
+  ],
+  "keywords": ["due-diligence", "credit-risk", "finance", "report"]
+}

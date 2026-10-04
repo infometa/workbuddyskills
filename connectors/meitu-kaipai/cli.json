@@ -1,0 +1,29 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=20"
+  },
+  "init": {
+    "darwin": "npm install -g meitu-kaipai-cli",
+    "linux": "npm install -g meitu-kaipai-cli",
+    "win32": "npm install -g meitu-kaipai-cli"
+  },
+  "auth": {
+    "darwin": "kaipai auth login --no-open",
+    "linux": "kaipai auth login --no-open",
+    "win32": "kaipai.cmd auth login --no-open"
+  },
+  "unAuth": {
+    "darwin": "kaipai auth logout",
+    "linux": "kaipai auth logout",
+    "win32": "kaipai.cmd auth logout"
+  },
+  "status": {
+    "darwin": "kaipai auth status",
+    "linux": "kaipai auth status",
+    "win32": "kaipai.cmd auth status"
+  },
+  "statusMatch": "^connected\\s*$",
+  "authUrlDomain": "www.kaipai.com",
+  "authWaitForExit": true
+}

@@ -1,5 +1,7 @@
 ---
 description: 唤起表格 AI 助手，用自然语言完成 Excel 表格的读写、查询、数据分析、公式计算等操作
+description_zh: "唤起表格 AI 助手，用自然语言完成 Excel 表格的读写、查询、数据分析、公式计算等操作"
+description_en: "Launch the spreadsheet AI assistant to read, write, query, analyze data, calculate formulas, and perform other Excel operations using natural language."
 argument-hint: "描述你想对表格做的事情，例如：帮我汇总 Q1 销售额"
 ---
 

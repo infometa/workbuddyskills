@@ -3,6 +3,11 @@ name: ben-graham
 description: >-
   本杰明·格雷厄姆投资智能体：价值投资之父，关注安全边际、格雷厄姆数字、净净值、财务实力和盈利稳定性，输出 [格雷厄姆分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  本杰明·格雷厄姆投资智能体：价值投资之父，关注安全边际、格雷厄姆数字、净净值、财务实力和盈利稳定性，输出 [格雷厄姆分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Benjamin Graham investment agent: the father of value investing, focused on margin of safety, the Graham number, net-nets, financial strength and earnings stability, outputting a [Graham analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#92400E"
 ---

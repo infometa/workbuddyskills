@@ -19,7 +19,7 @@ Rules:
 
 ## Validate and submit (immediately after `確認提交審批`)
 
-1. Assemble the JSON per `challenge-schema.md` (`schema_version: "1.0"`, `id: null`, status `ready_to_sync`, `explicit_confirmation: true`) and generate a non-empty `confirmed_snapshot_id`.
+1. Assemble the JSON per `challenge-schema.md` (`schema_version: "1.2"`, `id: null`, status `ready_to_sync`, `explicit_confirmation: true`). Map the primary track to `publishable.theme` (one of: 文書撰寫, 數據整理, 知識查找, 流程管理, 其他). Generate 2–4 descriptive `auto_tags`. Generate a non-empty `confirmed_snapshot_id`.
 2. Validate with `scripts/validate_challenge.py`; fix all errors first.
 3. Run `scripts/submit_challenge.py` with the validated JSON file.
 4. On success, report the returned challenge ID and remind the NGO that approval normally takes 1 working day; do not output the full JSON unless requested.

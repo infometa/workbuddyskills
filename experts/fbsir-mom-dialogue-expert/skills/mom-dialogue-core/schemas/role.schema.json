@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/project-role/2.0",
+  "title": "Project Role Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["role_id", "person_id", "role_type", "status"],
+  "properties": {
+    "role_id": {"type": "string", "pattern": "^ROL-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "person_id": {"type": "string", "pattern": "^PER-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "role_type": {"enum": ["project_initiator", "primary_mother", "additional_mother", "family_editor", "narrator", "material_provider", "reviewer", "read_only", "professional_editor", "custom"]},
+    "custom_role": {"type": "string"},
+    "permissions": {"type": "string", "x-csvEncoding": "json-array"},
+    "status": {"enum": ["active", "pending", "withdrawn"]},
+    "source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "notes": {"type": "string"}
+  }
+}

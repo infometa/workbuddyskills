@@ -1,7 +1,7 @@
 {
   "name": "omics-tfold-expert",
   "version": "1.0.0",
-  "description": "Tencent Health tFold Antibody-Antigen Complex Structure Prediction Expert - specializing in antibody (tFold-Ab), antigen (tFold-Ag) and TCR (tFold-TCR) complex structure prediction with 3D visualization support",
+  "description": "Tencent tFold model focusing on high-precision binding interface modeling of monoclonal antibodies, nanobodies and antigen complexes.",
   "author": {
     "name": "Tencent Health Omics Team",
     "email": "omics@tencent.com"
@@ -16,45 +16,49 @@
     "./skills/pdb-viewer-skill"
   ],
   "displayName": {
-    "en": "tFold Antibody Structure Prediction Expert",
-    "zh": "腾讯tFold抗体结构预测专家"
+    "en": "omics-expert",
+    "zh": "组小学"
   },
   "profession": {
-    "en": "tFold Antibody Structure Prediction Expert",
+    "en": "Tencent tFold Antibody Structure Prediction Expert",
     "zh": "腾讯tFold抗体结构预测专家"
   },
   "displayDescription": {
-    "en": "Expert in tFold complex structure prediction system, providing antibody, antigen and TCR structure prediction services with interactive 3D visualization",
+    "en": "Tencent tFold model focusing on high-precision binding interface modeling of monoclonal antibodies, nanobodies and antigen complexes.",
     "zh": "腾讯tFold模型，专注单克隆抗体、纳米抗体与抗原复合物的高精度结合界面建模，辅助表位预测与亲和力改造"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "04-DataAI",
   "defaultInitPrompt": {
-    "zh": "预测这个抗体和抗原的结合结构"
+    "zh": "预测抗体 Fv 结构，运行 tFold_ab_predict 默认参数，3D 展示 CDR-H3 构象",
+    "en": "Predict antibody Fv structure, run tFold_ab_predict with default parameters, 3D display CDR-H3 conformation"
   },
   "tags": [
     {
-      "en": "Antibody Structure Prediction",
-      "zh": "抗体结构预测"
+      "zh": "抗体结构预测",
+      "en": "Antibody Structure Prediction"
     },
     {
-      "en": "Antigen-Antibody Complex",
-      "zh": "抗原抗体复合物"
+      "zh": "抗原抗体复合物",
+      "en": "Antigen-Antibody Complex"
     },
     {
-      "en": "TCR Complex",
-      "zh": "TCR 复合物"
+      "zh": "TCR 复合物",
+      "en": "TCR Complex"
     }
   ],
   "quickPrompts": [
     {
-      "zh": "预测这个抗体和抗原的结合结构"
+      "zh": "预测抗体 Fv 结构，运行 tFold_ab_predict 默认参数，3D 展示 CDR-H3 构象",
+      "en": "Predict antibody Fv structure, run tFold_ab_predict with default parameters, 3D display CDR-H3 conformation"
     },
     {
-      "zh": "用 tFold 预测 TCR-pMHC 复合物"
+      "zh": "预测抗体-抗原复合物，运行 tFold_ag_predict 默认参数，定位表位与对位",
+      "en": "Predict antibody-antigen complex, run tFold_ag_predict with default parameters, locate epitope and paratope"
     },
     {
-      "zh": "把这个复合物的 PDB 结构转一圈看看"
+      "zh": "预测 TCR 结构，运行 tFold_tcr_predict 默认参数，分析 CDR3 环构象",
+      "en": "Predict TCR structure, run tFold_tcr_predict with default parameters, analyze CDR3 loop conformation"
     }
   ],
   "plugin": "omics-tfold-expert"

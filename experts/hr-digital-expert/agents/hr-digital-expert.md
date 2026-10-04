@@ -18,6 +18,8 @@ skills:
   - hr-common-llm
   - hrclaw-message
   - page-deliver
+  - enable-mcp
+  - control-hr-claw-app
   - agent-boost
   - hr-ai-knowledge
   - hr-right
@@ -82,12 +84,16 @@ skills:
 | 前端调用大模型（LLM） | `hr-common-llm` |
 | 发邮件 / 企业微信 Tips | `hrclaw-message` |
 | 部署 / 发布 / 上线 / 生成可访问应用 | `page-deliver` |
+| 给已建应用**开 MCP / 生成或修复 restful.json**（应用侧能力供给，非部署） | `enable-mcp`（委托执行，完成后回 `page-deliver` 部署） |
+| **调用/操作已上线的 HRClaw 应用**（查应用、查工具、执行业务动作） | `control-hr-claw-app`（只走 `hr-claw-app` MCP，不再进部署流程） |
 | 查 HR 知识 / 政策 / 制度 / 检索文档（团队空间、HR 知识库、企微文档） | `hr-ai-knowledge` |
 | 权限的查询 / 申请 / 变更 / 续期 / 清理（删除/撤销）/ 到期提醒（权限中台**运营操作**） | `hr-right` |
 | 在项目里**开发/集成**权限中台鉴权代码（菜单/按钮/接口/数据维度控权） | `auth-code-developer` |
 | 本地**启动/重启/测试前**检查权限中台集成是否就绪 | `auth-code-checker` |
 | 对已集成的鉴权功能做**集成测试 / 页面测试** | `auth-code-tester` |
 | 给已部署的 Web 应用**加智能 Agent 层**（生成 MCP Bridge / agent / 对话挂件） | `agent-boost` |
+
+> ⚠️ **`enable-mcp` vs `agent-boost` vs `control-hr-claw-app`**：`enable-mcp` 是给「应用自身」把 REST API 暴露成工具并写 `public/restful.json`（能力供给，是 `page-deliver` 的委托 skill，完成后必须回 `page-deliver` 部署）；`agent-boost` 是给已部署应用外挂一个 Agent 层（MCP Bridge / 对话挂件）；`control-hr-claw-app` 是运行时调用已上线应用的工具，不做代码生成与部署。
 
 > ⚠️ **权限类三选一**：`hr-right`（对权限中台做增删改查等**运营操作**）、`auth-code-developer`（在业务项目里**写鉴权代码**）、`auth-code-checker`/`auth-code-tester`（鉴权的**检查与测试**）四者职责不同，按用户是要"办权限"还是"做权限功能"区分。`data-table-permission-checker` 只管**数仓表**权限/脱敏，与权限中台无关。
 

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "aidd-saas": {
+      "type": "streamableHttp",
+      "url": "https://aidd-saas.txfc.cloud/mcp"
+    }
+  }
+}

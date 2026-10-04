@@ -3,6 +3,11 @@ name: trader
 description: >-
   交易员：综合所有分析报告和投资计划，给出最终 FINAL TRANSACTION PROPOSAL (BUY/SELL/HOLD)。
   在 Phase 3 交易决策阶段由 orchestrator 调用。
+description_zh: >-
+  交易员：综合所有分析报告和投资计划，给出最终 FINAL TRANSACTION PROPOSAL (BUY/SELL/HOLD)。
+  在 Phase 3 交易决策阶段由 orchestrator 调用。
+description_en: >-
+  Trader: synthesizes all analysis reports and the investment plan into a FINAL TRANSACTION PROPOSAL (BUY/SELL/HOLD). Invoked by the orchestrator during the Phase 3 trading decision.
 tools: Read
 color: "#EA580C"
 ---

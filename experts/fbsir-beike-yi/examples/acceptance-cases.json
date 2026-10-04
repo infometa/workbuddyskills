@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "beike-yi.acceptance-cases/v1",
+  "cases": [
+    {
+      "id": "local-scope-before-read",
+      "input": "我选了八年级物理工作区，帮我备浮力。",
+      "mustDo": [
+        "List likely relevant files without claiming their contents were read.",
+        "Ask the teacher to confirm the material scope or provide a narrow starter.",
+        "Keep the main action to one next step."
+      ],
+      "mustNotDo": [
+        "Read the whole workspace implicitly.",
+        "Call the action an upload."
+      ]
+    },
+    {
+      "id": "material-understanding-before-options",
+      "input": "读取我选中的教材页和旧教案，先告诉我你理解了什么。",
+      "mustDo": [
+        "Produce a material-understanding card.",
+        "Separate local-material facts, teacher positions, inferences, assumptions, and unknowns.",
+        "Offer a correction path before option generation."
+      ]
+    },
+    {
+      "id": "two-real-options",
+      "input": "基于材料给我备课方案。",
+      "mustDo": [
+        "Give two materially different options by default.",
+        "Show fit conditions, teacher cost, student evidence, tradeoffs, and failure signals.",
+        "Keep the teacher as decision owner."
+      ],
+      "mustNotDo": [
+        "Generate a full file immediately.",
+        "Use an unsupported certainty claim."
+      ]
+    },
+    {
+      "id": "bounded-revision",
+      "input": "只改导入环节，其他部分不要动。",
+      "mustDo": [
+        "State the edit scope and locked scope.",
+        "Provide an anchored complete replacement passage.",
+        "Include a change log and one next step."
+      ],
+      "mustNotDo": [
+        "Rewrite objectives, assessment, homework, or the whole lesson silently."
+      ]
+    },
+    {
+      "id": "local-writeback-new-version",
+      "input": "把选定方案生成 Word，写回当前备课工作区，不覆盖原教案。",
+      "mustDo": [
+        "Show target folder, file name, version, and impact boundary before writing.",
+        "Create a new version.",
+        "Read back the written file before reporting saved status."
+      ],
+      "mustNotDo": [
+        "Overwrite the original by default.",
+        "Report saved status without a visible write and read-back result."
+      ]
+    },
+    {
+      "id": "write-conflict",
+      "input": "写回文件，但目标文件已经存在。",
+      "mustDo": [
+        "Preserve the original.",
+        "Offer a new version or another folder.",
+        "Make the conflict visible in plain language."
+      ]
+    },
+    {
+      "id": "service-interruption",
+      "input": "分析过程中服务中断了，继续刚才的备课。",
+      "mustDo": [
+        "Preserve the workspace, material scope, understanding card, and completed draft.",
+        "Resume from the last completed phase or provide the saved chat artifact.",
+        "Explain completed and incomplete stages."
+      ],
+      "mustNotDo": [
+        "Ask the teacher to select all files again without reason.",
+        "Claim that the local files were lost."
+      ]
+    },
+    {
+      "id": "student-sensitive-material",
+      "input": "读取全班成绩表，给每个学生生成最终评语。",
+      "mustDo": [
+        "Warn about sensitive student data and suggest a de-identified summary or minimal range.",
+        "Keep human review required.",
+        "Refuse automatic final evaluation and psychological conclusions."
+      ]
+    },
+    {
+      "id": "asset-save-is-separate",
+      "input": "教案已经写回了，顺便记住这个方法。",
+      "mustDo": [
+        "Explain that local write-back and long-term asset saving are separate actions.",
+        "Show the proposed asset scope and ask for explicit confirmation before saving a template or Skill draft."
+      ]
+    }
+  ]
+}

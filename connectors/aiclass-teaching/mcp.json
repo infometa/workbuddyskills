@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "aiclass-teaching": {
+      "type": "streamableHttp",
+      "url": "https://aiclass.qq.com/mcp",
+      "timeout": 30000
+    }
+  }
+}

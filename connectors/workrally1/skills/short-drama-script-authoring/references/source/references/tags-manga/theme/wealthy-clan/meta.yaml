@@ -1,0 +1,94 @@
+# 豪门（wealthy-clan）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: wealthy-clan
+name_cn: 豪门
+category: theme
+carrier: manga
+audience: female
+weight: high
+level: level-1
+severity: strong
+version: 6.0.0
+related_combo: references/domestic/combos/wealthy-clan.md
+emotion_core:
+- 阶层反差
+- 权力博弈
+- 身份反转
+- 豪门恩怨
+- 精英爽感
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 女频为主，男频可做商战副线
+  bg_desc: 都市为核心基底，兼容年代、架空
+  weight: high
+  bottom_line:
+  - 豪门阶层感必须落地，不能悬浮
+  - 恩怨逻辑自洽，不能为了冲突强行降智
+  - 身份反差是核心爽点，必须有阶层对位
+relations:
+  synergy:
+  - target: ceo
+    effect_type: 增强型
+    weight: high
+    effect: 总裁人设强化豪门精英感，豪门背景丰富总裁设定
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 阶层反差放大逆袭爽感，从底层到顶层的成长更有冲击力
+  - target: rebirth
+    effect_type: 裂变型
+    weight: high
+    effect: 重生预知豪门格局，提前布局改写命运
+  - target: twist
+    effect_type: 增强型
+    weight: high
+    effect: 身份/身世反转是豪门核心爽点之一
+  mutex:
+  - target: 乡村/纯底层
+    reason: 无顶层阶层场景则豪门主题不成立
+combo_adapt:
+- combo: references/domestic/combos/wealthy-clan.md
+  rule: 对齐豪门核心规则，强化阶层感与博弈逻辑
+  sub: 家族恩怨型
+- combo: references/domestic/combos/face-slapping.md
+  rule: 阶层反差绑定打脸，身份曝光瞬间爽感最大化
+  sub: 豪门打脸型
+- combo: references/domestic/combos/counterattack.md
+  rule: 底层逆袭登顶豪门，阶层跨越爽感拉满
+  sub: 豪门逆袭型
+fusion:
+- recipe: fusion/recipes/wealthy-real-fake.md
+  note: 真假千金经典配方，强身份反差，适配高转化女频内容
+- recipe: fusion/recipes/marry-first-love-later.md
+  note: 先婚后爱+豪门背景，情感线与利益线双线并行
+redlines:
+- code: AP-HM01
+  name: 阶层悬浮不落地
+  severity: 极高
+  dimension: 标签与逻辑
+  test: 豪门生活全靠堆砌奢侈品，无对应阶层的行为逻辑与博弈
+- code: AP-HM02
+  name: 斗争逻辑降智
+  severity: 高
+  dimension: 标签与逻辑
+  test: 家族夺权、商业博弈如同过家家，缺乏基本合理性
+- code: AP-HM03
+  name: 身份反差缺失
+  severity: 高
+  dimension: 人物与人设
+  test: 无阶层对位与身份反转，豪门沦为纯背景板
+soft_warnings:
+- 避免豪门全员恶人，人物脸谱化严重
+- 避免商战情节脱离常识，专业内容出错
+- 避免主角光环过重，夺权过程毫无阻力
+manga:
+  visual_signature: 豪宅/宴会全景 + 破衣↔华服的反差对比镜头
+  high_affinity: true
+  visual_hooks:
+  - 阶层反差的视觉对比（出租屋↔别墅）
+  - 身份揭晓的满屏震撼定格
+  - 豪门宴会的奢华全景

@@ -5,6 +5,14 @@ description: >-
   林奇分析、塔勒布分析、价值投资分析、成长股分析、多角色投资分析、19位大师分析、
   hedge fund analysis、multi-guru investment analysis、portfolio decision、
   该不该买、能不能卖、投资建议、买卖决策、深度投资分析、全面分析。
+description_zh: >-
+  AI 对冲基金投资分析智能体，19位投资大师 + 风险管理 + 投资组合决策的全流程投资分析系统。
+  Use when user wants to: AI对冲基金分析、多大师投资分析、投资组合决策、巴菲特分析、芒格分析、
+  林奇分析、塔勒布分析、价值投资分析、成长股分析、多角色投资分析、19位大师分析、
+  hedge fund analysis、multi-guru investment analysis、portfolio decision、
+  该不该买、能不能卖、投资建议、买卖决策、深度投资分析、全面分析。
+description_en: >-
+  AI hedge-fund investment analysis agent: an end-to-end investment analysis system combining 19 investment masters, risk management and portfolio decision making. Use when user wants to: AI hedge fund analysis, multi-guru investment analysis, portfolio decision, Buffett analysis, Munger analysis, Lynch analysis, Taleb analysis, value investing analysis, growth stock analysis, multi-persona investment analysis, 19-master analysis, whether to buy, whether to sell, investment advice, buy/sell decisions, in-depth investment analysis, comprehensive analysis.
 alwaysApply: true
 enabled: true
 updatedAt: 2026-04-12T00:00:00.000Z

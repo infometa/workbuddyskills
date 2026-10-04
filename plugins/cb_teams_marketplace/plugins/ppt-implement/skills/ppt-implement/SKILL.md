@@ -1,6 +1,13 @@
 ---
 name: ppt-implement
 description: implement ppt(powerpoint) project with best practices, start's with "ppt" template. Trigger keywords include "web ppt", "网页ppt", "html ppt", "生成ppt", "制作ppt", "制作教案", "write a ppt about", or any request to create presentations on specific topics. 
+description_zh: >-
+  按最佳实践实现 PPT（PowerPoint）项目，从 "ppt" 模板起步。触发词包括：网页ppt、html ppt、生成ppt、制作ppt、制作教案，
+  或任何针对特定主题创建演示文稿的请求。
+description_en: >-
+  Implement a ppt (PowerPoint) project with best practices, starting from the "ppt" template. Trigger keywords include
+  "web ppt", "html ppt", "generate ppt", "make ppt", "create a lesson plan", "write a ppt about", or any request to
+  create presentations on specific topics.
 ---
 
 ## ⚠️ CRITICAL: DO NOT Explore Project Structure

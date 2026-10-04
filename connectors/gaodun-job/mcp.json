@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "gaodun-job": {
+      "type": "streamableHttp",
+      "url": "https://apigateway.gaodun.com/dyson/mcp",
+      "timeout": 60000
+    }
+  }
+}

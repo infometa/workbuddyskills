@@ -8,6 +8,18 @@ description: >
   row heights, column widths, merged cells, background colors, font sizes, font colors, font
   weights, font styles, font families, font lines, number formats, text wrap,
   horizontal/vertical alignment, borders.
+description_zh: >-
+  当用户要求"参考 / 复制 / 复刻 / 按照某个已有表格（模板）的格式"来修改另一个表格时必须使用。
+  触发词：参考、模版、模板、copy format、replicate layout、按照…格式、照着…做、复制格式、格式一样、样式一样、
+  跟…一样的格式，或任何表达"让表 B 看起来像表 A"的意图。覆盖 P0 属性：行高、列宽、合并单元格、背景色、字号、
+  字体颜色、字重、字形、字体、字体线条、数字格式、文本换行、水平/垂直对齐、边框。
+description_en: >-
+  MANDATORY when the user asks to "reference / copy / replicate / follow the format of" an existing sheet (template)
+  to modify another sheet. Triggers on "reference, template, copy format, replicate layout, follow the style of,
+  match the format, do it like this, same format, same style", or any intent implying "make sheet B look like sheet
+  A". Covers P0 properties: row heights, column widths, merged cells, background colors, font sizes, font colors,
+  font weights, font styles, font families, font lines, number formats, text wrap, horizontal/vertical alignment,
+  borders.
 ---
 
 # Replicate Template Layout & Styles

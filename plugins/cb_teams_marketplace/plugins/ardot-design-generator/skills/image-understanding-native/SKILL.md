@@ -1,6 +1,8 @@
 ---
 name: image-understanding-native
 description: "图片结构化语义分析。Agent 直接看图输出结构化 JSON，零外部依赖。四种分析任务：全页面结构分析、设计风格提取、区域语义描述、对比差异分析。"
+description_zh: "图片结构化语义分析。Agent 直接看图输出结构化 JSON，零外部依赖。四种分析任务：全页面结构分析、设计风格提取、区域语义描述、对比差异分析。"
+description_en: "Structured semantic image analysis. The agent directly inspects images and outputs structured JSON with no external dependencies. Supports four tasks: full-page structure analysis, design style extraction, regional semantic description, and comparative difference analysis."
 ---
 
 # Image Understanding Native — 图片结构化语义分析

@@ -1,0 +1,361 @@
+{
+  "artifactRefs": [
+    {
+      "archetypeId": "primary-document",
+      "artifactId": "heritage_archive_book"
+    },
+    {
+      "archetypeId": "primary-document",
+      "artifactId": "technique_process"
+    },
+    {
+      "archetypeId": "glossary",
+      "artifactId": "glossary"
+    },
+    {
+      "archetypeId": "manifest",
+      "artifactId": "media_and_consent_manifest"
+    }
+  ],
+  "capabilityBindings": [
+    {
+      "capabilityIds": [
+        "material-activation",
+        "multimodal-normalizer"
+      ],
+      "operationMode": "material_activation"
+    },
+    {
+      "capabilityIds": [
+        "scene-router",
+        "scene-composer",
+        "chapter-planning-expansion"
+      ],
+      "operationMode": "project_planning"
+    },
+    {
+      "capabilityIds": [
+        "chapter-planning-expansion",
+        "source-ledger-claim-graph",
+        "voice-profile-humanizer"
+      ],
+      "operationMode": "chapter_generation"
+    },
+    {
+      "capabilityIds": [
+        "continuation-recovery",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "continuation"
+    },
+    {
+      "capabilityIds": [
+        "scope-lock-diff",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "bounded_revision"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "rights-privacy-consent",
+        "research-verification"
+      ],
+      "operationMode": "review_quality"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "multi-format-rendering"
+      ],
+      "operationMode": "finished_draft_closure"
+    },
+    {
+      "capabilityIds": [
+        "multi-format-rendering",
+        "rights-privacy-consent"
+      ],
+      "operationMode": "export_delivery"
+    },
+    {
+      "capabilityIds": [
+        "asset-repurposing",
+        "media-illustration-planning"
+      ],
+      "operationMode": "asset_repurposing"
+    }
+  ],
+  "contentRiskClass": "high",
+  "displayName": "非遗与地方文化传承档案",
+  "domainObjects": [
+    "bearer",
+    "heritage_item",
+    "local_term",
+    "media_record",
+    "technique"
+  ],
+  "fallback": {
+    "allowGeneralSubstitution": false,
+    "connectorUnavailableBehavior": "preserve_route_and_use_local_workflow",
+    "localOfflineAvailable": true,
+    "riskFloor": "high"
+  },
+  "family": "legacy_humanities",
+  "fixtureRefs": [
+    "evals/fixtures/scenes/cultural-heritage/normal.json",
+    "evals/fixtures/scenes/cultural-heritage/missing.json",
+    "evals/fixtures/scenes/cultural-heritage/conflicting.json",
+    "evals/fixtures/scenes/cultural-heritage/unauthorized.json",
+    "evals/fixtures/scenes/cultural-heritage/adversarial.json",
+    "evals/fixtures/scenes/cultural-heritage/connector-unavailable.json"
+  ],
+  "implementationCheckpoint": "C3",
+  "kind": "vertical_scene",
+  "legacyAliases": [],
+  "lifecycle": "implemented",
+  "migrationProvenance": {
+    "mappingVersion": "1.0.0",
+    "seedCatalogSha256": "638f3f8e8f3ab7f1c2080018233ef6d7e19340187926571aad2eaf818eca82f4"
+  },
+  "operationModes": [
+    "material_activation",
+    "project_planning",
+    "chapter_generation",
+    "continuation",
+    "bounded_revision",
+    "review_quality",
+    "finished_draft_closure",
+    "export_delivery",
+    "asset_repurposing"
+  ],
+  "optionalPortBindings": [
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "field_interview_schedule",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "schedule_event",
+      "portId": "CollaborationPort",
+      "purpose": "optional enhancement for field_interview_schedule",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "media_archive",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "store_artifact",
+      "portId": "DeliveryPort",
+      "purpose": "optional enhancement for media_archive",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "expert_review",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "request_review",
+      "portId": "ReviewPort",
+      "purpose": "optional enhancement for expert_review",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    }
+  ],
+  "privacy": {
+    "livingPersonReview": false,
+    "minimumDataScope": "people_and_archive_scoped_minimum"
+  },
+  "qualityGateRefs": [
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.bearer-consent",
+      "registryId": "privacy.consent",
+      "reviewMandate": null,
+      "seedGate": "bearer_consent"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.local-term-fidelity",
+      "registryId": "reference.fidelity",
+      "reviewMandate": null,
+      "seedGate": "local_term_fidelity"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.sacred-or-restricted-knowledge",
+      "registryId": "confidentiality.preserved",
+      "reviewMandate": null,
+      "seedGate": "sacred_or_restricted_knowledge"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.media-rights",
+      "registryId": "rights.clearance",
+      "reviewMandate": null,
+      "seedGate": "media_rights"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "schema.valid",
+      "reviewMandate": null,
+      "seedGate": "core:schema.valid"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "input.required",
+      "reviewMandate": null,
+      "seedGate": "core:input.required"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "artifact.openability",
+      "reviewMandate": null,
+      "seedGate": "core:artifact.openability"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "delivery-manifest.integrity",
+      "reviewMandate": null,
+      "seedGate": "core:delivery-manifest.integrity"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "scope.lock",
+      "reviewMandate": null,
+      "seedGate": "core:scope.lock"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "external-action.authorized",
+      "reviewMandate": null,
+      "seedGate": "core:external-action.authorized"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "encoding.valid",
+      "reviewMandate": null,
+      "seedGate": "core:encoding.valid"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "id": "audience",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "community_terms",
+      "required": true,
+      "sensitivity": "sensitive"
+    },
+    {
+      "id": "goal",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "heritage_item",
+      "required": true,
+      "sensitivity": "sensitive"
+    },
+    {
+      "id": "materials",
+      "required": true,
+      "sensitivity": "user_provided"
+    },
+    {
+      "id": "time_boundary",
+      "required": true,
+      "sensitivity": "standard"
+    }
+  ],
+  "rights": {
+    "clearanceRequired": true,
+    "unknownRightsAction": "human_review"
+  },
+  "sceneId": "cultural-heritage",
+  "schemaVersion": "1.0.0",
+  "triggers": [
+    {
+      "id": "cultural-heritage-trigger-1",
+      "signal": "cultural heritage archive",
+      "weight": 1
+    },
+    {
+      "id": "cultural-heritage-trigger-2",
+      "signal": "local tradition",
+      "weight": 0.9
+    },
+    {
+      "id": "cultural-heritage-trigger-3",
+      "signal": "非遗档案",
+      "weight": 0.8
+    }
+  ],
+  "workflowStages": [
+    {
+      "exitGateRefs": [
+        "input.required"
+      ],
+      "id": "activate-materials",
+      "operationModes": [
+        "material_activation"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "schema.valid"
+      ],
+      "id": "plan-project",
+      "operationModes": [
+        "project_planning"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "confidentiality.preserved"
+      ],
+      "id": "draft-and-revise",
+      "operationModes": [
+        "chapter_generation",
+        "continuation",
+        "bounded_revision"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "confidentiality.preserved",
+        "delivery-manifest.integrity",
+        "encoding.valid",
+        "external-action.authorized",
+        "input.required",
+        "privacy.consent",
+        "reference.fidelity",
+        "rights.clearance",
+        "schema.valid",
+        "scope.lock"
+      ],
+      "id": "review-and-close",
+      "operationModes": [
+        "review_quality",
+        "finished_draft_closure",
+        "export_delivery",
+        "asset_repurposing"
+      ]
+    }
+  ]
+}

@@ -116,7 +116,7 @@ beisen-cli recruitment apply bs_search_apply_list --data '{"jobId":"职位ID","f
 ## bs_search_candidates_in_talentpool — 搜索人才库推荐候选人
 
 ```bash
-beisen-cli recruitment talentPool bs_search_candidates_in_talentpool --data '<json>'
+beisen-cli recruitment_ai talentPool bs_search_candidates_in_talentpool --data '<json>'
 ```
 
 ### 参数（--data JSON）
@@ -130,7 +130,7 @@ beisen-cli recruitment talentPool bs_search_candidates_in_talentpool --data '<js
 示例：
 
 ```bash
-beisen-cli recruitment talentPool bs_search_candidates_in_talentpool --data '{"jobRequirements":"3-5年Java开发经验，本科及以上","pageIndex":0,"pageSize":10}'
+beisen-cli recruitment_ai talentPool bs_search_candidates_in_talentpool --data '{"jobRequirements":"3-5年Java开发经验，本科及以上","pageIndex":0,"pageSize":10}'
 ```
 
 ### 异步任务处理
@@ -154,7 +154,7 @@ beisen-cli recruitment talentPool bs_search_candidates_in_talentpool --data '{"j
 **必须轮询任务结果**：
 
 1. 提取返回的 `taskId`
-2. 调用 `beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<id>"}'` 轮询
+2. 调用 `beisen-cli recruitment_ai async_task bs_get_async_task_status --data '{"taskId":"<id>"}'` 轮询
 3. 直到 `isFinished == true`：
    - `status == "Succeeded"` → 从 `resultJson`（JSON 字符串）解析候选人列表
    - `status == "Failed"` → 读取 `errorMessage` 向用户说明

@@ -7,18 +7,20 @@ import argparse
 import json
 from pathlib import Path
 
-ALLOWED_TRACKS = {
-    "流程自動化",
-    "報告與文書生成",
-    "數據整理與分析",
-    "對外溝通物料",
-    "知識問答與檢索",
+ALLOWED_THEMES = {
+    "文書撰寫",
+    "數據整理",
+    "知識查找",
+    "流程管理",
+    "其他",
 }
+
+SCHEMA_VERSION = "1.2"
 
 REQUIRED_TEXT_FIELDS = (
     "title",
     "organization_name",
-    "primary_track",
+    "theme",
     "pain_point",
     "current_situation",
     "current_method",
@@ -28,6 +30,10 @@ REQUIRED_TEXT_FIELDS = (
 
 def validate(data: dict) -> list[str]:
     errors: list[str] = []
+
+    if data.get("schema_version") != SCHEMA_VERSION:
+        errors.append(f'schema_version must be "{SCHEMA_VERSION}"')
+
     publishable = data.get("publishable")
     state = data.get("conversation_state")
     metadata = data.get("internal_metadata")
@@ -46,10 +52,9 @@ def validate(data: dict) -> list[str]:
         if not isinstance(value, str) or not value.strip():
             errors.append(f"publishable.{field} is required")
 
-    primary_track = publishable.get("primary_track")
-    if isinstance(primary_track, str) and primary_track and primary_track not in ALLOWED_TRACKS:
-        if primary_track == "其他":
-            errors.append("publishable.primary_track must describe the custom track, not only '其他'")
+    theme = publishable.get("theme")
+    if isinstance(theme, str) and theme and theme not in ALLOWED_THEMES:
+        errors.append(f"publishable.theme '{theme}' is not in allowed themes: {', '.join(sorted(ALLOWED_THEMES))}")
 
     for field in ("success_criteria", "materials", "boundaries"):
         value = publishable.get(field)

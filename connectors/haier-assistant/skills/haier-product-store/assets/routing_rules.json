@@ -1,0 +1,86 @@
+{
+  "_note": "门店引流分流规则（PRD 3.3.2.4 F1-渠道引流 / 3.3.2.5 F2-门店引流）。宿主大模型先判定命中 F1 还是 F2。F1 的三条分支由 query_product_sale_channel 返参 sceneType.type 直接决定（1/2/3，扁平结构、与 ok 同级，不在 data 下），线下线上细分由 sceneType.detailType 决定（1/2/3，仅 type=1 有值）；模型不再自行拿 channelName 与意向渠道求交。意向渠道以真实渠道名（小红书/京东/视频号/天猫/快手/线下）作为 intentChannels 入参下发，命中判定由服务端完成。门店查询有两个位置来源：用户说出来的省/市/区/地址，以及用户授权后由宿主注入的当前位置（模型不可见，不填不构造经纬度）；两者都没有时直接追问地址（见 address_flow）。",
+  "flow_selection": {
+    "_note": "先选流程再进分支。",
+    "F1": {
+      "name": "渠道引流",
+      "hit": "用户询问指定产品的售卖渠道，或问某产品在其意向渠道是否有售",
+      "product_name_required": true,
+      "note": "产品型号名称必填；本轮或上下文记忆补齐。补不到型号且用户在问附近/指定地址门店时，按 F2 处理。"
+    },
+    "F2": {
+      "name": "门店引流",
+      "hit": "用户直接要求查询附近/指定地址附近的海尔门店",
+      "product_name_required": false,
+      "note": "不依赖型号，直接进入【地址判定与门店查询】子流程。"
+    }
+  },
+  "F1_branches": [
+    {
+      "id": "in_intent_channel_on_sale",
+      "order": 1,
+      "name": "产品在用户意向渠道售卖",
+      "condition": "sceneType.type = \"1\"",
+      "template": "f1_scene1_on_sale",
+      "action": "按 sceneType.detailType 进入下述细分流程；detailType=3 时两条细分流程同时执行并组合输出",
+      "detail_branches": [
+        {
+          "detail_type": "1",
+          "name": "命中线下意向渠道",
+          "action": "走线下门店细分流程：有地址（省市区，或至少市/区二选一）则按省/市/区调用 query_store（上限10、展示≤5）；无地址则进入 address_flow 直接追问地址，不调用 query_store",
+          "template": "f1_scene1_on_sale.with_address"
+        },
+        {
+          "detail_type": "2",
+          "name": "命中线上渠道",
+          "action": "输出 channelName 中可购买的线上渠道，不查门店",
+          "template": "f1_scene1_on_sale.online_only"
+        },
+        {
+          "detail_type": "3",
+          "name": "同时命中线下与线上渠道",
+          "action": "同时分发：①按 detail_type=1 的线下门店细分流程查询并展示门店；②在门店列表后补充可购买的线上渠道（online_supplement）",
+          "template": "f1_scene1_on_sale.with_address + f1_scene1_on_sale.online_supplement"
+        }
+      ]
+    },
+    {
+      "id": "not_in_intent_channel",
+      "order": 2,
+      "name": "产品在用户意向渠道无售卖",
+      "condition": "sceneType.type = \"2\"（未命中用户意向渠道）",
+      "template": "f1_scene2_cross_channel",
+      "action": "输出话术③询问是否查全部渠道；用户回复需要则清空 intentChannels（按全部渠道）重新调用 query_product_sale_channel 并重走 F1 分流"
+    },
+    {
+      "id": "product_out_of_stock",
+      "order": 3,
+      "name": "产品不在库",
+      "condition": "sceneType.type = \"3\"（产品不在库/查不到该型号）",
+      "template": "f1_scene3_not_found",
+      "action": "输出话术④兜底，不猜测渠道，引导用户补充品类/预算等需求"
+    },
+    {
+      "id": "scene_type_missing",
+      "order": 4,
+      "name": "场景类型缺失（兜底）",
+      "condition": "sceneType 为空或 type 不在 1/2/3 之内（工具返回 ok=false 亦按此处理）",
+      "template": "f1_scene3_not_found",
+      "action": "按查不到处理，输出话术④；不得自行用 channelName 猜测分支"
+    }
+  ],
+  "address_flow": {
+    "_note": "F2 门店引流与 F1 type=1&detailType∈{1,3} 的线下门店查询共用的地址子流程。门店查询的位置来自用户说出来的省/市/区/地址，或用户授权后由宿主注入的当前位置（模型不可见，不填不构造经纬度）；「附近」两个字本身不构成位置。已授权时 request 可整体留空就近查询；两者都没有时**直接追问地址**，不自行输出授权信号、不空条件调用 query_store（后端会按 2005 拒绝）。",
+    "steps": [
+      {"step": "2.1", "condition": "用户本轮或上下文给了地址", "action": "按 references/address_parsing.md 提取省/市/区后调用 query_store", "template_on_hit": "f2_scene1_by_region"},
+      {"step": "2.2", "condition": "没有地址（含只说「附近」「就近」「我这边」）", "action": "直接追问地址，本轮结束：不调用 query_store，不请求定位授权，不输出任何授权信号或隐藏标记", "template": "ask_address"},
+      {"step": "2.3", "condition": "追问后提供了地址（主Agent带『槽位追问』标识）", "action": "直接跳转【判断地址】：省市区解析后调用 query_store", "template_on_hit": "f2_scene1_by_region"},
+      {"step": "2.4", "condition": "追问后仍不提供地址", "action": "输出话术⑤兜底，不再重复追问", "template": "no_location"}
+    ]
+  },
+  "store_limits": {
+    "_note": "query_store 门店数量上限 10；面向用户最多展示 5 家。返回条数是本次查询命中的门店数，不是区域门店总量，话术不得说「共/只有 N 家」（口径见 response_templates.json 的 count_wording）。",
+    "query_max": 10,
+    "display_max": 5
+  }
+}

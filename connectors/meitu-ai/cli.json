@@ -1,0 +1,36 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=20"
+  },
+  "init": {
+    "darwin": "npm install -g meitu-cli@2.1.21",
+    "linux": "npm install -g meitu-cli@2.1.21",
+    "win32": "npm install -g meitu-cli@2.1.21"
+  },
+  "auth": {
+    "darwin": "meitu auth login --force --no-open-browser --no-poll-progress",
+    "linux": "meitu auth login --force --no-open-browser --no-poll-progress",
+    "win32": "meitu.cmd auth login --force --no-open-browser --no-poll-progress"
+  },
+  "unAuth": {
+    "darwin": "meitu auth logout --json",
+    "linux": "meitu auth logout --json",
+    "win32": "meitu.cmd auth logout --json"
+  },
+  "status": {
+    "darwin": "meitu auth status",
+    "linux": "meitu auth status",
+    "win32": "meitu.cmd auth status"
+  },
+  "statusMatch": "execution_auth_available:\\s*yes",
+  "authUrlDomain": "iam.meitu.com",
+  "authWaitForExit": true,
+  "env": {
+    "MEITU_OPENAPI_AUTH_MODE": "iam",
+    "MEITU_IAM_CLIENT_TYPE": "workbuddy",
+    "MEITU_IAM_CLIENT_ID": "1189857723",
+    "MEITU_CLI_PARTITION": "cn",
+    "MEITU_CLI_OUTPUT_FORMAT": "full"
+  }
+}

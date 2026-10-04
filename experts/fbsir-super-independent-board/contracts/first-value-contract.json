@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "fbsir.super-independent-board.first-value-contract/v1",
+  "productId": "fbsir-super-independent-board",
+  "packageVersionSource": "../.codebuddy-plugin/plugin.json#/version",
+  "expertType": "agent",
+  "connectorRequired": false,
+  "questionBudgetMax": 2,
+  "recommendationStates": [
+    "go",
+    "conditional_go",
+    "no_go",
+    "defer_for_evidence"
+  ],
+  "requiredOutputs": [
+    "issueFrame",
+    "aiRecommendation",
+    "evidenceBoundary",
+    "strongestCountercase",
+    "conditionsAndKillCriteria",
+    "humanReviewBoundary",
+    "singleNextAction",
+    "recommendedArtifact",
+    "userDecisionState",
+    "questions",
+    "primaryCta",
+    "secondaryBranches"
+  ],
+  "primaryCtaPolicy": "exactly_one_dynamic_primary_cta",
+  "secondaryBranchesMax": 2,
+  "chatLevelFallbackRequired": true,
+  "mustPrecedeOptionalCapabilityPrompt": true,
+  "forbiddenClaims": [
+    "multi_agent_opinion_observed",
+    "statutory_board_resolution",
+    "statutory_independent_director_opinion",
+    "legal_or_regulatory_approval",
+    "host_action_completed_without_receipt",
+    "official_listing_completed_without_public_entry_proof",
+    "natural_business_closure_without_same_binding_evidence"
+  ],
+  "continuationHooks": [
+    "evidence_enhancement",
+    "mode_switch",
+    "artifact_request",
+    "authorized_action",
+    "outcome_review"
+  ]
+}

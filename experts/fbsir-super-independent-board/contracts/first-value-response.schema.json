@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.fbsir.local/super-independent-board/first-value-response.schema.json",
+  "title": "超级独董会首轮独立审议响应",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "issueFrame",
+    "aiRecommendation",
+    "evidenceBoundary",
+    "strongestCountercase",
+    "conditionsAndKillCriteria",
+    "humanReviewBoundary",
+    "singleNextAction",
+    "recommendedArtifact",
+    "userDecisionState",
+    "questions",
+    "primaryCta",
+    "secondaryBranches"
+  ],
+  "properties": {
+    "issueFrame": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aiRecommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "text"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "go",
+            "conditional_go",
+            "no_go",
+            "defer_for_evidence"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evidenceBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "facts",
+        "estimates",
+        "assumptions",
+        "judgments",
+        "unknowns"
+      ],
+      "properties": {
+        "facts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "estimates": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "judgments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "strongestCountercase": {
+      "type": "string",
+      "minLength": 1
+    },
+    "conditionsAndKillCriteria": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conditions",
+        "killCriteria"
+      ],
+      "properties": {
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "killCriteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "humanReviewBoundary": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "singleNextAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "owner",
+        "target",
+        "completionDefinition",
+        "verificationSignal",
+        "reviewWindow",
+        "reviewTrigger"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "completionDefinition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verificationSignal": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewWindow": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewTrigger": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "recommendedArtifact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "userDecisionState": {
+      "enum": [
+        "accepted",
+        "accepted_with_changes",
+        "rejected",
+        "deferred",
+        "no_decision"
+      ]
+    },
+    "questions": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "primaryCta": {
+      "type": "string",
+      "minLength": 1
+    },
+    "secondaryBranches": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

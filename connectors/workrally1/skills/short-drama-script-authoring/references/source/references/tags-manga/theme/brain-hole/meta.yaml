@@ -1,0 +1,87 @@
+# 脑洞（brain-hole）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: brain-hole
+name_cn: 脑洞
+category: theme
+carrier: manga
+audience: both
+weight: low
+level: level-3
+severity: weak
+version: 6.0.0
+related_combo: references/domestic/combos/innovation.md
+emotion_core:
+- 新鲜感
+- 反转惊喜
+- 认知冲击
+- 猎奇趣味
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 全受众通用，偏年轻化群体
+  bg_desc: 全背景兼容，都市、校园、架空适配度最高
+  weight: low
+  bottom_line:
+  - 核心创意设定必须贯穿主线，不能开篇用完即弃
+  - 设定逻辑自洽，不能强行圆场
+relations:
+  synergy:
+  - target: twist
+    effect_type: 增强型
+    weight: high
+    effect: 脑洞设定天然适配多层反转，强化认知冲击
+  - target: system
+    effect_type: 裂变型
+    weight: medium
+    effect: 系统规则作为脑洞核心载体，玩法更具象
+  - target: city
+    effect_type: 增强型
+    weight: medium
+    effect: 日常都市基底反衬脑洞设定的反常，反差更强
+  - target: campus
+    effect_type: 增强型
+    weight: medium
+    effect: 校园场景贴近受众，代入感更强
+  mutex:
+  - target: 纯现实主义
+    reason: 无超常规设定则脑洞无法成立
+combo_adapt:
+- combo: references/domestic/combos/innovation.md
+  rule: 脑洞创意为核心卖点，强化设定新鲜感与反转密度
+  sub: 创意脑洞型
+- combo: references/domestic/combos/face-slapping.md
+  rule: 利用信息差与设定差打脸，爽感更有记忆点
+  sub: 脑洞打脸型
+- combo: references/domestic/combos/suspense.md
+  rule: 脑洞+悬疑，层层揭秘设定真相
+  sub: 悬疑脑洞型
+fusion:
+- recipe: fusion/recipes/time-loop.md
+  note: 时间循环类经典脑洞，成熟节奏模板，适配快节奏短剧
+- recipe: fusion/recipes/world-rule.md
+  note: 规则类生存脑洞，强钩子强反转，适配高完读率需求
+redlines:
+- code: AP-NH01
+  name: 设定开篇即弃
+  severity: 高
+  dimension: 标签与逻辑
+  test: 核心脑洞仅开篇出现，后续剧情与设定无关，挂羊头卖狗肉
+- code: AP-NH02
+  name: 设定逻辑崩盘
+  severity: 高
+  dimension: 标签与逻辑
+  test: 前后设定矛盾，强行补bug，自洽性崩塌
+soft_warnings:
+- 避免设定过于复杂晦涩，观众理解成本过高
+- 避免为了脑洞牺牲人物逻辑，角色行为只为推进设定
+- 避免创意点不足，靠堆砌设定撑剧情
+manga:
+  visual_signature: 反常识规则的视觉化呈现（弹窗/规则提示/异常画面）
+  high_affinity: true
+  visual_hooks:
+  - 反常细节的镜头强调
+  - 设定反转的画面颠覆
+  - 规则可视化的符号设计

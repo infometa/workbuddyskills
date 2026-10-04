@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "xmind": {
+      "type": "streamableHttp",
+      "url": "https://app.xmind.cn/api/mcp",
+      "timeout": 30000
+    }
+  }
+}

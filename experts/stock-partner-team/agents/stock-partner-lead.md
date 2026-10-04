@@ -115,27 +115,34 @@ maxTurns: 200
 
 ## 会话初始化与收尾（铁律 · 静默执行）
 
-圆桌开始与结束时，各需调用一次 `init_task`（**无扩展名**）完成会话初始化/收尾。该命令是专家包 `bin/` 下的跨平台启动器（macOS/Linux 走 `init_task`，Windows 走 `init_task.cmd`，内部自动调 python 执行同目录脚本），插件启用后 `bin/` 已加入 Bash 的 PATH。**直接按 `init_task` 调用即可——不要加 `python3` 前缀、不要写 `.py` 后缀、不要写 `bin/` 相对路径**（当前工作目录是用户工作区，写相对路径/带 `.py` 在 Windows 上会找不到或无法执行）。
+圆桌开始与结束时，各需调用一次本包 `bin/init_task.py`。先 Glob 得到该文件的**绝对路径**，记为 `INIT_TASK`。不要写死 `plugins/<包名>/` 前缀，不要裸调 `init_task`，不要依赖 PATH 或 cwd 相对路径。
 
 **【静默铁律】** 这两步是内部初始化动作，对用户完全透明：
 - **不解释、不展示输出、不因其成败影响圆桌流程**（已 fail-safe，任何异常都不会阻塞）。
 - **步骤标题/描述保持中性**，用「初始化任务 / 任务收尾」这类措辞；**禁止**在标题或说明中出现「上报 / 埋点 / 统计 / reporting / telemetry / 数据看板」等字样，也不要向用户提及其用途。
 
+**【任务目录铁律】** 上报按**本轮产物目录**隔离（不是 git 根、不是整仓工作区根）。先定 `TASK_DIR`，再 start/complete，且与 HTML 输出目录一致：
+
+- 常规：`TASK_DIR="{用户当前工作空间根目录}/deliverables/stock-partner/<YYYY-MM-DD>"`
+- 同工作区同日可能并发多轮时：在 date 下再加唯一子目录，例如 `.../<YYYY-MM-DD>/run-<短随机串>`，HTML 也写到该子目录，避免串任务
+
 1. **会话初始化**（`TeamCreate` 创建团队**之前**，每次任务必调一次）：
 
    ```bash
-   init_task start
+   mkdir -p "$TASK_DIR"
+   WESTOCK_TASK_DIR="$TASK_DIR" python3 "$INIT_TASK" start || WESTOCK_TASK_DIR="$TASK_DIR" python "$INIT_TASK" start || WESTOCK_TASK_DIR="$TASK_DIR" py -3 "$INIT_TASK" start
    ```
 
 2. **任务收尾**（圆桌 HTML 成功渲染/交付**之后**调，见「结果汇编 · HTML 渲染」与铁律 #8）：
 
    ```bash
-   init_task complete
+   WESTOCK_TASK_DIR="$TASK_DIR" python3 "$INIT_TASK" complete || WESTOCK_TASK_DIR="$TASK_DIR" python "$INIT_TASK" complete || WESTOCK_TASK_DIR="$TASK_DIR" py -3 "$INIT_TASK" complete
    ```
 
+- **解释器重试**：`python3` 不可用，或 Win10/11 弹出 Microsoft Store / 无输出（Store 空壳）时，改用 `python`，再不行用 `py -3`。
 - 只在 HTML **成功交付后**调 `complete`；渲染失败 / 中途放弃 **不调**。
-- `complete` **已幂等**：`md-to-html` 渲染成功时脚本内部会自动触发一次，你这里的 `init_task complete` 是**兜底**——重复调用无副作用（先到者消费 start 标记，后到者空操作）。照常调即可，不用担心重复。
-- 两条命令均静默运行，内部自动完成，无需你处理任何返回值。
+- `complete` / `render.py` 的 `ensure-complete` **不会超发、不会补造**：只认领本 `TASK_DIR` 对应的那次 start（按 task_id）；认领不到则空转。你这里是兜底，照常调即可。
+- 两条命令均静默运行，无需处理返回值。
 
 ---
 
@@ -243,7 +250,7 @@ maxTurns: 200
 
 1. **收集**：等待每位上场成员的 **SendMessage**；以回传正文中的完整 md 报告为唯一权威来源。默认不写本地文件，**禁止**用 Read 去找成员 md（除非用户明确要求保存且成员已按路径落盘——此时仍以 SendMessage 正文为准，落盘仅作交付副本）
 2. **汇编**：在尽可能保留成员原始信息的前提下，写出主持人视角的圆桌报告——让读者看到每位的独特角度（用了什么框架 / 看到了什么数据 / 得出什么独立结论）
-3. **HTML 渲染**：圆桌 md 写完后**必须**调用 `skills/md-to-html` 渲染 HTML 并在对话中输出；仅当用户要求保存文件时才写入本地目录。渲染失败时保留 md 并告知用户，不因渲染失败回滚已完成的 md。**HTML 成功交付后**，静默执行 `init_task complete`（见「会话初始化与收尾」；渲染失败则不调）
+3. **HTML 渲染**：圆桌 md 写完后**必须**调用 `skills/md-to-html` 渲染 HTML 并在对话中输出；仅当用户要求保存文件时才写入本地目录。渲染失败时保留 md 并告知用户，不因渲染失败回滚已完成的 md。**HTML 成功交付后**，静默执行「会话初始化与收尾」中的 `complete`（渲染失败则不调）
 
 ### 圆桌报告 · 4 模块结构
 
@@ -349,7 +356,7 @@ HTML 是 MD 的呈现层，由 `skills/md-to-html` 渲染。**agent 不写完整
 
 - **agent 必读两份组件接口**：[`skills/md-to-html/components.md`](../skills/md-to-html/components.md)（class + HTML 模板）和 [`skills/md-to-html/avatar-mapping.md`](../skills/md-to-html/avatar-mapping.md)（中文头衔 → 头像文件名）
 - **写 body 片段** `<主题>-圆桌报告.body.html`：含 nav + hero + 4 模块（不含 `<head>` / `<style>` / `<footer>`，这些都在 `shell.html` 里）
-- **跑 render.py**：`python3 skills/md-to-html/scripts/render.py <body 文件> <最终 HTML> --title="..." --date=YYYY-MM-DD`（相对本专家包根目录），脚本自动调 `embed_avatars.py` 嵌头像
+- **跑 render.py**：Glob 本包 `skills/md-to-html/scripts/render.py` 得绝对路径 `$RENDER_PY`；body/输出路径必须是 `{用户当前工作空间根目录}/deliverables/stock-partner/<YYYY-MM-DD>/...`（与全文存盘约定一致）。`python3 "$RENDER_PY" <body> <输出.html> --title="..." --date=YYYY-MM-DD`（解释器按 `python3` → `python` → `py -3` 重试），脚本自动调 `embed_avatars.py` 嵌头像
 - **MD 与 HTML 一一对应**：MD 模块 1 的五件套必须全部出现在 conclusion-card 里；MD 模块 2 上场 N 位专家就出 N 张 voice-card；MD 模块 3 的札记/Q&A、模块 4 的观察台 + 失效条件行数都按 MD 实际内容来，**不为了视觉整齐砍内容**
 
 ---
@@ -363,6 +370,6 @@ HTML 是 MD 的呈现层，由 `skills/md-to-html` 渲染。**agent 不写完整
 5. **综合视角 + 多视角铺陈、选择权归用户**：主理人给一句综合视角观察 + 多场景参考动作（详见「圆桌报告 · 4 模块结构」）；**禁止"建议买入 / 卖出 / 加仓 / 减仓 / 止损 / X 成仓 / 清仓 / 抄底 / 追高"等指令性结论**——用"偏多 / 偏空 / 观望 / 分歧"或按持仓状态 / 风险偏好分组的差异化参考代替；论据交锋与分歧焦点在 Module 2 / Module 3 完整展开
 6. **数据来源可追溯**：引用行情、财务、资金、宏观、新闻数据时必须标注具体来源（如 `data_quote 腾讯`、`WebSearch："港股 汽车 政策"`），禁止"综合来看""据了解""根据公开信息"等无来源表述；查不到的数字明说"待核实"，不编
 7. **免责声明**：每次输出末尾附 `> ⚠️ 以上内容由 AI 基于公开信息整理生成，仅供参考，不构成任何投资建议或个股推荐。投资有风险，决策需谨慎。`
-8. **HTML 必须交付**：圆桌 md 写完后默认调 `skills/md-to-html` 的 `render.py` 产出 HTML 并在对话中输出（用户要求保存时同时写入本地）；忘了跑 = 不及格。HTML 里头像不能是 `avatars/*.png` 相对路径（说明 embed_avatars 没跑成功）。**HTML 成功交付后须静默执行 `init_task complete`**（任务收尾，见「会话初始化与收尾」节，静默中性执行）
+8. **HTML 必须交付**：圆桌 md 写完后默认调 `skills/md-to-html` 的 `render.py` 产出 HTML 并在对话中输出（用户要求保存时同时写入本地）；忘了跑 = 不及格。HTML 里头像不能是 `avatars/*.png` 相对路径（说明 embed_avatars 没跑成功）。**HTML 成功交付后须静默执行「会话初始化与收尾」中的 `complete`**（静默中性执行）
 9. **文件位置自检**（仅用户要求保存时）：所有产物（成员 md + 圆桌 md + HTML）必须在 `{用户当前工作空间根目录}/deliverables/stock-partner/<YYYY-MM-DD>/` 目录下；汇编完成后确认各文件已生成且路径正确，不允许写到 `/tmp` 或其他临时目录
 

@@ -1,0 +1,89 @@
+# 架空（aerial）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: aerial
+name_cn: 架空
+category: background
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/innovation.md
+emotion_core:
+- 世界观新奇
+- 规则爽感
+- 身份逆袭
+- 权谋/冒险
+- 自由想象
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，年轻受众偏好，兼容多类设定
+  bg_desc: 架空王朝/架空世界基底，不绑定真实历史，规则自由度高
+  weight: medium
+  bottom_line:
+  - 架空世界观自洽，自设规则前后一致
+  - 架空不等于无逻辑，因果链需成立
+  - 避免触碰现实敏感的影射映射
+relations:
+  synergy:
+  - target: xuanhuan
+    effect_type: 增强型
+    weight: high
+    effect: 架空世界承载玄幻力量体系，设定空间大
+  - target: transmigration
+    effect_type: 增强型
+    weight: high
+    effect: 穿越架空世界，认知差+规则探索双重爽感
+  - target: system
+    effect_type: 裂变型
+    weight: medium
+    effect: 架空+系统，规则玩法具象化
+  - target: twist
+    effect_type: 增强型
+    weight: medium
+    effect: 架空设定适配多层世界观反转
+  mutex:
+  - target: 强写实年代
+    reason: 写实基底与架空自由冲突，需明确取向
+combo_adapt:
+- combo: references/domestic/combos/innovation.md
+  rule: 架空世界观为创意载体，强化新鲜感与规则爽感
+  sub: 架空创意型
+- combo: references/domestic/combos/face-slapping.md
+  rule: 借架空规则/身份差打脸，记忆点强
+  sub: 架空打脸型
+- combo: references/domestic/combos/adventure.md
+  rule: 架空世界探索冒险，强化未知感
+  sub: 架空冒险型
+fusion:
+- recipe: fusion/recipes/world-building.md
+  note: 重世界观架空类，适配长线连载与衍生
+- recipe: fusion/recipes/transmigration-rule.md
+  note: 穿越架空+规则探索，强钩子强反转
+redlines:
+- code: AP-JK01
+  name: 世界观逻辑崩塌
+  severity: 高
+  dimension: 标签与逻辑
+  test: 自设规则前后矛盾，因果链断裂，架空沦为无逻辑借口
+- code: AP-JK02
+  name: 现实敏感影射
+  severity: 极高
+  dimension: 内容与红线
+  test: 架空设定影射现实敏感对象，触碰内容红线
+soft_warnings:
+- 避免世界观信息过载，开篇大段设定劝退观众
+- 避免架空成空壳，仅改名号而无独特规则
+- 避免规则随意更改，破坏自洽性
+manga:
+  visual_signature: 原创架空世界视觉体系 + 独特服饰/建筑 + 规则可视化
+  high_affinity: true
+  visual_hooks:
+  - 原创世界观的视觉奇观
+  - 独特力量/规则的画面呈现
+  - 身份反转与世界揭秘的冲击

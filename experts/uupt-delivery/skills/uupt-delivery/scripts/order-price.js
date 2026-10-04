@@ -30,16 +30,16 @@ async function main() {
   node order-price.js --fromAddress="起始地址" --toAddress="目的地址" [--cityName="城市名"] [--orderType="send|help"]
 
 参数:
-  --fromAddress  起始地址（必填，要求完整地址信息。帮忙订单时填写帮忙地点）
-  --toAddress    目的地址（必填，要求完整地址信息。帮忙订单时与fromAddress相同）
+  --fromAddress  起始地址（必填，要求完整地址信息。帮帮订单时填写帮帮地点）
+  --toAddress    目的地址（必填，要求完整地址信息。帮帮订单时与fromAddress相同）
   --cityName     城市名称（可选，默认郑州市，需要带"市"字）
-  --orderType    订单类型（可选，send=跑腿配送，help=帮忙服务，默认send）
+  --orderType    订单类型（可选，send=跑腿配送，help=帮帮服务，默认send）
 
 示例:
   # 跑腿配送询价
   node order-price.js --fromAddress="郑州市金水区农业路经三路交叉口" --toAddress="郑州市二七区德化街100号"
   node order-price.js --fromAddress="北京市朝阳区三里屯" --toAddress="北京市海淀区中关村" --cityName="北京市"
-  # 帮忙服务询价
+  # 帮帮服务询价
   node order-price.js --fromAddress="郑州市金水区农业路经三路交叉口" --orderType="help"
 `);
     process.exit(1);

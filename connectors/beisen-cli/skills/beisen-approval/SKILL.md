@@ -1,11 +1,14 @@
 ---
 name: beisen-approval
-version: 1.1.20
-description: "北森审批中心查询。本 Skill 用于查询审批流程的当前状态、节点、审批人等信息，覆盖本人待办、已办；支持按流程状态（在途/已结束）和时间范围筛选。当用户询问'我有什么待办'、'审批进度'、'已办事项'、'流程到哪了'、'在途流程'、'已结束流程'等审批相关问题时触发。每人仅能查询自己发起或参与过的流程，不支持创建、审批、转交等写操作。"
+version: 1.2.14
+description: "北森审批中心查询。本 Skill 用于查询审批流程的当前状态、节点、审批人等信息，覆盖本人待办、已办；支持按流程状态（在途/已结束）和时间范围筛选。当用户询问'我有什么审批待办'、'审批进度'、'已办事项'、'流程到哪了'、'在途流程'、'已结束流程'等审批相关问题时触发。每人仅能查询自己发起或参与过的流程，不支持创建、审批、转交等写操作。"
 category: 人力资源/审批
 author: beisen
 agent_created: false
 allowed-tools: Bash, Read
+requires-skills:
+  - beisen-shared
+requires-cli: ">=1.0.8"
 ---
 
 # 审批中心
@@ -17,7 +20,6 @@ allowed-tools: Bash, Read
 本 Skill 处理：审批流程状态、节点、审批人查询（本人待办 / 已办 ）
 
 不归本 Skill 处理：
-- 招聘 offer 审批 → [../beisen-recruitment/SKILL.md](../beisen-recruitment/SKILL.md)
 - 创建审批定义、审批同意/拒绝/转交/撤回 → 走后台管理界面
 
 ## 触发场景
@@ -188,5 +190,5 @@ CLI 返回为 JSON，外层为信封，内层为业务数据：
 ## 不在本 Skill 范围
 
 - 创建审批定义（走后台管理）
-- 非审批类待办（如招聘待办 → beisen-recruitment）
+- 非审批类待办（如招聘待办 → beisen-recruiting-todo）
 - 审批操作（同意/拒绝/转交/撤回）— 当前版本不支持

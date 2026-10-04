@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/source-root/2.0",
+  "title": "Authorized Source Root",
+  "x-schema-version": "2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["root_id", "label", "canonical_path", "authorized_at", "availability", "last_scan_id", "last_successful_scan_id"],
+  "properties": {
+    "root_id": {"type": "string", "pattern": "^ROOT-[A-Z0-9]{12,64}$"},
+    "label": {"type": "string", "minLength": 1, "maxLength": 120},
+    "canonical_path": {"type": "string", "minLength": 1},
+    "device_hint": {"type": "string", "maxLength": 200},
+    "authorized_at": {"type": "string", "format": "date-time"},
+    "availability": {"enum": ["available", "unavailable", "unknown"]},
+    "last_scan_id": {"type": "string", "pattern": "^$|^SCAN-[A-Z0-9]{12,64}$"},
+    "last_successful_scan_id": {"type": "string", "pattern": "^$|^SCAN-[A-Z0-9]{12,64}$"},
+    "registration_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "exclude_paths": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+  }
+}

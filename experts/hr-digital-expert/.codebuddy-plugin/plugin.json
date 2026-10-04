@@ -1,16 +1,13 @@
 {
   "name": "hr-digital-expert",
-  "version": "1.0.5",
+  "version": "1.0.9",
   "description": "HR digital intelligence expert covering data query, page design, deployment, and knowledge management for Tencent HR platform",
   "author": {
     "name": "nebula",
     "email": "nebulaliao@tencent.com"
   },
-  "expertType": "agent",
-  "agentName": "hr-digital-expert",
-  "agents": [
-    "./agents/hr-digital-expert.md"
-  ],
+  "hooks": "./hooks/hooks.json",
+  "agents": ["./agents/hr-digital-expert.md"],
   "skills": [
     "./skills/hr-data-sql-builder",
     "./skills/data-warehouse-api-codegen",
@@ -21,6 +18,8 @@
     "./skills/hr-common-llm",
     "./skills/hrclaw-message",
     "./skills/page-deliver",
+    "./skills/enable-mcp",
+    "./skills/control-hr-claw-app",
     "./skills/agent-boost",
     "./skills/hr-ai-knowledge",
     "./skills/hr-right",
@@ -28,6 +27,8 @@
     "./skills/auth-code-tester",
     "./skills/auth-code-developer"
   ],
+  "expertType": "agent",
+  "agentName": "hr-digital-expert",
   "displayName": {
     "en": "HR Digital Expert",
     "zh": "HR数智专家"
@@ -38,7 +39,7 @@
   },
   "displayDescription": {
     "en": "Full-chain HR IT expert covering data warehouse SQL queries, page development, one-click deployment, and knowledge management.",
-    "zh": "覆盖HR数仓查询、页面设计开发、一键部署上线和本地知识库管理的全链路HR数智专家"
+    "zh": "覆盖HR数仓查询、页面设计开发、一键部署上线和知识库管理的全链路HR数智专家"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "13-TencentZone",
@@ -46,34 +47,15 @@
     "zh": "帮我查询我有HR数仓哪些权限",
     "en": "Help me check what HR data warehouse permissions I have"
   },
+  "plugin": "hr-digital-expert",
   "tags": [
-    {
-      "en": "HR Data Query",
-      "zh": "HR数据查询"
-    },
-    {
-      "en": "Page Development",
-      "zh": "页面开发部署"
-    },
-    {
-      "en": "Knowledge Management",
-      "zh": "知识管理"
-    }
+    { "en": "HR Data Query", "zh": "HR数据查询" },
+    { "en": "Page Development", "zh": "页面开发部署" },
+    { "en": "Knowledge Management", "zh": "知识管理" }
   ],
   "quickPrompts": [
-    {
-      "en": "Help me check what HR data warehouse permissions I have",
-      "zh": "帮我查询我有HR数仓哪些权限"
-    },
-    {
-      "en": "Build a personnel management system and deploy to HRClaw",
-      "zh": "帮我生成一个人员信息管理系统并部署到HRClaw"
-    },
-    {
-      "en": "Help me look up the company employee leave policy",
-      "zh": "帮我查一下公司的员工休假制度"
-    }
-  ],
-  "hooks": "./hooks/hooks.json",
-  "plugin": "hr-digital-expert"
+    { "en": "Help me check what HR data warehouse permissions I have", "zh": "帮我查询我有HR数仓哪些权限" },
+    { "en": "Build a personnel management system and deploy to HRClaw", "zh": "帮我生成一个人员信息管理系统并部署到HRClaw" },
+    { "en": "Help me look up the company employee leave policy", "zh": "帮我查一下公司的员工休假制度" }
+  ]
 }

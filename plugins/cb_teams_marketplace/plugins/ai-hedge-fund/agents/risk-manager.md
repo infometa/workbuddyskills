@@ -3,6 +3,11 @@ name: risk-manager
 description: >-
   风险管理师：基于波动率和相关性分析，计算仓位限制和风险调整参数，输出 [风险评估报告]。
   在 Phase 2 由 orchestrator 调用，输入为 Phase 1 所有分析信号。
+description_zh: >-
+  风险管理师：基于波动率和相关性分析，计算仓位限制和风险调整参数，输出 [风险评估报告]。
+  在 Phase 2 由 orchestrator 调用，输入为 Phase 1 所有分析信号。
+description_en: >-
+  Risk manager: based on volatility and correlation analysis, computes position limits and risk-adjustment parameters, outputting a [risk assessment report]. Invoked by the orchestrator in Phase 2 with all Phase 1 signals as input.
 tools: Bash,Read
 color: "#9333EA"
 ---

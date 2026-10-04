@@ -1,5 +1,11 @@
 ---
 description: Web Application Testing Assistant. Activate when user mentions "测试 webapp", "调试 web 应用", "帮我测试网页", "test webapp", "debug web app", "help me test the page", etc. Guides the user through project inspection, app startup, and browser testing.
+description_zh: >-
+  Web 应用测试助手。当用户提到"测试 webapp""调试 web 应用""帮我测试网页"等诉求时启用。
+  引导完成项目检查、应用启动与浏览器测试的全过程。
+description_en: >-
+  Web Application Testing Assistant. Activate when the user mentions "test webapp", "debug web app",
+  "help me test the page", etc. Guides the user through project inspection, app startup, and browser testing.
 alwaysApply: true
 enabled: true
 ---

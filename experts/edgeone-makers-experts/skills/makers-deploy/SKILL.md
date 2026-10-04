@@ -30,7 +30,7 @@ Deploy any project to **EdgeOne Makers**.
 
 ## ⛔ Critical Rules (never skip)
 
-1. **CLI version ≥ `1.6.0`** — reinstall if lower. Versions below `1.6.0` lack the non-interactive fixes (whoami fail-fast, `--json` output) and will hang in Agent/CI environments. Never proceed with an outdated version.
+1. **CLI version ≥ `1.6.7`** — reinstall if lower. Versions below `1.6.7` lack the non-interactive fixes (whoami fail-fast, `--json` output) and will hang in Agent/CI environments. Never proceed with an outdated version.
 2. **Never truncate the deploy URL — this applies to EVERY mention** — `EDGEONE_DEPLOY_URL` includes query parameters (`?eo_token=...&eo_time=...`) required for access. Without them the page returns 401. Always output the **complete** URL with full query string. This rule applies to: the primary display, summary tables, footnotes, comparisons, code blocks, `present_files` calls — **every single occurrence** of the URL in your reply. Truncation is any removal of the `?` and everything after it.
 
    ❌ WRONG (truncated — will 401):
@@ -45,7 +45,7 @@ Deploy any project to **EdgeOne Makers**.
 
    **Self-check after writing your reply**: scan for every instance of the `.edgeone.cool` domain. Does each one include `?eo_token=`? If any doesn't, fix it NOW — the user will get a 401.
 3a. **Prefer `--json` when running non-interactively** — in Agent/CI/headless contexts, always pass `--json` to `deploy` so the result is a single machine-readable line; no need to scrape colored/`\r`-animated stdout. See **Parse Deploy Output**.
-3b. **Use `edgeone whoami` to check login status** — on CLI ≥ 1.6.0, `whoami` fails fast (exit 1) when not logged in instead of hanging. If it exits 0, the user is already logged in and `-t` is not needed. **Do NOT** check `cat .edgeone/.token` — CLI stores credentials in `~/.edgeone/<hash>` files, not a fixed `.token` path.
+3b. **Use `edgeone whoami` to check login status** — on CLI ≥ 1.6.7, `whoami` fails fast (exit 1) when not logged in instead of hanging. If it exits 0, the user is already logged in and `-t` is not needed. **Do NOT** check `cat .edgeone/.token` — CLI stores credentials in `~/.edgeone/<hash>` files, not a fixed `.token` path.
 4. **⚠️ The deploy result block is a fixed format — open your reply with it and add nothing extra.** Your reply MUST begin with the line `🎉 部署成功，页面已上线至 EdgeOne Makers`, followed by the complete access URL, followed by the console URL — and nothing else about the deployment. **Do NOT append caveats, expiry claims, access-policy claims, or console menu paths.** See **Present the Deploy Result** for the exact template and the list of banned fabrications.
    ```
    🎉 部署成功，页面已上线至 EdgeOne Makers
@@ -87,27 +87,29 @@ Run these checks first, then follow the decision table:
 # Check 0: Set environment variable (required before any edgeone command)
 export PAGES_SOURCE=skills
 
-# Check 1: CLI installed and correct version? (must be >= 1.6.0)
+# Check 1: CLI installed and correct version? (must be >= 1.6.7)
 edgeone -v
 
-# Check 2: Already logged in? (CLI >= 1.6.0 whoami fails fast, won't hang)
+# Check 2: Already logged in? (CLI >= 1.6.7 whoami fails fast, won't hang)
 edgeone whoami
 # If exit 0 → logged in, no -t needed
 # If exit 1 → not logged in, need token or browser login
 
 # Check 3: Project already linked?
 cat edgeone.json 2>/dev/null
+
+# Check 4: cwd IS the project root? (not the workspace root)
 ```
 
 ### Decision Table
 
 | CLI version | Login status | Action |
 |-------------|-------------|--------|
-| Not installed or < 1.6.0 | — | → Go to **Install CLI** |
-| `≥ 1.6.0` ✓ | Logged in (or token present) | → Go to **Deploy** |
-| `≥ 1.6.0` ✓ | Not logged in, has saved token | → Go to **Deploy with Token** (use saved token) |
-| `≥ 1.6.0` ✓ | Not logged in, no saved token, **interactive desktop** | → Go to **Login** (browser) |
-| `≥ 1.6.0` ✓ | Not logged in, no saved token, **non-interactive (Agent/CI/headless)** | → Ask user for a **token**; browser login is unavailable and `deploy` will fail fast with a token hint |
+| Not installed or < 1.6.7 | — | → Go to **Install CLI** |
+| `≥ 1.6.7` ✓ | Logged in (or token present) | → Go to **Deploy** |
+| `≥ 1.6.7` ✓ | Not logged in, has saved token | → Go to **Deploy with Token** (use saved token) |
+| `≥ 1.6.7` ✓ | Not logged in, no saved token, **interactive desktop** | → Go to **Login** (browser) |
+| `≥ 1.6.7` ✓ | Not logged in, no saved token, **non-interactive (Agent/CI/headless)** | → Ask user for a **token**; browser login is unavailable and `deploy` will fail fast with a token hint |
 
 ---
 
@@ -119,15 +121,15 @@ cat edgeone.json 2>/dev/null
 npm install -g edgeone@latest --registry=https://registry.npmmirror.com
 ```
 
-Verify: `edgeone -v` — confirm output is `1.6.0` or higher.
+Verify: `edgeone -v` — confirm output is `1.6.7` or higher.
 
-If the mirror install fails, or the version is still below `1.6.0`, retry **once** against the official registry (npmmirror is a lazy-sync mirror and can lag behind a fresh publish):
+If the mirror install fails, or the version is still below `1.6.7`, retry **once** against the official registry (npmmirror is a lazy-sync mirror and can lag behind a fresh publish):
 
 ```bash
 npm install -g edgeone@latest --registry=https://registry.npmjs.org
 ```
 
-(Versions < 1.6.0 hang on `whoami`/login in non-interactive environments and lack `--json`.)
+(Versions < 1.6.7 hang on `whoami`/login in non-interactive environments and lack `--json`.)
 
 > For the full install error reference (`ETIMEDOUT`, `EACCES`, PATH issues), see the `makers-cli` skill's **Install** section.
 
@@ -160,7 +162,7 @@ Use the IDE's selection control (`ask_followup_question`) before running any log
 ⚠️ **CRITICAL**: After the user chooses, you MUST invoke login with an explicit
 `--site <china|global>` flag (e.g. `edgeone login --site china`).
 **NEVER run a bare `edgeone login` (without `--site`) when driven by an Agent / skill.**
-On CLI ≥ 1.6.0, a bare `login` in a non-interactive context fails fast asking for
+On CLI ≥ 1.6.7, a bare `login` in a non-interactive context fails fast asking for
 `--site` (it no longer pops an interactive site-picker that would hang). The site choice
 is meant to happen here in the conversation, not inside the CLI.
 
@@ -312,7 +314,7 @@ The CLI auto-detects the framework, runs the build, and uploads the output direc
 
 ## ⚠️ Parse Deploy Output (Critical)
 
-### Preferred: `--json` (CLI ≥ 1.6.0)
+### Preferred: `--json` (CLI ≥ 1.6.7)
 
 When deploy is run with `--json`, the **last line** of stdout is a single JSON object —
 parse that directly, no regex / ANSI cleanup needed:
@@ -399,11 +401,11 @@ If the CLI's JSON output contains an `instruction` field, follow it exactly. If 
 | Error | Solution |
 |-------|----------|
 | `command not found: edgeone` | Run `npm install -g edgeone@latest --registry=https://registry.npmmirror.com` (see **Install CLI** for the official-registry fallback) |
-| CLI version < 1.6.0 | Reinstall: `npm install -g edgeone@latest --registry=https://registry.npmmirror.com`. If the version is still low, retry on `--registry=https://registry.npmjs.org` (mirror lag). Older versions hang on whoami/login in non-interactive contexts |
+| CLI version < 1.6.7 | Reinstall: `npm install -g edgeone@latest --registry=https://registry.npmmirror.com`. If the version is still low, retry on `--registry=https://registry.npmjs.org` (mirror lag). Older versions hang on whoami/login in non-interactive contexts |
 | Browser does not open during login | Switch to token login |
-| "not authenticated" / exit 1 from `whoami` (CLI ≥ 1.6.0) | Expected when not logged in — whoami now fails fast instead of hanging. Run `edgeone login` (desktop) or provide a token |
+| "not authenticated" / exit 1 from `whoami` (CLI ≥ 1.6.7) | Expected when not logged in — whoami now fails fast instead of hanging. Run `edgeone login` (desktop) or provide a token |
 | Non-interactive deploy says "browser login is unavailable" + exits 1 | Expected fail-fast in Agent/CI/headless with no token. Provide a token via `-t <token>` or set `EDGEONE_PAGES_API_TOKEN` |
-| Deploy seems to hang at `[DeployStatus] Deploying...` | On CLI ≥ 1.6.0 non-TTY emits heartbeat lines; it is NOT stuck. If a wrapper still mis-detects, use `--json` or run in background and poll. Do not kill it |
+| Deploy seems to hang at `[DeployStatus] Deploying...` | On CLI ≥ 1.6.7 non-TTY emits heartbeat lines; it is NOT stuck. If a wrapper still mis-detects, use `--json` or run in background and poll. Do not kill it |
 | Auth error with token | Token may be expired — regenerate at the console |
 | Login appears successful but `deploy` reports auth error | Browser reused a session from the wrong site, binding the wrong account. Click "Sign in with a different account" on the login page, or log out from all Tencent Cloud consoles first |
 | `edgeone whoami` shows an unexpected account | Browser session reuse. Click "Sign in with a different account" or log out from all consoles and re-login |

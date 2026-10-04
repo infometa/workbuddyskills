@@ -5,6 +5,13 @@ description: >-
   并行执行板块比较、风格轮动、产业链分析，串行叠加宏观传导验证与拥挤度排雷，
   输出优选板块及核心标的。
   触发词：板块比较、行业选择、现在该看哪个方向、选板块、行业轮动。
+description_zh: >-
+  板块比较与选股：从多个板块中比较出当前最值得关注的方向，
+  并行执行板块比较、风格轮动、产业链分析，串行叠加宏观传导验证与拥挤度排雷，
+  输出优选板块及核心标的。
+  触发词：板块比较、行业选择、现在该看哪个方向、选板块、行业轮动。
+description_en: >-
+  Sector comparison and screening: compares multiple sectors to identify the directions most worth watching. Runs sector comparison, style rotation and industry-chain analysis in parallel, then sequentially layers on macro-transmission validation and crowding checks, outputting preferred sectors and core candidates. Triggers: sector comparison, industry selection, which direction to watch now, picking sectors, sector rotation.
 tools: Bash,Read,Write,WebSearch,WebFetch
 color: "#10B981"
 ---

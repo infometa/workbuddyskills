@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "flova": {
+      "type": "streamableHttp",
+      "url": "https://service.flova.tv/api/mcp/",
+      "timeout": 60000
+    }
+  }
+}

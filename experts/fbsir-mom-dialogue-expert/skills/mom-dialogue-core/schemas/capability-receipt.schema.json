@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/capability-receipt/2.0",
+  "title": "WorkBuddy Capability Receipt",
+  "x-schema-version": "2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "checked_at", "capabilities", "fallbacks"],
+  "properties": {
+    "schema_version": {"const": "2.0"},
+    "checked_at": {"type": "string", "format": "date-time"},
+    "capabilities": {"type": "object", "additionalProperties": {"enum": ["available", "unavailable", "unknown"]}},
+    "fallbacks": {"type": "object", "additionalProperties": {"type": "string"}},
+    "notes": {"type": "string"}
+  }
+}

@@ -1,6 +1,6 @@
 # base +view-set-filter
 
-> **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+> **前置条件：** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
 
 更新视图筛选配置。
 
@@ -62,4 +62,4 @@ lark-cli base +view-set-filter \
 ## 6. 参考
 
 - [lark-base-filter-condition.md](lark-base-filter-condition.md)：filter/visible_rule 条件结构公共协议 SSOT
-- [lookup-field-guide.md](lookup-field-guide.md)
+- [Lookup Field](lark-base-field-lookup.md)

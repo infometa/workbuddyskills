@@ -6,25 +6,25 @@
 
 | 接口 | 返回 |
 |------|------|
-| `beisen-cli interview interviewAnalysis analyzeInterviewQuality` | `data.taskId` |
-| `beisen-cli interview interviewAnalysis analyzeCompetitorIntelligence` | `data.taskId` |
+| `beisen-cli interview_ai interviewAnalysis analyzeInterviewQuality` | `data.taskId` |
+| `beisen-cli interview_ai interviewAnalysis analyzeCompetitorIntelligence` | `data.taskId` |
 
 ## 轮询命令
 
-异步任务的状态查询与取消命令在 **recruitment 域**：
+异步任务的状态查询与取消命令在 **recruitment 域（recruitment_ai 命令组）**：
 
 ```bash
 # 查询任务结果
-beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<id>"}'
+beisen-cli recruitment_ai async_task bs_get_async_task_status --data '{"taskId":"<id>"}'
 
 # 取消任务
-beisen-cli recruitment async_task bs_cancel_async_task --data '{"taskId":"<id>"}'
+beisen-cli recruitment_ai async_task bs_cancel_async_task --data '{"taskId":"<id>"}'
 ```
 
 ## 轮询流程
 
 1. 发起异步任务 → 提取返回的 `taskId`
-2. 调用 `beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<id>"}'` 轮询
+2. 调用 `beisen-cli recruitment_ai async_task bs_get_async_task_status --data '{"taskId":"<id>"}'` 轮询
 3. 轮询间隔 2-5 秒，最长等待不超过 5 分钟
 4. `isFinished == true` 后：
    - `status == "Succeeded"` → 从 `resultJson`（JSON 字符串，需 `JSON.parse`）解析报告/结果

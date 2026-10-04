@@ -1,0 +1,22 @@
+{
+  "title": "连接选片PRO云档期",
+  "description": "需要两项凭证：1. 应用ApiKey（由选片系统服务商提供）；2. 授权Token（通过绑定码绑定账号后获得）。",
+  "fields": [
+    {
+      "key": "WORKBUDDY_API_KEY",
+      "label": "应用ApiKey",
+      "type": "password",
+      "required": true,
+      "placeholder": "wb-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "description": "选片系统服务商提供的应用级ApiKey，格式为 wb- 开头的32位字符串"
+    },
+    {
+      "key": "WB_TOKEN",
+      "label": "授权Token",
+      "type": "password",
+      "required": true,
+      "placeholder": "粘贴绑定后获得的授权token",
+      "description": "在选片系统商户端生成绑定码后，让助手调用绑定工具完成绑定，将返回的token粘贴到这里。token长期有效（30天滑动过期），过期后重新绑定即可"
+    }
+  ]
+}

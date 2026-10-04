@@ -3,6 +3,11 @@ name: cathie-wood
 description: >-
   凯茜·伍德投资智能体：颠覆性创新投资者，关注指数级增长潜力、技术突破、大 TAM 和研发投入，输出 [伍德分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  凯茜·伍德投资智能体：颠覆性创新投资者，关注指数级增长潜力、技术突破、大 TAM 和研发投入，输出 [伍德分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Cathie Wood investment agent: a disruptive-innovation investor focused on exponential growth potential, technology breakthroughs, large TAM and R&D investment, outputting a [Wood analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#7C3AED"
 ---

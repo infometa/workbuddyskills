@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/chapter-plan.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "chapters"],
+  "properties": {
+    "schemaVersion": { "const": "1.1.0" },
+    "chapters": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["id", "title", "promise", "materialRefs", "claimRefs", "targetWordCount", "status"], "properties": { "id": { "type": "string", "minLength": 1 }, "title": { "type": "string" }, "promise": { "type": "string" }, "materialRefs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "claimRefs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "targetWordCount": { "type": "integer", "minimum": 1 }, "status": { "enum": ["planned", "drafting", "reviewing", "complete", "blocked"] } } } }
+  }
+}

@@ -14,7 +14,7 @@ Do **not** block the user waiting for a restart when CLI (or another documented 
 
 ```
 1. Probe MCP in THIS session
-   - IDE: CloudBase tools visible (auth, envQuery, manageFunctions, …)
+   - IDE: CloudBase tools visible (auth, queryEnv, manageFunctions, …)
    - or: npx mcporter list | grep cloudbase  AND describe/call succeeds
      (if `npx` / `npm` missing → see "No npm/npx" below; do not stall)
 2. MCP tools usable now?
@@ -28,6 +28,7 @@ Do **not** block the user waiting for a restart when CLI (or another documented 
    - Read sibling skill `cloudbase-cli` (local relative path) — start with
      `references/core.md`, then load ONLY the matching domain reference
    - Ensure `tcb` is installed (see install notes below)
+   - International site: `TCB_IS_INTL=true` — this is the **CLI** switch; `TCB_SITE` is the MCP one and will not move the CLI
    - `tcb login` (device code by default) → confirm envId → `tcb env use <envId>`
    - Deploy / manage by following that domain skill — do NOT invent shortcuts
 5. After the user restarts the session
@@ -39,7 +40,7 @@ Do **not** block the user waiting for a restart when CLI (or another documented 
 Treat MCP as **unavailable in this session** when any of these hold:
 
 - No CloudBase MCP tools in the tool list / ToolSearch results
-- `auth` / `envQuery` / deploy tools return “unknown tool” or connection errors after one verify attempt
+- `auth` / `queryEnv` / deploy tools return “unknown tool” or connection errors after one verify attempt
 - User just finished MCP install/config and has not restarted
 
 Do **not** require the user to paste env vars into MCP JSON before you can proceed — configure MCP for later, use CLI now.
@@ -49,7 +50,7 @@ Do **not** require the user to paste env vars into MCP JSON before you can proce
 | Goal | MCP (when available) | CLI fallback — read skill, do not guess |
 |------|----------------------|------------------------------------------|
 | Login | `auth` (`start_auth` / device) | `cloudbase-cli` → `core.md` (`tcb login`) |
-| Bind / select env | `auth.set_env` + `envQuery` | `cloudbase-cli` → `core.md` (`tcb env use`) |
+| Bind / select env | `auth.set_env` + `queryEnv` | `cloudbase-cli` → `core.md` (`tcb env use`) |
 | Cloud function deploy | `manageFunctions` / `queryFunctions` | `cloud-functions` + `cloudbase-cli` → `functions.md` |
 | Web / static hosting | `manageApps` / `manageHosting` | `cloudbase-cli` → `hosting.md` (build locally, then hosting deploy) |
 | CloudRun | `manageCloudRun` / `queryCloudRun` | `cloudbase-cli` → `cloudrun.md` |
@@ -85,6 +86,24 @@ When npm is available:
 - Or project-local / `npx`-style invocation if the project already depends on the CLI
 
 Always confirm `tcb --version` (or equivalent) before `tcb login`.
+
+### International site (国际站)
+
+First run: settle **and persist** the site before installing MCP — the CLI switch is machine-global, the MCP switch is per-client, and only the project record is read after a restart. Procedure, conflict arbitration and fallback: `site-onboarding.md`.
+
+The CLI and the local MCP server use **different switches** for the site. Setting the wrong one fails silently.
+
+| Tool | Switch | Verify |
+|------|--------|--------|
+| `tcb` CLI | `TCB_IS_INTL=true`, or persistently `tcb config set isIntl true` | `tcb config get isIntl` |
+| MCP (local stdio) | `TCB_SITE=intl` (+ `TCB_REGION=ap-singapore`) | session `auth` status / env list |
+| MCP (remote) | none — the **hostname** decides it (`tcb-api.tencentcloud.com` vs `tcb-api.cloud.tencent.com`) | endpoint returns 401 without credentials |
+
+With `isIntl` on, the CLI also rewrites its own hosted endpoints to the international host.
+
+> ⚠️ Wrong-site symptom: `tcb login` succeeds but `tcb env list` comes back empty. Check `isIntl` **before** re-authenticating or assuming the account has no environments.
+>
+> ⚠️ The international site has **no NoSQL / document-database tools**.
 
 ## Hard rules
 

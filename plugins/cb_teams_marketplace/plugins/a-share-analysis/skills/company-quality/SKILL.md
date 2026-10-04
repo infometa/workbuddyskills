@@ -1,6 +1,8 @@
 ---
 name: company-quality
 description: 用于公司质地打分，聚焦基本面研究/公司质量评估/长线选股。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户希望对公司"质地"有一个结构化判断：是不是好公司，壁垒强不强，成长质量怎么样，治理怎么样，值不值得长期跟踪。
+description_zh: "用于公司质地打分，聚焦基本面研究/公司质量评估/长线选股。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户希望对公司\"质地\"有一个结构化判断：是不是好公司，壁垒强不强，成长质量怎么样，治理怎么样，值不值得长期跟踪。"
+description_en: "Use for company-quality scoring, focusing on fundamental research, company-quality assessment, and long-term stock selection. Primarily suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It provides a structured assessment of whether a company is high quality, how strong its competitive moat is, the quality of its growth and governance, and whether it merits long-term tracking."
 ---
 
 # 公司质地打分

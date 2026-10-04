@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/entity-timeline.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "entities", "events"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "entities": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "name", "aliases", "type"], "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "aliases": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }, "type": { "enum": ["person", "organization", "place", "work", "term", "other"] } } } },
+    "events": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "date", "entityIds", "description", "sourceIds"], "properties": { "id": { "type": "string" }, "date": { "type": "string" }, "entityIds": { "type": "array", "items": { "type": "string" } }, "description": { "type": "string" }, "sourceIds": { "type": "array", "items": { "type": "string" } } } } }
+  }
+}

@@ -1,0 +1,1705 @@
+{
+  "schemaVersion": 2,
+  "module": "invoice",
+  "skill": "weaver-e10-yepiaotong-connector",
+  "generatedFrom": {
+    "sourceSkill": "weaver-e10-yepiaotong",
+    "version": "1.0.0",
+    "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong",
+    "kind": "workbuddy-document-skill-package",
+    "availability": "user-provided-source-directory"
+  },
+  "generatedAt": "2026-09-18T00:00:00.000Z",
+  "sourceSet": {
+    "aggregateSha256": "53a97c4fa4575a95f13e5180e28b72fe35226d5f5803c3e767cd85e8f6222b7d",
+    "sourceRoots": [
+      "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong"
+    ],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/invoice",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "connector-skills/weaver-e10-yepiaotong-connector"
+    ],
+    "tests": [
+      "test/business/invoice-*.test.ts",
+      "test/skills/layout.test.ts"
+    ],
+    "docs": [
+      "docs/invoice.md",
+      "docs/agent-invoice.md",
+      "skill-template/domains/yepiaotong.md"
+    ]
+  },
+  "sources": [
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/agents/openai.yaml",
+      "size": 412,
+      "sha256": "4a8c65ee3954b9d886d670f50e94067a6cc0071395286469eba33eb275020045"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/catalog.md",
+      "size": 5238,
+      "sha256": "2ad236df16358d02b873e0ee5b187a5b16a19bae0e055bb9dc09c24b14b7aa37"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/get-token.md",
+      "size": 4109,
+      "sha256": "6998b4d7c961063ed2d8498bd9cbeea34e1991288827195de0b9db78e4c9423a"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-add.md",
+      "size": 8734,
+      "sha256": "319b4abc0e96cf4f710931649c4f53e6fb12971e6e737d0362b675c0a3b7e778"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-all-in-one.md",
+      "size": 4360,
+      "sha256": "422d5525e083c8365fddc58ae3a95ad2131e4725ef91c96a39c45b32c62b06cc"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-browse-field-data.md",
+      "size": 7184,
+      "sha256": "a00aa63d683336148e8ad58d091bfc368dd6f9839c0acf5b251c8353b12b5da2"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-delete.md",
+      "size": 3678,
+      "sha256": "e060c77a68546bc2bb3b377d9b15ac62f45850646b62dc81d357c1f8199fcd97"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-detail.md",
+      "size": 6836,
+      "sha256": "dece6e2aba8c6e06b96a84da9ea40204bb19fb3c4e072a438021b835efd7914c"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-download.md",
+      "size": 3195,
+      "sha256": "1c9ce0153761455df98455509bf64734ed30ab8d11b73bec39cd2ef4864f33d2"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-enterprise-list.md",
+      "size": 8679,
+      "sha256": "0bd771a8398e48aec6cb674305648a671d4a87761e069941fe143b3105dfb29a"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-file-upload.md",
+      "size": 4739,
+      "sha256": "88bfe9044f94d85843829042a1b638cd1806bd843b815cfea5f2bcbb25157304"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-ocr.md",
+      "size": 7237,
+      "sha256": "bf320890aaefbb27d6ff79e5f5b8e6214dfba7459bdc6d59f43b934d4b3e7375"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-personal-list.md",
+      "size": 8717,
+      "sha256": "5e59af3fb028f9f04c2241981998ff06616e95086aa9495bf2b239181969fbcd"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-share.md",
+      "size": 4120,
+      "sha256": "fecfc421c0d0534d638dcc637d3f8d5c759833b5502dca7f747df79da73c474e"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-tag.md",
+      "size": 3143,
+      "sha256": "81d70ebccc0b556d4579c0a1e401626ea45bb4539f675136e92f3dac5f4da742"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-transfer.md",
+      "size": 3650,
+      "sha256": "3dbd79526196b823e28321dc2203412273e8b2142c05294be9e260de4afa81f6"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-update.md",
+      "size": 12043,
+      "sha256": "9c40781ab22e45a4bbadb735d068016fe1bf13d4f81b298a7056939204ea8153"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-validation.md",
+      "size": 5891,
+      "sha256": "b2ab851a36a1d29a99c4afbe384eafe7eca8459155034542ac802ae1b1226676"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/api-reference.md",
+      "size": 7134,
+      "sha256": "0c63d193bedb8c974375f692171a9652eccba9c54c0501bd770aad969dda3d6a"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/examples.md",
+      "size": 10317,
+      "sha256": "5bc7ce5563ce6b98c124983b7b310b4d2dc574d865553fe49150a8cb1a5a5133"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/field-extraction-rules.md",
+      "size": 8113,
+      "sha256": "e7a9ef23629ae55d76f06911c07a0fe2825a99abefcbd27a7b2334668aae03bb"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/workflow.md",
+      "size": 17498,
+      "sha256": "81bcd9ae4452bbfe42fe47b374576f47c303b65fc493a8dc0a62d4f2b0d2e600"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/api-reference.md",
+      "size": 44498,
+      "sha256": "a3cfcdd9218619650c829f46d9d839eae041ec47f023d3ae88fa17eea0a97589"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/examples.md",
+      "size": 27424,
+      "sha256": "4083a4f460faa2662ff8f41d8fe7a583906819fd6f101ac498dd1ad183c47959"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/expense-subject-rules.md",
+      "size": 2749,
+      "sha256": "d47c9a89147f5d1674fc95cbb220dfa4ef251712fec5610d4203166e193ff741"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/form-fill-rules.md",
+      "size": 24403,
+      "sha256": "faab50c84b6509bf8bc1875574b311ffad413ade2d88c7e3109e1e79ffe96bcc"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/matching-rules.md",
+      "size": 9910,
+      "sha256": "0a8c59421683e6851d516d15f2233478c04ef081bdb4a83115e116192a510745"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/workflow.md",
+      "size": 29335,
+      "sha256": "a3991b36db53cdb91da0218cba29ebc79fec836301080da3cd9bf7d38beeae99"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/date_utils.py",
+      "size": 13719,
+      "sha256": "a42bd67c842d278104d7a748a336ddf06437e8f60ce910d8984e3ec68d91b4cf"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/invoice_browse_field.py",
+      "size": 12277,
+      "sha256": "46edf88fa16994744a7bd4fa66f9e1ecd12c7e7947c68551f78df82ba20a38b5"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/invoice_token_cache.mjs",
+      "size": 5648,
+      "sha256": "373f10eb5edd1fb435e8d8d1e2a542f6748bc143db89f8d4ab8680a2ad17ba8c"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/invoice_token_cache.py",
+      "size": 8573,
+      "sha256": "7f9ccc49d89cb013cadaacf40c761835a1c0fd580198fff09dd54cfc73ae62fb"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/parse_document.py",
+      "size": 4967,
+      "sha256": "d9d7af479a73b9c3058b54b10fd3fa2b7e2e29085b9da7b7268488b78228bc40"
+    },
+    {
+      "path": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/SKILL.md",
+      "size": 9723,
+      "sha256": "fd77edfd7587d309e0b485444a519f0eba5b534a00e19795a16aeadaca73cc35"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "invoice.agent.entry",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/SKILL.md",
+      "anchor": "source:SKILL.md",
+      "status": "converted",
+      "mapsToOperations": [],
+      "references": [
+        "SKILL.md",
+        "references/invoice-agent-entry.md"
+      ]
+    },
+    {
+      "id": "invoice.catalog",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/catalog.md",
+      "anchor": "source:catalog.md",
+      "status": "converted",
+      "mapsToOperations": [],
+      "references": [
+        "references/invoice-agent-entry.md"
+      ]
+    },
+    {
+      "id": "invoice.auth.token",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/get-token.md",
+      "anchor": "source:get-token.md",
+      "status": "converted",
+      "mapsToOperations": [],
+      "references": [
+        "../weaver-e10-shared/references/e10-auth-and-session.md"
+      ]
+    },
+    {
+      "id": "invoice.upload",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-file-upload.md",
+      "anchor": "source:invoice-file-upload.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.upload"
+      ],
+      "references": [
+        "references/invoice-file-upload.md"
+      ]
+    },
+    {
+      "id": "invoice.ocr.preview",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-ocr.md",
+      "anchor": "source:invoice-ocr.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.ocr.preview"
+      ],
+      "references": [
+        "references/invoice-ocr-preview.md"
+      ]
+    },
+    {
+      "id": "invoice.validate.preview",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-validation.md",
+      "anchor": "source:invoice-validation.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.validate.preview"
+      ],
+      "references": [
+        "references/invoice-validation-preview.md"
+      ]
+    },
+    {
+      "id": "invoice.import",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-all-in-one.md",
+      "anchor": "source:invoice-all-in-one.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.import.prepare",
+        "invoice.import.apply"
+      ],
+      "references": [
+        "references/invoice-import.md"
+      ]
+    },
+    {
+      "id": "invoice.add",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-add.md",
+      "anchor": "source:invoice-add.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.add.prepare",
+        "invoice.add.apply"
+      ],
+      "references": [
+        "references/invoice-add.md"
+      ]
+    },
+    {
+      "id": "invoice.update",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-update.md",
+      "anchor": "source:invoice-update.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.update.prepare",
+        "invoice.update.apply"
+      ],
+      "references": [
+        "references/invoice-update.md"
+      ]
+    },
+    {
+      "id": "invoice.delete",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-delete.md",
+      "anchor": "source:invoice-delete.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.delete.prepare",
+        "invoice.delete.apply"
+      ],
+      "references": [
+        "references/invoice-delete.md"
+      ]
+    },
+    {
+      "id": "invoice.get",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-detail.md",
+      "anchor": "source:invoice-detail.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.get"
+      ],
+      "references": [
+        "references/invoice-detail.md"
+      ]
+    },
+    {
+      "id": "invoice.download",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-download.md",
+      "anchor": "source:invoice-download.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.download"
+      ],
+      "references": [
+        "references/invoice-download.md"
+      ]
+    },
+    {
+      "id": "invoice.list.personal",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-personal-list.md",
+      "anchor": "source:invoice-personal-list.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.list"
+      ],
+      "references": [
+        "references/invoice-personal-list.md"
+      ]
+    },
+    {
+      "id": "invoice.list.enterprise",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-enterprise-list.md",
+      "anchor": "source:invoice-enterprise-list.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.enterprise.list"
+      ],
+      "references": [
+        "references/invoice-enterprise-list.md"
+      ]
+    },
+    {
+      "id": "invoice.browse-field.data",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-browse-field-data.md",
+      "anchor": "source:invoice-browse-field-data.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.browse-field.data"
+      ],
+      "references": [
+        "references/invoice-browse-field-data.md"
+      ]
+    },
+    {
+      "id": "invoice.reim.workflow",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/workflow.md",
+      "anchor": "source:workflow.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.reim.file-ocr.preview",
+        "invoice.reim.requests.list",
+        "invoice.reim.workflow.resolve",
+        "invoice.reim.form.structure",
+        "invoice.reim.row-info",
+        "invoice.reim.employee-superiors",
+        "invoice.reim.field.search"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-workflow.md"
+      ]
+    },
+    {
+      "id": "invoice.reim.flow",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/api-reference.md",
+      "anchor": "source:api-reference.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.reim.flow.create.prepare",
+        "invoice.reim.flow.create.apply",
+        "invoice.reim.flow.update.prepare",
+        "invoice.reim.flow.update.apply"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md"
+      ]
+    },
+    {
+      "id": "invoice.reim.matching",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/matching-rules.md",
+      "anchor": "source:matching-rules.md",
+      "status": "converted",
+      "mapsToOperations": [],
+      "references": [
+        "references/reim-matching-rules.md"
+      ]
+    },
+    {
+      "id": "invoice.reim.form-fill",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/form-fill-rules.md",
+      "anchor": "source:form-fill-rules.md",
+      "status": "converted",
+      "mapsToOperations": [],
+      "references": [
+        "references/reim-form-fill-rules.md"
+      ]
+    },
+    {
+      "id": "invoice.reim.expense-subject",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/expense-subject-rules.md",
+      "anchor": "source:expense-subject-rules.md",
+      "status": "converted",
+      "mapsToOperations": [],
+      "references": [
+        "references/reim-expense-subject-rules.md"
+      ]
+    },
+    {
+      "id": "invoice.reim.examples",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/examples.md",
+      "anchor": "source:examples.md",
+      "status": "converted",
+      "mapsToOperations": [],
+      "references": [
+        "references/reim-examples.md"
+      ]
+    },
+    {
+      "id": "invoice.issuing.make",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/api-reference.md",
+      "anchor": "source:api-reference.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.issuing.make.prepare",
+        "invoice.issuing.make.apply"
+      ],
+      "references": [
+        "references/invoice-issuing.md"
+      ]
+    },
+    {
+      "id": "invoice.issuing.workflow",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/workflow.md",
+      "anchor": "source:workflow.md",
+      "status": "converted",
+      "mapsToOperations": [
+        "invoice.issuing.make.prepare",
+        "invoice.issuing.make.apply"
+      ],
+      "references": [
+        "references/invoice-issuing.md"
+      ]
+    },
+    {
+      "id": "invoice.issuing.field-rules",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/field-extraction-rules.md",
+      "anchor": "source:field-extraction-rules.md",
+      "status": "converted",
+      "mapsToOperations": [],
+      "references": [
+        "references/invoice-issuing-field-rules.md"
+      ]
+    },
+    {
+      "id": "invoice.issuing.examples",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/examples.md",
+      "anchor": "source:examples.md",
+      "status": "converted",
+      "mapsToOperations": [],
+      "references": [
+        "references/invoice-issuing-examples.md"
+      ]
+    },
+    {
+      "id": "invoice.share",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-share.md",
+      "anchor": "source:invoice-share.md",
+      "status": "withheld",
+      "mapsToOperations": [],
+      "references": [
+        "references/invoice-disabled-capabilities.md"
+      ]
+    },
+    {
+      "id": "invoice.transfer",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-transfer.md",
+      "anchor": "source:invoice-transfer.md",
+      "status": "withheld",
+      "mapsToOperations": [],
+      "references": [
+        "references/invoice-disabled-capabilities.md"
+      ]
+    },
+    {
+      "id": "invoice.tag",
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-tag.md",
+      "anchor": "source:invoice-tag.md",
+      "status": "withheld",
+      "mapsToOperations": [],
+      "references": [
+        "references/invoice-disabled-capabilities.md"
+      ]
+    }
+  ],
+  "operationImpact": {
+    "invoice.list": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.list.personal"
+      ],
+      "references": [
+        "references/invoice-personal-list.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "page_size",
+        "start_pos",
+        "req_type",
+        "mask",
+        "mext",
+        "content",
+        "types",
+        "date_begin",
+        "date_end",
+        "create_tm_begin",
+        "create_tm_end",
+        "payer_company",
+        "buyer_company",
+        "payer_taxno",
+        "buyer_taxno",
+        "code",
+        "number",
+        "total_begin",
+        "total_end",
+        "attribute",
+        "sreim",
+        "valids",
+        "sources",
+        "is_lian",
+        "is_modify",
+        "tag_ids",
+        "tag_condition_type",
+        "sorts",
+        "bill_type"
+      ]
+    },
+    "invoice.enterprise.list": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.list.enterprise"
+      ],
+      "references": [
+        "references/invoice-enterprise-list.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "page_size",
+        "start_pos",
+        "req_type",
+        "mask",
+        "mext",
+        "content",
+        "types",
+        "date_begin",
+        "date_end",
+        "create_tm_begin",
+        "create_tm_end",
+        "payer_company",
+        "buyer_company",
+        "payer_taxno",
+        "buyer_taxno",
+        "code",
+        "number",
+        "total_begin",
+        "total_end",
+        "attribute",
+        "sreim",
+        "valids",
+        "sources",
+        "is_lian",
+        "is_modify",
+        "tag_ids",
+        "tag_condition_type",
+        "sorts",
+        "bill_type"
+      ]
+    },
+    "invoice.get": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.get"
+      ],
+      "references": [
+        "references/invoice-detail.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "fid",
+        "number"
+      ]
+    },
+    "invoice.upload": {
+      "risk": "external-artifact",
+      "sourceChunks": [
+        "invoice.upload"
+      ],
+      "references": [
+        "references/invoice-file-upload.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "file",
+        "url"
+      ]
+    },
+    "invoice.ocr.preview": {
+      "risk": "read-with-upload",
+      "sourceChunks": [
+        "invoice.ocr.preview"
+      ],
+      "references": [
+        "references/invoice-ocr-preview.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "file",
+        "url",
+        "upload",
+        "is_save"
+      ]
+    },
+    "invoice.validate.preview": {
+      "risk": "external-read",
+      "sourceChunks": [
+        "invoice.validate.preview"
+      ],
+      "references": [
+        "references/invoice-validation-preview.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "fid",
+        "scope"
+      ]
+    },
+    "invoice.import.prepare": {
+      "risk": "read-before-write",
+      "sourceChunks": [
+        "invoice.import"
+      ],
+      "references": [
+        "references/invoice-import.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "file",
+        "url",
+        "validate",
+        "syncToOa",
+        "fieldKey",
+        "fieldValue",
+        "filedMap"
+      ],
+      "jsonObjectFields": [
+        "filedMap"
+      ]
+    },
+    "invoice.import.apply": {
+      "risk": "high-risk-write",
+      "sourceChunks": [
+        "invoice.import"
+      ],
+      "references": [
+        "references/invoice-import.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "file",
+        "url",
+        "validate",
+        "syncToOa",
+        "fieldKey",
+        "fieldValue",
+        "filedMap",
+        "continuation",
+        "confirm"
+      ],
+      "jsonObjectFields": [
+        "filedMap"
+      ]
+    },
+    "invoice.add.prepare": {
+      "risk": "read-before-write",
+      "sourceChunks": [
+        "invoice.add"
+      ],
+      "references": [
+        "references/invoice-add.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "info",
+        "scope"
+      ]
+    },
+    "invoice.add.apply": {
+      "risk": "high-risk-write",
+      "sourceChunks": [
+        "invoice.add"
+      ],
+      "references": [
+        "references/invoice-add.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "info",
+        "continuation",
+        "confirm"
+      ]
+    },
+    "invoice.update.prepare": {
+      "risk": "read-before-write",
+      "sourceChunks": [
+        "invoice.update"
+      ],
+      "references": [
+        "references/invoice-update.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "fid",
+        "scope",
+        "changes"
+      ]
+    },
+    "invoice.update.apply": {
+      "risk": "high-risk-write",
+      "sourceChunks": [
+        "invoice.update"
+      ],
+      "references": [
+        "references/invoice-update.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "continuation",
+        "confirm"
+      ]
+    },
+    "invoice.download": {
+      "risk": "local-file-write",
+      "sourceChunks": [
+        "invoice.download"
+      ],
+      "references": [
+        "references/invoice-download.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "fid",
+        "fileId",
+        "output"
+      ]
+    },
+    "invoice.delete.prepare": {
+      "risk": "read-before-write",
+      "sourceChunks": [
+        "invoice.delete"
+      ],
+      "references": [
+        "references/invoice-delete.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "fid",
+        "scope"
+      ]
+    },
+    "invoice.delete.apply": {
+      "risk": "high-risk-write",
+      "sourceChunks": [
+        "invoice.delete"
+      ],
+      "references": [
+        "references/invoice-delete.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "continuation",
+        "confirm"
+      ]
+    },
+    "invoice.browse-field.data": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.browse-field.data"
+      ],
+      "references": [
+        "references/invoice-browse-field-data.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "fid",
+        "fids",
+        "detail"
+      ]
+    },
+    "invoice.reim.file-ocr.preview": {
+      "risk": "read-with-upload",
+      "sourceChunks": [
+        "invoice.reim.workflow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "fileId",
+        "fileIds"
+      ]
+    },
+    "invoice.reim.requests.list": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.reim.workflow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "pageNo",
+        "pageSize",
+        "requestname",
+        "cusCreateDateStart",
+        "cusCreateDateEnd"
+      ]
+    },
+    "invoice.reim.workflow.resolve": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.reim.workflow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "requestIds"
+      ]
+    },
+    "invoice.reim.form.structure": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.reim.workflow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "workflowId",
+        "nodeId"
+      ]
+    },
+    "invoice.reim.row-info": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.reim.workflow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "invoiceId",
+        "requestid",
+        "cdzt"
+      ]
+    },
+    "invoice.reim.employee-superiors": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.reim.workflow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": []
+    },
+    "invoice.reim.field.search": {
+      "risk": "read",
+      "sourceChunks": [
+        "invoice.reim.workflow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md"
+      ],
+      "requiresConfirmationChain": false,
+      "inputFields": [
+        "keywords",
+        "fieldId",
+        "workflowId",
+        "nodeId"
+      ]
+    },
+    "invoice.reim.flow.create.prepare": {
+      "risk": "read-before-write",
+      "sourceChunks": [
+        "invoice.reim.flow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md",
+        "references/reim-form-fill-rules.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "work_flow_id",
+        "mainFormId",
+        "request_name",
+        "main_fields",
+        "detail_rows",
+        "need_user_confirm",
+        "unable_to_fill"
+      ]
+    },
+    "invoice.reim.flow.create.apply": {
+      "risk": "high-risk-write",
+      "sourceChunks": [
+        "invoice.reim.flow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md",
+        "references/reim-form-fill-rules.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "work_flow_id",
+        "mainFormId",
+        "request_name",
+        "main_fields",
+        "detail_rows",
+        "need_user_confirm",
+        "unable_to_fill",
+        "continuation",
+        "confirm"
+      ]
+    },
+    "invoice.reim.flow.update.prepare": {
+      "risk": "read-before-write",
+      "sourceChunks": [
+        "invoice.reim.flow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md",
+        "references/reim-form-fill-rules.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "requestId",
+        "mainFormId",
+        "main_fields",
+        "detail_rows",
+        "deleteDetailRows",
+        "need_user_confirm",
+        "unable_to_fill"
+      ]
+    },
+    "invoice.reim.flow.update.apply": {
+      "risk": "high-risk-write",
+      "sourceChunks": [
+        "invoice.reim.flow"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md",
+        "references/reim-form-fill-rules.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "requestId",
+        "mainFormId",
+        "main_fields",
+        "detail_rows",
+        "deleteDetailRows",
+        "need_user_confirm",
+        "unable_to_fill",
+        "continuation",
+        "confirm"
+      ]
+    },
+    "invoice.issuing.make.prepare": {
+      "risk": "read-before-write",
+      "sourceChunks": [
+        "invoice.issuing.make",
+        "invoice.issuing.workflow"
+      ],
+      "references": [
+        "references/invoice-issuing-field-rules.md",
+        "references/invoice-issuing.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "mode",
+        "payload"
+      ]
+    },
+    "invoice.issuing.make.apply": {
+      "risk": "high-risk-write",
+      "sourceChunks": [
+        "invoice.issuing.make",
+        "invoice.issuing.workflow"
+      ],
+      "references": [
+        "references/invoice-issuing-field-rules.md",
+        "references/invoice-issuing.md"
+      ],
+      "requiresConfirmationChain": true,
+      "inputFields": [
+        "payload",
+        "continuation",
+        "confirm"
+      ]
+    }
+  },
+  "withheldOperations": [
+    {
+      "name": "invoice.share",
+      "reason": "新增源资料给出 /api/inc/shareUsers 请求体，但仍缺少接收人 appid/cid/uid 的 CLI 解析来源和共享关系回查契约。"
+    },
+    {
+      "name": "invoice.transfer",
+      "reason": "新增源资料给出 /api/inc/transferFpyUser 请求体，但转让会改变发票持有人，仍缺少接收人侧归属回查契约。"
+    },
+    {
+      "name": "invoice.tag",
+      "reason": "新增源资料给出 /api/my/tag/common/batchAddEntityTag 请求体，但仍缺少标签定义查询、当前标签关系回查和移除/替换语义。"
+    }
+  ],
+  "sourceCoverage": [
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/agents/openai.yaml",
+      "status": "not-applicable",
+      "reason": "运行时认证和 agent 配置由 weaver-work-cli/共享 skill 托管，不转换为业务 operation。"
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/catalog.md",
+      "status": "converted",
+      "operations": [],
+      "references": [
+        "references/invoice-agent-entry.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/get-token.md",
+      "status": "converted",
+      "operations": [],
+      "references": [
+        "../weaver-e10-shared/references/e10-auth-and-session.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-add.md",
+      "status": "converted",
+      "operations": [
+        "invoice.add.apply",
+        "invoice.add.prepare"
+      ],
+      "references": [
+        "references/invoice-add.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-all-in-one.md",
+      "status": "converted",
+      "operations": [
+        "invoice.import.apply",
+        "invoice.import.prepare"
+      ],
+      "references": [
+        "references/invoice-import.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-browse-field-data.md",
+      "status": "converted",
+      "operations": [
+        "invoice.browse-field.data"
+      ],
+      "references": [
+        "references/invoice-browse-field-data.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-delete.md",
+      "status": "converted",
+      "operations": [
+        "invoice.delete.apply",
+        "invoice.delete.prepare"
+      ],
+      "references": [
+        "references/invoice-delete.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-detail.md",
+      "status": "converted",
+      "operations": [
+        "invoice.get"
+      ],
+      "references": [
+        "references/invoice-detail.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-download.md",
+      "status": "converted",
+      "operations": [
+        "invoice.download"
+      ],
+      "references": [
+        "references/invoice-download.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-enterprise-list.md",
+      "status": "converted",
+      "operations": [
+        "invoice.enterprise.list"
+      ],
+      "references": [
+        "references/invoice-enterprise-list.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-file-upload.md",
+      "status": "converted",
+      "operations": [
+        "invoice.upload"
+      ],
+      "references": [
+        "references/invoice-file-upload.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-ocr.md",
+      "status": "converted",
+      "operations": [
+        "invoice.ocr.preview"
+      ],
+      "references": [
+        "references/invoice-ocr-preview.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-personal-list.md",
+      "status": "converted",
+      "operations": [
+        "invoice.list"
+      ],
+      "references": [
+        "references/invoice-personal-list.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-share.md",
+      "status": "withheld",
+      "operations": [],
+      "references": [
+        "references/invoice-disabled-capabilities.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-tag.md",
+      "status": "withheld",
+      "operations": [],
+      "references": [
+        "references/invoice-disabled-capabilities.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-transfer.md",
+      "status": "withheld",
+      "operations": [],
+      "references": [
+        "references/invoice-disabled-capabilities.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-update.md",
+      "status": "converted",
+      "operations": [
+        "invoice.update.apply",
+        "invoice.update.prepare"
+      ],
+      "references": [
+        "references/invoice-update.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/invoice-validation.md",
+      "status": "converted",
+      "operations": [
+        "invoice.validate.preview"
+      ],
+      "references": [
+        "references/invoice-validation-preview.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/api-reference.md",
+      "status": "converted",
+      "operations": [
+        "invoice.issuing.make.apply",
+        "invoice.issuing.make.prepare"
+      ],
+      "references": [
+        "references/invoice-issuing.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/examples.md",
+      "status": "converted",
+      "operations": [],
+      "references": [
+        "references/invoice-issuing-examples.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/field-extraction-rules.md",
+      "status": "converted",
+      "operations": [],
+      "references": [
+        "references/invoice-issuing-field-rules.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/issuing/workflow.md",
+      "status": "converted",
+      "operations": [
+        "invoice.issuing.make.apply",
+        "invoice.issuing.make.prepare"
+      ],
+      "references": [
+        "references/invoice-issuing.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/api-reference.md",
+      "status": "converted",
+      "operations": [
+        "invoice.reim.flow.create.apply",
+        "invoice.reim.flow.create.prepare",
+        "invoice.reim.flow.update.apply",
+        "invoice.reim.flow.update.prepare"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-api-reference.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/examples.md",
+      "status": "converted",
+      "operations": [],
+      "references": [
+        "references/reim-examples.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/expense-subject-rules.md",
+      "status": "converted",
+      "operations": [],
+      "references": [
+        "references/reim-expense-subject-rules.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/form-fill-rules.md",
+      "status": "converted",
+      "operations": [],
+      "references": [
+        "references/reim-form-fill-rules.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/matching-rules.md",
+      "status": "converted",
+      "operations": [],
+      "references": [
+        "references/reim-matching-rules.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/references/reim/workflow.md",
+      "status": "converted",
+      "operations": [
+        "invoice.reim.employee-superiors",
+        "invoice.reim.field.search",
+        "invoice.reim.file-ocr.preview",
+        "invoice.reim.form.structure",
+        "invoice.reim.requests.list",
+        "invoice.reim.row-info",
+        "invoice.reim.workflow.resolve"
+      ],
+      "references": [
+        "references/invoice-reim.md",
+        "references/reim-workflow.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/date_utils.py",
+      "status": "converted",
+      "references": [
+        "references/reim-workflow.md",
+        "references/invoice-issuing-field-rules.md"
+      ],
+      "reason": "日期处理规则已内化到报销/开票 reference 和 CLI 入参校验。"
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/invoice_browse_field.py",
+      "status": "converted",
+      "operations": [
+        "invoice.browse-field.data"
+      ],
+      "references": [
+        "references/invoice-browse-field-data.md"
+      ]
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/invoice_token_cache.mjs",
+      "status": "not-applicable",
+      "reason": "运行时认证和 agent 配置由 weaver-work-cli/共享 skill 托管，不转换为业务 operation。"
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/invoice_token_cache.py",
+      "status": "not-applicable",
+      "reason": "运行时认证和 agent 配置由 weaver-work-cli/共享 skill 托管，不转换为业务 operation。"
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/scripts/parse_document.py",
+      "status": "converted",
+      "references": [
+        "references/invoice-issuing-field-rules.md"
+      ],
+      "reason": "附件字段提取流程转换为开票字段规则，实际解析需用户确认后由 Agent 执行。"
+    },
+    {
+      "sourcePath": "weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong/SKILL.md",
+      "status": "converted",
+      "operations": [],
+      "references": [
+        "SKILL.md",
+        "references/invoice-agent-entry.md"
+      ]
+    },
+    {
+      "sourcePath": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-disabled-capabilities.md",
+      "status": "withheld",
+      "operations": [
+        "invoice.share",
+        "invoice.transfer",
+        "invoice.tag"
+      ],
+      "references": [
+        "references/invoice-disabled-capabilities.md"
+      ],
+      "reason": "共享、转让、标签已有接口线索但缺稳定人员/标签来源和写后回查；客户查询与红字发票接口在修正资料包中无来源。"
+    }
+  ],
+  "artifactBaseline": {
+    "aggregateSha256": "4c76d2e5f500e89e02213a98ffc2eb80948ed3eae5d4823a9cd834a6427302da",
+    "files": [
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-add.md",
+        "size": 835,
+        "sha256": "455a796c590f9ad91adf7993b706699153ba07773e31863139f0bff36be75a59"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-agent-entry.md",
+        "size": 2089,
+        "sha256": "1e2436dd65218e433e3d9e7f1cca2d71f40dc008b1f0c66fa3acb033bdfb63a6"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-browse-field-data.md",
+        "size": 7528,
+        "sha256": "296e2823414c204702a95f409a9d64ada0ff7b3ba0c3d7bfa6548203e69544e2"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-delete.md",
+        "size": 889,
+        "sha256": "40dc7354f20c148d575f998faf523dac93046e3144a28b0d8fe6a2cfaf556d2b"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-detail.md",
+        "size": 1312,
+        "sha256": "c327c11870b812da1c9733e7b21a7dd13ffdf9e0b540fa8af0264e10ff3ebca3"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-disabled-capabilities.md",
+        "size": 1861,
+        "sha256": "9b19e6bd53b100cacbe40a2fe4c9d0ac2253455f7d0f60c56f0f5d3fab0a81ce"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-download.md",
+        "size": 1097,
+        "sha256": "5398af2c0a9651d8e5761cead2851d8b9eefb8a32f77bf5325a16495043b5cd3"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-enterprise-list.md",
+        "size": 2166,
+        "sha256": "502eeb7481c51e6ea6407b84edbee0f373f4d6534d485e13c9ec236c80df81d8"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-file-upload.md",
+        "size": 1489,
+        "sha256": "b987313f16f12ac84e10622ad39002cdddb3e5ba35da1194096f56e9f6a592cc"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-import.md",
+        "size": 3515,
+        "sha256": "6540061caf0c736b8d3c061d3663bc0012567244b81b3eebf6b1cdd21286aa1c"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-issuing-examples.md",
+        "size": 2378,
+        "sha256": "ff61328d9f326d1495c9ad144d13dea416d1615e36be41819b1d6b304e30db32"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-issuing-field-rules.md",
+        "size": 4303,
+        "sha256": "bb5f34edbd6c0d3f2dc03e7b6d46a97f063bade8cd7af55241ab7ff72197a49c"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-issuing.md",
+        "size": 5548,
+        "sha256": "0b791bb103cfc8f0a8a10d1c4e6e56536ee55ab0a1d0d1ef14990a5bf7178bc3"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-ocr-preview.md",
+        "size": 1780,
+        "sha256": "4536404ab647237a395e32a4d4ffe21ec7f962bdb25dd74d521994edbde8c329"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-personal-list.md",
+        "size": 2511,
+        "sha256": "ff02ef5fe064ba8321706c16ff2fb7c306def5f166f6998825d972adcc5211cd"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-reim.md",
+        "size": 5230,
+        "sha256": "e2aba23b502ec41efbd0520d957bd5da8c801b0a3fd42c42c157982408ac541d"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-update.md",
+        "size": 1171,
+        "sha256": "ef594e34f6afa577b18648e30a3010b4f9dc5dd0c62be1a10efb4859b28cfc3b"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/invoice-validation-preview.md",
+        "size": 906,
+        "sha256": "1212eac3635c62168bc9d15e8f16c70e678d91841a42d18ad032efaf47b8865a"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/reim-api-reference.md",
+        "size": 46008,
+        "sha256": "8b14b83771131173f327b7f0428b83d1a0eddf02909d90de428f19b2dc1b64bc"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/reim-examples.md",
+        "size": 30185,
+        "sha256": "c969182a81c153fb1cf77365b4ccb3742f6ae977203b56185d0389aeff61238a"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/reim-expense-subject-rules.md",
+        "size": 2774,
+        "sha256": "6d8ee0d702e15430823b8d1376df9793f6e5a784fd7fb3f7d701b4c18520f3e0"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/reim-form-fill-rules.md",
+        "size": 25039,
+        "sha256": "ba34b493a3a3b3986d6cdf4c82e29401187035120511d4466fb76bf30c0d4ad7"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/reim-matching-rules.md",
+        "size": 10015,
+        "sha256": "def6852d251048f6a527fce20bd9a0eab937fc6f51357954266954e6b6696e61"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/references/reim-workflow.md",
+        "size": 20889,
+        "sha256": "a7ecb96713a944f063b9ebc1db7127a30eca5531f8c79f821a02d043d92cf13f"
+      },
+      {
+        "path": "connector-skills/weaver-e10-yepiaotong-connector/SKILL.md",
+        "size": 17669,
+        "sha256": "77aa0aa434724ab5e4f2aeeff5bd81c5c5b2162cef3d28080af3b024ed7d64d0"
+      },
+      {
+        "path": "docs/_catalog.md",
+        "size": 4203,
+        "sha256": "243ffcf4992ac592c8f4c34b594dfd33413156c9d5f34da4b68d72e1f96760e8"
+      },
+      {
+        "path": "docs/agent-invoice.md",
+        "size": 4685,
+        "sha256": "a59a73ced8892f991508d6c881441edd9d047699dc3ab5b9d7c0ee858ff51067"
+      },
+      {
+        "path": "docs/invoice.md",
+        "size": 8427,
+        "sha256": "ac4a86f302dfb6cb86cfd0ce09cc4392fb0ee0608e008bfdf4e201e993f74f8d"
+      },
+      {
+        "path": "skill-template/business-info.json",
+        "size": 5906,
+        "sha256": "0f375a6298fe3f2dc2828385e991854792f57b297225ab91630de04d7b8e3521"
+      },
+      {
+        "path": "skill-template/domains/yepiaotong.md",
+        "size": 2493,
+        "sha256": "6726bb118b0316eca20e09eb470f2efd2a9ff6490dfb28ffae7f6f42b55e7084"
+      },
+      {
+        "path": "src/shortcuts/invoice/continuation.ts",
+        "size": 3269,
+        "sha256": "bccadf66f0bc63be348f60e8094184f220a5149ca1ef583553b4dfe0af18a092"
+      },
+      {
+        "path": "src/shortcuts/invoice/errors.ts",
+        "size": 2492,
+        "sha256": "8a7bc896517fc7df0cf4cc95f4f65d6934bda3070ce1eaac1ef60e7d22c69b54"
+      },
+      {
+        "path": "src/shortcuts/invoice/host.ts",
+        "size": 18439,
+        "sha256": "1346531bb2556aa9b95f8a7d033101c80cd5092cdd81e1f9d5c45eaaaca57913"
+      },
+      {
+        "path": "src/shortcuts/invoice/index.ts",
+        "size": 13917,
+        "sha256": "975e49a5a3dad0eb9c50aea80505061a906ef8f82d0696aab81f1e16dee97246"
+      },
+      {
+        "path": "src/shortcuts/invoice/manifest.ts",
+        "size": 20891,
+        "sha256": "54d2ba85896607d69b12a9608da8599d340d52022f0ea1c2d6c1da96f2ed2f20"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations.ts",
+        "size": 652,
+        "sha256": "44fa62f1cc837a047226c1d043828a16c2bce16169b39a386150bf5263ee37d6"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/add.ts",
+        "size": 4848,
+        "sha256": "3123f3d52d16665f530a275b3ce6db93425a4f6b05d3d082379c856d721e7ad2"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/browse-field.ts",
+        "size": 880,
+        "sha256": "1bb597a3fa236716e86d7fa1ba87242135f895d031ec750d4dc5364ae9176e03"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/delete.ts",
+        "size": 4754,
+        "sha256": "e6fa37a60ed1e9e0d3ee49f126f887928d4da7f984fb492b01364705760015bb"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/download.ts",
+        "size": 1178,
+        "sha256": "119e295d946174e9cfa1bcaf46efa89548b720402039426ce1e8600aec0c3aea"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/get.ts",
+        "size": 448,
+        "sha256": "0f483e9d73e8a9ad9591aa35b46c6fba355b0b3a98b47d2cce9f9fc1d57f3149"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/import.ts",
+        "size": 6994,
+        "sha256": "686349cf85ae986bc58a6099f9f37cc215a1fa08a0269e0e412c92a1e784e138"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/issuing.ts",
+        "size": 9442,
+        "sha256": "79126500d97101c54ca678b35ea45551c32683216ad242faceaf36cd3ae6cbc6"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/list.ts",
+        "size": 451,
+        "sha256": "d8abe024462be56f71c55aa0626c9fcd01aef8ba65b86247b05fa1a17be7a894"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/ocr-preview.ts",
+        "size": 1865,
+        "sha256": "b3002c61465e2cd9794953d6ed9a5419399f80ac81946f8cf63a70590504a9ed"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/registry.ts",
+        "size": 3574,
+        "sha256": "cff25207df9ae8ce18f514d23e92110f076b31806349699fe8db6e348278a775"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/reim.ts",
+        "size": 20291,
+        "sha256": "e75b5cc10b3372665f0ce6eaf47a61606be1e411b106ae27eaec091d8c0a94f8"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/shared.ts",
+        "size": 38101,
+        "sha256": "1655c3be39452af10dc876a0f9bbf6e0c2ed35588c53f4b1b1c673b1fdaabad0"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/types.ts",
+        "size": 515,
+        "sha256": "70398ce419e1ffd40477f0e2be9b44523f15b14666e62a2b260132fda2ab221e"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/update.ts",
+        "size": 5026,
+        "sha256": "34bad95e379ce15b2cbe5e955387beb51302ca6b91b252c4d7b646b477e1441e"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/upload.ts",
+        "size": 543,
+        "sha256": "b353a430d79c88b7a9ccaef16b7ad9b3578dab5fd528b2ffb847b00bf50dd2cf"
+      },
+      {
+        "path": "src/shortcuts/invoice/operations/validate-preview.ts",
+        "size": 1678,
+        "sha256": "6bfeccfe07690ea1babb9d57fa09a52a74cdfe3a75ce53781c169941a1f0977e"
+      },
+      {
+        "path": "test/business/invoice-host.test.ts",
+        "size": 8834,
+        "sha256": "d959a51a25c73ab5ffb9bd348af00eabe1b7ab417e67a3fdec583f7962c9a18a"
+      },
+      {
+        "path": "test/business/invoice-operations.test.ts",
+        "size": 33089,
+        "sha256": "0711d7c0735058d15976c57315520c003f461f53b7fe476f674cf450163f38d4"
+      },
+      {
+        "path": "test/skills/layout.test.ts",
+        "size": 28801,
+        "sha256": "ec9c80e301e256e0f104690a9721ed276bb7f8fcf4e6e088801d51390e30aeec"
+      }
+    ]
+  },
+  "notes": [
+    "本 manifest 使用修正后的 weaver-e10-yepiaotong 技能资料包重新生成，源根为 weaver-interface/backend/business-apis/inc/weaver-e10-yepiaotong。",
+    "本次扫描移除旧来源带入的 invoice.customer.* 与 invoice.red.*，因为修正资料包没有客户档案查询或红字发票红冲接口文档。",
+    "invoice.import.prepare/apply 对应 invoice-all-in-one.md；filedMap 在 inputSchema 中保留 JSON object，仅在 multipart 提交前序列化。",
+    "invoice-share、invoice-transfer、invoice-tag 仍暂缓暴露，需要补稳定人员/标签来源、确认链和写后回查契约。"
+  ]
+}

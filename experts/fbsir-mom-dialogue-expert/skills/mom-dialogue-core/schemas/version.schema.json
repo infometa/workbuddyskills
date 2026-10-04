@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/version/2.0",
+  "title": "Artifact Version Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version_id", "object_type", "object_id", "version", "file_path", "sha256", "created_at", "status"],
+  "properties": {
+    "version_id": {"type": "string", "pattern": "^VER-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "object_type": {"enum": ["story", "answer", "chapter", "export", "other"]},
+    "object_id": {"type": "string"},
+    "version": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "file_path": {"type": "string", "minLength": 1},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "created_at": {"type": "string"},
+    "status": {"enum": ["draft", "confirmed", "locked", "superseded"]},
+    "notes": {"type": "string"}
+  }
+}

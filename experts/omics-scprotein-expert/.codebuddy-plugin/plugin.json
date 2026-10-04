@@ -1,7 +1,7 @@
 {
   "name": "omics-scprotein-expert",
   "version": "1.0.0",
-  "description": "Tencent Health scPROTEIN Single-Cell Proteomics Modeling Expert - specializing in peptide-level uncertainty quantification and cell-level embedding learning using GNN-based foundation model collection",
+  "description": "Tencent scPROTEIN representation model for peptide uncertainty estimation, batch effect denoising and cell type annotation of single-cell proteomics.",
   "author": {
     "name": "Tencent Health Omics Team",
     "email": "omics@tencent.com"
@@ -15,49 +15,49 @@
     "./skills/scprotein-collection-skill"
   ],
   "displayName": {
-    "en": "scPROTEIN Single-Cell Proteomics Expert",
-    "zh": "腾讯scPROTEIN单细胞蛋白组建模专家"
+    "en": "omics-expert",
+    "zh": "组小学"
   },
   "profession": {
-    "en": "scPROTEIN Single-Cell Proteomics Expert",
+    "en": "Tencent scPROTEIN Single-Cell Proteomics Modeling Expert",
     "zh": "腾讯scPROTEIN单细胞蛋白组建模专家"
   },
   "displayDescription": {
-    "en": "Expert in scPROTEIN GNN-based single-cell proteomics model, providing peptide uncertainty quantification and cell embedding services",
+    "en": "Tencent scPROTEIN representation model for peptide uncertainty estimation, batch effect denoising and cell type annotation of single-cell proteomics.",
     "zh": "腾讯 scPROTEIN表征模型，实现对单细胞蛋白组的多肽不确定性估计，去除批次效应噪声以及单细胞蛋白组的细胞类型注释"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "04-DataAI",
   "defaultInitPrompt": {
-    "en": "What can this expert do for me?",
-    "zh": "这个专家能帮我做什么"
+    "zh": "按默认参数运行 Stage1 肽级不确定性定量，并给我不确定性分布图和低置信肽段复核清单",
+    "en": "Run Stage1 peptide-level uncertainty quantification with default parameters, and give me uncertainty distribution map and low-confidence peptide review checklist"
   },
   "tags": [
     {
-      "en": "Uncertainty Estimation",
-      "zh": "不确定性估计"
+      "zh": "不确定性估计",
+      "en": "Uncertainty Estimation"
     },
     {
-      "en": "Cell Type Annotation",
-      "zh": "细胞类型注释"
+      "zh": "细胞类型注释",
+      "en": "Cell Type Annotation"
     },
     {
-      "en": "Batch Effect Removal & Data Denoising",
-      "zh": "去除批次效应和数据噪声"
+      "zh": "去除批次效应和数据噪声",
+      "en": "Batch Effect Removal and Data Denoising"
     }
   ],
   "quickPrompts": [
     {
-      "en": "What can this expert do for me?",
-      "zh": "这个专家能帮我做什么"
+      "zh": "按默认参数运行 Stage1 肽级不确定性定量，并给我不确定性分布图和低置信肽段复核清单",
+      "en": "Run Stage1 peptide-level uncertainty quantification with default parameters, and give me uncertainty distribution map and low-confidence peptide review checklist"
     },
     {
-      "en": "Evaluate peptide-level uncertainty quantification, use default template",
-      "zh": "评估肽级不确定性定量，使用默认模版"
+      "zh": "衔接 Stage1 结果运行 Stage2 细胞嵌入（默认参数），用 t-SNE 可视化细胞分群并推荐聚类数",
+      "en": "Connect Stage1 results to run Stage2 cell embedding (default parameters), visualize cell clustering with t-SNE and recommend cluster count"
     },
     {
-      "en": "Query task status",
-      "zh": "查询任务状态"
+      "zh": "汇总 Stage1 和 Stage2 结果，生成交互式 HTML 可视化报告（概览卡片、t-SNE 分群、不确定性分布、Top20 复核表、热图、聚类质量）并打开预览；结果缺失则按默认参数先跑全流程",
+      "en": "Summarize Stage1 and Stage2 results, generate interactive HTML visualization report (overview cards, t-SNE clustering, uncertainty distribution, Top20 review table, heatmap, clustering quality) and open preview; if results are missing, run the full process with default parameters first"
     }
   ],
   "plugin": "omics-scprotein-expert"

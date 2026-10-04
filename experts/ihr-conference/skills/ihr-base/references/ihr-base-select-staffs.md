@@ -76,7 +76,7 @@ ihr-cli base +selectStaffs --searchKeyword "张三" --output-file /tmp/ihr_base_
 
 ## 路由规则
 
-CLI 根据当前 profile 的 `baseUrl` 自动选择产品链路。Agent 只调用 `ihr-cli base +selectStaffs`，不硬编码或暴露内部 URL。
+CLI 根据当前 profile 的产品类型自动选择产品链路。Agent 只调用 `ihr-cli base +selectStaffs`，不硬编码或暴露内部 URL。
 
 ## 输出结果
 
@@ -111,8 +111,7 @@ CLI 统一输出：
 |---------|---------|---------|
 | `--pageNo 必须大于等于 1` | 页码小于 1 | 传入 `--pageNo 1` 或更大的整数 |
 | `--pageSize 取值范围必须为 1-100` | 每页数量越界 | 传入 `1` 到 `100` 之间的整数 |
-| 配置错误 | 尚未初始化 CLI 配置 | 先执行 `ihr-cli config init --base-url <url>` |
-| 未登录 | 当前 profile 没有 token | 先执行 `ihr-cli auth login --api-token-stdin` |
+| 配置或登录错误 | CLI 返回 `CONFIG_ERROR` / `AUTH_REQUIRED` / `AUTH_EXPIRED` / `CREDENTIAL_MISSING` | 回到 [ihr-shared](../../ihr-shared/SKILL.md)，只解释结构化错误与一次恢复边界；本业务 reference 不维护安装、配置或登录命令 |
 | 网络请求失败 | 服务不可达 | 检查服务地址与网络连通性 |
 
 ## 提示

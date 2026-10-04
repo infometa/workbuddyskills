@@ -1,7 +1,7 @@
 # TextIn AppKey Setup
 
-This page covers the legacy standalone AppKey flow. For Device OAuth, browser
-PKCE, and WorkBuddy login, use [authentication.md](authentication.md).
+This page covers the legacy standalone AppKey flow. For Device OAuth and browser
+PKCE, use [authentication.md](authentication.md).
 
 ## When to Configure
 
@@ -11,8 +11,10 @@ PKCE, and WorkBuddy login, use [authentication.md](authentication.md).
 
 ## Purchase Paid Credits
 
-Purchase or recharge paid PDF-to-Markdown credits at the
-[TextIn xParse purchase page](https://www.textin.com/market/chager/pdf_to_markdown).
+Purchase or recharge paid PDF-to-Markdown credits through the account's regional
+portal. When the current service returns an `upgrade_url`, use that exact URL;
+otherwise contact the account's regional support. Never reuse a purchase URL
+from another service region.
 Purchasing credits or configuring credentials does not authorize automatic paid
 usage. Run the paid API only when the user explicitly selects `--api paid`.
 
@@ -24,7 +26,10 @@ usage. Run the paid API only when the user explicitly selects `--api paid`.
 xparse-cli auth app-key
 ```
 
-Follow the prompts to enter your `APP_ID` and `SECRET_CODE` from [TextIn Console](https://www.textin.com/console/dashboard/setting). Credentials are saved to `~/.xparse-cli/config.yaml`. Do not use this flow to collect credentials inside WorkBuddy; reconnect the Connector instead.
+Follow the prompts to enter your `APP_ID` and `SECRET_CODE` from the TextIn
+Console associated with the current region and account. Credentials are saved
+to `~/.xparse-cli/config.yaml`. Do not collect credentials in the conversation;
+the user must enter them directly in the local CLI prompt.
 
 Bare `xparse-cli auth` also exposes this option from its terminal menu. For
 scripts and piped input, bare `auth` preserves the previous direct AppKey
@@ -54,6 +59,6 @@ For all error codes and recovery actions, see [error-handling.md](error-handling
 
 ## References
 
-- [TextIn xParse purchase page](https://www.textin.com/market/chager/pdf_to_markdown)
-- [TextIn Console](https://www.textin.com/console/dashboard/setting)
 - [TextIn Documentation](https://docs.textin.com/)
+- [Authentication](authentication.md)
+- [Structured error handling](error-handling.md)

@@ -318,6 +318,9 @@ PAT 拿不到。话术：
 不想现在折腾就告诉我。
 ```
 
+> **地址铁律**：太湖 PAT 申请页**只有** `https://tai.it.woa.com/user/pat` 这一个地址，上面话术里的 URL 必须**逐字照抄**。
+> `tai.woa.com` / `mcp.woa.com` / `taihu.woa.com` / path 写成 `/user/token` 都是**不存在的错误地址**，严禁凭"太湖"二字自己推测拼接。记不准就不给链接，也绝不许编一个看起来合理的。
+
 **用户给了 PAT 后**：LLM 直接 Read/Edit mcp.json 写入 QLearning / km 配置，引导信任；招活MCP 引导走一键授权。
 
 > 严禁在 QA 路径下小Q 没装时凭训练数据兜底答政策类问题——见 §6.1。

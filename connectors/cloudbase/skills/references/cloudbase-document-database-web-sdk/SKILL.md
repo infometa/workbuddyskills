@@ -1,7 +1,7 @@
 ---
 name: cloudbase-document-database-web-sdk
 description: Use CloudBase document database Web SDK only for confirmed NoSQL collection work. Query, create, update, and delete document data; if the task mentions PostgreSQL / CloudBase PG / app.rdb(), route to postgresql-development instead.
-version: 2.26.0
+version: 2.34.8
 alwaysApply: false
 ---
 
@@ -37,7 +37,7 @@ If a referenced sibling skill file is missing from this environment, ask the use
 - Server-side or cloud-function database access.
 - SQL / MySQL database operations.
 - Pure resource-permission administration with no browser SDK code.
-- **NEW business tables that the task explicitly asks to put in CloudBase PostgreSQL (CloudBase PG).** Before applying this skill, call `envQuery(action="info", envId=...)` and read `EnvInfo.RuntimeBackends`. If `postgresql === true` AND the task asks for a new business table to live in PG, switch to the `postgresql-development-cloudbase` skill for that table: it goes through `app.rdb()`, uses PG row-level security (`CREATE POLICY`), and uploads via `app.storage.from('<bucket>').upload('<key>', file)` against an explicitly-created pgstore bucket.
+- **NEW business tables that the task explicitly asks to put in CloudBase PostgreSQL (CloudBase PG).** Before applying this skill, call `queryEnv(action="info", envId=...)` and read `EnvInfo.RuntimeBackends`. If `postgresql === true` AND the task asks for a new business table to live in PG, switch to the `postgresql-development-cloudbase` skill for that table: it goes through `app.rdb()`, uses PG row-level security (`CREATE POLICY`), and uploads via `app.storage.from('<bucket>').upload('<key>', file)` against an explicitly-created pgstore bucket.
   - Existing NoSQL collections in the same env keep using THIS skill — PG and NoSQL coexist in CloudBase PG environments. The rule is "follow the task / existing surface", not "PG env forbids NoSQL".
 
 ### SDK Code vs MCP Tools
@@ -126,9 +126,10 @@ Important rules:
 3. **Respect security rules**
    - Collection rules can reject requests before data is read.
    - If the requirement is simple owner-only write access, `READONLY` can be enough.
-   - If the requirement is “app-level admin can edit/delete all, editor only own”, use a `CUSTOM` rule. A validated CMS pattern is `get('database.user_roles.' + auth.uid).role == 'admin' || doc.authorId == auth.uid`.
+   - If the requirement is “app-level admin can edit/delete all, editor only own”, use a `CUSTOM` rule. A validated CMS pattern is ``get(`database.user_roles.${auth.uid}`).role == 'admin' || doc.authorId == auth.uid``.
    - For that CMS pattern, frontend writes can stay on `.doc(id).update()` / `.doc(id).remove()`.
    - Reuse whichever role collection already exists and can be addressed by `_id == auth.uid`. In this CMS pattern, `user_roles` keyed by uid is acceptable.
+   - A `get()` whose target document is missing fails the request with HTTP 500 — it does not evaluate to `false`, and `||` does not skip it. If the app cannot guarantee a role document per user, keep the role list in one shared document and test ``auth.uid in get(`database.admin_registry.lock`).admins`` instead.
    - If the task fails with permission issues, inspect the rule model rather than assuming the query syntax is wrong.
 
 4. **Return user-friendly errors**

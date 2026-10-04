@@ -1,11 +1,11 @@
-# Omics Platform CLI 命令参考（v4 · 7 命令边界）
+# Omics Platform CLI 命令参考（v7 · 白名单含 cos 子命令）
 
-> 本文档提供 omics-platform-cli **白名单 7 条**一级命令的完整参数说明、行为矩阵和示例。
+> 本文档提供 omics-platform-cli **白名单命令**的完整参数说明、行为矩阵和示例。
 > 详细实现请参考源码仓库 `/Users/chanhfeng/Documents/UGit/omics-platform-cli`。
 >
-> ⚠️ **能力边界**：CLI v4 起对外暴露的一级命令严格限定为以下 7 条；
-> 旧 `omics app *` 命令族（list / list-public / templates / file *）已废除，
-> 查询语义迁移到 `omics list`，模板/文件操作内化到 `omics run` 内部链路。
+> ⚠️ **能力边界**：白名单命令：`login / whoami / config / list / run / status / debug / quota / cos(upload|ls)`
+> 旧 `omics app *` 命令族（list / list-public / templates / file *）已废除，查询语义迁移到 `omics list`，模板/文件操作内化到 `omics run` 内部链路。
+> `--cos-tool` 选项已移除：`omics cos upload` / `omics cos ls` 为 CLI 内置实现，无需第三方工具（coscli/mc/aws 等）。
 
 ---
 
@@ -19,9 +19,11 @@
 6. [run — 唯一运行入口](#6-run--唯一运行入口)
 7. [status — 任务状态](#7-status--任务状态)
 8. [debug — 异步失败取证（三段式）](#8-debug--异步失败取证三段式)
-9. [认证机制 & 配置文件](#9-认证机制--配置文件)
-10. [退出码说明](#10-退出码说明)
-11. [废弃命令对照表](#11-废弃命令对照表)
+9. [quota — 体验用户配额](#9-quota--体验用户配额)
+10. [cos — COS 文件操作](#10-cos--cos-文件操作)
+11. [认证机制 & 配置文件](#11-认证机制--配置文件)
+12. [退出码说明](#12-退出码说明)
+13. [废弃命令对照表](#13-废弃命令对照表)
 
 ---
 
@@ -32,6 +34,8 @@ omics                                            # 根命令
 ├── login                                        # OAuth 浏览器登录
 ├── whoami                                       # 当前登录用户
 ├── version                                      # CLI 版本号（工具命令，非业务白名单）
+├── update                                       # CLI 自更新（工具命令，SKILL 不调用）
+├── uninstall                                    # 卸载 CLI（工具命令，SKILL 不调用）
 ├── config
 │   ├── set     [-r ... -p ... -e ... -b ...]   # 交互式 / 显式入参；写盘前服务校验
 │   ├── show    [-o table|json]                 # 显示当前本地配置
@@ -42,9 +46,14 @@ omics                                            # 根命令
 │   ├── apps          [--type WDL|WDL_GRAPH|NEXTFLOW] [-o ...]
 │   │                 # 列 config 项目下的应用
 │   ├── versions      --app <appId> [--type RELEASE|HISTORY] [--limit N] [-o ...]
-│   │                 # v6：列指定应用的版本（form C 运行前必经）
-│   └── templates     --app <appId> [--version <verId>] [--with-content] [--limit N] [-o ...]
-│                     # v6.1：列指定应用的运行参数模板（form B/C 运行前必经）
+│   │                 # 列指定应用的版本（form C 运行前必经）
+│   ├── templates     --app <appId> [--version <verId>] [--with-content] [--limit N] [-o ...]
+│   │                 # 列指定应用的运行参数模板（form B/C 运行前必经）
+│   ├── region        [-o ...]                  # 平台支持的地域列表（配置引导用）
+│   ├── project       [-o ...]                  # 用户全部项目（配置引导用）
+│   ├── env           [--region <r>] [-o ...]   # 用户全部环境（配置引导用）
+│   ├── cos-bucket    [-o ...]                  # 当前环境绑定的 COS 桶（配置引导用）
+│   └── volume        [-o ...]                  # 当前环境下的缓存卷列表
 ├── run                                         # 四选一：--wdl / --nf / --public-app / --app
 │   │                                           # form A/C 不传 --input/--template → 仅靠 WDL Default 跑（baseline）
 │   │                                           # form B 不传 --input/--template → 自动取第一个 InputTemplate（兜底）
@@ -53,22 +62,29 @@ omics                                            # 根命令
 │   │                                           # 通用：--template <Id> 用服务端模板（与 --input 互斥）
 │   │                                           # form A 专属：--release-name <name> 把新 HISTORY 发布为 RELEASE
 │   ├── --wdl <path>          # form A：本地 WDL（必配 --name；失败可 --update <appId> 复用空白应用）
-│   ├── --nf <cos-path>       # form D：COS 上的 Nextflow（必配 --name + --nf-version）
-│   ├── --public-app <appId>  # form B：公共应用（合集子应用必传 --public-app-name）
+│   ├── --nf <cos-path>       # form D：COS 上的 Nextflow（必配 --name + --nf-version；文件须先通过 omics cos upload 上传）
+│   ├── --public-app <appId>  # form B：公共应用（合集子应用必传 --public-app-name；--app-type 必传）
 │   └── --app <appId>         # form C：项目内已有应用
 ├── status [<rgId>] [-o ...]                    # 列批次 / 列子任务（固定走 config 项目）
-└── debug
-    ├── <runGroupId>                            # 段 1：列该批次失败子任务
-    ├── --run <runUuid>                         # 段 2：单子任务现场（Status + Calls + JobLogs）
-    └── --run <runUuid> --job <jobId>           # 段 3：精确钻取 Job
+├── debug
+│   ├── <runGroupId>                            # 段 1：列该批次失败子任务（含 AppType 字段）
+│   ├── --run <runUuid>                         # 段 2：单子任务现场（WDL/NF 分流，含 NextflowLog）
+│   └── --run <runUuid> --job <jobId>           # 段 3：精确钻取 Job
+├── quota [-o ...]                              # 体验用户配额查询（仅 C 端）
+└── cos
+    ├── upload <local-path> [--prefix <p>] [--bucket <b>] [--dry-run] [-o ...]
+    │          # 上传文件/目录到 COS（CLI 内置，无需第三方工具，通过预签名 PUT URL 实现）
+    └── ls [cos://bucket/prefix] [--prefix <p>] [--bucket <b>] [-r] [-o ...]
+               # 浏览 COS 目录结构（通过平台 API 实现）
 ```
 
 **关键设计原则**：
 
-- **CLI 是能力的唯一合法出口**——SKILL 必须通过这 7 条命令操作平台
+- **CLI 是能力的唯一合法出口**——SKILL 必须通过这些命令操作平台
 - **运行类操作必须二次确认**（由 SKILL 层负责，CLI 不做）
 - **不再自动选默认项目/默认环境**：`region/projectId/environmentId` 必须显式 `omics config set`
 - **状态/失败诊断严格走 status 与 debug 命令**——不再有任何"直调后端 API"的旁路
+- **COS 文件操作通过 `omics cos` 完成**——CLI 内置实现，无需第三方工具
 
 ---
 
@@ -659,7 +675,105 @@ omics debug --run <uuid> --job <jobId>    # 段 3
 
 ---
 
-## 9. 认证机制 & 配置文件
+## 9. quota — 体验用户配额
+
+```bash
+omics quota [-o table|json]
+```
+
+仅 C 端体验用户可用。CLI 内部先调 `DescribeGlobalPermissions` 校验身份，非体验用户直接报错退出。
+
+### JSON 字段
+
+```json
+{
+  "run_limit": 10,
+  "run_remain_limit": 7,
+  "days": 30,
+  "remain_days": 15
+}
+```
+
+| 字段 | 说明 |
+|------|------|
+| `run_limit` | 每日运行次数上限 |
+| `run_remain_limit` | 今日剩余运行次数 |
+| `days` | 试用总天数 |
+| `remain_days` | 剩余天数 |
+
+---
+
+## 10. cos — COS 文件操作
+
+> **设计说明**：`omics cos` 是 CLI 内置命令，通过平台预签名 PUT URL 上传文件，通过平台 API 浏览目录，**无需安装 coscli / mc / aws 等任何第三方工具**。
+
+### 10.1 `omics cos upload` — 上传文件或目录
+
+```bash
+omics cos upload <local-path> [<local-path2> ...]
+  [--prefix <prefix>]      # COS 对象前缀，默认 "uploads"
+  [--bucket <name>]        # 目标桶（缺省使用 config 配置桶）
+  [--dry-run]              # 预览模式，不实际上传
+  [-o table|json]
+```
+
+**存储桶选择规则**：
+- 未指定 `--bucket`：使用 `omics_config.json` 中的 `CosBucketName`
+- 显式指定 `--bucket`：先调 `DescribeAssociatedCosBuckets` 校验该桶是否绑定到当前环境，未绑定则拒绝
+
+**上传实现**：通过平台 API 获取预签名 PUT URL，直接 HTTP PUT 到 COS；支持单文件和目录递归（跳过隐藏文件/.git）
+
+**JSON 输出**：
+
+```json
+{
+  "Bucket": "my-bucket-123",
+  "Prefix": "nf-apps/my-pipeline",
+  "Total": 5,
+  "Succeeded": 5,
+  "Failed": 0,
+  "Results": [
+    { "LocalPath": "./main.nf", "COSPath": "cos://my-bucket-123/nf-apps/my-pipeline/my-pipeline/main.nf" },
+    ...
+  ]
+}
+```
+
+**COS 路径规则**：`cos://{bucket}/{prefix}/{dirname}/{relpath}`（目录上传时保留目录名）
+
+**典型用途**：
+- form D（omics run --nf）的配套准备：将 NF 流程文件夹上传到 COS
+- 通用数据上传：将本地 FASTQ/BAM 等数据文件上传到平台关联桶
+
+### 10.2 `omics cos ls` — 浏览 COS 目录
+
+```bash
+omics cos ls [cos://bucket/prefix]
+  [--prefix <prefix>]    # 起始路径前缀（与位置参数互斥）
+  [--bucket <name>]      # 指定桶
+  [-r] [--recursive]     # 递归展开全部子目录
+  [--max-keys N]         # 最大返回条目数（默认 1000）
+  [-o table|json]
+```
+
+支持 `cos://bucket/prefix` 格式作为位置参数，CLI 自动解析桶名和前缀。
+
+**JSON 输出结构**：
+
+```json
+{
+  "Bucket": "my-bucket-123",
+  "Prefix": "nf-apps/",
+  "Objects": [
+    { "Key": "nf-apps/my-pipeline/main.nf", "Size": 1024, "LastModified": "..." }
+  ],
+  "Dirs": ["nf-apps/my-pipeline/"]
+}
+```
+
+---
+
+## 11. 认证机制 & 配置文件
 
 | 项 | 路径 | 说明 |
 |---|---|---|
@@ -669,7 +783,7 @@ omics debug --run <uuid> --job <jobId>    # 段 3
 
 ---
 
-## 10. 退出码说明
+## 12. 退出码说明
 
 | 退出码 | 含义 | SKILL 处理 |
 |---|---|---|
@@ -679,7 +793,7 @@ omics debug --run <uuid> --job <jobId>    # 段 3
 
 ---
 
-## 11. 废弃命令对照表
+## 13. 废弃命令对照表
 
 > 下表所有命令在 CLI v4 起**不再对外暴露**；SKILL 调用时会被 argparse 当场拒绝。
 
@@ -695,5 +809,5 @@ omics debug --run <uuid> --job <jobId>    # 段 3
 
 ---
 
-> 文档版本：v4 · 7 命令边界（2026-06-01）
+> 文档版本：v7 · 含 cos 子命令（2026-08-27）
 > 关联：[SKILL.md](../SKILL.md) / [CONTRACT.md](../CONTRACT.md) / [runtime_error_kb.md](runtime_error_kb.md)

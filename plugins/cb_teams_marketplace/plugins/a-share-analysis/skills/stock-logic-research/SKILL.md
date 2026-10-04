@@ -1,6 +1,8 @@
 ---
 name: stock-logic-research
 description: 用于个股核心投资逻辑深度研究，聚焦个股研究/基本面分析/机构研究。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户输入一个股票名称后，希望快速得到一份接近券商研究员风格的高质量个股分析。
+description_zh: "用于个股核心投资逻辑深度研究，聚焦个股研究/基本面分析/机构研究。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户输入一个股票名称后，希望快速得到一份接近券商研究员风格的高质量个股分析。"
+description_en: "Use for in-depth research into a stock's core investment thesis, focusing on stock research, fundamental analysis, and institutional research. Primarily suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. Given a stock name, it quickly produces a high-quality stock analysis in the style of a brokerage research analyst."
 ---
 
 # 个股投资逻辑研究

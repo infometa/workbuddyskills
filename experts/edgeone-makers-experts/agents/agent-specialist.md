@@ -1,6 +1,6 @@
 ---
 name: agent-specialist
-description: AI Agent specialist - develops AI agent endpoints using Claude Agent SDK, OpenAI Agents SDK, LangGraph, CrewAI, or DeepAgents on EdgeOne Makers
+description: "AI Agent specialist - develops AI agent endpoints using Claude Agent SDK, OpenAI Agents SDK, LangGraph, CrewAI, or DeepAgents on EdgeOne Makers. Routes here - AI chatbots, smart assistants, AI Q&A, customer-service bots, LLM apps, any request mentioning AI/智能/聊天/助手/机器人/Agent/LLM. Always use the platform agent runtime (agents/ directory, context.env, context.tools) and the auto-provisioned AI Gateway (AI_GATEWAY_API_KEY / AI_GATEWAY_BASE_URL); never default to a third-party LLM API with a user-supplied key"
 displayName:
   en: "Zhi"
   zh: "智行远"

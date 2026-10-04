@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mibao.local/schemas/expert-one-shot-request.schema.json",
+  "oneOf": [
+    {"$ref": "#/$defs/inventoryBuild"},
+    {"$ref": "#/$defs/inventorySearch"}
+  ],
+  "$defs": {
+    "absolutePath": {"type": "string", "minLength": 3, "maxLength": 32760, "pattern": "^(?:[A-Za-z]:[\\\\/]|/).+"},
+    "inventoryBuild": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "operation", "input"],
+      "properties": {
+        "schemaVersion": {"const": "1.0"},
+        "operation": {"const": "inventory_build"},
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sourceRoot", "projectRoot", "displayName", "scanBatchSize", "hashBatchSize", "maxEntries", "maxDepth", "htmlPreviewRows"],
+          "properties": {
+            "sourceRoot": {"$ref": "#/$defs/absolutePath"},
+            "projectRoot": {"$ref": "#/$defs/absolutePath"},
+            "displayName": {"type": "string", "minLength": 1, "maxLength": 128},
+            "scanBatchSize": {"type": "integer", "minimum": 1, "maximum": 512},
+            "hashBatchSize": {"type": "integer", "minimum": 1, "maximum": 256},
+            "maxEntries": {"type": "integer", "minimum": 1, "maximum": 100000},
+            "maxDepth": {"type": "integer", "minimum": 1, "maximum": 64},
+            "htmlPreviewRows": {"type": "integer", "minimum": 1, "maximum": 2000}
+          }
+        }
+      }
+    },
+    "inventorySearch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "operation", "input"],
+      "properties": {
+        "schemaVersion": {"const": "1.0"},
+        "operation": {"const": "inventory_search"},
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["projectRoot", "query", "limit"],
+          "properties": {
+            "projectRoot": {"$ref": "#/$defs/absolutePath"},
+            "query": {"type": "string", "minLength": 1, "maxLength": 256},
+            "limit": {"type": "integer", "minimum": 1, "maximum": 100}
+          }
+        }
+      }
+    }
+  }
+}

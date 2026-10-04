@@ -8,6 +8,11 @@
             "type": "command",
             "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/ensure-node.sh\" session-start",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/hr-ai-data/script/ensure-node.sh\" session-start",
+            "timeout": 30
           }
         ]
       }
@@ -18,6 +23,22 @@
           {
             "type": "command",
             "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/ensure-node.sh\" pre-tool",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/hr-ai-data/script/ensure-node.sh\" pre-tool",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/hr-ai-data/script/ensure-node.sh\" user-prompt",
             "timeout": 30
           }
         ]
@@ -52,6 +73,11 @@
             "type": "command",
             "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/ensure-node.sh\" session-end",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CODEBUDDY_PLUGIN_ROOT}/hooks/hr-ai-data/script/ensure-node.sh\" session-end",
+            "timeout": 15
           }
         ]
       }

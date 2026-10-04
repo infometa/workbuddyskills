@@ -8,6 +8,16 @@ description: >
   从另一个表导入 / 跨表引用 / 引用某个链接的数据 / IMPORTRANGE; "stock price / quote /
   ticker", "import a range from another sheet / doc", any formula string containing `STOCK(`
   or `IMPORTRANGE(`.
+description_zh: >-
+  STOCK（股票行情）与 IMPORTRANGE（跨表区域导入）两个外部数据公式的权威指南：语法、必填参数、
+  溢出/返回结构、限制、`#GETTING_DATA` 加载状态与错误码。在单元格中写入任何 STOCK 或 IMPORTRANGE 公式前必须阅读。
+  触发词：查股价 / 拉行情 / 股票报价 / 涨跌幅 / 实时价 / STOCK；从另一个表导入 / 跨表引用 / 引用某个链接的数据 /
+  IMPORTRANGE。
+description_en: >-
+  Authoritative guide to the two external-data formulas STOCK (stock quotes) and IMPORTRANGE (cross-sheet range
+  import) — syntax, required params, spill/return shape, limits, the `#GETTING_DATA` loading state, and error codes.
+  Read BEFORE writing any STOCK or IMPORTRANGE formula into a cell. Triggers on: "stock price / quote / ticker",
+  "import a range from another sheet / doc", any formula string containing `STOCK(` or `IMPORTRANGE(`.
 ---
 
 # 特色公式使用指南：STOCK 与 IMPORTRANGE

@@ -1,5 +1,7 @@
 ---
 description: 产品管理插件，支持功能规格编写、路线图规划、利益相关者沟通、用户研究综合、竞品分析、指标审查、产品头脑风暴和冲刺规划
+description_zh: "产品管理插件，支持功能规格编写、路线图规划、利益相关者沟通、用户研究综合、竞品分析、指标审查、产品头脑风暴和冲刺规划"
+description_en: "A product management plugin for feature specification writing, roadmap planning, stakeholder communication, user research synthesis, competitive analysis, metrics review, product brainstorming, and sprint planning."
 alwaysApply: true
 enabled: true
 updatedAt: 2026-04-08T17:00:00.000Z

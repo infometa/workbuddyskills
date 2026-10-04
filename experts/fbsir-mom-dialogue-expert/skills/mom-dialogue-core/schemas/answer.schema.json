@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/answer/2.0",
+  "title": "Answer Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["answer_id", "question_id", "source_status", "visibility", "status"],
+  "properties": {
+    "answer_id": {"type": "string", "pattern": "^ANS-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "question_id": {"type": "string", "pattern": "^QUE-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "narrator_person_id": {"type": "string", "pattern": "^$|^PER-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "transcript_path": {"type": "string"},
+    "source_status": {"enum": ["stated", "confirmed", "disputed", "unknown", "pending"]},
+    "visibility": {"enum": ["private", "selected_family", "family", "public", "pending"]},
+    "status": {"enum": ["draft", "recorded", "transcribed", "confirmed", "withdrawn"]},
+    "created_at": {"type": "string"},
+    "notes": {"type": "string"}
+  }
+}

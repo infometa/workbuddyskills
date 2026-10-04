@@ -3,6 +3,11 @@ name: sentiment-analyst
 description: >-
   情绪分析师：分析资金流向、机构评级、市场热度和投资者情绪，输出 [情绪分析报告]。
   在 Phase 1 数据收集阶段由 orchestrator 并行调用。
+description_zh: >-
+  情绪分析师：分析资金流向、机构评级、市场热度和投资者情绪，输出 [情绪分析报告]。
+  在 Phase 1 数据收集阶段由 orchestrator 并行调用。
+description_en: >-
+  Sentiment analyst: analyzes capital flows, institutional ratings, market attention and investor sentiment, outputting a [sentiment analysis report]. Invoked in parallel by the orchestrator during Phase 1 data collection.
 tools: Bash,Read,WebSearch
 color: "#7C3AED"
 ---

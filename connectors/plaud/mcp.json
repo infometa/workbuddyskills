@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "plaud": {
+      "type": "streamableHttp",
+      "url": "https://mcp.plaud.cn/mcp",
+      "timeout": 30000
+    }
+  }
+}

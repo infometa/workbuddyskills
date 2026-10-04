@@ -1,0 +1,75 @@
+<!-- 银行流水模板 -->
+<div class="pcf-section">
+  <h3>银行流水</h3>
+
+  <div class="pcf-section__metrics">
+    {{#each metrics}}
+    <div class="pcf-section__metric">
+      <div class="pcf-section__metric-label">{{label}}</div>
+      <div class="pcf-section__metric-value">{{value}}<span class="pcf-section__metric-unit">{{unit}}</span></div>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="pcf-section__data-block">
+    <h4>主要结算方向</h4>
+    <h4 style="margin-top:12px;">收款对手 Top 5</h4>
+    <table>
+      <thead>
+        <tr><th>排名</th><th>对手方</th><th>金额</th><th>占比</th></tr>
+      </thead>
+      <tbody>
+        {{#each topReceivers}}
+        <tr><td>{{rank}}</td><td>{{name}}</td><td>{{amount}}</td><td>{{ratio}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <h4 style="margin-top:12px;">付款对手 Top 5</h4>
+    <table>
+      <thead>
+        <tr><th>排名</th><th>对手方</th><th>金额</th><th>占比</th></tr>
+      </thead>
+      <tbody>
+        {{#each topPayers}}
+        <tr><td>{{rank}}</td><td>{{name}}</td><td>{{amount}}</td><td>{{ratio}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  {{#if abnormalTransactions}}
+  <div class="pcf-section__data-block">
+    <h4>异常笔</h4>
+    <table>
+      <thead>
+        <tr><th>日期</th><th>金额</th><th>对手方</th><th>异常特征</th></tr>
+      </thead>
+      <tbody>
+        {{#each abnormalTransactions}}
+        <tr><td>{{date}}</td><td>{{amount}}</td><td>{{counterparty}}</td><td>{{feature}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  {{/if}}
+
+  <div class="pcf-section__insight">
+    <div class="pcf-section__insight-title">研判结论</div>
+    {{#each judgments}}
+    <div class="pcf-section__insight-item pcf-section__insight-item--{{type}}">
+      <span>{{icon}}</span>
+      <span>{{text}}</span>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

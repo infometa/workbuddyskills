@@ -1,0 +1,40 @@
+{
+  "init": {
+    "darwin": "npm install -g tuniu-cli@latest",
+    "linux": "npm install -g tuniu-cli@latest",
+    "win32": "npm install -g tuniu-cli@latest"
+  },
+  "auth": {
+    "darwin": "tuniu auth login --daemon",
+    "linux": "tuniu auth login --daemon",
+    "win32": "tuniu auth login --daemon"
+  },
+  "unAuth": {
+    "darwin": "tuniu auth logout --daemon",
+    "linux": "tuniu auth logout --daemon",
+    "win32": "tuniu auth logout --daemon"
+  },
+  "status": {
+    "darwin": "tuniu auth status --daemon",
+    "linux": "tuniu auth status --daemon",
+    "win32": "tuniu auth status --daemon"
+  },
+  "statusMatch": "TUNIU_AUTH_OK",
+  "env": {
+    "TUNIU_DISCOVERY_ENABLED": "true",
+    "TUNIU_AUTH_TYPE": "oauth"
+  },
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "tuniu --version",
+      "linux": "tuniu --version",
+      "win32": "tuniu --version"
+    },
+    "minVersion": "1.1.1",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  }
+}

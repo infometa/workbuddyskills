@@ -3,6 +3,11 @@ name: warren-buffett
 description: >-
   沃伦·巴菲特投资智能体：以价值投资视角分析标的，关注护城河、管理层质量、财务健康和内在价值，输出 [巴菲特分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  沃伦·巴菲特投资智能体：以价值投资视角分析标的，关注护城河、管理层质量、财务健康和内在价值，输出 [巴菲特分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Warren Buffett investment agent: analyzes targets from a value-investing perspective, focusing on moats, management quality, financial health and intrinsic value, outputting a [Buffett analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#1E40AF"
 ---

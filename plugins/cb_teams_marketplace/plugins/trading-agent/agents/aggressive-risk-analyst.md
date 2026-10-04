@@ -3,6 +3,11 @@ name: aggressive-risk-analyst
 description: >-
   激进风险分析师：在风险辩论中倡导高回报机会，强调上行潜力，挑战保守观点。
   在 Phase 4 风险评估阶段由 orchestrator 并行调用（与保守/中性分析师同时）。
+description_zh: >-
+  激进风险分析师：在风险辩论中倡导高回报机会，强调上行潜力，挑战保守观点。
+  在 Phase 4 风险评估阶段由 orchestrator 并行调用（与保守/中性分析师同时）。
+description_en: >-
+  Aggressive risk analyst: advocates high-reward opportunities in the risk debate, emphasizing upside potential and challenging conservative views. Invoked in parallel by the orchestrator during the Phase 4 risk assessment (alongside the conservative and neutral analysts).
 tools: Read
 color: "#B45309"
 ---

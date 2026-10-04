@@ -1,5 +1,72 @@
 # CloudBase MCP Setup Reference
 
+## Site: domestic or international (decide first)
+
+CloudBase has two independent account systems — 国内站 (`cloud.tencent.com`) and 国际站 (`tencentcloud.com`). Env, console, API keys, and login state do not cross over, and a wrong-site login looks like *"logged in, but no environments"*. Confirm the site before configuring MCP. Ask the user if the console domain / envId does not make it obvious.
+
+### International (国际站)
+
+**Preferred: connect the international remote MCP endpoint directly.** One URL, no local Node, no keys on disk.
+
+```json
+{
+  "mcpServers": {
+    "cloudbase": {
+      "type": "http",
+      "url": "https://tcb-api.tencentcloud.com/mcp/v1"
+    }
+  }
+}
+```
+
+OAuth-capable clients finish login in the browser (DCR → login → pick env → consent). For clients without OAuth, or for CI, use the static-credential form and add the international site's key pair:
+
+```json
+{
+  "mcpServers": {
+    "cloudbase": {
+      "type": "http",
+      "url": "https://tcb-api.tencentcloud.com/mcp/v1?env_id=<env_id>",
+      "headers": {
+        "X-TencentCloud-SecretId": "<intl Secret ID>",
+        "X-TencentCloud-SecretKey": "<intl Secret Key>"
+      }
+    }
+  }
+}
+```
+
+If the user needs **local stdio** instead (local file access, offline), set the site explicitly — the local server cannot infer it from a hostname:
+
+```json
+{
+  "mcpServers": {
+    "cloudbase": {
+      "command": "npx",
+      "args": ["@cloudbase/cloudbase-mcp@latest"],
+      "env": {
+        "TCB_SITE": "intl",
+        "TCB_REGION": "ap-singapore"
+      }
+    }
+  }
+}
+```
+
+### Domestic (国内站)
+
+Same shape, different host — `https://tcb-api.cloud.tencent.com/mcp/v1`. Nothing site-specific to declare: `domestic` + `ap-shanghai` are the defaults for both remote and local mode.
+
+> ⚠️ **No `site` / `region` query parameter on the remote endpoint.** The host decides the site. A domestic environment located in `ap-singapore` still uses the domestic host — do not try to switch sites with a URL parameter.
+>
+> ⚠️ **International has no NoSQL / document-database tools.** Route document-DB work to the domestic site or to PostgreSQL instead.
+
+> ℹ️ `TCB_SITE` is the **MCP** variable. The `tcb` CLI uses a different one (`TCB_IS_INTL`) — see `tooling-fallback.md`.
+
+> ℹ️ **First run?** Follow `site-onboarding.md` — it settles the site with the CLI before MCP exists, persists it where the post-restart MCP session will read it (`.cloudbase/project.json`), and covers conflict arbitration + the MCP-down fallback.
+
+---
+
 ## Preferred: Install CloudBase Plugin (global)
 
 When the user asks to install CloudBase / the AI Toolkit / the plugin, **prefer the Open Plugin Spec CLI** over hand-writing MCP JSON. One install brings MCP + Skills + Hooks.
@@ -38,7 +105,7 @@ npx plugins add TencentCloudBase/cloudbase-plugin -y --scope user --target curso
 npx plugins targets
 ```
 
-**Not supported by `npx plugins` yet** (use each product's native path): CodeBuddy, WorkBuddy, ZCode, WindSurf, and other IDEs without Open Plugin Spec. For those, use Approach A (native MCP) or Approach B (mcporter) below, plus Skills if needed.
+**Not supported by `npx plugins` yet** (use each product's native path): CodeBuddy, WorkBuddy, Kimi Code, Kimi Work, ZCode, WindSurf, and other IDEs without Open Plugin Spec. For those, use Approach A (native MCP) or Approach B (mcporter) below, plus Skills if needed.
 
 **Do not double-install:** if Claude Code / Codex already has the plugin via marketplace (`claude plugin install` / `codex plugin add`), do **not** also run `npx plugins add` for the same tool.
 
@@ -120,7 +187,7 @@ When your IDE does not support native MCP or Plugin install, use **mcporter** as
 - Start device-flow login:
   `npx mcporter call cloudbase.auth action=start_auth authMode=device --output json`
 - Resolve env alias to full EnvId:
-  `npx mcporter call cloudbase.envQuery action=list alias=demo aliasExact=true fields='["EnvId","Alias","Status","IsDefault"]' --output json`
+  `npx mcporter call cloudbase.queryEnv action=list alias=demo aliasExact=true fields='["EnvId","Alias","Status","IsDefault"]' --output json`
 - Bind environment after login:
   `npx mcporter call cloudbase.auth action=set_env envId=<full-env-id> --output json`
 - Query app-side login config:
@@ -132,7 +199,7 @@ When your IDE does not support native MCP or Plugin install, use **mcporter** as
 
 ---
 
-## Environment Management Tools (manageEnv + auth + envQuery)
+## Environment Management Tools (manageEnv + auth + queryEnv)
 
 Beyond authentication, CloudBase MCP provides several environment management tools.
 
@@ -145,11 +212,11 @@ Query available plans, create environments, change plans, and renew:
 
 - **Create a new environment**:
   ```
-  npx mcporter call cloudbase.manageEnv action=create alias=my-env packageId=baas_personal resources='["flexdb","storage","function","postgresql"]' duration=1 confirm=yes --output json
+  npx mcporter call cloudbase.manageEnv action=create alias=my-env packageId=baas_personal resources='["storage","function","postgresql"]' duration=1 confirm=yes --output json
   ```
 
-  Resources parameter values: `flexdb` (document database), `storage` (cloud storage), `function` (cloud functions), `postgresql` (PostgreSQL database).
-  Do **not** pass `region`: CreateEnv does not accept Region; environment region is determined by account/package.
+  Resources parameter values: `storage` (cloud storage), `function` (cloud functions), `postgresql` (PostgreSQL database). `flexdb` (document database) is **not** offered — new environments are created without a NoSQL tenant, and passing it is rejected by the schema. To find out whether an environment actually has NoSQL, read `queryEnv(action="info")` → `EnvInfo.RuntimeBackends` instead of assuming.
+  Optional `region` (e.g. `region=ap-shanghai`) selects where the environment is created: it is sent as the **`X-TC-Region` request context** (same as CLI `tcb env create --region ap-shanghai`), never as a CreateEnv body field. Omit it to use the current session region (`cloudBaseOptions.region` → `TCB_REGION` → project config / rc binding → site default: `ap-shanghai` domestic, `ap-singapore` intl). If you pass `region`, repeat the same value on the confirming call (`confirm=yes`), otherwise the environment may be created in the session region instead.
 
 - **Change plan** (e.g. upgrade to standard):
   `npx mcporter call cloudbase.manageEnv action=modifyPlan envId=<envId> packageId=baas_pf_standard confirm=yes --output json`
@@ -168,16 +235,16 @@ Query available plans, create environments, change plans, and renew:
 - **Logout** (clears login state and cached env binding):
   `npx mcporter call cloudbase.auth action=logout confirm=yes --output json`
 
-### envQuery — Query environment details
+### queryEnv — Query environment details
 
 - **List all environments**:
-  `npx mcporter call cloudbase.envQuery action=list --output json`
+  `npx mcporter call cloudbase.queryEnv action=list --output json`
 
 - **Get environment info** (runtime backends, storage, status):
-  `npx mcporter call cloudbase.envQuery action=info envId=<envId> --output json`
+  `npx mcporter call cloudbase.queryEnv action=info envId=<envId> --output json`
 
 - **Resolve alias to EnvId**:
-  `npx mcporter call cloudbase.envQuery action=list alias=demo aliasExact=true fields='["EnvId","Alias","Status","IsDefault"]' --output json`
+  `npx mcporter call cloudbase.queryEnv action=list alias=demo aliasExact=true fields='["EnvId","Alias","Status","IsDefault"]' --output json`
 
 ---
 
@@ -194,5 +261,5 @@ If `npm` / `npx` are missing, do **not** keep retrying `npx plugins` / `npx mcpo
 - **When MCP tools are available in this session**, prefer them for manage/deploy, and understand tool details first. Before calling any CloudBase MCP tool, run `npx mcporter describe cloudbase --all-parameters` (or `ToolSearch` in IDE) to inspect available tools and their parameters.
 - **When MCP is not configured or tools are not yet loaded** (common on first session, or right after install before restart): complete the MCP setup steps above for the **next** session, then use `tcb` CLI for login/manage now. Follow `tooling-fallback.md` and the `cloudbase-cli` skill (domain references — **not** `tcb deploy`). Do not block the user waiting for a restart.
 - You **do not need to hard-code Secret ID / Secret Key / Env ID** in the config. Prefer device-code login via MCP `auth` or `tcb login` instead of storing long-lived secrets in MCP JSON.
-- When the environment identifier in the conversation is an alias, nickname, or other short form, **do not pass it directly** to `auth.set_env`, SDK init, console URLs, or generated config files. First resolve it to the canonical full `EnvId` with `envQuery(action=list, alias=..., aliasExact=true)` when MCP is available; with CLI, confirm the full envId with the user (or `tcb env list` as a fallback) before `tcb env use`. If multiple environments match or no exact alias exists, stop and clarify with the user.
+- When the environment identifier in the conversation is an alias, nickname, or other short form, **do not pass it directly** to `auth.set_env`, SDK init, console URLs, or generated config files. First resolve it to the canonical full `EnvId` with `queryEnv(action=list, alias=..., aliasExact=true)` when MCP is available; with CLI, confirm the full envId with the user (or `tcb env list` as a fallback) before `tcb env use`. If multiple environments match or no exact alias exists, stop and clarify with the user.
 - Verify MCP availability with `npx mcporter list | grep cloudbase` or the IDE's MCP panel (skip the `npx` check when npm/npx is absent — use the IDE panel / native plugin instead). Missing MCP is a signal to **set up MCP + fall back to CLI**, not to stop the task.

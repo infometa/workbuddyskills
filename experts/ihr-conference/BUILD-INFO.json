@@ -1,0 +1,55 @@
+{
+  "agent": {
+    "loginSource": "workbuddy-ihr-conference",
+    "name": "ihr-conference",
+    "version": "2.0.0"
+  },
+  "kind": "workbuddy-agent-build-info",
+  "package": {
+    "name": "work100-conference",
+    "version": "2.0.0"
+  },
+  "runtime": {
+    "channel": "stable",
+    "components": [
+      "cli"
+    ],
+    "hostRuntime": {
+      "provider": "host-managed-node",
+      "type": "node",
+      "version": ">=18"
+    },
+    "installVersionPolicy": "npm-channel-latest",
+    "minimumCliVersion": "1.0.28",
+    "minimumVersionPolicy": "expert-soft-warning",
+    "minimumVersionSource": "https://cdn-txtoqiniu.ihr360.com/ihr-cli/latest.json",
+    "npm": {
+      "betaTag": "beta",
+      "nodeMajorRequired": 18,
+      "package": "@ihr360cli/ihr-cli",
+      "stableTag": "latest"
+    },
+    "runtimeEnv": "work100-prod",
+    "skillSelectionPolicy": "expert-bundled"
+  },
+  "schemaVersion": 2,
+  "skills": {
+    "inventory": [
+      "ihr-bootstrap",
+      "ihr-shared",
+      "ihr-base",
+      "ihr-conference"
+    ],
+    "sha256": {
+      "ihr-base": "720e8d2367382b915e516055a2f2f6e6b563148b2bf6aef0e96fc66e3de4dc3f",
+      "ihr-bootstrap": "148bba21a304a62ba7732ce64e00040f35b077790fccecbe203458a887734652",
+      "ihr-conference": "d76e1643b46c9571aea4757a8d7ca4085b5b366af6d30204117185d6d331878e",
+      "ihr-shared": "99b20376acfad0eb7dcc20f40be11a645630782286c7d3ffe58f837afa0c7239"
+    }
+  },
+  "source": {
+    "docsCommit": "978b1e9b1cd097f5875d996cef00e0330edc2a57",
+    "docsTreeState": "clean",
+    "ihrCliCommit": "3f9a4c26c17c67df4dc5f24cbbfa2c75c876b250"
+  }
+}

@@ -1,6 +1,8 @@
 ---
 name: macro-to-stock
 description: 用于宏观—行业—个股传导分析，聚焦宏观研究/资产配置/行业传导/自上而下研究。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户关注利率、汇率、财政、地产、出口、通胀、全球景气等变化时，想知道这些变化会通过什么路径传导到哪些行业，再传导到哪些公司。
+description_zh: "用于宏观—行业—个股传导分析，聚焦宏观研究/资产配置/行业传导/自上而下研究。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户关注利率、汇率、财政、地产、出口、通胀、全球景气等变化时，想知道这些变化会通过什么路径传导到哪些行业，再传导到哪些公司。"
+description_en: "Use for macro-to-industry-to-stock transmission analysis, focusing on macro research, asset allocation, industry transmission, and top-down research. Primarily suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It explains how changes in interest rates, exchange rates, fiscal policy, property, exports, inflation, and global conditions flow through to industries and individual companies."
 ---
 
 # 宏观行业个股传导

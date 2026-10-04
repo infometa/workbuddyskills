@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/adapter-approval-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "intentDigest", "sceneId", "portId", "operation", "adapterId", "humanOwner", "decision", "minimumDataScope", "targetDescriptorDigest", "requestDigest", "expectedReadbackDigest", "idempotencyKeyDigest", "providerBindingDigest", "sceneBindingDigest", "approvalBindingDigest", "issuedAt", "expiresAt", "nonce", "receiptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "1.1.0" },
+    "intentDigest": { "$ref": "#/$defs/digest" },
+    "sceneId": { "type": "string", "minLength": 1 },
+    "portId": { "type": "string", "minLength": 1 },
+    "operation": { "type": "string", "minLength": 1 },
+    "adapterId": { "enum": ["wecom", "fbs"] },
+    "humanOwner": { "type": "string", "minLength": 1 },
+    "decision": { "const": "approved" },
+    "minimumDataScope": { "type": "string", "minLength": 1 },
+    "targetDescriptorDigest": { "$ref": "#/$defs/digest" },
+    "requestDigest": { "$ref": "#/$defs/digest" },
+    "expectedReadbackDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "idempotencyKeyDigest": { "$ref": "#/$defs/digest" },
+    "providerBindingDigest": { "$ref": "#/$defs/digest" },
+    "sceneBindingDigest": { "$ref": "#/$defs/digest" },
+    "approvalBindingDigest": { "$ref": "#/$defs/digest" },
+    "issuedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "nonce": { "type": "string", "pattern": "^[A-Za-z0-9_-]{16,128}$" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": { "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }
+}

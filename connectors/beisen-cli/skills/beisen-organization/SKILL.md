@@ -1,11 +1,15 @@
 ---
 name: beisen-organization
-version: 1.0.9
-description: "北森组织架构查询。本 Skill 用于查询组织/部门信息（负责人、BP、分管领导、行政助理）和编制信息。所有查询通过 beisen-data-query 通用数据查询流水线执行，需管理者视角。当用户询问组织、部门、负责人、BP、编制、分管领导、行政助理等组织架构相关问题时触发。"
+version: 1.2.13
+description: "北森组织架构查询。本 Skill 用于查询组织/部门信息（负责人、BP、分管领导、行政助理）和编制信息。所有查询通过 beisen-data-query 通用数据查询流水线执行；查询结果受当前登录账号的组织管理权限范围影响。当用户询问组织、部门、负责人、BP、编制、分管领导、行政助理等组织架构相关问题时触发。"
 category: 人力资源/组织架构
 author: beisen
 agent_created: false
 allowed-tools: Bash, Read
+requires-skills:
+  - beisen-shared
+  - beisen-data-query
+requires-cli: ">=1.0.8"
 ---
 
 # 组织架构
@@ -50,7 +54,7 @@ allowed-tools: Bash, Read
 ## 执行原则
 
 - 所有查询走 beisen-data-query 流水线，Agent 按 6 步流程执行
-- 组织信息查询需要 `beisen:org:read` scope，缺少时按 beisen-shared 的权限不足流程处理
+- 组织信息查询需要 `beisen:staffservice:read` scope，缺少时按 beisen-shared 的权限不足流程处理
 - 返回的 ID（负责人、BP、分管领导等）已由后端完成消歧，直接使用
 - 组织架构数据属于 L0 公开信息，正常完整展示
 - 编制信息属于 L1 内部数据，批量查询时使用摘要模式

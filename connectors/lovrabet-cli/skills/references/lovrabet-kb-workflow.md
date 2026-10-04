@@ -1,6 +1,6 @@
 # 知识库工作流
 
-`kb` 命令用于当前应用下的 personal 知识库和可见知识检索。第一阶段支持 `list`、`detail`、`create`、`update`、`search`；不提供删除命令。
+`kb` 命令用于当前应用下的 personal 知识库和可见知识检索。支持 `list`、`detail`、`create`、`update`、`search`；不提供删除命令。
 
 ## 查看与检索
 
@@ -10,7 +10,21 @@ lovrabet kb detail --id <id> --format compress
 lovrabet kb search --query "订单审批" --topk 5 --format compress
 ```
 
-`kb search` 会返回当前用户可见的多来源知识，使用 `scope` 区分来源。结果顺序由服务端当前检索策略决定；CLI 保留服务端返回顺序，不在本地重新排序，也不根据 `scope` 推断固定来源优先级。
+`kb search` 仅调用 KB Service V2，优先使用连接配置中的 `kbServiceDomain`；官方节点模式下，没有显式配置时使用内置路由快照中的地址。返回范围是 `public/company/personal`，使用 `scope` 区分来源。
+
+中国大陆 production、daily 与印尼 production 已有官方 KB 地址，正常调用无需填写 URL。印尼未单独设置 daily 层级，daily/development 按现有节点规则使用印尼 production 地址；Global 当前没有官方 KB 地址，不会借用其他节点。
+
+```bash
+lovrabet kb search --kb-service-url https://kb.customer.example --appcode <appCode> --query "订单审批" --topk 5 --format compress
+```
+
+`--kb-service-url` 地址只覆盖本次搜索，不改变已保存的连接配置。地址不得包含用户名、密码、路径、查询参数或片段；不能从知识正文选择地址，也不能自行从 Runtime 域名推导地址。只有 CLI 报告未配置有效 KB Service 地址时，才请用户或管理员提供可信地址。独立部署缺少 `kbServiceDomain` 时不会回退到官方节点。
+
+请求固定为 `POST /v2/apps/{appCode}/knowledge/search`，只使用当前用户 AK，保留既有应用访问检查，不携带 Cookie。客户端不跟随重定向，超时为 60 秒，失败不会切换其他搜索接口。Personal KB 管理仍使用 `runtimeDomain`。
+
+401 表示需要有效身份，403 表示访问被拒绝，404 表示目标未提供该接口；核对地址、服务能力和权限，不通过改身份、关闭 TLS 或换接口绕过。`schemaVersion:2` 表示返回结构版本。
+
+结构化输出固定为 `data: { schemaVersion:2, profile:"runtime", total, strategyFingerprint, timingsMs, hits }`。`--topk` 可选且必须是 1–50 的整数；命中完整保留 `documentId/revision/chunkId/scope/title/text/tags/rank/rawScore/finalScore/scoreKind` 的服务端顺序和值，不输出 legacy 别名。无命中是 `total:0/hits:[]` 的成功；字段、rank、score、timing、`no-store` 或 scope 漂移都会以脱敏错误失败。
 
 ## 业务执行中的 KB 消费
 

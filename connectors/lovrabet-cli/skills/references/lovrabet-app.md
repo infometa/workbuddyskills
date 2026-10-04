@@ -44,7 +44,7 @@ lovrabet app list --include-unpublished
 - `data.items[].enableI18n`：应用是否开启国际化；旧缓存或远端缺失该字段时为 `null`
 - `data.items[].languages`：应用支持的语种列表，来自平台真实 `i18nInfo.langs`
 - `data.items[].i18nInfo`：平台返回的应用国际化配置
-- `data.items[].locale`：CLI 本地兼容配置字段，不代表应用支持语种，可能为 `null`
+- `data.items[].locale`：本地应用本地化设置覆盖，可能为 `null`；不是 CLI 语言，也不代表平台支持语种
 - `data.meta.env`：环境
 - `data.meta.source`：来源
 - `data.meta.fetchedAt`：最近同步时间

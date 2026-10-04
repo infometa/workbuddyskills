@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "teacher-assistant": {
+      "url": "https://aiteach.qq.com/mcp",
+      "type": "streamableHttp",
+      "timeout": 30000,
+      "disabled": false
+    }
+  }
+}

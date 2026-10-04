@@ -1,0 +1,28 @@
+<div class="pcf-section">
+  <h3>ESG 综合评价</h3>
+  <div class="pcf-section__rating">
+    <div class="pcf-section__rating-num">{{score}}<small>/100</small></div>
+    <div class="pcf-section__rating-tier">{{grade}}</div>
+    <div class="pcf-section__rating-note">{{badge}}</div>
+  </div>
+
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>维度</th><th>评分</th><th>详细说明</th></tr></thead>
+      <tbody>
+        {{#details}}
+        <tr><td>{{dimension}}</td><td>{{score}}</td><td>{{items}}</td></tr>
+        {{/details}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

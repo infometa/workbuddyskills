@@ -1,0 +1,37 @@
+{
+  "runtime": {
+    "type": "node"
+  },
+  "init": {
+    "darwin": "npm install -g https://s3plus.meituan.net/static-prod01/com.sankuai.sqtaiposp.static.aiteam/sqt-auth-cli.tgz",
+    "linux": "npm install -g https://s3plus.meituan.net/static-prod01/com.sankuai.sqtaiposp.static.aiteam/sqt-auth-cli.tgz",
+    "win32": "npm install -g https://s3plus.meituan.net/static-prod01/com.sankuai.sqtaiposp.static.aiteam/sqt-auth-cli.tgz"
+  },
+  "auth": {
+    "darwin": "sqt-auth-cli login",
+    "linux": "sqt-auth-cli login",
+    "win32": "sqt-auth-cli.cmd login"
+  },
+  "authWaitForExit": true,
+  "authUrlDomain": "sqt.meituan.com",
+  "unAuth": {
+    "darwin": "sqt-auth-cli logout",
+    "linux": "sqt-auth-cli logout",
+    "win32": "sqt-auth-cli.cmd logout"
+  },
+  "status": {
+    "darwin": "sqt-auth-cli status",
+    "linux": "sqt-auth-cli status",
+    "win32": "sqt-auth-cli.cmd status"
+  },
+  "statusMatch": "已登录",
+  "versionCheck": {
+    "command": {
+      "darwin": "sqt-auth-cli version",
+      "linux": "sqt-auth-cli version",
+      "win32": "sqt-auth-cli.cmd version"
+    },
+    "minVersion": "0.3.8",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "title": "飞常准 MCP 用户连接配置",
+  "title_en": "VariFlight MCP User Configuration",
+  "description": "填写面向 C 端用户的飞常准 MCP Key。WorkBuddy 将凭证保存在本机，并在连接时注入请求头。个人行程、统计和关注操作仅作用于该 Key 绑定的当前用户。",
+  "description_en": "Enter a consumer VariFlight MCP key. WorkBuddy stores it locally and injects it into request headers. Personal trips, statistics, and follow actions are limited to the user bound to this key.",
+  "docUrl": "https://cmcp.variflight.com/",
+  "docLabel": "打开飞常准 MCP 开放平台获取 Key",
+  "docLabel_en": "Open the VariFlight MCP platform to get a key",
+  "fields": [
+    {
+      "key": "VARIFLIGHT_MCP_KEY",
+      "label": "用户 MCP Key",
+      "label_en": "User MCP Key",
+      "placeholder": "登录飞常准 MCP 开放平台后，粘贴以 sk-user- 开头的用户 Key",
+      "placeholder_en": "Sign in to the VariFlight MCP platform, then paste a user key beginning with sk-user-",
+      "type": "password",
+      "required": true,
+      "description": "用于连接飞常准 C 端 MCP 服务，并识别当前用户。Key 失效或泄露时，在飞常准 MCP 开放平台重新生成后更新此处。不要把真实 Key 写入 Skill、代码、截图或日志。",
+      "description_en": "Connects to the consumer VariFlight MCP service and identifies the current user. If the key expires or is exposed, regenerate it on the VariFlight MCP platform and update it here. Never put the real key in skills, code, screenshots, or logs."
+    }
+  ]
+}

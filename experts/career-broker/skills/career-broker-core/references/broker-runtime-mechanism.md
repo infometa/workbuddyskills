@@ -43,19 +43,20 @@ skills/career-qa/scripts/sensitive_filter.py
 
 ## 4. Skill 调度
 
-当前 7 个 skill 按用户旅程排序：
+当前 8 个 skill 按用户旅程排序（面向用户的 7 个 + 1 个共享容器；权威见主 agent §3.5）：
 
 1. `profile-perception`：先认识你。
 2. `career-qa`：答你关心的规则。
 3. `ai-career-agent`：看见冰山下的测评画像。
 4. `career-development-consultant`：陪你理下一步。
-5. `liveflow-job-recommender`：替你获取真实在招活水机会；课程资源由 CC.T3 承接。
-6. `resume-generator`：活水推荐后用自评生成在职经历简历描述。
-7. `career-broker-core`：共享资源容器，不直接面向用户。
+5. `mentor-recommender`：按职位族和职位推荐行家，可直接约 1v1 交流；名单是随包静态快照。
+6. `liveflow-job-recommender`：替你获取真实在招活水机会；课程资源由 CC.T3 承接。
+7. `resume-generator`：活水推荐后用自评生成在职经历简历描述。
+8. `career-broker-core`：共享资源容器，不直接面向用户。
 
 ## 5. 串接规则
 
-- `PP.FULL` 生成 profile 后，可以作为 CC / LJ 的输入。
+- `PP.FULL` 生成 profile 后，可以作为 CC / LJ / MR 的输入（MR 直接读 profile 里的职位族和职位）。
 - 用户贴 DNA 结果码时，先 `CC.T6` 写盘，再 `AC.M1` 解读。
 - 职业咨询中用户明确承诺方向后，才 HANDOFF 到 LJ。
 - 用户主动求案例时，可直接走 `CC.T2`，不必强行进入完整教练流。
@@ -134,6 +135,7 @@ MCP 只能用于本专家已定义的职业任务，不作为通用内网爬虫�
 1. **招活MCP（`recruit-mcp`，客户端显示名「腾讯招聘」）、自评MCP 走一键授权弹窗**：这两个已在 plugin.json 声明，召唤专家时客户端自动弹连接卡。用户一开始跳过、后面想连时，**先引导「切走再切回本对话」让连接卡再次自动弹出**，点「连接」完成授权。**兜底**：如果切走再切回没弹出来，引导去「**专家 → 连接器**」面板手动找「**腾讯招聘**」连接器点连接。**不要**说"我帮你触发授权页"（agent 无法在对话中途主动弹卡），更不要让用户申太湖 PAT / 申招活 token / 走审批。
    - **措辞铁律**：说"还差招活MCP 的**授权连接** / 还差**点一下连接**"，**禁止**说"还差一个招活MCP token / 申请一个 token / 授权页点一下申请"——招活MCP 不需要 token，"点连接"和"申请 token"是两件事，混用会让用户觉得要走审批/申凭证流程。把"点连接完成授权"和"QLearning/km 走 mcp.json+PAT"**严格区分**，前者是 OAuth 一键授权（点连接），后者才是 token-based（要 PAT）。
 2. QLearning / km 共用同一份太湖 PAT：先运行 `skills/career-broker-core/scripts/inspect_mcp_json.py` 检查可复用资源，已为任一 mcpgw 系 MCP 配过 PAT 就直接复用，不要求用户再申请。
+   - **太湖 PAT 申请地址铁律**：唯一正确地址 `https://tai.it.woa.com/user/pat`，权威见主 agent §3.7 第 2 条。严禁自己推测拼接域名（`tai.woa.com`/`mcp.woa.com`/`/user/token` 均不存在）。
 3. 能由 LLM 写入 `~/.workbuddy/mcp.json` 的配置就直接写（QLearning / km），保留既有配置；招活MCP / 自评MCP 不写 mcp.json，走弹窗授权。
 4. QLearning / km 是手填 mcp.json 型，写完后**必须**提示用户在「专家 → 连接器 → 自定义连接器」点“信任”才能激活（这步不能省）；招活MCP / 自评MCP 走授权弹窗，不走这一步。
 

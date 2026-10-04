@@ -1,0 +1,31 @@
+<div class="pcf-section">
+  <h3>押品资产</h3>
+  <div class="pcf-section__metrics">
+    {{#summary}}
+    <div class="pcf-section__metric">
+      <div class="pcf-section__metric-label">{{label}}</div>
+      <div class="pcf-section__metric-value">{{value}}<span class="pcf-section__metric-unit">{{unit}}</span></div>
+    </div>
+    {{/summary}}
+  </div>
+
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>资产类型</th><th>数量</th><th>估值</th><th>已抵押</th><th>可用</th></tr></thead>
+      <tbody>
+        {{#items}}
+        <tr><td>{{type}}</td><td>{{count}}</td><td>{{value}}</td><td>{{pledged}}</td><td>{{available}}</td></tr>
+        {{/items}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

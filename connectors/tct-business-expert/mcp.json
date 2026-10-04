@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "tct-business-expert": {
+      "type": "streamableHttp",
+      "url": "https://tctmcp.zhaogang.com/mcp",
+      "timeout": 60000
+    }
+  }
+}

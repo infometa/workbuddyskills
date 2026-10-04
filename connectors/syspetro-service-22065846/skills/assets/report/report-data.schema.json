@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:syspetro:propdb-full:report-data:1.1",
+  "title": "PROPDB report-data v1.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "templateVersion", "report", "executiveSummary", "keyMetrics", "sections"],
+  "properties": {
+    "schemaVersion": {"const": "1.1"},
+    "templateVersion": {"const": "propdb-report-v1.1"},
+    "report": {"$ref": "#/$defs/report"},
+    "executiveSummary": {
+      "type": "array", "minItems": 2, "maxItems": 4,
+      "items": {"$ref": "#/$defs/summary"}
+    },
+    "keyMetrics": {
+      "type": "array", "minItems": 2, "maxItems": 8,
+      "items": {"$ref": "#/$defs/metric"}
+    },
+    "sections": {
+      "type": "array", "minItems": 1, "maxItems": 12,
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/narrativeSection"},
+          {"$ref": "#/$defs/calloutSection"},
+          {"$ref": "#/$defs/tableSection"},
+          {"$ref": "#/$defs/curveSection"}
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "sourceKind": {"enum": ["propdb", "user-input", "agent-summary", "combined"]},
+    "role": {"enum": ["scope", "object", "conditions", "results", "curves", "methodology", "limitations", "appendix"]},
+    "scalar": {"type": ["string", "number", "integer", "boolean", "null"]},
+    "report": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "title", "generatedAt", "objectLabel", "scopeLabel", "dataStatus"],
+      "properties": {
+        "type": {"enum": ["query-result", "property-curve", "calculation-result"]},
+        "title": {"type": "string", "minLength": 1, "maxLength": 80},
+        "subtitle": {"type": "string", "maxLength": 160},
+        "generatedAt": {"type": "string", "minLength": 1, "maxLength": 40},
+        "dataAsOf": {"type": "string", "maxLength": 40},
+        "objectLabel": {"type": "string", "minLength": 1, "maxLength": 120},
+        "scopeLabel": {"type": "string", "minLength": 1, "maxLength": 160},
+        "unitSet": {"enum": ["SI", "MET", "ENG"]},
+        "coverage": {"type": "string", "maxLength": 180},
+        "methodLabel": {"type": "string", "maxLength": 120},
+        "resultReference": {"type": "string", "maxLength": 80},
+        "layout": {"enum": ["portrait", "landscape"]},
+        "language": {"enum": ["zh-CN", "en"]},
+        "dataStatus": {"enum": ["complete", "partial"]},
+        "curveFamilyCount": {"type": "integer", "minimum": 2, "maximum": 12}
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["text", "basis"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1, "maxLength": 180},
+        "basis": {"$ref": "#/$defs/sourceKind"}
+      }
+    },
+    "metric": {
+      "type": "object", "additionalProperties": false,
+      "required": ["label", "value", "sourceKind"],
+      "properties": {
+        "label": {"type": "string", "minLength": 1, "maxLength": 40},
+        "value": {"$ref": "#/$defs/scalar"},
+        "unit": {"type": "string", "maxLength": 24},
+        "note": {"type": "string", "maxLength": 100},
+        "tone": {"enum": ["neutral", "brand", "teal", "success", "warning", "critical"]},
+        "decimals": {"type": "integer", "minimum": 0, "maximum": 8},
+        "grouping": {"type": "boolean"},
+        "sourceKind": {"$ref": "#/$defs/sourceKind"}
+      }
+    },
+    "baseSection": {
+      "type": "object",
+      "required": ["role", "kind", "sourceKind"],
+      "properties": {
+        "role": {"$ref": "#/$defs/role"},
+        "kind": {"type": "string"},
+        "sourceKind": {"$ref": "#/$defs/sourceKind"},
+        "heading": {"type": "string", "maxLength": 60},
+        "description": {"type": "string", "maxLength": 180}
+      }
+    },
+    "narrativeSection": {
+      "allOf": [
+        {"$ref": "#/$defs/baseSection"},
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["role", "kind", "sourceKind", "paragraphs"],
+          "properties": {
+            "role": {"$ref": "#/$defs/role"}, "kind": {"const": "narrative"}, "sourceKind": {"$ref": "#/$defs/sourceKind"},
+            "heading": {"type": "string", "maxLength": 60}, "description": {"type": "string", "maxLength": 180},
+            "paragraphs": {"type": "array", "minItems": 1, "maxItems": 4, "items": {"type": "string", "minLength": 1, "maxLength": 360}}
+          }
+        }
+      ]
+    },
+    "calloutSection": {
+      "allOf": [
+        {"$ref": "#/$defs/baseSection"},
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["role", "kind", "sourceKind", "items"],
+          "properties": {
+            "role": {"$ref": "#/$defs/role"}, "kind": {"const": "callout"}, "sourceKind": {"$ref": "#/$defs/sourceKind"},
+            "heading": {"type": "string", "maxLength": 60}, "description": {"type": "string", "maxLength": 180},
+            "tone": {"enum": ["info", "warning", "critical"]},
+            "items": {"type": "array", "minItems": 1, "maxItems": 12, "items": {"type": "string", "minLength": 1, "maxLength": 220}}
+          }
+        }
+      ]
+    },
+    "column": {
+      "type": "object", "additionalProperties": false,
+      "required": ["key", "label", "type"],
+      "properties": {
+        "key": {"type": "string", "pattern": "^[a-z][a-zA-Z0-9_]{0,39}$"},
+        "label": {"type": "string", "minLength": 1, "maxLength": 40},
+        "type": {"enum": ["text", "number", "status"]},
+        "unit": {"type": "string", "maxLength": 24},
+        "decimals": {"type": "integer", "minimum": 0, "maximum": 8},
+        "grouping": {"type": "boolean"}
+      }
+    },
+    "tableSection": {
+      "allOf": [
+        {"$ref": "#/$defs/baseSection"},
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["role", "kind", "sourceKind", "columns", "rows"],
+          "properties": {
+            "role": {"$ref": "#/$defs/role"}, "kind": {"const": "table"}, "sourceKind": {"$ref": "#/$defs/sourceKind"},
+            "heading": {"type": "string", "maxLength": 60}, "description": {"type": "string", "maxLength": 180}, "caption": {"type": "string", "maxLength": 180},
+            "columns": {"type": "array", "minItems": 2, "maxItems": 16, "items": {"$ref": "#/$defs/column"}},
+            "rows": {"type": "array", "minItems": 1, "maxItems": 1000, "items": {"type": "object"}}
+          }
+        }
+      ]
+    },
+    "series": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "values"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 60},
+        "values": {"type": "array", "minItems": 2, "maxItems": 200, "items": {"type": ["number", "null"]}}
+      }
+    },
+    "marker": {
+      "type": "object", "additionalProperties": false,
+      "required": ["x", "label"],
+      "properties": {
+        "x": {"type": "number"}, "label": {"type": "string", "minLength": 1, "maxLength": 60},
+        "tone": {"enum": ["brand", "teal", "warning", "critical"]}
+      }
+    },
+    "curveSection": {
+      "allOf": [
+        {"$ref": "#/$defs/baseSection"},
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["role", "kind", "sourceKind", "xValues", "xLabel", "xUnit", "yLabel", "yUnit", "series"],
+          "properties": {
+            "role": {"const": "curves"}, "kind": {"const": "line-chart"}, "sourceKind": {"$ref": "#/$defs/sourceKind"},
+            "heading": {"type": "string", "maxLength": 60}, "description": {"type": "string", "maxLength": 180}, "caption": {"type": "string", "maxLength": 220},
+            "xValues": {"type": "array", "minItems": 2, "maxItems": 200, "items": {"type": "number"}},
+            "xLabel": {"type": "string", "minLength": 1, "maxLength": 40}, "xUnit": {"type": "string", "maxLength": 24},
+            "yLabel": {"type": "string", "minLength": 1, "maxLength": 40}, "yUnit": {"type": "string", "maxLength": 24},
+            "series": {"type": "array", "minItems": 1, "maxItems": 6, "items": {"$ref": "#/$defs/series"}},
+            "markers": {"type": "array", "maxItems": 12, "items": {"$ref": "#/$defs/marker"}}
+          }
+        }
+      ]
+    }
+  }
+}

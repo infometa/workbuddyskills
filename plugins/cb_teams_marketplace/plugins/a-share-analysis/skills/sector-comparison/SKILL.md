@@ -1,6 +1,8 @@
 ---
 name: sector-comparison
 description: 用于板块比较，聚焦行业比较/板块轮动/投资选择。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户在两个或多个板块之间犹豫时，想知道哪个更强、哪个更有性价比、哪个更适合当前阶段。
+description_zh: "用于板块比较，聚焦行业比较/板块轮动/投资选择。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户在两个或多个板块之间犹豫时，想知道哪个更强、哪个更有性价比、哪个更适合当前阶段。"
+description_en: "Use for sector comparison, focusing on industry comparison, sector rotation, and investment selection. Primarily suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It helps users comparing two or more sectors determine which is stronger, offers better value, and best fits the current market stage."
 ---
 
 # 板块比较

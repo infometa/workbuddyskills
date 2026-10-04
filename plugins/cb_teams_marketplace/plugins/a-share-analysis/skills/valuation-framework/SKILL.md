@@ -1,6 +1,8 @@
 ---
 name: valuation-framework
 description: 用于估值与定价框架分析，聚焦估值分析/定价逻辑/投资决策。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想知道一家公司应该怎么估值、当前估值处于什么水平、市场为什么愿意给这个估值、还有没有重估空间。
+description_zh: "用于估值与定价框架分析，聚焦估值分析/定价逻辑/投资决策。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想知道一家公司应该怎么估值、当前估值处于什么水平、市场为什么愿意给这个估值、还有没有重估空间。"
+description_en: "Use for valuation and pricing-framework analysis, focusing on valuation, pricing logic, and investment decisions. Primarily suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It explains how a company should be valued, where its current valuation stands, why the market assigns that valuation, and whether there is room for re-rating."
 ---
 
 # 估值与定价框架

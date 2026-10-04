@@ -1,6 +1,21 @@
 ---
 name: ardot-design-assistant
 description: "This skill should be used for any design-related tasks involving creating, editing, or modifying visual designs, UI screens, pages, layouts, or components, as well as converting designs to frontend code. Trigger phrases include: generate/create/design a page, design a screen, create a landing page, make a dashboard, design a login screen, modify the design, update the layout, change colors, add a component, edit design file, create wireframe, design a form, build a UI, generate homepage, create slides, design a presentation, generate style guide, create design system from website, extract design tokens, convert design to code, design to HTML, export as webpage, pixel-perfect reproduction, implement slide transitions, 生成设计指南, 提取设计风格, 网站风格转设计稿, 设计稿转代码, 转为前端代码, 生成HTML, 导出为网页, 一比一还原, 复刻设计稿, 设计稿出码, 切图, 幻灯片转网页, or Chinese equivalents like 生成页面, 设计页面, 创建界面, 修改设计稿, 调整布局, 修改样式, 生成设计, 做一个页面, 画一个页面. Routes all design work through the ardot MCP server."
+description_zh: >-
+  适用于任何设计相关任务：创建、编辑或修改视觉设计、UI 页面、布局与组件，以及把设计稿转换为前端代码。
+  触发词包括：生成页面、设计页面、创建界面、修改设计稿、调整布局、修改样式、生成设计、做一个页面、画一个页面、
+  设计登录页、做落地页、做仪表盘、加一个组件、生成线框图、生成设计指南、提取设计风格、网站风格转设计稿、
+  设计稿转代码、转为前端代码、生成HTML、导出为网页、一比一还原、复刻设计稿、设计稿出码、切图、幻灯片转网页。
+  所有设计工作统一通过 ardot MCP server 完成。
+description_en: >-
+  Use for any design-related task involving creating, editing, or modifying visual designs, UI screens, pages,
+  layouts, or components, as well as converting designs to frontend code. Trigger phrases include:
+  generate/create/design a page, design a screen, create a landing page, make a dashboard, design a login screen,
+  modify the design, update the layout, change colors, add a component, edit design file, create wireframe,
+  design a form, build a UI, generate homepage, create slides, design a presentation, generate style guide,
+  create design system from website, extract design tokens, convert design to code, design to HTML,
+  export as webpage, pixel-perfect reproduction, implement slide transitions. Routes all design work through the
+  ardot MCP server.
 allowed-tools: 
 ---
 

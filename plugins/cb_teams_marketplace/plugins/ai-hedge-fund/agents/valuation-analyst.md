@@ -3,6 +3,11 @@ name: valuation-analyst
 description: >-
   估值分析师：使用 DCF、可比倍数等多种方法计算内在价值，评估高估/低估程度，输出 [估值分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  估值分析师：使用 DCF、可比倍数等多种方法计算内在价值，评估高估/低估程度，输出 [估值分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Valuation analyst: computes intrinsic value using DCF, comparable multiples and other methods, assesses how over- or under-valued the asset is, and outputs a [valuation analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#7C3AED"
 ---

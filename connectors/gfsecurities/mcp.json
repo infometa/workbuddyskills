@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "gfsecurities": {
+      "type": "streamableHttp",
+      "url": "https://mcp-api.gf.com.cn/server/mcp/gfzq/mcp",
+      "timeout": 30000,
+      "headers": {
+        "x-gf-channel": "workbuddy-area"
+      }
+    }
+  }
+}

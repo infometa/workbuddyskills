@@ -1,0 +1,91 @@
+# 冒险（adventure）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: adventure
+name_cn: 冒险
+category: theme
+carrier: manga
+audience: both
+weight: low
+level: level-3
+severity: weak
+version: 6.0.0
+related_combo: references/domestic/combos/adventure.md
+emotion_core:
+- 探索欲
+- 未知刺激
+- 团队成长
+- 解谜快感
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 全受众通用，男女频兼容
+  bg_desc: 全背景兼容，异界、古墓、荒野、都市秘境适配度最高
+  weight: low
+  bottom_line:
+  - 冒险目标明确，主线清晰
+  - 危机与收获并存，不能全程无风险
+relations:
+  synergy:
+  - target: xuanhuan
+    effect_type: 增强型
+    weight: high
+    effect: 秘境探险+修仙体系，冒险与升级结合
+  - target: fantasy
+    effect_type: 增强型
+    weight: high
+    effect: 异世界探索，丰富冒险场景与奇观
+  - target: sci-fi
+    effect_type: 增强型
+    weight: medium
+    effect: 星际/未知科技区域冒险，更具新鲜感
+  - target: twist
+    effect_type: 增强型
+    weight: medium
+    effect: 冒险中层层反转，真相不断颠覆
+  - target: system
+    effect_type: 增强型
+    weight: medium
+    effect: 系统发布冒险任务，目标更明确
+  mutex:
+  - target: 纯日常甜宠
+    reason: 无未知探索与危机则冒险属性失效
+combo_adapt:
+- combo: references/domestic/combos/adventure.md
+  rule: 对齐冒险核心节奏，强化探索感与危机张力
+  sub: 经典冒险型
+- combo: references/domestic/combos/puzzle.md
+  rule: 冒险+解谜，闯关与推理结合
+  sub: 解谜冒险型
+- combo: references/domestic/combos/survival.md
+  rule: 冒险+生存，绝境探索双重张力
+  sub: 生存冒险型
+fusion:
+- recipe: fusion/recipes/tomb-raiding.md
+  note: 古墓探险经典配方，强悬念强危机，适配高完读率内容
+- recipe: fusion/recipes/team-adventure.md
+  note: 组队冒险配方，人物群像丰富，适配长连载
+redlines:
+- code: AP-MX01
+  name: 冒险主线模糊
+  severity: 高
+  dimension: 结构与节奏
+  test: 无明确目标，剧情东拉西扯，冒险属性失效
+- code: AP-MX02
+  name: 危机无代价
+  severity: 中
+  dimension: 结构与节奏
+  test: 全程顺风顺水，遇难呈祥无损失，冒险感缺失
+soft_warnings:
+- 避免冒险场景同质化，每个关卡缺乏差异
+- 避免解谜逻辑牵强，全靠主角光环强行破解
+- 避免配角工具化，只为触发机关、提供线索存在
+manga:
+  visual_signature: 古墓/秘境/荒野的探险场景 + 机关解谜视觉
+  high_affinity: true
+  visual_hooks:
+  - 未知区域的奇观全景
+  - 机关/谜题的视觉设计
+  - 守关者/凶兽的造型冲击

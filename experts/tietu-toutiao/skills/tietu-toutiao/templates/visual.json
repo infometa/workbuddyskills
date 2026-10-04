@@ -1,0 +1,54 @@
+{
+  "name": "visual",
+  "label": "大图传播型",
+  "description": "放大核心新闻图片和标题，减少次要信息，适合手机信息流。",
+  "background": "#FFFFFF",
+  "layers": [
+    {
+      "type": "text",
+      "field": "masthead.text",
+      "text": "{masthead}  {date}",
+      "x": 40,
+      "y": 40,
+      "size": 28,
+      "min_size": 22,
+      "max_width": 1000,
+      "max_lines": 1,
+      "color": "#888888"
+    },
+    {
+      "type": "image",
+      "field": "primary_photo.path",
+      "src": "{primary_photo_path}",
+      "x": 0,
+      "y": 90,
+      "w": 1080,
+      "h": 900,
+      "fit": "cover",
+      "allow_placeholder": true,
+      "placeholder": "图片占位：待确认核心新闻图片"
+    },
+    {
+      "type": "text",
+      "field": "headline.original",
+      "text": "{headline}",
+      "x": 40,
+      "y": 1030,
+      "size": 72,
+      "min_size": 44,
+      "max_width": 1000,
+      "max_lines": 2,
+      "line_spacing": 10,
+      "color": "#1a1a1a"
+    },
+    {
+      "type": "line",
+      "x1": 40,
+      "y1": 1230,
+      "x2": 1040,
+      "y2": 1230,
+      "color": "#cccccc",
+      "width": 2
+    }
+  ]
+}

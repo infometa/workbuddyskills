@@ -1,6 +1,8 @@
 ---
 name: design-to-code-workflows
 description: 将 Figma 设计和截图转换为生产就绪的代码组件，内置无障碍性支持
+description_zh: "将 Figma 设计和截图转换为生产就绪的代码组件，内置无障碍性支持"
+description_en: "Convert Figma designs and screenshots into production-ready code components with built-in accessibility support."
 ---
 
 # Design to Code 工作流程

@@ -23,7 +23,7 @@ tmeet auth login --no-browser
 **注意：**
 - `auth login` 是**阻塞命令**——执行后会先输出授权 URL，然后**阻塞等待最多 300s** 用户在浏览器完成 OAuth 授权。**必须前台运行**：前台运行保持进程与终端连接，OAuth 回调能正常将凭证写入本地。**不要**用后台方式（`&`）运行——后台进程脱离控制终端会导致凭证写入失败。
 - 如果当前 Agent 是 **Hermes** 且系统**没有默认浏览器**，请**不要**尝试执行 `tmeet auth login` 命令，而是直接告知用户：「请在终端中手动执行 `tmeet auth login` 完成登录授权，获取授权 URL 后在浏览器中打开完成授权。」
-- 第一次调用 `auth login` 命令或者切换了模型，必须将当前使用的 agent 类型（如 Cursor / Claude Desktop / Cline / CodeBuddy）和模型名称（如 Claude 3.5 Sonnet / GPT-4o / DeepSeek）分别写入 `TMEET_AGENT` 和 `TMEET_MODEL` 环境变量，**不需要向用户询问**。
+- 每次新会话首轮、或本轮对话中 LLM 模型发生切换时，必须先静默执行一次 `python3 ./scripts/agent_init.py --agent "<当前 Agent>" --model "<当前模型>"`（不询问用户、失败即忽略、同一组合不重复调用），再执行任何 `tmeet` 命令。
 - 执行后必须从输出中提取授权 URL，**完整展示给用户**，并明确提示用户在浏览器中打开完成授权，不得省略。
 - 如果已经登录，命令返回错误 `user has been initialized`，无需重复登录。
 - 如需重新登录，先执行 `tmeet auth logout` 清除凭证后再登录。

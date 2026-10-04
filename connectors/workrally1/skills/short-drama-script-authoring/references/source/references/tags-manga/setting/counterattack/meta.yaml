@@ -1,0 +1,97 @@
+# 逆袭（counterattack）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: counterattack
+name_cn: 逆袭
+category: setting
+carrier: manga
+audience: both
+weight: high
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/counterattack.md
+emotion_core:
+- 阶层翻盘
+- 打脸爽感
+- 成长逆袭
+- 扬眉吐气
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用
+  bg_desc: 全背景通用，都市、豪门、玄幻适配度最高
+  weight: high
+  bottom_line:
+  - 前期低谷有足够铺垫，不能开局即巅峰
+  - 逆袭有合理支撑，不能强行开挂
+  - 成长弧线清晰，前后反差明确
+relations:
+  synergy:
+  - target: 打脸
+    effect_type: 增强型
+    weight: high
+    effect: 逆袭过程中的打脸爽点，让成长更有反馈感
+  - target: rebirth
+    effect_type: 增强型
+    weight: high
+    effect: 重生提供信息差，为逆袭提供合理支撑
+  - target: system
+    effect_type: 增强型
+    weight: high
+    effect: 系统量化成长进度，逆袭节奏更清晰
+  - target: wealthy-clan
+    effect_type: 增强型
+    weight: high
+    effect: 阶层反差放大逆袭爽感，跨越感更强
+  - target: xuanhuan
+    effect_type: 增强型
+    weight: high
+    effect: 修为升级对应阶层逆袭，成长可视化
+  mutex:
+  - target: 纯甜宠无冲突
+    reason: 无低谷无冲突则逆袭无法成立
+combo_adapt:
+- combo: references/domestic/combos/counterattack.md
+  rule: 对齐逆袭核心成长弧光，强化前后反差与合理性
+  sub: 经典逆袭型
+- combo: references/domestic/combos/face-slapping.md
+  rule: 逆袭成长绑定打脸爆发，爽感层层递进
+  sub: 逆袭打脸型
+- combo: references/domestic/combos/wealthy-clan.md
+  rule: 豪门背景下的阶层跨越，身份反差拉满
+  sub: 豪门逆袭型
+fusion:
+- recipe: fusion/recipes/system-counterattack.md
+  note: 系统+逆袭经典配方，成长量化爽点直接，适配全品类高转化内容
+- recipe: fusion/recipes/son-in-law-counterattack.md
+  note: 赘婿逆袭配方，强身份反差，适配下沉男频市场
+redlines:
+- code: AP-NX01
+  name: 逆袭无支撑
+  severity: 极高
+  dimension: 标签与逻辑
+  test: 主角毫无铺垫突然变强，逻辑崩塌，爽感失效
+- code: AP-NX02
+  name: 前期铺垫不足
+  severity: 高
+  dimension: 结构与节奏
+  test: 无低谷受辱场景，前后反差微弱，逆袭感缺失
+- code: AP-NX03
+  name: 成长弧线断裂
+  severity: 高
+  dimension: 结构与节奏
+  test: 逆袭过程无递进，一步登顶，缺乏成长感
+soft_warnings:
+- 避免反派降智严重，只为衬托主角逆袭
+- 避免逆袭后人设崩塌，性格前后完全割裂
+- 避免配角态度反转过于生硬，缺乏过渡
+manga:
+  visual_signature: 前后反差的视觉对比（破衣↔华服/废柴↔大佬）
+  high_affinity: true
+  visual_hooks:
+  - 逆袭前后的造型反差对比
+  - 打脸名场面的满屏震撼
+  - 实力揭晓的全景定格

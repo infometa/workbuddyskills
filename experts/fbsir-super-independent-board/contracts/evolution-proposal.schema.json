@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.fbsir.local/super-independent-board/evolution-proposal.schema.json",
+  "title": "超级独董会 EvolutionProposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "productId",
+    "packageVersion",
+    "proposalId",
+    "scope",
+    "field",
+    "currentValue",
+    "proposedValue",
+    "evidence",
+    "expectedEffect",
+    "mustNotChange",
+    "status",
+    "rollback"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "fbsir.super-independent-board.evolution-proposal/v1"
+    },
+    "productId": {
+      "const": "fbsir-super-independent-board"
+    },
+    "packageVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Resolve from .codebuddy-plugin/plugin.json#/version when the proposal is created."
+    },
+    "proposalId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "enum": [
+        "current_case",
+        "current_session"
+      ]
+    },
+    "field": {
+      "enum": [
+        "questionOrder",
+        "explanationDepth",
+        "modeSelection",
+        "artifactFormat",
+        "ctaPresentation",
+        "reviewSuggestion",
+        "outputDensity"
+      ]
+    },
+    "currentValue": {},
+    "proposedValue": {},
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "expectedEffect": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mustNotChange": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "事实",
+          "来源",
+          "置信度",
+          "最强反方",
+          "失效条件",
+          "人工关卡",
+          "用户最终决策权"
+        ]
+      }
+    },
+    "status": {
+      "enum": [
+        "awaiting_user_confirmation",
+        "accepted",
+        "accepted_with_changes",
+        "rejected"
+      ]
+    },
+    "rollback": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

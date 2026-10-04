@@ -1,0 +1,93 @@
+# 反转（twist）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: twist
+name_cn: 反转
+category: setting
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/suspense.md
+emotion_core:
+- 意外感
+- 认知颠覆
+- 悬念拉扯
+- 真相冲击
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 全受众通用
+  bg_desc: 全背景通用，都市、悬疑、脑洞适配度最高
+  weight: medium
+  bottom_line:
+  - 反转有铺垫有逻辑，不能强行硬转
+  - 反转服务主线，不能为反而反
+  - 前后逻辑自洽，不能反转后剧情崩盘
+relations:
+  synergy:
+  - target: 悬疑
+    effect_type: 增强型
+    weight: high
+    effect: 悬疑铺垫反转，反转强化悬疑爽感，二者相辅相成
+  - target: brain-hole
+    effect_type: 增强型
+    weight: high
+    effect: 脑洞设定适配多层反转，认知冲击感更强
+  - target: wealthy-clan
+    effect_type: 增强型
+    weight: high
+    effect: 身份/身世反转是豪门核心爽点之一
+  - target: city
+    effect_type: 增强型
+    weight: medium
+    effect: 日常背景反衬反转的意外感，冲击力更强
+  mutex:
+  - target: 甜宠纯爱
+    reason: 过多反转会削弱情感浓度，需谨慎叠加（对冲型，非硬互斥）
+combo_adapt:
+- combo: references/domestic/combos/suspense.md
+  rule: 反转对齐悬疑节奏，强化铺垫与真相揭露逻辑
+  sub: 悬疑反转型
+- combo: references/domestic/combos/face-slapping.md
+  rule: 反转绑定打脸，真相揭晓瞬间爽感最大化
+  sub: 反转打脸型
+- combo: references/domestic/combos/innovation.md
+  rule: 脑洞+反转，创意与冲击力双重加持
+  sub: 脑洞反转型
+fusion:
+- recipe: fusion/recipes/identity-twist.md
+  note: 身份反转经典配方，强钩子强冲击，适配高完读率内容
+- recipe: fusion/recipes/multiple-twists.md
+  note: 多层反转配方，全程高能，适配强剧情向内容
+redlines:
+- code: AP-FZ01
+  name: 反转无铺垫硬转
+  severity: 极高
+  dimension: 结构与节奏
+  test: 毫无伏笔强行反转，逻辑崩塌，观众出戏
+- code: AP-FZ02
+  name: 为反而反
+  severity: 高
+  dimension: 结构与节奏
+  test: 反转与主线无关，纯为博眼球，剧情支离破碎
+- code: AP-FZ03
+  name: 反转后逻辑崩盘
+  severity: 高
+  dimension: 标签与逻辑
+  test: 反转后无法自圆其说，前后剧情矛盾
+soft_warnings:
+- 避免反转密度过高，观众审美疲劳，失去冲击力
+- 避免线索过于隐晦，观众完全猜不到，参与感低
+- 避免人物立场反复横跳，人设割裂
+manga:
+  visual_signature: 真相揭露的画面颠覆 + 伏笔回收的视觉呼应
+  high_affinity: true
+  visual_hooks:
+  - 反转瞬间的画面颠覆
+  - 伏笔细节的视觉强调与回收
+  - 身份揭露的震撼定格

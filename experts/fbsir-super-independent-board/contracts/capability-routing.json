@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "fbsir.super-independent-board.capability-routing/v1",
+  "productId": "fbsir-super-independent-board",
+  "packageVersionSource": "../.codebuddy-plugin/plugin.json#/version",
+  "firstValueCapabilityChecksAllowed": [
+    "user_provided_material",
+    "package_method",
+    "chat_output"
+  ],
+  "forbiddenBeforeFirstValue": [
+    "connector_state_read",
+    "service_login_requirement",
+    "long_term_profile_read",
+    "file_write_requirement",
+    "network_requirement"
+  ],
+  "gapTypes": [
+    "research_evidence",
+    "modeling_analysis",
+    "document_media",
+    "action_automation",
+    "memory_review"
+  ],
+  "routeOrder": [
+    "user_provided_material",
+    "package_method",
+    "enabled_skill",
+    "host_native_capability",
+    "authorized_connector",
+    "explicitly_enabled_service",
+    "chat_level_fallback"
+  ],
+  "rules": {
+    "selectByGapNotToolInventory": true,
+    "verifiedAvailabilityRequired": true,
+    "partialFailureMustNotBlockOtherRoutes": true,
+    "toolNamesHiddenFromOrdinaryUser": true,
+    "externalSuccessClaimRequiresReceipt": true,
+    "unknownCapabilityRemainsUnknown": true
+  },
+  "failureTerminal": "deliver_chat_level_artifact_and_state_unexecuted_capability"
+}

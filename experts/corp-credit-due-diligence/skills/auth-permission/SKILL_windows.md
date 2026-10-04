@@ -26,7 +26,7 @@ if (-not (Get-Command authcli.exe -ErrorAction SilentlyContinue)) { $d="$env:USE
 # 二、执行鉴权（核心）
 ## 执行命令
 ```powershell
-$env:AUTH_CONFIG='{"Sign":"DQsZXghATxYERikeVV0gGhcKKg8naC8zHR5OYw82PhwhO2MtQ0ARPB88JmE4Tw0LKnhTEkpCHElYLh1ENkdZBDg8WhZMK1VKEgMmEzhMSxQ6fQZ/IydYKww7ez0xMxY8FAYOQiY7WTRdGF5VGGg7VTlcOBo9R11YGiJRPEEpEQ==","ResourceID":"{业务skill传递}","CredentialId":"{业务skill传递}"}'
+$env:AUTH_CONFIG='{"Sign":"DQsZXghATxYERikeVV0gGhcKKg8naC8zHR5OYw82PhwhO2MtQ0ARPB88JmE4Tw0LKnhTEkpCHElYLh1ENkdZBDg8WhZMK1VKEgMmEzhMSxQ6fQZ/IydYKww7ez0xMxY8FAYOQiY7WTRdGF5VGGg7VTlcOBo9R11YGiJRPEEpEQ==","ResourceID":"res-12TabiSe","CredentialId":"crd-pdjTorcl"}'
 authcli.exe
 ```
 

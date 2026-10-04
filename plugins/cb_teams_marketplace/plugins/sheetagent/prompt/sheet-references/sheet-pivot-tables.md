@@ -8,6 +8,16 @@ description: >
   筛选透视 / 修改透视表 / 删除透视表; "create / add / build a pivot table"; "summarize / group /
   aggregate data"; "pivot by / group by / break down by"; "update / modify / change pivot";
   "remove / delete pivot".
+description_zh: >-
+  表格数据透视表的创建、配置、查看与修改规范。在调用 `createPivotTable` / `getPivotTableDetail` / `getPivotTable` /
+  `update` / `remove`，或执行任何创建、修改、删除透视表的任务前必须阅读。触发词：创建透视表 / 数据透视 / 汇总分析 /
+  分组统计 / 行分组 / 列分组 / 值汇总 / 筛选透视 / 修改透视表 / 删除透视表。
+description_en: >-
+  Pivot table creation, configuration, inspection, and modification patterns for spreadsheet operations.
+  Read before any `createPivotTable` / `getPivotTableDetail` / `getPivotTable` / `update` / `remove`, or any task
+  that creates, modifies, or removes a pivot table, or a request that implies one: "create / add / build a pivot
+  table"; "summarize / group / aggregate data"; "pivot by / group by / break down by"; "update / modify / change
+  pivot"; "remove / delete pivot".
 ---
 
 # Sheet Pivot Tables — Authoritative Guide for All Pivot Table Operations

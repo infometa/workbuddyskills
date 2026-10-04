@@ -1,0 +1,48 @@
+<!-- 供应集中度模板 -->
+<div class="pcf-section">
+  <h3>供应集中度</h3>
+
+  <div class="pcf-section__data-block">
+    <h4>前五大供应商</h4>
+    <table>
+      <thead>
+        <tr><th>排名</th><th>供应商</th><th>采购占比</th></tr>
+      </thead>
+      <tbody>
+        {{#each top5}}
+        <tr><td>{{rank}}</td><td>{{name}}</td><td>{{ratio}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__metrics">
+    <div class="pcf-section__metric">
+      <div class="pcf-section__metric-label">前五合计</div>
+      <div class="pcf-section__metric-value">{{total}}</div>
+    </div>
+    <div class="pcf-section__metric">
+      <div class="pcf-section__metric-label">评估</div>
+      <div class="pcf-section__metric-value">{{assessment}}</div>
+    </div>
+  </div>
+
+  <div class="pcf-section__insight">
+    <div class="pcf-section__insight-title">研判结论</div>
+    {{#each judgments}}
+    <div class="pcf-section__insight-item pcf-section__insight-item--{{type}}">
+      <span>{{icon}}</span>
+      <span>{{text}}</span>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

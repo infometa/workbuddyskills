@@ -1,0 +1,79 @@
+{
+  "name": "authoritative",
+  "label": "原报权威型",
+  "description": "保留报头、原标题、日期和原始新闻图片，突出正式媒体感。",
+  "background": "#FFFFFF",
+  "layers": [
+    {
+      "type": "text",
+      "field": "masthead.text",
+      "text": "{masthead}",
+      "x": 40,
+      "y": 40,
+      "size": 72,
+      "min_size": 48,
+      "max_width": 1000,
+      "max_lines": 1,
+      "color": "#1a1a1a"
+    },
+    {
+      "type": "text",
+      "field": "date.text",
+      "text": "{date}",
+      "x": 40,
+      "y": 150,
+      "size": 32,
+      "min_size": 24,
+      "max_width": 1000,
+      "max_lines": 1,
+      "color": "#666666"
+    },
+    {
+      "type": "line",
+      "x1": 40,
+      "y1": 210,
+      "x2": 1040,
+      "y2": 210,
+      "color": "#333333",
+      "width": 3
+    },
+    {
+      "type": "text",
+      "field": "headline.original",
+      "text": "{headline}",
+      "x": 40,
+      "y": 240,
+      "size": 64,
+      "min_size": 40,
+      "max_width": 1000,
+      "max_lines": 2,
+      "line_spacing": 10,
+      "color": "#000000"
+    },
+    {
+      "type": "image",
+      "field": "primary_photo.path",
+      "src": "{primary_photo_path}",
+      "x": 40,
+      "y": 430,
+      "w": 1000,
+      "h": 650,
+      "fit": "cover",
+      "allow_placeholder": true,
+      "placeholder": "图片占位：待确认核心新闻图片"
+    },
+    {
+      "type": "text",
+      "field": "sub_headline.text",
+      "text": "{sub_headline}",
+      "x": 40,
+      "y": 1120,
+      "size": 40,
+      "min_size": 28,
+      "max_width": 1000,
+      "max_lines": 2,
+      "line_spacing": 8,
+      "color": "#444444"
+    }
+  ]
+}

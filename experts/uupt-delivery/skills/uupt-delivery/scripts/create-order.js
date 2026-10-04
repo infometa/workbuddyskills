@@ -2,10 +2,10 @@
 
 /**
  * 创建订单脚本
- * 用法: node create-order.js --priceToken="询价token" --receiverPhone="收件人电话" [--channel="渠道"] [--note="帮忙内容"]
+ * 用法: node create-order.js --priceToken="询价token" --receiverPhone="收件人电话" [--channel="渠道"] [--note="帮帮内容"]
  */
 
-const { createOrder, formatPrice } = require('../index');
+const { createOrder, formatPrice, CONFIG_DIR } = require('../index');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
@@ -30,25 +30,25 @@ async function main() {
 📦 创建订单
 
 用法:
-  node create-order.js --priceToken="询价token" --receiverPhone="收件人电话" [--channel="渠道"] [--note="帮忙内容"]
+  node create-order.js --priceToken="询价token" --receiverPhone="收件人电话" [--channel="渠道"] [--note="帮帮内容"]
 
 参数:
   --priceToken     询价接口返回的 token（必填）
   --receiverPhone  收件人手机号（必填）
   --channel        聊天渠道（可选，如 wechat、feishu、dingtalk 等）
-  --note           帮忙内容描述（帮忙订单时必填，描述具体需要跑男提供的帮助服务）
+  --note           帮帮内容描述（帮帮订单时必填，描述具体需要跑男提供的帮助服务）
 
 示例:
   # 跑腿配送
   node create-order.js --priceToken="abc123xyz" --receiverPhone="13800138000"
   node create-order.js --priceToken="abc123xyz" --receiverPhone="13800138000" --channel="wechat"
-  # 帮忙服务
+  # 帮帮服务
   node create-order.js --priceToken="abc123xyz" --receiverPhone="13800138000" --note="帮我搬一箱矿泉水到3楼"
 
 注意:
   - priceToken 有时效性，请在询价后尽快创建订单
   - 如账户余额不足，将返回支付链接，用户可点击选择微信/支付宝支付
-  - 帮忙订单务必填写 --note 参数描述具体帮忙内容
+  - 帮帮订单务必填写 --note 参数描述具体帮帮内容
 `);
     process.exit(1);
   }
@@ -84,11 +84,11 @@ async function main() {
             const qrcodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(paymentUrl)}`;
             
             try {
-              const projectRoot = path.dirname(__dirname);
-              const qrFileName = 'payment_qrcode.png';
-              const qrFilePath = path.join(projectRoot, qrFileName);
+              // 写入用户主目录下的配置目录，skill 安装目录可能只读
+              const qrFilePath = path.join(CONFIG_DIR, 'payment_qrcode.png');
               
               const response = await axios.get(qrcodeUrl, { responseType: 'arraybuffer', timeout: 10000 });
+              fs.mkdirSync(CONFIG_DIR, { recursive: true });
               fs.writeFileSync(qrFilePath, response.data);
               
               console.log('\n💳 支付信息：');

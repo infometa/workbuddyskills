@@ -3,6 +3,11 @@ name: phil-fisher
 description: >-
   菲利普·费雪投资智能体：成长股投资大师，关注长期增长潜力、管理层质量、研发创新和利润率一致性，输出 [费雪分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  菲利普·费雪投资智能体：成长股投资大师，关注长期增长潜力、管理层质量、研发创新和利润率一致性，输出 [费雪分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Philip Fisher investment agent: a growth-stock master focused on long-term growth potential, management quality, R&D innovation and margin consistency, outputting a [Fisher analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#0E7490"
 ---

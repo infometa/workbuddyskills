@@ -1,14 +1,14 @@
 # 模型擅长场景速查表（references/model-scenarios.md）
 
-适用版本：AI-HIVE Connector 1.0.0
-更新日期：2026-07-31
+适用版本：AI-HIVE Connector 1.1.4
+更新日期：2026-08-13
 
 > 本表帮助 agent 在调用 `list_models` 后，结合用户任务特点快速匹配擅长模型。
 > 实际可用模型与价格以 `list_models` 返回为准；本表仅作场景速查，不替代服务端返回值。
 
-## routingMode 三档计费说明
+## routingMode 选择说明
 
-`list_models` 返回每个模型的 `pricingSnapshot`，含以下三档：
+`list_models` 会返回当前模型实际可用的 `routingMode` 及其对应 `pricingSnapshot`。以下路由是常见选项，但不是每个模型都必然同时提供；必须以本次工具返回为准：
 
 | routingMode | 含义 | 适用场景 |
 |---|---|---|
@@ -18,7 +18,7 @@
 
 推荐模型时同时给出推荐 `routingMode`，让用户理解效果与成本的取舍。
 
-## 文本模型（kind="text"）
+## 文本模型（modelType="TEXT"）
 
 | 模型 | 擅长场景 | 推荐 routingMode |
 |---|---|---|
@@ -43,7 +43,7 @@
 - **合同要点 / 企业工作流**：claude-opus-4-5 或 gemini-2.5-pro
 - **多语言翻译**：qwen3-max-preview 或 kimi-k2.6
 
-## 图片模型（kind="image"）
+## 图片模型（modelType="IMAGE"）
 
 | 模型 | 擅长场景 | 推荐 routingMode |
 |---|---|---|
@@ -66,7 +66,7 @@
 - **参考图风格迁移**：doubao-seedream-4-5（多图融合）
 - **需要文字的创意图**：gpt-image-2 或 Nano Banana pro（文字渲染强）
 
-## 视频模型（kind="video"）
+## 视频模型（modelType="VIDEO"）
 
 | 模型 | 擅长场景 | 推荐 routingMode |
 |---|---|---|
@@ -74,6 +74,7 @@
 | doubao-seedance-1-0-lite-i2v-250428 | 图生运镜强（环绕/航拍/变焦/平移/跟随/手持），多主体动作 | SPEED_FIRST（图生运镜） |
 | doubao-seedance-1-0-pro-250528 | 多镜头叙事，影视级 1080P | SUCCESS_FIRST（影视级） |
 | doubao-seedance-1-5-pro-251215 | 首尾帧音画 | SUCCESS_FIRST（首尾帧） |
+| doubao-seedance-2-5（Seedance 2.5） | 原生 30s、最多 50 全模态参考、专业编辑/延长/首尾帧/关键帧/分镜/白模/一键成片/无缝转场/多语言 | SUCCESS_FIRST（长叙事·强参考·可编辑） |
 | happyhorse-1.0-t2v | 文生视频，动态画面 | COST_FIRST（文生视频） |
 | happyhorse-1.0-i2v | 图生视频 | SPEED_FIRST（图生视频） |
 | happyhorse-1.0-r2v | 参考生视频，9 图参考，主体场景稳定 | SUCCESS_FIRST（参考生视频） |
@@ -81,6 +82,12 @@
 | veo3.1-pro | 高质量模式，首尾帧+音画 | SUCCESS_FIRST（高质量音画） |
 | sora-2 | 物理精准，同步对话音效 | SUCCESS_FIRST（物理精准） |
 | minimax/video-01 | 高清节奏稳定 | SPEED_FIRST（快速生成） |
+| minimax-h3（H3 / MiniMax H3） | 全模态上下文、原生立体声、首尾帧/Ref2V/视频编辑/动作迁移，最长 15s/2K | SUCCESS_FIRST（全模态·立体声·编辑迁移） |
+
+> **OpenAPI 交叉验证 ID（参考，2026-08）**：下表为 AI-HIVE OpenAPI 的 `publicModelId`，经 SDK `models-reference.md` 交叉验证。Connector 内部 `list_models` 返回的具体 ID 以运行时为准。
+> - Seedance 2.5：`public_model_seedance_2_5_t2v` / `_i2v` / `_r2v` / `_video_edit` / `_video_extend`
+> - MiniMax H3：`public_model_minimax_h3_t2v` / `_i2v` / `_r2v`
+> - Happyhorse：`public_model_happyhorse_t2v` / `_i2v` / `_r2v` / `_video_edit`
 
 ### 选派逻辑
 
@@ -89,6 +96,8 @@
 - **图生视频 / 单图动起来**：happyhorse-1.0-i2v 或 seedance-1-0-lite-i2v
 - **首尾帧过渡**：seedance-1-5-pro 或 seedance-1-0-pro
 - **多图参考保持一致**：happyhorse-1.0-r2v（最多 9 张参考）
+- **长视频 / 强参考 / 专业编辑 / 延长**：seedance-2-5（原生 30s、最多 50 参考、编辑/延长/首尾帧/关键帧/分镜/白模）
+- **全模态 / 原生立体声 / 动作迁移 / 产品设计 / 排版界面动画**：minimax-h3（H3）
 - **需要声音 / 音画同步**：veo3 或 sora-2
 - **快速预览**：seedance-1-0-pro-fast 或 minimax/video-01
 

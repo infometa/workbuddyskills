@@ -1,0 +1,57 @@
+{
+  "name": "query_product_sale_channel",
+  "description": "查询产品在售渠道接口。根据产品型号名称与用户意向购买渠道查询在售渠道，并由服务端直接返回场景类型（sceneType），用于判定 F1 分流的三条分支与线上/线下细分。意向渠道命中判定由服务端完成，不要自己拿 channelName 与意向渠道求交。所有参数必须包在 request 对象里。",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "request": {
+        "type": "object",
+        "description": "查询产品在售渠道请求参数",
+        "properties": {
+          "productName": {
+            "type": "string",
+            "description": "产品型号名称，必填。用于定位该型号对应的在售渠道。提取优先级：① 先查 assets/product_name_aliases.json 的别名映射（口语说法 → 标准型号名，如「云溪5.0 D3」→ XQG120-BLE7AD3U1、「小红花502」→ BCD-502WGHTDEDG7U1、「卡萨帝601鉴赏家」→ BCD-601WGCTDA4CBU1(AI)），触发词取最长匹配；② 映射不到时按该文件的 fallback_pattern 从用户话语中原样摘出型号（不改写、不补全、不纠正拼写）；③ 两者都取不到就追问型号，不得编造或拿相近型号顶替"
+          },
+          "intentChannels": {
+            "type": "array",
+            "description": "用户意向购买渠道，可空。填真实渠道名，仅限 抖音/快手/拼多多/天猫/京东/小红书/视频号/线下 八项（见 assets/trigger_dict.json.intent_channels）；其中「线下」视为线下渠道，其余渠道名视为线上。「附近/门店在哪」等只提位置的表达命中「线下」。用户只说了「线上」「全部/不限渠道」这类聚合词时，不要编造具体平台名，留空由服务端按未指定意向渠道处理。**异常地点不是地址，直接忽略、不得据此填「线下」**：火星/月球/霍格沃茨这类不可能有门店的地方，本字段留空按未指定意向渠道处理，正常返回该型号的在售渠道（含线上），话术里也不复述不点评这个地点（实测「XQG120-BLE7AD3WU1在火星有卖吗」下发了 [\"线下\"]，把在售渠道范围凭空缩小成只查线下）；用户同时说了真实渠道（「火星的京东有吗」）时异常地点照旧忽略、真实渠道照填 [\"京东\"]。境外真实城市（纽约/东京）与不完整的国内地址（朝阳区）**是**真实地址，不属异常地点，照常处理。完整口径见 assets/trigger_dict.json.invalid_location",
+            "items": {"type": "string"}
+          },
+          "excludeChannels": {
+            "type": "array",
+            "description": "排除的渠道，可空。取值同为上述八项真实渠道名。用户说「不要天猫的」「不要京东的」「不要这些渠道」「换个渠道」时，把被排除的渠道名填入本字段（见 assets/trigger_dict.json.slot_adjust.channel_exclude）：① 点名某渠道（不要天猫）→ 填 [\"天猫\"]；② 泛指「不要这些渠道」→ 填上一轮 channelName 里命中的渠道；③ 「不要线上的」→ 填除「线下」外的七个线上渠道名（线上是聚合词，需展开成真实渠道名才能排除）；④ 「不要线下的」→ 填 [\"线下\"]。被排除的渠道不参与在售判定，服务端据剩余渠道重新回传 sceneType。与 intentChannels 互斥：同一个渠道不要同时出现在两个字段里",
+            "items": {"type": "string"}
+          }
+        },
+        "required": ["productName"]
+      }
+    },
+    "required": ["request"]
+  },
+  "output_schema": {
+    "type": "object",
+    "description": "扁平结构：成功字段与 ok 同级，与 query_product_recommend/query_product_attribute 风格一致，不再嵌套 data。失败时 ok=false 并带 error/message。",
+    "properties": {
+      "ok": {"type": "boolean", "description": "true=查询成功，此时读同级的 productCode/productName/channelName/sceneType；false 时看 error/message"},
+      "productCode": {"type": "string", "description": "产品型号"},
+      "productName": {"type": "string", "description": "产品名称"},
+      "channelName": {"type": "string", "description": "渠道（多渠道用英文逗号隔开），如 天猫,京东,线下。仅用于话术展示，不用于分支判定"},
+      "sceneType": {
+        "type": "object",
+        "description": "场景类型，F1 分流的唯一依据。type 缺失时本对象的 type/detailType 均为 null，按信息不足兜底",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "1=产品在用户意向渠道售卖（命中用户意向渠道）；2=产品在用户意向渠道无售卖（未命中用户意向渠道）；3=产品不在库"
+          },
+          "detailType": {
+            "type": "string",
+            "description": "场景类型细分，仅 type=1 时有值。1=命中线下意向渠道；2=命中线上渠道；3=同时命中线下与线上渠道"
+          }
+        }
+      },
+      "error": {"type": "string", "description": "错误码，仅 ok=false 时出现"},
+      "message": {"type": "string", "description": "面向用户的稳定错误提示，仅 ok=false 时出现；禁止在错误时编造渠道"}
+    }
+  }
+}

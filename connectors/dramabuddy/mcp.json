@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "dramabuddy": {
+      "type": "streamableHttp",
+      "url": "https://aicomic.yuewen.com/mcp",
+      "timeout": 30000
+    }
+  }
+}

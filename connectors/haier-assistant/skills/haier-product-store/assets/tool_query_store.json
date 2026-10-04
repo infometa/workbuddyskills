@@ -1,0 +1,56 @@
+{
+  "name": "query_store",
+  "description": "查询门店信息接口。根据用户指定的省/市/区/地址查询附近的海尔门店，门店数量上限 10 个，用于线下引流；面向用户最多展示 5 家。**返参是本次查询命中的门店，不是该区域的门店总量**：话术只说「为您找到 N 家」，禁止说「共/总共/只有 N 家」「就这些」「全部为您列出」。**位置有两个来源**：request 里用户说出来的省/市/区/地址，以及用户授权后由宿主注入的当前位置（不在 schema 里，模型既不可见也不得提供经纬度）。已授权时 request 可整体留空按当前位置就近查询；未授权时 request 不能留空——「附近」两个字本身不构成位置，此时不要调用本接口（否则按 2005 拒绝），直接追问用户所在省市区。所有参数必须包在 request 对象里。",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "request": {
+        "type": "object",
+        "description": "用户指定位置查询参数（ReqLocation）。仅省市区/地址，不含经纬度。**本渠道不得整体留空**：没有地址就先追问，不要空条件调用",
+        "properties": {
+          "country": {"type": "string", "description": "国家，可空，默认中国"},
+          "province": {"type": "string", "description": "省，按用户所述地址解析填"},
+          "city": {"type": "string", "description": "城市，按用户所述地址解析填"},
+          "district": {"type": "string", "description": "区，按用户所述地址解析填"},
+          "address": {"type": "string", "description": "地址，可空，用户提供的详细地址"},
+          "size": {"type": "integer", "description": "查询门店数，可空，正整数。用户明确要「多看几家」「再多来几个」时填；不确定就省略由后端按缺省条数返回（宿主上限 10，超出会被收敛到 10）。它只影响后端取多少家，面向用户的展示条数仍为最多 5 家。**只在用户提了数量时填，且必须是正整数**：0 或负数是非法值，宿主会返回错误码 2006，不要下发；用户没提数量时省略而不是填 0"},
+          "excludeStoreNames": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "排除的门店名集合，可空。用户说「换一批门店」「还有别的吗」「不要这些店」「换几家」时，把**上一轮已展示给用户的门店名**（返参 storeName 原文）填入本字段，命中的门店后端不再返回。多轮连续换批时累计填入历次已展示的门店名，避免又换回之前看过的。不再需要在本地过滤结果——后端已排除"
+          },
+          "radius": {"type": "integer", "description": "就近搜索半径，单位米，可空。**仅在按已授权的当前位置就近搜索时有效**：用户说「远一点/近一点」时按 ±2000 调整。按省市区查询时后端会忽略它，**不要传**，改为放宽或收窄行政区范围（区 → 市 / 市 → 区）"}
+        }
+      }
+    },
+    "required": ["request"]
+  },
+  "output_schema": {
+    "type": "object",
+    "description": "扁平结构：成功字段与 ok 同级，与 query_product_sale_channel/query_product_recommend 风格一致，不再嵌套 data（下游后端的 {code,data} 信封已由工具规整掉）。失败时 ok=false 并带 error/message。",
+    "properties": {
+      "ok": {"type": "boolean", "description": "true=查询成功，此时读同级的 total/stores；false 时看 error/message"},
+      "total": {"type": "integer", "description": "门店数量，上限 10"},
+      "stores": {
+        "type": "array",
+        "description": "门店列表（StoreInfoResDto），最多 10 个",
+        "items": {
+          "type": "object",
+          "properties": {
+            "storeName": {"type": "string", "description": "门店名称"},
+            "storeAddress": {"type": "string", "description": "门店地址"},
+            "phone": {"type": "string", "description": "门店电话，可空"},
+            "province": {"type": "string", "description": "省"},
+            "city": {"type": "string", "description": "市"},
+            "district": {"type": "string", "description": "区"},
+            "longitude": {"type": "number", "description": "经度；仅用于后端计算，不要展示给用户"},
+            "latitude": {"type": "number", "description": "纬度；仅用于后端计算，不要展示给用户"},
+            "distance": {"type": "number", "description": "距离（米），仅经纬度附近搜索时返回。**本渠道按省市区查询，该字段恒为空**：不提距离、不猜测距离、不说「最近的一家」这类基于距离的判断"}
+          }
+        }
+      },
+      "error": {"type": "string", "description": "错误码，仅 ok=false 时出现（如 2005 无位置 / 2006 门店数非法；MCP 出站入口另有 INTERNAL_ERROR/INVALID_ARGUMENTS）"},
+      "message": {"type": "string", "description": "面向用户的稳定错误提示，仅 ok=false 时出现；禁止在错误时编造门店"}
+    }
+  }
+}

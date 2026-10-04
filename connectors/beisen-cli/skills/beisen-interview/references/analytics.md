@@ -6,7 +6,7 @@
 ## analyzeInterviewQuality — 面试官质量评估报告
 
 ```bash
-beisen-cli interview interviewAnalysis analyzeInterviewQuality --data '<json>'
+beisen-cli interview_ai interviewAnalysis analyzeInterviewQuality --data '<json>'
 ```
 
 ### 参数（--data JSON）
@@ -23,10 +23,10 @@ beisen-cli interview interviewAnalysis analyzeInterviewQuality --data '<json>'
 
 ```bash
 # 分析某面试官的所有面试质量
-beisen-cli interview interviewAnalysis analyzeInterviewQuality --data '{"userIdName":"张三"}'
+beisen-cli interview_ai interviewAnalysis analyzeInterviewQuality --data '{"userIdName":"张三"}'
 
 # 分析某职位的初试质量
-beisen-cli interview interviewAnalysis analyzeInterviewQuality --data '{"jobIdCode":"职位ID或编码","interviewType":"初试","assessmentFocus":"业务技术面试"}'
+beisen-cli interview_ai interviewAnalysis analyzeInterviewQuality --data '{"jobIdCode":"职位ID或编码","interviewType":"初试","assessmentFocus":"业务技术面试"}'
 ```
 
 ### 返回结构
@@ -43,12 +43,12 @@ beisen-cli interview interviewAnalysis analyzeInterviewQuality --data '{"jobIdCo
 
 ### 轮询结果
 
-用返回的 `taskId` 调用 `beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<id>"}'`，直到 `isFinished == true`，从 `resultJson` 解析面试质量评估报告。
+用返回的 `taskId` 调用 `beisen-cli recruitment_ai async_task bs_get_async_task_status --data '{"taskId":"<id>"}'`，直到 `isFinished == true`，从 `resultJson` 解析面试质量评估报告。
 
 ## analyzeCompetitorIntelligence — 竞品情报分析报告
 
 ```bash
-beisen-cli interview interviewAnalysis analyzeCompetitorIntelligence --data '<json>'
+beisen-cli interview_ai interviewAnalysis analyzeCompetitorIntelligence --data '<json>'
 ```
 
 ### 参数（--data JSON）
@@ -61,7 +61,7 @@ beisen-cli interview interviewAnalysis analyzeCompetitorIntelligence --data '<js
 ### 参数示例
 
 ```bash
-beisen-cli interview interviewAnalysis analyzeCompetitorIntelligence --data '{"activeDimension":"人才策略与招聘动向","companyNames":["某科技公司"]}'
+beisen-cli interview_ai interviewAnalysis analyzeCompetitorIntelligence --data '{"activeDimension":"人才策略与招聘动向","companyNames":["某科技公司"]}'
 ```
 
 ### 返回结构
@@ -78,7 +78,7 @@ beisen-cli interview interviewAnalysis analyzeCompetitorIntelligence --data '{"a
 
 ### 轮询结果
 
-用返回的 `taskId` 调用 `beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<id>"}'`，直到 `isFinished == true`，从 `resultJson` 解析竞品情报分析报告。
+用返回的 `taskId` 调用 `beisen-cli recruitment_ai async_task bs_get_async_task_status --data '{"taskId":"<id>"}'`，直到 `isFinished == true`，从 `resultJson` 解析竞品情报分析报告。
 
 ### 注意事项
 

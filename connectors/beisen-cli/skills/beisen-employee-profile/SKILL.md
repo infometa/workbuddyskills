@@ -1,11 +1,15 @@
 ---
 name: beisen-employee-profile
-version: 1.0.9
+version: 1.2.13
 description: "北森员工档案查询。本 Skill 用于查询员工基本信息、任职信息、语言能力、教育背景、考核结果、证书执照、项目经历、专业技能、工作履历、表彰奖励、晋升结果。所有查询通过 beisen-data-query 通用数据查询流水线执行。当用户询问个人信息、任职、学历、绩效、证书、项目、技能、履历、奖项、晋升等员工档案相关问题时触发。"
 category: 人力资源/员工档案
 author: beisen
 agent_created: false
 allowed-tools: Bash, Read
+requires-skills:
+  - beisen-shared
+  - beisen-data-query
+requires-cli: ">=1.0.8"
 ---
 
 # 员工档案

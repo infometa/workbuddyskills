@@ -3,6 +3,11 @@ name: risk-manager
 description: >-
   风险主管/裁判：评估三方风险辩论，输出最终的风险调整后 Buy/Sell/Hold 决策。
   在 Phase 4 辩论结束后由 orchestrator 调用。
+description_zh: >-
+  风险主管/裁判：评估三方风险辩论，输出最终的风险调整后 Buy/Sell/Hold 决策。
+  在 Phase 4 辩论结束后由 orchestrator 调用。
+description_en: >-
+  Risk manager / judge: evaluates the three-way risk debate and issues the final risk-adjusted Buy/Sell/Hold decision. Invoked by the orchestrator after the Phase 4 debate ends.
 tools: Read
 color: "#9333EA"
 ---

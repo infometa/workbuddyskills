@@ -1,0 +1,89 @@
+# 校园（campus）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: campus
+name_cn: 校园
+category: background
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/sweet-love.md
+emotion_core:
+- 青春悸动
+- 成长蜕变
+- 纯爱心动
+- 热血逆袭
+- 校园治愈
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 年轻受众为主，男频侧重热血/逆袭，女频侧重纯爱/成长
+  bg_desc: 中学/大学校园基底，兼容青春、纯爱、热血、悬疑等子方向
+  weight: medium
+  bottom_line:
+  - 校园生活质感真实，符合学生身份逻辑
+  - 情感发展健康向上，把握尺度
+  - 成长线有铺垫，蜕变不突兀
+relations:
+  synergy:
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 学渣/被欺凌者逆袭蜕变，青春热血爽感
+  - target: rebirth
+    effect_type: 裂变型
+    weight: high
+    effect: 重回校园弥补遗憾，借先知改写青春
+  - target: brain-hole
+    effect_type: 增强型
+    weight: medium
+    effect: 校园贴近受众，承载脑洞设定代入感强
+  - target: twist
+    effect_type: 增强型
+    weight: medium
+    effect: 校园悬疑/反转，青春外壳下的张力
+  mutex:
+  - target: 成人职场
+    reason: 身份基底冲突，需毕业/时间线桥接
+combo_adapt:
+- combo: references/domestic/combos/sweet-love.md
+  rule: 校园纯爱、青春心动，主打甜与共鸣
+  sub: 校园纯爱型
+- combo: references/domestic/combos/counterattack.md
+  rule: 校园逆袭蜕变，从弱到强的青春热血
+  sub: 校园逆袭型
+- combo: references/domestic/combos/growth.md
+  rule: 青春成长、自我和解，治愈共鸣
+  sub: 校园成长型
+fusion:
+- recipe: fusion/recipes/rebirth-youth.md
+  note: 重生回校园弥补遗憾类，强情感共鸣模板
+- recipe: fusion/recipes/campus-counter.md
+  note: 校园逆袭蜕变类，青春热血爽感
+redlines:
+- code: AP-XY01
+  name: 校园情感越界
+  severity: 高
+  dimension: 内容与红线
+  test: 学生情感描写尺度失当，价值观导向偏差，触碰内容红线
+- code: AP-XY02
+  name: 校园暴力美化
+  severity: 极高
+  dimension: 内容与红线
+  test: 渲染美化校园霸凌，价值观错误
+soft_warnings:
+- 避免校园生活悬浮，脱离真实学生状态
+- 避免成长线突兀，蜕变无过程铺垫
+- 避免情感线低龄狗血，缺乏真实共鸣
+manga:
+  visual_signature: 校园场景 + 青春校服造型 + 明亮清新色调
+  high_affinity: true
+  visual_hooks:
+  - 青春校园的清新画面氛围
+  - 心动瞬间的镜头渲染
+  - 蜕变前后的成长对比

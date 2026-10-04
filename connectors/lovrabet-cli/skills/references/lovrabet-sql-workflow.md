@@ -60,6 +60,8 @@ SQL 内容属于敏感实现资产。当前 `sql detail` 会按真实接口返�
 
 ## sql exec — 执行 Custom SQL
 
+运行态执行的唯一契约是 `sqlCode` + `params`。`sql detail` 只用于当前任务核对；执行始终使用已确认的 `sqlCode` 和当前 Custom SQL 契约定义的业务参数。标识无法唯一确认、参数无效或执行失败时，报告真实错误并停止。
+
 ```bash
 # 无参数执行
 lovrabet sql exec --sqlcode <code>
@@ -101,9 +103,10 @@ lovrabet sql exec --sqlcode 2305f915-dd48cd4c --params '{"status":"active"}' --f
 - Custom SQL 标识字段 `sqlCode` 的格式为 `{8位hex}-{8位hex}`，如 `2305f915-dd48cd4c`
 - `--params` 必须是合法 JSON 字符串
 - `lovrabet` 没有 `sql list` 命令；`sqlCode` 必须来自用户明确输入、业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选
-- 运行态发现业务能力，不枚举 Custom SQL 实现资产；基础事实查询优先使用已治理 Dataset，稳定规则由业务 Skill 或可信 Service Tree 绑定到已发布 Custom SQL
+- 运行态发现业务能力，不枚举 Custom SQL 实现资产；基础事实查询优先使用已治理 Dataset，稳定规则由业务 Skill 或可信 Service Tree 绑定到可信契约对应的 Custom SQL
 - 不知道 `sqlCode` 时不猜测，也不从 Dataset 原始字段重写已有稳定规则
 - 当业务归属不清时，先验证 `defaultApp`；验证不成立再 `app list` 做应用决议，再去确认 `sqlCode`，而不是直接盲猜当前 app
+- `--params` 只传当前 Custom SQL 契约定义的业务参数
 
 ## 参考
 

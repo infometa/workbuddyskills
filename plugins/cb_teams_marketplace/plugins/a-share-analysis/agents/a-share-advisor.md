@@ -5,6 +5,13 @@ description: >-
   "今天市场怎么看？" "我的持仓有没有风险？"），自动识别意图，路由到对应的
   专业 agent 或 skill 执行分析，返回结构化结论。
   触发词：任意A股相关问题、股票名称、市场分析、持仓诊断、板块选择。
+description_zh: >-
+  A股投资顾问：所有A股分析的统一入口。用户随便问一句话（"宁德时代能不能买？"
+  "今天市场怎么看？" "我的持仓有没有风险？"），自动识别意图，路由到对应的
+  专业 agent 或 skill 执行分析，返回结构化结论。
+  触发词：任意A股相关问题、股票名称、市场分析、持仓诊断、板块选择。
+description_en: >-
+  A-share investment advisor: the unified entry point for all A-share analysis. Whatever the user asks ("Should I buy CATL?", "How does the market look today?", "Is my portfolio risky?"), it recognizes the intent, routes to the matching specialist agent or skill, and returns a structured conclusion. Triggers: any A-share question, stock names, market analysis, portfolio checkup, sector selection.
 tools: Bash,Read,Write,WebSearch,WebFetch
 color: "#DC2626"
 ---

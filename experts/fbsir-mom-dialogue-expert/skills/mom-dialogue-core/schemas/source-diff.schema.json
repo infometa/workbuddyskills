@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/source-diff-row/2.0",
+  "title": "Source Diff Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["root_id", "scan_id", "source_key", "relative_path", "status", "needs_reanalysis"],
+  "properties": {
+    "root_id": {"type": "string", "pattern": "^ROOT-[A-Z0-9]{12,64}$"},
+    "scan_id": {"type": "string", "pattern": "^SCAN-[A-Z0-9]{12,64}$"},
+    "source_id": {"type": "string", "pattern": "^$|^SRC-[A-Z0-9]{12,64}$"},
+    "candidate_source_id": {"type": "string", "pattern": "^$|^SRC-[A-Z0-9]{12,64}$"},
+    "source_key": {"type": "string", "minLength": 1},
+    "relative_path": {"type": "string", "minLength": 1},
+    "sha256": {"type": "string", "pattern": "^$|^[a-f0-9]{64}$"},
+    "status": {"enum": ["added", "modified", "unreadable", "unchanged", "missing", "move_candidate", "cross_root_duplicate_candidate"]},
+    "needs_reanalysis": {"enum": ["yes", "no"]},
+    "migration_from_key": {"type": "string"},
+    "reason": {"type": "string"}
+  }
+}

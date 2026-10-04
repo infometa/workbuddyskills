@@ -34,7 +34,7 @@ lovrabet app-config get <key>
 - 不要把 app-config value 写入 `.lovrabet.json`、缓存、日志、命令参数或业务 Skill 入参。
 - 输出可能是敏感值，Agent 只在用户明确要求查询指定 key 时执行。
 - 示例 key 仅用于说明；实际执行必须使用调用方明确给出的 key，不能猜测、按 tags 查找或默认使用示例 key。
-- Agent 执行 Skill 需要 value 时也调用该 CLI，不创建或复用取配置 BFF。
+- Agent 执行 Skill 需要 value 时也调用该 CLI，不创建或复用取配置 Backend Function。
 - value 只在当前任务内消费；除非用户明确要求查看，最终答复默认不重复展示。
 
 ## 示例

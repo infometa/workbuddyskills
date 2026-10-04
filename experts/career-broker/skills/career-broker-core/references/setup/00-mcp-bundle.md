@@ -44,6 +44,9 @@ grep "tai_pat_" ~/.workbuddy/mcp.json
 
 > ⚠️ Token 关掉页面就看不到了，立刻复制保存。
 
+> **地址铁律**：太湖 PAT 申请页**只有** `https://tai.it.woa.com/user/pat` 这一个地址，上面话术里的 URL 必须**逐字照抄**。
+> `tai.woa.com` / `mcp.woa.com` / `taihu.woa.com` / path 写成 `/user/token` 都是**不存在的错误地址**，严禁凭"太湖"二字自己推测拼接。记不准就不给链接，也绝不许编一个看起来合理的。
+
 ### Step 2 · 看你需要哪几个
 
 | 你打算用 | 必装 |

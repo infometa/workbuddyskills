@@ -1,0 +1,43 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "init": {
+    "darwin": "npm install -g weaver-work-cli",
+    "linux": "npm install -g weaver-work-cli",
+    "win32": "npm install -g weaver-work-cli"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "weaver-work-cli --version",
+      "linux": "weaver-work-cli --version",
+      "win32": "weaver-work-cli.cmd --version"
+    },
+    "minVersion": "0.1.8"
+  },
+  "auth": {
+    "darwin": "weaver-work-cli --base-url https://weapp.eteams.cn auth login --agent_type workbuddy",
+    "linux": "weaver-work-cli --base-url https://weapp.eteams.cn auth login --agent_type workbuddy",
+    "win32": "weaver-work-cli.cmd --base-url https://weapp.eteams.cn auth login --agent_type workbuddy"
+  },
+  "unAuth": {
+    "darwin": "weaver-work-cli --profile eteams auth logout",
+    "linux": "weaver-work-cli --profile eteams auth logout",
+    "win32": "weaver-work-cli.cmd --profile eteams auth logout"
+  },
+  "status": {
+    "darwin": "weaver-work-cli --profile eteams --base-url https://weapp.eteams.cn --json auth status",
+    "linux": "weaver-work-cli --profile eteams --base-url https://weapp.eteams.cn --json auth status",
+    "win32": "weaver-work-cli.cmd --profile eteams --base-url https://weapp.eteams.cn --json auth status"
+  },
+  "statusMatchJson": {
+    "loggedIn": "true",
+    "profile": "eteams",
+    "baseUrl": "https://weapp.eteams.cn",
+    "valid": "true"
+  },
+  "authUrlDomain": "weapp.eteams.cn",
+  "authWaitForExit": true,
+  "authSuppressBrowser": true
+}

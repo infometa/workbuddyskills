@@ -1,7 +1,7 @@
 # T6 · 测评结果回流 profile
 
 ## 触发条件
-用户贴回来 DNA 结果码（教练用正则识别到 `DNA:...|A:...|S:...|P:...`）。
+用户贴回来 DNA 结果码（教练用正则识别，见 T5「DNA 结果码识别」；三版本尾段不同，正则已统一兜住）。
 
 > **职责边界**：本工具只做「写盘 + 简短 ack」，**不做深度解读**。
 > 如果用户在 ack 之后追问「帮我看看这个 DNA 怎么样」「八锚分别什么意思」「我适合什么方向」——
@@ -26,7 +26,7 @@ python skills/ai-career-agent/scripts/merge_assessment_into_profile.py \
 ```
 
 执行后：
-- `~/.workbuddy/career-broker/<rtx>/profile.json` schema 升 v2.1
+- `~/.workbuddy/career-broker/<rtx>/profile.json` schema 升 v2.2（新增 `assessment_kind` / `disc` / `leadership`）
 - 新增顶层字段 `assessment` 含 dna_short / top_anchors / top_scales / psy_state
 - 不动原有 skills / experiences / traits
 
@@ -77,7 +77,7 @@ psy_state.B 倦怠：
 
 ## 隐私
 
-- DNA 短码（如 TCA-CR/AN）写入 profile.json
+- DNA 短码（如 TEC-CR/AN）写入 profile.json
 - 原始 DNA 全串只在 raw/ 留底，不进 profile.json
 - assessment 整段标 P0 仅本地
 - 上云时 cloud_payload.json 只包含**提炼后的一句话结论**，不含 anchors 分数
@@ -87,10 +87,18 @@ psy_state.B 倦怠：
 ## 已实测
 
 ```
-DNA: DNA:TCA-CR/AN|A:TEC8CHL7ENT5MGT4AUT3SER3SEC2LIF1|S:CR4AN3CN2TC2SY1EM0|P:B2.5O4.0E3.5
-解析结果：
-  - top_anchors: TEC(8) / CHL(7) / ENT(5)
-  - top_scales:  CR(4) / AN(3)
-  - psy_state:   B=2.5(轻倦怠) / O=4.0 / E=3.5
-profile.json schema 升 v2.1，assessment 字段已写入 ✅
+员工版（V:JR / V:SR）：DNA:TEC-TC/AN|A:TEC10CHL7...|S:TC4AN3...|P:B2.5O4.0E3.5|D:C/S|R:后端开发|K:系统设计/架构|N:纯粹好奇先看看|V:SR
+  - assessment_kind: senior（初阶是 junior）
+  - disc: 主 严谨审慎型（C）/ 辅 稳定支持型（S）
+管理者版（V:MG）：…|P:…|SL:S4/S1|EF:52|FX:17|AD:69|DG:3|R:…|K:…|N:…|V:MG
+  - assessment_kind: manager；leadership: 主 授权型 / 辅 指令型，EF52 FX17 AD69 DG3
+  - 倦怠阈值自动降到 B≥3.0
+  - top_anchors: TEC(10) / CHL(7) / ENT(5)
+  - top_styles:  TC 技术深耕(4) / AN 分析洞察(3)
+  - psy_state:   B=2.5 / O=4.0 / E=3.5
+  - self_report: role=后端开发, skills=[系统设计/架构, 代码开发/编程], need=纯粹好奇先看看
+旧站 4 段 / 7 段：DNA:TEC-CR/AN|A:TEC8...|S:CR4...|P:B2.5O4.0E3.5
+  → assessment_kind: legacy，disc / leadership 均为 None，notes 里会给"建议重做最新版"的提示，兼容通过
+R/K/N 全空： |R:|K:|N:  → self_report 全 None，兼容通过
+profile.json schema 升 v2.2，assessment（含 assessment_kind / disc / leadership / self_report）已写入 ✅
 ```

@@ -9,19 +9,19 @@
     "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\install.ps1\""
   },
   "auth": {
-    "darwin": "\"$SL_CLI_HOME/bin/sl\" connector auth",
-    "linux": "\"$SL_CLI_HOME/bin/sl\" connector auth",
-    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& \\\"%SL_CLI_HOME%\\bin\\sl.cmd\\\" connector auth\""
+    "darwin": "bash \"$SL_CONNECTOR_HOME/launch.sh\" auth",
+    "linux": "bash \"$SL_CONNECTOR_HOME/launch.sh\" auth",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\launch.ps1\" -Action auth"
   },
   "unAuth": {
-    "darwin": "\"$SL_CLI_HOME/bin/sl\" connector unauth",
-    "linux": "\"$SL_CLI_HOME/bin/sl\" connector unauth",
-    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& \\\"%SL_CLI_HOME%\\bin\\sl.cmd\\\" connector unauth\""
+    "darwin": "bash \"$SL_CONNECTOR_HOME/launch.sh\" unauth",
+    "linux": "bash \"$SL_CONNECTOR_HOME/launch.sh\" unauth",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\launch.ps1\" -Action unauth"
   },
   "status": {
-    "darwin": "\"$SL_CLI_HOME/bin/sl\" connector status",
-    "linux": "\"$SL_CLI_HOME/bin/sl\" connector status",
-    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& \\\"%SL_CLI_HOME%\\bin\\sl.cmd\\\" connector status\""
+    "darwin": "bash \"$SL_CONNECTOR_HOME/launch.sh\" status",
+    "linux": "bash \"$SL_CONNECTOR_HOME/launch.sh\" status",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\launch.ps1\" -Action status"
   },
   "statusMatch": "\"authenticated\"\\s*:\\s*true",
   "authWaitForExit": true,
@@ -32,10 +32,10 @@
   },
   "versionCheck": {
     "command": {
-      "darwin": "\"$SL_CLI_HOME/bin/sl\" --version",
-      "linux": "\"$SL_CLI_HOME/bin/sl\" --version",
-      "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& \\\"%SL_CLI_HOME%\\bin\\sl.cmd\\\" --version\""
+      "darwin": "bash \"$SL_CONNECTOR_HOME/launch.sh\" version",
+      "linux": "bash \"$SL_CONNECTOR_HOME/launch.sh\" version",
+      "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\launch.ps1\" -Action version"
     },
-    "minVersion": "1.0.141"
+    "minVersion": "1.0.168"
   }
 }

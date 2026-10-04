@@ -1,6 +1,8 @@
 ---
 name: risk-checkup
 description: 用于持仓体检与组合风险管理，聚焦组合管理、风险控制、投资顾问。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户把当前持仓发给你，希望知道组合有没有问题、风险暴露在哪里、仓位是否合理。
+description_zh: "用于持仓体检与组合风险管理，聚焦组合管理、风险控制、投资顾问。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户把当前持仓发给你，希望知道组合有没有问题、风险暴露在哪里、仓位是否合理。"
+description_en: "Use for portfolio health checks and portfolio risk management, focusing on portfolio management, risk control, and investment advisory. Suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. Given a user's current holdings, it identifies portfolio issues, risk exposures, and whether position sizes are appropriate."
 ---
 
 # 持仓体检风险管理

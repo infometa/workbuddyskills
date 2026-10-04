@@ -53,7 +53,7 @@ Skills 通过软链接引用自 [edgeone-makers-tools](https://github.com/Tencen
 
 | 工具 | 安装命令 | 备注 |
 |------|----------|------|
-| EdgeOne CLI（>= 1.6.7） | `npm install -g edgeone@latest --registry=https://registry.npmmirror.com` | 部署、本地预览、登录、项目管理。默认走淘宝镜像源（国内更快）；失败或版本仍偏低时改用 `--registry=https://registry.npmjs.org` 重试一次。低于 1.6.7 在沙箱里会卡交互 prompt |
+| EdgeOne CLI（>= 1.6.7） | `makers-install-cli` | 部署、本地预览、登录、项目管理。专家包自带的安装器（见 `bin/`），会并行测速官方源与淘宝镜像源、自动选快的那个装，并校验版本、失败换源重试。低于 1.6.7 在沙箱里会卡交互 prompt |
 | Node.js | 参考 [nodejs.org](https://nodejs.org/) 或 `nvm install --lts` | 用于前端构建、Cloud Functions Node 运行时 |
 | Go（按需） | 参考 [go.dev/dl](https://go.dev/dl/) | 仅 Cloud Functions Go 运行时需要 |
 | Python（按需） | `python3 --version` | Cloud Functions Python / CrewAI 框架需要 |
@@ -80,10 +80,15 @@ Skills 通过软链接引用自 [edgeone-makers-tools](https://github.com/Tencen
 ### 常用安装/初始化命令速查
 
 ```bash
-# 1. 安装 / 升级 CLI（必须 >= 1.6.7）—— 默认淘宝镜像源
-npm install -g edgeone@latest --registry=https://registry.npmmirror.com && edgeone -v
+# 1. 安装 / 升级 CLI（必须 >= 1.6.7）—— 自动测速选源
+makers-install-cli
 
-# 若镜像源失败或版本仍低于 1.6.7（淘宝源懒同步会滞后），改官方源重试一次
+# 只想看会选哪个源、不实际安装：
+# makers-install-cli --dry-run
+
+# 无专家包环境时的手动等价命令（默认淘宝镜像源）：
+# npm install -g edgeone@latest --registry=https://registry.npmmirror.com
+# 失败或版本仍偏低时改官方源重试一次：
 # npm install -g edgeone@latest --registry=https://registry.npmjs.org
 
 # 2. 登录（推荐浏览器）
@@ -115,6 +120,24 @@ edgeone makers deploy -n <name> -t <token> --json
 # Login (Token，自动检测站点)
 edgeone login --token <token>
 ```
+
+## 内置工具（bin/）
+
+`bin/` 下的可执行文件安装后自动加入 PATH，可在对话中直接按文件名调用。
+
+| 命令 | 用途 |
+|------|------|
+| `makers-install-cli` | 安装 / 升级 EdgeOne CLI。并行探测官方源与淘宝镜像源的**真实包元数据**（`<registry>/edgeone/latest`）后择快安装，校验版本 >= 1.6.7，失败自动换另一源重试一次。已装且达标时 1s 内直接返回、不联网。`--dry-run` 只输出选中的源；`--force` 强制重装 |
+
+**与开发并行预热**：主理人会在 spawn 开发成员的同一轮就用 `run_in_background: true` 启动它（Phase 2 固定动作）。CLI 安装约 30–40s，成员写代码通常几分钟，因此这段耗时被完全吸收，用户侧净省 30–40s。由于「已达标即跳过」是幂等的，重复调用无副作用。
+
+**为什么要测速而不是固定用某个源**：镜像并非总是更快。同一台机器上实测过官方 0.17s / 镜像 0.28s（官方胜）与官方 0.17s / 镜像 0.14s（镜像胜）两种结果，取决于当时的网络状况。
+
+**为什么不探测 `/-/ping`**：`/-/ping` 只量到边缘节点的连接延迟，量不到"取包"的真实性能。淘宝源是懒同步镜像，ping 它的入口很快，但真去拉某个包时可能要现同步/回源，反而更慢——实测出现过 ping 说镜像快、真实包元数据说官方快的相反结论。
+
+**选源策略**：默认淘宝镜像源，仅当官方源明显更快（>20%）或镜像不可达时才切换。近似打平时不横跳。
+
+**退出码**：`0` 成功 · `1` 装不上或版本偏低 · `2` 两源均不可达。
 
 ## 头像
 

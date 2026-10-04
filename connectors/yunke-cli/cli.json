@@ -1,0 +1,38 @@
+{
+  "init": {
+    "darwin": "npm install -g @yunkeai/yunke-cli",
+    "linux": "npm install -g @yunkeai/yunke-cli",
+    "win32": "npm install -g @yunkeai/yunke-cli"
+  },
+  "runtime": { "type": "node", "version": ">=22" },
+  "npmRegistry": "https://registry.npmmirror.com",
+  "env": { "YUNKE_PC_OAUTH_BASE_URL": "https://crm.yunkecn.com/pc" },
+  "auth": {
+    "darwin": "yunke crm.auth.login-web",
+    "linux": "yunke crm.auth.login-web",
+    "win32": "yunke.cmd crm.auth.login-web"
+  },
+  "authWaitForExit": true,
+  "authSuppressBrowser": true,
+  "status": {
+    "darwin": "yunke crm.auth.status",
+    "linux": "yunke crm.auth.status",
+    "win32": "yunke.cmd crm.auth.status"
+  },
+  "statusMatch": "Logged in as",
+  "unAuth": {
+    "darwin": "yunke crm.auth.logout",
+    "linux": "yunke crm.auth.logout",
+    "win32": "yunke.cmd crm.auth.logout"
+  },
+  "authUrlDomain": "crm.yunkecn.com",
+  "versionCheck": {
+    "command": {
+      "darwin": "yunke --version",
+      "linux": "yunke --version",
+      "win32": "yunke.cmd --version"
+    },
+    "minVersion": "2.0.0",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  }
+}

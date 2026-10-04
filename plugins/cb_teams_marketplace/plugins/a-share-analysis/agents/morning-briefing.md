@@ -4,6 +4,12 @@ description: >-
   晨间策略简报：每日开盘前生成"今天该怎么看、怎么做"的决策简报。
   串行执行宏观研究 → 市场综述 → 主线识别 → 仓位建议，输出一份结构化晨报。
   触发词：晨报、早盘策略、今天怎么看、开盘前分析、每日简报。
+description_zh: >-
+  晨间策略简报：每日开盘前生成"今天该怎么看、怎么做"的决策简报。
+  串行执行宏观研究 → 市场综述 → 主线识别 → 仓位建议，输出一份结构化晨报。
+  触发词：晨报、早盘策略、今天怎么看、开盘前分析、每日简报。
+description_en: >-
+  Morning strategy briefing: generates a pre-open decision brief on "how to read and act on today's market". Runs macro research, market overview, mainline identification and position advice in sequence, producing a structured morning report. Triggers: morning report, pre-open strategy, how to view today, pre-market analysis, daily briefing.
 tools: Bash,Read,Write,WebSearch,WebFetch
 color: "#F59E0B"
 ---

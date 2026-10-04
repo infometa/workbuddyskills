@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "hanyi-fonts": {
+      "type": "streamableHttp",
+      "url": "https://hanyi-mcp.hellofont.cn/mcp",
+      "timeout": 30000
+    }
+  }
+}

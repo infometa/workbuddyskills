@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医学互动页面 - 组件库参考</title>
+    <style>
+        /*============================================================
+           CSS变量 - 主题系统
+           修改 :root 中的变量即可切换整体风格
+           ============================================================ */
+        :root {
+            /* 学术蓝 (默认) */
+            --primary: #185FA5;
+            --primary-light: #2E7BC9;
+            --primary-dark: #0D4A82;
+            --primary-bg: #E8F2FC;
+            --accent: #F59E0B;
+            --text: #1E293B;
+            --text-secondary: #475569;
+            --bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --border: #E2E8F0;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --info: #3B82F6;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ============================================================
+           全局基础样式
+           ============================================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        .container { max-width: 860px; margin: 0 auto; padding: 20px; }
+
+        /* ============================================================
+           组件 1: Header - 渐变标题区
+           ============================================================ */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, color-mix(in srgb, var(--primary-light) 70%, #fff) 100%);
+            color: white;
+            padding: 48px 40px;
+            border-radius: var(--radius);
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+        }
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .header p {
+            font-size: 15px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .tag {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ============================================================
+           组件 2: Stats Grid - 数据看板
+           ============================================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-top: 3px solid var(--primary);
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================================
+           组件 3: Section - 内容区块
+           ============================================================ */
+        .section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
+           组件 4: Footer - 页脚
+           ============================================================ */
+        .footer {
+            text-align: center;
+            padding: 32px 20px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+        .footer .disclaimer {
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            color: #991B1B;
+            font-size: 12px;
+        }
+        .references {
+            text-align: left;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 16px;
+        }
+        .references h4 { font-size: 13px; margin-bottom: 8px; color: var(--text); }
+        .references li { margin-bottom: 4px; }
+
+        /* ============================================================
+           组件 5: Expert Card - 专家信息卡
+           ============================================================ */
+        .expert-card {
+            background: linear-gradient(135deg, var(--primary-bg) 0%, color-mix(in srgb, var(--primary-bg) 50%, #fff) 100%);
+            border: 1px solid color-mix(in srgb, var(--primary) 30%, #fff);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .expert-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .expert-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .expert-info h3 { font-size: 18px; color: var(--primary-dark); margin-bottom: 4px; }
+        .expert-info p { font-size: 13px; color: var(--text-secondary); }
+        .expert-titles { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); }
+        .expert-titles.active { display: block; }
+        .expert-titles ul { list-style: none; }
+        .expert-titles li {
+            font-size: 13px; color: var(--text-secondary); padding: 4px 04px 16px; position: relative;
+        }
+        .expert-titles li::before { content: '•'; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+        .toggle-btn {
+            background: var(--primary); color: white; border: none;
+            padding: 8px 16px; border-radius: 6px; font-size: 13px;
+            cursor: pointer; margin-top: 12px; transition: background var(--transition);
+        }
+        .toggle-btn:hover { background: var(--primary-dark); }
+
+        /* ============================================================
+           组件 6: Tabs - 标签切换
+           ============================================================ */
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 0;
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab:hover { color: var(--primary); }
+        .tab-content { display: none; padding: 24px 0; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+
+        /* ============================================================
+           组件 7: Timeline - 时间轴
+           ============================================================ */
+        .timeline { position: relative; padding-left: 32px; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px; top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            background: var(--primary-bg);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--primary);
+            transition: transform var(--transition);
+        }
+        .timeline-item:hover { transform: translateX(4px); }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -31px; top: 20px;
+            width: 12px; height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .timeline-item h4 { font-size: 15px; color: var(--primary-dark); margin-bottom: 6px; }
+        .timeline-item p { font-size: 14px; color: var(--text-secondary); }
+        .timeline-item .time-label {
+            font-size: 11px; color: var(--primary); font-weight: 600;
+            text-transform: uppercase; margin-bottom: 4px;
+        }
+
+        /* ============================================================
+           组件 8: Flashcard -翻转知识卡
+           ============================================================ */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .flashcard { perspective: 1000px; height: 200px; cursor: pointer; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: var(--radius);
+            padding: 24px; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+        }
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white; box-shadow: var(--shadow);
+        }
+        .flashcard-front h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+        .flashcard-front .flip-hint { font-size: 11px; opacity: 0.6; margin-top: 12px; }
+        .flashcard-back {
+            background: var(--card-bg); border: 2px solid var(--primary);
+            transform: rotateY(180deg); box-shadow: var(--shadow);
+        }
+        .flashcard-back p { font-size: 14px; color: var(--text); line-height: 1.7; }
+
+        /* ============================================================
+           组件 9: Accordion - 手风琴折叠面板
+           ============================================================ */
+        .accordion { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+        .accordion-item { border-bottom: 1px solid var(--border); }
+        .accordion-item:last-child { border-bottom: none; }
+        .accordion-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 24px; cursor: pointer; background: var(--card-bg);
+            transition: background var(--transition); font-weight: 600; font-size: 15px;
+        }
+        .accordion-header:hover { background: var(--primary-bg); }
+        .accordion-header .icon {
+            width: 24px; height: 24px; border-radius: 50%;
+            background: var(--primary-bg); color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; transition: transform var(--transition); flex-shrink: 0;
+        }
+        .accordion-item.active .accordion-header .icon { transform: rotate(180deg); }
+        .accordion-item.active .accordion-header { background: var(--primary-bg); color: var(--primary-dark); }
+        .accordion-body {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 24px; background: var(--card-bg);
+        }
+        .accordion-item.active .accordion-body {
+            max-height: 500px; padding: 16px 24px 20px;
+        }
+        .accordion-body p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+
+        /* ============================================================
+           组件 10: Comparison Bar - 数据对比条
+           ============================================================ */
+        .comparison-bar { margin: 20px 0; }
+        .comparison-item { margin-bottom: 20px; }
+        .comparison-item .comp-label {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 8px; font-size: 14px;
+        }
+        .comparison-item .comp-label .name { font-weight: 600; color: var(--text); }
+        .comparison-item .comp-label .value { font-weight: 700; color: var(--primary); }
+        .comp-track {
+            height: 12px; background: var(--border); border-radius: 6px;
+            overflow: hidden; position: relative;
+        }
+        .comp-fill {
+            height: 100%; border-radius: 6px; transition: width 1s ease;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        }
+        .comp-fill.secondary {
+            background: linear-gradient(90deg, var(--accent), #FBBF24);
+        }
+
+        /* ============================================================
+           组件 11: Tooltip Card - 悬浮提示卡
+           ============================================================ */
+        .tooltip-card { position: relative; display: inline-block; }
+        .tooltip-trigger {
+            border-bottom: 2px dashed var(--primary);
+            color: var(--primary); cursor: help; font-weight: 500;
+        }
+        .tooltip-bubble {
+            visibility: hidden; opacity: 0;
+            position: absolute; bottom: calc(100% + 12px); left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            background: var(--text); color: white;
+            padding: 12px 16px; border-radius: var(--radius-sm);
+            font-size: 13px; line-height: 1.6; width: 260px;
+            box-shadow: var(--shadow-lg); z-index: 100;
+            transition: all var(--transition);
+        }
+        .tooltip-bubble::after {
+            content: '';
+            position: absolute; top: 100%; left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent; border-top-color: var(--text);
+        }
+        .tooltip-card:hover .tooltip-bubble {
+            visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0);
+        }
+
+        /* ============================================================
+           组件 12: Step Navigator - 步骤导航
+           ============================================================ */
+        .step-nav { display: flex; flex-direction: column; gap: 0; position: relative; }
+        .step-nav::before {
+            content: '';
+            position: absolute; left: 20px; top: 20px; bottom: 20px;
+            width: 2px; background: var(--border);
+        }
+        .step-item {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 16px 0; position: relative; cursor: pointer;
+        }
+        .step-number {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--border); color: var(--text-secondary);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px; flex-shrink: 0;
+            transition: all var(--transition); position: relative; z-index: 1;
+        }
+        .step-item.active .step-number {
+            background: var(--primary); color: white; box-shadow: 0 0 0 4px var(--primary-bg);
+        }
+        .step-item.completed .step-number {
+            background: var(--success); color: white;
+        }
+        .step-content h4 { font-size: 15px; color: var(--text); margin-bottom: 4px; }
+        .step-content p { font-size: 13px; color: var(--text-secondary); }
+        .step-item.active .step-content h4 { color: var(--primary-dark); }
+        .step-detail {
+            display: none; margin-top: 12px; padding: 16px;
+            background: var(--primary-bg); border-radius: var(--radius-sm);
+            font-size: 14px; color: var(--text); line-height: 1.7;
+        }
+        .step-item.active .step-detail { display: block; animation: fadeIn 0.3s; }
+
+        /* ============================================================
+           组件 13: Split Compare - 左右分栏对比
+           ============================================================ */
+        .split-compare {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+            border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+        }
+        .split-side { padding: 24px; }
+        .split-side:first-child { border-right: 1px solid var(--border); }
+        .split-side .side-header {
+            font-size: 16px; font-weight: 700; text-align: center;
+            padding: 12px; margin: -24px -24px 20px; border-bottom: 1px solid var(--border);
+        }
+        .split-side:first-child .side-header { background: var(--primary-bg); color: var(--primary-dark); }
+        .split-side:last-child .side-header { background: #FEF3C7; color: #92400E; }
+        .split-side ul { list-style: none; padding: 0; }
+        .split-side li {
+            padding: 10px 0; border-bottom: 1px dashed var(--border);
+            font-size: 14px; display: flex; align-items: flex-start; gap: 8px;
+        }
+        .split-side li:last-child { border-bottom: none; }
+        .split-side li::before { content: '•'; color: var(--primary); font-weight: bold; flex-shrink: 0; }
+        .split-side:last-child li::before { color: var(--accent); }
+
+        /* ============================================================
+           组件 14: Floating TOC - 浮动目录导航
+           ============================================================ */
+        .floating-toc {
+            position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-lg);
+            max-width: 200px; z-index: 1000;
+        }
+        .floating-toc h4 {
+            font-size: 12px; color: var(--text-secondary); text-transform: uppercase;
+            letter-spacing: 0.5px; margin-bottom: 12px;
+        }
+        .toc-item {
+            display: block; padding: 6px 12px; font-size: 13px;
+            color: var(--text-secondary); text-decoration: none;
+            border-left: 2px solid transparent; transition: all var(--transition);
+            margin-bottom: 2px; border-radius: 04px 4px 0;
+        }
+        .toc-item:hover { color: var(--primary); background: var(--primary-bg); }
+        .toc-item.active {
+            color: var(--primary); border-left-color: var(--primary);
+            background: var(--primary-bg); font-weight: 500;
+        }
+
+        /* ============================================================
+           组件 15: Counter Animation - 数字滚动
+           ============================================================ */
+        .counter-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px;
+        }
+        .counter-card {
+            text-align: center; padding: 28px 16px;
+            background: var(--card-bg); border-radius: var(--radius);
+            box-shadow: var(--shadow); border-bottom: 3px solid var(--primary);
+        }
+        .counter-value {
+            font-size: 36px; font-weight: 800; color: var(--primary);
+            display: block; margin-bottom: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+        .counter-suffix { font-size: 18px; font-weight: 400; }
+        .counter-label { font-size: 13px; color: var(--text-secondary); }
+
+        /* ============================================================
+           组件 16: Callout Variants - 多类型提示框
+           ============================================================ */
+        .callout {
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 16px 20px; margin: 20px 0;
+        }
+        .callout-title { font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+        .callout p { font-size: 14px; }
+
+        /* Info */
+        .callout-info { background: #EFF6FF; border-left: 4px solid var(--info); }
+        .callout-info .callout-title { color: #1E40AF; }
+        .callout-info p { color: #1E3A5F; }
+
+        /* Warning */
+        .callout-warning { background: #FEF3C7; border-left: 4px solid var(--warning); }
+        .callout-warning .callout-title { color: #92400E; }
+        .callout-warning p { color: #78350F; }
+
+        /* Success */
+        .callout-success { background: #D1FAE5; border-left: 4px solid var(--success); }
+        .callout-success .callout-title { color: #065F46; }
+        .callout-success p { color: #064E3B; }
+
+        /* Expert Quote */
+        .callout-expert {
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #F0F7FF 100%);
+            border-left: 4px solid var(--primary);
+            position: relative; padding-left: 48px;
+        }
+        .callout-expert::before {
+            content: '\201C'; position: absolute; left: 16px; top: 8px;
+            font-size: 36px; color: var(--primary); opacity: 0.4; font-family: Georgia, serif;
+        }
+        .callout-expert .callout-title { color: var(--primary-dark); }
+        .callout-expert p { color: var(--text); font-style: italic; }
+
+        /* ============================================================
+           辅助: Highlight Box
+           ============================================================ */
+        .highlight-box {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border: 1px solid #93C5FD; border-radius: var(--radius); padding: 24px; margin: 20px 0;
+        }
+        .highlight-box h4 { color: var(--primary-dark); margin-bottom: 12px; font-size: 16px; }
+        .highlight-box ul { list-style: none; padding: 0; }
+        .highlight-box li {
+            padding: 8px 0 8px 24px; position: relative; font-size: 14px; color: var(--text);
+        }
+        .highlight-box li::before {
+            content: '✓'; position: absolute; left: 0; color: var(--success); font-weight: bold;
+        }
+
+        /* ============================================================
+           动画
+           ============================================================ */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           响应式
+           ============================================================ */
+        @media (max-width: 640px) {
+            .container { padding: 12px; }
+            .header { padding: 32px 24px; }
+            .header h1 { font-size: 20px; }
+            .section { padding: 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .flashcard-grid { grid-template-columns:1fr; }
+            .split-compare { grid-template-columns: 1fr; }
+            .split-side:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+            .floating-toc { display: none; }
+            .step-nav::before { left: 16px; }
+            .counter-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ============================================================
+         示例: Header
+         ============================================================ -->
+    <div class="header">
+        <h1>文章主标题<br>副标题区域</h1>
+        <p>描述性文字，简要概括内容</p>
+        <div class="tags">
+            <span class="tag">标签1</span>
+            <span class="tag">标签2</span>
+            <span class="tag">标签3</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         示例: Stats Grid
+         ============================================================ -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="number">92.3%</span>
+            <span class="label">客观缓解率</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">18.9月</span>
+            <span class="label">中位PFS</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">P<0.001</span>
+            <span class="label">统计学显著</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">III期</span>
+            <span class="label">研究阶段</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         示例: Accordion
+         ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">手风琴折叠面板</h2>
+        <div class="accordion">
+            <div class="accordion-item active">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>一线治疗策略</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    <p>三代EGFR-TKI已确立为EGFR突变（Ex19del/L858R）晚期NSCLC患者的一线标准治疗。联合治疗策略在此基础上进一步探索，旨在延长患者生存获益。</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>耐药机制与处理</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    <p>EGFR-TKI耐药机制包括T790M突变、MET扩增、HER2扩增等。基因检测可明确具体耐药机制，为后续精准治疗提供依据。</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>全程管理要点</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    <p>全程管理需根据进展模式和耐药机制指导后续治疗策略制定，优化整体治疗方案。一线方案选择需把握全程管理观念。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         示例: Comparison Bar
+         ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">数据对比条</h2>
+        <div class="comparison-bar">
+            <div class="comparison-item">
+                <div class="comp-label">
+                    <span class="name">联合方案 PFS</span>
+                    <span class="value">18.9 月</span>
+                </div>
+                <div class="comp-track">
+                    <div class="comp-fill" style="width: 85%"></div>
+                </div>
+            </div>
+            <div class="comparison-item">
+                <div class="comp-label">
+                    <span class="name">单药方案 PFS</span>
+                    <span class="value">12.4 月</span>
+                </div>
+                <div class="comp-track">
+                    <div class="comp-fill secondary" style="width: 56%"></div>
+                </div>
+            </div>
+            <div class="comparison-item">
+                <div class="comp-label">
+                    <span class="name">联合方案 ORR</span>
+                    <span class="value">83.6%</span>
+                </div>
+                <div class="comp-track">
+                    <div class="comp-fill" style="width: 83.6%"></div>
+                </div>
+            </div>
+            <div class="comparison-item">
+                <div class="comp-label">
+                    <span class="name">单药方案 ORR</span>
+                    <span class="value">76.2%</span>
+                </div>
+                <div class="comp-track">
+                    <div class="comp-fill secondary" style="width: 76.2%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         示例: Tooltip Card
+         ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">术语悬浮提示</h2>
+        <p>
+            在
+            <span class="tooltip-card">
+                <span class="tooltip-trigger">EGFR-TKI</span>
+                <span class="tooltip-bubble">表皮生长因子受体酪氨酸激酶抑制剂 (Epidermal Growth Factor Receptor Tyrosine Kinase Inhibitor)，通过抑制EGFR信号通路发挥抗肿瘤作用。</span>
+            </span>
+            治疗过程中，
+            <span class="tooltip-card">
+                <span class="tooltip-trigger">Ex19del</span>
+                <span class="tooltip-bubble">外显子19缺失突变，是EGFR最常见的激活突变之一，约占EGFR突变的45%，对TKI治疗敏感。</span>
+            </span>
+            和
+            <span class="tooltip-card">
+                <span class="tooltip-trigger">L858R</span>
+                <span class="tooltip-bubble">外显子21L858R点突变，是EGFR第二常见的激活突变，约占EGFR突变的40-45%。</span>
+            </span>
+            是最常见的敏感突变类型。
+        </p>
+    </div>
+
+    <!-- ============================================================
+         示例: Step Navigator
+         ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">步骤导航器</h2>
+        <div class="step-nav">
+            <div class="step-item completed" onclick="toggleStep(this)">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>基因检测</h4>
+                    <p>初诊时进行精准基因检测</p>
+                    <div class="step-detail">晚期NSCLC患者在初诊时需进行基因检测，精准的基因检测对于一线治疗选择具有指导作用。</div>
+                </div>
+            </div>
+            <div class="step-item active" onclick="toggleStep(this)">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>一线治疗选择</h4>
+                    <p>根据基因检测结果制定方案</p>
+                    <div class="step-detail">EGFR突变阳性患者首选三代EGFR-TKI或联合治疗方案，一线获益对全程获益有积极影响。</div>
+                </div>
+            </div>
+            <div class="step-item" onclick="toggleStep(this)">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>疗效监测</h4>
+                    <p>定期评估治疗效果</p>
+                    <div class="step-detail">定期影像学评估和生物标志物监测，及时发现疾病进展信号。</div>
+                </div>
+            </div>
+            <div class="step-item" onclick="toggleStep(this)">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>耐药后管理</h4>
+                    <p>再次基因检测,调整方案</p>
+                    <div class="step-detail">耐药后通过基因检测明确耐药机制，根据进展模式制定后续精准治疗策略。</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         示例: Split Compare
+         ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">左右分栏对比</h2>
+        <div class="split-compare">
+            <div class="split-side">
+                <div class="side-header">联合治疗方案</div>
+                <ul>
+                    <li>PFS 显著延长</li>
+                    <li>ORR 更高</li>
+                    <li>深度缓解率提升</li>
+                    <li>可管理的安全性</li>
+                    <li>有望延长OS</li>
+                </ul>
+            </div>
+            <div class="split-side">
+                <div class="side-header">单药TKI方案</div>
+                <ul>
+                    <li>PFS 标准获益</li>
+                    <li>良好的ORR</li>
+                    <li>不良反应较轻</li>
+                    <li>给药方便（口服）</li>
+                    <li>长期安全性数据充分</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         示例: Counter Animation
+         ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">数字滚动动画</h2>
+        <div class="counter-grid">
+            <div class="counter-card">
+                <span class="counter-value" data-target="92.3" data-suffix="%">0</span>
+                <span class="counter-label">客观缓解率</span>
+            </div>
+            <div class="counter-card">
+                <span class="counter-value" data-target="18.9" data-suffix="月">0</span>
+                <span class="counter-label">中位PFS</span>
+            </div>
+            <div class="counter-card">
+                <span class="counter-value" data-target="52" data-suffix="%">0</span>
+                <span class="counter-label">3年OS率</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         示例: Callout Variants
+         ============================================================ -->
+    <div class="section">
+        <h2 class="section-title">多类型提示框</h2>
+
+        <div class="callout callout-info">
+            <div class="callout-title">ℹ️ 临床提示</div>
+            <p>基因检测不仅在一线治疗决策中具有关键作用，更是肺癌全程管理中动态调整治疗方案的重要工具。</p>
+        </div>
+
+        <div class="callout callout-warning">
+            <div class="callout-title">⚠️ 注意事项</div>
+            <p>联合治疗方案可能增加不良反应风险，需密切监测并及时处理。</p>
+        </div>
+
+        <div class="callout callout-success">
+            <div class="callout-title">✅ 关键结论</div>
+            <p>EGFR-TKI联合治疗策略已取得重要突破，有望进一步延长EGFR突变晚期NSCLC患者的生存。</p>
+        </div>
+
+        <div class="callout callout-expert">
+            <div class="callout-title">邬麟教授</div>
+            <p>一线获益对于提升全程获益和患者治疗信心具有积极影响，有助于优化全程管理和患者的治疗依从性。</p>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         示例: Footer
+         ============================================================ -->
+    <div class="footer">
+        <div class="disclaimer">
+            ⚠️ 本页面内容仅供医学专业人士学习参考，不作为临床诊疗依据
+        </div>
+        <div class="references">
+            <h4>参考文献</h4>
+            <ol>
+                <li>参考文献1</li>
+                <li>参考文献2</li>
+            </ol>
+        </div>
+        <p style="margin-top: 16px;">内容来源：XXX | 学术蓝主题</p>
+    </div>
+
+</div>
+
+<!-- ============================================================
+     JavaScript 交互逻辑
+     ============================================================ -->
+<script>
+    // ---------- Expert Card Toggle ----------
+    function toggleExpert() {
+        const titles = document.getElementById('expertTitles');
+        const btn = document.querySelector('.toggle-btn');
+        titles.classList.toggle('active');
+        btn.textContent = titles.classList.contains('active') ? '收起学术任职▲' : '查看完整学术任职 ▼';
+    }
+
+    // ---------- Tab Switching ----------
+    function switchTab(index) {
+        document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === index));
+        document.querySelectorAll('.tab-content').forEach((c, i) => c.classList.toggle('active', i === index));
+    }
+
+    // ---------- Flashcard Flip ----------
+    document.querySelectorAll('.flashcard').forEach(card => {
+        card.addEventListener('click', () => card.classList.toggle('flipped'));
+    });
+
+    // ---------- Accordion ----------
+    function toggleAccordion(header) {
+        const item = header.parentElement;
+        const wasActive = item.classList.contains('active');
+        // Close all items in same accordion
+        item.closest('.accordion').querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+        // Toggle clicked
+        if (!wasActive) item.classList.add('active');
+    }
+
+    // ---------- Step Navigator ----------
+    function toggleStep(stepItem) {
+        const wasActive = stepItem.classList.contains('active');
+        stepItem.closest('.step-nav').querySelectorAll('.step-item').forEach(s => s.classList.remove('active'));
+        if (!wasActive) stepItem.classList.add('active');
+    }
+
+    // ---------- Counter Animation ----------
+    function animateCounters() {
+        const counters = document.querySelectorAll('.counter-value[data-target]');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseFloat(el.dataset.target);
+                    const suffix = el.dataset.suffix || '';
+                    const isDecimal = target % 1 !== 0;
+                    const duration = 1500;
+                    const startTime = performance.now();
+
+                    function update(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        // Ease out cubic
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        const current = target * eased;
+                        el.textContent = (isDecimal ? current.toFixed(1) : Math.round(current)) + suffix;
+                        if (progress < 1) requestAnimationFrame(update);
+                    }
+                    requestAnimationFrame(update);
+                    observer.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(c => observer.observe(c));
+    }
+    animateCounters();
+
+    // ---------- Floating TOC (scroll spy) ----------
+    function initTOC() {
+        const toc = document.querySelector('.floating-toc');
+        if (!toc) return;
+        const sections = document.querySelectorAll('[data-toc-id]');
+        const tocItems = toc.querySelectorAll('.toc-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const top = section.getBoundingClientRect().top;
+                if (top < 200) current = section.dataset.tocId;
+            });
+            tocItems.forEach(item => {
+                item.classList.toggle('active', item.getAttribute('href') === '#' + current);
+            });
+        });
+    }
+    initTOC();
+</script>
+</body>
+</html>

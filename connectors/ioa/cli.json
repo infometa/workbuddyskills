@@ -1,0 +1,37 @@
+{
+    "runtime": {
+        "type": "node",
+        "version": ">=18"
+    },
+    "init": {
+        "darwin": "npm install -g @ioacloud/ioacloud-cli@latest",
+        "linux": "npm install -g @ioacloud/ioacloud-cli@latest",
+        "win32": "npm install -g @ioacloud/ioacloud-cli@latest"
+    },
+    "versionCheck": {
+        "command": {
+            "darwin": "ioacloud-cli --version",
+            "linux": "ioacloud-cli --version",
+            "win32": "ioacloud-cli.cmd --version"
+        },
+        "minVersion": "1.0.18"
+    },
+    "auth": {
+        "darwin": "ioacloud-cli login --yes",
+        "linux": "ioacloud-cli login --yes",
+        "win32": "ioacloud-cli.cmd login --yes"
+    },
+    "unAuth": {
+        "darwin": "ioacloud-cli logout --yes",
+        "linux": "ioacloud-cli logout --yes",
+        "win32": "ioacloud-cli.cmd logout --yes"
+    },
+    "status": {
+        "darwin": "ioacloud-cli status",
+        "linux": "ioacloud-cli status",
+        "win32": "ioacloud-cli.cmd status"
+    },
+    "authWaitForExit": true,
+    "authSuppressBrowser": true,
+    "authUrlDomain": "console.cloud.tencent.com"
+}

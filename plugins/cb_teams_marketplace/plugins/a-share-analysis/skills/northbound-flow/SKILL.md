@@ -1,6 +1,8 @@
 ---
 name: northbound-flow
 description: 用于北向资金行为分析，聚焦资金行为、市场风格、机构偏好。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想知道北向资金到底在买什么、卖什么，这种买卖是趋势性信号还是短期扰动，对市场风格意味着什么。
+description_zh: "用于北向资金行为分析，聚焦资金行为、市场风格、机构偏好。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想知道北向资金到底在买什么、卖什么，这种买卖是趋势性信号还是短期扰动，对市场风格意味着什么。"
+description_en: "Use for northbound capital-flow analysis, focusing on capital behavior, market style, and institutional preferences. Suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It identifies what northbound investors are buying and selling, whether those flows signal a trend or short-term noise, and what they imply for market style."
 ---
 
 # 北向资金行为

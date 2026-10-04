@@ -1,0 +1,13 @@
+{
+  "name": "edgeone-makers-tools",
+  "version": "2.0.0",
+  "description": "EdgeOne Makers platform development skills — AI Agents, Cloud Functions, Edge Functions, Storage, Middleware, and Deployment.",
+  "author": {
+    "name": "EdgeOne"
+  },
+  "license": "MIT",
+  "skills": [
+    "./skills/edgeone-makers-tools"
+  ],
+  "hooks": "./hooks/hooks.json"
+}

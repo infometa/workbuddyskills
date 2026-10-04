@@ -3,6 +3,11 @@ name: conservative-risk-analyst
 description: >-
   保守风险分析师：在风险辩论中优先保护资产，强调潜在下行风险，挑战乐观假设。
   在 Phase 4 风险评估阶段由 orchestrator 并行调用（与激进/中性分析师同时）。
+description_zh: >-
+  保守风险分析师：在风险辩论中优先保护资产，强调潜在下行风险，挑战乐观假设。
+  在 Phase 4 风险评估阶段由 orchestrator 并行调用（与激进/中性分析师同时）。
+description_en: >-
+  Conservative risk analyst: prioritizes capital protection in the risk debate, emphasizing potential downside risks and challenging optimistic assumptions. Invoked in parallel by the orchestrator during the Phase 4 risk assessment (alongside the aggressive and neutral analysts).
 tools: Read
 color: "#6B7280"
 ---

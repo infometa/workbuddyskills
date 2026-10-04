@@ -54,7 +54,7 @@
             {
               "code": "capability",
               "name": "命中能力",
-              "description": "命中能力：profile/qa/assessment/coaching/liveflow/resume",
+              "description": "命中能力：profile/qa/assessment/coaching/mentor/liveflow/resume",
               "type": "STRING",
               "isRequired": false
             }
@@ -250,6 +250,60 @@
               "code": "rec_count",
               "name": "推荐岗位数",
               "description": "本次推荐岗位数",
+              "type": "STRING",
+              "isRequired": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "cells": {
+        "事件名称": {
+          "dictItems": [
+            {
+              "code": "mentor_recommended",
+              "name": "行家推荐触发"
+            }
+          ]
+        },
+        "采集方式": {
+          "values": [
+            "track"
+          ]
+        },
+        "上报时机": {
+          "values": [
+            "行家推荐能力输出行家/话题列表时"
+          ]
+        },
+        "私有参数": {
+          "paramList": [
+            {
+              "code": "session_id",
+              "name": "会话ID",
+              "description": "会话ID",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "rec_count",
+              "name": "推荐行家数",
+              "description": "本次推荐行家数",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "trigger",
+              "name": "触发来源",
+              "description": "触发来源（可选）：user用户主动/coaching咨询下一步",
+              "type": "STRING",
+              "isRequired": false
+            },
+            {
+              "code": "clan_code",
+              "name": "匹配职位族",
+              "description": "匹配职位族（可选）：TE/PD/DG/MA/SC",
               "type": "STRING",
               "isRequired": false
             }

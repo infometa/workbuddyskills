@@ -1,0 +1,33 @@
+{
+    "title": "连接腾讯企点营销云",
+    "title_en": "Connect Tencent Qidian Marketing Cloud",
+    "description": "填写企业管理员提供的成员密钥和业务空间 ID，即可使用业务分析、人群圈选、选品配券等能力。WorkBuddy 将配置保存在本机 ~/.workbuddy 下，连接时通过请求头发送给营销云 MCP 服务。请勿在聊天中发送密钥。",
+    "description_en": "Enter the member key and business space ID provided by your administrator to use business analytics, audience segmentation, and product and offer selection. WorkBuddy stores the configuration locally under ~/.workbuddy and sends it to the Marketing Cloud MCP service in request headers. Do not share the key in chat.",
+    "docUrl": "https://tmc.qidian.qq.com/base/console/doc/33849",
+    "docLabel": "如何获取成员密钥与业务空间 ID？",
+    "docLabel_en": "How to get the member key and business space ID",
+    "fields": [
+        {
+            "key": "MAGIC_AGENT_SECRET_KEY",
+            "label": "成员密钥 SecretKey",
+            "label_en": "Member SecretKey",
+            "placeholder": "粘贴企业管理员提供的成员密钥 SecretKey",
+            "placeholder_en": "Paste the member SecretKey provided by your administrator",
+            "type": "password",
+            "required": true,
+            "description": "只填写密钥本身，不要加 Bearer 前缀。密钥失效时请联系管理员重新生成，并在此更新。",
+            "description_en": "Enter only the key, without the Bearer prefix. If it becomes invalid, ask your administrator to regenerate it and update this field."
+        },
+        {
+            "key": "MAGIC_AGENT_BIZ_ID",
+            "label": "业务空间 ID",
+            "label_en": "Business Space ID",
+            "placeholder": "填写本次使用的业务空间 ID",
+            "placeholder_en": "Enter the business space ID to use",
+            "type": "text",
+            "required": true,
+            "description": "请向企业管理员确认目标空间；该空间必须属于密钥对应的企业，切勿填写空间名称。",
+            "description_en": "Confirm the target space with your administrator. It must belong to the corporation associated with the key. Enter the ID, not the space name."
+        }
+    ]
+}

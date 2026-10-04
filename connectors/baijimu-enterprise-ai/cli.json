@@ -1,0 +1,30 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=20"
+  },
+  "npmRegistry": "https://registry.npmjs.org/",
+  "init": {
+    "darwin": "npm install -g @baijimu/cli@0.44.4",
+    "linux": "npm install -g @baijimu/cli@0.44.4",
+    "win32": "npm install -g @baijimu/cli@0.44.4"
+  },
+  "auth": {
+    "darwin": "baijimu auth login --no-browser",
+    "linux": "baijimu auth login --no-browser",
+    "win32": "baijimu.cmd auth login --no-browser"
+  },
+  "unAuth": {
+    "darwin": "baijimu auth logout --json",
+    "linux": "baijimu auth logout --json",
+    "win32": "baijimu.cmd auth logout --json"
+  },
+  "status": {
+    "darwin": "baijimu auth status --verify --json",
+    "linux": "baijimu auth status --verify --json",
+    "win32": "baijimu.cmd auth status --verify --json"
+  },
+  "statusMatch": "\\\"authenticated\\\"\\s*:\\s*true",
+  "authUrlDomain": "console.baijimu.com",
+  "authWaitForExit": true
+}

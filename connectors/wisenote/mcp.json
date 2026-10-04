@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "wisenote": {
+      "type": "streamableHttp",
+      "url": "https://100wiser.com/workbuddy/wisenote/meeting/mcp",
+      "timeout": 30000,
+      "disabled": false
+    }
+  }
+}

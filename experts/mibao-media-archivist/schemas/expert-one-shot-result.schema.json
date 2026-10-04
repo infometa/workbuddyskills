@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mibao.local/schemas/expert-one-shot-result.schema.json",
+  "oneOf": [
+    {"$ref": "#/$defs/inventoryBuild"},
+    {"$ref": "#/$defs/inventorySearch"},
+    {"$ref": "#/$defs/blocked"}
+  ],
+  "$defs": {
+    "stableId": {"type": "string", "minLength": 1, "maxLength": 512, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+    "projectId": {"type": "string", "pattern": "^MB-[0-9a-f]{32}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 32760,
+      "not": {"pattern": "^(?:[A-Za-z]:[\\/]|/)"}
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "display_name", "privacy_mode", "state", "created_at", "updated_at", "schema_version", "database_relative"],
+      "properties": {
+        "project_id": {"$ref": "#/$defs/projectId"},
+        "display_name": {"type": "string", "minLength": 1, "maxLength": 128},
+        "privacy_mode": {"const": "local-private"},
+        "state": {"const": "active"},
+        "created_at": {"type": "string", "minLength": 20, "maxLength": 40},
+        "updated_at": {"type": "string", "minLength": 20, "maxLength": 40},
+        "schema_version": {"type": "integer", "minimum": 1},
+        "database_relative": {"const": "database/mibao.sqlite"}
+      }
+    },
+    "scan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceRootId", "discoveredFiles", "newCandidates", "changedCandidates", "unchangedCandidates", "rejectedUnsafeEntries", "rejectedReparseEntries", "unreadableEntries", "issueCount", "issues"],
+      "properties": {
+        "sourceRootId": {"$ref": "#/$defs/stableId"},
+        "discoveredFiles": {"type": "integer", "minimum": 0},
+        "newCandidates": {"type": "integer", "minimum": 0},
+        "changedCandidates": {"type": "integer", "minimum": 0},
+        "unchangedCandidates": {"type": "integer", "minimum": 0},
+        "rejectedUnsafeEntries": {"type": "integer", "minimum": 0},
+        "rejectedReparseEntries": {"type": "integer", "minimum": 0},
+        "unreadableEntries": {"type": "integer", "minimum": 0},
+        "issueCount": {"type": "integer", "minimum": 0, "maximum": 100},
+        "issues": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "relativePath", "message"],
+            "properties": {
+              "code": {"type": "string", "pattern": "^MB-[A-Z]+-[0-9]{4}$"},
+              "relativePath": {"type": "string", "minLength": 1, "maxLength": 32760},
+              "message": {"type": "string", "minLength": 1, "maxLength": 256}
+            }
+          }
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "source_root_id", "classified_candidates", "unchanged_candidates", "recognized_candidates", "mismatched_candidates", "unknown_candidates", "truncated_candidates", "empty_candidates", "stale_candidates", "failed_candidates", "committed_batches", "max_batch_entries"],
+      "properties": {
+        "project_id": {"$ref": "#/$defs/projectId"},
+        "source_root_id": {"$ref": "#/$defs/stableId"},
+        "classified_candidates": {"type": "integer", "minimum": 0},
+        "unchanged_candidates": {"type": "integer", "minimum": 0},
+        "recognized_candidates": {"type": "integer", "minimum": 0},
+        "mismatched_candidates": {"type": "integer", "minimum": 0},
+        "unknown_candidates": {"type": "integer", "minimum": 0},
+        "truncated_candidates": {"type": "integer", "minimum": 0},
+        "empty_candidates": {"type": "integer", "minimum": 0},
+        "stale_candidates": {"const": 0},
+        "failed_candidates": {"const": 0},
+        "committed_batches": {"type": "integer", "minimum": 0},
+        "max_batch_entries": {"type": "integer", "minimum": 0}
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assetCount", "fileInstanceCount", "exactDuplicateGroupCount", "duplicateMemberCount", "bytesHashed", "strictRehashes"],
+      "properties": {
+        "assetCount": {"type": "integer", "minimum": 0},
+        "fileInstanceCount": {"type": "integer", "minimum": 0},
+        "exactDuplicateGroupCount": {"type": "integer", "minimum": 0},
+        "duplicateMemberCount": {"type": "integer", "minimum": 0},
+        "bytesHashed": {"type": "integer", "minimum": 0},
+        "strictRehashes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "report_id", "bundle_dir", "html", "assets_csv", "files_csv", "formats_csv", "duplicates_csv", "anomalies_csv", "jsonl", "manifest", "asset_count", "file_instance_count", "current_exact_duplicate_group_count", "strict_as_of_exact_duplicate_group_count", "historical_exact_duplicate_group_count", "anomaly_count", "duplicate_assurance", "reused_existing"],
+      "properties": {
+        "project_id": {"$ref": "#/$defs/projectId"},
+        "report_id": {"$ref": "#/$defs/stableId"},
+        "bundle_dir": {"$ref": "#/$defs/relativePath"},
+        "html": {"$ref": "#/$defs/relativePath"},
+        "assets_csv": {"$ref": "#/$defs/relativePath"},
+        "files_csv": {"$ref": "#/$defs/relativePath"},
+        "formats_csv": {"$ref": "#/$defs/relativePath"},
+        "duplicates_csv": {"$ref": "#/$defs/relativePath"},
+        "anomalies_csv": {"$ref": "#/$defs/relativePath"},
+        "jsonl": {"$ref": "#/$defs/relativePath"},
+        "manifest": {"$ref": "#/$defs/relativePath"},
+        "asset_count": {"type": "integer", "minimum": 0},
+        "file_instance_count": {"type": "integer", "minimum": 0},
+        "current_exact_duplicate_group_count": {"type": "integer", "minimum": 0},
+        "strict_as_of_exact_duplicate_group_count": {"type": "integer", "minimum": 0},
+        "historical_exact_duplicate_group_count": {"type": "integer", "minimum": 0},
+        "anomaly_count": {"type": "integer", "minimum": 0},
+        "duplicate_assurance": {"type": "string", "minLength": 1, "maxLength": 128},
+        "reused_existing": {"type": "boolean"}
+      }
+    },
+    "inventoryBuild": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "operation", "ok", "status", "project", "scan", "classification", "content", "searchIndexedDocumentCount", "searchRemovedDocumentCount", "report", "boundaries"],
+      "properties": {
+        "schemaVersion": {"const": "1.0"},
+        "operation": {"const": "inventory_build"},
+        "ok": {"const": true},
+        "status": {"enum": ["completed", "partial"]},
+        "project": {"$ref": "#/$defs/project"},
+        "scan": {"$ref": "#/$defs/scan"},
+        "classification": {"$ref": "#/$defs/classification"},
+        "content": {"$ref": "#/$defs/content"},
+        "searchIndexedDocumentCount": {"type": "integer", "minimum": 0},
+        "searchRemovedDocumentCount": {"type": "integer", "minimum": 0},
+        "report": {"$ref": "#/$defs/report"},
+        "boundaries": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sourceMutationRequested", "networkCallCount", "externalDisclosureCreated", "mcpServiceInstalled", "persistentProcessCreated", "productionVerified"],
+          "properties": {
+            "sourceMutationRequested": {"const": false},
+            "networkCallCount": {"const": 0},
+            "externalDisclosureCreated": {"const": false},
+            "mcpServiceInstalled": {"const": false},
+            "persistentProcessCreated": {"const": false},
+            "productionVerified": {"const": false}
+          }
+        }
+      }
+    },
+    "inventorySearch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "operation", "ok", "status", "projectId", "privacyMode", "query", "resultCount", "results", "boundaries"],
+      "properties": {
+        "schemaVersion": {"const": "1.0"},
+        "operation": {"const": "inventory_search"},
+        "ok": {"const": true},
+        "status": {"const": "completed"},
+        "projectId": {"$ref": "#/$defs/projectId"},
+        "privacyMode": {"const": "local-private"},
+        "query": {"type": "string", "minLength": 1, "maxLength": 256},
+        "resultCount": {"type": "integer", "minimum": 0, "maximum": 100},
+        "results": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["documentId", "fileInstanceId", "assetId", "sourceRootId", "relativePath", "state", "snippet", "evidenceRefs"],
+            "properties": {
+              "documentId": {"$ref": "#/$defs/stableId"},
+              "fileInstanceId": {"$ref": "#/$defs/stableId"},
+              "assetId": {"$ref": "#/$defs/stableId"},
+              "sourceRootId": {"$ref": "#/$defs/stableId"},
+              "relativePath": {"$ref": "#/$defs/relativePath"},
+              "state": {"const": "verified"},
+              "snippet": {"type": "string", "maxLength": 20000},
+              "evidenceRefs": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/stableId"}}
+            }
+          }
+        },
+        "boundaries": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["databaseModified", "mediaRead", "networkCallCount", "externalDisclosureCreated", "mcpServiceInstalled"],
+          "properties": {
+            "databaseModified": {"const": false},
+            "mediaRead": {"const": false},
+            "networkCallCount": {"const": 0},
+            "externalDisclosureCreated": {"const": false},
+            "mcpServiceInstalled": {"const": false}
+          }
+        }
+      }
+    },
+    "blocked": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "ok", "status", "code", "error", "requestDisposition", "recovery", "mcpServiceInstalled", "externalDisclosureCreated"],
+      "properties": {
+        "schemaVersion": {"const": "1.0"},
+        "ok": {"const": false},
+        "status": {"const": "blocked"},
+        "code": {"type": "string", "pattern": "^MB-[A-Z]+-[0-9]{4}$"},
+        "error": {"const": "The one-shot expert request failed a bounded safety or integrity gate."},
+        "requestDisposition": {"enum": ["not_consumed", "consumed_without_execution", "consumed_before_execution", "cleanup_failed_possible_residue"]},
+        "recovery": {"enum": ["correct_or_replace_request", "rewrite_request_before_retry", "manual_request_cleanup_required", "create_or_rebuild_local_private_project_then_rewrite_request"]},
+        "mcpServiceInstalled": {"const": false},
+        "externalDisclosureCreated": {"const": false}
+      }
+    }
+  }
+}

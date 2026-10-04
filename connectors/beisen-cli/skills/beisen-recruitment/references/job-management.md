@@ -17,7 +17,7 @@ beisen-cli recruitment job searchJobs --data '<json>'
 | `page` | integer | ✅ | 页数，默认从 0 开始，最小值 0 |
 | `pageSize` | integer | ✅ | 每页大小，默认 10，最小值 1，最大值 100 |
 | `jobStatus` | integer | ❌ | 职位状态：0=已暂停 1=招聘中 2=已结束 3=已取消 6=待处理 7=处理中 |
-| `recruitType` | integer | ❌ | 招聘分类：1=社会招聘 2=校园招聘 3=实习生招聘 |
+| `recruitType` | string | ❌ | 招聘分类：支持传入系统预定义的编码'1','2','3'（分别对应社会招聘/校园招聘/实习生招聘），也支持传入自定义文本（如'海外招聘'）  |
 
 > 注意：schema 中 `jobCode`、`jobTitle`、`page`、`pageSize` 标记为 required，但实际查询可按需填空值。例如按职位名称搜索：`--data '{"jobTitle":"Java开发","page":0,"pageSize":10}'`。
 
@@ -82,7 +82,7 @@ beisen-cli recruitment job getJobDetail --data '{"jobId":"<id>"}'
 ## bs_recommend_candidates_by_job — 批量查询职位的 AI 推荐人才
 
 ```bash
-beisen-cli recruitment job bs_recommend_candidates_by_job --data '<json>'
+beisen-cli recruitment_ai job bs_recommend_candidates_by_job --data '<json>'
 ```
 
 ### 参数（--data JSON）
@@ -96,7 +96,7 @@ beisen-cli recruitment job bs_recommend_candidates_by_job --data '<json>'
 示例：
 
 ```bash
-beisen-cli recruitment job bs_recommend_candidates_by_job --data '{"jobIds":["职位ID1","职位ID2"],"pageIndex":0,"pageSize":30}'
+beisen-cli recruitment_ai job bs_recommend_candidates_by_job --data '{"jobIds":["职位ID1","职位ID2"],"pageIndex":0,"pageSize":30}'
 ```
 
 ### 返回结构

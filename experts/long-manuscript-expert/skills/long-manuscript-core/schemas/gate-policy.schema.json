@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/gate-policy.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "gateId",
+    "priority",
+    "evaluatorVersion",
+    "lifecycle",
+    "implementationCheckpoint",
+    "evaluatorRef",
+    "evaluatorSha256",
+    "parameterProfiles",
+    "seedGateIds",
+    "policyDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "gateId": {
+      "type": "string"
+    },
+    "priority": {
+      "enum": [
+        "P0",
+        "P1",
+        "P2"
+      ]
+    },
+    "evaluatorVersion": {
+      "type": "string"
+    },
+    "lifecycle": {
+      "const": "active"
+    },
+    "implementationCheckpoint": {
+      "const": "C5"
+    },
+    "evaluatorRef": {
+      "type": "string"
+    },
+    "evaluatorSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "parameterProfiles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "seedGateIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "policyDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

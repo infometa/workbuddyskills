@@ -1,0 +1,389 @@
+{
+  "$id": "https://mibao.local/schemas/inventory-report-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "assurance_token": {
+      "additionalProperties": false,
+      "properties": {
+        "current_full_verified_count": {"minimum": 0, "type": "integer"},
+        "duplicate_extra_copy_count": {"minimum": 0, "type": "integer"},
+        "duplicate_member_count": {"minimum": 0, "type": "integer"},
+        "exact_duplicate_group_count": {"minimum": 0, "type": "integer"},
+        "issued_at": {"format": "date-time", "type": "string"},
+        "present_file_instance_count": {"minimum": 0, "type": "integer"},
+        "present_scan_candidate_count": {"minimum": 0, "type": "integer"},
+        "project_id": {"pattern": "^MB-[0-9a-f]{32}$", "type": "string"},
+        "scan_state_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+        "schema_version": {"const": "2.0"},
+        "snapshot_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+        "source_root_ids": {
+          "items": {"type": "string"},
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "project_id",
+        "source_root_ids",
+        "present_scan_candidate_count",
+        "present_file_instance_count",
+        "current_full_verified_count",
+        "exact_duplicate_group_count",
+        "duplicate_member_count",
+        "duplicate_extra_copy_count",
+        "scan_state_sha256",
+        "snapshot_sha256",
+        "issued_at"
+      ],
+      "type": "object"
+    },
+    "file_fact": {
+      "additionalProperties": false,
+      "properties": {
+        "bytes": {"minimum": 0, "type": "integer"},
+        "sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"}
+      },
+      "required": ["bytes", "sha256"],
+      "type": "object"
+    },
+    "migration_receipt": {
+      "additionalProperties": false,
+      "properties": {
+        "checksum": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+        "migration_id": {"type": "string"},
+        "version": {"minimum": 1, "type": "integer"}
+      },
+      "required": ["version", "migration_id", "checksum"],
+      "type": "object"
+    },
+    "scan_completeness": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {"properties": {"complete": {"const": true}}},
+          "then": {"properties": {"pending_reasons": {"maxItems": 0}}}
+        },
+        {
+          "if": {"properties": {"complete": {"const": false}}},
+          "then": {"properties": {"pending_reasons": {"minItems": 1}}}
+        }
+      ],
+      "properties": {
+        "complete": {"type": "boolean"},
+        "pending_reasons": {"items": {"type": "string"}, "type": "array"},
+        "schema_version": {"const": "1.0"},
+        "sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+        "source_root_ids": {
+          "items": {"type": "string"},
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "source_root_ids",
+        "complete",
+        "pending_reasons",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "source_state": {
+      "additionalProperties": false,
+      "properties": {
+        "source_root_id": {"type": "string"},
+        "state": {"enum": ["active", "offline", "removed"]}
+      },
+      "required": ["source_root_id", "state"],
+      "type": "object"
+    },
+    "sql_fact": {
+      "additionalProperties": false,
+      "properties": {
+        "sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+        "sql": {"minLength": 1, "type": "string"}
+      },
+      "required": ["sql", "sha256"],
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "duplicateAssurance": {"const": "strict_full_verified_as_of_token"}
+        }
+      },
+      "then": {
+        "properties": {
+          "assuranceToken": {"$ref": "#/$defs/assurance_token"},
+          "scanCompleteness": {
+            "properties": {
+              "complete": {"const": true},
+              "pending_reasons": {"maxItems": 0}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "duplicateAssurance": {"const": "historical_last_full_verified_only"}
+        }
+      },
+      "then": {
+        "properties": {
+          "assuranceToken": {"type": "null"},
+          "counts": {
+            "properties": {
+              "strictAsOfExactDuplicateGroupCount": {"const": 0}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "assuranceToken": {
+      "oneOf": [
+        {"$ref": "#/$defs/assurance_token"},
+        {"type": "null"}
+      ]
+    },
+    "cannotProve": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "claims": {
+      "additionalProperties": false,
+      "properties": {
+        "activeHostModified": {"const": false},
+        "databaseModified": {"const": false},
+        "officiallyListed": {"const": false},
+        "sourceBytesModified": {"const": false},
+        "submitReady": {"const": false}
+      },
+      "required": [
+        "sourceBytesModified",
+        "databaseModified",
+        "activeHostModified",
+        "submitReady",
+        "officiallyListed"
+      ],
+      "type": "object"
+    },
+    "counts": {
+      "additionalProperties": false,
+      "properties": {
+        "anomalyCount": {"minimum": 0, "type": "integer"},
+        "assetCount": {"minimum": 0, "type": "integer"},
+        "currentExactDuplicateGroupCount": {"const": 0},
+        "fileInstanceCount": {"minimum": 0, "type": "integer"},
+        "historicalDuplicateMemberCount": {"minimum": 0, "type": "integer"},
+        "historicalExactDuplicateGroupCount": {"minimum": 0, "type": "integer"},
+        "strictAsOfExactDuplicateGroupCount": {"minimum": 0, "type": "integer"}
+      },
+      "required": [
+        "assetCount",
+        "fileInstanceCount",
+        "currentExactDuplicateGroupCount",
+        "strictAsOfExactDuplicateGroupCount",
+        "historicalExactDuplicateGroupCount",
+        "historicalDuplicateMemberCount",
+        "anomalyCount"
+      ],
+      "type": "object"
+    },
+    "duplicateAssurance": {
+      "enum": [
+        "strict_full_verified_as_of_token",
+        "historical_last_full_verified_only"
+      ]
+    },
+    "files": {
+      "additionalProperties": false,
+      "properties": {
+        "anomalies.csv": {"$ref": "#/$defs/file_fact"},
+        "assets.csv": {"$ref": "#/$defs/file_fact"},
+        "duplicates.csv": {"$ref": "#/$defs/file_fact"},
+        "files.csv": {"$ref": "#/$defs/file_fact"},
+        "formats.csv": {"$ref": "#/$defs/file_fact"},
+        "index.html": {"$ref": "#/$defs/file_fact"},
+        "inventory.jsonl": {"$ref": "#/$defs/file_fact"}
+      },
+      "required": [
+        "index.html",
+        "assets.csv",
+        "files.csv",
+        "formats.csv",
+        "duplicates.csv",
+        "anomalies.csv",
+        "inventory.jsonl"
+      ],
+      "type": "object"
+    },
+    "generatedAt": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "generatorVersion": {
+      "const": "mibao-inventory-report-v2"
+    },
+    "hashAssuranceSnapshotSha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "policyVersion": {
+      "const": "mibao-inventory-report-policy-v2"
+    },
+    "projectId": {
+      "pattern": "^MB-[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "reconciliation": {
+      "additionalProperties": false,
+      "properties": {
+        "anomalyCsvDataRows": {"minimum": 0, "type": "integer"},
+        "anomalyResidual": {"const": 0},
+        "assetCsvDataRows": {"minimum": 0, "type": "integer"},
+        "assetResidual": {"const": 0},
+        "databaseAssetCount": {"minimum": 0, "type": "integer"},
+        "databaseFileInstanceCount": {"minimum": 0, "type": "integer"},
+        "duplicateCsvDataRows": {"minimum": 0, "type": "integer"},
+        "duplicateGroupResidual": {"const": 0},
+        "duplicateMemberResidual": {"const": 0},
+        "fileInstanceCsvDataRows": {"minimum": 0, "type": "integer"},
+        "fileInstanceResidual": {"const": 0},
+        "formatAssetResidual": {"const": 0},
+        "formatCsvDataRows": {"minimum": 0, "type": "integer"},
+        "formatPhysicalBytesResidual": {"const": 0},
+        "formatPresentFileResidual": {"const": 0},
+        "formatSummaryResidual": {"const": 0},
+        "jsonlAnomalyRecords": {"minimum": 0, "type": "integer"},
+        "jsonlAssetRecords": {"minimum": 0, "type": "integer"},
+        "jsonlDuplicateGroupRecords": {"minimum": 0, "type": "integer"},
+        "jsonlDuplicateMemberRecords": {"minimum": 0, "type": "integer"},
+        "jsonlExpectedRecordCount": {"minimum": 0, "type": "integer"},
+        "jsonlFileInstanceRecords": {"minimum": 0, "type": "integer"},
+        "jsonlFormatSummaryRecords": {"minimum": 0, "type": "integer"},
+        "jsonlRecordCount": {"minimum": 0, "type": "integer"},
+        "jsonlRecordResidual": {"const": 0},
+        "passed": {"const": true}
+      },
+      "required": [
+        "databaseAssetCount",
+        "databaseFileInstanceCount",
+        "assetCsvDataRows",
+        "fileInstanceCsvDataRows",
+        "formatCsvDataRows",
+        "duplicateCsvDataRows",
+        "anomalyCsvDataRows",
+        "jsonlAssetRecords",
+        "jsonlFileInstanceRecords",
+        "jsonlFormatSummaryRecords",
+        "jsonlDuplicateGroupRecords",
+        "jsonlDuplicateMemberRecords",
+        "jsonlAnomalyRecords",
+        "jsonlRecordCount",
+        "jsonlExpectedRecordCount",
+        "assetResidual",
+        "fileInstanceResidual",
+        "formatAssetResidual",
+        "formatPresentFileResidual",
+        "formatPhysicalBytesResidual",
+        "formatSummaryResidual",
+        "duplicateGroupResidual",
+        "duplicateMemberResidual",
+        "anomalyResidual",
+        "jsonlRecordResidual",
+        "passed"
+      ],
+      "type": "object"
+    },
+    "reportId": {
+      "pattern": "^RPT-[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "scanCompleteness": {"$ref": "#/$defs/scan_completeness"},
+    "schemaVersion": {
+      "const": 2
+    },
+    "snapshotSha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "sourceStates": {
+      "items": {
+        "$ref": "#/$defs/source_state"
+      },
+      "type": "array"
+    },
+    "sqlProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_rows": {"$ref": "#/$defs/sql_fact"},
+        "duplicate_members": {"$ref": "#/$defs/sql_fact"},
+        "file_instance_rows": {"$ref": "#/$defs/sql_fact"},
+        "project_summary": {"$ref": "#/$defs/sql_fact"}
+      },
+      "required": [
+        "project_summary",
+        "asset_rows",
+        "file_instance_rows",
+        "duplicate_members"
+      ],
+      "type": "object"
+    },
+    "sqlite": {
+      "additionalProperties": false,
+      "properties": {
+        "foreignKeyViolationCount": {"const": 0},
+        "integrityCheck": {"const": "ok"},
+        "migrationReceipts": {
+          "items": {"$ref": "#/$defs/migration_receipt"},
+          "type": "array"
+        },
+        "queryOnly": {"const": true},
+        "sqliteVersion": {"type": "string"},
+        "userVersion": {"minimum": 1, "type": "integer"}
+      },
+      "required": [
+        "queryOnly",
+        "integrityCheck",
+        "foreignKeyViolationCount",
+        "userVersion",
+        "sqliteVersion",
+        "migrationReceipts"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "reportId",
+    "projectId",
+    "generatorVersion",
+    "policyVersion",
+    "generatedAt",
+    "snapshotSha256",
+    "sourceStates",
+    "scanCompleteness",
+    "hashAssuranceSnapshotSha256",
+    "duplicateAssurance",
+    "assuranceToken",
+    "sqlite",
+    "sqlProvenance",
+    "counts",
+    "reconciliation",
+    "files",
+    "claims",
+    "cannotProve"
+  ],
+  "title": "MIBAO inventory report manifest v2",
+  "type": "object"
+}

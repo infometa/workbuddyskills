@@ -5,6 +5,14 @@ description: >
   一个 XLSX 文件、且**没有源 .xlsx/.csv 文件**时使用。支持纯文字需求，也支持
   以 pdf/docx/pptx 附件作为内容参考（由 `extract.py` 抽取为 markdown）。
   本 skill 在主代理侧准备 schema 与骨架文件，然后委派 sheet-agent 子代理完成单元格填充。
+description_zh: >
+  从零生成 Excel/xlsx 工作簿。当用户请求"创建/生成/新建/做一份/from scratch"
+  一个 XLSX 文件、且**没有源 .xlsx/.csv 文件**时使用。支持纯文字需求，也支持
+  以 pdf/docx/pptx 附件作为内容参考（由 `extract.py` 抽取为 markdown）。
+  本 skill 在主代理侧准备 schema 与骨架文件，然后委派 sheet-agent 子代理完成单元格填充。
+description_en: >-
+  Generates Excel/xlsx workbooks from scratch. Use when the user asks to "create/generate/build/make/from scratch" an XLSX file and **no source .xlsx/.csv file is provided**. Supports plain text requirements as well as pdf/docx/pptx attachments used as content references (extracted to markdown by `extract.py`). This skill prepares the schema and skeleton file on the main-agent side, then delegates cell filling to the sheet-agent subagent.
+
 ---
 
 # Excel 生成链路 (tencent-docs-sheet-generation)

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mibao.local/schemas/scan-candidate.schema.json",
+  "title": "MIBAO scanner stat candidate v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source_root_id",
+    "relative_path",
+    "size_bytes",
+    "modified_time_ms",
+    "identity",
+    "change_token"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "source_root_id": {
+      "type": "string",
+      "pattern": "^SRC-[0-9a-f]{32}$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 32760,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "size_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "modified_time_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "device",
+        "inode",
+        "mode"
+      ],
+      "properties": {
+        "device": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "inode": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "mode": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "change_token": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 over stat identity, size, and nanosecond mtime; not a content hash."
+    }
+  },
+  "additionalProperties": false
+}

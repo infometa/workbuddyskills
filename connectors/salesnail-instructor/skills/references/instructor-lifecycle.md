@@ -29,6 +29,8 @@
 
 Profile 发布至少需要 `displayName`、`headline`、`valueProposition` 和安全 slug。连接器只会在 Profile 状态为 `published` 时把 `visibility` 规范为 `public`，其他状态统一为 `private`。不得发布客户私密信息、学员信息、凭证或内部系统信息。
 
+Profile 长文本字段（`valueProposition`、`bio`、`featured[].description`）只支持纯文本：需要换行处必须显式写入 `\n`，公开页按原样保留换行（CSS `pre-wrap`）；每行写一个要点，可用 `· ` 开头。不要使用 Markdown 或 HTML（不会被渲染），也不要把多个要点用 `·` 连在同一行（会显示成一整段文字）。`displayName`、`headline`、`location` 保持单行。
+
 ## 客户方案
 
 调用 `salesnail_generate_proposal_draft` 时，只能提供一个已保存 `opportunityId` 或一个内联客户 Brief。工具会结合当前 Profile 返回结构化方案、Markdown、建议保存对象和明确假设。
@@ -37,8 +39,10 @@ Profile 发布至少需要 `displayName`、`headline`、`valueProposition` 和�
 
 ## 引导任务
 
-任务状态只是流程标记，不等于事实证明。先验证对应的 Profile、课程、客户 Brief 或方案确实存在，再调用 `salesnail_preview_instructor_task_update`，明确确认后调用 `salesnail_update_instructor_task`。
+任务状态只是流程标记，不等于事实证明。先验证对应的 Profile、Starter 体验课、客户 Brief 或手动创建课程确实存在，再调用 `salesnail_preview_instructor_task_update`，明确确认后调用 `salesnail_update_instructor_task`。
 
 固定顺序为：01 `self_experience` 完成自我体验；02 `positioning` 明确讲师定位。只有 Profile 的展示名称、专业标题和价值主张均有效时才能完成 02；完成任务不会自动发放正式学员额度。
+
+最后一项引导任务为 `course_create`：讲师必须从已授权剧本进入标准建课流程并创建一门真实课程，Starter 体验课不替代该任务。原 `proposal_share` 已退出 onboarding。六项任务全部完成后默认开放 Origin 创作者权限；更多剧本权限需联系 `demo@long-arena.com`。
 
 讲师可在讲师工作台使用已到账站内付费余额购买正式额度：国内站为人民币 800 元/人，国际站为美元 100 元/人。币种由账号所属站点固定，不换汇、不使用赠送余额，充值保持独立。Connector 可以解释并引导用户打开 `/instructor?tab=journey`，但不直接开放支付、余额扣减或额度购买写操作。

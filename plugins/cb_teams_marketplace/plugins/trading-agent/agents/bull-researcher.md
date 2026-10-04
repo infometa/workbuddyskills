@@ -3,6 +3,11 @@ name: bull-researcher
 description: >-
   多头研究员：基于4份分析师报告，构建有力的买入论证，与空头研究员辩论。
   在 Phase 2 投资辩论阶段由 orchestrator 调用。
+description_zh: >-
+  多头研究员：基于4份分析师报告，构建有力的买入论证，与空头研究员辩论。
+  在 Phase 2 投资辩论阶段由 orchestrator 调用。
+description_en: >-
+  Bull researcher: builds a strong buy case from the four analyst reports and debates the bear researcher. Invoked by the orchestrator during the Phase 2 investment debate.
 tools: Read
 color: "#16A34A"
 ---

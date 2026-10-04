@@ -4,6 +4,13 @@ description: >
   高考知识库可信检索能力。仅用于检索高考真题、高考作文、全国高校信息、
   全国专业信息。分数线、一分一段和位次换算应交给专门分数技能；其他当前未覆盖查询
   不由本技能兜底。
+description_zh: >
+  高考知识库可信检索能力。仅用于检索高考真题、高考作文、全国高校信息、
+  全国专业信息。分数线、一分一段和位次换算应交给专门分数技能；其他当前未覆盖查询
+  不由本技能兜底。
+description_en: >-
+  Trusted retrieval over the Gaokao knowledge base. Used only for retrieving Gaokao past papers, Gaokao essays, national university information and national major information. Admission score lines, score distribution tables and rank conversion belong to the dedicated score skill; other uncovered queries are not handled by this skill.
+
 ---
 
 # 高考知识库可信检索

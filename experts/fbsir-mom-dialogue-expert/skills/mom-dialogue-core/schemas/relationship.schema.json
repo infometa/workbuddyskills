@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/relationship/2.0",
+  "title": "Relationship Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["relationship_id", "person_a", "person_b", "relation_from_a", "relation_from_b", "status"],
+  "properties": {
+    "relationship_id": {"type": "string", "pattern": "^REL-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "person_a": {"type": "string", "pattern": "^PER-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "person_b": {"type": "string", "pattern": "^PER-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "relation_from_a": {"type": "string", "minLength": 1},
+    "relation_from_b": {"type": "string", "minLength": 1},
+    "confirmed_by": {"type": "string"},
+    "status": {"enum": ["candidate", "confirmed", "disputed", "unknown"]},
+    "source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "notes": {"type": "string"}
+  }
+}

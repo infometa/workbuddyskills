@@ -1,0 +1,44 @@
+{
+  "task_mode": "migrate",
+  "row_index": 1,
+  "batch_id": "smoke",
+  "product": { "sku": "PAWGO-19", "asin": "B0EXAMPLE1", "brand": "PawGo", "marketplace": "US" },
+  "legacy_title": "PawGo Dog Water Bottle for Walking, Portable Dog Bowl, Dog Travel Water Bottle, Puppy Water Cup, Outdoor Pet Drinking Bottle 19oz Leakproof",
+  "title": "PawGo Leakproof Dog Water Bottle for Travel",
+  "item_highlights": "One-hand water release and 19oz capacity for walks, hiking and car trips.",
+  "primary_keyword": "dog water bottle",
+  "used_keywords": [
+    { "kw": "dog water bottle", "position": 15, "field": "title", "bucket": "core", "source": "sif" },
+    { "kw": "dog travel water bottle", "position": 36, "field": "title", "bucket": "scenario", "source": "sif" },
+    { "kw": "19 oz", "position": 30, "field": "highlights", "bucket": "attribute", "source": "sif" },
+    { "kw": "hiking", "position": 52, "field": "highlights", "bucket": "scenario", "source": "sif" }
+  ],
+  "keyword_plan_used": {
+    "core": ["dog water bottle"],
+    "attribute": ["19 oz dog water bottle"],
+    "scenario": ["dog travel water bottle", "dog water bottle for hiking"]
+  },
+  "handoff_keywords": {
+    "bullets": ["leakproof dog water bottle", "one hand dog water bottle"],
+    "backend": ["puppy water cup", "outdoor pet drinking bottle"]
+  },
+  "ai_question_coverage": [
+    { "question": "hiking with dog bottle that doesn't leak", "hit_field": "highlights", "covered": true },
+    { "question": "water bottle for small dogs travel", "hit_field": "title", "covered": true },
+    { "question": "can I put it in a backpack", "hit_field": "bullets", "covered": false }
+  ],
+  "migration_map": [
+    { "segment": "19oz", "from": "legacy_title", "to": "highlights", "reason": "容量属性迁入 Highlights" },
+    { "segment": "Leakproof", "from": "legacy_title", "to": "title", "reason": "核心差异保留在 Title" },
+    { "segment": "Portable Dog Bowl", "from": "legacy_title", "to": "bullets", "reason": "第二形态说明交五点" },
+    { "segment": "Puppy Water Cup", "from": "legacy_title", "to": "backend_attributes", "reason": "长尾同义词进后台搜索词" },
+    { "segment": "Outdoor Pet Drinking Bottle", "from": "legacy_title", "to": "dropped", "reason": "与核心词重复" }
+  ],
+  "rationale": "核心词进 Title 前 50 字符，场景与容量迁入 Highlights，痛点词交五点。",
+  "meta": {
+    "amazon_title_policy": "compact_75",
+    "keyword_source": "sif",
+    "keyword_fetch_count": 0,
+    "keyword_bucket_coverage": { "core": 1, "attribute": 1, "scenario": 2, "pain": 0 }
+  }
+}

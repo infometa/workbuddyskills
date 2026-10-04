@@ -1,0 +1,62 @@
+name: thesis-workflow
+version: 1.4.0
+
+always_load:
+  - references/foundation-and-state.md
+  - references/academic-integrity-and-source-policy.md
+
+axes:
+  task:
+    values:
+      topic: references/topic-and-research-question.md
+      proposal: references/proposal-writing.md
+      literature: references/literature-and-evidence.md
+      search-query: references/search-query-templates.md
+      structure: references/manuscript-types-and-section-contracts.md
+      drafting: references/drafting-and-revision.md
+      polishing: references/academic-language-and-polishing.md
+      methods-statistics: references/statistics-results-and-figures.md
+      similarity-review: references/similarity-report-review.md
+      feedback-implementation: references/feedback-implementation.md
+      journal-selection: references/journal-selection-and-submission.md
+      initial-submission: references/journal-selection-and-submission.md
+      reviewer-response: references/reviewer-response.md
+      execution-record: references/research-execution-and-data-traceability.md
+      defense: references/defense-and-sharing.md
+  paper_type:
+    values:
+      humanities: references/manuscript-types-and-section-contracts.md
+      qualitative: references/manuscript-types-and-section-contracts.md
+      quantitative: references/statistics-results-and-figures.md
+      experimental: references/research-execution-and-data-traceability.md
+      engineering-design: references/manuscript-types-and-section-contracts.md
+      algorithmic: references/manuscript-types-and-section-contracts.md
+      review: references/literature-and-evidence.md
+  section:
+    values:
+      title: references/manuscript-types-and-section-contracts.md
+      abstract: references/manuscript-types-and-section-contracts.md
+      introduction: references/manuscript-types-and-section-contracts.md
+      literature-review: references/literature-and-evidence.md
+      methods: references/methods-results-and-figures.md
+      results: references/statistics-results-and-figures.md
+      discussion: references/manuscript-types-and-section-contracts.md
+      conclusion: references/manuscript-types-and-section-contracts.md
+  language:
+    values:
+      zh: references/academic-language-and-polishing.md
+      en: references/academic-language-and-polishing.md
+      zh-to-en: references/academic-language-and-polishing.md
+  standard:
+    values:
+      school: references/citation-and-formatting.md
+      citation: references/citation-and-formatting.md
+      journal: references/journal-selection-and-submission.md
+
+on_demand:
+  - condition: 需要具体交付结构
+    path: references/output-templates.md
+  - condition: 需要开放来源核验
+    path: references/trusted-accessible-sources.md
+  - condition: 需要全文、投稿包或回复包最终检查
+    path: references/quality-checklist.md

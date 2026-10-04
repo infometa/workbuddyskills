@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/gate-result.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "gateId",
+    "parameterProfile",
+    "sceneId",
+    "status",
+    "ok",
+    "deliveryEffect",
+    "findings",
+    "metrics",
+    "context",
+    "resultDigest",
+    "receipt"
+  ],
+  "properties": {
+    "gateId": {
+      "type": "string"
+    },
+    "parameterProfile": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sceneId": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "passed",
+        "failed",
+        "needs_input",
+        "needs_human_review",
+        "evaluator_unavailable",
+        "error"
+      ]
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "deliveryEffect": {
+      "enum": [
+        "allow",
+        "block",
+        "human_block"
+      ]
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "severity",
+          "subjectRef",
+          "evidenceRefs",
+          "expectedDigest",
+          "observedDigest"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "note",
+              "warning",
+              "critical"
+            ]
+          },
+          "subjectRef": {
+            "type": "string"
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "expectedDigest": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observedDigest": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "connectorAvailable",
+        "externalWriteAuthorized"
+      ],
+      "properties": {
+        "connectorAvailable": {
+          "const": false
+        },
+        "externalWriteAuthorized": {
+          "const": false
+        }
+      }
+    },
+    "resultDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "receipt": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://u3w.com/schemas/manuscriptos/gate-receipt.schema.json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "gateId",
+        "parameterProfile",
+        "sceneId",
+        "invocationDigest",
+        "evaluatorDigest",
+        "registryDigest",
+        "profileDigest",
+        "scenePackDigest",
+        "evidenceSnapshotDigest",
+        "artifactSetDigest",
+        "resultDigest",
+        "decision",
+        "externalActionCount",
+        "receiptDigest"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0.0"
+        },
+        "gateId": {
+          "type": "string"
+        },
+        "parameterProfile": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sceneId": {
+          "type": "string"
+        },
+        "invocationDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evaluatorDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "registryDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "profileDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scenePackDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidenceSnapshotDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "artifactSetDigest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resultDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "decision": {
+          "enum": [
+            "passed",
+            "blocked"
+          ]
+        },
+        "externalActionCount": {
+          "const": 0
+        },
+        "receiptDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

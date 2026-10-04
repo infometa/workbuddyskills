@@ -1,0 +1,364 @@
+{
+  "artifactRefs": [
+    {
+      "archetypeId": "primary-document",
+      "artifactId": "expert_book_manuscript"
+    },
+    {
+      "archetypeId": "structured-index",
+      "artifactId": "framework_index"
+    },
+    {
+      "archetypeId": "structured-index",
+      "artifactId": "case_index"
+    },
+    {
+      "archetypeId": "risk-gap-report",
+      "artifactId": "editorial_gap_notes"
+    }
+  ],
+  "capabilityBindings": [
+    {
+      "capabilityIds": [
+        "material-activation",
+        "multimodal-normalizer"
+      ],
+      "operationMode": "material_activation"
+    },
+    {
+      "capabilityIds": [
+        "scene-router",
+        "scene-composer",
+        "chapter-planning-expansion"
+      ],
+      "operationMode": "project_planning"
+    },
+    {
+      "capabilityIds": [
+        "chapter-planning-expansion",
+        "source-ledger-claim-graph",
+        "voice-profile-humanizer"
+      ],
+      "operationMode": "chapter_generation"
+    },
+    {
+      "capabilityIds": [
+        "continuation-recovery",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "continuation"
+    },
+    {
+      "capabilityIds": [
+        "scope-lock-diff",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "bounded_revision"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "rights-privacy-consent",
+        "research-verification"
+      ],
+      "operationMode": "review_quality"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "multi-format-rendering"
+      ],
+      "operationMode": "finished_draft_closure"
+    },
+    {
+      "capabilityIds": [
+        "multi-format-rendering",
+        "rights-privacy-consent"
+      ],
+      "operationMode": "export_delivery"
+    },
+    {
+      "capabilityIds": [
+        "asset-repurposing",
+        "media-illustration-planning"
+      ],
+      "operationMode": "asset_repurposing"
+    }
+  ],
+  "contentRiskClass": "medium",
+  "displayName": "专家思想书与方法论书",
+  "domainObjects": [
+    "author_position",
+    "case",
+    "category_claim",
+    "method_step",
+    "original_framework"
+  ],
+  "fallback": {
+    "allowGeneralSubstitution": false,
+    "connectorUnavailableBehavior": "preserve_route_and_use_local_workflow",
+    "localOfflineAvailable": true,
+    "riskFloor": "medium"
+  },
+  "family": "knowledge_publishing",
+  "fixtureRefs": [
+    "evals/fixtures/scenes/expert-book/normal.json",
+    "evals/fixtures/scenes/expert-book/missing.json",
+    "evals/fixtures/scenes/expert-book/conflicting.json",
+    "evals/fixtures/scenes/expert-book/unauthorized.json",
+    "evals/fixtures/scenes/expert-book/adversarial.json",
+    "evals/fixtures/scenes/expert-book/connector-unavailable.json"
+  ],
+  "implementationCheckpoint": "C3",
+  "kind": "vertical_scene",
+  "legacyAliases": [
+    "ghostwriter",
+    "personal-book"
+  ],
+  "lifecycle": "implemented",
+  "migrationProvenance": {
+    "mappingVersion": "1.0.0",
+    "seedCatalogSha256": "638f3f8e8f3ab7f1c2080018233ef6d7e19340187926571aad2eaf818eca82f4"
+  },
+  "operationModes": [
+    "material_activation",
+    "project_planning",
+    "chapter_generation",
+    "continuation",
+    "bounded_revision",
+    "review_quality",
+    "finished_draft_closure",
+    "export_delivery",
+    "asset_repurposing"
+  ],
+  "optionalPortBindings": [
+    {
+      "approvalRequired": false,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "voice_note_collection",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "import_material_reference",
+      "portId": "MaterialSourcePort",
+      "purpose": "optional enhancement for voice_note_collection",
+      "readbackRequired": false,
+      "required": false,
+      "writeMode": "read_only"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "case_submission",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "append_intake_submission",
+      "portId": "StructuredIntakePort",
+      "purpose": "optional enhancement for case_submission",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "editorial_review_tasks",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "request_review",
+      "portId": "ReviewPort",
+      "purpose": "optional enhancement for editorial_review_tasks",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    }
+  ],
+  "privacy": {
+    "livingPersonReview": false,
+    "minimumDataScope": "claim_and_source_scoped_minimum"
+  },
+  "qualityGateRefs": [
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.voice-fidelity",
+      "registryId": "voice.fidelity",
+      "reviewMandate": null,
+      "seedGate": "voice_fidelity"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.originality-boundary",
+      "registryId": "rights.clearance",
+      "reviewMandate": null,
+      "seedGate": "originality_boundary"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.method-reproducibility",
+      "registryId": "workflow.completeness",
+      "reviewMandate": null,
+      "seedGate": "method_reproducibility"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.claim-evidence",
+      "registryId": "claim.support",
+      "reviewMandate": null,
+      "seedGate": "claim_evidence"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "schema.valid",
+      "reviewMandate": null,
+      "seedGate": "core:schema.valid"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "input.required",
+      "reviewMandate": null,
+      "seedGate": "core:input.required"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "artifact.openability",
+      "reviewMandate": null,
+      "seedGate": "core:artifact.openability"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "delivery-manifest.integrity",
+      "reviewMandate": null,
+      "seedGate": "core:delivery-manifest.integrity"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "scope.lock",
+      "reviewMandate": null,
+      "seedGate": "core:scope.lock"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "external-action.authorized",
+      "reviewMandate": null,
+      "seedGate": "core:external-action.authorized"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "encoding.valid",
+      "reviewMandate": null,
+      "seedGate": "core:encoding.valid"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "id": "audience",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "claim_boundary",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "core_framework",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "expert_voice_samples",
+      "required": true,
+      "sensitivity": "personal_data"
+    },
+    {
+      "id": "goal",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "materials",
+      "required": true,
+      "sensitivity": "user_provided"
+    }
+  ],
+  "rights": {
+    "clearanceRequired": true,
+    "unknownRightsAction": "warn"
+  },
+  "sceneId": "expert-book",
+  "schemaVersion": "1.0.0",
+  "triggers": [
+    {
+      "id": "expert-book-trigger-1",
+      "signal": "expert methodology book",
+      "weight": 1
+    },
+    {
+      "id": "expert-book-trigger-2",
+      "signal": "thought leadership book",
+      "weight": 0.9
+    },
+    {
+      "id": "expert-book-trigger-3",
+      "signal": "专家思想书",
+      "weight": 0.8
+    }
+  ],
+  "workflowStages": [
+    {
+      "exitGateRefs": [
+        "input.required"
+      ],
+      "id": "activate-materials",
+      "operationModes": [
+        "material_activation"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "schema.valid"
+      ],
+      "id": "plan-project",
+      "operationModes": [
+        "project_planning"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "claim.support"
+      ],
+      "id": "draft-and-revise",
+      "operationModes": [
+        "chapter_generation",
+        "continuation",
+        "bounded_revision"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "claim.support",
+        "delivery-manifest.integrity",
+        "encoding.valid",
+        "external-action.authorized",
+        "input.required",
+        "rights.clearance",
+        "schema.valid",
+        "scope.lock",
+        "voice.fidelity",
+        "workflow.completeness"
+      ],
+      "id": "review-and-close",
+      "operationModes": [
+        "review_quality",
+        "finished_draft_closure",
+        "export_delivery",
+        "asset_repurposing"
+      ]
+    }
+  ]
+}

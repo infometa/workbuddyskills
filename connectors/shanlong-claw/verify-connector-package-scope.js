@@ -23,7 +23,17 @@ function walkFiles(root, current = root, out = []) {
 function findUnreachableRuntimeFiles(srcDir) {
   const allJs = walkFiles(srcDir).filter((file) => file.endsWith('.js'));
   const seen = new Set();
+  // index.js 是 npm 主入口；sea-entry.js 是 SEA 打包入口；两个 S1 校验脚本是
+  // 安装/升级旁路入口（可被 wrapper 直接 node 调用）。这些入口各自的静态闭包都必须纳入校验。
   const pending = [path.join(srcDir, 'index.js')];
+  for (const sidecar of [
+    'sea-entry.js',
+    'verify-connector-package-scope.js',
+    'connector-readonly-policy.js',
+  ]) {
+    const full = path.join(srcDir, sidecar);
+    if (fs.existsSync(full)) pending.push(full);
+  }
   while (pending.length > 0) {
     const file = path.resolve(pending.pop());
     if (seen.has(file) || !fs.existsSync(file)) continue;

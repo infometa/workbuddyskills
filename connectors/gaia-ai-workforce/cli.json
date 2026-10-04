@@ -1,0 +1,42 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": "20"
+  },
+  "npmRegistries": [
+    "https://registry.npmjs.org",
+    "https://registry.npmmirror.com"
+  ],
+  "init": {
+    "darwin": "npx --yes @gaiaworks/gaia-cli@latest install",
+    "linux": "npx --yes @gaiaworks/gaia-cli@latest install",
+    "win32": "npx --yes @gaiaworks/gaia-cli@latest install"
+  },
+  "auth": {
+    "darwin": "gaia login --browser",
+    "linux": "gaia login --browser",
+    "win32": "gaia.cmd login --browser"
+  },
+  "unAuth": {
+    "darwin": "gaia logout --all",
+    "linux": "gaia logout --all",
+    "win32": "gaia.cmd logout --all"
+  },
+  "status": {
+    "darwin": "gaia status --json",
+    "linux": "gaia status --json",
+    "win32": "gaia.cmd status --json"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "gaia version",
+      "linux": "gaia version",
+      "win32": "gaia.cmd version"
+    },
+    "minVersion": "0.5.4",
+    "versionPattern": "gaia v?(\\d+\\.\\d+\\.\\d+)"
+  },
+  "statusMatch": "\\\"logged_in\\\"\\s*:\\s*true",
+  "authWaitForExit": true,
+  "authSuppressBrowser": true
+}

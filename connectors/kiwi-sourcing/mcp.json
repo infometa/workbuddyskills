@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "kiwi-sourcing": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@harrylabsj/kiwi@0.8.0",
+        "mcp",
+        "serve",
+        "--principal",
+        "workbuddy:local",
+        "--agent",
+        "buyer-agent:workbuddy",
+        "--a2a-timeout-ms",
+        "15000"
+      ],
+      "runtime": {
+        "type": "node",
+        "version": "22"
+      },
+      "timeout": 30000
+    }
+  }
+}

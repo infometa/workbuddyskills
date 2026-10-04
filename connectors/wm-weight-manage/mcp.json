@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "wm-weight-manage": {
+      "type": "streamableHttp",
+      "url": "https://ichoice.myweimai.com/weimai-gpt/mcp",
+      "timeout": 30000
+    }
+  }
+}

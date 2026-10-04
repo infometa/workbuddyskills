@@ -1,15 +1,16 @@
 ---
 name: iggm-wdl-skill
-description: "腾讯健康组学平台(Omics) - IgGM(WDL) 公共应用专用运行助手。IgGM 是一个用于抗体设计的生成式基础模型，支持抗体CDR区域设计、全链设计和人源化设计等任务仅服务于本应用的导入与运行；其他公共应用、本地 WDL、COS 上的 NF、项目内已有应用请改用 omics-task-skill。 触发词：IgGM(WDL), iggm(wdl), AI 模型, ai 模型, 蛋白质与抗体设计, 一个用于抗体设计的生成式基础模型, 设计的生成式基础模型, IgGM, 全链设计和人源化设计等任务, 设计和人源化设计等任务, CDR, 跑 IgGM(WDL), run iggm(wdl), 应用"
+description: "IgGM 是 TencentAI4S 研发的抗体/纳米抗体生成式基础大模型（ICLR 2025），针对给定抗原同时生成抗体序列与结构。"
+triggers: [IgGM-WDL, iggm-wdl, 蛋白质与抗体设计, 跑 IgGM-WDL, run iggm-wdl]
 platform: 腾讯健康组学平台(Omics)
 tags: [行业专业, 生信分析, 生物医药, omics, 腾讯健康组学平台, public-app]
 version: 1.0.0
 ---
 
-# IgGM(WDL) Skill (v1.0.0 · 单应用收窄版)
+# IgGM-WDL Skill (v1.0.0 · 单应用收窄版)
 
 > **平台归属**：腾讯健康组学平台(Omics) 公共应用专用 SKILL。
-> 本 SKILL 是 `omics-task-skill` 的**单应用收窄版**：仅服务于 `IgGM(WDL)` (WDL) 这一个公共应用。
+> 本 SKILL 是 `omics-task-skill` 的**单应用收窄版**：仅服务于 `IgGM-WDL` (WDL) 这一个公共应用。
 > 所有命令拼接走 `scripts/omics_cli.py`，统一参数与输出格式。
 > **能力范围严格 = `omics-platform-cli` 7 命令 ∩ 仅允许 form B 运行本应用**；任何越界都视为越权。
 
@@ -19,48 +20,40 @@ version: 1.0.0
 
 | 字段               | 值                                     |
 | ------------------ | -------------------------------------- |
-| **应用名称**       | `IgGM(WDL)`                     |
-| **AppId（锁定）**  | `b65d7070-6e8a-4a57-914d-dbbb9dd9b286`                       |
-| **PublicAppId**    | `publicapp-wdl-iggm` |
+| **应用名称**       | `IgGM-WDL`                     |
+| **AppId（锁定）**  | `a9c8cb12-0a16-43f0-ab07-96ec5b41cc71`                       |
 | **应用类型**       | `WDL`                     |
 | **分组类型**       | 独立应用                               |
 | **标签**           | `行业专业, 生信分析, 生物医药, omics, 腾讯健康组学平台, public-app`                     |
 
-**应用简介**：IgGM 是一个用于抗体设计的生成式基础模型，支持抗体CDR区域设计、全链设计和人源化设计等任务。
+**应用简介**：IgGM 抗体/纳米抗体生成式基础大模型（ICLR 2025），针对给定抗原同时生成抗体序列与结构。
 
 ---
 
-## 能力边界（不可违反 · 最高优先级）
+## 能力边界
 
-本 SKILL 只能调用以下 **7 条** CLI 一级命令的**收窄子集**：
+> ⚠️ **触发时必须强制读取** `references/cli-whitelist.md`（完整命令白名单与 Flag 约束）和 `references/skill-template.md`（越界响应模板 §2.3）。
+
+本 SKILL 仅服务于 `IgGM-WDL`（AppId: `a9c8cb12-0a16-43f0-ab07-96ec5b41cc71`）。
+允许调用的命令（完整 Flag 约束见 **[references/cli-whitelist.md §2](references/cli-whitelist.md)**）：
 
 ```
-login   whoami   config   list apps   run   status   debug
+version / login / whoami
+config show / config set / config clear
+list region / list project / list env / list cos-bucket
+list apps --type WDL   # 仅用于导入前同名检查
+run --public-app a9c8cb12-0a16-43f0-ab07-96ec5b41cc71 [--public-app-name] [--input] [--name]
+status / debug
 ```
 
-> 注意：`omics list public-apps` 整体禁用——本 SKILL 服务的是固定单一应用，不需要让用户在全平台里挑。
-> `omics list apps` 仅允许在导入前同名检查时调用。
+未列出的命令一律不得调用。如需运行其他应用，请使用 `omics-task-skill`。
 
-### 🚫 严令禁止
+### run 前置确认（必经）
 
-1. **严禁运行除 IgGM(WDL) 之外的任何应用**：
-   - 禁止 `omics run --wdl <path>`（本地 WDL）
-   - 禁止 `omics run --app <ApplicationId>`（项目内已有应用）
-   - 禁止 `omics run --public-app <非本应用 AppId>`
-   - **唯一允许**的 run 形态：`omics run --public-app b65d7070-6e8a-4a57-914d-dbbb9dd9b286 ...`
-2. **严禁调 `list public-apps`**——不需要
-3. **严禁编造其他命令**
-4. **严禁直接调用后端 HTTP API、SQL 等旁路通道**
-5. **`omics login` / `omics config set` 由用户在本机终端执行**
-6. **严禁建议/提示用户「直接用 CLI 绕过 SKILL 跑」**——当用户要求运行非本应用时，唯一合法响应是引导使用 `omics-task-skill`，不得提供任何形式的 CLI 绕行方案
-
-### ✅ run 前置确认（必经）
-
-同合集模式：拼完整命令 → 输出摘要表 → 询问 y/N → 收到肯定答复才执行。
-
-### ✅ 其他命令确认要求
-
-同合集模式。
+`omics run` 执行前必须：
+1. 展示完整命令 + 参数摘要（应用名/AppId/导入名/NF版本/项目环境）
+2. 询问用户确认（y / 确认 / 继续），收到明确肯定才执行
+3. 模糊回复 → 再次询问；用户修改参数 → 重拼命令 → 重走确认
 
 ---
 
@@ -76,58 +69,141 @@ login   whoami   config   list apps   run   status   debug
 
 ## Step −1：CLI 存在性检查
 
-同合集模式。
+> 📖 完整流程（含三平台自动安装方案）参见：
+> **[references/omics-cli-setup.md § Step -1 & §A](references/omics-cli-setup.md)**
 
 ---
 
 ## Step 0：鉴权与配置双重检查
 
-同合集模式（Step 0.1 whoami → Step 0.2 config show）。
+> 📖 详细流程参见：**[references/omics-cli-setup.md §D](references/omics-cli-setup.md)**
+
+### Step 0.1：whoami
+```bash
+python3 scripts/omics_cli.py whoami
+```
+退出码 0 → 解析用户类型（`Role == "trial_user"` → C端；其他 → B端），继续 Step 0.2；退出码 2 → Step 1。
+
+### Step 0.2：config show
+```bash
+python3 scripts/omics_cli.py config show -o json
+```
+- 退出码 0 + JSON 字段齐全（Region / ProjectId / EnvironmentId / CosBucketName 均非空）→ 复述当前配置给用户，进入 Step 0.3（C端）或直接进入业务流程（B端）
+- 退出码 1 或任一字段为空 → Step 2（配置引导）
+
+### Step 0.3：体验配额首检（⚠️ **仅 C端用户，登录/配置就绪后必执行，不可跳过**）
+
+> **触发条件**：Step 0.2 通过 **且** 用户类型为 C端体验用户（`Role == "trial_user"`）。
+> **强制性**：不可跳过，不受用户指令影响。此为会话内第一次配额检查（首检）。
+
+```bash
+python3 scripts/omics_cli.py quota -o json
+```
+
+解析 `RemainDays`（剩余体验天数）和 `TodayRemainingRuns`（今日剩余运行次数），**按以下四档执行**：
+
+| 场景 | 条件 | 行为 |
+|------|------|------|
+| 已到期 | `RemainDays == 0` | **阻断** — 展示到期提示后终止，不进入业务流程 |
+| 今日次数耗尽 | `TodayRemainingRuns == 0` 且 `RemainDays > 0` | **阻断** — 展示次数用完提示后终止，不进入业务流程 |
+| 临近到期 | `RemainDays <= 3` 且 `RemainDays > 0` 且 `TodayRemainingRuns > 0` | **提示后继续** — 展示临近到期提示，直接进入业务流程 |
+| 正常体验 | `RemainDays > 3` 且 `TodayRemainingRuns > 0` | **简短提示后继续** — 一行配额信息，直接进入业务流程 |
+
+**话术模板（四档，必须完整执行）**：
+
+**场景一（已到期）— 阻断**：
+```
+⏰ 温馨提示：您的免费体验已到期，将无法继续运行任务，历史结果仍可查看。
+   您可开通组学平台正式版，体验更多功能。
+
+📋 立即开通 → https://cloud.tencent.com/apply/p/phrs1vb0chb
+🌐 了解平台 → https://cloud.tencent.com/product/omics
+```
+
+**场景二（今日次数耗尽）— 阻断**：
+```
+⏰ 温馨提示：今日免费体验运行已用完，明日 00:00 重置。
+   您可开通组学平台正式版，享受无限制运行。
+
+📋 立即开通 → https://cloud.tencent.com/apply/p/phrs1vb0chb
+```
+
+**场景三（临近到期）— 提示后继续**：
+```
+⏰ 温馨提示：您的免费体验即将到期（剩余 {RemainDays} 天）。
+   到期后将无法继续运行任务，历史结果仍可查看。
+   您可开通组学平台正式版，体验更多功能。
+
+📋 立即开通 → https://cloud.tencent.com/apply/p/phrs1vb0chb
+
+📊 今日剩余运行次数：{TodayRemainingRuns} 次
+```
+
+**场景四（正常体验）— 简短提示后继续**：
+```
+📊 免费体验版配额：今日剩余 {TodayRemainingRuns} 次 · 剩余 {RemainDays} 天
+```
+
+> ⚠️ **守则**：阻断时展示话术后立即终止，不进入任何业务逻辑；继续时无需等待用户确认，直接进入下一步。
+> 这是首检。每次实际提交 `omics run` 前还会再次执行运行前配额检查（Step 4.5），确保提交时配额仍充足。
 
 ---
 
-## Step 1：登录引导
+## Step 1：登录授权
 
-同合集模式。
+> 📖 完整流程参见：**[references/omics-cli-setup.md §B](references/omics-cli-setup.md)**
+
+SKILL 主动触发 `omics login`，浏览器自动打开授权页；用户点击「确认授权」即完成。
 
 ---
 
 ## Step 2：配置引导
 
-同合集模式。
+> 📖 完整流程（B端/C端分流、无项目/无环境/无桶异常处理）参见：**[references/omics-cli-setup.md §C](references/omics-cli-setup.md)**
+
+| 用户类型 | 流程 |
+|---------|------|
+| 🟢 B端正式用户 | `list region` → 选地域 → 并行 `list project`+`list env` → 选项目+环境 → 临时写入 → `list cos-bucket` → 选桶 → 正式 `config set` |
+| 🔵 C端体验用户 | 地域固定 `ap-guangzhou`，项目自动取第一条，环境/桶使用共享池占位符 |
+
+**B端用户异常分支（⚠️ 引导语强制使用，不得改写/替换/省略引导 URL）**：
+- **无可用项目**（`list project` 返回空）→ 提示用户前往组学平台创建项目后回复「已就绪」：
+  > 👉 https://omics.qq.com/platform/project/list
+- **无可用环境**（`list env` 返回空）→ 提示用户前往控制台创建环境后回复「已就绪」：
+  > 👉 https://console.cloud.tencent.com/omics/env/env-list
+- **无绑定存储桶**（`list cos-bucket` 返回空）→ 提示用户前往控制台为当前环境绑定 COS 桶后回复「已绑定」：
+  > 👉 https://console.cloud.tencent.com/omics/env/env-list（详见 [omics-cli-setup.md §C-B-no-bucket](references/omics-cli-setup.md)）
 
 ---
 
-## Step 3：导入前同名检查 + 快照记录（**必经**，必须才能导入）
-
-进入 `omics run` 之前，先在 config 项目里检查是否已存在同名应用。
+## Step 3：导入前同名检查（**必经，必须通过才能导入**）
 
 ```bash
-python3 scripts/omics_cli.py list apps -o json
+python3 scripts/omics_cli.py list apps --type WDL -o json
 ```
 
-| 用途 | 说明 |
-|------|------|
-| **快照记录（先执行）** | **必须**先将返回的全部 `ApplicationId` 存储为「预存应用快照」，用于后续 **`omics run` 命令接口报错**时判定孤儿应用来源 |
-| **同名检查（后执行）** | 检查是否有与 `IgGM(WDL)`（或用户指定的 `--public-app-name`）同名的已有应用 |
+> ⚠️ **`--type` 值固定为 `WDL`**，用于限定查询范围仅包含同类型应用。
+> **禁止不带 `--type` 调用**（那会列出项目所有应用，越界）。
 
-### 3.1 同名检查循环（⚠️ 必须通过，循环直到名称唯一）
+用途：检查是否有与 `IgGM-WDL`（或用户指定的 `--public-app-name`）同名的已有应用。
+
+#### 同名检查循环（⚠️ 必须通过，循环直到名称唯一）
 
 > **设计意图**：`--public-app` 会在项目中创建新的应用记录。如果项目已有同名应用，会导致运行失败。
 > 因此导入前必须确保名称唯一，通过**引导用户重命名**解决冲突（非拒绝）。
 
-查找 `Name == IgGM(WDL)`（或用户提供的自定义名）：
+查找 `Name == IgGM-WDL`（或用户提供的自定义名）：
 
 | 命中情况       | SKILL 行为                                                                                                  |
 | -------------- | ----------------------------------------------------------------------------------------------------------- |
 | **0 条命中**   | ✅ 通过检查，用当前名称作为 `--public-app-name` 继续下一步                                                  |
 | **≥ 1 条命中** | **必须停下来**，展示冲突信息 + 引导用户为待导入应用指定新名称；用户输入新名字后**重新执行同名检查**（循环） |
 
-#### 同名检查交互模板
+##### 同名检查交互模板
 
 ```
 ────────────────────────────────────
-同名检查：IgGM(WDL)（独立应用）
+同名检查：IgGM-WDL（独立应用）
 ────────────────────────────────────
 
 待导入名称: {candidateName}
@@ -137,8 +213,8 @@ python3 scripts/omics_cli.py list apps -o json
   名称: {ConflictingAppName}
   AppId: {ConflictingApplicationId}
 
-请为即将导入的 IgGM(WDL) 指定一个不同的名称（将用作 --public-app-name）：
-• 输入新名称，如 IgGM(WDL)_v2、my_IgGM(WDL)
+请为即将导入的 IgGM-WDL 指定一个不同的名称（将用作 --public-app-name）：
+• 输入新名称，如 IgGM-WDL_v2、my_IgGM-WDL
 • 或输入「取消」终止本次操作
 >
 ```
@@ -152,31 +228,37 @@ python3 scripts/omics_cli.py list apps -o json
 | 新名称无同名 | ✅ 通过检查，使用该名称继续 |
 | 「取消」/「终止」 | 终止本次运行操作（不删除/修改任何项目已有应用） |
 
-#### 同名检查守则
+##### 同名检查守则
 
-- **必须先记录快照再做同名判断**
 - **必须循环直到名称唯一**——不允许跳过同名检查直接 run
 - **不得自动生成名称替代用户选择**
 - **不得删除/修改项目已有应用**——只做读操作 + 引导重命名
 
 ---
 
+
 ## Step 4：运行（仅形态 B · 固定公共应用）
 
+根据应用锁定参数中硬编码的 `APP_TYPE` 区分构造入参：
+
+本应用为 **WDL 类型**，不需要 `--nf-version` 参数，直接构造 run 命令：
+
+**WDL 类型 — run 命令**：
+
 ```bash
-omics run --public-app b65d7070-6e8a-4a57-914d-dbbb9dd9b286 \\
-          --public-app-name <importedName>\
-          {[--nf-version <version>] if APP_TYPE == "NEXTFLOW" else ''} \\
+omics run --public-app a9c8cb12-0a16-43f0-ab07-96ec5b41cc71 \\
+          --public-app-name <importedName> \\
+          --app-type WDL \\
           [--input <path>] \\
           [--name <runName>] \\
           -o json
 ```
 
-> - `--public-app` 值**固定**为 `b65d7070-6e8a-4a57-914d-dbbb9dd9b286`，不接受替换。
-> - `--public-app-name` 可由用户自定义，默认用 `IgGM(WDL)`。
+> - `--nf-version` **不传**（本应用为 WDL 类型）。
+> - `--public-app` 值**固定**为 `a9c8cb12-0a16-43f0-ab07-96ec5b41cc71`，不接受替换。
+> - `--app-type` 值**固定**为 `WDL`，由 SKILL 内部硬编码传入，无需用户填写。
+> - `--public-app-name` 可由用户自定义，默认用 `IgGM-WDL`。
 
-> - `--input` 仅在用户明确要求自定义参数时传入。
-> - **`--nf-version` 仅当本应用 AppType 为 NEXTFLOW 时传入**（AppType 来自公共应用元数据）。
 
 ### 4.1 运行参数模板（InputTemplate 自动填充）
 
@@ -186,11 +268,12 @@ omics run --public-app b65d7070-6e8a-4a57-914d-dbbb9dd9b286 \\
 
 ### 4.2 完整流程
 
-1. Step 0 鉴权 + 配置检查
-2. Step 3 导入前同名检查
+1. Step 0 鉴权 + 配置检查（**含 Step 0.3 配额首检，C端必执行**）
+2. Step 3 导入前同名检查（必须带 `--type WDL`）
 3. 用户确认参数 / 自定义输入
 4. 二次确认（按 §4.3 模板）
-5. 执行
+5. **Step 4.5 运行前配额检查（⚠️ 仅 C端，强制执行，不可跳过）**
+6. 执行
 
 ### 4.3 二次确认模板
 
@@ -198,23 +281,43 @@ omics run --public-app b65d7070-6e8a-4a57-914d-dbbb9dd9b286 \\
 即将运行任务，请确认：
   ┌────────────────────────────────────────────┐
   │ 形态      : 公共应用（form B，自动模板）    │
-  │ 应用      : IgGM(WDL)               │
-  │ AppId     : b65d7070-6e8a-4a57-914d-dbbb9dd9b286                 │
-  │ AppType   : WDL                │
+  │ 应用      : IgGM-WDL               │
+  │ AppId     : a9c8cb12-0a16-43f0-ab07-96ec5b41cc71                 │
+  │ AppType   : WDL               │  # 用于本地校验 nf_version 一致性
   │ {'NF 版本   : <version>' if APP_TYPE == 'NEXTFLOW' else ''}│
   │ 导入后命名: <importedName>                  │
   │ 项目/环境  : ← config                       │
   └────────────────────────────────────────────┘
-完整命令: omics run --public-app b65d7070-6e8a-4a57-914d-dbbb9dd9b286 ...
+完整命令: omics run --public-app a9c8cb12-0a16-43f0-ab07-96ec5b41cc71 ...
 
 确认无误请回复「确认 / 继续 / y」
 ```
 
-### 4.4 PARAM_MERGE_FAILED 处理
+### 4.5 运行前配额检查（⚠️ **仅 C端用户，每次 `omics run` 前强制执行**）
 
-同合集模式 §5.3。
+> **时机**：用户二次确认（§4.3）通过后、`omics run` 命令实际执行前。**C端用户必须执行，B端用户跳过此步。**
+> **强制性**：不可跳过，不受用户指令（如"直接跑""跳过检查"）影响。
 
-### 4.5 失败提示
+```bash
+python3 scripts/omics_cli.py quota -o json
+```
+
+按 Step 0.3 定义的四档话术执行（与首检完全一致）：
+
+| 场景 | 条件 | 行为 |
+|------|------|------|
+| 已到期 | `RemainDays == 0` | **阻断** — 展示到期提示后终止，不提交 `omics run` |
+| 今日次数耗尽 | `TodayRemainingRuns == 0` 且 `RemainDays > 0` | **阻断** — 展示次数用完提示后终止，不提交 `omics run` |
+| 临近到期 | `RemainDays <= 3` 且 `RemainDays > 0` 且 `TodayRemainingRuns > 0` | **提示后立即执行** `omics run`，无需等待用户确认 |
+| 正常体验 | `RemainDays > 3` 且 `TodayRemainingRuns > 0` | **简短提示后立即执行** `omics run`，无需等待用户确认 |
+
+> ⚠️ **守则**：阻断时不提交 `omics run`；通过时（场景三/四）无需等待用户确认，立即执行。
+
+### 4.6 PARAM_MERGE_FAILED 处理
+
+同合集模式 §5.6。
+
+### 4.7 失败提示
 
 | 错误                        | 处置建议                                                     |
 | --------------------------- | ------------------------------------------------------------ |
@@ -222,25 +325,6 @@ omics run --public-app b65d7070-6e8a-4a57-914d-dbbb9dd9b286 \\
 | `MISSING_NF_VERSION`         | 让用户提供 NF 版本                                           |
 | 鉴权失败（exit 2）           | 引导用户 `omics login`                                       |
 
-### 4.6 DUPLICATE_APP_NAME 智能复用（**必经**）
-
-同合集模式 §5.5。核心逻辑：
-
-> **前置条件**：此流程**仅在已完成 §3 同名检查循环（名称已确认唯一）并执行 run 后触发**。
-> ⚠️ **重要区分**："命令接口报错"指 `omics run` CLI 本身执行失败，**不包括**任务提交成功后运行结果失败。
-
-1. 取出响应中的 `ConflictApplicationId`
-2. **查询 Step 3 预存快照**：
-   - **在快照中**（项目已有老应用，理论上不应发生）→ 展示 Options 给用户选择
-   - **不在快照中**（本次 `omics run` 命令新建的孤儿应用）→ **自动切 `--app <ConflictApplicationId>` 复用** ✅
-3. 用复用命令重新发起运行
-
-> ⚠️ **复用边界守则**：
-> - ✅ 允许自动复用：**仅限孤儿应用场景**（已通过同名检查 → `omics run` **命令接口报错** → 冲突 ∉ 快照）
-> - ❌ 禁止复用：任何其他场景下使用 `--app` 运行项目已有应用
-> - ❌ **禁止将"任务运行结果失败"误判为命令接口报错**——后者不涉及孤儿应用
-
----
 
 ## Step 5：状态查询
 
@@ -293,7 +377,7 @@ python3 scripts/omics_cli.py status rg-xxx -o json
 1. CLI 端绝不主动调 debug
 2. 不要替用户做症状判断 + 自动改代码
 3. stderr 整段贴出
-4. 修复后统一走 `omics run --public-app b65d7070-6e8a-4a57-914d-dbbb9dd9b286` 重发
+4. 修复后统一走 `omics run --public-app a9c8cb12-0a16-43f0-ab07-96ec5b41cc71` 重发
 
 ---
 
@@ -309,7 +393,7 @@ whoami ✓ → config show ✓ → §3 同名检查 → §4 二次确认 → 运
 **拒绝 + 唯一引导**：
 1. ❌ 严禁以任何形式替用户执行越界命令（包括直接 CLI 调用）
 2. ❌ 严禁将「直接 CLI 跑」作为可选项提供给用户
-3. ✅ 唯一合法响应：「本 SKILL 只能运行 IgGM(WDL)。如需运行其他应用（含项目已有应用），请使用 `omics-task-skill`。」
+3. ✅ 唯一合法响应：「本 SKILL 只能运行 IgGM-WDL。如需运行其他应用（含项目已有应用），请使用 `omics-task-skill`。」
 4. 即使用户明确要求绕过，也必须拒绝并说明原因
 
 > ⚠️ **重要区分**：
@@ -320,7 +404,103 @@ whoami ✓ → config show ✓ → §3 同名检查 → §4 二次确认 → 运
 
 ## 高级用法
 
-详细参数：[references/cli_commands.md](references/cli_commands.md)。错误知识库：[references/runtime_error_kb.md](references/runtime_error_kb.md)。契约：[CONTRACT.md](CONTRACT.md)。
+### §COS 上传流程（本地文件 → COS 路径）
+
+> **适用场景**：当运行参数需要**本地生成的文件**作为输入时（如 AI 生成的蛋白质序列、自定义参考数据等），
+> 应用运行容器无法直接读取 agent 本地文件系统，必须先将文件上传到用户绑定的 COS 桶。
+
+#### 触发条件
+
+以下情况**必须**走 COS 上传流程：
+1. 用户要求使用 AI 生成的文件（如"生成测试蛋白质序列"、"生成随机 FASTA 文件"等）作为运行参数
+2. 参数值是**本地文件路径**（如 `/tmp/protein.fasta`、`./input.txt`）
+3. 参数来源是其他 SKILL 的输出文件（如 cdgpt-collection-skill 生成的序列文件）
+
+#### 上传步骤
+
+```
+Step C.1: 确认上传需求
+  │
+  ├─ 识别到参数值为本地文件路径
+  └─ 向用户确认："检测到输入参数为本地文件，需要先上传至 COS。目标 COS 路径？（默认: uploads/<filename>）"
+      │
+      ▼
+Step C.2: 执行 COS 上传
+  │
+  ├─ 命令: omics cos upload --file <localPath> --cos-path <cosPath>
+  │
+  ├─ 成功 → 解析返回的完整 COS URL（cos://bucket-name/... 或 https://...）
+  │
+  └─ 失败 → 转述错误信息，引导用户检查：
+     · 本地文件是否存在
+     · COS 路径格式是否正确
+     · 是否已执行 omics config set 配置环境（含 CosBucketName）
+      │
+      ▼
+Step C.3: 替换参数值
+  │
+  ├─ 将原本地文件路径替换为返回的 COS URL
+  └─ 使用新参数值继续 run 流程
+```
+
+#### 命令示例
+
+```bash
+# 上传单个文件
+python3 scripts/omics_cli.py cos upload   --file /tmp/generated_protein.fasta   --cos-path uploads/protein_sequence.fasta   -o json
+
+# 返回示例（成功时）:
+# {
+#   "CosUrl": "cos://my-bucket-1234567890/uploads/protein_sequence.fasta",
+#   "FileSize": 1024,
+#   "UploadTime": "2026-08-06T16:00:00+08:00"
+# }
+```
+
+#### 参数说明
+
+| 参数 | 必填 | 说明 |
+|------|------|------|
+| `--file <path>` | ✅ | 本地文件绝对路径或相对路径 |
+| `--cos-path <path>` | ✅ | COS 目标路径（相对于用户配置的 CosBucketName）；需用户指定 |
+| `-o json` | 否 | 输出格式（默认 table） |
+
+#### 完整场景示例
+
+**场景：使用 AI 生成的蛋白质序列运行 IgGM-WDL**
+
+```
+用户: 生成测试蛋白质序列，使用默认模板运行IgGM-WDL
+
+Agent:
+  1. [调用相关SKILL] 生成蛋白质序列到 /tmp/test_protein.fasta
+  2. [识别到本地文件] 触发 COS 上传流程
+  
+  Agent → 用户:
+    "已生成测试蛋白质序列：/tmp/test_protein.fasta (2.3KB)
+     需要上传至 COS 后才能作为运行参数。
+     请指定 COS 目标路径（默认: uploads/test_protein.fasta）："
+  
+  用户: "uploads/my_test_protein.fasta"
+  
+  Agent:
+    3. [执行] omics cos upload --file /tmp/test_protein.fasta --cos-path uploads/my_test_protein.fasta
+    4. [解析返回] CosUrl = "cos://my-bucket/uploads/my_test_protein.fasta"
+    5. [构建 input JSON] { "input_file": "cos://my-bucket/uploads/my_test_protein.fasta" }
+    6. [继续] omics run --public-app a9c8cb12-0a16-43f0-ab07-96ec5b41cc71 --input /tmp/run_input.json ...
+```
+
+#### COS 上传守则
+
+1. **必须先确认再上传**——不得未经用户同意自动上传本地文件
+2. **COS 路径必须由用户指定**——SKILL 提供默认建议但不得自作主张
+3. **仅上传必要的文件**——不得批量上传目录或无关文件
+4. **上传失败时终止流程**——不得用本地路径替代 COS URL 继续运行
+5. **保留上传返回信息**——用于调试和问题排查
+
+---
+
+详细参数：[references/cli-whitelist.md](references/cli-whitelist.md)。错误知识库：[references/runtime_error_kb.md](references/runtime_error_kb.md)。运行流程规范：[references/run-flow-spec.md](references/run-flow-spec.md)。契约：[CONTRACT.md](CONTRACT.md)。
 
 ## 脚本 API 参考
 
@@ -333,14 +513,24 @@ cli = OmicsCLI()
 cli.execute(cli.build_whoami())
 cli.execute(cli.build_config_show(output="json"))
 
-# ✅ 同名检查
-cli.execute(cli.build_list_apps(output="json"))
+# ✅ 同名检查（唯一允许的形态：必须带 --type）
+cli.execute(cli.build_list_apps(
+    app_type="WDL",           # ★ 必须带 --type 限定查询范围
+    output="json",
+))
 
-# ✅ 唯一允许的 run（固定 AppId）
+# ✅ COS 上传（用于本地生成的文件）
+cli.execute(cli.build_cos_upload(
+    file_path="/tmp/local_file.txt",
+    cos_path="uploads/file.txt",
+    output="json",
+))
+
+# ✅ 唯一允许的 run（固定 AppId，WDL 类型不传 nf_version）
 cli.execute(cli.build_run(
-    public_app="b65d7070-6e8a-4a57-914d-dbbb9dd9b286",
+    public_app="a9c8cb12-0a16-43f0-ab07-96ec5b41cc71",
     public_app_name="<importedName>",
-    nf_version="<version>",  # 仅 NEXTFLOW 类型需要
+    app_type="WDL",           # ★ 硬编码，以 --app-type 传给 CLI；WDL 时自动跳过 nf_version 校验
     output="json",
 ))
 
@@ -352,4 +542,5 @@ cli.execute(cli.build_debug(run_group_id="rg-xxx", output="json"))
 # cli.execute(cli.build_run(wdl="./x.wdl", ...))             # form A
 # cli.execute(cli.build_run(app="app-xxx", ...))              # form C
 # cli.execute(cli.build_run(public_app="other-app-id", ...))  # 其他应用
-# cli.execute(cli.build_list_public_apps(output="json"))       # 不需要
+# cli.execute(cli.build_list_public_apps(output="json"))       # 不带 keyword（列出全平台）
+# cli.execute(cli.build_list_apps(output="json"))              # 不带 --type（列出所有类型）

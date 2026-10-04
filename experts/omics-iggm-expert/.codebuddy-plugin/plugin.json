@@ -1,7 +1,7 @@
 {
   "name": "omics-iggm-expert",
   "version": "1.0.0",
-  "description": "Tencent Health IgGM Antibody Drug R&D Expert - specializing in de novo antibody design, CDR redesign, and affinity maturation using generative AI model (ICLR 2025), with PDB structure visualization support",
+  "description": "Expert in Tencent IgGM generative model, covering CDR redesign, full-chain generation and humanization affinity optimization.",
   "author": {
     "name": "Tencent Health Omics Team",
     "email": "omics@tencent.com"
@@ -16,49 +16,49 @@
     "./skills/pdb-viewer-skill"
   ],
   "displayName": {
-    "en": "IgGM Antibody Drug R&D Expert",
-    "zh": "腾讯IgGM抗体药物研发专家"
+    "en": "omics-expert",
+    "zh": "组小学"
   },
   "profession": {
-    "en": "IgGM Antibody Drug R&D Expert",
+    "en": "Tencent IgGM Antibody Drug Development Expert",
     "zh": "腾讯IgGM抗体药物研发专家"
   },
   "displayDescription": {
-    "en": "Expert in IgGM generative antibody model (ICLR 2025), providing de novo antibody/nanobody design, CDR redesign, affinity maturation, and 3D structure visualization services",
+    "en": "Expert in Tencent IgGM generative model, covering CDR redesign, full-chain generation and humanization affinity optimization.",
     "zh": "精通腾讯IgGM生成式模型。覆盖CDR重设计、全链生成与人源化亲和力优化，输出可验证的抗体候选序列"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "04-DataAI",
   "defaultInitPrompt": {
-    "en": "What can this expert do for me?",
-    "zh": "这个专家能帮我做什么"
+    "zh": "针对默认的 PD-L1 靶点，按默认参数执行抗体从头设计（De Novo Design），输出候选序列表并 3D 展示代表结构",
+    "en": "For the default PD-L1 target, perform antibody de novo design with default parameters, output candidate sequence table and 3D display of representative structure"
   },
   "tags": [
     {
-      "en": "Antibody/Nanobody Design",
-      "zh": "抗体/纳米抗体设计"
+      "zh": "抗体设计",
+      "en": "Antibody Design"
     },
     {
-      "en": "CDR Redesign",
-      "zh": "CDR 重设计"
+      "zh": "CDR重设计",
+      "en": "CDR Redesign"
     },
     {
-      "en": "Affinity Maturation",
-      "zh": "亲和力成熟"
+      "zh": "亲和力成熟",
+      "en": "Affinity Maturation"
     }
   ],
   "quickPrompts": [
     {
-      "en": "What can this expert do for me?",
-      "zh": "这个专家能帮我做什么"
+      "zh": "针对默认的 PD-L1 靶点，按默认参数执行抗体从头设计（De Novo Design），输出候选序列表并 3D 展示代表结构",
+      "en": "For the default PD-L1 target, perform antibody de novo design with default parameters, output candidate sequence table and 3D display of representative structure"
     },
     {
-      "en": "Use default template to generate antibody sequences in de novo design scenario",
-      "zh": "按照从头设计场景，使用默认模版，生成抗体序列"
+      "zh": "保持框架区不变，对我提供的抗 PD-L1 先导抗体执行 CDR-H3 重设计（CDR Redesign），输出前后序列对比和结构展示",
+      "en": "Keeping the framework region unchanged, perform CDR-H3 redesign on the anti-PD-L1 lead antibody I provide, output sequence comparison before and after and structure display"
     },
     {
-      "en": "View 3D structure",
-      "zh": "查看3D结构"
+      "zh": "针对默认的 PD-L1 体系，按默认参数执行 CDR-H3 条件设计（CDR-H3 Conditional Design），输出候选序列汇总表并 3D 展示代表结构",
+      "en": "For the default PD-L1 system, perform CDR-H3 conditional design with default parameters, output candidate sequence summary table and 3D display of representative structure"
     }
   ],
   "plugin": "omics-iggm-expert"

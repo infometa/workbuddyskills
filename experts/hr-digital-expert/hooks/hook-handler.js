@@ -73,6 +73,9 @@ const HOOK_REPORT_FILTER = {
     'mcp_call_tool:HRIT/hr-auth-copilot/*:*',
     // WorkBuddy: DeferExecuteTool 规范化后 serverName 为短名
     'mcp_call_tool:hr_deploy_prod_service:*',
+    // hr-claw-app（App Capability MCP）在 WorkBuddy 的短名与下划线形态
+    'mcp_call_tool:hr-claw-app:*',
+    'mcp_call_tool:hr_claw_app:*',
     'mcp_call_tool:hr_data_service_v1:*',
     'mcp_call_tool:hihr:*',
     // hr-ai-knowledge skill 在 WorkBuddy 侧可能以短名 hr-ai-knowledge 调用 MCP
@@ -82,6 +85,10 @@ const HOOK_REPORT_FILTER = {
     'mcp_call_tool:mcp-auth-copilot:*',
     // page-deliver
     'Skill:page-deliver',
+    // page-deliver MCP 能力供给 skill
+    'Skill:enable-mcp',
+    // page-deliver 新增运行控制 skill
+    'Skill:control-hr-claw-app',
     // page-design
     "Skill:hr-common-llm", "Skill:hr-design-refs", "Skill:hr-vue-next", "Skill:hrclaw-message",
     // hr-ai-data

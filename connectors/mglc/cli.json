@@ -1,0 +1,33 @@
+{
+    "init": {
+        "darwin": "curl -fsSL https://aigc-assets.mgtv.com/mglc/install.sh | bash",
+        "linux": "curl -fsSL https://aigc-assets.mgtv.com/mglc/install.sh | bash",
+        "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"iwr https://aigc-assets.mgtv.com/mglc/install.ps1 -UseBasicParsing | iex\""
+    },
+    "auth": {
+        "darwin": "mglc auth --source workbuddy",
+        "linux": "mglc auth --source workbuddy",
+        "win32": "mglc.exe auth --source workbuddy"
+    },
+    "authDeviceFlow": {
+        "uriPattern": "(http(s)?://aigc\\.mgtv\\.com/authorize\\?provider=workbuddy&[^\\s]*)",
+        "defaultExpiresInSeconds": 600,
+        "codeEmbeddedInUri": true
+    },
+    "unAuth": {
+        "darwin": "mglc logout",
+        "linux": "mglc logout",
+        "win32": "mglc.exe logout"
+    },
+    "status": {
+        "darwin": "mglc status --text-plain",
+        "linux": "mglc status --text-plain",
+        "win32": "mglc.exe status --text-plain"
+    },
+    "statusMatch": "OK 登录状态正常",
+    "versionCheck": {
+        "command": { "darwin": "mglc version", "linux": "mglc version", "win32": "mglc.exe version" },
+        "minVersion": "0.1.13",
+        "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+    }
+}

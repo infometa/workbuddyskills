@@ -1,0 +1,85 @@
+# 年代（period）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: period
+name_cn: 年代
+category: background
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/counterattack.md
+emotion_core:
+- 怀旧质感
+- 时代机遇
+- 奋斗逆袭
+- 家国情怀
+- 情感坚守
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，中老年受众与怀旧群体偏好强
+  bg_desc: 建国后至改革开放等近现代年代基底，强调时代质感
+  weight: medium
+  bottom_line:
+  - 年代细节考究，服化道与时代背景自洽
+  - 时代机遇把握符合历史逻辑
+  - 价值观贴合时代且导向正面
+relations:
+  synergy:
+  - target: rebirth
+    effect_type: 裂变型
+    weight: high
+    effect: 重生回年代抓住时代红利，先知布局致富翻盘
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 借改革浪潮白手起家，阶层跃迁爽感强
+  - target: system
+    effect_type: 增强型
+    weight: medium
+    effect: 系统赋能年代创业，量化成长
+  mutex:
+  - target: 现代高科技
+    reason: 时代基底冲突，科技元素需符合年代限制
+combo_adapt:
+- combo: references/domestic/combos/counterattack.md
+  rule: 借时代机遇白手起家逆袭，对齐奋斗爽感
+  sub: 年代逆袭型
+- combo: references/domestic/combos/family.md
+  rule: 年代家庭情感、亲情坚守，主打共鸣
+  sub: 年代亲情型
+- combo: references/domestic/combos/sweet-love.md
+  rule: 年代纯爱、坚守相伴，情感质感细腻
+  sub: 年代情感型
+fusion:
+- recipe: fusion/recipes/era-fortune.md
+  note: 重生年代抓红利致富类，成熟模板，强信息差爽感
+- recipe: fusion/recipes/era-family.md
+  note: 年代家庭奋斗类，慢热情感共鸣，口碑向
+redlines:
+- code: AP-ND01
+  name: 年代细节穿帮
+  severity: 高
+  dimension: 标签与逻辑
+  test: 服化道、物价、社会风貌严重失真，时代质感崩塌
+- code: AP-ND02
+  name: 时代机遇架空
+  severity: 中
+  dimension: 标签与逻辑
+  test: 致富/逆袭脱离历史逻辑，凭空开挂违背年代背景
+soft_warnings:
+- 避免年代沦为背景板，仅换服装而无时代质感
+- 避免价值观与时代脱节，过度现代化
+- 避免苦难堆砌，缺乏向上的情感力量
+manga:
+  visual_signature: 年代街景/老物件 + 时代服化 + 怀旧色调
+  high_affinity: false
+  visual_hooks:
+  - 老物件与年代街景的怀旧氛围
+  - 时代变迁的画面对比
+  - 奋斗历程的情绪铺陈

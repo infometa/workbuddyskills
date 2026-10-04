@@ -57,6 +57,15 @@ blockquote {{ background:{c['quote_bg']}; border-left:4px solid {c['quote_bd']};
              padding:10px 16px; color:{c['quote_fg']}; font-size:13px; border-radius:0 4px 4px 0; }}
 strong {{ color:{c['main']}; }}
 a {{ color:#1559b0; text-decoration:none; }}
+.manager-input-needed {{
+  display:inline-block; color:#b42318; background:#fff1e8;
+  border:1px solid #ffb38a; border-radius:4px; padding:1px 6px;
+  font-weight:800;
+}}
+.source-link {{
+  color:#1559b0; text-decoration:underline; text-underline-offset:2px;
+  font-weight:700; white-space:nowrap;
+}}
 ol,ul {{ padding-left:24px; }}
 li {{ margin:5px 0; }}
 hr {{ border:none; border-top:1px solid #e0e0e0; margin:26px 0; }}
@@ -158,6 +167,13 @@ def md_to_html(md_text, title, theme, *, cover=False, subtitle="",
     body = markdown.markdown(
         md_text,
         extensions=["tables", "fenced_code", "sane_lists", "nl2br", "attr_list"],
+    )
+    # 纯 Markdown 的标准待补充标记在聊天/源码中以红色圆点展示；
+    # 转为 HTML/PDF 时升级为真正的红色高亮标签。
+    body = re.sub(
+        r"🔴\s*<strong>\s*待客户经理补充\s*</strong>",
+        '<span class="manager-input-needed">待客户经理补充</span>',
+        body,
     )
     body, toc_data = inject_anchors_and_collect_toc(body)
 

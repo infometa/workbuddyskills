@@ -1,0 +1,19 @@
+{
+  "title": "李未可记忆连接配置",
+  "title_en": "Lawaken Memory Connection",
+  "description": "请输入未可 App 中生成的 MCP Key，用于按需读取你的记忆、原文片段和记忆包。按 WorkBuddy Token 模式规范，凭证保存在本机并在连接时注入请求头。",
+  "description_en": "Enter an MCP Key generated in the Lawaken app to read your memories, transcript snippets, and memory packages on demand. Under WorkBuddy’s Token mode specification, credentials are stored locally and injected into request headers at connection time.",
+  "fields": [
+    {
+      "key": "LAWAKEN_MCP_KEY",
+      "label": "MCP API Key",
+      "label_en": "MCP API Key",
+      "type": "password",
+      "required": true,
+      "placeholder": "请输入 lawk_mcp_ 开头的完整 Key",
+      "placeholder_en": "Enter the complete key beginning with lawk_mcp_",
+      "description": "打开未可 App 的 WorkBuddy 设置 → 连接器，生成配置后，取 X-Lawaken-MCP-Key 对应的完整值。请只填写 Key，不要粘贴整段配置。",
+      "description_en": "In the Lawaken app, open WorkBuddy settings → Connector and generate the configuration. Enter only the complete X-Lawaken-MCP-Key value, not the full configuration."
+    }
+  ]
+}

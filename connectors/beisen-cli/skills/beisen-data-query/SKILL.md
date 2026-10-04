@@ -1,11 +1,14 @@
 ---
 name: beisen-data-query
-version: 2.0.11
+version: 2.0.19
 description: "北森 HR 通用数据查询引擎。本 Skill 通过 beisen-cli staffservice 子命令集（sceneTool / searchFormTool / businessDataTool，以及 sceneToolMessageForCLI、menuSearch）实现自然语言到业务数据的 6 步查询流水线。当用户询问假期余额、考勤异常、下属信息、绩效情况、任职信息、组织架构等个人或团队业务数据时触发。本 Skill 是 beisen-employee-profile、beisen-attendance-leave、beisen-organization 三个业务域 Skill 的共享查询底层。"
 category: 人力资源/数据查询
 author: beisen
 agent_created: false
 allowed-tools: Bash, Read
+requires-skills:
+  - beisen-shared
+requires-cli: ">=1.0.8"
 ---
 
 # 员工数据查询
@@ -14,9 +17,9 @@ allowed-tools: Bash, Read
 
 > **CLI 调用方式**：本 Skill 中工具通过 `beisen-cli staffservice` 的子命令调用：
 > - `beisen-cli staffservice employeeData sceneTool`
-> - `beisen-cli staffservice employeeData searchFormTool --data '{"intentionId":"<id>"}'`
+> - `beisen-cli staffservice employeeData searchFormTool --params '{"intentionId":"<id>"}'`
 > - `beisen-cli staffservice employeeData businessDataTool --data '{"intentionId":"<id>","search":[...]}'`
-> - `beisen-cli staffservice employeeData sceneToolMessageForCLI --data '{"intentionId":"<id>"}'`
+> - `beisen-cli staffservice employeeData sceneToolMessageForCLI --params '{"intentionId":"<id>"}'`
 >
 > 下文流水线中以逻辑名 `SceneTool` / `SearchFormTool` / `BusinessDataTool` / `SceneToolMessage` 指代上述子命令。
 
@@ -79,7 +82,7 @@ beisen-cli staffservice employeeData sceneTool
 5. 若无场景强命中 → 说明当前租户不支持该项数据查询，**按"非数据查询意图"降级处理**：立即静默结束本流程，交由菜单唤起或知识问答处理（同步骤一）。此时不输出任何文案，包括但不限于"暂不支持查询XX""没有找到数据"、场景分析过程、自行编造的查询建议或菜单入口
 6. 命中后，用 `intentionId` 调用 `SceneToolMessage` 获取输出要求和关联菜单：
 ```bash
-beisen-cli staffservice employeeData sceneToolMessageForCLI --data '{"intentionId":"<id>"}'
+beisen-cli staffservice employeeData sceneToolMessageForCLI --params '{"intentionId":"<id>"}'
 ```
 ```json
 {
@@ -94,7 +97,7 @@ beisen-cli staffservice employeeData sceneToolMessageForCLI --data '{"intentionI
 ### 步骤三：获取搜索字段并提取筛选参数
 1. **SearchFormTool 必须调用，严禁跳过**（真实事故：跳过本步骤、复用其他场景的 fieldName 导致查询返回错误数据）：用命中的 `intentionId` 调用 `SearchFormTool`，获取**本场景**支持筛选的字段：
 ```bash
-beisen-cli staffservice employeeData searchFormTool --data '{"intentionId":"<id>"}'
+beisen-cli staffservice employeeData searchFormTool --params '{"intentionId":"<id>"}'
 ```
 ```json
 {
@@ -143,7 +146,7 @@ beisen-cli staffservice employeeData searchFormTool --data '{"intentionId":"<id>
 ### 步骤四：调用 BusinessDataTool 查询数据
 将 `intentionId` 和提取的筛选条件传入 `BusinessDataTool`。`search` 数组中仅传入有值的字段；`businessParameters.userFindOrgType` 仅在优先级 4(A) 和 6(C) 时传 `2`，其余优先级不传 `businessParameters` 对象。字段编码和序号从 SearchFormTool 返回值中透传，禁止修改：
 ```bash
-beisen-cli staffservice employeeData businessDataTool --data '{"intentionId":"<id>","search":[...]}' 
+beisen-cli staffservice employeeData businessDataTool --data '{"intentionId":"<id>","search":[...]}'
 ```
 ```json
 {
@@ -305,9 +308,9 @@ beisen-cli staffservice employeeData businessDataTool --data '{"intentionId":"<i
 
 ## 注意事项
 
-### 用户输入转义（硬性规则，拼 `--data` 前必须执行）
+### 用户输入转义（硬性规则，拼 `--params` 或 `--data` 前必须执行）
 
-将用户原文（人名、部门名、昵称等）拼入 `--data '{"..."}'` 的 JSON 字符串前，必须依次完成两层转义，否则会导致 JSON 结构损坏或 shell 命令注入（RCE 风险）。
+将用户原文（人名、部门名、昵称等）拼入 `--params '{"..."}'` 或 `--data '{"..."}'` 的 JSON 字符串前，必须依次完成两层转义，否则会导致 JSON 结构损坏或 shell 命令注入（RCE 风险）。
 
 **转义顺序（先 JSON 转义，再 shell 包裹）**：
 
@@ -318,14 +321,14 @@ beisen-cli staffservice employeeData businessDataTool --data '{"intentionId":"<i
    - 控制字符（U+0000–U+001F）→ `\u00XX`
 2. **Shell 单引号转义**（在 shell 中用单引号包裹整个 JSON 时）：
    - `'` → `'\''`（先闭合当前单引号，插入转义单引号 `\'`，再重开单引号继续）
-3. **拼入命令**：转义后的 JSON 用单引号包裹，形如 `--data '{"key":"escaped_value"}'`
+3. **拼入命令**：转义后的 JSON 用单引号包裹，形如 `--params '{"key":"escaped_value"}'`
 4. **自检**：拼入前验证 JSON 字符串可被正确解析，所有字符串值的双引号均已闭合
 5. **正确示例**：用户输入 `王'欣欣`（含单引号）
    - JSON 转义后：`王'欣欣`（单引号不影响 JSON 字符串值）
-   - Shell 单引号包裹：`--data '{"search":[{"value":"王'\''欣欣"}]}'`
+   - Shell 单引号包裹：`--params '{"search":[{"value":"王'\''欣欣"}]}'`
 6. **错误示例（全部禁止）**：
-   - ❌ `--data '{"search":[{"value":"王'欣欣"}]}'`（未转义的单引号使 shell 单引号提前闭合，后续 `欣欣` 被 shell 当作独立 token，导致语法错误或更严重的安全问题）
-   - ❌ `--data "{\"search\":[{\"value\":\"王\\\"欣欣\"}]}"`（用双引号包裹 JSON 并转义内部双引号——可行但极易出错，禁止使用）
+   - ❌ `--params '{"search":[{"value":"王'欣欣"}]}'`（未转义的单引号使 shell 单引号提前闭合，后续 `欣欣` 被 shell 当作独立 token，导致语法错误或更严重的安全问题）
+   - ❌ `--params "{\"search\":[{\"value\":\"王\\\"欣欣\"}]}"`（用双引号包裹 JSON 并转义内部双引号——可行但极易出错，禁止使用）
    - ❌ 将用户原文直接字符串拼接进 JSON，跳过任何转义步骤
 
 > 提示：大多数中文人名不含特殊字符，但防御必须覆盖所有输入。即使当前用户输入看起来安全，也必须执行上述转义流程，不得依赖"大概率无特殊字符"跳过转义。

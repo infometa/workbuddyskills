@@ -1,0 +1,40 @@
+{
+  "init": {
+    "darwin": "npm install --global @77hub/cli@latest",
+    "linux": "npm install --global @77hub/cli@latest",
+    "win32": "npm install --global @77hub/cli@latest"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "qiqi --version --format json",
+      "linux": "qiqi --version --format json",
+      "win32": "qiqi.cmd --version --format json"
+    },
+    "minVersion": "0.1.12",
+    "versionPattern": "\"version\"\\s*:\\s*\"(\\d+\\.\\d+\\.\\d+)\""
+  },
+  "auth": {
+    "darwin": "qiqi auth login --method oauth --no-browser",
+    "linux": "qiqi auth login --method oauth --no-browser",
+    "win32": "qiqi.cmd auth login --method oauth --no-browser"
+  },
+  "unAuth": {
+    "darwin": "qiqi auth logout",
+    "linux": "qiqi auth logout",
+    "win32": "qiqi.cmd auth logout"
+  },
+  "status": {
+    "darwin": "qiqi auth status --format json",
+    "linux": "qiqi auth status --format json",
+    "win32": "qiqi.cmd auth status --format json"
+  },
+  "statusMatchJson": {
+    "verified": "true"
+  },
+  "authUrlDomain": "idps.77hub.com",
+  "runtime": {
+    "type": "node",
+    "version": ">=18.0.0"
+  },
+  "authWaitForExit": true
+}

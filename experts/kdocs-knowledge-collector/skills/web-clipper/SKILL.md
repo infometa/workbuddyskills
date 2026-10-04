@@ -3,7 +3,8 @@ name: web-clipper
 description: "将网页内容剪藏并自动保存为金山文档智能文档（.otl）。 当用户提供 URL 并要求「保存网页」、「收藏网页」、「剪藏」、「网页存到文档」时使用。 若需要存入知识库，请使用 knowledge-save 技能。
 "
 homepage: 
-version: 1.5.7
+version: 2.6.4
+metadata: {"openclaw":{"category":"kdocs","emoji":"🌐"}}
 ---
 
 # 网页收藏
@@ -11,6 +12,12 @@ version: 1.5.7
 网页收藏技能可以将任意网页内容保存为金山文档。
 
 > 本技能依赖 `kdocs` 技能的基础文档操作能力（认证、文件管理等），请确保已安装该技能。详见 `references/core/` 目录。
+
+## 严格规则
+
+### 禁止（NEVER）
+
+- 权限不足时禁止重试或绕过，立即告知用户无权限
 
 ---
 
@@ -27,7 +34,7 @@ version: 1.5.7
 | 意图 | 路由 |
 |------|------|
 | 读取文档内容 | `read_file`（统一入口，按后缀自动返回 Markdown 或结构化数据） |
-| 创建/写入 | `create_file_with_content`（统一入口，新建文档并写入内容，返回 link_url） |
+| 创建/写入 | 新建并写入、上传本地文件、新建空白文档 → **见下方「创建/写入」** |
 | 局部更新 | 改块/改段/改单元格，已有目标文档上的修改 → 按「支持的文档类型」→ 对应 reference |
 | 类型专属能力 | 条件格式、导出转换、翻译、PDF 拆分、幻灯片主题、数据校验 | 按「支持的文档类型」→ 对应 reference 中的专属功能章节 |
 | 获取文件标识指南 | **必读** `references/file-locating-guide.md` |
@@ -36,7 +43,7 @@ version: 1.5.7
 
 #### 网页剪藏
 
-> **当用户要求保存网页/URL 到金山文档时，直接调用 `scrape_url`。禁止先用 `web_fetch`、`web_search` 或浏览器抓取内容。**
+> 🎯 **当用户要求保存网页/URL 到金山文档时，直接调用 `scrape_url`。禁止先用 `web_fetch`、`web_search` 或浏览器抓取内容。**
 
 **触发识别**：用户消息中同时包含 **URL**（非金山文档链接）+ **保存/存到/收藏/剪藏** 等意图词时，走此流程。
 
@@ -46,11 +53,12 @@ version: 1.5.7
 
 步骤 2: scrape_progress(job_id=xxx)
         → 轮询（每 2-5 秒），status 判定：
-          1  = 完成 → 直接从返回值获取 link_url
+          1  = 完成 → 获得 scrape_file_id（剪藏专用标识）
           -1 = 失败 → 检查 URL 或重试
           其他 = 进行中 → 继续轮询
 
-步骤 3: 向用户展示 link_url（scrape_progress 完成时已返回）
+步骤 3: get_file_link(file_id=scrape_file_id)
+        → 返回文档在线链接
 ```
 
 ---
@@ -58,7 +66,16 @@ version: 1.5.7
 
 以下工具不可逆，调用前必须向用户确认（详细约束见各工具参考文档的「操作约束」区）：
 
-`cancel_share`
+`cancel_share`、`cancel_collaborator_permissions`
+
+---
+
+
+## 错误速查
+
+| 错误特征 | 原因 | 处理方式 |
+|----------|------|----------|
+| `403` / 权限不足 / `无权访问` / `forbidden` | 当前凭据对目标文档、目录或资源无操作权限 | 停止操作，禁止重试或尝试其他接口绕过；告知用户当前账号无权限，并建议联系文档所有者开通权限、确认分享链接权限，或切换到有权限的账号 |
 
 ---
 
@@ -66,4 +83,4 @@ version: 1.5.7
 
 | 用户需求 | 推荐工具组合 |
 |----------|-------------|
-| 将网页内容保存为金山文档 | `scrape_url` → `scrape_progress`（轮询至完成，返回 link_url） |
+| 将网页内容保存为金山文档 | `scrape_url` → `scrape_progress`（轮询至完成）→ `get_file_link` |

@@ -1,5 +1,31 @@
 const READ_METHODS = new Set(['GET', 'POST', 'LOCAL']);
 const DENIED_CATEGORIES = new Set(['action', 'auth']);
+const READ_CATEGORIES = new Set(['query', 'report']);
+
+const DYNAMIC_WHERE_DOMAINS = new Set([
+  'datacube_where',
+  'scm_datacube_where',
+  'crm_datacube_where',
+]);
+
+const AUDITED_SKILL_READ_COMMANDS = new Set([
+  'channel.get-distribution-channel-data',
+  'coupon.coupon-send-analysis',
+  'coupon.coupon-used-analysis',
+  'crm_data_overview.consume-change',
+  'crm_data_overview.member-increase',
+  'crm_data_overview.member-recharge',
+  'general.get-accumulated-amount-info',
+  'general.get-data-indicators',
+  'general.get-deductions-amount-info',
+  'general.get-detail-data',
+  'general.get-distribution-rule-data',
+  'general.get-gear-data',
+  'general.get-new-trend-chart',
+  'general.get-re-purchase-group-trend',
+  'general.get-re-purchase-growth-trend',
+  'marketing_crm.get-marketing-type-list',
+]);
 
 const MUTATION_TERMS = [
   'add', 'append', 'apply', 'approve', 'assign', 'audit',
@@ -138,12 +164,28 @@ function evaluateConnectorReadOnlyCommand(command) {
     return { allowed: false, reason: `http-method:${method || 'missing'}` };
   }
 
+  const domain = String(command.domain || '');
+  const action = String(command.action || '');
+  const commandKey = `${domain}.${action}`;
+  if (AUDITED_SKILL_READ_COMMANDS.has(commandKey)) {
+    return { allowed: true, reason: 'audited-skill-read' };
+  }
+
+  const endpointPath = String(command.endpoint && command.endpoint.path || '');
+  if (
+    DYNAMIC_WHERE_DOMAINS.has(domain)
+    && READ_CATEGORIES.has(category)
+    && method === 'POST'
+    && endpointPath.endsWith('/external/excByTaskId')
+  ) {
+    return { allowed: true, reason: 'dynamic-where-query' };
+  }
+
   const mutation = findMutation(command);
   if (mutation) {
     return { allowed: false, reason: `mutation-semantic:${mutation}` };
   }
 
-  const endpointPath = String(command.endpoint && command.endpoint.path || '');
   const knownReadDispatcher = endpointPath.includes('/external/excByTaskId')
     || endpointPath.startsWith('__cysms_builtin__/');
   if (!knownReadDispatcher && !hasReadSignal(command)) {
@@ -158,6 +200,8 @@ function isConnectorReadOnlyCommand(command) {
 }
 
 module.exports = {
+  AUDITED_SKILL_READ_COMMANDS,
+  DYNAMIC_WHERE_DOMAINS,
   READ_METHODS,
   evaluateConnectorReadOnlyCommand,
   isConnectorReadOnlyCommand,

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/person/2.0",
+  "title": "Person Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["person_id", "display_name", "status"],
+  "properties": {
+    "person_id": {"type": "string", "pattern": "^PER-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "display_name": {"type": "string", "minLength": 1},
+    "aliases": {"type": "string", "x-csvEncoding": "json-array"},
+    "birth_year": {"type": "string", "pattern": "^$|^[0-9]{4}$"},
+    "birth_year_precision": {"enum": ["", "unknown", "exact", "approximate", "range"]},
+    "languages": {"type": "string", "x-csvEncoding": "json-array"},
+    "relationship_notes": {"type": "string"},
+    "status": {"enum": ["candidate", "confirmed", "disputed", "unknown"]},
+    "source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "notes": {"type": "string"}
+  }
+}

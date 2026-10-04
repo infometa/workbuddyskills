@@ -43,6 +43,28 @@ _SENSITIVE_KEYS = {
     "refreshtoken",
 }
 
+# WorkBuddy / CodeBuddy injects the host conversation id into the Agent process
+# env. It is not present in the LLM prompt context, so the local client (or any
+# MCP forwarder) must resolve and inject it before canvas-related tool calls.
+HOST_CONVERSATION_ID_ENV = "CODEBUDDY_CONVERSATION_REQUEST_ID"
+# Do not use these as conversation_id: message id changes per turn; session ids
+# are Agent-process scoped, not the user-facing dialogue object.
+HOST_CONVERSATION_ID_FORBIDDEN_ENV = (
+    "CODEBUDDY_CONVERSATION_MESSAGE_ID",
+    "CODEBUDDY_SESSION_ID",
+    "CLAUDE_SESSION_ID",
+)
+# Preferred argument field name per tool (schema may accept snake or camel).
+CONVERSATION_ARG_BY_TOOL: dict[str, str] = {
+    "open_agent_canvas": "conversation_id",
+    "open_agent_pricing": "conversation_id",
+    "generate_agent_canvas_image": "conversationId",
+    "get_agent_canvas_image_status": "conversationId",
+    "get_agent_canvas_state": "conversation_id",
+    "insert_agent_canvas_image": "conversation_id",
+    "replace_agent_canvas_image": "conversation_id",
+}
+
 
 def _validate_ids(ids: Sequence[str], expected_prefix: str, label: str) -> None:
     if len(set(ids)) != len(ids):
@@ -63,6 +85,10 @@ def plan_batches(
     max_batch_size: int = MAX_SERVICE_BATCH_SIZE,
     request_id_factory: Callable[[], object] = uuid.uuid4,
 ) -> list[dict[str, object]]:
+    """将主图/详情图稳定编号切分为不超过 16 张的批次，并为每批生成 request_id。
+
+    该函数为 skill 执行逻辑的本地辅助函数，供参考和未来复用，不通过 CLI 暴露。
+    """
     if (
         isinstance(max_batch_size, bool)
         or not isinstance(max_batch_size, int)
@@ -92,6 +118,10 @@ def aggregate_estimates(
     batch_plans: Sequence[Mapping[str, object]],
     estimates: Mapping[str, Mapping[str, object]],
 ) -> dict[str, object]:
+    """按批次汇总预估积分并返回仅含公开字段的报价结果。
+
+    该函数为 skill 执行逻辑的本地辅助函数，供参考和未来复用，不通过 CLI 暴露。
+    """
     total: int | float = 0
     public_estimates: list[dict[str, object]] = []
     for batch in batch_plans:
@@ -125,6 +155,10 @@ def map_task_items(
     stable_ids: Sequence[str],
     items: Sequence[Mapping[str, object]],
 ) -> list[dict[str, object]]:
+    """按服务返回的批内 index 将稳定编号映射回任务项。
+
+    该函数为 skill 执行逻辑的本地辅助函数，供参考和未来复用，不通过 CLI 暴露。
+    """
     seen: set[int] = set()
     mapped_items: list[dict[str, object]] = []
     for item in items:
@@ -147,6 +181,10 @@ def _normalized_key(key: object) -> str:
 
 
 def redact_sensitive(value: object) -> object:
+    """递归脱敏映射/列表中的敏感键（_SENSITIVE_KEYS），避免凭据进入输出。
+
+    该函数为 skill 执行逻辑的本地辅助函数，供参考和未来复用，不通过 CLI 暴露。
+    """
     if isinstance(value, Mapping):
         return {
             key: "[REDACTED]"
@@ -184,8 +222,8 @@ def _validate_delivery_items(items: Sequence[Mapping[str, object]]) -> None:
     for item in items:
         stable_id = item.get("id")
         image_url = item.get("image_url")
-        if not isinstance(stable_id, str) or not re.fullmatch(r"[MD][1-9]\d*", stable_id):
-            raise ValueError("delivery stable id must match M1 or D1 style")
+        if not isinstance(stable_id, str) or not re.fullmatch(r"[MDR][1-9]\d*", stable_id):
+            raise ValueError("delivery stable id must match M1, D1 or R1 style")
         if not isinstance(image_url, str):
             raise ValueError("image_url must be a string")
         parsed_url = urlparse(image_url)
@@ -205,6 +243,58 @@ def _content_type_extension(headers: Mapping[str, object]) -> str:
         return IMAGE_CONTENT_TYPES[normalized_content_type]
     except KeyError as error:
         raise ValueError("unsupported image content type") from error
+
+
+def resolve_host_conversation_id(
+    environ: Mapping[str, str] | None = None,
+) -> str | None:
+    """Return the host dialogue id from the Agent process environment.
+
+    Prefer ``CODEBUDDY_CONVERSATION_REQUEST_ID``. Never fall back to message or
+    session ids — those bind the canvas to the wrong scope.
+    """
+    env = os.environ if environ is None else environ
+    raw = env.get(HOST_CONVERSATION_ID_ENV)
+    if not isinstance(raw, str):
+        return None
+    conversation_id = raw.strip()
+    return conversation_id or None
+
+
+def inject_conversation_id(
+    tool_name: str,
+    args: Mapping[str, object] | None = None,
+    *,
+    environ: Mapping[str, str] | None = None,
+    conversation_id: str | None = None,
+) -> dict[str, object]:
+    """Copy tool args and fill the host conversation id when the tool needs it.
+
+    Existing ``conversation_id`` / ``conversationId`` values are left unchanged.
+    Tools that do not take a conversation argument are returned unchanged.
+    """
+    result = dict(args or {})
+    field = CONVERSATION_ARG_BY_TOOL.get(tool_name)
+    if field is None:
+        return result
+
+    existing_snake = result.get("conversation_id")
+    existing_camel = result.get("conversationId")
+    if (
+        (isinstance(existing_snake, str) and existing_snake.strip())
+        or (isinstance(existing_camel, str) and existing_camel.strip())
+    ):
+        return result
+
+    resolved = (
+        conversation_id.strip()
+        if isinstance(conversation_id, str) and conversation_id.strip()
+        else resolve_host_conversation_id(environ)
+    )
+    if not resolved:
+        return result
+    result[field] = resolved
+    return result
 
 
 def deliver_results(
@@ -251,8 +341,8 @@ def deliver_results(
                         if downloaded_bytes > MAX_DELIVERY_BYTES:
                             raise ValueError("download exceeds 30 MiB")
                         output_file.write(chunk)
-            os.replace(temporary_path, output_path)
-            temporary_path = None
+                os.replace(temporary_path, output_path)
+                temporary_path = None
         except Exception:
             if temporary_path is not None:
                 temporary_path.unlink(missing_ok=True)
@@ -276,29 +366,41 @@ def main(
     stderr: TextIO | None = None,
 ) -> int:
     parser = argparse.ArgumentParser(description="Picset local workflow client")
-    parser.add_argument("command", choices=("upload", "deliver"))
+    parser.add_argument(
+        "command",
+        choices=("upload", "deliver", "host-conversation-id"),
+    )
     args = parser.parse_args(argv)
     input_stream = stdin or sys.stdin
     output_stream = stdout or sys.stdout
     error_stream = stderr or sys.stderr
 
     try:
-        payload = json.load(input_stream)
-        if not isinstance(payload, Mapping):
-            raise ValueError("input must be a JSON object")
-        if args.command == "upload":
-            result = upload_from_payload(payload)
+        if args.command == "host-conversation-id":
+            conversation_id = resolve_host_conversation_id()
+            if not conversation_id:
+                raise ValueError(
+                    f"{HOST_CONVERSATION_ID_ENV} is missing from the process "
+                    "environment; do not invent an id or use MESSAGE_ID/SESSION_ID"
+                )
+            result = {"conversation_id": conversation_id}
         else:
-            items = payload.get("items")
-            output_dir = payload.get("output_dir")
-            if not isinstance(items, list):
-                raise ValueError("items must be an array")
-            if not isinstance(output_dir, str) or not output_dir:
-                raise ValueError("output_dir must be a non-empty absolute path")
-            output_path = Path(output_dir)
-            if not output_path.is_absolute():
-                raise ValueError("output_dir must be an absolute path")
-            result = {"files": deliver_results(items, output_path)}
+            payload = json.load(input_stream)
+            if not isinstance(payload, Mapping):
+                raise ValueError("input must be a JSON object")
+            if args.command == "upload":
+                result = upload_from_payload(payload)
+            else:
+                items = payload.get("items")
+                output_dir = payload.get("output_dir")
+                if not isinstance(items, list):
+                    raise ValueError("items must be an array")
+                if not isinstance(output_dir, str) or not output_dir:
+                    raise ValueError("output_dir must be a non-empty absolute path")
+                output_path = Path(output_dir)
+                if not output_path.is_absolute():
+                    raise ValueError("output_dir must be an absolute path")
+                result = {"files": deliver_results(items, output_path)}
         print(json.dumps(result, ensure_ascii=False, sort_keys=True), file=output_stream)
         return 0
     except Exception as error:

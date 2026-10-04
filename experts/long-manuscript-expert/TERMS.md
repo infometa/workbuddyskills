@@ -2,7 +2,7 @@
 
 ## Scope
 
-本专家包提供 `drafting and revision assistance`，覆盖 README 所列 `three supported scenes`：材料启动、续写或有界改稿、成稿收口。它提供结构、正文和审阅建议，但不保证作品一定达到特定商业、学术、传播或审核结果。
+本专家包提供 `long-form drafting, continuation, bounded revision, review and delivery preparation`，覆盖 README 所列 21 个领域场景与 10 个操作模式。它提供结构、正文、审阅建议和包内确定性质量检查，但不保证作品一定达到特定商业、学术、传播或审核结果。
 
 ## User responsibility
 
@@ -20,7 +20,9 @@
 
 连接器、网络、文件系统、导出、发送、发布、安装或其他外部动作都需要用户的 `explicit authorization` 和当前任务中的 `successful receipt`。缺少相应能力或回执时，专家只能交付对话内成果，不声称外部状态已经改变。
 
-WorkBuddy 5.3.1 是当前兼容目标，不构成宿主升级承诺。专家包的安装也不自动赋予宿主、连接器或服务新能力。
+WorkBuddy 5.3.14 / expert-manager v2.0 是当前兼容目标，不构成宿主升级承诺。企业微信与 FBS 能力是可选增值端口；专家包的安装不会自动赋予宿主、连接器或服务新权限。
+
+包内确定性检查不会因安装而自动执行，也不替代事实核验、权利审查或人工终审；只有与当前输入、场景、策略、工件和评估器字节完整绑定的成功回执，才证明该回执明确列出的检查已经运行。
 
 ## Generated content and warranties
 

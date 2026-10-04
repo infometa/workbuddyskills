@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 2,
+  "module": "esb",
+  "skill": "weaver-e10-esb-connector",
+  "generatedFrom": {
+    "sourceSkill": "weaver-e10-customesb-execute",
+    "version": "1.1.0",
+    "path": "weaver-e10-customesb-execute",
+    "kind": "workbuddy-document-skill",
+    "availability": "user-provided-source-directory"
+  },
+  "generatedAt": "2026-09-11T08:23:45.946Z",
+  "sourceSet": {
+    "aggregateSha256": "6f1e7cd938c69611b820d262bc5ee1eb54d6d0aa83c00fe1df1b3b659245fb12",
+    "sourceRoots": [
+      "weaver-e10-customesb-execute"
+    ],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/esb",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "skills/weaver-e10-esb-connector"
+    ],
+    "tests": [
+      "test/business/esb-*.test.ts"
+    ],
+    "docs": [
+      "docs/esb.md",
+      "skill-template/domains/esb.md"
+    ]
+  },
+  "sources": [
+    {
+      "path": "weaver-e10-customesb-execute/SKILL.md",
+      "size": 8742,
+      "sha256": "b038c80f543dff453fc0268140a3fd2fc9e55aefd2507d6f72026f2f765535f2"
+    },
+    {
+      "path": "weaver-e10-customesb-execute/agents/openai.yaml",
+      "size": 804,
+      "sha256": "ccc4d3189d769db9ae5bdc858a9a43d9c7a257da72265fc970d9027a98856ad0"
+    },
+    {
+      "path": "weaver-e10-customesb-execute/references/catalog.md",
+      "size": 1334,
+      "sha256": "9c9616cea7fc6df5944d557aa4c6591f7b0a2910694908865013db07e569c588"
+    },
+    {
+      "path": "weaver-e10-customesb-execute/references/esb-actionflow-getinputformat.md",
+      "size": 7420,
+      "sha256": "eabe0eaac69ecd2a839e6814d39ebe9fa57c8b1643ee963bc5dfd7bd7829398f"
+    },
+    {
+      "path": "weaver-e10-customesb-execute/references/esb-actionflow-trigger.md",
+      "size": 12645,
+      "sha256": "7ef1cc6c717666b891748385a3c5158755c5202b6258b0f46452562c6b313a03"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "POST /api/bs/esb/setting/customData/application/copyCustomData",
+      "mapsToOperations": [
+        "esb.input-format"
+      ],
+      "references": [
+        "references/input-format.md"
+      ],
+      "note": "只读入参模板接口；返回模板对象，无 resultCode 信封。"
+    },
+    {
+      "id": "POST /api/esb/server/event/triggerActionFlow",
+      "mapsToOperations": [
+        "esb.trigger.prepare",
+        "esb.trigger.apply"
+      ],
+      "references": [
+        "references/trigger.md"
+      ],
+      "note": "写操作；resultCode 200 为成功，其余按错误码表映射为结构化 subtype。"
+    }
+  ],
+  "operationImpact": {
+    "esb.input-format": {
+      "requiresConfirmationChain": false,
+      "references": [
+        "references/input-format.md"
+      ]
+    },
+    "esb.trigger.prepare": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/trigger.md"
+      ]
+    },
+    "esb.trigger.apply": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/trigger.md"
+      ]
+    }
+  },
+  "artifactBaseline": {
+    "aggregateSha256": "0a4057c17cff482ee8784020f3781b6c1845f752e47e4f314aaacfce032e9ecf",
+    "files": [
+      {
+        "path": "docs/_catalog.md",
+        "size": 2580,
+        "sha256": "6944c1aaf36be248aed86513265c6ef41932dd09ad140d900ef3d0238104e431"
+      },
+      {
+        "path": "docs/esb.md",
+        "size": 4001,
+        "sha256": "703d6d9e990a217b411828de4459882ff07c1820c55e234203be6cc8bd1eadb6"
+      },
+      {
+        "path": "docs/SKILL.md",
+        "size": 3703,
+        "sha256": "4e30b95045178cd1fdb008f40936253b07a117f48b3801177ea08cd7968d4109"
+      },
+      {
+        "path": "skill-template/business-info.json",
+        "size": 1772,
+        "sha256": "16ddf164f518921175a87dbb2ca8262e85da2a43afe5b1eb149c2326e96bdb5e"
+      },
+      {
+        "path": "skill-template/domains/esb.md",
+        "size": 1574,
+        "sha256": "a88dc8b44452a121bb2974c156e512ca34c1c71c8fe66407b3de7e94557a4e95"
+      },
+      {
+        "path": "skill-template/product.json",
+        "role": "generated-skill-meta",
+        "size": 89,
+        "sha256": "211300a31c39f0feea66331101edea394ae841307302404c6d113b314954ee83"
+      },
+      {
+        "path": "skills/weaver-e10-esb-connector/references/input-format.md",
+        "size": 2618,
+        "sha256": "f0b6f96353a879f6acf380bacacea4ef514d7328dd14915e5495287d51bb1f63"
+      },
+      {
+        "path": "skills/weaver-e10-esb-connector/references/trigger.md",
+        "size": 5098,
+        "sha256": "64e0f9a17d80328c86679f3b0fd1784f91a5c80e577fbe2b6f8f5c882e9047c8"
+      },
+      {
+        "path": "skills/weaver-e10-esb-connector/SKILL.md",
+        "size": 6799,
+        "sha256": "20b0eb14c79a31188c7dfefd4de0adc9e5c53dfb93b10bdd18d71d4c228a84b9"
+      },
+      {
+        "path": "src/shortcuts/esb/continuation.ts",
+        "size": 3229,
+        "sha256": "125780b145eaa3e78cb630e843a083a79a8a674c7936be3f58567dcfcddc3210"
+      },
+      {
+        "path": "src/shortcuts/esb/errors.ts",
+        "size": 2829,
+        "sha256": "9ba6551fd92babc2085dc69fef3f5453c1f380808539c5bd86fa9a2c26165c73"
+      },
+      {
+        "path": "src/shortcuts/esb/host.ts",
+        "size": 9169,
+        "sha256": "e0e95488d7180a248b1e3aa35b40abb390c42317c898df23e6841be8f51218a9"
+      },
+      {
+        "path": "src/shortcuts/esb/index.ts",
+        "size": 4567,
+        "sha256": "8252a116edf03acd167c85bdfcb40207bd1b7f29cb02c7febd4c323614015b84"
+      },
+      {
+        "path": "src/shortcuts/esb/manifest.ts",
+        "size": 4063,
+        "sha256": "063eb2b1e7157efa9b8521e5d45cd12351c883b8489f2f32b2ba3827bff15ea8"
+      },
+      {
+        "path": "src/shortcuts/esb/operations.ts",
+        "size": 1088,
+        "sha256": "5169e7b6b11a6a56ea9377dcd208d3c060f0f6e86662eec462d73180d571f417"
+      },
+      {
+        "path": "src/shortcuts/esb/operations/input-format.ts",
+        "size": 1952,
+        "sha256": "0042d37b735fc78f7cb668e274adca6fdc4773c51733a153fd4c9074894e44c0"
+      },
+      {
+        "path": "src/shortcuts/esb/operations/registry.ts",
+        "size": 1999,
+        "sha256": "4288c80f0d27d0982dcf722d35d6df74ab9288291ac4e2dde41f62644c9f88b7"
+      },
+      {
+        "path": "src/shortcuts/esb/operations/shared.ts",
+        "size": 7362,
+        "sha256": "7cc9d18492d1de10b3c182f79899c4e001bb3d7dfe2a7148f9e6fe7a9384c2b5"
+      },
+      {
+        "path": "src/shortcuts/esb/operations/trigger.ts",
+        "size": 4429,
+        "sha256": "7584f54884e05556a07145f9dd3cbe432d30098316135eb2cd5b7949df146192"
+      },
+      {
+        "path": "src/shortcuts/esb/operations/types.ts",
+        "size": 1980,
+        "sha256": "9db3b9821b9378a822db8c718e88e727bc307e604047303523fcede383e1f0d0"
+      },
+      {
+        "path": "src/shortcuts/index.ts",
+        "size": 648,
+        "sha256": "f07b4df6baf33848ef0ce2134065373a03a9f871be0de556f0f1cdcad3f832dd"
+      },
+      {
+        "path": "test/business/esb-command.test.ts",
+        "size": 2081,
+        "sha256": "05fda49096153760a1cfdb2468755d58a01fe2211e90223d7438c2dffed4f91d"
+      },
+      {
+        "path": "test/business/esb-continuation.test.ts",
+        "size": 2228,
+        "sha256": "349a6ae7d8e386fe28b9f4ecc6913e41bf10265e541cf8e365e339b7e770a95a"
+      },
+      {
+        "path": "test/business/esb-host.test.ts",
+        "size": 5662,
+        "sha256": "00a9303763853b7d80cc2833bdd2697c4e5c2f13f534cb675d9d7663d03cba9e"
+      },
+      {
+        "path": "test/business/esb-operations.test.ts",
+        "size": 11069,
+        "sha256": "5c0ceb9f484521e74b57b702c901f85d72671492abe494ece7aca4198d4afb39"
+      }
+    ]
+  },
+  "notes": [
+    "源资料 Skill weaver-e10-customesb-execute 1.1.0；CLI 命令后缀 esb、Skill 后缀 esb。",
+    "唯一值触发所需的 primary_key 需查询 esb_setting 库，CLI 无数据库通道，列为 withheldOperations。",
+    "按动作流名称解析 esbFlowId 需要 ESB 中心查询接口，源资料未提供契约，列为 withheldOperations。",
+    "本模块尚未在真实 E10 环境完成端到端触发验证；触发与模板查询的真实响应以现场实测为准。"
+  ]
+}

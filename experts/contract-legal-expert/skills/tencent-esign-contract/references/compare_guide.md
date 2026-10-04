@@ -4,9 +4,13 @@
 
 ## 阶段 1：引导上传
 
-引导用户提供两份文件：「请提供需要对比的两份合同文件——原版和新版（支持 PDF/Word 格式）。」
+**识别输入类型**，然后按对应方式处理：
 
-**文件格式处理**：仅支持 `.pdf`、`.docx`、`.doc`。其他文本格式需先转换为 `.docx`（同审查流程）。
+- **给出两个具体文件路径**：直接进入文件验证流程，第一个作为原版，第二个作为新版。
+- **给出目录路径**（如 `test-file/compare/`）：`ls <目录>` 列出文件，筛选 `.pdf`、`.docx`、`.doc`，若恰好 2 份则向用户确认原版/新版对应关系后上传；多于 2 份则列出让用户指定哪两份对比。路径名本身（包含 `compare`、`diff` 等英文词）不影响意图判断。
+- **未提供路径**：引导「请提供需要对比的两份合同文件——原版和新版（支持 PDF/Word 格式）。」
+
+**不支持的格式**：如果扩展名不在 `.pdf`、`.docx`、`.doc` 内，告知用户转换为 PDF 或 Word 后再提供，**不要尝试自行转换**。
 
 上传两份文件获取两个 ResourceId，然后创建对比任务：
 
@@ -17,91 +21,58 @@ python3 scripts/tencent_esign.py call CreateContractComparisonTask '{"OriginFile
 ## 阶段 2：对比处理中
 
 ```bash
-python3 scripts/tencent_esign.py wait-compare <TaskId>
+python3 scripts/tencent_esign.py wait-compare <TaskId> "<原文件名>"
 ```
 
-对比通常几秒到一分钟内完成。可尝试获取对比页面链接：
+对比通常几秒到一分钟内完成。可调 `compare-progress-url <task_id>` 获取进度链接，有值时告知用户可点击查看。
 
-```bash
-python3 scripts/tencent_esign.py call DescribeContractDiffTaskWebUrl '{"TaskId":"<task_id>"}'
-```
+`wait-compare` 会在对比完成后自动获取三个链接并放入返回结果的 `_links_block` 字段。可选第二参数为原文件名（建议传用户提供的原始合同文件名，从上传步骤获取）；下载文件按「原文件名_对比报告 / 原文件名_差异明细」命名，未传时回退为「对比任务_<任务ID前缀>_对比报告 / 差异明细」。
 
-## 阶段 3：对比完成 — 返回值解析
+## 阶段 3：对比完成展示
 
-`wait-compare` 返回的 JSON 结构：
+**概览**：从 `Response` 取值，输出「共发现 **{TotalDiffCount}** 处差异：新增 {AddDiffCount} 处、修改 {ChangeDiffCount} 处、删除 {DeleteDiffCount} 处。」
 
-```json
-{
-  "Response": {
-    "Status": 2,
-    "TotalDiffCount": 12,
-    "AddDiffCount": 3,
-    "ChangeDiffCount": 7,
-    "DeleteDiffCount": 2,
-    "RequestId": "xxx"
-  }
-}
-```
+**链接**：`wait-compare` 返回结果里已包含 `_links_block` 字段和 `_downloaded_files`（已下载文件的本地路径数组）。若 `_downloaded_files` 非空，先按 `common_guide.md`「文件下载与迁移」把文件迁移到工作区 `downloads/`，再输出 `_links_block`（本地路径行替换为迁移后的最终路径，其余原样输出）。每个对比任务固定 3 行（①在线预览——链接、②PDF报告、③Excel明细——自动下载成功时为本地路径，失败时为原下载链接或获取失败提示）。
 
-1. **概览**（从 `Response` 对象取值）：「共发现 **{Response.TotalDiffCount}** 处差异：新增 {Response.AddDiffCount} 处、修改 {Response.ChangeDiffCount} 处、删除 {Response.DeleteDiffCount} 处。」
+**🪟 必须在交付文本输出前调用 `present_files`**：本地路径交付场景下（`wait-compare` 返回的 `_downloaded_files` 非空，且迁移到工作区 `downloads/` 成功；或迁移失败回退到技能目录原始路径），**调用一次 `present_files`**，传入**所有本地批注报告（PDF）与差异明细（Excel）的绝对路径数组**，让客户端把每个文件渲染成可下载卡片（图标/文件名/大小/点击下载）。`_links_block` 中的本地路径行仍照常输出作为伴随描述，但**主展示由 `present_files` 渲染的卡片承担**。**严禁漏调**（漏调退化为纯文本路径、用户看不到可下载文件入口）；`present_files` 调用失败按"在线链接回退"静默兜底，不向用户解释。
 
-2. **获取差异详情和链接**（`wait-compare` 不含具体内容，需并行调用以下接口）：
+若某行显示「获取失败」，用户可选择「刷新链接」重试。
+
+**获取差异详情**（`wait-compare` 不含具体内容，需额外调用）：
 
 ```bash
 python3 scripts/tencent_esign.py call DescribeContractComparisonTask '{"TaskId":"<task_id>","ShowDetail":true}'
-python3 scripts/tencent_esign.py call DescribeContractDiffTaskWebUrl '{"TaskId":"<task_id>"}'
-python3 scripts/tencent_esign.py call ExportContractComparisonTask '{"TaskId":"<task_id>","ExportType":0}'
-python3 scripts/tencent_esign.py call ExportContractComparisonTask '{"TaskId":"<task_id>","ExportType":1}'
 ```
 
-`DescribeContractComparisonTask`（ShowDetail=true）返回的 JSON 结构：
+`ComparisonDetail` 数组解析（严格按此路径取值）：
 
-```json
-{
-  "Response": {
-    "Status": 2,
-    "TotalDiffCount": 12,
-    "ComparisonDetail": [
-      {
-        "ComparisonType": "change",
-        "OriginText": "原文内容...",
-        "DiffText": "修改后内容...",
-        "PageNumber": 3,
-        "FormatType": 0
-      }
-    ],
-    "RequestId": "xxx"
-  }
-}
-```
-
-**解析步骤**（严格按此路径取值，不要对字符串调用 `.keys()` 等字典方法）：
-
-1. `resp = json.loads(output)` — 解析整个 JSON 字符串
-2. `response = resp["Response"]` — 取 Response 对象（dict）
-3. `details = response["ComparisonDetail"]` — 取差异数组（list），每个元素是 dict
-4. 遍历 `details` 数组，每个 `item` 是一个 dict，通过 `item["ComparisonType"]`、`item["OriginText"]` 等取值
-
-## 阶段 3：对比完成 — 展示规则
+1. `resp = json.loads(output)`
+2. `details = resp["Response"]["ComparisonDetail"]`
+3. 遍历 `details`，每项通过 `item["ComparisonType"]`、`item["OriginText"]`、`item["DiffText"]`、`item["PageNumber"]` 取值
 
 **差异明细表格**：
 
 | 序号 | 类型 | 原文 | 修改后 | 页码 |
 |------|------|------|--------|------|
 
-每行对应 `ComparisonDetail` 数组中的一个 dict 元素，字段映射：`item["ComparisonType"]` → 类型、`item["OriginText"]` → 原文、`item["DiffText"]` → 修改后、`item["PageNumber"]` → 页码
+`ComparisonType` 中文映射：`"add"` → 新增、`"change"` → 修改、`"delete"` → 删除。删除类型「修改后」列显示「—」，新增类型「原文」列显示「—」。
 
-`ComparisonType` 中文映射：`"add"` → 新增、`"change"` → 修改、`"delete"` → 删除
+展示规则：≤10 条全部展示；>10 条展示前 5 条，提示「还有 N 条差异，是否展开？或直接下载 Excel 明细。」
 
-展示规则：
-- **≤ 10 条**：全部展示
-- **> 10 条**：展示前 5 条，其余折叠，提示「还有 N 条差异，是否展开查看全部？或直接下载 Excel 明细查看完整列表。」
-- 删除类型的「修改后」列显示为「—」，新增类型的「原文」列显示为「—」
+**结尾引导**：
 
-差异表格之后紧跟链接：
+原样输出 `wait-compare` 返回的 `_next_steps` 字段值。
 
-> 📊 [在线预览对比结果]({WebUrl})（3 小时内有效）
-> · 📝 [下载带批注的结果文件（PDF）]({ExportUrl})（20 分钟内有效）
-> · 📋 [下载差异明细（Excel）]({ExportUrl})（20 分钟内有效）
+刷新链接：执行 `compare-links <task_id> "<原文件名>"`（脚本会重新调导出接口获取新链接并自动下载，文件名规则同 wait-compare），迁移后输出 `_links_block`。
 
-用户选择刷新链接时，重新调用 `DescribeContractDiffTaskWebUrl` 和 `ExportContractComparisonTask` 获取新链接并展示。
+查看对比记录：执行 `compare-list-url`，原样输出返回的 `_links_md`。
+
+## 阶段 4：获取对比列表（用户主动查询）
+
+用户主动输入「对比列表」「对比记录」「对比历史」时，无需先执行对比流程，直接鉴权后调用：
+
+```bash
+python3 scripts/tencent_esign.py compare-list-url
+```
+
+返回 `_links_md` 字段，**原样输出**即可。

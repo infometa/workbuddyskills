@@ -5,16 +5,43 @@
 ## 接口常量
 
 ```
+# 前端（浏览器端）
 API_URL = https://ntsgw.woa.com/api/sso/llm-proxy-service/api/v1/chat/completions
+
+# 后端（服务端）
+API_URL = http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions
+
 METHOD = POST
 Content-Type = application/json
 ```
+
+> 前端与后端接口的请求参数、请求体结构、响应结构完全一致，仅请求地址与适用环境不同。前端接口依赖浏览器 SSO 链路，后端接口无需鉴权直连即可调用，两者均**无需**手动添加 Authorization。
 
 ## 可用模型
 
 | 模型名称        | 类型       | 适用场景                     |
 | -------------- | ---------- | ---------------------------- |
-| `HY-3-Preview` | 非思考模型  | 一般对话、文本生成、内容分析   |
+| `HY-3` | 非思考模型  | 一般对话、文本生成、内容分析   |
+
+---
+
+## 目录
+
+**前端模板：**
+1. JavaScript - fetch（非流式）
+2. JavaScript - fetch（流式/SSE）
+3. JavaScript - axios
+4. TypeScript - fetch（含类型定义）
+5. React Hook 封装（非流式）
+6. React Hook 封装（流式）
+7. Vue 3 Composable 封装
+8. 简单对话工具函数
+
+**后端模板：**
+9. Node.js - axios / fetch（非流式与流式）
+10. Python - requests（非流式与流式）
+11. Java - HttpClient（非流式）
+12. Go - net/http（非流式）
 
 ---
 
@@ -27,7 +54,7 @@ const API_URL = 'https://ntsgw.woa.com/api/sso/llm-proxy-service/api/v1/chat/com
 
 async function chatCompletion(messages, options = {}) {
   const {
-    model = 'HY-3-Preview',
+    model = 'HY-3',
     temperature = 0.7,
     maxTokens = 2048,
   } = options;
@@ -75,7 +102,7 @@ const API_URL = 'https://ntsgw.woa.com/api/sso/llm-proxy-service/api/v1/chat/com
 
 async function chatCompletion(messages, options = {}) {
   const {
-    model = 'HY-3-Preview',
+    model = 'HY-3',
     temperature = 0.7,
     maxTokens = 2048,
     timeout = 60000,
@@ -142,7 +169,7 @@ const API_URL = 'https://ntsgw.woa.com/api/sso/llm-proxy-service/api/v1/chat/com
 
 async function chatCompletionStream(messages, onChunk, options = {}) {
   const {
-    model = 'HY-3-Preview',
+    model = 'HY-3',
     temperature = 0.7,
     maxTokens = 2048,
   } = options;
@@ -240,7 +267,7 @@ function createStreamChat() {
     }
 
     abortController = new AbortController();
-    const { model = 'HY-3-Preview', temperature = 0.7, maxTokens = 2048 } = options;
+    const { model = 'HY-3', temperature = 0.7, maxTokens = 2048 } = options;
 
     try {
       const response = await fetch(API_URL, {
@@ -340,7 +367,7 @@ const API_URL = 'https://ntsgw.woa.com/api/sso/llm-proxy-service/api/v1/chat/com
 
 async function chatCompletion(messages, options = {}) {
   const {
-    model = 'HY-3-Preview',
+    model = 'HY-3',
     temperature = 0.7,
     maxTokens = 2048,
   } = options;
@@ -395,7 +422,7 @@ llmClient.interceptors.response.use(
 
 export async function chat(messages, options = {}) {
   const {
-    model = 'HY-3-Preview',
+    model = 'HY-3',
     temperature = 0.7,
     maxTokens = 2048,
   } = options;
@@ -464,7 +491,7 @@ interface ChatCompletionError {
 }
 
 interface ChatOptions {
-  model?: 'HY-3-Preview';
+  model?: 'HY-3';
   temperature?: number;
   maxTokens?: number;
   timeout?: number;
@@ -478,7 +505,7 @@ export async function chatCompletion(
   options: ChatOptions = {}
 ): Promise<string> {
   const {
-    model = 'HY-3-Preview',
+    model = 'HY-3',
     temperature = 0.7,
     maxTokens = 2048,
     timeout = 60000,
@@ -527,7 +554,7 @@ const messages: ChatMessage[] = [
 ];
 
 const answer = await chatCompletion(messages, {
-  model: 'HY-3-Preview',
+  model: 'HY-3',
   temperature: 0.7,
 });
 console.log(answer);
@@ -547,7 +574,7 @@ interface ChatMessage {
 }
 
 interface ChatOptions {
-  model?: 'HY-3-Preview';
+  model?: 'HY-3';
   temperature?: number;
   maxTokens?: number;
 }
@@ -564,7 +591,7 @@ interface UseChatResult {
 const API_URL = 'https://ntsgw.woa.com/api/sso/llm-proxy-service/api/v1/chat/completions';
 
 export function useChat(options: ChatOptions = {}): UseChatResult {
-  const { model = 'HY-3-Preview', temperature = 0.7, maxTokens = 2048 } = options;
+  const { model = 'HY-3', temperature = 0.7, maxTokens = 2048 } = options;
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -634,7 +661,7 @@ export function useChat(options: ChatOptions = {}): UseChatResult {
 /*
 function ChatComponent() {
   const { messages, loading, error, sendMessage, clearHistory, setSystemPrompt } = useChat({
-    model: 'HY-3-Preview',
+    model: 'HY-3',
   });
   const [input, setInput] = useState('');
 
@@ -691,7 +718,7 @@ interface ChatMessage {
 }
 
 interface ChatOptions {
-  model: 'HY-3-Preview';
+  model: 'HY-3';
   temperature?: number;
   maxTokens?: number;
 }
@@ -710,7 +737,7 @@ interface UseStreamChatResult {
 const API_URL = 'https://ntsgw.woa.com/api/sso/llm-proxy-service/api/v1/chat/completions';
 
 export function useStreamChat(options: ChatOptions = {}): UseStreamChatResult {
-  const { model = 'HY-3-Preview', temperature = 0.7, maxTokens = 2048 } = options;
+  const { model = 'HY-3', temperature = 0.7, maxTokens = 2048 } = options;
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streamingContent, setStreamingContent] = useState('');
@@ -891,7 +918,7 @@ interface ChatMessage {
 }
 
 interface ChatOptions {
-  model: 'HY-3-Preview';
+  model: 'HY-3';
   temperature?: number;
   maxTokens?: number;
 }
@@ -899,7 +926,7 @@ interface ChatOptions {
 const API_URL = 'https://ntsgw.woa.com/api/sso/llm-proxy-service/api/v1/chat/completions';
 
 export function useChat(options: ChatOptions = {}) {
-  const { model = 'HY-3-Preview', temperature = 0.7, maxTokens = 2048 } = options;
+  const { model = 'HY-3', temperature = 0.7, maxTokens = 2048 } = options;
 
   const messages = ref<ChatMessage[]>([]);
   const loading = ref(false);
@@ -972,7 +999,7 @@ export function useChat(options: ChatOptions = {}) {
 
 // 流式版本
 export function useStreamChat(options: ChatOptions = {}) {
-  const { model = 'HY-3-Preview', temperature = 0.7, maxTokens = 2048 } = options;
+  const { model = 'HY-3', temperature = 0.7, maxTokens = 2048 } = options;
 
   const messages = ref<ChatMessage[]>([]);
   const streamingContent = ref('');
@@ -1160,7 +1187,7 @@ export async function ask(prompt, systemPrompt) {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
     body: JSON.stringify({
-      model: 'HY-3-Preview',
+      model: 'HY-3',
       messages,
       temperature: 0.7,
       max_tokens: 2048,
@@ -1175,4 +1202,421 @@ export async function ask(prompt, systemPrompt) {
 // 使用示例
 // const answer = await ask('什么是闭包？');
 // const analysis = await ask('分析这段代码的复杂度...', '你是一名资深架构师，请进行详尽的复杂度分析');
+```
+
+---
+
+## 9. Node.js - axios / fetch（后端服务端调用）
+
+> 后端接口地址为 `http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions`，服务端直连 ESB 网关，无需鉴权，不需要 `withCredentials`/`credentials`。
+
+### axios（非流式）
+
+```javascript
+const axios = require('axios');
+
+const API_URL = 'http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions';
+
+async function chatCompletion(messages, options = {}) {
+  const {
+    model = 'HY-3',
+    temperature = 0.7,
+    maxTokens = 2048,
+  } = options;
+
+  const { data } = await axios.post(API_URL, {
+    model,
+    messages,
+    temperature,
+    max_tokens: maxTokens,
+    stream: false,
+  }, {
+    headers: { 'Content-Type': 'application/json' },
+    timeout: 60000,
+  });
+
+  return data.choices[0].message.content;
+}
+
+// 使用示例
+(async () => {
+  try {
+    const answer = await chatCompletion([
+      { role: 'system', content: '你是一个有帮助的助手' },
+      { role: 'user', content: '请介绍一下Node.js的事件循环' },
+    ]);
+    console.log('AI回复:', answer);
+  } catch (error) {
+    console.error('调用出错:', error.response?.data?.error?.message || error.message);
+  }
+})();
+
+module.exports = { chatCompletion };
+```
+
+### fetch（Node.js 18+，非流式）
+
+```javascript
+const API_URL = 'http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions';
+
+async function chatCompletion(messages, options = {}) {
+  const { model = 'HY-3', temperature = 0.7, maxTokens = 2048 } = options;
+
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      messages,
+      temperature,
+      max_tokens: maxTokens,
+      stream: false,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`请求失败: ${error.error?.message || response.statusText}`);
+  }
+
+  const result = await response.json();
+  return result.choices[0].message.content;
+}
+
+module.exports = { chatCompletion };
+```
+
+### axios（流式/SSE）
+
+```javascript
+const axios = require('axios');
+
+const API_URL = 'http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions';
+
+async function chatCompletionStream(messages, onChunk, options = {}) {
+  const { model = 'HY-3', temperature = 0.7, maxTokens = 2048 } = options;
+
+  const response = await axios.post(API_URL, {
+    model,
+    messages,
+    temperature,
+    max_tokens: maxTokens,
+    stream: true,
+  }, {
+    headers: { 'Content-Type': 'application/json' },
+    responseType: 'stream',
+  });
+
+  let buffer = '';
+  let fullContent = '';
+
+  return new Promise((resolve, reject) => {
+    response.data.on('data', (chunk) => {
+      buffer += chunk.toString('utf-8');
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed || !trimmed.startsWith('data: ')) continue;
+
+        const data = trimmed.slice(6);
+        if (data === '[DONE]') {
+          resolve(fullContent);
+          return;
+        }
+
+        try {
+          const parsed = JSON.parse(data);
+          const content = parsed.choices?.[0]?.delta?.content;
+          if (content) {
+            fullContent += content;
+            onChunk(content, fullContent);
+          }
+        } catch (e) {
+          // 忽略解析错误
+        }
+      }
+    });
+
+    response.data.on('end', () => resolve(fullContent));
+    response.data.on('error', reject);
+  });
+}
+
+module.exports = { chatCompletionStream };
+```
+
+---
+
+## 10. Python - requests（后端服务端调用）
+
+### requests（非流式）
+
+```python
+import requests
+
+API_URL = "http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions"
+
+
+def chat_completion(messages, model="HY-3", temperature=0.7, max_tokens=2048):
+    """调用 LLM 代理服务，返回 AI 回复内容"""
+    response = requests.post(
+        API_URL,
+        json={
+            "model": model,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "stream": False,
+        },
+        headers={"Content-Type": "application/json"},
+        timeout=60,
+    )
+    response.raise_for_status()
+    result = response.json()
+    return result["choices"][0]["message"]["content"]
+
+
+# 使用示例
+if __name__ == "__main__":
+    try:
+        answer = chat_completion([
+            {"role": "system", "content": "你是一个有帮助的助手"},
+            {"role": "user", "content": "请介绍一下Python的装饰器"},
+        ])
+        print("AI回复:", answer)
+    except requests.exceptions.RequestException as e:
+        print("调用出错:", e)
+```
+
+### requests（流式/SSE）
+
+```python
+import json
+import requests
+
+API_URL = "http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions"
+
+
+def chat_completion_stream(messages, on_chunk, model="HY-3", temperature=0.7, max_tokens=2048):
+    """流式调用 LLM 代理服务，逐块回调 on_chunk(content, full_content)"""
+    full_content = ""
+    with requests.post(
+        API_URL,
+        json={
+            "model": model,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "stream": True,
+        },
+        headers={"Content-Type": "application/json"},
+        stream=True,
+        timeout=60,
+    ) as response:
+        response.raise_for_status()
+        for line in response.iter_lines(decode_unicode=True):
+            if not line or not line.startswith("data: "):
+                continue
+            data = line[len("data: "):]
+            if data == "[DONE]":
+                break
+            try:
+                parsed = json.loads(data)
+                content = parsed.get("choices", [{}])[0].get("delta", {}).get("content")
+                if content:
+                    full_content += content
+                    on_chunk(content, full_content)
+            except json.JSONDecodeError:
+                continue
+    return full_content
+
+
+# 使用示例
+if __name__ == "__main__":
+    result = chat_completion_stream(
+        [{"role": "user", "content": "请写一首关于秋天的诗"}],
+        lambda chunk, full: print(chunk, end="", flush=True),
+    )
+    print("\n完整回复:", result)
+```
+
+---
+
+## 11. Java - HttpClient（后端服务端调用）
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.List;
+import java.util.Map;
+
+public class LlmProxyClient {
+
+    private static final String API_URL =
+        "http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions";
+
+    private final HttpClient httpClient = HttpClient.newBuilder()
+        .connectTimeout(Duration.ofSeconds(10))
+        .build();
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
+     * 调用 LLM 代理服务（非流式）
+     *
+     * @param messages 消息列表，每个元素为 {"role": "user", "content": "..."}
+     * @param model    模型名称，如 HY-3
+     * @return AI 回复内容
+     */
+    public String chatCompletion(List<Map<String, String>> messages, String model) throws Exception {
+        ObjectNode body = objectMapper.createObjectNode();
+        body.put("model", model == null ? "HY-3" : model);
+        body.putPOJO("messages", messages);
+        body.put("temperature", 0.7);
+        body.put("max_tokens", 2048);
+        body.put("stream", false);
+
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(API_URL))
+            .header("Content-Type", "application/json")
+            .timeout(Duration.ofSeconds(60))
+            .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(body)))
+            .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("请求失败: HTTP " + response.statusCode() + " - " + response.body());
+        }
+
+        JsonNode result = objectMapper.readTree(response.body());
+        return result.get("choices").get(0).get("message").get("content").asText();
+    }
+
+    // 使用示例
+    public static void main(String[] args) throws Exception {
+        LlmProxyClient client = new LlmProxyClient();
+        List<Map<String, String>> messages = List.of(
+            Map.of("role", "system", "content", "你是一个有帮助的助手"),
+            Map.of("role", "user", "content", "请介绍一下Java的垃圾回收机制")
+        );
+        String answer = client.chatCompletion(messages, "HY-3");
+        System.out.println("AI回复: " + answer);
+    }
+}
+```
+
+---
+
+## 12. Go - net/http（后端服务端调用）
+
+```go
+package llmclient
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"time"
+)
+
+const apiURL = "http://ntsgw.woa.com/api/esb/llm-proxy-service/api/v1/chat/completions"
+
+// Message 对应 OpenAI 消息结构
+type Message struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
+type chatRequest struct {
+	Model       string    `json:"model"`
+	Messages    []Message `json:"messages"`
+	Temperature float64   `json:"temperature"`
+	MaxTokens   int       `json:"max_tokens"`
+	Stream      bool      `json:"stream"`
+}
+
+type chatChoice struct {
+	Message Message `json:"message"`
+}
+
+type chatResponse struct {
+	Choices []chatChoice `json:"choices"`
+}
+
+type chatErrorResponse struct {
+	Error struct {
+		Message string `json:"message"`
+	} `json:"error"`
+}
+
+// ChatCompletion 调用 LLM 代理服务（非流式），返回 AI 回复内容
+func ChatCompletion(messages []Message, model string) (string, error) {
+	if model == "" {
+		model = "HY-3"
+	}
+
+	reqBody := chatRequest{
+		Model:       model,
+		Messages:    messages,
+		Temperature: 0.7,
+		MaxTokens:   2048,
+		Stream:      false,
+	}
+
+	payload, err := json.Marshal(reqBody)
+	if err != nil {
+		return "", err
+	}
+
+	client := &http.Client{Timeout: 60 * time.Second}
+	req, err := http.NewRequest(http.MethodPost, apiURL, bytes.NewBuffer(payload))
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		var errResp chatErrorResponse
+		_ = json.Unmarshal(body, &errResp)
+		return "", fmt.Errorf("请求失败: HTTP %d - %s", resp.StatusCode, errResp.Error.Message)
+	}
+
+	var result chatResponse
+	if err := json.Unmarshal(body, &result); err != nil {
+		return "", err
+	}
+	if len(result.Choices) == 0 {
+		return "", fmt.Errorf("响应中没有可用的回复")
+	}
+
+	return result.Choices[0].Message.Content, nil
+}
+
+// 使用示例:
+// answer, err := llmclient.ChatCompletion([]llmclient.Message{
+//     {Role: "system", Content: "你是一个有帮助的助手"},
+//     {Role: "user", Content: "请介绍一下Go的goroutine"},
+// }, "HY-3")
 ```

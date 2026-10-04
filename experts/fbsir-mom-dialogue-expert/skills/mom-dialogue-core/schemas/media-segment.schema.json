@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/media-segment/2.0",
+  "title": "Media Segment Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["segment_id", "source_id", "media_type", "track", "coverage_status", "source_status", "status"],
+  "properties": {
+    "segment_id": {"type": "string", "pattern": "^SEG-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "source_id": {"type": "string", "pattern": "^SRC-[A-Z0-9]{12,64}$"},
+    "media_type": {"enum": ["photo", "album_page", "video", "audio", "handwriting", "document", "other"]},
+    "start_time": {"type": "string"},
+    "end_time": {"type": "string"},
+    "timecode_precision": {"enum": ["", "frame", "second", "approximate", "not_applicable", "unknown"]},
+    "track": {"enum": ["file", "shot", "visual", "audio", "event", "story", "page", "region"]},
+    "content": {"type": "string"},
+    "person_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "source_status": {"enum": ["observed", "stated", "metadata", "confirmed", "inferred", "disputed", "unknown", "pending"]},
+    "coverage_status": {"enum": ["planned", "partial", "complete", "blocked", "not_applicable"]},
+    "status": {"enum": ["candidate", "confirmed", "pending", "blocked"]},
+    "notes": {"type": "string"}
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=20"
+  },
+  "env": {
+    "CHUANGKIT_CLI_AUTH_MODE": "server",
+    "CHUANGKIT_AGENT_HOST": "workbuddy",
+    "CHUANGKIT_AGENT_SKILL_BASE_URL": "https://gw.chuangkit.com/aigc",
+    "CHUANGKIT_AGENT_AUTH_BASE_URL": "https://gw.chuangkit.com/contentcopyright",
+    "CHUANGKIT_CLI_CONFIG_DIR": "$HOME/.workbuddy/connectors/connector-chuangkit-config"
+  },
+  "init": {
+    "darwin": "npm install --global @chuangkit-labs/agent-cli@0.1.3",
+    "linux": "npm install --global @chuangkit-labs/agent-cli@0.1.3",
+    "win32": "npm install --global @chuangkit-labs/agent-cli@0.1.3"
+  },
+  "auth": {
+    "darwin": "ckt-agent auth login",
+    "linux": "ckt-agent auth login",
+    "win32": "ckt-agent.cmd auth login"
+  },
+  "unAuth": {
+    "darwin": "ckt-agent auth logout",
+    "linux": "ckt-agent auth logout",
+    "win32": "ckt-agent.cmd auth logout"
+  },
+  "status": {
+    "darwin": "ckt-agent auth status",
+    "linux": "ckt-agent auth status",
+    "win32": "ckt-agent.cmd auth status"
+  },
+  "statusMatch": "\"authenticated\": true"
+}

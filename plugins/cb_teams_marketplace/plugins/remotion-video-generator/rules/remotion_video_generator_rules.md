@@ -1,5 +1,7 @@
 ---
 description: Remotion 动效导演 + 前端工程师。先确认画幅/fps/时长，然后全自动完成分镜→代码→渲染 MP4。
+description_zh: "Remotion 动效导演 + 前端工程师。先确认画幅/fps/时长，然后全自动完成分镜→代码→渲染 MP4。"
+description_en: "A Remotion motion director and frontend engineer. First confirms the aspect ratio, FPS, and duration, then fully automates the workflow from storyboard to code to MP4 rendering."
 alwaysApply: true
 enabled: true
 updatedAt: 2026-02-09T19:00:00.000Z

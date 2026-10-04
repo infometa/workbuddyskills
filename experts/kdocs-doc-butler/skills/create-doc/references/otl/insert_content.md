@@ -12,17 +12,21 @@
 >
 > ⚠️ **Markdown 图片要求**：Markdown 内图片请使用 base64 数据 URI 或公网可访问的直链 URL。
 
+#### 工具选择
 
+- **适用**：向智能文档写入 Markdown/HTML 内容时
+- **勿用**（改用 `otl.block_insert`）：需块级精准增删改 — 失败或需精准操作时用 otl.block_delete + otl.block_insert
 
-#### 操作约束
+#### 调用约束
 
 - **前置检查**：先 otl.block_query 读取现有内容，了解文档当前状态
-- **提示**：支持三种写入模式：prepend（开头插入）、append（末尾追加）、replace（替换全部内容）
-- **提示**：参数规则：优先使用 format + mode；若不传 pos，则 format 与 mode 必须同时传入；pos 与 format/mode 互斥，不可同时传入
-- **提示**：**写入新建/空白文档时必须拆分 title 和 content**：① 从待写入的 Markdown 中提取开头一级标题（`# xxx`）的文字部分作为 `title` 参数；② 将该一级标题行从 `content` 中删除，`content` 从正文或二级标题开始。若 `content` 开头没有一级标题，则自行拟定一个 `title`。**禁止**将一级标题留在 `content` 里而不传 `title`——这会导致文档标题空缺、一级标题错误地出现在正文中
-- **提示**：返回 `InvalidArgument` 时不得原样重试；须重构 `content`（检查 Markdown 合法性）或改用 `otl.block_delete` + `otl.block_insert` 精准操作
+- **禁止**：返回 `InvalidArgument` 时不得原样重试；须重构 `content`（检查 Markdown 合法性）或改用 `otl.block_delete` + `otl.block_insert` 精准操作
 
 **幂等性**：否 — 非幂等操作，重复调用会导致内容重复插入；失败后应先用 otl.block_query 确认文档当前状态，再决定是否重新插入
+
+> 支持三种写入模式：prepend（开头插入）、append（末尾追加）、replace（替换全部内容）
+> 参数规则：优先使用 format + mode；若不传 pos，则 format 与 mode 必须同时传入；pos 与 format/mode 互斥，不可同时传入
+> **写入新建/空白文档时必须拆分 title 和 content**：① 从待写入的 Markdown 中提取开头一级标题（`# xxx`）的文字部分作为 `title` 参数；② 将该一级标题行从 `content` 中删除，`content` 从正文或二级标题开始。若 `content` 开头没有一级标题，则自行拟定一个 `title`。**禁止**将一级标题留在 `content` 里而不传 `title`——这会导致文档标题空缺、一级标题错误地出现在正文中
 
 #### 调用示例
 
@@ -71,10 +75,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 智能文档文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 智能文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 智能文档分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 智能文档文件 ID
 - `title` (string, 可选): 文档标题
 - `content` (string, 必填): 写入内容，支持 Markdown 或 HTML
 - `format` (string, 可选): content 字段的格式，markdown 或 html；当不传 pos 时必填，且需与 mode 同时传入。可选值：`markdown` / `html`
@@ -106,7 +111,6 @@
 
 > **说明**：此处仅针对**纯文本 Unicode/ASCII 制表图**。
 
-
 #### 返回值说明
 
 ```json
@@ -123,7 +127,3 @@
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | `data.result` | string | ok 表示成功 |
-
-
----
-

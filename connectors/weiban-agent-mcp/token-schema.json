@@ -1,0 +1,19 @@
+{
+  "title": "连接微伴员工账号",
+  "title_en": "Connect a Weiban employee account",
+  "description": "本预览包使用已签发的员工 Agent Secret。凭证由 WorkBuddy 保存在本机，并在调用时通过 HTTPS 发送给微伴服务；不要填写企业 OpenAPI secret。企业两字段首次授权模式尚需单独适配。",
+  "description_en": "This preview uses an issued employee Agent Secret. WorkBuddy stores it locally and sends it to Weiban over HTTPS. Do not enter a corporate OpenAPI secret.",
+  "docUrl": "https://mcp.weibanzhushou.com/mcp?installation=1",
+  "docLabel": "查看微伴凭证与安装说明",
+  "fields": [
+    {
+      "key": "WEIBAN_AGENT_SECRET",
+      "label": "员工 Agent Secret",
+      "label_en": "Employee Agent Secret",
+      "type": "password",
+      "required": true,
+      "placeholder": "填写已签发的员工 Agent Secret",
+      "description": "用于上传后预览和已有员工凭证接入，不是企业 secret。请勿在聊天中回显此凭证。"
+    }
+  ]
+}

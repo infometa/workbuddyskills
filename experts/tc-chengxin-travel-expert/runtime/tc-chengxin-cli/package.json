@@ -1,0 +1,28 @@
+{
+  "name": "@tongcheng/tc-chengxin-cli",
+  "version": "1.0.5",
+  "description": "同程程心 WorkBuddy CLI 连接器（仅负责 OAuth 鉴权与 token 维护；查询脚本随连接器 skill 下发）",
+  "bin": {
+    "tc-chengxin": "bin/cli.js"
+  },
+  "scripts": {
+    "build:config": "node scripts/build-runtime-config.js",
+    "build:config:local": "node scripts/build-runtime-config.js --env local",
+    "build:config:stage": "node scripts/build-runtime-config.js --env stage",
+    "build:config:product": "node scripts/build-runtime-config.js --env product",
+    "test": "node --test test/*.test.js",
+    "pack:local": "npm run build:config:local && npm pack --ignore-scripts",
+    "pack:stage": "npm run build:config:stage && npm pack --ignore-scripts",
+    "pack:product": "npm run build:config:product && npm pack --ignore-scripts",
+    "prepack": "node scripts/build-runtime-config.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "author": "同程网络科技股份有限公司",
+  "license": "MIT"
+}

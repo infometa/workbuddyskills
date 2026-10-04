@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟面试分析报告</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #2c3e50; line-height: 1.7; }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 20px 64px; }
+  .header { background: linear-gradient(135deg, #4a6cf7, #6a8bff); color: #fff; border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+  .header h1 { font-size: 24px; margin-bottom: 8px; }
+  .header .meta { font-size: 14px; opacity: .9; }
+  .score-panel { display: flex; align-items: center; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
+  .total-score { text-align: center; }
+  .total-score .num { font-size: 56px; font-weight: 700; line-height: 1; }
+  .total-score .label { font-size: 13px; opacity: .85; margin-top: 6px; }
+  .summary { flex: 1; min-width: 260px; font-size: 14px; background: rgba(255,255,255,.14); border-radius: 12px; padding: 16px 20px; }
+  .card { background: #fff; border-radius: 16px; padding: 24px 28px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(30,41,59,.06); }
+  .card h2 { font-size: 18px; margin-bottom: 16px; padding-left: 12px; border-left: 4px solid #4a6cf7; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eef0f5; }
+  th { color: #8492a6; font-weight: 500; font-size: 13px; }
+  .dim-bar { height: 8px; border-radius: 4px; background: #eef0f5; overflow: hidden; min-width: 120px; }
+  .dim-bar > div { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #4a6cf7, #7b9bff); }
+  .dim-score { font-weight: 600; color: #4a6cf7; white-space: nowrap; }
+  .qa-item { border: 1px solid #eef0f5; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .qa-item:last-child { margin-bottom: 0; }
+  .qa-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .qa-title { font-weight: 600; font-size: 15px; }
+  .tag { display: inline-block; font-size: 12px; color: #4a6cf7; background: #eef2ff; border-radius: 20px; padding: 2px 10px; margin-right: 6px; white-space: nowrap; }
+  .qa-score { font-size: 20px; font-weight: 700; color: #4a6cf7; white-space: nowrap; }
+  .qa-block { font-size: 14px; margin-top: 10px; }
+  .qa-block .label { color: #8492a6; font-size: 13px; margin-bottom: 4px; }
+  .qa-block .text { background: #f8f9fc; border-radius: 8px; padding: 10px 14px; white-space: pre-wrap; }
+  .coach { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 12px; }
+  .coach .box { border-radius: 10px; padding: 12px 14px; font-size: 13px; }
+  .coach .box h4 { font-size: 13px; margin-bottom: 6px; }
+  .box.strength { background: #ecfdf3; } .box.strength h4 { color: #12b76a; }
+  .box.improve { background: #fff6e9; } .box.improve h4 { color: #f79009; }
+  .box.refer { background: #eef2ff; } .box.refer h4 { color: #4a6cf7; }
+  .dim-eval { font-size: 13px; color: #5f6b7a; margin-top: 4px; }
+  .footer { text-align: center; color: #a0aab8; font-size: 12px; margin-top: 32px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>模拟面试分析报告</h1>
+    <div class="meta">目标岗位：{{TARGET_JOB}} ｜ 面试类型：{{INTERVIEW_TYPE}} ｜ 生成时间：{{GENERATED_AT}}</div>
+    <div class="score-panel">
+      <div class="total-score">
+        <div class="num">{{TOTAL_SCORE}}</div>
+        <div class="label">面试总分 / {{TOTAL_SCORE_MAX}}</div>
+      </div>
+      <div class="summary">{{INTERVIEW_EVALUATION}}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>维度报告</h2>
+    <table>
+      <thead>
+        <tr><th>考核维度</th><th>得分</th><th style="width:30%">得分情况</th><th>权重</th></tr>
+      </thead>
+      <tbody>
+        <!-- 每个维度一行，按得分比例升序排列：
+        <tr>
+          <td>{{DIMENSION_NAME}}<div class="dim-eval">{{DIMENSION_EVALUATE}}</div></td>
+          <td class="dim-score">{{DIMENSION_SCORE}}</td>
+          <td><div class="dim-bar"><div style="width:{{DIMENSION_PERCENT}}%"></div></div></td>
+          <td>{{APPRAISE_RATE}}</td>
+        </tr> -->
+        {{DIMENSION_ROWS}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>回答记录与辅导建议</h2>
+    <!-- 每题一个 qa-item：
+    <div class="qa-item">
+      <div class="qa-head">
+        <div>
+          <span class="tag">第{{NO}}题</span><span class="tag">{{TYPE_NAME}}</span>
+          <div class="qa-title">{{QUESTION}}</div>
+        </div>
+        <div class="qa-score">{{SCORE}}分</div>
+      </div>
+      <div class="qa-block"><div class="label">我的回答</div><div class="text">{{ANSWER}}</div></div>
+      <div class="coach">
+        <div class="box strength"><h4>你的回答优点在于：</h4>{{STRENGTHS}}</div>
+        <div class="box improve"><h4>不足之处及改进建议：</h4>{{IMPROVEMENT}}</div>
+        <div class="box refer"><h4>作答范例：</h4>{{REFERENCE}}</div>
+      </div>
+    </div> -->
+    {{ANSWER_RECORDS}}
+  </div>
+
+  <div class="footer">本报告由模拟面试流程生成。</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/hash-row/2.0",
+  "title": "Hash Manifest Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["root_id", "scan_id", "relative_path", "status"],
+  "properties": {
+    "root_id": {"type": "string", "pattern": "^ROOT-[A-Z0-9]{12,64}$"},
+    "scan_id": {"type": "string", "pattern": "^SCAN-[A-Z0-9]{12,64}$"},
+    "relative_path": {"type": "string", "minLength": 1},
+    "sha256": {"type": "string", "pattern": "^$|^[a-f0-9]{64}$"},
+    "size_bytes": {"type": "string", "pattern": "^$|^[0-9]+$"},
+    "status": {"enum": ["hashed", "reused", "unreadable"]},
+    "error": {"type": "string"}
+  }
+}

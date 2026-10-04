@@ -1,0 +1,22 @@
+{
+    "title": "东北证券 API Key 配置",
+    "title_en": "NESC API Key Configuration",
+    "description": "粘贴前请注意：只填 Key 本体，不要带空格、换行、引号或 Bearer 前缀（服务端会自动补 Bearer）——多一个字符就会连接失败。\n凭证只保存在你的本机，不会上传。\n连不上时：提示「认证凭证缺失或有误」= 没填或格式不对；提示「签名未找到对应的aksk信息」= Key 无效或已过期，请重新领取。\n若显示「连接成功」但提问时报 Unauthorized，说明 Key 未开通该服务权限，请重新领取后重试。",
+    "description_en": "Before pasting: enter the key itself only — no spaces, line breaks, quotes, or a Bearer prefix (the Bearer scheme is added automatically). One extra character breaks the connection.\nThe credential is stored locally on your machine and never uploaded.\nIf it fails: \"Missing or invalid credentials\" = empty or malformed; \"No aksk found for signature\" = invalid or expired key, please request a new one.\nIf it shows \"connected\" but queries return Unauthorized, the key lacks permission for that service.",
+    "docUrl": "https://activity.nesc.cn/cms-h5/index.html?works_link_id=f9Zp7ZSMIb",
+    "docLabel": "如何领取 API Key 并配置东北证券 MCP",
+    "docLabel_en": "How to get your NESC API Key and configure the MCP",
+    "fields": [
+        {
+            "key": "DBZQ_TOKEN",
+            "label": "NESC API Key",
+            "label_en": "NESC API Key",
+            "placeholder": "32 位 Key，不含空格与 Bearer 前缀",
+            "placeholder_en": "32-char key, no spaces, no Bearer prefix",
+            "type": "password",
+            "required": true,
+            "description": "只填 Key 本体，不要带空格、换行、引号或 Bearer 前缀。",
+            "description_en": "Enter the key itself only — no spaces, line breaks, quotes, or Bearer prefix."
+        }
+    ]
+}

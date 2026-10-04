@@ -7,7 +7,7 @@
 ## bs_get_async_task_status — 查询异步任务执行结果
 
 ```bash
-beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<id>"}'
+beisen-cli recruitment_ai async_task bs_get_async_task_status --data '{"taskId":"<id>"}'
 ```
 
 ### 参数（--data JSON）
@@ -39,7 +39,7 @@ beisen-cli recruitment async_task bs_get_async_task_status --data '{"taskId":"<i
 ## bs_cancel_async_task — 取消异步任务
 
 ```bash
-beisen-cli recruitment async_task bs_cancel_async_task --data '{"taskId":"<id>"}'
+beisen-cli recruitment_ai async_task bs_cancel_async_task --data '{"taskId":"<id>"}'
 ```
 
 ### 参数（--data JSON）

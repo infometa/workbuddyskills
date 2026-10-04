@@ -1,0 +1,39 @@
+{
+  "init": {
+    "darwin": "npm install -g @ihr360cli/ihr-cli",
+    "linux": "npm install -g @ihr360cli/ihr-cli",
+    "win32": "npm install -g @ihr360cli/ihr-cli"
+  },
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "ihr-cli version",
+      "linux": "ihr-cli version",
+      "win32": "ihr-cli version"
+    },
+    "minVersion": "1.0.28",
+    "versionPattern": "\\\"version\\\"\\s*:\\s*\\\"(\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?)\\\""
+  },
+  "auth": {
+    "darwin": "ihr-cli auth login --open-browser --source workbuddy-connector --env prod --create-timeout 8s --timeout 5m",
+    "linux": "ihr-cli auth login --open-browser --source workbuddy-connector --env prod --create-timeout 8s --timeout 5m",
+    "win32": "ihr-cli auth login --open-browser --source workbuddy-connector --env prod --create-timeout 8s --timeout 5m"
+  },
+  "unAuth": {
+    "darwin": "ihr-cli auth logout",
+    "linux": "ihr-cli auth logout",
+    "win32": "ihr-cli auth logout"
+  },
+  "status": {
+    "darwin": "ihr-cli auth status --readiness-only --strict-exit --env prod",
+    "linux": "ihr-cli auth status --readiness-only --strict-exit --env prod",
+    "win32": "ihr-cli auth status --readiness-only --strict-exit --env prod"
+  },
+  "statusMatch": "^READY\\s*$",
+  "authWaitForExit": true,
+  "authUrlDomain": "account.ihr360.com",
+  "authSuppressBrowser": true
+}

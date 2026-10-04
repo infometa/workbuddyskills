@@ -5,6 +5,14 @@ description: >
   图表生成、透视表、行列增删、合并/排序/筛选、格式设置、清洗整理等一切表格操作。
   当用户上传、引用或需要创建/编辑/分析任何 .xlsx/.xls/.csv 表格文件时使用。
   提供比 openpyxl 更强大的表格处理能力，支持复杂数据分析和可视化。
+description_zh: >
+  处理 Excel/xlsx/xls/csv 表格文件的读写、查询、数据分析、公式构造、
+  图表生成、透视表、行列增删、合并/排序/筛选、格式设置、清洗整理等一切表格操作。
+  当用户上传、引用或需要创建/编辑/分析任何 .xlsx/.xls/.csv 表格文件时使用。
+  提供比 openpyxl 更强大的表格处理能力，支持复杂数据分析和可视化。
+description_en: >-
+  Handles every spreadsheet operation on Excel/xlsx/xls/csv files: reading and writing, querying, data analysis, formula construction, chart generation, pivot tables, adding or deleting rows and columns, merging/sorting/filtering, formatting, cleaning and restructuring. Use whenever the user uploads, references, or needs to create/edit/analyze any .xlsx/.xls/.csv file. Provides stronger spreadsheet capabilities than openpyxl, supporting complex data analysis and visualization.
+
 ---
 
 将此任务委派给 **sheet-agent** 子代理处理。

@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "dcs-cloud": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["dcs-cloud-mcp-server"],
+      "env": {
+        "DCS_PAT": "${DCS_PAT}"
+      },
+      "runtime": { "type": "node", "version": ">=18.0.0" },
+      "timeout": 60000
+    }
+  }
+}

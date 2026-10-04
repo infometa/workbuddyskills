@@ -1,0 +1,33 @@
+<!-- 账税一致模板 -->
+<div class="pcf-section">
+  <h3>账税一致性</h3>
+
+  <div class="pcf-section__grid">
+    {{#each fields}}
+    <div class="pcf-section__field">
+      <div class="pcf-section__label">{{label}}</div>
+      <div class="pcf-section__value">{{value}}</div>
+      <div class="pcf-section__note">{{note}}</div>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="pcf-section__insight">
+    <div class="pcf-section__insight-title">研判结论</div>
+    {{#each judgments}}
+    <div class="pcf-section__insight-item pcf-section__insight-item--{{type}}">
+      <span>{{icon}}</span>
+      <span>{{text}}</span>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

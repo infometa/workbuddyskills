@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "cloudmall-operations": {
+      "type": "streamableHttp",
+      "url": "https://admin.rmall-solution.com/mcp",
+      "timeout": 30000
+    }
+  }
+}

@@ -1,0 +1,572 @@
+{
+  "$id": "https://mibao.local/schemas/inventory-report-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "nonnegative_integer": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "nullable_string": {
+      "type": ["string", "null"]
+    },
+    "string": {
+      "type": "string"
+    },
+    "string_array": {
+      "items": {"type": "string"},
+      "type": "array"
+    },
+    "anomaly": {
+      "additionalProperties": false,
+      "properties": {
+        "action_zh": {"$ref": "#/$defs/string"},
+        "anomaly_id": {"$ref": "#/$defs/string"},
+        "code": {"$ref": "#/$defs/string"},
+        "relative_path": {"$ref": "#/$defs/string"},
+        "severity": {"enum": ["warning"]},
+        "source_root_id": {"$ref": "#/$defs/string"},
+        "subject_id": {"$ref": "#/$defs/string"},
+        "subject_type": {"enum": ["asset", "file_instance", "source_root"]},
+        "summary_zh": {"$ref": "#/$defs/string"}
+      },
+      "required": [
+        "anomaly_id",
+        "code",
+        "severity",
+        "subject_type",
+        "subject_id",
+        "source_root_id",
+        "relative_path",
+        "summary_zh",
+        "action_zh"
+      ],
+      "type": "object"
+    },
+    "asset": {
+      "additionalProperties": false,
+      "properties": {
+        "anomaly_codes": {"$ref": "#/$defs/string_array"},
+        "asset_id": {"pattern": "^AST-[0-9a-f]{64}$", "type": "string"},
+        "byte_size": {"$ref": "#/$defs/nonnegative_integer"},
+        "capture_time_ms": {"type": ["integer", "null"], "minimum": 0},
+        "changed_instance_count": {"$ref": "#/$defs/nonnegative_integer"},
+        "created_at": {"format": "date-time", "type": "string"},
+        "file_instance_count": {"$ref": "#/$defs/nonnegative_integer"},
+        "format_assurance": {
+          "enum": ["content_bound_header_probe", "unknown_or_unbound"]
+        },
+        "format_id": {"$ref": "#/$defs/nullable_string"},
+        "format_media_kind": {"$ref": "#/$defs/nullable_string"},
+        "format_mime": {"$ref": "#/$defs/nullable_string"},
+        "media_kind": {"enum": ["video", "audio", "image", "document", "other"]},
+        "missing_instance_count": {"$ref": "#/$defs/nonnegative_integer"},
+        "present_instance_count": {"$ref": "#/$defs/nonnegative_integer"},
+        "sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+        "state": {"enum": ["active", "missing", "quarantined"]},
+        "updated_at": {"format": "date-time", "type": "string"}
+      },
+      "required": [
+        "asset_id",
+        "sha256",
+        "media_kind",
+        "byte_size",
+        "capture_time_ms",
+        "state",
+        "created_at",
+        "updated_at",
+        "format_id",
+        "format_mime",
+        "format_media_kind",
+        "format_assurance",
+        "file_instance_count",
+        "present_instance_count",
+        "missing_instance_count",
+        "changed_instance_count",
+        "anomaly_codes"
+      ],
+      "type": "object"
+    },
+    "duplicate_group": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "duplicate_assurance": {"const": "strict_full_verified_as_of_token"}
+            }
+          },
+          "then": {
+            "properties": {
+              "duplicate_scope": {"const": "strict_as_of_token"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "duplicate_assurance": {"const": "historical_last_full_verified_only"}
+            }
+          },
+          "then": {
+            "properties": {
+              "duplicate_scope": {"const": "historical_candidate"}
+            }
+          }
+        }
+      ],
+      "properties": {
+        "asset_id": {"pattern": "^AST-[0-9a-f]{64}$", "type": "string"},
+        "duplicate_assurance": {
+          "enum": [
+            "strict_full_verified_as_of_token",
+            "historical_last_full_verified_only"
+          ]
+        },
+        "duplicate_scope": {"enum": ["strict_as_of_token", "historical_candidate"]},
+        "extra_copy_count": {"$ref": "#/$defs/nonnegative_integer"},
+        "member_count": {"minimum": 2, "type": "integer"},
+        "potential_reclaimable_bytes": {"const": 0},
+        "sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"}
+      },
+      "required": [
+        "duplicate_scope",
+        "duplicate_assurance",
+        "asset_id",
+        "sha256",
+        "member_count",
+        "extra_copy_count",
+        "potential_reclaimable_bytes"
+      ],
+      "type": "object"
+    },
+    "duplicate_member": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {"pattern": "^AST-[0-9a-f]{64}$", "type": "string"},
+        "file_instance_id": {"pattern": "^FIL-[0-9a-f]{64}$", "type": "string"},
+        "file_size": {"$ref": "#/$defs/nonnegative_integer"},
+        "modified_time_ms": {"$ref": "#/$defs/nonnegative_integer"},
+        "relative_path": {"$ref": "#/$defs/string"},
+        "source_root_id": {"$ref": "#/$defs/string"}
+      },
+      "required": [
+        "asset_id",
+        "file_instance_id",
+        "source_root_id",
+        "relative_path",
+        "file_size",
+        "modified_time_ms"
+      ],
+      "type": "object"
+    },
+    "file_instance": {
+      "additionalProperties": false,
+      "properties": {
+        "anomaly_codes": {"$ref": "#/$defs/string_array"},
+        "asset_id": {"pattern": "^AST-[0-9a-f]{64}$", "type": "string"},
+        "asset_media_kind": {"enum": ["video", "audio", "image", "document", "other"]},
+        "asset_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+        "asset_state": {"enum": ["active", "missing", "quarantined"]},
+        "file_instance_id": {"pattern": "^FIL-[0-9a-f]{64}$", "type": "string"},
+        "file_size": {"$ref": "#/$defs/nonnegative_integer"},
+        "file_state": {"enum": ["present", "missing", "changed"]},
+        "hash_validation_mode": {"$ref": "#/$defs/nullable_string"},
+        "metadata_production_verified": {"type": "boolean"},
+        "metadata_surface": {"$ref": "#/$defs/nullable_string"},
+        "modified_time_ms": {"$ref": "#/$defs/nonnegative_integer"},
+        "observation_state": {"$ref": "#/$defs/nullable_string"},
+        "observed_format_id": {"$ref": "#/$defs/nullable_string"},
+        "operation_id": {"type": "string"},
+        "operation_status": {
+          "enum": ["queued", "running", "succeeded", "failed", "cancelled", "interrupted"]
+        },
+        "probe_status": {"$ref": "#/$defs/nullable_string"},
+        "relative_path": {"$ref": "#/$defs/string"},
+        "source_root_id": {"$ref": "#/$defs/string"},
+        "source_state": {"enum": ["active", "offline", "removed"]}
+      },
+      "required": [
+        "operation_id",
+        "operation_status",
+        "file_instance_id",
+        "asset_id",
+        "source_root_id",
+        "relative_path",
+        "file_size",
+        "modified_time_ms",
+        "file_state",
+        "asset_sha256",
+        "asset_media_kind",
+        "asset_state",
+        "source_state",
+        "observed_format_id",
+        "probe_status",
+        "observation_state",
+        "metadata_surface",
+        "metadata_production_verified",
+        "hash_validation_mode",
+        "anomaly_codes"
+      ],
+      "type": "object"
+    },
+    "format_summary": {
+      "additionalProperties": false,
+      "properties": {
+        "active_asset_count": {"$ref": "#/$defs/nonnegative_integer"},
+        "asset_count": {"$ref": "#/$defs/nonnegative_integer"},
+        "format_assurance": {
+          "enum": ["content_bound_header_probe", "unknown_or_unbound"]
+        },
+        "format_id": {"type": "string"},
+        "media_kind": {"type": "string"},
+        "mime_type": {"type": "string"},
+        "physical_present_bytes": {"$ref": "#/$defs/nonnegative_integer"},
+        "present_file_instance_count": {"$ref": "#/$defs/nonnegative_integer"},
+        "unique_asset_bytes": {"$ref": "#/$defs/nonnegative_integer"}
+      },
+      "required": [
+        "format_assurance",
+        "format_id",
+        "mime_type",
+        "media_kind",
+        "asset_count",
+        "active_asset_count",
+        "present_file_instance_count",
+        "physical_present_bytes",
+        "unique_asset_bytes"
+      ],
+      "type": "object"
+    },
+    "inventory_counts": {
+      "additionalProperties": false,
+      "properties": {
+        "anomaly_count": {"$ref": "#/$defs/nonnegative_integer"},
+        "asset_active": {"$ref": "#/$defs/nonnegative_integer"},
+        "asset_missing": {"$ref": "#/$defs/nonnegative_integer"},
+        "asset_quarantined": {"$ref": "#/$defs/nonnegative_integer"},
+        "asset_total": {"$ref": "#/$defs/nonnegative_integer"},
+        "exact_relation_rows": {"const": 0},
+        "file_changed": {"$ref": "#/$defs/nonnegative_integer"},
+        "file_missing": {"$ref": "#/$defs/nonnegative_integer"},
+        "file_present": {"$ref": "#/$defs/nonnegative_integer"},
+        "file_total": {"$ref": "#/$defs/nonnegative_integer"},
+        "physical_present_bytes": {"$ref": "#/$defs/nonnegative_integer"},
+        "unique_asset_bytes": {"$ref": "#/$defs/nonnegative_integer"}
+      },
+      "required": [
+        "asset_total",
+        "asset_active",
+        "asset_missing",
+        "asset_quarantined",
+        "file_total",
+        "file_present",
+        "file_missing",
+        "file_changed",
+        "unique_asset_bytes",
+        "physical_present_bytes",
+        "exact_relation_rows",
+        "anomaly_count"
+      ],
+      "type": "object"
+    },
+    "reconciliation": {
+      "additionalProperties": false,
+      "properties": {
+        "anomalyCsvDataRows": {"$ref": "#/$defs/nonnegative_integer"},
+        "anomalyResidual": {"const": 0},
+        "assetCsvDataRows": {"$ref": "#/$defs/nonnegative_integer"},
+        "assetResidual": {"const": 0},
+        "databaseAssetCount": {"$ref": "#/$defs/nonnegative_integer"},
+        "databaseFileInstanceCount": {"$ref": "#/$defs/nonnegative_integer"},
+        "duplicateCsvDataRows": {"$ref": "#/$defs/nonnegative_integer"},
+        "duplicateGroupResidual": {"const": 0},
+        "duplicateMemberResidual": {"const": 0},
+        "fileInstanceCsvDataRows": {"$ref": "#/$defs/nonnegative_integer"},
+        "fileInstanceResidual": {"const": 0},
+        "formatAssetResidual": {"const": 0},
+        "formatCsvDataRows": {"$ref": "#/$defs/nonnegative_integer"},
+        "formatPhysicalBytesResidual": {"const": 0},
+        "formatPresentFileResidual": {"const": 0},
+        "formatSummaryResidual": {"const": 0},
+        "jsonlAnomalyRecords": {"$ref": "#/$defs/nonnegative_integer"},
+        "jsonlAssetRecords": {"$ref": "#/$defs/nonnegative_integer"},
+        "jsonlDuplicateGroupRecords": {"$ref": "#/$defs/nonnegative_integer"},
+        "jsonlDuplicateMemberRecords": {"$ref": "#/$defs/nonnegative_integer"},
+        "jsonlExpectedRecordCount": {"$ref": "#/$defs/nonnegative_integer"},
+        "jsonlFileInstanceRecords": {"$ref": "#/$defs/nonnegative_integer"},
+        "jsonlFormatSummaryRecords": {"$ref": "#/$defs/nonnegative_integer"},
+        "jsonlRecordCount": {"$ref": "#/$defs/nonnegative_integer"},
+        "jsonlRecordResidual": {"const": 0},
+        "passed": {"const": true}
+      },
+      "required": [
+        "databaseAssetCount",
+        "databaseFileInstanceCount",
+        "assetCsvDataRows",
+        "fileInstanceCsvDataRows",
+        "formatCsvDataRows",
+        "duplicateCsvDataRows",
+        "anomalyCsvDataRows",
+        "jsonlAssetRecords",
+        "jsonlFileInstanceRecords",
+        "jsonlFormatSummaryRecords",
+        "jsonlDuplicateGroupRecords",
+        "jsonlDuplicateMemberRecords",
+        "jsonlAnomalyRecords",
+        "jsonlRecordCount",
+        "jsonlExpectedRecordCount",
+        "assetResidual",
+        "fileInstanceResidual",
+        "formatAssetResidual",
+        "formatPresentFileResidual",
+        "formatPhysicalBytesResidual",
+        "formatSummaryResidual",
+        "duplicateGroupResidual",
+        "duplicateMemberResidual",
+        "anomalyResidual",
+        "jsonlRecordResidual",
+        "passed"
+      ],
+      "type": "object"
+    },
+    "report_header": {
+      "additionalProperties": false,
+      "properties": {
+        "duplicate_assurance": {
+          "enum": [
+            "strict_full_verified_as_of_token",
+            "historical_last_full_verified_only"
+          ]
+        },
+        "generator_version": {"const": "mibao-inventory-report-v2"}
+      },
+      "required": [
+        "generator_version",
+        "duplicate_assurance"
+      ],
+      "type": "object"
+    },
+    "report_summary": {
+      "additionalProperties": false,
+      "properties": {
+        "counts": {"$ref": "#/$defs/inventory_counts"},
+        "duplicate_assurance": {
+          "enum": [
+            "strict_full_verified_as_of_token",
+            "historical_last_full_verified_only"
+          ]
+        },
+        "reconciliation": {"$ref": "#/$defs/reconciliation"}
+      },
+      "required": [
+        "counts",
+        "reconciliation",
+        "duplicate_assurance"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/report_header"
+        },
+        {
+          "$ref": "#/$defs/asset"
+        },
+        {
+          "$ref": "#/$defs/file_instance"
+        },
+        {
+          "$ref": "#/$defs/format_summary"
+        },
+        {
+          "$ref": "#/$defs/duplicate_group"
+        },
+        {
+          "$ref": "#/$defs/duplicate_member"
+        },
+        {
+          "$ref": "#/$defs/anomaly"
+        },
+        {
+          "$ref": "#/$defs/report_summary"
+        }
+      ]
+    },
+    "project_id": {
+      "pattern": "^MB-[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "record_type": {
+      "enum": [
+        "report_header",
+        "asset",
+        "file_instance",
+        "format_summary",
+        "duplicate_group",
+        "duplicate_member",
+        "anomaly",
+        "report_summary"
+      ]
+    },
+    "report_id": {
+      "pattern": "^RPT-[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "2.0"
+    },
+    "sequence": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "report_header"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/report_header"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "asset"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/asset"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "file_instance"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/file_instance"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "format_summary"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/format_summary"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "duplicate_group"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/duplicate_group"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "duplicate_member"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/duplicate_member"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "anomaly"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/anomaly"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_type": {
+            "const": "report_summary"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "#/$defs/report_summary"
+          }
+        }
+      }
+    }
+  ],
+  "required": [
+    "schema_version",
+    "report_id",
+    "project_id",
+    "snapshot_sha256",
+    "sequence",
+    "record_type",
+    "data"
+  ],
+  "title": "MIBAO inventory report JSONL record v2",
+  "type": "object"
+}

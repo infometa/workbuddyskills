@@ -1,6 +1,6 @@
 ---
 name: gongyi-open-mcp-skill
-description: 腾讯公益机构服务平台连接器技能 - 通过 MCP 查询当前机构的用户、机构信息、成员、项目、进展、财务披露与数据字典等机构侧业务数据
+description: 腾讯公益机构服务平台连接器：用自然语言连接并使用腾讯公益机构服务平台的功能。
 version: "1.0.0"
 author: "Tencent Charity"
 ---

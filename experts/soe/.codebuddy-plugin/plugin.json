@@ -1,6 +1,6 @@
 {
   "name": "soe",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "description": "Security Operations Expert",
   "author": {
     "name": "odaywang",
@@ -23,11 +23,11 @@
     "zh": "腾讯云安全运营专家"
   },
   "displayDescription": {
-    "en": "Security Operations Expert covering vulnerability management, alert triage (CWP/WAF/Yujie/Tianmu/SOC), intrusion analysis, DDoS traffic analysis, ransomware analysis, and asset management. Automatically routes requests to the right sub-skill and orchestrates multi-skill pipelines (L0 parsing -> L1 product analysis -> L2 cross-product correlation).",
-    "zh": "分析WAF/主机安全/云防火墙/SOC/御界/天幕的告警/事件等离线数据，含漏洞、攻击、溯源分析。"
+    "en": "Security Operations Expert covering vulnerability management, alert triage (CWP/WAF/Yujie/Tianmu/SOC), intrusion analysis, DDoS traffic analysis, ransomware analysis, asset management, and Tencent iOA zero-trust troubleshooting. Automatically routes requests to the right sub-skill and orchestrates multi-skill pipelines (L0 parsing -> L1 product analysis -> L2 cross-product correlation).",
+    "zh": "分析WAF、主机安全、云防火墙、SOC、御界、天幕告警事件，覆盖漏洞、攻击、入侵溯源与iOA排障。"
   },
   "avatar": "avatars/expert.png",
-  "categoryId": "11-SecurityCompliance",
+  "categoryId": "13-TencentZone",
   "defaultInitPrompt": {
     "zh": "解析这份漏洞扫描报告",
     "en": "Parse this vulnerability scan report"
@@ -53,12 +53,12 @@
       "zh": "解析这份漏洞扫描报告"
     },
     {
-      "en": "Analyze this WAF attack log",
-      "zh": "分析这份WAF攻击日志"
-    },
-    {
       "en": "Investigate suspicious intrusion on this host",
       "zh": "排查这台主机是否存在入侵痕迹"
+    },
+    {
+      "en": "iOA client logged in but cannot access intranet business systems. Help me troubleshoot.",
+      "zh": "iOA客户端登录成功了，但访问不了内网业务系统，帮我排查一下。"
     }
   ],
   "plugin": "soe"

@@ -1,6 +1,8 @@
 ---
 name: industry-chain
 description: 用于产业链映射，聚焦产业研究/主题投资/行业挖掘。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户输入一个行业趋势、技术方向、政策方向或事件，希望快速得到完整产业链结构、核心环节、最受益公司和映射逻辑。
+description_zh: "用于产业链映射，聚焦产业研究/主题投资/行业挖掘。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户输入一个行业趋势、技术方向、政策方向或事件，希望快速得到完整产业链结构、核心环节、最受益公司和映射逻辑。"
+description_en: "Use for value-chain mapping, focusing on industry research, thematic investing, and sector discovery. Primarily suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. Given an industry trend, technology direction, policy direction, or event, it quickly identifies the complete value-chain structure, key links, major beneficiaries, and mapping logic."
 ---
 
 # 产业链映射

@@ -1,6 +1,6 @@
 # auth — 认证管理
 
-当前推荐的认证路径是 **User Access Key（client-ak）**。
+Lovrabet CLI 只使用 User Access Key（client-ak）认证。
 
 ## auth login — 保存 accessKey
 
@@ -14,7 +14,7 @@ lovrabet auth login --global
 **行为**：
 - 默认写入全局配置 `~/.lovrabet.json`
 - 兼容场景可用 `--project` 写入当前目录本地配置；常规使用不需要
-- 交互模式下，不传 `--access-key` 会提示输入 AK，并提示先到 `https://user.lovrabet.com/user/ak` 自助创建
+- 交互模式下，不传 `--access-key` 会提示输入 AK，并给出当前 `userDomain` 下的 `/user/ak` 自助创建地址
 - `--non-interactive` 表示无打扰模式：不进入 stdin prompt；如果缺少 AccessKey，会立即提示创建链接和 `--access-key` 命令
 - `auth login` 不支持 `--yes`；`--yes` 只用于高风险写操作的确认跳过
 - 也可以直接显式传入：`lovrabet auth login --access-key <ACCESS_KEY>`
@@ -27,34 +27,16 @@ lovrabet auth login --global
 
 **推荐顺序**：
 
-1. Agent 先执行 `lovrabet auth login --non-interactive`，把提示里的 `https://user.lovrabet.com/user/ak` 发给用户
+1. Agent 先执行 `lovrabet auth login --non-interactive`，把命令根据当前 `userDomain` 返回的创建地址发给用户
 2. 用户创建或复制 AccessKey，并提供给 Agent
 3. Agent 执行 `lovrabet auth login --access-key <ACCESS_KEY>`
 4. 再执行 `lovrabet auth info`，确认当前 AK 对应的是预期用户
 
-## auth init — 清空并重建当前作用域认证配置
+## 配置节点与认证的边界
 
-```bash
-lovrabet auth init --access-key <ACCESS_KEY>
-lovrabet auth init --access-key <ACCESS_KEY> --env daily
-```
-
-**行为**：
-- 会清空当前作用域下已有的整份 `.lovrabet.json` 配置内容，再仅写回新的认证初始化结果
-- 默认写入全局配置 `~/.lovrabet.json`
-- 兼容场景可用 `--project` 写入当前目录本地配置；常规使用不需要
-- 支持 `--env`，会和新的 `accessKey` 一起写入
-
-**风险提醒**：
-- 这是破坏性操作
-- 当前作用域下已有的 `defaultApp`、`format`、`pageSize`、域名覆盖等字段都会被清掉
-- 如果只是想换 AK，不要用 `auth init`，优先用 `auth login`
-
-## 什么时候用 login，什么时候用 init
-
-- **保留现有配置，只更新认证**：`lovrabet auth login`
-- **当前作用域配置已经混乱，想彻底重来**：`lovrabet auth init`
-- **需要同时清空旧配置并重建 env**：`lovrabet auth init --access-key <ACCESS_KEY> --env daily`
+- 首次使用先执行 `lovrabet config init` 配置官方节点或独立部署 Domain
+- `auth login` 只保存 AccessKey，不接受 region 或 Domain 参数，也不会清除其他配置
+- 后续切换节点继续使用 `config init --region <region>`；精确调整使用 `config set/delete`
 
 ## auth logout — 清除本地 accessKey
 
@@ -124,11 +106,7 @@ CLI flag (--access-key)
 - `lovrabet app list` 可以直接查询当前 AK 在平台上的应用目录
 - 结果会缓存在 `~/.lovrabet/cache/<env>/<ak-fingerprint>/my-apps.json`
 
-`auth login` / `auth init` 本身都不会主动把应用目录写进 `.lovrabet.json`。
-
-## Cookie
-
-Cookie 仍保留历史兼容读取，但不再是推荐主路径。新的 Agent 指导和用户文档应默认使用 AK 流程。
+`auth login` 本身不会主动把应用目录写进 `.lovrabet.json`。
 
 ## 参考
 

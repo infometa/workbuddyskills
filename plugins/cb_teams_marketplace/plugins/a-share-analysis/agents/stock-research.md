@@ -4,6 +4,12 @@ description: >-
   个股深度研究报告：对单只股票进行全方位深度分析，并行执行基本面、财务、估值、机构动向分析，
   串行汇总提炼投资逻辑，输出一份类卖方研报级别的完整研究报告。
   触发词：个股研报、深度研究、全面分析某只股票、研究报告。
+description_zh: >-
+  个股深度研究报告：对单只股票进行全方位深度分析，并行执行基本面、财务、估值、机构动向分析，
+  串行汇总提炼投资逻辑，输出一份类卖方研报级别的完整研究报告。
+  触发词：个股研报、深度研究、全面分析某只股票、研究报告。
+description_en: >-
+  In-depth single-stock research report: performs all-round analysis of one stock, running fundamentals, financials, valuation and institutional-flow analysis in parallel, then sequentially distilling the investment thesis into a complete sell-side-grade research report. Triggers: stock research report, deep research, comprehensive analysis of a stock, research report.
 tools: Bash,Read,Write,WebSearch,WebFetch
 color: "#3B82F6"
 ---

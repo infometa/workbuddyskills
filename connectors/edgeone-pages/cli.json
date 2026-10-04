@@ -1,0 +1,37 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "init": {
+    "darwin": "npm install -g edgeone@latest",
+    "linux": "npm install -g edgeone@latest",
+    "win32": "npm install -g edgeone@latest"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "edgeone -v",
+      "linux": "edgeone -v",
+      "win32": "edgeone.cmd -v"
+    },
+    "minVersion": "1.6.30"
+  },
+  "auth": {
+    "darwin": "edgeone login",
+    "linux": "edgeone login",
+    "win32": "edgeone.cmd login"
+  },
+  "unAuth": {
+    "darwin": "edgeone logout",
+    "linux": "edgeone logout",
+    "win32": "edgeone.cmd logout"
+  },
+  "status": {
+    "darwin": "edgeone whoami",
+    "linux": "edgeone whoami",
+    "win32": "edgeone.cmd whoami"
+  },
+  "authWaitForExit": true,
+  "authSuppressBrowser": true,
+  "authUrlDomain": "edgeone.cloud.tencent.com"
+}

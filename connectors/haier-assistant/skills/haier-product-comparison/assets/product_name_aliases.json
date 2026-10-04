@@ -1,0 +1,95 @@
+{
+  "_note": "产品名（product_name / 产品型号名）别名映射。用途：把用户口语说法还原成下游可识别的产品名，填入 query_product_comparison 的 productNames。**不是在售清单**——不得据此向用户声称某型号在售或可对比；下游查不到就按 3001/3002 话术处理。映射里没有的按 fallback_pattern 识别；识别不到就追问完整型号，不编造。",
+
+  "aliases": {
+    "XQG120-BLE7AD3U1": {"brand": "海尔", "common": "云溪5.0 D3", "triggers": ["云溪5.0", "云溪5.0 D3", "云溪5.0 D3滚筒洗衣机", "云溪5.0 D3单洗版", "云溪5.0 D3 12kg单洗", "云溪5.0 D3 AD3U1", "云溪5.0 D3极夜灰单洗", "云溪5.0 D3直驱洗衣机", "云溪5.0 D3高配单洗", "云溪5.0 D3不带烘干", "云溪5.0 D3纯洗衣机"]},
+    "XQG120-BLE7AD3WU1": {"brand": "海尔", "common": "云溪5.0 D3+白色", "triggers": ["云溪5.0 D3冰雪白单洗", "云溪5.0 D3白色单洗版", "云溪5.0 D3 WU1单洗", "云溪5.0 D3白雪色洗衣机", "云溪5.0 D3白色高配单洗", "云溪5.0 D3纯白单洗", "云溪5.0 D3白色直驱洗衣机", "云溪5.0 D3白色不带烘干"]},
+    "XQG120-HBLE7AD3U1": {"brand": "海尔", "common": "云溪5.0 D3+12kg+洗烘", "triggers": ["云溪5.0 D3 12kg洗烘一体机", "云溪5.0 D3 HBLE版", "云溪5.0 D3十二公斤洗烘一体", "云溪5.0 D3洗烘一体高配版", "云溪5.0 D3一体机12kg", "云溪5.0 D3 HBLE7AD3U1", "云溪5.0 D3洗烘一体极夜灰", "云溪5.0 D3带烘干12kg"]},
+    "XQG100-HBLE7AD3U1": {"brand": "海尔", "common": "云溪5.0 D3+10kg+洗烘", "triggers": ["云溪5.0 D3 10kg洗烘一体机", "云溪5.0 D3十公斤洗烘一体", "云溪5.0 D3小容量洗烘一体", "云溪5.0 D3 HBLE 10kg", "云溪5.0 D3洗烘一体机10kg", "云溪5.0 D3带烘干10kg", "云溪5.0 D3一体机十公斤", "云溪5.0 D3洗烘一体入门版"]},
+    "XQG100-HBLEG582HU1": {"brand": "海尔", "common": "云溪4.0+洗烘", "triggers": ["云溪4.0", "云溪4.0洗烘一体机", "云溪4.0 10kg洗烘一体", "云溪4.0 HBLEG582", "云溪4.0洗烘一体经典款", "云溪4.0 G582洗烘一体", "云溪4.0洗烘一体机极夜灰", "云溪4.0带烘干10kg", "云溪4.0一体机基础版", "云溪4.0洗烘一体标准版"]},
+    "XQG120-BLEU582HU1": {"brand": "海尔", "common": "云溪4.0+12kg", "triggers": ["云溪4.0 Max 12kg单洗", "云溪4.0 Max单洗版", "云溪4.0 BLEU582单洗", "云溪4.0 U582单洗", "云溪4.0 Max 12kg洗衣机", "云溪4.0大容量单洗", "云溪4.0 Max不带烘干", "云溪4.0初色系列12kg单洗", "云溪4.0 Max直驱单洗", "云溪4.0十二公斤纯洗衣机"]},
+    "XQG100-BLEG75DWU1": {"brand": "海尔", "common": "云溪4.0pro", "triggers": ["云溪4.0 Pro单洗版", "云溪4.0 Pro 10kg单洗", "云溪4.0 Pro G75单洗", "云溪4.0 Pro DWU1单洗", "云溪4.0 Pro冰雪白单洗", "云溪4.0 Pro白色单洗", "云溪4.0 Pro不带烘干", "云溪4.0 Pro纯洗衣机", "云溪4.0 Pro智慧柔烘单洗", "云溪4.0 Pro直驱单洗10kg"]},
+    "XQG100-PBLEG75NU1": {"brand": "海尔", "common": "云溪4.0pro+洗烘", "triggers": ["云溪4.0 Pro洗烘一体机", "云溪4.0 Pro PBL版", "云溪4.0 Pro 10kg洗烘一体", "云溪4.0 Pro PBLEG75NU1", "云溪4.0 Pro洗烘一体冰雪白", "云溪4.0 Pro带烘干10kg", "云溪4.0 Pro一体机白色", "云溪4.0 Pro洗烘一体高配", "云溪4.0 Pro一体机PBL版", "云溪4.0 Pro洗烘一体智慧版"]},
+    "XQG100-BLE77EU1": {"brand": "海尔", "common": "海尔云溪77e+洗脱一体", "triggers": ["云溪77E", "海尔云溪77E洗烘一体机", "云溪77E洗脱一体", "云溪77E 12kg洗烘一体", "云溪77E BLE版", "云溪77E EU1", "云溪77E洗烘一体极夜灰", "云溪77E带烘干12kg", "云溪77E一体机", "云溪77E洗烘一体升级版", "云溪4.0升级款77E洗烘一体", "云溪77E双擎热泵洗烘一体"]},
+    "XQG100-BLE78E": {"brand": "海尔", "common": "海尔云溪78e+洗脱一体", "triggers": ["云溪78E", "海尔云溪78E洗烘一体机", "云溪78E洗脱一体", "云溪78E 12kg洗烘一体", "云溪78E BLE版", "云溪78E EU1", "云溪78E洗烘一体极夜灰", "云溪78E带烘干12kg", "云溪78E一体机", "云溪78E洗烘一体高配版", "云溪4.0升级款78E洗烘一体", "云溪78E双擎热泵洗烘一体"]},
+    "XQG100-BE35DH": {"category": "洗衣机", "common": "海尔小红花35dh", "triggers": ["小红花35dh"]},
+    "XQG130-HLD58E1": {"category": "洗衣机", "common": "海尔小红花58e", "triggers": ["小红花58e"]},
+    "BCD-502WGHTDEDG7U1": {"category": "冰箱", "common": "海尔小红花502", "triggers": ["小红花502"]},
+    "BCD-546WGHTDEDS9U1": {"category": "冰箱", "common": "海尔小红花546", "triggers": ["小红花546"]},
+    "BCD-476WGHTDEDXM": {"category": "冰箱", "common": "海尔小红花476", "triggers": ["小红花476"]},
+    "BCD-456WGHTDEDB7U1": {"category": "冰箱", "common": "海尔小红花456", "triggers": ["小红花456"]},
+    "BCD-501WGHTDCDXMU1": {"category": "冰箱", "common": "海尔小红花501", "triggers": ["小红花501"]},
+    "BCD-490WGLTDD9G9U1": {"category": "冰箱", "common": "海尔小红花490", "triggers": ["小红花490"]},
+    "LTD-575WDS9U1": {"category": "冰箱", "common": "海尔小红花550", "triggers": ["小红花550"]},
+    "HRF-H50JFEDU1": {"category": "冰箱", "common": "海尔小红花503", "triggers": ["小红花503"]},
+    "C72-TAU1": {"category": "烤箱", "common": "海尔小红花c72", "triggers": ["小红花c72"]},
+    "BCD-512WGHMD1BWLU1": {"category": "冰箱", "common": "麦浪512", "triggers": ["麦浪512"]},
+    "BCD-560WGHTD1BWLU1": {"category": "冰箱", "common": "麦浪560", "triggers": ["麦浪560"]},
+    "BCD-507WGHTD1BWLU1": {"category": "冰箱", "common": "麦浪507", "triggers": ["麦浪507"]},
+    "BCD-510WGHFD1BNXU1": {"category": "冰箱", "common": "麦浪510", "triggers": ["麦浪510"]},
+    "BCD-570WGHTD1BYUU1": {"category": "冰箱", "common": "麦浪570", "triggers": ["麦浪570"]},
+    "BCD-573WGHTD1BYAU1": {"category": "冰箱", "common": "麦浪573", "triggers": ["麦浪573"]},
+    "BCD-575WGHMD1BYUU1": {"category": "冰箱", "common": "麦浪575", "triggers": ["麦浪575"]},
+    "BCD-578WGHFD1BYAU1": {"category": "冰箱", "common": "麦浪578", "triggers": ["麦浪578", "麦浪9系"]},
+    "XQGL 125-MBE785WU1": {"category": "洗衣机", "common": "海尔三桶", "triggers": ["海尔三桶", "懒人三筒", "统帅三桶", "Leader三桶"]},
+    "CS HB14LWGLDU1": {"category": "洗衣机", "common": "卡萨帝双子", "triggers": ["卡萨帝双子", "卡萨帝揽光+洗衣机", "卡萨帝揽光双子"]},
+    "CE B10LWGLDU1,CG S10TGGLDU1": {"category": "洗衣机", "common": "卡萨帝揽光+洗衣机+分体", "triggers": ["卡萨帝揽光+洗衣机+分体", "揽光洗烘套装", "揽光洗烘套装10kg"]},
+    "BCD-548WGCFDMQL8U1": {"category": "冰箱", "common": "卡萨帝揽光548", "triggers": ["揽光548"]},
+    "BCD-538WGCTDMQL8U1": {"category": "冰箱", "common": "卡萨帝揽光538", "triggers": ["揽光538"]},
+    "BCD-520WGCFDM4G6U1": {"category": "冰箱", "common": "卡萨帝揽光520", "triggers": ["揽光520"]},
+    "BCD-560WGCFDA4GUU1": {"category": "冰箱", "common": "卡萨帝揽光560", "triggers": ["揽光560"]},
+    "BCD-610WGCTDM4D9U1": {"category": "冰箱", "common": "卡萨帝致境610", "triggers": ["致境610"]},
+    "BCD-620WGCFDM4L8U1": {"category": "冰箱", "common": "卡萨帝致境620", "triggers": ["致境620"]},
+    "CXW-358-CDQ5UD": {"category": "吸排油烟机", "common": "卡萨帝致境q5", "triggers": ["致境q5"]},
+    "CXW-358-C9Q90EGUD": {"category": "吸排油烟机", "common": "卡萨帝致境q7", "triggers": ["致境q7"]},
+    "CAS3525C30(81)U1": {"category": "挂机", "common": "卡萨帝星悦c30", "triggers": ["星悦c30"]},
+    "CAS3531F20T(81)U1": {"category": "挂机", "common": "卡萨帝星悦f20", "triggers": ["星悦f20"]},
+    "BCD-502WGHFDC4FBU1": {"category": "冰箱", "common": "海尔山茶花502", "triggers": ["山茶花502"]},
+    "BCD-550WGHFDBCFSU1": {"category": "冰箱", "common": "海尔山茶花550", "triggers": ["山茶花550", "山茶花pro550"]},
+    "BCD-485WGHFD1BWLU1": {"category": "冰箱", "common": "海尔山茶花485", "triggers": ["山茶花485"]},
+    "BCD-501WGHTDC4FSU1": {"category": "冰箱", "common": "海尔山茶花501", "triggers": ["山茶花501"]},
+    "BCD-502WGHFDGCFSU1": {"category": "冰箱", "common": "海尔山茶花2pro", "triggers": ["山茶花2pro", "山茶花机皇2.0pro", "山茶花2.0pro"]},
+    "HRF-B55XTBCU1": {"category": "冰箱", "common": "海尔山茶花551", "triggers": ["山茶花551", "山茶花机皇2.0max", "山茶花2.0max", "山茶花2max"]},
+    "JSQ30-16JM6PRODPMCU1": {"brand": "海尔", "common": "海尔星光jm6pro", "triggers": ["海尔水伺服JM6PRO", "海尔星光16JM6PRO", "海尔星光JM6PRO燃气热水器"]},
+    "JSQ30-16JM6SDU1": {"brand": "海尔", "common": "海尔星光jm6s", "triggers": ["海尔星光JM6S", "海尔星光16JM6S燃气热水器"]},
+    "JSQ30-16SN6DPMGU1": {"brand": "海尔", "common": "海尔小蓝瓶燃气热水器+冰雪银", "triggers": ["海尔小蓝瓶燃气热水器冰雪银", "海尔16升小蓝瓶燃气热水器"]},
+    "BCD-601WGCTDA4CBU1(AI)": {"brand": "卡萨帝", "common": "卡萨帝鉴赏家冰箱+601L", "triggers": ["卡萨帝601ai鉴赏家十字冰箱", "卡萨帝601鉴赏家观穹灰", "卡萨帝鉴赏家冰箱"]},
+    "BCD-600WGCFDA4CBU1": {"brand": "卡萨帝", "common": "卡萨帝鉴赏家冰箱+600L", "triggers": ["卡萨帝600升法式冰箱", "卡萨帝600鉴赏家观穹灰", "卡萨帝鉴赏家冰箱600L"]},
+    "BCD-580WGCTDA4H7U1": {"brand": "卡萨帝", "common": "卡萨帝鉴赏家冰箱+580L", "triggers": ["卡萨帝鉴赏家冰箱580L", "卡萨帝580升鉴赏家冰箱"]},
+    "JSQ31-16CWS(12)U1": {"brand": "卡萨帝", "common": "卡萨帝鉴赏家燃气热水器", "triggers": ["卡萨帝鉴赏家燃气热水器", "卡萨帝16升鉴赏家热水器"]},
+    "CAS5018ZDA(81)VU1": {"brand": "卡萨帝", "common": "卡萨帝鉴赏家空调", "triggers": ["卡萨帝鉴赏家空调", "卡萨帝鉴赏家系列空调"]},
+    "CXW-258-QZS3UD": {"brand": "卡萨帝", "common": "卡萨帝油烟机cxw258", "triggers": ["卡萨帝油烟机cxw258", "卡萨帝星云油烟机"]},
+    "CAS5016BAB(81)U1": {"brand": "卡萨帝", "common": "卡萨帝星云90", "triggers": ["卡萨帝星云50BAB", "卡萨帝星云90"]},
+    "CWY16-S46HGU1": {"brand": "卡萨帝", "common": "卡萨帝星云H20pro", "triggers": ["卡萨帝星云洗碗机", "卡萨帝星云H20pro", "卡萨帝16套星云H20pro", "卡萨帝星云H20pro曜石黑"]}
+  },
+
+  "matching_rules": [
+    "先按 triggers 做最长匹配还原为键（产品名），再传给工具；同一别名命中多个键时（如「卡萨帝鉴赏家冰箱」）追问用户具体是哪一款，不要随意取一个。",
+    "还原出的产品名原样传给工具，不改写、不补全、不纠正拼写。",
+    "映射表只解决「口语说法 → 产品名」，不代表该型号在售或可对比；下游查不到按 3001/3002 话术处理。"
+  ],
+
+  "fallback_pattern": {
+    "_note": "上表未收录时的型号形态识别规则。只用于把用户说出的型号原样摘出来，不做改写、不补全、不纠正拼写。",
+    "start": "以大写字母或数字开头",
+    "charset": "大写字母、数字、特殊符号（- / （） () 空格）、中文",
+    "length": "4-60",
+    "notes": [
+      "半角与全角括号都可能出现",
+      "中间可能存在空格",
+      "结尾可能为中文（一体机、套机 等）"
+    ],
+    "examples": [
+      "CXW-358-EC779UD", "HWY22-FZ696YXU1", "DD60SHTI9 CNC", "WY22-DFZ67GHU1(V6Pro)",
+      "WZK-V1-U1（白）", "JJZT-JE9C3(12T)", "KFR-35GW/Z8A", "CAS3539F50(81)VU1",
+      "ZKC-20/51ZBC201(JH6)一体机", "BZ16251898101", "ZKC-20/51ZBB904（S700）",
+      "KFR-72LW/E30AUD29FA10-A", "TX25F9K-T(时尚型-G2)", "HA-500H1Q(CT08)",
+      "JSLW27-16CF10UltraU1", "Q-B-J-1-155/2.25/0.05-D/T6PRO", "BCD-549WGHFD1BAGU1",
+      "BCD-625WGHTD1BBVU1(EX)"
+    ],
+    "guardrails": [
+      "不得把品类词、套系名、品牌名当作产品名（「冰箱」「致境」「卡萨帝」本身不是产品名）",
+      "不得为凑够 2 个产品而编造或从记忆外补充产品名；识别不到就走场景1 追问"
+    ]
+  }
+}

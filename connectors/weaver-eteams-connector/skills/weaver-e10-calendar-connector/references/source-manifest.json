@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 2,
+  "module": "calendar",
+  "skill": "weaver-e10-calendar-connector",
+  "generatedAt": "2026-09-08",
+  "sourceSet": {
+    "aggregateSha256": "2120af4a51488aa4c29bfe0efafb6017b5b4f46f92c8c5c35f2a9e96a2e60f28",
+    "sourceRoots": ["H:/日程SKILL包/weaver-e10-calendar-connector"],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": ["src/shortcuts/calendar", "src/shortcuts/index.ts"],
+    "skill": ["skills/weaver-e10-calendar-connector"],
+    "tests": ["test/business/calendar-*.test.ts"],
+    "docs": ["docs/calendar.md", "skill-template/domains/calendar.md"]
+  },
+  "sources": [
+    { "path": "SKILL.md", "role": "existing-skill", "size": 12914, "sha256": "57c18643d5db7ffc2d8051832d0687d61368d9ac7415a3bc8b48a3c6af99a9d2" },
+    { "path": "references/catalog.md", "role": "api-doc", "size": 3835, "sha256": "d00f89c65b1cda6c957368bede0644906a4bbd92e4b9aeaa99cb132c2d716032" },
+    { "path": "references/calendar-create-save.md", "role": "api-doc", "size": 9696, "sha256": "26a1009e631832a29a15035afa99675ca77b474bf04b28948ba00ce32821834f" },
+    { "path": "references/calendar-delete-delete.md", "role": "api-doc", "size": 4008, "sha256": "04deda7c3f0074d18695d1a46f75b40d70ffb073eab79fdbe7ce3ac33e9c6f31" },
+    { "path": "references/calendar-list-esb.md", "role": "api-doc", "size": 8535, "sha256": "5c2b022455afac7776a8915a0d7b25c05cfd32206bcc6506d05ea4607cd370be" },
+    { "path": "references/calendar-priority-query.md", "role": "api-doc", "size": 4801, "sha256": "2578d6731e497a45a6f1a67ef29b59afea3dfda422bef6eaaf0caad03970de01" },
+    { "path": "references/calendar-query-count.md", "role": "api-doc", "size": 2763, "sha256": "f898f0bb4a6a85a2015e94af48ddef53f416e597da524d41349f3fdafc149079" },
+    { "path": "references/calendar-query-get.md", "role": "api-doc", "size": 9354, "sha256": "7f9babaa26b23e77f9d8c4e4714318ef323c4ae817c0ba4e265004cdf6ad83ae" },
+    { "path": "references/calendar-type-query.md", "role": "api-doc", "size": 5404, "sha256": "4696c2e981e349e04a49840b47cb55e5440c391e3167efdda1a7e1b44c638858" },
+    { "path": "references/calendar-update-update.md", "role": "api-doc", "size": 8899, "sha256": "c3ca3c98be1779bfeda67d2e1041a703b9ea14bc525e0af6d6c835fee382bdc2" }
+  ],
+  "sourceChunks": [
+    { "id": "POST /api/ebuilder/form/formdata/v2/saveFormData/createAgenda", "sourcePath": "references/calendar-create-save.md", "anchor": "创建日程", "mapsToOperations": ["calendar.create.prepare", "calendar.create.apply"], "mapsToReferences": ["references/calendar-write.md"] },
+    { "id": "POST /api/ebuilder/form/formdata/v2/getFormDataByPk/queryAgenda", "sourcePath": "references/calendar-query-get.md", "anchor": "查询日程", "mapsToOperations": ["calendar.get"], "mapsToReferences": ["references/calendar-query.md"] },
+    { "id": "POST /api/ebuilder/form/formdata/v2/getFormDataCount/queryAgendaCount", "sourcePath": "references/calendar-query-count.md", "anchor": "查询日程总数", "mapsToOperations": ["calendar.count"], "mapsToReferences": ["references/calendar-query.md"] },
+    { "id": "POST /api/ebuilder/form/formdata/v2/updateFormData/updateAgenda", "sourcePath": "references/calendar-update-update.md", "anchor": "更新日程", "mapsToOperations": ["calendar.update.prepare", "calendar.update.apply"], "mapsToReferences": ["references/calendar-write.md"] },
+    { "id": "POST /api/ebuilder/form/formdata/v2/deleteFormData/deleteAgenda", "sourcePath": "references/calendar-delete-delete.md", "anchor": "删除日程", "mapsToOperations": ["calendar.delete.prepare", "calendar.delete.apply"], "mapsToReferences": ["references/calendar-write.md"] },
+    { "id": "POST /api/ebuilder/form/formdata/v2/getFormDataList/queryAgendaPriority", "sourcePath": "references/calendar-priority-query.md", "anchor": "查询日程紧急程度", "mapsToOperations": ["calendar.priority.list"], "mapsToReferences": ["references/calendar-dict.md"] },
+    { "id": "POST /api/ebuilder/form/formdata/v2/getFormDataList/queryAgendaType", "sourcePath": "references/calendar-type-query.md", "anchor": "查询日程类型", "mapsToOperations": ["calendar.type.list"], "mapsToReferences": ["references/calendar-dict.md"] },
+    { "id": "POST /api/esb/server/event/triggerActionFlow", "sourcePath": "references/calendar-list-esb.md", "anchor": "查询日程列表", "mapsToOperations": ["calendar.list"], "mapsToReferences": ["references/calendar-query.md"] }
+  ],
+  "operationImpact": {
+    "calendar.list": { "sourceChunkIds": ["POST /api/esb/server/event/triggerActionFlow"], "schemaFields": ["start_time", "end_time", "keywork", "page_no", "page_size"], "references": ["references/calendar-query.md"], "tests": ["test/business/calendar-*.test.ts"], "risk": "read", "requiresConfirmationChain": false },
+    "calendar.get": { "sourceChunkIds": ["POST /api/ebuilder/form/formdata/v2/getFormDataByPk/queryAgenda"], "schemaFields": ["id"], "references": ["references/calendar-query.md"], "tests": ["test/business/calendar-*.test.ts"], "risk": "read", "requiresConfirmationChain": false },
+    "calendar.count": { "sourceChunkIds": ["POST /api/ebuilder/form/formdata/v2/getFormDataCount/queryAgendaCount"], "schemaFields": [], "references": ["references/calendar-query.md"], "tests": ["test/business/calendar-*.test.ts"], "risk": "read", "requiresConfirmationChain": false },
+    "calendar.priority.list": { "sourceChunkIds": ["POST /api/ebuilder/form/formdata/v2/getFormDataList/queryAgendaPriority"], "schemaFields": ["priority_name", "pageNo", "pageSize"], "references": ["references/calendar-dict.md"], "tests": ["test/business/calendar-*.test.ts"], "risk": "read", "requiresConfirmationChain": false },
+    "calendar.type.list": { "sourceChunkIds": ["POST /api/ebuilder/form/formdata/v2/getFormDataList/queryAgendaType"], "schemaFields": ["type_name", "pageNo", "pageSize"], "references": ["references/calendar-dict.md"], "tests": ["test/business/calendar-*.test.ts"], "risk": "read", "requiresConfirmationChain": false },
+    "calendar.create.prepare": { "sourceChunkIds": ["POST /api/ebuilder/form/formdata/v2/saveFormData/createAgenda"], "schemaFields": ["agn_name", "start_time", "end_time", "participants", "agn_type", "priority"], "references": ["references/calendar-write.md"], "tests": ["test/business/calendar-*.test.ts"], "risk": "write-confirmed", "requiresConfirmationChain": true },
+    "calendar.update.prepare": { "sourceChunkIds": ["POST /api/ebuilder/form/formdata/v2/updateFormData/updateAgenda"], "schemaFields": ["id", "agn_name", "start_time", "end_time", "participants", "agn_type", "priority"], "references": ["references/calendar-write.md"], "tests": ["test/business/calendar-*.test.ts"], "risk": "write-confirmed", "requiresConfirmationChain": true },
+    "calendar.delete.prepare": { "sourceChunkIds": ["POST /api/ebuilder/form/formdata/v2/deleteFormData/deleteAgenda"], "schemaFields": ["id"], "references": ["references/calendar-write.md"], "tests": ["test/business/calendar-*.test.ts"], "risk": "write-confirmed", "requiresConfirmationChain": true }
+  },
+  "notes": [
+    "源资料为纯文档型 skill（无脚本），请求体构造依据各单接口文档的请求示例。",
+    "只记录源资料指纹与转换摘要，不保存 Cookie、Token 或大段源正文。",
+    "版本检测（calendar.app.check）与详情卡片页链接依赖 getAppIds/querySpAppVersionInfo/getObjsByTag 三步 GET，源资料未提供完整响应示例，字段解析按描述实现，需实测确认。"
+  ]
+}

@@ -3,6 +3,11 @@ name: market-analyst
 description: >-
   市场技术分析师：分析股票价格走势与技术指标，输出 [市场技术分析报告]。
   在 Phase 1 数据收集阶段由 orchestrator 并行调用。
+description_zh: >-
+  市场技术分析师：分析股票价格走势与技术指标，输出 [市场技术分析报告]。
+  在 Phase 1 数据收集阶段由 orchestrator 并行调用。
+description_en: >-
+  Market technical analyst: analyzes stock price action and technical indicators, outputting a [market technical analysis report]. Invoked in parallel by the orchestrator during Phase 1 data collection.
 tools: Bash,Read
 color: "#2563EB"
 ---

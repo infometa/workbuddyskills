@@ -34,8 +34,8 @@ description: 生成HR数仓StarRocks查询SQL。覆盖员工信息/人员异动/
 - 单表字段：resource `starrocks://tables/{table_code}` → 获取 `columns` 数组（含 `column_code`/`column_name`/`column_alias`/`column_type`/`column_use`/`column_group`/`sample`/`group_by_able`/`aggregate_type`）
 
 **术语知识**：
-- 术语清单：resource `starrocks://slangs` → 获取所有HR业务术语名称及同义词列表，用于识别用户问题中涉及的术语
-- 术语定义查询：工具 `slang_query`，输入术语名称或同义词 → 返回匹配术语的完整定义（含术语名称、定义、分类、同义词）
+- 术语清单：mcp resource `starrocks://slangs` → 获取所有HR业务术语名称及同义词列表，用于识别用户问题中涉及的术语
+- 术语定义查询：mcp tool `slang_query`，输入术语名称或同义词 → 返回匹配术语的完整定义（含术语名称、定义、分类、同义词）
 
 ### 选表策略
 
@@ -49,9 +49,9 @@ description: 生成HR数仓StarRocks查询SQL。覆盖员工信息/人员异动/
 ### Step 1：术语识别与需求分析
 
 1. **术语识别**（MCP优先，本地降级）：
-   1. 从MCP resource `starrocks://slangs` 获取术语清单（含术语名称和同义词）
-   2. 结合用户问题，推测哪些术语与用户意图相关（匹配关键词、简称、同义词）
-   3. 使用MCP工具 `slang_query` 查询相关术语的完整定义，补充业务知识以准确理解用户意图
+   1.1 从MCP resource `starrocks://slangs` 获取术语清单（含术语名称和同义词）
+   1.2 结合用户问题，推测哪些术语与用户意图相关（匹配关键词、简称、同义词）
+   1.3 使用MCP工具 `slang_query` 查询相关术语的完整定义，补充业务知识以准确理解用户意图
 2. 确定：查询目标（统计/明细/趋势/对比/分布）、数据范围（组织/时间/人群）、分析维度
 3. 根据选表策略，从MCP resources获取目标表字段定义
 4. **反向升级检查**：判断本次查询是否属于「比率/占比/均值/上级组织对比类」统计问题（如占比、比例、率、均值、人均、向上对比等），且尚未尝试 `indicator-query`。若是，应提示用户该类统计更适合走预置指标（结果更准确、执行更高效），建议切换到 `indicator-query`；若用户明确要求走 SQL、或该查询已确认无匹配指标，则继续本 Skill 后续步骤，不强制阻塞。

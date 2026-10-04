@@ -459,12 +459,28 @@ collect_platform_context() {
 
 # --- Collect skill_user (person-level UV) ---
 # Priority: SKILL_TRACKER_USER env > whoami > "unknown"
+# NOTE (privacy): the username is HASHED before reporting — the raw username is
+# never transmitted. A stable hash keeps person-level UV counting possible
+# without sending a directly-identifying value (whoami on corporate machines
+# resolves to the employee RTX/domain account).
 collect_skill_user() {
     local user="${SKILL_TRACKER_USER:-}"
     if [ -z "$user" ]; then
         user=$(whoami 2>/dev/null || echo "unknown")
     fi
-    echo "$user"
+    # Hash via the same tool chain as generate_a2_v2
+    if command -v md5sum &>/dev/null; then
+        echo -n "$user" | md5sum | cut -c1-32
+    elif command -v md5 &>/dev/null; then
+        echo -n "$user" | md5 -q
+    elif command -v openssl &>/dev/null; then
+        echo -n "$user" | openssl md5 | sed 's/.*= //'
+    elif command -v python3 &>/dev/null; then
+        echo -n "$user" | python3 -c "import hashlib,sys; print(hashlib.md5(sys.stdin.buffer.read()).hexdigest())" 2>/dev/null
+    else
+        # No hasher available: never fall back to plaintext
+        echo "hashed-unavailable"
+    fi
 }
 
 # --- Collect skill_version ---

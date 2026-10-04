@@ -24,6 +24,14 @@ The feeds table's partition field is `comment_time`, with `require_partition_fil
 - Aggregate queries only
 - For high-volume games (>30K/day), shorten the time window
 
+### 2b. Cost iron law — clustering + single text column (verified 2026-08-13)
+The feeds table is ~2.3 TB, MONTH-partitioned on `comment_time` and **clustered on `unified_edition_id`**. Two cutting layers, both mandatory when the game is known:
+- **Layer 1 — time range** (partition pruning): always required (see rule 1).
+- **Layer 2 — game UID** (cluster pruning): **when the game is known, ALWAYS filter by `unified_edition_id`**. At runtime this cuts the scan a further 100–200x (measured: a link/URL query 6.45 GB → 0.03 GB; a KOL-ranking query 1.21 GB → 0.01 GB).
+  - ⚠️ **Dry-run does NOT reveal cluster savings** (it estimates *higher* and is misleading). Judge cost by actual `total_bytes_billed`, not dry-run.
+- **Read a single text column** per query. Never `COALESCE(content_to_zh, content)` — that double-reads two heavy text columns. Pick one (`content_to_zh` for zh-normalized, `content` for raw).
+- When pulling replies under a post, add a **loose lower bound** on `comment_time` (e.g. start − 3 days) but **do not cap the upper bound** — replies are ingested later than the post, so an upper cap drops recent comments. Missing the lower bound = full-month scan of the comment text column.
+
 ### 3. Dual-field keyword search
 | Keyword language | Search fields | Reason |
 |------------------|---------------|--------|
@@ -51,8 +59,13 @@ The feeds table's partition field is `comment_time`, with `require_partition_fil
 - KPI definition: positive = `sentiment_rating >= 4`, negative = `sentiment_rating < 2`
 
 ### Post hierarchy
-- `comment_parent_id = '-1'`: root post / discussion starter
-- `comment_parent_id != '-1'`: reply
+- `comment_parent_id = '-1'` (or NULL): root post / discussion starter
+- `comment_parent_id != '-1'`: a reply; its value equals the `comment_id` of the post it replies to → self-join `comment_parent_id ↔ comment_id` to build the comment tree (post → audience replies).
+
+### Author / geography fields (corrected 2026-08-13)
+- `reviewer` = **author nickname, ~100% populated**. Use it for KOL/author aggregation and to attribute quotes. (Earlier notes wrongly claimed "no author field" — that was a search miss.)
+- `follower_number` = author follower count (use `MAX`, never `SUM`, to avoid accumulation across rows).
+- `language` / `country` columns exist. ⚠️ **`country='global'` is a NO-GEO fallback bucket** (Discord/YouTube/Twitter etc. often can't resolve the poster's location), NOT a real region. Never rank `global` as the #1 territory — split it out and label it "no geo info"; compute real country shares over the geo-resolvable rows only.
 
 ### High-discussion post detection
 - After LEFT JOIN is empty + URL does not contain `/threads/` → a Discord channel; label it "discussion area"

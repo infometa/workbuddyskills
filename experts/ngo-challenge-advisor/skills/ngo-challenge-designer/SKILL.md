@@ -127,7 +127,7 @@ Generate 2–3 problem-oriented titles. Let the NGO select one, enter its own ti
 Present a clean brief containing:
 - title;
 - issuing organization (`organization_name`, with `organization_intro` when provided);
-- primary track and track tags;
+- theme (主題分類) and auto_tags (描述性標籤);
 - current situation and pain point;
 - current handling method;
 - desired outcome;
@@ -150,7 +150,7 @@ Only an explicit `確認提交審批` moves the state to `ready_to_sync`. It mus
 
 Immediately after `確認提交審批`:
 
-1. Assemble the challenge JSON exactly per `references/challenge-schema.md`: `schema_version: "1.0"`, `id: null`, `conversation_state.status: "ready_to_sync"`, `conversation_state.explicit_confirmation: true`. Put only non-primary related tags in `track_tags` (use `[]` when none). Generate a new non-empty `confirmed_snapshot_id` such as `snapshot-` plus a random short ID; reuse that same ID only when retrying the identical confirmed brief.
+1. Assemble the challenge JSON exactly per `references/challenge-schema.md`: `schema_version: "1.2"`, `id: null`, `conversation_state.status: "ready_to_sync"`, `conversation_state.explicit_confirmation: true`. Map the primary track to `publishable.theme` (one of: 文書撰寫, 數據整理, 知識查找, 流程管理, 其他). Generate 2–4 descriptive `auto_tags` (short phrases describing what the challenge involves, e.g. "每月例行", "報表生成", "數據匯總"; NOT fixed category names). Generate a new non-empty `confirmed_snapshot_id` such as `snapshot-` plus a random short ID; reuse that same ID only when retrying the identical confirmed brief.
 2. Validate it with `scripts/validate_challenge.py` and fix every reported error.
 3. Save only the structured JSON to a temporary file and execute the bundled `scripts/submit_challenge.py` with that file. This calls the public review-submission endpoint; it does not use an admin token and cannot publish a challenge.
 4. If the response is successful, do not print the full JSON unless the NGO asks for it. Close in Traditional Chinese with:

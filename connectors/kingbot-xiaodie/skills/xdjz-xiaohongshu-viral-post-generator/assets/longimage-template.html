@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小红书笔记三方案预览 · {{PRODUCT_NAME}}</title>
+<style>
+  :root{
+    --bg:            #F7F6F3;
+    --surface:       #FFFFFF;
+    --surface-alt:   #FBFAF8;
+    --border:        #E8E5DF;
+    --border-strong: #D6D1C8;
+    --text:          #23201C;
+    --text-2:        #5F594F;
+    --text-3:        #918A7E;
+    --accent:        #C8543F;
+    --accent-soft:   #FBEBE7;
+    --ok:            #3F7A54;
+    --ok-soft:       #E7F1EA;
+    --warn:          #A8730F;
+    --warn-soft:     #FBF1DC;
+    --radius:        14px;
+    --shadow:        0 1px 2px rgba(35,32,28,.04), 0 8px 24px rgba(35,32,28,.06);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:32px 24px 64px;
+    background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1220px;margin:0 auto;}
+
+  /* ---------- header ---------- */
+  .page-head{margin-bottom:24px;}
+  .eyebrow{font-size:12px;letter-spacing:.14em;color:var(--text-3);text-transform:uppercase;margin-bottom:8px;}
+  h1{font-size:26px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em;}
+  .sub{font-size:13px;color:var(--text-2);margin:0;}
+  .meta-line{font-size:12px;color:var(--text-3);margin-top:10px;}
+
+  /* ---------- generic card ---------- */
+  .card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;margin-bottom:20px;
+  }
+  .card-title{font-size:14px;font-weight:600;margin:0 0 14px;display:flex;align-items:center;gap:8px;}
+  .card-title::before{content:"";width:3px;height:14px;background:var(--accent);border-radius:2px;}
+
+  /* ---------- fact table ---------- */
+  .facts{width:100%;border-collapse:collapse;font-size:13px;}
+  .facts th,.facts td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top;}
+  .facts th{background:var(--surface-alt);font-weight:600;width:120px;color:var(--text-2);white-space:nowrap;}
+  .facts td b{font-variant-numeric:tabular-nums;}
+  .tag{
+    display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;
+    background:var(--accent-soft);color:var(--accent);font-weight:600;
+  }
+  .tag.ok{background:var(--ok-soft);color:var(--ok);}
+  .tag.warn{background:var(--warn-soft);color:var(--warn);}
+
+  /* ---------- compare table ---------- */
+  .cmp{width:100%;border-collapse:collapse;font-size:13px;}
+  .cmp th,.cmp td{border:1px solid var(--border);padding:11px 12px;text-align:left;vertical-align:top;}
+  .cmp thead th{background:var(--surface-alt);font-weight:600;}
+  .cmp .rowhead{background:var(--surface-alt);font-weight:600;color:var(--text-2);width:96px;white-space:nowrap;}
+
+  /* ---------- plan grid ---------- */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px;}
+  @media (max-width:1080px){ .plans{grid-template-columns:1fr;} }
+  .plan{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;
+  }
+  .plan-head{padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface-alt);}
+  .plan-no{font-size:11px;letter-spacing:.12em;color:var(--text-3);font-weight:600;}
+  .plan-name{font-size:16px;font-weight:700;margin-top:3px;}
+  .plan-hook{font-size:12px;color:var(--text-2);margin-top:4px;}
+
+  /* ---------- phone cover ---------- */
+  .cover{
+    position:relative;width:100%;aspect-ratio:3/4;background:#EDEAE4;overflow:hidden;
+  }
+  .cover img{width:100%;height:100%;object-fit:cover;display:block;}
+  .cover .overlay{
+    position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:22px 20px 26px;gap:10px;
+    background:linear-gradient(to top,rgba(0,0,0,.52) 0%,rgba(0,0,0,.12) 45%,transparent 72%);
+  }
+  .cover .hookline{
+    color:#fff;font-size:clamp(20px,2.4vw,29px);font-weight:800;line-height:1.25;
+    letter-spacing:-.01em;text-shadow:0 1px 12px rgba(0,0,0,.28);
+  }
+  .cover .sticker{
+    align-self:flex-start;background:rgba(255,255,255,.94);color:#C8543F;
+    font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;
+  }
+  .cover-fallback{
+    width:100%;aspect-ratio:3/4;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:22px 20px 26px;gap:10px;background:linear-gradient(150deg,#F5E6DA 0%,#E8C9B0 100%);
+  }
+  .cover-fallback .hookline{color:#3B2A1E;font-size:clamp(20px,2.4vw,29px);font-weight:800;line-height:1.25;}
+  .cover-fallback .sticker{align-self:flex-start;background:#fff;color:#C8543F;font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;}
+
+  /* ---------- plan body ---------- */
+  .plan-body{padding:16px 18px 20px;display:flex;flex-direction:column;gap:14px;flex:1;}
+  .field-label{font-size:11px;letter-spacing:.1em;color:var(--text-3);font-weight:700;margin-bottom:5px;}
+  .headline{
+    font-size:17px;font-weight:700;line-height:1.4;color:var(--text);
+  }
+  .title-count{font-size:11px;color:var(--text-3);font-weight:600;margin-left:6px;}
+  .copy{
+    font-size:13px;line-height:1.85;color:var(--text-2);white-space:pre-line;
+  }
+  .hashtags{display:flex;flex-wrap:wrap;gap:6px;}
+  .hashtag{font-size:11px;color:#7A4A8C;background:#F4EEF7;padding:3px 9px;border-radius:6px;}
+  .cart{background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;padding:11px 13px;font-size:12px;line-height:1.9;}
+  .cart-note{font-size:12px;color:var(--text-3);margin:12px 2px 0;line-height:1.8;}
+  .cart-note b{color:var(--text-2);font-variant-numeric:tabular-nums;}
+  .cart-item{display:flex;justify-content:space-between;gap:10px;}
+  .cart-item span:last-child{color:var(--text-3);white-space:nowrap;}
+  .cart-role{
+    display:inline-block;min-width:52px;text-align:center;font-size:10px;font-weight:700;
+    padding:1px 6px;border-radius:4px;margin-right:6px;
+  }
+  .role-main{background:var(--accent-soft);color:var(--accent);}
+  .role-match{background:#EAF0F7;color:#2E5C8A;}
+
+  .plan-foot{
+    margin-top:auto;padding:11px 18px;border-top:1px solid var(--border);
+    font-size:12px;color:var(--text-2);background:var(--surface-alt);
+  }
+  .checkbox{display:inline-flex;align-items:center;gap:7px;font-weight:600;}
+  .checkbox i{
+    width:14px;height:14px;border:1.5px solid var(--border-strong);border-radius:4px;display:inline-block;
+  }
+
+  /* ---------- notes ---------- */
+  .notes{font-size:12px;line-height:1.9;color:var(--text-2);}
+  .notes ul{margin:0;padding-left:18px;}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .card,.plan{box-shadow:none;page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="page-head">
+    <div class="eyebrow">XIAOHONGSHU · 三方案预览</div>
+    <h1>{{PRODUCT_NAME}} · 小红书笔记三方案</h1>
+    <p class="sub">每张卡片即一条完整笔记：封面 / 标题 / 正文 / 话题 / 挂车，截图即可发布。</p>
+    <p class="meta-line">商品信息由用户提供 · 生成于 {{GEN_TIME}}</p>
+  </div>
+
+  <!-- 商品信息 -->
+  <div class="card">
+    <h2 class="card-title">商品信息</h2>
+    <table class="facts">
+      <tr><th>商品</th><td><b>{{PRODUCT_NAME}}</b> ｜ {{PRODUCT_SPEC}}</td></tr>
+      <tr><th>售价</th><td>¥{{PRICE}}</td></tr>
+      <tr><th>核心卖点</th><td>{{SELLING_POINTS}}</td></tr>
+      <tr><th>待确认</th><td>{{MISSING_FIELDS}}</td></tr>
+    </table>
+  </div>
+
+  <!-- 挂车推荐 -->
+  <div class="card">
+    <h2 class="card-title">挂车商品推荐</h2>
+    <table class="cmp">
+      <thead><tr><th style="width:88px">档位</th><th>商品</th><th style="width:120px">售价（参考区间）</th><th>为什么选它</th></tr></thead>
+      <tbody>
+        {{CART_ROWS}}
+      </tbody>
+    </table>
+    <p class="cart-note">{{CART_NOTE}}</p>
+  </div>
+
+  <!-- 三方案 -->
+  <div class="plans">
+
+    <!-- PLAN 1 -->
+    <div class="plan">
+      <div class="plan-head">
+        <div class="plan-no">方案 1</div>
+        <div class="plan-name">{{P1_NAME}}</div>
+        <div class="plan-hook">{{P1_HOOK}}</div>
+      </div>
+      {{P1_COVER}}
+      <div class="plan-body">
+        <div>
+          <div class="field-label">笔记标题</div>
+          <div class="headline">{{P1_TITLE}}<span class="title-count">{{P1_TITLE_LEN}} 字</span></div>
+        </div>
+        <div>
+          <div class="field-label">正文</div>
+          <div class="copy">{{P1_BODY}}</div>
+        </div>
+        <div>
+          <div class="field-label">话题标签</div>
+          <div class="hashtags">{{P1_TAGS}}</div>
+        </div>
+        <div>
+          <div class="field-label">挂车清单</div>
+          <div class="cart">{{P1_CART}}</div>
+        </div>
+      </div>
+      <div class="plan-foot"><span class="checkbox"><i></i>{{P1_FIT}}</span></div>
+    </div>
+
+    <!-- PLAN 2 -->
+    <div class="plan">
+      <div class="plan-head">
+        <div class="plan-no">方案 2</div>
+        <div class="plan-name">{{P2_NAME}}</div>
+        <div class="plan-hook">{{P2_HOOK}}</div>
+      </div>
+      {{P2_COVER}}
+      <div class="plan-body">
+        <div>
+          <div class="field-label">笔记标题</div>
+          <div class="headline">{{P2_TITLE}}<span class="title-count">{{P2_TITLE_LEN}} 字</span></div>
+        </div>
+        <div>
+          <div class="field-label">正文</div>
+          <div class="copy">{{P2_BODY}}</div>
+        </div>
+        <div>
+          <div class="field-label">话题标签</div>
+          <div class="hashtags">{{P2_TAGS}}</div>
+        </div>
+        <div>
+          <div class="field-label">挂车清单</div>
+          <div class="cart">{{P2_CART}}</div>
+        </div>
+      </div>
+      <div class="plan-foot"><span class="checkbox"><i></i>{{P2_FIT}}</span></div>
+    </div>
+
+    <!-- PLAN 3 -->
+    <div class="plan">
+      <div class="plan-head">
+        <div class="plan-no">方案 3</div>
+        <div class="plan-name">{{P3_NAME}}</div>
+        <div class="plan-hook">{{P3_HOOK}}</div>
+      </div>
+      {{P3_COVER}}
+      <div class="plan-body">
+        <div>
+          <div class="field-label">笔记标题</div>
+          <div class="headline">{{P3_TITLE}}<span class="title-count">{{P3_TITLE_LEN}} 字</span></div>
+        </div>
+        <div>
+          <div class="field-label">正文</div>
+          <div class="copy">{{P3_BODY}}</div>
+        </div>
+        <div>
+          <div class="field-label">话题标签</div>
+          <div class="hashtags">{{P3_TAGS}}</div>
+        </div>
+        <div>
+          <div class="field-label">挂车清单</div>
+          <div class="cart">{{P3_CART}}</div>
+        </div>
+      </div>
+      <div class="plan-foot"><span class="checkbox"><i></i>{{P3_FIT}}</span></div>
+    </div>
+
+  </div>
+
+  <!-- 对比 -->
+  <div class="card">
+    <h2 class="card-title">三方案对比</h2>
+    <table class="cmp">
+      <thead><tr><th class="rowhead"></th><th>{{P1_NAME}}</th><th>{{P2_NAME}}</th><th>{{P3_NAME}}</th></tr></thead>
+      <tbody>
+        <tr><td class="rowhead">封面主文案</td><td>{{P1_HOOLLINE}}</td><td>{{P2_HOOLLINE}}</td><td>{{P3_HOOLLINE}}</td></tr>
+        <tr><td class="rowhead">标题</td><td>{{P1_TITLE}}</td><td>{{P2_TITLE}}</td><td>{{P3_TITLE}}</td></tr>
+        <tr><td class="rowhead">核心钩子</td><td>{{P1_CORE}}</td><td>{{P2_CORE}}</td><td>{{P3_CORE}}</td></tr>
+        <tr><td class="rowhead">正文风格</td><td>{{P1_STYLE}}</td><td>{{P2_STYLE}}</td><td>{{P3_STYLE}}</td></tr>
+        <tr><td class="rowhead">挂车侧重</td><td>{{P1_FOCUS}}</td><td>{{P2_FOCUS}}</td><td>{{P3_FOCUS}}</td></tr>
+        <tr><td class="rowhead">适合场景</td><td>{{P1_FIT}}</td><td>{{P2_FIT}}</td><td>{{P3_FIT}}</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 合规 -->
+  <div class="card">
+    <h2 class="card-title">合规检查</h2>
+    <table class="facts">
+      <tr><th>标题字数</th><td>{{TITLE_LEN_REPORT}}</td></tr>
+      <tr><th>极限词扫描</th><td>{{WORD_SCAN}}</td></tr>
+      <tr><th>结论</th><td>{{COMPLIANCE_VERDICT}}</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">发布前确认</h2>
+    <div class="notes">
+      <ul>
+        <li>{{MISSING_NOTE}}</li>
+        <li>封面文案在图上为预览叠加效果，实际发布前建议导出图片二次确认文字清晰度。</li>
+        <li>正文中的价格需与实际挂车价一致，调价后请同步修改。</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

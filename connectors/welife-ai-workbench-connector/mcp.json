@@ -1,0 +1,20 @@
+{
+  "preAuth": "cli",
+  "mcpServers": {
+    "welife-ai-workbench-connector": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "-e",
+        "let c;Promise.resolve().then(()=>{const p=require('node:path');const e=process.env;const b=(e.WORKBUDDY_CONFIG_DIR||'').trim()||(e.CODEBUDDY_CONFIG_DIR||'').trim()||p.join(require('node:os').homedir(),'.workbuddy');const d=(e.WELIFE_CONNECTOR_DIR||'').trim()||p.join(b,'connectors-marketplace','connectors','welife-ai-workbench-connector');if(!p.isAbsolute(d))throw Error('invalid_root');c=require(p.join(d,'client.cjs'));return c.main(process.argv.slice(1));}).catch(e=>{process.stderr.write((c&&typeof c.safeMessage==='function'?c.safeMessage(e):'微生活连接组件未安装或路径无效，请重新安装连接器。')+'\\n');process.exitCode=1;});",
+        "--",
+        "mcp"
+      ],
+      "runtime": {
+        "type": "node",
+        "version": ">=20"
+      },
+      "timeout": 30000
+    }
+  }
+}

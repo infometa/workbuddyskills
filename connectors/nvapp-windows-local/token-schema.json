@@ -1,0 +1,19 @@
+{
+  "title": "连接本机 NVIDIA App",
+  "title_en": "Connect local NVIDIA App",
+  "description": "仅适用于已安装兼容 NVIDIA App 的 Windows 电脑。凭证由 WorkBuddy 保存在本机并注入本地进程，不经过云端。NVIDIA MCP 服务重启后，需更新会话令牌并重新连接。",
+  "description_en": "Requires a compatible NVIDIA App on Windows. WorkBuddy stores this credential locally and injects it into the local process, not via its cloud. Update the session token and reconnect after the NVIDIA MCP service restarts.",
+  "fields": [
+    {
+      "key": "NVAPP_MCP_TOKEN",
+      "label": "NVIDIA MCP 会话令牌",
+      "label_en": "NVIDIA MCP session token",
+      "type": "password",
+      "required": true,
+      "placeholder": "从本机受保护的 server.json 获取 token 字段；不要粘贴到聊天中",
+      "placeholder_en": "Use the token from your protected local server.json; do not paste it into chat",
+      "description": "位置：%LOCALAPPDATA%\\NVIDIA Corporation\\NVIDIA App\\McpServer\\server.json。需先在 NVIDIA App 中启用 AI Agents and App Connections。",
+      "description_en": "Location: %LOCALAPPDATA%\\NVIDIA Corporation\\NVIDIA App\\McpServer\\server.json. Enable AI Agents and App Connections in NVIDIA App first."
+    }
+  ]
+}

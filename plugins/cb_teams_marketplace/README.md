@@ -8,9 +8,8 @@ CodeBuddy Teams Marketplace - 团队协作、文档处理与开发工具插件�
 |--------|------|------|------|
 | **internal-comms** | 1.0.0 | 内部沟通文档编写工具（3P更新、通讯、FAQ等） | productivity |
 | **executing-marketing-campaigns** | 1.0.0 | 营销活动策划与执行（内容策略、社媒、邮件营销） | productivity |
-| **document-skills** | 1.0.0 | 文档处理套件（Excel、Word、PPT、PDF） | productivity |
+| **document-skills** | 1.0.0 | PDF 文档处理套件（读取、提取、表单、合并拆分） | productivity |
 | **general-skills** | 1.0.0 | 通用技能集合（文档转换、UI/UX设计、前端开发） | utility |
-| **data-analysis** | 1.0.0 | 数据分析插件（Excel表格创建、编辑、分析） | productivity |
 | **modern-webapp** | 1.0.0 | 现代Web应用开发（React、TypeScript、Vite、Tailwind） | development |
 | **ppt-implement** | 1.0.10 | 一键生成PPT（10种演示风格、丰富模板库） | productivity |
 | **deep-research** | 1.0.0 | 深度研究插件（网络调研、信息综合、微信文章检索） | research |
@@ -110,19 +109,16 @@ codebuddy plugin install internal-comms@cb-teams
 
 ### 📄 document-skills
 
-文档处理套件，支持主流办公文档格式的创建、编辑和分析。
+PDF 文档处理套件（Excel/Word/PPT 能力已由内置市场的 sheetagent / tencent-docx / tencent-pptx 提供）。
 
 **包含技能：**
 | 技能 | 功能 |
 |------|------|
-| **xlsx** | Excel 电子表格创建、编辑、公式、数据分析、可视化 |
-| **docx** | Word 文档创建、编辑、格式化、追踪修改、批注 |
-| **pptx** | PowerPoint 演示文稿创建和编辑 |
 | **pdf** | PDF 文档处理、表单填写、文本提取、表格提取 |
 
 **使用示例：**
 ```
-读取 data.xlsx 并生成一份销售报告的 PowerPoint
+提取这份 PDF 中的表格数据并填写表单
 ```
 
 ---
@@ -140,23 +136,6 @@ codebuddy plugin install internal-comms@cb-teams
 **使用示例：**
 ```
 将这个 PDF 转换为 Markdown 格式
-```
-
----
-
-### 📊 data-analysis
-
-数据分析插件，专注于 Excel 表格的创建、编辑和数据分析。
-
-**功能特性：**
-- Excel 电子表格创建和编辑
-- 公式和格式化支持
-- 数据分析和可视化
-- 图表生成
-
-**使用示例：**
-```
-分析这份销售数据，生成月度趋势图表
 ```
 
 ---
@@ -294,9 +273,8 @@ cb_teams_marketplace/
 ├── plugins/
 │   ├── internal-comms/            # 内部沟通插件
 │   ├── executing-marketing-campaigns/  # 营销活动插件
-│   ├── document-skills/           # 文档处理套件
+│   ├── document-skills/           # PDF 文档处理套件
 │   ├── general-skills/            # 通用技能集合
-│   ├── data-analysis/             # 数据分析插件
 │   ├── modern-webapp/             # 现代Web应用开发
 │   ├── ppt-implement/             # PPT生成插件
 │   ├── deep-research/             # 深度研究插件

@@ -1,0 +1,87 @@
+# 剧情（plot）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: plot
+name_cn: 剧情
+category: theme
+carrier: manga
+audience: both
+weight: low
+level: level-3
+severity: weak
+version: 6.0.0
+related_combo: references/domestic/combos/drama.md
+emotion_core:
+- 情节拉扯
+- 悬念感
+- 情感共鸣
+- 命运起伏
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 全受众通用
+  bg_desc: 全背景兼容
+  weight: low
+  bottom_line:
+  - 主线剧情连贯，逻辑闭环
+  - 人物行为符合动机，不服务剧情强行降智
+relations:
+  synergy:
+  - target: city
+    effect_type: 增强型
+    weight: high
+    effect: 都市背景强化现实感，剧情更易共情
+  - target: period
+    effect_type: 增强型
+    weight: medium
+    effect: 时代背景放大命运沉浮感，剧情更有厚度
+  - target: wealthy-clan
+    effect_type: 增强型
+    weight: medium
+    effect: 豪门恩怨丰富剧情冲突密度
+  - target: entertainment
+    effect_type: 增强型
+    weight: medium
+    effect: 行业背景为剧情提供天然冲突场景
+  mutex:
+  - target: 纯爽文无逻辑
+    reason: 无脑爽节奏与重剧情逻辑定位冲突
+combo_adapt:
+- combo: references/domestic/combos/drama.md
+  rule: 强化情节逻辑与人物动机，保证剧情闭环
+  sub: 强剧情型
+- combo: references/domestic/combos/emotional.md
+  rule: 情感线为核心，剧情服务情感拉扯
+  sub: 情感剧情型
+- combo: references/domestic/combos/suspense.md
+  rule: 悬疑线驱动剧情，层层揭秘
+  sub: 悬疑剧情型
+fusion:
+- recipe: fusion/recipes/family-ethics.md
+  note: 家庭伦理向剧情配方，受众广泛，适配下沉市场
+- recipe: fusion/recipes/emotional-tug.md
+  note: 情感拉扯型剧情配方，强虐点强共鸣，适配女频高粘性内容
+redlines:
+- code: AP-JQ01
+  name: 剧情逻辑断裂
+  severity: 高
+  dimension: 结构与节奏
+  test: 主线前后矛盾，情节推进全靠巧合
+- code: AP-JQ02
+  name: 人物行为工具化
+  severity: 高
+  dimension: 人物与人设
+  test: 角色强行降智/做不符合人设的事，只为推进剧情
+soft_warnings:
+- 避免剧情过于平淡，无起伏无转折
+- 避免支线过多，主线模糊
+- 避免结局强行圆满，不符合人物逻辑
+manga:
+  visual_signature: 情绪张力的分镜表达（特写/留白/蒙太奇）
+  high_affinity: false
+  visual_hooks:
+  - 情绪高潮的人物特写
+  - 命运转折的画面对比
+  - 真相揭露的蒙太奇剪辑

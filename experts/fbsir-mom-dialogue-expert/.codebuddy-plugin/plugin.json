@@ -1,0 +1,88 @@
+{
+  "name": "fbsir-mom-dialogue-expert",
+  "version": "26.8.27",
+  "description": "Mother-centered family materials organizer and story editor for mixed-media household archives, questions, timelines, privacy review, and editable manuscripts.",
+  "author": {
+    "name": "福帮手AI团队",
+    "email": "unique@u3w.com"
+  },
+  "license": "LicenseRef-FBSir-Evaluation-1.0",
+  "agents": ["./agents/fbsir-mom-dialogue-expert.md"],
+  "skills": ["./skills/mom-dialogue-core"],
+  "expertType": "agent",
+  "agentName": "fbsir-mom-dialogue-expert",
+  "displayName": {
+    "en": "FBSir",
+    "zh": "福帮手"
+  },
+  "profession": {
+    "en": "Mom Stories",
+    "zh": "妈妈问答"
+  },
+  "displayDescription": {
+    "en": "Organizes mother-centered family materials into source-linked stories, timelines, questions, and editable manuscripts.",
+    "zh": "整理与妈妈有关的照片、视频、录音、手稿和家庭资料，生成可追溯的故事卡、生活轨迹、追问与书稿。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "06-ContentCreative",
+  "defaultInitPrompt": {
+    "en": "Organize the family materials related to mothers in the current workspace. First inventory materials, identify people, relationships, and life trajectories, then create initial story cards, confirmation items, and follow-up questions.",
+    "zh": "整理当前工作区中与妈妈有关的生活资料，先盘点素材、识别人物关系和生活轨迹，再生成首批故事卡、待确认事项和下一步追问。"
+  },
+  "plugin": "fbsir-mom-dialogue-expert",
+  "tags": [
+    {"en": "Family Archive", "zh": "家庭资料整理"},
+    {"en": "Mothers' Stories", "zh": "妈妈故事"},
+    {"en": "Story Editing", "zh": "故事编纂"}
+  ],
+  "quickPrompts": [
+    {
+      "en": "Organize the family materials related to mothers in the current workspace. First inventory materials, identify people, relationships, and life trajectories, then create initial story cards, confirmation items, and follow-up questions.",
+      "zh": "整理当前工作区中与妈妈有关的生活资料，先盘点素材、识别人物关系和生活轨迹，再生成首批故事卡、待确认事项和下一步追问。"
+    },
+    {
+      "en": "Analyze these photos, videos, or recordings. Organize source-linked people, dialogue, events, timecodes, uncertainties, and questions for family confirmation.",
+      "zh": "分析这些照片、视频或录音，按来源整理人物、对话、事件、时间码、待确认事项和家人追问。"
+    },
+    {
+      "en": "Turn confirmed materials into a mother-centered life trajectory, outline, and one editable sample chapter while preserving family additions and source references.",
+      "zh": "把已确认资料编成妈妈主轴的生活轨迹、大纲和一章可编辑样稿，保留家人补充与来源索引。"
+    }
+  ],
+  "schemaVersion": "2.0",
+  "runtimeModes": ["archive_intake", "media_analysis", "question_design", "story_building", "manuscript_editing", "privacy_review", "project_resume"],
+  "workspaceWritePolicy": {
+    "scope": "project-directory-only",
+    "sourceFiles": "read-only",
+    "deletion": "proposal-only",
+    "rename": "preview-first"
+  },
+  "guardrails": {
+    "noExternalSkillDependency": true,
+    "noExternalSkillSearchInstallInvoke": true,
+    "noOtherExpertOrSubagentForFamilyData": true,
+    "noPrivateDataWebSearch": true,
+    "noFaceIdentityGuessing": true,
+    "noSilentPublication": true,
+    "sourceTraceabilityRequired": true,
+    "familyDataDefaultOffline": true,
+    "noConnectorDependency": true
+  },
+  "runtimeContract": {
+    "host": "WorkBuddy",
+    "coreFlowUsesHostCapabilities": ["file_read", "file_search", "file_write", "multimodal", "memory", "automation"],
+    "externalSkillDependency": false,
+    "connectorRequired": false,
+    "webSearch": "explicit-public-background-only"
+  },
+  "brand": {
+    "owner": "福帮手AI团队",
+    "avatarUsesProvidedLogo": true,
+    "logoRedrawn": false
+  },
+  "distributionSurface": {
+    "candidateState": "review_candidate",
+    "officialListing": "not_claimed",
+    "hostRegistration": "not_included"
+  }
+}

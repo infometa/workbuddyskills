@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/review-cycle.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "round", "maxRounds", "state", "issues", "humanReviewReceipts"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "round": { "type": "integer", "minimum": 1 },
+    "maxRounds": { "type": "integer", "minimum": 1 },
+    "state": { "enum": ["review", "revise", "verification_required", "passed", "max_round_reached", "human_review_pending", "human_review_required", "rejected"] },
+    "issues": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "severity", "resolved", "gateId"], "properties": { "id": { "type": "string" }, "severity": { "enum": ["note", "warning", "critical"] }, "resolved": { "type": "boolean" }, "gateId": { "type": "string" } } } },
+    "humanReviewReceipts": { "type": "array", "items": { "type": "string" } }
+  }
+}

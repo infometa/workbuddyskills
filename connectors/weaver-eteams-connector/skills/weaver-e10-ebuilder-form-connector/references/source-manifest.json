@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "generatedFrom": {
+    "path": "weaver-e10-ebuilder-form-connector",
+    "skill": "weaver-e10-ebuilder-form-connector",
+    "command": "ebuilder-form"
+  },
+  "sources": [
+    { "path": "SKILL.md", "sha256": "999172568786502cdd835a46a7f8905f11e12ab22f30c2b20c0fec7dfec1d5c9", "role": "existing-skill" },
+    { "path": "agents/openai.yaml", "sha256": "c64518022c780d6dc2ed615a03fe3ecade3fecfbc6132bd46061021a45437f58", "role": "requirement" },
+    { "path": "references/browser-fields.md", "sha256": "096002525c7719a5143e48b75e27cc51763ef013553998620ee8be0475d3b24e", "role": "api-doc" },
+    { "path": "references/catalog.md", "sha256": "bde8c90c4aa712b098716baa1010e9dbe6c7db69b5e6ed8dbd9de8e021b03499", "role": "api-doc" },
+    { "path": "references/cli.md", "sha256": "bd7c648a266b2378aecabf0923d47a21fd87c9f1d184ef4041416e95aa39e75f", "role": "api-doc" },
+    { "path": "references/deployment-routing.md", "sha256": "73b874f87c6de19027e812ffb5b3dddf9ed963ad75ddd675c0ec0d2d81a89197", "role": "api-doc" },
+    { "path": "references/ebuilder-customapi-formdata-add.md", "sha256": "dea6f1bddc7f544ad605a7aa0825f76882bf675f87228008fc4909b3b10c3390", "role": "api-doc" },
+    { "path": "references/ebuilder-customapi-formdata-count.md", "sha256": "097976303c0a97ce683d683d41b9bd7f33ae54e077d3a51b165778d889930a41", "role": "api-doc" },
+    { "path": "references/ebuilder-customapi-formdata-delete.md", "sha256": "a0a43bf2b8032dadb7c7db2abe82e092ecea2530989ca5591c9f9145908007f5", "role": "api-doc" },
+    { "path": "references/ebuilder-customapi-formdata-querybypk.md", "sha256": "1db36f3215908c48637814a99c6be58ef6968d58a5895b0154624c1905506f38", "role": "api-doc" },
+    { "path": "references/ebuilder-customapi-formdata-querypagedata.md", "sha256": "0c2ab32a1001fe73bc3984252207a4c60b411d77d244e3d9ea12e2db86893607", "role": "api-doc" },
+    { "path": "references/ebuilder-customapi-formdata-update.md", "sha256": "d132d8282099cb0067d824e4c89bbff97c131d1c7e392725f06ae79956821a82", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-common.md", "sha256": "4b5bb706583ad9a1ff1959b5e389906ce534ec8deeac4a97b20a5af135059b39", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-formdata-deletedata.md", "sha256": "3fed56e7247792753787df74ae6404c96c7bad56be4b325f4c79f8f61d9c33aa", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-formdata-getalldata.md", "sha256": "2b537026902c6eb9f56758f43fd904a5e96dc47d9a40eb1e6918bf0c084a4df3", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-formdata-getalldatacount.md", "sha256": "7a2ab547a8b0c142973ec2bd292b5e27956a4ab9816c0e5c0f85fb66ca39e49f", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-formdata-getdatabyid.md", "sha256": "5e000a15c9fbd3645f9fb61e6e076fc181c6f6bd07933c59a11be70d69226bb0", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-formdata-getfields.md", "sha256": "685b80d8334e0c27e41568a85bad5358f5996dbc336fb97b9e8fa4c092843039", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-formdata-getoptions.md", "sha256": "0f9543855762efad708b89d201234455b0d5ccba680c56a988164ebb849b0a68", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-formdata-gettablemapping.md", "sha256": "f26ab03139058968b0c2e04074399453c3faf4be6f996e9a267b1aab09926c01", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-formdata-saveformdata.md", "sha256": "9a743a4b3ff0dcde416626543e9f2f1b26f9100630d0897dc619aa32fbf94cce", "role": "api-doc" },
+    { "path": "references/ebuilder-openapi-formdata-updateformdata.md", "sha256": "18b2ebc58070f18893b82925a55b3a11596e1f12b80f4f26b9005f3d4a3d419e", "role": "api-doc" },
+    { "path": "references/list-pagination.md", "sha256": "1887fe99be73f1ddbe278daf4c89106c4d91414540bf03fc6355f669aa8533be", "role": "api-doc" },
+    { "path": "references/menu-listid-resolution.md", "sha256": "5e2970c5bb68998b345029cf16a5d661136e8a5a4a19c75680293def533eb2ba", "role": "api-doc" },
+    { "path": "references/menu-search.md", "sha256": "0f9565510ac4a024f1f527b643a4b846dfe456662afdd94a496d31dfd90bbf2d", "role": "api-doc" },
+    { "path": "references/nlist-config.md", "sha256": "597b3f88b4d8f3ce242766289fce30396158aa03fe779ba484b0d1b0f6afe92a", "role": "api-doc" },
+    { "path": "references/nlist-pagination.md", "sha256": "46360d753cd041f3db8cbd5d01ded465773855bd656519a253003a9ac0541592", "role": "api-doc" },
+    { "path": "references/routing.md", "sha256": "953a91e6ad074febdd6ccfc053838d0c686753f8edfcee4427395459c58e646b", "role": "api-doc" },
+    { "path": "references/runtime-routing.md", "sha256": "126cdc5a14ff31c7e26cb1356663ae0b5578a88bef0a96af788e88291b849e8e", "role": "api-doc" },
+    { "path": "references/session-and-routing.md", "sha256": "86b14140155c1026470d4fcc0a3070c0a0c8937adaa8890461a3a7de8cccc64e", "role": "api-doc" },
+    { "path": "references/table-config.md", "sha256": "489c1e9eeee3aa4e2b355833d55fba64bbd0c1beefccbe916da2ea7b60e42e0b", "role": "api-doc" },
+    { "path": "scripts/ebuilder_http.py", "sha256": "16c242d31a2ec61435182aaac8568d2f72877dc89352c00da1e269ceaf66a7a0", "role": "code" },
+    { "path": "scripts/form_data.py", "sha256": "ddd5f232e51c3967fb6bed165248483301bd1ae85576905d28325f01d642ecdd", "role": "code" },
+    { "path": "scripts/get_form_views.py", "sha256": "fd09b7b54b4f067a9f6a3b56765d59211fa5803b94389df802432818173fdbf5", "role": "code" },
+    { "path": "scripts/get_nlist_config.py", "sha256": "628bea6be2f786b9d27386ddc4caf1412bca3d2d55bc3ad4d4471d483570277a", "role": "code" },
+    { "path": "scripts/get_table_config.py", "sha256": "839e346596e22eefd0ad6d9d889c8d5aa67159a364a6fc6d272f14350cc09f2c", "role": "code" },
+    { "path": "scripts/query_browser_field.py", "sha256": "10ddf4cfff78e7f990eddab1eb24b842612fd214eaebd3d29c868f45c13a79fe", "role": "code" },
+    { "path": "scripts/query_list_data.py", "sha256": "70487ae1635104fcb0e54364a0c869612d3a6d05d62ed588e0e5395da0ff01c8", "role": "code" },
+    { "path": "scripts/query_nlist_data.py", "sha256": "b2eebc31f16ff26cd8465aa91d99ed22febaaecb9f9e87064393753246d4eaa3", "role": "code" }
+  ],
+  "sourceChunks": [
+    {
+      "id": "menu-search-and-context",
+      "sources": ["references/menu-search.md", "references/menu-listid-resolution.md", "references/deployment-routing.md", "references/runtime-routing.md", "references/session-and-routing.md", "scripts/form_data.py"],
+      "operations": ["ebuilder-form.menu.search", "ebuilder-form.context.resolve", "ebuilder-form.views.list"],
+      "references": ["context-routing.md"]
+    },
+    {
+      "id": "list-nlist-runtime",
+      "sources": ["references/table-config.md", "references/list-pagination.md", "references/nlist-config.md", "references/nlist-pagination.md", "scripts/get_table_config.py", "scripts/get_nlist_config.py", "scripts/query_list_data.py", "scripts/query_nlist_data.py"],
+      "operations": ["ebuilder-form.list.config", "ebuilder-form.list.query", "ebuilder-form.nlist.config", "ebuilder-form.nlist.query"],
+      "references": ["list-nlist.md"]
+    },
+    {
+      "id": "fields-options-browser",
+      "sources": ["references/browser-fields.md", "references/ebuilder-openapi-formdata-getfields.md", "references/ebuilder-openapi-formdata-getoptions.md", "references/ebuilder-openapi-formdata-gettablemapping.md", "scripts/query_browser_field.py"],
+      "operations": ["ebuilder-form.fields.get", "ebuilder-form.options.get", "ebuilder-form.mapping.get", "ebuilder-form.browser.resolve"],
+      "references": ["fields-browser.md"]
+    },
+    {
+      "id": "openapi-formdata",
+      "sources": ["references/ebuilder-openapi-common.md", "references/ebuilder-openapi-formdata-getdatabyid.md", "references/ebuilder-openapi-formdata-getalldata.md", "references/ebuilder-openapi-formdata-getalldatacount.md", "references/ebuilder-openapi-formdata-saveformdata.md", "references/ebuilder-openapi-formdata-updateformdata.md", "references/ebuilder-openapi-formdata-deletedata.md", "references/cli.md", "scripts/form_data.py"],
+      "operations": ["ebuilder-form.openapi.detail", "ebuilder-form.openapi.query", "ebuilder-form.openapi.count", "ebuilder-form.openapi.add.prepare", "ebuilder-form.openapi.add.apply", "ebuilder-form.openapi.update.prepare", "ebuilder-form.openapi.update.apply", "ebuilder-form.openapi.delete.prepare", "ebuilder-form.openapi.delete.apply"],
+      "references": ["openapi-read.md", "openapi-write.md"]
+    },
+    {
+      "id": "custom-formdata",
+      "sources": ["references/ebuilder-customapi-formdata-add.md", "references/ebuilder-customapi-formdata-update.md", "references/ebuilder-customapi-formdata-delete.md", "references/ebuilder-customapi-formdata-querybypk.md", "references/ebuilder-customapi-formdata-querypagedata.md", "references/ebuilder-customapi-formdata-count.md"],
+      "operations": ["ebuilder-form.custom.detail", "ebuilder-form.custom.query", "ebuilder-form.custom.count", "ebuilder-form.custom.add.prepare", "ebuilder-form.custom.add.apply", "ebuilder-form.custom.update.prepare", "ebuilder-form.custom.update.apply", "ebuilder-form.custom.delete.prepare", "ebuilder-form.custom.delete.apply"],
+      "references": ["custom-api.md"]
+    }
+  ],
+  "sourceCoverage": [
+    { "path": "SKILL.md", "status": "converted", "references": ["SKILL.md", "context-routing.md", "list-nlist.md", "openapi-write.md"] },
+    { "path": "agents/openai.yaml", "status": "converted", "references": ["SKILL.md"] },
+    { "path": "references/*.md", "status": "converted", "references": ["context-routing.md", "list-nlist.md", "fields-browser.md", "openapi-read.md", "openapi-write.md", "custom-api.md", "disabled-capabilities.md"] },
+    { "path": "scripts/*.py", "status": "converted", "operations": ["ebuilder-form.context.resolve", "ebuilder-form.nlist.query", "ebuilder-form.openapi.*", "ebuilder-form.browser.resolve"], "notes": "脚本不随 Skill 打包；URL 解析、NList customConfig 编码、字段 dataKey 选择、成功判定和写入确认语义已迁移到 TypeScript CLI 与 references。" }
+  ],
+  "withheld": [
+    {
+      "capability": "一步按显示名新增/修改并自动解析所有字段",
+      "reason": "已拆成 fields/options/browser + prepare/apply，避免把字段匹配和重名处理只放在提示层。"
+    },
+    {
+      "capability": "文件上传、附件、OCR、导入",
+      "reason": "源资料未提供稳定接口与文件处理确认链；当前模块不读取或上传用户文件。"
+    },
+    {
+      "capability": "eBuilder 配置写入或菜单/页面修改",
+      "reason": "源资料明确业务边界为菜单/列表/表单数据，不包含配置写入确认链。"
+    }
+  ],
+  "generatedArtifacts": [
+    "src/shortcuts/ebuilder-form",
+    "docs/ebuilder-form.md",
+    "skills/weaver-e10-ebuilder-form-connector",
+    "skill-template/domains/ebuilder-form.md"
+  ]
+}

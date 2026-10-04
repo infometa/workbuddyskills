@@ -4,6 +4,14 @@ description: |
   build React app, create dashboard, design UI, implement web interface, build single page application (SPA),
   create portfolio site, build e-commerce site, develop admin panel, make responsive website,
   构建网站, 创建网页, 开发前端, 做网站, 写网页, 建站, 做落地页, 开发Web应用, 创建React项目
+description_zh: |
+  当用户希望：构建网站、创建网页应用、制作落地页、开发前端、搭建 React 应用、创建仪表盘、设计 UI、
+  实现 Web 界面、构建单页应用（SPA）、创建作品集站点、搭建电商站点、开发后台管理面板、做响应式网站时必须使用。
+  触发词：构建网站、创建网页、开发前端、做网站、写网页、建站、做落地页、开发Web应用、创建React项目。
+description_en: |
+  MUST USE when the user wants to: build a website, create a web app, make a landing page, develop frontend,
+  build a React app, create a dashboard, design UI, implement a web interface, build a single page application (SPA),
+  create a portfolio site, build an e-commerce site, develop an admin panel, or make a responsive website.
 alwaysApply: true
 enabled: true
 ---

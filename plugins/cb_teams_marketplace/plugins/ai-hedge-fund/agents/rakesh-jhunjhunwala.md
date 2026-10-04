@@ -3,6 +3,11 @@ name: rakesh-jhunjhunwala
 description: >-
   拉凯什·金君瓦拉投资智能体：印度"大牛"，关注成长性、管理层质量、财务实力和安全边际(>30%)，输出 [金君瓦拉分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  拉凯什·金君瓦拉投资智能体：印度"大牛"，关注成长性、管理层质量、财务实力和安全边际(>30%)，输出 [金君瓦拉分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Rakesh Jhunjhunwala investment agent: India's "Big Bull", focused on growth, management quality, financial strength and a margin of safety above 30%, outputting a [Jhunjhunwala analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#B45309"
 ---

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mibao.local/schemas/media-probe.schema.json",
+  "title": "MIBAO bounded media header probe result v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "format_id",
+    "media_kind",
+    "mime_type",
+    "extension",
+    "expected_format_id",
+    "expected_mime_type",
+    "declared_mime",
+    "magic_evidence",
+    "bytes_read",
+    "mismatch_reasons"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "status": {
+      "enum": ["recognized", "mismatch", "empty", "truncated", "unknown"]
+    },
+    "format_id": {"type": ["string", "null"]},
+    "media_kind": {
+      "type": ["string", "null"],
+      "enum": ["video", "audio", "image", "document", "other", null]
+    },
+    "mime_type": {"type": ["string", "null"]},
+    "extension": {"type": "string", "pattern": "^(\\.[a-z0-9]+)?$"},
+    "expected_format_id": {"type": ["string", "null"]},
+    "expected_mime_type": {"type": ["string", "null"]},
+    "declared_mime": {"type": ["string", "null"]},
+    "magic_evidence": {"type": ["string", "null"]},
+    "bytes_read": {"type": "integer", "minimum": 0, "maximum": 65536},
+    "mismatch_reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["extension", "declared_mime"]}
+    }
+  },
+  "additionalProperties": false
+}

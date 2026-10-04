@@ -3,6 +3,11 @@ name: news-analyst
 description: >-
   新闻分析师：分析公司新闻、行业动态和宏观经济趋势，输出 [新闻分析报告]。
   在 Phase 1 数据收集阶段由 orchestrator 并行调用。
+description_zh: >-
+  新闻分析师：分析公司新闻、行业动态和宏观经济趋势，输出 [新闻分析报告]。
+  在 Phase 1 数据收集阶段由 orchestrator 并行调用。
+description_en: >-
+  News analyst: analyzes company news, industry developments and macroeconomic trends, outputting a [news analysis report]. Invoked in parallel by the orchestrator during Phase 1 data collection.
 tools: Bash,Read,WebSearch
 color: "#D97706"
 ---

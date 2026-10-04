@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "variflight-mcp": {
+      "type": "streamableHttp",
+      "url": "https://c-gw.variflight.com/chat_message/mcp/api/legacy",
+      "headers": {
+        "Authorization": "Bearer ${VARIFLIGHT_MCP_KEY}"
+      },
+      "timeout": 120000,
+      "disabledTools": [
+        "getUserInfo",
+        "queryUserTripStatsInner"
+      ]
+    }
+  }
+}

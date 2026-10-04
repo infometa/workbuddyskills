@@ -4,11 +4,13 @@
 
 #### 功能说明
 
-获取指定工作表的区域权限列表。
+获取指定工作表的区域权限列表。该能力面向智能表格（.ksheet），适合在新增、修改或删除区域权限前先读取现有配置。
 
-该能力面向智能表格（.ksheet），适合在新增、修改或删除区域权限前先读取现有配置。
+#### 调用约束
 
+- **前置检查**：使用该工具前必须先调用get_sheets_info确认要操作的工作表id，不得自行捏造工作表id。
 
+**幂等性**：是
 
 > 删除或更新前，建议先读取现有区域权限，确认目标范围和 `protection_range_id`
 
@@ -23,10 +25,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 
 #### 返回值说明
@@ -63,9 +66,7 @@
 
 适用于需要限制指定区域可查看、可编辑或可操作范围的场景。
 
-
-
-#### 操作约束
+#### 调用约束
 
 - **后置验证**：list_protection_ranges 确认权限已创建
 
@@ -110,10 +111,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `sheets_protection_infos` (array[object], 必填): 工作表区域权限详细信息列表
 
 **sheets_protection_infos 说明：**
@@ -171,7 +173,6 @@
 }
 ```
 
-
 #### 返回值说明
 
 ```json
@@ -190,9 +191,7 @@
 
 适用于调整受保护区域、权限主体或其他区域权限属性。
 
-
-
-#### 操作约束
+#### 调用约束
 
 - **前置检查**：list_protection_ranges 获取现有配置
 
@@ -236,10 +235,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `sheets_protection_infos` (array[object], 必填): 区域权限更新配置列表
 
 **sheets_protection_infos 说明：**
@@ -295,7 +295,6 @@
 }
 ```
 
-
 #### 返回值说明
 
 ```json
@@ -314,9 +313,7 @@
 
 删除前建议先读取现有区域权限，确认待删除的权限 ID 和目标区域。
 
-
-
-#### 操作约束
+#### 调用约束
 
 - **前置检查**：`sheet.list_protection_ranges` 确认拟删区域权限 ID 与范围
 - **用户确认**：删除区域权限不可恢复，必须向用户确认
@@ -345,10 +342,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `sheets_protection_infos` (array[object], 必填): 待删除的区域权限配置列表
 
 **sheets_protection_infos 说明：**
@@ -375,14 +373,9 @@
 }
 ```
 
-
 #### 返回值说明
 
 ```json
 {}
 
 ```
-
-
----
-

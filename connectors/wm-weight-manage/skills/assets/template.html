@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>个人体重管理方案 | {{CURRENT}} kg → {{TARGET}} kg</title>
+  <style>
+    :root { --ink:#1f2933; --muted:#65727e; --line:#d9e1e7; --paper:#fbfcfd; --navy:#17324d; --teal:#0f766e; --mint:#dff4ee; --coral:#c05640; --peach:#fff0e9; --yellow:#f5c96a; --shadow:0 10px 28px rgba(23,50,77,.08); }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:#edf2f4; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif; line-height:1.65; }
+    .page { max-width:1080px; margin:0 auto; padding:28px 18px 56px; }
+    .hero { background:var(--navy); color:#fff; padding:34px 38px; border-radius:8px; box-shadow:var(--shadow); }
+    .eyebrow { color:#b8ded5; font-size:13px; letter-spacing:.08em; margin:0 0 10px; }
+    h1 { font-size:clamp(28px,4vw,44px); line-height:1.2; margin:0 0 14px; letter-spacing:0; }
+    .hero p { max-width:730px; color:#dbe7ee; margin:0; }
+    .hero-grid { display:grid; grid-template-columns:1fr 240px; gap:28px; align-items:end; }
+    .goal-box { border-left:3px solid var(--yellow); padding-left:17px; }
+    .goal-box strong { display:block; font-size:32px; line-height:1.1; color:#fff7d3; }
+    .goal-box span { color:#dbe7ee; font-size:13px; }
+    section { background:var(--paper); margin-top:18px; padding:26px 30px; border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow); }
+    h2 { color:var(--navy); font-size:22px; margin:0 0 17px; letter-spacing:0; }
+    h3 { color:var(--navy); font-size:16px; margin:20px 0 8px; }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .stat { border:1px solid var(--line); border-top:3px solid var(--teal); padding:14px 15px; background:#fff; }
+    .stat .label { color:var(--muted); font-size:13px; }
+    .stat .value { color:var(--navy); font-size:25px; font-weight:700; margin-top:3px; }
+    .note { padding:13px 15px; background:var(--mint); border-left:4px solid var(--teal); margin:15px 0 0; }
+    .warning { padding:13px 15px; background:var(--peach); border-left:4px solid var(--coral); margin:15px 0 0; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; min-width:650px; background:#fff; }
+    th,td { border-bottom:1px solid var(--line); text-align:left; padding:11px 12px; vertical-align:top; }
+    th { color:var(--navy); background:#f1f5f7; font-size:13px; }
+    td { font-size:14px; }
+    .phase { border-left:4px solid var(--teal); padding:13px 16px; margin:10px 0; background:#fff; }
+    .phase strong { color:var(--navy); }
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+    ul { margin:8px 0 0; padding-left:21px; }
+    li { margin:5px 0; }
+    .checklist { display:grid; grid-template-columns:repeat(2,1fr); gap:8px 20px; }
+    label.check { display:flex; gap:9px; align-items:flex-start; padding:9px 10px; background:#fff; border:1px solid var(--line); font-size:14px; cursor:pointer; }
+    input[type=checkbox] { accent-color:var(--teal); margin-top:5px; }
+    .tracker { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; align-items:end; }
+    label.field { display:block; color:var(--muted); font-size:13px; }
+    input[type=number], input[type=date] { width:100%; margin-top:5px; padding:10px 11px; border:1px solid #b9c7d0; border-radius:4px; font:inherit; color:var(--ink); background:#fff; }
+    button { border:0; border-radius:4px; padding:11px 15px; background:var(--teal); color:#fff; font:inherit; cursor:pointer; }
+    button:hover { background:#095c56; }
+    button.btn-secondary { background:#fff; color:var(--teal); border:1px solid var(--teal); }
+    button.btn-secondary:hover { background:#f0faf8; }
+    button.btn-danger { background:#fff; color:var(--coral); border:1px solid var(--coral); padding:5px 10px; font-size:13px; }
+    button.btn-danger:hover { background:#fff5f2; }
+    .progress { height:12px; background:#e1e8eb; margin:16px 0 7px; overflow:hidden; border-radius:6px; }
+    .history-wrap { margin-top:22px; padding-top:20px; border-top:1px solid var(--line); }
+    .history-wrap h3 { margin:0 0 8px; font-size:16px; color:var(--navy); }
+    .history-wrap .table-wrap { margin-top:10px; }
+    .history-actions { display:flex; justify-content:flex-end; margin-top:12px; }
+    .diff-positive { color:var(--coral); }
+    .diff-negative { color:var(--teal); }
+    .diff-zero { color:var(--muted); }
+    .progress > div { height:100%; width:0; background:var(--teal); transition:width .2s ease; }
+    .progress-meta { display:flex; justify-content:space-between; color:var(--muted); font-size:13px; }
+    .small { color:var(--muted); font-size:13px; }
+    .footer { color:var(--muted); font-size:13px; padding:20px 2px 0; }
+    @media (max-width:760px) { .page{padding:14px 10px 36px}.hero{padding:25px 22px}.hero-grid,.two-col{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}section{padding:21px 18px}.checklist,.tracker{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">PERSONAL WEIGHT MANAGEMENT PLAN</p>
+          <h1>从 {{CURRENT}} kg 稳定走向 {{TARGET}} kg</h1>
+          <p>为 {{AGE}} 岁、{{HEIGHT}} cm、{{ACTIVITY}}、{{HEALTH_NOTE}}设计的生活方式方案。核心目标是降低体脂、保留肌肉，并建立能长期维持的节奏。</p>
+        </div>
+        <div class="goal-box"><strong>约 {{WEEKS}} 周</strong><span>建议减重速度：每周约 0.25–0.5 kg</span></div>
+      </div>
+    </header>
+
+    <section>
+      <h2>一、你的当前状态</h2>
+      <div class="stats">
+        <div class="stat"><div class="label">当前 BMI</div><div class="value">{{BMI_CURRENT}}</div></div>
+        <div class="stat"><div class="label">目标 BMI</div><div class="value">{{BMI_TARGET}}</div></div>
+        <div class="stat"><div class="label">需要减少</div><div class="value">{{LOSS}} kg</div></div>
+        <div class="stat"><div class="label">估算基础代谢</div><div class="value">约 {{BMR}} kcal</div></div>
+      </div>
+      <div class="note"><strong>怎么理解：</strong>按中国成人常用 BMI 分界，当前 BMI 已接近超重起点，目标 BMI 仍在健康范围内。BMI 不能代表全部健康状况，腰围、体脂、力量、睡眠和月经状态也应一起观察。</div>
+      <p class="small">热量为估算值，不是处方。先以每日约 {{CAL_LOW}}–{{CAL_HIGH}} kcal 的温和缺口为起点，连续观察 2–3 周再调整；不建议自行长期低于 1,200 kcal。</p>
+    </section>
+
+    <section>
+      <h2>二、分阶段目标</h2>
+      <div class="phase"><strong>第 1 阶段｜{{CURRENT}} → {{M1}} kg（约 6–10 周）</strong><br>先建立三餐、蛋白质、步行和每周力量训练的固定节奏。关注执行率，不追求每天体重下降。</div>
+      <div class="phase"><strong>第 2 阶段｜{{M1}} → {{M2}} kg（约 8–16 周）</strong><br>逐步把日均步数提高到 7,000–9,000；力量训练保持每周 2–3 次，记录腰围变化。</div>
+      <div class="phase"><strong>第 3 阶段｜{{M2}} → {{TARGET}} kg（约 10–20 周）</strong><br>每周复盘一次，避免因平台期过度节食。达到目标后，用 8–12 周做维持期，再决定是否继续调整。</div>
+      <div class="warning"><strong>平台期规则：</strong>连续 3 周“周平均体重”和腰围都没有变化，再从饮食记录或每日步数中做一个小调整（例如减少 100–150 kcal，或每天增加 1,000–1,500 步），不要同时大幅改变多项。</div>
+    </section>
+
+    <section>
+      <h2>三、饮食：稳定能量与保留肌肉</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>模块</th><th>建议标准</th><th>简单做法</th></tr></thead>
+        <tbody>
+          <tr><td>蛋白质</td><td>约 75–90 g/天，分到三餐</td><td>每餐一掌心：鸡蛋、鱼虾、鸡胸、瘦肉、无糖酸奶、豆腐或豆浆。</td></tr>
+          <tr><td>蔬菜水果</td><td>蔬菜 500 g 左右；水果 1–2 份</td><td>午晚餐各半盘蔬菜；水果优先整果，不用果汁替代。</td></tr>
+          <tr><td>主食</td><td>每餐约半拳至一拳，按活动量调整</td><td>米饭、杂粮饭、玉米、土豆、全麦面轮换，不需要完全戒碳水。</td></tr>
+          <tr><td>饮料与零食</td><td>含糖饮料尽量为 0；零食预留 100–150 kcal</td><td>用水、无糖茶、黑咖啡替代；零食提前分装，避免边看屏幕边吃。</td></tr>
+          <tr><td>睡眠</td><td>争取 7–8 小时，固定起床时间</td><td>睡前 1 小时降低屏幕和工作强度；睡眠不足时不额外惩罚性节食。</td></tr>
+        </tbody>
+      </table></div>
+      <h3>一日示例</h3>
+      <div class="two-col">
+        <div><strong>早餐：</strong>无糖酸奶 200 g + 鸡蛋 1 个 + 燕麦/全麦面包 1 份 + 一小份水果。</div>
+        <div><strong>午餐：</strong>米饭半碗至一碗 + 鱼/瘦肉/豆制品一掌心 + 两份蔬菜。</div>
+        <div><strong>晚餐：</strong>虾/鸡肉/豆腐一掌心 + 大量蔬菜 + 小份主食；不要用不吃晚餐替代控制总量。</div>
+        <div><strong>加餐：</strong>牛奶或无糖酸奶，或一小把坚果；当天不饿可以不加。</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>四、运动：先保留肌肉，再增加消耗</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>频率</th><th>安排</th><th>强度判断</th></tr></thead>
+        <tbody>
+          <tr><td>每天</td><td>饭后步行 10–15 分钟；逐步达到 7,000–9,000 步/天。</td><td>能说完整句子但略微喘。</td></tr>
+          <tr><td>每周 2–3 次</td><td>深蹲/坐站、臀桥、墙壁俯卧撑、划船、平板支撑，各 2 组 × 8–12 次。</td><td>最后 2–3 次有挑战，但动作不变形。</td></tr>
+          <tr><td>每周 1–2 次</td><td>快走、骑车或游泳 25–40 分钟。</td><td>主观用力程度约 5–6/10。</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note"><strong>久坐打断：</strong>设置每 50–60 分钟一次提醒，起身 2–5 分钟，接水、走动或做 10 次坐站。把“起身次数”作为单独目标，不用等到有完整运动时间才开始。</div>
+    </section>
+
+    <section>
+      <h2>五、睡眠与激素相关信号</h2>
+      <div class="two-col">
+        <div><strong>睡眠底线：</strong>固定起床时间，争取每晚 7–8 小时；睡前 1 小时降低屏幕、工作和高刺激内容。连续两晚睡差时，维持饮食和散步，不用极端节食“补偿”。</div>
+        <div><strong>周期观察：</strong>记录月经周期、经前食欲/水肿、潮热或夜间出汗等变化。体重在经前短期上升可能主要是水分，不据此加码运动。</div>
+        <div><strong>不要自行“调激素”：</strong>减脂不等于需要购买激素、排毒或所谓燃脂补剂。是否检查甲状腺、血糖、血脂等，应由医生结合症状决定。</div>
+        <div><strong>需要评估：</strong>月经持续明显紊乱、异常出血、持续失眠、明显怕冷/心悸、乳溢或短期体重异常变化，应预约妇科、内科或全科医生。</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>六、压力与情绪：减少“失控—补偿”循环</h2>
+      <div class="two-col">
+        <div><strong>冲动进食暂停 10 分钟：</strong>先喝水，离开食物场景，做 10 次慢呼吸或走动，再决定是否吃。</div>
+        <div><strong>区分饥饿类型：</strong>记录“时间、身体饥饿 0–10 分、情绪、吃了什么”，找出最常见触发点。</div>
+        <div><strong>预留而不是禁绝：</strong>每周安排 1–2 次喜欢的食物，坐下来吃一份，避免“破戒”后连续放弃。</div>
+        <div><strong>压力很高的日子：</strong>只守住蛋白质、蔬菜、饮水和 10 分钟步行四个底线，第二天回到常规，不惩罚性运动。</div>
+      </div>
+      <div class="warning"><strong>优先求助：</strong>若反复暴食、催吐、使用泻药/减肥药，或体重管理明显影响工作、关系和自我评价，应尽快寻求心理或医疗专业支持。</div>
+    </section>
+
+    <section>
+      <h2>七、身体监测：看趋势，不追逐单日数字</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>指标</th><th>频率</th><th>记录方式与解释</th></tr></thead>
+        <tbody>
+          <tr><td>体重</td><td>每周 3–7 次，固定在早晨</td><td>用 7 日平均比较；经期、外食、盐分会造成短期水分波动。</td></tr>
+          <tr><td>腰围</td><td>每 2 周一次</td><td>同一时间、肚脐水平、自然呼吸末测量；与体重一起看。</td></tr>
+          <tr><td>力量与步数</td><td>每周复盘</td><td>记录力量训练次数、步数和动作次数；力量不下降是保肌肉的重要信号。</td></tr>
+          <tr><td>睡眠、精力、周期</td><td>每天简记 0–10 分</td><td>关注连续趋势；不要用单日状态给自己贴标签。</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">血压、血糖或血脂如需监测，按医生建议进行；没有医学指征时，不需要为了减脂频繁自测或自行解读化验单。</p>
+    </section>
+
+    <section>
+      <h2>八、常见避坑</h2>
+      <div class="two-col">
+        <div><strong>不做：</strong>果汁断食、只吃水煮菜、长期跳过正餐、每天高强度空腹训练。</div>
+        <div><strong>不迷信：</strong>局部减脂、排毒茶、酵素、燃脂贴、未经验证的减肥药。</div>
+        <div><strong>不误判：</strong>单日掉秤多半不等于掉脂；出汗多也不等于减脂更多。</div>
+        <div><strong>不加码：</strong>平台期先查记录和执行，不同时砍热量、加有氧、延长空腹。</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>九、特殊情况与调整</h2>
+      <ul>
+        <li><strong>经期前后：</strong>允许体重短期波动，优先睡眠、补水、适度步行；疼痛明显时降低训练强度。</li>
+        <li><strong>备孕、怀孕、哺乳期：</strong>停止按本方案制造减重缺口，改由妇产科或营养专业人员制定方案。</li>
+        <li><strong>围绝经期或月经变化：</strong>记录周期与症状，力量训练和蛋白质优先，必要时就医评估。</li>
+        <li><strong>新增疾病、用药或运动损伤：</strong>先让医生重新评估，不自行用减肥药或调整处方药。</li>
+        <li><strong>体重过低或目标 BMI 低于健康范围：</strong>不要继续减重，应改为体成分、力量和健康指标管理。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>十、本周打卡</h2>
+      <p class="small">每天完成 4 项即可。连续性比满分更重要。</p>
+      <div class="checklist">
+        <label class="check"><input type="checkbox" data-key="protein"> 三餐至少两餐有明确蛋白质</label>
+        <label class="check"><input type="checkbox" data-key="veg"> 午晚餐各有一份蔬菜</label>
+        <label class="check"><input type="checkbox" data-key="walk"> 完成饭后步行或当日步数目标</label>
+        <label class="check"><input type="checkbox" data-key="strength"> 完成力量训练（每周 2–3 次）</label>
+        <label class="check"><input type="checkbox" data-key="sit"> 久坐期间起身至少 6 次</label>
+        <label class="check"><input type="checkbox" data-key="sleep"> 睡眠达到个人目标</label>
+      </div>
+    </section>
+
+    <section>
+      <h2>十一、体重记录器</h2>
+      <div class="tracker">
+        <label class="field">记录日期<input type="date" id="date"></label>
+        <label class="field">今日体重（kg）<input type="number" id="weight" min="30" max="200" step="0.1" placeholder="例如 61.7"></label>
+        <button id="save">保存本次记录</button>
+      </div>
+      <div class="progress"><div id="bar"></div></div>
+      <div class="progress-meta"><span id="progressText">填写体重后查看进度</span><span>目标：{{TARGET}} kg</span></div>
+      <p class="small" id="history">记录保存在当前浏览器中，不会上传。</p>
+
+      <div class="history-wrap">
+        <h3>历史记录</h3>
+        <p class="small" id="historySummary">暂无记录</p>
+        <div class="table-wrap">
+          <table id="historyTable">
+            <thead>
+              <tr><th>日期</th><th>体重</th><th>较上一条</th><th>操作</th></tr>
+            </thead>
+            <tbody id="historyBody">
+            </tbody>
+          </table>
+        </div>
+        <div class="history-actions">
+          <button id="clearAll" class="btn-secondary">清空全部记录</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>十二、每周复盘问题</h2>
+      <ul>
+        <li>本周周平均体重与上周相比如何？不要只看某一天。</li>
+        <li>腰围、衣服松紧、走路耐力或力量是否改善？</li>
+        <li>最容易失控的时间、地点和情绪是什么？下周准备一个替代动作。</li>
+        <li>是否出现明显疲劳、头晕、心悸、持续失眠、暴食/催吐或月经明显紊乱？</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>十三、安全边界</h2>
+      <div class="warning">出现胸痛、晕厥、呼吸困难、持续心悸、黑便/呕血，或严重脱水等情况，应立即就医。若出现持续头晕、异常乏力、饮食失控、月经明显紊乱，或体重下降超过每周 0.75 kg，先暂停加大减重力度并咨询医生或营养师。备孕、怀孕、哺乳期也应改用专业方案。</div>
+      <p class="small">本页面是基于你提供的信息生成的健康管理建议，不构成诊断、处方或医疗承诺。若后续出现慢病、用药变化或运动损伤，请让专业人员重新评估。</p>
+    </section>
+    <p class="footer">生成日期：2026-08-27　|　建议每 2–4 周根据真实记录调整一次，而不是根据单日波动调整。</p>
+  </main>
+  <script>
+    (function () {
+      function safeStorage(key, value) {
+        try {
+          if (value === undefined) return localStorage.getItem(key);
+          localStorage.setItem(key, value);
+          return true;
+        } catch (e) {
+          console.warn('localStorage 不可用，记录仅在当前页面有效', e);
+          return null;
+        }
+      }
+
+      const dateEl = document.getElementById('date');
+      const weightEl = document.getElementById('weight');
+      const barEl = document.getElementById('bar');
+      const progressTextEl = document.getElementById('progressText');
+      const historyEl = document.getElementById('history');
+      const saveBtn = document.getElementById('save');
+      const clearAllBtn = document.getElementById('clearAll');
+      const historyBodyEl = document.getElementById('historyBody');
+      const historySummaryEl = document.getElementById('historySummary');
+      const today = new Date();
+      const RECENT_COUNT = 5;
+
+      if (dateEl) dateEl.value = today.toISOString().slice(0, 10);
+
+      document.querySelectorAll('input[type=checkbox]').forEach(function (box) {
+        var stored = safeStorage('weight-plan-' + box.dataset.key);
+        box.checked = stored === '1';
+        box.addEventListener('change', function () {
+          safeStorage('weight-plan-' + box.dataset.key, box.checked ? '1' : '0');
+        });
+      });
+
+      function getRecords() {
+        try {
+          return JSON.parse(safeStorage('weight-plan-records') || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveRecords(records) {
+        safeStorage('weight-plan-records', JSON.stringify(records.slice(-60)));
+      }
+
+      function formatDiff(current, previous) {
+        if (previous === undefined || previous === null) {
+          return '<span class="diff-zero">—</span>';
+        }
+        var diff = current - previous;
+        if (Math.abs(diff) < 0.05) {
+          return '<span class="diff-zero">0.0 kg</span>';
+        }
+        var sign = diff > 0 ? '+' : '';
+        var cls = diff > 0 ? 'diff-positive' : 'diff-negative';
+        return '<span class="' + cls + '">' + sign + diff.toFixed(1) + ' kg</span>';
+      }
+
+      function renderHistory() {
+        if (!historyBodyEl || !historySummaryEl) return;
+        var records = getRecords();
+        records.sort(function (a, b) { return a.date.localeCompare(b.date); });
+        historyBodyEl.innerHTML = '';
+
+        if (records.length === 0) {
+          historySummaryEl.textContent = '暂无记录';
+          return;
+        }
+
+        var recent = records.slice(-RECENT_COUNT);
+        var avg = recent.reduce(function (sum, r) { return sum + r.weight; }, 0) / recent.length;
+        historySummaryEl.textContent = '共 ' + records.length + ' 条；最近 ' + recent.length + ' 条平均体重 ' + avg.toFixed(1) + ' kg。';
+
+        for (var i = records.length - 1; i >= 0; i--) {
+          var r = records[i];
+          var prev = i > 0 ? records[i - 1].weight : undefined;
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + r.date + '</td>' +
+            '<td>' + r.weight.toFixed(1) + ' kg</td>' +
+            '<td>' + formatDiff(r.weight, prev) + '</td>' +
+            '<td><button class="btn-danger" data-idx="' + i + '">删除</button></td>';
+          historyBodyEl.appendChild(tr);
+        }
+
+        historyBodyEl.querySelectorAll('button.btn-danger').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var idx = parseInt(btn.dataset.idx, 10);
+            var updated = getRecords();
+            updated.sort(function (a, b) { return a.date.localeCompare(b.date); });
+            if (idx >= 0 && idx < updated.length) {
+              updated.splice(idx, 1);
+              saveRecords(updated);
+              render();
+            }
+          });
+        });
+      }
+
+      function render() {
+        const records = getRecords();
+        const latest = records[records.length - 1];
+        if (latest && weightEl) weightEl.value = latest.weight;
+        const startWeight = {{CURRENT}};
+        const plannedLoss = {{LOSS}};
+        const pct = latest && Number.isFinite(startWeight) && plannedLoss > 0
+          ? Math.max(0, Math.min(100, ((startWeight - latest.weight) / plannedLoss) * 100))
+          : 0;
+        if (barEl) barEl.style.width = pct + '%';
+        if (progressTextEl) {
+          progressTextEl.textContent = latest
+            ? '已完成约 ' + pct.toFixed(0) + '%，当前 ' + latest.weight.toFixed(1) + ' kg'
+            : '填写体重后查看进度';
+        }
+        if (historyEl) {
+          historyEl.textContent = latest
+            ? '最近记录：' + latest.date + '，共 ' + records.length + ' 次。建议固定在早晨起床后、如厕后记录。'
+            : '记录保存在当前浏览器中，不会上传。';
+        }
+        renderHistory();
+      }
+
+      if (saveBtn && weightEl) {
+        saveBtn.addEventListener('click', function () {
+          const value = Number(weightEl.value);
+          if (!value || value < 30 || value > 200) {
+            weightEl.focus();
+            if (progressTextEl) progressTextEl.textContent = '请输入 30–200 之间的有效体重';
+            return;
+          }
+          const records = getRecords();
+          records.push({ date: (dateEl && dateEl.value) || today.toISOString().slice(0, 10), weight: value });
+          records.sort(function (a, b) { return a.date.localeCompare(b.date); });
+          saveRecords(records);
+          render();
+          var original = saveBtn.textContent;
+          saveBtn.textContent = '已保存 ✓';
+          saveBtn.style.background = '#095c56';
+          setTimeout(function () {
+            saveBtn.textContent = original;
+            saveBtn.style.background = '';
+          }, 1200);
+        });
+      }
+
+      if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', function () {
+          if (confirm('确定要清空所有体重记录吗？')) {
+            safeStorage('weight-plan-records', JSON.stringify([]));
+            render();
+          }
+        });
+      }
+
+      render();
+    }());
+  </script>
+</body>
+</html>

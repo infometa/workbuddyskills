@@ -14,12 +14,12 @@
             "linux": "wecom-cli --version",
             "win32": "wecom-cli.cmd --version"
         },
-        "minVersion": "0.1.9"
+        "minVersion": "1.3.4"
     },
     "auth": {
-        "darwin": "wecom-cli init --noninteractive --no-open",
-        "linux": "wecom-cli init --noninteractive --no-open",
-        "win32": "wecom-cli.cmd init --noninteractive --no-open"
+        "darwin": "wecom-cli auth init --noninteractive --no-browser",
+        "linux": "wecom-cli auth init --noninteractive --no-browser",
+        "win32": "wecom-cli.cmd auth init --noninteractive --no-browser"
     },
     "unAuth": {
         "darwin": "rm -rf \"$HOME/.config/wecom\"",
@@ -31,8 +31,8 @@
         "linux": "wecom-cli auth show",
         "win32": "wecom-cli.cmd auth show"
     },
-    "statusMatch": "\"id\"\\s*:\\s*\"",
+    "statusMatch": "\\bauthorized\\b",
     "authUrlDomain": "work.weixin.qq.com",
     "authWaitForExit": true,
-    "authQrModal": true
+    "authQrModal": false
 }

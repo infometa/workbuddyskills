@@ -1,0 +1,21 @@
+<div class="pcf-section">
+  <h3>实控人认定</h3>
+  <div class="pcf-section__summary">{{summaryText}}</div>
+  <div class="pcf-section__grid">
+    {{#items}}
+    <div class="pcf-section__field">
+      <div class="pcf-section__label">{{label}}</div>
+      <div class="pcf-section__value">{{value}}</div>
+    </div>
+    {{/items}}
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

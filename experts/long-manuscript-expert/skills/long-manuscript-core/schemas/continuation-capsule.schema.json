@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/continuation-capsule.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["documentType", "audience", "goal", "completedSections", "currentAnchor", "constraints", "openEvidenceGaps", "nextObjective", "savedBySystem"],
+  "properties": {
+    "documentType": { "type": "string" },
+    "audience": { "type": "string" },
+    "goal": { "type": "string" },
+    "completedSections": { "type": "array", "items": { "type": "string" } },
+    "currentAnchor": { "type": "string" },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "openEvidenceGaps": { "type": "array", "items": { "type": "string" } },
+    "nextObjective": { "type": "string" },
+    "savedBySystem": { "const": false }
+  }
+}

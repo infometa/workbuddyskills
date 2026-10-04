@@ -1,0 +1,384 @@
+{
+  "artifactRefs": [
+    {
+      "archetypeId": "primary-document",
+      "artifactId": "proposal_or_response"
+    },
+    {
+      "archetypeId": "matrix",
+      "artifactId": "requirements_matrix"
+    },
+    {
+      "archetypeId": "matrix",
+      "artifactId": "compliance_matrix"
+    },
+    {
+      "archetypeId": "manifest",
+      "artifactId": "evidence_manifest"
+    }
+  ],
+  "capabilityBindings": [
+    {
+      "capabilityIds": [
+        "material-activation",
+        "multimodal-normalizer"
+      ],
+      "operationMode": "material_activation"
+    },
+    {
+      "capabilityIds": [
+        "scene-router",
+        "scene-composer",
+        "chapter-planning-expansion"
+      ],
+      "operationMode": "project_planning"
+    },
+    {
+      "capabilityIds": [
+        "chapter-planning-expansion",
+        "source-ledger-claim-graph",
+        "voice-profile-humanizer"
+      ],
+      "operationMode": "chapter_generation"
+    },
+    {
+      "capabilityIds": [
+        "continuation-recovery",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "continuation"
+    },
+    {
+      "capabilityIds": [
+        "scope-lock-diff",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "bounded_revision"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "rights-privacy-consent",
+        "research-verification"
+      ],
+      "operationMode": "review_quality"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "multi-format-rendering"
+      ],
+      "operationMode": "finished_draft_closure"
+    },
+    {
+      "capabilityIds": [
+        "multi-format-rendering",
+        "scope-lock-diff"
+      ],
+      "operationMode": "template_fill_conversion"
+    },
+    {
+      "capabilityIds": [
+        "multi-format-rendering",
+        "rights-privacy-consent"
+      ],
+      "operationMode": "export_delivery"
+    },
+    {
+      "capabilityIds": [
+        "asset-repurposing",
+        "media-illustration-planning"
+      ],
+      "operationMode": "asset_repurposing"
+    }
+  ],
+  "contentRiskClass": "high",
+  "displayName": "投标、RFP 与申报材料",
+  "domainObjects": [
+    "approved_answer",
+    "compliance_item",
+    "evidence_attachment",
+    "owner",
+    "requirement"
+  ],
+  "fallback": {
+    "allowGeneralSubstitution": false,
+    "connectorUnavailableBehavior": "preserve_route_and_use_local_workflow",
+    "localOfflineAvailable": true,
+    "riskFloor": "high"
+  },
+  "family": "enterprise_professional",
+  "fixtureRefs": [
+    "evals/fixtures/scenes/proposal-rfp/normal.json",
+    "evals/fixtures/scenes/proposal-rfp/missing.json",
+    "evals/fixtures/scenes/proposal-rfp/conflicting.json",
+    "evals/fixtures/scenes/proposal-rfp/unauthorized.json",
+    "evals/fixtures/scenes/proposal-rfp/adversarial.json",
+    "evals/fixtures/scenes/proposal-rfp/connector-unavailable.json"
+  ],
+  "implementationCheckpoint": "C3",
+  "kind": "vertical_scene",
+  "legacyAliases": [
+    "consultant"
+  ],
+  "lifecycle": "implemented",
+  "migrationProvenance": {
+    "mappingVersion": "1.0.0",
+    "seedCatalogSha256": "638f3f8e8f3ab7f1c2080018233ef6d7e19340187926571aad2eaf818eca82f4"
+  },
+  "operationModes": [
+    "material_activation",
+    "project_planning",
+    "chapter_generation",
+    "continuation",
+    "bounded_revision",
+    "review_quality",
+    "finished_draft_closure",
+    "template_fill_conversion",
+    "export_delivery",
+    "asset_repurposing"
+  ],
+  "optionalPortBindings": [
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "requirements_table",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "append_intake_submission",
+      "portId": "StructuredIntakePort",
+      "purpose": "optional enhancement for requirements_table",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "owner_assignment",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "create_task",
+      "portId": "CollaborationPort",
+      "purpose": "optional enhancement for owner_assignment",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "deadline_reminder",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "send_notification",
+      "portId": "NotificationPort",
+      "purpose": "optional enhancement for deadline_reminder",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "approval_workflow",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "request_review",
+      "portId": "ReviewPort",
+      "purpose": "optional enhancement for approval_workflow",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    }
+  ],
+  "privacy": {
+    "livingPersonReview": true,
+    "minimumDataScope": "organization_scoped_minimum"
+  },
+  "qualityGateRefs": [
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.requirement-coverage",
+      "registryId": "coverage.completeness",
+      "reviewMandate": null,
+      "seedGate": "requirement_coverage"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.compliance-traceability",
+      "registryId": "source.traceability",
+      "reviewMandate": null,
+      "seedGate": "compliance_traceability"
+    },
+    {
+      "humanOwner": "proposal_owner",
+      "parameterProfile": "seed.answer-approval",
+      "registryId": "human-review.receipt",
+      "reviewMandate": "gate_mandated",
+      "seedGate": "answer_approval"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.deadline-and-version",
+      "registryId": "version.alignment",
+      "reviewMandate": null,
+      "seedGate": "deadline_and_version"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "schema.valid",
+      "reviewMandate": null,
+      "seedGate": "core:schema.valid"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "input.required",
+      "reviewMandate": null,
+      "seedGate": "core:input.required"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "artifact.openability",
+      "reviewMandate": null,
+      "seedGate": "core:artifact.openability"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "delivery-manifest.integrity",
+      "reviewMandate": null,
+      "seedGate": "core:delivery-manifest.integrity"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "scope.lock",
+      "reviewMandate": null,
+      "seedGate": "core:scope.lock"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "external-action.authorized",
+      "reviewMandate": null,
+      "seedGate": "core:external-action.authorized"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "encoding.valid",
+      "reviewMandate": null,
+      "seedGate": "core:encoding.valid"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "id": "audience",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "goal",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "materials",
+      "required": true,
+      "sensitivity": "user_provided"
+    },
+    {
+      "id": "proposal_owner",
+      "required": true,
+      "sensitivity": "personal_data"
+    },
+    {
+      "id": "requirements_table",
+      "required": true,
+      "sensitivity": "internal"
+    },
+    {
+      "id": "version_or_deadline",
+      "required": true,
+      "sensitivity": "standard"
+    }
+  ],
+  "rights": {
+    "clearanceRequired": true,
+    "unknownRightsAction": "human_review"
+  },
+  "sceneId": "proposal-rfp",
+  "schemaVersion": "1.0.0",
+  "triggers": [
+    {
+      "id": "proposal-rfp-trigger-1",
+      "signal": "RFP response",
+      "weight": 1
+    },
+    {
+      "id": "proposal-rfp-trigger-2",
+      "signal": "bid proposal",
+      "weight": 0.9
+    },
+    {
+      "id": "proposal-rfp-trigger-3",
+      "signal": "投标申报材料",
+      "weight": 0.8
+    }
+  ],
+  "workflowStages": [
+    {
+      "exitGateRefs": [
+        "input.required"
+      ],
+      "id": "activate-materials",
+      "operationModes": [
+        "material_activation"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "schema.valid"
+      ],
+      "id": "plan-project",
+      "operationModes": [
+        "project_planning"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "coverage.completeness"
+      ],
+      "id": "draft-and-revise",
+      "operationModes": [
+        "chapter_generation",
+        "continuation",
+        "bounded_revision",
+        "template_fill_conversion"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "coverage.completeness",
+        "delivery-manifest.integrity",
+        "encoding.valid",
+        "external-action.authorized",
+        "human-review.receipt",
+        "input.required",
+        "schema.valid",
+        "scope.lock",
+        "source.traceability",
+        "version.alignment"
+      ],
+      "id": "review-and-close",
+      "operationModes": [
+        "review_quality",
+        "finished_draft_closure",
+        "export_delivery",
+        "asset_repurposing"
+      ]
+    }
+  ]
+}

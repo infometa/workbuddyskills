@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "beike-yi.material-scope/v1",
+  "purpose": "Records the local workspace and the exact files or ranges the teacher confirmed for this task.",
+  "required": [
+    "mode",
+    "workspace",
+    "scopeMode",
+    "items"
+  ],
+  "allowedModes": [
+    "local_computer",
+    "cloud_optional"
+  ],
+  "allowedScopeModes": [
+    "selected_files_only",
+    "selected_ranges_only",
+    "teacher_provided_context_only"
+  ],
+  "itemFields": {
+    "path": "string",
+    "readScope": "string",
+    "includedByUser": "boolean",
+    "status": [
+      "listed_not_read",
+      "read",
+      "read_partial",
+      "unsupported",
+      "permission_needed",
+      "excluded"
+    ],
+    "sensitivity": [
+      "unknown",
+      "ordinary",
+      "student_sensitive",
+      "school_sensitive",
+      "restricted"
+    ]
+  },
+  "invariants": [
+    "Listing a file does not mean its contents were read.",
+    "Selecting a workspace does not authorize reading every file in it.",
+    "Removing an item from the material scope never deletes the local file.",
+    "The package must not scan, move, rename, delete, or overwrite local files implicitly.",
+    "A permission request must name the narrowest file or folder needed."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/delivery-manifest.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "projectId", "qualityState", "artifacts", "unavailableFormats", "externalDeliveryPerformed"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "projectId": { "type": "string" },
+    "qualityState": { "enum": ["candidate", "reviewed", "delivery_ready", "delivered"] },
+    "artifacts": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "format", "sha256", "state"], "properties": { "id": { "type": "string" }, "format": { "type": "string" }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "state": { "enum": ["candidate", "reviewed", "delivery_ready", "delivered"] } } } },
+    "unavailableFormats": { "type": "array", "items": { "type": "string" } },
+    "externalDeliveryPerformed": { "const": false }
+  }
+}

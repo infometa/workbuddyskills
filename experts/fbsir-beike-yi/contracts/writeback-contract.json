@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "beike-yi.writeback/v1",
+  "purpose": "Protects local teacher files and makes write-back status auditable in plain language.",
+  "defaultWriteMode": "new_version",
+  "allowedWriteModes": [
+    "new_version",
+    "user_confirmed_overwrite"
+  ],
+  "requiredBeforeWrite": [
+    "targetWorkspace",
+    "targetFolder",
+    "fileName",
+    "versionLabel",
+    "impactBoundary",
+    "userRequestForPersistence"
+  ],
+  "requiredAfterWrite": [
+    "writeResult",
+    "readBackCheck",
+    "filePath"
+  ],
+  "defaultPolicies": {
+    "overwriteOriginal": false,
+    "automaticSharing": false,
+    "automaticPublishing": false,
+    "automaticAssetSave": false
+  },
+  "statusSemantics": {
+    "draft_delivered": "Chat-level artifact exists; no file write is claimed.",
+    "saved_and_read_back": "A new or explicitly approved file was written and checked at the target path.",
+    "not_executed": "No write occurred; the chat artifact remains available.",
+    "write_conflict": "The original target exists and was not overwritten."
+  }
+}

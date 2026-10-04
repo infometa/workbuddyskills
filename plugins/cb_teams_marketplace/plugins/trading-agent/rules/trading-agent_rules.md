@@ -4,6 +4,13 @@ description: >-
   Use when user wants to: 分析股票、投资分析、交易决策、买卖建议、多空辩论、风险评估、
   该不该买、能不能卖、要不要持有、看好看空、仓位建议、加仓减仓、投资价值、完整分析、
   深度分析、trading analysis、investment analysis、buy sell hold recommendation。
+description_zh: >-
+  多角色辩论式交易智能体，对股票/基金/指数进行系统性投资分析，输出 BUY/SELL/HOLD 建议。
+  Use when user wants to: 分析股票、投资分析、交易决策、买卖建议、多空辩论、风险评估、
+  该不该买、能不能卖、要不要持有、看好看空、仓位建议、加仓减仓、投资价值、完整分析、
+  深度分析、trading analysis、investment analysis、buy sell hold recommendation。
+description_en: >-
+  A multi-persona debate-driven trading agent that performs systematic investment analysis on stocks, funds and indices and outputs BUY/SELL/HOLD recommendations. Use when user wants to: stock analysis, investment analysis, trading decisions, buy/sell advice, bull-bear debate, risk assessment, whether to buy, whether to sell, whether to hold, bullish or bearish views, position sizing advice, adding or trimming positions, investment value, full analysis, in-depth analysis, trading analysis, investment analysis, buy sell hold recommendation.
 alwaysApply: true
 enabled: true
 updatedAt: 2026-04-06T00:00:00.000Z

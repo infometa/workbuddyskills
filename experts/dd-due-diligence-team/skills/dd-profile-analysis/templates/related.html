@@ -1,0 +1,43 @@
+<div class="pcf-section">
+  <div class="pcf-section__metrics">
+    {{#summary}}
+    <div class="pcf-section__metric">
+      <div class="pcf-section__metric-label">{{label}}</div>
+      <div class="pcf-section__metric-value">{{value}}<span class="pcf-section__metric-unit">{{unit}}</span></div>
+    </div>
+    {{/summary}}
+  </div>
+
+  <h3>关联方清单</h3>
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>关联方名称</th><th>关联关系</th><th>持股/关系比例</th><th>业务往来性质</th></tr></thead>
+      <tbody>
+        {{#parties}}
+        <tr><td>{{name}}</td><td>{{relation}}</td><td>{{ratio}}</td><td>{{business}}</td></tr>
+        {{/parties}}
+      </tbody>
+    </table>
+  </div>
+
+  <h3>关联方财务快照</h3>
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>关联方</th><th>营收</th><th>利润</th><th>总资产</th><th>总负债</th><th>关联交易占比</th></tr></thead>
+      <tbody>
+        {{#financeSnapshot}}
+        <tr><td>{{name}}</td><td>{{revenue}}</td><td>{{profit}}</td><td>{{assets}}</td><td>{{liabilities}}</td><td>{{relatedRatio}}</td></tr>
+        {{/financeSnapshot}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

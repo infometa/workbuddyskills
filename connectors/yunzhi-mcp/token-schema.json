@@ -1,0 +1,33 @@
+{
+  "title": "云指建站 MCP · 连接配置",
+  "title_en": "YunZhi Site Builder MCP · Connection",
+  "description": "填入你的云指建站站点 ID 与 MCP 令牌即可启用。",
+  "description_en": "Enter your YunZhi Site Builder Site ID and MCP Token to get started.",
+  "docUrl": "http://help.yz168.com/NewsDetail/8492403.html",
+  "docLabel": "如何获取 MCP 令牌？",
+  "docLabel_en": "How to get an MCP Token?",
+  "fields": [
+    {
+      "key": "SITE_ID",
+      "label": "站点 ID (SiteID)",
+      "label_en": "Site ID (SiteID)",
+      "type": "text",
+      "required": true,
+      "placeholder": "例如 80559，在云指建站后台「MCP」中查看",
+      "placeholder_en": "e.g. 80559, found in YunZhi Site Builder backend Site Settings",
+      "description": "用于标识你要操作的站点，会作为请求头 SiteID 注入。",
+      "description_en": "Identifies the target site; injected as the SiteID request header."
+    },
+    {
+      "key": "MCP_TOKEN",
+      "label": "MCP 令牌 (Token)",
+      "label_en": "MCP Token",
+      "type": "password",
+      "required": true,
+      "placeholder": "在云指建站后台「MCP」-> 访问Token页生成的 Bearer Token",
+      "placeholder_en": "The Bearer Token generated on the YunZhi MCP access page",
+      "description": "以 Bearer 方式注入 Authorization 请求头，请勿泄露。",
+      "description_en": "Injected into the Authorization header as Bearer. Keep it secret."
+    }
+  ]
+}

@@ -3,6 +3,11 @@ name: news-sentiment-analyst
 description: >-
   新闻情绪分析师：分析近期公司新闻和行业动态，评估新闻面正负情绪分布，输出 [新闻情绪信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  新闻情绪分析师：分析近期公司新闻和行业动态，评估新闻面正负情绪分布，输出 [新闻情绪信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  News sentiment analyst: analyzes recent company news and industry developments, assesses the positive/negative sentiment distribution, and outputs a [news sentiment signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read,WebSearch
 color: "#EA580C"
 ---

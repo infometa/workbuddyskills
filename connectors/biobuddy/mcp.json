@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "biobuddy": {
+      "type": "streamableHttp",
+      "url": "https://ai4s.tencent.com/biobuddy/mcp",
+      "timeout": 30000
+    }
+  }
+}

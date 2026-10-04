@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/event/2.0",
+  "title": "Event Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "title", "source_status", "status"],
+  "properties": {
+    "event_id": {"type": "string", "pattern": "^EVT-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "title": {"type": "string", "minLength": 1},
+    "date_or_range": {"type": "string"},
+    "place": {"type": "string"},
+    "person_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "description": {"type": "string"},
+    "source_status": {"enum": ["observed", "stated", "metadata", "confirmed", "inferred", "disputed", "unknown", "pending"]},
+    "status": {"enum": ["candidate", "confirmed", "disputed", "unknown"]},
+    "source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "notes": {"type": "string"}
+  }
+}

@@ -1,0 +1,89 @@
+# 古代（ancient）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: ancient
+name_cn: 古代
+category: background
+carrier: manga
+audience: both
+weight: high
+level: level-1
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/face-slapping.md
+emotion_core:
+- 权谋博弈
+- 宫廷恩怨
+- 江湖恩仇
+- 身份逆袭
+- 古风情感
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，男频侧重权谋/江湖，女频侧重宫斗/宅斗/古言
+  bg_desc: 古代王朝基底（可朝代模糊化），兼容宫廷、江湖、世家等子方向
+  weight: high
+  bottom_line:
+  - 古代礼制/称谓/伦理逻辑自洽，不能现代化串味
+  - 权谋/复仇路径有铺垫，不能凭空神机
+  - 身份逆袭符合古代阶层逻辑
+relations:
+  synergy:
+  - target: rebirth
+    effect_type: 裂变型
+    weight: high
+    effect: 重生回古代某节点，借先知复仇/翻盘，宫斗宅斗经典模板
+  - target: transmigration
+    effect_type: 增强型
+    weight: high
+    effect: 现代人穿越古代，借认知差降维布局
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 庶女/落魄子弟逆袭上位，阶层跃迁爽感
+  - target: twist
+    effect_type: 增强型
+    weight: medium
+    effect: 身世/阴谋多层反转，权谋张力拉满
+  mutex:
+  - target: 现代都市
+    reason: 时代基底冲突，需穿越/重生桥接
+combo_adapt:
+- combo: references/domestic/combos/face-slapping.md
+  rule: 宫斗宅斗权谋打脸，身份/智计揭晓即高潮
+  sub: 古代打脸型
+- combo: references/domestic/combos/counterattack.md
+  rule: 庶女/寒门逆袭上位，对齐古代阶层跃迁
+  sub: 古代逆袭型
+- combo: references/domestic/combos/sweet-love.md
+  rule: 古风情感、强强联手，甜虐交织
+  sub: 古代情感型
+fusion:
+- recipe: fusion/recipes/rebirth-palace.md
+  note: 重生宫斗/宅斗类，成熟节奏模板，强复仇信息差爽感
+- recipe: fusion/recipes/transmigration-strategy.md
+  note: 穿越权谋类，认知降维布局，男女频均适配
+redlines:
+- code: AP-GD01
+  name: 古代逻辑现代化
+  severity: 高
+  dimension: 标签与逻辑
+  test: 礼制、称谓、价值观严重现代化串味，古风质感崩塌
+- code: AP-GD02
+  name: 权谋智商崩塌
+  severity: 中
+  dimension: 人物与人设
+  test: 反派降智配合主角，权谋博弈无真实张力，爽感廉价
+soft_warnings:
+- 避免历史细节硬伤（服化道、礼仪）引发出戏
+- 避免后宫/世家关系混乱，人物谱系不清
+- 避免权谋沦为口号，缺乏实际智计交锋
+manga:
+  visual_signature: 宫廷楼阁/江湖山水 + 古风服饰造型 + 权谋氛围渲染
+  high_affinity: true
+  visual_hooks:
+  - 华美宫装与场景的视觉奢华感
+  - 权谋对峙的镜头张力
+  - 身份反转的画面冲击

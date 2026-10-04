@@ -1,0 +1,102 @@
+{
+  "name": "ppt-creation-expert",
+  "version": "1.1.0",
+  "description": "An AI presentation expert that creates general-purpose and customer-facing solution PPTs.",
+  "author": {
+    "name": "WorkBuddy",
+    "email": "workbuddy@tencent.com"
+  },
+  "expertType": "agent",
+  "agentName": "ppt-creator",
+  "agents": [
+    "./agents/ppt-creator.md"
+  ],
+  "skills": [
+    "./skills/guided-ppt-creation-workflow",
+    "./skills/solution-ppt-generator-v3",
+    "./skills/call-high-deck-generator",
+    "./skills/ppt-script-generator"
+  ],
+  "displayName": {
+    "en": "Tencent Yunzhi",
+    "zh": "腾讯云知（乐享）"
+  },
+  "profession": {
+    "en": "Tencent Cloud PPT Creation Expert",
+    "zh": "腾讯云PPT制作专家"
+  },
+  "displayDescription": {
+    "en": "A presentation expert built on the Tencent Cloud Zhi (Lexiang) platform, tailored to Tencent Cloud templates. It integrates streamlined workflows for general presentations, customer-facing solution decks, executive briefing materials, and speech script generation.",
+    "zh": "基于腾讯云知（乐享）平台，整合通用汇报、面客方案、高拜材料与演讲讲稿生成的 PPT 制作专家"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "06-ContentCreative",
+  "defaultInitPrompt": {
+    "zh": "你好！我是 PPT 制作专家，可以帮你快速生成专业演示文稿。无论是通用主题汇报，还是面向客户的解决方案，把主题或资料发给我就行。你想做一份什么样的 PPT？",
+    "en": "Hi! I'm your PPT Creation Expert. I can quickly turn your topic or materials into a polished presentation — whether it's a general report or a customer-facing solution deck. What kind of PPT would you like to create?"
+  },
+  "tags": [
+    {
+      "en": "PPT Generation",
+      "zh": "PPT 生成"
+    },
+    {
+      "en": "Solution Deck",
+      "zh": "解决方案"
+    },
+    {
+      "en": "Client-facing Materials",
+      "zh": "面客材料"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "Generate a customer-facing solution deck for the smart healthcare industry",
+      "zh": "帮我生成一份智慧医疗行业的面客解决方案 PPT"
+    },
+    {
+      "en": "Create executive briefing materials for a client chairman meeting",
+      "zh": "帮我做一份拜访客户董事长的高拜材料"
+    },
+    {
+      "en": "Turn this document into a presentation",
+      "zh": "把这份文档做成 PPT"
+    }
+  ],
+  "dependencies": {
+    "mcpServers": {
+      "lexiang": {
+        "type": "http",
+        "url": "http://lexiang.agent-gateway.auth-proxy.local/mcp?company_from=CSIG",
+        "headers": {
+          "Authorization": "Bearer ${LEXIANG_TOKEN}"
+        },
+        "x-workbuddy": {
+          "displayName": {
+            "zh": "乐享知识库 MCP",
+            "en": "Lexiang MCP"
+          },
+          "description": {
+            "zh": "连接后检索腾讯云知（乐享）知识库内容。",
+            "en": "Search the Tencent Cloud Zhi (Lexiang) knowledge base after connecting."
+          },
+          "auth": {
+            "type": "token",
+            "tokenSchema": {
+              "title": "乐享 MCP 访问令牌",
+              "fields": [
+                {
+                  "key": "LEXIANG_TOKEN",
+                  "label": "LEXIANG_TOKEN",
+                  "type": "password",
+                  "required": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "plugin": "ppt-creation-expert"
+}

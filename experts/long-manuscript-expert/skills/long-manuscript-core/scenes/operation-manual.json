@@ -1,0 +1,369 @@
+{
+  "artifactRefs": [
+    {
+      "archetypeId": "primary-document",
+      "artifactId": "operation_manual"
+    },
+    {
+      "archetypeId": "structured-index",
+      "artifactId": "procedure_index"
+    },
+    {
+      "archetypeId": "checklist",
+      "artifactId": "safety_checklist"
+    },
+    {
+      "archetypeId": "matrix",
+      "artifactId": "exception_matrix"
+    }
+  ],
+  "capabilityBindings": [
+    {
+      "capabilityIds": [
+        "material-activation",
+        "multimodal-normalizer"
+      ],
+      "operationMode": "material_activation"
+    },
+    {
+      "capabilityIds": [
+        "scene-router",
+        "scene-composer",
+        "chapter-planning-expansion"
+      ],
+      "operationMode": "project_planning"
+    },
+    {
+      "capabilityIds": [
+        "chapter-planning-expansion",
+        "source-ledger-claim-graph",
+        "voice-profile-humanizer"
+      ],
+      "operationMode": "chapter_generation"
+    },
+    {
+      "capabilityIds": [
+        "continuation-recovery",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "continuation"
+    },
+    {
+      "capabilityIds": [
+        "scope-lock-diff",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "bounded_revision"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "rights-privacy-consent",
+        "research-verification"
+      ],
+      "operationMode": "review_quality"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "multi-format-rendering"
+      ],
+      "operationMode": "finished_draft_closure"
+    },
+    {
+      "capabilityIds": [
+        "multi-format-rendering",
+        "scope-lock-diff"
+      ],
+      "operationMode": "template_fill_conversion"
+    },
+    {
+      "capabilityIds": [
+        "multi-format-rendering",
+        "rights-privacy-consent"
+      ],
+      "operationMode": "export_delivery"
+    },
+    {
+      "capabilityIds": [
+        "asset-repurposing",
+        "media-illustration-planning"
+      ],
+      "operationMode": "asset_repurposing"
+    }
+  ],
+  "contentRiskClass": "high",
+  "displayName": "操作、维修与制度手册",
+  "domainObjects": [
+    "exception",
+    "hazard",
+    "precondition",
+    "procedure",
+    "role",
+    "step"
+  ],
+  "fallback": {
+    "allowGeneralSubstitution": false,
+    "connectorUnavailableBehavior": "preserve_route_and_use_local_workflow",
+    "localOfflineAvailable": true,
+    "riskFloor": "high"
+  },
+  "family": "enterprise_professional",
+  "fixtureRefs": [
+    "evals/fixtures/scenes/operation-manual/normal.json",
+    "evals/fixtures/scenes/operation-manual/missing.json",
+    "evals/fixtures/scenes/operation-manual/conflicting.json",
+    "evals/fixtures/scenes/operation-manual/unauthorized.json",
+    "evals/fixtures/scenes/operation-manual/adversarial.json",
+    "evals/fixtures/scenes/operation-manual/connector-unavailable.json"
+  ],
+  "implementationCheckpoint": "C3",
+  "kind": "vertical_scene",
+  "legacyAliases": [],
+  "lifecycle": "implemented",
+  "migrationProvenance": {
+    "mappingVersion": "1.0.0",
+    "seedCatalogSha256": "638f3f8e8f3ab7f1c2080018233ef6d7e19340187926571aad2eaf818eca82f4"
+  },
+  "operationModes": [
+    "material_activation",
+    "project_planning",
+    "chapter_generation",
+    "continuation",
+    "bounded_revision",
+    "review_quality",
+    "finished_draft_closure",
+    "template_fill_conversion",
+    "export_delivery",
+    "asset_repurposing"
+  ],
+  "optionalPortBindings": [
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "procedure_owner_review",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "request_review",
+      "portId": "ReviewPort",
+      "purpose": "optional enhancement for procedure_owner_review",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "training_tasks",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "create_task",
+      "portId": "CollaborationPort",
+      "purpose": "optional enhancement for training_tasks",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "revision_notice",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "send_notification",
+      "portId": "NotificationPort",
+      "purpose": "optional enhancement for revision_notice",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    }
+  ],
+  "privacy": {
+    "livingPersonReview": false,
+    "minimumDataScope": "organization_scoped_minimum"
+  },
+  "qualityGateRefs": [
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.step-completeness",
+      "registryId": "workflow.completeness",
+      "reviewMandate": null,
+      "seedGate": "step_completeness"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.safety-warning",
+      "registryId": "safety.hazard-review",
+      "reviewMandate": null,
+      "seedGate": "safety_warning"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.exception-path",
+      "registryId": "workflow.completeness",
+      "reviewMandate": null,
+      "seedGate": "exception_path"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.role-responsibility",
+      "registryId": "workflow.completeness",
+      "reviewMandate": null,
+      "seedGate": "role_responsibility"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "schema.valid",
+      "reviewMandate": null,
+      "seedGate": "core:schema.valid"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "input.required",
+      "reviewMandate": null,
+      "seedGate": "core:input.required"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "artifact.openability",
+      "reviewMandate": null,
+      "seedGate": "core:artifact.openability"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "delivery-manifest.integrity",
+      "reviewMandate": null,
+      "seedGate": "core:delivery-manifest.integrity"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "scope.lock",
+      "reviewMandate": null,
+      "seedGate": "core:scope.lock"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "external-action.authorized",
+      "reviewMandate": null,
+      "seedGate": "core:external-action.authorized"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "encoding.valid",
+      "reviewMandate": null,
+      "seedGate": "core:encoding.valid"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "id": "audience",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "goal",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "hazard_boundary",
+      "required": true,
+      "sensitivity": "safety_sensitive"
+    },
+    {
+      "id": "materials",
+      "required": true,
+      "sensitivity": "user_provided"
+    },
+    {
+      "id": "procedure_scope",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "version_or_deadline",
+      "required": true,
+      "sensitivity": "standard"
+    }
+  ],
+  "rights": {
+    "clearanceRequired": true,
+    "unknownRightsAction": "human_review"
+  },
+  "sceneId": "operation-manual",
+  "schemaVersion": "1.0.0",
+  "triggers": [
+    {
+      "id": "operation-manual-trigger-1",
+      "signal": "operation manual",
+      "weight": 1
+    },
+    {
+      "id": "operation-manual-trigger-2",
+      "signal": "maintenance procedure",
+      "weight": 0.9
+    },
+    {
+      "id": "operation-manual-trigger-3",
+      "signal": "操作维修手册",
+      "weight": 0.8
+    }
+  ],
+  "workflowStages": [
+    {
+      "exitGateRefs": [
+        "input.required"
+      ],
+      "id": "activate-materials",
+      "operationModes": [
+        "material_activation"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "schema.valid"
+      ],
+      "id": "plan-project",
+      "operationModes": [
+        "project_planning"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "delivery-manifest.integrity"
+      ],
+      "id": "draft-and-revise",
+      "operationModes": [
+        "chapter_generation",
+        "continuation",
+        "bounded_revision",
+        "template_fill_conversion"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "delivery-manifest.integrity",
+        "encoding.valid",
+        "external-action.authorized",
+        "input.required",
+        "safety.hazard-review",
+        "schema.valid",
+        "scope.lock",
+        "workflow.completeness"
+      ],
+      "id": "review-and-close",
+      "operationModes": [
+        "review_quality",
+        "finished_draft_closure",
+        "export_delivery",
+        "asset_repurposing"
+      ]
+    }
+  ]
+}

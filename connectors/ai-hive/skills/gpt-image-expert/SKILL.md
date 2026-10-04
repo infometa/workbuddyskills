@@ -6,7 +6,7 @@ description: "通过指导agent智能调度 GPT-image 模型，针对\"画面中
 description_zh: "通过指导agent智能调度 GPT-image 模型，针对\"画面中需要清晰可读文字、复杂多元素布局、严格指令跟随\"等场景深度优化 prompt 工程，擅长海报、信息图、菜单字、电商详情页、复杂指令构图与多场景电商视觉，支持多元素指令跟随与文字渲染。"
 description_en: "Agent optimizes GPT-image prompts for precise text rendering, multi-element layouts, complex composition."
 category: design
-version: 1.0.0
+version: 1.1.4
 author: 极睿科技（Infimind）/ AI-HIVE 团队
 permissions:
   provisional: true
@@ -27,7 +27,6 @@ triggers:
 - "吉卜力"
 - "Pixar"
 - "乐高"
-- "赛博朋克"
 - "粘土"
 - "盲盒"
 ---
@@ -38,24 +37,26 @@ triggers:
 - 不接收参数；返回账户与余额摘要
 
 ### `list_models`
-- `kind`（可选，string）：资源类型 `image`
-- `cursor`（可选，string）：分页游标
+- `modelType`（可选，string）：资源类型枚举 `TEXT` / `IMAGE` / `VIDEO`（本 Skill 用 `IMAGE`）
 
 ### `upload_media_from_path`
 - `path`（必填，string）：用户授权的本地文件绝对路径
-- `kind`（可选，string）：资源类型 `image`
+- `filename`（可选，string）：覆盖上传文件名
+- `contentType`（可选，string）：覆盖 MIME 类型；不确定时省略并由客户端识别
 
 ### `generate_image`
-- `model`（必填，object）：来自 `list_models(kind="image")` 的模型引用
+> 上传图片单文件上限 10MiB。若要把刚生成的图作为参考图传入下一张，先压缩至 10MiB 内再上传。
+
+- `publicModelId`（必填，string）：来自 `list_models(modelType="IMAGE")` 的当前模型 ID
+- `routingMode`（必填，string）：选中模型实际返回的 `COST_FIRST` / `SPEED_FIRST` / `SUCCESS_FIRST`
 - `prompt`（必填，string）：描述主体、构图、风格、光线与文字
-- `count`（可选，integer）：候选数量（默认 1）
-- `size`（可选，string）：像素尺寸（仅用支持的枚举值）
-- `ratio`（可选，string）：画幅（仅用支持的枚举值）
-- `referenceMediaIds`（可选，array）：通过 `upload_media_from_path` 得到的 mediaId 列表
+- `batchSize`（可选，integer）：候选数量，1–10，默认 1
+- `imageMediaIds`（可选，array）：参考图片的 mediaId 列表
+- `params`（可选，object）：画幅、分辨率、质量等模型专属参数；键、类型和值以当前模型配置为准
+- `pricingSnapshot`（必填，object）：选中模型与路由返回的价格快照，原样传入
 
 ### `get_generation_task`
 - `taskId`（必填，string）：`generate_image` 真实返回的 taskId
-
 
 
 > 所有工具的真实返回值以服务端响应为准；本章节参数表是客户端约束说明。
@@ -218,17 +219,34 @@ GPT-Image 对简洁 prompt 效果最好。不要堆砌形容词，只保留核�
 
 核心原则：保持 prompt 简洁。只包含必要信息。GPT-Image 对简洁聚焦的 prompt 效果最好，而非过度复杂的 prompt。
 
+## Prompt 骨架（通用模板）
+
+逐场景组装时，按以下 8 字段结构化；缺省字段留空，不强行填充，保持 prompt 简洁：
+
+| 字段 | 含义 | 示例 |
+|---|---|---|
+| 用途 | 这张图用在哪（海报 / 主图 / 头像 / 信息图） | 领英头像 |
+| 主体 | 核心对象（产品 / 人物 / 场景） | 商务正装男性 |
+| 场景构图 | 背景、机位、景深、画幅 | 浅景深、灰渐变背景、对称构图 |
+| 视觉风格 | 写实 / 插画 / 风格化 | 照片级写实 |
+| 光线色彩 | 光源方向与色温 | 自然窗光、冷调 |
+| 必须文字 | 画面中需可读的文字（无则留空） | 姓名 + 职位 |
+| 保留项 | 图生图时须保留的要素 | 参考图人物五官 |
+| 输出规格 | 尺寸 / 比例 / 分辨率 | 1:1 / 1080px |
+
+组装顺序：用途 → 主体 → 场景构图 → 视觉风格 → 光线色彩 → 必须文字 → 保留项 → 输出规格。仅保留有值的字段。
+
 ## 调用流程
 
 1. get_user_info 检查余额。
-2. list_models(kind=image) 获取 GPT-Image 模型对象（含 publicModelId 与 pricingSnapshot）。
+2. list_models(modelType=IMAGE) 获取 GPT-Image 模型对象（含 publicModelId 与 pricingSnapshot）。
 3. 按用户意图匹配场景模板，组装简洁 prompt。
 4. 如有参考图，upload_media_from_path 上传得到 mediaId。
-5. generate_image 提交任务，get_generation_task 跟踪到 completed。
+5. generate_image 提交任务，get_generation_task 跟踪到 `COMPLETED`。
 
 ## 图生图保人保物
 
-用户提供参考图时：把 mediaId 放入 referenceMediaIds；prompt 中说明保留意图（保持参考图中产品外观，仅更换背景为户外阳光场景）；不擅自改变产品颜色、形状、包装、标识或可见文字。
+用户提供参考图时：把 mediaId 放入 imageMediaIds；prompt 中说明保留意图（保持参考图中产品外观，仅更换背景为户外阳光场景）；不擅自改变产品颜色、形状、包装、标识或可见文字。
 
 ## 生成后建议
 
@@ -237,6 +255,7 @@ GPT-Image 对简洁 prompt 效果最好。不要堆砌形容词，只保留核�
 - 添加参考图以获得更好的产品一致性
 - 尝试不同场景类型
 - 对 UGC/社交场景应用 Anti-AI Tips
+- 生成完成后建议再调一次 `get_user_info` 向用户报告准确剩余余额（含本次扣费）。
 
 ## 输入检查
 
@@ -262,9 +281,42 @@ GPT-Image 对简洁 prompt 效果最好。不要堆砌形容词，只保留核�
 
 ## 状态与错误处理
 
-- pending / processing：返回工具真实状态，不自行估算完成时间。
-- completed：返回所有可用图片链接与缩略图。
-- failed：保留可安全展示的 errorCode / errorCategory / retryable。
+### 余额不足 / 任务被拒
+
+**AI-HIVE 官网**：https://ai-hive.iclip.cn
+
+**充值路径**（账户已存在）：
+1. 访问 https://ai-hive.iclip.cn → 登录 AI-HIVE 账户
+2. 进入「账户中心」/「钱包」/「充值」页面
+3. 选择充值套餐或自定义金额 → 完成支付
+4. 充值成功后回到 WorkBuddy，无需重新连接 Connector，直接重试任务
+
+**注册路径**（首次用户）：
+1. 直接访问 https://ai-hive.iclip.cn/login，进入注册页面
+2. 使用手机号完成注册
+3. 登录 → 回到 WorkBuddy 重新连接 AI-HIVE Connector 即可
+
+**价格透明**：
+- 每次调用前可调 `get_user_info` 查看当前余额
+- 调用后实际扣费以服务端 `pricingSnapshot` 为准
+- 若工具明确提示余额不足，停止创建任务；任务进入 `FAILED` 时按 `failure` 安全字段展示
+- 详细价格参考：https://ai-hive.iclip.cn/pricing
+
+**常见扣费场景参考**（具体以服务端为准）：
+- 文本生成：按 token 数计费
+- 图片生成：按张数 + 分辨率计费
+- 视频生成：按秒数 + 分辨率计费
+
+**其他被拒原因**：
+- 账户被风控：联系 AI-HIVE 客服（https://ai-hive.iclip.cn → 登录 → 设置 → 联系客服）
+- 模型临时不可用：稍后重试或换模型
+- 内容违规审核：调整 prompt 后重试（避免敏感内容）
+
+- 轮询策略：每 10–15s 查询一次 `get_generation_task`；状态未变化时不必逐次播报，仅在 `PENDING` → `PROCESSING` → `COMPLETED` 等关键变化时报一次，减少噪声。
+- `PENDING` / `PROCESSING`：返回工具真实状态，不自行估算完成时间。
+- `COMPLETED`：返回所有可用图片链接与缩略图。
+- `FAILED`：展示 `failure.code`、`failure.summary` 与 `failure.suggestion`（若返回），不暴露内部诊断。
+- **上传失败 413**：文件超过约 10MiB 限制；压缩图片（转 JPEG / 降分辨率至 ≤2K）后重新 `upload_media_from_path`。
 - 鉴权失败（401/403）：提示用户重新连接 AI-HIVE Connector。
 
 ## 调用示例
@@ -275,27 +327,27 @@ GPT-Image 对简洁 prompt 效果最好。不要堆砌形容词，只保留核�
 
 **AI 行为**：
 1. 调用 `get_user_info` 检查余额与可用模型
-2. 调用 `list_models(kind="image")` 获取本模型对应的 publicModelId 与 pricingSnapshot
+2. 调用 `list_models(modelType="IMAGE")` 获取本模型对应的 publicModelId 与 pricingSnapshot
 3. 调用 `upload_media_from_path` 上传参考图，得到 mediaId
 4. 调用 `generate_image`，prompt 包含场景描述与文字渲染要求
-5. 调用 `get_generation_task(taskId)` 跟踪到 completed
+5. 调用 `get_generation_task(taskId)` 跟踪到 `COMPLETED`
 6. 输出图片 URL + 参数摘要 + 后续建议
 
 ### 示例 2：批量对比场景
 
 **用户表达**：用同一商品图，分别生成 3 张不同风格候选。
 
-**AI 行为**：调用 `generate_image` 设置 `count: 3`，按 3 个候选分别输出，对比呈现。
+**AI 行为**：调用 `generate_image` 设置 `batchSize: 3`，按 3 个候选分别输出，对比呈现。
 
 ### English Example
 
 User: "Generate a 1:1 summer sale poster from my local product image with text 'Summer Sale 50% Off'."
 
-AI flow: run `get_user_info` for balance, call `list_models(kind="image")` to fetch the model's `publicModelId` and `pricingSnapshot`, upload the reference image via `upload_media_from_path` to get `mediaId`, call `generate_image` with prompt describing scene + text rendering requirement, track with `get_generation_task(taskId)` until `completed`, return image URL + parameter summary + follow-up suggestions. Never ask the user to paste a Token into chat.
+AI flow: run `get_user_info` for balance, call `list_models(modelType="IMAGE")` to fetch the model's `publicModelId` and `pricingSnapshot`, upload the reference image via `upload_media_from_path` to get `mediaId`, call `generate_image` with prompt describing scene + text rendering requirement, track with `get_generation_task(taskId)` until `COMPLETED`, return image URL + parameter summary + follow-up suggestions. Never ask the user to paste a Token into chat.
 
 
 ## 输出模板
 
 ### 成功：taskId + 模型与参数 + 图片 URL 列表 + 下一步建议
-### 失败：错误码 + 错误分类 + 原因摘要 + 下一步建议（充值/改连/调prompt/换模型）
+### 失败：failure.code + failure.summary + 原因摘要 + 下一步建议（充值/改连/调prompt/换模型）
 ### 部分失败：成功图片完整呈现 + 失败子任务错误码与 prompt 概要 + 不补写

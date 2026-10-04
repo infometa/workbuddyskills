@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "beike-yi.option-decision/v1",
+  "purpose": "Keeps teaching option comparison small, explainable, and teacher-controlled.",
+  "maxOptions": 3,
+  "defaultOptions": 2,
+  "decisionOwner": "teacher",
+  "teacherOverrideAllowed": true,
+  "requiredOptionFields": [
+    "optionName",
+    "fitConditions",
+    "teachingMechanism",
+    "classroomStructureChange",
+    "teacherPreparationCost",
+    "studentEvidence",
+    "benefits",
+    "tradeoffs",
+    "failureSignals",
+    "recommendationBasis"
+  ],
+  "comparisonDimensions": [
+    "goal_alignment",
+    "learner_fit",
+    "classroom_feasibility",
+    "observable_evidence",
+    "reuse_potential"
+  ],
+  "rules": [
+    "Options must differ in teaching mechanism or classroom structure, not only wording.",
+    "Benefits and tradeoffs must be shown with comparable visibility.",
+    "A recommendation must cite the current material or be labeled assumption-driven.",
+    "Choosing an option must not write or overwrite a file automatically.",
+    "Keep one primary teaching problem in the current decision thread; park other issues for later."
+  ]
+}

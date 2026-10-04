@@ -1,0 +1,73 @@
+{
+  "name": "query_product_attribute",
+  "description": "按产品名称/型号查询参数接口。输入产品型号与可选的指定参数名集合，由后端返回该产品的参数名值对；参数名集合为空则返回该产品全量参数。所有参数必须包在 request 对象里。",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "request": {
+        "type": "object",
+        "description": "售前咨询「型号-参数/价格」「型号-购买建议」请求参数",
+        "properties": {
+          "productName": {
+            "type": "string",
+            "description": "产品名称或产品型号，必填。提取优先级：① 先查 assets/product_name_aliases.json 的别名映射（口语说法 → 标准型号名，触发词取最长匹配，如「云溪5.0 D3」→ XQG120-BLE7AD3U1、「小红花502」→ BCD-502WGHTDEDG7U1、「卡萨帝601鉴赏家」→ BCD-601WGCTDA4CBU1(AI)）；② 映射不到时按该文件的 fallback_pattern 从用户话语/记忆中原样摘出型号（以大写字母或数字开头，含大写字母、数字、- / （） () 空格、中文，长度 4-60；不改写、不补全、不纠正拼写），品牌智能体直接传入的型号（示例 BCD-345XXXX）同样原样使用；③ 两者都取不到时：有品类改走 query_product_attribute_by_category，无品类返回错误码 4002。一个说法命中多个型号（如只说「云溪4.0」）时按 series_disambiguation 追问缺失的那一个维度，不要随便挑一个"
+          },
+          "attributeNames": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "指定参数名集合，可空。用户明确问到的维度映射为标准参数名后按提问顺序填入（如 [\"容量偏好\",\"价格\"]）：品类专属参数名见 assets/trigger_dict.json 的 attribute_slots_by_category（按已确定品类取该品类下的槽位，触发词取最长匹配），通用参数名（套系/价格/品牌偏好/渠道，所有品类都有）见 universal_attribute_slots，口语同义词兜底见 assets/consult_attributes.json 的 slot_synonyms。金额条件的参数名是「价格」，不存在「预算」。用户泛问「参数是什么/有哪些参数」时留空表示查全量参数；映射不到标准参数名的长尾表达宁可留空查全量，也不得自造参数名。宿主会去重并最多取前 10 个"
+          }
+        },
+        "required": ["productName"]
+      }
+    },
+    "required": ["request"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "ok": {"type": "boolean", "description": "true=查询成功；false 时看 error/message"},
+      "fullAttributes": {"type": "boolean", "description": "true=本次查的是全量参数（走场景二）；false=指定参数（走场景一）"},
+      "requestedAttributeNames": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "去重截断后实际下发的指定参数名；空数组等价于全量参数。场景一里用户指定但 product.productAttributes 中缺失的参数名，需输出「暂无此参数信息」"
+      },
+      "queriedProductName": {"type": "string", "description": "本轮实际下发给下游的型号原文（即用户输入/记忆里的那个型号）。模糊匹配提示里的「您的【输入型号】」用它，不要用命中型号顶替"},
+      "fuzzyMatched": {"type": "boolean", "description": "是否模糊匹配（等价于 product.matchType==\"2\"）。**true 时必须在原输出话术之前先加一段模糊匹配提示**，见 consult_scenarios.json 的 fuzzy_match_notice；false 保持原输出模式不变"},
+      "product": {"$ref": "#/definitions/Product", "description": "命中的产品及其参数"},
+      "error": {"type": "string", "description": "错误码：4003 查不到参数（最常见——下游返参为空时「型号不存在」与「指定参数名没匹配上」不可区分，统一归此码，话术不提型号真伪）/ 4002 型号与品类均缺失 / 4004 参数接口失败 / 4005 响应超时 / 4001 产品未找到（少见，仅下游显式回该码时）"},
+      "message": {"type": "string", "description": "面向用户的稳定错误提示，禁止在错误时编造参数值"}
+    }
+  },
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "productName": {"type": "string", "description": "产品名称，用于回复第一行「产品名称 产品型号」"},
+        "productCode": {"type": "string", "description": "产品型号"},
+        "matchType": {"type": "string", "description": "匹配方式：\"1\" 精准匹配（命中产品名称与入参完全一致）、\"2\" 模糊匹配（前缀命中，名称与入参不一致）。**仅按产品名称查询时有值**，按品类查询为 null。为 \"2\" 时必须先输出模糊匹配提示再输出原对比话术（顶层 fuzzyMatched 是同一判定的布尔快捷字段）"},
+        "productAttributes": {
+          "type": "array",
+          "description": "产品参数集合；展示顺序由 Skill 按 full_attributes_priority 决定，不直接沿用本数组顺序",
+          "items": {
+            "type": "object",
+            "properties": {
+              "attributeName": {"type": "string", "description": "参数名/属性名。**展示时有一处别名：attributeName 为「价格」时，对用户写「官方指导价」**（「- 官方指导价：5299元」），不写「价格/售价/参考价/到手价」；见 consult_attributes.json 的 display_name_overrides。其余参数名原样展示"},
+              "attributeValue": {"type": "string", "description": "参数值/属性值。原样展示，不改数值与单位——价格改的只是参数名，不是参数值"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "usage_rules": [
+    "本轮或记忆中存在产品型号时只调用本工具，不再调用 query_product_attribute_by_category。",
+    "同一轮最多调用一次；需要查多个型号的参数时说明本技能不做多型号对比，交由产品对比技能处理。",
+    "参数名与参数值一律以本工具返回为准，不得引用 assets 中的示例值，不得跨型号推断。",
+    "**参数名「价格」对用户展示为「官方指导价」**：参数行写「- 官方指导价：5299元」，正文提到金额时写「这款的官方指导价为 5299元」；只换参数名，参数值、单位与排序都不变，缺失行写「- 官方指导价：暂无此参数信息」。**送出侧不变**：attributeNames 仍填标准参数名「价格」，「官方指导价」不在 legal_attribute_names.names 里，下发它后端匹配不到、会返回空参数。",
+    "**fuzzyMatched=true（即 product.matchType=\"2\"）时，先输出一段模糊匹配提示，再接原本的输出话术**：「您的【queriedProductName】有多款产品，已为您自动匹配到 【product.productName】 查询，如与您意向产品不同，请告诉我准确的型号名称哦~」。提示只加这一句，接着照场景一/二/三原样输出，不改动原话术。fuzzyMatched=false 或字段缺失时保持原输出模式，不加这句。",
+    "ok=false 时按 assets/consult_scenarios.json 的 fallbacks 原样输出降级话术，不补充任何具体参数值。",
+    "身份字段由宿主注入，request 中不得包含用户、租户或会话标识。"
+  ]
+}

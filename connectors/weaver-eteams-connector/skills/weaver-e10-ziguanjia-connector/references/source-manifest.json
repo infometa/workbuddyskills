@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 2,
+  "module": "asset",
+  "skill": "weaver-e10-ziguanjia-connector",
+  "generatedFrom": {
+    "sourceSkill": "weaver-e10-ziguanjia-connector",
+    "version": "unknown",
+    "path": "weaver-e10-ziguanjia-connector",
+    "kind": "workbuddy-document-skill",
+    "availability": "available-in-external-dir"
+  },
+  "generatedAt": "2026-09-07T00:00:00.000Z",
+  "sourceSet": {
+    "aggregateSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "sourceRoots": ["weaver-e10-ziguanjia-connector"],
+    "detectionStrength": "weak"
+  },
+  "generatedTargets": {
+    "cli": ["src/shortcuts/asset", "src/shortcuts/index.ts"],
+    "skill": ["skills/weaver-e10-ziguanjia-connector"],
+    "tests": ["test/business/ziguanjia-*.test.ts"],
+    "docs": ["docs/ziguanjia.md", "skill-template/domains/ziguanjia.md"]
+  },
+  "sources": [],
+  "sourceChunks": [
+    {
+      "id": "asset.gate.check",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-agent-entry.md",
+      "anchor": "reference:ziguanjia-agent-entry.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.gate.check"],
+      "mapsToReferences": ["references/ziguanjia-agent-entry.md"]
+    },
+    {
+      "id": "asset.list",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-query.md",
+      "anchor": "reference:ziguanjia-query.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.list", "asset.detail", "asset.uselist", "asset.repaillist", "asset.purchaselist"],
+      "mapsToReferences": ["references/ziguanjia-query.md"]
+    },
+    {
+      "id": "asset.resolve",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-resolve.md",
+      "anchor": "reference:ziguanjia-resolve.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.resolve.location", "asset.resolve.status", "asset.resolve.type"],
+      "mapsToReferences": ["references/ziguanjia-resolve.md"]
+    },
+    {
+      "id": "asset.create",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-create.md",
+      "anchor": "reference:ziguanjia-create.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.create"],
+      "mapsToReferences": ["references/ziguanjia-create.md"]
+    },
+    {
+      "id": "asset.update",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-update.md",
+      "anchor": "reference:ziguanjia-update.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.update"],
+      "mapsToReferences": ["references/ziguanjia-update.md"]
+    },
+    {
+      "id": "asset.use",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-use.md",
+      "anchor": "reference:ziguanjia-use.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.use"],
+      "mapsToReferences": ["references/ziguanjia-use.md"]
+    },
+    {
+      "id": "asset.return",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-return.md",
+      "anchor": "reference:ziguanjia-return.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.return.query", "asset.return.create"],
+      "mapsToReferences": ["references/ziguanjia-return.md"]
+    },
+    {
+      "id": "asset.repair",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-repair.md",
+      "anchor": "reference:ziguanjia-repair.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.repair.query", "asset.repair.create"],
+      "mapsToReferences": ["references/ziguanjia-repair.md"]
+    },
+    {
+      "id": "asset.purch",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-purch.md",
+      "anchor": "reference:ziguanjia-purch.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.purch"],
+      "mapsToReferences": ["references/ziguanjia-purch.md"]
+    },
+    {
+      "id": "asset.depre",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-depre.md",
+      "anchor": "reference:ziguanjia-depre.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.depre"],
+      "mapsToReferences": ["references/ziguanjia-depre.md"]
+    },
+    {
+      "id": "disabled",
+      "sourcePath": "skills/weaver-e10-ziguanjia-connector/references/ziguanjia-disabled-capabilities.md",
+      "anchor": "reference:ziguanjia-disabled-capabilities.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mapsToOperations": ["asset.transfer", "asset.approve", "asset.file.upload"],
+      "mapsToReferences": ["references/ziguanjia-disabled-capabilities.md"]
+    }
+  ],
+  "operationImpact": {
+    "added": [
+      "asset.gate.check",
+      "asset.list",
+      "asset.detail",
+      "asset.uselist",
+      "asset.repaillist",
+      "asset.purchaselist",
+      "asset.resolve.location",
+      "asset.resolve.status",
+      "asset.resolve.type",
+      "asset.create",
+      "asset.update",
+      "asset.use",
+      "asset.return.query",
+      "asset.return.create",
+      "asset.repair.query",
+      "asset.repair.create",
+      "asset.purch",
+      "asset.depre"
+    ],
+    "withheld": ["asset.transfer", "asset.approve", "asset.file.upload"],
+    "changed": [],
+    "removed": []
+  },
+  "artifactBaseline": {
+    "cliModule": "src/shortcuts/asset",
+    "skillDir": "skills/weaver-e10-ziguanjia-connector",
+    "referenceCount": 11,
+    "manifestOperations": 18,
+    "withheldOperations": 3
+  }
+}

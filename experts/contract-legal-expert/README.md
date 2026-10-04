@@ -48,7 +48,7 @@ contract-legal-expert/
 
 ## 鉴权
 
-首次业务调用时，需引导用户前往 https://qian.tencent.com/aiSkill 获取 SIGN-TOKEN，由 `tencent-esign-contract` Skill 通过 `ESIGN_TOKEN` 环境变量或 `~/.esign-token` 持久化。详见 `skills/tencent-esign-contract/SKILL.md`。
+首次业务调用时，需引导用户前往 https://qian.tencent.com/aiSkill 获取 SIGN-TOKEN，通过 `auth-validate <token>` 验证后由 `tencent-esign-contract` Skill 持久化到 `~/.esign-token`（权限 600，统一从该文件读取，不使用环境变量）。详见 `skills/tencent-esign-contract/SKILL.md`。
 
 ## 安装
 

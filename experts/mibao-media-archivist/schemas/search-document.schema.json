@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["documentId", "projectId", "documentKind", "title", "body", "sourceRef", "state"],
+  "properties": {
+    "documentId": {"type": "string", "minLength": 1, "maxLength": 512},
+    "projectId": {"type": "string", "minLength": 1, "maxLength": 512},
+    "documentKind": {"enum": ["asset", "segment", "evidence", "annotation", "representation"]},
+    "title": {"type": "string", "maxLength": 512},
+    "body": {"type": "string", "maxLength": 20000},
+    "sourceRef": {"type": "string", "minLength": 1, "maxLength": 512},
+    "assetId": {"type": ["string", "null"]},
+    "segmentId": {"type": ["string", "null"]},
+    "startMs": {"type": ["integer", "null"], "minimum": 0},
+    "endMs": {"type": ["integer", "null"], "minimum": 0},
+    "evidenceRefs": {"type": "array", "maxItems": 128, "items": {"type": "string"}},
+    "state": {"enum": ["candidate", "verified", "rejected", "unknown"]}
+  }
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>简历诊断报告</title>
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --ink: #1f2733;
+    --ink-sub: #667085;
+    --line: #e8ecf3;
+    --brand: #3b6ef6;
+    --brand-soft: #eef3ff;
+    --ok: #10b981;
+    --warn: #f59e0b;
+    --danger: #ef6a5e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 32px 16px 48px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; }
+
+  /* 头部 */
+  .hero { text-align: center; margin-bottom: 24px; }
+  .hero h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; }
+  .hero .meta { margin-top: 6px; font-size: 13px; color: var(--ink-sub); }
+  .hero .meta b { color: var(--ink); font-weight: 600; }
+
+  /* 分数卡 */
+  .score-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px 24px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px rgba(16, 24, 40, .05);
+  }
+  .ring-wrap { position: relative; flex-shrink: 0; }
+  .ring-wrap svg { display: block; transform: rotate(-90deg); }
+  .ring-bg { stroke: #eef1f6; }
+  .ring-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .ring-center .num { font-size: 40px; font-weight: 800; line-height: 1; }
+  .ring-center .unit { margin-top: 4px; font-size: 12px; color: var(--ink-sub); }
+  .beat { flex: 1; }
+  .beat .beat-text { font-size: 20px; font-weight: 700; color: var(--brand); }
+  .beat .beat-title { font-size: 14px; color: var(--ink); margin-top: 4px; font-weight: 600; }
+  .beat .beat-sub { font-size: 12.5px; color: var(--ink-sub); margin-top: 8px; }
+
+  /* 模块卡片 */
+  .module {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    margin-top: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .03);
+  }
+  .m-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    background: linear-gradient(180deg, #fbfcfe, #f6f8fc);
+    border-bottom: 1px solid var(--line);
+  }
+  .m-head h2 { font-size: 16px; font-weight: 700; }
+  .m-head .badge {
+    font-size: 12px; font-weight: 600; color: var(--brand);
+    background: var(--brand-soft); border: 1px solid #dce7ff;
+    padding: 2px 10px; border-radius: 999px;
+  }
+  .m-body { padding: 6px 18px 14px; }
+  .item {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px dashed var(--line);
+  }
+  .item:last-child { border-bottom: none; }
+  .item .tag {
+    flex-shrink: 0; font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 6px; margin-top: 3px;
+    white-space: nowrap;
+  }
+  .item .txt { font-size: 14px; color: var(--ink); word-break: break-word; }
+  .item .txt.suggest-body { white-space: pre-line; }
+
+  .t-nodata .tag { color: #b45309; background: #fef3c7; }
+  .t-nofill .tag { color: #475467; background: #f2f4f7; }
+  .t-suggest .tag { color: #047857; background: #d1fae5; }
+  .t-suggest { background: #f8fdf9; margin: 0 -18px; padding: 0 18px; }
+
+  /* 页脚 */
+  .foot {
+    margin-top: 24px; text-align: center;
+    font-size: 12px; color: #98a2b3;
+  }
+
+  /* 空状态 */
+  .empty { text-align: center; color: var(--ink-sub); padding: 48px 0; font-size: 14px; }
+
+  @media (max-width: 560px) {
+    .score-card { flex-direction: column; text-align: center; }
+    .beat { display: flex; flex-direction: column; align-items: center; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .score-card, .module { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <h1>简历诊断报告</h1>
+    <div class="meta">简历标识：<b>{{RESUME_ID}}</b> · 生成于 {{GENERATED_AT}}</div>
+  </header>
+
+  <section class="score-card">
+    <div class="ring-wrap">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/>
+        <circle class="ring-fg" cx="60" cy="60" r="52" fill="none" stroke-width="10"
+                stroke-dasharray="326.73" stroke-dashoffset="{{SCORE_RING_OFFSET}}" stroke="{{SCORE_RING_COLOR}}"/>
+      </svg>
+      <div class="ring-center">
+        <div class="num">{{SCORE}}</div>
+        <div class="unit">总分</div>
+      </div>
+    </div>
+    <div class="beat">
+      <div class="beat-text">{{BEAT_TEXT}}</div>
+      <div class="beat-title">{{BEAT_TITLE}}</div>
+      <div class="beat-sub">基于六维评分模型：简历完整度 · 经历描述 · 学习能力 · 专业能力 · 创新领导力 · 职场能力</div>
+    </div>
+  </section>
+
+  <section>
+    <!-- ============ MODULE_ROWS：模块诊断卡片 ============
+     按 report.reportDetails 数组顺序逐模块生成（不得重排），每个模块一个 .module：
+     <div class="module">
+       <div class="m-head">
+         <h2>{moduleName}</h2>
+         <span class="badge">{diagnoseNum} 条</span>
+       </div>
+       <div class="m-body">
+         {每条诊断文案一个 .item，文案逐条原样注入，不得改写；含换行时保留 \n}
+       </div>
+     </div>
+
+     tag 分类规则（按文案内容判断，文本一律原样）：
+       - 以「描述建议」开头            → tag=描述建议， item class="item t-suggest"， txt class="txt suggest-body"（保留 \n 换行）
+       - 含「可以为你加分哦」           → tag=可加分，   item class="item t-nodata"，  txt class="txt"
+       - 含「是简历中的重要信息，请完善」 → tag=需完善，   item class="item t-nofill"，   txt class="txt"
+       - 其他                          → tag=建议，     item class="item t-nofill"，   txt class="txt"
+     每个 .item 结构：
+     <div class="item t-xxx">
+       <span class="tag">xxx</span>
+       <span class="txt [suggest-body]">原文</span>
+     </div>
+
+     report.reportDetails 为空时：MODULE_ROWS 填 <div class="empty">暂无诊断明细</div>
+     文本中若含 < > & 等字符，按 HTML 实体转义（& → &amp; 等）。
+     ============ /MODULE_ROWS ============ -->
+    {{MODULE_ROWS}}
+  </section>
+
+  <footer class="foot">本报告由自动化诊断生成，仅供简历优化参考，不构成任何录用或淘汰依据。</footer>
+</main>
+</body>
+</html>

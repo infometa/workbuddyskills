@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/project/2.0",
+  "title": "Mom Dialogue Project",
+  "x-schema-version": "2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["project_type", "schema_version", "created_at", "source_files_read_only", "write_scope", "source_roots_registered"],
+  "properties": {
+    "project_type": {"const": "fbsir-mom-dialogue"},
+    "schema_version": {"const": "2.0"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "source_files_read_only": {"const": true},
+    "write_scope": {"const": "project-directory-only"},
+    "source_roots_registered": {"type": "array", "items": {"type": "string", "pattern": "^ROOT-[A-Z0-9]{12,64}$"}, "uniqueItems": true}
+  }
+}

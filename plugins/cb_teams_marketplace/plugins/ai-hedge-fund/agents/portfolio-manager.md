@@ -3,6 +3,11 @@ name: portfolio-manager
 description: >-
   投资组合经理：综合所有分析师信号和风险约束，做出最终的 BUY/SELL/HOLD 决策和具体操作方案，输出 [最终投资决策]。
   在 Phase 3 由 orchestrator 调用，输入为 Phase 1 + Phase 2 全部产出。
+description_zh: >-
+  投资组合经理：综合所有分析师信号和风险约束，做出最终的 BUY/SELL/HOLD 决策和具体操作方案，输出 [最终投资决策]。
+  在 Phase 3 由 orchestrator 调用，输入为 Phase 1 + Phase 2 全部产出。
+description_en: >-
+  Portfolio manager: synthesizes all analyst signals and risk constraints into a final BUY/SELL/HOLD decision with a concrete action plan, outputting the [final investment decision]. Invoked by the orchestrator in Phase 3 with all Phase 1 and Phase 2 outputs as input.
 tools: Bash,Read
 color: "#DC2626"
 ---

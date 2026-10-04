@@ -1,6 +1,8 @@
 ---
 name: bubble-detection
 description: 用于反身性与预期泡沫识别，聚焦市场行为、预期管理、风险识别、高阶交易研究。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想判断一个热门板块或热门个股是否已经进入"预期自我强化"的泡沫阶段，什么时候从基本面交易转向预期交易，再转向兑现与反噬。
+description_zh: "用于反身性与预期泡沫识别，聚焦市场行为、预期管理、风险识别、高阶交易研究。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想判断一个热门板块或热门个股是否已经进入\"预期自我强化\"的泡沫阶段，什么时候从基本面交易转向预期交易，再转向兑现与反噬。"
+description_en: "Use for identifying reflexivity and expectation-driven bubbles, focusing on market behavior, expectation management, risk identification, and advanced trading research. Suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It assesses whether a popular sector or stock has entered a self-reinforcing expectations bubble and identifies transitions from fundamental trading to expectation trading, realization, and eventual reversal."
 ---
 
 # 反身性与泡沫识别

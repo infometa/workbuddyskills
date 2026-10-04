@@ -1,0 +1,75 @@
+{
+  "name": "query_product_attribute_by_category",
+  "description": "按品类查询销量 TOP3 型号参数接口。输入家电品类与可选的指定参数名集合，由后端按一年内销量倒序取 TOP3 型号并返回各型号的参数名值对；参数名集合为空则返回 TOP3 型号的全量参数。所有参数必须包在 request 对象里。",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "request": {
+        "type": "object",
+        "description": "售前咨询「品类-参数/价格」请求参数",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "家电品类，必填，只支持一个值。按 assets/trigger_dict.json 的 category 词典取最长匹配后映射为标准品类名，取值必须是这 15 个之一：冰箱/冷柜/波轮洗衣机/滚筒洗衣机/电热水器/太阳能热水器/燃气热水器/平板电视/家中机/挂机/柜机/烤箱/洗碗机/吸排油烟机/燃气灶。用户说模糊品类时按 category_ambiguous_default 取默认优先品类且**不要追问**：洗衣机→滚筒洗衣机、热水器→电热水器、空调→挂机。本轮与记忆各支持 1 个，按时间先后（记忆按最近时间）截断。为空时宿主不会调用下游，直接返回错误码 4002"
+          },
+          "attributeNames": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "指定参数名集合，可空。映射规则同 query_product_attribute：品类专属参数名按已确定品类取 assets/trigger_dict.json 的 attribute_slots_by_category[该品类] 下的槽位（触发词取最长匹配），通用参数名（套系/价格/品牌偏好/渠道）见 universal_attribute_slots。金额条件的参数名是「价格」，不存在「预算」。留空表示查 TOP3 型号的全量参数。宿主会去重并最多取前 10 个"
+          }
+        },
+        "required": ["category"]
+      }
+    },
+    "required": ["request"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "ok": {"type": "boolean", "description": "true=查询成功；false 时看 error/message"},
+      "maxProducts": {"type": "integer", "description": "品类分支返回型号上限（默认 3，即销量 TOP3）"},
+      "total": {"type": "integer", "description": "实际返回的型号数量，可能少于 maxProducts"},
+      "fullAttributes": {"type": "boolean", "description": "true=本次查的是全量参数；false=指定参数"},
+      "requestedAttributeNames": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "去重截断后实际下发的指定参数名；空数组等价于全量参数"
+      },
+      "products": {
+        "type": "array",
+        "description": "销量倒序的 TOP3 型号及其参数，顺序即下游给出的销量排序，禁止重排",
+        "items": {"$ref": "#/definitions/Product"}
+      },
+      "error": {"type": "string", "description": "错误码：4003 查不到参数（最常见——下游返参为空时统一归此码，不推断品类或型号是否存在）/ 4002 型号与品类均缺失 / 4004 参数接口失败 / 4005 响应超时 / 4001 品类下未找到产品（少见，仅下游显式回该码时）"},
+      "message": {"type": "string", "description": "面向用户的稳定错误提示，禁止在错误时编造参数值"}
+    }
+  },
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "productName": {"type": "string", "description": "产品名称"},
+        "productCode": {"type": "string", "description": "产品型号"},
+        "productAttributes": {
+          "type": "array",
+          "description": "该型号的参数集合",
+          "items": {
+            "type": "object",
+            "properties": {
+              "attributeName": {"type": "string", "description": "参数名/属性名。**展示时有一处别名：attributeName 为「价格」时，对用户写「官方指导价」**（「- 官方指导价：5299元」），不写「价格/售价/参考价/到手价」；见 consult_attributes.json 的 display_name_overrides。其余参数名原样展示"},
+              "attributeValue": {"type": "string", "description": "参数值/属性值。原样展示，不改数值与单位——价格改的只是参数名，不是参数值"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "usage_rules": [
+    "只在本轮与记忆都没有产品型号、仅有品类时调用；一旦存在型号改用 query_product_attribute。",
+    "同一轮最多调用一次；品类只传一个，不得为覆盖更多结果拆成多次调用。",
+    "返回的是 TOP3 型号的参数，不得说成用户问的某一个型号的参数，也不得把三款参数混为一款。",
+    "本分支不做性价比/购买建议；用户要买建议时引导补充具体型号。",
+    "ok=false 时按 assets/consult_scenarios.json 的 fallbacks 原样输出降级话术，不补充任何具体参数值。",
+    "身份字段由宿主注入，request 中不得包含用户、租户或会话标识。"
+  ]
+}

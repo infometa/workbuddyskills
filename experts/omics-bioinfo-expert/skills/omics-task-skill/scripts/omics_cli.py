@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-Omics Platform CLI Command Builder & Executor (v4 · 7 命令边界)
+Omics Platform CLI Command Builder & Executor (v6 · 完整命令边界)
 
 封装 omics-platform-cli 的命令拼接与执行，供 SKILL 调用。
 
 ⚠️ 能力边界（不可违反 · 最高优先级）⚠️
-SKILL 只能调用以下 7 条 CLI 一级命令，禁止越界：
+SKILL 只能调用以下白名单命令，禁止越界：
 
-    login / whoami / config / list / run / status / debug
+    login / whoami / config(show/set/clear) / list(*) / run / status / debug / quota
 
 禁止行为：
-  1. 严禁编造其他命令（如 app / project / import / app templates 等已废弃命令）
+  1. 严禁编造其他命令（如旧版 app / project / import / app templates 等已废弃命令）
   2. 严禁直接调用 omics 后端 HTTP API、SQL、文件系统写入等任何旁路通道
   3. 严禁通过组合现有命令"模拟"出白名单外的语义
   4. 严禁单独"导入公共应用"——导入是 run --public-app 的内部步骤，必须随 run 一起发生
@@ -21,35 +21,54 @@ run 前置确认：
   完成确认流程，再 cli.execute(...) 真实发起。
 
 子命令结构（由 argparse 强约束）：
-  - login                       OAuth 浏览器登录（仅作建议，SKILL 不主动调）
-  - whoami                      当前登录用户
-  - config show / clear         本地配置查看/清除（SKILL 不调 set，引导用户本机执行）
-  - list public-apps            平台公共应用，按 AppTag 分组（含 --tag/--keyword/--parent-app/--type）
-  - list apps                   config 项目下的应用（form C 用户挑 ApplicationId 用）
-  - run                         唯一运行入口（form A/B/C），baseline + override 合并
-  - status [<rgId>]             任务批次/子任务状态
-  - debug                       三段式失败取证（<rgId> / --run / --run + --job）
+  - login                              OAuth 浏览器登录（SKILL 主动调用，拉起浏览器授权）
+  - whoami                             当前登录用户
+  - config show / set / clear          本地配置（set 由 SKILL 在配置引导流程中调用，参数来自用户选择）
+  - list public-apps                   平台公共应用，按 AppTag 分组
+  - list apps                          config 项目下的应用
+  - list versions                      指定应用的可用版本
+  - list templates                     指定应用的运行参数模板
+  - list project                       用户全部项目（配置引导用）
+  - list env                           用户全部环境（配置引导用）
+  - list region                        平台支持的地域列表（配置引导用）
+  - list cos-bucket                    当前环境绑定的 COS 桶列表（配置引导用）
+  - list volume                        当前环境下的缓存卷列表
+  - run                                唯一运行入口（form A/B/C/D）
+  - status [<rgId>]                    任务批次/子任务状态
+  - debug                              三段式失败取证
+  - quota                              C端体验用户配额查询
 
 CLI v3 起已删除（SKILL 不再使用）：
   - omics app list / list-public / templates / file *  → 迁入 omics list 或内化到 run
-  - omics project list                                   → 由 omics config set 校验链替代
+  - omics project list                                   → 迁入 omics list project
   - omics run-app                                        → 合并到 omics run --public-app/--app
 
 用法示例：
   python omics_cli.py whoami
   python omics_cli.py config show -o json
+  python omics_cli.py config set -r ap-guangzhou -p prj-xxx -e env-xxx -b my-bucket
+  python omics_cli.py list region -o json
+  python omics_cli.py list project -o json
+  python omics_cli.py list env --region ap-guangzhou -o json
+  python omics_cli.py list cos-bucket -o json
+  python omics_cli.py list volume -o json
   python omics_cli.py list public-apps -o json
   python omics_cli.py list public-apps --tag WGS
   python omics_cli.py list public-apps --parent-app cm-collection-xxx -o json
   python omics_cli.py list apps --type WDL -o json
+  python omics_cli.py list versions --app app-xxx -o json
+  python omics_cli.py list templates --app app-xxx -o json
   python omics_cli.py run --wdl ./hello.wdl --name hello --input ./hello.json
-  python omics_cli.py run --public-app cm-xxx --public-app-name my-app
+  python omics_cli.py run --wdl ./hello.wdl --name hello --output-dir cos://bucket/out/
+  python omics_cli.py run --public-app cm-xxx --public-app-name my-app --app-type WDL
   python omics_cli.py run --app app-xxx --input ./run.json
+  python omics_cli.py run --nf cos://bucket/nf-apps/my-pipeline/ --name my-nf --nf-version 24.04.3
   python omics_cli.py status -o json
   python omics_cli.py status rg-aa11bb22 -o json
   python omics_cli.py debug rg-aa11bb22 -o json
   python omics_cli.py debug --run <runUuid> -o json
   python omics_cli.py debug --run <runUuid> --job <jobId> -o json
+  python omics_cli.py quota -o json
 """
 
 import argparse
@@ -98,35 +117,148 @@ def shutil_which(name: str) -> str | None:
 
 
 # ──────────────────────────────────────────────
-# 命令构建器（仅 7 个白名单一级命令）
+# 命令构建器（白名单命令族）
 # ──────────────────────────────────────────────
 
 class OmicsCLI:
-    """Omics Platform CLI 命令构建与执行封装（v4 · 7 命令边界）"""
+    """Omics Platform CLI 命令构建与执行封装（v6 · 完整命令边界）"""
 
     def __init__(self, cli_path: str | None = None):
         self.cli_path = cli_path or find_cli()
 
-    # --- 1. login（保留 builder 仅供 dry-run 演示，SKILL 不应自动 execute） ---
-    def build_login(self) -> list[str]:
-        return [self.cli_path, "login"]
+    # --- 1. login（SKILL 主动调用，拉起浏览器完成 OAuth 授权） ---
+    def build_login(self, no_browser: bool = False) -> list[str]:
+        """
+        omics login：触发 OAuth 浏览器登录。
+
+        SKILL 应主动调用此命令完成用户授权（拉起浏览器）。
+        远程 / 无图形环境下 CLI 会自动切换为打印 URL 模式。
+
+        参数:
+          no_browser: True 时传 --no-browser，仅打印授权 URL（远程场景）
+        """
+        cmd = [self.cli_path, "login"]
+        if no_browser:
+            cmd.append("--no-browser")
+        return cmd
 
     # --- 2. whoami ---
     def build_whoami(self) -> list[str]:
         return [self.cli_path, "whoami"]
 
-    # --- 辅助：version（不属白名单一级命令，但属 CLI 自身工具命令，可调） ---
+    # --- 辅助：version ---
     def build_version(self) -> list[str]:
         return [self.cli_path, "version"]
 
-    # --- 3. config show / clear（SKILL 不应调 set） ---
+    # --- 3. config show / set / clear ---
     def build_config_show(self, output: str = "table") -> list[str]:
         return [self.cli_path, "config", "show", "-o", output]
+
+    def build_config_set(
+        self,
+        region: str,
+        project_id: str,
+        environment_id: str,
+        bucket: str,
+    ) -> list[str]:
+        """
+        omics config set：写入本地配置（四项必填）。
+
+        SKILL 在配置引导流程中调用，参数必须来自用户通过 AskUserQuestion 选项卡
+        选定的值，禁止猜测或编造。
+
+        参数:
+          region         : 地域（如 ap-guangzhou）；来自 list region 结果
+          project_id     : 项目 ID（如 prj-xxx）；来自 list project 结果
+          environment_id : 环境 ID（如 env-xxx）；来自 list env 结果
+          bucket         : COS 存储桶名称；来自 list cos-bucket 结果
+        """
+        if not all([region, project_id, environment_id, bucket]):
+            raise ValueError("build_config_set: region / project_id / environment_id / bucket 均为必填")
+        return [
+            self.cli_path, "config", "set",
+            "-r", region,
+            "-p", project_id,
+            "-e", environment_id,
+            "-b", bucket,
+        ]
 
     def build_config_clear(self) -> list[str]:
         return [self.cli_path, "config", "clear"]
 
-    # --- 4. list public-apps / apps（替代旧 app list / list-public） ---
+    # --- 4. list 命令族 ---
+
+    def build_list_region(self, output: str = "json") -> list[str]:
+        """
+        omics list region：列平台支持的全部地域。
+
+        SKILL 在配置引导 Step C-B-1 中调用，解析结果呈现给用户选择。
+        """
+        return [self.cli_path, "list", "region", "-o", output]
+
+    def build_list_project(
+        self,
+        region: str | None = None,
+        output: str = "json",
+    ) -> list[str]:
+        """
+        omics list project：列用户的全部项目。
+
+        SKILL 在配置引导 Step C-B-2 中调用（B端用户选项目；C端自动取第一条）。
+
+        参数:
+          region : 可选，按地域过滤
+        """
+        cmd = [self.cli_path, "list", "project", "-o", output]
+        if region:
+            cmd.extend(["--region", region])
+        return cmd
+
+    def build_list_env(
+        self,
+        region: str | None = None,
+        output: str = "json",
+    ) -> list[str]:
+        """
+        omics list env：列用户的全部环境。
+
+        SKILL 在配置引导 Step C-B-2（并行查询）和 C-B-3（展示选择）中调用。
+
+        参数:
+          region : 可选，按地域过滤
+        """
+        cmd = [self.cli_path, "list", "env", "-o", output]
+        if region:
+            cmd.extend(["--region", region])
+        return cmd
+
+    def build_list_cos_bucket(self, output: str = "json") -> list[str]:
+        """
+        omics list cos-bucket：列当前 config 环境下绑定的 COS 存储桶。
+
+        SKILL 在配置引导 Step C-B-5 中调用（需先完成 Step C-B-4 临时写入 config）。
+        过滤 Associated=true 的条目呈现给用户选择。
+        """
+        return [self.cli_path, "list", "cos-bucket", "-o", output]
+
+    def build_list_volume(
+        self,
+        environment_id: str | None = None,
+        output: str = "json",
+    ) -> list[str]:
+        """
+        omics list volume：列当前环境下的缓存卷。
+
+        SKILL 在用户询问"用哪个 volume"时调用，结果用于 run --volume-id 参数。
+
+        参数:
+          environment_id : 可选，临时指定环境 ID（默认读 config）
+        """
+        cmd = [self.cli_path, "list", "volume", "-o", output]
+        if environment_id:
+            cmd.extend(["--environment", environment_id])
+        return cmd
+
     def build_list_public_apps(
         self,
         tag: str | None = None,
@@ -148,8 +280,8 @@ class OmicsCLI:
 
         JSON 输出形态:
           {
-            "Tags": [str, ...],          # 全部出现过的 Tag（含"未分类"）
-            "TotalApps": int,            # 去重后的应用总数
+            "Tags": [str, ...],
+            "TotalApps": int,
             "Groups": [
               { "Tag": str, "Count": int, "Apps": [CommonApp, ...] },
               ...
@@ -177,12 +309,6 @@ class OmicsCLI:
         omics list apps：列当前 config 项目下的应用。
 
         固定走 config 写入的 ProjectId，不支持 -p。
-        SKILL 主要在两处场景使用：
-          1. 用户想跑 form C（项目内已有应用）时帮其挑 ApplicationId
-          2. form B 导入公共应用前的同名预检（SKILL 比对 Name == candidateName）
-
-        参数:
-          app_type : WDL / WDL_GRAPH / NEXTFLOW（默认不过滤）
         """
         cmd = [self.cli_path, "list", "apps", "-o", output]
         if app_type:
@@ -197,19 +323,12 @@ class OmicsCLI:
         output: str = "json",
     ) -> list[str]:
         """
-        omics list versions：列指定应用的可用版本（v6 新增）。
-
-        SKILL 主要使用场景：
-          1. form C 运行前展示可选版本，让用户确认要跑哪个版本
-             → 输出 JSON 含 Versions[]: { Type, ApplicationVersionId, Name, Entrypoint, CreateTime }
-          2. form A/D 通过 --update 上传新代码后查询最新 VersionId
-          3. 排查应用版本演进史
+        omics list versions：列指定应用的可用版本。
 
         参数:
           app          : 应用 ApplicationId（必填）
           version_type : RELEASE / HISTORY；缺省返回全部
           limit        : 返回条数上限（默认 50）
-          output       : 推荐 json，便于 SKILL 解析后渲染给用户
         """
         if not (app and app.strip()):
             raise ValueError("build_list_versions: --app 不能为空")
@@ -229,21 +348,16 @@ class OmicsCLI:
         output: str = "json",
     ) -> list[str]:
         """
-        omics list templates：列指定应用的运行参数模板（v6.1 新增）。
+        omics list templates：列指定应用的运行参数模板。
 
-        SKILL 强制使用场景（form B/C 运行前必经）：
-          1) 先调本命令拿到 Templates[]: { InputTemplateId, Name, Description, ApplicationVersionId, Creator }
-          2) 把候选清单呈现给用户，由用户挑选 InputTemplateId
-          3) 把所选 ID 通过 build_run(template_id=<Id>) 传给 run 命令
-          4) 若 Templates 为空 / 用户认为模板都不合适 → 引导用户准备本地 run.json，
-             改走 build_run(input_json="./run.json")
+        SKILL 在 form B/C 运行前调用，呈现模板列表供用户拍板，
+        拍板后通过 build_run(template_id=<Id>) 传给 run 命令。
 
         参数:
           app          : 应用 ApplicationId（必填）
           version      : 可选，按应用版本 ID 过滤模板
           limit        : 返回条数上限（默认 50）
-          with_content : True 则每条模板附带 Content + ContentValid（多一次 GetInputTemplateFile 调用）
-          output       : 推荐 json
+          with_content : True 则附带模板内容
         """
         if not (app and app.strip()):
             raise ValueError("build_list_templates: --app 不能为空")
@@ -256,124 +370,166 @@ class OmicsCLI:
             cmd.append("--with-content")
         return cmd
 
-    # --- 5. run（唯一运行入口 · 触发前必须二次确认 · v5 支持版本管理 + COS NF） ---
+    # --- 5. run（唯一运行入口 · 触发前必须二次确认） ---
     def build_run(
         self,
-        # 四选一
-        wdl: str | None = None,          # 形态 A：本地 WDL
-        nf_cos_path: str | None = None,  # 形态 D：COS 上的 NF（cos://bucket/prefix/）
-        public_app: str | None = None,   # 形态 B：公共应用
-        app: str | None = None,          # 形态 C：项目内已有应用
-        # 通用
+        # 四选一（互斥）
+        wdl: str | None = None,          # 形态 A：本地 WDL 文件/目录
+        nf_cos_path: str | None = None,  # 形态 D：COS 上的 NF 路径（cos://bucket/prefix/）
+        public_app: str | None = None,   # 形态 B：公共应用 AppId
+        app: str | None = None,          # 形态 C：项目内 ApplicationId
+        # 通用参数
         input_json: str | None = None,
         name: str | None = None,
         main: str | None = None,
-        update_app_id: str | None = None,
+        update_app_id: str | None = None,   # 仅形态 A：复用现有应用重试
         public_app_name: str | None = None,
+        app_type: str | None = None,        # 仅形态 B：WDL / NEXTFLOW（不传默认 WDL）
         nf_version: str | None = None,
-        cos_tool: str | None = None,       # v5.1: COS 同步工具（coscli/mc/aws/coscmd/python_cos/auto；默认 auto）
         output: str = "table",
-        # v5 版本管理
-        target_version: str | None = None,  # 指定目标 ApplicationVersionId
-        # v6 版本管理：form A 配合 --update 时把新 HISTORY 版本发布为 RELEASE 并命名
+        # 版本管理
+        target_version: str | None = None,
+        # 形态 A + --update 时的发布命名
         release_name: str | None = None,
         release_desc: str | None = None,
-        # v6.1 运行参数模板拍板（form B/C）：与 input_json 互斥
+        # 服务端参数模板拍板（form B/C，与 input_json 互斥）
         template_id: str | None = None,
+        # NF 运行高级选项（仅 NEXTFLOW 应用有效）
+        nf_resume: bool = False,
+        nf_config: str | None = None,
+        nf_profile: str | None = None,
+        nf_report: bool = False,
+        volume_id: str | None = None,
+        # WDL 运行选项
+        output_dir: str | None = None,
     ) -> list[str]:
         """
-        合并后的 omics run 命令（CLI v5 唯一运行入口）。
+        合并后的 omics run 命令（CLI v6 唯一运行入口）。
 
         形态分流（互斥四选一，CLI 强校验）：
           A. 本地 WDL              wdl=...
-          D. COS Nextflow           nf_cos_path=... + name=...
-                                 （用户需先通过 COS 工具上传到 COS）
-                                 --nf-version 必填（从默认候选列表 22.10.7/23.10.1/23.10.3/24.04.3/25.10.2 中选取）
-                                 --cos-tool 可选（auto 自动检测 / coscli / mc / aws / coscmd / python_cos）
-          B. 公共应用              public_app=...    public_app_name 视情况必传：
-                                   - 独立公共应用 + 用户未指定名 可省（CLI 兜底用原名）
-                                   - 合集子应用 必传（CLI 拿不到子应用元信息无法兜底）
-                                   - 用户明确改名 必传
-                                   nf_version 仅 form B 且 AppType=NEXTFLOW 时必填
-          C. 项目内已有应用        app=...           可加 target_version 指定版本
+             - name 必填
+             - main 可选（多文件时指定主入口）
+             - update_app_id 可选（整改重试时复用已有应用）
+             - release_name 可选（配合 update_app_id 发布命名版本）
+             - output_dir 可选（指定 COS 结果输出路径）
 
-                                 ★ NF 应用额外要求（form C 运行 NEXTFLOW 应用时）：
-                                   --nf-version 必填（版本来源：list apps 输出中该应用的 NextflowVersion 字段，不要使用默认列表）
-                                   --input 必填（NF 无 Validate baseline，必须显式提供参数）
+          D. COS Nextflow          nf_cos_path=...（cos://bucket/prefix/）
+             - 文件须预先通过 omics cos upload 上传到 COS，服务端直接读取
+             - name 必填
+             - nf_version 必填（候选: 22.10.7/23.10.1/23.10.3/24.04.3/25.10.2）
+             - main 可选（默认 main.nf）
+             - update_app_id 与 --nf 互斥（CLI 会报错拒绝）
+             - NF 高级选项可选（nf_resume / nf_config / nf_profile / nf_report）
+             - volume_id 可选
 
-        版本管理（v5 新增）：
-          - target_version: 指定 ApplicationVersionId
-            * form C 运行历史版本（不传则自动选最新，table 模式打印版本列表）
-            * form A/D 保存文件后 CLI 回显新 VersionId，后续可用此 ID 回溯运行
-          - Debug 重跑模式：诊断出参数/设置问题后用修正参数重新发起 RunApplication：
-            build_run(app=<appId>, input_json=<fixed.json>, target_version=<ver>)
-            （非独立 RetryRuns 接口）
+          B. 公共应用              public_app=...
+             - public_app_name 视情况必传：
+               独立公共应用可省（CLI 兜底用原名）；合集子应用必传
+             - app_type 可选（WDL 或 NEXTFLOW；不传默认 WDL）
+             - nf_version 仅 AppType=NEXTFLOW 时必填
+             - template_id 可选（拍板服务端模板，与 input_json 互斥）
+             - NF 高级选项可选（AppType=NEXTFLOW 时）
+             - volume_id 可选（NF 应用专用）
 
-        参数模板（v3 起统一为 baseline + override 合并模式）：
-          - form A / C（WDL）：input_json 为 override；不传仅靠 baseline
-          - form C（NF）：--input 必填（NF 无 Validate，无 baseline 可用）
-          - form B：自动取第一个 InputTemplate；input_json 覆盖自动模板
-          缺必填项时 PARAM_MERGE_FAILED 报错，由 SKILL 引导补值
+          C. 项目内已有应用        app=...
+             - target_version 可选（指定历史版本）
+             - template_id 可选（拍板服务端模板，与 input_json 互斥）
+             - nf_version 可选（NEXTFLOW 应用，CLI 会从 RunConstraints 自动取，可覆盖）
+             - NF 高级选项可选（NEXTFLOW 应用时）
+             - volume_id 可选（NF 应用专用）
 
-        整改重试（form A / D）：
-          Validate 不过 / NF 运行失败时 CLI 输出 ApplicationId；
-          form A 用 build_run(wdl=..., update_app_id=app-xxxx) 复用；
-          form D 用 build_run(nf_cos_path=..., update_app_id=app-xxxx) 复用。
+        结果引导（output_dir）：
+          - 若传入 output_dir，任务成功后 SKILL 应告知用户结果在该 COS 路径
+          - 若未传入 output_dir，无需结果引导
         """
         provided = sum(1 for v in (wdl, nf_cos_path, public_app, app) if v)
         if provided != 1:
             raise ValueError("--wdl / --nf / --public-app / --app 必须四选一")
-        if nf_version and not (public_app or nf_cos_path or app):
-            raise ValueError("--nf-version 仅在 form B（--public-app）、form C（--app，NEXTFLOW 类型）或 form D（--nf）下生效")
         if template_id and input_json:
-            raise ValueError("--template 与 --input 互斥（要么传服务端模板 ID，要么传本地 JSON 文件）")
+            raise ValueError("--template 与 --input 互斥")
         if template_id and not (public_app or app):
             raise ValueError("--template 仅在 form B（--public-app）或 form C（--app）下生效")
+        if update_app_id and nf_cos_path:
+            raise ValueError("--update 与 --nf 互斥。NF 应用每次运行自动创建新应用，不支持通过 --update 复用旧应用。"
+                             "如需运行已有 NF 应用，请使用形态 C：--app <ApplicationId>")
 
         cmd = [self.cli_path, "run", "-o", output]
+
         if wdl:
             cmd.extend(["--wdl", wdl])
             if main:
                 cmd.extend(["--main", main])
             if update_app_id:
                 cmd.extend(["--update", update_app_id])
+            if release_name:
+                cmd.extend(["--release-name", release_name])
+            if release_desc:
+                cmd.extend(["--release-desc", release_desc])
+            if output_dir:
+                cmd.extend(["--output-dir", output_dir])
+
         elif nf_cos_path:
             cmd.extend(["--nf", nf_cos_path])
-            if cos_tool:
-                cmd.extend(["--cos-tool", cos_tool])
-            if update_app_id:
-                cmd.extend(["--update", update_app_id])
             if nf_version:
                 cmd.extend(["--nf-version", nf_version])
+            # form D 主流程不依赖本地 COS 工具（服务端直接读 COS 源码）
+            # 注：--cos-tool flag 仍存在于 CLI 但 form D 主流程不调用 syncFromCos
+            if nf_resume:
+                cmd.append("--nf-resume")
+            if nf_config:
+                cmd.extend(["--nf-config", nf_config])
+            if nf_profile:
+                cmd.extend(["--nf-profile", nf_profile])
+            if nf_report:
+                cmd.append("--nf-report")
+            if volume_id:
+                cmd.extend(["--volume-id", volume_id])
+
         elif public_app:
             cmd.extend(["--public-app", public_app])
             if public_app_name:
                 cmd.extend(["--public-app-name", public_app_name])
+            if app_type:
+                cmd.extend(["--app-type", app_type])
             if nf_version:
                 cmd.extend(["--nf-version", nf_version])
+            if nf_resume:
+                cmd.append("--nf-resume")
+            if nf_config:
+                cmd.extend(["--nf-config", nf_config])
+            if nf_profile:
+                cmd.extend(["--nf-profile", nf_profile])
+            if nf_report:
+                cmd.append("--nf-report")
+            if volume_id:
+                cmd.extend(["--volume-id", volume_id])
+
         elif app:
             cmd.extend(["--app", app])
             if nf_version:
                 cmd.extend(["--nf-version", nf_version])
+            if nf_resume:
+                cmd.append("--nf-resume")
+            if nf_config:
+                cmd.extend(["--nf-config", nf_config])
+            if nf_profile:
+                cmd.extend(["--nf-profile", nf_profile])
+            if nf_report:
+                cmd.append("--nf-report")
+            if volume_id:
+                cmd.extend(["--volume-id", volume_id])
 
-        # v5 版本管理
+        # 通用参数
         if target_version:
             cmd.extend(["--version", target_version])
-
-        # v6 版本管理：form A 发布命名（仅 form A + --update 时有意义；CLI 自身会做兜底校验）
-        if release_name:
-            cmd.extend(["--release-name", release_name])
-        if release_desc:
-            cmd.extend(["--release-desc", release_desc])
-
-        # v6.1 模板拍板（与 --input 互斥）
         if template_id:
             cmd.extend(["--template", template_id])
-
         if input_json:
             cmd.extend(["--input", input_json])
         if name:
             cmd.extend(["--name", name])
+
         return cmd
 
     # --- 6. status ---
@@ -408,10 +564,6 @@ class OmicsCLI:
           omics debug --run <uuid> --job <j>  在 Calls/JobLogs 中按 JobId 过滤
 
         run_group_id 与 run_uuid 互斥；job_id 仅在 run_uuid 非空时生效。
-        内部链路：GetRunStatus + GetRunCalls + 自动钻取最多 5 个失败 call 的
-        JobService.GetRunJobLog(stderr) + MonitorService.DescribeKubernetesEvents(PLAN, JobId)。
-        段 2/3 输出 JobLogs[]：含 JobId / CallName / Status / Stderr / StderrTruncated /
-        PodEvents（保留 FailedMount 信号）。详见 references/cli_commands.md §debug。
         """
         if run_group_id and run_uuid:
             raise ValueError("debug: <runGroupId> 与 --run 互斥，只能传一个")
@@ -429,6 +581,21 @@ class OmicsCLI:
             cmd.extend(["--job", job_id])
         return cmd
 
+    # --- 8. quota（仅 C 端体验用户可用） ---
+    def build_quota(self, output: str = "table") -> list[str]:
+        """
+        omics quota：查询 C 端体验用户的配额（仅 C 端用户可用）。
+
+        返回字段：
+          run_limit        : 每日运行次数上限
+          run_remain_limit : 今日剩余运行次数
+          days             : 试用总天数
+          remain_days      : 试用剩余天数
+
+        非 C 端用户调用会报错（CLI 内部先做身份校验）。
+        """
+        return [self.cli_path, "quota", "-o", output]
+
     # --- 执行 ---
     def execute(self, args: list[str], check: bool = True) -> subprocess.CompletedProcess:
         """
@@ -441,9 +608,9 @@ class OmicsCLI:
         退出码语义：
           0 → 成功
           1 → 业务错误
-          2 → 鉴权失败（SKILL 应捕获并提示用户在本机跑 omics login，不要循环重试）
+          2 → 鉴权失败（SKILL 应捕获并调用 omics login 引导用户授权）
         """
-        print(f"\n▶ 执行命令: {' '.join(args)}\n")
+        print(f"\n> 执行命令: {' '.join(args)}\n")
         result = subprocess.run(
             args,
             capture_output=True,
@@ -479,12 +646,12 @@ def validate_run_local_wdl(wdl: str, input_json: str, name: str) -> list[str]:
 
 
 # ──────────────────────────────────────────────
-# CLI 入口（argparse 顶层只注册 7 个一级命令 + version 工具）
+# CLI 入口（argparse 顶层注册所有白名单命令）
 # ──────────────────────────────────────────────
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Omics Platform CLI 命令构建与执行工具（v4 · 7 命令边界）",
+        description="Omics Platform CLI 命令构建与执行工具（v6 · 完整命令边界）",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--cli-path", default=None,
@@ -494,7 +661,9 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="可用命令")
 
     # 1. login
-    subparsers.add_parser("login", help="OAuth 浏览器登录（SKILL 不应自动调；引导用户本机执行）")
+    login_p = subparsers.add_parser("login", help="OAuth 浏览器登录（SKILL 主动调用，拉起浏览器授权）")
+    login_p.add_argument("--no-browser", dest="no_browser", action="store_true",
+                         help="不自动拉起浏览器，仅打印授权 URL（远程/无图形环境）")
 
     # 2. whoami
     subparsers.add_parser("whoami", help="查看当前登录用户")
@@ -502,80 +671,116 @@ def main():
     # 工具：version
     subparsers.add_parser("version", help="CLI 版本号")
 
-    # 3. config（show / clear；不暴露 set，避免 SKILL 误调）
-    cfg = subparsers.add_parser("config", help="本地配置（show / clear；set 由用户在本机执行）")
+    # 3. config（show / set / clear）
+    cfg = subparsers.add_parser("config", help="本地配置管理（show / set / clear）")
     cfg_sub = cfg.add_subparsers(dest="config_action")
     cfg_show = cfg_sub.add_parser("show", help="显示当前配置")
     cfg_show.add_argument("-o", "--output", default="table", choices=["table", "json"])
+    cfg_set = cfg_sub.add_parser("set", help="写入配置（四项必填；参数来自用户选择）")
+    cfg_set.add_argument("-r", "--region", required=False, default=None, help="地域（如 ap-guangzhou）")
+    cfg_set.add_argument("-p", "--project-id", dest="project_id", required=False, default=None, help="项目 ID")
+    cfg_set.add_argument("-e", "--environment", dest="environment_id", required=False, default=None, help="环境 ID")
+    cfg_set.add_argument("-b", "--bucket", dest="bucket", required=False, default=None, help="COS 存储桶名称")
     cfg_sub.add_parser("clear", help="清除本地配置")
 
-    # 4. list（public-apps / apps）
-    list_p = subparsers.add_parser("list", help="只读查询（公共应用 / 项目内应用）")
+    # 4. list（多子命令）
+    list_p = subparsers.add_parser("list", help="只读查询（应用、项目、环境、地域、COS桶、缓存卷等）")
     list_sub = list_p.add_subparsers(dest="list_action")
 
+    # list region
+    list_reg = list_sub.add_parser("region", help="列平台支持的全部地域")
+    list_reg.add_argument("-o", "--output", default="json", choices=["table", "json"])
+
+    # list project
+    list_proj = list_sub.add_parser("project", help="列用户的全部项目")
+    list_proj.add_argument("--region", default=None, help="按地域过滤")
+    list_proj.add_argument("-o", "--output", default="json", choices=["table", "json"])
+
+    # list env
+    list_env = list_sub.add_parser("env", help="列用户的全部环境")
+    list_env.add_argument("--region", default=None, help="按地域过滤")
+    list_env.add_argument("-o", "--output", default="json", choices=["table", "json"])
+
+    # list cos-bucket
+    list_cos = list_sub.add_parser("cos-bucket", help="列当前 config 环境绑定的 COS 存储桶")
+    list_cos.add_argument("-o", "--output", default="json", choices=["table", "json"])
+
+    # list volume
+    list_vol = list_sub.add_parser("volume", help="列当前环境下的缓存卷")
+    list_vol.add_argument("--environment", dest="environment_id", default=None, help="临时指定环境 ID")
+    list_vol.add_argument("-o", "--output", default="json", choices=["table", "json"])
+
+    # list public-apps
     list_pub = list_sub.add_parser("public-apps", help="列平台公共应用，按 AppTag 分组")
     list_pub.add_argument("--tag", default=None, help="按 AppTag 业务标签精确过滤")
     list_pub.add_argument("--type", dest="app_type", default=None,
-                          help="二级类型过滤：WDL / NEXTFLOW（叠加在 tag 之上）")
+                          help="二级类型过滤：WDL / NEXTFLOW")
     list_pub.add_argument("--keyword", default=None, help="service 端关键词搜索")
     list_pub.add_argument("--parent-app", dest="parent_app", default=None,
-                          help="展开合集：传入合集 AppId（屏蔽 --type/--keyword/--tag）")
+                          help="展开合集：传入合集 AppId")
     list_pub.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
+    # list apps
     list_apps = list_sub.add_parser("apps", help="列 config 项目下的应用")
     list_apps.add_argument("--type", dest="app_type", default=None,
                            help="WDL / WDL_GRAPH / NEXTFLOW")
     list_apps.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
-    list_ver = list_sub.add_parser("versions", help="列指定应用的版本（v6）")
-    list_ver.add_argument("--app", dest="app", required=True,
-                          help="应用 ApplicationId（必填）")
+    # list versions
+    list_ver = list_sub.add_parser("versions", help="列指定应用的版本")
+    list_ver.add_argument("--app", dest="app", required=True, help="应用 ApplicationId（必填）")
     list_ver.add_argument("--type", dest="version_type", default=None,
-                          choices=["RELEASE", "HISTORY"],
-                          help="版本类型过滤")
-    list_ver.add_argument("--limit", type=int, default=None,
-                          help="返回条数上限（默认 50）")
-    list_ver.add_argument("-o", "--output", default="table", choices=["table", "json"])
+                          choices=["RELEASE", "HISTORY"])
+    list_ver.add_argument("--limit", type=int, default=None)
+    list_ver.add_argument("-o", "--output", default="json", choices=["table", "json"])
 
-    list_tpl = list_sub.add_parser("templates", help="列指定应用的运行参数模板（v6.1）")
-    list_tpl.add_argument("--app", dest="app", required=True,
-                          help="应用 ApplicationId（必填）")
-    list_tpl.add_argument("--version", dest="version", default=None,
-                          help="按 ApplicationVersionId 过滤（可选）")
-    list_tpl.add_argument("--limit", type=int, default=None,
-                          help="返回条数上限（默认 50）")
-    list_tpl.add_argument("--with-content", dest="with_content", action="store_true",
-                          help="附带每个模板的 Content（多调一次 GetInputTemplateFile）")
-    list_tpl.add_argument("-o", "--output", default="table", choices=["table", "json"])
+    # list templates
+    list_tpl = list_sub.add_parser("templates", help="列指定应用的运行参数模板")
+    list_tpl.add_argument("--app", dest="app", required=True, help="应用 ApplicationId（必填）")
+    list_tpl.add_argument("--version", dest="version", default=None)
+    list_tpl.add_argument("--limit", type=int, default=None)
+    list_tpl.add_argument("--with-content", dest="with_content", action="store_true")
+    list_tpl.add_argument("-o", "--output", default="json", choices=["table", "json"])
 
-    # 5. run（合并四形态 + 版本管理 + COS NF）
+    # 5. run
     run_p = subparsers.add_parser("run", help="发起任务批次（form A/B/C/D 四选一）")
     grp = run_p.add_mutually_exclusive_group(required=True)
     grp.add_argument("--wdl", default=None, help="形态 A：本地 WDL 文件或目录")
     grp.add_argument("--nf", dest="nf_cos_path", default=None,
-                    help="形态 D：COS 上的 NF 应用路径（格式：cos://bucket-name/prefix/）；需先通过 coscli 上传")
+                     help="形态 D：COS 上的 NF 路径（cos://bucket/prefix/）；文件须预先通过 omics cos upload 上传")
     grp.add_argument("--public-app", dest="public_app", default=None, help="形态 B：公共应用 AppId")
     grp.add_argument("--app", default=None, help="形态 C：项目内 ApplicationId")
-    run_p.add_argument("--main", default=None)
-    run_p.add_argument("--update", dest="update_app_id", default=None)
-    run_p.add_argument("--input", dest="input_json", default=None,
-                       help="本地参数模板 JSON（override）。form A/C/D 不传仅靠 baseline；form B 不传时 CLI 自动取第一个 InputTemplate")
-    run_p.add_argument("--public-app-name", dest="public_app_name", default=None,
-                       help="form B 导入到项目时的应用名。独立公共应用 CLI 兜底用原名；合集子应用必须传。")
+    run_p.add_argument("--main", default=None, help="主入口文件（form A 目录时指定；form D 默认 main.nf）")
+    run_p.add_argument("--update", dest="update_app_id", default=None,
+                       help="形态 A 专用：复用已有应用 ApplicationId 做覆盖上传重试（与 --nf 互斥）")
+    run_p.add_argument("--input", dest="input_json", default=None, help="本地参数模板 JSON（override）")
+    run_p.add_argument("--public-app-name", dest="public_app_name", default=None)
+    run_p.add_argument("--app-type", dest="app_type", default=None,
+                       help="仅 form B：应用类型 WDL / NEXTFLOW（不传默认 WDL）")
     run_p.add_argument("--nf-version", dest="nf_version", default=None,
-                       help="NF 引擎版本：form B（NEXTFLOW 公共应用）必填（从应用 NextflowVersion[] 获取）；form C（运行 NEXTFLOW 项目内应用）必填（从应用信息 NextflowVersion 字段获取，不用默认列表）；form D（COS NF）必填（从默认候选列表 22.10.7/23.10.1/23.10.3/24.04.3/25.10.2 选取）")
-    # v5 新增：版本管理
+                       help="NF 引擎版本（form B NEXTFLOW 必填；form D 必填；form C 可选覆盖）")
     run_p.add_argument("--version", dest="target_version", default=None,
-                       help="指定目标应用版本 ApplicationVersionId（不传则自动选最新；形态 C/A/D 均可用）")
-    # v6 新增：form A 发布命名
+                       help="指定目标应用版本 ApplicationVersionId")
     run_p.add_argument("--release-name", dest="release_name", default=None,
-                       help="form A + --update 专用：把 SaveApplicationFiles 生成的新 HISTORY 版本发布为 RELEASE 并以此命名（应用维度内唯一）")
-    run_p.add_argument("--release-desc", dest="release_desc", default=None,
-                       help="form A 配合 --release-name 使用：发布版本的描述（可选）")
-    # v6.1 新增：模板拍板
+                       help="form A + --update：把新 HISTORY 版本发布为 RELEASE 并命名")
+    run_p.add_argument("--release-desc", dest="release_desc", default=None)
     run_p.add_argument("--template", dest="template_id", default=None,
-                       help="form B/C 用：从 list templates 中拍板的 InputTemplateId；CLI 调 GetInputTemplateFile 拉模板内容作为 override；与 --input 互斥")
-    run_p.add_argument("--name", default=None)
+                       help="form B/C：服务端模板 InputTemplateId（与 --input 互斥）")
+    run_p.add_argument("--name", default=None, help="RunGroup 名称前缀（form A/D 必填）")
+    # NF 高级选项
+    run_p.add_argument("--nf-resume", dest="nf_resume", action="store_true",
+                       help="NF 专用：从断点继续执行")
+    run_p.add_argument("--nf-config", dest="nf_config", default=None,
+                       help="NF 专用：Nextflow config 文件路径")
+    run_p.add_argument("--nf-profile", dest="nf_profile", default=None,
+                       help="NF 专用：profile 名称（多个逗号分隔）")
+    run_p.add_argument("--nf-report", dest="nf_report", action="store_true",
+                       help="NF 专用：生成 workflow execution report")
+    run_p.add_argument("--volume-id", dest="volume_id", default=None,
+                       help="NF 专用：指定非默认缓存卷 ID（可通过 list volume 查询）")
+    # WDL 运行选项
+    run_p.add_argument("--output-dir", dest="output_dir", default=None,
+                       help="WDL 专用：结果输出目录（COS 路径，如 cos://bucket/path）")
     run_p.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
     # 6. status
@@ -584,17 +789,15 @@ def main():
     st.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
     # 7. debug
-    dbg = subparsers.add_parser(
-        "debug",
-        help="异步任务失败取证：<runGroupId> / --run / --run + --job",
-    )
-    dbg.add_argument("run_group_id", nargs="?", default=None,
-                     help="批次 RunGroupId；与 --run 互斥")
-    dbg.add_argument("--run", dest="run_uuid", default=None,
-                     help="子任务 RunUuid；与位置参数 <runGroupId> 互斥")
-    dbg.add_argument("--job", dest="job_id", default=None,
-                     help="底层作业 ID（plan-xxx / tes-xxx）；仅在 --run 模式下生效")
+    dbg = subparsers.add_parser("debug", help="异步任务失败取证：<runGroupId> / --run / --run + --job")
+    dbg.add_argument("run_group_id", nargs="?", default=None)
+    dbg.add_argument("--run", dest="run_uuid", default=None)
+    dbg.add_argument("--job", dest="job_id", default=None)
     dbg.add_argument("-o", "--output", default="table", choices=["table", "json"])
+
+    # 8. quota
+    quota_p = subparsers.add_parser("quota", help="C端体验用户配额查询")
+    quota_p.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
     args = parser.parse_args()
     if not args.command:
@@ -605,7 +808,7 @@ def main():
         cli = OmicsCLI(cli_path=args.cli_path)
 
         if args.command == "login":
-            cmd_args = cli.build_login()
+            cmd_args = cli.build_login(no_browser=getattr(args, "no_browser", False))
         elif args.command == "whoami":
             cmd_args = cli.build_whoami()
         elif args.command == "version":
@@ -613,12 +816,41 @@ def main():
         elif args.command == "config":
             if args.config_action == "show":
                 cmd_args = cli.build_config_show(output=args.output)
+            elif args.config_action == "set":
+                if not all([args.region, args.project_id, args.environment_id, args.bucket]):
+                    _print_errors(["config set 需要 -r <region> -p <project-id> -e <environment> -b <bucket> 四项参数"])
+                    sys.exit(1)
+                cmd_args = cli.build_config_set(
+                    region=args.region,
+                    project_id=args.project_id,
+                    environment_id=args.environment_id,
+                    bucket=args.bucket,
+                )
             elif args.config_action == "clear":
                 cmd_args = cli.build_config_clear()
             else:
                 cfg.print_help(); sys.exit(1)
         elif args.command == "list":
-            if args.list_action == "public-apps":
+            if args.list_action == "region":
+                cmd_args = cli.build_list_region(output=args.output)
+            elif args.list_action == "project":
+                cmd_args = cli.build_list_project(
+                    region=getattr(args, "region", None),
+                    output=args.output,
+                )
+            elif args.list_action == "env":
+                cmd_args = cli.build_list_env(
+                    region=getattr(args, "region", None),
+                    output=args.output,
+                )
+            elif args.list_action == "cos-bucket":
+                cmd_args = cli.build_list_cos_bucket(output=args.output)
+            elif args.list_action == "volume":
+                cmd_args = cli.build_list_volume(
+                    environment_id=getattr(args, "environment_id", None),
+                    output=args.output,
+                )
+            elif args.list_action == "public-apps":
                 cmd_args = cli.build_list_public_apps(
                     tag=args.tag,
                     app_type=args.app_type,
@@ -627,9 +859,7 @@ def main():
                     output=args.output,
                 )
             elif args.list_action == "apps":
-                cmd_args = cli.build_list_apps(
-                    app_type=args.app_type, output=args.output,
-                )
+                cmd_args = cli.build_list_apps(app_type=args.app_type, output=args.output)
             elif args.list_action == "versions":
                 cmd_args = cli.build_list_versions(
                     app=args.app,
@@ -649,13 +879,11 @@ def main():
                 list_p.print_help(); sys.exit(1)
         elif args.command == "run":
             if args.wdl:
-                # 形态 A：name 必填；input_json 可选（不传仅靠 baseline）；CLI 还会做完整校验
                 errs = validate_run_local_wdl(args.wdl, args.input_json, args.name)
                 if errs:
                     _print_errors(errs); sys.exit(1)
-            # nf-version 仅在 form B/D/C(NF) 下生效
-            if args.nf_version and not (args.public_app or args.nf_cos_path or args.app):
-                _print_errors(["--nf-version 仅在 form B（--public-app）、form C（--app，NEXTFLOW 类型）或 form D（--nf）下生效"])
+            if args.nf_cos_path and getattr(args, "update_app_id", None):
+                _print_errors(["--update 与 --nf 互斥：NF 应用不支持通过 --update 复用旧应用"])
                 sys.exit(1)
             cmd_args = cli.build_run(
                 wdl=args.wdl,
@@ -665,23 +893,24 @@ def main():
                 input_json=args.input_json,
                 name=args.name,
                 main=args.main,
-                update_app_id=args.update_app_id,
-                public_app_name=args.public_app_name,
-                nf_version=args.nf_version,
+                update_app_id=getattr(args, "update_app_id", None),
+                public_app_name=getattr(args, "public_app_name", None),
+                app_type=getattr(args, "app_type", None),
+                nf_version=getattr(args, "nf_version", None),
                 output=args.output,
-                # v6 版本管理
-                target_version=args.target_version,
-                # v6 版本管理
-                release_name=args.release_name,
-                release_desc=args.release_desc,
-                # v6.1 模板拍板
-                template_id=args.template_id,
+                target_version=getattr(args, "target_version", None),
+                release_name=getattr(args, "release_name", None),
+                release_desc=getattr(args, "release_desc", None),
+                template_id=getattr(args, "template_id", None),
+                nf_resume=getattr(args, "nf_resume", False),
+                nf_config=getattr(args, "nf_config", None),
+                nf_profile=getattr(args, "nf_profile", None),
+                nf_report=getattr(args, "nf_report", False),
+                volume_id=getattr(args, "volume_id", None),
+                output_dir=getattr(args, "output_dir", None),
             )
         elif args.command == "status":
-            cmd_args = cli.build_status(
-                run_group_id=args.run_group_id,
-                output=args.output,
-            )
+            cmd_args = cli.build_status(run_group_id=args.run_group_id, output=args.output)
         elif args.command == "debug":
             try:
                 cmd_args = cli.build_debug(
@@ -691,8 +920,9 @@ def main():
                     output=args.output,
                 )
             except ValueError as e:
-                _print_errors([str(e)])
-                sys.exit(1)
+                _print_errors([str(e)]); sys.exit(1)
+        elif args.command == "quota":
+            cmd_args = cli.build_quota(output=args.output)
         else:
             parser.print_help(); sys.exit(1)
 
@@ -705,15 +935,15 @@ def main():
         sys.exit(result.returncode)
 
     except FileNotFoundError as e:
-        print(f"❌ {e}", file=sys.stderr)
+        print(f"[ERROR] {e}", file=sys.stderr)
         sys.exit(2)
     except KeyboardInterrupt:
-        print("\n⚠️ 用户中断操作", file=sys.stderr)
+        print("\n[WARN] 用户中断操作", file=sys.stderr)
         sys.exit(130)
 
 
 def _print_errors(errors: list[str]) -> None:
-    print("❌ 参数错误:", file=sys.stderr)
+    print("[ERROR] 参数错误:", file=sys.stderr)
     for e in errors:
         print(f"  - {e}", file=sys.stderr)
 

@@ -1,0 +1,95 @@
+# 系统（system）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: system
+name_cn: 系统
+category: setting
+carrier: manga
+audience: both
+weight: high
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/system.md
+emotion_core:
+- 量化成长
+- 任务爽感
+- 开挂逆袭
+- 即时反馈
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，男频适配度更高
+  bg_desc: 全背景通用，都市、玄幻、末世适配度最高
+  weight: high
+  bottom_line:
+  - 系统规则清晰，任务与奖惩明确
+  - 系统有边界，不能无所不能
+  - 任务推动主线，不能与剧情脱节
+relations:
+  synergy:
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 系统量化成长进度，逆袭节奏更清晰爽感更直接
+  - target: xuanhuan
+    effect_type: 增强型
+    weight: high
+    effect: 系统量化修为境界，升级反馈感更强
+  - target: apocalypse
+    effect_type: 增强型
+    weight: high
+    effect: 系统赋能生存与建设，目标感更强
+  - target: city
+    effect_type: 增强型
+    weight: high
+    effect: 都市背景+资源发放/定时反馈类系统，轻松爽感适配下沉市场（机制自由原创，勿固定为某一种包装）
+  - target: rebirth
+    effect_type: 增强型
+    weight: medium
+    effect: 重生+系统双金手指，成长速度加倍
+  mutex:
+  - target: 纯现实主义
+    reason: 无超自然设定则系统无法成立
+combo_adapt:
+- combo: references/domestic/combos/system.md
+  rule: 对齐系统核心规则，强化任务逻辑与成长反馈
+  sub: 经典系统型
+- combo: references/domestic/combos/counterattack.md
+  rule: 系统驱动逆袭，量化成长+阶层翻盘
+  sub: 系统逆袭型
+- combo: references/domestic/combos/cultivation.md
+  rule: 系统+修仙，升级节奏更清晰
+  sub: 系统修仙型
+fusion:
+- recipe: fusion/recipes/system-counterattack.md
+  note: 系统+逆袭经典配方，强即时爽感，适配全品类高转化内容
+redlines:
+- code: AP-XT01
+  name: 系统无规则边界
+  severity: 极高
+  dimension: 标签与逻辑
+  test: 能力无所不能，奖励随意发放，金手指崩坏
+- code: AP-XT02
+  name: 系统与剧情脱节
+  severity: 高
+  dimension: 结构与节奏
+  test: 任务与主线无关，纯为发奖励存在，沦为炫技工具
+- code: AP-XT03
+  name: 主角完全工具化
+  severity: 高
+  dimension: 人物与人设
+  test: 主角全被系统推着走，无主观能动性，人设缺失
+soft_warnings:
+- 避免系统提示音过于频繁，打断剧情节奏
+- 避免奖励过于夸张，前期就无敌导致后续无看点
+- 避免系统人设过于抢戏，盖过主角与主线
+manga:
+  visual_signature: 系统弹窗/任务面板的UI视觉特效
+  high_affinity: true
+  visual_hooks:
+  - 系统面板/弹窗的UI设计
+  - 任务奖励的光效呈现
+  - 数值成长的可视化界面

@@ -9,6 +9,17 @@ description: >
   add a chart / graph / plot"; "visualize / plot this"; a named chart type (bar / line / pie /
   scatter / bubble / radar / stacked / combo / dual-axis); "add a trendline"; "restyle / recolor /
   retitle this chart".
+description_zh: >-
+  表格图表操作的图表类型选择、样式默认值、组合图与双轴图，以及最小改动原则。在调用 `newChart` / `setOptions` /
+  `setDataRange` / `removeChart` / `getCharts`，或执行任何创建、修改、删除图表的任务前必须阅读。
+  触发词：生成图表 / 画个图 / 柱状图 / 折线图 / 饼图 / 环形图 / 散点图 / 气泡图 / 雷达图 / 趋势图 / 占比 /
+  对比图 / 可视化 / 仪表盘 / 图表样式 / 改图。
+description_en: >-
+  Chart-type selection, styling defaults, combo & dual-axis, and the minimal-patch rule for spreadsheet chart
+  operations. Read before any `newChart` / `setOptions` / `setDataRange` / `removeChart` / `getCharts`, or any task
+  that creates, modifies, or removes a chart, or a request that implies one: "make / create / add a chart / graph /
+  plot"; "visualize / plot this"; a named chart type (bar / line / pie / scatter / bubble / radar / stacked / combo /
+  dual-axis); "add a trendline"; "restyle / recolor / retitle this chart".
 ---
 
 # Sheet Charts — Authoritative Guide for All Chart Operations

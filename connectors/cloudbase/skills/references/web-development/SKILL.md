@@ -1,7 +1,7 @@
 ---
 name: web-development
 description: Use when users need to implement, integrate, debug, build, deploy, or validate a Web frontend after the product direction is already clear, especially for React, Vue, Vite, browser flows, or CloudBase Web integration.
-version: 2.26.0
+version: 2.34.8
 alwaysApply: false
 ---
 
@@ -36,7 +36,7 @@ If a referenced sibling skill file is missing from this environment, ask the use
 - General React / Vue / Vite guidance -> `frameworks.md`
 - Browser flow checks or page validation -> `browser-testing.md`
 - Login flow -> `../auth-tool-cloudbase/SKILL.md`, then `../auth-web-cloudbase/SKILL.md`
-- Official Account JSAPI Pay, Native QR-code Pay, or WeChat OAuth on CloudBase -> `../cloudbase-wechat-integration/SKILL.md` (official docs: `https://docs.cloudbase.net/integration/introduce/index.md`)
+- Official Account JSAPI Pay, Native QR-code Pay, or WeChat OAuth on CloudBase -> `../cloudbase-wechat-integration/SKILL.md` (official docs: `https://docs.cloudbase.net/integration/introduce.md`)
 - CloudBase database work -> matching database skill
 
 ### Do NOT use for
@@ -199,7 +199,7 @@ Use this section only when the Web project needs CloudBase platform features.
 import cloudbase from "@cloudbase/js-sdk";
 
 const app = cloudbase.init({
-  env: "your-full-env-id", // Canonical full CloudBase environment ID resolved from envQuery or the console
+  env: "your-full-env-id", // Canonical full CloudBase environment ID resolved from queryEnv or the console
 });
 
 const auth = app.auth

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "beike-yi.high-value-delivery/v1",
+  "purpose": "Defines one main teaching deliverable and its reviewable companion artifacts.",
+  "required": [
+    "artifactType",
+    "sourceMaterialRefs",
+    "chosenOption",
+    "editableContent",
+    "reviewGates",
+    "singleNextStep",
+    "deliveryStatus"
+  ],
+  "artifactTypes": [
+    "lesson_plan_draft",
+    "lesson_flow_card",
+    "lesson_case_revision",
+    "differentiated_task_pack",
+    "pilot_reflection_card",
+    "skill_draft"
+  ],
+  "deliveryStatus": [
+    "draft_delivered",
+    "ready_for_teacher_review",
+    "saved_and_read_back",
+    "ready_for_trial",
+    "not_executed",
+    "write_conflict"
+  ],
+  "companionArtifactLimit": 2,
+  "rules": [
+    "The main artifact must remain editable.",
+    "A saved status requires a visible write result and a read-back check.",
+    "A delivered artifact is not the same as a teacher-approved or classroom-validated artifact.",
+    "Sharing, publishing, and saving a reusable asset are separate actions."
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "_comment": "示例规则文件：复制为 rules.json 后修改使用。groups 顺序决定画板从左到右的排列，每个 asset 只会归入第一个匹配的组，fallback 必须放最后。",
+  "groups": [
+    {
+      "id": "board_roles",
+      "title": "🎭 人物资产",
+      "cols": 4,
+      "match": {
+        "type": "title_keywords",
+        "keywords": ["韩团风", "清凉造型", "角色", "人物"]
+      }
+    },
+    {
+      "id": "board_style",
+      "title": "🎬 风格参考",
+      "cols": 5,
+      "match": {
+        "type": "title_prefix",
+        "prefix": ["迪金斯", "Deakins"]
+      }
+    },
+    {
+      "id": "board_scene",
+      "title": "🛰️ 场景设定",
+      "cols": 4,
+      "match": {
+        "type": "title_prefix",
+        "prefix": ["太空电梯", "场景"]
+      }
+    },
+    {
+      "id": "board_videos",
+      "title": "🎥 视频库",
+      "cols": 3,
+      "match": {
+        "type": "asset_type",
+        "value": "video"
+      }
+    },
+    {
+      "id": "board_misc",
+      "title": "📦 杂项 / 散图",
+      "cols": 6,
+      "match": {
+        "type": "fallback"
+      }
+    }
+  ],
+  "layout": {
+    "cell_w": 280,
+    "cell_h": 280,
+    "gap": 20,
+    "pad": 40,
+    "title_h": 60,
+    "board_gap": 200
+  }
+}

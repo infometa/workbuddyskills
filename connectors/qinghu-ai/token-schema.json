@@ -1,0 +1,33 @@
+{
+  "title": "连接青虎AI",
+  "title_en": "Connect Qinghu AI",
+  "description": "填写青虎AI API 密钥，连接电商数据、选品运营和 LinkPix 视觉创作服务。凭证由 WorkBuddy 保存在本机，并在调用青虎AI时用于鉴权。可用范围取决于账号权限与订阅权益。",
+  "description_en": "Enter a Qinghu AI API key to connect ecommerce data, sourcing, operations, and LinkPix visual-creation services. WorkBuddy stores credentials locally and uses them only to authenticate Qinghu AI requests. Availability depends on account permissions and subscriptions.",
+  "docUrl": "https://www.iqinghu.com/workbench/dashboard/api-keys?urlCode=1789720362523",
+  "docLabel": "如何获取 API 密钥？",
+  "docUrl_en": "https://www.autoagc.com/workbench/dashboard/api-keys",
+  "docLabel_en": "How do I get an API key?",
+  "fields": [
+    {
+      "key": "API_KEY",
+      "label": "API 密钥",
+      "label_en": "API Key",
+      "type": "password",
+      "required": true,
+      "placeholder": "在青虎工作台 API Keys 创建后粘贴，不要加 Bearer 前缀",
+      "placeholder_en": "Paste the key from Qinghu AI Workbench API Keys. Do not add a Bearer prefix.",
+      "description": "青虎AI个人访问令牌。国内版与国际版账号、密钥互不通用。"
+    },
+    {
+      "key": "QINGHU_ENV",
+      "label": "站点",
+      "label_en": "Site",
+      "type": "text",
+      "required": true,
+      "defaultValue": "prod",
+      "placeholder": "prod 或 intl",
+      "placeholder_en": "prod or intl",
+      "description": "prod = 国内版 iqinghu.com；intl = 国际版 autoagc.com。必须与密钥所属站点一致。"
+    }
+  ]
+}

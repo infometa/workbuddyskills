@@ -1,55 +1,42 @@
 #!/usr/bin/env python3
 """
-Omics Platform CLI Command Builder & Executor (v4 · 7 命令边界)
+Omics Platform CLI Command Builder & Executor (v6 · 产物注入版)
 
-封装 omics-platform-cli 的命令拼接与执行，供 SKILL 调用。
+封装 omics-platform-cli 的命令拼接与执行，供生成的专用 SKILL 调用。
+
+⚠️ 本文件是 omics-common-app-skill 的 **产物模板**，不直接使用。
+   generate_app_skill.py 生成时会：
+   1. 将 @@SKILL_APP_ID@@ 替换为实际 AppId（独立应用）
+   2. 将 @@SKILL_APP_TYPE@@ 替换为实际 AppType（WDL 或 NEXTFLOW）
+   3. 将 @@SKILL_COLLECTION_APP_ID@@ 替换为合集 AppId（仅合集模式）
+   4. 将 @@SKILL_SUB_APPS_JSON@@ 替换为子应用清单 JSON（仅合集模式）
+   5. 将 @@SKILL_IS_COLLECTION@@ 替换为 true/false
+   并用特化后的 build_run() 替换 # @@INJECT_BUILD_RUN@@ 注释区段。
 
 ⚠️ 能力边界（不可违反 · 最高优先级）⚠️
-SKILL 只能调用以下 7 条 CLI 一级命令，禁止越界：
+生成的产物 SKILL 只能调用以下命令，禁止越界：
 
-    login / whoami / config / list / run / status / debug
+    login / whoami / config / list（region / project / env / cos-bucket / apps）
+    run（仅 --public-app 形态，AppId 已硬编码）/ status / debug
 
 禁止行为：
-  1. 严禁编造其他命令（如 app / project / import / app templates 等已废弃命令）
-  2. 严禁直接调用 omics 后端 HTTP API、SQL、文件系统写入等任何旁路通道
-  3. 严禁通过组合现有命令"模拟"出白名单外的语义
-  4. 严禁单独"导入公共应用"——导入是 run --public-app 的内部步骤，必须随 run 一起发生
+  1. 严禁调用 list public-apps（AppId 已硬编码）
+  2. 严禁直接调用 omics 后端 HTTP API、SQL、文件系统写入等旁路通道
+  3. 严禁 run --wdl / --app / --nf 形态
 
-run 前置确认：
-  SKILL 触发 omics run 前必须先输出"完整命令字符串 + 参数摘要表"，
-  等用户显式 y/yes/确认 才能执行。本 wrapper 提供 build_run(...) 后由调用方
-  完成确认流程，再 cli.execute(...) 真实发起。
-
-子命令结构（由 argparse 强约束）：
-  - login                       OAuth 浏览器登录（仅作建议，SKILL 不主动调）
-  - whoami                      当前登录用户
-  - config show / clear         本地配置查看/清除（SKILL 不调 set，引导用户本机执行）
-  - list public-apps            平台公共应用，按 AppTag 分组（含 --tag/--keyword/--parent-app/--type）
-  - list apps                   config 项目下的应用（form C 用户挑 ApplicationId 用）
-  - run                         唯一运行入口（form A/B/C），baseline + override 合并
-  - status [<rgId>]             任务批次/子任务状态
-  - debug                       三段式失败取证（<rgId> / --run / --run + --job）
-
-CLI v3 起已删除（SKILL 不再使用）：
-  - omics app list / list-public / templates / file *  → 迁入 omics list 或内化到 run
-  - omics project list                                   → 由 omics config set 校验链替代
-  - omics run-app                                        → 合并到 omics run --public-app/--app
-
-用法示例：
+用法示例（生成后的产物）：
+  python omics_cli.py login
   python omics_cli.py whoami
   python omics_cli.py config show -o json
-  python omics_cli.py list public-apps -o json
-  python omics_cli.py list public-apps --tag WGS
-  python omics_cli.py list public-apps --parent-app cm-collection-xxx -o json
+  python omics_cli.py config set -r ap-guangzhou -p prj-xxx -e env-yyy -b my-bucket
+  python omics_cli.py list region -o json
+  python omics_cli.py list project -o json
+  python omics_cli.py list env --region ap-guangzhou -o json
+  python omics_cli.py list cos-bucket -o json
   python omics_cli.py list apps --type WDL -o json
-  python omics_cli.py run --wdl ./hello.wdl --name hello --input ./hello.json
-  python omics_cli.py run --public-app cm-xxx --public-app-name my-app
-  python omics_cli.py run --app app-xxx --input ./run.json
+  python omics_cli.py run --public-app-name my-app --nf-version 23.10.0
   python omics_cli.py status -o json
-  python omics_cli.py status rg-aa11bb22 -o json
   python omics_cli.py debug rg-aa11bb22 -o json
-  python omics_cli.py debug --run <runUuid> -o json
-  python omics_cli.py debug --run <runUuid> --job <jobId> -o json
 """
 
 import argparse
@@ -62,7 +49,16 @@ DEFAULT_CLI_NAME = "omics"
 
 
 def find_cli() -> str:
-    """查找 omics CLI 可执行文件的路径。优先级：环境变量 > PATH"""
+    """查找 omics CLI 可执行文件的路径。优先级：环境变量 > PATH > 固定路径探测
+
+    固定路径探测说明：
+      安装脚本默认将 omics 放到 ~/.local/bin（macOS/Linux）或 WindowsApps（Windows），
+      并将该目录写入 ~/.zshrc / ~/.bashrc。但 WorkBuddy 的 subprocess 不会重新 source
+      这些配置文件，导致跨会话时 PATH 中可能没有该目录，shutil_which() 找不到 omics。
+      固定路径探测直接检查文件是否存在，绕开 PATH 限制，使跨会话检测可靠工作。
+
+      命中固定路径时会输出一行提示，告知用户终端可能尚未生效（需新建终端窗口）。
+    """
     env_path = os.environ.get("OMICS_CLI_PATH")
     if env_path:
         if os.path.isfile(env_path) and os.access(env_path, os.X_OK):
@@ -73,9 +69,36 @@ def find_cli() -> str:
             f"  https://cnb.cool/tencenthealthcareomics/omics-platform-cli"
         )
 
+    # 优先查 PATH（尊重用户的 shell 配置）
     cli_path = shutil_which(DEFAULT_CLI_NAME)
     if cli_path:
         return cli_path
+
+    # PATH 未命中时，探测常见固定安装路径
+    # 原因：安装后 ~/.zshrc 已更新，但当前 subprocess 的 PATH 尚未刷新
+    fixed_candidates: list[str] = []
+    if sys.platform == "win32":
+        local_app_data = os.environ.get("LOCALAPPDATA", "")
+        if local_app_data:
+            fixed_candidates.append(
+                os.path.join(local_app_data, "Microsoft", "WindowsApps", "omics.exe")
+            )
+    else:
+        home = os.path.expanduser("~")
+        fixed_candidates = [
+            os.path.join(home, ".local", "bin", "omics"),  # macOS/Linux 默认安装路径
+            os.path.join(home, "bin", "omics"),            # 部分 Linux 发行版
+        ]
+
+    for candidate in fixed_candidates:
+        if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            print(
+                f"[omics-skill] 已通过固定路径找到 CLI：{candidate}\n"
+                f"[omics-skill] 提示：若在终端直接输入 omics 命令不可用，"
+                f"请新建终端窗口（重新加载 shell 配置后即可生效）。",
+                file=sys.stderr,
+            )
+            return candidate
 
     raise FileNotFoundError(
         f"未找到 '{DEFAULT_CLI_NAME}' 命令。\n"
@@ -98,183 +121,175 @@ def shutil_which(name: str) -> str | None:
 
 
 # ──────────────────────────────────────────────
-# 命令构建器（仅 7 个白名单一级命令）
+# 命令构建器（产物专用，仅包含允许的命令）
 # ──────────────────────────────────────────────
 
 class OmicsCLI:
-    """Omics Platform CLI 命令构建与执行封装（v4 · 7 命令边界）"""
+    """Omics Platform CLI 命令构建与执行封装（产物专用版）"""
 
     def __init__(self, cli_path: str | None = None):
         self.cli_path = cli_path or find_cli()
 
-    # --- 1. login（保留 builder 仅供 dry-run 演示，SKILL 不应自动 execute） ---
+    # --- 1. login ---
     def build_login(self) -> list[str]:
+        """
+        omics login：启动 localhost:18000 监听，打开浏览器至 OAuth 授权页。
+        SKILL 调用时机：whoami 返回 exit 2（未登录或 session 过期）时主动触发。
+        """
         return [self.cli_path, "login"]
 
     # --- 2. whoami ---
     def build_whoami(self) -> list[str]:
+        """
+        omics whoami：验证当前 session 有效性，判断用户类型（B端/C端）。
+        退出码：0=已登录；2=未登录/session 过期 → SKILL 应触发 omics login
+        """
         return [self.cli_path, "whoami"]
 
-    # --- 辅助：version（不属白名单一级命令，但属 CLI 自身工具命令，可调） ---
+    # --- 辅助：version ---
     def build_version(self) -> list[str]:
         return [self.cli_path, "version"]
 
-    # --- 3. config show / clear（SKILL 不应调 set） ---
+    # --- 3. config ---
     def build_config_show(self, output: str = "table") -> list[str]:
         return [self.cli_path, "config", "show", "-o", output]
 
     def build_config_clear(self) -> list[str]:
         return [self.cli_path, "config", "clear"]
 
-    # --- 4. list public-apps / apps（替代旧 app list / list-public） ---
-    def build_list_public_apps(
+    def build_config_set(
         self,
-        tag: str | None = None,
-        app_type: str | None = None,
-        keyword: str | None = None,
-        parent_app: str | None = None,
+        region: str,
+        project_id: str,
+        environment_id: str,
+        bucket_name: str,
+    ) -> list[str]:
+        """omics config set（一次性自动化模式）：四参数全部必填。"""
+        if not region:
+            raise ValueError("config set: region 不能为空")
+        if not project_id:
+            raise ValueError("config set: project_id 不能为空")
+        if not environment_id:
+            raise ValueError("config set: environment_id 不能为空")
+        if not bucket_name:
+            raise ValueError("config set: bucket_name 不能为空")
+        return [
+            self.cli_path, "config", "set",
+            "-r", region,
+            "-p", project_id,
+            "-e", environment_id,
+            "-b", bucket_name,
+        ]
+
+    # --- 4. list region ---
+    def build_list_region(self, output: str = "table") -> list[str]:
+        return [self.cli_path, "list", "region", "-o", output]
+
+    # --- 5. list project ---
+    def build_list_project(self, output: str = "table") -> list[str]:
+        return [self.cli_path, "list", "project", "-o", output]
+
+    # --- 6. list env ---
+    def build_list_env(
+        self,
+        region: str | None = None,
         output: str = "table",
     ) -> list[str]:
-        """
-        omics list public-apps：列平台公共应用，按 AppTag 分组展示。
-
-        参数:
-          tag        : 业务分类标签精确过滤（如 "WGS" / "RNA-seq"）
-          app_type   : 二级类型过滤（WDL / NEXTFLOW），可叠加在 tag 之上
-          keyword    : service 端关键词搜索
-          parent_app : 展开公共应用合集，传入合集 AppId；
-                       service 端会屏蔽 type/keyword/tag
-          output     : table / json
-
-        JSON 输出形态:
-          {
-            "Tags": [str, ...],          # 全部出现过的 Tag（含"未分类"）
-            "TotalApps": int,            # 去重后的应用总数
-            "Groups": [
-              { "Tag": str, "Count": int, "Apps": [CommonApp, ...] },
-              ...
-            ]
-          }
-        """
-        cmd = [self.cli_path, "list", "public-apps", "-o", output]
-        if parent_app:
-            cmd.extend(["--parent-app", parent_app])
-        else:
-            if tag:
-                cmd.extend(["--tag", tag])
-            if app_type:
-                cmd.extend(["--type", app_type])
-            if keyword:
-                cmd.extend(["--keyword", keyword])
+        cmd = [self.cli_path, "list", "env", "-o", output]
+        if region:
+            cmd.extend(["--region", region])
         return cmd
 
+    # --- 7. list cos-bucket ---
+    def build_list_cos_bucket(self, output: str = "table") -> list[str]:
+        return [self.cli_path, "list", "cos-bucket", "-o", output]
+
+    # --- 8. list apps（仅用于导入前同名检查，必须带 --type）---
     def build_list_apps(
         self,
-        app_type: str | None = None,
+        app_type: str,
         output: str = "table",
     ) -> list[str]:
         """
-        omics list apps：列当前 config 项目下的应用。
-
-        固定走 config 写入的 ProjectId，不支持 -p。
-        SKILL 主要在两处场景使用：
-          1. 用户想跑 form C（项目内已有应用）时帮其挑 ApplicationId
-          2. form B 导入公共应用前的同名预检（SKILL 比对 Name == candidateName）
-
-        参数:
-          app_type : WDL / WDL_GRAPH / NEXTFLOW（默认不过滤）
+        omics list apps：仅用于导入前同名检查。
+        ⚠️ app_type 必填，不允许不带 --type 调用（那会列出项目所有应用）。
         """
-        cmd = [self.cli_path, "list", "apps", "-o", output]
-        if app_type:
-            cmd.extend(["--type", app_type])
-        return cmd
+        if not app_type:
+            raise ValueError("build_list_apps: app_type 必填（不允许不带 --type 调用）")
+        return [self.cli_path, "list", "apps", "--type", app_type, "-o", output]
 
-    # --- 5. run（唯一运行入口 · 触发前必须二次确认） ---
+    # --- 9. run（合集模式，AppId 来自硬编码子应用清单，生成时注入）---
     def build_run(
         self,
-        # 三选一
-        wdl: str | None = None,
-        public_app: str | None = None,
-        app: str | None = None,
-        # 通用
+        sub_app_id: str,
+        public_app_name: str,
+        app_type: str | None = None,
+        nf_version: str | None = None,
         input_json: str | None = None,
         name: str | None = None,
-        main: str | None = None,
-        update_app_id: str | None = None,
-        public_app_name: str | None = None,
-        nf_version: str | None = None,
         output: str = "table",
     ) -> list[str]:
         """
-        合并后的 omics run 命令（CLI v3 唯一运行入口）。
-
-        ⚠️ 调用前必须完成"二次确认"：先 build_run 拼出命令、向用户展示
-           参数摘要表，等用户显式回复 y/yes/确认 后才能 cli.execute(...)。
-
-        形态分流（互斥三选一，CLI 强校验）：
-          A. 本地 WDL              wdl=...
-          B. 公共应用              public_app=...    public_app_name 视情况必传：
-                                   - 独立公共应用 + 用户未指定名 → 可省（CLI 兜底用原名）
-                                   - 合集子应用 → 必须传（CLI 拿不到子应用元信息无法兜底）
-                                   - 用户明确改名 → 必传
-                                   nf_version 仅 form B 且 AppType=NEXTFLOW 时必填
-          C. 项目内已有应用        app=...
-
-        参数模板（v3 起统一为 baseline + override 合并模式）：
-          - 形态 A / C：input_json 为 override；不传时仅靠 baseline（WDL Default）跑
-          - 形态 B：CLI 自动取该公共应用第一个 InputTemplate 作为 override；
-                   显式 input_json 会覆盖自动模板
-          缺必填项时 CLI 以 PARAM_MERGE_FAILED 报错，由 SKILL 引导用户补值。
-
-        Validate 失败后整改重试（仅 A）：
-          首次因 WDL Validate 不过被中止时，CLI stderr 会输出 ApplicationId；
-          用户更新 WDL 后调用 build_run(wdl=..., update_app_id=app-xxxx) 即可
-          复用空白应用做覆盖上传重试（CLI 内部走整目录覆盖 + 乐观锁回退）。
+        omics run（合集模式）：AppId 必须来自本 SKILL 硬编码子应用清单。
+        ⚠️ 合集本身（COLLECTION_APP_ID）不可直接作为 --public-app 参数。
         """
-        provided = sum(1 for v in (wdl, public_app, app) if v)
-        if provided != 1:
-            raise ValueError("--wdl / --public-app / --app 必须三选一")
-        if nf_version and not public_app:
-            raise ValueError("--nf-version 仅在 form B（--public-app）下生效")
-
-        cmd = [self.cli_path, "run", "-o", output]
-        if wdl:
-            cmd.extend(["--wdl", wdl])
-            if main:
-                cmd.extend(["--main", main])
-            if update_app_id:
-                cmd.extend(["--update", update_app_id])
-        elif public_app:
-            cmd.extend(["--public-app", public_app])
-            if public_app_name:
-                cmd.extend(["--public-app-name", public_app_name])
-            if nf_version:
-                cmd.extend(["--nf-version", nf_version])
-        elif app:
-            cmd.extend(["--app", app])
-
+        COLLECTION_APP_ID = '5c63718b-d24f-4a9f-9838-4177185f414a'  # 合集 AppId（硬编码，禁止覆盖）
+        SUB_APPS = [{"AppId": "bfa72f47-c230-41eb-806f-973fe00a8cda", "AppName": "scPROTEIN_stage1", "AppType": "NEXTFLOW", "AppDesc": "scPROTEIN stage1", "NextflowVersions": ["v24.04.3"]}, {"AppId": "58a00e72-116b-4bd1-bfee-ee22763f21e5", "AppName": "scPROTEIN_stage2", "AppType": "NEXTFLOW", "AppDesc": "scPROTEIN stage2", "NextflowVersions": ["v24.04.3"]}]  # 子应用清单（生成时注入）
+        
+        # 强校验：sub_app_id 必须在 SUB_APPS 清单中
+        valid_ids = {a['AppId'] for a in SUB_APPS}
+        if sub_app_id == COLLECTION_APP_ID:
+            raise ValueError(
+                f"不允许用合集 AppId（{COLLECTION_APP_ID}）直接 run，"
+                "请从子应用清单中选择具体子应用"
+            )
+        if sub_app_id not in valid_ids:
+            raise ValueError(
+                f"sub_app_id '{sub_app_id}' 不在本合集的子应用清单中。"
+                f"合法的 AppId: {sorted(valid_ids)}"
+            )
+        
+        # 从清单中取该子应用的 AppType，用于本地校验
+        resolved_app_type = app_type
+        if not resolved_app_type:
+            for sa in SUB_APPS:
+                if sa['AppId'] == sub_app_id:
+                    resolved_app_type = sa.get('AppType', '')
+                    break
+        
+        # 本地校验：NEXTFLOW 类型必须传 nf_version
+        if resolved_app_type and resolved_app_type.upper() == 'NEXTFLOW' and not nf_version:
+            raise ValueError(
+                f"子应用 '{sub_app_id}' 为 NEXTFLOW 类型，必须指定 nf_version"
+            )
+        if resolved_app_type and resolved_app_type.upper() == 'WDL' and nf_version:
+            import warnings
+            warnings.warn("WDL 类型不需要 nf_version，该参数将被 CLI 忽略", UserWarning)
+        
+        cmd = [self.cli_path, "run", "-o", output,
+               "--public-app", sub_app_id,
+               "--public-app-name", public_app_name,
+               "--app-type", resolved_app_type]
+        if nf_version:
+            cmd.extend(["--nf-version", nf_version])
         if input_json:
             cmd.extend(["--input", input_json])
         if name:
             cmd.extend(["--name", name])
         return cmd
 
-    # --- 6. status ---
+    # --- 10. status ---
     def build_status(
         self,
         run_group_id: str | None = None,
         output: str = "table",
     ) -> list[str]:
-        """
-        omics status：固定走 config 的 ProjectId，不支持跨项目查询。
-        如需查别的项目，先重新 omics config set。
-        """
         cmd = [self.cli_path, "status", "-o", output]
         if run_group_id:
             cmd.append(run_group_id)
         return cmd
 
-    # --- 7. debug 三段式 ---
+    # --- 11. debug 三段式 ---
     def build_debug(
         self,
         run_group_id: str | None = None,
@@ -282,27 +297,12 @@ class OmicsCLI:
         job_id: str | None = None,
         output: str = "table",
     ) -> list[str]:
-        """
-        omics debug：异步任务失败的"取证"出口（CLI 仅取证，不做规则匹配）。
-
-        三种形态（位置参数 / --run / --run + --job）：
-          omics debug <runGroupId>            列该批次所有子任务，标出 Failed
-          omics debug --run <runUuid>         单子任务现场（Status + Calls + JobLogs[].Stderr/PodEvents）
-          omics debug --run <uuid> --job <j>  在 Calls/JobLogs 中按 JobId 过滤
-
-        run_group_id 与 run_uuid 互斥；job_id 仅在 run_uuid 非空时生效。
-        内部链路：GetRunStatus + GetRunCalls + 自动钻取最多 5 个失败 call 的
-        JobService.GetRunJobLog(stderr) + MonitorService.DescribeKubernetesEvents(PLAN, JobId)。
-        段 2/3 输出 JobLogs[]：含 JobId / CallName / Status / Stderr / StderrTruncated /
-        PodEvents（保留 FailedMount 信号）。详见 references/cli_commands.md §debug。
-        """
         if run_group_id and run_uuid:
             raise ValueError("debug: <runGroupId> 与 --run 互斥，只能传一个")
         if not run_group_id and not run_uuid:
             raise ValueError("debug: 必须传入 run_group_id 或 run_uuid 之一")
         if job_id and not run_uuid:
             raise ValueError("debug: --job 仅在 --run 模式下生效")
-
         cmd = [self.cli_path, "debug", "-o", output]
         if run_group_id:
             cmd.append(run_group_id)
@@ -316,15 +316,7 @@ class OmicsCLI:
     def execute(self, args: list[str], check: bool = True) -> subprocess.CompletedProcess:
         """
         执行 CLI 命令。
-
-        参数:
-          args : 完整命令列表
-          check: True 则在非零退出码时抛出 CalledProcessError
-
-        退出码语义：
-          0 → 成功
-          1 → 业务错误
-          2 → 鉴权失败（SKILL 应捕获并提示用户在本机跑 omics login，不要循环重试）
+        退出码语义：0=成功；1=业务错误；2=鉴权失败（SKILL 应触发 omics login）
         """
         print(f"\n▶ 执行命令: {' '.join(args)}\n")
         result = subprocess.run(
@@ -348,26 +340,19 @@ class OmicsCLI:
 # 参数校验辅助
 # ──────────────────────────────────────────────
 
-def validate_run_local_wdl(wdl: str, input_json: str, name: str) -> list[str]:
-    errors = []
-    if not wdl:
-        errors.append("缺少 --wdl")
-    elif not os.path.exists(wdl):
-        errors.append(f"--wdl 路径不存在: {wdl}")
-    if input_json and not os.path.exists(input_json):
-        errors.append(f"--input 文件不存在: {input_json}")
-    if not (name and name.strip()):
-        errors.append("形态 A 必须 --name")
-    return errors
+def _print_errors(errors: list[str]) -> None:
+    print("❌ 参数错误:", file=sys.stderr)
+    for e in errors:
+        print(f"  - {e}", file=sys.stderr)
 
 
 # ──────────────────────────────────────────────
-# CLI 入口（argparse 顶层只注册 7 个一级命令 + version 工具）
+# CLI 入口（argparse — 产物专用命令集）
 # ──────────────────────────────────────────────
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Omics Platform CLI 命令构建与执行工具（v4 · 7 命令边界）",
+        description="Omics Platform CLI 命令构建与执行工具（产物专用版）",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--cli-path", default=None,
@@ -377,72 +362,71 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="可用命令")
 
     # 1. login
-    subparsers.add_parser("login", help="OAuth 浏览器登录（SKILL 不应自动调；引导用户本机执行）")
+    subparsers.add_parser("login", help="OAuth 浏览器登录（SKILL 主动触发）")
 
     # 2. whoami
-    subparsers.add_parser("whoami", help="查看当前登录用户")
+    subparsers.add_parser("whoami", help="查看当前登录用户及用户类型（C端/B端）")
 
-    # 工具：version
+    # version（工具命令）
     subparsers.add_parser("version", help="CLI 版本号")
 
-    # 3. config（show / clear；不暴露 set，避免 SKILL 误调）
-    cfg = subparsers.add_parser("config", help="本地配置（show / clear；set 由用户在本机执行）")
+    # 3. config
+    cfg = subparsers.add_parser("config", help="本地配置（show / clear / set）")
     cfg_sub = cfg.add_subparsers(dest="config_action")
     cfg_show = cfg_sub.add_parser("show", help="显示当前配置")
     cfg_show.add_argument("-o", "--output", default="table", choices=["table", "json"])
     cfg_sub.add_parser("clear", help="清除本地配置")
+    cfg_set = cfg_sub.add_parser("set", help="设置配置（-r/-p/-e/-b 四者必填）")
+    cfg_set.add_argument("-r", "--region", required=True)
+    cfg_set.add_argument("-p", "--project", dest="project_id", required=True)
+    cfg_set.add_argument("-e", "--environment", dest="environment_id", required=True)
+    cfg_set.add_argument("-b", "--bucket", dest="bucket_name", required=True)
 
-    # 4. list（public-apps / apps）
-    list_p = subparsers.add_parser("list", help="只读查询（公共应用 / 项目内应用）")
+    # 4. list
+    list_p = subparsers.add_parser("list", help="只读查询（地域/项目/环境/COS桶/项目内应用）")
     list_sub = list_p.add_subparsers(dest="list_action")
 
-    list_pub = list_sub.add_parser("public-apps", help="列平台公共应用，按 AppTag 分组")
-    list_pub.add_argument("--tag", default=None, help="按 AppTag 业务标签精确过滤")
-    list_pub.add_argument("--type", dest="app_type", default=None,
-                          help="二级类型过滤：WDL / NEXTFLOW（叠加在 tag 之上）")
-    list_pub.add_argument("--keyword", default=None, help="service 端关键词搜索")
-    list_pub.add_argument("--parent-app", dest="parent_app", default=None,
-                          help="展开合集：传入合集 AppId（屏蔽 --type/--keyword/--tag）")
-    list_pub.add_argument("-o", "--output", default="table", choices=["table", "json"])
+    list_region = list_sub.add_parser("region", help="列平台全部地域列表")
+    list_region.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
-    list_apps = list_sub.add_parser("apps", help="列 config 项目下的应用")
-    list_apps.add_argument("--type", dest="app_type", default=None,
-                           help="WDL / WDL_GRAPH / NEXTFLOW")
+    list_proj = list_sub.add_parser("project", help="列用户全部项目列表")
+    list_proj.add_argument("-o", "--output", default="table", choices=["table", "json"])
+
+    list_env = list_sub.add_parser("env", help="列用户全部环境列表")
+    list_env.add_argument("--region", default=None)
+    list_env.add_argument("-o", "--output", default="table", choices=["table", "json"])
+
+    list_cos = list_sub.add_parser("cos-bucket", help="列当前 config 环境绑定的 COS 桶")
+    list_cos.add_argument("-o", "--output", default="table", choices=["table", "json"])
+
+    list_apps = list_sub.add_parser("apps", help="列 config 项目下同类型应用（仅用于同名检查）")
+    list_apps.add_argument("--type", dest="app_type", required=True,
+                           help="WDL / NEXTFLOW（必填，用于限定查询范围）")
     list_apps.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
-    # 5. run（合并三形态）
-    run_p = subparsers.add_parser("run", help="发起任务批次（form A/B/C 三选一）")
-    grp = run_p.add_mutually_exclusive_group(required=True)
-    grp.add_argument("--wdl", default=None, help="形态 A：本地 WDL")
-    grp.add_argument("--public-app", dest="public_app", default=None, help="形态 B：公共应用 AppId")
-    grp.add_argument("--app", default=None, help="形态 C：项目内 ApplicationId")
-    run_p.add_argument("--main", default=None)
-    run_p.add_argument("--update", dest="update_app_id", default=None)
-    run_p.add_argument("--input", dest="input_json", default=None,
-                       help="本地参数模板 JSON（override）。form A/C 不传仅靠 baseline；form B 不传时 CLI 自动取第一个 InputTemplate")
+    # 5. run（产物专用 — 仅 --public-app 形态，AppId 由 build_run() 内部硬编码）
+    run_p = subparsers.add_parser("run", help="发起任务批次（仅 --public-app 形态）")
+    run_p.add_argument("--sub-app-id", dest="sub_app_id", required=True,
+                       help="子应用 AppId（必须来自本 SKILL 硬编码子应用清单）")
     run_p.add_argument("--public-app-name", dest="public_app_name", default=None,
-                       help="form B 导入到项目时的应用名。独立公共应用 CLI 兜底用原名；合集子应用必须传。")
+                       help="导入到项目时的应用名。合集子应用必传；独立应用可省略（CLI 兜底用原名）。")
     run_p.add_argument("--nf-version", dest="nf_version", default=None,
-                       help="form B 专用：NF 公共应用必填；候选见 list public-apps 输出 NextflowVersion[]。")
-    run_p.add_argument("--name", default=None)
+                       help="NEXTFLOW 类型必填；候选版本见 SKILL 中的子应用清单。")
+    run_p.add_argument("--input", dest="input_json", default=None,
+                       help="本地参数 JSON（override）。不传时 CLI 自动取 InputTemplate 第一个模板。")
+    run_p.add_argument("--name", default=None, help="运行批次名称（可选）。")
     run_p.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
     # 6. status
-    st = subparsers.add_parser("status", help="任务批次/子任务状态（固定走 config 项目）")
+    st = subparsers.add_parser("status", help="任务批次/子任务状态")
     st.add_argument("run_group_id", nargs="?", default=None)
     st.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
     # 7. debug
-    dbg = subparsers.add_parser(
-        "debug",
-        help="异步任务失败取证：<runGroupId> / --run / --run + --job",
-    )
-    dbg.add_argument("run_group_id", nargs="?", default=None,
-                     help="批次 RunGroupId；与 --run 互斥")
-    dbg.add_argument("--run", dest="run_uuid", default=None,
-                     help="子任务 RunUuid；与位置参数 <runGroupId> 互斥")
-    dbg.add_argument("--job", dest="job_id", default=None,
-                     help="底层作业 ID（plan-xxx / tes-xxx）；仅在 --run 模式下生效")
+    dbg = subparsers.add_parser("debug", help="异步任务失败取证（三段式）")
+    dbg.add_argument("run_group_id", nargs="?", default=None)
+    dbg.add_argument("--run", dest="run_uuid", default=None)
+    dbg.add_argument("--job", dest="job_id", default=None)
     dbg.add_argument("-o", "--output", default="table", choices=["table", "json"])
 
     args = parser.parse_args()
@@ -464,17 +448,24 @@ def main():
                 cmd_args = cli.build_config_show(output=args.output)
             elif args.config_action == "clear":
                 cmd_args = cli.build_config_clear()
+            elif args.config_action == "set":
+                cmd_args = cli.build_config_set(
+                    region=args.region,
+                    project_id=args.project_id,
+                    environment_id=args.environment_id,
+                    bucket_name=args.bucket_name,
+                )
             else:
                 cfg.print_help(); sys.exit(1)
         elif args.command == "list":
-            if args.list_action == "public-apps":
-                cmd_args = cli.build_list_public_apps(
-                    tag=args.tag,
-                    app_type=args.app_type,
-                    keyword=args.keyword,
-                    parent_app=args.parent_app,
-                    output=args.output,
-                )
+            if args.list_action == "region":
+                cmd_args = cli.build_list_region(output=args.output)
+            elif args.list_action == "project":
+                cmd_args = cli.build_list_project(output=args.output)
+            elif args.list_action == "env":
+                cmd_args = cli.build_list_env(region=args.region, output=args.output)
+            elif args.list_action == "cos-bucket":
+                cmd_args = cli.build_list_cos_bucket(output=args.output)
             elif args.list_action == "apps":
                 cmd_args = cli.build_list_apps(
                     app_type=args.app_type, output=args.output,
@@ -482,24 +473,12 @@ def main():
             else:
                 list_p.print_help(); sys.exit(1)
         elif args.command == "run":
-            if args.wdl:
-                # 形态 A：name 必填；input_json 可选（不传仅靠 baseline）；CLI 还会做完整校验
-                errs = validate_run_local_wdl(args.wdl, args.input_json, args.name)
-                if errs:
-                    _print_errors(errs); sys.exit(1)
-            if args.nf_version and not args.public_app:
-                _print_errors(["--nf-version 仅在 form B（--public-app）下生效"])
-                sys.exit(1)
             cmd_args = cli.build_run(
-                wdl=args.wdl,
-                public_app=args.public_app,
-                app=args.app,
-                input_json=args.input_json,
-                name=args.name,
-                main=args.main,
-                update_app_id=args.update_app_id,
+                sub_app_id=args.sub_app_id,
                 public_app_name=args.public_app_name,
                 nf_version=args.nf_version,
+                input_json=args.input_json,
+                name=args.name,
                 output=args.output,
             )
         elif args.command == "status":
@@ -522,7 +501,7 @@ def main():
             parser.print_help(); sys.exit(1)
 
         if args.dry_run:
-            print("DRY RUN - 将执行以下命令:")
+            print("DRY RUN — 将执行以下命令:")
             print(" ".join(cmd_args))
             sys.exit(0)
 
@@ -537,11 +516,6 @@ def main():
         sys.exit(130)
 
 
-def _print_errors(errors: list[str]) -> None:
-    print("❌ 参数错误:", file=sys.stderr)
-    for e in errors:
-        print(f"  - {e}", file=sys.stderr)
-
-
 if __name__ == "__main__":
     main()
+

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/inventory-row/2.0",
+  "title": "Inventory Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["root_id", "scan_id", "relative_path", "status"],
+  "properties": {
+    "root_id": {"type": "string", "pattern": "^ROOT-[A-Z0-9]{12,64}$"},
+    "scan_id": {"type": "string", "pattern": "^SCAN-[A-Z0-9]{12,64}$"},
+    "relative_path": {"type": "string", "minLength": 1},
+    "name": {"type": "string"},
+    "suffix": {"type": "string"},
+    "media_type": {"type": "string"},
+    "size_bytes": {"type": "string", "pattern": "^$|^[0-9]+$"},
+    "modified_ns": {"type": "string", "pattern": "^$|^[0-9]+$"},
+    "status": {"enum": ["observed", "unreadable"]},
+    "error": {"type": "string"}
+  }
+}

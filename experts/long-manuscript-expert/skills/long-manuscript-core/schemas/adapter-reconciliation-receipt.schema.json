@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/adapter-reconciliation-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "receiptNamespace", "adapterId", "portId", "operation", "sceneId", "intentDigest", "idempotencyKeyDigest", "providerBindingDigest", "dispatchDigest", "nonceConsumptionReceiptDigest", "reason", "state", "externalReplayBlocked", "createdAt", "receiptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "1.1.0" },
+    "receiptNamespace": { "enum": ["wecom_collaboration", "fbs_connector_receipt"] },
+    "adapterId": { "enum": ["wecom", "fbs"] },
+    "portId": { "type": "string", "minLength": 1 },
+    "operation": { "type": "string", "minLength": 1 },
+    "sceneId": { "type": "string", "minLength": 1 },
+    "intentDigest": { "$ref": "#/$defs/digest" },
+    "idempotencyKeyDigest": { "$ref": "#/$defs/digest" },
+    "providerBindingDigest": { "$ref": "#/$defs/digest" },
+    "dispatchDigest": { "$ref": "#/$defs/digest" },
+    "nonceConsumptionReceiptDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "reason": { "type": "string", "minLength": 1 },
+    "state": { "const": "required" },
+    "externalReplayBlocked": { "const": true },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": { "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }
+}

@@ -1,6 +1,8 @@
 ---
 name: fund-crowding
 description: 用于基金重仓股拥挤度分析，聚焦机构行为、拥挤交易、风险管理、组合研究。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想判断某只基金重仓股到底是"机构共识优质资产"，还是"已经过度拥挤、稍有不及预期就容易踩踏"的标的。
+description_zh: "用于基金重仓股拥挤度分析，聚焦机构行为、拥挤交易、风险管理、组合研究。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想判断某只基金重仓股到底是\"机构共识优质资产\"，还是\"已经过度拥挤、稍有不及预期就容易踩踏\"的标的。"
+description_en: "Use for crowding analysis of heavily held fund stocks, focusing on institutional behavior, crowded trades, risk management, and portfolio research. Suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It determines whether a heavily held stock is a high-quality institutional consensus asset or an overcrowded position vulnerable to a sell-off after even a minor disappointment."
 ---
 
 # 基金重仓拥挤度

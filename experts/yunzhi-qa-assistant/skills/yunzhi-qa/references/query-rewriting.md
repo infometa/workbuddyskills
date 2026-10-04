@@ -74,6 +74,10 @@
 | 配置 | 设置 / 开启 / 启用 / setup / config |
 | 价格 | 计费 / 收费 / 费用 / 报价 / pricing |
 | 文档 | 资料 / 手册 / 说明书 / 教程 |
+| 海外 | 国际版 / 出海 / 海外市场 / 国际站 / overseas / international / global |
+| 多语言 | 多语种 / 语言支持 / 本地化 / i18n / multilingual |
+
+> **国际化叠加提示**：若问题命中海外/国际版场景（`intl=on`，判定见 `agent-architecture.md`），改写时在保留主关键词的同时补上上表的海外/多语言同义词，并在检索阶段对每条 Query 注入「国际版=是」UDF 过滤（参数见 `overseas-search.md`）。
 
 ---
 

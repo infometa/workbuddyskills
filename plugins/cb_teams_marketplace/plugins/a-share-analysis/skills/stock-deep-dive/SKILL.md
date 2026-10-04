@@ -1,6 +1,8 @@
 ---
 name: stock-deep-dive
 description: 擅长单只股票的精准分析。能够对单只股票的"投资逻辑梳理、基本面分析、财务分析、技术分析、资金面解读、公司速览(一页纸)、战略分析、财报解读、同业比较与竞争力、机构研究汇总、优劣机会分析、重大事件点评、近期事件动态、近日异动原因、投资者问答精粹"这15个主题领域进行单项或多项分析。当直接命中或高相似度命中这些领域时，使用本技能。本技能不适用于：大盘分析、行业整体研究、宏观解读、多资产配置、基金筛选、债券点评等。
+description_zh: "擅长单只股票的精准分析。能够对单只股票的\"投资逻辑梳理、基本面分析、财务分析、技术分析、资金面解读、公司速览(一页纸)、战略分析、财报解读、同业比较与竞争力、机构研究汇总、优劣机会分析、重大事件点评、近期事件动态、近日异动原因、投资者问答精粹\"这15个主题领域进行单项或多项分析。当直接命中或高相似度命中这些领域时，使用本技能。本技能不适用于：大盘分析、行业整体研究、宏观解读、多资产配置、基金筛选、债券点评等。"
+description_en: "Specializes in precise analysis of individual stocks. It can perform one or more analyses across 15 topics: investment thesis, fundamentals, financials, technicals, capital flows, one-page company overview, strategy, earnings reports, peer comparison and competitiveness, institutional research synthesis, strengths and opportunities, major-event commentary, recent developments, causes of unusual price moves, and investor Q&A highlights. Use this skill when the request directly or closely matches these areas. It is not suitable for broad-market analysis, industry-wide research, macro interpretation, multi-asset allocation, fund screening, or bond commentary."
 ---
 
 # 个股深度分析

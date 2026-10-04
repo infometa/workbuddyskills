@@ -1,0 +1,89 @@
+# 职场（workplace）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: workplace
+name_cn: 职场
+category: background
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/counterattack.md
+emotion_core:
+- 职场博弈
+- 能力逆袭
+- 权力上位
+- 情感纠葛
+- 现实共鸣
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，男频侧重商战/权力，女频侧重职场+情感
+  bg_desc: 现代职场/商战基底，与都市、总裁高度兼容
+  weight: medium
+  bottom_line:
+  - 职场规则与专业逻辑自洽，不能外行悬浮
+  - 上位/逆袭靠能力与博弈，不能纯靠运气
+  - 职场情感有边界，不沦为狗血
+relations:
+  synergy:
+  - target: ceo
+    effect_type: 增强型
+    weight: high
+    effect: 职场是总裁题材主场，商战与权力博弈拉满
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 底层职员凭能力逆袭上位，职场打脸爽感
+  - target: rebirth
+    effect_type: 裂变型
+    weight: medium
+    effect: 重生回职场关键节点，借信息差布局上位
+  - target: twist
+    effect_type: 增强型
+    weight: medium
+    effect: 职场阴谋/身份多层反转，博弈张力强
+  mutex:
+  - target: 纯校园学生
+    reason: 身份基底冲突，需毕业/时间线桥接
+combo_adapt:
+- combo: references/domestic/combos/counterattack.md
+  rule: 职场能力逆袭上位，对齐现实奋斗爽感
+  sub: 职场逆袭型
+- combo: references/domestic/combos/face-slapping.md
+  rule: 打脸轻视主角的上司/同事，能力碾压
+  sub: 职场打脸型
+- combo: references/domestic/combos/sweet-love.md
+  rule: 职场+情感，强强CP或上下级张力
+  sub: 职场情感型
+fusion:
+- recipe: fusion/recipes/workplace-rebirth.md
+  note: 重生职场逆袭类，信息差布局上位，强爽感
+- recipe: fusion/recipes/business-war.md
+  note: 商战博弈类，专业质感+权力对决
+redlines:
+- code: AP-ZP01
+  name: 职场专业失真
+  severity: 高
+  dimension: 标签与逻辑
+  test: 行业/职场逻辑外行悬浮，专业细节硬伤，劝退职场受众
+- code: AP-ZP02
+  name: 上位逻辑廉价
+  severity: 中
+  dimension: 标签与逻辑
+  test: 逆袭/上位纯靠运气或主角光环，缺乏能力与博弈支撑
+soft_warnings:
+- 避免职场沦为背景板，仅作恋爱场景而无博弈
+- 避免职场关系狗血化，情感越界失真
+- 避免反派降智配合，博弈无真实张力
+manga:
+  visual_signature: 现代写字楼/商务场景 + 职业精英造型 + 博弈氛围
+  high_affinity: false
+  visual_hooks:
+  - 商务精英的造型质感
+  - 职场博弈/谈判的镜头张力
+  - 上位反转的画面冲击

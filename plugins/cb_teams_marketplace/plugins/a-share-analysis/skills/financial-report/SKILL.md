@@ -1,6 +1,8 @@
 ---
 name: financial-report
 description: 用于公告影响力与财报质量分析，聚焦公告解读/财报分析/基本面验证。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户上传或粘贴公告、年报、季报、业绩预告，想快速知道：到底有没有用，对股价意味着什么。
+description_zh: "用于公告影响力与财报质量分析，聚焦公告解读/财报分析/基本面验证。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户上传或粘贴公告、年报、季报、业绩预告，想快速知道：到底有没有用，对股价意味着什么。"
+description_en: "Use for announcement-impact and financial-report-quality analysis, focusing on announcement interpretation, financial-report analysis, and fundamental validation. Primarily suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. When a user uploads or pastes an announcement, annual report, quarterly report, or earnings forecast, it quickly explains whether the information is material and what it means for the share price."
 ---
 
 # 公告与财报分析

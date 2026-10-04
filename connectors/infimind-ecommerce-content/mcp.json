@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "infimind-ecommerce-content": {
+      "type": "streamableHttp",
+      "url": "https://imiva.ecpro.com/mcp/workbuddy"
+    }
+  }
+}

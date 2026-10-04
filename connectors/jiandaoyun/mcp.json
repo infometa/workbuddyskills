@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "jiandaoyun": {
+      "type": "streamableHttp",
+      "url": "https://mcp.jiandaoyun.com/mcp",
+      "timeout": 30000
+    }
+  }
+}

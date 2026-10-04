@@ -1,0 +1,41 @@
+{
+  "runtime": { "type": "node", "version": ">=22" },
+  "npmRegistry": "https://registry.npmmirror.com",
+  "init": {
+    "darwin": "npm install -g @puyinkai/xiaobao-cli",
+    "linux": "npm install -g @puyinkai/xiaobao-cli",
+    "win32": "npm install -g @puyinkai/xiaobao-cli"
+  },
+  "auth": {
+    "darwin": "xiaobao-cli auth login",
+    "linux": "xiaobao-cli auth login",
+    "win32": "xiaobao-cli.cmd auth login"
+  },
+  "authDeviceFlow": {
+    "uriPattern": "(https?://[^\\s]+)",
+    "codePattern": "设备验证码: (\\S+)",
+    "defaultExpiresInSeconds": 300,
+    "codeEmbeddedInUri": false
+  },
+  "authUrlDomain": "wangxiaobao.com",
+  "status": {
+    "darwin": "xiaobao-cli auth status",
+    "linux": "xiaobao-cli auth status",
+    "win32": "xiaobao-cli.cmd auth status"
+  },
+  "statusMatch": "Logged in as",
+  "unAuth": {
+    "darwin": "xiaobao-cli auth logout",
+    "linux": "xiaobao-cli auth logout",
+    "win32": "xiaobao-cli.cmd auth logout"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "xiaobao-cli --version",
+      "linux": "xiaobao-cli --version",
+      "win32": "xiaobao-cli.cmd --version"
+    },
+    "minVersion": "0.5.0",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  }
+}

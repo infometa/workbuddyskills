@@ -1,0 +1,37 @@
+<div class="pcf-section">
+  <div class="pcf-section__rating">
+    <div class="pcf-section__rating-num">{{ratingGrade}}</div>
+    <div class="pcf-section__rating-tier">治理评级</div>
+  </div>
+
+  <h3>高管团队</h3>
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>职务</th><th>姓名</th><th>任职年限</th><th>备注</th></tr></thead>
+      <tbody>
+        {{#executives}}
+        <tr><td>{{title}}</td><td>{{name}}</td><td>{{years}}</td><td>{{note}}</td></tr>
+        {{/executives}}
+      </tbody>
+    </table>
+  </div>
+
+  <h3>治理指标</h3>
+  <div class="pcf-section__grid">
+    {{#indices}}
+    <div class="pcf-section__field">
+      <div class="pcf-section__label">{{label}}</div>
+      <div class="pcf-section__value">{{value}}</div>
+    </div>
+    {{/indices}}
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

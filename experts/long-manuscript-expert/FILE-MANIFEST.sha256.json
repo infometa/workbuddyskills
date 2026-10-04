@@ -1,100 +1,817 @@
 {
-    "schemaVersion":  "long_manuscript.file_hash_manifest.v2",
-    "packageName":  "long-manuscript-expert",
-    "packageVersion":  "26.7.22",
-    "rootDirectory":  "long-manuscript-expert",
-    "hashAlgorithm":  "SHA-256",
-    "pathEncoding":  "UTF-8 POSIX relative path",
-    "zipEntryTimestamp":  "1980-01-01T00:00:00Z",
-    "generationPolicy":  "ordinal_paths_utf8_lf_content_only_no_wall_clock_input",
-    "sourceProvenance":  {
-                             "mode":  "audited_source_reconstruction",
-                             "sourceRevisionClaimed":  false,
-                             "frozenBaselineTreeSha256":  "94c81a7e6a56acfa04745a39150e4fe976736b893ca19585d4fb0c84601704cd",
-                             "dispositionLedgerSha256":  "90ff5e7b7263d6b4ce7c8b20ac162fe21e66e585988dc057bae34b48fb589afa"
-                         },
-    "coverage":  {
-                     "totalPackageFiles":  16,
-                     "hashedFileCount":  15,
-                     "selfEntry":  "FILE-MANIFEST.sha256.json",
-                     "selfEntryExcludedForSelfReference":  true,
-                     "unlistedPayloadFiles":  0
-                 },
-    "files":  [
-                  {
-                      "path":  ".codebuddy-plugin/plugin.json",
-                      "bytes":  3268,
-                      "sha256":  "93eb2e97333117317b12f1ca85ae107382e09739e1d667cb6886078786cd05c2"
-                  },
-                  {
-                      "path":  "LICENSE",
-                      "bytes":  1081,
-                      "sha256":  "cebc764d66b57eb4bd545462eb389cf22498f1a2a90909c364087a6dcef017bb"
-                  },
-                  {
-                      "path":  "PRIVACY.md",
-                      "bytes":  2283,
-                      "sha256":  "72c4299d690a5748b25ff2bf59abd101ce5c89cba0cf25e55ce0278d3f70918b"
-                  },
-                  {
-                      "path":  "README.md",
-                      "bytes":  4042,
-                      "sha256":  "edf3ac0ab1050da0d0b998614317e9e493d9296aea1065655a90c477f9c872a3"
-                  },
-                  {
-                      "path":  "RIGHTS-NOTICE.md",
-                      "bytes":  2788,
-                      "sha256":  "8e4d4f3e08d3a3cc55fb807bca3cf35c60545d48db3a8d627a0470650e23411b"
-                  },
-                  {
-                      "path":  "SECURITY.md",
-                      "bytes":  2325,
-                      "sha256":  "0a57e3d75dd5d01c67cd8f63cee70e8ab844500967537a55d146e21c1781ff6b"
-                  },
-                  {
-                      "path":  "TERMS.md",
-                      "bytes":  1970,
-                      "sha256":  "c197ebabb6787048c3cc750cc92f30c38041458f98816e06d2a97715236c9812"
-                  },
-                  {
-                      "path":  "agents/long-manuscript-expert.md",
-                      "bytes":  10788,
-                      "sha256":  "23083a8604fef066b2a9099bbc30875de9c53610f60894ec9e6acc4b19650f77"
-                  },
-                  {
-                      "path":  "avatars/expert-v2.jpg",
-                      "bytes":  74880,
-                      "sha256":  "9bd60660e65e961829362c0a7636794a3c183844134977dad7057c82331dde24"
-                  },
-                  {
-                      "path":  "skills/long-manuscript-core/SKILL.md",
-                      "bytes":  5147,
-                      "sha256":  "21eb940913fcf51beba34cf3035d378b40d317053c822c6fa31d95ef38b1fe53"
-                  },
-                  {
-                      "path":  "skills/long-manuscript-core/references/bounded-revision.md",
-                      "bytes":  3188,
-                      "sha256":  "f8f8c666e7bc69672ceaa1816977aa83e255832b5aa7e0729f4d52b365b4f2cc"
-                  },
-                  {
-                      "path":  "skills/long-manuscript-core/references/first-value-and-continuation.md",
-                      "bytes":  2600,
-                      "sha256":  "e616747755759a273116ad2d3f9d4d9c45bde729f77b8325c59494c55350c564"
-                  },
-                  {
-                      "path":  "skills/long-manuscript-core/references/quality-and-delivery.md",
-                      "bytes":  2448,
-                      "sha256":  "f7ba51d3f4bd4b23d43e5a2c68d6028f3b444bc730fd065497abe0f34d407dbe"
-                  },
-                  {
-                      "path":  "skills/long-manuscript-core/references/safety-and-evidence.md",
-                      "bytes":  3273,
-                      "sha256":  "6909bf7170fae9444d1fd068844e3a76ce428af1c7a8eb863d51ccd86cc24fe1"
-                  },
-                  {
-                      "path":  "skills/long-manuscript-core/references/scene-routing.md",
-                      "bytes":  2711,
-                      "sha256":  "f7052a96275addb89ce45dbab506f55747a8401522adc9b72d462a6e7a2cf12e"
-                  }
-              ]
+  "coverage": {
+    "hashedFileCount": 158,
+    "selfEntry": "FILE-MANIFEST.sha256.json",
+    "selfEntryExcludedForSelfReference": true,
+    "totalPackageFiles": 159,
+    "unlistedPayloadFiles": 0
+  },
+  "files": [
+    {
+      "bytes": 3337,
+      "path": ".codebuddy-plugin/plugin.json",
+      "sha256": "09af5c308ae473375865bb7e5f05d9afe9b0df51dcdbe4a9d9e1607c034f8f7f"
+    },
+    {
+      "bytes": 1060,
+      "path": "LICENSE",
+      "sha256": "442f2f7922d3fd146cb5ae0094e84450e9076a56a395db8311e46c5f68c9e207"
+    },
+    {
+      "bytes": 2283,
+      "path": "PRIVACY.md",
+      "sha256": "72c4299d690a5748b25ff2bf59abd101ce5c89cba0cf25e55ce0278d3f70918b"
+    },
+    {
+      "bytes": 4659,
+      "path": "README.md",
+      "sha256": "69f65e13bdb1222281b386ef606563475b3d4b789be6670fe953b0503f26e913"
+    },
+    {
+      "bytes": 2018,
+      "path": "RIGHTS-NOTICE.md",
+      "sha256": "bb8e895601a140a3c29e6bdf1966c5f03777f36a1affa9f67c01f68047c445f5"
+    },
+    {
+      "bytes": 2325,
+      "path": "SECURITY.md",
+      "sha256": "0a57e3d75dd5d01c67cd8f63cee70e8ab844500967537a55d146e21c1781ff6b"
+    },
+    {
+      "bytes": 2349,
+      "path": "TERMS.md",
+      "sha256": "3803c79bfcb7012da78ca2994d33504485e3dc216821a695605ff05862fe7183"
+    },
+    {
+      "bytes": 743,
+      "path": "THIRD-PARTY-NOTICES.md",
+      "sha256": "4b1ecfbdc6f341254eb2918e03762aa5a2db0bbb8e742c5c705f912ba663dcc8"
+    },
+    {
+      "bytes": 11010,
+      "path": "agents/long-manuscript-expert.md",
+      "sha256": "95e886d78a1a65dd58fad72263c52a0c287896105f042d079ca6ba89afd6e4a2"
+    },
+    {
+      "bytes": 74880,
+      "path": "avatars/expert-v2.jpg",
+      "sha256": "9bd60660e65e961829362c0a7636794a3c183844134977dad7057c82331dde24"
+    },
+    {
+      "bytes": 7187,
+      "path": "skills/long-manuscript-core/SKILL.md",
+      "sha256": "f2fdba530283cff0c1676f6021dea72c918eab3147376005d6a846b33290776e"
+    },
+    {
+      "bytes": 3188,
+      "path": "skills/long-manuscript-core/references/bounded-revision.md",
+      "sha256": "f8f8c666e7bc69672ceaa1816977aa83e255832b5aa7e0729f4d52b365b4f2cc"
+    },
+    {
+      "bytes": 2600,
+      "path": "skills/long-manuscript-core/references/first-value-and-continuation.md",
+      "sha256": "e616747755759a273116ad2d3f9d4d9c45bde729f77b8325c59494c55350c564"
+    },
+    {
+      "bytes": 2099,
+      "path": "skills/long-manuscript-core/references/manuscriptos-kernel.md",
+      "sha256": "38402706ba2572d8b9fbbaade1dbe574ccf93cd84457ee10e957a19de52264d1"
+    },
+    {
+      "bytes": 1720,
+      "path": "skills/long-manuscript-core/references/optional-adapters.md",
+      "sha256": "ee69413697ca24ebf1fcd729fc1cb5b2c5ab19243ef55330358dc3784b46c8ea"
+    },
+    {
+      "bytes": 2448,
+      "path": "skills/long-manuscript-core/references/quality-and-delivery.md",
+      "sha256": "f7ba51d3f4bd4b23d43e5a2c68d6028f3b444bc730fd065497abe0f34d407dbe"
+    },
+    {
+      "bytes": 740,
+      "path": "skills/long-manuscript-core/references/quality-evaluators.md",
+      "sha256": "bc026bb6c0ae251f8fbfed8622ac6e93700dcda25e7985a65c0ded7e778ad5b4"
+    },
+    {
+      "bytes": 3273,
+      "path": "skills/long-manuscript-core/references/safety-and-evidence.md",
+      "sha256": "6909bf7170fae9444d1fd068844e3a76ce428af1c7a8eb863d51ccd86cc24fe1"
+    },
+    {
+      "bytes": 1538,
+      "path": "skills/long-manuscript-core/references/scene-packs.md",
+      "sha256": "e67963834ee2dc64cd71c2d79e28915465756f2ae0d8d38980d3a322f72341f9"
+    },
+    {
+      "bytes": 2711,
+      "path": "skills/long-manuscript-core/references/scene-routing.md",
+      "sha256": "f7052a96275addb89ce45dbab506f55747a8401522adc9b72d462a6e7a2cf12e"
+    },
+    {
+      "bytes": 655,
+      "path": "skills/long-manuscript-core/references/self-contained-runtime.md",
+      "sha256": "04f39ffdeb98c9669658bc772f2c155e84fe3be4dffc6605e77fac622ca258b5"
+    },
+    {
+      "bytes": 2008,
+      "path": "skills/long-manuscript-core/references/shared-capabilities.md",
+      "sha256": "62619d94774ed55a74e1520a5a34a8bd939bb71db22fd7715a4664aaab9b0d98"
+    },
+    {
+      "bytes": 10581,
+      "path": "skills/long-manuscript-core/resources/capability-port-adapter-registry.json",
+      "sha256": "8490171c10cf604870c8b7d2a199994080976c73ff20ce09756557631ebdddd0"
+    },
+    {
+      "bytes": 12875,
+      "path": "skills/long-manuscript-core/resources/capability-registry.json",
+      "sha256": "59f65ec39a34a1aad2ef38afc2505250ef8a69719f9e6af7fdff14901b29aa9f"
+    },
+    {
+      "bytes": 2170,
+      "path": "skills/long-manuscript-core/resources/durable-object-registry.json",
+      "sha256": "be2dab5df2618ad7c98a14269190862b412c9f5acae30d99c709453fece88ace"
+    },
+    {
+      "bytes": 1695,
+      "path": "skills/long-manuscript-core/resources/fbs-provider-bindings.json",
+      "sha256": "d5e98e92aa5fad93826bb16a094d1f8d01b4eae24cac3186ebf469df74d5d3ba"
+    },
+    {
+      "bytes": 675,
+      "path": "skills/long-manuscript-core/resources/gates/delivery-quality-policy.json",
+      "sha256": "5784715c171bce0ef367b218262aa7c9a7a3c5dabbd34d6955a65e5406798c6a"
+    },
+    {
+      "bytes": 22780,
+      "path": "skills/long-manuscript-core/resources/gates/evaluator-registry.json",
+      "sha256": "9b36120721bdd1085581fbf4ea3ea3e2fcfc5b797eda1ab222b6c4469532fc23"
+    },
+    {
+      "bytes": 3361,
+      "path": "skills/long-manuscript-core/resources/gates/human-review-gate.json",
+      "sha256": "7af95a714bf202880915a8d88e7e5117b0146b34d4ca484ae873aa2141da88e4"
+    },
+    {
+      "bytes": 225978,
+      "path": "skills/long-manuscript-core/resources/gates/quality-gate-applicability.json",
+      "sha256": "5d0ea2565e628e9471df5b75083f60cead6fab95333c33cf4a4f9341ed46ad2f"
+    },
+    {
+      "bytes": 2083,
+      "path": "skills/long-manuscript-core/resources/legacy-scene-migrations.json",
+      "sha256": "0fd2788c9aa3ce76916354fbca63e81fc1850dc2641509b28e0ab53bc12e3d0f"
+    },
+    {
+      "bytes": 2598,
+      "path": "skills/long-manuscript-core/resources/operation-mode-registry.json",
+      "sha256": "5356f080044e1ff9ee683c0862859bc2bb3854df180800318dd4361654e23e42"
+    },
+    {
+      "bytes": 8287,
+      "path": "skills/long-manuscript-core/resources/scene-artifact-archetype-registry.json",
+      "sha256": "898b976088f15933de3f47b1d5cd3358a7aed6b2b1d7121db354983fe6a03af3"
+    },
+    {
+      "bytes": 3529,
+      "path": "skills/long-manuscript-core/resources/scene-capability-port-registry.json",
+      "sha256": "ad92f24607135fd818dbb07fa5b1558491d1c73190419b3f22e9d930b008d376"
+    },
+    {
+      "bytes": 18290,
+      "path": "skills/long-manuscript-core/resources/scene-quality-gate-registry.json",
+      "sha256": "a13f182bd7df9bdee60b81df1dee229868ee01503bf87d8a03ec0c49e6e99b50"
+    },
+    {
+      "bytes": 8861,
+      "path": "skills/long-manuscript-core/resources/scene-registry.json",
+      "sha256": "d4735ddb77330b893f208c4451522ff36808d4c60542f022f9fc13807011aa30"
+    },
+    {
+      "bytes": 5455,
+      "path": "skills/long-manuscript-core/resources/scene-route-index.json",
+      "sha256": "cb3cf52cd8056e40d2fa29ac637b1c3651fb887e51a76068a9fb92ba61a4c587"
+    },
+    {
+      "bytes": 963,
+      "path": "skills/long-manuscript-core/resources/self-contained-policy.json",
+      "sha256": "59ae09a64262c43c9235144b8210406dce8c64d0fc77f873b38d5ff1ec67ec28"
+    },
+    {
+      "bytes": 4674,
+      "path": "skills/long-manuscript-core/resources/wecom-provider-bindings.json",
+      "sha256": "c3828c028c42f0a5fcdd8e31cb0aaedaa1df4c7c55f571105608ace37019a800"
+    },
+    {
+      "bytes": 8768,
+      "path": "skills/long-manuscript-core/scenes/academic-monograph.json",
+      "sha256": "23697aa610ccc7c0ba72184a2254192b77f4e55a2223f03a2fa942502fc71600"
+    },
+    {
+      "bytes": 9189,
+      "path": "skills/long-manuscript-core/scenes/annual-chronicle.json",
+      "sha256": "0596fdc4f3c1b6df69ed1d38764913b37f8e7909e45653d40446b821fe39faa8"
+    },
+    {
+      "bytes": 9164,
+      "path": "skills/long-manuscript-core/scenes/biography-memorial.json",
+      "sha256": "9714d010f9d37d4ef512f07ae28368e2bdb72fce4541b41ecec03717361d5e73"
+    },
+    {
+      "bytes": 9112,
+      "path": "skills/long-manuscript-core/scenes/brand-story-longform.json",
+      "sha256": "f2fa1cc45972544b7cceba53cc0d457da8b696559aa975e7c450747b56dbcf74"
+    },
+    {
+      "bytes": 9068,
+      "path": "skills/long-manuscript-core/scenes/casebook.json",
+      "sha256": "354f4e49550d4408d574481d3aa88f0d9811ee74d421719123eb6bf496fd5066"
+    },
+    {
+      "bytes": 9143,
+      "path": "skills/long-manuscript-core/scenes/collection-album.json",
+      "sha256": "3ca60ea91864afac0622d752495cd5e1f7872950029bc2bde42f774d57276020"
+    },
+    {
+      "bytes": 9337,
+      "path": "skills/long-manuscript-core/scenes/conference-proceedings.json",
+      "sha256": "b1d2143ca032d2023b2ae6efe81a4634fabd02b04165d2ceba103ab4184ce371"
+    },
+    {
+      "bytes": 9490,
+      "path": "skills/long-manuscript-core/scenes/consulting-decision-report.json",
+      "sha256": "d37f18104cacbbaad99249331822a593526716f5dc01c767bc494a3955c94ca1"
+    },
+    {
+      "bytes": 9174,
+      "path": "skills/long-manuscript-core/scenes/cultural-heritage.json",
+      "sha256": "51ccb2d7dc8bcbfba0e9c407aa96362c7feb412a796629794be950b3de6237d0"
+    },
+    {
+      "bytes": 9191,
+      "path": "skills/long-manuscript-core/scenes/expert-book.json",
+      "sha256": "f726513a3d4465ac2cdd55e10cc758601c14e535b00634ab4b63e80c7421dd23"
+    },
+    {
+      "bytes": 9161,
+      "path": "skills/long-manuscript-core/scenes/genealogy.json",
+      "sha256": "37092e66e86eb5f284b4f41a5d4d7733b96879099f23b0218343357f0673d6b1"
+    },
+    {
+      "bytes": 6794,
+      "path": "skills/long-manuscript-core/scenes/general.json",
+      "sha256": "5e055d2a89be98f76c98a58ccad013af083ad53b439157663b2881e081206e1e"
+    },
+    {
+      "bytes": 9233,
+      "path": "skills/long-manuscript-core/scenes/investigative-report-restricted.json",
+      "sha256": "6db67e3ab9585b9a5b91eba6de79b49ea0d90bba577d5754c6a0ef63c069f57d"
+    },
+    {
+      "bytes": 9254,
+      "path": "skills/long-manuscript-core/scenes/memoir-oral-history.json",
+      "sha256": "7440910b6dfdcda11f9f31345d3f4bfa05572b51e26bd037bae25f85f8266618"
+    },
+    {
+      "bytes": 9333,
+      "path": "skills/long-manuscript-core/scenes/operation-manual.json",
+      "sha256": "8b069692a5a1308fe11163c0f5330a694cb12ee1dcfa5da39cf283bca52be38b"
+    },
+    {
+      "bytes": 9328,
+      "path": "skills/long-manuscript-core/scenes/organization-history.json",
+      "sha256": "b11f009b39396d38375bca4cba326f61ccb6299f61dfd471dc3192e485f54cea"
+    },
+    {
+      "bytes": 9455,
+      "path": "skills/long-manuscript-core/scenes/policy-standard-guide.json",
+      "sha256": "330894aeb4ebf607e329cf4723a9b4c0c2f977d5bf2326701e4c085281363d17"
+    },
+    {
+      "bytes": 9841,
+      "path": "skills/long-manuscript-core/scenes/proposal-rfp.json",
+      "sha256": "1fbbf50707db99abd7e6160771d0fb7f43f4ba3c48cf38c7c8ee48a0109cdd79"
+    },
+    {
+      "bytes": 9495,
+      "path": "skills/long-manuscript-core/scenes/technical-documentation.json",
+      "sha256": "2492b153239aa27f593185679c00fdfb243c02d8c84325ab15355412018c81b7"
+    },
+    {
+      "bytes": 9431,
+      "path": "skills/long-manuscript-core/scenes/training-course.json",
+      "sha256": "6cd3a4aa2da5db2ad76b1608c64816548d90102be61b2122b95318e94be30aec"
+    },
+    {
+      "bytes": 9212,
+      "path": "skills/long-manuscript-core/scenes/whitepaper-research.json",
+      "sha256": "6ddcc5d613965313ad14c54940c3d379c27bb9da4c62096db4295fd698fa38e4"
+    },
+    {
+      "bytes": 3006,
+      "path": "skills/long-manuscript-core/schemas/adapter-action-receipt.schema.json",
+      "sha256": "96e581e721f7d5f450ad567b01f31f5dbd7c4e3e16eea3dcec7d8d4f64603ac2"
+    },
+    {
+      "bytes": 1803,
+      "path": "skills/long-manuscript-core/schemas/adapter-approval-receipt.schema.json",
+      "sha256": "90a5390b218eb90c1c4a54b7035a52f9f9fb2894da0d8ad6269a1cdffe4ea29d"
+    },
+    {
+      "bytes": 2348,
+      "path": "skills/long-manuscript-core/schemas/adapter-intent.schema.json",
+      "sha256": "9ad59191ae7ce7a58d03c98fd42ccf61665de2082f20e5b79f9c07b487657f44"
+    },
+    {
+      "bytes": 1100,
+      "path": "skills/long-manuscript-core/schemas/adapter-nonce-consumption-receipt.schema.json",
+      "sha256": "494efb2968ae7cbeee3c03d7f1ee021f0572c9dd67927365660476147895ee5f"
+    },
+    {
+      "bytes": 1505,
+      "path": "skills/long-manuscript-core/schemas/adapter-reconciliation-receipt.schema.json",
+      "sha256": "58ec93f1854dbccb8849b555c664600ba2283a8315c3f8ed6a758ed472576fce"
+    },
+    {
+      "bytes": 1531,
+      "path": "skills/long-manuscript-core/schemas/adapter-target-resolution.schema.json",
+      "sha256": "a8b3a0d76a19f05f0de28a1e2b4cea4ba91e97969d9e0117af386be251fbeab8"
+    },
+    {
+      "bytes": 1306,
+      "path": "skills/long-manuscript-core/schemas/binary-artifact-receipt.schema.json",
+      "sha256": "b4ccb0d37a6bba263dc8edb967678fa9cd67bab1e5b8f621266f61a6458f4b27"
+    },
+    {
+      "bytes": 1098,
+      "path": "skills/long-manuscript-core/schemas/capability-invocation.schema.json",
+      "sha256": "e9a42be23318abaab0abe634bdc5b854facc7e157b55e0a730288555486cd56f"
+    },
+    {
+      "bytes": 988,
+      "path": "skills/long-manuscript-core/schemas/capability-receipt.schema.json",
+      "sha256": "ff3195d64343555683d2f624f2a7a11e1c428ebc7f243dcf1b562aa9e9c1bf9b"
+    },
+    {
+      "bytes": 1912,
+      "path": "skills/long-manuscript-core/schemas/capability-result.schema.json",
+      "sha256": "b0772f1803f6430459d1261f74bdb1e9eda37853b4d192a8ab4bfdf33e3ea737"
+    },
+    {
+      "bytes": 953,
+      "path": "skills/long-manuscript-core/schemas/chapter-plan.schema.json",
+      "sha256": "d185ba90884b7c031b345d0c59683637ecfee043976dcfd49f7686ef705e1f53"
+    },
+    {
+      "bytes": 1048,
+      "path": "skills/long-manuscript-core/schemas/claim-graph.schema.json",
+      "sha256": "9c9e4bb3d550bb8ff91ea15ec5c45b3c7593810c9aafab348ee1d45e8bdaeca7"
+    },
+    {
+      "bytes": 845,
+      "path": "skills/long-manuscript-core/schemas/continuation-capsule.schema.json",
+      "sha256": "134dbe90285e4277350a7575bd78f0e520af545268f7b63666b1f7222b7e374f"
+    },
+    {
+      "bytes": 5584,
+      "path": "skills/long-manuscript-core/schemas/delivery-gate-summary.schema.json",
+      "sha256": "860df8bbbf4306a4cbd172751b722a7687b0d9d2cf3829a561bed4ff6638d7d6"
+    },
+    {
+      "bytes": 1014,
+      "path": "skills/long-manuscript-core/schemas/delivery-manifest.schema.json",
+      "sha256": "108a19089d697abdeec168ca0575522d3ce9537abc584db5c4df9ced4586a198"
+    },
+    {
+      "bytes": 1111,
+      "path": "skills/long-manuscript-core/schemas/entity-timeline.schema.json",
+      "sha256": "ce82767fb3e976af485ae8dd08d306feb77ac974288f59f7c7b00bf7b1ae469c"
+    },
+    {
+      "bytes": 328102,
+      "path": "skills/long-manuscript-core/schemas/gate-evidence.schema.json",
+      "sha256": "ac4488797fe42b2beebe7dcb1f959a73af2bfcf9a5085d582e0826fff0ca742e"
+    },
+    {
+      "bytes": 391268,
+      "path": "skills/long-manuscript-core/schemas/gate-invocation.schema.json",
+      "sha256": "1298e800c9571faed19a291a1f980e893895cd15ace8dc2cf4cffc60729767f4"
+    },
+    {
+      "bytes": 1310,
+      "path": "skills/long-manuscript-core/schemas/gate-policy.schema.json",
+      "sha256": "42c4c28f4aef92d15abc85746773a0ddf1fecd6ed82c9be6d0c6698b6b44c8c6"
+    },
+    {
+      "bytes": 2438,
+      "path": "skills/long-manuscript-core/schemas/gate-receipt.schema.json",
+      "sha256": "b0724e7e07991e02748cdec8c225f1804a5b149f20be605a956ea8096d1e886a"
+    },
+    {
+      "bytes": 5705,
+      "path": "skills/long-manuscript-core/schemas/gate-result.schema.json",
+      "sha256": "e144a46bf4804f3eff15e6e7722edfc7ce9bcf5e93c0f6042383a7c335a9c3ea"
+    },
+    {
+      "bytes": 2508,
+      "path": "skills/long-manuscript-core/schemas/human-gate-receipt.schema.json",
+      "sha256": "2733475339ee56f3f63f72d96dda4bc1e269a70ed3098b3c09b5bda5772f3b78"
+    },
+    {
+      "bytes": 1631,
+      "path": "skills/long-manuscript-core/schemas/manuscript-project.schema.json",
+      "sha256": "00aaaeb54275228f75053e44aa1aef0690017fbdd4b47e0f8c5ce72814b4898f"
+    },
+    {
+      "bytes": 925,
+      "path": "skills/long-manuscript-core/schemas/material-item.schema.json",
+      "sha256": "ff4978a29aea3ee7ad9950fd909cb6695b99c7922026e7aa872236b77d7786c0"
+    },
+    {
+      "bytes": 856,
+      "path": "skills/long-manuscript-core/schemas/media-plan.schema.json",
+      "sha256": "3b929f5fdfd86fcfbcad71ff3415e3ac6a2093317e896e50e77f9ee6e01ad6ce"
+    },
+    {
+      "bytes": 1021,
+      "path": "skills/long-manuscript-core/schemas/review-cycle.schema.json",
+      "sha256": "fd101197e9e7fa8c0812f708198ec2e2d28ebec5ab1b79dce68bd55d1deca819"
+    },
+    {
+      "bytes": 7726,
+      "path": "skills/long-manuscript-core/schemas/scene-pack.schema.json",
+      "sha256": "3ad18a37c7aa47bdfdd244b4161cce7ee25efe27265fa58eefb5deb155dd72f9"
+    },
+    {
+      "bytes": 828,
+      "path": "skills/long-manuscript-core/schemas/scope-lock.schema.json",
+      "sha256": "9328fc5cc2d7b7a9b5c2b8099c0d786d6cf775e16075dc399bcf2a850fb43ee3"
+    },
+    {
+      "bytes": 812,
+      "path": "skills/long-manuscript-core/schemas/source-ledger.schema.json",
+      "sha256": "ff3bfb1b613ea9dce11e5240660e8870a935afeb0d40deded179f0b0845c49fc"
+    },
+    {
+      "bytes": 46653,
+      "path": "skills/long-manuscript-core/scripts/adapter-runtime.mjs",
+      "sha256": "6629c4369aec1898ab81da8517bba1ea194a888289f629e7c7f2d8c094d998c8"
+    },
+    {
+      "bytes": 735,
+      "path": "skills/long-manuscript-core/scripts/artifact-planner.mjs",
+      "sha256": "5715401bda5952b38bdd8acea619c213a13d5af05aa9b943b9f26396d4ea79e5"
+    },
+    {
+      "bytes": 461,
+      "path": "skills/long-manuscript-core/scripts/capabilities/asset-repurposing.mjs",
+      "sha256": "ef0142cf0d2735ab8cc6fe324636d7b1458ae29fa063cef962ba5f28b1ec4148"
+    },
+    {
+      "bytes": 470,
+      "path": "skills/long-manuscript-core/scripts/capabilities/chapter-planning-expansion.mjs",
+      "sha256": "c27c95d00fc344a655ab5615713bdb89985ccec2221773d98b695ea1220ec93a"
+    },
+    {
+      "bytes": 465,
+      "path": "skills/long-manuscript-core/scripts/capabilities/continuation-recovery.mjs",
+      "sha256": "3288076c6ada3a2b6e93221c56c385fb23a4c9a8342b817c6868c07901badf93"
+    },
+    {
+      "bytes": 470,
+      "path": "skills/long-manuscript-core/scripts/capabilities/entity-timeline-continuity.mjs",
+      "sha256": "7aedb315581b910c1e9eb820d57b0d2c96599426fb334695642e4d250b1fb3f3"
+    },
+    {
+      "bytes": 463,
+      "path": "skills/long-manuscript-core/scripts/capabilities/material-activation.mjs",
+      "sha256": "6ef990eb9f23fdba68da8a401d4d4c2104e54ff65833afc521fff5f6c05606d3"
+    },
+    {
+      "bytes": 471,
+      "path": "skills/long-manuscript-core/scripts/capabilities/media-illustration-planning.mjs",
+      "sha256": "c0743b5ab6ac052f21be2699ec6ce8aef5be7bb0baacc70af199b7f3a62231c7"
+    },
+    {
+      "bytes": 466,
+      "path": "skills/long-manuscript-core/scripts/capabilities/multi-format-rendering.mjs",
+      "sha256": "2dc100fa72d18af689c31607056196a48291f973261ec23a8145fb368eee8d94"
+    },
+    {
+      "bytes": 465,
+      "path": "skills/long-manuscript-core/scripts/capabilities/multimodal-normalizer.mjs",
+      "sha256": "1fd493dd52d9cb0a2a9f9371ed10e061282dd372daf0016c1804d7f2aa0c6eac"
+    },
+    {
+      "bytes": 465,
+      "path": "skills/long-manuscript-core/scripts/capabilities/research-verification.mjs",
+      "sha256": "96cfde5d240baf1ff6ebdc540dc5ffba72ff41e3b2127dd5a9ca1dc7334de5f7"
+    },
+    {
+      "bytes": 470,
+      "path": "skills/long-manuscript-core/scripts/capabilities/review-revise-quality-loop.mjs",
+      "sha256": "01863f3e90f46036e0c10e039bc0cf32ecc4de06e722f43893ca380faa59cf2a"
+    },
+    {
+      "bytes": 466,
+      "path": "skills/long-manuscript-core/scripts/capabilities/rights-privacy-consent.mjs",
+      "sha256": "eb1c1633da26db2c7f58261aa1f45aa3c2429dadcb3f2d2b4f68905ba68d19c9"
+    },
+    {
+      "bytes": 458,
+      "path": "skills/long-manuscript-core/scripts/capabilities/scene-composer.mjs",
+      "sha256": "475776efae25e85b2e4cdc8ada17d967d56e83c2260839e80792ac0a93b1133a"
+    },
+    {
+      "bytes": 456,
+      "path": "skills/long-manuscript-core/scripts/capabilities/scene-router.mjs",
+      "sha256": "d439cdecdc6e2d9d7c1e9e555194d88b57ffd92f9f44a9641a48b94cc1d54e37"
+    },
+    {
+      "bytes": 459,
+      "path": "skills/long-manuscript-core/scripts/capabilities/scope-lock-diff.mjs",
+      "sha256": "8e5750f00dcf0b37e30c41c8dcf7a806fa569dc7180fe16483c57f99589f98ac"
+    },
+    {
+      "bytes": 469,
+      "path": "skills/long-manuscript-core/scripts/capabilities/source-ledger-claim-graph.mjs",
+      "sha256": "5bb2ab5b24c28513b5f9a7ea0eaad0d4b2303549e915aa4731b9cc30f8b4694f"
+    },
+    {
+      "bytes": 467,
+      "path": "skills/long-manuscript-core/scripts/capabilities/voice-profile-humanizer.mjs",
+      "sha256": "e1ad32d50cfb0e9c6796679e31fe8f43288274b50d42751606384b1824d8a153"
+    },
+    {
+      "bytes": 39231,
+      "path": "skills/long-manuscript-core/scripts/capability-runtime.mjs",
+      "sha256": "370f1d155cc30d5aafec0108a8098ddc5e13cf8f8cb806ddfe04434479120170"
+    },
+    {
+      "bytes": 6057,
+      "path": "skills/long-manuscript-core/scripts/gate-planner.mjs",
+      "sha256": "739fa235f5fb11096e8bff71f93e112df5f25b9398c6a494033cf4206d213ea1"
+    },
+    {
+      "bytes": 3272,
+      "path": "skills/long-manuscript-core/scripts/lib/kernel-utils.mjs",
+      "sha256": "b5fe07b3a5ad61909a187de658f0b9a82bc7ea3cd8fcf2d1bbad33fbac9f7292"
+    },
+    {
+      "bytes": 3813,
+      "path": "skills/long-manuscript-core/scripts/manuscript-kernel.mjs",
+      "sha256": "848d7ec04f95d43b503c42d983f122161d2b2f5b04f7e3c8e884c443c5a1878a"
+    },
+    {
+      "bytes": 966,
+      "path": "skills/long-manuscript-core/scripts/port-intent.mjs",
+      "sha256": "048b283197271176d3d71ef9fbf4191e896c9fc8bece9876325bd15c20dc8a3a"
+    },
+    {
+      "bytes": 3309,
+      "path": "skills/long-manuscript-core/scripts/project-state.mjs",
+      "sha256": "b5f47e9e647eac7d694b1b8b0b462f2969329e431b7bbf07b67dc1c3055b0611"
+    },
+    {
+      "bytes": 11869,
+      "path": "skills/long-manuscript-core/scripts/quality/binary-artifact-inspector.mjs",
+      "sha256": "05d1fc505732380f0287aaf6475507814c8c2d5a6972153b602f679b44606e83"
+    },
+    {
+      "bytes": 7397,
+      "path": "skills/long-manuscript-core/scripts/quality/binary-document-renderer.mjs",
+      "sha256": "1db8b5c4899de35ac307c5235785b1c2c83bd3d54c735b9a75bfd50351ef1e15"
+    },
+    {
+      "bytes": 12394,
+      "path": "skills/long-manuscript-core/scripts/quality/delivery-aggregator.mjs",
+      "sha256": "0eaeead5442a38c908e988525f69665008a9b76cdba8547a0f7e09d0bb35e954"
+    },
+    {
+      "bytes": 411,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/artifact-openability.mjs",
+      "sha256": "390bbb7abacde29c058afe856c273416731de60471a78da4bcbcf3deb4fb6eae"
+    },
+    {
+      "bytes": 409,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/artifact-structure.mjs",
+      "sha256": "7dff0a45a71858e6971365780b710e1eb317552b57189beb926b02c0cdb9776b"
+    },
+    {
+      "bytes": 422,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/claim-fact-inference-separation.mjs",
+      "sha256": "a88f89c296f665d0d0d3fabecf307578baa21880a712cb60c97362d90d74536f"
+    },
+    {
+      "bytes": 404,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/claim-support.mjs",
+      "sha256": "39760648f1fa181412442b3e891f60edf8c317248f98da4ef810b6ff7733cde1"
+    },
+    {
+      "bytes": 416,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/confidentiality-preserved.mjs",
+      "sha256": "52fa55810bf36d43c990048d2cf12793d0311a87918ea3006b6d3d32a3346050"
+    },
+    {
+      "bytes": 412,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/coverage-completeness.mjs",
+      "sha256": "64ee62c2acf40238ac92ebd4ddb41351a652f083c72ba0d0277c30041fe9f874"
+    },
+    {
+      "bytes": 418,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/delivery-manifest-integrity.mjs",
+      "sha256": "4168237db49a22c882ccd22140fd1f90bf08c7ed4900d90c729a68ab7f3a5a32"
+    },
+    {
+      "bytes": 405,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/encoding-valid.mjs",
+      "sha256": "9538fe0499ca2de97ba379fc93ee907d0d51156b88b604e3c8d5c20ab6b15b18"
+    },
+    {
+      "bytes": 418,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/entity-identity-consistency.mjs",
+      "sha256": "ba8ad929c357f6b16b7ad88c0ffbf6dca2f08eec73066172d81ab1081e08758c"
+    },
+    {
+      "bytes": 409,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/example-executable.mjs",
+      "sha256": "0e10e2b05f2d725de9d2715780302f437e44d825051704dc852bf0ad4a993a33"
+    },
+    {
+      "bytes": 417,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/external-action-authorized.mjs",
+      "sha256": "3faae4cb9c2e3e2bc327057fcd7f430464bf335ad47df77ef3cba100fd018f6d"
+    },
+    {
+      "bytes": 405,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/input-required.mjs",
+      "sha256": "4a2a490a9ea1934f9648fd813ff936207e1b76d2e60fa22355d5d64abf0ab3d8"
+    },
+    {
+      "bytes": 415,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/numeric-unit-consistency.mjs",
+      "sha256": "dfb557509fd2355cf5e75d83e8867494d488a8b27496955327ce90bcccdb9584"
+    },
+    {
+      "bytes": 412,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/privacy-anonymization.mjs",
+      "sha256": "3442cd544bcf923887f9c78f269ee7cebbf8528e40198b6ffd859fd816b22dd2"
+    },
+    {
+      "bytes": 406,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/privacy-consent.mjs",
+      "sha256": "13bb06d3b06b248606cd058ac773e4bb5c11d5d284aa506ecd166c2f121be16e"
+    },
+    {
+      "bytes": 411,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/privacy-minimization.mjs",
+      "sha256": "0ee1ac10a446926b050b86257308488e3526df5016ae7aa9fb418d3b0c6b608a"
+    },
+    {
+      "bytes": 408,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/projection-parity.mjs",
+      "sha256": "2d2a4b952f689957ac162fe27211792d88459c523a43b7bb24346904ea46c66e"
+    },
+    {
+      "bytes": 409,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/reference-fidelity.mjs",
+      "sha256": "b5a1d846a2451fe9ebebc147cf1751be3b124a9d4e8847079c9fc766d3bb42ac"
+    },
+    {
+      "bytes": 415,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/relationship-consistency.mjs",
+      "sha256": "342563ac975bb2be34b8a62aad0b83e60a2706bf38324e2161f86468e74a7840"
+    },
+    {
+      "bytes": 407,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/rights-clearance.mjs",
+      "sha256": "53d4127d239aad48edb5d34875bef73d2746ca2e882877d00acbefca32c0aa4e"
+    },
+    {
+      "bytes": 406,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/risk-disclosure.mjs",
+      "sha256": "292be03011b586c886f832f6dae6756f2f6042d8a6755f8416144e3e035cdb82"
+    },
+    {
+      "bytes": 411,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/safety-hazard-review.mjs",
+      "sha256": "6bb94cd7610795b226364fe5ebfb792a058ebc7900c6ae59eface316ba25e2e2"
+    },
+    {
+      "bytes": 403,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/schema-valid.mjs",
+      "sha256": "6fd6f0556d68051f0d18f0aa10baf080161449e0a68d582e217c1bc695d5f36f"
+    },
+    {
+      "bytes": 401,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/scope-lock.mjs",
+      "sha256": "6bf8f76745a76d236924a2d29e85d89baa736fcdd104cab6bdc88856b039549e"
+    },
+    {
+      "bytes": 407,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/source-freshness.mjs",
+      "sha256": "21322593adbea82e451c6f01a6ba10f722e07c43d2c1afdada9f327c3849bdb6"
+    },
+    {
+      "bytes": 405,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/source-quality.mjs",
+      "sha256": "2d73dcfbba9c99c4cef17b4770ed44c4458ddea0cca5c69d32e9d968d60fc2eb"
+    },
+    {
+      "bytes": 410,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/source-traceability.mjs",
+      "sha256": "88d27e7a61867d1b4071b4aa499c33aae9638a67c905d8b102701eb075e6a011"
+    },
+    {
+      "bytes": 408,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/temporal-validity.mjs",
+      "sha256": "df1e4603bd70fa93b94567cc6d73b24fb1fa4fadebb2808b704179edd993816d"
+    },
+    {
+      "bytes": 411,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/timeline-consistency.mjs",
+      "sha256": "392b0d6450550a0bc1e874382de13859d4b058bfa78a818e58e074dc8ca639a2"
+    },
+    {
+      "bytes": 408,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/version-alignment.mjs",
+      "sha256": "ee53f7a34c318e1ece0e15d5e3ce0915e552ffeacad2d0c7146ae80bd722803a"
+    },
+    {
+      "bytes": 405,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/voice-fidelity.mjs",
+      "sha256": "fc0d9584c9ada46c31b8895c6bfa28c76563aa6cd4a3779c963db13d6fab0ca8"
+    },
+    {
+      "bytes": 412,
+      "path": "skills/long-manuscript-core/scripts/quality/evaluators/workflow-completeness.mjs",
+      "sha256": "c187b69143907cc8c49859cee04c698529db97c892ee82fbc10021721782d1c5"
+    },
+    {
+      "bytes": 7926,
+      "path": "skills/long-manuscript-core/scripts/quality/human-receipt-validator.mjs",
+      "sha256": "7d8258972628c8fdf94e54524cb4890e636c1909484adba095289d2e2c8fb523"
+    },
+    {
+      "bytes": 44319,
+      "path": "skills/long-manuscript-core/scripts/quality/quality-gate-runtime.mjs",
+      "sha256": "611d2d47d8d9e4febba3971d2425a315d4e99d66a825c8a27977ef056a9d958e"
+    },
+    {
+      "bytes": 1466,
+      "path": "skills/long-manuscript-core/scripts/quality/trusted-evidence-policy.mjs",
+      "sha256": "09b7e5e69e9dc616c2be5c361034f78934aeeb24734c88f68229f8157731b4a7"
+    },
+    {
+      "bytes": 13146,
+      "path": "skills/long-manuscript-core/scripts/scene-runtime.mjs",
+      "sha256": "26dee1bc036c2fe3ff9d1d88beb8f9b6c5ffbc277721435123f9e3b49a42cb6a"
+    },
+    {
+      "bytes": 510,
+      "path": "skills/long-manuscript-core/scripts/validate-project.mjs",
+      "sha256": "559db0359c8c180cece60b9155c4e5b79dec84bd20dbc8c8dc47d651862bb60a"
+    },
+    {
+      "bytes": 289,
+      "path": "skills/long-manuscript-core/templates/bookwriter-core.json",
+      "sha256": "0b00c4ab1d1fcab58d7fff15b2fe9c97849926a196848121e7089cb0006650aa"
+    },
+    {
+      "bytes": 145,
+      "path": "skills/long-manuscript-core/templates/chapter-task.json",
+      "sha256": "95395d505d406ab068bb0bb0a7a64b305de0c595c90ac8c0cc95a2653c8f5aeb"
+    },
+    {
+      "bytes": 203,
+      "path": "skills/long-manuscript-core/templates/continuation-capsule.json",
+      "sha256": "9a7173470e14fef00746b7765a8c71f353c3a1612b147c49a901a23edc966307"
+    },
+    {
+      "bytes": 250,
+      "path": "skills/long-manuscript-core/templates/project-card.json",
+      "sha256": "7f88122af06c087fdd75504c7c36f852dc942b9a6a6eeae1dfab57817b2aaaaf"
+    },
+    {
+      "bytes": 139,
+      "path": "skills/long-manuscript-core/templates/review-report.json",
+      "sha256": "bd4420c61b92224caaa24db2eb66b4d0eaa59f0fb6dab0387fc006b9fdfa7eb9"
+    }
+  ],
+  "generationPolicy": "ordinal_paths_utf8_content_hash_no_wall_clock_input",
+  "hashAlgorithm": "SHA-256",
+  "packageName": "long-manuscript-expert",
+  "packageVersion": "26.8.20",
+  "pathEncoding": "UTF-8 POSIX relative path",
+  "rootDirectory": "long-manuscript-expert",
+  "schemaVersion": "long_manuscript.file_hash_manifest.v4",
+  "sourceProvenance": {
+    "bookwriterRuntimeDependency": false,
+    "connectorRequired": false,
+    "externalRuntimeDependencies": [],
+    "mode": "official_review_candidate",
+    "runtimeSelfContained": true,
+    "targetVersion": "26.8.20"
+  },
+  "zipEntryTimestamp": "1980-01-01T00:00:00Z"
 }

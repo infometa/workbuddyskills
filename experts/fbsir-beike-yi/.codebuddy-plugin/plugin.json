@@ -1,0 +1,105 @@
+{
+  "name": "fbsir-beike-yi",
+  "version": "0.2.1",
+  "description": "FBSir local-workspace lesson planning expert that understands teacher materials, compares teaching options, and delivers reviewable local artifacts.",
+  "author": {
+    "name": "福帮手",
+    "email": "unique@u3w.com"
+  },
+  "keywords": [
+    "福帮手",
+    "FBSir",
+    "备课易",
+    "本地备课",
+    "教学设计",
+    "教师工作区",
+    "教学成果交付"
+  ],
+  "agents": [
+    "./agents/fbsir-beike-yi.md"
+  ],
+  "skills": [
+    "./skills/lesson-planning-core"
+  ],
+  "expertType": "agent",
+  "agentName": "fbsir-beike-yi",
+  "brand": {
+    "en": "FBSir",
+    "zh": "福帮手"
+  },
+  "displayName": {
+    "en": "FBSir",
+    "zh": "福帮手"
+  },
+  "profession": {
+    "en": "Lesson Planning Decision and Delivery Expert",
+    "zh": "备课易"
+  },
+  "displayDescription": {
+    "en": "Reads teacher materials in a local workspace, compares a few teaching paths, and delivers editable, reviewable, reusable lesson assets.",
+    "zh": "在本地备课工作区读懂教材与旧稿，比较教学方案，写回可编辑成果并保留复核与复用线索。"
+  },
+  "avatar": "avatars/expert.jpg",
+  "categoryId": "09-OperationsHR",
+  "license": "MIT",
+  "defaultInitPrompt": {
+    "zh": "我在本地备课工作区里有教材或旧教案。请先读取我指定的材料，告诉我你理解的教学问题，再给出不超过三个可比较的教学方案。",
+    "en": "I have textbooks or previous lesson plans in a local preparation workspace. Read only the materials I specify, explain the teaching problem you understood, then give me no more than three comparable teaching options."
+  },
+  "plugin": "fbsir-beike-yi",
+  "tags": [
+    {
+      "en": "Teaching Design Decisions",
+      "zh": "教学设计决策"
+    },
+    {
+      "en": "Local Material Understanding",
+      "zh": "本地材料理解"
+    },
+    {
+      "en": "Reviewable Delivery",
+      "zh": "可复核成果交付"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "我在本地备课工作区里有教材或旧教案。请先读取我指定的材料，告诉我你理解的教学问题，再给出不超过三个可比较的教学方案。",
+      "en": "I have textbooks or previous lesson plans in a local preparation workspace. Read only the materials I specify, explain the teaching problem you understood, then give me no more than three comparable teaching options."
+    },
+    {
+      "zh": "请根据我指定的教材页和旧教案，先做一张材料理解卡，再只改教学目标、课堂活动和评价不一致的一个关键环节，保留其他内容不动。",
+      "en": "Using only the textbook pages and previous lesson plan I specify, create a material-understanding card, then revise only the one key mismatch among objectives, activities, and assessment while keeping everything else unchanged."
+    },
+    {
+      "zh": "我已经选定教学方案，请生成一个可编辑的教案草稿、教师复核清单和唯一下一步，并写回本地工作区的新版本，不要覆盖原文件。",
+      "en": "I have selected a teaching option. Create one editable lesson-plan draft, a teacher review checklist, and one next step, then write a new version back to the local workspace without overwriting the original."
+    }
+  ],
+  "educationScope": {
+    "modePreference": "local_computer",
+    "defaultInputConcept": "local_workspace_and_selected_materials",
+    "defaultOutputConcept": "write_back_to_local_workspace",
+    "firstValueRequiresConnector": false,
+    "supportedScenes": [
+      "material_understanding",
+      "bounded_lesson_revision",
+      "teaching_option_decision",
+      "high_value_lesson_delivery",
+      "pilot_reflection",
+      "reusable_asset_draft"
+    ],
+    "supportedArtifacts": [
+      "material_understanding_card",
+      "teaching_option_card",
+      "lesson_plan_draft",
+      "lesson_flow_card",
+      "differentiated_task_pack",
+      "teacher_review_card",
+      "pilot_reflection_card",
+      "skill_draft"
+    ],
+    "humanReviewRequired": true,
+    "overwriteOriginalByDefault": false,
+    "automaticSharingByDefault": false
+  }
+}

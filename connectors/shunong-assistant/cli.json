@@ -1,0 +1,44 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=20"
+  },
+  "npmRegistry": "https://registry.npmjs.org",
+  "init": {
+    "darwin": "npm install -g sznr-cli@0.1.2 --no-audit --no-fund",
+    "linux": "npm install -g sznr-cli@0.1.2 --no-audit --no-fund",
+    "win32": "npm install -g sznr-cli@0.1.2 --no-audit --no-fund"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "sznr-cli --version",
+      "linux": "sznr-cli --version",
+      "win32": "sznr-cli.cmd --version"
+    },
+    "minVersion": "0.1.2",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  },
+  "auth": {
+    "darwin": "sznr-cli auth login",
+    "linux": "sznr-cli auth login",
+    "win32": "sznr-cli.cmd auth login"
+  },
+  "status": {
+    "darwin": "sznr-cli auth status",
+    "linux": "sznr-cli auth status",
+    "win32": "sznr-cli.cmd auth status"
+  },
+  "unAuth": {
+    "darwin": "sznr-cli auth logout",
+    "linux": "sznr-cli auth logout",
+    "win32": "sznr-cli.cmd auth logout"
+  },
+  "statusMatchJson": {
+    "loggedIn": "true"
+  },
+  "authUrlDomain": "shunong.gc365.com",
+  "env": {
+    "SHUNONG_GATEWAY_URL": "https://agent-gateway.gc365.com",
+    "SHUNONG_AUTH_ORIGIN": "https://shunong.gc365.com"
+  }
+}

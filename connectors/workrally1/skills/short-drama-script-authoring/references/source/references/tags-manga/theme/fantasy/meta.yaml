@@ -1,0 +1,91 @@
+# 奇幻（fantasy）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: fantasy
+name_cn: 奇幻
+category: theme
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/fantasy.md
+emotion_core:
+- 魔法奇观
+- 种族冒险
+- 宿命感
+- 异世界浪漫
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，偏年轻化受众
+  bg_desc: 异界、架空为核心，兼容都市奇幻变体
+  weight: medium
+  bottom_line:
+  - 魔法/种族体系清晰，规则自洽
+  - 世界观有奇观感，不能完全套皮日常
+relations:
+  synergy:
+  - target: adventure
+    effect_type: 增强型
+    weight: high
+    effect: 奇幻世界观为冒险提供天然舞台，冒险强化奇幻探索感
+  - target: system
+    effect_type: 增强型
+    weight: medium
+    effect: 系统量化魔法等级，成长节奏更清晰
+  - target: transmigration
+    effect_type: 裂变型
+    weight: medium
+    effect: 现代人穿越奇幻世界，知识差形成爽点
+  - target: rebirth
+    effect_type: 裂变型
+    weight: medium
+    effect: 重生预知剧情走向，规避悲剧快速成长
+  - target: city
+    effect_type: 裂变型
+    weight: medium
+    effect: 都市隐藏魔法世界，日常与奇幻形成反差
+  mutex:
+  - target: 纯现实主义
+    reason: 无超自然魔法体系则奇幻主题不成立
+combo_adapt:
+- combo: references/domestic/combos/fantasy.md
+  rule: 对齐奇幻核心世界观规则，强化魔法体系与奇观感
+  sub: 经典西幻型
+- combo: references/domestic/combos/adventure.md
+  rule: 冒险主线+奇幻世界观，探索与成长并行
+  sub: 奇幻冒险型
+- combo: references/domestic/combos/counterattack.md
+  rule: 魔法升级绑定逆袭，从底层到顶级强者
+  sub: 魔法逆袭型
+fusion:
+- recipe: fusion/recipes/magic-academy.md
+  note: 魔法学院配方，校园+成长+竞争，适配年轻受众
+- recipe: fusion/recipes/different-world-team.md
+  note: 异世界组队冒险配方，单元化剧情，适配长连载
+redlines:
+- code: AP-QH01
+  name: 体系规则混乱
+  severity: 高
+  dimension: 标签与逻辑
+  test: 魔法设定前后矛盾，能力无边界，世界观崩塌
+- code: AP-QH02
+  name: 奇观感缺失
+  severity: 中
+  dimension: 标签与逻辑
+  test: 异世界与日常无差异，完全套皮，奇幻属性失效
+soft_warnings:
+- 避免过度堆砌设定，观众理解成本高
+- 避免种族设定脸谱化，精灵全高冷、兽人全鲁莽
+- 避免冒险剧情流水账，无核心冲突与成长
+manga:
+  visual_signature: 魔法奇观 + 多种族造型 + 异世界大陆全景
+  high_affinity: true
+  visual_hooks:
+  - 魔法释放的奇观特效
+  - 精灵/兽人/龙族的造型设计
+  - 异世界秘境的全景镜头

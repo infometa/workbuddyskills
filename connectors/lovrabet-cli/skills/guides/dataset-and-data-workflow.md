@@ -9,7 +9,7 @@
 1. 先判断 app 是否明确  
    不明确时，先看 [app-resolution.md](app-resolution.md)
 
-2. 需要写 personal BFF 或知识库内容时，先做发现
+2. 需要写 Personal Backend Function 或知识库内容时，先做发现
 
 ```bash
 lovrabet api-doc list --category dataset
@@ -91,7 +91,7 @@ lovrabet data filter --code <datasetCode> --params '{"where":{"status":{"$eq":"a
 
 以下场景补一轮 `dataset sdk-doc`：
 
-- 需要在 personal BFF 或其他可交付源码中调用运行态 SDK
+- 需要在 Personal Backend Function 或其他可交付源码中调用运行态 SDK
 - 需要确认 SDK 参数结构，而不只是字段名
 - 要把数据访问方式写进可交付源码或文档
 

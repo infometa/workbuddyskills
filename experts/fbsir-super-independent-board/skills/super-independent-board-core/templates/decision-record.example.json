@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "fbsir.super-independent-board.decision-record/v1",
+  "productId": "fbsir-super-independent-board",
+  "packageVersion": "${manifest.version}",
+  "caseRef": null,
+  "issueFrame": {
+    "question": "是否在未来三个月启动新产品试点",
+    "decisionDeadline": "2026-09-01",
+    "options": [
+      "暂不启动",
+      "启动有边界试点",
+      "直接全面投入"
+    ],
+    "nonGoals": [
+      "本轮不决定规模化预算"
+    ]
+  },
+  "decisionDNA": {
+    "impact": "medium",
+    "reversibility": "reversible",
+    "urgency": "weeks",
+    "uncertainty": "high",
+    "evidenceStrength": "partial",
+    "stakeholderConflict": "moderate",
+    "regulatoryRisk": "none",
+    "executionReadiness": "ready"
+  },
+  "selectedRecipe": {
+    "primaryMode": "reversible_experiment",
+    "auxiliaryLenses": [
+      "execution_commitment"
+    ]
+  },
+  "aiRecommendation": {
+    "state": "conditional_go",
+    "text": "建议启动有边界试点，不建议直接全面投入。"
+  },
+  "evidenceBoundary": {
+    "facts": [
+      "用户已有两个意向客户。"
+    ],
+    "estimates": [],
+    "assumptions": [
+      "两个意向客户的需求具有一定代表性。"
+    ],
+    "judgments": [
+      "当前证据只支持试点，不支持规模化。"
+    ],
+    "unknowns": [
+      "单位经济性尚未验证。"
+    ]
+  },
+  "strongestCountercase": "两个意向客户可能只是关系样本，无法代表真实市场需求。",
+  "conditions": [
+    "至少完成五次非关系客户访谈。"
+  ],
+  "killCriteria": [
+    "连续两轮访谈均无付费意向。"
+  ],
+  "humanReviewBoundary": [],
+  "singleNextAction": {
+    "action": "完成第一轮五位非关系客户访谈。",
+    "owner": "用户",
+    "target": "符合目标画像且没有既有关系的潜在客户",
+    "completionDefinition": "五份带原话记录的访谈纪要",
+    "verificationSignal": "至少两人明确描述同一高频痛点",
+    "reviewWindow": "完成第五次访谈后",
+    "reviewTrigger": "出现至少两位非关系客户的同类付费意向，或连续五次均无明确痛点"
+  },
+  "recommendedArtifact": {
+    "primary": "一页试点决策图",
+    "companion": null
+  },
+  "userDecision": {
+    "state": "no_decision",
+    "text": null
+  },
+  "truthBoundary": {
+    "canProve": [
+      "当前建议基于用户提供的两个意向客户事实。"
+    ],
+    "cannotProve": [
+      "不能证明市场需求、单位经济性或规模化成功。"
+    ]
+  }
+}

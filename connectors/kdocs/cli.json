@@ -1,0 +1,40 @@
+{
+  "env": {
+    "KDOCS_CONNECTOR_HOME": "$HOME/.workbuddy/connectors-marketplace/connectors/kdocs"
+  },
+  "init": {
+    "darwin": "bash \"$KDOCS_CONNECTOR_HOME/skills/scripts/setup.sh\"",
+    "linux": "bash \"$KDOCS_CONNECTOR_HOME/skills/scripts/setup.sh\"",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%KDOCS_CONNECTOR_HOME%\\skills\\scripts\\setup.ps1\""
+  },
+  "auth": {
+    "darwin": "kdocs-cli auth login",
+    "linux": "kdocs-cli auth login",
+    "win32": "kdocs-cli auth login"
+  },
+  "unAuth": {
+    "darwin": "kdocs-cli auth logout",
+    "linux": "kdocs-cli auth logout",
+    "win32": "kdocs-cli auth logout"
+  },
+  "status": {
+    "darwin": "kdocs-cli auth status",
+    "linux": "kdocs-cli auth status",
+    "win32": "kdocs-cli auth status"
+  },
+  "statusMatchJson": {
+    "authenticated": "true"
+  },
+  "authWaitForExit": true,
+  "authSuppressBrowser": true,
+  "authUrlDomain": "mcp-center.wps.cn",
+  "versionCheck": {
+    "command": {
+      "darwin": "kdocs-cli version",
+      "linux": "kdocs-cli version",
+      "win32": "kdocs-cli version"
+    },
+    "minVersion": "2.6.8",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  }
+}

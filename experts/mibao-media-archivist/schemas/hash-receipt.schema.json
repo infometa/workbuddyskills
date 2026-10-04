@@ -1,0 +1,198 @@
+{
+  "$id": "https://mibao.local/schemas/hash-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "algorithm": {
+      "const": "sha256"
+    },
+    "bytes_hashed": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "cache": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "const": "current_full_hash"
+        },
+        "decision": {
+          "enum": [
+            "miss",
+            "bypass_strict"
+          ]
+        }
+      },
+      "required": [
+        "decision",
+        "authority"
+      ],
+      "type": "object"
+    },
+    "candidate_change_token": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "chunk_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "chunk_size_bytes": {
+      "minimum": 4096,
+      "type": "integer"
+    },
+    "content_assertion": {
+      "const": "current_full_verified"
+    },
+    "full_hash_performed": {
+      "const": true
+    },
+    "full_pass_count": {
+      "maximum": 2,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "path_revalidated": {
+      "const": true
+    },
+    "policy_version": {
+      "const": "mibao-hash-policy-v1"
+    },
+    "post_handle_identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "post_path_identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "pre_handle_identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "sample": {
+      "additionalProperties": false,
+      "properties": {
+        "covers_all_bytes": {
+          "type": "boolean"
+        },
+        "digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "sampled_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "scheme": {
+          "const": "sha256-regions-v1"
+        },
+        "windows": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "length": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "offset": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "offset",
+              "length"
+            ],
+            "type": "object"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "scheme",
+        "digest",
+        "sampled_bytes",
+        "covers_all_bytes",
+        "windows"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "validation_mode": {
+      "enum": [
+        "full_hash",
+        "strict_rehash"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "policy_version",
+    "content_assertion",
+    "algorithm",
+    "validation_mode",
+    "full_hash_performed",
+    "full_pass_count",
+    "sha256",
+    "bytes_hashed",
+    "chunk_count",
+    "chunk_size_bytes",
+    "candidate_change_token",
+    "pre_handle_identity",
+    "post_handle_identity",
+    "post_path_identity",
+    "path_revalidated",
+    "sample",
+    "cache"
+  ],
+  "title": "MIBAO current full hash receipt v1",
+  "type": "object",
+  "$defs": {
+    "identity": {
+      "additionalProperties": false,
+      "properties": {
+        "device": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "inode": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "mode": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "modified_time_ns": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "size_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "device",
+        "inode",
+        "mode",
+        "size_bytes",
+        "modified_time_ns"
+      ],
+      "type": "object"
+    }
+  }
+}

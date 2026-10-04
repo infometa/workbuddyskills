@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "fbsir.super-independent-board.artifact-contract/v1",
+  "productId": "fbsir-super-independent-board",
+  "packageVersionSource": "../.codebuddy-plugin/plugin.json#/version",
+  "semanticSource": "DecisionRecord",
+  "onePrimaryArtifactPerTurn": true,
+  "companionArtifactMax": 1,
+  "rendererMayChangeSemantics": false,
+  "invariantFields": [
+    "issueFrame",
+    "aiRecommendation",
+    "evidenceBoundary",
+    "strongestCountercase",
+    "conditions",
+    "killCriteria",
+    "humanReviewBoundary",
+    "userDecision",
+    "singleNextAction",
+    "truthBoundary"
+  ],
+  "mvpArtifacts": [
+    "chat_decision_card",
+    "markdown_decision_brief",
+    "html_decision_page",
+    "presentation_outline",
+    "infographic_brief",
+    "video_storyboard",
+    "action_packet",
+    "outcome_review_card"
+  ],
+  "deliveryStates": [
+    "delivered",
+    "executed",
+    "awaiting_approval",
+    "not_executed"
+  ],
+  "guaranteedFormats": [
+    {
+      "id": "chat_decision_card",
+      "delivery": "chat_content",
+      "templatePath": "skills/super-independent-board-core/templates/first-value-card.md",
+      "fallback": null
+    },
+    {
+      "id": "markdown_decision_brief",
+      "delivery": "source_content",
+      "templatePath": "skills/decision-artifact-renderer/templates/decision-brief.md",
+      "fallback": "chat_decision_card"
+    },
+    {
+      "id": "html_decision_page",
+      "delivery": "source_content",
+      "templatePath": "skills/decision-artifact-renderer/templates/decision-page.html",
+      "fallback": "markdown_decision_brief"
+    },
+    {
+      "id": "presentation_outline",
+      "delivery": "source_content",
+      "templatePath": "skills/decision-artifact-renderer/templates/presentation-outline.md",
+      "fallback": "markdown_decision_brief"
+    },
+    {
+      "id": "infographic_brief",
+      "delivery": "source_content",
+      "templatePath": "skills/decision-artifact-renderer/templates/infographic-brief.md",
+      "fallback": "markdown_decision_brief"
+    },
+    {
+      "id": "video_storyboard",
+      "delivery": "source_content",
+      "templatePath": "skills/decision-artifact-renderer/templates/video-storyboard.md",
+      "fallback": "markdown_decision_brief"
+    },
+    {
+      "id": "action_packet",
+      "delivery": "source_content",
+      "templatePath": "skills/decision-artifact-renderer/templates/action-packet.md",
+      "fallback": "chat_decision_card"
+    },
+    {
+      "id": "outcome_review_card",
+      "delivery": "chat_content",
+      "templatePath": "skills/decision-artifact-renderer/templates/outcome-review-card.md",
+      "fallback": null
+    }
+  ],
+  "optionalMaterializations": [
+    "markdown_file",
+    "html_file",
+    "docx",
+    "pdf",
+    "pptx",
+    "image",
+    "video"
+  ],
+  "materializedOutputRequiresSaveReadback": true,
+  "externalDeliveryRequiresTargetReadback": true,
+  "actualVideoRequired": false,
+  "actualFileClaimsRequireReceipt": true
+}

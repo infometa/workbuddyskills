@@ -9,6 +9,7 @@
 - 当前 AccessKey 对目标应用有权限。
 - `--app`、`--appcode` 或当前工作目录指向正确应用。
 - 时间统一使用 UTC。
+- 使用 `--model` 选择执行模型；默认 `deepseek-v4-flash-0731`，也可显式选择 `kimi/k3` 或 `deepseek-v4-pro-0813`。
 - prompt 是完整、可重复执行的任务说明，不依赖当前对话中的临时上下文。
 - prompt 不包含 AccessKey、密码或其他明文凭证。
 
@@ -35,10 +36,10 @@ lovrabet schedule validate \
   --cron '0 9 * * 1-5' \
   --title '工作日销售日报' \
   --prompt '汇总昨日销售数据并生成报告' \
-  --channel auto
+  --model deepseek-v4-flash-0731
 ```
 
-检查返回的 `kind`、`timezone`、`cron`、`title`、`prompt` 和 `channel`。
+检查返回的 `kind`、`timezone`、`cron`、`title`、`prompt` 和 `model`。
 
 ## 校验单次任务
 
@@ -50,7 +51,7 @@ lovrabet schedule validate \
   --scheduled-at '2026-08-01T01:30:00.000Z' \
   --title '发布前检查' \
   --prompt '检查当前应用的发布资料' \
-  --channel premium
+  --model kimi/k3
 ```
 
 不要同时传 `--cron` 和 `--scheduled-at`。
@@ -65,7 +66,7 @@ lovrabet schedule create \
   --cron '0 9 * * 1-5' \
   --title '工作日销售日报' \
   --prompt '汇总昨日销售数据并生成报告' \
-  --channel auto \
+  --model deepseek-v4-flash-0731 \
   --dry-run
 ```
 
@@ -76,7 +77,7 @@ lovrabet schedule create \
 - 是否重复执行
 - 标题
 - 完整 prompt
-- channel
+- model
 
 用户明确确认后执行：
 
@@ -86,7 +87,7 @@ lovrabet schedule create \
   --cron '0 9 * * 1-5' \
   --title '工作日销售日报' \
   --prompt '汇总昨日销售数据并生成报告' \
-  --channel auto \
+  --model deepseek-v4-flash-0731 \
   --yes
 ```
 

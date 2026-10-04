@@ -1,6 +1,8 @@
 ---
 name: macro-research
 description: 擅长全球宏观经济与政策分析。能够对"全球宏观综述、宏观经济综述、国际关系解读、财政政策解读、货币政策简报、区域经济分析"这6个主题领域进行单项或多项分析。当直接命中或高相似度命中这些领域时，使用本技能。本技能不适用于：个股分析、A股大盘行情、行业选股、基金配置。
+description_zh: "擅长全球宏观经济与政策分析。能够对\"全球宏观综述、宏观经济综述、国际关系解读、财政政策解读、货币政策简报、区域经济分析\"这6个主题领域进行单项或多项分析。当直接命中或高相似度命中这些领域时，使用本技能。本技能不适用于：个股分析、A股大盘行情、行业选股、基金配置。"
+description_en: "Specializes in global macroeconomic and policy analysis across six topics: global macro overviews, macroeconomic reviews, international relations, fiscal policy, monetary-policy briefings, and regional economic analysis. Use this skill when the request directly or closely matches these areas. It is not suitable for individual-stock analysis, A-share market commentary, industry stock selection, or fund allocation."
 ---
 
 # 宏观研究

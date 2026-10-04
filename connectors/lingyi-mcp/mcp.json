@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "lingyi-mcp": {
+      "type": "streamableHttp",
+      "url": "https://service.lingyishuke.com/api/v1/skill-provider/mcp",
+      "timeout": 30000
+    }
+  }
+}

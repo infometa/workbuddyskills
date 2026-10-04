@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "xmed-figure-mcp": {
+      "type": "streamableHttp",
+      "url": "https://x-med-kyy-mcp.dazd.cn/kyy_visualization_mcp",
+      "timeout": 30000
+    }
+  }
+}

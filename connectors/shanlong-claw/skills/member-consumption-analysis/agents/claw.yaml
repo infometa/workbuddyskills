@@ -1,0 +1,13 @@
+display_name: "会员-消费分析"
+display_description: "仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。会员业务 Skill：组合 SCRM 消费分析页面接口，输出营业额、消费笔数、客单价、趋势、会员明细、商品排行和来源分布。适用于用户问“分析消费分析页面近一周表现”。用于 SCRM 消费分析页面；不要替代 DataCube 会员消费占比或完整会员营业汇总。当用户的本业务问题提到“整个集团”“集团视角”“不区分门店”或未指定门店时，仍按当前账号/当前上下文默认权限范围执行，不得仅因未指定门店而拒绝或改用其它 Skill。"
+skill_type: "business"
+skill_tag_level1: "official"
+skill_tag_level2:
+  - "member_marketing"
+  - "business_decision"
+routing:
+  skill_id: "member-consumption-analysis"
+  allow_implicit_invocation: true
+  prefer_when:
+    - "会员-消费分析"
+  notes: "仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。按正文固定接口独立执行。"

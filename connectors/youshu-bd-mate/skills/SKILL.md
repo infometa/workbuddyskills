@@ -1,27 +1,34 @@
 ---
-name: "有数智客 · 对公(To B)营销助手"
-description: "基于企业全维数据的对公营销智能助手，提供访前报告、营销话术、行业透视、关键人画像、金融产品匹配等展业闭环能力。所有报告生成工具为异步模式，需配合 get_report_run 轮询获取结果。"
-description_zh: "基于企业全维数据的对公营销智能助手，提供访前报告、营销话术、行业透视、关键人画像、金融产品匹配等展业闭环能力。所有报告生成工具为异步模式，需配合 get_report_run 轮询获取结果。"
-description_en: "An intelligent corporate marketing assistant powered by full-dimensional enterprise data, offering pre-visit reports, marketing scripts, industry analysis, key person profiling, and financial product matching. All report generation tools are asynchronous — always poll with get_report_run to retrieve results."
-version: "1.0.0"
+name: "智客AI · 对公(To B)营销助手"
+description: "对公营销助手是基于企业全维数据构建的对公营销智能助手，提供从生成访前一页纸、访前客情报告、产品找客、关键人画像、营销话术及按企荐品的完整展业闭环能力。所有报告生成工具为异步模式，需配合 get_report_run 轮询获取结果。"
+description_zh: "对公营销助手是基于企业全维数据构建的对公营销智能助手，提供从生成访前一页纸、访前客情报告、产品找客、关键人画像、营销话术及按企荐品的完整展业闭环能力。所有报告生成工具为异步模式，需配合 get_report_run 轮询获取结果。"
+description_en: "The BD Mate is an intelligent corporate marketing assistant built on full-dimensional enterprise data, delivering a complete business development closed-loop from pre-visit one-pagers and customer intelligence reports to product-based customer acquisition, key-person profiling, sales scripts, and enterprise-based product recommendations. All report generation tools are asynchronous — always poll with get_report_run to retrieve results."
+version: "2.0.2"
 author: "YouShu Open Platform"
 ---
 
-# 有数智客 · 对公(To B)营销助手
+# 智客AI · 对公(To B)营销助手
 
 ## 1. 认证与连接
 
-### 1.1 获取凭证
+### 1.1 OAuth 2.0 授权
 
-前往有数开放平台 `https://open.yscredit.com/mcp/guide`，点击右上角头像获取 MCP Key，将 Key 填入连接器配置界面的输入框。
+本连接器采用 **OAuth 2.0 服务端授权（server-side）模式**，用户无需手动填写或管理任何凭证。
 
-Key 仅存储在本机 `~/.workbuddy` 目录下，不会上传云端。
+连接步骤：
+1. 在 WorkBuddy 左侧「连接器」管理页面找到「智客AI · 对公(To B)营销助手」
+2. 点击「连接 / +」发起授权，WorkBuddy 将跳转至有数开放平台登录页
+3. 使用有数开放平台账号完成登录并同意授权
+4. 授权成功后回到 WorkBuddy，点击「信任」启用连接器
 
-### 1.2 凭证过期与降级
+授权完成后，访问凭证由 WorkBuddy 安全托管并自动注入 MCP 请求，无需手动配置。
 
-- 若调用返回 **401 Unauthorized**，表示 MCP Key 已过期或无效。
-- **降级提示**：提示用户重新前往有数开放平台获取新的 MCP Key，并在连接器配置中更新凭证。
+### 1.2 凭证失效与重新授权
+
+- 若调用返回 **401 Unauthorized**，表示 OAuth 访问凭证已过期或已被撤销。
+- **处理方式**：提示用户前往 WorkBuddy「连接器」管理页面，断开后重新连接该连接器以完成再次授权。
 - 避免在凭证失效时重复调用工具，以免触发限流。
+- 如需主动撤销授权，可在有数开放平台「账号授权管理」中操作。
 
 ---
 
@@ -302,7 +309,7 @@ Key 仅存储在本机 `~/.workbuddy` 目录下，不会上传云端。
 
 ### 5.4 限流策略
 
-- 有数 MCP Server 对单 Key 设有 QPS 限制，建议报告工具调用间隔不低于 3 秒。
+- 有数 MCP Server 对单授权账号设有 QPS 限制，建议报告工具调用间隔不低于 3 秒。
 - 若触发限流（返回 429），应等待 3 秒后重试，最多重试 3 次。
 
 ### 5.5 错误码说明
@@ -311,7 +318,7 @@ Key 仅存储在本机 `~/.workbuddy` 目录下，不会上传云端。
 |------------|------|---------|
 | 200 | 成功 | — |
 | 400 | 请求参数错误 | 检查 `enterprise_name` 是否拼写正确 |
-| 401 | 凭证无效或过期 | 提示用户更新 MCP Key |
+| 401 | 凭证无效或过期 | 提示用户重新授权连接器 |
 | 429 | 请求过于频繁 | 等待后重试，降低调用频率 |
 | 500 | 服务端内部错误 | 稍后重试 |
 | 503 | 服务暂时不可用 | 稍后重试 |

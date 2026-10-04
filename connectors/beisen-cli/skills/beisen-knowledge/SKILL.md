@@ -1,11 +1,14 @@
 ---
 name: beisen-knowledge
-version: 1.0.9
+version: 1.2.13
 description: "北森企业知识库搜索。本 Skill 用于搜索和查询企业知识库中的制度、政策、流程文档等。当用户询问知识库、制度、政策、流程、规定、手册等企业知识相关问题时触发。仅支持只读搜索，不涉及文档编辑或发布。员工和管理者均可使用。"
 category: 人力资源/企业知识
 author: beisen
 agent_created: false
 allowed-tools: Bash, Read
+requires-skills:
+  - beisen-shared
+requires-cli: ">=1.0.8"
 ---
 
 # 企业知识
@@ -44,7 +47,9 @@ beisen-cli knowledge retrieve searchKnowledge --data '{"queries":["年假政策�
 
 ## 返回字段说明
 
-返回结构为 `{code, message, payload: {hitKnowledgeList: [...]}}`，`hitKnowledgeList` 为命中知识数组。每条记录常见关注字段：
+返回结构为 `{code, message, payload: {hitKnowledgeList: [...]}}`，`hitKnowledgeList` 为命中知识数组。
+
+> **注意**：`beisen-cli knowledge` 命令以 `code == "0"`表示成功，非 `"0"` 表示异常（与其他 beisen-cli 命令使用 `code == "200"` 不同）。
 
 | 字段 | 说明 |
 |------|------|

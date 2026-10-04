@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "surface", "中文搜索可用", "增量事务安全", "localMcpInstalled", "productionVerified"],
+  "properties": {
+    "schemaVersion": {"const": "1.0"},
+    "status": {"const": "completed"},
+    "surface": {"const": "local_search_fts5_candidate"},
+    "中文搜索可用": {"const": true},
+    "增量事务安全": {"const": true},
+    "localMcpInstalled": {"const": false},
+    "productionVerified": {"const": false},
+    "documentsIndexed": {"type": "integer", "minimum": 0},
+    "schemaVersionSqlite": {"const": 3}
+  }
+}

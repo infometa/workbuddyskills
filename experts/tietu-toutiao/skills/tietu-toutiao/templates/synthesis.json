@@ -1,0 +1,85 @@
+{
+  "name": "synthesis",
+  "label": "综合报道型",
+  "description": "主标题+核心图+精选条目清单，把多版内容综合为一份可传播的移动端头图。",
+  "background": "#FFFFFF",
+  "layers": [
+    {
+      "type": "text",
+      "field": "masthead.text",
+      "text": "{masthead}",
+      "x": 40,
+      "y": 40,
+      "size": 64,
+      "min_size": 48,
+      "max_width": 1000,
+      "max_lines": 1,
+      "color": "#1a1a1a"
+    },
+    {
+      "type": "text",
+      "field": "date.text",
+      "text": "{date}",
+      "x": 40,
+      "y": 150,
+      "size": 32,
+      "min_size": 24,
+      "max_width": 1000,
+      "max_lines": 1,
+      "color": "#666666"
+    },
+    {
+      "type": "line",
+      "x1": 40,
+      "y1": 210,
+      "x2": 1040,
+      "y2": 210,
+      "color": "#333333",
+      "width": 3
+    },
+    {
+      "type": "text",
+      "field": "headline.original",
+      "text": "{headline}",
+      "x": 40,
+      "y": 240,
+      "size": 64,
+      "min_size": 40,
+      "max_width": 1000,
+      "max_lines": 2,
+      "line_spacing": 10,
+      "color": "#000000"
+    },
+    {
+      "type": "image",
+      "field": "primary_photo.path",
+      "src": "{primary_photo_path}",
+      "x": 40,
+      "y": 400,
+      "w": 1000,
+      "h": 620,
+      "fit": "cover",
+      "allow_placeholder": true,
+      "placeholder": "图片占位：待确认核心新闻图片"
+    },
+    {
+      "type": "item_list",
+      "field": "items.selected",
+      "x": 40,
+      "y": "=photo_bottom + 40",
+      "w": 1000,
+      "item_max": 4,
+      "headline_size": 40,
+      "headline_min_size": 30,
+      "headline_color": "#1a1a1a",
+      "summary_size": 26,
+      "summary_min_size": 20,
+      "summary_color": "#666666",
+      "summary_max_lines": 2,
+      "item_spacing": 36,
+      "divider": true,
+      "divider_color": "#e0e0e0",
+      "number_style": "number"
+    }
+  ]
+}

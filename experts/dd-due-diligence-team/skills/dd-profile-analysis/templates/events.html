@@ -1,0 +1,26 @@
+<div class="pcf-section">
+  <div class="pcf-section__summary">{{summaryText}}</div>
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>日期</th><th>事项</th><th>类型</th></tr></thead>
+      <tbody>
+        {{#events}}
+        <tr>
+          <td>{{date}}</td>
+          <td>{{desc}}</td>
+          <td><span class="pcf-section__insight-item pcf-section__insight-item--{{type}}">{{type}}</span></td>
+        </tr>
+        {{/events}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

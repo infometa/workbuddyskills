@@ -1,0 +1,41 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=16"
+  },
+  "env": {
+    "WEDATA_HOST": "workbuddy",
+    "WEDATA_CLI_INVOKER": "databuddycli"
+  },
+  "init": {
+    "darwin": "npm install -g databuddycli@latest && databuddycli init --host workbuddy --tag latest",
+    "linux": "npm install -g databuddycli@latest && databuddycli init --host workbuddy --tag latest",
+    "win32": "npm install -g databuddycli@latest && databuddycli init --host workbuddy --tag latest"
+  },
+  "auth": {
+    "darwin": "wedatacli login",
+    "linux": "wedatacli login",
+    "win32": "wedatacli login"
+  },
+  "unAuth": {
+    "darwin": "wedatacli logout",
+    "linux": "wedatacli logout",
+    "win32": "wedatacli logout"
+  },
+  "status": {
+    "darwin": "wedatacli auth-status",
+    "linux": "wedatacli auth-status",
+    "win32": "wedatacli auth-status"
+  },
+  "statusMatch": "Logged in",
+  "authUrlDomain": "cloud.tencent.com",
+  "versionCheck": {
+    "command": {
+      "darwin": "wedatacli version",
+      "linux": "wedatacli version",
+      "win32": "wedatacli version"
+    },
+    "minVersion": "0.0.2",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  }
+}

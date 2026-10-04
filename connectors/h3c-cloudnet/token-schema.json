@@ -1,0 +1,23 @@
+{
+  "title": "Cloudnet MCP 对接配置",
+  "title_en": "Cloudnet MCP Configuration",
+  "description": "请填写 Cloudnet 管理平台的 API Key。凭证仅存储在本机 ~/.workbuddy 下，不会上传云端。",
+  "description_en": "Please enter your Cloudnet API Key and platform host. Credentials are stored locally in ~/.workbuddy only.",
+  "docUrl": "https://oasis.h3c.com/oasis6/static/#/net/set/apikey",
+  "docLabel": "如何获取 Cloudnet API Key？",
+  "docLabel_en": "How to get Cloudnet API Key?",
+
+  "fields": [
+    {
+      "key": "CLOUDNET_API_KEY",
+      "label": "API Key",
+      "label_en": "API Key",
+      "placeholder": "在 Cloudnet 管理平台 → 网络管理 → 设置 → 开放平台 获取",
+      "placeholder_en": "Get it from Cloudnet Console → Network Management → Settings → Open Platform",
+      "type": "password",
+      "required": true,
+      "description": "用于访问 Cloudnet OpenAPI 的 API Key，将写入 Authorization 请求头。",
+      "description_en": "API Key for Cloudnet OpenAPI, injected into the Authorization header."
+    }
+  ]
+}

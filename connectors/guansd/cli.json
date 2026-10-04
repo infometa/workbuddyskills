@@ -1,0 +1,42 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=20"
+  },
+  "npmRegistries": [
+    "https://registry.npmmirror.com",
+    "https://registry.npmjs.org"
+  ],
+  "init": {
+    "darwin": "npm install -g guansd@latest",
+    "linux": "npm install -g guansd@latest",
+    "win32": "npm install -g guansd@latest"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "guansd --version",
+      "linux": "guansd --version",
+      "win32": "guansd.cmd --version"
+    },
+    "minVersion": "0.5.0"
+  },
+  "auth": {
+    "darwin": "guansd login --browser",
+    "linux": "guansd login --browser",
+    "win32": "guansd.cmd login --browser"
+  },
+  "unAuth": {
+    "darwin": "guansd logout",
+    "linux": "guansd logout",
+    "win32": "guansd.cmd logout"
+  },
+  "status": {
+    "darwin": "guansd whoami",
+    "linux": "guansd whoami",
+    "win32": "guansd.cmd whoami"
+  },
+  "statusMatch": "可管理应用",
+  "authUrlDomain": "console.guansd.cn",
+  "authWaitForExit": true,
+  "authSuppressBrowser": true
+}

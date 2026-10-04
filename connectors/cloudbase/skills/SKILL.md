@@ -1,9 +1,9 @@
 ---
 name: cloudbase
-description: "Use this skill when you develop, design, build, deploy, debug, migrate, or troubleshoot CloudBase (腾讯云开发, 云开发, TCB, 微信云开发) projects. Covers Web, 微信小程序, 小程序, uni-app, mobile (iOS, Android, Flutter, React Native). UI (页面, 界面, 表单, form, dashboard, prototype, 原型); auth (登录, 注册, OAuth, 微信登录, publishable key); databases (NoSQL 文档数据库, MySQL 关系型数据库, PostgreSQL/CloudBase PG, app.rdb(), queryPgDatabase/managePgDatabase, CRUD, 查询, security rules); 云函数/cloud functions (serverless, scf_bootstrap); CloudRun (云托管, Dockerfile); 云存储. Built-in AI (内置大模型, AI 对话, streaming, 流式输出, 图片生成, generateText, streamText, createModel, generateImage, TokenHub, Hunyuan, hunyuan-exp, DeepSeek, deepseek, GLM, Kimi, Token Credits 资源包, 小程序成长计划). 第三方大模型, 大模型接入, 大模型调用, LLM API, AI agent, 智能体, AI Agent, AG-UI, LangGraph. Ops (巡检, 诊断, health check, 日志, troubleshooting). Spec (需求文档, 技术方案, requirements, tasks.md). Do NOT use for non-CloudBase projects, pure frontend without CloudBase, or self-hosted backends without CloudBase."
+description: "Use this skill when you develop, design, build, deploy, debug, migrate, or troubleshoot CloudBase (腾讯云开发, 云开发, TCB, 微信云开发) projects — Web, 微信小程序, 小程序, uni-app, mobile (iOS, Android, Flutter, React Native). Covers UI (页面, 界面, 表单, dashboard, prototype, 原型); auth (登录, 注册, OAuth, publishable key); databases (NoSQL 文档数据库, MySQL 关系型数据库, PostgreSQL/CloudBase PG, app.rdb(), queryPgDatabase/managePgDatabase, CRUD, security rules); 云函数/cloud functions (serverless, scf_bootstrap); CloudRun (云托管, Dockerfile); 云存储; built-in AI (内置大模型, AI 对话, streaming, 流式输出, 图片生成, generateText, streamText, createModel, generateImage, TokenHub, Hunyuan, DeepSeek, GLM, Kimi, Token Credits 资源包, 小程序成长计划); third-party/custom model onboarding (第三方大模型接入, 大模型调用, LLM API); AI agent (智能体, AG-UI, LangGraph); ops troubleshooting (巡检, 诊断, 日志); spec workflow (需求文档, 技术方案, requirements, tasks.md). Do NOT use for non-CloudBase projects, pure frontend without CloudBase, or self-hosted backends without CloudBase."
 description_zh: 为你的小程序和 Web/H5 提供一体化运行与部署环境，包括数据库、云函数、云存储、身份权限和静态托管
 description_en: An all-in-one runtime and deployment environment for WeChat Mini Programs and Web/H5 apps, including database, cloud functions, cloud storage, identity and access control, and static hosting.
-version: 2.26.0
+version: 2.34.8
 ---
 
 # CloudBase Development Guidelines
@@ -17,9 +17,9 @@ All reference documentation files are located in the `references/` directory rel
 cloudbase/
 ├── SKILL.md              # This file (main entry)
 └── references/           # All reference documentation
-    ├── auth-web/SKILL.md       # Web authentication guide
-    ├── auth-wechat/SKILL.md    # WeChat authentication guide
-    ├── no-sql-web-sdk/SKILL.md # NoSQL database for Web
+    ├── auth-web-cloudbase/SKILL.md              # Web authentication guide
+    ├── auth-wechat-miniprogram/SKILL.md         # WeChat authentication guide
+    ├── cloudbase-document-database-web-sdk/SKILL.md # NoSQL database for Web
     ├── ui-design/        # UI design guidelines
     └── ...               # Other reference docs
 ```
@@ -28,6 +28,29 @@ cloudbase/
 
 ---
 
+
+## Step 0 — Confirm the site (domestic vs international)
+
+CloudBase has **two independent account systems**: 国内站 (domestic, `cloud.tencent.com`) and 国际站 (international, `tencentcloud.com`). Environments, consoles, API keys, and login state do **not** cross over. A wrong-site login usually looks like *"logged in, but no environments visible"* rather than a clear error — so settle the site **before** installing MCP, logging in, or binding an env.
+
+Infer it when you can (console domain, envId, an existing error); otherwise **ask the user once**. Do not guess.
+
+| | 国内站 domestic | 国际站 international |
+|---|---|---|
+| Remote MCP (preferred) | `https://tcb-api.cloud.tencent.com/mcp/v1` | `https://tcb-api.tencentcloud.com/mcp/v1` |
+| Local stdio MCP | default — nothing to set | `TCB_SITE=intl` + `TCB_REGION=ap-singapore` |
+| `tcb` CLI | default | `TCB_IS_INTL=true` (or `tcb config set isIntl true`) |
+| Project record `.cloudbase/project.json` | `site` omitted, or `"domestic"` | `"site": "intl"`, `"region": "ap-singapore"` |
+| Console | `tcb.cloud.tencent.com` | `tcb.tencentcloud.com` |
+| Default region | `ap-shanghai` | `ap-singapore` |
+| NoSQL / document DB tools | available | **not available** |
+
+- **International users: connect the international remote MCP endpoint directly** — `https://tcb-api.tencentcloud.com/mcp/v1`. It is a first-class hosted endpoint; OAuth covers the login. The site is decided by the host, so there is no `site` query parameter to pass.
+- Domestic remote MCP is the same shape at `https://tcb-api.cloud.tencent.com/mcp/v1` — that stays the default for domestic users.
+- `TCB_IS_INTL` (CLI) and `TCB_SITE` (MCP) are **different variable names for different tools**. Set the one matching the tool in use; setting the wrong one silently does nothing.
+- On a first run, **settle the site once and persist it** — the CLI switch is machine-global, the MCP switch is per-client, and only `.cloudbase/project.json` is project-scoped and readable by MCP after a restart. Follow `references/site-onboarding.md`; do not re-ask on later sessions.
+
+Details and copy-paste configs: `references/mcp-setup.md`. CLI specifics: `references/tooling-fallback.md`. First-run orchestration (trigger/skip, conflict arbitration, MCP-down fallback): `references/site-onboarding.md`.
 
 ## Workflow
 
@@ -39,6 +62,7 @@ cloudbase/
    │     configure MCP for next session and use `tcb` CLI now (see tooling-fallback.md)
    └── 2b. Frontend implementation → Write code, install deps, start server, test
 3. Close-out  →  Run cloudbase-code-review, fix errors, declare done
+                   (after a verified deploy: optionally offer Deployment Share once — see references/deployment-workflow.md §5)
 ```
 
 **Key constraints:** Stage 2a must precede frontend code. Stage 3 is mandatory.
@@ -70,10 +94,10 @@ Follow relative `references/...` paths from the current skill. If MCP is unavail
 
 - After 2–3 failed attempts on the same path, stop and reroute (platform skill, runtime, auth domain, permission model, SDK boundary).
 - Always specify `EnvId` explicitly; do not rely on CLI-selected or implicit env state.
-- When the environment identifier is an alias, nickname, or other short form, **do not pass it directly** to `auth.set_env`, SDK init, console URLs, or generated config. First resolve it to the canonical full `EnvId` with `envQuery(action=list, alias=..., aliasExact=true)`. If multiple environments match or no exact alias exists, stop and clarify with the user.
+- When the environment identifier is an alias, nickname, or other short form, **do not pass it directly** to `auth.set_env`, SDK init, console URLs, or generated config. First resolve it to the canonical full `EnvId` with `queryEnv(action=list, alias=..., aliasExact=true)`. If multiple environments match or no exact alias exists, stop and clarify with the user.
 - When writing MCP/tool results to a file, pass serialized text (`JSON.stringify(result, null, 2)`), not raw objects. If a write tool says `content` expected a string but received an object, do not retry with the same raw object. Serialize the object first, then retry once with the serialized text, and make sure the retried call actually passes the serialized string rather than the original object.
 - Keep scenario-specific pitfalls in child skills — do not expand this entry file.
-- **First frontend deploy must use `manageApps(action="createApp", ...)`.** `manageHosting` is only for incremental updates of projects originally deployed via hosting.
+- **First frontend deploy must use `manageApps(action="deployApp", ...)`.** There is no `createApp` / `updateApp` action — first deploy and re-deploy both use `deployApp`, and a re-deploy reuses the same `serviceName`. `manageHosting` is only for incremental updates of projects originally deployed via hosting.
 
 ### Engineering constitution (applies to every scenario)
 
@@ -96,6 +120,7 @@ These rules override convenience. Full rationale lives in `web-development`.
 | WeChat mini program + CloudBase | `miniprogram-development` | `auth-wechat-miniprogram`, `cloudbase-document-database-in-wechat-miniprogram` | `auth-web-cloudbase`, `web-development` | Whether the project really uses CloudBase / `wx.cloud` |
 | Native App / Flutter / React Native | `http-api-cloudbase` | `auth-tool-cloudbase`, `relational-database-mcp-cloudbase` | `auth-web-cloudbase`, `cloudbase-document-database-web-sdk`, `web-development` | SDK boundary, OpenAPI, auth method |
 | Web projects + NoSQL Database | `web-development` | `cloudbase-document-database-web-sdk`, `auth-web-cloudbase` | `relational-database-mcp-cloudbase`, `http-api-cloudbase` | Login state and database access permission model |
+| CloudBase PostgreSQL Best Practices | `postgresql-best-practices-cloudbase` | `postgresql-development-cloudbase` | `cloudbase-document-database-web-sdk` | Access paths, index decisions, row authorization, and launch capacity |
 | CloudBase PostgreSQL / PG | `postgresql-development-cloudbase` | `auth-tool-cloudbase`, `auth-web-cloudbase`, `web-development`, `miniprogram-development`, `cloud-storage-web`, `http-api-cloudbase` | `relational-database-mcp-cloudbase`, `cloudbase-document-database-web-sdk` | PG schema, usernamePassword login, backend/RLS permission model |
 | MySQL Database (relational) | `relational-database-mcp-cloudbase` | `relational-database-web-cloudbase`, `http-api-cloudbase` | `cloudbase-document-database-web-sdk`, `web-development` | Distinguish MCP management vs app code access |
 | Cloud Functions | `cloud-functions` | `auth-tool-cloudbase`, `ai-model-nodejs` | `cloudrun-development`, `auth-web-cloudbase` | Event vs HTTP function, runtime, `scf_bootstrap` |
@@ -114,6 +139,7 @@ These rules override convenience. Full rationale lives in `web-development`.
 - **WeChat mini program + CloudBase** — 小程序 云开发, wx.cloud, mini program cloudbase, OPENID, 小程序数据库
 - **Native App / Flutter / React Native** — Android CloudBase, iOS CloudBase, Flutter CloudBase, React Native CloudBase, 原生 App 接入
 - **Web projects + NoSQL Database** — Web 文档数据库, CloudBase collection, 前端查库, NoSQL Web SDK
+- **CloudBase PostgreSQL Best Practices** — PG access pattern, 数据库访问路径, N+1 查询, 批量查询, 慢查询, EXPLAIN ANALYZE, 缺索引, 活动数据库容量
 - **CloudBase PostgreSQL / PG** — CloudBase PG, PostgreSQL, Postgres, PG 模式, JS SDK v3 PostgreSQL, app.rdb(), queryPgDatabase, managePgDatabase, mysqldb OpenAPI, PostgREST, RLS, service_role, auth schema, storage schema, pgvector
 - **MySQL Database (relational)** — MySQL 建表, executeWriteSQL, security rule, CloudBase 关系型数据库管理
 - **Cloud Functions** — 创建云函数, HTTP 云函数, getFunctionLogs, scf_bootstrap, runtime
@@ -148,7 +174,8 @@ Prefer CloudBase MCP for management/deploy when tools are loaded in the current 
 Load only when needed (do not expand this entry):
 
 - `references/tooling-fallback.md` — MCP vs `tcb` CLI decision tree for first session / missing tools
-- `references/deployment-workflow.md` — deploy backend/frontend, `manageApps` vs hosting, URL/docs updates
+- `references/site-onboarding.md` — first-run site onboarding: trigger/skip, persistence, conflict arbitration, MCP-down fallback
+- `references/deployment-workflow.md` — deploy backend/frontend, `manageApps` vs hosting, URL/docs updates, optional post-deployment Deployment Share offer (§5)
 - `references/console-links.md` — console hash paths after creating resources
 - `references/scenarios.md` — user-need → CloudBase capability mapping
 - `references/mcp-setup.md` — Plugin install (global default + targets), IDE MCP / mcporter config and auth examples
@@ -163,4 +190,5 @@ All packaged reference files (required for skill lint reachability):
 - [deployment-workflow.md](references/deployment-workflow.md)
 - [mcp-setup.md](references/mcp-setup.md)
 - [scenarios.md](references/scenarios.md)
+- [site-onboarding.md](references/site-onboarding.md)
 - [tooling-fallback.md](references/tooling-fallback.md)

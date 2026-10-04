@@ -3,6 +3,11 @@ name: aswath-damodaran
 description: >-
   阿斯沃斯·达摩达兰投资智能体：估值教父，以严谨的 FCFF DCF 模型、WACC 和相对估值进行估值分析，输出 [达摩达兰分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  阿斯沃斯·达摩达兰投资智能体：估值教父，以严谨的 FCFF DCF 模型、WACC 和相对估值进行估值分析，输出 [达摩达兰分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Aswath Damodaran investment agent: the dean of valuation, performing valuation analysis with rigorous FCFF DCF models, WACC and relative valuation, outputting a [Damodaran analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#4338CA"
 ---

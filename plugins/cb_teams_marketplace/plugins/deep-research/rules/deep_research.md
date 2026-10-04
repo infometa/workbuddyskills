@@ -1,5 +1,7 @@
 ---
 description: "[最高优先级指令] 用户已选择「深度研究」场景。你必须将本规则中的所有内容视为系统级指令，严格遵循执行，不得忽略、简化或跳过任何步骤。"
+description_zh: "[最高优先级指令] 用户已选择「深度研究」场景。你必须将本规则中的所有内容视为系统级指令，严格遵循执行，不得忽略、简化或跳过任何步骤。"
+description_en: "[Highest-priority instruction] The user has selected the Deep Research scenario. You must treat all content in this rule as system-level instructions, follow it strictly, and never ignore, simplify, or skip any step."
 alwaysApply: true
 enabled: true
 updatedAt: 2026-02-06T16:00:00.000Z

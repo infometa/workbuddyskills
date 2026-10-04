@@ -1,0 +1,31 @@
+<div class="pcf-section">
+  <div class="pcf-section__metrics">
+    {{#summary}}
+    <div class="pcf-section__metric">
+      <div class="pcf-section__metric-label">{{label}}</div>
+      <div class="pcf-section__metric-value">{{value}}<span class="pcf-section__metric-unit">{{unit}}</span></div>
+    </div>
+    {{/summary}}
+  </div>
+
+  <h3>股东列表</h3>
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>股东名称</th><th>持股性质</th><th>持股比例</th><th>表决权</th></tr></thead>
+      <tbody>
+        {{#shareholders}}
+        <tr><td>{{name}}</td><td>{{type}}</td><td>{{ratio}}</td><td>{{vote}}</td></tr>
+        {{/shareholders}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

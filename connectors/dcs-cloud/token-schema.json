@@ -1,0 +1,22 @@
+{
+  "title": "DCS Cloud 对接配置",
+  "title_en": "DCS Cloud Configuration",
+  "description": "连接您的 DCS Cloud 账号。请先登录 https://www.dcs.cloud/#/login ，在个人中心创建一个个人访问令牌(PAT)，复制后填入下方。PAT 仅存储在本机 ~/.workbuddy 下，不会上传云端；连接器用它登录 dcs CLI，之后无需再次填写。",
+  "description_en": "Connect your DCS Cloud account. First log in at https://www.dcs.cloud/#/login , create a Personal Access Token (PAT) in your profile page, then paste it below. The PAT is stored locally in ~/.workbuddy only and never uploaded. The connector uses it to log in to the dcs CLI; you will not need to re-enter it afterwards.",
+  "docUrl": "https://www.dcs.cloud/#/login",
+  "docLabel": "登录 DCS Cloud 创建 PAT",
+  "docLabel_en": "Log in to DCS Cloud to create a PAT",
+  "fields": [
+    {
+      "key": "DCS_PAT",
+      "label": "个人访问令牌 (PAT)",
+      "label_en": "Personal Access Token (PAT)",
+      "placeholder": "dcs_pat_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "placeholder_en": "dcs_pat_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "type": "password",
+      "required": true,
+      "description": "登录 www.dcs.cloud 后，在个人中心 → 访问令牌页面创建并复制的 PAT（dcs_pat_ 开头）。",
+      "description_en": "After logging in to www.dcs.cloud, create and copy a PAT (starting with dcs_pat_) from the profile page → access tokens."
+    }
+  ]
+}

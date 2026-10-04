@@ -14,6 +14,17 @@
 > 库在 `skills/career-development-consultant/references/cases/all_cases.json`，受控词表在 `skills/career-development-consultant/references/cases/tag_definitions.md`。
 > 路由 LLM 把「有没有像我这样的人」直接路由到 `CC.T2`——主入口收到这个编号就该跑本工具。
 
+### 和「行家推荐」的分界（别混）
+
+| 用户要的 | 走谁 |
+|---|---|
+| 看**别人的故事**：谁转过、别人怎么走的、有没有先例 | **本工具 CC.T2**（书面案例，13 条） |
+| 找**一个真人聊**：有没有人能指导我、想找前辈请教、能不能约个人 | `MR.FULL` 行家推荐（可预约 1v1） |
+
+判据很简单：**用户想"看"还是想"聊"。** 想聊就给行家，别拿书面案例顶上去。
+
+案例讲完用户说「那能不能找个真人聊聊」→ 顺势转 `MR.FULL`，这是自然衔接。
+
 ---
 
 ## 调用方式（v2 · 5 轴标签召回）
@@ -161,6 +172,9 @@ PAT 都没有，让用户先申。话术：
 
 不想装也行，告诉我我跳过。
 ```
+
+> **地址铁律**：太湖 PAT 申请页**只有** `https://tai.it.woa.com/user/pat` 这一个地址，上面话术里的 URL 必须**逐字照抄**。
+> `tai.woa.com` / `mcp.woa.com` / `taihu.woa.com` / path 写成 `/user/token` 都是**不存在的错误地址**，严禁凭"太湖"二字自己推测拼接。记不准就不给链接，也绝不许编一个看起来合理的。
 
 > 通用 MCP 安装规则：能 LLM 直接 Read/Edit `~/.workbuddy/mcp.json` 写好的，就直接写——不要让用户复制粘贴 JSON。
 > 写完一定要告诉用户：还要去客户端「专家 → 连接器 → 自定义连接器」点「信任」才能激活。

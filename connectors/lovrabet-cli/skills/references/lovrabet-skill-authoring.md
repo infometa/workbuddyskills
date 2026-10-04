@@ -11,7 +11,8 @@
 - `lovrabet.skill.json` 必须位于 Skill 目录根部。
 - 需要较长规则、schema、示例或脚本时，放入 `references/`、`scripts/` 或 `assets/`，并在 `SKILL.md` 中说明读取时机。
 - `SKILL.md` frontmatter 中 `name` 固定写稳定 `skillCode`，不要写展示文案；面向用户的业务展示名写顶层 `displayName`，即使展示名暂时等于 `skillCode` 也应显式保留。
-- 顶层 `example` 是一条用户可以直接发送、用于触发该 Skill 的推荐话术，例如 `example: 上传这份产品资料`。
+- 顶层 `example` 是一条用户可以直接发送的推荐话术；调用方可展示或填入 `/skillCode <example>`，但它不参与 Agent 隐式路由。
+- `example` 必须从 `description` 已覆盖的应触发场景中选取一个具体、典型诉求，并保留该场景的关键业务对象或变量，例如产品资料 Skill 可写 `example: 校验并导入这份产品资料`；不要写“处理这个业务 Skill”等与能力无关的泛化占位句。
 - `example` 可选；缺失、空白或不是单个标量时，`lovrabet skill validate` 会给出 warning，但不阻断 push。
 - 不要把正文说明、内部 CLI 命令、执行步骤或多个示例写入 `example`，也不要自动生成该字段。
 
@@ -19,7 +20,7 @@
 
 用户 Prompt 只表达本次任务相对于稳定契约发生变化的目标、对象、范围等变量；稳定规则、执行步骤、能力标识、输出契约、安全边界和降级策略由业务 Skill 承载，不要求用户重复输入。
 
-- `example`：一句用户可直接发送的最简典型诉求。
+- `example`：从 `description` 的应触发场景中抽取的一句最简典型诉求，仅用于用户可见的调用提示。
 - `description`：说明触发语义以及何时使用或不使用。
 - `SKILL.md` 与其明确引用的 `references/`：承载完整稳定契约。
 
@@ -35,7 +36,7 @@ lovrabet skill push --dir .agents/skills/<skillCode> --diagram-file ./<skillCode
 
 业务 Skill 模板类型仅支持 `read | write`。Agent 必须根据业务目标显式传入 `--type`；无法判断是否存在业务副作用时，停止并请求澄清。仅查询、汇总或核对且不改变业务状态时选择 `read`；涉及创建、更新、删除、状态流转、发送、发布或上传等业务副作用时选择 `write`，并在 Skill 契约中定义预览、用户确认、正式执行、读回核对和失败恢复。
 
-`displayName` 是给人看的展示名，`description` 是触发依据，要说明 Skill 做什么、什么时候使用、什么时候不要使用；`example` 则是一句推荐给用户直接发送的最简触发话术。
+`displayName` 是给人看的展示名，`description` 是触发依据，要说明 Skill 做什么、什么时候使用、什么时候不要使用；`example` 则是与其中一个应触发场景强相关、推荐给用户直接发送的最简典型话术，不承担触发判断。
 
 ## 更新
 
@@ -58,7 +59,7 @@ lovrabet skill push --dir .agents/skills/<skillCode> --diagram-file ./<skillCode
 - 只修改用户明确指定的字段，保留其他字段和 Markdown 正文。
 - `name` 是稳定 `skillCode`，普通配置任务不得修改。
 - `displayName` 根据用户实际展示诉求填写人类可读名称。
-- `example` 写一句用户可直接发送的最简触发话术。
+- `example` 从 `description` 已覆盖的应触发场景中选一句具体、典型、用户可直接发送的话术。
 - `metadata.type` 只能是 `read` 或 `write`。
 - 不创建或开启 `metadata.internal`；未知字段默认保留，语义不明确时不修改。
 

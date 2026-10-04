@@ -3,6 +3,11 @@ name: mohnish-pabrai
 description: >-
   莫尼什·帕布莱投资智能体：Dhandho 投资者，关注下行保护、自由现金流收益率和翻倍潜力，输出 [帕布莱分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  莫尼什·帕布莱投资智能体：Dhandho 投资者，关注下行保护、自由现金流收益率和翻倍潜力，输出 [帕布莱分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Mohnish Pabrai investment agent: a Dhandho investor focused on downside protection, free cash flow yield and doubling potential, outputting a [Pabrai analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#065F46"
 ---

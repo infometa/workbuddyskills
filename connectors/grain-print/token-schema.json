@@ -1,0 +1,26 @@
+{
+  "title": "GrainPrint 连接器凭证",
+  "title_en": "GrainPrint Connector Credential",
+  "description": "填写连接器凭证与后台 API 地址。凭证为「连接器专用凭证（ConnectorCredential）」，由 GrainPrint 后台按配送商维度签发，仅在本地 WorkBuddy 凭据区与 ~/.grain-print-mcp 保存，不会上传第三方。",
+  "description_en": "Enter your connector credential and the backend API base URL. The credential is a distributor-scoped ConnectorCredential issued by the GrainPrint backend; it is stored only locally.",
+  "fields": [
+    {
+      "key": "GRAIN_TOKEN",
+      "label": "连接器凭证",
+      "label_en": "Connector Credential",
+      "type": "password",
+      "required": true,
+      "placeholder": "向系统管理员索取（管理员用登录会话调用后台接口签发，明文仅返回一次）",
+      "description": "一次性明文凭证（Bearer），绑定到你的配送商（disId）。每次实际打印请求都会校验有效性、是否过期/撤销及资源归属。GrainPrint 控制台暂无「连接器凭证」自助菜单，需由管理员签发；凭证疑似泄露时可随时撤销并重新签发。"
+    },
+    {
+      "key": "GRAIN_API_BASE",
+      "label": "API 基础地址",
+      "label_en": "API Base URL",
+      "type": "text",
+      "required": true,
+      "defaultValue": "https://grainservice.club:8443/nongxinle/api",
+      "description": "标准云服务的默认地址；私有部署可改为内网地址。默认严格校验证书（未设置或设为 0 均校验）；仅当后台为自签/私有 CA 时显式设 GRAIN_TLS_INSECURE=1 才跳过校验。"
+    }
+  ]
+}

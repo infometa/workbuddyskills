@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mibao.local/schemas/expert-runtime-probe.schema.json",
+  "title": "MIBAO expert one-shot runtime probe",
+  "type": "object",
+  "required": [
+    "ok",
+    "status",
+    "probe",
+    "runtimeVersion",
+    "executionMode",
+    "mcpConnected",
+    "persistentProcessCreated",
+    "mediaRead",
+    "hostConfigModified",
+    "separateConnectorRequired",
+    "platform",
+    "python"
+  ],
+  "properties": {
+    "ok": {"const": true},
+    "status": {"const": "completed"},
+    "probe": {"const": "runtime_check"},
+    "runtimeVersion": {"type": "string", "minLength": 1, "maxLength": 64},
+    "executionMode": {"const": "packaged_one_shot_cli"},
+    "mcpConnected": {"const": false},
+    "persistentProcessCreated": {"const": false},
+    "mediaRead": {"const": false},
+    "hostConfigModified": {"const": false},
+    "separateConnectorRequired": {"const": false},
+    "platform": {
+      "type": "object",
+      "required": ["system", "release", "machine"],
+      "properties": {
+        "system": {"type": "string", "maxLength": 128},
+        "release": {"type": "string", "maxLength": 128},
+        "machine": {"type": "string", "maxLength": 128}
+      },
+      "additionalProperties": false
+    },
+    "python": {
+      "type": "object",
+      "required": ["version", "implementation"],
+      "properties": {
+        "version": {"type": "string", "maxLength": 64},
+        "implementation": {"type": "string", "maxLength": 64}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

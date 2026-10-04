@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mibao.local/schemas/path-policy.schema.json",
+  "title": "MIBAO path authorization policy",
+  "type": "object",
+  "required": [
+    "allow_unc",
+    "reject_reparse",
+    "max_component_chars",
+    "max_path_chars"
+  ],
+  "properties": {
+    "allow_unc": {
+      "type": "boolean",
+      "default": false
+    },
+    "reject_reparse": {
+      "const": true
+    },
+    "max_component_chars": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 255,
+      "default": 255
+    },
+    "max_path_chars": {
+      "type": "integer",
+      "minimum": 260,
+      "maximum": 32760,
+      "default": 32760
+    }
+  },
+  "additionalProperties": false
+}

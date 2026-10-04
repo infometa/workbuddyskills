@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "today-watermark-camera": {
+      "type": "streamableHttp",
+      "url": "https://workbuddy.xhey.top/workbuddy-adapter/mcp",
+      "timeout": 60000
+    }
+  }
+}

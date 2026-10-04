@@ -1,6 +1,6 @@
 # pricingSnapshot 使用规范（references/model-pricing.md）
 
-适用版本：AI-HIVE Connector 1.0.0
+适用版本：AI-HIVE Connector 1.1.4
 更新日期：2026-07-31
 
 ## 核心原则
@@ -17,7 +17,7 @@ list_models(...)
    └─ 返回 models[]：每个 model 含 publicModelId + routingMode + pricingSnapshot
 
 user -> decide model
-   └─ 把选中的 model 对象（含 pricingSnapshot）作为入参传给 chat_text / generate_* 
+   └─ 分别把选中项的 publicModelId、routingMode、pricingSnapshot 原样传给 chat_text / generate_*
 
 get_generation_task(...)
    └─ 返回 finalPrice 仅当服务端回写，SKILL 不主动估算
@@ -32,7 +32,7 @@ get_generation_task(...)
 
 ## 用户余额不足时
 
-返回 `INSUFFICIENT_BALANCE`（Category: `billing`），按 `error-catalog.md` 通用展示建议：
+展示工具实际返回的余额不足消息；若生成任务已创建并失败，则按 `failure` 安全字段展示。随后按 `error-catalog.md` 通用建议处理：
 - 不补写价格
 - 不重复创建任务
 - 引导用户在 AI-HIVE 完成充值后再试

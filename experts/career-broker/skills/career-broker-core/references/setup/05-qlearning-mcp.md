@@ -25,6 +25,9 @@
 
 > **复用提醒**：如果你 `~/.workbuddy/mcp.json` 里已经为 km / recruit-mcp 配过 Bearer token，**同一个 PAT 在 mcpgw 系列共享**——可直接复用，不用再申请新的。
 
+> **地址铁律**：太湖 PAT 申请页**只有** `https://tai.it.woa.com/user/pat` 这一个地址，上面话术里的 URL 必须**逐字照抄**。
+> `tai.woa.com` / `mcp.woa.com` / `taihu.woa.com` / path 写成 `/user/token` 都是**不存在的错误地址**，严禁凭"太湖"二字自己推测拼接。记不准就不给链接，也绝不许编一个看起来合理的。
+
 ### ② 把 PAT 贴回对话
 
 直接对 agent 说："这是我的太湖 PAT：tai_pat_xxxxx"

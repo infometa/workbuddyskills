@@ -1,0 +1,21 @@
+display_name: "营销活动分析"
+display_description: "仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。全面分析会员营销活动效果，支持按时间、活动名称和活动创建人，查询发券量、用券量、收益等活动明细和核销情况。实现营销活动ROI自动分析、重点活动与异常表现，为活动复盘、营销策略优化和经营决策提供可靠的数据依据"
+skill_type: "business"
+skill_tag_level1: "official"
+skill_tag_level2:
+  - "member_marketing"
+  - "business_decision"
+
+# WorkBuddy / Claw 路由（与公司介绍 Skill 并列）
+routing:
+  skill_id: "member-campaign-analysis"
+  allow_implicit_invocation: true
+  prefer_when:
+    - "营销活动效果 / ROI"
+    - "活动发券、用券、核销率"
+    - "活动列表、活动状态数量"
+    - "活动收益"
+  notes: |
+    本 Skill 走固定 marketing_crm API。
+    仓库内 OpenClaw Agent（agent_group / agent_store）挂的是 L1 marketing_crm，
+    与本 WorkBuddy Skill 是不同加载链路，互不自动路由。

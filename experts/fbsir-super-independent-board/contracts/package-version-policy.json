@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "fbsir.super-independent-board.package-version-policy/v1",
+  "productId": "fbsir-super-independent-board",
+  "packageVersionSource": "../.codebuddy-plugin/plugin.json#/version",
+  "versionFormat": "three_numeric_segments",
+  "derivedAtBuild": [
+    "review_zip_filename",
+    "file_manifest_package_version",
+    "verification_receipts",
+    "cleanroom_receipts"
+  ],
+  "templateToken": "${manifest.version}",
+  "templateTokenMustResolveBeforeRecordValidation": true,
+  "historyFile": "../CHANGELOG.md",
+  "hardcodedCurrentVersionAllowedOnlyIn": [
+    ".codebuddy-plugin/plugin.json",
+    "CHANGELOG.md"
+  ]
+}

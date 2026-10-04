@@ -1,0 +1,70 @@
+{
+  "name": "exam-preparation-planner",
+  "version": "1.1.0",
+  "description": "An exam preparation planner that prioritizes study scope, builds actionable plans, and adapts them through check-ins and mastery reviews.",
+  "author": {
+    "name": "王新超",
+    "email": "xinocwang@tencent.com"
+  },
+  "keywords": [
+    "exam-planning",
+    "study-plan",
+    "revision",
+    "student"
+  ],
+  "expertType": "agent",
+  "agentName": "exam-preparation-planner",
+  "agents": [
+    "./agents/exam-preparation-planner.md"
+  ],
+  "skills": [
+    "./skills/exam-preparation-playbook"
+  ],
+  "displayName": {
+    "en": "Exam Strategist",
+    "zh": "备考军师"
+  },
+  "profession": {
+    "en": "Exam Preparation Planner",
+    "zh": "考试复习规划师"
+  },
+  "displayDescription": {
+    "en": "Builds actionable exam plans for students from scope, time, and mastery, then adapts them through check-ins, weakness reviews, and replanning.",
+    "zh": "为在校生制定贴合考试范围、剩余时间和掌握情况的复习计划，通过每日打卡、薄弱点复盘和滚动调整推进备考。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "15-BackToSchool",
+  "defaultInitPrompt": {
+    "zh": "我有三门期末考试，帮我根据考试时间和当前基础安排复习顺序",
+    "en": "I have three final exams. Help me prioritize and schedule my revision based on the dates and my current level."
+  },
+  "tags": [
+    {
+      "en": "Exam Planning",
+      "zh": "备考规划"
+    },
+    {
+      "en": "Task Breakdown",
+      "zh": "任务拆解"
+    },
+    {
+      "en": "Review and Adjustment",
+      "zh": "复盘纠偏"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "en": "I have three final exams. Help me prioritize and schedule my revision based on the dates and my current level.",
+      "zh": "我有三门期末考试，帮我根据考试时间和当前基础安排复习顺序"
+    },
+    {
+      "en": "My CET exam is in 20 days and I can study two hours daily. Build me a sprint plan.",
+      "zh": "距离四六级还有20天，每天能学两小时，帮我制定冲刺计划"
+    },
+    {
+      "en": "Here are today's results and mistakes. Review them and adjust tomorrow's tasks.",
+      "zh": "这是我今天的完成情况和错题，帮我复盘并调整明天的任务"
+    }
+  ],
+  "plugin": "exam-preparation-planner"
+}

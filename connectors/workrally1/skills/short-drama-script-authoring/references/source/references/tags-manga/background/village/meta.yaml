@@ -1,0 +1,89 @@
+# 乡村（village）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: village
+name_cn: 乡村
+category: background
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/counterattack.md
+emotion_core:
+- 质朴情感
+- 返乡逆袭
+- 宗族博弈
+- 土地财富
+- 城乡反差
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，下沉市场代入感强，中老年受众友好
+  bg_desc: 现代乡村/城镇基底，兼容返乡创业、宗族、田园等子方向
+  weight: medium
+  bottom_line:
+  - 乡村生活质感真实，不能城市化悬浮
+  - 宗族/邻里逻辑符合现实人情
+  - 致富/逆袭路径要有合理性
+relations:
+  synergy:
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 返乡主角借能力/资源带富乡里，逆袭打脸看不起的人
+  - target: rebirth
+    effect_type: 增强型
+    weight: medium
+    effect: 重回乡村抓住时代机遇，先人一步致富
+  - target: system
+    effect_type: 裂变型
+    weight: medium
+    effect: 种田/经营系统赋能，量化致富成长
+  - target: ceo
+    effect_type: 反差型
+    weight: medium
+    effect: 隐藏大佬返乡，与乡村质朴形成反差
+  mutex:
+  - target: 纯都市精英
+    reason: 场景基底冲突，需做返乡/下乡桥接
+combo_adapt:
+- combo: references/domestic/combos/counterattack.md
+  rule: 返乡逆袭、带富乡里，对齐城乡反差爽感
+  sub: 乡村逆袭型
+- combo: references/domestic/combos/face-slapping.md
+  rule: 打脸看不起主角的宗族/同乡，落差感强烈
+  sub: 乡村打脸型
+- combo: references/domestic/combos/family.md
+  rule: 宗族亲情与家长里短，主打情感共鸣
+  sub: 乡村亲情型
+fusion:
+- recipe: fusion/recipes/return-home-tycoon.md
+  note: 隐藏大佬返乡类，反差与打脸密集，下沉市场偏好
+- recipe: fusion/recipes/farming-fortune.md
+  note: 种田致富类，慢节奏成长爽感，适配中老年受众
+redlines:
+- code: AP-XC01
+  name: 乡村质感失真
+  severity: 高
+  dimension: 标签与逻辑
+  test: 乡村生活细节脱离现实，悬浮如城市片场，劝退下沉受众
+- code: AP-XC02
+  name: 致富路径架空
+  severity: 中
+  dimension: 标签与逻辑
+  test: 暴富过程毫无逻辑，凭空开挂，丧失现实代入感
+soft_warnings:
+- 避免乡村刻板化（贫穷愚昧脸谱），引发受众反感
+- 避免宗族冲突脸谱化，反派纯坏缺乏人情逻辑
+- 避免致富过程一笔带过，丧失成长爽感
+manga:
+  visual_signature: 田园山水全景 + 乡土生活造型 + 城乡符号对比
+  high_affinity: false
+  visual_hooks:
+  - 田园风光与都市归来者的反差
+  - 宗族祠堂/院落的场景仪式感
+  - 致富前后的环境变化对比

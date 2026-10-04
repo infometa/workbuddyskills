@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/adapter-action-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "receiptNamespace", "adapterId", "portId", "operation", "sceneId", "intentDigest", "idempotencyKeyDigest", "providerRegistryDigest", "providerBindingDigest", "sceneBindingDigest", "sameBindingPolicyDigest", "requestDigest", "responseDigest", "expectedReadbackDigest", "readbackDigest", "providerReceiptDigest", "providerBindingFingerprintDigest", "targetResolutionReceiptDigest", "sameBindingDigest", "approvalReceiptDigest", "nonceConsumptionReceiptDigest", "externalDispatchCount", "externalActionCount", "externalReadCount", "externalWriteCount", "reconciliationState", "receiptDigest"],
+  "oneOf": [
+    { "properties": { "externalReadCount": { "const": 1 }, "externalWriteCount": { "const": 0 } } },
+    { "properties": { "externalReadCount": { "const": 0 }, "externalWriteCount": { "const": 1 } } }
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.1.0" },
+    "receiptNamespace": { "enum": ["wecom_collaboration", "fbs_connector_receipt"] },
+    "adapterId": { "enum": ["wecom", "fbs"] },
+    "portId": { "type": "string", "minLength": 1 },
+    "operation": { "type": "string", "minLength": 1 },
+    "sceneId": { "type": "string", "minLength": 1 },
+    "intentDigest": { "$ref": "#/$defs/digest" },
+    "idempotencyKeyDigest": { "$ref": "#/$defs/digest" },
+    "providerRegistryDigest": { "$ref": "#/$defs/digest" },
+    "providerBindingDigest": { "$ref": "#/$defs/digest" },
+    "sceneBindingDigest": { "$ref": "#/$defs/digest" },
+    "sameBindingPolicyDigest": { "$ref": "#/$defs/digest" },
+    "requestDigest": { "$ref": "#/$defs/digest" },
+    "responseDigest": { "$ref": "#/$defs/digest" },
+    "expectedReadbackDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "readbackDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "providerReceiptDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "providerBindingFingerprintDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "targetResolutionReceiptDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "sameBindingDigest": { "$ref": "#/$defs/digest" },
+    "approvalReceiptDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "nonceConsumptionReceiptDigest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "externalDispatchCount": { "const": 1 },
+    "externalActionCount": { "const": 1 },
+    "externalReadCount": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "externalWriteCount": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "reconciliationState": { "const": "not_required" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": { "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }
+}

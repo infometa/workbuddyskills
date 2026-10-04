@@ -1,0 +1,642 @@
+{
+  "artifactType": "quality_gate_registry",
+  "entries": [
+    {
+      "description": "ManuscriptOS core deterministic gate",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "artifact.openability",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [],
+      "seedGateIds": []
+    },
+    {
+      "description": "shared evaluator archetype for 2 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "artifact.structure",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.instructor-learner-separation",
+        "seed.layout-completeness"
+      ],
+      "seedGateIds": [
+        "instructor_learner_separation",
+        "layout_completeness"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 5 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "claim.fact-inference-separation",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.consensus-disagreement-separation",
+        "seed.fact-inference-separation",
+        "seed.fact-opinion-separation",
+        "seed.marketing-fact-separation",
+        "seed.memory-fact-separation"
+      ],
+      "seedGateIds": [
+        "consensus_disagreement_separation",
+        "fact_inference_separation",
+        "fact_opinion_separation",
+        "marketing_fact_separation",
+        "memory_fact_separation"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 2 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "claim.support",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.claim-evidence",
+        "seed.claim-proof"
+      ],
+      "seedGateIds": [
+        "claim_evidence",
+        "claim_proof"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 3 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "confidentiality.preserved",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.confidentiality",
+        "seed.sacred-or-restricted-knowledge",
+        "seed.source-protection"
+      ],
+      "seedGateIds": [
+        "confidentiality",
+        "sacred_or_restricted_knowledge",
+        "source_protection"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 6 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "coverage.completeness",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.answer-completeness",
+        "seed.api-completeness",
+        "seed.department-source-coverage",
+        "seed.objective-assessment-alignment",
+        "seed.option-completeness",
+        "seed.requirement-coverage"
+      ],
+      "seedGateIds": [
+        "answer_completeness",
+        "api_completeness",
+        "department_source_coverage",
+        "objective_assessment_alignment",
+        "option_completeness",
+        "requirement_coverage"
+      ]
+    },
+    {
+      "description": "ManuscriptOS core deterministic gate",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "delivery-manifest.integrity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [],
+      "seedGateIds": []
+    },
+    {
+      "description": "ManuscriptOS core deterministic gate",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "encoding.valid",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [],
+      "seedGateIds": []
+    },
+    {
+      "description": "shared evaluator archetype for 3 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "entity.identity-consistency",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.duplicate-event-control",
+        "seed.identity-accuracy",
+        "seed.media-identity"
+      ],
+      "seedGateIds": [
+        "duplicate_event_control",
+        "identity_accuracy",
+        "media_identity"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 1 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "example.executable",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.example-executability"
+      ],
+      "seedGateIds": [
+        "example_executability"
+      ]
+    },
+    {
+      "description": "ManuscriptOS core deterministic gate",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "external-action.authorized",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [],
+      "seedGateIds": []
+    },
+    {
+      "description": "shared evaluator archetype for 3 approved seed gate(s)",
+      "evaluatorRef": "../scripts/gate-planner.mjs#validateHumanReviewReceipt",
+      "generatorRef": "../scripts/gate-planner.mjs#planGates",
+      "humanOwner": null,
+      "humanProfiles": [
+        {
+          "humanOwner": "proposal_owner",
+          "reviewMandate": "gate_mandated",
+          "seedGate": "answer_approval"
+        },
+        {
+          "humanOwner": "legal_reviewer",
+          "reviewMandate": "risk_mandated",
+          "seedGate": "mandatory_human_legal_review"
+        },
+        {
+          "humanOwner": "privacy_editor",
+          "reviewMandate": "gate_mandated",
+          "seedGate": "sensitive_person_review"
+        }
+      ],
+      "id": "human-review.receipt",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "implemented",
+      "parameterProfiles": [
+        "seed.answer-approval",
+        "seed.mandatory-human-legal-review",
+        "seed.sensitive-person-review"
+      ],
+      "seedGateIds": [
+        "answer_approval",
+        "mandatory_human_legal_review",
+        "sensitive_person_review"
+      ]
+    },
+    {
+      "description": "ManuscriptOS core deterministic gate",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "input.required",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [],
+      "seedGateIds": []
+    },
+    {
+      "description": "shared evaluator archetype for 1 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "numeric-unit.consistency",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.metric-definition-consistency"
+      ],
+      "seedGateIds": [
+        "metric_definition_consistency"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 1 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "privacy.anonymization",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.anonymization"
+      ],
+      "seedGateIds": [
+        "anonymization"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 2 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "privacy.consent",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.bearer-consent",
+        "seed.informed-consent"
+      ],
+      "seedGateIds": [
+        "bearer_consent",
+        "informed_consent"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 1 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "privacy.minimization",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.living-person-privacy"
+      ],
+      "seedGateIds": [
+        "living_person_privacy"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 1 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "projection.parity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.cross-case-comparability"
+      ],
+      "seedGateIds": [
+        "cross_case_comparability"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 4 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "reference.fidelity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.caption-accuracy",
+        "seed.clause-fidelity",
+        "seed.local-term-fidelity",
+        "seed.transcript-accuracy"
+      ],
+      "seedGateIds": [
+        "caption_accuracy",
+        "clause_fidelity",
+        "local_term_fidelity",
+        "transcript_accuracy"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 1 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "relationship.consistency",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.relationship-consistency"
+      ],
+      "seedGateIds": [
+        "relationship_consistency"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 6 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "rights.clearance",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.case-permission",
+        "seed.copyright-status",
+        "seed.media-rights",
+        "seed.originality-boundary",
+        "seed.publication-permission",
+        "seed.rights-review"
+      ],
+      "seedGateIds": [
+        "case_permission",
+        "copyright_status",
+        "media_rights",
+        "originality_boundary",
+        "publication_permission",
+        "rights_review"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 5 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "risk.disclosure",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.legal-advice-boundary",
+        "seed.limitation-disclosure",
+        "seed.recommendation-strength",
+        "seed.reputation-risk",
+        "seed.tradeoff-visibility"
+      ],
+      "seedGateIds": [
+        "legal_advice_boundary",
+        "limitation_disclosure",
+        "recommendation_strength",
+        "reputation_risk",
+        "tradeoff_visibility"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 1 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "safety.hazard-review",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.safety-warning"
+      ],
+      "seedGateIds": [
+        "safety_warning"
+      ]
+    },
+    {
+      "description": "ManuscriptOS core deterministic gate",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "schema.valid",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [],
+      "seedGateIds": []
+    },
+    {
+      "description": "ManuscriptOS core deterministic gate",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "scope.lock",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [],
+      "seedGateIds": []
+    },
+    {
+      "description": "shared evaluator archetype for 1 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "source.freshness",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.freshness"
+      ],
+      "seedGateIds": [
+        "freshness"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 7 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "source.quality",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.authoritative-source",
+        "seed.evidence-strength",
+        "seed.literature-balance",
+        "seed.multi-source-corroboration",
+        "seed.official-record-priority",
+        "seed.source-balance",
+        "seed.source-quality"
+      ],
+      "seedGateIds": [
+        "authoritative_source",
+        "evidence_strength",
+        "literature_balance",
+        "multi_source_corroboration",
+        "official_record_priority",
+        "source_balance",
+        "source_quality"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 6 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "source.traceability",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.citation-traceability",
+        "seed.compliance-traceability",
+        "seed.deprecation-trace",
+        "seed.result-attribution",
+        "seed.source-traceability",
+        "seed.speaker-attribution"
+      ],
+      "seedGateIds": [
+        "citation_traceability",
+        "compliance_traceability",
+        "deprecation_trace",
+        "result_attribution",
+        "source_traceability",
+        "speaker_attribution"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 3 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "temporal.validity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.coverage-period-closed",
+        "seed.effective-date",
+        "seed.late-entry-policy"
+      ],
+      "seedGateIds": [
+        "coverage_period_closed",
+        "effective_date",
+        "late_entry_policy"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 3 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "timeline.consistency",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.chronology-consistency",
+        "seed.date-plausibility",
+        "seed.periodization-consistency"
+      ],
+      "seedGateIds": [
+        "chronology_consistency",
+        "date_plausibility",
+        "periodization_consistency"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 2 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "version.alignment",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.deadline-and-version",
+        "seed.version-alignment"
+      ],
+      "seedGateIds": [
+        "deadline_and_version",
+        "version_alignment"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 2 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "voice.fidelity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.voice-consistency",
+        "seed.voice-fidelity"
+      ],
+      "seedGateIds": [
+        "voice_consistency",
+        "voice_fidelity"
+      ]
+    },
+    {
+      "description": "shared evaluator archetype for 8 approved seed gate(s)",
+      "evaluatorRef": null,
+      "generatorRef": null,
+      "humanOwner": null,
+      "humanProfiles": [],
+      "id": "workflow.completeness",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "seed",
+      "parameterProfiles": [
+        "seed.action-owner",
+        "seed.difficulty-progression",
+        "seed.exception-path",
+        "seed.method-reproducibility",
+        "seed.method-transparency",
+        "seed.role-responsibility",
+        "seed.step-completeness",
+        "seed.subject-response"
+      ],
+      "seedGateIds": [
+        "action_owner",
+        "difficulty_progression",
+        "exception_path",
+        "method_reproducibility",
+        "method_transparency",
+        "role_responsibility",
+        "step_completeness",
+        "subject_response"
+      ]
+    }
+  ],
+  "entryCount": 33,
+  "lifecycle": {
+    "activeRequiresPhysicalEvaluator": true,
+    "allowed": [
+      "seed",
+      "implemented",
+      "active",
+      "retired"
+    ],
+    "c1State": "seed",
+    "implementationCheckpoint": "C3"
+  },
+  "schemaVersion": "1.0.0"
+}

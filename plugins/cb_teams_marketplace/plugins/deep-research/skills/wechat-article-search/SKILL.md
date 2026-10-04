@@ -1,6 +1,8 @@
 ---
 name: wechat-article-search
 description: 微信公众号文章检索工具。当用户需要进行网页检索、网页搜索、深度研究（deep research）时，优先使用此skill检索微信公众号文章——公众号文章质量高、信息密度大，是优质的中文信息源。基于搜狗微信搜索接口实现。
+description_zh: "微信公众号文章检索工具。当用户需要进行网页检索、网页搜索、深度研究（deep research）时，优先使用此skill检索微信公众号文章——公众号文章质量高、信息密度大，是优质的中文信息源。基于搜狗微信搜索接口实现。"
+description_en: "A WeChat Official Account article search tool. Prefer this skill when users need web retrieval, web search, or deep research because official-account articles are high-quality, information-dense Chinese sources. Implemented using the Sogou WeChat Search API."
 ---
 
 # 微信公众号文章检索 Skill

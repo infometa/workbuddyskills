@@ -24,3 +24,5 @@ lovrabet doctor
 ```
 
 `doctor` 不修改配置、不安装 Skill，也不替代业务命令的认证和权限检查。
+
+`API Endpoints` 显示 `runtimeDomain` 和 `kbServiceDomain`；前者承载普通运行态请求与 Personal KB 管理，后者供 `kb search` 使用。未配置独立搜索地址时显示 `not configured`；单次 `--kb-service-url` 覆盖不会写入配置。

@@ -2,7 +2,7 @@
 <#
 .SYNOPSIS
     商龙 CLI 连接器安装脚本 (Windows)
-    从 OSS/CDN 下载 slclaw-cli.tgz 并安装到 %USERPROFILE%\.slclaw
+    从 OSS/CDN 按平台下载 SEA 二进制并安装到 %USERPROFILE%\.slclaw
 .PARAMETER EnsureLatest
     对比 OSS 版本，有更新则覆盖安装；stdout 仅输出当前版本号（供 CLI 层自检）
 .PARAMETER Uninstall
@@ -22,6 +22,7 @@ $INSTALL_DIR = "$SL_HOME\bin"
 $SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
 $URL_CONF = Join-Path $SCRIPT_DIR "install-url.conf"
 $HomeUrlConf = Join-Path $SL_HOME "install-url.conf"
+$SeaName = "sl-sea.exe"
 
 function Write-Log($msg) { [Console]::Error.WriteLine($msg) }
 function Write-OK($msg) { Write-Log "✓ $msg" }
@@ -63,53 +64,73 @@ function Get-ConfValue([string]$key) {
     return $null
 }
 
-function Get-TgzUrl {
-    if ($env:SL_CLI_TGZ_URL) { return $env:SL_CLI_TGZ_URL }
-    $url = Get-ConfValue "SL_CLI_TGZ_URL"
-    if (-not $url) {
-        Write-Err "缺少 install-url.conf 或未设置 SL_CLI_TGZ_URL"
-        exit 1
-    }
-    return $url
+function Normalize-BaseUrl([string]$base) {
+    if (-not $base.EndsWith('/')) { return "$base/" }
+    return $base
 }
 
-function Get-VersionUrl([string]$tgzUrl) {
+function Get-SeaArtifactName {
+    $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLowerInvariant()
+    switch ($arch) {
+        'x64' { return 'sl-win-x64.exe' }
+        'arm64' { return 'sl-win-arm64.exe' }
+        'x86' { return 'sl-win-x86.exe' }
+        default {
+            # Fallback for older PowerShell / PROCESSOR_ARCHITECTURE
+            $pa = ($env:PROCESSOR_ARCHITECTURE + '').ToUpperInvariant()
+            if ($pa -eq 'AMD64') { return 'sl-win-x64.exe' }
+            if ($pa -eq 'ARM64') { return 'sl-win-arm64.exe' }
+            if ($pa -eq 'X86') { return 'sl-win-x86.exe' }
+            throw "不支持的 Windows 架构: $arch / $pa"
+        }
+    }
+}
+
+function Get-BaseUrl {
+    if ($env:SL_CLI_BASE_URL) { return (Normalize-BaseUrl $env:SL_CLI_BASE_URL) }
+    $url = Get-ConfValue "SL_CLI_BASE_URL"
+    if (-not $url) {
+        $legacy = Get-ConfValue "SL_CLI_TGZ_URL"
+        if ($legacy) {
+            Write-Err "install-url.conf 仍使用已废弃的 SL_CLI_TGZ_URL，请改为 SL_CLI_BASE_URL"
+            exit 1
+        }
+        Write-Err "缺少 install-url.conf 或未设置 SL_CLI_BASE_URL"
+        exit 1
+    }
+    return (Normalize-BaseUrl $url)
+}
+
+function Get-VersionUrl([string]$baseUrl) {
     if ($env:SL_CLI_VERSION_URL) { return $env:SL_CLI_VERSION_URL }
     $fromConf = Get-ConfValue "SL_CLI_VERSION_URL"
     if ($fromConf) { return $fromConf }
-    if ($tgzUrl -match '\.tgz$') {
-        return ($tgzUrl -replace '\.tgz$', '.version')
-    }
-    return "$tgzUrl.version"
+    return "${baseUrl}slclaw-cli.version"
 }
 
-function Assert-TgzUrl([string]$url) {
+function Get-ManifestUrl([string]$baseUrl) {
+    if ($env:SL_CLI_MANIFEST_URL) { return $env:SL_CLI_MANIFEST_URL }
+    if (-not $env:SL_CLI_BASE_URL) {
+        $fromConf = Get-ConfValue "SL_CLI_MANIFEST_URL"
+        if ($fromConf) { return $fromConf }
+    }
+    return "${baseUrl}slclaw-cli.manifest.json"
+}
+
+function Assert-BaseUrl([string]$url) {
     if ($url -match 'REPLACE_WITH_YOUR_OSS_HOST') {
         Write-Err "尚未配置真实 OSS/CDN 地址"
         Write-Log "  请编辑: $URL_CONF"
-        Write-Log "  或设置环境变量 SL_CLI_TGZ_URL 后重试"
+        Write-Log "  或设置环境变量 SL_CLI_BASE_URL 后重试"
         exit 1
-    }
-}
-
-function Check-Node {
-    $node = Get-Command node -ErrorAction SilentlyContinue
-    if (-not $node) {
-        Write-Err "未检测到 Node.js，请先安装 Node.js >= 18"
-        exit 1
-    }
-    $ver = (node -v) -replace 'v', ''
-    $major = [int]($ver.Split('.')[0])
-    if ($major -lt 18) {
-        Write-Err "Node.js 版本过低: v$ver，需要 >= 18"
-        exit 1
-    }
-    if (-not $EnsureLatest) {
-        Write-OK "Node.js v$ver"
     }
 }
 
 function Read-LocalVersion {
+    $verFile = Join-Path $INSTALL_DIR "version"
+    if (Test-Path $verFile) {
+        return ((Get-Content -Raw -Path $verFile) -replace '\s', '')
+    }
     $pkg = Join-Path $INSTALL_DIR "dist\package.json"
     if (-not (Test-Path $pkg)) { return "" }
     try {
@@ -128,14 +149,27 @@ function Test-VersionGreater([string]$a, [string]$b) {
     return ($va -gt $vb)
 }
 
+function ConvertFrom-FileUrl([string]$url) {
+    $uri = [Uri]$url
+    if ($uri.IsFile) {
+        return $uri.LocalPath
+    }
+    return $null
+}
+
 function Download-UrlToFile([string]$url, [string]$dest) {
+    $local = ConvertFrom-FileUrl $url
+    if ($local) {
+        Copy-Item -Force $local $dest
+        return
+    }
     try {
-        & curl.exe -fsSL --connect-timeout 5 --max-time 60 $url -o $dest
+        & curl.exe -fsSL --connect-timeout 5 --max-time 300 $url -o $dest
         if ($LASTEXITCODE -ne 0) { throw "curl exit $LASTEXITCODE" }
     } catch {
         $req = [System.Net.HttpWebRequest]::Create($url)
-        $req.Timeout = 60000
-        $req.ReadWriteTimeout = 60000
+        $req.Timeout = 300000
+        $req.ReadWriteTimeout = 300000
         $resp = $req.GetResponse()
         try {
             $stream = $resp.GetResponseStream()
@@ -148,6 +182,10 @@ function Download-UrlToFile([string]$url, [string]$dest) {
 }
 
 function Download-UrlText([string]$url) {
+    $local = ConvertFrom-FileUrl $url
+    if ($local) {
+        return [string](Get-Content -Raw -Path $local)
+    }
     try {
         $text = & curl.exe -fsSL --connect-timeout 5 --max-time 30 $url
         if ($LASTEXITCODE -ne 0) { throw "curl exit $LASTEXITCODE" }
@@ -158,8 +196,8 @@ function Download-UrlText([string]$url) {
     }
 }
 
-function Download-Tgz([string]$url, [string]$dest) {
-    Write-Warn "下载 CLI 包 ..."
+function Download-Sea([string]$url, [string]$dest) {
+    Write-Warn "下载 CLI 二进制 ..."
     Write-Log "  $url"
     Download-UrlToFile $url $dest
     if (-not (Test-Path $dest) -or ((Get-Item $dest).Length -le 0)) {
@@ -169,164 +207,355 @@ function Download-Tgz([string]$url, [string]$dest) {
     Write-OK "下载完成"
 }
 
-function Assert-S1Package([string]$distDir) {
-    $verifier = Join-Path $SCRIPT_DIR "verify-connector-package-scope.js"
-    if (-not (Test-Path $verifier)) {
-        $devVerifier = Join-Path (Split-Path -Parent $SCRIPT_DIR) "scripts\verify-connector-package-scope.js"
-        if (Test-Path $devVerifier) { $verifier = $devVerifier }
+function Assert-SeaRunnable([string]$seaPath, [string]$expectedVersion) {
+    $previousSkipUpdate = $env:SL_CLI_SKIP_UPDATE
+    $validationError = $null
+    try {
+        $env:SL_CLI_SKIP_UPDATE = "1"
+        $output = @(& $seaPath --sl-sea-self-check 2>$null)
+        if ($LASTEXITCODE -ne 0) {
+            throw "SEA self-check 退出码为 $LASTEXITCODE"
+        }
+        $raw = (($output | ForEach-Object { [string]$_ }) -join "`n").Trim()
+        if (-not $raw) {
+            throw "SEA self-check 未返回结果"
+        }
+        $check = $raw | ConvertFrom-Json
+        if ($check.ok -ne $true) {
+            throw "SEA self-check 未通过"
+        }
+        if ($expectedVersion -and ([string]$check.version) -ne $expectedVersion.Trim()) {
+            throw "SEA 版本不匹配: expected=$($expectedVersion.Trim()), actual=$($check.version)"
+        }
+    } catch {
+        $validationError = "SEA 二进制验证失败: $($_.Exception.Message)"
+    } finally {
+        if ($null -eq $previousSkipUpdate) {
+            Remove-Item Env:SL_CLI_SKIP_UPDATE -ErrorAction SilentlyContinue
+        } else {
+            $env:SL_CLI_SKIP_UPDATE = $previousSkipUpdate
+        }
     }
-    if (-not (Test-Path $verifier)) {
-        throw "连接器缺少 S1-only 安装校验器，拒绝安装"
-    }
-    Write-Warn "校验 CLI 包为 S1-only 只读版 ..."
-    & node $verifier $distDir
-    if ($LASTEXITCODE -ne 0) {
-        throw "CLI 包未通过 S1-only 只读校验，已保留当前安装"
-    }
-    Write-OK "S1-only 只读校验通过"
+    if ($validationError) { throw $validationError }
+    return [string]$check.version
 }
 
-function Install-FromTgz([string]$tgzPath) {
-    $tmpDir = Join-Path ([System.IO.Path]::GetTempPath()) ("slclaw-install-" + [guid]::NewGuid().ToString("n"))
-    New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null
+function Remove-LegacyProgramAssets {
+    foreach ($target in @(
+        (Join-Path $SL_HOME "sea"),
+        (Join-Path $INSTALL_DIR ".sea-cache"),
+        (Join-Path $INSTALL_DIR "dist"),
+        (Join-Path $INSTALL_DIR "node_modules")
+    )) {
+        if (Test-Path -LiteralPath $target) {
+            try {
+                Remove-Item -LiteralPath $target -Recurse -Force -ErrorAction Stop
+            } catch {
+                Write-Warn "旧程序资产清理失败，将在后续安装时重试: $target"
+            }
+        }
+    }
+}
+
+function Get-Sha256Hex([string]$filePath) {
+    $stream = [System.IO.File]::OpenRead($filePath)
+    $sha = [System.Security.Cryptography.SHA256]::Create()
     try {
-        Write-Warn "解压并安装到 $INSTALL_DIR ..."
-        & tar.exe -xzf $tgzPath -C $tmpDir
-        if ($LASTEXITCODE -ne 0) {
-            Write-Err "解压 tgz 失败（需要 Windows 自带 tar）"
-            exit 1
-        }
+        $bytes = $sha.ComputeHash($stream)
+        return (($bytes | ForEach-Object { $_.ToString('x2') }) -join '')
+    } finally {
+        $sha.Dispose()
+        $stream.Dispose()
+    }
+}
 
-        $pkgJson = Get-ChildItem -Path $tmpDir -Filter package.json -Recurse -File |
-            Where-Object { $_.Directory.Name -eq 'package' } |
-            Select-Object -First 1
-        if (-not $pkgJson) {
-            $pkgJson = Get-ChildItem -Path $tmpDir -Filter package.json -Recurse -File | Select-Object -First 1
-        }
-        if (-not $pkgJson) {
-            Write-Err "tgz 内容无效：未找到 package.json"
-            exit 1
-        }
-        $pkgDir = $pkgJson.Directory.FullName
-        if (-not (Test-Path (Join-Path $pkgDir "dist"))) {
-            Write-Err "tgz 内容无效：未找到 dist/"
-            exit 1
-        }
+function Assert-SeaMatchesManifest(
+    [string]$seaPath,
+    [string]$artifactName,
+    [string]$expectedVersion,
+    $manifest
+) {
+    if (-not $manifest -or [int]$manifest.schemaVersion -ne 1) {
+        throw "SEA manifest schemaVersion 无效"
+    }
+    if ([string]$manifest.scope -ne "S1-only") {
+        throw "SEA manifest scope 必须为 S1-only"
+    }
+    if ([string]$manifest.version -ne $expectedVersion) {
+        throw "SEA manifest 版本不匹配: manifest=$($manifest.version), version=$expectedVersion"
+    }
+    $artifactProperty = $manifest.artifacts.PSObject.Properties[$artifactName]
+    if (-not $artifactProperty) {
+        throw "SEA manifest 缺少当前平台产物: $artifactName"
+    }
+    $artifact = $artifactProperty.Value
+    $actualSize = (Get-Item -LiteralPath $seaPath).Length
+    if ([Int64]$artifact.size -ne $actualSize) {
+        throw "SEA 文件大小不匹配: expected=$($artifact.size), actual=$actualSize"
+    }
+    $actualHash = Get-Sha256Hex $seaPath
+    $expectedHash = ([string]$artifact.sha256).ToLowerInvariant()
+    if (-not $expectedHash -or $actualHash -ne $expectedHash) {
+        throw "SEA SHA-256 校验失败: expected=$expectedHash, actual=$actualHash"
+    }
+}
 
-        # 必须先完成物理包审计，再删除/替换现有安装；旧 full 包一律 fail-closed。
-        Assert-S1Package (Join-Path $pkgDir "dist")
-
-        if (Test-Path $INSTALL_DIR) { Remove-Item -Recurse -Force $INSTALL_DIR }
-        New-Item -ItemType Directory -Path $INSTALL_DIR -Force | Out-Null
-        if (-not (Test-Path $SL_HOME)) { New-Item -ItemType Directory -Path $SL_HOME -Force | Out-Null }
-        # 全量安装已写入最新 bin，丢弃陈旧 pending/锁，避免下次启动降级
-        foreach ($stale in @(
-            (Join-Path $SL_HOME "pending-update"),
-            (Join-Path $SL_HOME "update-stage.lock")
-        )) {
-            if (Test-Path $stale) { Remove-Item -Recurse -Force $stale }
-        }
-        Get-ChildItem -Path $SL_HOME -Force -ErrorAction SilentlyContinue |
-            Where-Object { $_.Name -like 'tmp-update-*' -or $_.Name -like 'pending-update.staging-*' } |
-            ForEach-Object { Remove-Item -Recurse -Force $_.FullName }
-
-        Copy-Item -Recurse (Join-Path $pkgDir "dist") (Join-Path $INSTALL_DIR "dist")
-        if (Test-Path (Join-Path $SCRIPT_DIR "default.env")) {
-            Copy-Item (Join-Path $SCRIPT_DIR "default.env") (Join-Path $SL_HOME "default.env")
-        }
-        if (Test-Path $URL_CONF) {
-            Copy-Item $URL_CONF $HomeUrlConf -Force
-        }
-
-        $utf8NoBom = New-Object System.Text.UTF8Encoding $false
-        $wrapper = @'
-#!/usr/bin/env node
-process.env.SL_MAX_SECURITY_LEVEL = 'S1';
-require('./dist/cli/src/index.js');
-'@
-        [System.IO.File]::WriteAllText((Join-Path $INSTALL_DIR "sl"), ($wrapper.TrimEnd() + "`n"), $utf8NoBom)
-
-        # 单引号 here-string，避免批处理里的 % / & / " 被 PowerShell 解析
-        $bat = @'
+function Write-WindowsWrappers([string]$targetDir = $INSTALL_DIR) {
+    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+    $bat = @'
 @echo off
 setlocal EnableExtensions
 set "BIN=%~dp0"
 set "SL_HOME=%BIN%.."
 set "PENDING=%SL_HOME%\pending-update"
+set "SEA=%BIN%sl-sea.exe"
+set "SL_MAX_SECURITY_LEVEL=S1"
+
 if not exist "%PENDING%\ready" goto :run
-if not exist "%PENDING%\dist" goto :discard_pending
-if not exist "%PENDING%\dist\package.json" goto :discard_pending
-node "%BIN%dist\cli\src\verify-connector-package-scope.js" "%PENDING%\dist" >nul 2>&1
+if not exist "%PENDING%\sl-sea.exe" goto :discard_pending
+for %%A in ("%PENDING%\sl-sea.exe") do if %%~zA==0 goto :discard_pending
+
+del /f /q "%SEA%.new" 2>nul
+del /f /q "%SEA%.bak" 2>nul
+copy /y "%PENDING%\sl-sea.exe" "%SEA%.new" >nul
 if errorlevel 1 goto :discard_pending
-rd /s /q "%BIN%dist.new" 2>nul
-rd /s /q "%BIN%dist.bak" 2>nul
-xcopy /e /i /y "%PENDING%\dist" "%BIN%dist.new\" >nul
-if errorlevel 1 (
-  rd /s /q "%BIN%dist.new" 2>nul
-  goto :discard_pending
-)
-if exist "%BIN%dist" (
-  ren "%BIN%dist" dist.bak
+if exist "%SEA%" (
+  ren "%SEA%" "sl-sea.exe.bak"
   if errorlevel 1 (
-    rd /s /q "%BIN%dist.new" 2>nul
-    goto :discard_pending
+    del /f /q "%SEA%.new" 2>nul
+    goto :run
   )
 )
-ren "%BIN%dist.new" dist
+ren "%SEA%.new" "sl-sea.exe"
 if errorlevel 1 (
-  if exist "%BIN%dist.bak" ren "%BIN%dist.bak" dist
-  rd /s /q "%BIN%dist.new" 2>nul
-  goto :discard_pending
+  if exist "%BIN%sl-sea.exe.bak" ren "%BIN%sl-sea.exe.bak" "sl-sea.exe"
+  del /f /q "%SEA%.new" 2>nul
+  goto :run
 )
-rd /s /q "%BIN%dist.bak" 2>nul
+
+set "EXPECTED_VERSION="
+set /p EXPECTED_VERSION=<"%PENDING%\ready"
+set "SELF_CHECK_FILE=%PENDING%\self-check.json"
+set "SL_CLI_SKIP_UPDATE=1"
+"%SEA%" --sl-sea-self-check >"%SELF_CHECK_FILE%" 2>nul
+if errorlevel 1 goto :rollback_pending
+findstr /C:"\"ok\":true" "%SELF_CHECK_FILE%" >nul || goto :rollback_pending
+findstr /C:"\"version\":\"%EXPECTED_VERSION%\"" "%SELF_CHECK_FILE%" >nul || goto :rollback_pending
+
+"%SEA%" --sl-config-migrate --home "%SL_HOME%" >"%PENDING%\config-result.json" 2>nul
+if errorlevel 1 goto :rollback_pending
+findstr /C:"\"ok\":true" "%PENDING%\config-result.json" >nul || goto :rollback_pending
+findstr /C:"\"status\":\"conflict\"" "%PENDING%\config-result.json" >nul && type "%PENDING%\config-result.json" 1>&2
+
+if exist "%PENDING%\ready" copy /y "%PENDING%\ready" "%BIN%version" >nul
+if exist "%BIN%sl-sea.exe.bak" del /f /q "%BIN%sl-sea.exe.bak" 2>nul
+rd /s /q "%PENDING%" 2>nul
+rd /s /q "%SL_HOME%\sea" 2>nul
+rd /s /q "%BIN%.sea-cache" 2>nul
+rd /s /q "%BIN%dist" 2>nul
+rd /s /q "%BIN%node_modules" 2>nul
+goto :run
+
+:rollback_pending
+del /f /q "%SEA%" 2>nul
+if exist "%BIN%sl-sea.exe.bak" ren "%BIN%sl-sea.exe.bak" "sl-sea.exe"
 rd /s /q "%PENDING%" 2>nul
 goto :run
+
 :discard_pending
 rd /s /q "%PENDING%" 2>nul
+del /f /q "%SEA%.new" 2>nul
+
 :run
-set "SL_MAX_SECURITY_LEVEL=S1"
-node "%BIN%dist\cli\src\index.js" %*
+if not exist "%SEA%" (
+  echo sl-sea.exe missing: %SEA% 1>&2
+  exit /b 1
+)
+"%SEA%" %*
 '@
-        [System.IO.File]::WriteAllText((Join-Path $INSTALL_DIR "sl.cmd"), ($bat.TrimEnd() + "`r`n"), $utf8NoBom)
+    [System.IO.File]::WriteAllText((Join-Path $targetDir "sl.cmd"), ($bat.TrimEnd() + "`r`n"), $utf8NoBom)
 
-        # Skills 由 WorkBuddy 从连接器 zip 加载，不属于 CLI 运行目录；清理旧安装遗留副本。
-        if (Test-Path (Join-Path $SL_HOME "skills")) { Remove-Item -Recurse -Force (Join-Path $SL_HOME "skills") }
-        if (Test-Path (Join-Path $SL_HOME ".DS_Store")) { Remove-Item -Force (Join-Path $SL_HOME ".DS_Store") }
+    # 兼容可能直接调用 bin/sl 的场景
+    $shim = @'
+#!/usr/bin/env node
+console.error('Use sl.cmd on Windows');
+process.exit(1);
+'@
+    [System.IO.File]::WriteAllText((Join-Path $targetDir "sl"), ($shim.TrimEnd() + "`n"), $utf8NoBom)
+}
 
-        Write-OK "文件安装完成"
-    } finally {
-        if (Test-Path $tmpDir) { Remove-Item -Recurse -Force $tmpDir }
+function Restore-InstallDirFromBackup([string]$installDir, [string]$backupDir) {
+    if ((Test-Path $backupDir) -and -not (Test-Path $installDir)) {
+        [System.IO.Directory]::Move($backupDir, $installDir)
     }
 }
 
-function Init-Env {
-    $env_file = "$SL_HOME\.env"
-    $default_env_file = "$SCRIPT_DIR\default.env"
-    $needs_init = $false
-    $saved_key = $null
+function Restore-InPlaceInstallBackup([string]$installDir) {
+    $sea = Join-Path $installDir $SeaName
+    $seaBackup = "$sea.bak"
+    if (-not (Test-Path -LiteralPath $seaBackup)) { return }
 
-    if (-not (Test-Path $env_file)) {
-        $needs_init = $true
-    } elseif (-not (Select-String -Path $env_file -Pattern 'SL_SLY_BASEURL' -Quiet)) {
-        $needs_init = $true
-        $saved_key = (Select-String -Path $env_file -Pattern '^SL_API_KEY=(.*)' | ForEach-Object { $_.Matches.Groups[1].Value }) | Select-Object -First 1
+    if (Test-Path -LiteralPath $sea) { Remove-Item -LiteralPath $sea -Force -ErrorAction SilentlyContinue }
+    Rename-Item -LiteralPath $seaBackup -NewName $SeaName
+
+    $version = Join-Path $installDir "version"
+    $versionBackup = "$version.bak"
+    if (Test-Path -LiteralPath $version) { Remove-Item -LiteralPath $version -Force -ErrorAction SilentlyContinue }
+    if (Test-Path -LiteralPath $versionBackup) {
+        Rename-Item -LiteralPath $versionBackup -NewName "version"
+    }
+}
+
+function Remove-InPlaceInstallBackup([string]$installDir) {
+    foreach ($backup in @(
+        ((Join-Path $installDir $SeaName) + ".bak"),
+        ((Join-Path $installDir "version") + ".bak")
+    )) {
+        if (Test-Path -LiteralPath $backup) {
+            Remove-Item -LiteralPath $backup -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+function Install-InPlaceFromStaged([string]$newDir, [string]$installDir) {
+    if (-not (Test-Path $installDir)) {
+        New-Item -ItemType Directory -Path $installDir -Force | Out-Null
     }
 
-    if ($needs_init) {
-        if (-not (Test-Path $default_env_file)) {
-            Write-Err "缺少 default.env，无法初始化连接器配置"
-            exit 1
+    $seaSrc = Join-Path $newDir $SeaName
+    $seaDst = Join-Path $installDir $SeaName
+    $seaNew = "$seaDst.new"
+    $seaBak = "$seaDst.bak"
+    $verSrc = Join-Path $newDir "version"
+    $replacedSea = $false
+
+    if (Test-Path $seaNew) { Remove-Item -Force $seaNew }
+    Copy-Item -Force $seaSrc $seaNew
+    try {
+        if (Test-Path $seaBak) { Remove-Item -Force $seaBak }
+        if (Test-Path $seaDst) {
+            Rename-Item -Path $seaDst -NewName "$SeaName.bak"
         }
-        Copy-Item $default_env_file $env_file
-        if ($saved_key) {
-            (Get-Content $env_file) -replace '^SL_API_KEY=.*', "SL_API_KEY=$saved_key" | Set-Content $env_file
-            Write-OK "配置已修复（保留原 API Key）"
+        Rename-Item -Path $seaNew -NewName $SeaName
+        $replacedSea = $true
+    } catch {
+        if ((-not (Test-Path $seaDst)) -and (Test-Path $seaBak)) {
+            try { Rename-Item -Path $seaBak -NewName $SeaName } catch {}
+        }
+        if (Test-Path $seaNew) { Remove-Item -Force $seaNew -ErrorAction SilentlyContinue }
+
+        $pending = Join-Path $SL_HOME "pending-update"
+        if (Test-Path $pending) { Remove-Item -Recurse -Force $pending }
+        New-Item -ItemType Directory -Path $pending -Force | Out-Null
+        Copy-Item -Force $seaSrc (Join-Path $pending $SeaName)
+        if (Test-Path $verSrc) {
+            Copy-Item -Force $verSrc (Join-Path $pending "ready")
         } else {
-            Write-OK "默认配置已初始化"
+            [System.IO.File]::WriteAllText((Join-Path $pending "ready"), "unknown`n")
         }
-    } else {
-        Write-OK "配置文件完整，保留原配置"
+        Write-Warn "sl-sea.exe is locked; staged pending-update for next sl.cmd start"
     }
+
+    if ($replacedSea -and (Test-Path $verSrc)) {
+        $verDst = Join-Path $installDir "version"
+        $verBak = "$verDst.bak"
+        if (Test-Path -LiteralPath $verBak) { Remove-Item -LiteralPath $verBak -Force }
+        if (Test-Path -LiteralPath $verDst) { Copy-Item -LiteralPath $verDst -Destination $verBak -Force }
+        Copy-Item -Force $verSrc (Join-Path $installDir "version")
+    }
+    foreach ($name in @('sl.cmd', 'sl')) {
+        $src = Join-Path $newDir $name
+        if (Test-Path $src) { Copy-Item -Force $src (Join-Path $installDir $name) }
+    }
+    Remove-Item -Recurse -Force $newDir -ErrorAction SilentlyContinue
+}
+
+function Switch-InstallDir([string]$newDir, [string]$installDir, [string]$backupDir) {
+    $attempts = 6
+    $lastError = $null
+    for ($i = 1; $i -le $attempts; $i++) {
+        try {
+            if (Test-Path $backupDir) { Remove-Item -Recurse -Force $backupDir }
+            if (Test-Path $installDir) {
+                [System.IO.Directory]::Move($installDir, $backupDir)
+            }
+            if (Test-Path $installDir) {
+                throw "install dir still present after move: $installDir"
+            }
+            [System.IO.Directory]::Move($newDir, $installDir)
+            return
+        } catch {
+            $lastError = $_
+            try { Restore-InstallDirFromBackup $installDir $backupDir } catch {}
+            Start-Sleep -Milliseconds (300 * $i)
+        }
+    }
+
+    Write-Warn ("directory swap failed after retries: {0}; falling back to in-place install" -f $lastError.Exception.Message)
+    try {
+        Install-InPlaceFromStaged $newDir $installDir
+    } catch {
+        if (Test-Path $newDir) { Remove-Item -Recurse -Force $newDir -ErrorAction SilentlyContinue }
+        try { Restore-InPlaceInstallBackup $installDir } catch {}
+        try { Restore-InstallDirFromBackup $installDir $backupDir } catch {}
+        throw ("CLI install swap failed (Windows file lock?). Close WorkBuddy/sl processes and retry. Detail: {0}" -f $_.Exception.Message)
+    }
+}
+
+function Install-FromSea([string]$seaPath, [string]$remoteVersion) {
+    Write-Warn "安装到 $INSTALL_DIR ..."
+    $newDir = "$INSTALL_DIR.new"
+    $backupDir = "$INSTALL_DIR.bak"
+
+    if (-not (Test-Path $SL_HOME)) { New-Item -ItemType Directory -Path $SL_HOME -Force | Out-Null }
+    foreach ($stale in @(
+        (Join-Path $SL_HOME "pending-update"),
+        (Join-Path $SL_HOME "update-stage.lock")
+    )) {
+        if (Test-Path $stale) { Remove-Item -Recurse -Force $stale }
+    }
+    Get-ChildItem -Path $SL_HOME -Force -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -like 'tmp-update-*' -or $_.Name -like 'pending-update.staging-*' } |
+        ForEach-Object { Remove-Item -Recurse -Force $_.FullName }
+
+    if (Test-Path $newDir) { Remove-Item -Recurse -Force $newDir }
+    if (Test-Path $backupDir) { Remove-Item -Recurse -Force $backupDir }
+    New-Item -ItemType Directory -Path $newDir -Force | Out-Null
+
+    Copy-Item -Force $seaPath (Join-Path $newDir $SeaName)
+    if ($remoteVersion) {
+        [System.IO.File]::WriteAllText((Join-Path $newDir "version"), ($remoteVersion.Trim() + "`n"))
+    }
+
+    Write-WindowsWrappers $newDir
+    Switch-InstallDir $newDir $INSTALL_DIR $backupDir
+
+    if (Test-Path $URL_CONF) {
+        Copy-Item $URL_CONF $HomeUrlConf -Force
+    }
+
+    # Skills 由 WorkBuddy 从连接器 zip 加载；始终清理旧 tgz 布局。
+    $legacySkills = Join-Path $SL_HOME "skills"
+    if (Test-Path $legacySkills) { Remove-Item -Recurse -Force $legacySkills }
+
+    if (Test-Path (Join-Path $SL_HOME ".DS_Store")) { Remove-Item -Force (Join-Path $SL_HOME ".DS_Store") }
+
+    Write-OK "文件安装完成"
+}
+
+function Init-Env {
+    if (Test-Path -LiteralPath (Join-Path $SL_HOME 'pending-update/ready')) {
+        Write-Warn '配置迁移随 pending-update 激活执行，当前配置保持不变'
+        return
+    }
+    $sea = Join-Path $INSTALL_DIR $SeaName
+    $resultText = & $sea --sl-config-migrate --home $SL_HOME
+    if ($LASTEXITCODE -ne 0) { throw 'config-migration-failed' }
+    try { $result = ($resultText -join "`n") | ConvertFrom-Json } catch { throw 'config-migration-invalid-result' }
+    if ($result.ok -ne $true) { throw 'config-migration-failed' }
+    if ($result.status -eq 'conflict') {
+        Write-Warn ('配置已同步；保留需确认的自定义字段: ' + ($result.fields -join ', '))
+    } else { Write-OK ('配置迁移: ' + $result.status) }
 }
 
 function Setup-Path {
@@ -336,30 +565,85 @@ function Setup-Path {
 }
 
 function Verify-Install {
+    $entry = Join-Path $INSTALL_DIR 'sl.cmd'
+    if (-not (Test-Path -LiteralPath $entry -PathType Leaf)) {
+        throw '安装验证失败: sl.cmd 缺失'
+    }
+    $pendingReady = Join-Path (Join-Path $SL_HOME "pending-update") "ready"
+    if (Test-Path $pendingReady) {
+        Write-Warn "新版本已暂存，等待下次 sl.cmd 启动时应用"
+        return
+    }
     $version = Read-LocalVersion
     if (-not $version) { $version = "unknown" }
-    Write-OK "安装成功: sl v$version"
+    $sea = Join-Path $INSTALL_DIR $SeaName
+    if (Test-Path $sea) {
+        try {
+            Assert-SeaRunnable $sea $version | Out-Null
+            $previousSkipUpdate = $env:SL_CLI_SKIP_UPDATE
+            try {
+                $env:SL_CLI_SKIP_UPDATE = '1'
+                $entryVersion = ((@(& $entry --version) | ForEach-Object { [string]$_ }) -join "`n").Trim()
+                if ($LASTEXITCODE -ne 0 -or $entryVersion -ne $version) {
+                    throw 'sl.cmd 版本验证失败'
+                }
+            } finally {
+                if ($null -eq $previousSkipUpdate) { Remove-Item Env:SL_CLI_SKIP_UPDATE -ErrorAction SilentlyContinue }
+                else { $env:SL_CLI_SKIP_UPDATE = $previousSkipUpdate }
+            }
+            Write-OK "安装成功: sl v$version"
+            return
+        } catch {}
+    }
+    throw "安装验证失败: SEA self-check 未通过"
 }
 
-function Invoke-FullInstall([string]$tgzUrl) {
-    Check-Node
-    $tmpTgz = Join-Path ([System.IO.Path]::GetTempPath()) ("slclaw-cli-" + [guid]::NewGuid().ToString("n") + ".tgz")
+function Invoke-FullInstall([string]$baseUrl, [string]$versionUrl) {
+    $artifact = Get-SeaArtifactName
+    $artifactUrl = "$baseUrl$artifact"
+    $manifestUrl = Get-ManifestUrl $baseUrl
+    $tmpSea = Join-Path ([System.IO.Path]::GetTempPath()) ("slclaw-cli-" + [guid]::NewGuid().ToString("n") + ".exe")
     try {
-        Download-Tgz $tgzUrl $tmpTgz
-        Install-FromTgz $tmpTgz
-        Init-Env
-        Setup-Path
-        Verify-Install
+        Download-Sea $artifactUrl $tmpSea
+        $remote = ""
+        try { $remote = (Download-UrlText $versionUrl).Trim() } catch {}
+        if (-not $remote) {
+            throw "无法读取远端版本: $versionUrl"
+        }
+        $manifest = (Download-UrlText $manifestUrl) | ConvertFrom-Json
+        Assert-SeaMatchesManifest $tmpSea $artifact $remote $manifest
+        Assert-SeaRunnable $tmpSea $remote | Out-Null
+        try {
+            Install-FromSea $tmpSea $remote
+            Setup-Path
+            Verify-Install
+            Init-Env
+        } catch {
+            $backupDir = "$INSTALL_DIR.bak"
+            try { Restore-InPlaceInstallBackup $INSTALL_DIR } catch {}
+            if (Test-Path $backupDir) {
+                if (Test-Path $INSTALL_DIR) { Remove-Item -Recurse -Force $INSTALL_DIR }
+                Move-Item $backupDir $INSTALL_DIR
+            }
+            throw
+        }
+        # Configuration is committed. Cleanup must never roll back only the binary.
+        try {
+            $pendingReady = Join-Path (Join-Path $SL_HOME "pending-update") "ready"
+            if (-not (Test-Path -LiteralPath $pendingReady)) { Remove-LegacyProgramAssets }
+            Remove-InPlaceInstallBackup $INSTALL_DIR
+            $backupDir = "$INSTALL_DIR.bak"
+            if (Test-Path $backupDir) { Remove-Item -Recurse -Force $backupDir }
+        } catch { Write-Warn '安装已完成；旧版本备份清理失败，保留供后续清理' }
     } finally {
-        if (Test-Path $tmpTgz) { Remove-Item -Force $tmpTgz }
+        if (Test-Path $tmpSea) { Remove-Item -Force $tmpSea -ErrorAction SilentlyContinue }
     }
 }
 
 function Invoke-EnsureLatest {
-    $tgzUrl = Get-TgzUrl
-    Assert-TgzUrl $tgzUrl
-    $versionUrl = Get-VersionUrl $tgzUrl
-    Check-Node
+    $baseUrl = Get-BaseUrl
+    Assert-BaseUrl $baseUrl
+    $versionUrl = Get-VersionUrl $baseUrl
 
     $remote = (Download-UrlText $versionUrl).Trim()
     if (-not $remote) {
@@ -367,13 +651,20 @@ function Invoke-EnsureLatest {
         exit 1
     }
     $local = Read-LocalVersion
+    $seaPath = Join-Path $INSTALL_DIR $SeaName
+    $hasOldDist = Test-Path (Join-Path $INSTALL_DIR "dist")
 
-    if (-not (Test-Path (Join-Path $INSTALL_DIR "dist\package.json")) -or (Test-VersionGreater $remote $local)) {
+    if (-not (Test-Path $seaPath) -or $hasOldDist -or (Test-VersionGreater $remote $local)) {
         $localLabel = if ($local) { $local } else { "无" }
         Write-Warn "检测到更新: 本地 $localLabel → 远端 $remote"
-        Invoke-FullInstall $tgzUrl
+        Invoke-FullInstall $baseUrl $versionUrl
         $local = Read-LocalVersion
     } else {
+        if (-not (Test-Path -LiteralPath (Join-Path $INSTALL_DIR 'sl.cmd') -PathType Leaf)) {
+            Write-WindowsWrappers
+        }
+        Verify-Install
+        Init-Env
         Write-OK "已是最新: v$local"
     }
 
@@ -401,9 +692,10 @@ Write-Log "║  商龙 CLI 连接器安装 (Windows)        ║"
 Write-Log "╚═══════════════════════════════════════╝"
 Write-Log ""
 
-$tgzUrl = Get-TgzUrl
-Assert-TgzUrl $tgzUrl
-Invoke-FullInstall $tgzUrl
+$baseUrl = Get-BaseUrl
+Assert-BaseUrl $baseUrl
+$versionUrl = Get-VersionUrl $baseUrl
+Invoke-FullInstall $baseUrl $versionUrl
 
 Write-Log ""
 Write-Log "下一步："

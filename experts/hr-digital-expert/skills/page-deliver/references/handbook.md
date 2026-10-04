@@ -22,7 +22,7 @@
 | **可自愈**（瞬时抖动、可幂等重试） | 网络超时、单次 HTTP 5xx、agent 通道掉线 | **自动重试 1 次**，不打扰用户 |
 | **需用户操作**（凭证/配置/资源在用户那一侧） | 未登录、配额满、缺插件、状态前置不足 | 停下，按"给用户的话"模板汇报，等用户处理后回复"重试/继续" |
 | **代码/数据 bug**（产物本身有问题） | SQL 报错、前端 JS 异常、健康检查 404 | 先抓证据（日志/响应/stderr）→ 自己判断能否定位 → 能定位就改 + 重新 full-deploy；不能定位再问用户 |
-| **环境破坏**（插件文件缺失、二进制不兼容） | `BIN_NOT_FOUND`、`SCRIPT_NOT_FOUND` | 不要自行回退到系统 PATH 工具，提示用户重装/更新 page-deliver 插件 |
+| **环境破坏**（插件文件缺失、二进制不兼容） | `BIN_NOT_FOUND`、`BIN_DOWNLOAD_FAILED`、`SCRIPT_NOT_FOUND` | 不要自行回退到系统 PATH 工具；二进制缺失会自动按需下载，下载失败提示检查网络后重试 |
 
 判断不准时按"需用户操作"处理，宁可多问一次也不要乱重试。
 
@@ -54,7 +54,7 @@
 
 - 任何步骤失败都**不允许**伪造 `status:success` 继续往下走
 - `anydev publish` 在用户没点"确认注册"前**禁止**执行（无论 plan 写没写）
-- `BIN_NOT_FOUND` / `SCRIPT_NOT_FOUND` **禁止**回退到系统 PATH 找替代品
+- `BIN_NOT_FOUND` / `BIN_DOWNLOAD_FAILED` / `SCRIPT_NOT_FOUND` **禁止**回退到系统 PATH 找替代品
 - state / plan 不一致时**禁止**靠"猜测"恢复，要么按卡片走，要么问用户
 
 ---
@@ -125,16 +125,20 @@
 
 ### B2. anydev 永远用 page-deliver 封装好的，不要用 CodeBuddy/WorkBuddy 或者其他任何插件内置的
 
-**触发**：调用 page-deliver 时出错，找不到插件自带的 any CLI。 
-**识别信号**：`error.code = BIN_NOT_FOUND` 且 `error.message` 含 `any CLI binary ... not found`等
+**触发**：调用 page-deliver 时出错，any CLI 缺失或下载失败。
+**识别信号**：
+- `error.code = BIN_NOT_FOUND`：当前平台不支持（如 linux-arm64），或未找到可用二进制
+- `error.code = BIN_DOWNLOAD_FAILED`：按需下载失败（网络 / SHA256 校验失败）
 **给用户的话**：
 
 ```
-找不到插件自带的 any CLI（路径：{SKILL_DIR}/bin/anydev/{any-macos|any-linux|any-windows.exe}）。
+any CLI 二进制缺失或下载失败。
 
-修复：
-   在插件市场重新安装/更新 page-deliver 插件
-重装后回复「重试」。
+any CLI 现在按需下载到本地缓存（~/.page-deliver/bin/anydev/），
+首次使用 AnyDev 部署时会自动下载并校验，无需手动安装。
+
+如失败，请检查网络后回复「重试」；若仍失败，可设置 ANY_BIN 环境变量
+指向本地已有的 any CLI。
 ```
 
 **禁止**：使用 CodeBuddy/WorkBuddy 或者其他插件内置的 anydev 功能

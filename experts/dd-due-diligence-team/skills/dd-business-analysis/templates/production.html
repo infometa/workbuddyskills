@@ -1,0 +1,60 @@
+<!-- 产销分析模板 -->
+<div class="pcf-section">
+  <h3>产销分析</h3>
+
+  <div class="pcf-section__metrics">
+    {{#each metrics}}
+    <div class="pcf-section__metric">
+      <div class="pcf-section__metric-label">{{label}}</div>
+      <div class="pcf-section__metric-value">{{value}}<span class="pcf-section__metric-unit">{{unit}}</span></div>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="pcf-section__data-block">
+    <h4>采购台账</h4>
+    <table>
+      <thead>
+        <tr><th>原材料</th><th>采购量</th><th>采购金额</th><th>单价波动</th></tr>
+      </thead>
+      <tbody>
+        {{#each purchaseLedger}}
+        <tr><td>{{name}}</td><td>{{qty}}</td><td>{{amount}}</td><td>{{priceChange}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__data-block">
+    <h4>销售台账</h4>
+    <table>
+      <thead>
+        <tr><th>产品</th><th>销量</th><th>销售额</th><th>单价波动</th></tr>
+      </thead>
+      <tbody>
+        {{#each salesLedger}}
+        <tr><td>{{name}}</td><td>{{qty}}</td><td>{{amount}}</td><td>{{priceChange}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__insight">
+    <div class="pcf-section__insight-title">研判结论</div>
+    {{#each judgments}}
+    <div class="pcf-section__insight-item pcf-section__insight-item--{{type}}">
+      <span>{{icon}}</span>
+      <span>{{text}}</span>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

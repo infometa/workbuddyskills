@@ -1,0 +1,89 @@
+# 都市（city）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: city
+name_cn: 都市
+category: background
+carrier: manga
+audience: both
+weight: high
+level: level-1
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/face-slapping.md
+emotion_core:
+- 阶层反差
+- 身份反转
+- 现实代入
+- 逆袭爽感
+- 情感纠葛
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，男频侧重事业/权力逆袭，女频侧重情感/身份逆袭
+  bg_desc: 现代都市基底，承载力最强，几乎可兼容所有设定类标签
+  weight: high
+  bottom_line:
+  - 现代生活逻辑自洽，不能违背基本社会常识
+  - 阶层差异需有现实质感，不能悬浮
+  - 身份反转要有铺垫，不能凭空降临
+relations:
+  synergy:
+  - target: ceo
+    effect_type: 增强型
+    weight: high
+    effect: 都市是总裁题材的天然舞台，商战与豪门氛围拉满
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 都市阶层分明，逆袭落差感最强
+  - target: rebirth
+    effect_type: 裂变型
+    weight: high
+    effect: 重回都市某时间点，借信息差布局翻盘
+  - target: system
+    effect_type: 增强型
+    weight: medium
+    effect: 系统赋能都市生活，量化成长爽感
+  mutex:
+  - target: 纯古代架空
+    reason: 时代基底冲突，需二选一或做穿越桥接
+combo_adapt:
+- combo: references/domestic/combos/face-slapping.md
+  rule: 都市阶层落差放大打脸爽感，身份揭晓即高潮
+  sub: 都市打脸型
+- combo: references/domestic/combos/counterattack.md
+  rule: 底层主角借机遇/能力逆袭上位，对齐都市现实质感
+  sub: 都市逆袭型
+- combo: references/domestic/combos/sweet-love.md
+  rule: 都市情感线，强反差CP，甜虐交织
+  sub: 都市情感型
+fusion:
+- recipe: fusion/recipes/hidden-tycoon.md
+  note: 马甲大佬类都市经典，主打身份隐藏与层层揭晓打脸
+- recipe: fusion/recipes/rebirth-revenge.md
+  note: 重生回都市复仇翻盘，成熟节奏模板，强信息差爽感
+redlines:
+- code: AP-DS01
+  name: 现实逻辑悬浮
+  severity: 高
+  dimension: 标签与逻辑
+  test: 都市生活细节严重失真，豪门/职场/消费认知脱离现实，劝退观众
+- code: AP-DS02
+  name: 身份反转无铺垫
+  severity: 中
+  dimension: 结构与节奏
+  test: 主角隐藏身份突然降临，前期零伏笔，反转生硬
+soft_warnings:
+- 避免都市背景沦为空壳，仅作场景板而无现实质感
+- 避免阶层符号堆砌（名车豪宅）替代人物塑造
+- 避免情感线悬浮，恋爱动机经不起推敲
+manga:
+  visual_signature: 现代都市天际线 + 商务/时尚造型 + 阶层符号对比
+  high_affinity: true
+  visual_hooks:
+  - 豪车豪宅与底层环境的画面反差
+  - 身份揭晓时的镜头冲击
+  - 都市霓虹下的情绪渲染

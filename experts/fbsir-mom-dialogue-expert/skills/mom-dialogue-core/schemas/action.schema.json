@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/action/2.0",
+  "title": "Family Action Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["action_id", "description", "visibility", "status"],
+  "properties": {
+    "action_id": {"type": "string", "pattern": "^ACT-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "story_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "owner_person_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "description": {"type": "string", "minLength": 1},
+    "visibility": {"enum": ["private", "selected_family", "family", "public", "pending"]},
+    "status": {"enum": ["candidate", "planned", "in_progress", "completed", "declined", "withdrawn"]},
+    "created_at": {"type": "string"},
+    "notes": {"type": "string"}
+  }
+}

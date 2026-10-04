@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "2.0",
+  "ledgers": [
+    {"path": "02_素材账/素材总表.csv", "schema": "inventory.schema.json", "required": true, "idField": "relative_path"},
+    {"path": "02_素材账/哈希清单.csv", "schema": "hash-manifest.schema.json", "required": true, "idField": "relative_path"},
+    {"path": "02_素材账/重复候选.csv", "schema": "duplicate-candidate.schema.json", "required": true, "idField": "sha256"},
+    {"path": "02_素材账/质量问题.csv", "schema": "quality-issue.schema.json", "required": true},
+    {"path": "02_素材账/source-ledger.csv", "schema": "source.schema.json", "required": true, "idField": "source_id"},
+    {"path": "03_人物与关系/person-ledger.csv", "schema": "person.schema.json", "required": true, "idField": "person_id"},
+    {"path": "03_人物与关系/relationship-ledger.csv", "schema": "relationship.schema.json", "required": true, "idField": "relationship_id"},
+    {"path": "03_人物与关系/role-ledger.csv", "schema": "role.schema.json", "required": true, "idField": "role_id"},
+    {"path": "05_媒体索引/media-index.csv", "schema": "media-segment.schema.json", "required": true, "idField": "segment_id"},
+    {"path": "06_事件与生活轨迹/event-ledger.csv", "schema": "event.schema.json", "required": true, "idField": "event_id"},
+    {"path": "07_问题与回答/question-ledger.csv", "schema": "question.schema.json", "required": true, "idField": "question_id"},
+    {"path": "07_问题与回答/answer-ledger.csv", "schema": "answer.schema.json", "required": true, "idField": "answer_id"},
+    {"path": "09_心愿与家庭行动/action-ledger.csv", "schema": "action.schema.json", "required": true, "idField": "action_id"},
+    {"path": "10_大纲与章节/chapter-ledger.csv", "schema": "chapter.schema.json", "required": true, "idField": "chapter_id"},
+    {"path": "11_隐私与授权/consent-ledger.csv", "schema": "consent.schema.json", "required": true, "idField": "consent_id"},
+    {"path": "12_版本与检查点/version-ledger.csv", "schema": "version.schema.json", "required": true, "idField": "version_id"}
+  ],
+  "objects": [
+    {"path": ".mom-dialogue-project.json", "schema": "project.schema.json"},
+    {"path": "00_项目看板/source-roots.json", "schema": "source-root.schema.json", "collectionKey": "roots"},
+    {"glob": "02_素材账/scan-runs/*/receipt.json", "schema": "scan-run.schema.json"},
+    {"glob": "08_故事卡/*.md", "schema": "story-card.schema.json", "encoding": "markdown-frontmatter"},
+    {"glob": "12_版本与检查点/CPK-*.json", "schema": "checkpoint.schema.json"},
+    {"path": "13_导出成果/delivery-selection.json", "schema": "delivery-selection.schema.json", "optional": true}
+  ]
+}

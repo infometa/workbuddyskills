@@ -1,0 +1,7 @@
+查询研发3组今天的考勤日报，按日报业务实际使用的 permissionCode 解析部门范围。
+把结果里的部门ID和职位ID格式化成名称，沿用原业务 permissionCode，并保留原始ID用于后续调用。
+用户已经给出 departmentId=1001 时，不要再次按名称解析。
+同名部门有两个候选时先让我确认，不要自动选择第一个。
+批量格式化员工ID跨多个分块时，如果后一批上游失败，保留对应ID并提示部分失败。
+目标字段嵌套在 OBJECT 的 fields 中时，按 fields 递归识别主数据类型。
+Schema 字段类型是未注册的 GRADE_LEVEL 时保持原始值，不要映射成 POSITION_GRADE 或调用主数据命令。

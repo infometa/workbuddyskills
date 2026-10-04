@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "fbsir.super-independent-board.no-connector-action/v1",
+  "productId": "fbsir-super-independent-board",
+  "packageVersionSource": "../.codebuddy-plugin/plugin.json#/version",
+  "firstValueRequiresConnector": false,
+  "coreDecisionQualityRequiresConnector": false,
+  "productFlowReadsConnectorStateBeforeFirstValue": false,
+  "allowedNoConnectorStates": [
+    "delivered",
+    "awaiting_approval",
+    "not_executed"
+  ],
+  "executedRequiresExternalReceipt": true,
+  "fallbackOrder": [
+    "requested_host_artifact",
+    "html_or_markdown_source",
+    "chat_level_artifact"
+  ],
+  "cannotProve": [
+    "host_action_completed",
+    "external_delivery_completed",
+    "official_listing_completed",
+    "continued_use_completed",
+    "natural_business_closure"
+  ]
+}

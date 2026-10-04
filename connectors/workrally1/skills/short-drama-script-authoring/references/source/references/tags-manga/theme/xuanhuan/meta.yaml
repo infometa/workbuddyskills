@@ -1,0 +1,98 @@
+# 玄幻（xuanhuan）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: xuanhuan
+name_cn: 玄幻
+category: theme
+carrier: manga
+audience: male
+weight: high
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/cultivation.md
+emotion_core:
+- 升级爽感
+- 战力碾压
+- 宗门博弈
+- 逆天改命
+- 宏大世界观
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男频为主，女频可做女强修仙
+  bg_desc: 异界、架空、古代为核心，兼容都市修仙变体
+  weight: high
+  bottom_line:
+  - 修为境界体系清晰，不能随意越级
+  - 升级有代价有铺垫，不能一蹴而就
+  - 战力体系自洽，避免战力崩坏
+relations:
+  synergy:
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 修为升级对应阶层逆袭，成长可视化爽感拉满
+  - target: system
+    effect_type: 增强型
+    weight: high
+    effect: 系统量化修为进度，升级节奏更清晰
+  - target: rebirth
+    effect_type: 裂变型
+    weight: high
+    effect: 重生预知机缘与格局，提前布局快速崛起
+  - target: transmigration
+    effect_type: 裂变型
+    weight: medium
+    effect: 现代知识/思维碰撞修仙世界，形成差异化优势
+  - target: city
+    effect_type: 裂变型
+    weight: medium
+    effect: 都市修仙形成身份反差，日常与修仙双线并行
+  mutex:
+  - target: 纯现实主义
+    reason: 无修仙体系则玄幻主题不成立
+combo_adapt:
+- combo: references/domestic/combos/cultivation.md
+  rule: 对齐玄幻核心境界规则，强化升级节奏与战力逻辑
+  sub: 经典修仙型
+- combo: references/domestic/combos/counterattack.md
+  rule: 升级绑定逆袭，从底层废柴到顶级强者
+  sub: 修仙逆袭型
+- combo: references/domestic/combos/face-slapping.md
+  rule: 境界提升绑定打脸，越级碾压爽感最大化
+  sub: 修仙打脸型
+fusion:
+- recipe: fusion/recipes/waste-counterattack.md
+  note: 废柴逆袭经典配方，强升级爽感，适配男频高转化内容
+- recipe: fusion/recipes/secret-realm-explore.md
+  note: 秘境探险配方，单元化剧情，适配长周期连载
+redlines:
+- code: AP-XH01
+  name: 战力体系崩坏
+  severity: 极高
+  dimension: 标签与逻辑
+  test: 境界设定前后矛盾，越级无底线，爽感根基崩塌
+- code: AP-XH02
+  name: 升级无铺垫
+  severity: 高
+  dimension: 结构与节奏
+  test: 修为突破全靠机缘，无修炼过程与代价，成长感缺失
+- code: AP-XH03
+  name: 世界观悬浮
+  severity: 中
+  dimension: 标签与逻辑
+  test: 宗门、势力、地理设定混乱，缺乏基本逻辑
+soft_warnings:
+- 避免境界名称堆砌，观众记不住，缺乏代入感
+- 避免配角纯工具人，只为送经验送装备存在
+- 避免同质化严重，无差异化设定与剧情
+manga:
+  visual_signature: 境界突破的形态进化 + 法术释放的标志性特效
+  high_affinity: true
+  visual_hooks:
+  - 法术/神通释放的专属符号特效
+  - 境界突破的形态蜕变画面
+  - 仙山/秘境大场景全景

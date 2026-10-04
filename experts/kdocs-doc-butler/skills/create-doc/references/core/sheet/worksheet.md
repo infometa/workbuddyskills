@@ -6,8 +6,6 @@
 
 获取指定表格文件的所有工作表信息，包含每个工作表的名称、索引、数据区域范围等。
 
-
-
 > rowTo/colTo 比 maxRow/maxCol 更有参考价值，表示实际数据区域
 
 #### 调用示例
@@ -20,10 +18,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 
 #### 返回值说明
 
@@ -86,8 +85,6 @@
 在指定表格文件中新增工作表。可指定名称、数量、插入位置和默认列宽。
 插入位置通过 `before` / `after` / `end` 三选一控制。
 
-
-
 **幂等性**：否 — 重复调用会创建多个工作表，先确认是否已成功
 
 #### 调用示例
@@ -99,7 +96,6 @@
   "file_id": "string",
   "name": "销售数据",
   "end": true,
-  "type": "xlWorksheet",
   "defColWidth": 1335,
   "count": 1
 }
@@ -128,14 +124,14 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID（路径参数 `{file_id}`）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `before` (object, 可选): 插入到指定工作表之前；与 `after`、`end` 三选一
 - `after` (object, 可选): 插入到指定工作表之后；与 `before`、`end` 三选一
 - `end` (boolean, 可选): 是否插入到末尾；与 `before`、`after` 三选一
-- `type` (string, 可选): 工作表类型，默认 `xlWorksheet`；默认值：`xlWorksheet`
 - `defColWidth` (integer, 可选): 默认列宽，如 `1335`（约 10.5 个字符）
 - `count` (integer, 可选): 新增工作表数量，默认 `1`；默认值：`1`
 - `name` (string, 可选): 工作表名，默认 `sheetn`
@@ -151,7 +147,6 @@
 | `before` | object | 否 | 在指定工作表之前插入；与 `after`、`end` 三选一 |
 | `after` | object | 否 | 在指定工作表之后插入；与 `before`、`end` 三选一 |
 | `end` | boolean | 否 | 是否在末尾插入；与 `before`、`after` 三选一 |
-| `type` | string | 否 | 工作表类型，默认 `xlWorksheet` |
 | `defColWidth` | integer | 否 | 默认列宽，如 `1335`（约 10.5 个字符） |
 | `count` | integer | 否 | 新增工作表数量，默认 `1` |
 | `name` | string | 否 | 工作表名，默认 `sheetn` |
@@ -161,7 +156,6 @@
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `sheetId` | integer | 是 | 目标工作表 ID |
-
 
 #### 返回值说明
 
@@ -183,10 +177,11 @@
 
 #### 功能说明
 
-更新指定工作表，支持重命名以及调整工作表位置。
-适用于 Excel（.xlsx）和智能表格（.ksheet）。
+更新指定工作表，支持重命名以及调整工作表位置。适用于 Excel（.xlsx）和智能表格（.ksheet）。
 
+#### 调用约束
 
+- **前置检查**：使用该工具前必须先调用get_sheets_info确认要操作的工作表id，不得自行捏造工作表id。
 
 **幂等性**：是
 
@@ -204,10 +199,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `move_sheet_id` (integer, 可选): 移动时参照的工作表 ID
 - `move_type` (string, 可选): 需要移动的位置，若不传则不移动位置。可选值：`sheet_move_type_before` / `sheet_move_type_after`
@@ -238,11 +234,9 @@
 删除一个或多个工作表。
 适用于 Excel（.xlsx）和智能表格（.ksheet）。
 
+#### 调用约束
 
-
-#### 操作约束
-
-- **前置检查**：`sheet.get_sheets_info` 核对拟删工作表名称与 sheetId
+- **前置检查**：`sheet.get_sheets_info` 核对拟删工作表名称与 worksheet_id
 - **用户确认**：删除工作表不可恢复，必须向用户确认工作表名称和 ID
 
 **幂等性**：是
@@ -255,16 +249,19 @@
 {
   "file_id": "string",
   "worksheet_ids": [
-    0
+    0,
+    1,
+    2
   ]
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
-- `worksheet_ids` (array[integer], 可选): 需要删除的工作表 ID 列表
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
+- `worksheet_ids` (array[integer], 可选): 需要删除的工作表 ID 列表；`worksheet_ids` 必须是数字数组（如 `[0, 1]`），不能传对象数组（如 `[{ "id": 0 }]`）
 
 #### 返回值说明
 
@@ -288,14 +285,11 @@
 
 #### 功能说明
 
-复制指定工作表。
+复制指定工作表。适用于按模板快速生成副本、保留原始工作表不动的场景。
 
-适用于按模板快速生成副本、保留原始工作表不动的场景。
+#### 调用约束
 
-
-
-#### 操作约束
-
+- **前置检查**：使用该工具前必须先调用get_sheets_info确认要操作的工作表id，不得自行捏造工作表id。
 - **后置验证**：get_sheets_info 确认副本已创建
 
 **幂等性**：否 — 重复调用会生成多个副本，先确认是否已成功
@@ -313,10 +307,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `copy_first_sheet` (boolean, 可选): 是否复制第一个工作表,若要复制第一个工作表必须带该参数且设置为 true
 
@@ -342,11 +337,11 @@
 
 #### 功能说明
 
-更新工作表名称或调整工作表顺序位置。
+更新工作表名称或调整工作表顺序位置。支持重命名工作表，也支持相对于另一张工作表前后移动。
 
-支持重命名工作表，也支持相对于另一张工作表前后移动。
+#### 调用约束
 
-
+- **前置检查**：使用该工具前必须先调用get_sheets_info确认要操作的工作表id，不得自行捏造工作表id。
 
 **幂等性**：是
 
@@ -375,10 +370,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `name` (string, 可选): 新工作表名称
 - `move_sheet_id` (integer, 可选): 参照工作表 ID
@@ -390,7 +386,3 @@
 {}
 
 ```
-
-
----
-

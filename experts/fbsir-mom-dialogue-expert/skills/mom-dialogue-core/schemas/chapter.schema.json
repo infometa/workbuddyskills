@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/chapter/2.0",
+  "title": "Chapter Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["chapter_id", "title", "file_path", "visibility", "permission_status", "status", "version"],
+  "properties": {
+    "chapter_id": {"type": "string", "pattern": "^CH-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "title": {"type": "string", "minLength": 1},
+    "story_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "file_path": {"type": "string", "minLength": 1},
+    "visibility": {"enum": ["private", "selected_family", "family", "public", "pending"]},
+    "permission_status": {"enum": ["pending", "blocked", "approved"]},
+    "status": {"enum": ["draft", "review", "confirmed", "locked", "withdrawn"]},
+    "version": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "notes": {"type": "string"}
+  }
+}

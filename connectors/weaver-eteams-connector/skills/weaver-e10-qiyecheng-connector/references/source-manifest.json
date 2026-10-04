@@ -1,0 +1,698 @@
+{
+  "schemaVersion": 2,
+  "module": "fna",
+  "skill": "weaver-e10-qiyecheng-connector",
+  "generatedAt": "2026-09-09T10:05:00.000Z",
+  "generatedFrom": {
+    "kind": "user-provided-folder",
+    "sourceRoots": [
+      "/Users/zhufangyuan/Desktop/weaver-e10-qiyecheng-connector"
+    ],
+    "note": "用户桌面目录的旧版 weaver-e10-qiyecheng-connector 文档型 Skill（含 scripts/agents/icon 等打包文件，未纳入功能源资料指纹）"
+  },
+  "sourceSet": {
+    "aggregateSha256": "b8f3dfe7928498c66790a0509d32d8e0b5ff77c86e141fd6921f59bc13e7a95f",
+    "sourceRoots": [
+      "/Users/zhufangyuan/Desktop/weaver-e10-qiyecheng-connector"
+    ],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/fna",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "skills/weaver-e10-qiyecheng-connector"
+    ],
+    "tests": [
+      "test/business/fna-operations.test.ts",
+      "test/business/fna-host.test.ts"
+    ],
+    "docs": [
+      "docs/fna.md",
+      "docs/_catalog.md",
+      "docs/SKILL.md",
+      "skill-template/domains/qiyecheng.md",
+      "skill-template/business-info.json"
+    ]
+  },
+  "sources": [
+    {
+      "path": "SKILL.md",
+      "role": "module-skill",
+      "size": 12705,
+      "sha256": "1b854d0db0398cd8b96f09e08b849416537819571b6f3d8b23f353078d5d5267"
+    },
+    {
+      "path": "references/catalog.md",
+      "role": "catalog",
+      "size": 5540,
+      "sha256": "e361c12d15a1288e429f1570b0e4766a0a79609933ad6a35d4b4f5e997964dd5"
+    },
+    {
+      "path": "references/inv-write-off-callticket.md",
+      "role": "api-doc",
+      "size": 2001,
+      "sha256": "f787ca00261c8639ffb45c066d5802cf97fd3761cf39aa086dfe9139958ab3ce"
+    },
+    {
+      "path": "references/inv-write-off-list.md",
+      "role": "api-doc",
+      "size": 5161,
+      "sha256": "732f43e67f3a54d26ff800c6e56b3cfb77f48e188e118c5369fcec09c1cfd4ee"
+    },
+    {
+      "path": "references/inv-write-off-pagetab.md",
+      "role": "api-doc",
+      "size": 2854,
+      "sha256": "881586288197c9830760737cf937ed5e453759c1e27aa208beb1058cc69fba8f"
+    },
+    {
+      "path": "references/loan-menu-mainpage.md",
+      "role": "api-doc",
+      "size": 2017,
+      "sha256": "4e0288dc3f6c31e17c8e212ced5db3e1ed0baff1f45ac8f053c9aa025ddb5b9d"
+    },
+    {
+      "path": "references/loan-menu-mainpagelist.md",
+      "role": "api-doc",
+      "size": 5632,
+      "sha256": "fabbdb9baacea20e2cc054f81714c490362abcb57db7a79b26f319cba5a39bdb"
+    },
+    {
+      "path": "references/loan-menu-remindrepay.md",
+      "role": "api-doc",
+      "size": 3016,
+      "sha256": "9a38e166ccd76fd6ae791104f013c6d6f1437e94b97ebca3bd5fc14c41ecfaeb"
+    },
+    {
+      "path": "references/weaver-e10-qiyecheng-budget-execute-getExecuteListByAi.md",
+      "role": "api-doc",
+      "size": 13173,
+      "sha256": "c38c7fb24ac9e539003de7699702a1ee3fa04ecfc5847ba41f7f81121dc0dd08"
+    },
+    {
+      "path": "references/weaver-e10-qiyecheng-expense-center-ai-query-loan.md",
+      "role": "api-doc",
+      "size": 7217,
+      "sha256": "4f2597e80d878d24bbaa1109e665496e8a61c0672e28c366b67b8b2f3a102083"
+    },
+    {
+      "path": "references/weaver-e10-qiyecheng-expense-center-ai-query-prepay-writeoff.md",
+      "role": "api-doc",
+      "size": 6438,
+      "sha256": "ccb234469d6d03706d151b2446edaf6ec90799ed4338a37e961241b7186d340e"
+    },
+    {
+      "path": "references/weaver-e10-qiyecheng-expense-center-ai-query-reimbursed.md",
+      "role": "api-doc",
+      "size": 5286,
+      "sha256": "57b9c5c74a4331e719cc84ec2e6d073770790c7ce38c2d1ceeda39d59a206101"
+    },
+    {
+      "path": "references/weaver-e10-qiyecheng-preapplication-getApplicationDetail.md",
+      "role": "api-doc",
+      "size": 6509,
+      "sha256": "3146c04af0c44622a4d45966e1e7a744f96757f29faf986445a201cd93e89688"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "preApplication.getApplicationDetail",
+      "sourcePath": "references/weaver-e10-qiyecheng-preapplication-getApplicationDetail.md",
+      "anchor": "# 获取流程预算报销信息详情（事前申请单预算详情）",
+      "sha256": "3146c04af0c44622a4d45966e1e7a744f96757f29faf986445a201cd93e89688",
+      "mapsToOperations": [
+        "fna.budget.application.detail"
+      ],
+      "mapsToReferences": [
+        "references/budget.md"
+      ]
+    },
+    {
+      "id": "getExecuteListByAi",
+      "sourcePath": "references/weaver-e10-qiyecheng-budget-execute-getExecuteListByAi.md",
+      "anchor": "# 预算执行报表查询（按预算模板 + 维度 + 期间）",
+      "sha256": "c38c7fb24ac9e539003de7699702a1ee3fa04ecfc5847ba41f7f81121dc0dd08",
+      "mapsToOperations": [
+        "fna.budget.execute.list"
+      ],
+      "mapsToReferences": [
+        "references/budget.md"
+      ]
+    },
+    {
+      "id": "getSumReimbursedAmountByAi",
+      "sourcePath": "references/weaver-e10-qiyecheng-expense-center-ai-query-reimbursed.md",
+      "anchor": "# AI 查询报销金额",
+      "sha256": "57b9c5c74a4331e719cc84ec2e6d073770790c7ce38c2d1ceeda39d59a206101",
+      "mapsToOperations": [
+        "fna.expense.reimbursed.sum"
+      ],
+      "mapsToReferences": [
+        "references/expense-center.md"
+      ]
+    },
+    {
+      "id": "getSumLoanAmountByAi",
+      "sourcePath": "references/weaver-e10-qiyecheng-expense-center-ai-query-loan.md",
+      "anchor": "# AI 查询借款金额",
+      "sha256": "4f2597e80d878d24bbaa1109e665496e8a61c0672e28c366b67b8b2f3a102083",
+      "mapsToOperations": [
+        "fna.expense.loan.sum"
+      ],
+      "mapsToReferences": [
+        "references/expense-center.md"
+      ]
+    },
+    {
+      "id": "selectPrepayWriteOffAmountBySkill",
+      "sourcePath": "references/weaver-e10-qiyecheng-expense-center-ai-query-prepay-writeoff.md",
+      "anchor": "# AI 查询预付核销金额",
+      "sha256": "ccb234469d6d03706d151b2446edaf6ec90799ed4338a37e961241b7186d340e",
+      "mapsToOperations": [
+        "fna.expense.prepay.writeoff.sum"
+      ],
+      "mapsToReferences": [
+        "references/expense-center.md"
+      ]
+    },
+    {
+      "id": "loan.mainPage",
+      "sourcePath": "references/loan-menu-mainpage.md",
+      "anchor": "# 借款管理菜单 - 首页汇总 mainPage",
+      "sha256": "4e0288dc3f6c31e17c8e212ced5db3e1ed0baff1f45ac8f053c9aa025ddb5b9d",
+      "mapsToOperations": [
+        "fna.loan.main.page"
+      ],
+      "mapsToReferences": [
+        "references/loan-management.md"
+      ]
+    },
+    {
+      "id": "loan.mainPageList",
+      "sourcePath": "references/loan-menu-mainpagelist.md",
+      "anchor": "# 借款管理菜单 - 首页列表 mainPageList",
+      "sha256": "fabbdb9baacea20e2cc054f81714c490362abcb57db7a79b26f319cba5a39bdb",
+      "mapsToOperations": [
+        "fna.loan.main.list"
+      ],
+      "mapsToReferences": [
+        "references/loan-management.md"
+      ]
+    },
+    {
+      "id": "loan.remindRepay",
+      "sourcePath": "references/loan-menu-remindrepay.md",
+      "anchor": "# 借款管理菜单 - 提醒还款 remindRepay",
+      "sha256": "9a38e166ccd76fd6ae791104f013c6d6f1437e94b97ebca3bd5fc14c41ecfaeb",
+      "mapsToOperations": [
+        "fna.loan.remind.repay.prepare",
+        "fna.loan.remind.repay.apply"
+      ],
+      "mapsToReferences": [
+        "references/loan-management.md"
+      ]
+    },
+    {
+      "id": "inv.writeOffPageTab",
+      "sourcePath": "references/inv-write-off-pagetab.md",
+      "anchor": "# 发票核销 - 金额 tab 汇总 writeOffPageTab",
+      "sha256": "881586288197c9830760737cf937ed5e453759c1e27aa208beb1058cc69fba8f",
+      "mapsToOperations": [
+        "fna.invoice.writeoff.summary"
+      ],
+      "mapsToReferences": [
+        "references/invoice-writeoff.md"
+      ]
+    },
+    {
+      "id": "inv.writeOffList",
+      "sourcePath": "references/inv-write-off-list.md",
+      "anchor": "# 发票核销 - 核销列表 writeOffList",
+      "sha256": "732f43e67f3a54d26ff800c6e56b3cfb77f48e188e118c5369fcec09c1cfd4ee",
+      "mapsToOperations": [
+        "fna.invoice.writeoff.list"
+      ],
+      "mapsToReferences": [
+        "references/invoice-writeoff.md"
+      ]
+    },
+    {
+      "id": "inv.callTicket",
+      "sourcePath": "references/inv-write-off-callticket.md",
+      "anchor": "# 发票核销 - 催票 callTicket",
+      "sha256": "f787ca00261c8639ffb45c066d5802cf97fd3761cf39aa086dfe9139958ab3ce",
+      "mapsToOperations": [
+        "fna.invoice.writeoff.callticket.prepare",
+        "fna.invoice.writeoff.callticket.apply"
+      ],
+      "mapsToReferences": [
+        "references/invoice-writeoff.md"
+      ]
+    }
+  ],
+  "operationImpact": {
+    "fna.budget.application.detail": {
+      "sourceChunkIds": [
+        "preApplication.getApplicationDetail"
+      ],
+      "schemaFields": [
+        "requestId"
+      ],
+      "references": [
+        "references/budget.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "fna.budget.execute.list": {
+      "sourceChunkIds": [
+        "getExecuteListByAi"
+      ],
+      "schemaFields": [
+        "current",
+        "pageSize",
+        "templateId",
+        "formDatas",
+        "type",
+        "departmentFlag",
+        "exportType",
+        "ignoreReportPower"
+      ],
+      "references": [
+        "references/budget.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "fna.expense.reimbursed.sum": {
+      "sourceChunkIds": [
+        "getSumReimbursedAmountByAi"
+      ],
+      "schemaFields": [
+        "employeeId",
+        "startDate",
+        "endDate",
+        "workflowId",
+        "requestId"
+      ],
+      "references": [
+        "references/expense-center.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "fna.expense.loan.sum": {
+      "sourceChunkIds": [
+        "getSumLoanAmountByAi"
+      ],
+      "schemaFields": [
+        "employeeId",
+        "startDate",
+        "endDate",
+        "workflowId",
+        "requestId"
+      ],
+      "references": [
+        "references/expense-center.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "fna.expense.prepay.writeoff.sum": {
+      "sourceChunkIds": [
+        "selectPrepayWriteOffAmountBySkill"
+      ],
+      "schemaFields": [
+        "employeeId",
+        "startDate",
+        "endDate",
+        "workflowId",
+        "requestId"
+      ],
+      "references": [
+        "references/expense-center.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "fna.loan.main.page": {
+      "sourceChunkIds": [
+        "loan.mainPage"
+      ],
+      "schemaFields": [
+        "borrowingStatus",
+        "departmentId",
+        "menuCode",
+        "permissionSetCode"
+      ],
+      "references": [
+        "references/loan-management.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "fna.loan.main.list": {
+      "sourceChunkIds": [
+        "loan.mainPageList"
+      ],
+      "schemaFields": [
+        "current",
+        "pageSize",
+        "isBatchConfirmRepaymentSearch",
+        "departmentId",
+        "menuCode",
+        "permissionSetCode"
+      ],
+      "references": [
+        "references/loan-management.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "fna.loan.remind.repay.prepare": {
+      "sourceChunkIds": [
+        "loan.remindRepay"
+      ],
+      "schemaFields": [
+        "type",
+        "data"
+      ],
+      "references": [
+        "references/loan-management.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "write",
+      "requiresConfirmationChain": true
+    },
+    "fna.loan.remind.repay.apply": {
+      "sourceChunkIds": [
+        "loan.remindRepay"
+      ],
+      "schemaFields": [
+        "type",
+        "data",
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/loan-management.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "write",
+      "requiresConfirmationChain": true
+    },
+    "fna.invoice.writeoff.summary": {
+      "sourceChunkIds": [
+        "inv.writeOffPageTab"
+      ],
+      "schemaFields": [
+        "invoiceStatus",
+        "type",
+        "menuCode",
+        "permissionSetCode",
+        "departmentId",
+        "dataSource",
+        "cfgType",
+        "dataStatisticCfgId",
+        "requestId"
+      ],
+      "references": [
+        "references/invoice-writeoff.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "fna.invoice.writeoff.list": {
+      "sourceChunkIds": [
+        "inv.writeOffList"
+      ],
+      "schemaFields": [
+        "current",
+        "pageSize",
+        "invoiceStatus",
+        "type",
+        "departmentId",
+        "menuCode",
+        "permissionSetCode",
+        "dataSource",
+        "quickSearchDatas",
+        "formDatas",
+        "cfgType",
+        "dataStatisticCfgId",
+        "requestId"
+      ],
+      "references": [
+        "references/invoice-writeoff.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "fna.invoice.writeoff.callticket.prepare": {
+      "sourceChunkIds": [
+        "inv.callTicket"
+      ],
+      "schemaFields": [
+        "requestids"
+      ],
+      "references": [
+        "references/invoice-writeoff.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "write",
+      "requiresConfirmationChain": true
+    },
+    "fna.invoice.writeoff.callticket.apply": {
+      "sourceChunkIds": [
+        "inv.callTicket"
+      ],
+      "schemaFields": [
+        "requestids",
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/invoice-writeoff.md"
+      ],
+      "tests": [
+        "test/business/fna-operations.test.ts"
+      ],
+      "risk": "write",
+      "requiresConfirmationChain": true
+    }
+  },
+  "artifactBaseline": {
+    "aggregateSha256": "6aa8c9cfc85d43d3a601e3c73c8e83d6e76c1f2263398d7b28c7357e48bdbc0f",
+    "files": [
+      {
+        "path": "src/shortcuts/fna/manifest.ts",
+        "role": "generated",
+        "size": 1982,
+        "sha256": "5dc6498720b683153dbbe5877170e0fc5d749a54e55226e7b9e8cad2507a8fdd"
+      },
+      {
+        "path": "src/shortcuts/fna/operations.ts",
+        "role": "generated",
+        "size": 870,
+        "sha256": "0a5b2c825600b157531ee319dfe49b157acefc157ec15623f2954e16d5de706d"
+      },
+      {
+        "path": "src/shortcuts/fna/errors.ts",
+        "role": "generated",
+        "size": 2420,
+        "sha256": "d1512303f918aef4416950bcdeb173e95858380ad2c00efa724549fbb0579780"
+      },
+      {
+        "path": "src/shortcuts/fna/host.ts",
+        "role": "generated",
+        "size": 6847,
+        "sha256": "b9e9c2a10d01ce680c732d0b92650d02306495d7ae8b922296d5ab5c084dd316"
+      },
+      {
+        "path": "src/shortcuts/fna/continuation.ts",
+        "role": "generated",
+        "size": 3229,
+        "sha256": "6f9e0fe10c5371d2084d40bf8c44064aee855b6c1d5d48336d6bd51220dd70aa"
+      },
+      {
+        "path": "src/shortcuts/fna/index.ts",
+        "role": "generated",
+        "size": 4633,
+        "sha256": "c9735f6e32d33b31f4cd981bf520c40d109f3168c4149ca13420216bb672ac78"
+      },
+      {
+        "path": "src/shortcuts/fna/operations/types.ts",
+        "role": "generated",
+        "size": 2514,
+        "sha256": "3518f952f5f55e36f2edadf07fd4add712980d6bc802a26f90b6fd4f63e7a9b7"
+      },
+      {
+        "path": "src/shortcuts/fna/operations/shared.ts",
+        "role": "generated",
+        "size": 9752,
+        "sha256": "0c436cd21ca1e28fbb89f5e097ea6dbba8d360ffca9479ac80061b0169422953"
+      },
+      {
+        "path": "src/shortcuts/fna/operations/registry.ts",
+        "role": "generated",
+        "size": 1419,
+        "sha256": "e0fbb55b35600664b7e7ee5d5853edb75f80fb7d01140af523fac890590bbff1"
+      },
+      {
+        "path": "src/shortcuts/fna/operations/budget.ts",
+        "role": "generated",
+        "size": 6323,
+        "sha256": "726a58928c1ca4a32d960a1f47fd285c178f47c722f220cd3b90d4c3fe66a44d"
+      },
+      {
+        "path": "src/shortcuts/fna/operations/expense-center.ts",
+        "role": "generated",
+        "size": 7127,
+        "sha256": "f7832ab54b556ba9b2fd532a6d5930f88a81566e76a6d048fa699dbcff994c9d"
+      },
+      {
+        "path": "src/shortcuts/fna/operations/loan.ts",
+        "role": "generated",
+        "size": 9656,
+        "sha256": "a619e9e704b2ed91dfd182592e40b8156f7869cb3bd4488efeb8111525ec00ef"
+      },
+      {
+        "path": "src/shortcuts/fna/operations/invoice-writeoff.ts",
+        "role": "generated",
+        "size": 10386,
+        "sha256": "8f6b053fdc0f265c3e641f9f8e6a044f9ed261cf56856214a947b6f1a7e577d7"
+      },
+      {
+        "path": "src/shortcuts/index.ts",
+        "role": "generated",
+        "size": 294,
+        "sha256": "a16e6fbb6dbf27111f8c25c3d92ab3cb241e16461aaa4bcfcdd34048f6be73da"
+      },
+      {
+        "path": "test/business/fna-operations.test.ts",
+        "role": "generated",
+        "size": 20744,
+        "sha256": "d1840453db1380df6ab00e61b77a082e8aff6c79f3fed2c1cef955d12e2ea46c"
+      },
+      {
+        "path": "test/business/fna-host.test.ts",
+        "role": "generated",
+        "size": 3558,
+        "sha256": "2fbbf0506c47e4e43e23211d1fa6ca700d1deb56af5e6ddaa1f376294b01f909"
+      },
+      {
+        "path": "docs/fna.md",
+        "role": "generated",
+        "size": 5381,
+        "sha256": "15fb13f47fff23032910f647fbf2647fdcd4786db76392f7959cb940fc1fb26c"
+      },
+      {
+        "path": "docs/_catalog.md",
+        "role": "generated",
+        "size": 2252,
+        "sha256": "704569bbb73dc78c0eb7f050d1157ff60168c578ffb2bec37d0e270ecd05ca2f"
+      },
+      {
+        "path": "docs/SKILL.md",
+        "role": "generated",
+        "size": 3383,
+        "sha256": "829971ba105c0c0a0fd63e2bf6ca5b63fefeb00632dac1aac25d8cc4b3585a84"
+      },
+      {
+        "path": "skills/weaver-e10-qiyecheng-connector/SKILL.md",
+        "role": "generated",
+        "size": 9537,
+        "sha256": "e477deece6837ef4ca9744cbe8ba13808d31afe81c8f7a3f5fd2db2f4d00d0f0"
+      },
+      {
+        "path": "skill-template/product.json",
+        "role": "generated",
+        "size": 89,
+        "sha256": "211300a31c39f0feea66331101edea394ae841307302404c6d113b314954ee83"
+      },
+      {
+        "path": "skills/weaver-e10-qiyecheng-connector/references/catalog.md",
+        "role": "generated",
+        "size": 4181,
+        "sha256": "e0da26934f577f3f9c1c4ac7ae4561f90e88cd2c23a9948798451c79fdbaba03"
+      },
+      {
+        "path": "skills/weaver-e10-qiyecheng-connector/references/budget.md",
+        "role": "generated",
+        "size": 3095,
+        "sha256": "c2d295c42071b5628388b93a763616493a3c52a82363a820658dfd40048ca383"
+      },
+      {
+        "path": "skills/weaver-e10-qiyecheng-connector/references/expense-center.md",
+        "role": "generated",
+        "size": 2994,
+        "sha256": "58aea2b61cd6c1977140f3a7a92bcf13c15f0a98e1b881ffa1918f5168f43769"
+      },
+      {
+        "path": "skills/weaver-e10-qiyecheng-connector/references/loan-management.md",
+        "role": "generated",
+        "size": 4165,
+        "sha256": "08ef63d4721871a06b12d45a216c234536e228906ea11e08af3a1f5ae2913604"
+      },
+      {
+        "path": "skills/weaver-e10-qiyecheng-connector/references/invoice-writeoff.md",
+        "role": "generated",
+        "size": 4313,
+        "sha256": "4f04be723e81771c8ac2d821c2c213d1275406022512aed0e82ff2ebf74ead6e"
+      },
+      {
+        "path": "skill-template/business-info.json",
+        "role": "generated",
+        "size": 1825,
+        "sha256": "b12a58cd168cd334083fa74a2aadbf8b0a078ace723972637f50a9c8ed8b7979"
+      },
+      {
+        "path": "skill-template/domains/qiyecheng.md",
+        "role": "generated",
+        "size": 1733,
+        "sha256": "ecd1964e29f83d13451def3e9cff7de0cface2ea6be108a1dc31b91443dae488"
+      }
+    ]
+  },
+  "notes": [
+    "源资料为用户桌面目录的旧版 weaver-e10-qiyecheng-connector 文档型 Skill；只将 SKILL.md、catalog.md 与 11 份单接口文档纳入功能源指纹；agents/scripts/_icon.png/domain-login-contract/workflow-selection 等打包或旧认证材料未纳入（新 CLI 认证由 src/internal/e10 托管，不复制旧 Mode1 登录脚本）。",
+    "不保存 Cookie、Token 或大段源正文。",
+    "已知实现缺陷与口径（借款仅统计首条、日期口径差异、menuCode/permissionSetCode 环境相关、超 2^53 ID 保留字符串）写入 docs/fna.md 与 Skill references。",
+    "2026-09-09 由 weaver-e10-skill-maker-connector 首次生成：CLI 命令后缀 fna、Skill 后缀 qiyecheng。"
+  ]
+}

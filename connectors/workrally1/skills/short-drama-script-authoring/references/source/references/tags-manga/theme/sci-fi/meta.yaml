@@ -1,0 +1,91 @@
+# 科幻（sci-fi）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: sci-fi
+name_cn: 科幻
+category: theme
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/tech-future.md
+emotion_core:
+- 科技感
+- 未来想象
+- 危机思辨
+- 超现实爽感
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，偏男性与年轻受众
+  bg_desc: 未来都市、星际、近未来都市为核心
+  weight: medium
+  bottom_line:
+  - 核心科技设定自洽，不能前后矛盾
+  - 科幻元素服务主线，不能纯背景板
+relations:
+  synergy:
+  - target: apocalypse
+    effect_type: 增强型
+    weight: high
+    effect: 科技灾难强化末世合理性，科幻丰富末世设定
+  - target: system
+    effect_type: 裂变型
+    weight: medium
+    effect: 科技系统作为金手指，更具科幻质感
+  - target: rebirth
+    effect_type: 裂变型
+    weight: medium
+    effect: 重生预知科技走向，提前布局技术发展
+  - target: adventure
+    effect_type: 增强型
+    weight: medium
+    effect: 星际/未知区域探索，强化科幻冒险感
+  - target: ability
+    effect_type: 增强型
+    weight: medium
+    effect: 生物科技/基因变异解释异能来源，更具逻辑
+  mutex:
+  - target: 纯古代/纯历史
+    reason: 无科技基础则科幻主题无法成立
+combo_adapt:
+- combo: references/domestic/combos/tech-future.md
+  rule: 对齐科幻核心设定规则，强化科技感与逻辑自洽
+  sub: 未来科技型
+- combo: references/domestic/combos/survival.md
+  rule: 科幻背景下的生存危机，紧张感更强
+  sub: 科幻末世型
+- combo: references/domestic/combos/adventure.md
+  rule: 星际/未知领域探索，冒险+科幻双重看点
+  sub: 星际冒险型
+fusion:
+- recipe: fusion/recipes/mecha-battle.md
+  note: 机甲战斗配方，强视觉爽感，适配男频内容
+- recipe: fusion/recipes/cyberpunk-city.md
+  note: 赛博朋克都市配方，风格化强，适配差异化内容
+redlines:
+- code: AP-KH01
+  name: 科技设定硬伤
+  severity: 高
+  dimension: 标签与逻辑
+  test: 核心科技逻辑矛盾，违背基本常识，出戏感强
+- code: AP-KH02
+  name: 科幻元素边缘化
+  severity: 中
+  dimension: 标签与逻辑
+  test: 科技仅为背景板，剧情换成普通背景也成立，标签失效
+soft_warnings:
+- 避免过于硬核的专业术语，观众理解门槛过高
+- 避免未来世界设定悬浮，社会逻辑脱离现实基础
+- 避免AI/外星反派脸谱化，行为动机单一
+manga:
+  visual_signature: 飞船/机甲/赛博都市的未来感视觉 + 科技光效
+  high_affinity: true
+  visual_hooks:
+  - 机甲/飞船的精密造型
+  - 星海/未来都市大场景
+  - 科技战斗的光效设计

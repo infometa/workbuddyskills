@@ -1,0 +1,130 @@
+{
+  "_note": "售前咨询展示场景与降级话术。判定顺序：先按 consult_intents.scenario_selection 选场景，工具返回 ok=false 时改走 fallbacks。输出结构以 references/output_templates.md 为准。模糊匹配时先输出 fuzzy_match_notice，再接场景话术。",
+
+  "fuzzy_match_notice": {
+    "_note": "模糊匹配提示：**只在 query_product_attribute 返回 fuzzyMatched=true（即 product.matchType=\"2\"）时，加在原输出话术之前**。它是前置的一段独立话术，不替代、不改写任何场景话术；精准匹配（matchType=\"1\"）、字段缺失、以及按品类查询（query_product_attribute_by_category，无 matchType）时都不输出这句。",
+    "condition": "query_product_attribute 返回 fuzzyMatched=true 或 product.matchType=\"2\"",
+    "applies_to": ["场景一", "场景二", "场景三"],
+    "not_applies_to": ["场景四（品类 TOP3，用户没输入型号，无 matchType）", "所有降级话术（ok=false 时只输出降级那一句）"],
+    "position": "整段回复的最前面，与随后的原场景话术之间空一行",
+    "reply": "您的【{queriedProductName}】有多款产品，已为您自动匹配到 【{productName}】 查询，如与您意向产品不同，请告诉我准确的型号名称哦~",
+    "placeholders": {
+      "{queriedProductName}": "工具返参的 queriedProductName，即用户本轮输入/记忆里的那个型号原文；不得用命中型号顶替",
+      "{productName}": "工具返参 product.productName，即下游实际命中的型号"
+    },
+    "rules": [
+      "只加这一句，随后照原场景（场景一/二/三）原样输出，原话术一个字不改",
+      "两个占位符都必须回填真实值：前者是用户输入的型号，后者是实际命中的型号，二者不同才是模糊匹配的意义所在",
+      "不解释「为什么是模糊匹配」、不描述匹配规则或前缀命中逻辑、不追问用户是否确认——话术里的「请告诉我准确的型号名称哦~」已是引导",
+      "fuzzyMatched=false / matchType=\"1\" / 字段缺失时**保持原输出模式**，不加这句、不加任何替代说明"
+    ]
+  },
+
+  "scenarios": [
+    {
+      "id": "场景一",
+      "name": "指定参数",
+      "condition": "工具 ok=true 且 requestedAttributeNames 非空（fullAttributes=false）",
+      "rules": [
+        "第一行输出「产品名称 产品型号」，中间用空格分隔",
+        "第二行留空行",
+        "只展示用户指定的参数，格式「- {参数名}：{参数值}」，每个参数单独一行",
+        "**严格只展示 requestedAttributeNames 里的参数**：工具为了兜底会返回该产品的其它参数（甚至全量），这些未被指定的参数一律不展示、不作为补充说明、不写进总结语——用户问容量就只答容量",
+        "多个指定参数按用户提问顺序展示（requestedAttributeNames 的顺序即提问顺序），不按优先级重排",
+        "不展示用户没问的参数，不补充全量参数",
+        "用户指定但工具未返回的参数输出「- {参数名}：暂无此参数信息」",
+        "**参数名「价格」展示为「官方指导价」**（见 consult_attributes.display_name_overrides）：写「- 官方指导价：5299元」，不写「价格/售价/参考价」；参数值原样不变，送出侧 attributeNames 仍填「价格」",
+        "不做主观评价、不加卖点、不加推荐语"
+      ],
+      "missing_attribute_line": "- {参数名}：暂无此参数信息"
+    },
+    {
+      "id": "场景二",
+      "name": "全量参数",
+      "condition": "工具 ok=true 且 requestedAttributeNames 为空（fullAttributes=true）",
+      "rules": [
+        "第一行输出「产品名称 产品型号」，中间用空格分隔",
+        "第二行留空行",
+        "展示工具返回的全部参数，格式「- {参数名}：{参数值}」，每个参数单独一行",
+        "排序按 consult_attributes.full_attributes_priority 的 rank_map 数字升序：容量/匹数 > 能效等级 > 核心功能 > 尺寸 > 颜色 > 其他；**不得沿用工具返回顺序**（下游常把「渠道」排在第一个），rank_map 未登记的参数名归入「其他」排在最后",
+        "参数超过 10 项时截取前 10 项，末尾追加「更多参数请前往海尔官网查看。」",
+        "**参数名「价格」展示为「官方指导价」**（见 consult_attributes.display_name_overrides）：参数值原样不变，排序仍按 rank_map 里「价格」那一档",
+        "不做主观评价"
+      ],
+      "display_max": 10,
+      "overflow_suffix": "更多参数请前往海尔官网查看。"
+    },
+    {
+      "id": "场景三",
+      "name": "性价比（型号-购买建议）",
+      "condition": "子意图=型号-购买建议 且工具 ok=true",
+      "rules": [
+        "**先剔除 consult_attributes.excluded_from_selling_points.names（渠道/套系/品牌偏好/价格）**，再从剩余参数里选卖点；这些参数不写成卖点、不计入条数、不进总结语",
+        "卖点选取：requestedAttributeNames 非空时优先转化用户指定参数，不足 3 条从全量参数按 selling_point_priority 补充；为空时按优先级选 3-5 个最具说服力的参数",
+        "剔除后可用卖点不足 3 条时如实少写（可以只写 1-2 条），不得拿被排除的参数凑数",
+        "卖点顺序按 selling_point_priority 的 rank_map 升序，不沿用工具返回顺序",
+        "参数→卖点必须一一对应工具返回的真实参数值，不编造",
+        "输出结构：开头一句「{产品名称} {产品型号}整体表现不错，值得考虑：」，随后每条卖点单独一行，最后一段以「总的来说，」开头收尾",
+        "总结语：requestedAttributeNames 非空时围绕用户指定维度总结；为空时围绕产品核心优势总结",
+        "卖点 3-5 条，全文 ≤250 字",
+        "禁用「最」「第一」「全网最低」等绝对化用语，不用「亲」「您好」等客服套话"
+      ],
+      "selling_points": "3-5",
+      "max_chars": 250
+    },
+    {
+      "id": "场景四",
+      "name": "品类 TOP3 参数",
+      "condition": "子意图=品类-参数/价格 且工具 ok=true",
+      "rules": [
+        "开头一句说明这是该品类销量较高的 3 款，按工具返回顺序展示，不重排、不宣称排名口径以外的结论",
+        "每个型号按 场景一（指定参数）或 场景二（全量参数）的结构输出，型号之间空一行",
+        "不做性价比推荐、不做主观评价；用户想要买建议时引导补充具体型号"
+      ]
+    }
+  ],
+
+  "fallbacks": [
+    {
+      "_note": "**降级即封闭输出：只输出命中那一条的 reply，输出到此为止。** 除了 {productModel} 原样回填，不得改写措辞、不得同义转述、不得在前后追加任何内容。禁止追加的内容（实测踩过的坑）：教用户核对铭牌/说明书/购买凭证/完整型号写法、索取购买链接或商品页截图或照片、追问上市时间、解释查不到的原因或后端匹配逻辑、复述用户问的参数名、承诺「我再为您查询」「帮您进一步核实」。4002 是唯一自带引导的降级，照原文输出即可。全局的「信息不足时主动追问」不适用于降级：话术自身已含引导，用户会在下一轮补充。",
+      "trigger": "工具返回 error=4001",
+      "condition": "**下游显式回 code=2001/4001**，即下游自己断言产品不存在。宿主不会因为返参为空而给这个码（空返参一律走 4003），因此本条实际很少命中。",
+      "reply": "未找到型号为{productModel}的产品信息，请确认型号是否正确。",
+      "note": "{productModel} 用用户原文中的型号原样回填，不改写、不纠正拼写。这一句就是完整回复：不要再解释怎么确认型号，也不要索取照片、链接或截图——本技能没有识图与读链接的能力。"
+    },
+    {
+      "trigger": "工具返回 error=4002",
+      "condition": "型号与品类均缺失",
+      "reply": "方便告诉我具体的产品型号或想了解的家电品类吗？这样我才能帮您查到准确的参数。",
+      "note": "不猜测型号、不默认品类"
+    },
+    {
+      "trigger": "工具返回 error=4003",
+      "condition": "**查不到参数数据——最常见的降级**。既覆盖「产品存在但指定参数无取值」，也覆盖「下游返参为空」：下游对「型号不存在」与「型号存在但指定参数名没匹配上」返回的是同一个 {\"code\":0,\"data\":[]}，两者不可区分，宿主统一降级到本条，不推断型号真伪。",
+      "reply": "暂未查询到该参数的相关信息，建议您前往海尔官网查看完整参数。",
+      "note": "话术不提「型号可能不对」，因为我们无从判断——用户的型号很可能是正确的。同样只输出这一句，不追加核对指引。"
+    },
+    {
+      "trigger": "工具返回 error=4004",
+      "condition": "参数接口失败（参数数据为 null）",
+      "reply": "详细参数信息暂时无法获取，建议您前往海尔官网查看完整参数。"
+    },
+    {
+      "trigger": "工具返回 error=4005",
+      "condition": "参数接口响应超时",
+      "reply": "参数查询有点慢，请稍后再试一次。"
+    }
+  ],
+
+  "global_guardrails": [
+    "所有参数值必须来自工具返回，禁止编造、禁止跨型号推断。",
+    "**模糊匹配（query_product_attribute 返回 fuzzyMatched=true / product.matchType=\"2\"）时，先输出 fuzzy_match_notice 那一句，再接原场景话术**；精准匹配、字段缺失与品类分支都保持原输出模式。降级（ok=false）时不加这句——降级只输出对应的那一句话术。",
+    "**工具返回的参数顺序不是展示顺序**：场景二按 full_attributes_priority 重排，场景三按 selling_point_priority 重排，场景一按用户提问顺序。",
+    "**参数名「价格」对用户展示为「官方指导价」**（含场景一/二/四的参数行与正文里提到金额的句子），参数值、单位、排序都不变；送出侧 attributeNames 仍填标准名「价格」——「官方指导价」不是合法参数名，下发会返回空参数。完整口径见 consult_attributes.display_name_overrides。",
+    "**渠道永远不参与卖点展示**（连同套系/品牌偏好/价格，见 consult_attributes.excluded_from_selling_points）；用户在场景一/二里明确问到时才如实列出。",
+    "品类分支返回的是 TOP3 型号的参数，不得说成用户问的某一个型号的参数。",
+    "**降级话术原样使用且仅此一句**：不补充参数值，也不补充追问、核对方法、原因解释或能力承诺；除 {productModel} 回填外不得改写措辞。详见 fallbacks._note。",
+    "**不承诺本技能不具备的能力**：可用工具只有 query_product_attribute 与 query_product_attribute_by_category，只能按型号/品类+参数名查参数。不得声称能识图或看铭牌照片、能读购买链接与商品截图、能按上市时间反查型号、能扫码查电子能效标识、能「进一步核实」型号。",
+    "第一阶段只输出文本，不生成卡片或其他交互式、可执行内容。"
+  ]
+}

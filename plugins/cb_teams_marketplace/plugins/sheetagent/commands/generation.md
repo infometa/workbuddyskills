@@ -1,5 +1,7 @@
 ---
 description: 从零生成全新的 Excel 表格，可附带 pdf/docx 作为参考素材
+description_zh: "从零生成全新的 Excel 表格，可附带 pdf/docx 作为参考素材"
+description_en: "Create a new Excel spreadsheet from scratch, optionally using PDF or DOCX files as reference materials."
 argument-hint: "描述你想生成的表格，例如：做一份 6 月销售统计表"
 ---
 

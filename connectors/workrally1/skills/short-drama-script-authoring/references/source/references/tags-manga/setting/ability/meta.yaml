@@ -1,0 +1,95 @@
+# 异能（ability）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: ability
+name_cn: 异能
+category: setting
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: weak
+version: 6.0.0
+related_combo: references/domestic/combos/fantasy.md
+emotion_core:
+- 超能反差
+- 隐藏实力
+- 能力碾压
+- 神秘感
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用
+  bg_desc: 都市最佳，兼容校园、职场
+  weight: medium
+  bottom_line:
+  - 异能要有规则与代价，与主线挂钩
+  - 能力呈现要视觉化，不能随心所欲无敌流
+relations:
+  synergy:
+  - target: counterattack
+    effect_type: 增强型
+    weight: high
+    effect: 异能作为觉醒型金手指，能力成长可视化，强化阶层翻盘爽感
+  - target: 马甲
+    effect_type: 增强型
+    weight: high
+    effect: 异能作为终极底牌，身份揭露瞬间的能力碾压，放大反差震慑感
+  - target: apocalypse
+    effect_type: 增强型
+    weight: high
+    effect: 末世为异能提供合理性舞台，异能强化生存爽感
+  - target: city
+    effect_type: 增强型
+    weight: medium
+    effect: 日常都市基底反衬异能的反常，反差感更强
+  - target: campus
+    effect_type: 增强型
+    weight: medium
+    effect: 校园场景贴近受众，代入感更强
+  mutex:
+  - target: 纯现实主义
+    reason: 无超自然设定则异能无法成立
+  - target: 纯历史正剧
+    reason: 题材基底不兼容
+combo_adapt:
+- combo: references/domestic/combos/fantasy.md
+  rule: 都市异能体系化，强化能力规则与升级节奏
+  sub: 全子方向适配
+- combo: references/domestic/combos/face-slapping.md
+  rule: 异能碾压绑定打脸，隐藏实力反差震慑
+  sub: 异能打脸型
+- combo: references/domestic/combos/counterattack.md
+  rule: 觉醒异能驱动阶层翻盘，能力即上升通道
+  sub: 异能逆袭型
+- combo: references/domestic/combos/secret-identity.md
+  rule: 异能作为隐藏身份的核心，逐层揭露
+  sub: 异能马甲型
+fusion:
+- recipe: fusion/recipes/system-counterattack.md
+  note: 异能可替代系统作为觉醒型金手指，适配逆袭配方的成长节奏，强化能力升级的可视化爽感
+- recipe: fusion/recipes/mask-face-slap.md
+  note: 异能作为马甲核心底牌，适配打脸配方的揭露节奏，放大身份反差的震慑效果
+redlines:
+- code: AP-YN01
+  name: 异能无规则边界
+  severity: 高
+  dimension: 标签与逻辑
+  test: 能力随心所欲、边界模糊，剧情失控，金手指崩坏
+- code: AP-YN02
+  name: 异能无代价无敌流
+  severity: 高
+  dimension: 标签与逻辑
+  test: 主角靠能力躺赢，无拉扯无代价，爽感根基崩塌
+soft_warnings:
+- 避免能力靠嘴说、无视觉化，异能场面缺乏画面呈现
+- 避免异能与主线脱节，能力沦为炫技摆设、不推动剧情
+manga:
+  visual_signature: 异能视觉符号（瞳孔变色/纹路浮现/光效）
+  high_affinity: true
+  visual_hooks:
+  - 异能释放的专属视觉符号
+  - 能力觉醒的瞳变/纹路特效
+  - 同类异能对决的视觉碰撞

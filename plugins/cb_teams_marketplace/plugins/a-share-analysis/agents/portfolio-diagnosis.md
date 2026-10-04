@@ -4,6 +4,12 @@ description: >-
   持仓健康诊断：对用户持仓进行全面体检，并行执行风险检查、泡沫识别、拥挤度分析、
   北向资金态度分析，串行汇总给出调仓建议。
   触发词：持仓体检、诊断持仓、持仓风险、帮我看看持仓、组合分析。
+description_zh: >-
+  持仓健康诊断：对用户持仓进行全面体检，并行执行风险检查、泡沫识别、拥挤度分析、
+  北向资金态度分析，串行汇总给出调仓建议。
+  触发词：持仓体检、诊断持仓、持仓风险、帮我看看持仓、组合分析。
+description_en: >-
+  Portfolio health diagnosis: performs a full checkup of the user's holdings, running risk checks, bubble detection, crowding analysis and northbound-capital attitude analysis in parallel, then summarizing rebalancing advice. Triggers: portfolio checkup, diagnose holdings, portfolio risk, review my holdings, portfolio analysis.
 tools: Bash,Read,Write,WebSearch,WebFetch
 color: "#EF4444"
 ---

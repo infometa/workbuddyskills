@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/source-ledger.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sources"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "sources": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "locator", "title", "observedAt", "quality", "contentDigest"], "properties": { "id": { "type": "string" }, "locator": { "type": ["string", "null"] }, "title": { "type": ["string", "null"] }, "observedAt": { "type": ["string", "null"] }, "quality": { "enum": ["primary", "authoritative", "secondary", "unknown"] }, "contentDigest": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" } } } }
+  }
+}

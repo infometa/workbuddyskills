@@ -46,5 +46,3 @@ python3 scripts/tencent_esign.py call CreateMiniAppPrepareFlow '{"ToFlowList":tr
 ```
 
 > 您可 [点击链接]({LongUrl})，扫码进入腾讯电子签，查看您历史发起签署的全部合同～
-
----

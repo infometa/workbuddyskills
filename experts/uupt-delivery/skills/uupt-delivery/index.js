@@ -1,11 +1,16 @@
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const axios = require('axios');
 const crypto = require('crypto');
 
-// 配置文件路径
-const CONFIG_FILE = path.join(__dirname, 'config.json');
+// 配置文件保存在用户主目录，不受 skill 重装影响，且始终可写
+const CONFIG_DIR = path.join(os.homedir(), '.uupt-delivery');
+const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 const DEFAULTS_FILE = path.join(__dirname, 'defaults.json');
+
+// API 基础地址（接口路径在调用处写全，方便后续接入其他前缀的接口）
+const DEFAULT_API_URL = 'https://api-open.uupt.com';
 
 /**
  * 读取配置文件
@@ -44,6 +49,7 @@ function saveConfig(config) {
   try {
     const existing = readConfig();
     const merged = { ...existing, ...config };
+    fs.mkdirSync(CONFIG_DIR, { recursive: true });
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(merged, null, 2), 'utf8');
     console.log('配置已保存到:', CONFIG_FILE);
     return true;
@@ -54,7 +60,7 @@ function saveConfig(config) {
 }
 
 /**
- * 获取配置（优先级：环境变量 > config.json > defaults.json）
+ * 获取配置（优先级：环境变量 > config.json > defaults.json > 内置默认值）
  */
 function getConfig() {
   const defaults = readDefaults();
@@ -62,9 +68,8 @@ function getConfig() {
   
   return {
     appId: process.env.UUPT_APP_ID || config.appId || defaults.appId || null,
-    appSecret: process.env.UUPT_APP_SECRET || config.appSecret || defaults.appSecret || null,
     openId: process.env.UUPT_OPEN_ID || config.openId || defaults.openId || null,
-    apiUrl: process.env.UUPT_API_URL || config.apiUrl || defaults.apiUrl || 'https://api-open.uupt.com/openapi/v3/'
+    apiUrl: process.env.UUPT_API_URL || config.apiUrl || defaults.apiUrl || DEFAULT_API_URL
   };
 }
 
@@ -74,9 +79,9 @@ function getConfig() {
 function ensureConfig() {
   const config = getConfig();
   
-  if (!config.appId || !config.appSecret) {
-    console.log('\n[FATAL] 缺少应用凭证，请确认 defaults.json 文件完整');
-    throw new Error('[FATAL] 缺少应用凭证 (appId/appSecret)，请确认 defaults.json 文件存在且内容完整');
+  if (!config.appId) {
+    console.log('\n[FATAL] 缺少应用凭证，请确认 defaults.json 文件完整，或通过环境变量 UUPT_APP_ID 配置');
+    throw new Error('[FATAL] 缺少应用凭证 (appId)，请确认 defaults.json 文件存在且内容完整，或配置环境变量 UUPT_APP_ID');
   }
   
   if (!config.openId) {
@@ -104,7 +109,7 @@ async function postRequest(bizParams, apiPath) {
   const timestamp = Math.floor(Date.now() / 1000);
   const bizJson = JSON.stringify(bizParams);
   
-  const signStr = bizJson + config.appSecret + timestamp;
+  const signStr = bizJson + timestamp;
   const sign = generateMd5(signStr);
   
   const payload = {
@@ -145,14 +150,14 @@ async function postRequest(bizParams, apiPath) {
 async function postUnauthorizedRequest(bizParams, apiPath) {
   const config = getConfig();
   
-  if (!config.appId || !config.appSecret) {
-    throw new Error('[FATAL] 缺少应用凭证 (appId/appSecret)，请确认 defaults.json 文件存在且内容完整');
+  if (!config.appId) {
+    throw new Error('[FATAL] 缺少应用凭证 (appId)，请确认 defaults.json 文件存在且内容完整，或配置环境变量 UUPT_APP_ID');
   }
   
   const timestamp = Math.floor(Date.now() / 1000);
   const bizJson = JSON.stringify(bizParams);
   
-  const signStr = bizJson + config.appSecret + timestamp;
+  const signStr = bizJson + timestamp;
   const sign = generateMd5(signStr);
   
   const payload = {
@@ -241,7 +246,7 @@ async function sendSmsCode(params) {
   };
   
   console.log('📱 正在发送短信验证码...');
-  return await postUnauthorizedRequest(biz, 'user/unauthorized/sendSmsCode');
+  return await postUnauthorizedRequest(biz, '/openapi/v3/user/unauthorized/sendSmsCode');
 }
 
 /**
@@ -273,11 +278,15 @@ async function auth(params) {
   };
   
   console.log('🔐 正在进行商户授权...');
-  const result = await postUnauthorizedRequest(biz, 'user/unauthorized/auth');
+  const result = await postUnauthorizedRequest(biz, '/openapi/v3/user/unauthorized/auth');
   
   if (result && result.body && result.body.openId) {
-    saveConfig({ openId: result.body.openId });
-    console.log('✅ 授权成功，openId 已保存');
+    result.configSaved = saveConfig({ openId: result.body.openId });
+    if (result.configSaved) {
+      console.log('✅ 授权成功，openId 已保存');
+    } else {
+      console.error('⚠️ 授权成功，但 openId 保存失败');
+    }
   }
   
   return result;
@@ -286,10 +295,10 @@ async function auth(params) {
 /**
  * 订单询价
  * @param {Object} params - 询价参数
- * @param {string} params.fromAddress - 起始地址（必填，帮忙订单时为帮忙地点）
- * @param {string} params.toAddress - 目的地址（必填，帮忙订单时与fromAddress相同）
+ * @param {string} params.fromAddress - 起始地址（必填，帮帮订单时为帮帮地点）
+ * @param {string} params.toAddress - 目的地址（必填，帮帮订单时与fromAddress相同）
  * @param {string} params.cityName - 城市名称（可选，默认郑州市）
- * @param {string} [params.orderType='send'] - 订单类型，'send'为跑腿配送，'help'为帮忙服务
+ * @param {string} [params.orderType='send'] - 订单类型，'send'为跑腿配送，'help'为帮帮服务
  */
 async function orderPrice(params) {
   const { fromAddress, toAddress, cityName = '郑州市', orderType = 'send' } = params;
@@ -318,9 +327,9 @@ async function orderPrice(params) {
     biz.goodsType = 'ALLHELP';
   }
   
-  const typeLabel = isHelp ? '帮忙服务' : '配送';
+  const typeLabel = isHelp ? '帮帮服务' : '配送';
   console.log(`💰 正在查询${typeLabel}价格...`);
-  return await postRequest(biz, 'order/orderPrice');
+  return await postRequest(biz, '/openapi/v3/order/orderPrice');
 }
 
 /**
@@ -329,7 +338,7 @@ async function orderPrice(params) {
  * @param {string} params.priceToken - 询价返回的 token（必填）
  * @param {string} params.receiverPhone - 收件人电话（必填）
  * @param {string} [params.channel] - 聊天渠道（wechat 渠道 specialChannel=4，其他渠道=2）
- * @param {string} [params.note] - 帮忙内容描述（帮忙订单时必填，描述具体需要跑男提供的帮助服务）
+ * @param {string} [params.note] - 帮帮内容描述（帮帮订单时必填，描述具体需要跑男提供的帮助服务）
  */
 async function createOrder(params) {
   const { priceToken, receiverPhone, channel, note } = params;
@@ -360,7 +369,7 @@ async function createOrder(params) {
   }
   
   console.log('📦 正在创建订单...');
-  return await postRequest(biz, 'order/addOrder');
+  return await postRequest(biz, '/openapi/v3/order/addOrder');
 }
 
 /**
@@ -380,7 +389,7 @@ async function orderDetail(params) {
   };
   
   console.log('📋 正在查询订单详情...');
-  return await postRequest(biz, 'order/orderDetail');
+  return await postRequest(biz, '/openapi/v3/order/orderDetail');
 }
 
 /**
@@ -402,7 +411,7 @@ async function cancelOrder(params) {
   };
   
   console.log('❌ 正在取消订单...');
-  return await postRequest(biz, 'order/cancelOrder');
+  return await postRequest(biz, '/openapi/v3/order/cancelOrder');
 }
 
 /**
@@ -422,7 +431,23 @@ async function driverTrack(params) {
   };
   
   console.log('🏃 正在查询跑男信息...');
-  return await postRequest(biz, 'order/driverTrack');
+  return await postRequest(biz, '/openapi/v3/order/driverTrack');
+}
+
+/**
+ * 领取优惠券包
+ * @param {Object} params - 领券参数
+ * @param {number} [params.source=2] - 领取来源（决定可领哪些券包）
+ */
+async function receiveCouponPackages(params = {}) {
+  const { source = 2 } = params;
+
+  const biz = {
+    source: Number(source)
+  };
+
+  console.log('🎟️ 正在领取优惠券...');
+  return await postRequest(biz, '/openapiext/v3/aiagentcoupon/receiveCouponPackages');
 }
 
 /**
@@ -434,6 +459,8 @@ function formatPrice(priceInFen) {
 
 // 导出函数
 module.exports = {
+  CONFIG_DIR,
+  CONFIG_FILE,
   readConfig,
   readDefaults,
   saveConfig,
@@ -448,22 +475,25 @@ module.exports = {
   orderDetail,
   cancelOrder,
   driverTrack,
-  formatPrice
+  receiveCouponPackages,
+  formatPrice,
+  DEFAULT_API_URL
 };
 
 // 如果直接运行此文件，显示帮助信息
 if (require.main === module) {
   console.log(`
 🚚 UU跑腿同城配送服务
-支持跑腿配送(SEND)和帮忙服务(HELP)两种订单类型。
+支持跑腿配送(SEND)和帮帮服务(HELP)两种订单类型。
 
 可用命令:
   node scripts/register.js       - 手机号注册/获取授权
-  node scripts/order-price.js    - 订单询价（支持跑腿配送和帮忙服务）
+  node scripts/order-price.js    - 订单询价（支持跑腿配送和帮帮服务）
   node scripts/create-order.js   - 创建订单
   node scripts/order-detail.js   - 查询订单详情
   node scripts/cancel-order.js   - 取消订单
   node scripts/driver-track.js   - 跑男实时追踪
+  node scripts/receive-coupon.js - 领取优惠券
 
 首次使用:
   运行任何命令时会自动检测是否需要注册。

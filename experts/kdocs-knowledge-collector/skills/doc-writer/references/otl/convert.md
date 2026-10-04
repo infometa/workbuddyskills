@@ -6,8 +6,6 @@
 
 将 HTML、Markdown 等内容转换为智能文档块结构，适合在正式插入前先生成可复用的块内容。
 
-
-
 **幂等性**：是
 
 > `otl.convert` 仅做格式转换，不会修改文档内容；需配合 `otl.block_insert` 才能将转换结果写入文档
@@ -41,10 +39,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 智能文档文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `params` (object, 必填): 转换参数对象
   - `format` (string, 必填): 源数据格式，支持 `"html"` 或 `"markdown"`
   - `content` (string, 必填): 待转换的源数据内容
@@ -61,7 +60,3 @@
 }
 
 ```
-
-
----
-

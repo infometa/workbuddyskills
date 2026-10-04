@@ -1,0 +1,43 @@
+{
+    "init": {
+        "darwin": "npm install -g vibeknow-cli",
+        "linux": "npm install -g vibeknow-cli",
+        "win32": "npm install -g vibeknow-cli"
+    },
+    "auth": {
+        "darwin": "vibeknow auth login --headless",
+        "linux": "vibeknow auth login --headless",
+        "win32": "vibeknow.cmd auth login --headless"
+    },
+    "authWaitForExit": true,
+    "authDeviceFlow": {
+        "uriPattern": "\"verification_uri_complete\":\\s*\"([^\"]+)\"",
+        "codePattern": "\"user_code\":\\s*\"([^\"]+)\"",
+        "defaultExpiresInSeconds": 300,
+        "codeEmbeddedInUri": true
+    },
+    "unAuth": {
+        "darwin": "vibeknow auth logout",
+        "linux": "vibeknow auth logout",
+        "win32": "vibeknow.cmd auth logout"
+    },
+    "status": {
+        "darwin": "vibeknow auth status --output json",
+        "linux": "vibeknow auth status --output json",
+        "win32": "vibeknow.cmd auth status --output json"
+    },
+    "statusMatchJson": {
+        "authenticated": "true"
+    },
+    "authUrlDomain": "vibeknow.com",
+    "runtime": { "type": "node", "version": ">=18" },
+    "versionCheck": {
+        "command": {
+            "darwin": "vibeknow version",
+            "linux": "vibeknow version",
+            "win32": "vibeknow.cmd version"
+        },
+        "minVersion": "0.9.1",
+        "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+    }
+}

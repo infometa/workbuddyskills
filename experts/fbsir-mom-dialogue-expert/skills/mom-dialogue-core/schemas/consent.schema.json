@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/consent/2.0",
+  "title": "Consent Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["consent_id", "object_type", "object_id", "family_visibility", "manuscript_use", "public_use", "anonymize", "sensitive", "status", "recorded_at"],
+  "properties": {
+    "consent_id": {"type": "string", "pattern": "^CON-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "object_type": {"enum": ["source", "story", "answer", "person", "segment", "chapter"]},
+    "object_id": {"type": "string", "pattern": "^(SRC|STY|ANS|PER|SEG|CH)-[A-Z0-9_-]+$"},
+    "grantor_person_id": {"type": "string", "pattern": "^$|^PER-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "provider": {"type": "string"},
+    "narrator": {"type": "string"},
+    "family_visibility": {"enum": ["private", "selected_family", "family", "public", "pending"]},
+    "manuscript_use": {"enum": ["pending", "no", "yes"]},
+    "public_use": {"enum": ["pending", "no", "yes"]},
+    "anonymize": {"enum": ["no", "required", "completed"]},
+    "sensitive": {"enum": ["no", "yes", "reviewed"]},
+    "status": {"enum": ["pending", "family_only", "manuscript_allowed", "public_allowed", "anonymized", "withdrawn", "disputed"]},
+    "evidence_source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "recorded_at": {"type": "string"},
+    "expires_at": {"type": "string"},
+    "notes": {"type": "string"}
+  }
+}

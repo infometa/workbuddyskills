@@ -1,0 +1,51 @@
+<!-- 营收质量模板 -->
+<div class="pcf-section">
+  <h3>营收质量</h3>
+
+  <div class="pcf-section__data-block">
+    <h4>收入构成</h4>
+    <table>
+      <thead>
+        <tr><th>产品</th><th>占比</th><th>变化</th></tr>
+      </thead>
+      <tbody>
+        {{#each composition}}
+        <tr><td>{{product}}</td><td>{{ratio}}</td><td>{{change}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__data-block">
+    <h4>毛利率趋势</h4>
+    <table>
+      <thead>
+        <tr><th>年份</th><th>毛利率</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+        {{#each marginTrend}}
+        <tr><td>{{year}}</td><td>{{margin}}</td><td>{{status}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__insight">
+    <div class="pcf-section__insight-title">研判结论</div>
+    {{#each judgments}}
+    <div class="pcf-section__insight-item pcf-section__insight-item--{{type}}">
+      <span>{{icon}}</span>
+      <span>{{text}}</span>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

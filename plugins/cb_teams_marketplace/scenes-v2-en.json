@@ -1,0 +1,350 @@
+[
+  {
+    "id": 47,
+    "unified_id": 130,
+    "name": "Documents",
+    "icon": "documentation",
+    "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
+    "plugins": [
+      {
+        "id": 0,
+        "name": "workbuddy-docx",
+        "marketplaceName": "workbuddy-builtin"
+      }
+    ],
+    "prompts": [
+      "Turn my work notes into a results-focused year-end review. First ask me just four things: my role, the year's goals, 3 main achievements and 1 main problem; don't re-ask anything I have already told you. Deliver Markdown body text covering the year at a glance, key achievements (written as action - result - impact), skills gained, lessons learned and next year's priorities. Leave a blank where an achievement lacks a number; never invent results.",
+      "Write an ops report whose charts are easy to read. Deliver a report table plus a data-definition card for each of three charts. The report table covers work overview, incidents and how they were handled, response times, recurring issues, risks and next-stage plans; each card states what its chart shows, which fields it needs and how the conclusion is calculated. First ask me what I run and the reporting period; if no data is available, leave the fields empty rather than inventing incidents or metrics.",
+      "Write an email asking a colleague for feedback on my draft. Deliver a copy-ready email: a subject line, a first paragraph on where the item stands now, a second giving the exact time I need their reply by, and a third explaining how to make it easy for them (for example, replying to just a few items). Keep it polite but clear; leave the colleague's name and the dates blank.",
+      "Draft a kickoff speech I can read aloud as-is. First ask me the project type, the audience and the meeting length; if I don't say, assume an internal project kickoff. Write a speech of roughly 800 Chinese-character equivalents, ready to read aloud, covering in order: goals, current challenges, who owns what, quality and safety baselines, and a call to action. Keep the language practical and forceful, avoid empty slogans, and offer 3 title options."
+    ],
+    "promptTitles": [
+      "Turn work notes into a results-focused annual review",
+      "Create a clear, chart-based operations report",
+      "Write a polite but firm follow-up email",
+      "Write a kickoff speech I can read aloud"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 52,
+    "unified_id": 135,
+    "name": "Finance",
+    "icon": "financial-services",
+    "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
+    "plugins": [],
+    "prompts": [
+      "Search the last 24 hours of official financial news, pick up to 3 items and write the event, what changed and what to watch, delivered as a visual Markdown brief. Sources must be original links on official institutional sites (not reposts or aggregators), with the publication time to the hour and the original URL. Give fewer items if that is all you find; if you cannot go online, say so.",
+      "Lay out this week's key financial events as a calendar. From official schedules, find up to 5 major financial events this week and list Beijing time, the event, the institution and why it matters, with up to 3 sources. Include only confirmed times, don't fill in forecasts, and say so if you cannot go online.",
+      "Screen for high-ROE, low-debt companies. By default use ROE above 15% and a debt-to-asset ratio below 50% over the past year, and output the candidate companies, their metric values and the data date. If I don't specify a market, start with A-shares as the example and note that the criteria can be adjusted.",
+      "Build a full financial plan for one client. First ask me their age, family situation, income and goals, then cover retirement planning, education planning, tax optimisation and estate arrangements, with an asset allocation and the key assumptions behind it. State which region it applies to, and don't recommend specific products."
+    ],
+    "promptTitles": [
+      "Give me three finance headlines with key points",
+      "Put this week's major finance events on a calendar",
+      "Screen for high-ROE, low-debt companies",
+      "Create a comprehensive financial plan for a client"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 48,
+    "unified_id": 131,
+    "name": "Data",
+    "icon": "data-visualization",
+    "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
+    "plugins": [
+      {
+        "id": 0,
+        "name": "workbuddy-sheetagent",
+        "marketplaceName": "workbuddy-builtin"
+      }
+    ],
+    "prompts": [
+      "Design a data report structure that supports decisions. In Markdown, spell out how business questions, metrics, charts and recommendations map to each other, then append a small case study clearly marked as an example that shows the question - metric - chart - recommendation structure. Don't fabricate company conclusions; deliver the result first.",
+      "Turn autumn recruitment data into a research brief: one page of Markdown with 3 findings and the key numbers behind them, plus charts where useful. If there is no material in the workspace, you may fill in with publicly available industry sample data, clearly labelled 'sample data - to be replaced', so the brief delivers real findings instead of an empty framework. Also list the minimum data I need to supply.",
+      "Build a break-even sheet that recalculates itself. Deliver an XLSX split into an inputs area and a results area: the inputs area holds fixed cost, unit price and unit variable cost; the results area uses formulas to work out contribution margin, break-even units and break-even revenue, and shows a warning instead of a negative number when the unit price is not above the unit variable cost. Results recalculate automatically when inputs change.",
+      "Build a retirement planning tool for finance beginners with compound-interest calculation. Ship a default set of editable inputs (current age, retirement age, current savings, monthly contribution, expected annual return), keep inputs and results visually separate, and skip any input that is missing or zero while flagging it. State the key assumptions, and avoid any wording that promises returns."
+    ],
+    "promptTitles": [
+      "Design a decision-ready data report structure",
+      "Turn recruitment data into a research brief",
+      "Create an automatically calculated break-even sheet",
+      "Build a compound-interest retirement planning tool"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 49,
+    "unified_id": 132,
+    "name": "Slides",
+    "icon": "slides-creation",
+    "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
+    "plugins": [
+      {
+        "id": 0,
+        "name": "workbuddy-pptx",
+        "marketplaceName": "workbuddy-builtin"
+      }
+    ],
+    "prompts": [
+      "Make a 10-slide year-end review deck for an individual or a team, covering the year's goals, key projects, core results, lessons learned and next year's plans, using placeholders where information is missing. Use a clean business style: white background with deep blue (#173A63) and warm orange (#F08A4B). One core conclusion per slide, presented through big numbers, project cards, milestones and a quarterly roadmap - clear and restrained, highlighting results, contribution and growth.",
+      "Make a deck analysing the past year's AI trends, for industry research and a management briefing. Go online to gather developments in agents, multimodality, on-device AI, embodied AI, AI coding and compute chips, and present the latest progress, commercial value and forward view. Use a future-intelligence-briefing style: near-black blue (#090D18) with electric cyan (#38E8D4) and digital purple (#846BFF). Use trend matrices, vendor comparisons and market forecast charts - frontier, precise and opinionated.",
+      "Build a brand analysis deck on Pop Mart. Go online and cover the brand's history, core IPs, the blind-box mechanic, customer profiles, channel strategy, overseas markets and business model. Use a designer-toy catalogue style: cream white (#F7F3EE) with bubblegum pink (#F4A8C4), bright red (#E94752) and lake blue (#64C9D4). Use large IP imagery, rounded cards, sticker labels, an IP matrix and an overseas map - young and vivid with a collector's feel, but not childish.",
+      "Make a deck introducing the culture of Journey to the West, covering its background, main storyline, key characters, classic episodes, the pantheon of gods and demons, and its cultural influence. Use an eastern myth scroll style: rice-paper off-white (#F3E8D2) with cinnabar red (#B83A32), ink black and gilded gold (#C89B4B). Use the pilgrimage route, a character relationship chart, magic-weapon cards and ink-wash illustrations, with page numbers styled as seals - classical and vivid, both narrative and cultural."
+    ],
+    "promptTitles": [
+      "Make me a 10-slide year-end review template",
+      "Make me a deck on the past year's AI trends",
+      "A brand analysis deck on Pop Mart",
+      "Create a presentation introducing Journey to the West"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 50,
+    "unified_id": 133,
+    "name": "Deep Research",
+    "icon": "deep-research",
+    "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
+    "plugins": [
+      {
+        "id": 0,
+        "name": "deep-research",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "Research the low-altitude economy and judge which links have a verifiable revenue loop and which are still pilots. Deliver a Markdown research brief: a one-sentence conclusion first; then three sections - aircraft manufacturing, infrastructure and operations services - each covering what has worked and what has not, with supporting evidence; finally 2 to 3 signals to watch that would confirm or break the judgement. Cite a source and date for every key conclusion, and separate commercial projects from pilots. Treat figures taken from media coverage as leads only, never as conclusions; write [data to verify] where something cannot be confirmed and say what is missing. Length serves the judgement - don't cut evidence to hit a page count.",
+      "Walk through the key metrics in an ESG report and how to read them, so anyone holding a report knows what to look at first. Deliver a Markdown research brief: a one-sentence reading conclusion first; 2 to 3 key metrics each for E, S and G with their meaning and how each is commonly dressed up; one line each on where the mainstream disclosure frameworks apply and how they differ; a clear separation between company self-disclosure and third-party ratings; and finally a reading order you can follow directly. Cite sources and dates for key points. Explain how to read only - don't rate any specific company's ESG performance.",
+      "Understand how a company makes money in one page. Before starting, ask me which company I want to look at - without a company name there is nothing to research. Once I have given one, produce a research brief: one page of Markdown covering what the company does, how it earns, recent performance and the main risks, with a date and source against every key number.",
+      "Check at most 2 official or research-institute sources and map how the EV supply chain divides across materials, batteries, vehicles and charging, along with what drives cost at each stage. Deliver a Markdown file containing one relationship table and the source links, within 400 Chinese-character equivalents. Don't expand into market-share forecasts."
+    ],
+    "promptTitles": [
+      "Find low-altitude economy segments with real revenue",
+      "Understand core ESG metrics and how to read them",
+      "Explain how this company makes money",
+      "Explain the electric vehicle value chain"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 51,
+    "unified_id": 134,
+    "name": "Proposals",
+    "icon": "lightbulb",
+    "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
+    "plugins": [],
+    "prompts": [
+      "Design a landed plan for cross-border e-commerce logistics and payments. Deliver one document covering: why the target market was chosen; a logistics comparison (direct mail, overseas warehouse and consolidation, with each one's delivery time, cost and conditions); payment options (available channels, fee rates, settlement cycles and refund handling); compliance requirements; rollout steps and timeline; and the main risks with fallbacks. Pick a single target market or platform for the pilot, and if no target market is set, ask me first.",
+      "Plan a 30-minute team knowledge-sharing session. Deliver a one-table agenda (time slot, segment, key content, owner), splitting the 30 minutes as 5/15/5/5 for opening, sharing, discussion and agreeing actions, plus a materials checklist. Leave the actual times and owners blank for me to fill in.",
+      "Write up the key points of a modern minimalist living-room design. Deliver a comparison table covering colour, materials, lighting and storage, with each dimension listing the recommended approach, the common pitfalls and the conditions where it does not apply. Add one line below the table on which items to adjust for ceiling height and daylight.",
+      "Lay out a three-month operating plan for a store. First ask me the store type, the current goal and any known campaign dates; don't re-ask what I have already said. Deliver a monthly plan table with one row per month covering goals, traffic and sales actions, membership work, product or service priorities, staffing and review metrics, then break the first month into weekly tasks below the table. Leave unknown figures blank rather than inventing business data."
+    ],
+    "promptTitles": [
+      "Plan cross-border logistics and payments",
+      "Plan a thirty-minute team sharing session",
+      "List modern minimalist living-room design principles",
+      "Build a three-month store operations plan"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 53,
+    "unified_id": 136,
+    "name": "Scheduled Tasks",
+    "icon": "timer",
+    "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
+    "plugins": [],
+    "prompts": [
+      "After the close on each trading day, check the CSI Artificial Intelligence Theme Index (930713). Alert me when the daily change reaches 3% in absolute terms or the intraday range reaches 4%, stating the current level, the change, the range, the past 5 sessions and the time it triggered. If nothing triggers, stay quiet. Don't forecast where it goes next and don't give buy or sell advice.",
+      "Send me a closing briefing at 15:20 on every A-share trading day; skip market holidays. The briefing has up to 5 items, each a one-line summary with a source link; if you cannot find a source, just say so. Set the schedule in my local timezone without asking me again, and after setting it up tell me the next trigger time and what sections the briefing will contain.",
+      "Remind me at 8:30 every day to look at today's meetings and to-dos. The reminder has three parts: today's meetings, the 3 most important to-dos, and anything I need to prepare in advance; if the day is quiet, keep only the to-do part. Handle the timezone as my local time, no need to ask, and tell me the exact next reminder time once it is set up.",
+      "Remind me at 9:00, 30 days before a contract expires, to check the renewal. The reminder carries three fields: expiry date, renewal intention and the documents to prepare. If I haven't given the expiry date, ask me once; if the calculated time has already passed, tell me and push it to a sensible later date. Handle the timezone as my local time, and tell me the next trigger time once it is set up."
+    ],
+    "promptTitles": [
+      "Alert me to sharp AI sector volatility",
+      "Send me a workday stock-market brief",
+      "Remind me at 8:30 daily to check meetings and to-dos",
+      "Remind me 30 days before a contract expires to check renewal"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 54,
+    "unified_id": 137,
+    "name": "Development",
+    "icon": "daily-development",
+    "mode": "coding",
+    "plugins": [],
+    "prompts": [
+      "Demonstrate a single click submitting twice by binding the form listener twice. Write a minimal HTML reproduction and the fixed version side by side on the same offline page so they can be compared. Each shows its submit count. Show only this one cause and prove it.",
+      "Using a fictional create-task endpoint as the example, write a JavaScript validation function: title must be non-empty after trimming, dueDate is optional but must be a valid YYYY-MM-DD when present. Return a single consistent error field, include 2 test cases, and deliver one JS file.",
+      "Write a discount function in Python: 10 off for every full 100, capped at 50, rejecting negative numbers and non-numeric input. Include tests for 99, 100, 600 and invalid input, and deliver one runnable code file.",
+      "Act as a senior code reviewer and review the given change strictly, with the merge decision as the goal. Principles: every point must point to a specific file, symbol or diff - no vague commentary. Report blockers first, then improvements. Separate fact from inference, and flag clearly when information is missing. For each issue give the cause, the fix and how to verify it. Default to a production lens: concurrency, retry on failure, permission boundaries and data consistency."
+    ],
+    "promptTitles": [
+      "Explain why one click submits twice",
+      "Add validation and tests to an API",
+      "Write and test a discount function",
+      "Review this code for critical issues"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 55,
+    "unified_id": 138,
+    "name": "Websites",
+    "icon": "website-development",
+    "mode": "coding",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "modern-webapp",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "Build a single-file HTML to-do list for today, supporting add, check off, delete and a remaining count, ignoring blank tasks, usable on a phone and requiring no account.",
+      "Build a corporate website for me. The company name is [company name] and its main business is [business description]. Requirements: a home page, an About us page, a Products and services page and a Contact page; a simple, confident style; user login; site data in a cloud database and images and files in cloud storage; then publish it live.",
+      "Build a data table page with 10 rows of fictional sales data built in, supporting filtering by region and sorting by amount. Deliver a single HTML file, usable offline with no external dependencies, and check the main interactions.",
+      "Build an e-commerce home page selling [product type]. Requirements: a carousel, product categories, a featured products section and a promotions area; user login; product data in a cloud database and product images in cloud storage."
+    ],
+    "promptTitles": [
+      "Build a usable daily to-do webpage",
+      "Build a four-page company website",
+      "Add filtering and sorting to a data table",
+      "Build an e-commerce storefront homepage"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 58,
+    "unified_id": 141,
+    "name": "Mini Programs",
+    "icon": "mini-program",
+    "mode": "coding",
+    "plugins": [],
+    "prompts": [
+      "Build a coffee-ordering mini program, then preview and debug it on a real device in WeChat DevTools.",
+      "Build an event sign-up WeChat mini program. The event is called [event name] and it is for [audience]. Requirements: a home page, an event detail page, online sign-up and a sign-up records page; WeChat authorised login; event and sign-up data in a cloud database and event images in cloud storage. Use a clean mobile mini-program design that fits the scenario, emphasising the core content and main action, with a clear information hierarchy, a compact comfortable layout and a consistent icon set. No emoji.",
+      "Build a food-ordering WeChat mini program. The restaurant is called [restaurant name] and serves [cuisine type]. Requirements: a home page, dish categories, dish detail, cart and order history pages; WeChat authorised login; dish and order data in a cloud database and dish images in cloud storage. Use a clean mobile mini-program design that fits the scenario, emphasising the core content and main action, with a clear information hierarchy, a compact comfortable layout and a consistent icon set. No emoji.",
+      "Build a store booking WeChat mini program. The store is called [store name] and offers [service type]. Requirements: a home page, a service list, booking time selection and booking records pages; WeChat authorised login; booking data in a cloud database and service images in cloud storage. Use a clean mobile mini-program design that fits the scenario, emphasising the core content and main action, with a clear information hierarchy, a compact comfortable layout and a consistent icon set. No emoji."
+    ],
+    "promptTitles": [
+      "Build a coffee-shop ordering mini program",
+      "Build a mini program for event sign-up and check-in",
+      "Build a restaurant ordering mini program",
+      "Turn store service booking into a mini program"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 56,
+    "unified_id": 139,
+    "name": "Agents",
+    "icon": "agent-apps",
+    "mode": "coding",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "codebuddy-chat-web",
+        "marketplaceName": "cb_teams_marketplace"
+      },
+      {
+        "id": 1,
+        "name": "agent-sdk-dev",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "Build a knowledge Q&A agent web app that takes user questions and answers from a knowledge base. Connect a large language model and publish it live. Every answer must cite its evidence: the document name and the exact passage used, pointing back to the original text. When nothing is retrieved, say plainly that it was not found instead of answering from the model's memory.",
+      "Build a customer support agent web app. Requirements: multi-turn conversation, FAQ knowledge-base retrieval, automatic intent detection (refund, order lookup, technical support), automatic handoff to a human when it cannot resolve the issue, persistent conversation history, and an admin console showing conversation logs and satisfaction stats. Store data in the cloud, connect a large language model and publish it live.",
+      "Build a personal information butler web app where users capture scattered ideas, references and to-dos, with automatic categorisation, summaries and links between related items. Support keyword search, Q&A, extraction of key points and to-do tidy-up, and generate periodic summaries and suggested next actions from what is already stored. Data in the cloud, a large language model connected, published live.",
+      "Build a data analysis agent web app where users upload or enter data, then ask questions in natural language for queries, trend analysis, anomaly detection and metric comparisons, with automatically generated conclusions and visual charts. Data in a cloud database, a large language model connected, published live."
+    ],
+    "promptTitles": [
+      "Build a citation-based knowledge agent",
+      "A support agent that hands off to a human",
+      "A personal assistant agent for notes, links and to-dos",
+      "An agent that queries your data and charts the result"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 57,
+    "unified_id": 140,
+    "name": "Skills",
+    "icon": "skill-development",
+    "mode": "coding",
+    "plugins": [
+      {
+        "id": 0,
+        "name": "skill-creator",
+        "marketplaceName": "cb_teams_marketplace"
+      }
+    ],
+    "prompts": [
+      "Write a minimal working Skill from scratch. Deliver a concise SKILL.md covering the trigger conditions, inputs, steps and output, plus one example invocation. If no purpose is given, use text summarisation as the default example. Hand over an editable skill definition first, and don't keep asking for background. When it is done, offer two options: A. try the Skill on one real work request; B. add another example invocation to verify the steps.",
+      "Turn this workflow into a reusable Skill. Ask one question first: is this client workflow for solo freelance work or for a team? If I have already said, skip it and assume solo freelance. Package set up a new client, verify documents, create the group chat and first contact into a SKILL.md, with each step stating its input, output and completion condition. Add one short fictional client example, listing missing information as items to supply. Deliver the Skill definition only - don't perform any client actions.",
+      "Create a document proofreading Skill that checks for typos, conflicting dates, inconsistent number definitions and missing conditions, listing at most 5 items, with 2 sample sentences built in. Deliver a SKILL.md containing the name, description, trigger conditions and steps - don't install it.",
+      "Create a research-evidence checking Skill that verifies whether conclusions match their evidence, whether the definitions are consistent and how missing evidence should be flagged, with 2 examples. Deliver a SKILL.md containing the name, description, trigger conditions and steps - don't install it."
+    ],
+    "promptTitles": [
+      "Write a minimal usable Skill",
+      "Turn a workflow into a reusable Skill",
+      "Create a proofreading Skill for documents",
+      "Build a research-evidence checking Skill"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 59,
+    "unified_id": 142,
+    "name": "Tech Docs",
+    "icon": "documentation-tools",
+    "mode": "coding",
+    "plugins": [],
+    "prompts": [
+      "Scan the current project and generate a README.md with these sections: what the project is for, installation steps, how to run it, usage examples, key configuration notes, common questions and known limitations. I haven't settled the actual commands, paths and addresses yet, so leave them blank for me to fill in. Don't invent files or scripts that don't exist.",
+      "Generate an API document anyone can follow. From the requirements below, produce OpenAPI 3.1 YAML (savable directly as openapi.yaml): a fictional GET /tasks, 2 query parameters, a success JSON, 2 error responses and Bearer auth; servers set to https://api.example.com; examples consistent with the schema fields; plus a note that it is illustrative only. Output YAML only, with no explanation.",
+      "Write an onboarding guide template for new developers, with four sections: environment setup, getting the code, starting it up and common problems. Leave the commands as placeholders. Deliver one MD file.",
+      "Build an offline single-file HTML troubleshooting guide with 5 fictional errors built in, filterable by keyword and expandable to show the cause and a 2-step fix. Readable on a phone, searching only the built-in content, with no log system connected. Check the filtering."
+    ],
+    "promptTitles": [
+      "Write a beginner-friendly project README",
+      "Generate an easy-to-read API document",
+      "Create a developer onboarding roadmap",
+      "Turn common errors into a troubleshooting guide"
+    ],
+    "target": "all"
+  }
+]

@@ -19,10 +19,12 @@ description: 把腾讯自选股股票投研圆桌报告渲染成 Anthropic 浅�
 4. **跑 render.py**：
 
 ```bash
-# 在专家包根目录执行（勿写死 plugins/<包名>/ 前缀，上架后路径会变）
-python3 skills/md-to-html/scripts/render.py \
-  deliverables/stock-partner/<YYYY-MM-DD>/<主题>-圆桌报告.body.html \
-  deliverables/stock-partner/<YYYY-MM-DD>/<主题>-圆桌报告.html \
+# RENDER_PY = Glob 本包 skills/md-to-html/scripts/render.py 的绝对路径（勿写死 plugins/<包名>/）
+# 产物路径必须用「用户当前工作空间根目录」，与全文 deliverables 约定一致（不要写成专家包内相对路径）
+# 解释器按 python3 → python → py -3 重试
+python3 "$RENDER_PY" \
+  "{用户当前工作空间根目录}/deliverables/stock-partner/<YYYY-MM-DD>/<主题>-圆桌报告.body.html" \
+  "{用户当前工作空间根目录}/deliverables/stock-partner/<YYYY-MM-DD>/<主题>-圆桌报告.html" \
   --title="<主题> · 腾讯自选股股票投研圆桌报告" \
   --date=<YYYY-MM-DD>
 ```
@@ -33,11 +35,12 @@ python3 skills/md-to-html/scripts/render.py \
 
 最终产物可独立分发。
 
-5. **任务收尾**（主理人职责）：HTML 成功渲染/交付后，静默执行一次包根脚本完成收尾——
+5. **任务收尾**（主理人职责）：HTML 成功渲染/交付后，静默执行一次收尾——
 
 ```bash
-# bin/ 已加入 PATH，直接调无扩展名的跨平台启动器（勿加 python3 / .py / bin/ 前缀）；渲染失败则不调
-init_task complete
+# Glob 得到本包 bin/init_task.py 绝对路径记为 INIT_TASK；渲染失败则不调
+# render.py 成功时会按产物目录 ensure-complete（不补造）；此处为兜底，TASK_DIR 须与 HTML 输出目录一致
+WESTOCK_TASK_DIR="$TASK_DIR" python3 "$INIT_TASK" complete || WESTOCK_TASK_DIR="$TASK_DIR" python "$INIT_TASK" complete || WESTOCK_TASK_DIR="$TASK_DIR" py -3 "$INIT_TASK" complete
 ```
 
 详见主理人 prompt「会话初始化与收尾」节；步骤标题保持中性、静默执行，不向用户解释。本步与渲染解耦，渲染失败不影响已产出的 HTML。

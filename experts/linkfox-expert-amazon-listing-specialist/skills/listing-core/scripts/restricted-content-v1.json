@@ -1,0 +1,58 @@
+{
+  "version": "2026.07.10",
+  "scope": "Amazon general listing copy preflight. This library blocks prohibited controlled-substance and drug-paraphernalia references by default, and routes context-dependent regulated categories to manual review. It is not a substitute for marketplace- and category-specific policy approval.",
+  "profiles": {
+    "block": [
+      {
+        "category": "controlled_substance",
+        "terms": ["cannabis", "marijuana", "marihuana", "weed", "cbd", "thc", "delta 8", "delta-8", "delta 9", "delta-9", "tetrahydrocannabinol", "hashish", "hash", "cannabis concentrate", "cannabis extract"],
+        "reason": "Controlled-substance reference or an implied use with one. Do not use in title, bullets, description, search terms, or Subject Matter for general listings.",
+        "replacement": "Use only a product-factual, neutral scenario such as dry-goods storage, snacks, coffee, spices, or small-business packaging."
+      },
+      {
+        "category": "drug_paraphernalia",
+        "terms": ["dispensary", "dispensary packaging", "dispensary supplies", "weed bags", "cannabis bags", "bong", "water pipe", "dab rig", "dabber", "dab tool", "rolling paper", "rolling tray", "herb grinder", "smoking pipe", "drug paraphernalia"],
+        "reason": "Directly signals a product intended for controlled-substance preparation, use, or concealment.",
+        "replacement": "Remove the term; do not replace it with an obfuscated synonym."
+      },
+      {
+        "category": "illicit_drug_reference",
+        "terms": ["cocaine", "heroin", "fentanyl", "methamphetamine", "meth", "mdma", "ecstasy", "lsd", "ketamine", "psilocybin"],
+        "reason": "Illicit-drug reference. General consumer listings must not target these substances or their use.",
+        "replacement": "Remove the term and rewrite around the product's actual, lawful use."
+      }
+    ],
+    "review": [
+      {
+        "category": "nicotine_tobacco_vaping",
+        "terms": ["nicotine", "tobacco", "cigarette", "cigar", "vape", "vaping", "e-cigarette", "ejuice", "e-liquid"],
+        "reason": "Age-restricted or regulated product/accessory context. Require marketplace/category eligibility review before publishing.",
+        "replacement": "Do not add as a traffic keyword unless the product is approved for that regulated category."
+      },
+      {
+        "category": "weapons_or_components",
+        "terms": ["firearm", "ammunition", "ammo", "suppressor", "silencer", "switchblade", "brass knuckles", "taser", "stun gun", "explosive", "detonator"],
+        "reason": "Weapon or weapon-component context. Availability and wording vary by marketplace and jurisdiction.",
+        "replacement": "Pause publication and route to a weapons-policy review; do not use as a generic keyword."
+      },
+      {
+        "category": "adult_sexual_content",
+        "terms": ["dildo", "vibrator", "masturbator", "sex toy", "anal toy", "bondage", "sexual enhancement", "male enhancement", "erection", "aphrodisiac"],
+        "reason": "Adult-product context. It requires the correct category, adult flag, images, and clinical wording.",
+        "replacement": "Route to adult-product workflow rather than general listing generation."
+      },
+      {
+        "category": "prescription_or_medical_product",
+        "terms": ["prescription", "rx only", "opioid", "antibiotic", "insulin", "medical device", "fda approved", "diagnose", "cure", "treat disease"],
+        "reason": "Drug, prescription, medical-device, or therapeutic claim. Product eligibility and evidence must be verified.",
+        "replacement": "Remove unsupported therapeutic wording or route to regulated-health review with evidence."
+      },
+      {
+        "category": "pesticidal_claim",
+        "terms": ["antimicrobial", "antibacterial", "antiviral", "antifungal", "disinfect", "sterilize", "kills germs", "kills bacteria", "repels insects", "insect repellent", "pesticide", "insecticide"],
+        "reason": "Pesticidal claim can trigger EPA/Amazon pesticide requirements.",
+        "replacement": "Remove the claim unless the listing is approved and carries the required compliance attributes."
+      }
+    ]
+  }
+}

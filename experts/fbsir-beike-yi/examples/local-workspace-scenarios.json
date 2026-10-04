@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "beike-yi.local-workspace-scenarios/v1",
+  "scenarios": [
+    {
+      "id": "old-lesson-plan-refinement",
+      "teacherGoal": "降低基础薄弱学生在课堂活动中的掉队率",
+      "workspace": "D:/教学/八年级物理/浮力",
+      "materials": [
+        {"path": "01_教材与课程标准/教材摘录.pdf", "scope": "pages:12-18"},
+        {"path": "02_教师旧稿/浮力_旧教案.docx", "scope": "full_file"}
+      ],
+      "primaryArtifact": "lesson_case_revision",
+      "companionArtifacts": ["teacher_review_card", "single_next_step"],
+      "expectedWriteMode": "new_version",
+      "expectedNextStep": "确认是否保留原实验导入"
+    },
+    {
+      "id": "training-material-to-lesson",
+      "teacherGoal": "把培训中的项目式学习方法落到一节真实课",
+      "materials": [
+        {"path": "培训讲义.pdf", "scope": "selected_sections"},
+        {"path": "学校教案模板.docx", "scope": "full_file"}
+      ],
+      "primaryArtifact": "lesson_plan_draft",
+      "companionArtifacts": ["teaching_decision_card", "teacher_review_card"],
+      "expectedWriteMode": "new_version",
+      "expectedNextStep": "确认课时和学生前置知识"
+    },
+    {
+      "id": "pilot-reflection",
+      "teacherGoal": "根据一次试教结果修订分层任务",
+      "materials": [
+        {"path": "本次教案_v01.docx", "scope": "full_file"},
+        {"path": "课堂观察记录.docx", "scope": "full_file"},
+        {"path": "学生作品摘要.xlsx", "scope": "selected_sheet_or_range"}
+      ],
+      "primaryArtifact": "pilot_reflection_card",
+      "companionArtifacts": ["bounded_revision_preview", "reuse_capsule"],
+      "expectedWriteMode": "new_version",
+      "expectedNextStep": "确认是否把改良后的任务保存为个人模板"
+    }
+  ]
+}

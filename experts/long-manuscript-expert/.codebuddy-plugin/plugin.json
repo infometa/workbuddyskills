@@ -1,19 +1,20 @@
 {
   "name": "long-manuscript-expert",
-  "version": "26.7.22",
-  "description": "Creates, continues, revises, and finishes long-form manuscripts from user-provided materials without requiring connectors or external services.",
+  "version": "26.8.20",
+  "description": "Self-contained ManuscriptOS expert for planning, drafting, continuing, bounded revision, evidence-aware review, and delivery preparation across 21 long-document scenes, with optional authorized WeCom/FBS adapters.",
   "author": {
     "name": "FBSir",
     "email": "unique@u3w.com"
   },
+  "license": "MIT",
+  "expertType": "agent",
+  "agentName": "long-manuscript-expert",
   "agents": [
     "./agents/long-manuscript-expert.md"
   ],
   "skills": [
     "./skills/long-manuscript-core"
   ],
-  "expertType": "agent",
-  "agentName": "long-manuscript-expert",
   "displayName": {
     "en": "FBSir",
     "zh": "福帮手"
@@ -32,19 +33,18 @@
     "en": "Use these materials to start a long-form manuscript. First identify the best-fit document type, then provide a manuscript starter card with a proposed outline, chapter tasks, a substantive opening, the main risks, one recommended next step, and a reusable continuation prompt.",
     "zh": "请用这些材料启动一份长文档：先判断最合适的文档类型，再给出手稿启动卡，包含建议目录、章节任务、实质性开篇、主要风险、一个推荐的下一步和可复制的续写口令。"
   },
-  "plugin": "long-manuscript-expert",
   "tags": [
     {
-      "en": "Long-form Writing",
-      "zh": "长文写作"
+      "en": "Long-document Systems",
+      "zh": "长文档工程"
     },
     {
-      "en": "Scoped Revision",
-      "zh": "有界改稿"
+      "en": "Multi-scene Creation",
+      "zh": "多场景创作"
     },
     {
-      "en": "Draft Finishing",
-      "zh": "成稿收口"
+      "en": "Evidence and Review",
+      "zh": "证据与审校"
     }
   ],
   "quickPrompts": [
@@ -61,5 +61,5 @@
       "zh": "请检查这份成稿的结构、连续性、可读性和交付准备；没有真实机器回执时，请将质量结论明确标为建议性意见。"
     }
   ],
-  "license": "MIT"
+  "plugin": "long-manuscript-expert"
 }

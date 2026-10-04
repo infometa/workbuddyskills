@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>商龙经营洞察 · WorkBuddy 连接器 — 集成手册</title>
+<title>天财商龙餐饮SaaS · WorkBuddy 连接器 — 集成手册</title>
 <style>
 :root { --blue: #1677ff; --green: #52c41a; --bg: #fafbfc; --card: #fff; --border: #e5e7eb; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,13 +31,13 @@ ol li { margin: .3rem 0; }
 </head>
 <body>
 
-<h1>商龙经营洞察 · WorkBuddy 连接器</h1>
-<p class="subtitle">面向 WorkBuddy 对接方的集成手册 · v1.0.149 · CLI + Skill 方案</p>
+<h1>天财商龙餐饮SaaS · WorkBuddy 连接器</h1>
+<p class="subtitle">面向 WorkBuddy 对接方的集成手册 · v1.0.168 · CLI + Skill 方案</p>
 
 <!-- ==================== 前置条件 ==================== -->
 <h2>前置条件</h2>
 <div class="card">
-<p><span class="badge badge-req">必须</span> Node.js &gt;= 18（<code>node -v</code> 检查）</p>
+<p><span class="badge badge-ok">无需</span> 无需预装 Node.js，安装脚本会下载当前平台的独立 SEA 可执行文件</p>
 <p><span class="badge badge-req">必须</span> macOS / Linux / Windows 环境</p>
 <p><span class="badge badge-req">必须</span> 我方提供的 <code>slclaw-connector.zip</code> 包</p>
 <p><span class="badge badge-req">必须</span> 我方提供的 API Key（<code>sl-</code> 开头）</p>
@@ -53,14 +53,19 @@ ol li { margin: .3rem 0; }
 ├── icon.png                <span class="comment">← WorkBuddy 读取：图标</span>
 ├── default.env             <span class="comment">← CLI 默认环境配置模板</span>
 ├── skills/                 <span class="comment">← WorkBuddy 读取：AI 技能（WorkBuddy 加载给 AI）</span>
-│   └── starrocks-business-analysis-sly/
-│       ├── SKILL.md        <span class="comment">← 入口文件（AI 从这里理解能力）</span>
-│       ├── intents/        <span class="comment">← 78 个业务意图模板</span>
-│       ├── rules/          <span class="comment">← 安全规则、输出规范、参数补全</span>
-│       └── references/     <span class="comment">← 数据表结构参考</span>
+│   ├── member-campaign-analysis/        <span class="comment">← 会员营销活动分析</span>
+│   ├── member-recharge-analysis/        <span class="comment">← 会员储值分析</span>
+│   ├── member-coupon-analysis/          <span class="comment">← 会员卡券分析</span>
+│   ├── member-repurchase-analysis/      <span class="comment">← 会员复购分析</span>
+│   ├── member-data-overview-analysis/   <span class="comment">← 会员数据概览综合分析</span>
+│   ├── member-consumption-analysis/     <span class="comment">← 会员消费分析</span>
+│   ├── member-profile-analysis/         <span class="comment">← 会员用户画像分析</span>
+│   ├── member-points-analysis/          <span class="comment">← 会员积分分析</span>
+│   └── tcsl-company-intro/               <span class="comment">← 天财商龙公司介绍</span>
+│       ├── SKILL.md / agents/ / rules/
 ├── install.sh              <span class="comment">← init 脚本（macOS/Linux）</span>
 ├── install.ps1             <span class="comment">← init 脚本（Windows）</span>
-└── install-url.conf        <span class="comment">← S1-only CLI 的 CDN 地址</span></pre>
+└── install-url.conf        <span class="comment">← SEA 二进制 CDN 基址（SL_CLI_BASE_URL）</span></pre>
 </div>
 
 <div class="info">
@@ -72,8 +77,8 @@ ol li { margin: .3rem 0; }
 </div>
 
 <div class="warn">
-<strong>安全边界：</strong>WorkBuddy 连接器只允许发布 S1 只读命令。S2、S3、S4 必须在 CLI tgz 构建阶段物理移除；即使原始数据标为 S1，PUT/DELETE/PATCH、action/auth 以及含新增、修改、删除、审核、充值等操作语义的接口也必须排除，不能仅依赖标签、Skill 提示词、用户配置或认证状态拦截。
-安装脚本会在替换现有 CLI 前对下载后的 tgz 再执行同一套校验；远端误传 full/旧包时会保留当前安装并立即失败，不允许静默降级。
+<strong>安全边界：</strong>WorkBuddy 连接器只允许发布 S1 只读命令。S2、S3、S4 必须在 CLI 打包进 SEA 前（<code>pack:cli-tgz</code> 阶段）物理移除；即使原始数据标为 S1，PUT/DELETE/PATCH、action/auth 以及含新增、修改、删除、审核、充值等操作语义的接口也必须排除，不能仅依赖标签、Skill 提示词、用户配置或认证状态拦截。
+安装脚本按平台下载 SEA 二进制，不再在客户端解包扫描；S1 约束由构建期校验保证，并通过发布 manifest 将 S1 构建版本与各平台 SHA-256 绑定。manifest、hash、版本或 <code>--version</code> 校验失败时保留当前安装并立即失败。
 </div>
 
 <!-- ==================== 打包 ==================== -->
@@ -81,15 +86,15 @@ ol li { margin: .3rem 0; }
 <div class="card">
 <pre><span class="comment"># 在 slclaw-cli 项目根目录执行（Mac / Linux / Windows 均可）</span>
 
-<span class="comment"># 1. 生成连接器专用 S1-only CLI；脚本会在打包前后检查并拒绝任何 S2~S4</span>
-npm run pack:cli-tgz
+<span class="comment"># 1. 生成各平台 SEA 二进制（内部会先打 S1-only tgz 再注入）</span>
+npm run pack:cli-sea
 
-<span class="comment"># 2. 上传 slclaw-cli.tgz 与 slclaw-cli.version 到 install-url.conf 指定的 OSS/CDN</span>
+<span class="comment"># 2. 上传 release/sea/ 下 sl-*、slclaw-cli.version 与 slclaw-cli.manifest.json 到 SL_CLI_BASE_URL 目录</span>
 
 <span class="comment"># 3. 生成提交给 WorkBuddy 的轻量连接器 zip</span>
 npm run pack:connector
 
-<span class="comment"># 产出：slclaw-cli.tgz、slclaw-cli.version、slclaw-connector.zip</span>
+<span class="comment"># 产出：release/sea/sl-*、slclaw-cli.version、slclaw-cli.manifest.json、slclaw-connector.zip</span>
 <span class="comment"># 注意：npm run pack / npm run build 是全量 CLI，禁止将其产物上传到连接器 CDN</span></pre>
 </div>
 
@@ -258,10 +263,18 @@ statusMatch: "\"authenticated\"\\s*:\\s*true"
 runtime:     { "type": "node", "version": ">=18" }
 
 <span class="comment"># WorkBuddy 从 zip 包中加载 skills/ 目录给 AI：</span>
-skills/starrocks-business-analysis-sly/SKILL.md  <span class="comment">← 入口</span>
-skills/starrocks-business-analysis-sly/intents/  <span class="comment">← 业务意图</span>
-skills/starrocks-business-analysis-sly/rules/    <span class="comment">← 规则</span>
-skills/starrocks-business-analysis-sly/references/ <span class="comment">← 参考</span></pre>
+skills/member-campaign-analysis/        <span class="comment">← 会员营销活动分析</span>
+skills/member-recharge-analysis/        <span class="comment">← 会员储值分析</span>
+skills/member-coupon-analysis/          <span class="comment">← 会员卡券分析</span>
+skills/member-repurchase-analysis/      <span class="comment">← 会员复购分析</span>
+skills/member-data-overview-analysis/   <span class="comment">← 会员数据概览综合分析</span>
+skills/member-consumption-analysis/     <span class="comment">← 会员消费分析</span>
+skills/member-profile-analysis/         <span class="comment">← 会员用户画像分析</span>
+skills/member-points-analysis/          <span class="comment">← 会员积分分析</span>
+skills/tcsl-company-intro/               <span class="comment">← 天财商龙公司介绍与当前支持功能</span>
+<span class="comment"># 路由：本 Skill 的 SKILL.md「Skill 路由」+ agents/*.yaml</span></pre>
+<p>会员分析仅支持 CRM8 客户；非 CRM8 客户使用没有数据。</p>
+<p>天财商龙限时免费回馈客户,更多能力期待10月份Workbuddy企业版使用~</p>
 </div>
 
 <div class="info">

@@ -1,11 +1,15 @@
 ---
 name: beisen-attendance-leave
-version: 1.1.0
-description: "北森考勤休假查询。本 Skill 用于查询假期余额、考勤记录、排班信息、加班、公出、出差、休假记录、调休假余额。所有查询通过 beisen-data-query 通用数据查询流水线执行。当用户询问考勤、打卡、排班、加班、公出、出差、休假、请假、调休、假期余额等考勤休假相关问题时触发。"
+version: 1.2.13
+description: "北森考勤休假查询。本 Skill 用于查询数据，包含：假期余额、考勤记录、排班信息、加班、公出、出差、休假记录、调休假余额。所有查询通过 beisen-data-query 通用数据查询流水线执行。当用户询问考勤、打卡、排班、加班、公出、出差、休假、请假、调休、假期余额等考勤休假相关记录时触发。"
 category: 人力资源/考勤休假
 author: beisen
 agent_created: false
 allowed-tools: Bash, Read
+requires-skills:
+  - beisen-shared
+  - beisen-data-query
+requires-cli: ">=1.0.8"
 ---
 
 # 考勤休假

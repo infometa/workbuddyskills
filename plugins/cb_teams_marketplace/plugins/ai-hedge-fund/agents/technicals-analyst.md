@@ -3,6 +3,11 @@ name: technicals-analyst
 description: >-
   技术面分析师：分析价格走势、技术指标和量能信号，识别趋势与动量，输出 [技术面分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  技术面分析师：分析价格走势、技术指标和量能信号，识别趋势与动量，输出 [技术面分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Technical analyst: analyzes price action, technical indicators and volume signals to identify trend and momentum, outputting a [technical analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#2563EB"
 ---

@@ -1,6 +1,8 @@
 ---
 name: image-to-ui
 description: "图生 UI（截图/设计稿 → 画布设计稿）。将参考图片转化为可编辑的 ardot 设计稿。四阶段流水线：设计风格提取 → 结构化精细描述 → 反思校验 → Agent Teams 画布绘制。触发场景：上传截图/线框图/草图要求生成设计稿、还原界面、复刻页面、参照图片设计。"
+description_zh: "图生 UI（截图/设计稿 → 画布设计稿）。将参考图片转化为可编辑的 ardot 设计稿。四阶段流水线：设计风格提取 → 结构化精细描述 → 反思校验 → Agent Teams 画布绘制。触发场景：上传截图/线框图/草图要求生成设计稿、还原界面、复刻页面、参照图片设计。"
+description_en: "Image-to-UI conversion for screenshots and design mockups. Transforms reference images into editable Ardot designs through a four-stage pipeline: design style extraction, detailed structured description, reflective validation, and Agent Teams canvas rendering. Use when users upload screenshots, wireframes, or sketches and ask to generate a design, recreate an interface or page, or design from a reference image."
 allowed-tools:
 disable: false
 ---

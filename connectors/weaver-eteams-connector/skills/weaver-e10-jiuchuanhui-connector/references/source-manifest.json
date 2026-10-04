@@ -1,0 +1,2632 @@
+{
+  "schemaVersion": 2,
+  "module": "jiuchuanhui",
+  "skill": "weaver-e10-jiuchuanhui-connector",
+  "generatedFrom": {
+    "sourceSkill": "weaver-e10-jiuchuanhui-connector",
+    "version": "1.1.1",
+    "path": "weaver-e10-jiuchuanhui-connector",
+    "kind": "workbuddy-document-skill",
+    "availability": "user-provided-source-directory"
+  },
+  "generatedAt": "2026-09-09T00:00:00.000Z",
+  "sourceSet": {
+    "aggregateSha256": "47a4fe6dc3b258bfcf5a79c6122edf67494b3466ff976bd63bef2c5624f42833",
+    "sourceRoots": [
+      "weaver-e10-jiuchuanhui-connector"
+    ],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/jiuchuanhui",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "skills/weaver-e10-jiuchuanhui-connector"
+    ],
+    "tests": [
+      "test/business/jiuchuanhui-operations.test.ts"
+    ],
+    "docs": [
+      "docs/jiuchuanhui.md",
+      "skill-template/domains/jiuchuanhui.md"
+    ]
+  },
+  "sources": [
+    {
+      "path": "SKILL.md",
+      "size": 10484,
+      "sha256": "dc8eb9f2836b5779bb8ecd1aafbe5541583b21e50f6043f5a541e1d0b42c2ff7"
+    },
+    {
+      "path": "agents/openai.yaml",
+      "size": 318,
+      "sha256": "7bcb7ea74ef341b8ed9d14d3e891db2e4cc58e97a623eabe01ab7df4bde23b85"
+    },
+    {
+      "path": "references/batch-add-customer-contact-records.md",
+      "size": 2797,
+      "sha256": "8faf8c0cb0ef8f8d684ad4aa59b75c682a9e5105838b427454bf5c60f3b045c3"
+    },
+    {
+      "path": "references/browser-option-search.md",
+      "size": 3462,
+      "sha256": "2c30670e4ce751ecf8c62b46a9c34e9de13be83a2d9cebbb56072f6f579a8e2f"
+    },
+    {
+      "path": "references/cache.md",
+      "size": 9028,
+      "sha256": "22b4be445313a4fb5f927f25647819f7e847660224d94ac18239bfaeffc1812a"
+    },
+    {
+      "path": "references/catalog.md",
+      "size": 6994,
+      "sha256": "7a290a00f7c0e1b212d3faa2a7ba68c1d3fc5a4522549e5435cc538223867749"
+    },
+    {
+      "path": "references/check-duplicate-customer.md",
+      "size": 2902,
+      "sha256": "2f13f93757f53849d7b4ae94b65e814382d690b71cb258aeda7f2b8740d4fb6d"
+    },
+    {
+      "path": "references/claim-public-pool-customer.md",
+      "size": 2583,
+      "sha256": "900653fc08e75b18bb3efcd458469e17d5e8c5d3f75e10d1ae685d5409c9c28b"
+    },
+    {
+      "path": "references/clue-contact-record-create.md",
+      "size": 4482,
+      "sha256": "36e909ab0635af2b7445facd2af542aec16f75ee064adc017ac720849b067881"
+    },
+    {
+      "path": "references/clue-create.md",
+      "size": 8529,
+      "sha256": "1f806fb2f4fb54c16d6710c96e73677e3ac3237b5f8a501adaaba40ca888ca70"
+    },
+    {
+      "path": "references/clue-detail-get.md",
+      "size": 5570,
+      "sha256": "4c2a397ef536c917e6d76aa796a9c7158eac7d0089b94ad1fb7b5d8f90b25402"
+    },
+    {
+      "path": "references/clue-pool-search.md",
+      "size": 2240,
+      "sha256": "b4cf89faf0a7b16a20c88960e3d3cf182b0442b6435a1438242acfc25ec505d5"
+    },
+    {
+      "path": "references/clue-search.md",
+      "size": 9500,
+      "sha256": "b19a842607e70c49cbacdeab64e99b6180f2b596993a023cfacaed248004a067"
+    },
+    {
+      "path": "references/clue-status-change.md",
+      "size": 5081,
+      "sha256": "8c65bfce576dd6bdba5bd2f92c95632a5ca183b0175ab184980dde6463992e83"
+    },
+    {
+      "path": "references/clue-to-customer.md",
+      "size": 4631,
+      "sha256": "f99596aa4f7f9a81dab6577ee5c1f91dc1c571643ed078ee54ec52214841e4fe"
+    },
+    {
+      "path": "references/clue-update.md",
+      "size": 7972,
+      "sha256": "4868403f56db9d6c402a2a9361ea3b4ef3af8c9f2a99f4d37095e588af5dabef"
+    },
+    {
+      "path": "references/common.md",
+      "size": 2302,
+      "sha256": "341acf22da0be61fd4e596527021a3d6303f8a1b633a4d0cd5d75b5f291ecb4f"
+    },
+    {
+      "path": "references/complete-contact-plan.md",
+      "size": 2569,
+      "sha256": "68406f7f8ce2c0a6498a2e86a3b136f85fa42e46a4dc50fa7612d773e9851f73"
+    },
+    {
+      "path": "references/contact-create.md",
+      "size": 8108,
+      "sha256": "c03b596d7a471811a77362a1f28f4b8d9347bfe780f07b11c7cd74755bb3682a"
+    },
+    {
+      "path": "references/contact-get.md",
+      "size": 4075,
+      "sha256": "10c6583d54a1b340e4a4fe4df43f3040ab1312ee53d61479d912adb1cf082205"
+    },
+    {
+      "path": "references/contact-update.md",
+      "size": 7219,
+      "sha256": "e855db2d2e4c82e41b54ed60660d42a0e289d73e2ef2e9a45cf8aa48cb233576"
+    },
+    {
+      "path": "references/create-contact-plan.md",
+      "size": 9123,
+      "sha256": "ad3da0e1ee928545a1e57a9afe3a53cf576707b2db1a3c2180bd5932e378b285"
+    },
+    {
+      "path": "references/customer-contact-record-create.md",
+      "size": 6172,
+      "sha256": "f04c59e571460fab1b12dfb0cb038bc89d2731bfe9bca9c0e3b88ee82209a28d"
+    },
+    {
+      "path": "references/customer-create.md",
+      "size": 12637,
+      "sha256": "02e8fe4dc7047d55bcdc85e1b1ddff270f593a7ed8f0ee7860a9e99f3da4ae92"
+    },
+    {
+      "path": "references/customer-get.md",
+      "size": 5203,
+      "sha256": "bd9d0bf526a6048602a289f2d9b57ee3187802ca44e2e49a7772632036d7d41d"
+    },
+    {
+      "path": "references/customer-industry-search.md",
+      "size": 2732,
+      "sha256": "19c8a19762ed211ea664c408088e1080763c7bde4b041d582e9b040011a87384"
+    },
+    {
+      "path": "references/customer-search.md",
+      "size": 10994,
+      "sha256": "17729def97a1728316c5f91821eb9002e9ab1a3d811b0244a6b293d5a97abadd"
+    },
+    {
+      "path": "references/customer-status-search.md",
+      "size": 2829,
+      "sha256": "132cd78c2c9606f76bfb8c19e485f1598c264f773668708387698d370022c81f"
+    },
+    {
+      "path": "references/customer-transfer.md",
+      "size": 4172,
+      "sha256": "35e6a8748750aa8b847cdd5ce02d6d54c29d1be199aca3acaf9c2c8bcd5ba3a3"
+    },
+    {
+      "path": "references/customer-type-search.md",
+      "size": 2518,
+      "sha256": "31eb16f866f6b514dd634efcc628f565d2e1004c8ad50d866b3f83497c68be53"
+    },
+    {
+      "path": "references/customer-update.md",
+      "size": 12265,
+      "sha256": "ea0dee29c349d33bedb71137911c89fd03261bbb570bed25c3ac24daa1a02060"
+    },
+    {
+      "path": "references/get-config-id-by-pk.md",
+      "size": 2920,
+      "sha256": "434192d07dc849de2d821bf980bbdfa099cc68980cda81defb349cf1d15f0edd"
+    },
+    {
+      "path": "references/get-contact-records-for-person-and-time-range.md",
+      "size": 2567,
+      "sha256": "705371f0fadfc15f9295266e1b37ef5a9990ee8c43409420a7ec4d6641ff94dd"
+    },
+    {
+      "path": "references/get-contacts-by-entity.md",
+      "size": 6029,
+      "sha256": "eef2e033727353c57d97588e48b6f15bc98ad0ea2eb152ecb94f73cf51406796"
+    },
+    {
+      "path": "references/get-current-user-profile.md",
+      "size": 2069,
+      "sha256": "3337c98ee142caa7d5ba9ebfeac0cc631025884ed2045588077a072669311758"
+    },
+    {
+      "path": "references/get-entity-contact-records.md",
+      "size": 2584,
+      "sha256": "e0359059cfe79c2a6bf32f6bbc312b908412ff7644d12bc9f83b90e2523b43ee"
+    },
+    {
+      "path": "references/get-entity-id-by-name.md",
+      "size": 6927,
+      "sha256": "df2ae06a1062d7faf915cdd9b99c3811113a5173619615fd42dcb1d9e3a50ba3"
+    },
+    {
+      "path": "references/get-field-info-by-ids.md",
+      "size": 3568,
+      "sha256": "fdae637c604c0fda4df6bd14a6e7db70aa007942977bbb26f4f3555a1a600672"
+    },
+    {
+      "path": "references/get-field-options.md",
+      "size": 5175,
+      "sha256": "fcc5fde38017a52dbdd0b3dafcc307793db1f3786823ea876349de05ced15758"
+    },
+    {
+      "path": "references/get-file-preview.md",
+      "size": 5757,
+      "sha256": "d7ba9c1fa28ed5cff6c780e22e14ea443d733683c97cf6a2d8d803d4559963ed"
+    },
+    {
+      "path": "references/get-rest-cfg-detail.md",
+      "size": 3806,
+      "sha256": "8ee8d91abee1c77a034b776e04037492df0b960b27caf763f1a22bf6e0596c1e"
+    },
+    {
+      "path": "references/get-user-id-by-name.md",
+      "size": 2414,
+      "sha256": "f9a02945f3407274defc9e5a3cbffde7dcefc7cd0d2f15017dbb5efb61dea576"
+    },
+    {
+      "path": "references/jch-crm-app-discovery.md",
+      "size": 1805,
+      "sha256": "08cfe8ec9b53856737ebcef0ec7a3adfc3b124aa245f874897423827c5985ad1"
+    },
+    {
+      "path": "references/jch-crm-form-discovery.md",
+      "size": 3375,
+      "sha256": "608fc19fc32992f5dcef4fe0471f348a4569e2d87e1a47a0cfbaebcfd6017087"
+    },
+    {
+      "path": "references/judge-crm-entity-permission.md",
+      "size": 2881,
+      "sha256": "60f5e6763f9e50cf95d988b035c88ad63a0f25e46325a9bbbf6f179e2f2fd28f"
+    },
+    {
+      "path": "references/open-sea-release.md",
+      "size": 3409,
+      "sha256": "8240874c8ab8854dc1a36c08caa26e0f8f1879a14893ae7226e864aa256809bf"
+    },
+    {
+      "path": "references/open-sea-search.md",
+      "size": 4606,
+      "sha256": "ea48062c5d537d2a763579b93d86516505e15f0ab00a33c1d348e3829dc5c253"
+    },
+    {
+      "path": "references/query-company-business-profile.md",
+      "size": 2317,
+      "sha256": "d40f2a94fd609416ec25a35e46246db4be19f002aa76a64c8bf0aeeb6f4939b1"
+    },
+    {
+      "path": "references/rival-search.md",
+      "size": 2523,
+      "sha256": "daa6b9759b12e0601db37597d38d0c26d0bbed61a6107b297e7817bfc853c906"
+    },
+    {
+      "path": "references/sale-contact-record-create.md",
+      "size": 6751,
+      "sha256": "7688c83275c9cab571e777947002cdba10d7f16497372006e5388d2ec7d4d615"
+    },
+    {
+      "path": "references/sale-create.md",
+      "size": 8721,
+      "sha256": "eeaf7a7ac6ee5bc4681f2645a69edb9d481e7b3e3a4c59b9ab1bb4634391dce3"
+    },
+    {
+      "path": "references/sale-get.md",
+      "size": 6582,
+      "sha256": "268eb59d39af54afcdad8af95a96fbfb54005c38dabb7a1c17e4a95f4b5d16a9"
+    },
+    {
+      "path": "references/sale-invalid.md",
+      "size": 2744,
+      "sha256": "780222f221ab95dc7522f28a5d69b63c361408cf5f582b8a411a87fb32f4dbbf"
+    },
+    {
+      "path": "references/sale-link-contacts.md",
+      "size": 4023,
+      "sha256": "db9e96b5d844f9dc2009499f4363ab468fee6bb3e82da23457c8b917ef38032b"
+    },
+    {
+      "path": "references/sale-lose-reason-search.md",
+      "size": 2782,
+      "sha256": "da15bd5b566e05391bc5ab7510ede533a15773ce7faf839caa4fc684006bf605"
+    },
+    {
+      "path": "references/sale-lose.md",
+      "size": 4259,
+      "sha256": "d9f36ddfa96da92a64125a5d016795af0e36338daeb14158ce3754e3d207658d"
+    },
+    {
+      "path": "references/sale-manager-change.md",
+      "size": 3801,
+      "sha256": "816eede69f495c22aa06c8d4f713a8c13be62a70ddbc6cf7e95f1889c0cf84d3"
+    },
+    {
+      "path": "references/sale-pause.md",
+      "size": 3170,
+      "sha256": "e4f4fa967ae0aa3f2dd8e668bf03a72587968ada3b46f3a46b0058191b491a8f"
+    },
+    {
+      "path": "references/sale-process-search.md",
+      "size": 4856,
+      "sha256": "2e21ba105151f7b1b8b744a46c02930c4be7b1607d69efac99c2162cb29b1948"
+    },
+    {
+      "path": "references/sale-restart.md",
+      "size": 2705,
+      "sha256": "6cf8e48cd93bf09557eae80159c30f9c2676e715cb18b69ac994a96cddd339f7"
+    },
+    {
+      "path": "references/sale-search.md",
+      "size": 10817,
+      "sha256": "520d1b399430f7ca154c3d0662f368f3bea98dfd0aac343dea9dde3f8695e833"
+    },
+    {
+      "path": "references/sale-stage-search.md",
+      "size": 6484,
+      "sha256": "1d7280ec65eddd0da82ef8d4cc6e8da0f95093738ddb28ebc6646ff9953f49ad"
+    },
+    {
+      "path": "references/sale-update.md",
+      "size": 8854,
+      "sha256": "2bcf14cdcd9c9569d6f67e0c230e7cc144072adb54e77d58428c5074a381487e"
+    },
+    {
+      "path": "references/sale-win.md",
+      "size": 2615,
+      "sha256": "c7b4123caa54bb419202b55d6a810f9cb7505444a39ceb0331945af1f27696ca"
+    },
+    {
+      "path": "scripts/app-discovery.mjs",
+      "size": 336,
+      "sha256": "f66a117a1fb266f74102aef8c06e594e98164e7241075f951733b65fb79de11b"
+    },
+    {
+      "path": "scripts/batch-add-customer-contact-records.mjs",
+      "size": 324,
+      "sha256": "73dbbe0bb32bc3f7691e30ad2744b74c1134951bdf38a416ef554ec55473aea4"
+    },
+    {
+      "path": "scripts/browser-option-search.mjs",
+      "size": 481,
+      "sha256": "c83e1d4718f6a2a5960c1ae46600386fc282b10d5949b83800a0a09f0d2e448b"
+    },
+    {
+      "path": "scripts/cache-init.mjs",
+      "size": 24710,
+      "sha256": "686100a0ef4ba9ef77c5783f983edb6335364e65ecf9546517f1af50cd9ede0e"
+    },
+    {
+      "path": "scripts/check-duplicate-customer.mjs",
+      "size": 302,
+      "sha256": "e3b7a4fdfc133e1e79b596ad625ac0a6e38abe1dfedca6f2c1070745a3ae273d"
+    },
+    {
+      "path": "scripts/claim-public-pool-customer.mjs",
+      "size": 304,
+      "sha256": "f9a5be8fa550b0abadbc31ed7bf449817924628a5f52ecca8854f724408c4adf"
+    },
+    {
+      "path": "scripts/clue-contact-record-create.mjs",
+      "size": 304,
+      "sha256": "df9adefecad8f392b48c515511a5389c390a182a6f2400c3f311ce30ba366074"
+    },
+    {
+      "path": "scripts/clue-create.mjs",
+      "size": 265,
+      "sha256": "5e5d955f54b6334c6056ae6a6262988a78a6394471f2041851b5b3590fa56e27"
+    },
+    {
+      "path": "scripts/clue-detail-get.mjs",
+      "size": 278,
+      "sha256": "002b0a69ad7e938efe342cba7e173147da02c7297f56500e50f0ae9db44d513f"
+    },
+    {
+      "path": "scripts/clue-pool-search.mjs",
+      "size": 279,
+      "sha256": "eb42c0dad610fb9fe3452faaea3d8ac579c6a01f6e52a366edf9ec577de94c63"
+    },
+    {
+      "path": "scripts/clue-search.mjs",
+      "size": 360,
+      "sha256": "94edcc0cc4d938b6272acb2262a228b76e14c08386eb05611b63223cd0b0293f"
+    },
+    {
+      "path": "scripts/clue-status-change.mjs",
+      "size": 296,
+      "sha256": "507939cddef6aecf119e40b1764abd9900e5d39cf3ff9cad0f82f6cdf35f6d5b"
+    },
+    {
+      "path": "scripts/clue-to-customer.mjs",
+      "size": 297,
+      "sha256": "fdfa6c4724e3c191b7a3d2e7103c2dea1d5a065185e48e2941d9abb35cd24e30"
+    },
+    {
+      "path": "scripts/clue-update.mjs",
+      "size": 267,
+      "sha256": "191fafe07e50a9a89a86b8b539a40e8d975dfcb2e3b8c4165781938339240f55"
+    },
+    {
+      "path": "scripts/common.mjs",
+      "size": 13749,
+      "sha256": "7e622fe564582220772d4cc87f9af93cd511409a4f670d4384ac7ff54cd2375c"
+    },
+    {
+      "path": "scripts/complete-contact-plan.mjs",
+      "size": 299,
+      "sha256": "5faf0ace16493811ff2576e7816f1254ad99d64c3dc2483a1b5290b21727abc2"
+    },
+    {
+      "path": "scripts/contact-create.mjs",
+      "size": 269,
+      "sha256": "4d47215671036eb757c5cdb9d706010f6828763b7031763a022723f5d7c584a7"
+    },
+    {
+      "path": "scripts/contact-get.mjs",
+      "size": 265,
+      "sha256": "96932788fe36fc819f06cf3471a30e5021e5acf385b134bf2dae6ab16d972645"
+    },
+    {
+      "path": "scripts/contact-update.mjs",
+      "size": 271,
+      "sha256": "97c9ae27184a79620d9e175d3f9bd0b0f7a6c6dd852e8d21a02c8f88bbea7f86"
+    },
+    {
+      "path": "scripts/create-contact-plan.mjs",
+      "size": 284,
+      "sha256": "b6c71a299edd9a0f2106475815454ad46950ade7e850bac4dda9b419ba65ceac"
+    },
+    {
+      "path": "scripts/customer-contact-record-create.mjs",
+      "size": 314,
+      "sha256": "52bc33020363e60475a0c20a1aad5472a0153ede190a0a9e9d6ccba6b8827e2b"
+    },
+    {
+      "path": "scripts/customer-create.mjs",
+      "size": 268,
+      "sha256": "8aea8abe461b2cfdd3ba737ed49eb57f4813d90cee7d2840ac5f88148d15f5fd"
+    },
+    {
+      "path": "scripts/customer-get.mjs",
+      "size": 264,
+      "sha256": "42fe5550c4e48278b423770db868ef93358e4a2f7e8875b8b44bbc5a5a68d325"
+    },
+    {
+      "path": "scripts/customer-industry-search.mjs",
+      "size": 296,
+      "sha256": "02929eb4316e641f143184530d79bb945e814af08cdec4522ef1d2fdc76c4e61"
+    },
+    {
+      "path": "scripts/customer-search.mjs",
+      "size": 366,
+      "sha256": "1f9227f3c7271abd3ea16f13e123bf2da33c10951cd8e80b2f54fd411eef2697"
+    },
+    {
+      "path": "scripts/customer-status-search.mjs",
+      "size": 292,
+      "sha256": "bfb9b281fe85aa253e1326ac0297ce39f0a1bf66f69e6a7751e4e21bf2c8b16d"
+    },
+    {
+      "path": "scripts/customer-transfer.mjs",
+      "size": 289,
+      "sha256": "a2c093b34b1c1bbacfbfc7e3815c13576fe7dee958c8d6f5bec14fa5ab0273db"
+    },
+    {
+      "path": "scripts/customer-type-search.mjs",
+      "size": 288,
+      "sha256": "4e64a4a8575bc3a6e2563995a7b2746198825d27ccc9022f986ca4159fa21b56"
+    },
+    {
+      "path": "scripts/customer-update.mjs",
+      "size": 270,
+      "sha256": "a50fba5126e2654bac2d6583add1bfd1f153f9c8fe5d39aa756c67ecb3ccad52"
+    },
+    {
+      "path": "scripts/ds-fields.mjs",
+      "size": 340,
+      "sha256": "84b38e6fe1b6cd71321889f9b18834faeacdf4048f43ea4134f9241310a75c17"
+    },
+    {
+      "path": "scripts/form-discovery.mjs",
+      "size": 350,
+      "sha256": "dc406be1aa743be6ed2d9433db18c442a8ece2ba9d9c9e2130be56739c2d9b13"
+    },
+    {
+      "path": "scripts/get-config-id-by-pk.mjs",
+      "size": 418,
+      "sha256": "a591ed76a9b286377c115c0dc1dfc26ce12a46396b8c8ed1017c3414328287f5"
+    },
+    {
+      "path": "scripts/get-contact-records-for-person-and-time-range.mjs",
+      "size": 347,
+      "sha256": "f544f664c91fd9c55f3a0e624992f124af2fbf116d295296403d53ee997cae54"
+    },
+    {
+      "path": "scripts/get-contacts-by-entity.mjs",
+      "size": 312,
+      "sha256": "0c67ea67e4730d7a0baa179c33690f7b37d2755875e0f0ef41c98785c82d8cc0"
+    },
+    {
+      "path": "scripts/get-current-user-profile.mjs",
+      "size": 423,
+      "sha256": "04c5823f5aed9a2362da1d42464e0923f1eea5e124df55a7815039fbd84fddd1"
+    },
+    {
+      "path": "scripts/get-entity-contact-records.mjs",
+      "size": 310,
+      "sha256": "b2156c336245db790ac4f92676bd22c974bc396b1f31b8e3e584a87bb0cc333c"
+    },
+    {
+      "path": "scripts/get-entity-id-by-name.mjs",
+      "size": 483,
+      "sha256": "67813e48433bbdef794a9076bac4cc767b3c1515c293f65db013deafce21b49d"
+    },
+    {
+      "path": "scripts/get-field-info-by-ids.mjs",
+      "size": 418,
+      "sha256": "982a8edf737d5703b0ce7ec423e76d835f2cc5ed816eb563461eb946c64ad43d"
+    },
+    {
+      "path": "scripts/get-field-options.mjs",
+      "size": 362,
+      "sha256": "ba6934670d668f451f75bda3aef2bea1fb8bcd80bfbbed5655ce4916cb00234d"
+    },
+    {
+      "path": "scripts/get-file-preview.mjs",
+      "size": 471,
+      "sha256": "9f757afb7841581fc48e89198721767d5bc607915e949d14f8e584ce4b01d3e2"
+    },
+    {
+      "path": "scripts/get-rest-cfg-detail.mjs",
+      "size": 332,
+      "sha256": "0bf096011ade04f70bbd71bc20a4af9feae91a11c9313f9d3efd9d6372464c67"
+    },
+    {
+      "path": "scripts/get-user-id-by-name.mjs",
+      "size": 302,
+      "sha256": "c37cd20711aba7b2f54b05197f43cc4ee4c9afecf8408ad4399d0f14a198f1d2"
+    },
+    {
+      "path": "scripts/judge-crm-entity-permission.mjs",
+      "size": 314,
+      "sha256": "e0d519a83aefe34715f81f60b09ec056d9234aac629546fca66635ac471d1f4d"
+    },
+    {
+      "path": "scripts/open-sea-release.mjs",
+      "size": 294,
+      "sha256": "6082725ecd19d6211d4cb00695ed98751fe5308b9745f4a7aa7e9601b784a996"
+    },
+    {
+      "path": "scripts/open-sea-search.mjs",
+      "size": 285,
+      "sha256": "79773bcea1c0800c19abfce9c9f5cf53125d6d13cc855df8fba5c360ecd9fb10"
+    },
+    {
+      "path": "scripts/query-company-business-profile.mjs",
+      "size": 320,
+      "sha256": "c5610c7c2481f37378deb632b7fc40dbe2f82e8e9d87c80abdfc9aa82c0c10c7"
+    },
+    {
+      "path": "scripts/rival-search.mjs",
+      "size": 266,
+      "sha256": "e6ede3436978471bf840173cdb231bab0772aea5ab6bc842e5695d85c5cbc335"
+    },
+    {
+      "path": "scripts/sale-contact-record-create.mjs",
+      "size": 304,
+      "sha256": "783384f0d5630070c2658362f6d0d97d7778c8b0aa8b95ff32b692da358aeabc"
+    },
+    {
+      "path": "scripts/sale-create.mjs",
+      "size": 260,
+      "sha256": "48adf4bf9fd80d6014de0f72926222a7040c009733fdb2f20566e4a91edd8f19"
+    },
+    {
+      "path": "scripts/sale-get.mjs",
+      "size": 262,
+      "sha256": "af243f634fcb53e90f746a67994c4980771548fa0331b2efb27994de9e7aba92"
+    },
+    {
+      "path": "scripts/sale-invalid.mjs",
+      "size": 284,
+      "sha256": "93b20fa3a737d31600027f0b6f4638416c6477fac8de4d0da8a83d4ce70f3d03"
+    },
+    {
+      "path": "scripts/sale-link-contacts.mjs",
+      "size": 305,
+      "sha256": "ffac658f364db802173fd2ff68b9f0d9c94a20296631e3db4f6790f4a3bd0845"
+    },
+    {
+      "path": "scripts/sale-lose-reason-search.mjs",
+      "size": 293,
+      "sha256": "89d732bf330fc631becaf934582ad1ead42884649bf2ebbcb0771da2233a2801"
+    },
+    {
+      "path": "scripts/sale-lose.mjs",
+      "size": 281,
+      "sha256": "814121607c1cd56d9b234095a2807ddfd744fa80c9fb6ff80989a1858bc3b35c"
+    },
+    {
+      "path": "scripts/sale-manager-change.mjs",
+      "size": 307,
+      "sha256": "c8ef41a273b2c2ef24712e8b3855e5a5fc0b26d020a47e9a20681b85eb9ff30d"
+    },
+    {
+      "path": "scripts/sale-pause.mjs",
+      "size": 282,
+      "sha256": "2c0987b3d026d2d32839d6783ff6a924dcc26f211921704ad4efc04c32b5a35e"
+    },
+    {
+      "path": "scripts/sale-process-search.mjs",
+      "size": 288,
+      "sha256": "1bd7baf6eaeae73764fc03b29847947c93cbeb6d634a08630a5f3e73d4d61808"
+    },
+    {
+      "path": "scripts/sale-restart.mjs",
+      "size": 284,
+      "sha256": "d376cc65f60a031e8c7ae4d0d4601b7bceb96e382d9ec19a834ed89f13d20a4f"
+    },
+    {
+      "path": "scripts/sale-search.mjs",
+      "size": 354,
+      "sha256": "e95c6f430d2373b74a8abcd53222e0e0619b2d60eda12c2de5e7c131c0eec9ad"
+    },
+    {
+      "path": "scripts/sale-stage-search.mjs",
+      "size": 286,
+      "sha256": "8cc1460007e4c78da8b0ee356997075df8d9b59b2fda97a659db808329d5d725"
+    },
+    {
+      "path": "scripts/sale-update.mjs",
+      "size": 262,
+      "sha256": "04b8f65ac65fe6c1e08c989d47a38c92db9bc96ff441416555c014bf1e583148"
+    },
+    {
+      "path": "scripts/sale-win.mjs",
+      "size": 280,
+      "sha256": "c78d53c3a67432075fa5529f84ab635e99b34b4514a640550083e230f76b7011"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "app.discovery",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/jch-crm-app-discovery.md",
+      "anchor": "reference:jch-crm-app-discovery.md",
+      "sha256": "08cfe8ec9b53856737ebcef0ec7a3adfc3b124aa245f874897423827c5985ad1",
+      "mapsToOperations": [
+        "jiuchuanhui.app.discovery"
+      ],
+      "mapsToReferences": [
+        "references/discovery-config.md"
+      ]
+    },
+    {
+      "id": "form.discovery",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/jch-crm-form-discovery.md",
+      "anchor": "reference:jch-crm-form-discovery.md",
+      "sha256": "608fc19fc32992f5dcef4fe0471f348a4569e2d87e1a47a0cfbaebcfd6017087",
+      "mapsToOperations": [
+        "jiuchuanhui.form.discovery"
+      ],
+      "mapsToReferences": [
+        "references/discovery-config.md"
+      ]
+    },
+    {
+      "id": "cache",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/cache.md",
+      "anchor": "reference:cache.md",
+      "sha256": "22b4be445313a4fb5f927f25647819f7e847660224d94ac18239bfaeffc1812a",
+      "mapsToOperations": [],
+      "mapsToReferences": [
+        "references/discovery-config.md",
+        "references/disabled-capabilities.md"
+      ]
+    },
+    {
+      "id": "customer.create",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/customer-create.md",
+      "anchor": "reference:customer-create.md",
+      "sha256": "02e8fe4dc7047d55bcdc85e1b1ddff270f593a7ed8f0ee7860a9e99f3da4ae92",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.create.prepare",
+        "jiuchuanhui.customer.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "customer.get",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/customer-get.md",
+      "anchor": "reference:customer-get.md",
+      "sha256": "bd9d0bf526a6048602a289f2d9b57ee3187802ca44e2e49a7772632036d7d41d",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.get"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "customer.search",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/customer-search.md",
+      "anchor": "reference:customer-search.md",
+      "sha256": "17729def97a1728316c5f91821eb9002e9ab1a3d811b0244a6b293d5a97abadd",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.search"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "customer.update",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/customer-update.md",
+      "anchor": "reference:customer-update.md",
+      "sha256": "ea0dee29c349d33bedb71137911c89fd03261bbb570bed25c3ac24daa1a02060",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.update.prepare",
+        "jiuchuanhui.customer.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "customer.transfer",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/customer-transfer.md",
+      "anchor": "reference:customer-transfer.md",
+      "sha256": "35e6a8748750aa8b847cdd5ce02d6d54c29d1be199aca3acaf9c2c8bcd5ba3a3",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.transfer.prepare",
+        "jiuchuanhui.customer.transfer.apply"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "open-sea-search",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/open-sea-search.md",
+      "anchor": "reference:open-sea-search.md",
+      "sha256": "ea48062c5d537d2a763579b93d86516505e15f0ab00a33c1d348e3829dc5c253",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.open-sea.search"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "open-sea-release",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/open-sea-release.md",
+      "anchor": "reference:open-sea-release.md",
+      "sha256": "8240874c8ab8854dc1a36c08caa26e0f8f1879a14893ae7226e864aa256809bf",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.open-sea.release.prepare",
+        "jiuchuanhui.customer.open-sea.release.apply"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "claim-public-pool",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/claim-public-pool-customer.md",
+      "anchor": "reference:claim-public-pool-customer.md",
+      "sha256": "900653fc08e75b18bb3efcd458469e17d5e8c5d3f75e10d1ae685d5409c9c28b",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.open-sea.claim.prepare",
+        "jiuchuanhui.customer.open-sea.claim.apply"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "check-duplicate",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/check-duplicate-customer.md",
+      "anchor": "reference:check-duplicate-customer.md",
+      "sha256": "2f13f93757f53849d7b4ae94b65e814382d690b71cb258aeda7f2b8740d4fb6d",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.duplicate.check"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "customer-contact-record",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/customer-contact-record-create.md",
+      "anchor": "reference:customer-contact-record-create.md",
+      "sha256": "f04c59e571460fab1b12dfb0cb038bc89d2731bfe9bca9c0e3b88ee82209a28d",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.contact-record.create.prepare",
+        "jiuchuanhui.customer.contact-record.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "batch-contact-records",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/batch-add-customer-contact-records.md",
+      "anchor": "reference:batch-add-customer-contact-records.md",
+      "sha256": "8faf8c0cb0ef8f8d684ad4aa59b75c682a9e5105838b427454bf5c60f3b045c3",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.contact-record.batch.prepare",
+        "jiuchuanhui.customer.contact-record.batch.apply"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "customer-type",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/customer-type-search.md",
+      "anchor": "reference:customer-type-search.md",
+      "sha256": "31eb16f866f6b514dd634efcc628f565d2e1004c8ad50d866b3f83497c68be53",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.type.search"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "customer-status",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/customer-status-search.md",
+      "anchor": "reference:customer-status-search.md",
+      "sha256": "132cd78c2c9606f76bfb8c19e485f1598c264f773668708387698d370022c81f",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.status.search"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "customer-industry",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/customer-industry-search.md",
+      "anchor": "reference:customer-industry-search.md",
+      "sha256": "19c8a19762ed211ea664c408088e1080763c7bde4b041d582e9b040011a87384",
+      "mapsToOperations": [
+        "jiuchuanhui.customer.industry.search"
+      ],
+      "mapsToReferences": [
+        "references/customer.md"
+      ]
+    },
+    {
+      "id": "contact.create",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/contact-create.md",
+      "anchor": "reference:contact-create.md",
+      "sha256": "c03b596d7a471811a77362a1f28f4b8d9347bfe780f07b11c7cd74755bb3682a",
+      "mapsToOperations": [
+        "jiuchuanhui.contact.create.prepare",
+        "jiuchuanhui.contact.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/contact.md"
+      ]
+    },
+    {
+      "id": "contact.get",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/contact-get.md",
+      "anchor": "reference:contact-get.md",
+      "sha256": "10c6583d54a1b340e4a4fe4df43f3040ab1312ee53d61479d912adb1cf082205",
+      "mapsToOperations": [
+        "jiuchuanhui.contact.get"
+      ],
+      "mapsToReferences": [
+        "references/contact.md"
+      ]
+    },
+    {
+      "id": "contact.update",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/contact-update.md",
+      "anchor": "reference:contact-update.md",
+      "sha256": "e855db2d2e4c82e41b54ed60660d42a0e289d73e2ef2e9a45cf8aa48cb233576",
+      "mapsToOperations": [
+        "jiuchuanhui.contact.update.prepare",
+        "jiuchuanhui.contact.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/contact.md"
+      ]
+    },
+    {
+      "id": "get-contacts-by-entity",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-contacts-by-entity.md",
+      "anchor": "reference:get-contacts-by-entity.md",
+      "sha256": "eef2e033727353c57d97588e48b6f15bc98ad0ea2eb152ecb94f73cf51406796",
+      "mapsToOperations": [
+        "jiuchuanhui.contact.by-entity.search"
+      ],
+      "mapsToReferences": [
+        "references/contact.md"
+      ]
+    },
+    {
+      "id": "sale.create",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-create.md",
+      "anchor": "reference:sale-create.md",
+      "sha256": "eeaf7a7ac6ee5bc4681f2645a69edb9d481e7b3e3a4c59b9ab1bb4634391dce3",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.create.prepare",
+        "jiuchuanhui.sale.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale.get",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-get.md",
+      "anchor": "reference:sale-get.md",
+      "sha256": "268eb59d39af54afcdad8af95a96fbfb54005c38dabb7a1c17e4a95f4b5d16a9",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.get"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale.search",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-search.md",
+      "anchor": "reference:sale-search.md",
+      "sha256": "520d1b399430f7ca154c3d0662f368f3bea98dfd0aac343dea9dde3f8695e833",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.search"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale.update",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-update.md",
+      "anchor": "reference:sale-update.md",
+      "sha256": "2bcf14cdcd9c9569d6f67e0c230e7cc144072adb54e77d58428c5074a381487e",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.update.prepare",
+        "jiuchuanhui.sale.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-stage-search",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-stage-search.md",
+      "anchor": "reference:sale-stage-search.md",
+      "sha256": "1d7280ec65eddd0da82ef8d4cc6e8da0f95093738ddb28ebc6646ff9953f49ad",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.stage.search"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-process-search",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-process-search.md",
+      "anchor": "reference:sale-process-search.md",
+      "sha256": "2e21ba105151f7b1b8b744a46c02930c4be7b1607d69efac99c2162cb29b1948",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.process.search"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-lose-reason",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-lose-reason-search.md",
+      "anchor": "reference:sale-lose-reason-search.md",
+      "sha256": "da15bd5b566e05391bc5ab7510ede533a15773ce7faf839caa4fc684006bf605",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.lose-reason.search"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "rival-search",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/rival-search.md",
+      "anchor": "reference:rival-search.md",
+      "sha256": "daa6b9759b12e0601db37597d38d0c26d0bbed61a6107b297e7817bfc853c906",
+      "mapsToOperations": [
+        "jiuchuanhui.rival.search"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-win",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-win.md",
+      "anchor": "reference:sale-win.md",
+      "sha256": "c7b4123caa54bb419202b55d6a810f9cb7505444a39ceb0331945af1f27696ca",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.win.prepare",
+        "jiuchuanhui.sale.win.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-lose",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-lose.md",
+      "anchor": "reference:sale-lose.md",
+      "sha256": "d9f36ddfa96da92a64125a5d016795af0e36338daeb14158ce3754e3d207658d",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.lose.prepare",
+        "jiuchuanhui.sale.lose.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-invalid",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-invalid.md",
+      "anchor": "reference:sale-invalid.md",
+      "sha256": "780222f221ab95dc7522f28a5d69b63c361408cf5f582b8a411a87fb32f4dbbf",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.invalid.prepare",
+        "jiuchuanhui.sale.invalid.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-pause",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-pause.md",
+      "anchor": "reference:sale-pause.md",
+      "sha256": "e4f4fa967ae0aa3f2dd8e668bf03a72587968ada3b46f3a46b0058191b491a8f",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.pause.prepare",
+        "jiuchuanhui.sale.pause.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-restart",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-restart.md",
+      "anchor": "reference:sale-restart.md",
+      "sha256": "6cf8e48cd93bf09557eae80159c30f9c2676e715cb18b69ac994a96cddd339f7",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.restart.prepare",
+        "jiuchuanhui.sale.restart.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-manager-change",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-manager-change.md",
+      "anchor": "reference:sale-manager-change.md",
+      "sha256": "816eede69f495c22aa06c8d4f713a8c13be62a70ddbc6cf7e95f1889c0cf84d3",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.manager-change.prepare",
+        "jiuchuanhui.sale.manager-change.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-link-contacts",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-link-contacts.md",
+      "anchor": "reference:sale-link-contacts.md",
+      "sha256": "db9e96b5d844f9dc2009499f4363ab468fee6bb3e82da23457c8b917ef38032b",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.link-contacts.prepare",
+        "jiuchuanhui.sale.link-contacts.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "sale-contact-record",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/sale-contact-record-create.md",
+      "anchor": "reference:sale-contact-record-create.md",
+      "sha256": "7688c83275c9cab571e777947002cdba10d7f16497372006e5388d2ec7d4d615",
+      "mapsToOperations": [
+        "jiuchuanhui.sale.contact-record.create.prepare",
+        "jiuchuanhui.sale.contact-record.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/sale.md"
+      ]
+    },
+    {
+      "id": "clue.create",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/clue-create.md",
+      "anchor": "reference:clue-create.md",
+      "sha256": "1f806fb2f4fb54c16d6710c96e73677e3ac3237b5f8a501adaaba40ca888ca70",
+      "mapsToOperations": [
+        "jiuchuanhui.clue.create.prepare",
+        "jiuchuanhui.clue.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/clue.md"
+      ]
+    },
+    {
+      "id": "clue-detail-get",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/clue-detail-get.md",
+      "anchor": "reference:clue-detail-get.md",
+      "sha256": "4c2a397ef536c917e6d76aa796a9c7158eac7d0089b94ad1fb7b5d8f90b25402",
+      "mapsToOperations": [
+        "jiuchuanhui.clue.get"
+      ],
+      "mapsToReferences": [
+        "references/clue.md"
+      ]
+    },
+    {
+      "id": "clue-search",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/clue-search.md",
+      "anchor": "reference:clue-search.md",
+      "sha256": "b19a842607e70c49cbacdeab64e99b6180f2b596993a023cfacaed248004a067",
+      "mapsToOperations": [
+        "jiuchuanhui.clue.search"
+      ],
+      "mapsToReferences": [
+        "references/clue.md"
+      ]
+    },
+    {
+      "id": "clue-pool-search",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/clue-pool-search.md",
+      "anchor": "reference:clue-pool-search.md",
+      "sha256": "b4cf89faf0a7b16a20c88960e3d3cf182b0442b6435a1438242acfc25ec505d5",
+      "mapsToOperations": [
+        "jiuchuanhui.clue.pool.search"
+      ],
+      "mapsToReferences": [
+        "references/clue.md"
+      ]
+    },
+    {
+      "id": "clue-update",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/clue-update.md",
+      "anchor": "reference:clue-update.md",
+      "sha256": "4868403f56db9d6c402a2a9361ea3b4ef3af8c9f2a99f4d37095e588af5dabef",
+      "mapsToOperations": [
+        "jiuchuanhui.clue.update.prepare",
+        "jiuchuanhui.clue.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/clue.md"
+      ]
+    },
+    {
+      "id": "clue-status-change",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/clue-status-change.md",
+      "anchor": "reference:clue-status-change.md",
+      "sha256": "8c65bfce576dd6bdba5bd2f92c95632a5ca183b0175ab184980dde6463992e83",
+      "mapsToOperations": [
+        "jiuchuanhui.clue.status-change.prepare",
+        "jiuchuanhui.clue.status-change.apply"
+      ],
+      "mapsToReferences": [
+        "references/clue.md"
+      ]
+    },
+    {
+      "id": "clue-to-customer",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/clue-to-customer.md",
+      "anchor": "reference:clue-to-customer.md",
+      "sha256": "f99596aa4f7f9a81dab6577ee5c1f91dc1c571643ed078ee54ec52214841e4fe",
+      "mapsToOperations": [
+        "jiuchuanhui.clue.to-customer.prepare",
+        "jiuchuanhui.clue.to-customer.apply"
+      ],
+      "mapsToReferences": [
+        "references/clue.md"
+      ]
+    },
+    {
+      "id": "clue-contact-record",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/clue-contact-record-create.md",
+      "anchor": "reference:clue-contact-record-create.md",
+      "sha256": "36e909ab0635af2b7445facd2af542aec16f75ee064adc017ac720849b067881",
+      "mapsToOperations": [
+        "jiuchuanhui.clue.contact-record.create.prepare",
+        "jiuchuanhui.clue.contact-record.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/clue.md"
+      ]
+    },
+    {
+      "id": "create-contact-plan",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/create-contact-plan.md",
+      "anchor": "reference:create-contact-plan.md",
+      "sha256": "ad3da0e1ee928545a1e57a9afe3a53cf576707b2db1a3c2180bd5932e378b285",
+      "mapsToOperations": [
+        "jiuchuanhui.contact-plan.create.prepare",
+        "jiuchuanhui.contact-plan.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/contact-plan.md"
+      ]
+    },
+    {
+      "id": "complete-contact-plan",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/complete-contact-plan.md",
+      "anchor": "reference:complete-contact-plan.md",
+      "sha256": "68406f7f8ce2c0a6498a2e86a3b136f85fa42e46a4dc50fa7612d773e9851f73",
+      "mapsToOperations": [
+        "jiuchuanhui.contact-plan.complete.prepare",
+        "jiuchuanhui.contact-plan.complete.apply"
+      ],
+      "mapsToReferences": [
+        "references/contact-plan.md"
+      ]
+    },
+    {
+      "id": "get-entity-contact-records",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-entity-contact-records.md",
+      "anchor": "reference:get-entity-contact-records.md",
+      "sha256": "e0359059cfe79c2a6bf32f6bbc312b908412ff7644d12bc9f83b90e2523b43ee",
+      "mapsToOperations": [
+        "jiuchuanhui.entity.contact-records.list"
+      ],
+      "mapsToReferences": [
+        "references/contact-records.md"
+      ]
+    },
+    {
+      "id": "records-by-person-time",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-contact-records-for-person-and-time-range.md",
+      "anchor": "reference:get-contact-records-for-person-and-time-range.md",
+      "sha256": "705371f0fadfc15f9295266e1b37ef5a9990ee8c43409420a7ec4d6641ff94dd",
+      "mapsToOperations": [
+        "jiuchuanhui.contact-records.by-person-time.list"
+      ],
+      "mapsToReferences": [
+        "references/contact-records.md"
+      ]
+    },
+    {
+      "id": "get-entity-id-by-name",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-entity-id-by-name.md",
+      "anchor": "reference:get-entity-id-by-name.md",
+      "sha256": "df2ae06a1062d7faf915cdd9b99c3811113a5173619615fd42dcb1d9e3a50ba3",
+      "mapsToOperations": [
+        "jiuchuanhui.entity.id.by-name"
+      ],
+      "mapsToReferences": [
+        "references/general-helpers.md"
+      ]
+    },
+    {
+      "id": "get-user-id-by-name",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-user-id-by-name.md",
+      "anchor": "reference:get-user-id-by-name.md",
+      "sha256": "f9a02945f3407274defc9e5a3cbffde7dcefc7cd0d2f15017dbb5efb61dea576",
+      "mapsToOperations": [
+        "jiuchuanhui.user.id.by-name"
+      ],
+      "mapsToReferences": [
+        "references/general-helpers.md"
+      ]
+    },
+    {
+      "id": "get-current-user-profile",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-current-user-profile.md",
+      "anchor": "reference:get-current-user-profile.md",
+      "sha256": "3337c98ee142caa7d5ba9ebfeac0cc631025884ed2045588077a072669311758",
+      "mapsToOperations": [
+        "jiuchuanhui.user.current-profile"
+      ],
+      "mapsToReferences": [
+        "references/general-helpers.md"
+      ]
+    },
+    {
+      "id": "judge-permission",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/judge-crm-entity-permission.md",
+      "anchor": "reference:judge-crm-entity-permission.md",
+      "sha256": "60f5e6763f9e50cf95d988b035c88ad63a0f25e46325a9bbbf6f179e2f2fd28f",
+      "mapsToOperations": [
+        "jiuchuanhui.entity.permission.judge"
+      ],
+      "mapsToReferences": [
+        "references/general-helpers.md"
+      ]
+    },
+    {
+      "id": "company-business-profile",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/query-company-business-profile.md",
+      "anchor": "reference:query-company-business-profile.md",
+      "sha256": "d40f2a94fd609416ec25a35e46246db4be19f002aa76a64c8bf0aeeb6f4939b1",
+      "mapsToOperations": [
+        "jiuchuanhui.company.business-profile.query"
+      ],
+      "mapsToReferences": [
+        "references/general-helpers.md"
+      ]
+    },
+    {
+      "id": "field-info-by-ids",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-field-info-by-ids.md",
+      "anchor": "reference:get-field-info-by-ids.md",
+      "sha256": "fdae637c604c0fda4df6bd14a6e7db70aa007942977bbb26f4f3555a1a600672",
+      "mapsToOperations": [
+        "jiuchuanhui.field.info.by-ids"
+      ],
+      "mapsToReferences": [
+        "references/general-helpers.md"
+      ]
+    },
+    {
+      "id": "browser-option-search",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/browser-option-search.md",
+      "anchor": "reference:browser-option-search.md",
+      "sha256": "2c30670e4ce751ecf8c62b46a9c34e9de13be83a2d9cebbb56072f6f579a8e2f",
+      "mapsToOperations": [
+        "jiuchuanhui.browser-option.search"
+      ],
+      "mapsToReferences": [
+        "references/general-helpers.md"
+      ]
+    },
+    {
+      "id": "field-options",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-field-options.md",
+      "anchor": "reference:get-field-options.md",
+      "sha256": "fcc5fde38017a52dbdd0b3dafcc307793db1f3786823ea876349de05ced15758",
+      "mapsToOperations": [
+        "jiuchuanhui.field.options"
+      ],
+      "mapsToReferences": [
+        "references/discovery-config.md"
+      ]
+    },
+    {
+      "id": "file-preview",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-file-preview.md",
+      "anchor": "reference:get-file-preview.md",
+      "sha256": "d7ba9c1fa28ed5cff6c780e22e14ea443d733683c97cf6a2d8d803d4559963ed",
+      "mapsToOperations": [
+        "jiuchuanhui.file.preview"
+      ],
+      "mapsToReferences": [
+        "references/discovery-config.md"
+      ]
+    },
+    {
+      "id": "get-config-id-by-pk",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-config-id-by-pk.md",
+      "anchor": "reference:get-config-id-by-pk.md",
+      "sha256": "434192d07dc849de2d821bf980bbdfa099cc68980cda81defb349cf1d15f0edd",
+      "mapsToOperations": [
+        "jiuchuanhui.config.id.by.pk"
+      ],
+      "mapsToReferences": [
+        "references/discovery-config.md"
+      ]
+    },
+    {
+      "id": "get-rest-cfg-detail",
+      "sourcePath": "weaver-e10-jiuchuanhui-connector/references/get-rest-cfg-detail.md",
+      "anchor": "reference:get-rest-cfg-detail.md",
+      "sha256": "8ee8d91abee1c77a034b776e04037492df0b960b27caf763f1a22bf6e0596c1e",
+      "mapsToOperations": [
+        "jiuchuanhui.rest.cfg.detail",
+        "jiuchuanhui.get-rest-cfg-detail"
+      ],
+      "mapsToReferences": [
+        "references/discovery-config.md"
+      ]
+    }
+  ],
+  "operationImpact": {
+    "jiuchuanhui.app.discovery": {
+      "sourceChunkIds": [
+        "app.discovery"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/discovery-config.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.form.discovery": {
+      "sourceChunkIds": [
+        "form.discovery"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/discovery-config.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.customer.create.prepare": {
+      "sourceChunkIds": [
+        "customer.create"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.create.apply": {
+      "sourceChunkIds": [
+        "customer.create"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.get": {
+      "sourceChunkIds": [
+        "customer.get"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.customer.search": {
+      "sourceChunkIds": [
+        "customer.search"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.customer.update.prepare": {
+      "sourceChunkIds": [
+        "customer.update"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.update.apply": {
+      "sourceChunkIds": [
+        "customer.update"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.transfer.prepare": {
+      "sourceChunkIds": [
+        "customer.transfer"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.transfer.apply": {
+      "sourceChunkIds": [
+        "customer.transfer"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.open-sea.search": {
+      "sourceChunkIds": [
+        "open-sea-search"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.customer.open-sea.release.prepare": {
+      "sourceChunkIds": [
+        "open-sea-release"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.open-sea.release.apply": {
+      "sourceChunkIds": [
+        "open-sea-release"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.open-sea.claim.prepare": {
+      "sourceChunkIds": [
+        "claim-public-pool"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.open-sea.claim.apply": {
+      "sourceChunkIds": [
+        "claim-public-pool"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.duplicate.check": {
+      "sourceChunkIds": [
+        "check-duplicate"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.customer.contact-record.create.prepare": {
+      "sourceChunkIds": [
+        "customer-contact-record"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.contact-record.create.apply": {
+      "sourceChunkIds": [
+        "customer-contact-record"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.contact-record.batch.prepare": {
+      "sourceChunkIds": [
+        "batch-contact-records"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.contact-record.batch.apply": {
+      "sourceChunkIds": [
+        "batch-contact-records"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.customer.type.search": {
+      "sourceChunkIds": [
+        "customer-type"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.customer.status.search": {
+      "sourceChunkIds": [
+        "customer-status"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.customer.industry.search": {
+      "sourceChunkIds": [
+        "customer-industry"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/customer.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.contact.create.prepare": {
+      "sourceChunkIds": [
+        "contact.create"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.contact.create.apply": {
+      "sourceChunkIds": [
+        "contact.create"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.contact.get": {
+      "sourceChunkIds": [
+        "contact.get"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.contact.update.prepare": {
+      "sourceChunkIds": [
+        "contact.update"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.contact.update.apply": {
+      "sourceChunkIds": [
+        "contact.update"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.contact.by-entity.search": {
+      "sourceChunkIds": [
+        "get-contacts-by-entity"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.sale.create.prepare": {
+      "sourceChunkIds": [
+        "sale.create"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.create.apply": {
+      "sourceChunkIds": [
+        "sale.create"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.get": {
+      "sourceChunkIds": [
+        "sale.get"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.sale.search": {
+      "sourceChunkIds": [
+        "sale.search"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.sale.update.prepare": {
+      "sourceChunkIds": [
+        "sale.update"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.update.apply": {
+      "sourceChunkIds": [
+        "sale.update"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.stage.search": {
+      "sourceChunkIds": [
+        "sale-stage-search"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.sale.process.search": {
+      "sourceChunkIds": [
+        "sale-process-search"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.sale.lose-reason.search": {
+      "sourceChunkIds": [
+        "sale-lose-reason"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.rival.search": {
+      "sourceChunkIds": [
+        "rival-search"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.sale.win.prepare": {
+      "sourceChunkIds": [
+        "sale-win"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.win.apply": {
+      "sourceChunkIds": [
+        "sale-win"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.lose.prepare": {
+      "sourceChunkIds": [
+        "sale-lose"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.lose.apply": {
+      "sourceChunkIds": [
+        "sale-lose"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.invalid.prepare": {
+      "sourceChunkIds": [
+        "sale-invalid"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.invalid.apply": {
+      "sourceChunkIds": [
+        "sale-invalid"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.pause.prepare": {
+      "sourceChunkIds": [
+        "sale-pause"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.pause.apply": {
+      "sourceChunkIds": [
+        "sale-pause"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.restart.prepare": {
+      "sourceChunkIds": [
+        "sale-restart"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.restart.apply": {
+      "sourceChunkIds": [
+        "sale-restart"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.manager-change.prepare": {
+      "sourceChunkIds": [
+        "sale-manager-change"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.manager-change.apply": {
+      "sourceChunkIds": [
+        "sale-manager-change"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.link-contacts.prepare": {
+      "sourceChunkIds": [
+        "sale-link-contacts"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.link-contacts.apply": {
+      "sourceChunkIds": [
+        "sale-link-contacts"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.contact-record.create.prepare": {
+      "sourceChunkIds": [
+        "sale-contact-record"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.sale.contact-record.create.apply": {
+      "sourceChunkIds": [
+        "sale-contact-record"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/sale.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.create.prepare": {
+      "sourceChunkIds": [
+        "clue.create"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.create.apply": {
+      "sourceChunkIds": [
+        "clue.create"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.get": {
+      "sourceChunkIds": [
+        "clue-detail-get"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.clue.search": {
+      "sourceChunkIds": [
+        "clue-search"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.clue.pool.search": {
+      "sourceChunkIds": [
+        "clue-pool-search"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.clue.update.prepare": {
+      "sourceChunkIds": [
+        "clue-update"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.update.apply": {
+      "sourceChunkIds": [
+        "clue-update"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.status-change.prepare": {
+      "sourceChunkIds": [
+        "clue-status-change"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.status-change.apply": {
+      "sourceChunkIds": [
+        "clue-status-change"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.to-customer.prepare": {
+      "sourceChunkIds": [
+        "clue-to-customer"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.to-customer.apply": {
+      "sourceChunkIds": [
+        "clue-to-customer"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.contact-record.create.prepare": {
+      "sourceChunkIds": [
+        "clue-contact-record"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.clue.contact-record.create.apply": {
+      "sourceChunkIds": [
+        "clue-contact-record"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/clue.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.contact-plan.create.prepare": {
+      "sourceChunkIds": [
+        "create-contact-plan"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact-plan.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.contact-plan.create.apply": {
+      "sourceChunkIds": [
+        "create-contact-plan"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact-plan.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.contact-plan.complete.prepare": {
+      "sourceChunkIds": [
+        "complete-contact-plan"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact-plan.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.contact-plan.complete.apply": {
+      "sourceChunkIds": [
+        "complete-contact-plan"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact-plan.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "jiuchuanhui.entity.contact-records.list": {
+      "sourceChunkIds": [
+        "get-entity-contact-records"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact-records.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.contact-records.by-person-time.list": {
+      "sourceChunkIds": [
+        "records-by-person-time"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/contact-records.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.entity.id.by-name": {
+      "sourceChunkIds": [
+        "get-entity-id-by-name"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/general-helpers.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.user.id.by-name": {
+      "sourceChunkIds": [
+        "get-user-id-by-name"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/general-helpers.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.user.current-profile": {
+      "sourceChunkIds": [
+        "get-current-user-profile"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/general-helpers.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.entity.permission.judge": {
+      "sourceChunkIds": [
+        "judge-permission"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/general-helpers.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.company.business-profile.query": {
+      "sourceChunkIds": [
+        "company-business-profile"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/general-helpers.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.field.info.by-ids": {
+      "sourceChunkIds": [
+        "field-info-by-ids"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/general-helpers.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.browser-option.search": {
+      "sourceChunkIds": [
+        "browser-option-search"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/general-helpers.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.field.options": {
+      "sourceChunkIds": [
+        "field-options"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/discovery-config.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.file.preview": {
+      "sourceChunkIds": [
+        "file-preview"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/discovery-config.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.config.id.by.pk": {
+      "sourceChunkIds": [
+        "get-config-id-by-pk"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/discovery-config.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.rest.cfg.detail": {
+      "sourceChunkIds": [
+        "get-rest-cfg-detail"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/discovery-config.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "jiuchuanhui.get-rest-cfg-detail": {
+      "sourceChunkIds": [
+        "get-rest-cfg-detail"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/discovery-config.md"
+      ],
+      "tests": [
+        "test/business/jiuchuanhui-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    }
+  },
+  "artifactBaseline": {
+    "aggregateSha256": "pending-after-write",
+    "files": []
+  },
+  "notes": [
+    "本 manifest 已基于用户提供的 weaver-e10-jiuchuanhui-connector 1.1.1 源目录建立强源资料基线（126 个文件）。",
+    "本次同步把 66 个源脚本接口映射为 87 个 CLI operation：每个 ESB/datajson 写操作拆为 prepare/apply 对，读操作单 operation。",
+    "缓存初始化（cache.init）已暴露为 CLI operation（risk: local-file-write，写入本地缓存文件）；商机阶段推进（sale.stage-advance）按模块边界不暴露为 CLI operation，由 Skill 编排层承担。",
+    "manifest 只记录路径、hash、影响映射和转换摘要，不保存 Cookie、Token、个人主目录绝对路径或大段源正文。"
+  ]
+}

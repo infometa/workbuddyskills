@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/material-item.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "name", "source", "rightsStatus", "privacyClass", "contentDigest", "extractionState"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "kind": { "enum": ["text", "markdown", "document", "table", "pdf", "image", "audio", "transcript", "other"] },
+    "name": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "rightsStatus": { "enum": ["cleared", "unknown", "restricted"] },
+    "privacyClass": { "enum": ["public", "internal", "private", "restricted"] },
+    "contentDigest": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+    "extractionState": { "enum": ["descriptor_ready", "extracted", "unsupported", "human_review_pending"] }
+  }
+}

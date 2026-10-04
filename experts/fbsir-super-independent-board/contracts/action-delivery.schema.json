@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.fbsir.local/super-independent-board/action-delivery.schema.json",
+  "title": "超级独董会行动与交付回执",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "state",
+    "outputRef",
+    "target",
+    "payloadSummary",
+    "impactBoundary",
+    "approval",
+    "execution",
+    "cannotProve"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "fbsir.super-independent-board.action-delivery/v1"
+    },
+    "state": {
+      "enum": [
+        "delivered",
+        "executed",
+        "awaiting_approval",
+        "not_executed"
+      ]
+    },
+    "outputRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "payloadSummary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "impactBoundary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "status",
+        "grantedFor"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "not_required",
+            "required_not_granted",
+            "granted"
+          ]
+        },
+        "grantedFor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "execution": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "cannotProve": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "executed"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "callRef",
+              "targetReadback",
+              "terminalState",
+              "observedAt"
+            ],
+            "properties": {
+              "callRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "targetReadback": {
+                "type": "string",
+                "minLength": 1
+              },
+              "terminalState": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "awaiting_approval"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "approval": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "status": {
+                "const": "required_not_granted"
+              }
+            }
+          },
+          "execution": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "delivered",
+              "not_executed"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

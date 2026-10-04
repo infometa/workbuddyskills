@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/adapter-target-resolution.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sceneId", "portId", "operation", "adapterId", "readableTarget", "targetDescriptorDigest", "internalTargetDigest", "providerBindingFingerprintDigest", "resolutionSnapshotDigest", "intentDigest", "bindingTargetDigest", "observedAt", "issuedAt", "expiresAt", "receiptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "1.1.0" },
+    "sceneId": { "type": "string", "minLength": 1 },
+    "portId": { "type": "string", "minLength": 1 },
+    "operation": { "type": "string", "minLength": 1 },
+    "adapterId": { "enum": ["wecom", "fbs"] },
+    "readableTarget": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "targetDescriptorDigest": { "$ref": "#/$defs/digest" },
+    "internalTargetDigest": { "$ref": "#/$defs/digest" },
+    "providerBindingFingerprintDigest": { "$ref": "#/$defs/digest" },
+    "resolutionSnapshotDigest": { "$ref": "#/$defs/digest" },
+    "intentDigest": { "$ref": "#/$defs/digest" },
+    "bindingTargetDigest": { "$ref": "#/$defs/digest" },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "issuedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": { "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }
+}

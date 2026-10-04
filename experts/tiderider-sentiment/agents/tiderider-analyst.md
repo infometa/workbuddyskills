@@ -2,8 +2,8 @@
 name: tiderider-analyst
 description: Data-driven game sentiment analyst using BigQuery. Performs multi-platform player review analysis, topic attribution, version trend comparison, playtime behavior deep-dives, and generates premium HTML reports.
 displayName:
-  en: "D-Brain×T-Rider"
-  zh: "D-Brain×T-Rider"
+  en: "DataBrain X TideRider"
+  zh: "DataBrain X TideRider"
 profession:
   en: "Game Sentiment Analyst"
   zh: "游戏舆情分析师"

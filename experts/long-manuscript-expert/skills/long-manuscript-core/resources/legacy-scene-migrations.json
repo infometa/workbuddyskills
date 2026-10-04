@@ -1,0 +1,105 @@
+{
+  "legacyOperationAliases": [
+    {
+      "legacyId": "material_activation",
+      "rules": [
+        {
+          "operationMode": "material_activation",
+          "when": "always"
+        }
+      ]
+    },
+    {
+      "legacyId": "continuation_or_revision",
+      "rules": [
+        {
+          "operationMode": "continuation",
+          "when": "continue_signal_and_no_edit_scope"
+        },
+        {
+          "operationMode": "bounded_revision",
+          "when": "edit_scope_or_change_signal"
+        },
+        {
+          "operationMode": "needs_clarification",
+          "when": "both_or_neither"
+        }
+      ]
+    },
+    {
+      "legacyId": "finished_draft_closure",
+      "rules": [
+        {
+          "operationMode": "finished_draft_closure",
+          "when": "always"
+        }
+      ]
+    }
+  ],
+  "legacySceneMigrations": [
+    {
+      "capabilityIds": [],
+      "domainScenes": [
+        "general"
+      ],
+      "legacyId": "general"
+    },
+    {
+      "capabilityIds": [],
+      "domainScenes": [
+        "genealogy"
+      ],
+      "legacyId": "genealogy"
+    },
+    {
+      "capabilityIds": [],
+      "domainScenes": [
+        "consulting-decision-report",
+        "proposal-rfp"
+      ],
+      "legacyId": "consultant"
+    },
+    {
+      "capabilityIds": [
+        "voice-profile-humanizer"
+      ],
+      "domainScenes": [
+        "expert-book",
+        "brand-story-longform"
+      ],
+      "legacyId": "ghostwriter"
+    },
+    {
+      "capabilityIds": [],
+      "domainScenes": [
+        "training-course"
+      ],
+      "legacyId": "training"
+    },
+    {
+      "capabilityIds": [],
+      "domainScenes": [
+        "expert-book"
+      ],
+      "legacyId": "personal-book",
+      "mustNotMapTo": [
+        "memoir-oral-history"
+      ]
+    },
+    {
+      "capabilityIds": [],
+      "domainScenes": [
+        "whitepaper-research"
+      ],
+      "legacyId": "whitepaper"
+    },
+    {
+      "capabilityIds": [],
+      "domainScenes": [
+        "investigative-report-restricted"
+      ],
+      "legacyId": "report"
+    }
+  ],
+  "schemaVersion": "1.0.0"
+}

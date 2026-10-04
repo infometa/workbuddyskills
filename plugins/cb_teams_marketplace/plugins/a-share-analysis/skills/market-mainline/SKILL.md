@@ -1,6 +1,8 @@
 ---
 name: market-mainline
 description: 用于A股市场主线识别，聚焦市场结构/题材周期/资金行为。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。每天开盘后、午盘、收盘后，用户都需要快速知道：今天市场到底在交易什么，真正的主线是什么，情绪在什么位置，明天应该盯哪里。
+description_zh: "用于A股市场主线识别，聚焦市场结构/题材周期/资金行为。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。每天开盘后、午盘、收盘后，用户都需要快速知道：今天市场到底在交易什么，真正的主线是什么，情绪在什么位置，明天应该盯哪里。"
+description_en: "Use for identifying the main themes in the A-share market, focusing on market structure, thematic cycles, and capital behavior. Primarily suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. After the open, at midday, or after the close, it quickly explains what the market is trading, the true leading theme, current sentiment, and what to watch next."
 ---
 
 # A股市场主线识别

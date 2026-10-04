@@ -1,0 +1,61 @@
+{
+  "adapterId": "fbs",
+  "bindings": [
+    {
+      "adapterId": "fbs",
+      "adapterOperation": "skill_whoami",
+      "approvalRequired": false,
+      "bindingScope": "product_control_binding",
+      "freshTargetResolutionRequired": false,
+      "operation": "check_entitlement",
+      "portId": "EntitlementPort",
+      "publicResultFields": [
+        "productLabel",
+        "entitlementStatus",
+        "bindingDigest"
+      ],
+      "readbackRequired": false,
+      "writeMode": "read_only"
+    },
+    {
+      "adapterId": "fbs",
+      "adapterOperation": "lebao_status",
+      "approvalRequired": false,
+      "bindingScope": "product_control_binding",
+      "freshTargetResolutionRequired": false,
+      "operation": "read_receipt",
+      "portId": "ReceiptPort",
+      "publicResultFields": [
+        "productLabel",
+        "receiptStatus",
+        "receiptDigest"
+      ],
+      "readbackRequired": false,
+      "writeMode": "read_only"
+    },
+    {
+      "adapterId": "fbs",
+      "adapterOperation": "skill_consume",
+      "approvalRequired": true,
+      "bindingScope": "product_control_binding",
+      "freshTargetResolutionRequired": true,
+      "operation": "record_receipt",
+      "portId": "ReceiptPort",
+      "publicResultFields": [
+        "productLabel",
+        "receiptStatus",
+        "receiptDigest"
+      ],
+      "readbackRequired": true,
+      "sameBindingRequired": true,
+      "writeMode": "external_write"
+    }
+  ],
+  "designRules": {
+    "officialConnectorEndpointClass": "public_fbs_mcp",
+    "probeDoesNotProveBusinessClosure": true,
+    "providerBindingFingerprintRequired": true,
+    "sameBindingRequiredForConsume": true
+  },
+  "schemaVersion": "1.1.0"
+}

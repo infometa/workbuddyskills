@@ -1,0 +1,176 @@
+#!/usr/bin/env bash
+# makers-install-cli — install the EdgeOne CLI, picking the fastest npm registry.
+#
+# Why this exists: users in mainland China are far faster on the npmmirror
+# mirror, users elsewhere are usually faster on the official registry. Probing
+# both before installing costs ~0.3s and picks the right one automatically.
+#
+# Probing note: we request the single-version manifest (<registry>/edgeone/latest,
+# ~5-14 KB) rather than the full packument (~460 KB). Both travel the real path
+# npm uses to fetch package data and both prove the package exists on that
+# registry (200 vs 404) — but the small one measures latency instead of
+# bandwidth, and does not slow the check down on a poor connection.
+#
+# We deliberately do NOT probe /-/ping: it only measures edge-node connect
+# latency. npmmirror is a lazy-sync mirror, so its ping can win while an actual
+# package fetch loses. Measured on the same machine: ping said mirror was
+# faster (0.14s vs 0.29s) while real package metadata said official was
+# (0.24s vs 0.42s) — opposite conclusions.
+#
+# Usage:
+#   makers-install-cli              # no-op if already >= MIN_VERSION, else probe + install
+#   makers-install-cli --dry-run    # print the chosen registry only, install nothing
+#   makers-install-cli --force      # reinstall/upgrade even if a good version is present
+#
+# Safe to run speculatively and safe to run twice: with a satisfying version
+# already installed it exits 0 immediately without touching the network.
+#
+# Exit codes: 0 ok · 1 install failed / version too low · 2 both registries unreachable
+
+set -uo pipefail
+
+readonly OFFICIAL="https://registry.npmjs.org"
+readonly MIRROR="https://registry.npmmirror.com"
+readonly MIN_VERSION="1.6.7"
+readonly PROBE_TIMEOUT=4
+
+DRY_RUN=0
+FORCE=0
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run) DRY_RUN=1 ;;
+    --force)   FORCE=1 ;;
+    -h|--help) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *) echo "unknown option: $arg (try --help)" >&2; exit 1 ;;
+  esac
+done
+
+# Probe one registry. Prints "<http_code> <seconds>" — "000 99" when unreachable.
+probe() {
+  local url="$1" out
+  # --noproxy '*' matters inside the WorkBuddy sandbox: an injected http_proxy
+  # would otherwise route (and can stall) these probes.
+  out=$(curl -s -o /dev/null --noproxy '*' --max-time "$PROBE_TIMEOUT" \
+        -w '%{http_code} %{time_total}' "$url/edgeone/latest" 2>/dev/null) || out="000 99"
+  [ -z "$out" ] && out="000 99"
+  printf '%s' "$out"
+}
+
+# Pick a registry. Default is the mirror; only switch to official when the
+# mirror is unusable, or official is clearly (>20%) faster. Near-parity does
+# not trigger a switch — churn buys nothing and the mirror is the safer default
+# for this expert team's primary audience.
+#
+# Sets globals: REGISTRY, PROBE_SUMMARY, PROBE_BOTH_DOWN.
+# (Assigns to globals rather than echoing a value, so the probe numbers survive
+#  for the caller — a $(...) subshell would discard them.)
+choose_registry() {
+  local tmp oc ot mc mt
+  tmp=$(mktemp -d) || { REGISTRY=$MIRROR; PROBE_SUMMARY="probe skipped"; return; }
+
+  ( probe "$OFFICIAL" > "$tmp/off" ) &
+  ( probe "$MIRROR"   > "$tmp/mir" ) &
+  wait
+
+  # NB: probe writes without a trailing newline, so `read` returns non-zero even
+  # on success. Ignore its exit status and validate the parsed values instead —
+  # keying the fallback off `read`'s status would discard good measurements.
+  read -r oc ot < "$tmp/off" || true
+  read -r mc mt < "$tmp/mir" || true
+  rm -rf "$tmp"
+  case "${oc:-}" in ''|*[!0-9]*) oc=000; ot=99 ;; esac
+  case "${mc:-}" in ''|*[!0-9]*) mc=000; mt=99 ;; esac
+  : "${ot:=99}" "${mt:=99}"
+
+  REGISTRY="$MIRROR"
+  if [ "$oc" = "200" ]; then
+    if [ "$mc" != "200" ]; then
+      REGISTRY="$OFFICIAL"                                # mirror unusable
+    elif awk "BEGIN{exit !($ot < $mt * 0.8)}"; then
+      REGISTRY="$OFFICIAL"                                # official >20% faster
+    fi
+  fi
+
+  PROBE_SUMMARY="official ${oc}/${ot}s · mirror ${mc}/${mt}s"
+  if [ "$oc" != "200" ] && [ "$mc" != "200" ]; then
+    PROBE_BOTH_DOWN=1
+  fi
+}
+
+# Extract the installed version and compare it against MIN_VERSION.
+# `edgeone -v` prints an ASCII-art banner plus a boxed "version 1.6.23-beta.222"
+# line, so prefer the labelled match and only fall back to a bare semver scan.
+version_ok() {
+  local raw v
+  raw=$(edgeone -v 2>/dev/null | tr -d '\r') || return 1
+  v=$(printf '%s' "$raw" | grep -oE 'version[[:space:]]+[0-9]+\.[0-9]+\.[0-9]+' \
+      | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+  [ -z "$v" ] && v=$(printf '%s' "$raw" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+  [ -z "$v" ] && return 1
+  INSTALLED_VERSION="$v"
+  # sort -V handles 1.6.21 > 1.6.7 correctly (a plain string compare would not).
+  # Pre-release suffixes (-beta.N) are dropped above, so 1.6.7-beta counts as 1.6.7.
+  [ "$(printf '%s\n%s\n' "$MIN_VERSION" "$v" | sort -V | head -1)" = "$MIN_VERSION" ]
+}
+
+PROBE_SUMMARY=""
+PROBE_BOTH_DOWN=0
+INSTALLED_VERSION=""
+REGISTRY=""
+
+# Fast path: already satisfied → do nothing. Keeps this script safe to call
+# speculatively (e.g. pre-warmed in parallel with development) and safe to call
+# twice, without paying a ~30s reinstall. Skipped under --force, and under
+# --dry-run (whose whole job is to report which registry would win).
+if [ "$FORCE" = "0" ] && [ "$DRY_RUN" = "0" ] && version_ok; then
+  echo "✔ edgeone $INSTALLED_VERSION already installed (>= $MIN_VERSION) — nothing to do"
+  exit 0
+fi
+
+choose_registry
+
+if [ "$PROBE_BOTH_DOWN" = "1" ]; then
+  echo "✖ Both npm registries are unreachable ($PROBE_SUMMARY)." >&2
+  echo "  Check network/proxy settings, then retry. Do not loop on this." >&2
+  exit 2
+fi
+
+echo "→ registry: $REGISTRY   ($PROBE_SUMMARY)"
+
+if [ "$DRY_RUN" = "1" ]; then
+  printf '%s\n' "$REGISTRY"
+  exit 0
+fi
+
+echo "→ npm install -g edgeone@latest --registry=$REGISTRY"
+if npm install -g edgeone@latest --registry="$REGISTRY" 2>&1 && version_ok; then
+  echo "✔ edgeone $INSTALLED_VERSION installed (registry: $REGISTRY)"
+  exit 0
+fi
+
+# One retry on the other registry. npmmirror is a lazy-sync mirror, so a
+# freshly published CLI can be missing there for minutes — which shows up as a
+# successful install of a stale, too-low version, not as a network error.
+OTHER=$OFFICIAL
+[ "$REGISTRY" = "$OFFICIAL" ] && OTHER=$MIRROR
+
+if [ -n "$INSTALLED_VERSION" ]; then
+  echo "⚠ Installed $INSTALLED_VERSION, below required $MIN_VERSION — likely mirror lag." >&2
+else
+  echo "⚠ Install from $REGISTRY failed." >&2
+fi
+echo "→ retrying once on $OTHER" >&2
+
+if npm install -g edgeone@latest --registry="$OTHER" 2>&1 && version_ok; then
+  echo "✔ edgeone $INSTALLED_VERSION installed (registry: $OTHER)"
+  exit 0
+fi
+
+echo "✖ Could not install edgeone >= $MIN_VERSION from either registry." >&2
+echo "  Last version seen: ${INSTALLED_VERSION:-none}" >&2
+echo "  If the error was EACCES/permission: do NOT use sudo. Either set a user" >&2
+echo "  prefix (npm config set prefix ~/.npm-global, then add ~/.npm-global/bin" >&2
+echo "  to PATH) or ask the user to run the install themselves." >&2
+echo "  If 'command not found: edgeone' persists after a successful install," >&2
+echo "  the global bin dir is not on PATH — check: npm prefix -g" >&2
+exit 1

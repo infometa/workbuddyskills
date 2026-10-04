@@ -81,6 +81,9 @@ PAT 拿不到，没法直接帮配。但仍要尽量减少用户操作：
 完整指南：skills/career-broker-core/references/setup/00-mcp-bundle.md（一次装齐 mcpgw 全家）
 ```
 
+> **地址铁律**：太湖 PAT 申请页**只有** `https://tai.it.woa.com/user/pat` 这一个地址，上面话术里的 URL 必须**逐字照抄**。
+> `tai.woa.com` / `mcp.woa.com` / `taihu.woa.com` / path 写成 `/user/token` 都是**不存在的错误地址**，严禁凭"太湖"二字自己推测拼接。记不准就不给链接，也绝不许编一个看起来合理的。
+
 > **关键**：用户给了 PAT 之后（第 2 步），LLM **直接帮 ta 写 mcp.json**——不要再让用户自己粘贴 JSON。
 > 写完一样要提示去客户端「专家 → 连接器 → 自定义连接器」点「信任」。
 

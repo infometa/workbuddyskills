@@ -3,6 +3,11 @@ name: sentiment-analyst
 description: >-
   情绪分析师：分析内部人交易和新闻情绪，判断市场多空情绪，输出 [情绪分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  情绪分析师：分析内部人交易和新闻情绪，判断市场多空情绪，输出 [情绪分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Sentiment analyst: analyzes insider transactions and news sentiment to judge bullish/bearish market sentiment, outputting a [sentiment analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read,WebSearch
 color: "#D97706"
 ---

@@ -1,6 +1,8 @@
 ---
 name: institutional-holdings
 description: 用于机构持仓与十大股东分析，聚焦股东结构、机构行为、个股深度研究。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户希望通过十大股东、机构持仓、持股集中度变化，判断谁在买、谁在卖、筹码是否稳定、机构是否认可公司中长期逻辑。
+description_zh: "用于机构持仓与十大股东分析，聚焦股东结构、机构行为、个股深度研究。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户希望通过十大股东、机构持仓、持股集中度变化，判断谁在买、谁在卖、筹码是否稳定、机构是否认可公司中长期逻辑。"
+description_en: "Use for institutional-holdings and top-ten-shareholder analysis, focusing on ownership structure, institutional behavior, and in-depth stock research. Suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It uses changes in major shareholders, institutional holdings, and ownership concentration to identify buyers and sellers, assess holding stability, and evaluate institutional confidence in a company's medium- to long-term thesis."
 ---
 
 # 机构持仓股东分析

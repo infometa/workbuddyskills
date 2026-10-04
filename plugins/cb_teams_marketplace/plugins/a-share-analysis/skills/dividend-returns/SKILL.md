@@ -1,6 +1,8 @@
 ---
 name: dividend-returns
 description: 用于分红与股东回报分析，聚焦股东回报、价值投资、资本配置、长线研究。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想知道一家公司分红高不高、是否稳定、是不是"真红利"，以及公司整体资本配置是否尊重股东回报。
+description_zh: "用于分红与股东回报分析，聚焦股东回报、价值投资、资本配置、长线研究。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想知道一家公司分红高不高、是否稳定、是不是\"真红利\"，以及公司整体资本配置是否尊重股东回报。"
+description_en: "Use for dividend and shareholder-return analysis, focusing on shareholder returns, value investing, capital allocation, and long-term research. Suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It evaluates whether a company's dividends are high, stable, and genuinely sustainable, and whether its overall capital allocation respects shareholder returns."
 ---
 
 # 分红与股东回报

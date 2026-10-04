@@ -1,0 +1,97 @@
+# 总裁（ceo）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: ceo
+name_cn: 总裁
+category: setting
+carrier: manga
+audience: female
+weight: high
+level: level-1
+severity: strong
+version: 6.0.0
+related_combo: references/domestic/combos/wealthy-clan.md
+emotion_core:
+- 精英爽感
+- 权力反差
+- 霸道宠溺
+- 阶层仰望
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 女频核心，男频可做主角身份设定
+  bg_desc: 都市为绝对核心，兼容豪门、职场
+  weight: high
+  bottom_line:
+  - 总裁身份必须落地，有对应商业能力与权力感
+  - 人设统一，不能霸道与油腻边界模糊
+  - 阶层反差明确，与女主形成身份对位
+relations:
+  synergy:
+  - target: wealthy-clan
+    effect_type: 增强型
+    weight: high
+    effect: 豪门背景强化总裁身份含金量，阶层感更强
+  - target: 甜宠
+    effect_type: 增强型
+    weight: high
+    effect: 总裁身份放大宠溺反差，霸总甜宠爽感更强
+  - target: 追妻
+    effect_type: 增强型
+    weight: high
+    effect: 高高在上的总裁卑微追妻，身份反差爽感拉满
+  - target: 萌宝
+    effect_type: 增强型
+    weight: high
+    effect: 总裁爹+萌宝，父子相认+追妻双线并行
+  - target: counterattack
+    effect_type: 增强型
+    weight: medium
+    effect: 女主逆袭+总裁加持，爽感与情感双线
+  mutex:
+  - target: 纯校园/纯乡村
+    reason: 无商业都市背景则总裁人设不成立
+combo_adapt:
+- combo: references/domestic/combos/wealthy-clan.md
+  rule: 总裁人设对齐豪门背景规则，强化身份与阶层感
+  sub: 豪门总裁型
+- combo: references/domestic/combos/sweet-romance.md
+  rule: 总裁人设绑定甜宠，强化身份反差与爽感
+  sub: 霸总甜宠型
+- combo: references/overseas/combos/chase-regret.md
+  rule: 总裁追妻火葬场，身份反差放大卑微感
+  sub: 总裁追妻型
+fusion:
+- recipe: fusion/recipes/contract-marriage.md
+  note: 契约婚姻经典配方，先婚后爱+总裁人设，适配女频高转化内容
+- recipe: fusion/recipes/ceo-sweet-pet.md
+  note: 霸总甜宠标准配方，强爽感强反差，受众基础广泛
+redlines:
+- code: AP-ZC01
+  name: 总裁身份悬浮
+  severity: 极高
+  dimension: 人物与人设
+  test: 无商业行为与能力体现，全靠台词说厉害，人设崩塌
+- code: AP-ZC02
+  name: 霸总人设油腻
+  severity: 极高
+  dimension: 人物与人设
+  test: 行为越界、不尊重女性，爽感变油腻，观感崩盘
+- code: AP-ZC03
+  name: 阶层反差缺失
+  severity: 高
+  dimension: 标签与逻辑
+  test: 男女主身份无差异，总裁身份沦为背景板
+soft_warnings:
+- 避免商业内容过于失真，专业常识错误
+- 避免女主完全工具人，只为衬托男主存在
+- 避免配角全员降智，只为凸显男主厉害
+manga:
+  visual_signature: 西装精英造型 + 商业帝国/豪宅场景
+  high_affinity: false
+  visual_hooks:
+  - 总裁的精英气场造型
+  - 权力场合的视觉压迫感
+  - 反差宠溺的名场面定格

@@ -3,6 +3,11 @@ name: neutral-risk-analyst
 description: >-
   中性风险分析师：在风险辩论中提供平衡视角，同时挑战激进和保守两方，推荐温和策略。
   在 Phase 4 风险评估阶段由 orchestrator 并行调用（与激进/保守分析师同时）。
+description_zh: >-
+  中性风险分析师：在风险辩论中提供平衡视角，同时挑战激进和保守两方，推荐温和策略。
+  在 Phase 4 风险评估阶段由 orchestrator 并行调用（与激进/保守分析师同时）。
+description_en: >-
+  Neutral risk analyst: provides a balanced perspective in the risk debate, challenging both the aggressive and conservative sides and recommending moderate strategies. Invoked in parallel by the orchestrator during the Phase 4 risk assessment (alongside the aggressive and conservative analysts).
 tools: Read
 color: "#0284C7"
 ---

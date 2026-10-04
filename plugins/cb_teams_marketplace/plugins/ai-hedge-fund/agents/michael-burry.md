@@ -3,6 +3,11 @@ name: michael-burry
 description: >-
   迈克尔·伯里投资智能体：深度价值逆向投资者，关注自由现金流收益率、EV/EBIT、资产负债表安全性和内部人买入，输出 [伯里分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  迈克尔·伯里投资智能体：深度价值逆向投资者，关注自由现金流收益率、EV/EBIT、资产负债表安全性和内部人买入，输出 [伯里分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Michael Burry investment agent: a deep-value contrarian focused on free cash flow yield, EV/EBIT, balance-sheet safety and insider buying, outputting a [Burry analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#991B1B"
 ---

@@ -91,7 +91,7 @@
 
 - **Python 3.8+**（用于 `skills/md-to-html/scripts/render.py` 与 `embed_avatars.py`）
 - **Pillow**（用于 HTML 头像 base64 内嵌）：`pip install pillow`
-- **验证安装**：`python3 -c "import PIL; print(PIL.__version__)"`
+- **验证安装**：`python3 -c "import PIL; print(PIL.__version__)"`（Windows 若 `python3` 不可用，改用 `python` 或 `py -3`）
 
 ## 使用数据说明
 
@@ -99,9 +99,8 @@
 
 - **采集内容**：随机生成的设备标识 `dev_id`（首次运行本地生成的 UUID）、事件时间戳、事件类型（start/complete）、任务耗时等常量字段。
 - **不采集**：任何个人身份信息、股票查询内容、对话内容、账户信息。
-- **上报方式**：由 `bin/init_task`（跨平台启动器，内部调 `init_task.py`）通过 HTTPS 上报，全程 fail-safe，网络异常不影响任何功能。
-- **会话隔离**：多会话/多项目并发时，任务标记按会话隔离（默认按项目根 `.git` 或工作目录分桶）；`dev_id` 跨会话复用。可选环境变量 `WESTOCK_SESSION_KEY` 可显式指定会话隔离键，**普通用户无需配置**（未设置时自动回退，功能不受影响）。
-- **关闭方式**：如需关闭，删除或清空 `bin/init_task.py` 即可（不影响专家团分析能力）。
+- **上报方式**：由 `bin/init_task.py` 通过 HTTPS 上报（调用方用该文件绝对路径，解释器按 `python3` → `python` → `py -3` 重试），全程 fail-safe；`render.py` 成功时会自动 `ensure-complete`（按**产物目录**对齐任务键，找不到匹配 start 时不补造）。排障可设 `WESTOCK_TELEMETRY_DEBUG=1` 查看 POST 失败原因。
+- **任务隔离**：任务键为本轮产物目录 `deliverables/stock-partner/<YYYY-MM-DD>`（同日并发请再加唯一子目录）；每次 `start` 生成唯一 `task_id` 并写入该目录 `.westock-task-id`，`complete` 只认领对应标记。目录下多个 pending 且未指定 id 时不认领（宁可漏报，也不串报/多报）。`dev_id` 跨会话复用。调用方通过 `WESTOCK_TASK_DIR`（兼容旧名 `WESTOCK_SESSION_KEY`）传入产物目录。
 
 ## 目录结构
 
@@ -141,10 +140,8 @@ stock-partner-team/
 │       └── scripts/
 │           ├── render.py        # 注入器：body 片段 → 完整 HTML（自动调 embed_avatars）
 │           └── embed_avatars.py # 就地把 <img src="avatars/*.png"> 内嵌为 base64
-├── bin/                         # 跨技能通用可执行文件（安装后加入 PATH）
-│   ├── init_task                # 跨平台启动器（macOS/Linux，sh）——调用入口
-│   ├── init_task.cmd            # 跨平台启动器（Windows，cmd）
-│   └── init_task.py             # 实际逻辑：任务级 InLong 上报（start/complete）+ dev_id 持久化
+├── bin/                         # 包级脚本（绝对路径 + python 直跑）
+│   └── init_task.py             # 任务级 InLong 上报（start/complete/ensure-complete）+ dev_id
 ├── settings.json                # 主理人设置
 └── README.md
 ```

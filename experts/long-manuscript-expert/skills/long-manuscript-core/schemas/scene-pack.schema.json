@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/fbs-long-manuscript/scene-pack.schema.json",
+  "title": "ManuscriptOS canonical scene pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "sceneId", "kind", "family", "displayName", "lifecycle", "implementationCheckpoint",
+    "operationModes", "capabilityBindings", "triggers", "requiredInputs", "domainObjects", "workflowStages", "artifactRefs",
+    "qualityGateRefs", "optionalPortBindings", "privacy", "rights", "contentRiskClass", "fallback",
+    "legacyAliases", "migrationProvenance", "fixtureRefs"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "sceneId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "kind": { "enum": ["general_fallback", "vertical_scene"] },
+    "family": { "type": ["string", "null"] },
+    "displayName": { "type": "string", "minLength": 1 },
+    "lifecycle": { "enum": ["seed", "implemented", "active", "retired"] },
+    "implementationCheckpoint": { "type": "string", "pattern": "^C[0-9]+$" },
+    "operationModes": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/operationMode" } },
+    "capabilityBindings": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["operationMode", "capabilityIds"], "properties": { "operationMode": { "$ref": "#/$defs/operationMode" }, "capabilityIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" } } } } },
+    "triggers": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "signal", "weight"], "properties": { "id": { "type": "string" }, "signal": { "type": "string" }, "weight": { "type": "number" } } } },
+    "requiredInputs": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "required", "sensitivity"], "properties": { "id": { "type": "string" }, "required": { "type": "boolean" }, "sensitivity": { "type": "string" } } } },
+    "domainObjects": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "workflowStages": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["id", "operationModes", "exitGateRefs"], "properties": { "id": { "type": "string" }, "operationModes": { "type": "array", "items": { "$ref": "#/$defs/operationMode" } }, "exitGateRefs": { "type": "array", "items": { "$ref": "#/$defs/registryId" } } } } },
+    "artifactRefs": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["artifactId", "archetypeId"], "properties": { "artifactId": { "type": "string" }, "archetypeId": { "type": "string" } } } },
+    "qualityGateRefs": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["seedGate", "registryId", "parameterProfile", "humanOwner", "reviewMandate"], "properties": { "seedGate": { "type": "string" }, "registryId": { "$ref": "#/$defs/registryId" }, "parameterProfile": { "type": "string" }, "humanOwner": { "type": ["string", "null"] }, "reviewMandate": { "type": ["string", "null"] } } } },
+    "optionalPortBindings": { "type": "array", "items": { "$ref": "#/$defs/portBinding" } },
+    "privacy": { "type": "object", "additionalProperties": false, "required": ["minimumDataScope", "livingPersonReview"], "properties": { "minimumDataScope": { "type": "string" }, "livingPersonReview": { "type": "boolean" } } },
+    "rights": { "type": "object", "additionalProperties": false, "required": ["clearanceRequired", "unknownRightsAction"], "properties": { "clearanceRequired": { "type": "boolean" }, "unknownRightsAction": { "enum": ["block", "human_review", "warn"] } } },
+    "contentRiskClass": { "enum": ["low", "medium", "high", "restricted"] },
+    "fallback": { "type": "object", "additionalProperties": false, "required": ["localOfflineAvailable", "allowGeneralSubstitution", "riskFloor", "connectorUnavailableBehavior"], "properties": { "localOfflineAvailable": { "const": true }, "allowGeneralSubstitution": { "type": "boolean" }, "riskFloor": { "enum": ["low", "medium", "high", "restricted"] }, "connectorUnavailableBehavior": { "const": "preserve_route_and_use_local_workflow" } } },
+    "legacyAliases": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "migrationProvenance": { "type": "object", "required": ["seedCatalogSha256", "mappingVersion"], "properties": { "seedCatalogSha256": { "$ref": "#/$defs/sha256" }, "mappingVersion": { "type": "string" } } },
+    "fixtureRefs": { "type": "array", "items": { "$ref": "#/$defs/safeRef" }, "uniqueItems": true }
+  },
+  "allOf": [
+    { "if": { "properties": { "lifecycle": { "const": "active" } }, "required": ["lifecycle"] }, "then": { "properties": { "fixtureRefs": { "minItems": 1 } } } },
+    { "if": { "properties": { "contentRiskClass": { "const": "restricted" } }, "required": ["contentRiskClass"] }, "then": { "properties": { "qualityGateRefs": { "contains": { "type": "object", "properties": { "registryId": { "const": "human-review.receipt" }, "humanOwner": { "const": "legal_reviewer" } }, "required": ["registryId", "humanOwner"] } }, "fallback": { "properties": { "allowGeneralSubstitution": { "const": false }, "riskFloor": { "const": "restricted" } } } } } },
+    { "if": { "properties": { "contentRiskClass": { "const": "high" } }, "required": ["contentRiskClass"] }, "then": { "properties": { "fallback": { "properties": { "riskFloor": { "enum": ["high", "restricted"] } } } } } },
+    { "if": { "properties": { "contentRiskClass": { "const": "medium" } }, "required": ["contentRiskClass"] }, "then": { "properties": { "fallback": { "properties": { "riskFloor": { "enum": ["medium", "high", "restricted"] } } } } } }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "registryId": { "type": "string", "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$" },
+    "safeRef": { "type": "string", "pattern": "^(?![A-Za-z]:)(?!/)(?!.*//)(?!.*[\\\\:<>\"|?*])(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[. ](?:/|$)).+$" },
+    "operationMode": { "enum": ["material_activation", "project_planning", "chapter_generation", "continuation", "bounded_revision", "review_quality", "finished_draft_closure", "template_fill_conversion", "export_delivery", "asset_repurposing"] },
+    "portBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["legacyLabel", "portId", "operation", "purpose", "minimumDataScope", "writeMode", "required", "approvalRequired", "readbackRequired", "fallback"],
+      "properties": {
+        "legacyLabel": { "type": "string" },
+        "portId": { "enum": ["MaterialSourcePort", "StructuredIntakePort", "CollaborationPort", "ReviewPort", "DeliveryPort", "NotificationPort", "EntitlementPort", "ReceiptPort"] },
+        "operation": { "type": "string", "minLength": 1 },
+        "purpose": { "type": "string", "minLength": 1 },
+        "minimumDataScope": { "type": "string", "minLength": 1 },
+        "writeMode": { "enum": ["read_only", "draft_write", "external_write"] },
+        "required": { "const": false },
+        "approvalRequired": { "type": "boolean" },
+        "readbackRequired": { "type": "boolean" },
+        "fallback": { "const": "local_workflow_without_connector" }
+      },
+      "allOf": [
+        { "if": { "properties": { "writeMode": { "const": "external_write" } }, "required": ["writeMode"] }, "then": { "properties": { "approvalRequired": { "const": true }, "readbackRequired": { "const": true } } } }
+      ]
+    }
+  }
+}

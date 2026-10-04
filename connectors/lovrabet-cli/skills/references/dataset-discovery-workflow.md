@@ -52,7 +52,7 @@ lovrabet dataset list --app <name> --name "<关键词>"
 
 ### api-doc list/detail — 查看运行态 API 文档
 
-写 personal BFF 或复杂数据访问说明前，先用 API 文档收敛可用接口：
+写 Personal Backend Function 或复杂数据访问说明前，先用 API 文档收敛可用接口：
 
 ```bash
 lovrabet api-doc list --category dataset
@@ -157,4 +157,4 @@ lovrabet data filter --code 2874b19935c240659e8872e9e2416ae3 \
 3. `dataset detail` 返回的字段兼容 v1（properties）和 v2（fields）两种数据集格式；运行态接口未给完整字段时会兜底字段名
 4. 数据集的 code 是 32 位 hex UUID，是所有 `data *` 命令的必填参数
 5. 当业务需求不明确落在哪个 app 时，先验证 `defaultApp`；验证不成立再 `app list`，并用 `dataset list --app <name> --name <关键词>` 做验证式收敛
-6. 写 personal BFF 或其他数据访问源码前，除非用户已经提供明确数据，否则先用 `api-doc`、`dataset detail`、`dataset sdk-doc` 和只读 `data` 命令确认真实结构
+6. 写 Personal Backend Function 或其他数据访问源码前，除非用户已经提供明确数据，否则先用 `api-doc`、`dataset detail`、`dataset sdk-doc` 和只读 `data` 命令确认真实结构

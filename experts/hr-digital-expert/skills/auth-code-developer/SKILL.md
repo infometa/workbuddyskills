@@ -1,4 +1,4 @@
----
+﻿---
 name: auth-code-developer
 description: >
   权限中台鉴权代码开发。包含完整的鉴权规范与代码实现指南：权限项命名规范、

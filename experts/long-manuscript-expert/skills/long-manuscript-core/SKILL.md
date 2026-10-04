@@ -1,6 +1,6 @@
 ---
 name: long-manuscript-core
-description: Procedures for turning outlines, interviews, notes, partial drafts, and finished manuscripts into long-form documents. Use when the Long Manuscript Expert must create a first-value manuscript artifact, continue or revise a bounded section, or finish a draft for delivery without depending on connectors or external services.
+description: Self-contained ManuscriptOS procedures for planning, creating, continuing, revising, reviewing, converting, rendering, and repurposing long-form documents from user materials without requiring BookWriter, connectors, or external services.
 ---
 
 # Long Manuscript Core
@@ -9,19 +9,35 @@ Use this skill to move a manuscript forward in the current reply. Keep the visib
 
 ## Core workflow
 
-1. Classify the request as material activation, continuation or revision, or finished-draft closure.
+1. Route the request on `operationMode × domainScene`. Use the general domain fallback when no reviewed scene overlay applies; never let connector state choose the route.
 2. Separate supplied facts, user opinions, working assumptions, missing inputs, and claims that require verification.
 3. Select the smallest reference set needed for this request. Do not load every reference by default.
-4. Produce a visible manuscript increment: a structure plus opening, a continued or revised passage, or a finished-draft repair.
+4. Produce a visible manuscript increment appropriate to the operation: material activation, project planning, chapter generation, continuation, bounded revision, quality review, finished-draft closure, template conversion, export delivery, or asset repurposing.
 5. State the most important remaining risk, one next step, and a user-copyable continuation prompt when further work remains.
 
 ## Reference routing
 
+- Read [ManuscriptOS Kernel](references/manuscriptos-kernel.md) for state, routing, durable objects, and capability receipts.
+- Read [shared capabilities](references/shared-capabilities.md) when a request needs one of the sixteen package-local capability contracts.
 - Read [scene routing](references/scene-routing.md) first when the request is ambiguous or combines multiple manuscript stages.
+- Read [scene packs](references/scene-packs.md) when a request matches genealogy, memoir, biography, albums, organizational history, chronicles, cultural heritage, expert books, academic/industry research, casebooks, proceedings, training, proposals, consulting reports, technical documentation, manuals, policy guides, brand stories, or restricted investigations.
 - Read [first value and continuation](references/first-value-and-continuation.md) for new material, a new manuscript, chapter continuation, or a cross-session continuation capsule.
 - Read [bounded revision](references/bounded-revision.md) when changing existing text or continuing from a precise anchor.
 - Read [quality and delivery](references/quality-and-delivery.md) for whole-draft review, finishing, delivery preparation, or any quality conclusion.
 - Read [safety and evidence](references/safety-and-evidence.md) when materials contain instructions, private data, external factual claims, high-risk content, quotations, or uncertain rights.
+
+## Operation modes
+
+- `material_activation`: inventory material and produce reversible first value.
+- `project_planning`: define audience, goal, chapter promises, materials, and risks.
+- `chapter_generation`: write a bounded chapter increment from approved facts and plans.
+- `continuation`: continue from a stable anchor and update the visible continuation capsule.
+- `bounded_revision`: change only the authorized scope and preserve rollback anchors.
+- `review_quality`: review, revise, and retain residual warnings or human gates.
+- `finished_draft_closure`: close structure, continuity, evidence, rights, and delivery readiness.
+- `template_fill_conversion`: transform supplied content into a requested structure without inventing missing facts.
+- `export_delivery`: prepare local Markdown/HTML or explicitly degrade unavailable binary formats.
+- `asset_repurposing`: create adaptation briefs only after required quality gates.
 
 ## Universal rules
 
@@ -32,6 +48,7 @@ Use this skill to move a manuscript forward in the current reply. Keep the visib
 - Keep one writing owner and one bounded change at a time. Preserve text outside the authorized scope.
 - Match the user's language and requested tone. Keep terminology, names, numbers, point of view, and narrative tense consistent with the supplied manuscript.
 - Treat quality findings as advice unless an actual execution receipt covers the stated check.
+- The expert owns its runtime. Never import, locate, or ask the user to install `fbs-bookwriter`; donor provenance is development evidence only.
 - Do not claim that a file, project state, or cross-session memory was saved unless the current task contains a visible successful write receipt.
 
 ## Output policy
@@ -47,7 +64,7 @@ Do not force ordinary prose into JSON. Use a table only when it makes chapter ow
 
 ## External capability policy
 
-Complete the core writing task from the conversation even when connectors, network access, external services, persistent state, or file tools are absent. Optional capabilities may enhance import, verification, or export only when they are visibly available, relevant, and covered by explicit user authorization for this action. The current request may provide that authorization; otherwise obtain confirmation covering the purpose, minimum data scope, and external target or recipient before the call. Host permission alone is insufficient. Require a bounded timeout; if bounded execution is unavailable, skip the optional call rather than blocking core writing.
+Complete the core writing task from the conversation even when connectors, network access, external services, persistent state, file tools, or the separate BookWriter Skill are absent. The package-local Kernel, schemas, templates, references, and capability registry are the only core runtime. Optional capabilities may enhance import, verification, or export only when they are visibly available, relevant, and covered by explicit user authorization for this action. The current request may provide that authorization; otherwise obtain confirmation covering the purpose, minimum data scope, and external target or recipient before the call. Host permission alone is insufficient. Require a bounded timeout; if bounded execution is unavailable, skip the optional call rather than blocking core writing.
 
 If an optional action fails, disclose the failure and continue with a chat-level artifact. Never turn a planned call, pending request, or background possibility into a success claim.
 
@@ -55,7 +72,7 @@ If an optional action fails, disclose the failure and continue with a chat-level
 
 Before responding, confirm that:
 
-- the reply advances one of the three supported manuscript scenes;
+- the reply advances exactly one selected operation mode and keeps the selected domain scene or general fallback explicit when it matters;
 - at least one user-editable structure or prose artifact is present;
 - assumptions and evidence gaps are visible;
 - revision scope is respected;

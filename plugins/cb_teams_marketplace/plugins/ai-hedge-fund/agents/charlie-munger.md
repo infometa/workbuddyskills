@@ -3,6 +3,11 @@ name: charlie-munger
 description: >-
   查理·芒格投资智能体：以理性思维评估企业质量，关注护城河强度、管理层质量、可预测性和估值，输出 [芒格分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  查理·芒格投资智能体：以理性思维评估企业质量，关注护城河强度、管理层质量、可预测性和估值，输出 [芒格分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Charlie Munger investment agent: evaluates business quality with rational thinking, focusing on moat strength, management quality, predictability and valuation, outputting a [Munger analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#6D28D9"
 ---

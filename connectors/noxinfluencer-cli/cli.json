@@ -1,0 +1,48 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": "20"
+  },
+  "init": {
+    "darwin": "npm install -g @noxinfluencer/cli@0.5.5",
+    "linux": "npm install -g @noxinfluencer/cli@0.5.5",
+    "win32": "npm.cmd install -g @noxinfluencer/cli@0.5.5"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "noxinfluencer --version",
+      "linux": "noxinfluencer --version",
+      "win32": "noxinfluencer.cmd --version"
+    },
+    "minVersion": "0.5.5",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  },
+  "auth": {
+    "darwin": "noxinfluencer login --no-browser --timeout 300",
+    "linux": "noxinfluencer login --no-browser --timeout 300",
+    "win32": "noxinfluencer.cmd login --no-browser --timeout 300"
+  },
+  "unAuth": {
+    "darwin": "noxinfluencer auth logout",
+    "linux": "noxinfluencer auth logout",
+    "win32": "noxinfluencer.cmd auth logout"
+  },
+  "status": {
+    "darwin": "noxinfluencer auth status",
+    "linux": "noxinfluencer auth status",
+    "win32": "noxinfluencer.cmd auth status"
+  },
+  "statusMatch": "\"authenticated\"\\s*:\\s*true",
+  "statusMatchJson": {
+    "authenticated": "true"
+  },
+  "authUrlDomain": "noxinfluencer.com",
+  "authSuppressBrowser": true,
+  "authWaitForExit": true,
+  "authDeviceFlow": {
+    "uriPattern": "(https?://[^\\s]*noxinfluencer\\.com/oauth/device[^\\s]*)",
+    "codePattern": "user_code=([^&\\s]+)",
+    "defaultExpiresInSeconds": 600,
+    "codeEmbeddedInUri": true
+  }
+}

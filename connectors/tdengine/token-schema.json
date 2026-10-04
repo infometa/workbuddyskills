@@ -1,0 +1,56 @@
+{
+  "title": "TDengine MCP 连接配置",
+  "title_en": "TDengine MCP Configuration",
+  "description": "连接您的 TDengine 平台。API Key 仅存储在本机 ~/.workbuddy 下。",
+  "description_en": "Connect your TDengine platform. The API Key is stored only locally under ~/.workbuddy.",
+  "docUrl": "https://idmpdocs.taosdata.com/administration/profile-settings",
+  "docLabel": "如何获取 TDengine IDMP API Key？",
+  "docLabel_en": "How to get a TDengine IDMP API Key?",
+  "fields": [
+    {
+      "key": "TDENGINE_API_SCHEMA",
+      "label": "协议",
+      "label_en": "Schema",
+      "type": "text",
+      "required": true,
+      "defaultValue": "http",
+      "description": "TDengine 平台访问协议（http/https）。",
+      "description_en": "TDengine platform access schema (http/https)."
+    },
+    {
+      "key": "TDENGINE_API_HOST",
+      "label": "TDengine 平台地址",
+      "label_en": "TDengine platform host",
+      "placeholder": "localhost",
+      "placeholder_en": "localhost",
+      "type": "text",
+      "required": true,
+      "defaultValue": "localhost",
+      "description": "TDengine 平台服务主机地址。",
+      "description_en": "TDengine platform service host."
+    },
+    {
+      "key": "TDENGINE_API_PORT",
+      "label": "端口",
+      "label_en": "Port",
+      "placeholder": "6042",
+      "placeholder_en": "6042",
+      "type": "text",
+      "required": true,
+      "defaultValue": "6042",
+      "description": "TDengine 平台服务端口（HTTP 默认 6042，HTTPS 默认 6034）。",
+      "description_en": "TDengine platform service port (HTTP default 6042, HTTPS default 6034)."
+    },
+    {
+      "key": "TDENGINE_API_KEY",
+      "label": "TDengine API Key",
+      "label_en": "TDengine API Key",
+      "placeholder": "在个人设置（点击头像）→ API Key 中生成",
+      "placeholder_en": "Generate one in Profile Settings (click the avatar) → API Key",
+      "type": "password",
+      "required": true,
+      "description": "用于访问 TDengine 的个人 API Key。",
+      "description_en": "Personal API Key for TDengine."
+    }
+  ]
+}

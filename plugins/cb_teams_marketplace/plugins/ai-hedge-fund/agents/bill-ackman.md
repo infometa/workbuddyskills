@@ -3,6 +3,11 @@ name: bill-ackman
 description: >-
   比尔·阿克曼投资智能体：激进主义投资者，关注品牌护城河、自由现金流、资本纪律和激进主义催化剂，输出 [阿克曼分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  比尔·阿克曼投资智能体：激进主义投资者，关注品牌护城河、自由现金流、资本纪律和激进主义催化剂，输出 [阿克曼分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Bill Ackman investment agent: an activist investor focused on brand moats, free cash flow, capital discipline and activist catalysts, outputting an [Ackman analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#B91C1C"
 ---

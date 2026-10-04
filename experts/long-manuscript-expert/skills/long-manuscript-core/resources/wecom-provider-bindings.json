@@ -1,0 +1,164 @@
+{
+  "adapterId": "wecom",
+  "bindings": [
+    {
+      "adapterId": "wecom",
+      "adapterOperation": "material.reference.read",
+      "approvalRequired": false,
+      "bindingScope": "scene_optional_binding",
+      "freshTargetResolutionRequired": false,
+      "operation": "import_material_reference",
+      "portId": "MaterialSourcePort",
+      "publicResultFields": [
+        "title",
+        "name",
+        "summary",
+        "sourceType",
+        "modifiedAt",
+        "contentDigest"
+      ],
+      "readbackRequired": false,
+      "writeMode": "read_only"
+    },
+    {
+      "adapterId": "wecom",
+      "adapterOperation": "smartsheet.record.append",
+      "approvalRequired": true,
+      "bindingScope": "scene_optional_binding",
+      "freshTargetResolutionRequired": true,
+      "operation": "append_intake_submission",
+      "portId": "StructuredIntakePort",
+      "publicResultFields": [
+        "title",
+        "status",
+        "rowLabel"
+      ],
+      "readbackRequired": true,
+      "writeMode": "external_write"
+    },
+    {
+      "adapterId": "wecom",
+      "adapterOperation": "todo.create",
+      "approvalRequired": true,
+      "bindingScope": "scene_optional_binding",
+      "freshTargetResolutionRequired": true,
+      "operation": "create_task",
+      "portId": "CollaborationPort",
+      "publicResultFields": [
+        "title",
+        "status",
+        "assigneeLabel"
+      ],
+      "readbackRequired": true,
+      "writeMode": "external_write"
+    },
+    {
+      "adapterId": "wecom",
+      "adapterOperation": "calendar.create",
+      "approvalRequired": true,
+      "bindingScope": "scene_optional_binding",
+      "freshTargetResolutionRequired": true,
+      "operation": "schedule_event",
+      "portId": "CollaborationPort",
+      "publicResultFields": [
+        "title",
+        "status",
+        "timeLabel"
+      ],
+      "readbackRequired": true,
+      "writeMode": "external_write"
+    },
+    {
+      "adapterId": "wecom",
+      "adapterOperation": "document.review_access.configure",
+      "approvalRequired": true,
+      "bindingScope": "scene_optional_binding",
+      "freshTargetResolutionRequired": true,
+      "operation": "configure_review_access",
+      "portId": "ReviewPort",
+      "publicResultFields": [
+        "title",
+        "status",
+        "accessLabel"
+      ],
+      "readbackRequired": true,
+      "writeMode": "external_write"
+    },
+    {
+      "adapterId": "wecom",
+      "adapterOperation": "review.request",
+      "approvalRequired": true,
+      "bindingScope": "scene_optional_binding",
+      "freshTargetResolutionRequired": true,
+      "operation": "request_review",
+      "portId": "ReviewPort",
+      "publicResultFields": [
+        "title",
+        "status",
+        "reviewerLabel"
+      ],
+      "readbackRequired": true,
+      "writeMode": "external_write"
+    },
+    {
+      "adapterId": "wecom",
+      "adapterOperation": "smartpage.private_preview.create",
+      "approvalRequired": true,
+      "bindingScope": "scene_optional_binding",
+      "freshTargetResolutionRequired": true,
+      "operation": "create_private_preview",
+      "portId": "DeliveryPort",
+      "publicResultFields": [
+        "title",
+        "status",
+        "previewLabel",
+        "artifactDigest"
+      ],
+      "readbackRequired": true,
+      "writeMode": "external_write"
+    },
+    {
+      "adapterId": "wecom",
+      "adapterOperation": "document.artifact.store",
+      "approvalRequired": true,
+      "bindingScope": "scene_optional_binding",
+      "freshTargetResolutionRequired": true,
+      "operation": "store_artifact",
+      "portId": "DeliveryPort",
+      "publicResultFields": [
+        "title",
+        "status",
+        "artifactLabel",
+        "artifactDigest"
+      ],
+      "readbackRequired": true,
+      "writeMode": "external_write"
+    },
+    {
+      "adapterId": "wecom",
+      "adapterOperation": "message.send",
+      "approvalRequired": true,
+      "bindingScope": "scene_optional_binding",
+      "freshTargetResolutionRequired": true,
+      "operation": "send_notification",
+      "portId": "NotificationPort",
+      "publicResultFields": [
+        "title",
+        "status",
+        "targetLabel"
+      ],
+      "readbackRequired": true,
+      "writeMode": "external_write"
+    }
+  ],
+  "designRules": {
+    "appendIsDefaultWriteSemantic": true,
+    "authorizationStatusRequired": "authorized",
+    "installOrAuthInitializationPerformedByExpert": false,
+    "internalIdsMayOnlyComeFromCurrentResolution": true,
+    "minimumCliVersion": "1.1.0",
+    "overwriteRequiresExplicitDestructiveApproval": true,
+    "targetResolutionMustBindCurrentSnapshot": true
+  },
+  "schemaVersion": "1.1.0"
+}

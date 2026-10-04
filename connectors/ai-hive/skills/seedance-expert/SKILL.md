@@ -6,29 +6,24 @@ description: "通过指导agent智能调度 Seedance 模型，针对\"电影级�
 description_zh: "通过指导agent智能调度 Seedance 模型，针对\"电影级运镜、首尾帧过渡、多模态角色引用、时序分镜、角色一致性\"等场景深度优化 prompt 工程，输出具备角色一致性的高质量电影级视频，支持 4-15 秒时长、原生音频生成与多模态参考。"
 description_en: "Agent optimizes Seedance prompts for cinematic camera work, first/last-frame transitions, role consistency."
 category: media
-version: 1.0.0
+version: 1.1.4
 author: 极睿科技（Infimind）/ AI-HIVE 团队
 permissions:
   provisional: true
   read:
-  - 仅限当前对话中用户主动选择的本地图片与视频
+  - 仅限当前对话中用户主动选择的本地图片、视频与音频
   network:
   - 仅通过已启用的 AI-HIVE Connector 调用 get_user_info、list_models、upload_media_from_path、generate_video 与 get_generation_task
 triggers:
 - "Seedance"
-- "seedance"
-- "首尾帧"
-- "运镜"
 - "电影级"
+- "运镜"
 - "分镜"
 - "角色一致性"
-- "多模态参考"
-- "图生视频"
 - "过渡视频"
 - "链式续写"
 - "cinematic"
 - "camera movement"
-- "first last frame"
 ---
 
 ## 工具参数
@@ -37,27 +32,27 @@ triggers:
 - 不接收参数；返回账户与余额摘要
 
 ### `list_models`
-- `kind`（可选，string）：资源类型 `video`
-- `cursor`（可选，string）：分页游标
+- `modelType`（可选，string）：资源类型枚举 `TEXT` / `IMAGE` / `VIDEO`（本 Skill 用 `VIDEO`）
 
 ### `upload_media_from_path`
 - `path`（必填，string）：用户授权的本地文件绝对路径
-- `kind`（可选，string）：资源类型 `video`
+- `filename`（可选，string）：覆盖上传文件名
+- `contentType`（可选，string）：覆盖 MIME 类型；不确定时省略并由客户端识别
+- MP3/WAV 音频单文件最大 15 MiB；上传成功后返回 `mediaType=AUDIO`
 
 ### `generate_video`
-- `model`（必填，object）：来自 `list_models(kind="video")` 的模型引用
+- `publicModelId`（必填，string）：来自 `list_models(modelType="VIDEO")` 的当前模型 ID
+- `routingMode`（必填，string）：选中模型实际返回的 `COST_FIRST` / `SPEED_FIRST` / `SUCCESS_FIRST`
 - `prompt`（必填，string）：描述主体、动作、镜头、光线、风格与声音
-- `durationSeconds`（可选，integer）：时长 5/10/15
-- `count`（可选，integer）：候选数量（默认 1）
-- `size`（可选，string）：像素尺寸（仅用支持的枚举值）
-- `ratio`（可选，string）：画幅（仅用支持的枚举值）
-- `referenceMediaIds`（可选，array）：参考媒体 mediaId 列表
-- `firstFrameMediaId`（可选，string）：首帧 mediaId
-- `lastFrameMediaId`（可选，string）：尾帧 mediaId
+- `imageMediaIds`（可选，array）：参考图片 mediaId 列表
+- `videoMediaIds`（可选，array）：参考或待编辑视频 mediaId 列表
+- `audioMediaIds`（可选，array）：外部参考音频 mediaId 列表；默认空数组，仅用于当前模型配置明确支持参考音频的组合
+- `firstFrameMediaId` / `lastFrameMediaId`（可选，string）：首尾帧 mediaId
+- `params`（可选，object）：时长、画幅、分辨率、声音等模型专属参数；键、类型和值以当前模型配置为准
+- `pricingSnapshot`（必填，object）：选中模型与路由返回的价格快照，原样传入
 
 ### `get_generation_task`
 - `taskId`（必填，string）：`generate_video` 真实返回的 taskId
-
 
 
 > 所有工具的真实返回值以服务端响应为准；本章节参数表是客户端约束说明。
@@ -80,14 +75,14 @@ triggers:
 
 - get_user_info：查询当前账户与余额；不接收参数。
 - list_models：按 video 列出当前可用模型及价格快照，从中筛选 Seedance 对应的 publicModelId。
-- upload_media_from_path：上传本地图片/视频并返回 mediaId，用于首尾帧、参考图与角色锚点。
+- upload_media_from_path：上传本地图片/视频或 MP3/WAV 音频并返回 mediaId；音频单文件最大 15 MiB。
 - generate_video：使用选定模型与 prompt 创建视频任务。
 - get_generation_task：使用 taskId 查询任务状态与结果。
 
 ## 适用场景
 
 - 用户明确表达使用本 Skill 对应的模型能力或场景需求
-- 用户提供素材（图片/视频）需要在该模型擅长的领域生成结果
+- 用户提供素材（图片/视频/音频）需要在该模型擅长的领域生成结果
 - 用户希望跨场景复用同一模型能力保持风格一致
 - 用户对生成结果的某项特性（文字渲染/真实质感/艺术风格/运镜/动态表现）有明确要求
 
@@ -113,9 +108,9 @@ triggers:
 
 | 类型 | 限制 | 格式 | 单文件大小 |
 |---|---|---|---|
-| 图片 | ≤ 9 张 | jpeg / png / webp / bmp / tiff / gif | 各 30MB |
-| 视频 | ≤ 3 个 | mp4 / mov | 各 50MB，总时长 2-15s |
-| 音频 | ≤ 3 个 | mp3 / wav | 各 15MB，总时长 ≤ 15s |
+| 图片 | 模型能力参考 ≤9 张 | jpeg / jpg / png / webp | 当前 Connector 单文件 ≤10MiB |
+| 视频 | 模型能力参考 ≤3 个 | mp4 / webm / mov | 当前 Connector 单文件 ≤100MiB；总时长以模型配置为准 |
+| 音频 | 参考音频需以当前模型配置为准 | mp3 / wav | 当前 Connector 单文件 ≤15 MiB |
 | 文本 | 自然语言 prompt | — | — |
 | 总文件数 | ≤ 12 个 | — | — |
 
@@ -154,7 +149,7 @@ triggers:
 
 | 维度 | 规格 |
 |---|---|
-| 输入模态 | 文本 + 最多 9 张图 + 最多 3 个视频 + 最多 3 个音频（共最多 12 个文件） |
+| 模型级输入能力 | 文本 + 图片 / 视频 / 音频参考；公开数量仅作能力参考，实际数量、时长和组合限制以当前模型配置为准 |
 | 输出 | MP4，480p 或 720p |
 | 时长 | 4-15 秒 |
 | 原生音频 | 自动生成 SFX、音乐、lip-sync 对话 |
@@ -170,21 +165,23 @@ Seedance 的核心优势是电影级运镜与多模态角色引用，是把多�
 | 首尾帧过渡 | 提供 firstFrameMediaId + lastFrameMediaId，生成两帧之间的平滑过渡视频 |
 | 运镜控制 | 推、拉、摇、移、跟、升、降--单一镜头内一种运镜 |
 | 多图角色引用 | 把参考图标记为角色，在 prompt 中锚定身份 |
-| 多模态输入 | 文本 + 最多 9 张图 + 视频参考，融合多源素材 |
+| 多模态输入 | 文本 + 图片 / 视频参考；模型配置允许时可加入外部参考音频 |
 | 时序分镜 | 大于 8 秒视频按时间片拆分 |
 | 角色一致性 | 4 图法（正面 + 纯侧脸 + 3/4 动态 + 换背景正面）跨镜头保人 |
 | 原生音频 | 自动生成 SFX、音乐、lip-sync 对话 |
 
 ## 角色引用系统（核心语法）
 
-Seedance 把参考图当角色而非视觉锚点。上传多张参考图后，按上传顺序编号（图1、图2...），在 prompt 中声明每张图的用途：
+Seedance 把参考素材作为明确角色或职责输入。图片、视频和音频分别按各自上传顺序编号（图1、图2…… / 视频1、视频2…… / 音频1、音频2……），在 prompt 中声明用途：
 
 - 图1 作为首帧 / 图2 作为尾帧
 - 图1 的角色作为主体（身份锚定）
 - 场景参考图3
 - 参考视频1 的运镜
 - 穿着图2 中的服装
-- BGM 参考音频1
+- BGM 节奏参考音频1（仅在当前模型配置明确支持参考音频和该组合时，把对应 mediaId 放入 `audioMediaIds`）
+
+外部参考音频、Prompt 中的声音描述和 `params` 中的原生声音开关是三类独立输入，不能互相替代。当前 Seedance 2.0 的参考音频不能作为唯一参考输入；使用 `audioMediaIds` 时，需要按当前模型配置配合参考图片或视频。若用户只提供音频，必须在调用前请其补充参考图片或视频，或改为不提交外部音频、仅保留 Prompt / `params` 的原生声音需求。
 
 ## Prompt 公式
 
@@ -236,25 +233,46 @@ Seedance 单次最长 15 秒。需要更长叙事时，用链式续写：
 
 | 用户意图 | 参数 | 说明 |
 |---|---|---|
-| 纯文生视频 | 无 referenceMediaIds / 无首尾帧 | 从 prompt 生成 |
+| 纯文生视频 | 无图片/视频素材、无首尾帧 | 从 prompt 生成 |
 | 首帧续写 | firstFrameMediaId | 从指定帧开始，自然延续 |
 | 首尾帧过渡 | firstFrameMediaId + lastFrameMediaId | 生成两帧之间过渡 |
-| 多图角色融合 | referenceMediaIds（多图）| 用图N 引用角色 |
+| 多图角色融合 | `imageMediaIds`（多图）| 用图N 引用角色 |
+| 多模态参考 | `imageMediaIds` 或 `videoMediaIds` + `audioMediaIds` | 音频不得作为唯一参考输入；数量与组合以当前模型配置为准 |
 | 链式续写 | 上一个 clip 最后一帧作为 firstFrameMediaId | 长视频分段 |
+
+## Prompt 骨架（通用模板）
+
+逐场景组装时，按以下字段结构化；缺省字段留空，不强行填充：
+
+| 字段 | 含义 | 示例 |
+|---|---|---|
+| 用途 | 视频用在哪（产品讲解 / 宣传片 / 分镜） | 产品宣传短片 |
+| 主体 | 核心对象 / 人物 | 产品 + 模特 |
+| 镜头脚本 | 分镜与时长（0-4s / 4-8s …） | 0-4s 推进特写 |
+| 运镜 | 相机运动 | 环绕 / 横移 |
+| 视觉风格 | 电影级 / 动画 / 实拍 | 电影级调色 |
+| 光线色彩 | 光向与色调 | 暖光、霓虹 |
+| 音频 | 原生音 / 配乐 / BGM | Synthwave 124BPM |
+| 保留项 | 图生视频须保留要素 | 人物不变形 |
+| 输出规格 | 时长 / 画幅 / 分辨率 | 12s / 9:16 / 480P |
+
+组装顺序：用途 → 主体 → 镜头脚本 → 运镜 → 视觉风格 → 光线色彩 → 音频 → 保留项 → 输出规格。仅保留有值的字段。
 
 ## 调用流程
 
 1. get_user_info 检查余额。
-2. list_models(kind=video) 获取 Seedance 模型对象（含 publicModelId 与 pricingSnapshot）。
+2. list_models(modelType=VIDEO) 获取 Seedance 模型对象（含 publicModelId 与 pricingSnapshot）。
 3. 分析用户需求：纯文生 / 图生 / 首尾帧 / 多图角色 / 链式续写。
-4. 如需参考图，upload_media_from_path 逐张上传得到 mediaId。
-5. 组装 prompt：角色设定、场景、动作、运镜、时序、音频、风格。
-6. generate_video 提交任务，get_generation_task 跟踪到 completed。
+4. 如需参考图片、视频或音频，使用 upload_media_from_path 逐个上传得到 mediaId；MP3/WAV 音频单文件最大 15 MiB。
+5. 按上传顺序建立图N、视频N、音频N映射；只有当前模型配置明确支持参考音频且同时提供所需参考图片或视频时，才填写 `audioMediaIds`。
+6. 组装 prompt：角色设定、场景、动作、运镜、时序、原生声音描述、风格；原生声音开关只放入当前模型配置明确暴露的 `params`。
+7. generate_video 提交任务，get_generation_task 跟踪到 `COMPLETED`。
 
 ## 输入检查
 
 - 明确生成模式（文生 / 图生 / 首尾帧 / 多图角色 / 链式续写）。
-- 参考图仅使用用户主动选择的文件。
+- 参考图片、视频与音频仅使用用户主动选择的文件；音频限 MP3/WAV 且单文件 ≤15 MiB。
+- 参考音频不能作为唯一参考输入；必须按模型配置配合参考图片或视频，否则调用前拦截。
 - 时长仅使用服务端支持的枚举值（4-15 秒）。
 - 画幅仅使用服务端支持的枚举值。
 - 多图角色引用时，必须用图N + 角色名明确每张图的用途。
@@ -285,41 +303,83 @@ Seedance 单次最长 15 秒。需要更长叙事时，用链式续写：
 
 ## 状态与错误处理
 
-- pending / processing：返回工具真实状态或进度，无进度数字时不自行估算。
-- completed：返回所有可用视频链接、缩略图与工具明确给出的部分失败信息。注意 COMPLETED 状态不保证有视频 URL，必须检查返回体。
-- failed：保留可安全展示的 errorCode / errorCategory / retryable。
+### 余额不足 / 任务被拒
+
+**AI-HIVE 官网**：https://ai-hive.iclip.cn
+
+**充值路径**（账户已存在）：
+1. 访问 https://ai-hive.iclip.cn → 登录 AI-HIVE 账户
+2. 进入「账户中心」/「钱包」/「充值」页面
+3. 选择充值套餐或自定义金额 → 完成支付
+4. 充值成功后回到 WorkBuddy，无需重新连接 Connector，直接重试任务
+
+**注册路径**（首次用户）：
+1. 直接访问 https://ai-hive.iclip.cn/login，进入注册页面
+2. 使用手机号完成注册
+3. 登录 → 回到 WorkBuddy 重新连接 AI-HIVE Connector 即可
+
+**价格透明**：
+- 每次调用前可调 `get_user_info` 查看当前余额
+- 调用后实际扣费以服务端 `pricingSnapshot` 为准
+- 若工具明确提示余额不足，停止创建任务；任务进入 `FAILED` 时按 `failure` 安全字段展示
+- 详细价格参考：https://ai-hive.iclip.cn/pricing
+
+**常见扣费场景参考**（具体以服务端为准）：
+- 文本生成：按 token 数计费
+- 图片生成：按张数 + 分辨率计费
+- 视频生成：按秒数 + 分辨率计费
+
+**其他被拒原因**：
+- 账户被风控：联系 AI-HIVE 客服（https://ai-hive.iclip.cn → 登录 → 设置 → 联系客服）
+- 模型临时不可用：稍后重试或换模型
+- 内容违规审核：调整 prompt 后重试（避免敏感内容）
+
+- `PENDING` / `PROCESSING`：返回工具真实状态或进度，无进度数字时不自行估算。
+- `COMPLETED`：返回所有可用视频链接、缩略图与工具明确给出的部分失败信息。注意 `COMPLETED` 状态不保证有视频 URL，必须检查返回体。
+- `FAILED`：展示 `failure.code`、`failure.summary` 与 `failure.suggestion`（若返回），不暴露内部诊断。
 - 超时或网络不明：拿到 taskId 时只查询原任务，不重复创建。
 - 鉴权失败（401/403）：提示用户重新连接 AI-HIVE Connector。
 
 ## 调用示例
 
-### 示例 1：典型办公场景
+### 示例 1：首尾帧过渡（I2V）
 
-**用户表达**：用一张本地商品图，生成一张 1:1 的夏季促销海报，要求海报上写"夏季新品 5 折起"。
+**用户表达**：用这张开箱图当首帧、成品图当尾帧，生成一段 6 秒过渡视频。
 
 **AI 行为**：
-1. 调用 `get_user_info` 检查余额与可用模型
-2. 调用 `list_models(kind="image")` 获取本模型对应的 publicModelId 与 pricingSnapshot
-3. 调用 `upload_media_from_path` 上传参考图，得到 mediaId
-4. 调用 `generate_image`，prompt 包含场景描述与文字渲染要求
-5. 调用 `get_generation_task(taskId)` 跟踪到 completed
-6. 输出图片 URL + 参数摘要 + 后续建议
+1. 调用 `get_user_info` 检查余额
+2. 调用 `list_models(modelType="VIDEO")` 筛选 Seedance 对应的 publicModelId 与 pricingSnapshot
+3. 调用 `upload_media_from_path` 分别上传首帧图、尾帧图，得到两个 mediaId
+4. 调用 `generate_video`：`firstFrameMediaId=首帧`、`lastFrameMediaId=尾帧`、`params={duration: 6}`，prompt 聚焦「从开箱到成品的自然过渡」；`duration` 的键和值以当前模型配置为准
+5. 调用 `get_generation_task(taskId)` 跟踪到 `COMPLETED`
+6. 输出视频 URL + 参数摘要 + 后续建议
 
-### 示例 2：批量对比场景
+### 示例 2：多图角色参考（R2V）
 
-**用户表达**：用同一商品图，分别生成 3 张不同风格候选。
+**用户表达**：用图1当主角、图2当场景，生成一段 10 秒电影感短片，角色在雪夜房间踱步。
 
-**AI 行为**：调用 `generate_image` 设置 `count: 3`，按 3 个候选分别输出，对比呈现。
+**AI 行为**：
+1. `get_user_info` 检查余额
+2. `list_models(modelType="VIDEO")` 选定 Seedance 模型
+3. `upload_media_from_path` 上传图1、图2，按上传顺序编号（图1=角色，图2=场景）
+4. `generate_video`：`imageMediaIds=[图1,图2]`、`params={duration: 10}`，prompt 开头建立「图1是主角、图2是场景」映射 + 时间戳分镜（0-4s…4-10s…）；参数以当前模型配置为准
+5. `get_generation_task` 跟踪到 `COMPLETED`，返回视频 URL + 参数摘要
+
+### 示例 3：链式续写（长视频）
+
+**用户表达**：把这个 15 秒短片接着往下拍一段。
+
+**AI 行为**：取上一段成片最后一帧（或 `get_generation_task` 返回的尾帧）→ `upload_media_from_path` 上传 → `generate_video` 以该帧为 `firstFrameMediaId`，prompt 写明「紧接上一段结尾，角色/服装/场景连续不跳变」→ 跟踪结果。
 
 ### English Example
 
-User: "Generate a 1:1 summer sale poster from my local product image with text 'Summer Sale 50% Off'."
+User: "Use this unboxing shot as the first frame and the finished-product shot as the last frame to make a 6-second transition video."
 
-AI flow: run `get_user_info` for balance, call `list_models(kind="image")` to fetch the model's `publicModelId` and `pricingSnapshot`, upload the reference image via `upload_media_from_path` to get `mediaId`, call `generate_image` with prompt describing scene + text rendering requirement, track with `get_generation_task(taskId)` until `completed`, return image URL + parameter summary + follow-up suggestions. Never ask the user to paste a Token into chat.
+AI flow: run `get_user_info` for balance, call `list_models(modelType="VIDEO")` to fetch the Seedance `publicModelId` and `pricingSnapshot`, upload both frames via `upload_media_from_path`, call `generate_video` with `firstFrameMediaId`/`lastFrameMediaId` and a prompt focused on the change (not the static content already in the frames), track with `get_generation_task(taskId)` until `COMPLETED`, return video URL + parameter summary. Never ask the user to paste a Token into chat.
 
 
 ## 输出模板
 
 ### 成功：taskId + 模型与参数 + 视频 URL 列表 + 下一步建议
-### 失败：错误码 + 错误分类 + 原因摘要 + 下一步建议
+### 失败：failure.code + failure.summary + 原因摘要 + 下一步建议
 ### 部分失败：成功视频完整呈现 + 失败子任务错误码与 prompt 概要 + 不补写

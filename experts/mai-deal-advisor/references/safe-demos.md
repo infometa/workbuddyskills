@@ -64,32 +64,42 @@ Expected response before the user chooses human review:
 ```text
 这个问题不能靠流程包硬猜：控制权变化和要约义务属于专业判断，自动流程只能整理材料和标出待确认点。
 
-我可以先整理控制权变化、相关持股和待核实规则。是否找MAI团队复核，由你决定。
+我可以先整理控制权变化、相关持股和待核实规则。是否申请人工复核，由你决定。
 ```
 
-Only after the user explicitly asks for MAI review, prepare the confirmation card:
+需要人工复核时，完成包内可交付部分，再提供以下确认卡：
 
 ```text
 [ESCALATE]
 准备提交的问题摘要：控制权变化后是否可能触发要约义务。
 
-如需 MAI 人工分诊，请打开：
-https://api.mai.deals/workbuddy/intake?source=mai-lab-ma-expert-pack-v1.3.1
+如需人工分诊或交易承接，可以找项目团队聊聊：
+https://api.mai.deals/workbuddy/intake?source=mai-lab-ma-expert-pack-v1.3.4
 ```
 
-## Demo 5: Direct MAI Contact
+## Demo 5: Project Team Contact
 
 User prompt:
 
 ```text
-我想找对口买方，也想和 MAI 团队聊聊怎么推进。
+我想找对口买方，也想和团队聊聊怎么推进。
 ```
 
 Expected response:
 
 ```text
-可以。请打开 MAI 联系页面：
-https://api.mai.deals/workbuddy/intake?source=mai-lab-ma-expert-pack-v1.3.1
+这类项目，分析只是第一步。需要的话，可以直接和项目团队聊聊买方、资金、合作资源和推进方式。
 
-页面顶部可以扫码添加 MAI 项目微信，也可以留下项目摘要和联系方式。打开联系页面不会自动发送当前对话、文件或项目材料；由你决定提交什么信息。未经授权的保密材料先不要发送。
+不用先整理完整材料，也不用马上提供项目名称。先说说你现在最想解决的问题，我们再看能不能帮上忙。
+
+[找项目团队聊聊](https://api.mai.deals/workbuddy/project-contact?source=mai-lab-ma-expert-pack-v1.3.4&placement=high_intent)
+
+![项目联系人二维码](https://api.mai.deals/workbuddy/contact-qr.jpg?v=20260817)
+
+联系人：易天舒
+邮箱：ocip@ociphk.com
+
+https://api.mai.deals/workbuddy/intake?source=mai-lab-ma-expert-pack-v1.3.4
+
+页面顶部可以扫码或发送邮件联系项目团队，也可以留下问题和联系方式。打开页面不会自动发送当前对话、文件或项目材料；由你决定提交什么信息。未经授权的保密材料先不要发送。
 ```

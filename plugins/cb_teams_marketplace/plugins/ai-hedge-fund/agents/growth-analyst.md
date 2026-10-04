@@ -3,6 +3,11 @@ name: growth-analyst
 description: >-
   成长分析师：分析营收/盈利增长趋势、PEG 比率和利润率扩张，评估成长性，输出 [成长分析信号]。
   在 Phase 1 由 orchestrator 并行调用。
+description_zh: >-
+  成长分析师：分析营收/盈利增长趋势、PEG 比率和利润率扩张，评估成长性，输出 [成长分析信号]。
+  在 Phase 1 由 orchestrator 并行调用。
+description_en: >-
+  Growth analyst: analyzes revenue/earnings growth trends, the PEG ratio and margin expansion to assess growth quality, outputting a [growth analysis signal]. Invoked in parallel by the orchestrator in Phase 1.
 tools: Bash,Read
 color: "#16A34A"
 ---

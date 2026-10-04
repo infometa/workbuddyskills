@@ -1,0 +1,351 @@
+/* job-search-coaching · ATS-safe 简历主题
+ * 单列、文本优先；屏幕预览使用 A4 纸张效果，打印时自动移除预览装饰。
+ */
+
+:root {
+    --resume-primary: #1e6fd9;
+    --resume-primary-dark: #164f9c;
+    --resume-text: #1f2937;
+    --resume-muted: #5f6b7a;
+    --resume-rule: #cbd8e8;
+    --resume-soft: #f4f8fd;
+    --resume-paper: #ffffff;
+    --resume-canvas: #edf2f7;
+}
+
+@page {
+    size: A4;
+    margin: 15mm 18mm;
+}
+
+html {
+    background: var(--resume-canvas);
+}
+
+body {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    color: var(--resume-text);
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    background: var(--resume-paper);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+.resume-page {
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+blockquote,
+table {
+    max-width: 100%;
+}
+
+h1 {
+    font-size: 22pt;
+    line-height: 1.15;
+    font-weight: 700;
+    margin: 0 0 5pt;
+    color: var(--resume-primary-dark);
+    letter-spacing: 0.2pt;
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+h1 + p {
+    font-size: 9.5pt;
+    line-height: 1.45;
+    color: var(--resume-muted);
+    margin: 0 0 12pt;
+    padding-bottom: 8pt;
+    border-bottom: 1pt solid var(--resume-rule);
+}
+
+h2 {
+    font-size: 12pt;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: 0.35pt;
+    margin: 14pt 0 6pt;
+    padding: 0 0 3pt;
+    border-bottom: 1.2pt solid var(--resume-primary);
+    color: var(--resume-primary-dark);
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+h3 {
+    font-size: 11pt;
+    line-height: 1.35;
+    font-weight: 700;
+    margin: 9pt 0 2pt;
+    color: var(--resume-text);
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+h4 {
+    font-size: 10.5pt;
+    line-height: 1.35;
+    font-weight: 600;
+    margin: 7pt 0 1pt;
+    color: var(--resume-text);
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+p {
+    margin: 3.5pt 0;
+    text-align: left;
+    orphans: 3;
+    widows: 3;
+}
+
+ul,
+ol {
+    margin: 3pt 0 7pt;
+    padding-left: 17pt;
+}
+
+li {
+    margin: 2.5pt 0;
+    padding-left: 1pt;
+    line-height: 1.47;
+    text-align: left;
+    orphans: 2;
+    widows: 2;
+}
+
+li::marker {
+    color: var(--resume-primary-dark);
+}
+
+strong,
+b {
+    font-weight: 650;
+    color: #111827;
+}
+
+em,
+i {
+    font-style: italic;
+    color: var(--resume-muted);
+}
+
+a {
+    color: var(--resume-primary-dark);
+    text-decoration: underline;
+    text-decoration-thickness: 0.5pt;
+    text-underline-offset: 2pt;
+    overflow-wrap: anywhere;
+}
+
+code {
+    font-family: "Menlo", "Monaco", "Courier New", monospace;
+    font-size: 9.2pt;
+    background: var(--resume-soft);
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+}
+
+pre {
+    background: var(--resume-soft);
+    padding: 6pt 8pt;
+    overflow-x: auto;
+    font-size: 9pt;
+    border: 0.5pt solid var(--resume-rule);
+}
+
+blockquote {
+    margin: 7pt 0 10pt;
+    padding: 6pt 9pt;
+    border-left: 2.5pt solid var(--resume-primary);
+    background: var(--resume-soft);
+    color: #344054;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+blockquote p {
+    margin: 0;
+}
+
+hr {
+    border: none;
+    border-top: 0.5pt solid var(--resume-rule);
+    margin: 11pt 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0;
+    font-size: 10pt;
+}
+
+th,
+td {
+    border: 0.5pt solid var(--resume-rule);
+    padding: 4pt 6pt;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background: var(--resume-soft);
+    font-weight: 650;
+}
+
+@media screen {
+    html,
+    body {
+        min-height: 100%;
+        background: var(--resume-canvas);
+    }
+
+    body {
+        padding: 24px 12px 40px;
+    }
+
+    .resume-page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto;
+        padding: 15mm 18mm;
+        background: var(--resume-paper);
+        border: 1px solid #dce4ee;
+        border-radius: 2px;
+        box-shadow: 0 12px 34px rgba(31, 55, 85, 0.14);
+    }
+}
+
+@media screen and (max-width: 860px) {
+    body {
+        padding: 0;
+    }
+
+    .resume-page {
+        width: 100%;
+        min-height: 100vh;
+        padding: 28px 24px 40px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
+
+@media print {
+    :root {
+        --resume-primary: #000000;
+        --resume-primary-dark: #000000;
+        --resume-text: #1a1a1a;
+        --resume-muted: #555555;
+        --resume-rule: #999999;
+        --resume-soft: #ffffff;
+        --resume-paper: #ffffff;
+        --resume-canvas: #ffffff;
+    }
+
+    html,
+    body {
+        background: #ffffff !important;
+    }
+
+    body {
+        font-size: 10pt;
+        line-height: 1.45;
+        color: #1a1a1a !important;
+        -webkit-print-color-adjust: economy;
+        print-color-adjust: economy;
+    }
+
+    .resume-page {
+        width: auto;
+        min-height: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: #ffffff !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        color: #000000 !important;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    h1 {
+        font-size: 20pt;
+        letter-spacing: -0.3pt;
+    }
+
+    h1 + p {
+        color: #555555 !important;
+        border-bottom-color: #999999 !important;
+    }
+
+    h2 {
+        border-bottom-color: #777777 !important;
+    }
+
+    p,
+    li,
+    blockquote,
+    table {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    strong,
+    b {
+        color: #000000 !important;
+    }
+
+    em,
+    i,
+    li::marker {
+        color: #444444 !important;
+    }
+
+    a {
+        color: #1a1a1a !important;
+    }
+
+    blockquote {
+        color: #555555 !important;
+        background: #ffffff !important;
+        border-left-color: #aaaaaa !important;
+    }
+
+    code,
+    pre,
+    th {
+        color: #1a1a1a !important;
+        background: #ffffff !important;
+    }
+
+    pre,
+    th,
+    td {
+        border-color: #cccccc !important;
+    }
+
+    hr {
+        border-top-color: #cccccc !important;
+    }
+}

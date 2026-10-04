@@ -1,6 +1,8 @@
 ---
 name: gaokao-zhiyuan-assistant
 description: 高考志愿填报的逐步引导助手，帮用户梳理出最适合自己的志愿填报名单。通过对话分阶段进行：收集个人信息与选科，解读感兴趣的专业，探讨城市与院校，产出带“冲稳保”的候选志愿草表，最终生成可直接对照官方系统填报的志愿表与报告；全程产物沉淀为腾讯文档。只要用户提到高考、报志愿、填志愿、选专业、选大学、冲稳保、平行志愿、选科能报什么专业、想去哪个城市或哪所大学等相关话题，就应当使用本技能。本技能只提供分析与建议，绝不替用户做决定；所有数据必须标注来源与时效，并提示以官方招生系统为准。
+description_zh: "高考志愿填报的逐步引导助手，帮用户梳理出最适合自己的志愿填报名单。通过对话分阶段进行：收集个人信息与选科，解读感兴趣的专业，探讨城市与院校，产出带“冲稳保”的候选志愿草表，最终生成可直接对照官方系统填报的志愿表与报告；全程产物沉淀为腾讯文档。只要用户提到高考、报志愿、填志愿、选专业、选大学、冲稳保、平行志愿、选科能报什么专业、想去哪个城市或哪所大学等相关话题，就应当使用本技能。本技能只提供分析与建议，绝不替用户做决定；所有数据必须标注来源与时效，并提示以官方招生系统为准。"
+description_en: "A step-by-step assistant for Gaokao application planning that helps users build the application list best suited to them. Through staged dialogue, it collects personal information and subject choices, explains majors of interest, explores cities and institutions, produces a draft list organized by reach, target, and safety choices, and finally generates an application form and report that can be used alongside the official system; all deliverables are saved as Tencent Docs. Use this skill whenever users mention the Gaokao, application planning, choosing majors or universities, reach-target-safety strategies, parallel applications, eligible majors based on subject choices, or preferred cities and institutions. This skill provides analysis and advice only and never makes decisions for users. All data must include sources and freshness information, with a reminder to rely on the official admissions system."
 version: 1.0.2
 ---
 

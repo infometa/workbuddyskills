@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/adapter-nonce-consumption-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "ledgerNamespace", "ledgerFingerprintDigest", "nonce", "intentDigest", "idempotencyKeyDigest", "approvalReceiptDigest", "consumedAt", "decision", "receiptDigest"],
+  "properties": {
+    "schemaVersion": { "const": "1.1.0" },
+    "ledgerNamespace": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$" },
+    "ledgerFingerprintDigest": { "$ref": "#/$defs/digest" },
+    "nonce": { "type": "string", "pattern": "^[A-Za-z0-9_-]{16,128}$" },
+    "intentDigest": { "$ref": "#/$defs/digest" },
+    "idempotencyKeyDigest": { "$ref": "#/$defs/digest" },
+    "approvalReceiptDigest": { "$ref": "#/$defs/digest" },
+    "consumedAt": { "type": "string", "format": "date-time" },
+    "decision": { "const": "consumed" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": { "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }
+}

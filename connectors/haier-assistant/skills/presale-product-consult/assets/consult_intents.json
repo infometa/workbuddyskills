@@ -1,0 +1,66 @@
+{
+  "_note": "售前咨询意图判定顺序。自上而下取第一个命中的分支；触发词见 trigger_dict.json。型号优先于品类：同时存在时只走型号分支。",
+
+  "decision_order": [
+    {
+      "intent": "型号-购买建议",
+      "branch": "model",
+      "tool": "query_product_attribute",
+      "trigger": "（产品型号有值 OR 用户原文提取到具体型号） AND 原文命中 trigger_dict.value_intent.words",
+      "attribute_names": "命中的参数维度写入 attributeNames 作为卖点素材；未命中维度则留空查全量参数",
+      "output_scenario": "场景三 性价比"
+    },
+    {
+      "intent": "型号-参数/价格",
+      "branch": "model",
+      "tool": "query_product_attribute",
+      "trigger": "（产品型号有值 OR 用户原文提取到具体型号） AND 原文命中 trigger_dict.attribute_intent.words",
+      "attribute_names": "命中的参数维度按 consult_attributes.slot_synonyms 映射为标准参数名写入 attributeNames；只命中 full_attribute_intent 时留空",
+      "output_scenario": "命中具体维度→场景一 指定参数；仅泛问参数→场景二 全量参数"
+    },
+    {
+      "intent": "品类-参数/价格",
+      "branch": "category",
+      "tool": "query_product_attribute_by_category",
+      "trigger": "产品型号为空 AND （产品品类有值 OR 用户原文提取到品类） AND 原文命中 trigger_dict.attribute_intent.words",
+      "attribute_names": "同型号分支的映射规则；留空表示查 TOP3 型号的全量参数",
+      "output_scenario": "对 TOP3 型号逐个套用 场景一 或 场景二；不做性价比、不做主观评价"
+    },
+    {
+      "intent": "要素缺失",
+      "branch": "none",
+      "tool": null,
+      "trigger": "型号与品类均为空，且本轮与记忆都提取不到",
+      "handling": "不调用工具，按错误码 4002 引导用户补充具体型号或家电品类"
+    }
+  ],
+
+  "exclusions": {
+    "_note": "以下诉求不属于本技能，需交回营销 Agent 另选技能，不得在本技能内自行处理。",
+    "multi_model_comparison": {
+      "signal": "本轮或记忆中存在两个及以上型号且用户要求对比/哪个好/有什么区别",
+      "route_to": "haier-product-comparison"
+    },
+    "recommend_without_target": {
+      "signal": "既无型号也无品类参数问法，只有模糊选购需求（如「三口之家推荐哪款」）",
+      "route_to": "haier-product-recommend"
+    },
+    "purchase_channel": {
+      "signal": "在哪买 / 去哪买 / 附近门店 / 线上线下渠道",
+      "route_to": "haier-product-store"
+    },
+    "category_value_advice": {
+      "signal": "只有品类却问「值得买吗/性价比」——品类下没有唯一型号可评价",
+      "handling": "按品类-参数/价格输出 TOP3 型号参数，不做性价比推荐；若用户坚持要买建议，引导其补充具体型号"
+    }
+  },
+
+  "scenario_selection": {
+    "_note": "展示场景由「是否指定参数」与「是否购买建议」共同决定，与 consult_scenarios.json 的话术一一对应。",
+    "rules": [
+      {"when": "子意图=型号-购买建议", "scenario": "场景三 性价比"},
+      {"when": "attributeNames 非空", "scenario": "场景一 指定参数"},
+      {"when": "attributeNames 为空", "scenario": "场景二 全量参数"}
+    ]
+  }
+}

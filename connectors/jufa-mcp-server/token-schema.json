@@ -1,0 +1,22 @@
+{
+  "title": "聚法法律数据 MCP 配置",
+  "title_en": "Jufa Legal Data MCP Configuration",
+  "description": "请输入聚法智能体数据平台 API Key。凭证仅由 WorkBuddy 保存在本机，并在启动聚法 MCP 时作为环境变量注入；聚法服务端在请求鉴权时会接收该凭证。",
+  "description_en": "Enter your Jufa Agent Data Platform API Key. WorkBuddy stores it only on this device and injects it as an environment variable when starting the Jufa MCP process; Jufa receives it for request authentication.",
+  "docUrl": "https://www.jufaai.com/agent/profile",
+  "docLabel": "获取聚法 API Key",
+  "docLabel_en": "Get a Jufa API Key",
+  "fields": [
+    {
+      "key": "JUFA_API_KEY",
+      "label": "聚法 API Key",
+      "label_en": "Jufa API Key",
+      "type": "password",
+      "required": true,
+      "placeholder": "登录聚法智能体数据平台 → 个人中心 → API Key",
+      "placeholder_en": "Sign in to Jufa Agent Data Platform → Profile → API Key",
+      "description": "用于访问聚法法律数据服务；失效或疑似泄露时请在聚法平台重新生成。",
+      "description_en": "Used to access Jufa legal data services. Regenerate it on Jufa if it expires or may have been exposed."
+    }
+  ]
+}

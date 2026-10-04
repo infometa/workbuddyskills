@@ -6,19 +6,18 @@
 
 更新指定块的内容或属性，支持多种操作：更新块内容、更新块属性、插入/删除表格行列、合并/拆分单元格。适合局部更新或处理 Markdown 数据不支持的内容。
 
-
-
-#### 操作约束
+#### 调用约束
 
 - **前置检查**：先 otl.block_query 了解目标块结构，确认更新内容
 - **用户确认**：当文档已有内容时，对 blockId=`doc` 执行 `update_content` 会覆盖全部标题和正文，执行前必须向用户确认
-- **提示**：节点类型和属性定义可参考 `references/otl/node.md`
-- **提示**：update_attrs 是覆盖操作，不需更新的属性需保持原样传入
-- **提示**：当 blockId 为 `doc` 且 operation 为 `update_content` 时，content 的第一个子节点必须是 title；如仅需更新局部内容，应将 blockId 设为具体子块 ID
-- **提示**：update_attrs 不支持 appComponent、lockBlock 两种块
-- **提示**：表格操作中行/列数量需与表格结构对齐
 
 **幂等性**：是
+
+> 节点类型和属性定义可参考 `references/otl/node.md`
+> update_attrs 是覆盖操作，不需更新的属性需保持原样传入
+> 当 blockId 为 `doc` 且 operation 为 `update_content` 时，content 的第一个子节点必须是 title；如仅需更新局部内容，应将 blockId 设为具体子块 ID
+> update_attrs 不支持 appComponent、lockBlock 两种块
+> 表格操作中行/列数量需与表格结构对齐
 
 #### 调用示例
 
@@ -247,10 +246,11 @@
 }
 ```
 
-
 #### 参数说明
 
-- `file_id` (string, 必填): 智能文档文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 智能文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 智能文档分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 智能文档文件 ID
 - `params` (array, 必填): 更新操作列表，每项为一个更新块对象。所有操作必须包含 `operation` 和 `blockId`，其余字段由 `operation` 决定，详见下方各操作说明
   - `operation` (string, 必填): 操作类型
   - `blockId` (string, 必填): 目标块 ID
@@ -264,7 +264,7 @@
 **`update_content`** — 更新块的内容
 - `operation`: "update_content"
 - `blockId`: 目标块 ID；为 "doc" 时表示更新全文
-- `content` (array, 必填): 新的子节点数组，节点类型参考 `references/otl/node.md`
+- `content` (array, 必填): 新的子节点数组。常见块类型：`paragraph`、`heading`、`picture`、`blockQuote`、`codeBlock`、`table`、`hr`、`column`。完整定义见 `references/otl/node.md`
 - **当 blockId 为 "doc" 时，content 的第一个子节点必须是 type: title**，否则接口报错
 
 **`update_attrs`** — 更新块的属性
@@ -312,7 +312,6 @@
 - `startRow` (integer, 可选): 目标单元格行号，默认 0
 - `startCol` (integer, 可选): 目标单元格列号，默认 0
 
-
 #### 返回值说明
 
 ```json
@@ -325,7 +324,3 @@
 }
 
 ```
-
-
----
-

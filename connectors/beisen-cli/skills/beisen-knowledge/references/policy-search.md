@@ -16,7 +16,7 @@ beisen-cli knowledge retrieve searchKnowledge --data '{"queries":["<问题1>","<
 
 ```json
 {
-  "code": "200",
+  "code": "0",
   "message": "提示消息",
   "payload": {
     "hitKnowledgeList": [ { "..." : "命中知识" } ]
@@ -24,7 +24,8 @@ beisen-cli knowledge retrieve searchKnowledge --data '{"queries":["<问题1>","<
 }
 ```
 
-- `code` 为状态码；`payload.hitKnowledgeList` 为命中知识的相关信息数组
+- `code == "0"`表示成功；非 `"0"` 表示异常（**注意**：knowledge 命令与其他 beisen-cli 命令不同，其他命令以 `code == "200"` 为成功标准）
+- `payload.hitKnowledgeList` 为命中知识的相关信息数组
 - 每条记录的字段由知识库配置决定，常见关注字段见下表
 
 ### 关注字段（从 hitKnowledgeList 条目中提取）

@@ -1,0 +1,355 @@
+{
+  "artifactRefs": [
+    {
+      "archetypeId": "primary-document",
+      "artifactId": "restricted_draft"
+    },
+    {
+      "archetypeId": "matrix",
+      "artifactId": "claim_source_matrix"
+    },
+    {
+      "archetypeId": "review-log",
+      "artifactId": "response_log"
+    },
+    {
+      "archetypeId": "risk-gap-report",
+      "artifactId": "legal_and_editorial_risk_report"
+    }
+  ],
+  "capabilityBindings": [
+    {
+      "capabilityIds": [
+        "material-activation",
+        "multimodal-normalizer"
+      ],
+      "operationMode": "material_activation"
+    },
+    {
+      "capabilityIds": [
+        "scene-router",
+        "scene-composer",
+        "chapter-planning-expansion"
+      ],
+      "operationMode": "project_planning"
+    },
+    {
+      "capabilityIds": [
+        "chapter-planning-expansion",
+        "source-ledger-claim-graph",
+        "voice-profile-humanizer"
+      ],
+      "operationMode": "chapter_generation"
+    },
+    {
+      "capabilityIds": [
+        "continuation-recovery",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "continuation"
+    },
+    {
+      "capabilityIds": [
+        "scope-lock-diff",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "bounded_revision"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "rights-privacy-consent",
+        "research-verification"
+      ],
+      "operationMode": "review_quality"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "multi-format-rendering"
+      ],
+      "operationMode": "finished_draft_closure"
+    },
+    {
+      "capabilityIds": [
+        "multi-format-rendering",
+        "rights-privacy-consent"
+      ],
+      "operationMode": "export_delivery"
+    }
+  ],
+  "contentRiskClass": "restricted",
+  "displayName": "受限调查报道与深度专题",
+  "domainObjects": [
+    "allegation",
+    "corroboration",
+    "legal_risk",
+    "response_right",
+    "source"
+  ],
+  "fallback": {
+    "allowGeneralSubstitution": false,
+    "connectorUnavailableBehavior": "preserve_route_and_use_local_workflow",
+    "localOfflineAvailable": true,
+    "riskFloor": "restricted"
+  },
+  "family": "content_restricted",
+  "fixtureRefs": [
+    "evals/fixtures/scenes/investigative-report-restricted/normal.json",
+    "evals/fixtures/scenes/investigative-report-restricted/missing.json",
+    "evals/fixtures/scenes/investigative-report-restricted/conflicting.json",
+    "evals/fixtures/scenes/investigative-report-restricted/unauthorized.json",
+    "evals/fixtures/scenes/investigative-report-restricted/adversarial.json",
+    "evals/fixtures/scenes/investigative-report-restricted/connector-unavailable.json"
+  ],
+  "implementationCheckpoint": "C3",
+  "kind": "vertical_scene",
+  "legacyAliases": [
+    "report"
+  ],
+  "lifecycle": "implemented",
+  "migrationProvenance": {
+    "mappingVersion": "1.0.0",
+    "seedCatalogSha256": "638f3f8e8f3ab7f1c2080018233ef6d7e19340187926571aad2eaf818eca82f4"
+  },
+  "operationModes": [
+    "material_activation",
+    "project_planning",
+    "chapter_generation",
+    "continuation",
+    "bounded_revision",
+    "review_quality",
+    "finished_draft_closure",
+    "export_delivery"
+  ],
+  "optionalPortBindings": [
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "private_source_intake",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "append_intake_submission",
+      "portId": "StructuredIntakePort",
+      "purpose": "optional enhancement for private_source_intake",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "restricted_review_permissions",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "configure_review_access",
+      "portId": "ReviewPort",
+      "purpose": "optional enhancement for restricted_review_permissions",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    }
+  ],
+  "privacy": {
+    "livingPersonReview": true,
+    "minimumDataScope": "restricted_source_scoped_minimum"
+  },
+  "qualityGateRefs": [
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.multi-source-corroboration",
+      "registryId": "source.quality",
+      "reviewMandate": null,
+      "seedGate": "multi_source_corroboration"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.source-protection",
+      "registryId": "confidentiality.preserved",
+      "reviewMandate": null,
+      "seedGate": "source_protection"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.subject-response",
+      "registryId": "workflow.completeness",
+      "reviewMandate": null,
+      "seedGate": "subject_response"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.fact-opinion-separation",
+      "registryId": "claim.fact-inference-separation",
+      "reviewMandate": null,
+      "seedGate": "fact_opinion_separation"
+    },
+    {
+      "humanOwner": "legal_reviewer",
+      "parameterProfile": "seed.mandatory-human-legal-review",
+      "registryId": "human-review.receipt",
+      "reviewMandate": "risk_mandated",
+      "seedGate": "mandatory_human_legal_review"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "schema.valid",
+      "reviewMandate": null,
+      "seedGate": "core:schema.valid"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "input.required",
+      "reviewMandate": null,
+      "seedGate": "core:input.required"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "artifact.openability",
+      "reviewMandate": null,
+      "seedGate": "core:artifact.openability"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "delivery-manifest.integrity",
+      "reviewMandate": null,
+      "seedGate": "core:delivery-manifest.integrity"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "scope.lock",
+      "reviewMandate": null,
+      "seedGate": "core:scope.lock"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "external-action.authorized",
+      "reviewMandate": null,
+      "seedGate": "core:external-action.authorized"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "encoding.valid",
+      "reviewMandate": null,
+      "seedGate": "core:encoding.valid"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "id": "audience",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "goal",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "legal_review_owner",
+      "required": true,
+      "sensitivity": "sensitive"
+    },
+    {
+      "id": "materials",
+      "required": true,
+      "sensitivity": "user_provided"
+    },
+    {
+      "id": "publication_boundary",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "review_owner",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "source_protection_plan",
+      "required": true,
+      "sensitivity": "sensitive"
+    }
+  ],
+  "rights": {
+    "clearanceRequired": true,
+    "unknownRightsAction": "block"
+  },
+  "sceneId": "investigative-report-restricted",
+  "schemaVersion": "1.0.0",
+  "triggers": [
+    {
+      "id": "investigative-report-restricted-trigger-1",
+      "signal": "restricted investigation",
+      "weight": 1
+    },
+    {
+      "id": "investigative-report-restricted-trigger-2",
+      "signal": "protected source report",
+      "weight": 0.9
+    },
+    {
+      "id": "investigative-report-restricted-trigger-3",
+      "signal": "受限调查专题",
+      "weight": 0.8
+    }
+  ],
+  "workflowStages": [
+    {
+      "exitGateRefs": [
+        "input.required"
+      ],
+      "id": "activate-materials",
+      "operationModes": [
+        "material_activation"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "schema.valid"
+      ],
+      "id": "plan-project",
+      "operationModes": [
+        "project_planning"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "claim.fact-inference-separation"
+      ],
+      "id": "draft-and-revise",
+      "operationModes": [
+        "chapter_generation",
+        "continuation",
+        "bounded_revision"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "claim.fact-inference-separation",
+        "confidentiality.preserved",
+        "delivery-manifest.integrity",
+        "encoding.valid",
+        "external-action.authorized",
+        "human-review.receipt",
+        "input.required",
+        "schema.valid",
+        "scope.lock",
+        "source.quality",
+        "workflow.completeness"
+      ],
+      "id": "review-and-close",
+      "operationModes": [
+        "review_quality",
+        "finished_draft_closure",
+        "export_delivery"
+      ]
+    }
+  ]
+}

@@ -140,6 +140,7 @@ role: infrastructure                 # [可选] 角色类型（infrastructure=�
 | `attack-analysis/` | 攻击分析 | DDoS/流量攻击分析、勒索病毒分析 |
 | `asset-management/` | 告警研判辅助 | 告警研判资产关联辅助（IP→主机映射） |
 | `general/` | 腾讯云产品日志排查 | 腾讯云产品日志分析 |
+| `ioa-troubleshooting/` | iOA 排障 | 腾讯 iOA 零信任终端安全排障（领域入口 SKILL.md + 9 个子目录：common 公共规范、trusted-access 可信接入、endpoint-management 终端资产、policy-management 策略管控、security-protection 安全检测、platform-operations 平台运维、consulting 咨询判断、ioa-openapi-invoke 接口调用、ioa-sql-query-generator 只读查询） |
 
 新增分类需在此表和 README.md 中同步更新。
 

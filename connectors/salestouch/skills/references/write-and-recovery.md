@@ -17,6 +17,8 @@ Proceed only after an explicit approval in the current conversation. Silence, a 
 
 Create one unique `clientRequestId` for each intended mutation. Reuse it only when retrying the same mutation after a timeout or recoverable transport failure. A changed target, effect, or payload is a new mutation and needs a new ID and confirmation.
 
+For B2C customer identity confirmation, the confirmation payload changes the request. Use a new `clientRequestId`; never reuse the key from the non-writing confirmation-required response. For a multi-tool request, assign a different key to each write, retain each receipt, and retry only the step whose exact payload is unresolved.
+
 ## Formal actions
 
 When capabilities marks an operation as requiring formal authorization:
@@ -35,6 +37,8 @@ When capabilities marks an operation as requiring formal authorization:
 - `failed` with a retryable/recoverable category: explain the failure and retry only with the same `clientRequestId` after user intent is still valid.
 - guarded, permission, identity, or canonicalization failure: change the missing condition or stop. Repeated retries cannot repair it.
 - disabled: report the exact readiness reason and available read-only path.
+
+For a B2C target that became unreadable after mutation, operation status may intentionally contain only the action type, timestamps, status, failure class, and payload-free events. Do not reconstruct the removed object, readback, mutation/evidence references, semantic result, or failure narrative from earlier cached data.
 
 ## Corrections
 

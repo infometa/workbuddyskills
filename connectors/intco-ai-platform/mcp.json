@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "intco-ai-platform": {
+      "type": "streamableHttp",
+      "url": "https://ai-platform.intcomedical.com.cn:11443/agt_c8c1aaea4a564b0eb1878929dfbf37d2/mcp",
+      "timeout": 30
+    }
+  }
+}

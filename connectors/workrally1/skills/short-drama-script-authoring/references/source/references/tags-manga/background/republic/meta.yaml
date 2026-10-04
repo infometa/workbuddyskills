@@ -1,0 +1,89 @@
+# 民国（republic）· 漫剧标签机器数据
+# 真相源：程序调度/自动组装/自动化质检均读本文件，受 references/common-tags/schema/tag.schema.json 约束
+# 自由采样的创作素材见同目录 doc.md
+schema_version: '1.0'
+id: republic
+name_cn: 民国
+category: background
+carrier: manga
+audience: both
+weight: medium
+level: level-2
+severity: medium
+version: 6.0.0
+related_combo: references/domestic/combos/sweet-love.md
+emotion_core:
+- 乱世情深
+- 家国情怀
+- 豪门恩怨
+- 身份悬疑
+- 时代风云
+nodes:
+  call: 步骤1 · 第二轨原子标签拼接
+  review: 步骤4 · 标签与逻辑维度
+boundary:
+  audience_desc: 男女频通用，女频侧重乱世情感/豪门，男频侧重谍战/争锋
+  bg_desc: 民国时代基底（朝代可适度模糊），强调乱世质感与时代风云
+  weight: medium
+  bottom_line:
+  - 民国时代质感考究，服化道/风貌自洽
+  - 家国立场导向正确，价值观正面
+  - 谍战/权谋逻辑严密，不降智
+relations:
+  synergy:
+  - target: wealthy-clan
+    effect_type: 增强型
+    weight: high
+    effect: 民国豪门世家，恩怨情仇与权力博弈氛围浓
+  - target: twist
+    effect_type: 增强型
+    weight: high
+    effect: 谍战/身份多层反转，乱世悬疑张力强
+  - target: rebirth
+    effect_type: 裂变型
+    weight: medium
+    effect: 重生回民国改写命运/复仇翻盘
+  - target: counterattack
+    effect_type: 增强型
+    weight: medium
+    effect: 乱世中底层/落魄者逆袭上位
+  mutex:
+  - target: 现代科技
+    reason: 时代基底冲突，科技元素需符合民国限制
+combo_adapt:
+- combo: references/domestic/combos/sweet-love.md
+  rule: 乱世深情、强强相守，甜虐交织
+  sub: 民国情感型
+- combo: references/domestic/combos/suspense.md
+  rule: 谍战悬疑、身份博弈，层层反转
+  sub: 民国谍战型
+- combo: references/domestic/combos/face-slapping.md
+  rule: 豪门恩怨打脸，身份/智计揭晓即高潮
+  sub: 民国打脸型
+fusion:
+- recipe: fusion/recipes/republic-romance.md
+  note: 民国乱世深情类，强情感张力，女频经典模板
+- recipe: fusion/recipes/republic-spy.md
+  note: 民国谍战类，身份博弈+多层反转，强悬疑
+redlines:
+- code: AP-MG01
+  name: 民国质感失真
+  severity: 高
+  dimension: 标签与逻辑
+  test: 服化道、社会风貌、语言严重失真，时代质感崩塌
+- code: AP-MG02
+  name: 家国立场偏差
+  severity: 极高
+  dimension: 内容与红线
+  test: 家国大是大非立场错误，价值观导向偏差，触碰内容红线
+soft_warnings:
+- 避免民国沦为背景板，仅换服装而无时代风云
+- 避免谍战降智，反派工具化配合主角
+- 避免情感线悬浮，脱离乱世质感
+manga:
+  visual_signature: 民国街景/洋楼 + 旗袍/西装造型 + 复古时代色调
+  high_affinity: true
+  visual_hooks:
+  - 旗袍/西装与民国街景的复古美学
+  - 乱世风云的画面氛围
+  - 身份反转/谍战对峙的张力

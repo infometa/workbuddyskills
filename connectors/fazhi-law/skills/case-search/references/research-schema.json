@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Case Search Report Research Data",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["matter", "search", "legal_rules", "cases"],
+  "properties": {
+    "matter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "category", "parties", "legal_relationship", "facts", "claims", "issues"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "case_number": {"type": ["string", "null"]},
+        "category": {"enum": ["contract", "project", "financial", "transaction", "other"]},
+        "parties": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+        "legal_relationship": {"type": "string", "minLength": 1},
+        "facts": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "claims": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "issues": {"type": "array", "minItems": 1, "maxItems": 3, "items": {"type": "string", "minLength": 1, "maxLength": 45}}
+      }
+    },
+    "search": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["search_date", "submitter", "submission_date", "platforms", "keywords", "date_from", "date_to", "time_scope", "area_scope", "screening_conditions", "candidate_count", "result_conclusion"],
+      "properties": {
+        "search_date": {"type": "string", "format": "date"},
+        "submitter": {"type": "string", "minLength": 1},
+        "submission_date": {"type": "string", "format": "date"},
+        "platforms": {"type": "array", "minItems": 2, "items": {"enum": ["case_search", "case_browser", "legal_article_search", "law_content_visit", "webpage_search", "webpage_visit"]}},
+        "keywords": {"type": "array", "minItems": 2, "maxItems": 12, "items": {"type": "string", "minLength": 2}},
+        "date_from": {"type": "string", "format": "date"},
+        "date_to": {"type": "string", "format": "date"},
+        "time_scope": {"type": "string", "minLength": 1},
+        "area_scope": {"type": "string", "minLength": 1},
+        "screening_conditions": {"type": "array", "minItems": 2, "maxItems": 6, "items": {"type": "string", "minLength": 1}},
+        "candidate_count": {"type": "integer", "minimum": 0},
+        "insufficient_reason": {"type": ["string", "null"]},
+        "result_conclusion": {"type": "string", "minLength": 30, "maxLength": 800}
+      }
+    },
+    "legal_rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["law_id", "law_name", "article", "status", "url", "verified"],
+        "properties": {
+          "law_id": {"type": "string", "minLength": 1},
+          "law_name": {"type": "string", "minLength": 1},
+          "article": {"type": "string", "minLength": 1},
+          "status": {"const": "现行有效"},
+          "url": {"type": "string", "format": "uri"},
+          "verified": {"const": true}
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["lawsuit_id", "title", "case_no", "court", "judge_date", "case_url", "object_name", "issues", "holdings", "outcome_class", "outcome_detail", "direction", "summary_fact", "summary_reasoning", "full_text_verified", "source"],
+        "properties": {
+          "lawsuit_id": {"type": "string", "minLength": 1},
+          "title": {"type": "string", "minLength": 1},
+          "case_no": {"type": "string", "minLength": 1},
+          "court": {"type": "string", "minLength": 1},
+          "judge_date": {"type": "string", "format": "date"},
+          "case_url": {"type": "string", "format": "uri"},
+          "object_name": {"type": "string", "minLength": 1},
+          "issues": {"type": "array", "minItems": 1, "maxItems": 3, "items": {"type": "string", "minLength": 1, "maxLength": 45}},
+          "holdings": {"type": "array", "minItems": 2, "maxItems": 4, "items": {"type": "string", "minLength": 1, "maxLength": 90}},
+          "outcome_class": {"enum": ["支持", "部分支持", "不支持", "程序性处理", "未明确认定"]},
+          "outcome_detail": {"type": "string", "minLength": 1},
+          "direction": {"enum": ["support", "partial", "oppose"]},
+          "summary_fact": {"type": "string", "minLength": 1},
+          "summary_reasoning": {"type": "string", "minLength": 1},
+          "full_text_verified": {"const": true},
+          "source": {"const": "fazhi"}
+        }
+      }
+    }
+  }
+}

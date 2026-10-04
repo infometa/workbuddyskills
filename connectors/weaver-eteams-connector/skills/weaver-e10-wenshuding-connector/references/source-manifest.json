@@ -1,0 +1,518 @@
+{
+  "schemaVersion": 2,
+  "module": "archive",
+  "skill": "weaver-e10-wenshuding-connector",
+  "generatedFrom": {
+    "sourceSkill": "weaver-e10-wenshuding-connector",
+    "version": "1.0.3",
+    "path": "weaver-e10-wenshuding-connector",
+    "kind": "workbuddy-document-skill",
+    "availability": "user-provided-source-directory"
+  },
+  "generatedAt": "2026-09-08T00:00:00.000Z",
+  "sourceSet": {
+    "aggregateSha256": "fb4a06ff0f06ca1775390402ea4fbeffe496befc34f715d005c480e25ed5f103",
+    "sourceRoots": [
+      "weaver-e10-wenshuding-connector"
+    ],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/archive",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "skills/weaver-e10-wenshuding-connector"
+    ],
+    "tests": [
+      "test/business/archive-*.test.ts"
+    ],
+    "docs": [
+      "docs/wenshuding.md",
+      "skill-template/domains/wenshuding.md"
+    ]
+  },
+  "sources": [
+    {
+      "path": "weaver-e10-wenshuding-connector/SKILL.md",
+      "size": 45009,
+      "sha256": "baadb7e00a39df326e2037b57a23f079f7f20216b9a79d9f4339d8c82dc17a66"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/agents/openai.yaml",
+      "size": 336,
+      "sha256": "a491805d5e049083c6ff3d583a8f13d926a2e23b02d778566ef88c620196621b"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/archive-archiveSet-getSetValue.md",
+      "size": 3007,
+      "sha256": "ae10d29bf4536dce09254dd6975ab44129b7a6982252a5b66f5419ef296dfaf8"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/archive-archivetree-getFonds.md",
+      "size": 4477,
+      "sha256": "7ce0799ca4712dbf35ffe1506cb817bc8bb79bbc02b333f32306a5ebad50d03e"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/archive-archivetree-getTree.md",
+      "size": 4483,
+      "sha256": "e4e2087ea09fa3053baa375808ca429a284ed05fcddba00f4e8c3197d747bd03"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/archive-form-addCache.md",
+      "size": 6295,
+      "sha256": "c2fc0bea70324f7a83af88b3b6ff8f06971707d0994742d52ee9653679683809"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/archive-form-getPageUrl.md",
+      "size": 4782,
+      "sha256": "03e54f4a3bad872242f291c51bbff225ecdbd68c22510e76f72d9978bb653db5"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/archive-intelligent-saveFile.md",
+      "size": 3389,
+      "sha256": "d9590c2d46091aa10c576b98f01f1f5b28fa1e77852072bdc01a91f3c2d755f2"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/borrow-addBorrowCar.md",
+      "size": 2908,
+      "sha256": "2e3d24f28f2839e201bf6d61f8132f5c196c8ebeb789177cd7cc0ba104d98f6e"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/borrow-batchDownloadBorrowZip.md",
+      "size": 13402,
+      "sha256": "3267c68b21d4f483d298bc22555a79cb9e07278037649d82e0bbfa6c808802f3"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/borrow-getBorrowDetails.md",
+      "size": 4599,
+      "sha256": "8e93a5edbb9dd64f0702336d51066bc81d57d0d6557efcdedf9bbf9f0a4f2a7a"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/catalog.md",
+      "size": 7367,
+      "sha256": "db79902cb324e42ad5869eabbdf431b98b1b1a250a041fe3fa382198e3d57e2e"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/ebuilder-customapi-getMyBorrowCar.md",
+      "size": 7683,
+      "sha256": "29f7209e5d5a97340c3cefe2f83a1c18c7da607e587ad6395c25b9444e68347a"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/ebuilder-customapi-getMyBorrowDetail.md",
+      "size": 10334,
+      "sha256": "1da5a26e8a2abcbbe1b726d3da3125f7a90bf06e1962ccc813ad6e38a7fb8fcd"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/ebuilder-customapi-getMyBorrowList.md",
+      "size": 9108,
+      "sha256": "4ce55da10d0990c33213c7575caac98a61430ac4c6a2fa8eb02a7ec3cc58bd4e"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/ebuilder-getAppIds.md",
+      "size": 1952,
+      "sha256": "9a0b2a2296b2e9bac3e24d9f8de0410ee9978b25fc74cbacd10419d7fd880779"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/ebuilder-getBorrowingList.md",
+      "size": 7153,
+      "sha256": "b7b0a06f520f8f8ec179807185a0b704e876f4a1e38da929c0b2ecddc16718d8"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/ebuilder-getListDatas.md",
+      "size": 7704,
+      "sha256": "93635ac420038965109ed981ef42f0a58edda84e7f9916c55cc17b82b0d050a0"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/ebuilder-getObjsByTag.md",
+      "size": 3250,
+      "sha256": "66fcbc578bd9ad24283dc56dc32f48c5c36cdf7ed64eaa1b8420d574317e5f0f"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/ebuilder-getViewlist.md",
+      "size": 4073,
+      "sha256": "e62d94800def1cac23a33317c9b305ad91a9e643843f7e3ce53f14eb1efb406f"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/fullSearch-searchByModule.md",
+      "size": 12873,
+      "sha256": "1ba4621c4bd8a0eb600afec4937fe22990d841f08806312fa79fff97e566ba21"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/prefile-upload-module-upload.md",
+      "size": 5067,
+      "sha256": "2c1995ba56616d3578e299b8f2bb0719aa1749728a5119e24a96838e68d61831"
+    },
+    {
+      "path": "weaver-e10-wenshuding-connector/references/prefile-upload-preUploadCheck.md",
+      "size": 4902,
+      "sha256": "8def450af9243e322c5ddc026728560322c4d4e0edc8eb2d38991519ba75b8a9"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "archive.fonds",
+      "mapsToOperations": [
+        "archive.fonds.list",
+        "archive.prelib.tree"
+      ]
+    },
+    {
+      "id": "archive.search",
+      "mapsToOperations": [
+        "archive.search.run"
+      ]
+    },
+    {
+      "id": "archive.info",
+      "mapsToOperations": [
+        "archive.info.get"
+      ]
+    },
+    {
+      "id": "archive.borrow-car",
+      "mapsToOperations": [
+        "archive.borrow-car.list",
+        "archive.borrow-car.add"
+      ]
+    },
+    {
+      "id": "archive.borrow-list",
+      "mapsToOperations": [
+        "archive.borrow-list.list",
+        "archive.borrow-list.detail"
+      ]
+    },
+    {
+      "id": "archive.download",
+      "mapsToOperations": [
+        "archive.borrow-list.download.prepare",
+        "archive.borrow-list.download.apply"
+      ]
+    },
+    {
+      "id": "archive.flow",
+      "mapsToOperations": [
+        "archive.flow.borrow-car.prepare",
+        "archive.flow.borrow-car.apply",
+        "archive.flow.search.prepare",
+        "archive.flow.search.apply",
+        "archive.flow.renew.prepare",
+        "archive.flow.renew.apply"
+      ]
+    },
+    {
+      "id": "archive.upload",
+      "mapsToOperations": [
+        "archive.upload.prelib.prepare",
+        "archive.upload.prelib.apply"
+      ]
+    }
+  ],
+  "operationImpact": {
+    "archive.fonds.list": {
+      "requiresConfirmationChain": false,
+      "references": [
+        "references/archive-fonds.md"
+      ]
+    },
+    "archive.prelib.tree": {
+      "requiresConfirmationChain": false,
+      "references": [
+        "references/archive-fonds.md"
+      ]
+    },
+    "archive.search.run": {
+      "requiresConfirmationChain": false,
+      "references": [
+        "references/archive-search.md"
+      ]
+    },
+    "archive.info.get": {
+      "requiresConfirmationChain": false,
+      "references": [
+        "references/archive-info.md"
+      ]
+    },
+    "archive.borrow-car.list": {
+      "requiresConfirmationChain": false,
+      "references": [
+        "references/archive-borrow-car.md"
+      ]
+    },
+    "archive.borrow-car.add": {
+      "requiresConfirmationChain": false,
+      "references": [
+        "references/archive-borrow-car.md"
+      ]
+    },
+    "archive.borrow-list.list": {
+      "requiresConfirmationChain": false,
+      "references": [
+        "references/archive-borrow-list.md"
+      ]
+    },
+    "archive.borrow-list.detail": {
+      "requiresConfirmationChain": false,
+      "references": [
+        "references/archive-borrow-list.md"
+      ]
+    },
+    "archive.borrow-list.download.prepare": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-download.md",
+        "references/archive-borrow-list.md"
+      ]
+    },
+    "archive.borrow-list.download.apply": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-download.md"
+      ]
+    },
+    "archive.flow.borrow-car.prepare": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-flow.md"
+      ]
+    },
+    "archive.flow.borrow-car.apply": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-flow.md"
+      ]
+    },
+    "archive.flow.search.prepare": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-flow.md"
+      ]
+    },
+    "archive.flow.search.apply": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-flow.md"
+      ]
+    },
+    "archive.flow.renew.prepare": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-flow.md"
+      ]
+    },
+    "archive.flow.renew.apply": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-flow.md"
+      ]
+    },
+    "archive.upload.prelib.prepare": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-upload.md",
+        "references/archive-fonds.md"
+      ]
+    },
+    "archive.upload.prelib.apply": {
+      "requiresConfirmationChain": true,
+      "references": [
+        "references/archive-upload.md"
+      ]
+    }
+  },
+  "artifactBaseline": {
+    "aggregateSha256": "ab81987fc668d0d77005f214f4954174b853f68e6343451694a4c199e21e643e",
+    "files": [
+      {
+        "path": "src/shortcuts/archive/continuation.ts",
+        "size": 3269,
+        "sha256": "8f300e9faee63405f8df205f48f8b1eb073f428e76a73addc4b5cf95ff7292c3"
+      },
+      {
+        "path": "src/shortcuts/archive/errors.ts",
+        "size": 2272,
+        "sha256": "ea812411abcda84a5276dc6dd53d8d1ae63631a20fe1332f2fd100a19495f36e"
+      },
+      {
+        "path": "src/shortcuts/archive/host.ts",
+        "size": 10498,
+        "sha256": "a32c4e03a3b76c8c91476b50c279000ef997a2fa6b6687bfe6f29830e22ea187"
+      },
+      {
+        "path": "src/shortcuts/archive/index.ts",
+        "size": 15338,
+        "sha256": "f31d56f1d8dbb46d6dc75ca46dd13987fd8c39046a50c7d8de543d9c34d33434"
+      },
+      {
+        "path": "src/shortcuts/archive/manifest.ts",
+        "size": 2404,
+        "sha256": "6b66366330699833243e924d9b621000bcbab04251e22984aec913e38a46dc11"
+      },
+      {
+        "path": "src/shortcuts/archive/operations.ts",
+        "size": 1169,
+        "sha256": "1e620e47d7227330e3a15ab6ab62139843cab1a0eabe6d1f100b9130402c8c94"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/archive-info.ts",
+        "size": 3004,
+        "sha256": "cbeaf4310962567feb20d41ac0bd14698f3753c6db752281928c53b22455e0cd"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/borrow-car.ts",
+        "size": 9137,
+        "sha256": "2828e910fa9db03b3d3d9d337abbe96f006665f6c2437b11c9be3cbc7e9d0df7"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/borrow-list.ts",
+        "size": 10573,
+        "sha256": "a1953736cd7d0f8cde2501230e318fff78d5a16e11c9e69c0ea62bab934ca955"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/confirm.ts",
+        "size": 2823,
+        "sha256": "b20b583047735427a2adbed1eba129ced48cde8000cca2ade4aa6ba79653aec8"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/download.ts",
+        "size": 12275,
+        "sha256": "abd23b790db3090bcf9748ba8e1b677b6e6cbc3ed1386316a544d6a23cf59e8e"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/fonds.ts",
+        "size": 4373,
+        "sha256": "3d066cdb6ef06f942b21a8b6757af3b70568e4e9433c2d86faedeb1ce899b586"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/flow-url.ts",
+        "size": 12425,
+        "sha256": "34a381817eb0c6fb117c03f64649e7d8c043cfcb205b5b80b86e2ed5040a1507"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/getPageUrl.ts",
+        "size": 6193,
+        "sha256": "433157d64a0376cef577938f08d4718b2a7acd42f035fea8294bacfbff94c034"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/registry.ts",
+        "size": 1777,
+        "sha256": "cd343105ddb87f24bbeaf7df05a079ba924a618704637df40b6dd09fb7e865d5"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/search.ts",
+        "size": 3560,
+        "sha256": "305f57bd363f4fb9bf834ea090cbf9d81015e2688a94e7556defc532a30aaa98"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/shared.ts",
+        "size": 5083,
+        "sha256": "baf2dfc6166c5f01b41c5fdda76d74ccc7c42cae84570f7b1c448869d6efa66b"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/types.ts",
+        "size": 2409,
+        "sha256": "042e330102c0bba7391a9cdf83ddef2737bd6ca1179f187a47b62a7ac652570a"
+      },
+      {
+        "path": "src/shortcuts/archive/operations/upload.ts",
+        "size": 8474,
+        "sha256": "c503a6b25947118c5f1e05d302f31aa5520ee2ec49caf2e4d6c11874d4f4c74b"
+      },
+      {
+        "path": "src/shortcuts/index.ts",
+        "size": 306,
+        "sha256": "11c90f2ad7844c468469fb5cbd98df289d7e1830da748116945a5691e1dac374"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/SKILL.md",
+        "size": 15400,
+        "sha256": "6a12d7d172c9893e7fec6ebd07b259c92615e06319d51cd37621cab2b96520ad"
+      },
+      {
+        "path": "skill-template/product.json",
+        "role": "generated-skill-meta",
+        "size": 89,
+        "sha256": "211300a31c39f0feea66331101edea394ae841307302404c6d113b314954ee83"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-agent-entry.md",
+        "size": 3302,
+        "sha256": "84b05e8505415fd8f3d2368a9db4ad335218f1691cd0b88d230e260b7e5cbe44"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-borrow-car.md",
+        "size": 2539,
+        "sha256": "a70920cd78b842414a961deb402d287ee5e05d462bc350d2a0ca7f9070fabfd4"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-borrow-list.md",
+        "size": 1810,
+        "sha256": "158833863bfd1b5a5e5d737d3e5036b3f781ab45a2dc362d2346f3e1a11917ba"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-disabled-capabilities.md",
+        "size": 1393,
+        "sha256": "a0dd54ece54943c6ec7b1a476fbe10d0692c3a25e2c23ca9bfe34c8219bf3cae"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-download.md",
+        "size": 2533,
+        "sha256": "f48cae1a86ff81eb2594a5bb92aa6a1deef11a06ee8be9287ab0ade1b9af0f8f"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-flow.md",
+        "size": 2681,
+        "sha256": "a3143666778878ad87b4777ed58a9fa055deb90c88a0bb19abfb045ea495ecb1"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-fonds.md",
+        "size": 1512,
+        "sha256": "0312515f08f41a2d106c5de54e8a446bc2b5a6f21510ca699264b5ebbd6e6d63"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-info.md",
+        "size": 1375,
+        "sha256": "621d800d98af81c053c9d0901bfade14f4748884a0d51d6f10198903e3fdbccf"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-search.md",
+        "size": 1440,
+        "sha256": "494686f528a10e5db57e43635c589be77bd78500a85cacd54ba5d4d07e54f8fc"
+      },
+      {
+        "path": "skills/weaver-e10-wenshuding-connector/references/archive-upload.md",
+        "size": 2199,
+        "sha256": "5255779205ecbe4062943d11cdbda870dc077ba977ba1d93275c39c813274648"
+      },
+      {
+        "path": "test/business/archive-operations.test.ts",
+        "size": 10663,
+        "sha256": "debfa323dd9cdae87e1114f13b54a58963dd4731577db9991410da6980126a21"
+      },
+      {
+        "path": "docs/wenshuding.md",
+        "size": 7662,
+        "sha256": "0a9a4e9916349dc73a3d93effb3385c403e5f1742e5cb6870a096fa8ccac1754"
+      },
+      {
+        "path": "skill-template/domains/wenshuding.md",
+        "size": 2141,
+        "sha256": "ae0a1e0923b958766ba76655be1a266d5fe6293ec0e7b11e8f50594a3819cc5f"
+      },
+      {
+        "path": "skill-template/business-info.json",
+        "size": 1825,
+        "sha256": "b12a58cd168cd334083fa74a2aadbf8b0a078ace723972637f50a9c8ed8b7979"
+      }
+    ]
+  },
+  "notes": [
+    "源资料 weaver-e10-wenshuding-connector 1.0.3 提供全宗、预归档上传、借阅车、借阅单、下载与发起借阅链路。",
+    "借阅车/借阅单列表优先自定义接口（getFormDataList/myBorrowCar、myBorrowList），不可用时回退 getPageUrl → getListDatas。",
+    "下载为异步任务：getImportOrExportRate 轮询百分比，完成后 getImportOrExportRateNum 取 fileId，再下载 zip 落盘。",
+    "发起借阅/续借只返回流程创建页 URL，CLI 不自动打开浏览器。",
+    "借阅申请表单提交、借阅车移除、归还/催还缺少稳定契约，暂不暴露为 operation。"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "jinshouzhi": {
+      "type": "streamableHttp",
+      "url": "https://ad-goldfinger.app.fitgroup-fat.com/mcp",
+      "timeout": 30000
+    }
+  }
+}

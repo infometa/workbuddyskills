@@ -317,7 +317,7 @@ B3. skills / traits 走"轻量推断"：
 信号 → 兜底话术：
 - recruit-mcp 工具不存在 / 401 / 403 → "recruit-mcp 没连上，我这边拿不到你的基础信息。你先切走再切回本对话，连接卡会自动弹出来点「连接」；如果没弹出来，去「专家 → 连接器」面板找「腾讯招聘」连接器手动连接。"
 - 自评 MCP 工具不存在 / 401   → "自评没连上。你切走再切回本对话，连接卡会自动弹出来，点「连接」授权即可。"
-- tapd_taihu / gongfeng 工具不存在 / 401 → **agent 先直接帮用户写好 mcp.json**（复用现有太湖 PAT：Read ~/.workbuddy/mcp.json → 加对应段，tapd_taihu url=https://mcpgw.knot.woa.com/tapd/ ，gongfeng url=https://mcpgw.knot.woa.com/gongfeng ，Authorization 复用已有 mcpgw 系 MCP 的太湖 PAT 全串 → Write 回去），**然后给用户二选一**（详见 §3 Stage 0 的二选一话术）：① 去点「信任」激活让画像更全，或 ② 直接用自评+基础信息生成画像。用户选 ② 就不再追问，直接降级出画像。
+- tapd_taihu / gongfeng 工具不存在 / 401 → **agent 先直接帮用户写好 mcp.json**（复用现有太湖 PAT：Read ~/.workbuddy/mcp.json → 加对应段，tapd_taihu url=https://mcpgw.knot.woa.com/tapd/ ，gongfeng url=https://mcpgw.knot.woa.com/gongfeng ，Authorization 复用已有 mcpgw 系 MCP 的太湖 PAT 全串 → Write 回去），**然后给用户二选一**（详见 §3 Stage 0 的二选一话术）：① 去点「信任」激活让画像更全，或 ② 直接用自评+基础信息生成画像。用户选 ② 就不再追问，直接降级出画像。**没有可复用 PAT 需要用户去申时，申请地址只能给 `https://tai.it.woa.com/user/pat` 这一个完整 URL，禁止自己拼域名（详见 §3 Stage 0 的地址铁律）。**
 - 自评 count=0               → 走 Stage B：引导上传简历或对话采集
 ```
 
@@ -342,6 +342,9 @@ B3. skills / traits 走"轻量推断"：
      - gongfeng:   url=https://mcpgw.knot.woa.com/gongfeng
      - 两个 Authorization 都复用现有太湖 PAT（从 mcp.json 已有 mcpgw 系 MCP 如 QLearning 的 Authorization 拿同一份全串）
      - 若用户 mcp.json 里没有任何可复用的太湖 PAT，才引导用户提供 PAT；有就直接复用不重复申
+       > **申请地址只能给这一个完整 URL**：`https://tai.it.woa.com/user/pat`
+       > **严禁自己推测/简写域名**——`tai.woa.com`、`mcp.woa.com`、`taihu.woa.com`、path 写成 `/user/token` 全都是**不存在的错误地址**。
+       > 记不准就别给链接（改说"内网太湖平台的 PAT 页面"），**绝不许编一个看起来合理的**。权威见主 agent §3.7 第 2 条。
   2. **写完给用户二选一**（不硬卡在"必须去激活"），话术示例：
      > "我已经帮你把 TAPD / 工蜂 配好了（复用了你现有的太湖 PAT）。接下来你选一个：
      > **① 想让画像更全**：去「专家 → 连接器 → 自定义连接器」点一下「信任 tapd_taihu / gongfeng」激活，激活后回我一声，我用你真实做过的事项 + 主力代码语言把画像补全；

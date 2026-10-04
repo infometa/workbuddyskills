@@ -92,6 +92,30 @@ Plan 中禁止出现缺 `projectDir` 的部署/state 命令，禁止给 `anydev 
 
 ---
 
+## MCP 化 Task（命中 MCP 意图时）
+
+当 `SKILL.md` 的 MCP 意图路由命中时，Plan 必须包含一个独立的「委托 enable-mcp」task。
+
+**放置规则**：
+
+- 新建应用：放在应用初始化和业务功能 task 之后、代码合规检查与最后三个固定 task 之前
+- 纯 MCP 化迭代：可作为首个业务 task，但仍必须位于最后三个固定 task 之前
+- 已有未完成 plan：在「迭代预览」前追加该 task，保留既有 task 与完成状态；不得覆盖已完成记录
+- 混合迭代：先执行页面或业务功能修改 task，再执行该 task，避免 `restful.json` 描述不稳定路由
+
+**Task 内容必须说明**：
+
+1. 委托对象为 `enable-mcp`，由 `page-deliver` 通过宿主 skill 调用机制执行
+2. 输入为真实项目目录与已确认的业务能力范围来源
+3. `enable-mcp` 完成能力范围确认、元信息确认、API 路由生成、`public/restful.json` 生成和自查后，返回 `page-deliver`
+4. 验证标准是路由、`public/restful.json` 与实际业务行为一致；最终 full-deploy、`RESTFUL_SPEC_INVALID` 校验和 `restful-probe` 仍由 `page-deliver` 执行
+
+不得把该 task 写成直接调用平台网关或自行部署；也不得在 `page-deliver` 的 Plan 中复制 `enable-mcp` 的生成细节。
+
+生成普通页面/API 路由，必须避免使用 `/app-mcp/` 保留前缀，该前缀仅由 `enable-mcp` 为 Agent 暴露接口时生成。
+
+---
+
 ## 迭代循环（核心流程）
 
 > **代码合规检查**：在进入下面的迭代预览之前，建议在 Plan 中安排一个「代码合规检查」task，按 `${SKILL_DIR}/references/project-constraints.md` 自查并修复硬约束违规（C1 文件上传路径、C2 MongoDB 数据库名）。该 task 不计入"最后三个固定 task"，位置灵活（代码生成完成后、迭代预览前即可）。详见 SKILL.md → 阶段4 步骤5。
@@ -104,7 +128,7 @@ Plan 的最后**三个** task 必须固定为「迭代预览」「Dockerfile 检
 - [ ] **Task N: 迭代预览**
 ```
 
-这是整个部署阶段的核心 task。它本身是一个**循环**，直到用户明确点击"确认发布"才跳出。
+这是整个部署阶段的核心 task。它本身是一个**循环**，直到用户明确点击"确认注册"才跳出。
 
 **循环体**（每次迭代）：
 1. `anydev full-deploy` — 部署/重新部署代码到 AnyDev：
@@ -115,7 +139,7 @@ Plan 的最后**三个** task 必须固定为「迭代预览」「Dockerfile 检
 3. 按 `references/output-templates.md` → **后续动作** 的 JSON 格式弹出 `ask_followup_question`
 
 **用户两种反应**：
-- 用户**点"确认发布"** → 跳出循环，进入 Task N+1（Dockerfile 检查/生成）
+- 用户**点"确认注册"** → 跳出循环，进入 Task N+1（Dockerfile 检查/生成）
 - 用户**输入文字**（如"改一下颜色""再加个图表"）→ 模型修改代码 → **在 Task N 之前追加新的 task**（Task N-1.5 等），执行完新增的 task 后重新回到 Task N 的循环体开头（重新 full-deploy + 预览确认）。**不要**改本 task 的内容，**不要**把 `[ ]` 改回 `[x]`。
 
 > ⚠️ **迭代中引入/移除 DB 或数仓时必须先同步 state**：若某轮反馈让代码**新增或去掉**了数据库持久化（mongoose/`db.js`/`MONGO_URI` 等）或数仓访问（`queryDW`/`starrocks` 等），在重新 `full-deploy` 之前先 `state update` 把 `needsDb` / `needsDw` 改成与代码一致的值：
@@ -138,7 +162,7 @@ Plan 的最后**三个** task 必须固定为「迭代预览」「Dockerfile 检
 **关键规则**：
 - 每次修改都必须**重新 full-deploy**（`anydev full-deploy` 是幂等的，14 步走完保证状态一致）
 - 修改代码后必须**重新弹确认按钮**
-- "迭代预览" task 本身永远不勾 `[x]`，直到用户点了"确认发布"才勾，然后进入下一步
+- "迭代预览" task 本身永远不勾 `[x]`，直到用户点了"确认注册"才勾，然后进入下一步
 - Task N 之前的 task 正常勾 `[x]`
 
 ### 2. Task N+1: Dockerfile 检查/生成
@@ -147,7 +171,7 @@ Plan 的最后**三个** task 必须固定为「迭代预览」「Dockerfile 检
 - [ ] **Task N+1: Dockerfile 检查/生成**
 ```
 
-**仅在用户点击"确认发布"后执行**。COS 归档的代码会被流水线拉取并按 Dockerfile 构建生产镜像，因此 Dockerfile 的正确性直接决定生产环境能否正常运行。
+**仅在用户点击"确认注册"后执行**。COS 归档的代码会被流水线拉取并按 Dockerfile 构建生产镜像，因此 Dockerfile 的正确性直接决定生产环境能否正常运行。
 
 **目标**：确保项目根目录存在一个合理的 Dockerfile（含 `{{PROJECT_ID}}` 占位符）和配套的 `.dockerignore`。
 - [重要] 使用 bash 命令 `cp` 目标dockerfile 到项目根目录， 在已有模板的基础上新增内容，** 不要动已有内容 ** 

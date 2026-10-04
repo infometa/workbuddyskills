@@ -48,6 +48,10 @@ def main():
         profile = json.loads(profile_path.read_text(encoding="utf-8"))
         profile["assessment"] = {
             "result_code": result.get("raw_code"),
+            # 测评版本：junior / senior / manager / legacy —— 下游按它决定解读口径
+            "assessment_kind": result.get("assessment_kind"),
+            "assessment_kind_label": result.get("assessment_kind_label"),
+            "version_tag": result.get("version_tag"),
             "main_code": result.get("main_code"),
             "anchors_top3": result.get("anchors_top3", []),
             "styles_top2": result.get("styles_top2", []),
@@ -55,9 +59,16 @@ def main():
                 k: v.get("score") for k, v in (result.get("psy_state") or {}).items()
             },
             "burnout_alert": result.get("psy_burnout_alert", False),
+            "burnout_threshold": result.get("psy_burnout_threshold"),
+            # 性格底色（员工版专有；管理者版为 None）
+            "disc": result.get("disc"),
+            # 领导风格 + 四个定位分（管理者版专有；员工版为 None）
+            "leadership": result.get("leadership"),
+            # R/K/N —— 用户在测评前自填的岗位/技能/诉求，下游 LJ/CC 直接可用
+            "self_report": result.get("self_report") or {},
             "captured_at": assessment_full["captured_at"],
         }
-        profile["schema_version"] = "2.1"  # 升 schema 版本号
+        profile["schema_version"] = "2.2"  # 升 schema：新增 assessment_kind / disc / leadership
         profile_path.write_text(
             json.dumps(profile, ensure_ascii=False, indent=2), encoding="utf-8"
         )

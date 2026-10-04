@@ -1,6 +1,8 @@
 ---
 name: style-rotation
 description: 用于风格轮动分析，聚焦风格配置/市场结构/资金偏好。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想判断当前市场更偏大盘还是小盘、成长还是价值、题材还是趋势、防御还是进攻。
+description_zh: "用于风格轮动分析，聚焦风格配置/市场结构/资金偏好。主要用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户想判断当前市场更偏大盘还是小盘、成长还是价值、题材还是趋势、防御还是进攻。"
+description_en: "Use for style-rotation analysis, focusing on style allocation, market structure, and capital preferences. Primarily suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. It determines whether the current market favors large caps or small caps, growth or value, themes or trends, and defensive or aggressive positioning."
 ---
 
 # 风格轮动

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{project_name} 日报 {date}</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif; font-size: 12px; color: #333; background: #fff; padding: 15px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: center; vertical-align: middle; font-size: 11px; }
+th { color: #fff; font-weight: bold; }
+
+.title-bg { background: #1F4E79; }
+.orange-bg { background: #975765; }
+.pink-bg { background: #EEE2E6; color: #333; }
+.peach-bg { background: #C59BA6; }
+.light-bg { background: #f5f5f5; }
+
+.kpi-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.kpi-card { flex: 1; border: 2px solid #1F4E79; border-radius: 4px; padding: 10px; text-align: center; background: #fafafa; }
+.kpi-card .label { font-size: 10px; color: #666; margin-bottom: 3px; }
+.kpi-card .value { font-size: 22px; font-weight: bold; color: #1F4E79; line-height: 1.2; }
+.kpi-card .sub { font-size: 9px; color: #888; margin-top: 3px; }
+
+.col-2 { display: flex; gap: 12px; margin-bottom: 12px; }
+.col-2 > div { flex: 1; }
+
+.section-title { background: #1F4E79; color: #fff; font-size: 13px; font-weight: bold; padding: 8px; text-align: center; }
+.table-header { background: #975765; color: #fff; font-weight: bold; }
+.table-header-pink { background: #EEE2E6; color: #333; font-weight: bold; }
+.table-header-peach { background: #C59BA6; color: #fff; font-weight: bold; }
+
+.data-value { font-weight: bold; font-size: 14px; color: #1F4E79; }
+.data-red { color: #c00; font-weight: bold; }
+
+tr:nth-child(even) { background: #f9f9f9; }
+
+.footer { text-align: center; padding: 15px; color: #999; font-size: 10px; border-top: 1px solid #ddd; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<!-- 项目标题 -->
+<table>
+<tr>
+<td class="title-bg" style="font-size: 18px; font-weight: bold; padding: 12px; text-align: center;">
+{project_name} 营销日报
+</td>
+</tr>
+<tr>
+<td style="text-align: center; padding: 6px; color: #666; background: #f5f5f5; font-size: 11px;">
+数据日期：{yesterday}（昨日） | 统计周期：{month_start} ~ {yesterday} | 截至时间：23:59
+</td>
+</tr>
+</table>
+
+<!-- KPI概览 -->
+<div class="kpi-row">
+<div class="kpi-card">
+<div class="label">本月来访（组）</div>
+<div class="value">{month_visit_actual}</div>
+<div class="sub">目标{month_visit_target}组 | 完成率{visit_complete_rate}%</div>
+</div>
+<div class="kpi-card">
+<div class="label">来访进度达成</div>
+<div class="value">{progress_rate}%</div>
+<div class="sub">时间进度{time_progress}% | 超额{over_progress}%</div>
+</div>
+<div class="kpi-card">
+<div class="label">本月成交（组）</div>
+<div class="value">{month_deals}</div>
+<div class="sub">目标待确认 | 成交金额待填报</div>
+</div>
+<div class="kpi-card">
+<div class="label">昨日来访（组）</div>
+<div class="value">{yesterday_visits}</div>
+<div class="sub">本周来访量平稳</div>
+</div>
+</div>
+
+<!-- 来访指标 + 来访意向等级 -->
+<div class="col-2">
+<div>
+<table>
+<tr><td colspan="6" class="section-title" style="font-size:12px;">本月来访指标及达成</td></tr>
+<tr class="table-header">
+<td>月度客储指标</td>
+<td>截至昨日来访</td>
+<td>完成率</td>
+<td>进度达成率</td>
+<td>总组数</td>
+<td>转化率</td>
+</tr>
+<tr>
+<td class="data-value">{month_visit_target}</td>
+<td class="data-value">{month_visit_actual}</td>
+<td class="data-red">{visit_complete_rate}%</td>
+<td class="data-red">{progress_rate}%</td>
+<td class="data-value">{month_visit_actual}</td>
+<td>-</td>
+</tr>
+</table>
+</div>
+<div>
+<table>
+<tr><td colspan="5" class="section-title" style="font-size:12px;">本月来访客户意向等级分析</td></tr>
+<tr class="table-header">
+<td>A级（高意向）</td>
+<td>B级（中高）</td>
+<td>C级（中意向）</td>
+<td>D级（低意向）</td>
+<td>合计</td>
+</tr>
+<tr>
+<td class="data-value">{intent_A}</td>
+<td class="data-value">{intent_B}</td>
+<td class="data-value">{intent_C}</td>
+<td class="data-value">{intent_D}</td>
+<td class="data-value" style="font-size:16px;">{intent_total}</td>
+</tr>
+<tr style="background:#f5f5f5;">
+<td>{intent_A_pct}%</td>
+<td>{intent_B_pct}%</td>
+<td>{intent_C_pct}%</td>
+<td>{intent_D_pct}%</td>
+<td>100%</td>
+</tr>
+</table>
+</div>
+</div>
+
+<!-- 销售指标 + 成交意向等级 -->
+<div class="col-2">
+<div>
+<table>
+<tr><td colspan="6" class="section-title" style="font-size:12px;">本月销售指标及达成</td></tr>
+<tr class="table-header">
+<td>月度销售指标(万)</td>
+<td>截至昨日成交(万)</td>
+<td>完成率</td>
+<td>进度达成率</td>
+<td>总套数</td>
+<td>转化率</td>
+</tr>
+<tr>
+<td class="data-value">{month_sales_target:,}</td>
+<td class="data-value">待填报</td>
+<td class="data-red">-</td>
+<td class="data-red">-</td>
+<td class="data-value">{month_deals}</td>
+<td>-</td>
+</tr>
+<tr style="background:#fff3cd; font-size:9px;">
+<td colspan="6" style="text-align:left;">⚠ 成交金额待确认，建议从销售管理系统补充数据</td>
+</tr>
+</table>
+</div>
+<div>
+<table>
+<tr><td colspan="5" class="section-title" style="font-size:12px;">本月成交客户意向等级分析</td></tr>
+<tr class="table-header">
+<td>A级</td>
+<td>B级</td>
+<td>C/C+级</td>
+<td>D级</td>
+<td>合计</td>
+</tr>
+<tr>
+<td class="data-value">{deal_A}</td>
+<td>{deal_B}</td>
+<td>{deal_C}</td>
+<td>{deal_D}</td>
+<td class="data-value">{month_deals}</td>
+</tr>
+</table>
+</div>
+</div>
+
+<!-- 来访渠道分布 -->
+<table>
+<tr><td colspan="5" class="section-title" style="font-size:12px;">来访渠道分布（本月）</td></tr>
+<tr class="table-header">
+<td>渠道类型</td>
+<td>来访组数</td>
+<td>占比</td>
+<td>意向等级分布</td>
+<td>备注</td>
+</tr>
+{channel_rows}
+<tr style="background:#1F4E79; color:#fff;">
+<td><strong>合计</strong></td>
+<td class="data-value" style="color:#fff;">{channel_total}</td>
+<td>100%</td>
+<td>A:{intent_A}, B:{intent_B}, C:{intent_C}, D:{intent_D}</td>
+<td>-</td>
+</tr>
+</table>
+
+<!-- 存量客户汇总 -->
+<table>
+<tr><td colspan="7" class="section-title" style="font-size:12px;">存量客户本周复访 - 近3月未成交（{three_months_ago} ~ {yesterday}）</td></tr>
+<tr class="table-header">
+<td>渠道</td>
+<td>未成交总数</td>
+<td>A级</td>
+<td>B级</td>
+<td>C级</td>
+<td>D级</td>
+<td>占比</td>
+</tr>
+{stock_rows}
+<tr style="background:#1F4E79; color:#fff;">
+<td><strong>合计</strong></td>
+<td class="data-value" style="color:#fff;">{stock_total}</td>
+<td>{stock_A}</td>
+<td>{stock_B}</td>
+<td>{stock_C}</td>
+<td>{stock_D}</td>
+<td>100%</td>
+</tr>
+</table>
+
+<!-- 存量客户明细 -->
+<table>
+<tr><td colspan="12" class="section-title" style="font-size:12px; background:#C59BA6;">存量客户预计本周复访明细</td></tr>
+<tr class="table-header-peach">
+<td style="width:30px;">序号</td>
+<td>客户姓名</td>
+<td>来访渠道</td>
+<td>置业顾问</td>
+<td>最近来访</td>
+<td>意向等级</td>
+<td>跟进情况</td>
+<td>决策周期</td>
+<td>未成交原因</td>
+<td>复访概率</td>
+<td>成交概率</td>
+<td>跟进策略</td>
+</tr>
+{customer_rows}
+</table>
+
+<!-- 昨日来访明细 -->
+<table>
+<tr><td colspan="7" class="section-title" style="font-size:12px;">昨日来访明细（{yesterday} 共{yesterday_visits}组）</td></tr>
+<tr class="table-header">
+<td style="width:30px;">序号</td>
+<td>到访时间</td>
+<td>顾问</td>
+<td>到访次数</td>
+<td>停留时长</td>
+<td>首访/复访</td>
+<td>备注</td>
+</tr>
+{yesterday_rows}
+</table>
+
+<!-- 数据说明 -->
+<table>
+<tr><td colspan="4" class="section-title" style="font-size:12px;">数据说明</td></tr>
+<tr class="table-header-pink">
+<td>数据项</td>
+<td>数据来源</td>
+<td>数据状态</td>
+<td>备注</td>
+</tr>
+<tr>
+<td>来访数据</td>
+<td>旺小宝来访记录API</td>
+<td class="data-value" style="color:#0a0;">已获取</td>
+<td>{month_start}~{yesterday}共{month_visit_actual}组</td>
+</tr>
+<tr>
+<td>意向等级</td>
+<td>旺小宝客户画像API</td>
+<td class="data-value" style="color:#0a0;">已获取</td>
+<td>顾问评级(A/B/C/D)</td>
+</tr>
+<tr>
+<td>渠道分类</td>
+<td>旺小宝dynamicTags</td>
+<td class="data-value" style="color:#0a0;">已获取</td>
+<td>五大类来访渠道</td>
+</tr>
+<tr>
+<td>成交数据</td>
+<td>旺小宝客户画像API</td>
+<td class="data-value" style="color:#f90;">待确认</td>
+<td>本月成交{month_deals}组，金额待填报</td>
+</tr>
+<tr>
+<td>月度KPI指标</td>
+<td>IMA知识库/配置</td>
+<td class="data-value" style="color:#0a0;">已配置</td>
+<td>来访{month_visit_target}组/销售{month_sales_target}万</td>
+</tr>
+</table>
+
+<!-- 页脚 -->
+<div class="footer">
+<p>{project_name} 营销日报 | 数据日期：{yesterday} | 生成时间：{date}</p>
+<p>数据来源：旺小宝智能营销系统 | 本月来访{month_visit_actual}组 | 意向客户{intent_A}组（A级）</p>
+<p style="color:#c00; font-weight:bold;">⚠ 成交金额待从销售管理系统补充，建议每日同步</p>
+</div>
+
+</body>
+</html>

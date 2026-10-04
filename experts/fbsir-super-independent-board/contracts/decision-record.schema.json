@@ -1,0 +1,407 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.fbsir.local/super-independent-board/decision-record.schema.json",
+  "title": "超级独董会 DecisionRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "productId",
+    "packageVersion",
+    "caseRef",
+    "issueFrame",
+    "decisionDNA",
+    "selectedRecipe",
+    "aiRecommendation",
+    "evidenceBoundary",
+    "strongestCountercase",
+    "conditions",
+    "killCriteria",
+    "humanReviewBoundary",
+    "singleNextAction",
+    "recommendedArtifact",
+    "userDecision",
+    "truthBoundary"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "fbsir.super-independent-board.decision-record/v1"
+    },
+    "productId": {
+      "const": "fbsir-super-independent-board"
+    },
+    "packageVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Resolve from .codebuddy-plugin/plugin.json#/version when the record is created."
+    },
+    "caseRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "issueFrame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question",
+        "decisionDeadline",
+        "options",
+        "nonGoals"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decisionDeadline": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "nonGoals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "decisionDNA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "impact",
+        "reversibility",
+        "urgency",
+        "uncertainty",
+        "evidenceStrength",
+        "stakeholderConflict",
+        "regulatoryRisk",
+        "executionReadiness"
+      ],
+      "properties": {
+        "impact": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical",
+            "unknown"
+          ]
+        },
+        "reversibility": {
+          "enum": [
+            "reversible",
+            "costly",
+            "irreversible",
+            "unknown"
+          ]
+        },
+        "urgency": {
+          "enum": [
+            "immediate",
+            "days",
+            "weeks",
+            "open",
+            "unknown"
+          ]
+        },
+        "uncertainty": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "evidenceStrength": {
+          "enum": [
+            "sufficient",
+            "partial",
+            "conflicted",
+            "missing",
+            "unknown"
+          ]
+        },
+        "stakeholderConflict": {
+          "enum": [
+            "none",
+            "moderate",
+            "high",
+            "unknown"
+          ]
+        },
+        "regulatoryRisk": {
+          "enum": [
+            "none",
+            "possible",
+            "high",
+            "unknown"
+          ]
+        },
+        "executionReadiness": {
+          "enum": [
+            "ready",
+            "blocked",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "selectedRecipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primaryMode",
+        "auxiliaryLenses"
+      ],
+      "properties": {
+        "primaryMode": {
+          "enum": [
+            "quick_review",
+            "red_team",
+            "evidence_court",
+            "scenario_simulation",
+            "reversible_experiment",
+            "deep_preparation"
+          ]
+        },
+        "auxiliaryLenses": {
+          "type": "array",
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "stakeholder_impact",
+              "regulatory_and_safety",
+              "execution_commitment"
+            ]
+          }
+        }
+      }
+    },
+    "aiRecommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "text"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "go",
+            "conditional_go",
+            "no_go",
+            "defer_for_evidence"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evidenceBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "facts",
+        "estimates",
+        "assumptions",
+        "judgments",
+        "unknowns"
+      ],
+      "properties": {
+        "facts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "estimates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "judgments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "strongestCountercase": {
+      "type": "string",
+      "minLength": 1
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "killCriteria": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "humanReviewBoundary": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "singleNextAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "owner",
+        "target",
+        "completionDefinition",
+        "verificationSignal",
+        "reviewWindow",
+        "reviewTrigger"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "completionDefinition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verificationSignal": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewWindow": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewTrigger": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "recommendedArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary",
+        "companion"
+      ],
+      "properties": {
+        "primary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "companion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "userDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "text"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "accepted",
+            "accepted_with_changes",
+            "rejected",
+            "deferred",
+            "no_decision"
+          ]
+        },
+        "text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "truthBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canProve",
+        "cannotProve"
+      ],
+      "properties": {
+        "canProve": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "cannotProve": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

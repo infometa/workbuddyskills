@@ -1,0 +1,52 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": "22"
+  },
+  "npmRegistry": "https://registry.npmjs.org",
+  "env": {
+    "AE_CLI_CONFIG_DIR": "${HOME}/.ae-cli-workbuddy"
+  },
+  "init": {
+    "darwin": "npm install -g @thinkingai/ae-cli@6.0.48-workbuddy",
+    "linux": "npm install -g @thinkingai/ae-cli@6.0.48-workbuddy",
+    "win32": "npm install -g @thinkingai/ae-cli@6.0.48-workbuddy"
+  },
+  "auth": [
+    {
+      "command": {
+        "darwin": "ae-cli-workbuddy auth workbuddy-host-page",
+        "linux": "ae-cli-workbuddy auth workbuddy-host-page",
+        "win32": "ae-cli-workbuddy.cmd auth workbuddy-host-page"
+      },
+      "authWaitForExit": true,
+      "authUrlDomain": "127.0.0.1",
+      "authDeviceFlow": false
+    },
+    {
+      "command": {
+        "darwin": "ae-cli-workbuddy auth login --no-browser",
+        "linux": "ae-cli-workbuddy auth login --no-browser",
+        "win32": "ae-cli-workbuddy.cmd auth login --no-browser"
+      }
+    }
+  ],
+  "unAuth": {
+    "darwin": "ae-cli-workbuddy auth logout --all",
+    "linux": "ae-cli-workbuddy auth logout --all",
+    "win32": "ae-cli-workbuddy.cmd auth logout --all"
+  },
+  "status": {
+    "darwin": "ae-cli-workbuddy auth status",
+    "linux": "ae-cli-workbuddy auth status",
+    "win32": "ae-cli-workbuddy.cmd auth status"
+  },
+  "statusMatch": "\\\"authenticated\\\"\\s*:\\s*true",
+  "authWaitForExit": true,
+  "authDeviceFlow": {
+    "uriPattern": "(https://[^\\s]+/device-activate\\?user_code=[^\\s]+)",
+    "codePattern": "Verification code:\\s*([^\\s]+)",
+    "defaultExpiresInSeconds": 300,
+    "codeEmbeddedInUri": true
+  }
+}

@@ -1,0 +1,28 @@
+<!-- 经营布局模板 -->
+<div class="pcf-section">
+  <h3>经营布局</h3>
+  <div class="pcf-section__summary">
+    <p>{{summary}}</p>
+  </div>
+  <div class="pcf-section__data-block">
+    <h4>基地/功能/产能</h4>
+    <table>
+      <thead>
+        <tr><th>基地</th><th>功能</th><th>产能</th></tr>
+      </thead>
+      <tbody>
+        {{#each bases}}
+        <tr><td>{{location}}</td><td>{{function}}</td><td>{{capacity}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

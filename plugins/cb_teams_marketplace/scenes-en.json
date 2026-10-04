@@ -5,12 +5,15 @@
     "name": "Documentation",
     "icon": "documentation",
     "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
     "plugins": [
       {
         "id": 0,
-        "name": "document-skills",
-        "marketplaceName": "cb_teams_marketplace",
-        "marketplaceUrl": "https://cnb.cool/codebuddy/cbteamsmarketplace"
+        "name": "tencent-docx",
+        "marketplaceName": "workbuddy-builtin"
       }
     ],
     "prompts": [
@@ -33,6 +36,10 @@
     "name": "Financial Services",
     "icon": "financial-services",
     "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
     "plugins": [
       {
         "id": 0,
@@ -92,6 +99,10 @@
     "name": "Visualization",
     "icon": "data-visualization",
     "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
     "plugins": [
       {
         "id": 0,
@@ -101,9 +112,8 @@
       },
       {
         "id": 1,
-        "name": "document-skills",
-        "marketplaceName": "cb_teams_marketplace",
-        "marketplaceUrl": "https://cnb.cool/codebuddy/cbteamsmarketplace"
+        "name": "sheetagent",
+        "marketplaceName": "workbuddy-builtin"
       }
     ],
     "prompts": [
@@ -128,14 +138,17 @@
     "name": "Personal Workspace",
     "icon": "tool-case",
     "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
     "plugins": [],
     "expert": {
-      "id": "workspace-builder",
+      "id": "ex_kXnGMfUfWS6d",
       "name": "小台",
       "profession": "工作台搭建师",
       "expertType": "agent",
-      "source": "expert-marketplace",
-      "expert_id": "ex_kXnGMfUfWS6d"
+      "source": "expert-marketplace"
     },
     "prompts": [
       "Create an integrated life-management workbench for a broad everyday audience and deliver it as a single HTML file. Inline all CSS, JavaScript, icons, and assets; use no external components; make it reliable on both desktop and mobile.\n\nThe workbench should include at least: a daily life score; personal finance tracking with income and expenses, budgets, monthly comparison, category filters, spending breakdown, and Excel export; habit tracking where users can add or delete habits and choose check, counter, or numeric tracking with a 30-day heatmap; weight-loss tracking with weight and body-fat entries, a 7-day average, BMI, goal progress, calorie deficit guidance, and customizable weekly plans; schedule planning; a shopping list; and a books/film/series/anime library with status, star rating, short review, wall/list views, and annual statistics.\n\nSave input immediately to localStorage so it remains after closing the page. Provide JSON backup export and unlimited import, remind users to back up after 20 new items, clearly report storage failures or corrupted data, and allow recovery. Include a small set of removable demo entries. Keep the visual direction restrained, polished, and warm rather than using a generic AI-card template.",
@@ -154,11 +167,48 @@
     "target": "all"
   },
   {
+    "id": 1,
+    "unified_id": 105,
+    "name": "Slides Creation",
+    "icon": "slides-creation",
+    "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
+    "plugins": [
+      {
+        "id": 0,
+        "name": "tencent-pptx",
+        "marketplaceName": "workbuddy-builtin"
+      }
+    ],
+    "prompts": [
+      "Create a popular-science PPT on the history of AI, organized as a timeline covering symbolism, expert systems, machine learning, deep learning, and large models, highlighting key figures, technologies, and events. Use a \"Tech Archive\" style: deep navy-black (#0B1020) paired with electric blue (#3478F6) and orange-red (#FF6B4A). Focus on a vertical timeline, historical event cards, and technology evolution diagrams; use Source Han Sans for Chinese text, combining historical depth with a futuristic tech feel.",
+      "Create a 2026 AI trends analysis PPT for industry research and executive reporting. Research online the trends in agents, multimodal AI, on-device AI, embodied intelligence, AI coding, and compute chips, presenting the latest progress, business value, and future outlook. Use a \"Future Intelligence Briefing\" style: black-blue (#090D18) paired with neon cyan (#38E8D4) and digital purple (#846BFF). Use trend matrices, vendor comparisons, and market forecast charts—cutting-edge, precise, and opinionated.",
+      "Create a 10-page personal or team year-end review PPT covering annual goals, key projects, core achievements, problem retrospectives, and next-year plans; use placeholders for missing information. Use a clean business style: white background paired with deep blue (#173A63) and warm orange (#F08A4B). Express one core takeaway per page, presented through big numbers, project cards, milestones, and quarterly roadmaps—clear and restrained, highlighting results, contributions, and growth.",
+      "Create a cultural introduction PPT for \"Journey to the West\", covering its creation background, main storyline, key characters, classic episodes, the pantheon of gods and demons, and its cultural influence. Use an \"Eastern Mythology Scroll\" style: rice-paper off-white (#F3E8D2) paired with cinnabar red (#B83A32), ink black, and gilded gold (#C89B4B). Feature the pilgrimage route, character relationship maps, magical-artifact cards, and ink-wash illustrations; design page numbers as seal stamps—classical and vivid, combining storytelling with cultural depth.",
+      "Create a Pop Mart brand analysis PPT; research online the brand's development, core IPs, blind-box mechanics, user profiles, channel layout, overseas markets, and business model. Use a \"Designer Toy Exhibition Catalog\" style: cream white (#F7F3EE) paired with Pop pink (#F4A8C4), bright red (#E94752), and lagoon blue (#64C9D4). Feature large IP images, rounded cards, sticker labels, an IP matrix, and an overseas map—young, vivid, and collectible without being childish."
+    ],
+    "promptTitles": [
+      "AI History PPT",
+      "AI Trends PPT",
+      "Year-End Review PPT",
+      "Journey to the West PPT",
+      "Pop Mart PPT"
+    ],
+    "target": "all"
+  },
+  {
     "id": 3,
     "unified_id": 103,
     "name": "Deep Research",
     "icon": "deep-research",
     "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
     "plugins": [
       {
         "id": 0,
@@ -187,6 +237,10 @@
     "name": "Video Generation",
     "icon": "video-generation",
     "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
     "plugins": [
       {
         "id": 0,
@@ -215,39 +269,15 @@
     "target": "all"
   },
   {
-    "id": 1,
-    "unified_id": 105,
-    "name": "Slides Creation",
-    "icon": "slides-creation",
-    "mode": "working",
-    "plugins": [
-      {
-        "id": 0,
-        "name": "ppt-implement",
-        "marketplaceName": "cb_teams_marketplace",
-        "marketplaceUrl": "https://cnb.cool/codebuddy/cbteamsmarketplace"
-      }
-    ],
-    "prompts": [
-      "Create a PowerPoint presentation on the development history of artificial intelligence (AI).",
-      "Create a PowerPoint presentation on 2026 trends in AI agents.",
-      "Create a minimalist-style PowerPoint presentation forCodeBuddy's 2025 year-end summary.",
-      "Create a PowerPoint presentation on POP MART's development history, with one IP character featured on every slide."
-    ],
-    "promptTitles": [
-      "AI History PPT",
-      "AI Trends PPT",
-      "Year-end Summary PPT",
-      "POP MART PPT"
-    ],
-    "target": "all"
-  },
-  {
     "id": 11,
     "unified_id": 106,
     "name": "Product",
     "icon": "product-management",
     "mode": "working",
+    "interactionModes": [
+      "craft",
+      "plan"
+    ],
     "plugins": [
       {
         "id": 0,
@@ -257,9 +287,8 @@
       },
       {
         "id": 1,
-        "name": "document-skills",
-        "marketplaceName": "cb_teams_marketplace",
-        "marketplaceUrl": "https://cnb.cool/codebuddy/cbteamsmarketplace"
+        "name": "tencent-docx",
+        "marketplaceName": "workbuddy-builtin"
       }
     ],
     "prompts": [
@@ -315,16 +344,37 @@
       }
     ],
     "prompts": [
-      "Help me develop a corporate website. Company name: [Company name], main business: [Business description]. Requirements: Include homepage, about us, products/services, and contact us pages with a clean, professional style.",
-      "Help me develop an admin dashboard for managing [Content to manage]. Requirements: Include login page, data dashboard, list management, and form editing with responsive layout.",
-      "Help me develop a personal blog website. Blog theme: [Blog theme]. Requirements: Include article list, article detail, tag categories, and about page with Markdown rendering support.",
-      "Help me develop an e-commerce homepage selling [Product type]. Requirements: Include carousel, product categories, featured products, and promotional sections."
+      "Help me develop a corporate website. Company name: [Company name], main business: [Business description]. Requirements: Include homepage, about us, products/services, and contact us pages with a clean, professional style, and publish it online.",
+      "Help me develop an admin dashboard for managing [Content to manage]. Requirements: Include login page, data dashboard, list management, form editing with responsive layout, and publish it online.",
+      "Help me develop a personal blog website. Blog theme: [Blog theme]. Requirements: Include article list, article detail, tag categories, and about page with Markdown rendering support, and publish it online.",
+      "Help me develop an e-commerce homepage selling [Product type]. Requirements: Include carousel, product categories, featured products, promotional sections, and publish it online."
     ],
     "promptTitles": [
       "Corporate Website",
       "Admin Dashboard",
       "Personal Blog",
       "E-commerce Homepage"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 50,
+    "unified_id": 129,
+    "name": "Mini Program",
+    "icon": "mini-program",
+    "mode": "coding",
+    "plugins": [],
+    "prompts": [
+      "Help me develop a WeChat Mini Program for event registration. The event name is [Event Name], targeting [Target Audience]. Requirements: Include an event homepage, event details page, online registration, and registration records page. Support WeChat authorized login. Store event and registration data in a cloud database, and store event images in cloud storage. The interface should adopt a clean mobile Mini Program design that fits the business scenario, highlighting core content and primary actions, maintaining a clear information hierarchy and a compact yet comfortable layout, using a consistent icon style, and avoiding Emojis.",
+      "Help me develop a WeChat Mini Program for community group buying, mainly offering [Product Type]. Requirements: Include a group buying homepage, product list, group buying details page, and order records page. Support WeChat authorized login. Store product and order data in a cloud database, and store product images in cloud storage. The interface should adopt a clean mobile Mini Program design that fits the business scenario, highlighting core content and primary actions, maintaining a clear information hierarchy and a compact yet comfortable layout, using a consistent icon style, and avoiding Emojis.",
+      "Help me develop a WeChat Mini Program for store appointments. The store name is [Store Name], providing [Service Type]. Requirements: Include a store homepage, service items, appointment time selection, and appointment records page. Support WeChat authorized login. Store appointment data in a cloud database, and store service images in cloud storage. The interface should adopt a clean mobile Mini Program design that fits the business scenario, highlighting core content and primary actions, maintaining a clear information hierarchy and a compact yet comfortable layout, using a consistent icon style, and avoiding Emojis.",
+      "Help me develop a WeChat Mini Program for restaurant ordering. The restaurant name is [Restaurant Name], specializing in [Cuisine Type]. Requirements: Include a restaurant homepage, dish categories, dish details page, shopping cart, and order records page. Support WeChat authorized login. Store dish and order data in a cloud database, and store dish images in cloud storage. The interface should adopt a clean mobile Mini Program design that fits the business scenario, highlighting core content and primary actions, maintaining a clear information hierarchy and a compact yet comfortable layout, using a consistent icon style, and avoiding Emojis."
+    ],
+    "promptTitles": [
+      "Event Registration Mini Program",
+      "Community Group Buying Mini Program",
+      "Store Appointment Mini Program",
+      "Restaurant Ordering Mini Program"
     ],
     "target": "all"
   },
@@ -347,16 +397,16 @@
       }
     ],
     "prompts": [
-      "Use CodeBuddy SDK to create an Agent Web application for [Describe the Agent's purpose]. (Please use skill codebuddy-chat-web)",
-      "Use CodeBuddy SDK to initialize a chat application with functionality: [Describe chat functionality]. (Please use skill codebuddy-chat-web)",
-      "Use CodeBuddy SDK to create a client-side Agent Web application that implements [Describe project functionality]. (Please use skill codebuddy-chat-web, create a web app wrapped with Electron, ensuring it can be developed using a web browser)",
-      "Use CodeBuddy SDK to create an 'Intelligent Customer Service Agent' Web application. Requirements: multi-turn conversation support, FAQ knowledge base retrieval, automatic intent recognition (refund / order inquiry / technical support), auto-escalation to human agents when unresolved, persistent conversation history storage, and an admin dashboard to view chat logs and satisfaction statistics (Please use skill codebuddy-chat-web)"
+      "Help me create a Knowledge Q&A Agent web application that allows users to enter questions and receive answers based on content from a knowledge base. Integrate a large language model (LLM) and deploy the application online.",
+      "Help me create an AI Customer Support Agent web application with support for multi-turn conversations, FAQ knowledge base retrieval, automatic user intent recognition (such as refunds, order inquiries, and technical support), automatic escalation to a human agent when an issue cannot be resolved, persistent conversation history storage, and an admin dashboard for viewing conversation records and customer satisfaction statistics. Store data in the cloud, integrate a large language model (LLM), and deploy the application online.",
+      "Help me create a Personal Information Manager Agent web application that allows users to capture scattered thoughts, reference materials, and to-do items, and automatically categorize, summarize, and connect related information. Support keyword search, intelligent Q&A, key information extraction, and task organization, and generate periodic summaries and suggested next actions based on existing content. Store data in the cloud, integrate a large language model (LLM), and deploy the application online.",
+      "Help me create a Data Analysis Agent web application that allows users to upload or enter data and use natural language to perform data queries, trend analysis, anomaly detection, and metric comparisons, while automatically generating analytical insights and data visualizations. Store data in a cloud database, integrate a large language model (LLM), and deploy the application online."
     ],
     "promptTitles": [
-      "Agent Web App",
-      "Init Chat App",
-      "Client-side Agent App",
-      "Customer Service Agent"
+      "Knowledge Q&A Agent",
+      "AI Customer Support Agent",
+      "Personal Information Manager Agent",
+      "Data Analysis Agent"
     ],
     "target": "all"
   },
@@ -653,6 +703,162 @@
       "Product Launch Poster",
       "Double 11 Banners",
       "Tech Summit Poster"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 44,
+    "unified_id": 123,
+    "name": "Latest News",
+    "icon": "wb-view",
+    "mode": "working",
+    "interactionModes": [
+      "quick"
+    ],
+    "plugins": [],
+    "prompts": [
+      "Summarize the three most noteworthy news stories today in plain language.",
+      "Tell me how the weather has changed recently and what to watch out for.",
+      "Explain recent new regulations that affect ordinary people.",
+      "Tell me what topics people have been discussing lately.",
+      "Share a few warm and interesting small news stories from recently."
+    ],
+    "promptTitles": [
+      "Today's top stories",
+      "Recent weather changes",
+      "New rules for daily life",
+      "Trending topics",
+      "Heartwarming news"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 45,
+    "unified_id": 124,
+    "name": "Writing Help",
+    "icon": "wb-ai-edit",
+    "mode": "working",
+    "interactionModes": [
+      "quick"
+    ],
+    "plugins": [],
+    "prompts": [
+      "Write a short leave-of-absence message to send to my manager.",
+      "Write a polite message reminding someone to finish on time.",
+      "Write a natural, not-awkward birthday wish for a friend.",
+      "Write a sincere apology text that is not overly formal.",
+      "Write a short social media post based on today's mood."
+    ],
+    "promptTitles": [
+      "Write a leave message",
+      "Politely follow up",
+      "Write a birthday wish",
+      "Write an apology text",
+      "Write a social post"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 46,
+    "unified_id": 125,
+    "name": "Daily Translation",
+    "icon": "wb-translate",
+    "mode": "working",
+    "interactionModes": [
+      "quick"
+    ],
+    "plugins": [],
+    "prompts": [
+      "Translate this English sentence into natural, easy-to-understand Chinese.",
+      "Translate this menu and explain what each dish is.",
+      "Translate this delivery update and tell me where my package is.",
+      "Tell me in simple terms what this email is mainly about.",
+      "Teach me how to ask how to get somewhere in simple English."
+    ],
+    "promptTitles": [
+      "What does this mean",
+      "Translate a menu",
+      "Read a delivery update",
+      "Summarize this email",
+      "Ask for directions"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 47,
+    "unified_id": 126,
+    "name": "Everyday Know-how",
+    "icon": "search",
+    "mode": "working",
+    "interactionModes": [
+      "quick"
+    ],
+    "plugins": [],
+    "prompts": [
+      "Why do staircases usually have an odd number of steps like 7, 9 or 11?",
+      "How should eggs be stored so they stay fresh longer?",
+      "My clothes shrank in the wash. Any simple ways to fix them?",
+      "What charge level is best for protecting my phone battery?",
+      "Why does cutting onions make you cry, and how can I avoid it?"
+    ],
+    "promptTitles": [
+      "Why odd-numbered stairs",
+      "Keep eggs fresh longer",
+      "Fix shrunken clothes",
+      "Best phone charge level",
+      "Why onions make you cry"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 48,
+    "unified_id": 127,
+    "name": "Work Tips",
+    "icon": "powerpoint",
+    "mode": "working",
+    "interactionModes": [
+      "quick"
+    ],
+    "plugins": [],
+    "prompts": [
+      "When there is a lot to do, how should I order my tasks for the day?",
+      "I get nervous speaking up in meetings. Any simple ways to ease that?",
+      "How do I quickly note down what really matters while someone is talking?",
+      "When my plate is full, how do I politely decline extra last-minute tasks?",
+      "My computer has more and more files. How should I sort them to find things easily?"
+    ],
+    "promptTitles": [
+      "Plan my workday",
+      "Nervous in meetings",
+      "Capture key points fast",
+      "Decline extra tasks",
+      "Organize too many files"
+    ],
+    "target": "all"
+  },
+  {
+    "id": 49,
+    "unified_id": 128,
+    "name": "Travel Guide",
+    "icon": "wb-publish",
+    "mode": "working",
+    "interactionModes": [
+      "quick"
+    ],
+    "plugins": [],
+    "prompts": [
+      "Recommend short, low-effort trips that are good for relaxing on a weekend.",
+      "It is my first time taking a high-speed train. What should I prepare and note?",
+      "What should I bring for a three-day trip, and how do I pack light?",
+      "What practical items should I prepare for a day at the beach?",
+      "How do I pick travel dates to avoid long queues and crowds?"
+    ],
+    "promptTitles": [
+      "Relaxing weekend ideas",
+      "First high-speed rail trip",
+      "Pack for a 3-day trip",
+      "What to bring to the beach",
+      "Avoid tourist crowds"
     ],
     "target": "all"
   }

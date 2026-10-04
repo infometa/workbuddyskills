@@ -1,0 +1,30 @@
+<div class="pcf-section">
+  <div class="pcf-section__metrics">
+    {{#summary}}
+    <div class="pcf-section__metric">
+      <div class="pcf-section__metric-label">{{label}}</div>
+      <div class="pcf-section__metric-value">{{value}}<span class="pcf-section__metric-unit">{{unit}}</span></div>
+    </div>
+    {{/summary}}
+  </div>
+
+  <div class="pcf-section__data-block">
+    <table>
+      <thead><tr><th>类别</th><th>数量</th><th>详情</th></tr></thead>
+      <tbody>
+        {{#items}}
+        <tr><td>{{category}}</td><td>{{count}}</td><td>{{detail}}</td></tr>
+        {{/items}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pcf-section__source">
+    <div class="pcf-section__source-title">数据来源文件</div>
+    <div class="pcf-section__source-list">
+      {{#each sourceFiles}}
+      <span class="pcf-section__source-item">{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>

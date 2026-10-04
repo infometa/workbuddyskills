@@ -1,6 +1,8 @@
 ---
 name: market-overview
 description: 擅长股票市场整体行情分析。能够对"全球股市联动综述、全球金融市场综述、盘前市场综述、盘中市场简评、盘后市场简报、新股情报、再融资情报、每日大宗交易解读、每日龙虎榜解读、南向沪港通解读、市场情绪解读"这11个主题领域进行单项或多项分析。当直接命中或高相似度命中这些领域时，使用本技能。本技能不适用于：个股深度分析、宏观政策解读、基金产品选择。
+description_zh: "擅长股票市场整体行情分析。能够对\"全球股市联动综述、全球金融市场综述、盘前市场综述、盘中市场简评、盘后市场简报、新股情报、再融资情报、每日大宗交易解读、每日龙虎榜解读、南向沪港通解读、市场情绪解读\"这11个主题领域进行单项或多项分析。当直接命中或高相似度命中这些领域时，使用本技能。本技能不适用于：个股深度分析、宏观政策解读、基金产品选择。"
+description_en: "Specializes in broad stock-market analysis across 11 topics: global equity-market linkages, global financial markets, pre-market overviews, intraday commentary, post-market briefings, IPO intelligence, refinancing intelligence, daily block trades, daily trading-list activity, southbound Stock Connect flows, and market sentiment. Use this skill when the request directly or closely matches these areas. It is not suitable for in-depth individual-stock analysis, macro-policy interpretation, or fund selection."
 ---
 
 # 股票市场分析

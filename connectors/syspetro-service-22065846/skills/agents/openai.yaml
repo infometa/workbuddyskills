@@ -1,0 +1,15 @@
+interface:
+  display_name: "PROPDB 完整版"
+  short_description: "执行物性计算，生成曲线图片或多曲线网页报告"
+  default_prompt: "使用 $propdb-skill-full 查询或计算指定组分的物性；采用可用默认参数直接执行，单一或同族曲线组生成 SVG，多曲线集合生成 HTML 并默认附带同源 XLSX，同时披露默认条件和适用性。"
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "propdb-full"
+      description: "PROPDB 完整版 MCP"
+      transport: "streamable_http"
+      url: "https://marketplace.syspetro.com/syspetro-mcp-marketplace/mcp/service_22065846/streamable-http?authkey=${SYSPETRO_MCP_API_KEY}"
+
+policy:
+  allow_implicit_invocation: true

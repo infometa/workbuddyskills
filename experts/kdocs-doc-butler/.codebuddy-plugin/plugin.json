@@ -1,7 +1,7 @@
 {
   "name": "kdocs-doc-butler",
-  "version": "1.5.7",
-  "description": "文档管家：文档创建、搜索定位、智能分类整理、分享管理、文档内容读取，一站式文档全生命周期管理。",
+  "version": "2.6.4",
+  "description": "文档管家：文档创建、搜索定位、智能分类整理、分享管理，一站式文档全生命周期管理。",
   "author": {
     "name": "Kingsoft Office",
     "email": "kdocs@wps.com"
@@ -14,8 +14,7 @@
   "skills": [
     "./skills/create-doc",
     "./skills/doc-search",
-    "./skills/doc-classify",
-    "./skills/doc-to-markdown"
+    "./skills/doc-classify"
   ],
   "displayName": {
     "en": "KDocs Doc Butler Assistant",
@@ -26,14 +25,14 @@
     "zh": "文档管家"
   },
   "displayDescription": {
-    "en": "By Kingsoft Docs End-to-end Kingsoft Docs lifecycle management: create docs of any type, locate files by keyword, AI-classify folders by topic, batch move/rename, manage sharing links with permissions, and extract document content as Markdown.",
-    "zh": "金山文档出品一站式管理金山文档全生命周期：新建各类在线文档、按关键词快速搜索定位、AI 按主题自动分类整理文件夹、批量移动重命名、生成分享链接与权限管理、读取文档内容输出为 Markdown。"
+    "en": "By Kingsoft Docs End-to-end Kingsoft Docs lifecycle management: create docs of any type, locate files by keyword, AI-classify folders by topic, batch move/rename, and manage sharing links with permissions.",
+    "zh": "金山文档出品，覆盖新建搜索、分类整理与分享权限管理，助力文档全生命周期一站搞定。"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "06-ContentCreative",
   "defaultInitPrompt": {
-    "zh": "你好，我是文档管家。告诉我要新建文档、找文档、整理文件夹，还是分享某份资料，我都搞定。",
-    "en": "Hi, I am the Doc Butler. Tell me whether you want to create a doc, find one, organize folders, or share a file — I've got you covered."
+    "zh": "帮我搜一下金山文档里有没有「合同」相关的文件",
+    "en": "Search my Kdocs for any files related to 'contract'"
   },
   "tags": [
     {
@@ -63,5 +62,10 @@
       "zh": "把「周报」文件夹下的所有文件移到「2026年归档」文件夹"
     }
   ],
-  "plugin": "kdocs-doc-butler"
+  "plugin": "kdocs-doc-butler",
+  "dependencies": {
+    "connectors": [
+      "kdocs"
+    ]
+  }
 }

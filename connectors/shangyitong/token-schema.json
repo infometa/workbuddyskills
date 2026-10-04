@@ -1,0 +1,22 @@
+{
+  "title": "商易通 MCP 用户配置",
+  "title_en": "ShangYiTong MCP User Configuration",
+  "description": "填写您的商易通开放平台 MCP Token。WorkBuddy 将凭证保存在本机 ~/.workbuddy 下，仅用于访问商易通企业数据查询服务，不会上传云端。",
+  "description_en": "Enter your ShangYiTong open platform MCP token. WorkBuddy stores the credential locally in ~/.workbuddy and uses it only to access ShangYiTong enterprise data services; it is never uploaded to the cloud.",
+  "docUrl": "https://shangyitong.vzoom.com/nsyt-pc/#/mcp",
+  "docLabel": "如何获取商易通 MCP Token？",
+  "docLabel_en": "How to get a ShangYiTong MCP Token?",
+  "fields": [
+    {
+      "key": "SHANGYITONG_MCP_TOKEN",
+      "label": "MCP Token",
+      "label_en": "MCP Token",
+      "placeholder": "登录商易通开放平台后，粘贴以 mcp_ 开头的 Token",
+      "placeholder_en": "Sign in to the ShangYiTong open platform, then paste the token beginning with mcp_",
+      "type": "password",
+      "required": true,
+      "description": "用于连接商易通 MCP 服务并鉴权访问企业工商、股权人员、上市与司法风险等数据。将以 Authorization: Bearer 形式注入请求头。Token 泄露或失效时，请在商易通开放平台作废并重新生成后更新此处。不要把真实 Token 写入 Skill、代码、截图或日志。",
+      "description_en": "Connects to the ShangYiTong MCP service to access enterprise registry, equity/personnel, listing and judicial risk data. Injected into the request header as Authorization: Bearer. If the token leaks or expires, revoke and regenerate it on the ShangYiTong open platform, then update it here. Never put the real token in skills, code, screenshots, or logs."
+    }
+  ]
+}

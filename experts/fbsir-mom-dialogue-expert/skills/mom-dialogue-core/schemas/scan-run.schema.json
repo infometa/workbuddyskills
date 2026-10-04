@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/scan-run/2.0",
+  "title": "Source Scan Run",
+  "x-schema-version": "2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scan_id", "root_id", "registered_root_path", "source_path", "scope_relative_path", "hash_mode", "started_at", "completed_at", "status", "file_count", "error_count", "skipped_count", "hashed_count", "reused_count", "inventory_sha256", "hashes_sha256", "inventory_digest", "empty_confirmation_required"],
+  "properties": {
+    "schema_version": {"const": "2.0"},
+    "scan_id": {"type": "string", "pattern": "^SCAN-[A-Z0-9]{12,64}$"},
+    "root_id": {"type": "string", "pattern": "^ROOT-[A-Z0-9]{12,64}$"},
+    "root_label": {"type": "string"},
+    "registered_root_path": {"type": "string"},
+    "source_path": {"type": "string"},
+    "scope_relative_path": {"type": "string"},
+    "hash_mode": {"enum": ["none", "incremental", "full"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["complete", "partial", "unavailable", "failed"]},
+    "file_count": {"type": "integer", "minimum": 0},
+    "error_count": {"type": "integer", "minimum": 0},
+    "skipped_count": {"type": "integer", "minimum": 0},
+    "hashed_count": {"type": "integer", "minimum": 0},
+    "reused_count": {"type": "integer", "minimum": 0},
+    "inventory_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "hashes_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "inventory_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "empty_confirmation_required": {"type": "boolean"},
+    "notes": {"type": "string"}
+  }
+}

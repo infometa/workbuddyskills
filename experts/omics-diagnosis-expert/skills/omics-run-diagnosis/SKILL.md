@@ -32,15 +32,77 @@ description: 组学平台任务运行错误诊断。通过 omics-platform-cli �
 4. 使用 session_id + Uin 调用 RunService.DescribeRunLogs
 ```
 
-### 前置依赖
+### 前置依赖：omics-platform-cli 安装与登录
+
+本 Skill 通过读取 `~/.omics-platform-cli/auth.json` 获取 `session_id` 进行认证。
+**必须确保 CLI 已安装且处于登录状态，才能调用诊断脚本。**
+
+---
+
+#### Step −1：CLI 存在性检查（**最先执行**）
+
+在调用 `query_run_log.py` 之前，先确认 CLI 是否已安装：
 
 ```bash
-# 安装 omics-platform-cli
-curl -fsSL https://cnb.cool/tencenthealthcareomics/omics-platform-cli/-/raw/main/install.sh | bash
+omics version
+```
 
-# 登录授权（首次使用）
+| 结果 | 行动 |
+|------|------|
+| exit 0，打印版本号 | CLI 已安装，进入 Step 0 |
+| `FileNotFoundError` / `command not found` | 给出安装链接，等待用户安装（见下） |
+| exit 非 0，其他错误 | 提示可能损坏，给出安装链接，建议重装 |
+
+**CLI 未安装时**，给出以下提示，等待用户回复「已安装」：
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+请前往官网，按页面安装指引完成安装：
+👉 https://cnb.cool/tencenthealthcareomics/omics-platform-cli
+完成后回复「已安装」。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+用户回复「已安装」后，重新运行 `omics version` 验证，通过后继续 Step 0。
+
+---
+
+#### Step 0：登录状态检查
+
+```bash
+omics whoami
+```
+
+| 退出码 | 行动 |
+|--------|------|
+| `0` | 登录有效，`auth.json` 可用，继续诊断流程 |
+| `2` | 进入 Step 1（登录引导） |
+
+---
+
+#### Step 1：登录授权
+
+SKILL 主动触发登录：
+
+```bash
 omics login
 ```
+
+CLI 自动打开浏览器到授权确认页（`localhost:18000` 回调）。
+
+提示用户：
+```
+🔐 已为您打开浏览器登录授权页，请在浏览器中点击「确认授权」完成登录。
+   授权完成后系统将自动继续。（等待中...最长 120 秒）
+```
+
+登录后轮询验证（最多 3 次，间隔 2s）：
+- 成功（exit 0）→ 继续诊断流程
+- 仍失败 → 提示用户确认浏览器授权，或回复「重试」重新发起
+
+> 说明：本 Skill 不需要 `omics config set`（不调用平台任务接口，仅读 `auth.json` 中的 `session_id`）。
+
+<!-- 流程来源：omics-common-app-skill/references/omics-cli-setup.md v1.2 §Step-1 / §A / §B -->
 
 ### Uin 获取策略
 
@@ -91,11 +153,11 @@ python3 scripts/query_run_log.py \
 ```
 用户提供 RunUuid / RunGroupId
   │
-  ├─ Step 0：认证
-  │   ├─ 检查 omics-platform-cli 安装状态
-  │   ├─ 读取 ~/.omics-platform-cli/auth.json 中的 session_id
+  ├─ Step −1 & Step 0：CLI 检查与认证
+  │   ├─ 确认 omics-platform-cli 已安装（Step −1，提供官网链接）
+  │   ├─ 读取 ~/.omics-platform-cli/auth.json 中的 session_id（Step 0 whoami 检查）
   │   ├─ 调用 /userinfo 自动获取当前用户 Uin
-  │   └─ 如果认证失败 → 引导用户执行 omics login
+  │   └─ 如果认证失败（exit 2）→ SKILL 主动触发 omics login（Step 1）
   │
   ├─ Step 1：收集信息
   │   ├─ 调用 query_run_log.py 拉取日志（单任务 or 批次模式）
@@ -318,5 +380,5 @@ python3 scripts/query_run_log.py \
 6. NF 引擎下传 RunGroupId 与传 RunUuid 等价，直接返回完整 Run 详情，无需二次调用
 7. 如果知识库中无匹配项，展示原始错误信息并建议用户联系平台支持
 8. 禁止透露任何敏感信息，包括 session_id、密码、用户名、调用的接口名称等
-9. 如果认证失败（session 过期），引导用户执行 `omics login`
+9. 如果认证失败（session 过期），SKILL 主动触发 `omics login`，引导用户在浏览器中完成授权
 10. 诊断他人任务时需手动指定 `--run-uin`，否则默认使用当前登录用户的 Uin

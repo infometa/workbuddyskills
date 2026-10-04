@@ -1,0 +1,1380 @@
+{
+  "schemaVersion": 2,
+  "module": "project",
+  "skill": "weaver-e10-shijingran-connector",
+  "generatedAt": "2026-09-14T07:08:57.780Z",
+  "sourceSet": {
+    "aggregateSha256": "1537cb7165099624cede6fa95d09f7a2bed1c4948250c68272653424d99d55ce",
+    "sourceRoots": [
+      "backend/business-apis/project/weaver-e10-shijingran-connector"
+    ],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/project",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "skills/weaver-e10-shijingran-connector"
+    ],
+    "tests": [
+      "test/business/project-operations.test.ts"
+    ],
+    "docs": [
+      "docs/project.md",
+      "skill-template/domains/shijingran.md",
+      "docs/_catalog.md",
+      "skill-template/business-info.json"
+    ]
+  },
+  "sources": [
+    {
+      "path": "references/catalog.md",
+      "role": "api-doc",
+      "size": 5566,
+      "sha256": "32d86319f3c8d3e4eff7d547030bbb47b2da35d22880f1bd635827b08b25bab7"
+    },
+    {
+      "path": "references/ebproject-getcurrentobjid.md",
+      "role": "api-doc",
+      "size": 1894,
+      "sha256": "fa2b4efa9057c83e97f64d1dd24a0a88d926ce6b5a5ea8416c509f9c455ed1b0"
+    },
+    {
+      "path": "references/ebuilder-app-getappids.md",
+      "role": "api-doc",
+      "size": 2005,
+      "sha256": "1e143621dd8ff83099e17c5ec6678b67f07692e23b25120cd4e1d6dde656cc08"
+    },
+    {
+      "path": "references/ebuilder-form-getalldata.md",
+      "role": "api-doc",
+      "size": 2602,
+      "sha256": "de1554b539c261442304957c3cf4de25fa649abf37119aa5aa8cc4e088192bed"
+    },
+    {
+      "path": "references/ebuilder-form-getfields.md",
+      "role": "api-doc",
+      "size": 5881,
+      "sha256": "fb1ca312ab230d7cc9f053f3b91845851c362183388a65361a9a299e6007d120"
+    },
+    {
+      "path": "references/ebuilder-form-getoptions.md",
+      "role": "api-doc",
+      "size": 1810,
+      "sha256": "b87b699d7e8c3f679fb4776d521c5c94b2331c9d273adb99bbcf27f3edf01b97"
+    },
+    {
+      "path": "references/field-resolution.md",
+      "role": "process-guide",
+      "size": 12515,
+      "sha256": "257d9a85eefa9c966b5760115cfb5730c2e872d48a4edb5e9000068d097ae6e6"
+    },
+    {
+      "path": "references/hrm-employee-name-id.md",
+      "role": "api-doc",
+      "size": 5408,
+      "sha256": "3ec156ee4a9926a2a898f6adc3a21c7aebddb6b3f0a736e58f0d77548a19d1d7"
+    },
+    {
+      "path": "references/hrm-org-department-name-id.md",
+      "role": "api-doc",
+      "size": 3124,
+      "sha256": "17b5b2490359a82a345cd397f5c7e19faf2f1829de1f6ce7527da037285d4b7d"
+    },
+    {
+      "path": "references/hrm-org-subcompany-name-id.md",
+      "role": "api-doc",
+      "size": 3481,
+      "sha256": "6f4ffb02b584a4aae71ecea3377857804aa9f5090afa3b1ac0ec8ac8f8721cc8"
+    },
+    {
+      "path": "references/installer-querySpAppVersionInfo.md",
+      "role": "api-doc",
+      "size": 5387,
+      "sha256": "ff8720ceb8fbc09917c856c263803f21793fb500f70985137332215c5ee1239f"
+    },
+    {
+      "path": "references/project-project-createProject.md",
+      "role": "api-doc",
+      "size": 12373,
+      "sha256": "a45bd561eaba06bc2758632c2a78bfc7ca8a83d2b4098cd0f56ce8830c654dff"
+    },
+    {
+      "path": "references/project-project-deleteProject.md",
+      "role": "api-doc",
+      "size": 3444,
+      "sha256": "62370134ba8880f42b03124aefb15d76a94709f1a113aa1a52d7b5e2db5a6838"
+    },
+    {
+      "path": "references/project-project-queryProjDetail.md",
+      "role": "api-doc",
+      "size": 9140,
+      "sha256": "99f9561a4b9101659584e5dcb158bd15c19ce6168eb8a7ffcbd87fdda61714c8"
+    },
+    {
+      "path": "references/project-project-queryProjects.md",
+      "role": "api-doc",
+      "size": 13007,
+      "sha256": "1534664ba6b16701e396b600006f00348a8a8515f2955777a32800bac0bc325e"
+    },
+    {
+      "path": "references/project-project-queryProjPriorities.md",
+      "role": "api-doc",
+      "size": 4654,
+      "sha256": "4ce1ba0986bde53b6a5c2eef8d7fecdaacf27293cf046c85a900fc32c986cd5b"
+    },
+    {
+      "path": "references/project-project-queryProjStatus.md",
+      "role": "api-doc",
+      "size": 4226,
+      "sha256": "6e20b04ba36519d87f101500df8e449601445b2655d76bfe042a1b2f9bdc9616"
+    },
+    {
+      "path": "references/project-project-queryProjTypes.md",
+      "role": "api-doc",
+      "size": 4265,
+      "sha256": "c6a873e4955920c126845514a280c0f3517aa4cea9889e56370d8e441a9d8b4c"
+    },
+    {
+      "path": "references/project-project-updateProject.md",
+      "role": "api-doc",
+      "size": 11473,
+      "sha256": "94af53d4e564bbc6057f4bd8cc49d3121d76f2d3db1aebec015aaaa48e6d2a70"
+    },
+    {
+      "path": "references/project-task-createTask.md",
+      "role": "api-doc",
+      "size": 10510,
+      "sha256": "f055c75342e14cc856c18c82c422bb7f18e6004ece2a01d3101c9002b7f338d8"
+    },
+    {
+      "path": "references/project-task-deleteTask.md",
+      "role": "api-doc",
+      "size": 3460,
+      "sha256": "a9828511cbc51dcbbea29c1022fadc2f18834c39c993174413dab9e219c6ebc4"
+    },
+    {
+      "path": "references/project-task-queryTaskDetail.md",
+      "role": "api-doc",
+      "size": 7074,
+      "sha256": "09101f8a89aa541773b837e4d8c8180eec96b4bbaf915a036847ced0d95b23f9"
+    },
+    {
+      "path": "references/project-task-queryTaskPriorities.md",
+      "role": "api-doc",
+      "size": 4594,
+      "sha256": "1cbb390661f9c4d029227d7a3c7ebabb4298d46c0cbc4d0dd8fbac3827a761e5"
+    },
+    {
+      "path": "references/project-task-queryTasks.md",
+      "role": "api-doc",
+      "size": 12257,
+      "sha256": "4e93d951b54aadaae7eb79203e81ddf221c195bfb2b4a0ccd9985ecb2a7ff1b2"
+    },
+    {
+      "path": "references/project-task-queryTaskStatus.md",
+      "role": "api-doc",
+      "size": 4537,
+      "sha256": "cc5fd32f87df04c83e28e5d7923778c9e0e358566fe839aaf31887e09982b747"
+    },
+    {
+      "path": "references/project-task-queryTaskTypes.md",
+      "role": "api-doc",
+      "size": 4258,
+      "sha256": "c610c74b64c557c95e63cb4be5dff7fd41d7f82a9d4a7f38984b314bc268f72d"
+    },
+    {
+      "path": "references/project-task-updateTask.md",
+      "role": "api-doc",
+      "size": 10085,
+      "sha256": "128b7fa7f414c9144ec9e99857df0f5b6410359b88e5fd27ccbe60cb61f22dcd"
+    },
+    {
+      "path": "SKILL.md",
+      "role": "api-doc",
+      "size": 11183,
+      "sha256": "b45eff6bc160fa14cb336b5cc193d11bb35d26d55801b9d166c7a886a1cc292f"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "project.catalog",
+      "sourcePath": "references/catalog.md",
+      "anchor": "heading:file:references/catalog.md",
+      "sha256": "32d86319f3c8d3e4eff7d547030bbb47b2da35d22880f1bd635827b08b25bab7",
+      "mapsToOperations": [
+        "project.app.ids",
+        "project.object.id",
+        "project.form.fields",
+        "project.form.options",
+        "project.form.data.page",
+        "project.version.check",
+        "project.task.list",
+        "project.task.detail",
+        "project.project.list",
+        "project.project.detail",
+        "project.dictionary.task-type",
+        "project.dictionary.task-priority",
+        "project.dictionary.task-status",
+        "project.dictionary.project-type",
+        "project.dictionary.project-priority",
+        "project.dictionary.project-status",
+        "project.employee.resolve",
+        "project.department.resolve",
+        "project.subcompany.resolve",
+        "project.task.create.prepare",
+        "project.task.create.apply",
+        "project.task.update.prepare",
+        "project.task.update.apply",
+        "project.task.delete.prepare",
+        "project.task.delete.apply",
+        "project.project.create.prepare",
+        "project.project.create.apply",
+        "project.project.update.prepare",
+        "project.project.update.apply",
+        "project.project.delete.prepare",
+        "project.project.delete.apply"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "ebproject-getcurrentobjid",
+      "sourcePath": "references/ebproject-getcurrentobjid.md",
+      "anchor": "heading:file:references/ebproject-getcurrentobjid.md",
+      "sha256": "fa2b4efa9057c83e97f64d1dd24a0a88d926ce6b5a5ea8416c509f9c455ed1b0",
+      "mapsToOperations": [
+        "project.object.id"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "ebuilder-app-getappids",
+      "sourcePath": "references/ebuilder-app-getappids.md",
+      "anchor": "heading:获取 eBuilder 应用 ID",
+      "sha256": "1e143621dd8ff83099e17c5ec6678b67f07692e23b25120cd4e1d6dde656cc08",
+      "mapsToOperations": [
+        "project.app.ids"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "ebuilder-form-getalldata",
+      "sourcePath": "references/ebuilder-form-getalldata.md",
+      "anchor": "heading:file:references/ebuilder-form-getalldata.md",
+      "sha256": "de1554b539c261442304957c3cf4de25fa649abf37119aa5aa8cc4e088192bed",
+      "mapsToOperations": [
+        "project.form.data.page"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "ebuilder-form-getfields",
+      "sourcePath": "references/ebuilder-form-getfields.md",
+      "anchor": "heading:file:references/ebuilder-form-getfields.md",
+      "sha256": "fb1ca312ab230d7cc9f053f3b91845851c362183388a65361a9a299e6007d120",
+      "mapsToOperations": [
+        "project.form.fields"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "ebuilder-form-getoptions",
+      "sourcePath": "references/ebuilder-form-getoptions.md",
+      "anchor": "heading:file:references/ebuilder-form-getoptions.md",
+      "sha256": "b87b699d7e8c3f679fb4776d521c5c94b2331c9d273adb99bbcf27f3edf01b97",
+      "mapsToOperations": [
+        "project.form.options"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "field-resolution",
+      "sourcePath": "references/field-resolution.md",
+      "anchor": "heading:字段值解析规则",
+      "sha256": "257d9a85eefa9c966b5760115cfb5730c2e872d48a4edb5e9000068d097ae6e6",
+      "mapsToOperations": [
+        "project.employee.resolve",
+        "project.department.resolve",
+        "project.subcompany.resolve",
+        "project.form.fields",
+        "project.form.options",
+        "project.form.data.page",
+        "project.task.create.prepare",
+        "project.task.create.apply",
+        "project.task.update.prepare",
+        "project.task.update.apply",
+        "project.task.delete.prepare",
+        "project.task.delete.apply",
+        "project.project.create.prepare",
+        "project.project.create.apply",
+        "project.project.update.prepare",
+        "project.project.update.apply",
+        "project.project.delete.prepare",
+        "project.project.delete.apply"
+      ],
+      "mapsToReferences": [
+        "references/field-resolution.md",
+        "references/write-operations.md"
+      ]
+    },
+    {
+      "id": "hrm-employee-name-id",
+      "sourcePath": "references/hrm-employee-name-id.md",
+      "anchor": "heading:file:references/hrm-employee-name-id.md",
+      "sha256": "3ec156ee4a9926a2a898f6adc3a21c7aebddb6b3f0a736e58f0d77548a19d1d7",
+      "mapsToOperations": [
+        "project.employee.resolve"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "hrm-org-department-name-id",
+      "sourcePath": "references/hrm-org-department-name-id.md",
+      "anchor": "heading:file:references/hrm-org-department-name-id.md",
+      "sha256": "17b5b2490359a82a345cd397f5c7e19faf2f1829de1f6ce7527da037285d4b7d",
+      "mapsToOperations": [
+        "project.department.resolve"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "hrm-org-subcompany-name-id",
+      "sourcePath": "references/hrm-org-subcompany-name-id.md",
+      "anchor": "heading:file:references/hrm-org-subcompany-name-id.md",
+      "sha256": "6f4ffb02b584a4aae71ecea3377857804aa9f5090afa3b1ac0ec8ac8f8721cc8",
+      "mapsToOperations": [
+        "project.subcompany.resolve"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "installer-querySpAppVersionInfo",
+      "sourcePath": "references/installer-querySpAppVersionInfo.md",
+      "anchor": "heading:查询应用版本信息",
+      "sha256": "ff8720ceb8fbc09917c856c263803f21793fb500f70985137332215c5ee1239f",
+      "mapsToOperations": [
+        "project.version.check"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-project-createProject",
+      "sourcePath": "references/project-project-createProject.md",
+      "anchor": "heading:file:references/project-project-createProject.md",
+      "sha256": "a45bd561eaba06bc2758632c2a78bfc7ca8a83d2b4098cd0f56ce8830c654dff",
+      "mapsToOperations": [
+        "project.project.create.prepare",
+        "project.project.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/write-operations.md"
+      ]
+    },
+    {
+      "id": "project-project-deleteProject",
+      "sourcePath": "references/project-project-deleteProject.md",
+      "anchor": "heading:file:references/project-project-deleteProject.md",
+      "sha256": "62370134ba8880f42b03124aefb15d76a94709f1a113aa1a52d7b5e2db5a6838",
+      "mapsToOperations": [
+        "project.project.delete.prepare",
+        "project.project.delete.apply"
+      ],
+      "mapsToReferences": [
+        "references/write-operations.md"
+      ]
+    },
+    {
+      "id": "project-project-queryProjDetail",
+      "sourcePath": "references/project-project-queryProjDetail.md",
+      "anchor": "heading:查询项目详情",
+      "sha256": "99f9561a4b9101659584e5dcb158bd15c19ce6168eb8a7ffcbd87fdda61714c8",
+      "mapsToOperations": [
+        "project.project.detail"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-project-queryProjects",
+      "sourcePath": "references/project-project-queryProjects.md",
+      "anchor": "heading:查询项目",
+      "sha256": "1534664ba6b16701e396b600006f00348a8a8515f2955777a32800bac0bc325e",
+      "mapsToOperations": [
+        "project.project.list"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-project-queryProjPriorities",
+      "sourcePath": "references/project-project-queryProjPriorities.md",
+      "anchor": "heading:查询项目紧急程度",
+      "sha256": "4ce1ba0986bde53b6a5c2eef8d7fecdaacf27293cf046c85a900fc32c986cd5b",
+      "mapsToOperations": [
+        "project.dictionary.project-priority"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-project-queryProjStatus",
+      "sourcePath": "references/project-project-queryProjStatus.md",
+      "anchor": "heading:查询项目状态",
+      "sha256": "6e20b04ba36519d87f101500df8e449601445b2655d76bfe042a1b2f9bdc9616",
+      "mapsToOperations": [
+        "project.dictionary.project-status"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-project-queryProjTypes",
+      "sourcePath": "references/project-project-queryProjTypes.md",
+      "anchor": "heading:查询项目类型",
+      "sha256": "c6a873e4955920c126845514a280c0f3517aa4cea9889e56370d8e441a9d8b4c",
+      "mapsToOperations": [
+        "project.dictionary.project-type"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-project-updateProject",
+      "sourcePath": "references/project-project-updateProject.md",
+      "anchor": "heading:file:references/project-project-updateProject.md",
+      "sha256": "94af53d4e564bbc6057f4bd8cc49d3121d76f2d3db1aebec015aaaa48e6d2a70",
+      "mapsToOperations": [
+        "project.project.update.prepare",
+        "project.project.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/write-operations.md"
+      ]
+    },
+    {
+      "id": "project-task-createTask",
+      "sourcePath": "references/project-task-createTask.md",
+      "anchor": "heading:file:references/project-task-createTask.md",
+      "sha256": "f055c75342e14cc856c18c82c422bb7f18e6004ece2a01d3101c9002b7f338d8",
+      "mapsToOperations": [
+        "project.task.create.prepare",
+        "project.task.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/write-operations.md"
+      ]
+    },
+    {
+      "id": "project-task-deleteTask",
+      "sourcePath": "references/project-task-deleteTask.md",
+      "anchor": "heading:file:references/project-task-deleteTask.md",
+      "sha256": "a9828511cbc51dcbbea29c1022fadc2f18834c39c993174413dab9e219c6ebc4",
+      "mapsToOperations": [
+        "project.task.delete.prepare",
+        "project.task.delete.apply"
+      ],
+      "mapsToReferences": [
+        "references/write-operations.md"
+      ]
+    },
+    {
+      "id": "project-task-queryTaskDetail",
+      "sourcePath": "references/project-task-queryTaskDetail.md",
+      "anchor": "heading:查询任务详情",
+      "sha256": "09101f8a89aa541773b837e4d8c8180eec96b4bbaf915a036847ced0d95b23f9",
+      "mapsToOperations": [
+        "project.task.detail"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-task-queryTaskPriorities",
+      "sourcePath": "references/project-task-queryTaskPriorities.md",
+      "anchor": "heading:查询任务紧急程度",
+      "sha256": "1cbb390661f9c4d029227d7a3c7ebabb4298d46c0cbc4d0dd8fbac3827a761e5",
+      "mapsToOperations": [
+        "project.dictionary.task-priority"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-task-queryTasks",
+      "sourcePath": "references/project-task-queryTasks.md",
+      "anchor": "heading:查询任务",
+      "sha256": "4e93d951b54aadaae7eb79203e81ddf221c195bfb2b4a0ccd9985ecb2a7ff1b2",
+      "mapsToOperations": [
+        "project.task.list"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-task-queryTaskStatus",
+      "sourcePath": "references/project-task-queryTaskStatus.md",
+      "anchor": "heading:查询任务状态",
+      "sha256": "cc5fd32f87df04c83e28e5d7923778c9e0e358566fe839aaf31887e09982b747",
+      "mapsToOperations": [
+        "project.dictionary.task-status"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-task-queryTaskTypes",
+      "sourcePath": "references/project-task-queryTaskTypes.md",
+      "anchor": "heading:查询任务类型",
+      "sha256": "c610c74b64c557c95e63cb4be5dff7fd41d7f82a9d4a7f38984b314bc268f72d",
+      "mapsToOperations": [
+        "project.dictionary.task-type"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    },
+    {
+      "id": "project-task-updateTask",
+      "sourcePath": "references/project-task-updateTask.md",
+      "anchor": "heading:file:references/project-task-updateTask.md",
+      "sha256": "128b7fa7f414c9144ec9e99857df0f5b6410359b88e5fd27ccbe60cb61f22dcd",
+      "mapsToOperations": [
+        "project.task.update.prepare",
+        "project.task.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/write-operations.md"
+      ]
+    },
+    {
+      "id": "project.overview",
+      "sourcePath": "SKILL.md",
+      "anchor": "heading:file:SKILL.md",
+      "sha256": "b45eff6bc160fa14cb336b5cc193d11bb35d26d55801b9d166c7a886a1cc292f",
+      "mapsToOperations": [
+        "project.app.ids",
+        "project.object.id",
+        "project.form.fields",
+        "project.form.options",
+        "project.form.data.page",
+        "project.version.check",
+        "project.task.list",
+        "project.task.detail",
+        "project.project.list",
+        "project.project.detail",
+        "project.dictionary.task-type",
+        "project.dictionary.task-priority",
+        "project.dictionary.task-status",
+        "project.dictionary.project-type",
+        "project.dictionary.project-priority",
+        "project.dictionary.project-status",
+        "project.employee.resolve",
+        "project.department.resolve",
+        "project.subcompany.resolve",
+        "project.task.create.prepare",
+        "project.task.create.apply",
+        "project.task.update.prepare",
+        "project.task.update.apply",
+        "project.task.delete.prepare",
+        "project.task.delete.apply",
+        "project.project.create.prepare",
+        "project.project.create.apply",
+        "project.project.update.prepare",
+        "project.project.update.apply",
+        "project.project.delete.prepare",
+        "project.project.delete.apply"
+      ],
+      "mapsToReferences": [
+        "references/operations.md"
+      ]
+    }
+  ],
+  "operationImpact": {
+    "project.app.ids": {
+      "sourceChunkIds": [
+        "ebuilder-app-getappids",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.object.id": {
+      "sourceChunkIds": [
+        "ebproject-getcurrentobjid",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "table"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.form.fields": {
+      "sourceChunkIds": [
+        "ebuilder-form-getfields",
+        "field-resolution",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "table",
+        "groupId",
+        "sourceId",
+        "detailFieldsGroup",
+        "enableMerge"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.form.options": {
+      "sourceChunkIds": [
+        "ebuilder-form-getoptions",
+        "field-resolution",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "table",
+        "fieldName",
+        "groupId",
+        "sourceId",
+        "optionLevel"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.form.data.page": {
+      "sourceChunkIds": [
+        "ebuilder-form-getalldata",
+        "field-resolution",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "refObjId",
+        "fieldKey",
+        "value",
+        "pageNo",
+        "pageSize"
+      ],
+      "references": [
+        "references/field-resolution.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.version.check": {
+      "sourceChunkIds": [
+        "installer-querySpAppVersionInfo",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "appId"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.task.list": {
+      "sourceChunkIds": [
+        "project-task-queryTasks",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "filters",
+        "pageNo",
+        "pageSize",
+        "name",
+        "description"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.task.detail": {
+      "sourceChunkIds": [
+        "project-task-queryTaskDetail",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "id"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.project.list": {
+      "sourceChunkIds": [
+        "project-project-queryProjects",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "filters",
+        "pageNo",
+        "pageSize",
+        "name",
+        "description"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.project.detail": {
+      "sourceChunkIds": [
+        "project-project-queryProjDetail",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "id"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.dictionary.task-type": {
+      "sourceChunkIds": [
+        "project-task-queryTaskTypes",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "filters",
+        "pageNo",
+        "pageSize"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.dictionary.task-priority": {
+      "sourceChunkIds": [
+        "project-task-queryTaskPriorities",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "filters",
+        "pageNo",
+        "pageSize"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.dictionary.task-status": {
+      "sourceChunkIds": [
+        "project-task-queryTaskStatus",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "filters",
+        "pageNo",
+        "pageSize"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.dictionary.project-type": {
+      "sourceChunkIds": [
+        "project-project-queryProjTypes",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "filters",
+        "pageNo",
+        "pageSize"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.dictionary.project-priority": {
+      "sourceChunkIds": [
+        "project-project-queryProjPriorities",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "filters",
+        "pageNo",
+        "pageSize"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.dictionary.project-status": {
+      "sourceChunkIds": [
+        "project-project-queryProjStatus",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "filters",
+        "pageNo",
+        "pageSize"
+      ],
+      "references": [
+        "references/operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.employee.resolve": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "hrm-employee-name-id",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "name",
+        "match",
+        "status"
+      ],
+      "references": [
+        "references/field-resolution.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.department.resolve": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "hrm-org-department-name-id",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "name",
+        "match"
+      ],
+      "references": [
+        "references/field-resolution.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.subcompany.resolve": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "hrm-org-subcompany-name-id",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "name",
+        "match"
+      ],
+      "references": [
+        "references/field-resolution.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "project.task.create.prepare": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-task-createTask",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "records"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.task.create.apply": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-task-createTask",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "continuation",
+        "confirm"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.task.update.prepare": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-task-updateTask",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "id",
+        "fields"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.task.update.apply": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-task-updateTask",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "continuation",
+        "confirm"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.task.delete.prepare": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-task-deleteTask",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "id"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.task.delete.apply": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-task-deleteTask",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "continuation",
+        "confirm"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.project.create.prepare": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-project-createProject",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "records"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.project.create.apply": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-project-createProject",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "continuation",
+        "confirm"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.project.update.prepare": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-project-updateProject",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "id",
+        "fields"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.project.update.apply": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-project-updateProject",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "continuation",
+        "confirm"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.project.delete.prepare": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-project-deleteProject",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "id"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    },
+    "project.project.delete.apply": {
+      "sourceChunkIds": [
+        "field-resolution",
+        "project-project-deleteProject",
+        "project.catalog",
+        "project.overview"
+      ],
+      "schemaFields": [
+        "continuation",
+        "confirm"
+      ],
+      "references": [
+        "references/write-operations.md"
+      ],
+      "tests": [
+        "test/business/project-operations.test.ts"
+      ],
+      "risk": "write-confirmed",
+      "requiresConfirmationChain": true
+    }
+  },
+  "artifactBaseline": {
+    "aggregateSha256": "3688d7d6fe978fb5ed8dcb7dd007a539ac5d7f6356121a5ed2f913cf27afdcdc",
+    "files": [
+      {
+        "path": "docs/_catalog.md",
+        "role": "generated-doc",
+        "size": 4259,
+        "sha256": "4f904be2b748c540f81c0c8cb8e2a8dbbb5101292b406161be26acee3e5e6156"
+      },
+      {
+        "path": "docs/project.md",
+        "role": "generated-doc",
+        "size": 4232,
+        "sha256": "eb5b7683740b0c3f66cbe00ef8c3a1c9c0abbd87d97f1c436a4fc02b47160544"
+      },
+      {
+        "path": "skill-template/business-info.json",
+        "role": "generated-template",
+        "size": 5456,
+        "sha256": "69c40d7dfc40f91393060adb3c0a15f4833f044a0fb4839c17e1a32356463230"
+      },
+      {
+        "path": "skill-template/domains/shijingran.md",
+        "role": "generated-template",
+        "size": 534,
+        "sha256": "853f73687d75a82e21f9518aaac057889fa91e8d934be6a989e8cc60a8d90366"
+      },
+      {
+        "path": "skills/weaver-e10-shijingran-connector/references/field-resolution.md",
+        "role": "generated-reference",
+        "size": 5576,
+        "sha256": "f47129546d9bd242765ae733fd4e423f2cd932c83a53d97c4e5e1c047063565b"
+      },
+      {
+        "path": "skills/weaver-e10-shijingran-connector/references/operations.md",
+        "role": "generated-reference",
+        "size": 11645,
+        "sha256": "dd07ba00bf6e2fde28269843dae8a56137b91e4f22211f4e7f13bbdd876a9c9a"
+      },
+      {
+        "path": "skills/weaver-e10-shijingran-connector/references/write-operations.md",
+        "role": "generated-reference",
+        "size": 3714,
+        "sha256": "45a507fd872ab6b555163808b2593fee95a58b4c4bfbd07d5efca22ff33b001f"
+      },
+      {
+        "path": "skills/weaver-e10-shijingran-connector/SKILL.md",
+        "role": "generated-skill-entry",
+        "size": 7879,
+        "sha256": "1c2d9c3ea8fcfdc71b474db12ec019b23dc854b5c4a4e55715d1be24aabc0f7e"
+      },
+      {
+        "path": "src/shortcuts/index.ts",
+        "role": "generated-cli",
+        "size": 1164,
+        "sha256": "e2962dbb84dd35c488dfd1b53743f02b4698cd5545c1756ae73f1ef43b6306f4"
+      },
+      {
+        "path": "src/shortcuts/project/continuation.ts",
+        "role": "generated-cli",
+        "size": 3366,
+        "sha256": "6663706182a5bdd5a38774d415f86cb9c9a09e40f0e7d69e65017fc70c2cd2b8"
+      },
+      {
+        "path": "src/shortcuts/project/errors.ts",
+        "role": "generated-cli",
+        "size": 2275,
+        "sha256": "60e810cbce79d1eddaf0a2d71a2b396dcb59b3c9c8111ae972cbfb8e46e0acc8"
+      },
+      {
+        "path": "src/shortcuts/project/host.ts",
+        "role": "generated-cli",
+        "size": 7359,
+        "sha256": "c1a4ec3ed354ff2c3ffc878243911bedd7e898c8945c2ec341025c981eccf2c1"
+      },
+      {
+        "path": "src/shortcuts/project/index.ts",
+        "role": "generated-cli",
+        "size": 4514,
+        "sha256": "ca49682ceba69ba8a0356ea021f749415190a46e531955419968a48cfb3f112d"
+      },
+      {
+        "path": "src/shortcuts/project/manifest.ts",
+        "role": "generated-cli",
+        "size": 1435,
+        "sha256": "faf46784f6371458c8e20be6b1975dea1db74986196a35243ff4ed99df826386"
+      },
+      {
+        "path": "src/shortcuts/project/operations.ts",
+        "role": "generated-cli",
+        "size": 647,
+        "sha256": "8b4f86d3535310b09d05ee6c59d33c6d63235e5e0bc638f8d3f8dfefcff93ee0"
+      },
+      {
+        "path": "src/shortcuts/project/operations/read.ts",
+        "role": "generated-cli",
+        "size": 21536,
+        "sha256": "a774262e0ebef135e3f19444e1a60967a705b279d54d43b877ded5bc9794bd47"
+      },
+      {
+        "path": "src/shortcuts/project/operations/registry.ts",
+        "role": "generated-cli",
+        "size": 1354,
+        "sha256": "3406fd9458cbd169f95cc75bac803ff437b12b02b1efd40600d8875bea213893"
+      },
+      {
+        "path": "src/shortcuts/project/operations/shared.ts",
+        "role": "generated-cli",
+        "size": 3034,
+        "sha256": "455c14f798a718a5ffbf429306dbdea783412314354b7c0d5b45757eb73ef90d"
+      },
+      {
+        "path": "src/shortcuts/project/operations/types.ts",
+        "role": "generated-cli",
+        "size": 3053,
+        "sha256": "ca57f63bf41417a178da1585194a2df008d36f7f8f0e0eb67a4f71a5169e7213"
+      },
+      {
+        "path": "src/shortcuts/project/operations/write.ts",
+        "role": "generated-cli",
+        "size": 12806,
+        "sha256": "85ba545d190962f3616afa080f03437c0408ea965d9bff18267ef7fb7d468f17"
+      },
+      {
+        "path": "test/business/project-operations.test.ts",
+        "role": "generated-test",
+        "size": 12647,
+        "sha256": "8d5f0eb0450273553ee31ddf8db789693fa2f94832dc4ccc22809406f9cf3e80"
+      }
+    ]
+  },
+  "notes": [
+    "只记录源资料指纹、operation 影响索引和产物指纹，不保存 Cookie、Token、认证信息、真实内网地址、大段源正文或个人主目录路径。",
+    "source-manifest.json 自身不纳入 artifactBaseline 文件列表，避免自引用指纹无法稳定计算。",
+    "源资料版本为 1.0.4，覆盖 25 个接口文档、1 个目录文档和 1 个字段解析流程指引。",
+    "project.attachment.upload 与 project.field.auto-resolve 因源资料缺少安全实现契约而保留为 withheldOperations。"
+  ]
+}

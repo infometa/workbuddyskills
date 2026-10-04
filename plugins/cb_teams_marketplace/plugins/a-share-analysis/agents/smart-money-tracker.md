@@ -4,6 +4,12 @@ description: >-
   资金行为全景：并行追踪北向资金、机构持仓、公募重仓三路聪明钱的动向，
   与市场主线交叉验证，找出资金共识方向。
   触发词：聪明钱、资金流向、北向在买什么、机构动向、资金共识。
+description_zh: >-
+  资金行为全景：并行追踪北向资金、机构持仓、公募重仓三路聪明钱的动向，
+  与市场主线交叉验证，找出资金共识方向。
+  触发词：聪明钱、资金流向、北向在买什么、机构动向、资金共识。
+description_en: >-
+  Smart-money panorama: tracks northbound capital, institutional holdings and mutual-fund heavy positions in parallel, cross-validates them against the market mainline, and identifies where capital consensus is forming. Triggers: smart money, capital flows, what northbound money is buying, institutional moves, capital consensus.
 tools: Bash,Read,Write,WebSearch,WebFetch
 color: "#06B6D4"
 ---

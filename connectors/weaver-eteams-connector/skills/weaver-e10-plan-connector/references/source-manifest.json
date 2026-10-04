@@ -1,0 +1,858 @@
+{
+  "schemaVersion": 2,
+  "module": "plan",
+  "skill": "weaver-e10-plan-connector",
+  "generatedAt": "2026-09-11T09:20:00.000Z",
+  "sourceSet": {
+    "aggregateSha256": "b9e792f1b114ddceefc2c68d664b05ac37692857d450c12eb9deb44cfd210eb7",
+    "sourceRoots": [
+      "E10标准报告和eb报告整合skill（new）/skill生成参考文件"
+    ],
+    "detectionStrength": "strong"
+  },
+  "generatedTargets": {
+    "cli": [
+      "src/shortcuts/plan",
+      "src/shortcuts/index.ts"
+    ],
+    "skill": [
+      "skills/weaver-e10-plan-connector"
+    ],
+    "tests": [
+      "test/business/plan-operations.test.ts"
+    ],
+    "docs": [
+      "docs/plan.md",
+      "skill-template/domains/plan.md"
+    ]
+  },
+  "sources": [
+    {
+      "path": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10标准版本计划报告接口说明文档.docx",
+      "role": "api-doc",
+      "size": 20803,
+      "sha256": "995e43cebca895620ff3a0fa1df09ba6314ae170ff545db1ec7da94b6f4f1f62"
+    },
+    {
+      "path": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告其他接口说明文档.docx",
+      "role": "api-doc",
+      "size": 13180,
+      "sha256": "5e1710d3619b189c4a0ee6b5190408ca3506d57b2cbcbe8d06230c8fe9d7ff18"
+    },
+    {
+      "path": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告自定义接口说明文档.zip",
+      "role": "api-doc",
+      "size": 61436,
+      "sha256": "d2084d48f9cde2a03867f04adb7629edf0ffcd8a61fe233d5d846a9053360ca8"
+    },
+    {
+      "path": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/补充说明规则.txt",
+      "role": "requirement",
+      "size": 18200,
+      "sha256": "1b7842e425b083264c2593568550fded5858355b7c28c3defa7f2d0966253b29"
+    }
+  ],
+  "sourceChunks": [
+    {
+      "id": "std.report.create",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10标准版本计划报告接口说明文档.docx",
+      "anchor": "heading:新建报告",
+      "sha256": "9d3ec189b46e958398cc8455d26c8d77f32c52c73289b05ec95d85b41005dd0d",
+      "mapsToOperations": [
+        "plan.report.create.prepare",
+        "plan.report.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-write.md",
+        "references/plan-collect-and-compose.md"
+      ]
+    },
+    {
+      "id": "std.report.update",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10标准版本计划报告接口说明文档.docx",
+      "anchor": "heading:修改报告",
+      "sha256": "94fc22ad7c0c00a1c3849c754ad31089ba2419c0a83cd5b1526fd1e4ee480d78",
+      "mapsToOperations": [
+        "plan.report.update.prepare",
+        "plan.report.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-write.md"
+      ]
+    },
+    {
+      "id": "std.report.publish",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10标准版本计划报告接口说明文档.docx",
+      "anchor": "heading:发布报告",
+      "sha256": "772489e48abd7cf7ad346df16e874a6aba8f603a25bc8e40238b6562c806d281",
+      "mapsToOperations": [
+        "plan.report.publish.prepare",
+        "plan.report.publish.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-write.md"
+      ]
+    },
+    {
+      "id": "std.report.withdraw",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10标准版本计划报告接口说明文档.docx",
+      "anchor": "heading:撤回报告",
+      "sha256": "6642ebe1e41fc98b904f66cb44a882a47bda9a61dfe72086a403539f908dfd9d",
+      "mapsToOperations": [
+        "plan.report.withdraw.prepare",
+        "plan.report.withdraw.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-write.md"
+      ]
+    },
+    {
+      "id": "std.report.view",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10标准版本计划报告接口说明文档.docx",
+      "anchor": "heading:按报告id或者按周期信息查询单个报告详情",
+      "sha256": "ddcb9af201421253ee0613531d80e078b53dc6b98bdee4fe1e7831508c9dbeb7",
+      "mapsToOperations": [
+        "plan.report.get"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-query.md",
+        "references/plan-collect-and-compose.md"
+      ]
+    },
+    {
+      "id": "std.report.page",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10标准版本计划报告接口说明文档.docx",
+      "anchor": "heading:分页查询共享我的报告",
+      "sha256": "198e704d614422c42a1f3764254ce324e2e7be132164fddbb1692c405c5f8784",
+      "mapsToOperations": [
+        "plan.report.page"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-query.md"
+      ]
+    },
+    {
+      "id": "std.report.remind",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10标准版本计划报告接口说明文档.docx",
+      "anchor": "heading:发送报告提交提醒",
+      "sha256": "561d78c5b0e3b8534c18bd876f13e2c7142abe17499c59cc63ee16d01081ddfe",
+      "mapsToOperations": [
+        "plan.report.remind.prepare",
+        "plan.report.remind.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-remind.md"
+      ]
+    },
+    {
+      "id": "std.report.comment",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10标准版本计划报告接口说明文档.docx",
+      "anchor": "heading:获取某个报告的评论",
+      "sha256": "071a6602c62f120ba74017990f9c0964a9a108fbfebb8daf7ef39e53730c2216",
+      "mapsToOperations": [
+        "plan.comment.list",
+        "plan.report.get"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-query.md"
+      ]
+    },
+    {
+      "id": "eb.report.publish",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告其他接口说明文档.docx",
+      "anchor": "heading:发布报告(secondev)",
+      "sha256": "e39defa003ef5c755b9c72d8d33ca73367bd0eaf7efed6840071f51696fba22e",
+      "mapsToOperations": [
+        "plan.report.publish.prepare",
+        "plan.report.publish.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-write.md"
+      ]
+    },
+    {
+      "id": "eb.report.withdraw",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告其他接口说明文档.docx",
+      "anchor": "heading:撤回报告(esb)",
+      "sha256": "3c95573c5d3b085e49de0eea467273c9fcacb08e657cfd83c68bfa81792d3f0c",
+      "mapsToOperations": [],
+      "mapsToReferences": [
+        "references/plan-report-write.md"
+      ]
+    },
+    {
+      "id": "eb.report.create",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告自定义接口说明文档.zip",
+      "anchor": "html:1.1 创建报告",
+      "sha256": "977ff2e7c2c99920e98a1198bc937efe6836d1539be3582225a18ae64aabb025",
+      "mapsToOperations": [
+        "plan.report.create.prepare",
+        "plan.report.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-write.md"
+      ]
+    },
+    {
+      "id": "eb.report.update",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告自定义接口说明文档.zip",
+      "anchor": "html:1.2 编辑报告",
+      "sha256": "911c73cd76328231081e05a5d3808d1dc7ccd767fe8266a2ed7bb6153d09614e",
+      "mapsToOperations": [
+        "plan.report.update.prepare",
+        "plan.report.update.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-write.md"
+      ]
+    },
+    {
+      "id": "eb.report.view",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告自定义接口说明文档.zip",
+      "anchor": "html:1.3 按周期查询单个报告详情",
+      "sha256": "e2f3c0297006463beb375c86961bb04bcd741eb6af91e1ff64825e68e2d7e94c",
+      "mapsToOperations": [
+        "plan.report.get"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-query.md"
+      ]
+    },
+    {
+      "id": "eb.report.page",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告自定义接口说明文档.zip",
+      "anchor": "html:1.4 分页查询报告",
+      "sha256": "159d27b44022659c14ad58aae75410da215bae94872f0e490d7eee8898e3acf7",
+      "mapsToOperations": [
+        "plan.report.page"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-query.md"
+      ]
+    },
+    {
+      "id": "eb.version",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告自定义接口说明文档.zip",
+      "anchor": "html:2.1 查询报告版本信息",
+      "sha256": "ab39acddf21cc4641f48ad0050c20ecbbe384d70abc574d14aad27a4cefe035f",
+      "mapsToOperations": [
+        "plan.version.check"
+      ],
+      "mapsToReferences": [
+        "references/plan-overview-and-routing.md"
+      ]
+    },
+    {
+      "id": "eb.openapi.common",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告自定义接口说明文档.zip",
+      "anchor": "html:openApi公共参数说明",
+      "sha256": "be6b7ce026fd8858a24e2303c1776e0ba1fa08e740ec47b59155d332d5d2009a",
+      "mapsToOperations": [
+        "plan.eb.form.resolve"
+      ],
+      "mapsToReferences": [
+        "references/plan-overview-and-routing.md"
+      ]
+    },
+    {
+      "id": "eb.openapi.demo",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/e10-ebuilder版本计划报告自定义接口说明文档.zip",
+      "anchor": "html:restfulDemo",
+      "sha256": "01349d1c4467ec7af4174308c476e8a07a49fa1b7dd526d762efa3a40012afc1",
+      "mapsToOperations": [
+        "plan.eb.form.resolve"
+      ],
+      "mapsToReferences": [
+        "references/plan-overview-and-routing.md"
+      ]
+    },
+    {
+      "id": "rules.intent",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/补充说明规则.txt",
+      "anchor": "section:一、意图判定与歧义消解规则",
+      "sha256": "161b8a8426cd4ed5b7cc10d1e39d65390d749a6df27ac74a54e4afc3e0225745",
+      "mapsToOperations": [
+        "plan.report.get",
+        "plan.report.page",
+        "plan.report.create.prepare"
+      ],
+      "mapsToReferences": [
+        "references/plan-overview-and-routing.md",
+        "references/plan-collect-and-compose.md"
+      ]
+    },
+    {
+      "id": "rules.version-routing",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/补充说明规则.txt",
+      "anchor": "section:二、接口路由版本判定规则",
+      "sha256": "67c6d5f4172429977a5c5433916a5f98c22fa00e725c9d7ddfa509531a2fab9c",
+      "mapsToOperations": [
+        "plan.version.check"
+      ],
+      "mapsToReferences": [
+        "references/plan-overview-and-routing.md"
+      ]
+    },
+    {
+      "id": "rules.metadata",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/补充说明规则.txt",
+      "anchor": "section:三、skill生成元数据规则",
+      "sha256": "0a685677fb41f6db3576e616a30003fd25b4bc25a7da6f3eb0303a94151c0c9e",
+      "mapsToOperations": [],
+      "mapsToReferences": []
+    },
+    {
+      "id": "rules.collect",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/补充说明规则.txt",
+      "anchor": "section:五、报告汇总&生成作业链",
+      "sha256": "97a32010336bdfb828db0a1c49ea0d159ae485094da9cfc61f4e9c1232d74e7e",
+      "mapsToOperations": [
+        "plan.report.get",
+        "plan.report.create.prepare",
+        "plan.report.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-collect-and-compose.md"
+      ]
+    },
+    {
+      "id": "rules.common",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/补充说明规则.txt",
+      "anchor": "section:六、其余通用基础规则",
+      "sha256": "afa7e7abefb60d2d4803a5a6071110ca936e1d61fc7025905bc530f08835490f",
+      "mapsToOperations": [
+        "plan.report.get",
+        "plan.report.page",
+        "plan.report.create.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-overview-and-routing.md",
+        "references/plan-report-query.md",
+        "references/plan-report-write.md"
+      ]
+    },
+    {
+      "id": "rules.eb",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/补充说明规则.txt",
+      "anchor": "section:七、e10-ebuilder版本专属规则",
+      "sha256": "e86fa00fe0009feb874f672243a5f7cbe937ede8db3496589fda935b8ab88b46",
+      "mapsToOperations": [
+        "plan.eb.form.resolve",
+        "plan.report.create.apply",
+        "plan.report.publish.apply"
+      ],
+      "mapsToReferences": [
+        "references/plan-overview-and-routing.md",
+        "references/plan-report-write.md"
+      ]
+    },
+    {
+      "id": "rules.std",
+      "sourcePath": "E10标准报告和eb报告整合skill（new）/skill生成参考文件/补充说明规则.txt",
+      "anchor": "section:八、e10标准版本专属规则",
+      "sha256": "3cae7b09874dae44285e1772b3196d8a5c401f3395e8537d6391ceadba785419",
+      "mapsToOperations": [
+        "plan.report.remind.prepare",
+        "plan.comment.list",
+        "plan.report.get"
+      ],
+      "mapsToReferences": [
+        "references/plan-report-remind.md",
+        "references/plan-report-query.md"
+      ]
+    }
+  ],
+  "operationImpact": {
+    "plan.version.check": {
+      "sourceChunkIds": [
+        "rules.version-routing",
+        "eb.version"
+      ],
+      "schemaFields": [
+        "refresh"
+      ],
+      "references": [
+        "references/plan-overview-and-routing.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "plan.eb.form.resolve": {
+      "sourceChunkIds": [
+        "rules.eb",
+        "eb.openapi.common",
+        "eb.openapi.demo"
+      ],
+      "schemaFields": [],
+      "references": [
+        "references/plan-overview-and-routing.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "plan.report.get": {
+      "sourceChunkIds": [
+        "std.report.view",
+        "eb.report.view",
+        "std.report.comment",
+        "rules.common"
+      ],
+      "schemaFields": [
+        "id",
+        "year",
+        "type",
+        "serialNumber",
+        "creatorUserId",
+        "withComments"
+      ],
+      "references": [
+        "references/plan-report-query.md",
+        "references/plan-collect-and-compose.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "plan.report.page": {
+      "sourceChunkIds": [
+        "std.report.page",
+        "eb.report.page",
+        "rules.common"
+      ],
+      "schemaFields": [
+        "scope",
+        "unreadOnly",
+        "year",
+        "type",
+        "serialNumber",
+        "creatorUserId",
+        "onlyIncludeSubs",
+        "pageNo",
+        "pageSize"
+      ],
+      "references": [
+        "references/plan-report-query.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "plan.comment.list": {
+      "sourceChunkIds": [
+        "std.report.comment",
+        "rules.std"
+      ],
+      "schemaFields": [
+        "reportId",
+        "pageNo",
+        "pageSize"
+      ],
+      "references": [
+        "references/plan-report-query.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read",
+      "requiresConfirmationChain": false
+    },
+    "plan.report.create.prepare": {
+      "sourceChunkIds": [
+        "std.report.create",
+        "eb.report.create",
+        "rules.collect"
+      ],
+      "schemaFields": [
+        "content",
+        "summary",
+        "plans",
+        "year",
+        "type",
+        "serialNumber",
+        "title",
+        "userName"
+      ],
+      "references": [
+        "references/plan-report-write.md",
+        "references/plan-collect-and-compose.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "plan.report.create.apply": {
+      "sourceChunkIds": [
+        "std.report.create",
+        "eb.report.create",
+        "rules.eb"
+      ],
+      "schemaFields": [
+        "content",
+        "summary",
+        "plans",
+        "year",
+        "type",
+        "serialNumber",
+        "title",
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/plan-report-write.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "plan.report.update.prepare": {
+      "sourceChunkIds": [
+        "std.report.update",
+        "eb.report.update"
+      ],
+      "schemaFields": [
+        "id",
+        "year",
+        "type",
+        "serialNumber",
+        "creatorUserId",
+        "content",
+        "summary",
+        "plans"
+      ],
+      "references": [
+        "references/plan-report-write.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "plan.report.update.apply": {
+      "sourceChunkIds": [
+        "std.report.update",
+        "eb.report.update"
+      ],
+      "schemaFields": [
+        "content",
+        "summary",
+        "plans",
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/plan-report-write.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "plan.report.publish.prepare": {
+      "sourceChunkIds": [
+        "std.report.publish",
+        "eb.report.publish"
+      ],
+      "schemaFields": [
+        "id",
+        "year",
+        "type",
+        "serialNumber",
+        "creatorUserId"
+      ],
+      "references": [
+        "references/plan-report-write.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "plan.report.publish.apply": {
+      "sourceChunkIds": [
+        "std.report.publish",
+        "eb.report.publish"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/plan-report-write.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "plan.report.withdraw.prepare": {
+      "sourceChunkIds": [
+        "std.report.withdraw",
+        "eb.report.withdraw"
+      ],
+      "schemaFields": [
+        "id",
+        "year",
+        "type",
+        "serialNumber",
+        "creatorUserId"
+      ],
+      "references": [
+        "references/plan-report-write.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "plan.report.withdraw.apply": {
+      "sourceChunkIds": [
+        "std.report.withdraw",
+        "eb.report.withdraw"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/plan-report-write.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    },
+    "plan.report.remind.prepare": {
+      "sourceChunkIds": [
+        "std.report.remind",
+        "rules.std"
+      ],
+      "schemaFields": [
+        "personIds",
+        "year",
+        "type",
+        "serialNumber",
+        "content"
+      ],
+      "references": [
+        "references/plan-report-remind.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "read-before-write",
+      "requiresConfirmationChain": true
+    },
+    "plan.report.remind.apply": {
+      "sourceChunkIds": [
+        "std.report.remind",
+        "rules.std"
+      ],
+      "schemaFields": [
+        "confirm",
+        "continuation"
+      ],
+      "references": [
+        "references/plan-report-remind.md"
+      ],
+      "tests": [
+        "test/business/plan-operations.test.ts"
+      ],
+      "risk": "high-risk-write",
+      "requiresConfirmationChain": true
+    }
+  },
+  "artifactBaseline": {
+    "aggregateSha256": "21b1f0fa70c20c0de7760e21580db3b144cbd260bba072af56e626225c9b5fa4",
+    "files": [
+      {
+        "path": "src/shortcuts/plan/index.ts",
+        "role": "generated-cli",
+        "size": 6437,
+        "sha256": "0c6858994dc12c931bfa4962134f89529e15ce25cdbf2e77166bc5affdabb8b8"
+      },
+      {
+        "path": "src/shortcuts/plan/manifest.ts",
+        "role": "generated-cli",
+        "size": 2292,
+        "sha256": "b98d7a851aef1903c5508ddbe778ddbd943c216f39f4d1f78d42f68a7c3ebaec"
+      },
+      {
+        "path": "src/shortcuts/plan/operations.ts",
+        "role": "generated-cli",
+        "size": 604,
+        "sha256": "91fa87755053d62f3a82fc0334acb4b5302934717ccc5158bed2955b18a32185"
+      },
+      {
+        "path": "src/shortcuts/plan/errors.ts",
+        "role": "generated-cli",
+        "size": 3054,
+        "sha256": "8f7817f7fc18061d9412441a8906d2783aa237749790bec26da2b73e2cd4f436"
+      },
+      {
+        "path": "src/shortcuts/plan/host.ts",
+        "role": "generated-cli",
+        "size": 8302,
+        "sha256": "0171f10390281c9690df935d88be82d44c3d866b1907df2a9b29fac2ebeb29f7"
+      },
+      {
+        "path": "src/shortcuts/plan/continuation.ts",
+        "role": "generated-cli",
+        "size": 3254,
+        "sha256": "ad77c2ce4a4b4a3cc6dcdd7060fa5cd7760306ec8c0150f21bdbaefb0eb0fa15"
+      },
+      {
+        "path": "src/shortcuts/plan/operations/registry.ts",
+        "role": "generated-cli",
+        "size": 1339,
+        "sha256": "9980b41d6a451911c1d066ebce7b8fbc1148c2831ba522bc151d57f411993d8d"
+      },
+      {
+        "path": "src/shortcuts/plan/operations/types.ts",
+        "role": "generated-cli",
+        "size": 3470,
+        "sha256": "2c9ce57fa46fbcae73b9d56378dea4ad48efd199c1a723b07d8ff37be36a76f4"
+      },
+      {
+        "path": "src/shortcuts/plan/operations/shared.ts",
+        "role": "generated-cli",
+        "size": 10929,
+        "sha256": "7562ee217aa70c8f709510a1a77e8e77ece5f19d5e18cfe58043bf6037aec749"
+      },
+      {
+        "path": "src/shortcuts/plan/operations/link.ts",
+        "role": "generated-cli",
+        "size": 11418,
+        "sha256": "6057c02f4e3d739618380a662846306a4b9c7aa26eff0aec53ee74e8ee756309"
+      },
+      {
+        "path": "src/shortcuts/plan/operations/version.ts",
+        "role": "generated-cli",
+        "size": 2174,
+        "sha256": "21cce989fd0acca366170022391e783dee7e3ac7772f8e5711a2c8b4a88b8d80"
+      },
+      {
+        "path": "src/shortcuts/plan/operations/read.ts",
+        "role": "generated-cli",
+        "size": 11818,
+        "sha256": "9846d5f78841d638cb3b0019ac98edec1a9ff28470dbdcd535f229da6626fe6c"
+      },
+      {
+        "path": "src/shortcuts/plan/operations/write.ts",
+        "role": "generated-cli",
+        "size": 32775,
+        "sha256": "4723fdc857d05b2e41d5213286551e650ab18be7ae0b34067980b3f8094a8c66"
+      },
+      {
+        "path": "src/shortcuts/index.ts",
+        "role": "generated-cli",
+        "size": 651,
+        "sha256": "65c1f146346f0fd4b1a89a486aecb092bc46103bc142f39dc2d8d7149e1ee9fd"
+      },
+      {
+        "path": "skills/weaver-e10-plan-connector/SKILL.md",
+        "role": "generated-skill-entry",
+        "size": 12449,
+        "sha256": "78f4088d765285c9952f30467ccccfebd1f98a09e42cb9a3731604c2aebdbefc"
+      },
+      {
+        "path": "skill-template/product.json",
+        "role": "generated-skill-meta",
+        "size": 89,
+        "sha256": "211300a31c39f0feea66331101edea394ae841307302404c6d113b314954ee83"
+      },
+      {
+        "path": "skills/weaver-e10-plan-connector/references/plan-overview-and-routing.md",
+        "role": "generated-reference",
+        "size": 8369,
+        "sha256": "9760b0c68103bd782154da8bd6305b2d7be0d8bffe4651fa2b686ca398651079"
+      },
+      {
+        "path": "skills/weaver-e10-plan-connector/references/plan-report-query.md",
+        "role": "generated-reference",
+        "size": 6261,
+        "sha256": "f25ffe170738e394bb14ea7b0fc75519b2adc7d8e56a4644d44b7dcf1a843271"
+      },
+      {
+        "path": "skills/weaver-e10-plan-connector/references/plan-report-write.md",
+        "role": "generated-reference",
+        "size": 7599,
+        "sha256": "f37a8826fbe7ceb7ed2276fc079c801af1a06aa8de780b9bf63815ceee700d7f"
+      },
+      {
+        "path": "skills/weaver-e10-plan-connector/references/plan-report-remind.md",
+        "role": "generated-reference",
+        "size": 4155,
+        "sha256": "b879a737474190ea8ea0bd25e8695e42a946a59a0a4a457e23c04273e551c8e9"
+      },
+      {
+        "path": "skills/weaver-e10-plan-connector/references/plan-collect-and-compose.md",
+        "role": "generated-reference",
+        "size": 7579,
+        "sha256": "cf64b734fb348bdbe11ab24689fde4d76ce895561d7ec915edcb783466dc0bc6"
+      },
+      {
+        "path": "docs/plan.md",
+        "role": "generated-doc",
+        "size": 5995,
+        "sha256": "955f44e10968929db8dd7d4cc599107ceb32ec60d657930062da183ef62d35f4"
+      },
+      {
+        "path": "docs/_catalog.md",
+        "role": "generated-doc",
+        "size": 2605,
+        "sha256": "ce11d0da2c2caef7ef4f8ccaf3e7fb8c9c3a0a193deb1250844e98ef5f0aea62"
+      },
+      {
+        "path": "docs/SKILL.md",
+        "role": "generated-doc",
+        "size": 3761,
+        "sha256": "3a62f4433498450ea3b3a0fea71623fe9399e0929c9b4b71c0fb5bec98649a03"
+      },
+      {
+        "path": "test/business/plan-operations.test.ts",
+        "role": "generated-test",
+        "size": 43007,
+        "sha256": "5775e72ad42101f1a010e35e6b325b85003754bb1a87c4430f38a18fa7227d87"
+      },
+      {
+        "path": "skill-template/domains/plan.md",
+        "role": "generated-template",
+        "size": 1746,
+        "sha256": "a5b78dfb3726cbc91f75ba362e025a9f41e5c63482035ed2eca55d6497280b74"
+      },
+      {
+        "path": "skill-template/business-info.json",
+        "role": "generated-template",
+        "size": 2102,
+        "sha256": "b26100c94b1c045de93d4c32d72456f90f1e95f7c62768e9db2b2d5582468486"
+      }
+    ]
+  },
+  "notes": [
+    "源资料为外部提供的计划报告接口说明（标准版 docx、ebuilder 其他接口 docx、ebuilder 自定义接口 zip）与补充说明规则 txt。",
+    "只记录源资料指纹与转换摘要，不保存 Cookie、Token、大段源正文或真实内网地址。",
+    "plan 模块同时实现标准版与 e10-ebuilder 两套报告侧链路，链路由 CLI 依据 plan_searchAppver 的 ver_name 判定并按租户缓存 1 天。",
+    "eb 链路撤回报告为 ESB 动作流，源资料未给出动作流 uniqueIndent，未生成 operation，登记在 manifest.withheldOperations。",
+    "eb 链路未提供报告提交提醒与评论接口，对应 operation 仅支持标准版链路。"
+  ]
+}

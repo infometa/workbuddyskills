@@ -1,6 +1,8 @@
 ---
 name: position-management
 description: 用于仓位决策，聚焦仓位管理、风险控制、交易决策。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户最常见的真实问题不是"买什么"，而是"现在到底该上仓位还是降仓位"。本技能解决的是总仓位、进攻节奏、试错强度的问题。
+description_zh: "用于仓位决策，聚焦仓位管理、风险控制、交易决策。适用于问题回答、撰写报告、撰写金融类文章等场景。输出内容较多，不适合简单对话场景。各类信息与数据通过 finance-data plugin 获取。用户最常见的真实问题不是\"买什么\"，而是\"现在到底该上仓位还是降仓位\"。本技能解决的是总仓位、进攻节奏、试错强度的问题。"
+description_en: "Use for position-sizing decisions, focusing on position management, risk control, and trading decisions. Suitable for answering questions and writing reports or financial articles. Produces substantial output and is not suitable for simple conversations. All information and data are obtained through the finance-data plugin. Users' most common real question is not what to buy, but whether to increase or reduce exposure now. This skill addresses total exposure, the pace of risk-taking, and the intensity of trial positions."
 ---
 
 # 仓位决策

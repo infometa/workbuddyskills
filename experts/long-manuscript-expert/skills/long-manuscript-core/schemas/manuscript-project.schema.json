@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/manuscript-project.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "projectId", "documentType", "audience", "goal", "state", "operationMode", "domainScene", "materialIds", "chapterIds", "openEvidenceGaps", "constraints", "decisionLog", "stateDigest"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "projectId": { "type": "string", "minLength": 1 },
+    "documentType": { "type": "string", "minLength": 1 },
+    "audience": { "type": ["string", "null"] },
+    "goal": { "type": ["string", "null"] },
+    "state": { "enum": ["intake", "planned", "drafting", "reviewing", "delivery_ready", "delivered"] },
+    "operationMode": { "enum": ["material_activation", "project_planning", "chapter_generation", "continuation", "bounded_revision", "review_quality", "finished_draft_closure", "template_fill_conversion", "export_delivery", "asset_repurposing"] },
+    "domainScene": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "materialIds": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "chapterIds": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "openEvidenceGaps": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "constraints": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "decisionLog": { "type": "array", "items": { "type": "object" } },
+    "stateDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>独立审议决策页</title>
+  <style>
+    :root { color-scheme: light; --ink: #12323a; --muted: #5b6f74; --line: #c9d8d9; --panel: #f4f8f7; --accent: #0f766e; --warn: #9a5a12; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #eaf1f0; color: var(--ink); font: 16px/1.55 system-ui, sans-serif; }
+    main { width: min(960px, calc(100% - 32px)); margin: 32px auto; background: white; border: 1px solid var(--line); border-radius: 18px; padding: clamp(24px, 5vw, 56px); box-shadow: 0 18px 48px rgb(18 50 58 / 10%); }
+    .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { font-size: clamp(28px, 5vw, 48px); line-height: 1.1; margin: .25em 0; }
+    h2 { font-size: 18px; margin: 0 0 8px; }
+    .meta { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+    section { border: 1px solid var(--line); border-radius: 12px; padding: 18px; background: var(--panel); }
+    .recommendation { border-left: 5px solid var(--accent); }
+    .countercase { border-left: 5px solid var(--warn); }
+    .wide { grid-column: 1 / -1; }
+    footer { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); }
+    @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } .wide { grid-column: auto; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header data-field="issueFrame">
+      <div class="eyebrow">单一 AI 独立审议 · 非法定董事会</div>
+      <h1 data-field="issueFrame.question">从 DecisionRecord 渲染真正要决定的事</h1>
+      <p class="meta">同时呈现决策时点、真实选项与本轮不讨论事项。</p>
+    </header>
+    <div class="grid">
+      <section class="recommendation" data-field="aiRecommendation">
+        <h2>当前独立判断</h2>
+        <p>保留建议状态、正文含义与适用范围。</p>
+      </section>
+      <section class="countercase" data-field="strongestCountercase">
+        <h2>最强反方</h2>
+        <p>呈现足以改变建议的竞争解释与推翻证据。</p>
+      </section>
+      <section data-field="evidenceBoundary">
+        <h2>证据边界</h2>
+        <p>分别渲染事实、估计、假设、判断与未知。</p>
+      </section>
+      <section data-field="conditions killCriteria">
+        <h2>成立条件与否决线</h2>
+        <p>保留建议成立、失效和停止条件。</p>
+      </section>
+      <section data-field="humanReviewBoundary">
+        <h2>人工关卡</h2>
+        <p>显著呈现必须交给现实有权人或专业人士的事项。</p>
+      </section>
+      <section data-field="singleNextAction">
+        <h2>一个动作与复审</h2>
+        <p>呈现负责人、对象、完成定义、验证信号、窗口和触发器。</p>
+      </section>
+      <section class="wide" data-field="truthBoundary">
+        <h2>事实边界</h2>
+        <p>分开当前能证明与不能证明的内容。</p>
+      </section>
+      <section class="wide" data-field="userDecision">
+        <h2>用户决定</h2>
+        <p>AI 建议与用户明确决定分栏；没有明确决定时保持未决定。</p>
+      </section>
+    </div>
+    <footer>本模板必须绑定完整 DecisionRecord 后再交付；保存、预览或外部送达需相应真实回执。</footer>
+  </main>
+</body>
+</html>

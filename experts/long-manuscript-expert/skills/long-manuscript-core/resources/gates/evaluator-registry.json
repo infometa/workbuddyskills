@@ -1,0 +1,632 @@
+{
+  "activeEvaluatorCount": 32,
+  "artifactType": "active_quality_evaluator_registry",
+  "entries": [
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/artifact-openability.mjs",
+      "evaluatorSha256": "390bbb7abacde29c058afe856c273416731de60471a78da4bcbcf3deb4fb6eae",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "artifact.openability",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [],
+      "policyDigest": "11f740659a152f2849551fcb06a883b93ea52c3720b8d8bc6ce042f4270383c1",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": []
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/artifact-structure.mjs",
+      "evaluatorSha256": "7dff0a45a71858e6971365780b710e1eb317552b57189beb926b02c0cdb9776b",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "artifact.structure",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.instructor-learner-separation",
+        "seed.layout-completeness"
+      ],
+      "policyDigest": "06d989fa07d638d3410be131b1f86e4bc2f21312b3708f8795b22443227c8b74",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "instructor_learner_separation",
+        "layout_completeness"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/claim-fact-inference-separation.mjs",
+      "evaluatorSha256": "a88f89c296f665d0d0d3fabecf307578baa21880a712cb60c97362d90d74536f",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "claim.fact-inference-separation",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.consensus-disagreement-separation",
+        "seed.fact-inference-separation",
+        "seed.fact-opinion-separation",
+        "seed.marketing-fact-separation",
+        "seed.memory-fact-separation"
+      ],
+      "policyDigest": "555505dc02a1d5864cf1ce6e1389eacab842ab831295ace0bca1ae9840bcdd5a",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "consensus_disagreement_separation",
+        "fact_inference_separation",
+        "fact_opinion_separation",
+        "marketing_fact_separation",
+        "memory_fact_separation"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/claim-support.mjs",
+      "evaluatorSha256": "39760648f1fa181412442b3e891f60edf8c317248f98da4ef810b6ff7733cde1",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "claim.support",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.claim-evidence",
+        "seed.claim-proof"
+      ],
+      "policyDigest": "6241641016d63c9617aa2ad8304ce93bb8918984f2258726f94fd05bb0f2664c",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "claim_evidence",
+        "claim_proof"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/confidentiality-preserved.mjs",
+      "evaluatorSha256": "52fa55810bf36d43c990048d2cf12793d0311a87918ea3006b6d3d32a3346050",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "confidentiality.preserved",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.confidentiality",
+        "seed.sacred-or-restricted-knowledge",
+        "seed.source-protection"
+      ],
+      "policyDigest": "9c33877b130797d0d0d30fbc15cba605f764b5397f4d6bb8c5c3916636bc97cf",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "confidentiality",
+        "sacred_or_restricted_knowledge",
+        "source_protection"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/coverage-completeness.mjs",
+      "evaluatorSha256": "64ee62c2acf40238ac92ebd4ddb41351a652f083c72ba0d0277c30041fe9f874",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "coverage.completeness",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.answer-completeness",
+        "seed.api-completeness",
+        "seed.department-source-coverage",
+        "seed.objective-assessment-alignment",
+        "seed.option-completeness",
+        "seed.requirement-coverage"
+      ],
+      "policyDigest": "bdcbc62d6405685e581d0c60946c2188b9d20538cf40ab25463ca6b63f0fba87",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "answer_completeness",
+        "api_completeness",
+        "department_source_coverage",
+        "objective_assessment_alignment",
+        "option_completeness",
+        "requirement_coverage"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/delivery-manifest-integrity.mjs",
+      "evaluatorSha256": "4168237db49a22c882ccd22140fd1f90bf08c7ed4900d90c729a68ab7f3a5a32",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "delivery-manifest.integrity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [],
+      "policyDigest": "783a957b029f7d4e8c79335fb54cefdc68fbdcb9971711240f73718893040171",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": []
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/encoding-valid.mjs",
+      "evaluatorSha256": "9538fe0499ca2de97ba379fc93ee907d0d51156b88b604e3c8d5c20ab6b15b18",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "encoding.valid",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [],
+      "policyDigest": "9e7a760760719ff9c58a710e2183e2654eac8fc06080fa850c424bb74c329c91",
+      "priority": "P2",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": []
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/entity-identity-consistency.mjs",
+      "evaluatorSha256": "ba8ad929c357f6b16b7ad88c0ffbf6dca2f08eec73066172d81ab1081e08758c",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "entity.identity-consistency",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.duplicate-event-control",
+        "seed.identity-accuracy",
+        "seed.media-identity"
+      ],
+      "policyDigest": "211292cf117722a74b9e4a63fe886e455716ef230cd9e6d76feadf41d53aa46f",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "duplicate_event_control",
+        "identity_accuracy",
+        "media_identity"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/example-executable.mjs",
+      "evaluatorSha256": "0e10e2b05f2d725de9d2715780302f437e44d825051704dc852bf0ad4a993a33",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "example.executable",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.example-executability"
+      ],
+      "policyDigest": "71f3cb06fb585845153649b545747df670e2c70a6254af3f648290ff9f467574",
+      "priority": "P2",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "example_executability"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/external-action-authorized.mjs",
+      "evaluatorSha256": "3faae4cb9c2e3e2bc327057fcd7f430464bf335ad47df77ef3cba100fd018f6d",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "external-action.authorized",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [],
+      "policyDigest": "95baa1caa3b5b417bcf835912e8c7baa6a086b051e61e15ff0bc839ceb4db3e2",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": []
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/input-required.mjs",
+      "evaluatorSha256": "4a2a490a9ea1934f9648fd813ff936207e1b76d2e60fa22355d5d64abf0ab3d8",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "input.required",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [],
+      "policyDigest": "c7f02999a3091e6b0778c7add01844303c5fdaa3db4c82b43463067b29804f69",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": []
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/numeric-unit-consistency.mjs",
+      "evaluatorSha256": "dfb557509fd2355cf5e75d83e8867494d488a8b27496955327ce90bcccdb9584",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "numeric-unit.consistency",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.metric-definition-consistency"
+      ],
+      "policyDigest": "d18664eaccbf267cb9c5ba77fead026c858bd6a6a4b27e758395ba5a6dec0233",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "metric_definition_consistency"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/privacy-anonymization.mjs",
+      "evaluatorSha256": "3442cd544bcf923887f9c78f269ee7cebbf8528e40198b6ffd859fd816b22dd2",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "privacy.anonymization",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.anonymization"
+      ],
+      "policyDigest": "b545e9352cf2345911ad7daea4dc71b26f9acf9f63a1b6793aaa9554ed7c9025",
+      "priority": "P2",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "anonymization"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/privacy-consent.mjs",
+      "evaluatorSha256": "13bb06d3b06b248606cd058ac773e4bb5c11d5d284aa506ecd166c2f121be16e",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "privacy.consent",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.bearer-consent",
+        "seed.informed-consent"
+      ],
+      "policyDigest": "8a4708a847ddfbe02e969636e483055a5b1d4dcc0c3221bb2aca1f7bc994b0a1",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "bearer_consent",
+        "informed_consent"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/privacy-minimization.mjs",
+      "evaluatorSha256": "0ee1ac10a446926b050b86257308488e3526df5016ae7aa9fb418d3b0c6b608a",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "privacy.minimization",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.living-person-privacy"
+      ],
+      "policyDigest": "fcf650b4b5c929a85d546041cd930fd853ae989389c88ea377706ce6b3da3e91",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "living_person_privacy"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/projection-parity.mjs",
+      "evaluatorSha256": "2d2a4b952f689957ac162fe27211792d88459c523a43b7bb24346904ea46c66e",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "projection.parity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.cross-case-comparability"
+      ],
+      "policyDigest": "bdb42ce8b38307a2bf1b42f2ba2a5e02189ca11ffc6d463192fcc746ba9392e5",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "cross_case_comparability"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/reference-fidelity.mjs",
+      "evaluatorSha256": "b5a1d846a2451fe9ebebc147cf1751be3b124a9d4e8847079c9fc766d3bb42ac",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "reference.fidelity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.caption-accuracy",
+        "seed.clause-fidelity",
+        "seed.local-term-fidelity",
+        "seed.transcript-accuracy"
+      ],
+      "policyDigest": "447808c45aef18bfb930dd66c822a5d57709a8c346338d3a0316a3bcf94247c7",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "caption_accuracy",
+        "clause_fidelity",
+        "local_term_fidelity",
+        "transcript_accuracy"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/relationship-consistency.mjs",
+      "evaluatorSha256": "342563ac975bb2be34b8a62aad0b83e60a2706bf38324e2161f86468e74a7840",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "relationship.consistency",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.relationship-consistency"
+      ],
+      "policyDigest": "315968620d48af0d1be43bc4a95875145b9e80e1e2d4f5583718399ae41a62cf",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "relationship_consistency"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/rights-clearance.mjs",
+      "evaluatorSha256": "53d4127d239aad48edb5d34875bef73d2746ca2e882877d00acbefca32c0aa4e",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "rights.clearance",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.case-permission",
+        "seed.copyright-status",
+        "seed.media-rights",
+        "seed.originality-boundary",
+        "seed.publication-permission",
+        "seed.rights-review"
+      ],
+      "policyDigest": "82315b6dedd0e70f560de9e7ce87a575cd940e94bfd2127607dc74d49e92fcac",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "case_permission",
+        "copyright_status",
+        "media_rights",
+        "originality_boundary",
+        "publication_permission",
+        "rights_review"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/risk-disclosure.mjs",
+      "evaluatorSha256": "292be03011b586c886f832f6dae6756f2f6042d8a6755f8416144e3e035cdb82",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "risk.disclosure",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.legal-advice-boundary",
+        "seed.limitation-disclosure",
+        "seed.recommendation-strength",
+        "seed.reputation-risk",
+        "seed.tradeoff-visibility"
+      ],
+      "policyDigest": "540621df6bf1d138c74b44a8bfc82b58db6a84fb5946e55f1962b36b41033297",
+      "priority": "P2",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "legal_advice_boundary",
+        "limitation_disclosure",
+        "recommendation_strength",
+        "reputation_risk",
+        "tradeoff_visibility"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/safety-hazard-review.mjs",
+      "evaluatorSha256": "6bb94cd7610795b226364fe5ebfb792a058ebc7900c6ae59eface316ba25e2e2",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "safety.hazard-review",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.safety-warning"
+      ],
+      "policyDigest": "3ab6a63044abd51ec04b8ebdfdab9e0f2121fc71f514d618264828d6484ff792",
+      "priority": "P2",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "safety_warning"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/schema-valid.mjs",
+      "evaluatorSha256": "6fd6f0556d68051f0d18f0aa10baf080161449e0a68d582e217c1bc695d5f36f",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "schema.valid",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [],
+      "policyDigest": "fd98c056e705542cd4de6ed6bee84b1a7b843fc791d0eb925e3c0d2b40d6f9a5",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": []
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/scope-lock.mjs",
+      "evaluatorSha256": "6bf8f76745a76d236924a2d29e85d89baa736fcdd104cab6bdc88856b039549e",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "scope.lock",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [],
+      "policyDigest": "6a9944239be9b9182bcc4bb680606df87726962aac983e63af6cb1aca8847bc7",
+      "priority": "P2",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": []
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/source-freshness.mjs",
+      "evaluatorSha256": "21322593adbea82e451c6f01a6ba10f722e07c43d2c1afdada9f327c3849bdb6",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "source.freshness",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.freshness"
+      ],
+      "policyDigest": "528e7b36248da4ee19ac3a756fb0f22d113d81ad0701064316dfd803d0f7f469",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "freshness"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/source-quality.mjs",
+      "evaluatorSha256": "2d73dcfbba9c99c4cef17b4770ed44c4458ddea0cca5c69d32e9d968d60fc2eb",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "source.quality",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.authoritative-source",
+        "seed.evidence-strength",
+        "seed.literature-balance",
+        "seed.multi-source-corroboration",
+        "seed.official-record-priority",
+        "seed.source-balance",
+        "seed.source-quality"
+      ],
+      "policyDigest": "0ee98d3319b02c00702b23079e03e9a5f584dc6ea48e1e40d398205f7ca38c07",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "authoritative_source",
+        "evidence_strength",
+        "literature_balance",
+        "multi_source_corroboration",
+        "official_record_priority",
+        "source_balance",
+        "source_quality"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/source-traceability.mjs",
+      "evaluatorSha256": "88d27e7a61867d1b4071b4aa499c33aae9638a67c905d8b102701eb075e6a011",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "source.traceability",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.citation-traceability",
+        "seed.compliance-traceability",
+        "seed.deprecation-trace",
+        "seed.result-attribution",
+        "seed.source-traceability",
+        "seed.speaker-attribution"
+      ],
+      "policyDigest": "6cef17f055b29b57043d09104b3a2b765e3ee5070b4ec7511393006f6e0a1611",
+      "priority": "P0",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "citation_traceability",
+        "compliance_traceability",
+        "deprecation_trace",
+        "result_attribution",
+        "source_traceability",
+        "speaker_attribution"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/temporal-validity.mjs",
+      "evaluatorSha256": "df1e4603bd70fa93b94567cc6d73b24fb1fa4fadebb2808b704179edd993816d",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "temporal.validity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.coverage-period-closed",
+        "seed.effective-date",
+        "seed.late-entry-policy"
+      ],
+      "policyDigest": "77c482f4620d556d12ffce003b41f3d1c83530148e9f7cbd2581fcbe9eaa9026",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "coverage_period_closed",
+        "effective_date",
+        "late_entry_policy"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/timeline-consistency.mjs",
+      "evaluatorSha256": "392b0d6450550a0bc1e874382de13859d4b058bfa78a818e58e074dc8ca639a2",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "timeline.consistency",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.chronology-consistency",
+        "seed.date-plausibility",
+        "seed.periodization-consistency"
+      ],
+      "policyDigest": "2fbcc2088893349f0ee86b64c66dc33854d94eabbd3658693eaea0517b1b71e9",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "chronology_consistency",
+        "date_plausibility",
+        "periodization_consistency"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/version-alignment.mjs",
+      "evaluatorSha256": "ee53f7a34c318e1ece0e15d5e3ce0915e552ffeacad2d0c7146ae80bd722803a",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "version.alignment",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.deadline-and-version",
+        "seed.version-alignment"
+      ],
+      "policyDigest": "84ed55f78bcbde0b831ff68dfcd23abd62913f8ec605f7ce58104c295bf44a03",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "deadline_and_version",
+        "version_alignment"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/voice-fidelity.mjs",
+      "evaluatorSha256": "fc0d9584c9ada46c31b8895c6bfa28c76563aa6cd4a3779c963db13d6fab0ca8",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "voice.fidelity",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.voice-consistency",
+        "seed.voice-fidelity"
+      ],
+      "policyDigest": "077f2666b28251227a317cca209507a1250411af12e956cfe610ff141c6d51cd",
+      "priority": "P2",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "voice_consistency",
+        "voice_fidelity"
+      ]
+    },
+    {
+      "evaluatorRef": "../scripts/quality/evaluators/workflow-completeness.mjs",
+      "evaluatorSha256": "c187b69143907cc8c49859cee04c698529db97c892ee82fbc10021721782d1c5",
+      "evaluatorVersion": "1.0.0",
+      "gateId": "workflow.completeness",
+      "implementationCheckpoint": "C5",
+      "lifecycle": "active",
+      "parameterProfiles": [
+        "seed.action-owner",
+        "seed.difficulty-progression",
+        "seed.exception-path",
+        "seed.method-reproducibility",
+        "seed.method-transparency",
+        "seed.role-responsibility",
+        "seed.step-completeness",
+        "seed.subject-response"
+      ],
+      "policyDigest": "c7b2e0975920c1221955f513dee1c7c211490c62ab37f7355069347bae26c6fb",
+      "priority": "P1",
+      "schemaVersion": "1.0.0",
+      "seedGateIds": [
+        "action_owner",
+        "difficulty_progression",
+        "exception_path",
+        "method_reproducibility",
+        "method_transparency",
+        "role_responsibility",
+        "step_completeness",
+        "subject_response"
+      ]
+    }
+  ],
+  "entryCount": 32,
+  "humanGateId": "human-review.receipt",
+  "pendingEvaluatorCount": 0,
+  "schemaVersion": "1.0.0",
+  "seedRegistryPath": "../scene-quality-gate-registry.json",
+  "seedRegistrySha256": "a13f182bd7df9bdee60b81df1dee229868ee01503bf87d8a03ec0c49e6e99b50"
+}

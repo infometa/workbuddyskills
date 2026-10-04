@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fbsir://mom-dialogue/question/2.0",
+  "title": "Question Ledger Row",
+  "x-schema-version": "2.0",
+  "x-storage": "csv",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question_id", "question", "sensitivity", "status"],
+  "properties": {
+    "question_id": {"type": "string", "pattern": "^QUE-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "target_person_id": {"type": "string", "pattern": "^$|^PER-[A-Z0-9][A-Z0-9_-]{2,63}$"},
+    "source_ids": {"type": "string", "x-csvEncoding": "json-array"},
+    "gap_basis": {"type": "string"},
+    "question": {"type": "string", "minLength": 1},
+    "sensitivity": {"enum": ["normal", "sensitive", "highly_sensitive"]},
+    "visibility": {"enum": ["", "private", "selected_family", "family", "pending"]},
+    "status": {"enum": ["draft", "asked", "answered", "skipped", "withdrawn"]},
+    "created_at": {"type": "string"},
+    "notes": {"type": "string"}
+  }
+}

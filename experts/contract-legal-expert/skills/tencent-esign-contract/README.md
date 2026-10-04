@@ -251,10 +251,9 @@ python3 scripts/tencent_esign.py wait-compare <task_id>
 
 | 变量 | 说明 | 默认值 |
 |------|------|--------|
-| `ESIGN_TOKEN` | 鉴权 Token（优先级高于文件存储） | — |
 | `ESIGN_BASE_URL` | 自定义 API 地址 | `config.json` 中的值 |
 
-Token 存储优先级：环境变量 `ESIGN_TOKEN` > 文件 `~/.esign-token`
+Token 统一从 `~/.esign-token` 文件读取（由 `auth-validate` / `auth-save` 命令写入，权限 600），不使用环境变量
 
 ## 验证安装
 

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/human-gate-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "gateInvocationDigest",
+    "machineGateResultDigest",
+    "scenePackDigest",
+    "projectStateDigest",
+    "artifactSetDigest",
+    "evidenceSnapshotDigest",
+    "reviewScopeDigest",
+    "reviewerIdentityDigest",
+    "ownerResolutionReceiptDigest",
+    "approvalLedgerReceiptDigest",
+    "commentsDigest",
+    "receiptDigest",
+    "schemaVersion",
+    "gateId",
+    "parameterProfile",
+    "sceneId",
+    "humanOwnerRole",
+    "reviewMandate",
+    "decision",
+    "issuedAt",
+    "expiresAt",
+    "nonce"
+  ],
+  "properties": {
+    "gateInvocationDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "machineGateResultDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "scenePackDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "projectStateDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "artifactSetDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "evidenceSnapshotDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "reviewScopeDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "reviewerIdentityDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "ownerResolutionReceiptDigest": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{80,96}$"
+    },
+    "approvalLedgerReceiptDigest": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{80,96}$"
+    },
+    "commentsDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "receiptDigest": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{80,96}$"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "gateId": {
+      "const": "human-review.receipt"
+    },
+    "parameterProfile": {
+      "type": "string"
+    },
+    "sceneId": {
+      "type": "string"
+    },
+    "humanOwnerRole": {
+      "type": "string"
+    },
+    "reviewMandate": {
+      "type": "string"
+    },
+    "decision": {
+      "const": "approved"
+    },
+    "issuedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nonce": {
+      "type": "string",
+      "minLength": 16
+    }
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "$note": [
+    "商家连接器（Kiwi 商家运营）的 WorkBuddy 连接器包：远程 HTTPS MCP + OAuth。",
+    "tools 为平台解析用的非标准信息字段（平台以运行时 tools/list 为准）；此处声明的",
+    "就是入口提供的全部工具（第 0 版目录能力）。按「网关不碰实例」原则（部署说明 §0），",
+    "网关**不提供** kiwi_merchant_* 之类的实例工具——商家实例独立部署、直接与买家做 A2A。",
+    "url 必须指向受信任的网关入口；提交前需确认域名归属（见部署说明 §1）。"
+  ],
+  "mcpServers": {
+    "kiwi-merchant": {
+      "type": "streamableHttp",
+      "url": "https://merchant.kiwi.harrylabsj.com/mcp",
+      "timeout": 30000
+    }
+  },
+  "tools": [
+    {
+      "name": "kiwi_catalog_get_merchant_profile",
+      "description": "读取当前已连接商家的目录身份与连接状态（只读）。返回 merchant_id、目录凭据是否可用，以及公开资料管理入口地址。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "kiwi_catalog_get_merchant_stats",
+      "description": "读取本商家在 Kiwi 目录的经营汇总（只读，匿名枚举）：活跃关注者总数、公开资料总浏览量、以及每条公开资料的状态与浏览量。用于回答「有多少买家在关注我」「我的公开资料有没有人看」「哪条资料被看得多」。目录**只提供数字**：不提供关注者身份、名单或联系方式，也没有向关注者群发消息的通道——不要向商家承诺任何群发、触达或导出名单的能力。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "kiwi_catalog_save_publication_draft",
+      "description": "保存商家公开资料草稿（私有，不公开）。必填 merchant_display_name 与 title；类目/简介/店铺链接/FAQ/有效期选填。草稿不会出现在采购专家搜索结果中；公开前置请用 kiwi_catalog_request_publish。不得填写电话、邮箱等联系方式（会被目录拒绝）。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "merchant_display_name": {
+            "type": "string",
+            "description": "公开商家名称（买家可见）"
+          },
+          "title": {
+            "type": "string",
+            "description": "商品名（买家通过它搜索到你）"
+          },
+          "category": {
+            "type": "string",
+            "description": "类目（选填）"
+          },
+          "summary": {
+            "type": "string",
+            "description": "公开简介（选填，买家可见）"
+          },
+          "shop_platform": {
+            "type": "string",
+            "description": "店铺平台（选填，如 淘宝/京东）"
+          },
+          "shop_url": {
+            "type": "string",
+            "description": "公开店铺链接（选填，http/https）"
+          },
+          "faq": {
+            "type": "array",
+            "description": "公开 FAQ（选填；每项 question/answer，不得含电话或邮箱）",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "question",
+                "answer"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "expires_at": {
+            "type": "string",
+            "description": "资料有效期（选填，ISO 时间；到期后不再出现在搜索中）"
+          }
+        },
+        "required": [
+          "merchant_display_name",
+          "title"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "kiwi_catalog_request_publish",
+      "description": "准备发布公开资料：保存草稿并返回目录门户的确认入口。**本工具不会把资料变成已发布**——必须由商家本人在门户核对公开预览并确认发布后才生效。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "merchant_display_name": {
+            "type": "string",
+            "description": "公开商家名称（买家可见）"
+          },
+          "title": {
+            "type": "string",
+            "description": "商品名（买家通过它搜索到你）"
+          },
+          "category": {
+            "type": "string",
+            "description": "类目（选填）"
+          },
+          "summary": {
+            "type": "string",
+            "description": "公开简介（选填，买家可见）"
+          },
+          "shop_platform": {
+            "type": "string",
+            "description": "店铺平台（选填，如 淘宝/京东）"
+          },
+          "shop_url": {
+            "type": "string",
+            "description": "公开店铺链接（选填，http/https）"
+          },
+          "faq": {
+            "type": "array",
+            "description": "公开 FAQ（选填；每项 question/answer，不得含电话或邮箱）",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "question",
+                "answer"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "expires_at": {
+            "type": "string",
+            "description": "资料有效期（选填，ISO 时间；到期后不再出现在搜索中）"
+          }
+        },
+        "required": [
+          "merchant_display_name",
+          "title"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "kiwi_catalog_get_publication",
+      "description": "按 publication_id 读取一条公开资料的**当前内容**（商家名/商品名/类目/简介/店铺平台与链接/FAQ）与状态（draft/published/withdrawn）、版本、时间戳。改写文案前先用它看原文——不要凭记忆重写，否则会丢字段或编造内容。第 0 版资料恒为不可实时询价（inquiry_available=false）。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "publication_id": {
+            "type": "string",
+            "description": "公开资料 id（发布回执中的 publication_id）"
+          }
+        },
+        "required": [
+          "publication_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "kiwi_catalog_withdraw_publication",
+      "description": "撤回已发布的公开资料（终态）：撤回后不再出现在采购专家搜索结果中。撤回不会删除账号或历史版本。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "publication_id": {
+            "type": "string",
+            "description": "公开资料 id（发布回执中的 publication_id）"
+          }
+        },
+        "required": [
+          "publication_id"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

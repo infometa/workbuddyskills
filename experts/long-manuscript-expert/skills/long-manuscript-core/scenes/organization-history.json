@@ -1,0 +1,361 @@
+{
+  "artifactRefs": [
+    {
+      "archetypeId": "primary-document",
+      "artifactId": "organization_history"
+    },
+    {
+      "archetypeId": "timeline",
+      "artifactId": "milestone_timeline"
+    },
+    {
+      "archetypeId": "structured-index",
+      "artifactId": "department_contribution_index"
+    },
+    {
+      "archetypeId": "appendix",
+      "artifactId": "archive_appendix"
+    }
+  ],
+  "capabilityBindings": [
+    {
+      "capabilityIds": [
+        "material-activation",
+        "multimodal-normalizer"
+      ],
+      "operationMode": "material_activation"
+    },
+    {
+      "capabilityIds": [
+        "scene-router",
+        "scene-composer",
+        "chapter-planning-expansion"
+      ],
+      "operationMode": "project_planning"
+    },
+    {
+      "capabilityIds": [
+        "chapter-planning-expansion",
+        "source-ledger-claim-graph",
+        "voice-profile-humanizer"
+      ],
+      "operationMode": "chapter_generation"
+    },
+    {
+      "capabilityIds": [
+        "continuation-recovery",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "continuation"
+    },
+    {
+      "capabilityIds": [
+        "scope-lock-diff",
+        "entity-timeline-continuity"
+      ],
+      "operationMode": "bounded_revision"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "rights-privacy-consent",
+        "research-verification"
+      ],
+      "operationMode": "review_quality"
+    },
+    {
+      "capabilityIds": [
+        "review-revise-quality-loop",
+        "multi-format-rendering"
+      ],
+      "operationMode": "finished_draft_closure"
+    },
+    {
+      "capabilityIds": [
+        "multi-format-rendering",
+        "rights-privacy-consent"
+      ],
+      "operationMode": "export_delivery"
+    },
+    {
+      "capabilityIds": [
+        "asset-repurposing",
+        "media-illustration-planning"
+      ],
+      "operationMode": "asset_repurposing"
+    }
+  ],
+  "contentRiskClass": "high",
+  "displayName": "企业志、校史与组织史",
+  "domainObjects": [
+    "department",
+    "institutional_record",
+    "milestone",
+    "organization",
+    "period"
+  ],
+  "fallback": {
+    "allowGeneralSubstitution": false,
+    "connectorUnavailableBehavior": "preserve_route_and_use_local_workflow",
+    "localOfflineAvailable": true,
+    "riskFloor": "high"
+  },
+  "family": "legacy_humanities",
+  "fixtureRefs": [
+    "evals/fixtures/scenes/organization-history/normal.json",
+    "evals/fixtures/scenes/organization-history/missing.json",
+    "evals/fixtures/scenes/organization-history/conflicting.json",
+    "evals/fixtures/scenes/organization-history/unauthorized.json",
+    "evals/fixtures/scenes/organization-history/adversarial.json",
+    "evals/fixtures/scenes/organization-history/connector-unavailable.json"
+  ],
+  "implementationCheckpoint": "C3",
+  "kind": "vertical_scene",
+  "legacyAliases": [],
+  "lifecycle": "implemented",
+  "migrationProvenance": {
+    "mappingVersion": "1.0.0",
+    "seedCatalogSha256": "638f3f8e8f3ab7f1c2080018233ef6d7e19340187926571aad2eaf818eca82f4"
+  },
+  "operationModes": [
+    "material_activation",
+    "project_planning",
+    "chapter_generation",
+    "continuation",
+    "bounded_revision",
+    "review_quality",
+    "finished_draft_closure",
+    "export_delivery",
+    "asset_repurposing"
+  ],
+  "optionalPortBindings": [
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "department_collection_form",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "append_intake_submission",
+      "portId": "StructuredIntakePort",
+      "purpose": "optional enhancement for department_collection_form",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "chapter_owner_tasks",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "create_task",
+      "portId": "CollaborationPort",
+      "purpose": "optional enhancement for chapter_owner_tasks",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    },
+    {
+      "approvalRequired": true,
+      "fallback": "local_workflow_without_connector",
+      "legacyLabel": "private_approval_workflow",
+      "minimumDataScope": "scene_scoped_minimum",
+      "operation": "configure_review_access",
+      "portId": "ReviewPort",
+      "purpose": "optional enhancement for private_approval_workflow",
+      "readbackRequired": true,
+      "required": false,
+      "writeMode": "external_write"
+    }
+  ],
+  "privacy": {
+    "livingPersonReview": false,
+    "minimumDataScope": "people_and_archive_scoped_minimum"
+  },
+  "qualityGateRefs": [
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.periodization-consistency",
+      "registryId": "timeline.consistency",
+      "reviewMandate": null,
+      "seedGate": "periodization_consistency"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.department-source-coverage",
+      "registryId": "coverage.completeness",
+      "reviewMandate": null,
+      "seedGate": "department_source_coverage"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.official-record-priority",
+      "registryId": "source.quality",
+      "reviewMandate": null,
+      "seedGate": "official_record_priority"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "seed.confidentiality",
+      "registryId": "confidentiality.preserved",
+      "reviewMandate": null,
+      "seedGate": "confidentiality"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "schema.valid",
+      "reviewMandate": null,
+      "seedGate": "core:schema.valid"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "input.required",
+      "reviewMandate": null,
+      "seedGate": "core:input.required"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "artifact.openability",
+      "reviewMandate": null,
+      "seedGate": "core:artifact.openability"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "delivery-manifest.integrity",
+      "reviewMandate": null,
+      "seedGate": "core:delivery-manifest.integrity"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "scope.lock",
+      "reviewMandate": null,
+      "seedGate": "core:scope.lock"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "external-action.authorized",
+      "reviewMandate": null,
+      "seedGate": "core:external-action.authorized"
+    },
+    {
+      "humanOwner": null,
+      "parameterProfile": "core.default",
+      "registryId": "encoding.valid",
+      "reviewMandate": null,
+      "seedGate": "core:encoding.valid"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "id": "audience",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "department_sources",
+      "required": true,
+      "sensitivity": "internal"
+    },
+    {
+      "id": "goal",
+      "required": true,
+      "sensitivity": "standard"
+    },
+    {
+      "id": "materials",
+      "required": true,
+      "sensitivity": "user_provided"
+    },
+    {
+      "id": "organization_scope",
+      "required": true,
+      "sensitivity": "internal"
+    },
+    {
+      "id": "time_boundary",
+      "required": true,
+      "sensitivity": "standard"
+    }
+  ],
+  "rights": {
+    "clearanceRequired": true,
+    "unknownRightsAction": "human_review"
+  },
+  "sceneId": "organization-history",
+  "schemaVersion": "1.0.0",
+  "triggers": [
+    {
+      "id": "organization-history-trigger-1",
+      "signal": "organization history",
+      "weight": 1
+    },
+    {
+      "id": "organization-history-trigger-2",
+      "signal": "school history",
+      "weight": 0.9
+    },
+    {
+      "id": "organization-history-trigger-3",
+      "signal": "企业志校史",
+      "weight": 0.8
+    }
+  ],
+  "workflowStages": [
+    {
+      "exitGateRefs": [
+        "input.required"
+      ],
+      "id": "activate-materials",
+      "operationModes": [
+        "material_activation"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "schema.valid"
+      ],
+      "id": "plan-project",
+      "operationModes": [
+        "project_planning"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "confidentiality.preserved"
+      ],
+      "id": "draft-and-revise",
+      "operationModes": [
+        "chapter_generation",
+        "continuation",
+        "bounded_revision"
+      ]
+    },
+    {
+      "exitGateRefs": [
+        "artifact.openability",
+        "confidentiality.preserved",
+        "coverage.completeness",
+        "delivery-manifest.integrity",
+        "encoding.valid",
+        "external-action.authorized",
+        "input.required",
+        "schema.valid",
+        "scope.lock",
+        "source.quality",
+        "timeline.consistency"
+      ],
+      "id": "review-and-close",
+      "operationModes": [
+        "review_quality",
+        "finished_draft_closure",
+        "export_delivery",
+        "asset_repurposing"
+      ]
+    }
+  ]
+}

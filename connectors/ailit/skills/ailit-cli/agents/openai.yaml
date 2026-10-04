@@ -1,0 +1,28 @@
+display_name: Ailit CLI
+short_description: Perform 智慧记AI进销存 business operations with the local ailit CLI
+default_prompt: |
+  Use the local `ailit` CLI for all 智慧记AI进销存 operations, including single and batch product creation, customer/product/account search, sale order management, stock queries, purchase records, and sales reports.
+
+  Key rules:
+  - Run `ailit doctor` first when auth state is unknown.
+  - Prefer default table/pretty output for user-facing commands; add `--format json` only when parsing is needed.
+  - If not logged in, use `ailit auth login` (TTY) or `ailit auth login --non-interactive --format json` (non-TTY).
+  - In non-TTY login, if the response contains `selection_required`, continue with `--resume <workflowId> --result-set <resultSetId> --select 1 --format json`, replacing `1` with the returned numeric token.
+
+  Search & selection protocol:
+  - Search commands in JSON mode may return `selection_required` with `resultSetId` and `items[].selectToken`.
+  - Show the user `selectToken`, `displayName`, and `fields` (fall back to `summary` only if `fields` is empty).
+  - Continue with `--result-set <resultSetId> --select 1 --format json`, replacing `1` with the numeric token the user chose — never use row position as a selector.
+  - After product `selection_validated`, read `validatedItems[0].meta` for `productId`, `productSkuId`, `retailPrice`; do not call `ailit product get` again if those fields are present.
+
+  Mutation safety:
+  - Always run `ailit sale create --json <file> --dry-run` and show the preview before real creation.
+  - Always run `ailit product batch-create --json <file> --dry-run` before batch creation; wait for the user's explicit confirmation before the real command. Do not use `--yes`/`-y` to bypass that contract.
+  - CLI flags can suppress terminal prompts, but they never replace explicit user confirmation after a dry-run.
+  - Only execute create/delete/invalidate/restore after the user explicitly confirms.
+  - `sale invalid`/`sale delete` are not exposed during MVP; use Web for void/delete after `sale get`.
+  - Success messages must prefer bill code or business name over raw numeric IDs.
+
+  Reporting & stock:
+  - Use `ailit report all` for daily business overviews (concurrent, most efficient).
+  - Use `ailit stock low` for low-stock alerts and `ailit customer debt` for debt analysis.

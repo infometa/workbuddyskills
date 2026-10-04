@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://u3w.com/schemas/manuscriptos/binary-artifact-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "fixtureId",
+    "format",
+    "state",
+    "byteLength",
+    "sha256",
+    "issues",
+    "metrics",
+    "inspectorDigest",
+    "receiptDigest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "fixtureId": {
+      "type": "string"
+    },
+    "format": {
+      "enum": [
+        "docx",
+        "pdf"
+      ]
+    },
+    "state": {
+      "enum": [
+        "openable",
+        "not_openable",
+        "not_evaluable"
+      ]
+    },
+    "byteLength": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "inspectorDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "receiptDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

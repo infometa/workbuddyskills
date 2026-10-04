@@ -1,0 +1,171 @@
+<!-- 经营分析 · 风险要点 · HTML 模板（表格形态） -->
+<!--
+  ⚠️⚠️⚠️ 强制约束 — 必须严格遵守 ⚠️⚠️⚠️
+  1. 必须使用 <table> 表格结构，严禁使用 <ul>/<li> 列表
+  2. 表头固定为：等级 | 类别 | 标题 | 证据 | 建议（5列，顺序不可变）
+  3. 每行 <tr> 必须带两个 class：analysis-risk-points__row + 等级修饰符（--high/--medium/--low）
+  4. 等级单元格内的 <span> 必须带两个 class：analysis-risk-points__level + 等级修饰符
+  5. 高=--high  中=--medium  低=--low
+  6. 不要生成采用/不采用按钮、不要生成展开按钮
+  7. <style> 块原样保留，不要修改
+  8. 风险要点从 8 个 section 提炼 3-8 条
+  9. 替换示例数据为实际风险内容，保持结构不变
+-->
+<style>
+.analysis-risk-points {
+  width: 100%;
+  background: var(--bg-panel, #fff);
+  border: 1px solid var(--border-soft, #eef1f6);
+  border-radius: var(--radius-md, 10px);
+  overflow: hidden;
+}
+.analysis-risk-points__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft, #eef1f6);
+  background: var(--bg-soft, #eef1f6);
+}
+.analysis-risk-points__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #0f1a2e);
+}
+.analysis-risk-points__badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.analysis-risk-points__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm, 8px);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.analysis-risk-points__badge--high {
+  background: rgba(227, 77, 89, 0.12);
+  color: var(--up, #e34d59);
+}
+.analysis-risk-points__badge--medium {
+  background: rgba(227, 115, 24, 0.12);
+  color: var(--warn, #e37318);
+}
+.analysis-risk-points__badge--low {
+  background: rgba(0, 168, 112, 0.12);
+  color: var(--down, #00a870);
+}
+.analysis-risk-points__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.analysis-risk-points__table thead th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted, #8a9ab5);
+  background: var(--bg-soft, #f8f9fc);
+  border-bottom: 1px solid var(--border-soft, #eef1f6);
+}
+.analysis-risk-points__table thead th:first-child {
+  width: 60px;
+  text-align: center;
+}
+.analysis-risk-points__table thead th:nth-child(2) {
+  width: 80px;
+}
+.analysis-risk-points__row td {
+  padding: 10px 12px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft, #eef1f6);
+  line-height: 1.6;
+  color: var(--text-secondary, #4b5c73);
+}
+.analysis-risk-points__row:last-child td {
+  border-bottom: none;
+}
+.analysis-risk-points__row td:first-child {
+  text-align: center;
+}
+.analysis-risk-points__row--high td:first-child {
+  border-left: 3px solid var(--up, #e34d59);
+}
+.analysis-risk-points__row--medium td:first-child {
+  border-left: 3px solid var(--warn, #e37318);
+}
+.analysis-risk-points__row--low td:first-child {
+  border-left: 3px solid var(--down, #00a870);
+}
+.analysis-risk-points__level {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-sm, 8px);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+.analysis-risk-points__level--high {
+  background: var(--up, #e34d59);
+}
+.analysis-risk-points__level--medium {
+  background: var(--warn, #e37318);
+}
+.analysis-risk-points__level--low {
+  background: var(--down, #00a870);
+}
+</style>
+<div class="analysis-risk-points">
+  <div class="analysis-risk-points__header">
+    <span class="analysis-risk-points__title">风险要点</span>
+    <div class="analysis-risk-points__badges">
+      <span class="analysis-risk-points__badge analysis-risk-points__badge--high">高风险 1</span>
+      <span class="analysis-risk-points__badge analysis-risk-points__badge--medium">中风险 1</span>
+      <span class="analysis-risk-points__badge analysis-risk-points__badge--low">低风险 1</span>
+    </div>
+  </div>
+  <table class="analysis-risk-points__table">
+    <thead>
+      <tr>
+        <th>等级</th>
+        <th>类别</th>
+        <th>标题</th>
+        <th>证据</th>
+        <th>建议</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="analysis-risk-points__row analysis-risk-points__row--high">
+        <td><span class="analysis-risk-points__level analysis-risk-points__level--high">高</span></td>
+        <td>供应集中度</td>
+        <td>前五供应商集中度偏高</td>
+        <td>前五大供应商合计占比 72%，对第一大供应商依赖超 35%（来源：采购台账）</td>
+        <td>评估供应中断风险，建议分散供应来源</td>
+      </tr>
+      <tr class="analysis-risk-points__row analysis-risk-points__row--medium">
+        <td><span class="analysis-risk-points__level analysis-risk-points__level--medium">中</span></td>
+        <td>账税一致</td>
+        <td>账税差异需关注</td>
+        <td>审计收入与纳税申报收入差异率 8.2%（来源：审计报告+纳税申报表）</td>
+        <td>核查差异来源，确认是否存在账外收入</td>
+      </tr>
+      <tr class="analysis-risk-points__row analysis-risk-points__row--low">
+        <td><span class="analysis-risk-points__level analysis-risk-points__level--low">低</span></td>
+        <td>流水</td>
+        <td>我行结算占比较低</td>
+        <td>我行结算占比仅 28%，主要流水在他行（来源：银行流水明细）</td>
+        <td>提升结算份额，加强资金监控</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
