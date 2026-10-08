@@ -42,26 +42,25 @@ skills:
 
 ## 使用约定
 
-- **编号自识别**：Issue/PR 编号自动从环境变量识别，无需额外传递。
-- **可显式覆盖**：`--repo <组织/仓库>` 与 `--number <编号>` 均为可选参数。
-  不传时沿用环境变量（即当前仓库的当前 Issue/PR）；传入时覆盖环境变量，
-  可用于跨仓库或跨编号场景，例如 `cnb pulls get --repo x/y --number 97`、
-  `cnb issues get --number 68`。两个参数相互独立，可只传其中一个。
 - **默认摘要省流**：默认精简输出，加 `--verbose` 输出完整数据。
 - **多行用单引号**：bash 参数为多行文本时用单引号，降低命令注入风险。
-- **提及不召唤**：评论中直接 @npc 会召唤 npc；仅提及不召唤时，用反引号包裹 `@npc`。
-  NPC 的触发条件见 `cnb-npc-search`，单独 `@仓库名` 不会触发。
 
-## 取正文里的图片与附件
+## issue/pr 访问说明
 
-评论正文里的图片、附件 URL，一律用 `get-imgs` / `get-files` 取回，URL 从 `list-comments` 原文取：
+编号同 `--repo` 一样默认从环境变量识别，无需传递；用 `--repo <组织/仓库>`、`--number <编号>` 可覆盖。
 
-- **参数取 URL 的尾段，且必须含数字 ID 段**：图片取 `/imgs/<issues|pulls>/` 之后的**完整尾段**，
-  附件取 `/files/<issues|pulls>/` 之后的完整尾段；尾段首位的数字 ID 段不能省，漏掉会返回 `404 Resource not found`：
-  - 原文 `.../-/imgs/issues/2101868753481326592/Lma2nfHjnchalMtHZcq4OA/6d7ab033-xxxx.png`
-  - 正确 `2101868753481326592/Lma2nfHjnchalMtHZcq4OA/6d7ab033-xxxx.png` ✅
-  - 漏 ID `Lma2nfHjnchalMtHZcq4OA/6d7ab033-xxxx.png` ❌ `404`
-- **CLI 内置鉴权**：手写 `Authorization: Bearer` 或 `token` 都不被识别，只会拿到 400
+例如：
+- `cnb issues get --number 66`
+- `cnb pulls get --repo x/y --number 99`
+
+## 图片与附件解析
+
+正文里图片、附件的下载地址形如：
+
+- 图片 `.../-/imgs/<issues|pulls>/<数字 ID>/<key>/<文件名>`
+- 附件 `.../-/files/<issues|pulls>/<数字 ID>/<key>/<文件名>`
+
+`图片路径/附件路径`=`<数字 ID>/<key>/<文件名>`，即 `参数` 取 `<issues|pulls>/` 之后的**完整尾段**。
 
 ## 常用链接
 

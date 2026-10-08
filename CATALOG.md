@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**317** · 专家：**429** · 官方插件：**60** · 团队插件：**31**
+- 技能包：**295** · 连接器：**316** · 专家：**429** · 官方插件：**60** · 团队插件：**31**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-10-08
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-10-09
 
 ---
 ## 目录
@@ -576,7 +576,7 @@
 | [`sensors-data-cli`](./connectors/sensors-data-cli/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`sesunfox-gateway`](./connectors/sesunfox-gateway/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`CLIENT_SECRET` |
 | [`shanglv-mcp-gateway`](./connectors/shanglv-mcp-gateway/) | 企业级 MCP 授权网关技能 - 聚合财务发票查询与银行账户交易数据（客户/账户/余额/交易/对账单/回单/小时余额），统一走 Keycloak OAuth 2.1 + PKCE… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
-| [`shangyitong`](./connectors/shangyitong/) | VZOOM商易通-企业信息查询技能 - 工商、股权人员、上市、司法风险 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SHANGYITONG_MCP_TOKEN` |
+| [`shangyitong`](./connectors/shangyitong/) | VZOOM商易通-企业信息查询技能 - 工商信息、企业经营数据、财务指标、交易上下游、产业链画像、财务尽调、供应商筛查、供应链分析 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SHANGYITONG_MCP_TOKEN` |
 | [`shanlong-claw`](./connectors/shanlong-claw/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`sharecrm`](./connectors/sharecrm/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`shopee-market-intelligence`](./connectors/shopee-market-intelligence/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ACCESS_TOKEN` |
@@ -613,7 +613,7 @@
 | [`tencent-yaoxiang-bi`](./connectors/tencent-yaoxiang-bi/) | 「腾讯健康药箱 × 药企」数据洞察 skill（两个层面九大维度 · 三种模式）。承接用户给定的药品名称与时间范围，数据统一从药箱数据平台实时拉取，按「整体市场规模和药箱用户分析… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`tencentads`](./connectors/tencentads/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`textin-xparse`](./connectors/textin-xparse/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
-| [`thinkingai-ae-cli`](./connectors/thinkingai-ae-cli/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
+| [`thinkingai-agentic-engine`](./connectors/thinkingai-agentic-engine/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`tiktok`](./connectors/tiktok/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`timem-space`](./connectors/timem-space/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
 | [`tmeet`](./connectors/tmeet/) | 腾讯会议 CLI（tmeet）：OAuth 授权登录/登出/状态查询、会议管理（创建/更新/取消/查询/受邀者）、录制管理（列表/播放地址/智能纪要/转写/录制权限申请）、会议报… | 需要登录 / OAuth / 扫码授权 |
@@ -632,7 +632,6 @@
 | [`voko-guest`](./connectors/voko-guest/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`vox-teacher`](./connectors/vox-teacher/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`wanfang-literature-search-download-oauth`](./connectors/wanfang-literature-search-download-oauth/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`wangxiaobao`](./connectors/wangxiaobao/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`wavenote-audio`](./connectors/wavenote-audio/) | WaveNote 音频技能 - 查询录音、转写和总结，并在用户确认后发起转写任务 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`weaver-eteams-connector`](./connectors/weaver-eteams-connector/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`wecom`](./connectors/wecom/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |

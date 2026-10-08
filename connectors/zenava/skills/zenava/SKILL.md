@@ -1,7 +1,7 @@
 ---
 name: zenava
 description: Zenava（CtiCloud/Clink2）命令行连接器。通过 zenava 完成呼叫中心、工单、CRM、在线客服、智能体与知识库操作。凭证由连接配置流程写入 ~/.zenava/profile.json，AI 不应向用户索要 Token/Secret。
-version: 0.1.2
+version: 0.1.3
 author: Tinet
 ---
 
@@ -28,6 +28,8 @@ author: Tinet
 | `--no-redact` | 关闭手机号脱敏（确需明文须用户确认） |
 | `--verbose` | 打印 URL / TraceId（不含 token/sign/body） |
 | `--version` / `--help` | 版本 / 帮助 |
+
+`agent` / `aikb` 会把上表里的全局参数原样转给 taco。taco 根命令只接受 `--profile`。`--json`、`--dry-run`、`--verbose`、`--no-redact` 写在域名前或域名后都会失败，见 §3.5。
 
 成功常见形态：`result` 为 `"0"` / `"success"`；失败读 `error.message` / `description`。进程非 0 退出时一并呈现退出码与错误文本。
 
@@ -78,6 +80,22 @@ zenava agent --help          # 智能体（根级，非 callcenter agent）
 zenava aikb --help           # 智能知识库
 ```
 
+### 3.5 智能体 / 知识库（taco 转发）
+
+`zenava agent`、`zenava aikb` 不在本 CLI 内实现，参数原样转给 taco（`tinet-agent-cli`，随 zenava 安装）。taco 默认就是 JSON，不要再加 `--json`。
+
+| 不要这样 | 原因 | 这样写 |
+|---|---|---|
+| `zenava --json agent …` 或 `zenava agent --json …` | 转给 taco 后根命令没有 `--json`，退出码 2：`CLI_USAGE_ERROR`「命令参数不合法」。`--dry-run` / `--verbose` / `--no-redact` 同样 | `zenava agent …`、`zenava aikb …`。要指定环境只用 `--profile <name>` |
+| `zenava agent app get --app-id <id>` | 应用 ID 是位置参数，写成选项会「命令参数不合法」 | `zenava agent app get <app-id>` |
+| `zenava agent app delete …` | `agent app` 没有 `delete`。建出来的应用只能到控制台删 | 不要调用；告诉用户去控制台删除 |
+
+```bash
+zenava agent app list
+zenava agent app get <app-id>
+zenava aikb --help
+```
+
 > 完整命令树：`zenava --help`
 
 ## 4. 通用约定
@@ -90,7 +108,7 @@ zenava aikb --help           # 智能知识库
 | 任务类型 | `1` 预测外呼，`2` 自动外呼 |
 | 分页 | `start` 从 0，`limit` 最大 100（默认 10） |
 | 脱敏 | 默认脱敏；确需明文用户授权后 `--no-redact` |
-| 危险操作 | stop / delete 等：二次确认，必要时先 `--dry-run` |
+| 危险操作 | stop / delete 等：二次确认，必要时先 `--dry-run`。`agent app` 没有 delete，见 §3.5 |
 | 串行执行 | 禁止并发跑 CLI；先查后用（task-id、cno 等不得臆造） |
 | 禁止透传密钥 | 命令参数中不要带 Token / AccessKeySecret |
 
@@ -109,4 +127,5 @@ zenava aikb --help           # 智能知识库
 | 权限不足 / 4xx | 检查企业编号与 Token/AK 权限 |
 | 凭证缺失或无效 | 提示在连接设置更新或断开重连；**不要索要明文密钥** |
 | 未设置 currentProfile | `zenava profile use <name>` 或让用户走 WorkBuddy 连接流程 |
+| `agent` / `aikb` 报「命令参数不合法」或 `CLI_USAGE_ERROR`（exit 2） | 去掉 `--json` 等全局旗标；`app get` 改为位置参数；不要调用 `agent app delete`。见 §3.5 |
 

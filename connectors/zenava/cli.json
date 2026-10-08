@@ -21,11 +21,11 @@
   },
   "versionCheck": {
     "command": {
-      "darwin": "python -c \"from importlib.metadata import version; print(version('zenava'))\"",
-      "linux": "python -c \"from importlib.metadata import version; print(version('zenava'))\"",
-      "win32": "python -c \"from importlib.metadata import version; print(version('zenava'))\""
+      "darwin": "python -c \"from importlib.metadata import version; print(version('zenava'))\" 2>/dev/null || zenava --version",
+      "linux": "python -c \"from importlib.metadata import version; print(version('zenava'))\" 2>/dev/null || zenava --version",
+      "win32": "python -c \"from importlib.metadata import version; print(version('zenava'))\" 2>nul || zenava --version"
     },
-    "minVersion": "0.4.0",
+    "minVersion": "0.4.7",
     "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
   },
   "auth": {
