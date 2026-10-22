@@ -1,9 +1,9 @@
-# WeStock Tool - ETF 选基速查
+# WeStock Screener - ETF 选基速查
 
 > **定位**：本文档是 [SKILL.md](../SKILL.md) ETF 选基章节的 **L3 层补充材料**，收纳全部 ETF 主题池与排行指标速查表。命令用法和基本路由请参见 SKILL.md。
 >
 > **使用方式**：
-> - 完整且最新清单**必须**执行 `westock-tool label --asset etf --list` / `westock-tool ranking --list --asset etf`
+> - 完整且最新清单**必须**执行 `westock screen label --asset etf --list` / `westock screen ranking --list --asset etf`
 > - 本文档仅作离线快速对照，**示例性条目**（不全）
 
 ---
@@ -24,7 +24,7 @@
 | 境外/特殊 | `t0`(可T+0)、`america`、`euro`、`japan`、`hk` |
 | 类型/策略 | `commodity`(商品型)、`bond`(债券型)、`currency`(货币型)、`strategy_div`(红利) |
 
-> 完整池清单：`westock-tool label --asset etf --list`
+> 完整池清单：`westock screen label --asset etf --list`
 
 ---
 
@@ -42,7 +42,7 @@
 | `amt_interval` | 成交额波动 | `EtfTurnoverAvgM` | ↓ | EtfTurnover/...AvgW/AvgM/AvgQ/AvgY |
 | `disc_interval` | 溢折率波动 | `EtfDiscAvgM` | ↓ | EtfDisc/...AvgW/AvgM/AvgQ/AvgY |
 
-> 完整指标清单：`westock-tool ranking --list --asset etf`
+> 完整指标清单：`westock screen ranking --list --asset etf`
 
 ---
 
@@ -50,23 +50,24 @@
 
 ```bash
 # 标签筛选（label）
-westock-tool label high_dividend --asset etf                   # 高股息 ETF
-westock-tool label low_valuation,high_roe --asset etf          # 多池并查
-westock-tool label size_100 --asset etf --limit 50 --offset 50 # 百亿基金分页
+westock screen label --type high_dividend --asset etf                   # 高股息 ETF
+westock screen label --type low_valuation,high_roe --asset etf          # 多池并查
+westock screen label --type size_100 --asset etf --limit 50 --offset 50 # 百亿基金分页
 
 # 横截面排行（ranking）
-westock-tool ranking size --asset etf --limit 20               # 规模榜 TOP20（默认 TotalAsset 降序）
-westock-tool ranking valuation --asset etf --orderby PB --asc       # 估值最低（按 PB 升序）
-westock-tool ranking valuation_pct --asset etf --orderby PE_TTM_PCT # 估值百分位最低（默认升序）
-westock-tool ranking qt_chg_interval --asset etf --orderby ChgPct20D # 近 20 日涨幅榜
-westock-tool ranking turn_interval --asset etf --orderby EtfTurnoverRAvgM # 月均换手率榜
-westock-tool ranking disc_interval --asset etf --orderby EtfDiscAvgW # 周均溢价榜
+westock screen ranking --type size --asset etf --limit 20               # 规模榜 TOP20（默认 TotalAsset 降序）
+westock screen ranking --type valuation --asset etf --orderby PB --asc       # 估值最低（按 PB 升序）
+westock screen ranking --type valuation_pct --asset etf --orderby PE_TTM_PCT # 估值百分位最低（默认升序）
+westock screen ranking --type qt_chg_interval --asset etf --orderby ChgPct20D # 近 20 日涨幅榜
+westock screen ranking --type turn_interval --asset etf --orderby EtfTurnoverRAvgM # 月均换手率榜
+westock screen ranking --type disc_interval --asset etf --orderby EtfDiscAvgW # 周均溢价榜
+
 ```
 
 ---
 
 ## 四、决策入口
 
-- 用户带"标签/主题"（如"高股息 / 千亿基金 / 科创板占比高"）→ `label ... --asset etf`
-- 用户带"排序/榜单"（如"规模最大 / 涨幅前 10 / 估值最低"）→ `ranking ... --asset etf`
-- 跨市场行情/单只 ETF 详情 → 改用 `westock-data etf detail/holdings/...`
+- 用户带"标签/主题"（如"高股息 / 千亿基金 / 科创板占比高"）→ `westock screen label ... --asset etf`
+- 用户带"排序/榜单"（如"规模最大 / 涨幅前 10 / 估值最低"）→ `westock screen ranking ... --asset etf`
+- 跨市场行情/单只 ETF 维度 → 改用 `westock etf profile/market/holdings/...`

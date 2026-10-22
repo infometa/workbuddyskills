@@ -1,6 +1,6 @@
-# WeStock Tool - AI 深度参考指南
+# WeStock Screener - AI 深度参考指南
 
-> **定位**：本文档提供选股工具的详细返回数据格式、分析模板，以及完整的策略/标签代码列表。命令列表和基本用法请参见 [SKILL.md](../SKILL.md)。
+> **定位**：本文档提供智能选股的详细返回数据格式、分析模板，以及完整的策略/标签代码列表。命令列表和基本用法请参见 [SKILL.md](../SKILL.md)。
 > 完整字段列表请参见 [fields-guide.md](./fields-guide.md)。
 
 ---
@@ -19,39 +19,6 @@
 ...
 ```
 
-### 原始 JSON（`--raw`）
-
-```json
-{
-  "code": 0,
-  "msg": "",
-  "data": {
-    "total": 156,
-    "returned": 20,
-    "items": [
-      {
-        "SecuCode": "sh600519",
-        "SecuName": "贵州茅台",
-        "ClosePrice": 1690.00,
-        "ChangePCT": 1.25,
-        "PE_TTM": 28.50,
-        "ROETTM": 32.15,
-        "TotalMV": 2123000000000,
-        "TurnoverRate": 0.35
-      }
-    ]
-  }
-}
-```
-
-**字段说明**：
-
-| 字段 | 说明 |
-|------|------|
-| `code` | 状态码，`0` 表示成功 |
-| `data.total` | 符合条件的股票总数 |
-| `data.returned` | 实际返回数量 |
-| `data.items` | 股票列表，始终包含 `SecuCode`/`SecuName`/`ClosePrice`/`ChangePCT`，动态包含表达式中的字段 |
 
 ### 港股/美股字段差异
 
@@ -65,19 +32,20 @@
 
 ```bash
 # 低PE（PE < 15）
-westock-tool filter "intersect([PE_TTM > 0, PE_TTM < 15])" --date 2026-03-12 --limit 20 --orderby PE_TTM --asc
+westock screen condition --expression "intersect([PE_TTM > 0, PE_TTM < 15])" --date 2026-03-12 --limit 20 --orderby PE_TTM --asc
 
 # 高股息（股息率 > 5%）
-westock-tool filter "DividendRatioTTM > 5" --date 2026-03-12 --limit 20 --orderby DividendRatioTTM --desc
+westock screen condition --expression "DividendRatioTTM > 5" --date 2026-03-12 --limit 20 --orderby DividendRatioTTM --desc
 
-# PEG策略（净利润增速 > 25%，PEG < 1）
-westock-tool filter "intersect([PE_TTM > 0, NetProfitGrowRate > 25, PE_TTM / NetProfitGrowRate < 1])" --date 2026-03-12 --limit 20
+# PEG策略（PEG < 1，即 PE_TTM / 净利润增速 < 1）
+westock screen condition --preset PEG --date 2026-03-12 --limit 20
 
 # 低估值高ROE（PE < 15，ROE > 15%）
-westock-tool filter "intersect([PE_TTM > 0, PE_TTM < 15, ROETTM > 15])" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
+westock screen condition --expression "intersect([PE_TTM > 0, PE_TTM < 15, ROETTM > 15])" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
 
 # 破净股（PB < 1）
-westock-tool filter "intersect([PB > 0, PB < 1])" --date 2026-03-12 --limit 20 --orderby PB --asc
+westock screen condition --expression "intersect([PB > 0, PB < 1])" --date 2026-03-12 --limit 20 --orderby PB --asc
+
 ```
 
 **分析要点**：PE_TTM 分布（中位数/均值）、ROETTM 排名、结合市值和行业分类汇总
@@ -86,22 +54,23 @@ westock-tool filter "intersect([PB > 0, PB < 1])" --date 2026-03-12 --limit 20 -
 
 ```bash
 # 均线多头排列（MA5 > MA10 > MA20 > MA60）
-westock-tool filter "intersect([MA_5 > MA_10, MA_10 > MA_20, MA_20 > MA_60])" --date 2026-03-12 --limit 20
+westock screen condition --expression "intersect([MA_5 > MA_10, MA_10 > MA_20, MA_20 > MA_60])" --date 2026-03-12 --limit 20
 
 # MACD金叉（DIF > DEA）
-westock-tool filter "DIF > DEA" --date 2026-03-12 --limit 20
+westock screen condition --expression "DIF > DEA" --date 2026-03-12 --limit 20
 
 # KDJ超卖（KDJ_J < 15）
-westock-tool filter "KDJ_J < 15" --date 2026-03-12 --limit 20 --orderby KDJ_J --asc
+westock screen condition --expression "KDJ_J < 15" --date 2026-03-12 --limit 20 --orderby KDJ_J --asc
 
 # RSI超卖（RSI_6 < 25）
-westock-tool filter "RSI_6 < 25" --date 2026-03-12 --limit 20 --orderby RSI_6 --asc
+westock screen condition --expression "RSI_6 < 25" --date 2026-03-12 --limit 20 --orderby RSI_6 --asc
 
 # 神奇九转绿9信号
-westock-tool filter "NineTurn_9 = 1" --date 2026-03-12 --limit 20
+westock screen condition --expression "NineTurn_9 = 1" --date 2026-03-12 --limit 20
 
 # 布林带突破上轨
-westock-tool filter "ClosePrice > BollingerUpper" --date 2026-03-12 --limit 20
+westock screen condition --expression "ClosePrice > BollingerUpper" --date 2026-03-12 --limit 20
+
 ```
 
 **分析要点**：均线间距（趋势强度）、配合换手率（TurnoverRate）验证、配合 MACD 交叉确认
@@ -110,16 +79,17 @@ westock-tool filter "ClosePrice > BollingerUpper" --date 2026-03-12 --limit 20
 
 ```bash
 # 主力净流入 > 1亿
-westock-tool filter "MainNetFlow > 100000000" --date 2026-03-12 --limit 20 --orderby MainNetFlow --desc
+westock screen condition --expression "MainNetFlow > 100000000" --date 2026-03-12 --limit 20 --orderby MainNetFlow --desc
 
 # 主力持续流入（5/10/20日均为正）
-westock-tool filter "intersect([MainNetFlow5D > 0, MainNetFlow10D > 0, MainNetFlow20D > 0])" --date 2026-03-12 --limit 20
+westock screen condition --expression "intersect([MainNetFlow5D > 0, MainNetFlow10D > 0, MainNetFlow20D > 0])" --date 2026-03-12 --limit 20
 
 # 主力5日流入 > 5亿
-westock-tool filter "MainNetFlow5D > 500000000" --date 2026-03-12 --limit 20 --orderby MainNetFlow5D --desc
+westock screen condition --expression "MainNetFlow5D > 500000000" --date 2026-03-12 --limit 20 --orderby MainNetFlow5D --desc
 
 # 高换手率（> 5%）
-westock-tool filter "TurnoverRate > 5" --date 2026-03-12 --limit 20 --orderby TurnoverRate --desc
+westock screen condition --expression "TurnoverRate > 5" --date 2026-03-12 --limit 20 --orderby TurnoverRate --desc
+
 ```
 
 **分析要点**：资金流入持续性、配合涨跌幅判断是否拉升期、筛选"主力流入但涨幅不大"的潜力股
@@ -128,72 +98,76 @@ westock-tool filter "TurnoverRate > 5" --date 2026-03-12 --limit 20 --orderby Tu
 
 ```bash
 # 高ROE（ROE > 20%）
-westock-tool filter "ROETTM > 20" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
+westock screen condition --expression "ROETTM > 20" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
 
 # 高成长（营收增速 > 30%，净利润增速 > 40%）
-westock-tool filter "intersect([RevenueGrowRate > 30, NetProfitGrowRate > 40])" --date 2026-03-12 --limit 20 --orderby NetProfitGrowRate --desc
+westock screen condition --expression "intersect([TORGrowRate > 30, NPParentCompanyYOY > 40])" --date 2026-03-12 --limit 20 --orderby NPParentCompanyYOY --desc
 
 # 低负债（资产负债率 < 40%）
-westock-tool filter "DebtRatio < 40" --date 2026-03-12 --limit 20 --orderby DebtRatio --asc
+westock screen condition --expression "DebtAssetsRatio < 40" --date 2026-03-12 --limit 20 --orderby DebtAssetsRatio --asc
 
 # 正经营现金流
-westock-tool filter "OCFPS > 0" --date 2026-03-12 --limit 20
+westock screen condition --preset PositiveCashFlow --date 2026-03-12 --limit 20
 
 # 高ROE低负债（ROE > 15%，负债率 < 50%）
-westock-tool filter "intersect([ROETTM > 15, DebtRatio < 50])" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
+westock screen condition --expression "intersect([ROETTM > 15, DebtAssetsRatio < 50])" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
+
 ```
 
 ### 3.5 组合策略选股
 
 ```bash
 # 高股息+低估值（股息率 > 4%，PE < 12，PB < 1.5）
-westock-tool filter "intersect([DividendRatioTTM > 4, PE_TTM > 0, PE_TTM < 12, PB > 0, PB < 1.5])" --date 2026-03-12 --limit 20 --orderby DividendRatioTTM --desc
+westock screen condition --expression "intersect([DividendRatioTTM > 4, PE_TTM > 0, PE_TTM < 12, PB > 0, PB < 1.5])" --date 2026-03-12 --limit 20 --orderby DividendRatioTTM --desc
 
 # 白马成长（高ROE + 稳定增长）
-westock-tool filter "intersect([ROETTM > 15, RevenueGrowRate > 15, NetProfitGrowRate > 15])" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
+westock screen condition --expression "intersect([ROETTM > 15, TORGrowRate > 15, NPParentCompanyYOY > 15])" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
 
 # 困境反转（近期跌幅大但开始反弹）
-westock-tool filter "intersect([Chg20D < -20, Chg5D > 0, Chg5D < 10])" --date 2026-03-12 --limit 20 --orderby Chg5D --desc
+westock screen condition --expression "intersect([Chg20D < -20, Chg5D > 0, Chg5D < 10])" --date 2026-03-12 --limit 20 --orderby Chg5D --desc
 
 # 小盘价值（市值20-100亿，PE < 20）
-westock-tool filter "intersect([TotalMV > 2000000000, TotalMV < 10000000000, PE_TTM > 0, PE_TTM < 20])" --date 2026-03-12 --limit 20 --orderby PE_TTM --asc
+westock screen condition --expression "intersect([TotalMV > 2000000000, TotalMV < 10000000000, PE_TTM > 0, PE_TTM < 20])" --date 2026-03-12 --limit 20 --orderby PE_TTM --asc
 
 # 技术面+基本面组合（均线多头 + 低PE + 高ROE）
-westock-tool filter "intersect([MA_5 > MA_10, MA_10 > MA_20, PE_TTM > 0, PE_TTM < 25, ROETTM > 12])" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
+westock screen condition --expression "intersect([MA_5 > MA_10, MA_10 > MA_20, PE_TTM > 0, PE_TTM < 25, ROETTM > 12])" --date 2026-03-12 --limit 20 --orderby ROETTM --desc
 
-# 次新股高成长（上市1年内 + 高增长）
-westock-tool filter "intersect([ListDate > 20250317, RevenueGrowRate > 30])" --date 2026-03-12 --limit 20
+# 次新股高成长（近端次新股 + 成长能力排行）
+westock screen ranking --type fin_growth --within-label listeddate_3mons --limit 20
+
 ```
 
 ### 3.6 机构评级选股（港股/美股）
 
 ```bash
 # 港股高机构评级（买入评级 >= 8家）
-westock-tool filter "BuyRatingNum >= 8" --date 2026-03-12 --limit 20 --orderby BuyRatingNum --desc --market hk
+westock screen condition --expression "RatingBuyCnt > 7" --date 2026-03-12 --limit 20 --orderby RatingBuyCnt --desc --market hk
 
 # 港股目标价上行空间（> 30%）
-westock-tool filter "TargetPriceUpside > 30" --date 2026-03-12 --limit 20 --orderby TargetPriceUpside --desc --market hk
+westock screen condition --expression "TargetPriceAvg > ClosePrice * 1.3" --date 2026-03-12 --limit 20 --orderby TargetPriceAvg --desc --market hk
 
 # 美股高机构评级
-westock-tool filter "BuyRatingNum >= 8" --date 2026-03-12 --limit 20 --orderby BuyRatingNum --desc --market us
+westock screen condition --expression "RatingBuyCnt > 7" --date 2026-03-12 --limit 20 --orderby RatingBuyCnt --desc --market us
 
 # 港股低估值 + 高评级
-westock-tool filter "intersect([PeTTM > 0, PeTTM < 15, BuyRatingNum >= 5])" --date 2026-03-12 --limit 20 --market hk
+westock screen condition --expression "intersect([PeTTM > 0, PeTTM < 15, RatingBuyCnt > 4])" --date 2026-03-12 --limit 20 --market hk
+
 ```
 
 ### 3.7 按板块筛选
 
-使用 `--universe` 限定选股范围，板块代码通过 `westock-data search <关键词> sector` 获取（去掉 `pt` 前缀）：
+使用 `--sector` 限定选股范围，板块代码通过 `westock search <关键词> --type sector` 获取（直接用 `search` 返回的原始代码，含 `pt` 前缀）：
 
 ```bash
 # 在华为概念板块中筛选低PE股票
-westock-tool filter "intersect([PE_TTM > 0, PE_TTM < 25])" --date 2026-03-12 --limit 20 --orderby PE_TTM --asc --universe 02021291
+westock screen condition --expression "intersect([PE_TTM > 0, PE_TTM < 25])" --date 2026-03-12 --limit 20 --orderby PE_TTM --asc --sector pt02021291
 
 # 在人工智能板块中筛选高ROE股票
-westock-tool filter "ROETTM > 15" --date 2026-03-12 --limit 20 --orderby ROETTM --desc --universe 02003800
+westock screen condition --expression "ROETTM > 15" --date 2026-03-12 --limit 20 --orderby ROETTM --desc --sector pt02003800
+
 ```
 
-**常见板块代码**（可通过 westock-data 搜索获取最新代码）：
+**常见板块代码**（可通过 westock 搜索获取最新代码）：
 
 | 板块名称 | 代码 | 板块名称 | 代码 |
 |---------|------|---------|------|
@@ -208,13 +182,14 @@ westock-tool filter "ROETTM > 15" --date 2026-03-12 --limit 20 --orderby ROETTM 
 
 ```bash
 # 港股高股息低估值（股息率 > 6%，PE < 8，PB < 0.8）
-westock-tool filter "intersect([PeTTM > 0, PeTTM < 8, DivTTM > 6, PbLF > 0, PbLF < 0.8])" --date 2026-03-12 --limit 20 --orderby DivTTM --desc --market hk
+westock screen condition --expression "intersect([PeTTM > 0, PeTTM < 8, DivTTM > 6, PbLF > 0, PbLF < 0.8])" --date 2026-03-12 --limit 20 --orderby DivTTM --desc --market hk
 
 # 港股低估值蓝筹（PE < 10，市值 > 500亿）
-westock-tool filter "intersect([PeTTM > 0, PeTTM < 10, TotalMV > 500])" --date 2026-03-12 --limit 20 --orderby TotalMV --desc --market hk
+westock screen condition --expression "intersect([PeTTM > 0, PeTTM < 10, TotalMV > 500])" --date 2026-03-12 --limit 20 --orderby TotalMV --desc --market hk
 
 # 美股低估值高股息
-westock-tool filter "intersect([PeTTM > 0, PeTTM < 15, DivTTM > 3])" --date 2026-03-12 --limit 20 --orderby DivTTM --desc --market us
+westock screen condition --expression "intersect([PeTTM > 0, PeTTM < 15, DivTTM > 3])" --date 2026-03-12 --limit 20 --orderby DivTTM --desc --market us
+
 ```
 
 ### 3.9 标签选股
@@ -223,34 +198,35 @@ westock-tool filter "intersect([PeTTM > 0, PeTTM < 15, DivTTM > 3])" --date 2026
 
 ```bash
 # 查看央企公司
-westock-tool label shareholder_central_state --date 2026-04-10
+westock screen label --type shareholder_central_state --date 2026-04-10
 
 # 查看国企 + 央企（多标签）
-westock-tool label shareholder_central_state,shareholder_local_state --date 2026-04-10 --limit 50
+westock screen label --type shareholder_central_state,shareholder_local_state --date 2026-04-10 --limit 50
 
 # 查看大基金持仓
-westock-tool label shareholder_nicf_phase1,shareholder_nicf_phase2,shareholder_nicf_phase3 --date 2026-04-10
+westock screen label --type shareholder_nicf_phase1,shareholder_nicf_phase2,shareholder_nicf_phase3 --date 2026-04-10
 
 # 查看破净股
-westock-tool label valuation_lowpb --date 2026-04-10
+westock screen label --type valuation_lowpb --date 2026-04-10
 
 # 查看高ROE股票
-westock-tool label fin_high_roettm --date 2026-04-10 --limit 50
+westock screen label --type fin_high_roettm --date 2026-04-10 --limit 50
 
 # 查看业绩预增股
-westock-tool label fin_forecast_inc --date 2026-04-10
+westock screen label --type fin_forecast_inc --date 2026-04-10
 
 # 查看千元股
-westock-tool label price_up1000 --date 2026-04-10
+westock screen label --type price_up1000 --date 2026-04-10
 
 # 查看超大盘股
-westock-tool label marketcap_super_big --date 2026-04-10
+westock screen label --type marketcap_super_big --date 2026-04-10
 
 # 查看近期次新股
-westock-tool label listeddate_3mons --date 2026-04-10
+westock screen label --type listeddate_3mons --date 2026-04-10
 
 # 查看 ST 股票（风险提示）
-westock-tool label risk_st --date 2026-04-10
+westock screen label --type risk_st --date 2026-04-10
+
 ```
 
 **分析要点**：
@@ -263,9 +239,10 @@ westock-tool label risk_st --date 2026-04-10
 
 ```bash
 # 先用标签找出央企股票，再用 filter 在其中筛选低估值高股息
-westock-tool label shareholder_central_state --date 2026-04-10 --limit 100
+westock screen label --type shareholder_central_state --date 2026-04-10 --limit 100
 # → 从结果中提取股票代码列表
-# → westock-data quote <央企代码列表>  # 查看行情进一步筛选
+# → westock quote <央企代码列表>  # 查看行情进一步筛选
+
 ```
 
 ### 3.9.1 ETF 选基（label --asset etf）
@@ -274,18 +251,19 @@ westock-tool label shareholder_central_state --date 2026-04-10 --limit 100
 
 ```bash
 # 列出全部 ETF 主题池
-westock-tool label --asset etf --list
-westock-tool label --asset etf --list 行情表现             # 按分组筛选
+westock screen label --asset etf --list
+westock screen label --asset etf --list 行情表现             # 按分组筛选
 
 # 单池查询
-westock-tool label high_dividend --asset etf               # 高股息 ETF
-westock-tool label size_1000 --asset etf                   # 千亿规模 ETF
-westock-tool label size_100 --asset etf --limit 50         # 百亿基金（分页）
-westock-tool label issue_in_3m --asset etf                 # 近 3 月新发 ETF
+westock screen label --type high_dividend --asset etf               # 高股息 ETF
+westock screen label --type size_1000 --asset etf                   # 千亿规模 ETF
+westock screen label --type size_100 --asset etf --limit 50         # 百亿基金（分页）
+westock screen label --type issue_in_3m --asset etf                 # 近 3 月新发 ETF
 
 # 多池并查（每个池分别返回，非交集）
-westock-tool label low_valuation,high_roe --asset etf
-westock-tool label commodity,bond,currency --asset etf     # 商品/债券/货币型
+westock screen label --type low_valuation,high_roe --asset etf
+westock screen label --type commodity,bond,currency --asset etf     # 商品/债券/货币型
+
 ```
 
 **主题池分类速查**：
@@ -300,8 +278,8 @@ westock-tool label commodity,bond,currency --asset etf     # 商品/债券/货�
 | 类型/策略 | `commodity`(商品型)、`bond`(债券型)、`currency`(货币型)、`strategy_div`(红利) |
 
 > ⚠️ **数据职责边界**：
-> - 用户带"标签/主题"（如"高股息 / 千亿基金 / 科创板占比高"）→ 走 `label --asset etf`（横截面筛选）
-> - 用户给具体 ETF 代码（如"沪深300ETF详情"）→ 走 `westock-data etf detail`（按代码精查）
+> - 用户带"标签/主题"（如"高股息 / 千亿基金 / 科创板占比高"）→ 走 `westock screen label --asset etf`（横截面筛选）
+> - 用户给具体 ETF 代码（如"沪深300ETF详情"）→ 走 `westock etf profile` / `westock etf overview` 等子命令
 >
 > ⚠️ **限制**：ETF 选基仅支持单日查询（不支持 `--start/--end` 区间）。
 
@@ -311,40 +289,41 @@ westock-tool label commodity,bond,currency --asset etf     # 商品/债券/货�
 
 ```bash
 # 预计解禁三月内
-westock-tool event shareunlock_next_90
+westock screen event --type shareunlock_next_90 
 
 # 实际解禁公告后
-westock-tool event shareunlock_incoming
+westock screen event --type shareunlock_incoming 
 
 # 董监高变动
-westock-tool event manager_change
+westock screen event --type manager_change 
 
 # 董监高增减持
-westock-tool event manager_sharechg
+westock screen event --type manager_sharechg 
 
 # 计划减持未实施
-westock-tool event manager_shareplan_sell_incoming
+westock screen event --type manager_shareplan_sell_incoming 
 
 # 回购一月内
-westock-tool event buyback
+westock screen event --type buyback 
 
 # 大宗交易一月内
-westock-tool event block_past_30
+westock screen event --type block_past_30 
 
 # 龙虎榜上榜统计两周内
-westock-tool event longhu_statis_past_15
+westock screen event --type longhu_statis_past_15 
 
 # 将加入重要指数
-westock-tool event index_add_incoming
+westock screen event --type index_add_incoming 
 
 # 重大资产重组
-westock-tool event regroup_unclosed
+westock screen event --type regroup_unclosed 
 
 # 分红预案公告后一月
-westock-tool event dividend_plan
+westock screen event --type dividend_plan 
 
 # 业绩预约一月内披露
-westock-tool event earnings_schedule
+westock screen event --type earnings_schedule 
+
 ```
 
 **分析要点**：
@@ -355,86 +334,93 @@ westock-tool event earnings_schedule
 
 ```bash
 # 先用事件找出即将限售解禁的股票，再分析基本面
-westock-tool event shareunlock_next_90
+westock screen event --type shareunlock_next_90 
 # → 从结果中提取股票代码列表
-# → westock-data quote <解禁股代码列表>  # 查看行情进一步筛选
+# → westock quote <解禁股代码列表>  # 查看行情进一步筛选
+
 ```
 # → 从结果中提取股票代码列表
-# → westock-data quote <解禁股代码列表>  # 查看行情进一步筛选
+# → westock quote <解禁股代码列表>  # 查看行情进一步筛选
 ```
 
 ### 3.11 排行选股（ranking）
 
-排行选股是**按指标排序选股**的统一入口，支持**五类指标源**（涨跌停 / 财务 / 评分 / 两融 / 资金流入），核心特色是可在板块、标签、策略、事件结果内做**二次排序**。
+排行选股是**按指标排序选股**的统一入口，支持**六类指标源**（涨跌停 / 财务 / 评分 / 两融 / 资金流入 / 北向活跃），核心特色是可在板块、标签、策略、事件结果内做**二次排序**（北向活跃榜单除外，为固定 Top20）。
 
 ```bash
 # 查看所有可用指标
-westock-tool ranking --list
+westock screen ranking --list
 
 # ── 评分排行（score 源） ──
-westock-tool ranking CompScore --limit 10              # 综合评分 TOP10
-westock-tool ranking CapScore --limit 20               # 资金评分 TOP20
-westock-tool ranking RiskScore --limit 15              # 风险评分排行
-westock-tool ranking CompScore --type weekly           # 评分周变动排行
-westock-tool ranking CompScore --type monthly          # 评分月变动排行
+westock screen ranking --type CompScore --limit 10              # 综合评分 TOP10
+westock screen ranking --type CapScore --limit 20               # 资金评分 TOP20
+westock screen ranking --type RiskScore --limit 15              # 风险评分排行
+westock screen ranking --type CompScore --period weekly           # 评分周变动排行
+westock screen ranking --type CompScore --period monthly          # 评分月变动排行
 
 # ── 涨跌停排行（market 源） ──
-westock-tool ranking limitup_days                      # 连续涨停天数排行
-westock-tool ranking limitup_seal_volume               # 涨停封单量排行
-westock-tool ranking limitdn_days                      # 连续跌停天数排行
-westock-tool ranking limitdn_seal_volume               # 跌停封单量排行
+westock screen ranking --type limitup_days                      # 连续涨停天数排行
+westock screen ranking --type limitup_seal_volume               # 涨停封单量排行
+westock screen ranking --type limitdn_days                      # 连续跌停天数排行
+westock screen ranking --type limitdn_seal_volume               # 跌停封单量排行
 
 # ── 财务排行（financial 源） ──
-westock-tool ranking fin_valuation --limit 10          # 估值排行（默认升序，PE最低）
-westock-tool ranking fin_growth --limit 20             # 成长能力排行
-westock-tool ranking fin_profit                        # 盈利能力排行
-westock-tool ranking fin_pershare                      # 每股指标排行
-westock-tool ranking fin_cash_size                     # 现金流规模排行
+westock screen ranking --type fin_valuation --limit 10          # 估值排行（默认升序，PE最低）
+westock screen ranking --type fin_growth --limit 20             # 成长能力排行
+westock screen ranking --type fin_profit                        # 盈利能力排行
+westock screen ranking --type fin_pershare                      # 每股指标排行
+westock screen ranking --type fin_cash_size                     # 现金流规模排行
 
 # ── 两融排行（margin 源） ──
-westock-tool ranking margin_balance --limit 20         # 两融余额最多 TOP20
-westock-tool ranking margin_chg_d                      # 两融日加仓榜（--asc 看日减仓榜）
-westock-tool ranking margin_chg_w                      # 两融周加仓榜
-westock-tool ranking margin_chg_m                      # 两融月加仓榜
-westock-tool ranking margin_chg_q                      # 两融季加仓榜
-westock-tool ranking margin_chg_y                      # 两融年加仓榜
-westock-tool ranking margin_in_days --min-MtInDays 5   # 两融连续扩大≥5天
-westock-tool ranking margin_out_days                   # 两融连续缩小天数排行
+westock screen ranking --type margin_balance --limit 20         # 两融余额最多 TOP20
+westock screen ranking --type margin_chg_d                      # 两融日加仓榜（--asc 看日减仓榜）
+westock screen ranking --type margin_chg_w                      # 两融周加仓榜
+westock screen ranking --type margin_chg_m                      # 两融月加仓榜
+westock screen ranking --type margin_chg_q                      # 两融季加仓榜
+westock screen ranking --type margin_chg_y                      # 两融年加仓榜
+westock screen ranking --type margin_in_days --min-MtInDays 5   # 两融连续扩大≥5天
+westock screen ranking --type margin_out_days                   # 两融连续缩小天数排行
 
 # ── 资金流入排行（capital 源） ──
-westock-tool ranking cap_main_net --limit 20           # 主力净流入榜（--asc 看主力净流出榜）
-westock-tool ranking cap_retail_net --limit 20         # 散户净流入榜
-westock-tool ranking cap_main_5d --limit 20            # 主力 5 日合计净流入榜
-westock-tool ranking cap_in_days --min-MainInDays 3    # 主力连续净流入≥3天
-westock-tool ranking cap_out_days                      # 主力连续净流出天数排行
+westock screen ranking --type cap_main_net --limit 20           # 主力净流入榜（--asc 看主力净流出榜）
+westock screen ranking --type cap_retail_net --limit 20         # 散户净流入榜
+westock screen ranking --type cap_main_5d --limit 20            # 主力 5 日合计净流入榜
+westock screen ranking --type cap_in_days --min-MainInDays 3    # 主力连续净流入≥3天
+westock screen ranking --type cap_out_days                      # 主力连续净流出天数排行
+
+# ── 北向活跃排行（north 源，固定 Top20，勿加 --limit） ──
+westock screen ranking --type north_active_d                    # 近1周按日成交活跃股
+westock screen ranking --type north_active_m                    # 近半年按月成交活跃股
+westock screen ranking --type north_appear_w                    # 周上榜次数（AppearanceCnt 降序）
 
 # ── 范围限定（核心特色） ──
-westock-tool ranking CompScore --within-label shareholder_central_state --limit 10  # 央企里评分最高
-westock-tool ranking fin_valuation --within-strategy macd_golden                    # MACD金叉中估值最低
-westock-tool ranking CompScore --within-event shareunlock_next_90                   # 限售解禁股评分排行
-westock-tool ranking fin_valuation --universe 11010001                              # 半导体板块估值排行
-westock-tool ranking margin_chg_d --universe 11010001 --limit 10                    # 半导体板块两融日加仓最多
-westock-tool ranking cap_main_5d --within-label shareholder_central_state           # 央企里主力 5 日累计加仓最多
+westock screen ranking --type CompScore --within-label shareholder_central_state --limit 10  # 央企里评分最高
+westock screen ranking --type fin_valuation --within-strategy macd_golden                    # MACD金叉中估值最低
+westock screen ranking --type CompScore --within-event shareunlock_next_90                   # 限售解禁股评分排行
+westock screen ranking --type fin_valuation --sector pt11010001                              # 半导体板块估值排行
+westock screen ranking --type margin_chg_d --sector pt11010001 --limit 10                    # 半导体板块两融日加仓最多
+westock screen ranking --type cap_main_5d --within-label shareholder_central_state           # 央企里主力 5 日累计加仓最多
 
 # ── 阈值筛选 ──
-westock-tool ranking CapScore --min-CompScore 70 --limit 10   # 综合评分≥70按资金评分排序
+westock screen ranking --type CapScore --min-CompScore 70 --limit 10   # 综合评分≥70按资金评分排序
 
 # ── 历史日期 / 排序方向 / 分页 ──
-westock-tool ranking CompScore --date 2026-04-20
-westock-tool ranking CompScore --asc                   # 评分最低
-westock-tool ranking limitup_days --limit 50 --offset 20
+westock screen ranking --type CompScore --date 2026-04-20
+westock screen ranking --type CompScore --asc                   # 评分最低
+westock screen ranking --type limitup_days --limit 50 --offset 20
+
 ```
 
 **核心参数**：
 
 | 参数 | 说明 |
 |------|------|
-| `<指标>` | 位置参数，支持 30 个指标：涨跌停（`limitup_*`/`limitdn_*`，4 个）、财务（`fin_*`，8 个）、评分（`CompScore`/`CapScore`/`FunmScore`/`RiskScore`/`TecScore`，5 个）、两融（`margin_*`，8 个）、资金流入（`cap_*`，5 个） |
-| `--type` | 评分类型：`cur`(默认) / `weekly` / `monthly`，仅 score 指标有效 |
+| `--type <指标>` | **必填**，排行指标（共 **36 个**）：涨跌停（`limitup_*`/`limitdn_*`，4 个）、财务（`fin_*`，8 个）、评分（`CompScore`/`CapScore`/`FunmScore`/`RiskScore`/`TecScore`，5 个）、两融（`margin_*`，8 个）、资金流入（`cap_*`，5 个）、**北向活跃**（`north_*`，6 个，固定 Top20，不支持 `--limit`/`--asc`/`--within-*`） |
+| `--period` | 评分类型：`cur`(默认) / `weekly` / `monthly`，仅 score 指标有效 |
 | `--within-label` | 限定在指定标签内排行（如 `shareholder_central_state`） |
 | `--within-strategy` | 限定在指定策略内排行（如 `macd_golden`） |
 | `--within-event` | 限定在指定事件内排行（如 `shareunlock_next_90`） |
-| `--universe` | 限定在板块内排行（板块代码） |
+| `--sector` | 限定在板块内排行（板块代码） |
 | `--min-<字段> 值` | 阈值筛选（如 `--min-MtInDays 5` 两融连续扩大≥5天） |
 | `--asc` | 升序（默认降序；估值类默认升序）。变动类指标支持 `--asc` 看反向（如 `cap_main_net --asc` 看主力净流出榜） |
 | `--date` | 查询日期，默认今天 |
@@ -490,22 +476,23 @@ westock-tool ranking limitup_days --limit 50 --offset 20
 
 ```bash
 # 先用排行选股找出综合评分最高的股票，再查看个股详情
-westock-tool ranking CompScore --limit 5
+westock screen ranking --type CompScore --limit 5
 # → 从结果中提取股票代码
-# → westock-data score sh600519       # 查看评分详情及变动
-# → westock-data quote sh600519       # 查看行情
+# → westock score sh600519       # 查看评分详情及变动
+# → westock quote sh600519       # 查看行情
 
 # 先找出连续涨停的股票，再查看个股详情
-westock-tool ranking limitup_days --limit 10
-# → westock-data quote <涨停股代码列表>  # 查看行情
+westock screen ranking --type limitup_days --limit 10
+# → westock quote <涨停股代码列表>  # 查看行情
 
 # 先找两融加仓最多的股票，再查融资融券明细
-westock-tool ranking margin_chg_d --limit 10
-# → westock-data flow margin sh600519   # 查看个股两融详情
+westock screen ranking --type margin_chg_d --limit 10
+# → westock fund margin sh600519   # 查看个股两融详情
 
 # 先找主力 5 日加仓最多的股票，再查资金流向时间序列
-westock-tool ranking cap_main_5d --limit 10
-# → westock-data fundhold sh600519 --market hs --start 2026-04-15 --end 2026-04-20  # 查看时间序列
+westock screen ranking --type cap_main_5d --limit 10
+# → westock fund flow sh600519 --start 2026-04-15 --end 2026-04-20  # 查看资金流向时间序列
+
 ```
 
 ### 3.11.1 ETF 排行选基（ranking --asset etf）
@@ -514,19 +501,20 @@ westock-tool ranking cap_main_5d --limit 10
 
 ```bash
 # 列出全部 ETF 排行指标
-westock-tool ranking --asset etf --list
+westock screen ranking --asset etf --list
 
 # 规模榜
-westock-tool ranking size --asset etf --limit 20                 # 默认 TotalAsset 降序
+westock screen ranking --type size --asset etf --limit 20                 # 默认 TotalAsset 降序
 
 # 估值榜（--orderby 切换字段，--asc 覆盖默认方向）
-westock-tool ranking valuation --asset etf --orderby PB --asc         # 按 PB 升序（最低估值）
-westock-tool ranking valuation_pct --asset etf --orderby PE_TTM_PCT   # PE 历史百分位最低（默认升序）
+westock screen ranking --type valuation --asset etf --orderby PB --asc         # 按 PB 升序（最低估值）
+westock screen ranking --type valuation_pct --asset etf --orderby PE_TTM_PCT   # PE 历史百分位最低（默认升序）
 
 # 区间表现
-westock-tool ranking qt_chg_interval --asset etf --orderby ChgPct20D --limit 10  # 近 20 日涨幅榜
-westock-tool ranking turn_interval --asset etf --orderby EtfTurnoverRAvgM        # 月均换手率榜
-westock-tool ranking disc_interval --asset etf --orderby EtfDiscAvgW             # 周均溢价榜
+westock screen ranking --type qt_chg_interval --asset etf --orderby ChgPct20D --limit 10  # 近 20 日涨幅榜
+westock screen ranking --type turn_interval --asset etf --orderby EtfTurnoverRAvgM        # 月均换手率榜
+westock screen ranking --type disc_interval --asset etf --orderby EtfDiscAvgW             # 周均溢价榜
+
 ```
 
 **ETF 排行指标速查**：
@@ -545,15 +533,15 @@ westock-tool ranking disc_interval --asset etf --orderby EtfDiscAvgW            
 
 | 参数 | 说明 |
 |------|------|
-| `<指标>` | ETF 排行指标之一 |
+| `--type <指标>` | ETF 排行指标之一 |
 | `--asset etf` | **必填**，切换为 ETF 维度（不传则走股票排行） |
 | `--orderby <字段>` | 覆盖默认排序字段（如同一个 valuation 指标可按 PB/PS/DivYield 切换） |
 | `--asc` | 覆盖默认方向 |
 | `--date` / `--limit` / `--offset` / `--list` | 同股票排行 |
 
 > ⚠️ **数据职责边界**：
-> - 用户问"ETF 规模最大/估值最低/涨幅最高"等**横截面排行** → 走 `ranking --asset etf`
-> - 用户给具体 ETF 代码问详情 → 走 `westock-data etf detail`（按代码精查）
+> - 用户问"ETF 规模最大/估值最低/涨幅最高"等**横截面排行** → 走 `westock screen ranking --asset etf`
+> - 用户给具体 ETF 代码问详情 → 走 `westock etf profile` / `westock etf overview` 等子命令
 >
 > ⚠️ **限制**：ETF 排行不支持 `--within-label/--within-strategy/--within-event` 范围限定（这些仅作用于股票池）。
 
@@ -561,8 +549,8 @@ westock-tool ranking disc_interval --asset etf --orderby EtfDiscAvgW            
 
 ## 四、预设选股函数完整列表
 
-> `filter --preset` 是 filter 命令的快捷方式，用预设条件表达式筛选，输出含指标列的 Markdown 表格。
-> 与 `strategy` 命令的区别：strategy 输出仅含 code/name 的表格，preset 输出含指标列的表格。
+> `westock screen condition --preset` 是 filter 命令的快捷方式，用预设条件表达式筛选，输出含指标列的 Markdown 表格。
+> 与 `westock screen strategy` 命令的区别：strategy 输出仅含 code/name 的表格，preset 输出含指标列的表格。
 
 #### 估值分析类
 
@@ -617,7 +605,7 @@ westock-tool ranking disc_interval --asset etf --orderby EtfDiscAvgW            
 | `SmallCapValue` | 小盘价值(20-100亿市值) | - |
 | `TechFundamentalCombo` | 技术面+基本面组合 | - |
 
-> ⚠️ 预设函数的参数均为内置默认值，不支持通过 CLI 传入自定义参数。如需自定义条件，请使用 `filter` 表达式语法手写条件。
+> ⚠️ 预设函数的参数均为内置默认值，不支持通过 CLI 传入自定义参数。如需自定义条件，请使用 `westock screen condition` 表达式语法手写条件。
 
 ---
 
@@ -686,6 +674,56 @@ westock-tool ranking disc_interval --asset etf --orderby EtfDiscAvgW            
 | 资金面 | `institution_chasing` | 机构接盘 |
 | 资金面 | `abnormal_trade_at_dayend` | 尾盘掘金 |
 | 资金面 | `margin_trade` | 融资追涨 |
+| 当日-新高新低 | `today_newhigh_in_month` | 今日创月内新高 |
+| 当日-新高新低 | `today_newhigh_in_halfyear` | 今日创半年新高 |
+| 当日-新高新低 | `today_newhigh_in_year` | 今日创一年新高 |
+| 当日-新高新低 | `today_newhigh_in_hist` | 今日创历史新高 |
+| 当日-新高新低 | `today_newlow_in_month` | 今日创月内新低 |
+| 当日-新高新低 | `today_newlow_in_halfyear` | 今日创半年新低 |
+| 当日-新高新低 | `today_newlow_in_year` | 今日创一年新低 |
+| 当日-新高新低 | `today_newlow_in_hist` | 今日创历史新低 |
+| 当日-均线突破 | `today_upbreak_ma5` | 今日向上突破5日均线 |
+| 当日-均线突破 | `today_upbreak_ma10` | 今日向上突破10日均线 |
+| 当日-均线突破 | `today_upbreak_ma20` | 今日向上突破20日均线 |
+| 当日-均线突破 | `today_upbreak_ma60` | 今日向上突破60日均线 |
+| 当日-均线突破 | `today_upbreak_ma120` | 今日向上突破120日均线 |
+| 当日-均线突破 | `today_upbreak_ma250` | 今日向上突破250日均线 |
+| 当日-均线突破 | `today_dnbreak_ma5` | 今日向下突破5日均线 |
+| 当日-均线突破 | `today_dnbreak_ma10` | 今日向下突破10日均线 |
+| 当日-均线突破 | `today_dnbreak_ma20` | 今日向下突破20日均线 |
+| 当日-均线突破 | `today_dnbreak_ma60` | 今日向下突破60日均线 |
+| 当日-均线突破 | `today_dnbreak_ma120` | 今日向下突破120日均线 |
+| 当日-均线突破 | `today_dnbreak_ma250` | 今日向下突破250日均线 |
+| 当日-布林带 | `today_boll_upbreak_upper` | 今日布林带向上突破上轨 |
+| 当日-布林带 | `today_boll_upbreak_mid` | 今日布林带向上突破中轨 |
+| 当日-布林带 | `today_boll_upbreak_lower` | 今日布林带向上突破下轨 |
+| 当日-布林带 | `today_boll_dnbreak_upper` | 今日布林带向下突破上轨 |
+| 当日-布林带 | `today_boll_dnbreak_mid` | 今日布林带向下突破中轨 |
+| 当日-布林带 | `today_boll_dnbreak_lower` | 今日布林带向下突破下轨 |
+| 当日-MACD | `today_macd_green_to_red` | 今日MACD绿转红 |
+| 当日-MACD | `today_macd_red_expanding` | 今日MACD红柱扩大 |
+| 当日-MACD | `today_macd_red_knee` | 今日MACD红柱拐点确认 |
+| 当日-MACD | `today_macd_red_shrink` | 今日MACD红柱收缩 |
+| 当日-MACD | `today_macd_red_to_green` | 今日MACD红转绿 |
+| 当日-MACD | `today_macd_green_expanding` | 今日MACD绿柱扩大 |
+| 当日-MACD | `today_macd_green_knee` | 今日MACD绿柱拐点确认 |
+| 当日-MACD | `today_macd_green_shrink` | 今日MACD绿柱收缩 |
+| 当日-MACD | `today_macd_golden_cross` | 今日MACD金叉 |
+| 当日-MACD | `today_macd_dead_cross` | 今日MACD死叉 |
+| 当日-涨跌统计 | `today_continue_up` | 今日连涨 |
+| 当日-涨跌统计 | `today_continue_down` | 今日连跌 |
+| 当日-涨跌停 | `today_first_limitup` | 今日首板涨停 |
+| 当日-涨跌停 | `today_first_limitdown` | 今日首板跌停 |
+| 当日-涨跌停 | `today_continue_limitup` | 今日连板涨停 |
+| 当日-涨跌停 | `today_continue_limitdown` | 今日连板跌停 |
+| 当日-成交量 | `today_volume_expanding_s` | 短期放量 |
+| 当日-成交量 | `today_volume_expanding_m` | 中期放量 |
+| 当日-成交量 | `today_volume_expanding_l` | 长期放量 |
+| 当日-成交量 | `today_volume_shrinking_s` | 短期缩量 |
+| 当日-成交量 | `today_volume_shrinking_m` | 中期缩量 |
+| 当日-成交量 | `today_volume_shrinking_l` | 长期缩量 |
+
+> **当日技术信号（`strategy_today_*`）**：基于当日行情的实时技术信号，仅 A 股。不传 `--date` 默认当天；自然语言可直接命中，例如"今天创一年新高的股票" → `westock screen strategy --type today_newhigh_in_year`，"站上 250 日线的" → `today_upbreak_ma250`，"MACD 金叉的" → `today_macd_golden_cross`，"连续涨停的" → `today_continue_limitup`。
 
 ---
 
@@ -828,12 +866,12 @@ westock-tool ranking disc_interval --asset etf --orderby EtfDiscAvgW            
 | 公司变更 | `rename_incoming` | 即将更名 |
 | 公司变更 | `rename_past_90` | 更名后三月 |
 | 董监高变动 | `manager_change` | 董监高变动 |
-| 董监高变动 | `manager_sharechg` | 董监高增减持 |
+| 董监高变动 | `westock screen event --type manager_sharechg ` | 董监高增减持 |
 | 董监高变动 | `manager_shareplan_sell_incoming` | 计划减持未实施 |
 | 董监高变动 | `manager_shareplan_buy_incoming` | 计划增持未实施 |
 | 董监高变动 | `manager_shareplan_sell_implementing` | 计划减持实施中 |
 | 董监高变动 | `manager_shareplan_buy_implementing` | 计划增持实施中 |
-| 回购 | `buyback` | 回购一月内 |
+| 回购 | `westock buyback` | 回购一月内 |
 | 限售解禁 | `shareunlock_next_90` | 预计解禁三月内 |
 | 限售解禁 | `shareunlock_incoming` | 实际解禁公告后 |
 | 限售解禁 | `shareunlock_next_15` | 实际解禁两周内 |
@@ -848,14 +886,14 @@ westock-tool ranking disc_interval --asset etf --orderby EtfDiscAvgW            
 | 指数变动 | `index_del_incoming` | 将踢出重要指数 |
 | 指数变动 | `index_del_implemented_prev_7` | 已踢出重要指数一周 |
 | 交易异动 | `block_past_30` | 大宗交易一月内 |
-| 交易异动 | `longhu_statis_past_15` | 龙虎榜上榜统计两周内 |
+| 交易异动 | `westock screen event --type longhu_statis_past_15 ` | 龙虎榜上榜统计两周内 |
 | 交易异动 | `longhu_detail_past_15` | 龙虎榜上榜详情两周内 |
 
 ---
 
 ## 九、排行选股（ranking）完整指标列表
 
-`ranking` 命令支持三类指标源，共 17 个指标：
+`westock screen ranking` 命令支持**六类指标源，共 36 个指标**（完整速查见 [ranking-indicators.md](./ranking-indicators.md)）：
 
 ### 9.1 涨跌停指标（market）
 
@@ -889,16 +927,67 @@ westock-tool ranking disc_interval --asset etf --orderby EtfDiscAvgW            
 | `RiskScore` | 风险评分 | 反映风险程度（高分代表低风险） |
 | `TecScore` | 技术评分 | 反映技术面状况 |
 
-> 评分指标支持 `--type cur/weekly/monthly` 查看当前值或周/月变动值。
+> 评分指标支持 `--period cur/weekly/monthly` 查看当前值或周/月变动值。
 
-### 9.4 范围限定参数（所有指标通用）
+### 9.4 两融排行指标（margin）
+
+| 指标代码 | 名称 | 默认排序字段 | 默认方向 |
+|---------|------|-------------|---------|
+| `margin_balance` | 两融余额 | MarginTrade | 降序 |
+| `margin_chg_d` | 两融日变动 | MChgD | 降序 |
+| `margin_chg_w` | 两融周变动 | MChgW | 降序 |
+| `margin_chg_m` | 两融月变动 | MChgM | 降序 |
+| `margin_chg_q` | 两融季变动 | MChgQ | 降序 |
+| `margin_chg_y` | 两融年变动 | MChgY | 降序 |
+| `margin_in_days` | 两融连续扩大天数 | MtInDays | 降序 |
+| `margin_out_days` | 两融连续缩小天数 | MtOutDays | 降序 |
+
+### 9.5 资金流入指标（capital）
+
+| 指标代码 | 名称 | 默认排序字段 | 默认方向 |
+|---------|------|-------------|---------|
+| `cap_main_net` | 主力净流入 | MainNetIn | 降序 |
+| `cap_retail_net` | 散户净流入 | RetailNetOut | 降序 |
+| `cap_main_5d` | 主力5日合计净流入 | MainSum5d | 降序 |
+| `cap_in_days` | 主力连续净流入天数 | MainInDays | 降序 |
+| `cap_out_days` | 主力连续净流出天数 | MainOutDays | 降序 |
+
+### 9.6 范围限定参数（所有指标通用）
 
 | 参数 | 作用 |
 |------|------|
-| `--universe <板块代码>` | 限定在板块内排行 |
+| `--sector <板块代码>` | 限定在板块内排行 |
 | `--within-label <标签短名>` | 限定在标签结果内排行（如 `shareholder_central_state`） |
 | `--within-strategy <策略短名>` | 限定在策略结果内排行（如 `macd_golden`） |
 | `--within-event <事件短名>` | 限定在事件结果内排行（如 `shareunlock_next_90`） |
 
 > ⚠️ `--within-label` / `--within-strategy` / `--within-event` **三者互斥**。
 
+### 9.7 北向活跃指标（north）
+
+> 后端固定 Top20 预排序榜单；`--limit`/`--offset`/`--asc`/`--desc` 不适用；不支持 `--within-*` / `--sector`。
+
+| 指标代码 | 名称 | 排序规则 |
+|---------|------|---------|
+| `north_active_d` | 北向成交活跃股（近1周按日 Top20） | EndDate 降序，同日内 Rank 升序 |
+| `north_active_m` | 北向成交活跃股（近半年按月 Top20） | EndDate 降序，同月内 Rank 升序 |
+| `north_appear_w` | 北向活跃股上榜次数（周） | AppearanceCnt 降序 |
+| `north_appear_m` | 北向活跃股上榜次数（月） | AppearanceCnt 降序 |
+| `north_appear_q` | 北向活跃股上榜次数（季） | AppearanceCnt 降序 |
+| `north_appear_y` | 北向活跃股上榜次数（年） | AppearanceCnt 降序 |
+
+> 个股/行业**北向季度持仓**不在 ranking 范围，请用 `westock fund north-holding <代码>`。
+
+---
+
+## 十、数据更新频率
+
+| 类型 | 频率 |
+|------|------|
+| 条件 / 策略 | 每日收盘后 |
+| 标签 / 事件 | 跟随财报/公告基础数据 |
+| 排行（涨跌停 / 资金流入） | 盘中实时 |
+| 排行（财务 / 评分 / 两融） | 每日收盘后（两融 T+1） |
+
+> **日期格式**：统一使用 `YYYY-MM-DD`，不传则默认当天。
+> **数据时效**：选股数据基于收盘后更新，盘中查询可能使用前一交易日数据。

@@ -2,7 +2,7 @@ import json
 import re
 import pandas as pd
 
-XLSX = "WorkBuddy_query池_最新分类与胶囊Top4_923_1790336609267724640-latest.xlsx"
+XLSX = "WorkBuddy_query池_最新分类与胶囊Top4_923_1790336609267724640.xlsx"
 
 # 中文胶囊名 -> (id, unified_id, icon, mode)；顺序即 Excel 中的胶囊顺序
 CAPSULE_META = {

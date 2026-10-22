@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**443** · 专家：**429** · 官方插件：**60** · 团队插件：**31**
+- 技能包：**295** · 连接器：**443** · 专家：**429** · 官方插件：**60** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-10-22
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-10-23
 
 ---
 ## 目录
@@ -1320,7 +1320,7 @@
 ## 4. 插件市场 `plugins/`
 
 - 官方插件 `plugins/codebuddy-plugins-official/plugins/`：**60**
-- 团队插件 `plugins/cb_teams_marketplace/plugins/`：**31**
+- 团队插件 `plugins/cb_teams_marketplace/plugins/`：**30**
 
 ### 官方插件
 
@@ -1394,7 +1394,6 @@
 | [`a-share-analysis`](./plugins/cb_teams_marketplace/plugins/a-share-analysis/) | A股投资分析技能集，覆盖宏观研究、市场结构、个股深度、行业比较、资金行为、风险管理等 21 个专业分析 skill 和 6 个编排 agent。 |
 | [`agent-sdk-dev`](./plugins/cb_teams_marketplace/plugins/agent-sdk-dev/) | 用于创建和验证 CodeBuddy Agent SDK 应用的综合开发插件。 |
 | [`ai-hedge-fund`](./plugins/cb_teams_marketplace/plugins/ai-hedge-fund/) | AI 对冲基金投资分析系统：19位投资大师并行分析 + 风险管理 + 投资组合决策的全流程投资分析。涵盖巴菲特、芒格、林奇、伯里、塔勒布、伍德、格雷厄姆等13位传奇投资哲学家 +… |
-| [`ardot-design-generator`](./plugins/cb_teams_marketplace/plugins/ardot-design-generator/) | `ardot-design-generator` 是一个面向 Ardot 画布的 CodeBuddy 插件，通过 MCP（Model Context Protocol）对接 Ar… |
 | [`codebuddy-chat-web`](./plugins/cb_teams_marketplace/plugins/codebuddy-chat-web/) | 用途：Initialize a complete web-based chat application powered by CodeBuddy Agent SDK. |
 | [`data`](./plugins/cb_teams_marketplace/plugins/data/) | 数据分析插件，支持 SQL 查询、数据探索、可视化、仪表板构建和洞察生成。包含完整的数据分析工作流程和最佳实践。 |
 | [`deep-research`](./plugins/cb_teams_marketplace/plugins/deep-research/) | 用途：Deep research plugin that enables comprehensive web research, information synthesis, a… |
@@ -1404,7 +1403,7 @@
 | [`equity-research`](./plugins/cb_teams_marketplace/plugins/equity-research/) | 用途：Equity research tools: earnings analysis, initiating coverage reports, and research wo… |
 | [`executing-marketing-campaigns`](./plugins/cb_teams_marketplace/plugins/executing-marketing-campaigns/) | 用途：A comprehensive Claude skill designed to help marketing teams plan, execute, and measu… |
 | [`finance`](./plugins/cb_teams_marketplace/plugins/finance/) | 财务与会计插件，支持月末结账、日记账分录、账户核对、财务报表生成、差异分析和 SOX 审计支持。 |
-| [`finance-data`](./plugins/cb_teams_marketplace/plugins/finance-data/) | 金融数据与研究插件，包含 neodata-financial-search 自然语言金融搜索、westock-data 结构化行情数据和 westock-tool 条件选股，覆盖… |
+| [`finance-data`](./plugins/cb_teams_marketplace/plugins/finance-data/) | 金融数据与研究插件，包含 neodata-financial-search 自然语言金融搜索、westock-data 结构化行情数据和 westock-screener 条件选… |
 | [`financial-analysis`](./plugins/cb_teams_marketplace/plugins/financial-analysis/) | 用途：Core financial modeling and analysis tools: DCF, comps, LBO, 3-statement models, compe… |
 | [`gaokao-advisor`](./plugins/cb_teams_marketplace/plugins/gaokao-advisor/) | 面向高考真题/作文、全国高校与专业信息检索、地区批次线查询、一分一段/位次查询和志愿填报参考。 |
 | [`general-skills`](./plugins/cb_teams_marketplace/plugins/general-skills/) | 用途：A collection of general-purpose skills for CodeBuddy Code. |

@@ -17,16 +17,16 @@
       }
     ],
     "prompts": [
-      "Turn my work notes into a results-focused year-end review. First ask me just four things: my role, the year's goals, 3 main achievements and 1 main problem; don't re-ask anything I have already told you. Deliver Markdown body text covering the year at a glance, key achievements (written as action - result - impact), skills gained, lessons learned and next year's priorities. Leave a blank where an achievement lacks a number; never invent results.",
-      "Write an ops report whose charts are easy to read. Deliver a report table plus a data-definition card for each of three charts. The report table covers work overview, incidents and how they were handled, response times, recurring issues, risks and next-stage plans; each card states what its chart shows, which fields it needs and how the conclusion is calculated. First ask me what I run and the reporting period; if no data is available, leave the fields empty rather than inventing incidents or metrics.",
       "Write an email asking a colleague for feedback on my draft. Deliver a copy-ready email: a subject line, a first paragraph on where the item stands now, a second giving the exact time I need their reply by, and a third explaining how to make it easy for them (for example, replying to just a few items). Keep it polite but clear; leave the colleague's name and the dates blank.",
-      "Draft a kickoff speech I can read aloud as-is. First ask me the project type, the audience and the meeting length; if I don't say, assume an internal project kickoff. Write a speech of roughly 800 Chinese-character equivalents, ready to read aloud, covering in order: goals, current challenges, who owns what, quality and safety baselines, and a call to action. Keep the language practical and forceful, avoid empty slogans, and offer 3 title options."
+      "Using fictional administrative work, write a 500-Chinese-character weekly report around training arrangements, materials procurement and next-week preparation. State achievements, problems and next steps. Label it as an example and do not invent performance figures. After writing the template, ask whether I want to add specific information to make a report ready to submit.",
+      "Create a project meeting-minutes template covering a meeting summary, key discussions, trade-offs, decisions and action items. If no transcript is provided, demonstrate the result with a short simulated case labeled “Example.” If text is provided, organize it faithfully without inventing information. List task, owner and deadline for action items, marking missing fields “Not specified.” Use polished Markdown, highlight key conclusions and include an action table. End by inviting the user to provide meeting notes.",
+      "Organize my materials into knowledge cards and deliver a single-page HTML file. Use a scrapbook style with highlighted annotations and compact sections. If no materials are provided, use photography basics as a clearly labeled example. Use comparison images to explain background blur, motion sharpness and image noise, alongside settings and shooting advice, with film-frame borders. After completion, ask what materials I want to organize and what image style I prefer; I can paste or upload them."
     ],
     "promptTitles": [
-      "Turn work notes into a results-focused annual review",
-      "Create a clear, chart-based operations report",
       "Write a polite but firm follow-up email",
-      "Write a kickoff speech I can read aloud"
+      "Write a weekly report example that goes beyond listing tasks",
+      "Create a project meeting-minutes template",
+      "Turn materials into easy-to-understand visual notes"
     ],
     "target": "all"
   },
@@ -43,15 +43,15 @@
     "plugins": [],
     "prompts": [
       "Search the last 24 hours of official financial news, pick up to 3 items and write the event, what changed and what to watch, delivered as a visual Markdown brief. Sources must be original links on official institutional sites (not reposts or aggregators), with the publication time to the hour and the original URL. Give fewer items if that is all you find; if you cannot go online, say so.",
-      "Lay out this week's key financial events as a calendar. From official schedules, find up to 5 major financial events this week and list Beijing time, the event, the institution and why it matters, with up to 3 sources. Include only confirmed times, don't fill in forecasts, and say so if you cannot go online.",
       "Screen for high-ROE, low-debt companies. By default use ROE above 15% and a debt-to-asset ratio below 50% over the past year, and output the candidate companies, their metric values and the data date. If I don't specify a market, start with A-shares as the example and note that the criteria can be adjusted.",
-      "Build a full financial plan for one client. First ask me their age, family situation, income and goals, then cover retirement planning, education planning, tax optimisation and estate arrangements, with an asset allocation and the key assumptions behind it. State which region it applies to, and don't recommend specific products."
+      "Create a single-file HTML financial calculator. Input revenue, net profit, average total assets, period-end assets and liabilities to calculate net margin, return on assets and the debt-to-asset ratio. Show formulas and do not calculate when an input is missing or a denominator is zero. Include data labeled “Teaching example” and verify the results.",
+      "Create an annual-report audit preparation checklist covering financial statements, bank and counterparty confirmations, revenue and costs, inventory and assets, tax, contracts and internal controls. Use a table with document name, owner, deadline, key checks and completion status, highlighting likely delays. Adapt to any industry provided; otherwise deliver a general-company version first. Leave unknown people and dates blank. After delivery, ask in chat whether to add industry-specific items."
     ],
     "promptTitles": [
-      "Give me three finance headlines with key points",
-      "Put this week's major finance events on a calendar",
-      "Screen for high-ROE, low-debt companies",
-      "Create a comprehensive financial plan for a client"
+      "Understand the key points of 3 financial headlines",
+      "Screen for high-ROE, low-debt companies over the past year",
+      "Build a return-on-assets and debt-ratio calculator",
+      "Create an annual audit preparation checklist"
     ],
     "target": "all"
   },
@@ -73,16 +73,16 @@
       }
     ],
     "prompts": [
-      "Design a data report structure that supports decisions. In Markdown, spell out how business questions, metrics, charts and recommendations map to each other, then append a small case study clearly marked as an example that shows the question - metric - chart - recommendation structure. Don't fabricate company conclusions; deliver the result first.",
-      "Turn autumn recruitment data into a research brief: one page of Markdown with 3 findings and the key numbers behind them, plus charts where useful. If there is no material in the workspace, you may fill in with publicly available industry sample data, clearly labelled 'sample data - to be replaced', so the brief delivers real findings instead of an empty framework. Also list the minimum data I need to supply.",
+      "Calculate conversion rates and losses through visits, leads, trials and purchases. Separately identify the stage with the most people lost and the highest loss rate, and recommend improvements with causes labeled as hypotheses to validate. If no data is provided, demonstrate with 1000, 200, 80 and 20, labeled “Example.” Deliver an editable single-page HTML report emphasizing the funnel and conclusions. Show input errors inline and perform validation in the background.",
+      "Create an XLSX project-management sheet for tracking tasks across the full project lifecycle, including task, phase, owner, start and due dates, status, and dependencies. Use formulas to summarize completion by status and exclude blank rows. Keep the visual style elegant and minimal, add three clearly labeled sample rows, and verify the summary results.",
       "Build a break-even sheet that recalculates itself. Deliver an XLSX split into an inputs area and a results area: the inputs area holds fixed cost, unit price and unit variable cost; the results area uses formulas to work out contribution margin, break-even units and break-even revenue, and shows a warning instead of a negative number when the unit price is not above the unit variable cost. Results recalculate automatically when inputs change.",
-      "Build a retirement planning tool for finance beginners with compound-interest calculation. Ship a default set of editable inputs (current age, retirement age, current savings, monthly contribution, expected annual return), keep inputs and results visually separate, and skip any input that is missing or zero while flagging it. State the key assumptions, and avoid any wording that promises returns."
+      "Organize my numbers into an analysis table with consistent items, periods and units. Calculate applicable totals, maxima and minima, and produce a visual analysis. Without data, use Q1 sales of 120 units, Q2 of 150 and Q3 of 90 as a clearly labeled example. Separate facts from causal hypotheses. Suggest causes only when supported, alongside evidence within the data and information needed for validation; do not force 3 explanations or present speculation as fact. Prioritize any additional context I provide without asking first."
     ],
     "promptTitles": [
-      "Design a decision-ready data report structure",
-      "Turn recruitment data into a research brief",
+      "Analyze a conversion funnel and suggest improvements",
+      "Create an elegant, minimal project management sheet",
       "Create an automatically calculated break-even sheet",
-      "Build a compound-interest retirement planning tool"
+      "Organize some numbers into an analysis table"
     ],
     "target": "all"
   },
@@ -135,16 +135,16 @@
       }
     ],
     "prompts": [
+      "Research enterprise agents’ actual applications in customer service, R&D and data analysis. Search online for representative cases and use a Markdown table to list use case, deployment status, actual results and source date. Distinguish confirmed deployments, demonstrations only and insufficient information. Mark undisclosed performance figures accordingly. End with implementation conditions and main limitations.",
+      "Research the company I specify, analyzing revenue sources, cost structure, core customers, competitive barriers and main risks. Validate judgments using key data from the latest 3 periods and evidence from comparable companies. Deliver a Markdown research report with a short conclusion summary, the necessary analysis and evidence, and 3 indicators to monitor. If no company name or ticker is provided, ask briefly only for that. State dates and sources, distinguish facts, inference and information gaps, and do not give direct buy or sell advice.",
       "Research the low-altitude economy and judge which links have a verifiable revenue loop and which are still pilots. Deliver a Markdown research brief: a one-sentence conclusion first; then three sections - aircraft manufacturing, infrastructure and operations services - each covering what has worked and what has not, with supporting evidence; finally 2 to 3 signals to watch that would confirm or break the judgement. Cite a source and date for every key conclusion, and separate commercial projects from pilots. Treat figures taken from media coverage as leads only, never as conclusions; write [data to verify] where something cannot be confirmed and say what is missing. Length serves the judgement - don't cut evidence to hit a page count.",
-      "Walk through the key metrics in an ESG report and how to read them, so anyone holding a report knows what to look at first. Deliver a Markdown research brief: a one-sentence reading conclusion first; 2 to 3 key metrics each for E, S and G with their meaning and how each is commonly dressed up; one line each on where the mainstream disclosure frameworks apply and how they differ; a clear separation between company self-disclosure and third-party ratings; and finally a reading order you can follow directly. Cite sources and dates for key points. Explain how to read only - don't rate any specific company's ESG performance.",
-      "Understand how a company makes money in one page. Before starting, ask me which company I want to look at - without a company name there is nothing to research. Once I have given one, produce a research brief: one page of Markdown covering what the company does, how it earns, recent performance and the main risks, with a date and source against every key number.",
-      "Check at most 2 official or research-institute sources and map how the EV supply chain divides across materials, batteries, vehicles and charging, along with what drives cost at each stage. Deliver a Markdown file containing one relationship table and the source links, within 400 Chinese-character equivalents. Don't expand into market-share forecasts."
+      "Compare premium electric toothbrushes and identify differences in a shared-dimension table: brands across columns and cleaning mechanism, battery life, noise, consumable cost and after-sales policy down rows. Use the same dimensions for every brand, mark unpublished metrics “Not disclosed” and do not fill them with estimates. Below the table distinguish experience differences reported by users from differences in marketing claims."
     ],
     "promptTitles": [
+      "Research real-world AI agent applications and results",
+      "How does a company earn money and compete",
       "Find low-altitude economy segments with real revenue",
-      "Understand core ESG metrics and how to read them",
-      "Explain how this company makes money",
-      "Explain the electric vehicle value chain"
+      "Compare premium electric toothbrushes"
     ],
     "target": "all"
   },
@@ -160,16 +160,16 @@
     ],
     "plugins": [],
     "prompts": [
-      "Design a landed plan for cross-border e-commerce logistics and payments. Deliver one document covering: why the target market was chosen; a logistics comparison (direct mail, overseas warehouse and consolidation, with each one's delivery time, cost and conditions); payment options (available channels, fee rates, settlement cycles and refund handling); compliance requirements; rollout steps and timeline; and the main risks with fallbacks. Pick a single target market or platform for the pilot, and if no target market is set, ask me first.",
-      "Plan a 30-minute team knowledge-sharing session. Deliver a one-table agenda (time slot, segment, key content, owner), splitting the 30 minutes as 5/15/5/5 for opening, sharing, discussion and agreeing actions, plus a materials checklist. Leave the actual times and owners blank for me to fill in.",
-      "Write up the key points of a modern minimalist living-room design. Deliver a comparison table covering colour, materials, lighting and storage, with each dimension listing the recommended approach, the common pitfalls and the conditions where it does not apply. Add one line below the table on which items to adjust for ceiling height and daylight.",
-      "Lay out a three-month operating plan for a store. First ask me the store type, the current goal and any known campaign dates; don't re-ask what I have already said. Deliver a monthly plan table with one row per month covering goals, traffic and sales actions, membership work, product or service priorities, staffing and review metrics, then break the first month into weekly tasks below the table. Leave unknown figures blank rather than inventing business data."
+      "Create a promotion plan for the 7 days starting on a new product’s launch day. Deliver a single-page HTML file with a timeline showing the first-week schedule and an action table listing each day’s channels, content theme, concrete deliverables and observation metrics. Highlight target users and core selling points, and prioritize low-cost validation. Use any available product information; otherwise demonstrate a complete example with a fictional note-taking tool, clearly labeled “Example,” without inventing promotional results. After delivery, briefly ask in chat which new product I want to promote, then adapt the plan.",
+      "Create a Markdown customer-follow-up table with contact timing, communication goal, one usable line and conditions for pausing. Use any client background provided; otherwise use follow-up after an initial consulting-service conversation as an example, with subsequent actions for different responses. Respect refusals and avoid repeated sales pressure. Afterwards ask in chat what stage the client conversation has reached.",
+      "Create an actionable Markdown pricing-test plan for a new product. Use available product information; otherwise demonstrate a complete example with a fictional note-taking tool. Compare 2 prices and specify test participants, execution steps, a feedback-record table and how to adjust pricing under different results. Keep the product and presentation conditions consistent. Clearly label example prices, do not invent test results, and do not treat small samples as market conclusions. Deliver the plan first, then ask in chat which new product I want to test.",
+      "Plan a 30-minute team knowledge-sharing session. Deliver a one-table agenda (time slot, segment, key content, owner), splitting the 30 minutes as 5/15/5/5 for opening, sharing, discussion and agreeing actions, plus a materials checklist. Leave the actual times and owners blank for me to fill in."
     ],
     "promptTitles": [
-      "Plan cross-border logistics and payments",
-      "Plan a thirty-minute team sharing session",
-      "List modern minimalist living-room design principles",
-      "Build a three-month store operations plan"
+      "Write a first-week promotion plan for a new product launch",
+      "Plan customer follow-up timing and conversation scripts",
+      "Design a pricing-test plan for a new product",
+      "Plan a thirty-minute team sharing session"
     ],
     "target": "all"
   },
@@ -185,15 +185,15 @@
     ],
     "plugins": [],
     "prompts": [
-      "After the close on each trading day, check the CSI Artificial Intelligence Theme Index (930713). Alert me when the daily change reaches 3% in absolute terms or the intraday range reaches 4%, stating the current level, the change, the range, the past 5 sessions and the time it triggered. If nothing triggers, stay quiet. Don't forecast where it goes next and don't give buy or sell advice.",
-      "Send me a closing briefing at 15:20 on every A-share trading day; skip market holidays. The briefing has up to 5 items, each a one-line summary with a source link; if you cannot find a source, just say so. Set the schedule in my local timezone without asking me again, and after setting it up tell me the next trigger time and what sections the briefing will contain.",
-      "Remind me at 8:30 every day to look at today's meetings and to-dos. The reminder has three parts: today's meetings, the 3 most important to-dos, and anything I need to prepare in advance; if the day is quiet, keep only the to-do part. Handle the timezone as my local time, no need to ask, and tell me the exact next reminder time once it is set up.",
-      "Remind me at 9:00, 30 days before a contract expires, to check the renewal. The reminder carries three fields: expiry date, renewal intention and the documents to prepare. If I haven't given the expiry date, ask me once; if the calculated time has already passed, tell me and push it to a sensible later date. Handle the timezone as my local time, and tell me the next trigger time once it is set up."
+      "Every Monday through Friday at 8:30 in my local time zone, remind me to check meetings and to-dos. Include 3 checks: meeting times, today’s priorities and preparation materials. Use actual calendar and task content if provided; otherwise use a checklist. After creation, state the next reminder time.",
+      "Every Friday at 17:00, remind me to organise this week's work, with three fill-in slots in the reminder: this week's results, the problems encountered, and next week's priorities. Set the time directly in my local time zone, with no further confirmation, and report the next date and time when done.",
+      "Every Monday at 9:00, give me a brief on new AI developments: pick five, each a one-line summary with a source link, and mark it as not found if no source can be located. Set it up directly in my local time zone and reply with one line giving the next trigger time when done.",
+      "Remind me at 9:00 in my local time zone, 30 days before a contract expires, to check renewal. Include the expiry date, renewal intention and materials to prepare. Ask for the expiry date if missing. If the reminder time has passed but the contract has not expired, ask whether to remind me today. If the contract has expired, explain and confirm next arrangements. After creation, state the exact reminder time."
     ],
     "promptTitles": [
-      "Alert me to sharp AI sector volatility",
-      "Send me a workday stock-market brief",
-      "Remind me at 8:30 daily to check meetings and to-dos",
+      "At 8:30 on weekdays, remind me to check meetings and to-dos",
+      "Every Friday, remind me to review this week’s work",
+      "Give me a weekly AI news brief",
       "Remind me 30 days before a contract expires to check renewal"
     ],
     "target": "all"
@@ -233,13 +233,13 @@
       }
     ],
     "prompts": [
-      "Build a single-file HTML to-do list for today, supporting add, check off, delete and a remaining count, ignoring blank tasks, usable on a phone and requiring no account.",
+      "Build a to-do list website for today, supporting add, check off, delete and a remaining count, ignoring blank tasks, usable on a phone, requiring user login and data stored in a cloud database, then publish it live.",
       "Build a corporate website for me. The company name is [company name] and its main business is [business description]. Requirements: a home page, an About us page, a Products and services page and a Contact page; a simple, confident style; user login; site data in a cloud database and images and files in cloud storage; then publish it live.",
-      "Build a data table page with 10 rows of fictional sales data built in, supporting filtering by region and sorting by amount. Deliver a single HTML file, usable offline with no external dependencies, and check the main interactions.",
+      "Build a data table app supporting add, edit, delete and query, filtering by region and sorting by amount. Include 10 rows of fictional sales data. Store the data in a cloud database, then publish it live.",
       "Build an e-commerce home page selling [product type]. Requirements: a carousel, product categories, a featured products section and a promotions area; user login; product data in a cloud database and product images in cloud storage."
     ],
     "promptTitles": [
-      "Build a usable daily to-do webpage",
+      "Build a to-do list website for today",
       "Build a four-page company website",
       "Add filtering and sorting to a data table",
       "Build an e-commerce storefront homepage"
@@ -261,7 +261,7 @@
     ],
     "promptTitles": [
       "Build a coffee-shop ordering mini program",
-      "Build a mini program for event sign-up and check-in",
+      "Build an event registration mini program",
       "Build a restaurant ordering mini program",
       "Turn store service booking into a mini program"
     ],
@@ -314,7 +314,7 @@
     ],
     "prompts": [
       "Write a minimal working Skill from scratch. Deliver a concise SKILL.md covering the trigger conditions, inputs, steps and output, plus one example invocation. If no purpose is given, use text summarisation as the default example. Hand over an editable skill definition first, and don't keep asking for background. When it is done, offer two options: A. try the Skill on one real work request; B. add another example invocation to verify the steps.",
-      "Turn this workflow into a reusable Skill. Ask one question first: is this client workflow for solo freelance work or for a team? If I have already said, skip it and assume solo freelance. Package set up a new client, verify documents, create the group chat and first contact into a SKILL.md, with each step stating its input, output and completion condition. Add one short fictional client example, listing missing information as items to supply. Deliver the Skill definition only - don't perform any client actions.",
+      "Turn this workflow into a reusable Skill. Ask one question first: is this client workflow for solo freelance work or for a team? If I have already said, use what I said and don't ask again; if I haven't, wait for my answer. Package \"setting up a new client, verifying documents, creating the group chat and making first contact\" into a SKILL.md, with each step stating its input, output and completion condition. Add one short fictional client example, listing missing information as items to supply. Deliver the Skill definition only - don't perform any client actions.",
       "Create a document proofreading Skill that checks for typos, conflicting dates, inconsistent number definitions and missing conditions, listing at most 5 items, with 2 sample sentences built in. Deliver a SKILL.md containing the name, description, trigger conditions and steps - don't install it.",
       "Create a research-evidence checking Skill that verifies whether conclusions match their evidence, whether the definitions are consistent and how missing evidence should be flagged, with 2 examples. Deliver a SKILL.md containing the name, description, trigger conditions and steps - don't install it."
     ],
@@ -342,7 +342,7 @@
     "promptTitles": [
       "Write a beginner-friendly project README",
       "Generate an easy-to-read API document",
-      "Create a developer onboarding roadmap",
+      "Write a developer onboarding guide template",
       "Turn common errors into a troubleshooting guide"
     ],
     "target": "all"
