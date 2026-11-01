@@ -75,6 +75,8 @@ lovrabet app list --include-unpublished
 
 ## 如何选择使用哪个应用
 
+以下 `--name <关键词>` 用于数据集名称搜索；用户给的是物理表名时，改用 `--table-name <表名前缀>` 验证默认候选或其他候选 app，无需补齐名称。匹配规则见 [数据集发现](dataset-discovery-workflow.md)。
+
 推荐方法不是只看 app 名，而是：
 
 1. 有 `defaultApp` 时，先在默认候选下执行 `dataset list --name <关键词>`

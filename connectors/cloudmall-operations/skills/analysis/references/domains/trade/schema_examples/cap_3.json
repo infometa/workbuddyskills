@@ -1,0 +1,80 @@
+{
+  "_doc": "经营日报 JSON 组装示例。⚠️ SQL 返回中文列名，必须按 _column_map 转为英文 key。带 ★ 为必填。",
+
+  "_column_map": {
+    "_doc": "Q-1 SQL 中文列名 → JSON 英文 key（逐项对照）",
+    "gmv": "gmv",
+    "支付人数": "pay_uv",
+    "成交订单数": "pay_cnt",
+    "下单人数": "order_uv",
+    "下单订单数": "order_cnt",
+    "销量": "sales_qty",
+    "退款金额": "refund_amt",
+    "访问次数": "visit_pv",
+    "访问人数": "visit_uv",
+    "浏览次数": "browse_pv",
+    "浏览人数": "browse_uv"
+  },
+
+  "_user_segments_map": {
+    "_doc": "Q-4 (dim_type=user_order_type) 结果映射。每行的 dim_value 决定字段前缀，支付人数和成交金额分别映射。",
+    "新客 → 支付人数": "new_pay_uv",
+    "新客 → 成交金额": "new_gmv",
+    "老客 → 支付人数": "returning_pay_uv",
+    "老客 → 成交金额": "returning_gmv"
+  },
+
+  "meta": {
+    "_doc": "★ capability_id/start_date/end_date 必填",
+    "capability_id": 3,
+    "brand_name": "商家名称",
+    "title": "经营日报",
+    "start_date": "yyyyMMdd",
+    "end_date": "yyyyMMdd",
+    "domain": "trade",
+    "generated_at": ""
+  },
+
+  "_overview_doc": "★ 必填。Q-1 昨日查询结果，按 _column_map 转换",
+  "overview": {
+    "gmv": 0, "pay_uv": 0, "pay_cnt": 0,
+    "order_uv": 0, "order_cnt": 0,
+    "sales_qty": 0, "refund_amt": 0,
+    "visit_uv": 0, "visit_pv": 0,
+    "browse_uv": 0, "browse_pv": 0
+  },
+
+  "_previous_overview_doc": "★ 必填。Q-1 前日查询结果，字段与 overview 完全相同",
+  "previous_overview": {
+    "gmv": 0, "pay_uv": 0, "pay_cnt": 0,
+    "order_uv": 0, "order_cnt": 0,
+    "sales_qty": 0, "refund_amt": 0,
+    "visit_uv": 0, "visit_pv": 0,
+    "browse_uv": 0, "browse_pv": 0
+  },
+
+  "_user_segments_doc": "推荐。Q-4 结果按 _user_segments_map 映射。缺少则用户结构章节不显示",
+  "user_segments": {
+    "new_pay_uv": 0, "new_gmv": 0,
+    "returning_pay_uv": 0, "returning_gmv": 0
+  },
+
+  "_previous_user_segments_doc": "可选。Q-4 前日结果，字段同 user_segments。缺少则环比显示 -",
+  "previous_user_segments": {},
+
+  "_category_stats_doc": "推荐。Q-2 品类查询（按 GMV 降序）。cvr = 转化率（Q-2 SQL 返回），refund_rate 需额外从 Q-2b 获取或填 0。缺少则品类章节不显示",
+  "category_stats": [
+    {"category_name": "品类名", "gmv": 0, "prev_gmv": 0, "cvr": 0, "refund_rate": 0}
+  ],
+
+  "_narrative_doc": "强烈推荐填写（缺少则对应区域空白）",
+  "executive_summary": "<p>一段话总结（HTML）</p>",
+  "highlights": {
+    "positive": {"label": "亮点", "text": ""},
+    "negative": {"label": "痛点", "text": ""}
+  },
+  "insights": ["洞察 1", "洞察 2"],
+  "recommendations": [
+    {"priority": "P0", "title": "建议标题", "items": ["行动 1"]}
+  ]
+}

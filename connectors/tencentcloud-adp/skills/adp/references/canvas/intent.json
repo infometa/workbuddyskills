@@ -1,0 +1,340 @@
+{
+ "ProtoVersion": "V2_6",
+ "WorkflowID": "",
+ "WorkflowName": "zz-demo-intent",
+ "WorkflowDesc": "Route the query by intent: calculation goes to code (with a failure branch), chit-chat gets a fixed reply, and the last intent is the explicit fallback",
+ "Nodes": [
+  {
+   "NodeID": "start",
+   "NodeName": "Start",
+   "NodeDesc": "",
+   "NodeType": "START",
+   "StartNodeData": {},
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "intent1"
+   ]
+  },
+  {
+   "NodeID": "intent1",
+   "NodeName": "意图识别",
+   "NodeDesc": "",
+   "NodeType": "INTENT_RECOGNITION",
+   "IntentRecognitionNodeData": {
+    "ModelName": "Hunyuan/hy3",
+    "ModelParams": {
+     "Temperature": 0.3,
+     "TopP": 0.8,
+     "MaxTokens": 256
+    },
+    "Prompt": "{{q}}",
+    "Intents": [
+     {
+      "Name": "计算",
+      "Desc": "用户要求计算或处理一段数据，包括明确要求失败测试",
+      "Example": "帮我算一下 1+1",
+      "NextNodeIDs": [
+       "code1"
+      ]
+     },
+     {
+      "Name": "闲聊",
+      "Desc": "问候或寒暄",
+      "Example": "你好",
+      "NextNodeIDs": [
+       "ans_chat"
+      ]
+     },
+     {
+      "Name": "其他",
+      "Desc": "兜底：以上意图都不匹配。平台把最后一个意图当作兜底（Other），不交给模型判断，必须保持在最后",
+      "Example": "",
+      "NextNodeIDs": [
+       "ans_other"
+      ]
+     }
+    ]
+   },
+   "Inputs": [
+    {
+     "Name": "q",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "SYSTEM_VARIABLE",
+      "SystemVariable": {
+       "Name": "SYS.UserQuery"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [],
+   "NextNodeIDs": []
+  },
+  {
+   "NodeID": "code1",
+   "NodeName": "计算",
+   "NodeDesc": "",
+   "NodeType": "CODE_EXECUTOR",
+   "CodeExecutorNodeData": {
+    "Code": "def main(params: dict) -> dict:\n    q = str(params.get(\"q\", \"\"))\n    if \"fail\" in q:\n        raise ValueError(\"forced failure\")\n    return {\"result\": \"CALC-OK:\" + q}\n",
+    "Language": "PYTHON3"
+   },
+   "Inputs": [
+    {
+     "Name": "q",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "SYSTEM_VARIABLE",
+      "SystemVariable": {
+       "Name": "SYS.UserQuery"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "result",
+       "Type": "STRING"
+      }
+     ],
+     "Desc": "",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "ans_ok"
+   ],
+   "ExceptionHandling": {
+    "Switch": "ON",
+    "MaxRetries": "0",
+    "RetryInterval": "1",
+    "AbnormalOutputResult": "",
+    "HandleMethod": "EXCEPTION_EXECUTE",
+    "NextNodeIDs": [
+     "ans_fail"
+    ],
+    "AbnormalRetrySwitch": "ABNORMAL_RETRY_OFF",
+    "Timeout": "60"
+   }
+  },
+  {
+   "NodeID": "ans_ok",
+   "NodeName": "ans_ok",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "{{r}}"
+   },
+   "Inputs": [
+    {
+     "Name": "r",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "REFERENCE_OUTPUT",
+      "Reference": {
+       "NodeID": "code1",
+       "JsonPath": "Output.result"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "ans_fail",
+   "NodeName": "ans_fail",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "CALC-FAILED"
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "ans_chat",
+   "NodeName": "ans_chat",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "CHAT"
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "ans_other",
+   "NodeName": "ans_other",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "OTHER"
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "end",
+   "NodeName": "End",
+   "NodeDesc": "",
+   "NodeType": "END",
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [],
+     "Desc": "Output content",
+     "Value": {
+      "InputType": "USER_INPUT"
+     },
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": []
+  }
+ ],
+ "Mode": "NORMAL"
+}

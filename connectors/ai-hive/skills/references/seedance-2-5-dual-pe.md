@@ -1,6 +1,6 @@
 # Seedance 2.5 双 PE 对照规范
 
-适用版本：AI-HIVE Connector 1.1.4
+适用版本：AI-HIVE Connector 1.2.0
 
 本参考只在用户明确要求“双 PE”“A/B prompt”“稳健版和增强版”“两版提示词对照”或“组内盲测”时读取。普通视频请求仍使用单一最佳 Prompt。
 

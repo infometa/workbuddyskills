@@ -6,14 +6,14 @@ description: "通过指导agent智能调度 Happyhorse、Seedance、Kling 等顶
 description_zh: "通过指导agent智能调度 Happyhorse、Seedance、Kling 等顶尖视频模型，按\"图生视频/首尾帧/电影级运镜\"自动匹配最优模型，完成产品讲解、培训录屏、宣传短片、模特走秀、多镜头分镜与会议摘要视频，支持 5-15 秒多时长与 9:16、1:1、16:9 多画幅。"
 description_en: "Agent routes Happyhorse/Seedance/Kling for product demos, training clips, promo reels, multi-aspect."
 category: media
-version: 1.1.4
+version: 1.2.1
 author: 极睿科技（Infimind）/ AI-HIVE 团队
 permissions:
   provisional: true
   read:
   - 仅限当前对话中用户主动选择的本地图片、视频与音频
   network:
-  - 仅通过已启用的 AI-HIVE Connector 调用 get_user_info、list_models、upload_media_from_path、generate_video
+  - 仅通过已启用的 AI-HIVE Connector 调用 get_user_info、list_models、get_model、upload_media_from_path、generate_video
     与 get_generation_task
 triggers:
 - 视频生成
@@ -208,6 +208,16 @@ AI-HIVE 视频生成 Skill 通过 AI-HIVE Connector 完成端到端视频创作�
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |---|---|---|---|---|
 | `modelType` | string | 可选 | — | `TEXT` / `IMAGE` / `VIDEO`；本 Skill 显式传入 `"VIDEO"` |
+| `detail` | string | 可选 | `full` | `lite` 只返回售价摘要用于选型；`full` 返回完整公开详情（含 `pricingSnapshot`） |
+
+### `get_model`
+
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|---|---|---|---|---|
+| `publicModelId` | string | ✅ | — | 来自 `list_models` 的当前模型 ID |
+| `routingMode` | string | 可选 | — | 获取指定线路的专属契约 |
+
+返回该模型当前唯一调用契约：`paramsSchema`、媒体要求、计费因素、示例与 `pricingSnapshot`。
 
 ### `upload_media_from_path`
 
@@ -232,7 +242,9 @@ AI-HIVE 视频生成 Skill 通过 AI-HIVE Connector 完成端到端视频创作�
 | `firstFrameMediaId` | string | 可选 | — | 首帧图片 mediaId |
 | `lastFrameMediaId` | string | 可选 | — | 尾帧图片 mediaId |
 | `params` | object | 可选 | 空对象 | 当前模型支持的时长、画幅、分辨率与声音等字段 |
-| `pricingSnapshot` | object | ✅ | — | 对应模型与路由的价格快照，原样传入 |
+| `dryRun` | boolean | 可选 | false | `true` 时只校验参数与媒体并返回预估费用，不创建任务、不扣费，此时省略 `pricingSnapshot` 与 `clientRequestId` |
+| `clientRequestId` | string | 付费必传 | — | 稳定 UUID 幂等键；传输中断或刷新过期快照后用原值同参重试，修正业务参数后必须换新 |
+| `pricingSnapshot` | object | 付费必传 | — | `list_models(detail="full")`、`get_model` 或 dry-run 返回的价格快照，原样回传 |
 
 ### `get_generation_task`
 

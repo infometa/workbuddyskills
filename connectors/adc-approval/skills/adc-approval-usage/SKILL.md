@@ -17,7 +17,7 @@ description_en: >
   and gated by a two-phase confirmation; ticket forensics is read-only.
 display_name: 审批域连接器用法
 display_name_en: ADC Approval Connector Usage
-version: 0.3.6
+version: 0.3.7
 author: ADC Copilot Team
 ---
 

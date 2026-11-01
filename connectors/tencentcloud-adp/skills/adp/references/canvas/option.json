@@ -1,0 +1,97 @@
+{
+ "ProtoVersion": "V2_6",
+ "WorkflowID": "",
+ "WorkflowName": "zz-demo-option",
+ "WorkflowDesc": "Ask the user to pick a plan with an option card, then branch on the choice",
+ "Nodes": [
+  {
+   "NodeID": "start",
+   "NodeName": "Start",
+   "NodeDesc": "",
+   "NodeType": "START",
+   "StartNodeData": {},
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "opt"
+   ]
+  },
+  {
+   "NodeID": "opt",
+   "NodeName": "选择套餐",
+   "NodeDesc": "",
+   "NodeType": "OPTION_CARD",
+   "OptionCardNodeData": {
+    "Question": "请选择套餐：",
+    "Options": [
+     {
+      "Content": "基础版",
+      "NextNodeIDs": [
+       "ans_basic"
+      ]
+     },
+     {
+      "Content": "专业版",
+      "NextNodeIDs": [
+       "ans_pro"
+      ]
+     }
+    ],
+    "CardFrom": "INPUT"
+   },
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": []
+  },
+  {
+   "NodeID": "ans_basic",
+   "NodeName": "ans_basic",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "PLAN=BASIC"
+   },
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "ans_pro",
+   "NodeName": "ans_pro",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "PLAN=PRO"
+   },
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "end",
+   "NodeName": "End",
+   "NodeDesc": "",
+   "NodeType": "END",
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [],
+     "Desc": "Output content",
+     "Value": {
+      "InputType": "USER_INPUT"
+     },
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": []
+  }
+ ],
+ "Mode": "NORMAL"
+}

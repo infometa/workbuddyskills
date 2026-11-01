@@ -1,0 +1,28 @@
+{
+  "runtime": {
+    "type": "python",
+    "version": ">=3.8"
+  },
+  "init": {
+    "darwin": "python -m pip install --upgrade zijizhang-cli",
+    "linux": "python -m pip install --upgrade zijizhang-cli",
+    "win32": "python -m pip install --upgrade zijizhang-cli"
+  },
+  "auth": {
+    "darwin": "zijizhang-cli account create_auth_url",
+    "linux": "zijizhang-cli account create_auth_url",
+    "win32": "zijizhang-cli account create_auth_url"
+  },
+  "unAuth": {
+    "darwin": "zijizhang-cli account logout",
+    "linux": "zijizhang-cli account logout",
+    "win32": "zijizhang-cli account logout"
+  },
+  "status": {
+    "darwin": "zijizhang-cli account get_cpy_list",
+    "linux": "zijizhang-cli account get_cpy_list",
+    "win32": "zijizhang-cli account get_cpy_list"
+  },
+  "statusMatch": "\"code\": 200",
+  "authUrlDomain": "zijizhang.com"
+}

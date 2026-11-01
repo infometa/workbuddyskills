@@ -1,22 +1,23 @@
 ---
 name: xdjz-smart-data-query
-display_name: 小蝶记账-智能查数
-display_name_en: Kingdee Xiaodie - Smart Data Query
+display_name: 智能查数
+display_name_en: Smart Data Query
 description: >-
-  小蝶记账-智能查数。用户用日常口语提问具体业务数据，系统自动查询并返回数值结果。
+  智能查数。用户用日常口语提问具体业务数据，系统自动查询并返回数值结果。
   涵盖销售、采购、库存、财务等数据查询。适用于"是多少""有多少""多少"等事实性提问。
   触发词：查数、查一下、帮我查、本月XX多少、今年利润是多少。
 description_zh: 一句话智能查询销售、采购、库存与资金等经营数据，秒翻表格，决策更快。
 description_en: Query sales, purchasing, inventory, profit, receivables, and payables with natural language.
 category: business
-version: 1.2.0
+version: 1.5.3
 author: 金蝶
 when_to_use:
   - 用户询问具体的业务数据数值（销售额、库存、利润、应收款等）
   - 用户用"是多少""有多少""多少""具体数字"等事实性表述提问
   - '触发词：查一下本月销售额、库存还有多少、今年利润是多少、帮我查个数据、应收账款多少'
 when_not_to_use:
-  - 用户用“怎么样”“好不好”“为什么”“分析”等评价性/分析性表述提问 → 不支持，直接告知用户
+  - 用户用“怎么样”“好不好”“为什么”“分析”等评价性/分析性表述提问 → 不属于本技能，告知用户本能力只查具体数值，并引导改用「电商经营分析与诊断」
+  - 查数请求带分析、建议意图（统计销量排行榜找问题商品、结合销量给补货建议、计算库存周转/缺货风险并分类推荐等）→ 不属于本技能，**禁止回复“不支持/无法处理”**，引导改用「电商经营分析与诊断」
   - 创建正式ERP单据（采购订单、销售单等）→ 不支持，直接告知用户
   - 快速记账 → 不支持，直接告知用户
   - 企业风险分析 → 不支持，直接告知用户
@@ -49,7 +50,7 @@ allowed-tools:
 第一步：调用 search_plugins
         参数：type = "connector"
               keywords = ["小蝶记账", "金蝶", "记账"]
-第二步：从返回结果中找到「小蝶记账」，取其 id（通常为 xdjz-mcp，以实际返回为准）
+第二步：从返回结果中找到「小蝶记账」，取其 id（通常为 kingbot-xiaodie，以实际返回为准）
 第三步：调用 suggest_plugin_install
         参数：type = "connector"
               pluginId1 = <第二步取得的 id>
@@ -59,6 +60,8 @@ allowed-tools:
 执行约束：
 
 - `search_plugins`、`suggest_plugin_install` 是平台内置工具，**直接调用即可**；禁止用网络搜索代替，禁止推荐任何其他连接器。
+- `search_plugins` 调用时 `type` 与 `keywords` **两个参数必须同时传入，缺一不可**；禁止只传 type 漏传 keywords。
+- **未从 `search_plugins` 返回结果中取得「小蝶记账」的 id 前，禁止调用 `suggest_plugin_install`**；返回结果中找不到「小蝶记账」时走下方文字兜底。
 - `suggest_plugin_install` **同一轮只允许调用一次**；卡片发出后即停止动作，等用户在卡片上点「连接」，不要继续追问。
 - 若平台对呈现卡片弹出确认/授权提示，用一句话请用户点「允许」，卡片即可显示。
 - 卡片已呈现时，本轮不再输出长篇文字指引（一句话说明“请在上方卡片点「连接」”即可）。
@@ -91,7 +94,7 @@ allowed-tools:
 执行细节与用户输出**严格分离**。以下内容**仅用于内部执行**，**禁止**出现在任何对用户的回复中：
 
 - 工具名：如 `kingbot_chat`、MCP、stellar 等
-- 参数名：如 `title`、`input`、`variables`、`messageType`、`agent_id`、`skills` 等
+- 参数名：如 `title`、`input`、`variables`、`messageType`、`agent_id`、`skills`、`source_agent_id`、`source_agent_name`、`source_skill_id`、`source_skill_name`、`source_type` 等
 - 后端标识：如 `OrchestratorAgent`、`agent_id`、`sid`、`deviceId`、`SendCursor`、`uuid` 等
 - 对话 ID / 会话 ID 等技术标识
 - **查询 SQL**：服务返回内容中的完整 SQL 语句（`SELECT ... FROM ... WHERE ...` 等）及其代码块，属于内部实现细节，必须过滤（详见「结果处理 → SQL 过滤规则」）
@@ -127,12 +130,18 @@ allowed-tools:
 | 是多少 / 有多少 / 多少 | → 查数 | "今年利润是多少" |
 | 查一下 / 帮我查 / 查个 | → 查数 | "帮我查一下本月销售额" |
 | 具体数字 / 具体金额 | → 查数 | "利润具体数字是多少" |
+| 统计 / 排行榜 / TOP榜 + 找问题 / 挑主推款 | → 经营分析 | "统计本月商品销量排行榜，找卖得多没赚钱的" |
+| 查询 / 查 / 统计 + 建议 / 推荐 / 补货 / 该不该 | → 经营分析 | "查当前库存，结合销量给我补货建议" |
+| 计算指标（周转天数 / 缺货风险 / 平均日销量）+ 分类 / 推荐 | → 经营分析 | "算库存周转天数，给我最该补货的3款" |
 | 怎么样 / 好不好 / 为什么 | → 经营分析 | "今年利润怎么样" |
 | 分析 / 趋势 / 对比 | → 经营分析 | "分析一下经营状况" |
 | 评估 / 解读 / 原因 | → 经营分析 | "利润率为什么下降" |
 
+> 路由原则（强制）：**带分析、建议意图的查数请求走经营分析**——即使表述含"统计""查询""查一下""排行榜"，只要落点是排行找问题、给建议/推荐、算指标做分类决策，就走「电商经营分析与诊断」；仅要具体数值的才走查数。
+
 **不包含**：
-- 经营分析（评价性提问）→ 不支持，直接告知用户
+- 经营分析（评价性提问）→ 不属于本技能，告知用户本能力只查具体数值，并引导改用经营分析能力
+- 带分析、建议意图的查数（统计排行榜找问题商品、结合销量给补货建议、计算库存周转与缺货风险并分类推荐等）→ 引导改用「电商经营分析与诊断」，本技能不承接
 - 创建正式 ERP 单据（采购订单/入库单/销售单等）→ 不支持，直接告知用户
 - 快速记账 → 不支持，直接告知用户
 - 企业风险分析 → 不支持，直接告知用户
@@ -160,12 +169,12 @@ allowed-tools:
 |------|------|------|------|
 | title | string | 是 | 对话标题，固定使用 `"新对话"` |
 | input | string | 是 | 发送给服务的消息内容，默认使用用户原话；仅允许做最小必要改写，不得扩展用户未明确表达的查询范围 |
-| sid | string | 是 | 当前轮次的会话 ID，从当前工作目录路径中提取 UUID 作为其值，原样传入 |
-| variables | object | 是 | 对话变量，需填充 messageType=Message、agent_id=OrchestratorAgent、skills=report-data-query-guide-v2 |
+| sid | string | 是 | 当前轮次的会话 ID，按「调用要点」规则取值后原样传入 |
+| variables | object | 是 | 对话变量，需填充 messageType=Message、agent_id=OrchestratorAgent、skills=report-data-query-guide-v2，以及来源参数 source_agent_id=""、source_agent_name=""、source_skill_id=xdjz-smart-data-query、source_skill_name=智能查数、source_type=workbuddy |
 
 **调用要点**：
 - `input` **默认使用用户原话**：只有主 Agent 对话上下文中存在明确、可引用的信息，且用户当前问题包含指代或省略时，才允许基于该上下文做最小必要改写；如果没有主 Agent 对话上下文信息，必须原样传递用户问题，不得改写
-- `sid` **必须传入**当前轮次的会话 ID；取値方式：从当前工作目录路径中提取 UUID（格式为 `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`），原样传入；不可为空、不可伪造；如路径中无法识别 UUID，则告知用户“服务暂时无法获取会话信息，请稍后重试”，**禁止**在无法获取 sid 的情况下发起调用
+- `sid` **必须传入**当前轮次的会话 ID；取值方式：Windows 端取 `~/.workbuddy/workspace/sessions/` 下与当前工作目录创建时刻对应的 UUID 目录名（注意：工作目录名本身是时间戳，不是 UUID，不可直接用作 sid），原样传入；其他端该目录位置不一定相同；若不存在该目录，由你自行寻找会话 ID（可依据会话上下文、本机会话记录等线索，如 `~/.workbuddy/sessions/*.json` 中 cwd 匹配记录的 sessionId）；确实无法确定时，自行随机生成一个 UUID 作为 sid 传入，且当前轮次内保持一致（同一轮次的多次调用复用同一个随机 UUID，不得中途更换）
 - `title` 固定为 `"新对话"`，用户不可见
 - `variables` 必须传入，格式如下：
 
@@ -173,7 +182,12 @@ allowed-tools:
 {
   "messageType": "Message",
   "agent_id": "OrchestratorAgent",
-  "skills": "report-data-query-guide-v2"
+  "skills": "report-data-query-guide-v2",
+  "source_agent_id": "",
+  "source_agent_name": "",
+  "source_skill_id": "xdjz-smart-data-query",
+  "source_skill_name": "智能查数",
+  "source_type": "workbuddy"
 }
 ```
 
@@ -213,11 +227,16 @@ allowed-tools:
 {
   "title": "新对话",
   "input": "本月销售额是多少？",
-  "sid": "<当前工作目录路径中提取的UUID>",
+  "sid": "<按「调用要点」规则取得的会话ID>",
   "variables": {
     "messageType": "Message",
     "agent_id": "OrchestratorAgent",
-    "skills": "report-data-query-guide-v2"
+    "skills": "report-data-query-guide-v2",
+    "source_agent_id": "",
+    "source_agent_name": "",
+    "source_skill_id": "xdjz-smart-data-query",
+    "source_skill_name": "智能查数",
+    "source_type": "workbuddy"
   }
 }
 ```
@@ -239,7 +258,16 @@ kingbot_chat 返回对话 ID 和 AI 回复内容。处理方式：
 - 以简洁的业务语义展示查询结果，不暴露对话 ID、工具名等
 - 如果 AI 回复包含表格或列表，按原格式展示
 - 如果 AI 回复包含确认提示或要求补充信息，原样转达给用户
-- **展示、生成文件前必须先按下方【SQL 过滤规则】【tipsjson 展示规则】处理返回内容**
+- 同一数值/信息只输出一次，禁止在不同段落或表格中重复展示
+- **展示、生成文件前必须先按下方【数值真实性规则】【SQL 过滤规则】【tipsjson 展示规则】处理返回内容**
+
+### 数值真实性规则（强制）
+
+对用户展示的每一个数值（金额、数量、比例、日期等）都必须**逐字来自服务返回内容**：
+
+- 禁止估算、推算、四舍五入或自行加工：不得在服务返回之外自行计算合计、增长率、平均值、汇总数等
+- 服务未返回数值、查询结果为空 → 如实告知用户“未查询到相关数据”，**禁止编造、填充或举例任何数字**
+- 未收到明确的查询结果前，禁止以任何形式向用户呈现“查询结果”或宣称查询成功
 
 ### SQL 过滤规则（强制）
 
@@ -321,6 +349,7 @@ kingbot_chat 返回对话 ID 和 AI 回复内容。处理方式：
 ```
 1. 意图识别
    ├─ 确认用户意图为查询业务数据（而非创建单据/记账/风险分析）
+   ├─ 命中意图路由表「→ 经营分析」行（带分析/建议意图）→ **禁止回复“不支持”**，禁止调用查数服务硬做，引导改用「电商经营分析与诊断」
    ├─ 排除场景：含“创建/新增/记账/风险评估”等 → 直接告知不支持
    └─ 确认用户提供了查询需求描述
 
@@ -330,12 +359,12 @@ kingbot_chat 返回对话 ID 和 AI 回复内容。处理方式：
 
 3. 调用查数服务
    ├─ input = 用户原话或基于主 Agent 对话上下文的最小必要改写（无上下文时禁止改写；禁止补充用户未明确表达的年份、月份拆分、查询维度等）
-   ├─ sid = 从当前工作目录路径中提取的 UUID（必填；路径中无 UUID 时终止并告知用户）
+   ├─ sid = 按调用要点规则取得的会话 ID（必填；确实无法确定时随机生成一个 UUID，当前轮次内保持一致）
    ├─ title = "新对话"
-   └─ variables = {messageType=Message, agent_id=OrchestratorAgent, skills=report-data-query-guide-v2}
+   └─ variables = {messageType=Message, agent_id=OrchestratorAgent, skills=report-data-query-guide-v2, source_agent_id="", source_agent_name="", source_skill_id=xdjz-smart-data-query, source_skill_name=智能查数, source_type=workbuddy}
 
 4. 结果展示
-   ├─ 成功 → 先按【SQL 过滤规则】删除 SQL 语句、按【tipsjson 展示规则】转换提示数据，再按业务语义展示查询结果
+   ├─ 成功 → 先按【数值真实性规则】核对数值来源、按【SQL 过滤规则】删除 SQL 语句、按【tipsjson 展示规则】转换提示数据，再按业务语义展示查询结果
    │   └─ 明细数据超过 20 条 → 仅展示前 20 条，完整明细生成 Excel 文件（文件中同样不得包含 SQL）并告知用户文件位置
    ├─ AI 要求补充信息 → 原样转达，等待用户补充后重新调用
    └─ 异常 → 展示错误提示，建议重试
@@ -351,8 +380,8 @@ kingbot_chat 返回对话 ID 和 AI 回复内容。处理方式：
 **Q2: 用户要求创建单据怎么办？**
 → 直接告知不支持该操作。
 
-**Q3: 用户要求经营分析怎么办？**
-→ 直接告知不支持该操作。
+**Q3: 用户要求经营分析、或查数请求带分析/建议意图怎么办？**
+→ 均不属于本技能：评价性/分析性提问直接告知不支持并引导改用经营分析能力；带分析、建议意图的查数请求（如"统计本月销量排行榜，找卖得多没赚钱的""结合销量给我补货建议""算库存周转天数，给我最该补货的3款"）引导改用「电商经营分析与诊断」。
 
 **Q4: 用户要求修改数据怎么办？**
 → 直接告知不支持该操作。

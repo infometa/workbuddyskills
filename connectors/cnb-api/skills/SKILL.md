@@ -44,6 +44,7 @@ skills:
 
 - **默认摘要省流**：默认精简输出，加 `--verbose` 输出完整数据。
 - **多行用单引号**：bash 参数为多行文本时用单引号，降低命令注入风险。
+- **创建 issue 默认带 `--work-mode`**：`cnb issues create-issue` 已默认注入 `work_mode: true`，不必再传；`--work-mode` 也仍可从 `--help` 看到并显式覆盖。
 
 ## issue/pr 访问说明
 

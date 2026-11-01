@@ -2,10 +2,10 @@
 name: yihook-ugc-video
 description: 根据商品图与可选人物图制作单条 UGC 商品视频；用户确认 2–30 秒时长后生成，查询已有任务和实际结算。
 metadata:
-  version: 0.7.8
+  version: 0.8.1
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.7.8
+version: 0.8.1
 display_name: Yihook UGC 商品视频
 display_name_en: Yihook UGC Product Video
 description_zh: 根据商品图与可选人物图制作单条 UGC 商品视频；用户确认 2–30 秒时长后生成，查询已有任务和实际结算。

@@ -3,9 +3,9 @@ name: product-video
 description: 复用商品资料，确认解析与成片整单费用后，逐条制作通用、开箱、口播或钩子视频并恢复原请求。
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
 metadata:
-  version: 0.7.8
+  version: 0.8.1
   author: yihook
-version: 0.7.8
+version: 0.8.1
 display_name: TikTok Shop 商品链接智能成片
 display_name_en: TikTok Shop Product Video
 description_zh: 复用商品资料，确认解析与成片整单费用后，逐条制作通用、开箱、口播或钩子视频并恢复原请求。
@@ -33,17 +33,17 @@ author: yihook
 
 ## 整单免费报价与一次确认
 
-1. 链接调用 `preview_product_links`；已有商品用 `get_product` / `list_products` 定位并确认已完成，解析费为 0。Excel 先按下节上传，再调用 `preview_product_excel`。商品解析语言未指定可用英语，不代替视频语言选择。保留预检返回的重复链接、原行号、收费与复用信息，不静默丢项。
+1. 链接调用 `preview_product_parse`，传 `source_type=links` 和 `links`；已有商品用 `get_product` / `list_products` 定位并确认已完成，解析费为 0。Excel 先按下节上传，再调用 `preview_product_parse`，传 `source_type=excel` 和 `upload_id`，不传 `links`。商品解析语言未指定可用英语，不代替视频语言选择。保留预检返回的重复链接、原行号、收费与复用信息，不静默丢项。
 2. 把“各商品 × 用户指定的各类型条数”展开为执行清单，每条调用 `preview_hookreel_video({selling_angle, person_region, video_language, disable_voiceover})`。它在商品解析之前就能返回可信单条成片费，不含解析费；不先付费解析来取得成片报价。多条逐项记录报价 ID、有效期与积分。
-3. 展示商品来源、类型与各自条数、人物地区、语言、有声 / 无人声、解析预估积分、逐条成片预估积分、总额和有效期。没有可信完整报价或超出用户预算时停止。取得一次整单确认后执行；解析成功、每条成片前不例行再次确认。仅费用增加、条数增加或重新制作需要再次确认。
+3. 展示商品来源、类型与各自条数、人物地区、语言、有声 / 无人声、解析预估总额及专用/通用积分拆分、逐条成片预估通用积分、整单两种积分支出和有效期。没有可信完整报价或超出用户预算时停止。取得一次整单确认后执行；解析成功、每条成片前不例行再次确认。费用增加、费用来源变化、条数增加或重新制作需要再次确认。
 
-预检有效且可提交时返回 `quote_id` 与 `expires_at`。宿主保存它们，提交 `submit_product_links` / `submit_product_excel` 时原样传 `quote_id` 和预检时相同的 links / upload_id；不得自行填造报价。报价绑定账号、输入、费用、额度与价格版本，有效期 600 秒。无有效报价不提交；服务端明确返回 `PRODUCT_QUOTE_*` 时本次付费解析已回滚，只刷新免费预检，费用增加时重新确认。Excel 报价拒绝可能保留未收费的失败文件任务；确认未创建解析运行后，刷新报价并用新请求 ID 提交，保留原记录。
+预检有效且可提交时返回 `quote_id` 与 `expires_at`。宿主保存它们，提交 `submit_product_parse` 时原样传 `quote_id` 和预检时相同的 source_type 及 links / upload_id；不得自行填造报价。报价绑定账号、输入、总费用、双积分分摊、逐项单元、周期与价格版本，有效期 600 秒。无有效报价不提交；服务端明确返回 `PRODUCT_QUOTE_*` 时本次付费解析已回滚，只刷新免费预检，费用增加或费用来源变化时重新确认。Excel 报价拒绝可能保留未收费的失败文件任务；确认未创建解析运行后，刷新报价并用新请求 ID 提交，保留原记录。
 
 创建响应丢失时用原 `request_id` 调用 `get_product_parse_request`，不依赖报价或文件是否过期。Excel 恢复响应的 `job` 为文件汇总，`run` 和 `items` 为原解析运行及逐行商品、`attempt.excelRowNumber`、状态与结算；`run=null` 表示尚无已提交解析运行，只继续查询或说明阻塞，不重提。已知 run.id 后用 `get_product_parse_run` 查询，P5 仅使用成功项的 product.id 成片。
 
 ## 解析与逐条成片
 
-商品解析可一次提交多链接或 Excel 多行。宿主为本次解析生成并保存独立 `request_id`，调用 `submit_product_links` / `submit_product_excel`；链接按提交返回的 run.id 轮询 `get_product_parse_run`；Excel 从提交返回的 runs 或 `get_product_parse_request` 恢复 run.id，再查询逐行 items，取得 P1 的 product.id。`get_product_excel_job` 仅查询文件汇总，不据此猜测商品 ID。解析响应未知只调用 `get_product_parse_request`，查不到就停止，不换 ID 重提。解析失败的商品不得成片；分别说明失败和实际结算，其他已成功商品可按确认清单继续。
+商品解析可一次提交多链接或 Excel 多行。宿主为本次解析生成并保存独立 `request_id`，调用 `submit_product_parse`，链接传 `source_type=links` 与 `links`，Excel 传 `source_type=excel` 与 `upload_id`，两种输入不得混传；链接按提交返回的 run.id 轮询 `get_product_parse_run`；Excel 从提交返回的 runs 或 `get_product_parse_request` 恢复 run.id，再查询逐行 items，取得 P1 的 product.id。`get_product_excel_job` 仅查询文件汇总，不据此猜测商品 ID。解析响应未知只调用 `get_product_parse_request`，查不到就停止，不换 ID 重提。解析失败的商品不得成片；分别说明失败和实际结算，其他已成功商品可按确认清单继续。
 
 已有商品直接复用 product_id。展示已解析商品的简短摘要；名称或图片缺失则说明阻塞，不用无关图片替代，也不重新收费解析来绕过身份差异。服务端使用本人已完成商品的名称、描述和前至多 16 张图片。
 
@@ -69,9 +69,17 @@ author: yihook
 
 ## 渠道与授权
 
-仅使用 WorkBuddy 原生 OAuth 连接的 Yihook 主站 MCP。成片预检、结果和原请求查询需要 hookreel:read；创建需要 hookreel:create；下载需要 hookreel:download。商品读取 / 预检需要 product:read，解析提交需要 product:create，Excel 上传需要 file:upload。缺少工具或 scope 时补授权，不切换其他后端。
+仅使用 WorkBuddy 原生 OAuth 连接的 Yihook 主站 MCP。成片预检、结果和原请求查询需要 video:read；创建需要 video:create；下载同属 video:read。商品读取 / 预检需要 product:read，解析提交需要 product:create，Excel 上传需要 file:upload。缺少工具或 scope 时补授权，不切换其他后端。
 
 本 Skill 不使用开放平台 API Key 或脚本客户端，不发行 SkillHub 包。账号、积分、商品和任务均属于当前主站账号。所有请求 ID、商品 ID、报价 ID 和上传 ID 由宿主维护，不让用户手填。失败或状态未知时遵守正文恢复规则，不自动重发收费创建。
+
+## 前置解析的研策费用
+
+商品解析免费预检展示 `quote.totalCredits`、`quote.researchCredits`、`quote.generalCredits`、`quote.quoteUnits`、`quote.priceVersion` 与有效期，检查 `quote.canSubmit`；有收费单元还需 `quote.available=true`。完整报价缺失或不允许提交时停止，不把缺失金额填 0。未开通套餐可按真实报价使用通用积分，不自动购买套餐；专用积分优先、通用补差，赠分到期重置、不结转。解析仍仅支持当前 MCP 的 TikTok Shop 美国站。
+
+解析双积分费用与成片通用积分费用分开列出，再汇总整单两种积分支出；不能用研策专用积分抵扣成片费，也不能把解析总费用全算为通用积分。免费复用按本次报价说明。费用来源变化时重新确认；前置解析响应未知仍只查原请求，生成预算不能代替未授权的解析费。
+
+解析结算取本次 `run.entitlement`，逐行取 `items[].attempt.entitlement`，分别展示 `researchCreditsCharged/generalCreditsCharged` 和 `researchCreditsRefunded/generalCreditsRefunded`，整单与逐行不重复相加。`reserved` 为预占，`partial/unknown` 为未决，`released` 为已释放，不用估价或商品历史费用冒充本次实扣；`workflow_included` 不重复收费。成片仍按其 `settlement` 展示通用积分结算，研策积分只用于已报价的前置解析。
 
 
 ## 按需参考

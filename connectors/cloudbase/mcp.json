@@ -6,12 +6,18 @@
                 "-y",
                 "@cloudbase/cloudbase-mcp@latest"
             ],
+            "timeout": 60000,
             "runtime": {
                 "type": "node",
                 "version": ">=20"
             },
+            "npmRegistries": [
+                "https://registry.npmmirror.com",
+                "https://registry.npmjs.org"
+            ],
             "staticEnv": {
-                "INTEGRATION_IDE": "WorkBuddy"
+                "INTEGRATION_IDE": "WorkBuddy",
+                "CLOUDBASE_MCP_CLIENT": "workbuddy"
             }
         }
     },

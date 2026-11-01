@@ -48,7 +48,7 @@
 |---|---|
 | 「看看经过第 2 层『提交订单』节点的用户」 | `slice_element_filters: [{"event":"e2e_submit_order"}]` + `session_level: 2` |
 | 「看看第 1 层节点的流失用户」 | `slice_element_filters: [{"event":"<该层事件>"}]` + `session_level: 1` + `edge_type: "WASTAGE"` |
-| 「看看从节点 A 流向节点 B 的用户」 | `slice_element_filters: [A]` + `next_slice_element_filters: [B]` + 对应层数 |
+| 「看看从节点 A 流向节点 B 的用户」 | `slice_element_filters: [A]` + `next_slice_element_filters: [B]` + 对应层数 + `edge_type: "ALL"`（流向语义的正确组合是 ALL + next；RETENTION + next 会退化为节点全集，见使用约束） |
 
 `session_level` 与报表 `nodes` 的下标对应（第 1 层 = `nodes[0]`）。
 
@@ -58,7 +58,7 @@
 
 ### 第四步：自检并执行
 
-对照校验速记过一遍 → `--dry-run` → 执行。
+对照校验速记过一遍 → 执行。
 
 ### 调用示例
 
@@ -104,6 +104,7 @@ __SENSORS_QUERY__
 | 错误 / 现象 | 触发条件 | 修正方式 |
 |---|---|---|
 | `参数校验失败: edge_type ...` | `edge_type` 不在 WASTAGE / RETENTION / ALL 内 | 按业务口径改为三者之一 |
+| 下钻 total 等于该节点 ALL 全集 / 始终为 0 | `next_slice_element_filters` 被服务端忽略（已知问题） | 见使用约束的已知服务端问题说明 |
 | 返回 `total: 0` | 节点定位与报表不一致（层数、事件、`session_interval` 不同），或该节点本身无人 | 对照报表 `nodes` / `links` 重新定位；`session_interval` 与报表保持一致 |
 
 ## 使用约束
@@ -112,3 +113,6 @@ __SENSORS_QUERY__
 - 路径明细的节点定位依赖服务端路径计算，部分环境下明细可能返回空：定位值与报表一致且无报错时按合法空结果报告，不反复重试。
 - `total: 0` 且无报错时直接报告，不自动调整层数或事件重试。
 - `user_filter` 在明细中不可用（接口无该字段）：需要按用户属性筛人群时，先用 `analysis.user-path` 报表确认，或将条件改写进事件过滤。
+- 流向查询的正确组合是 `edge_type: "ALL"` + `next_slice_element_filters`（老执行链路按 lead 语义对下一行求值条件，行为正确）；`edge_type: RETENTION` + next 从来不生效（IsSet 对 true/false 均为真，结果退化为节点用户全集，新老执行链路的历史行为一致，不是可修复的缺陷）。
+- 已知服务端问题（实测 SA 3.0.5.330，3.0.4 同源代码）：路径明细的新 transform 执行链路把 next 条件编码为窗口 CASE 列，生产 Impala 内核对该 CASE 型参数按当前行求值而非会话内下一行，导致 `ALL` + next 在新模式下拿不到真实流向（同事件得全集、异事件得 0）。服务端修复（携带 next 过滤时回退老链路）已提交，待部署后 `ALL` + next 生效。判别方式：返回 `total` 等于该节点 ALL 口径 total 或为 0 即未生效；不可用时改为查询「经过 B」人群：B 所在层 + `slice_element_filters: [B]` 单独查询。
+- 明细 `page.total` 是去重用户数，报表 `nodes/links` 的 `times` 是 Session 内步骤出现次数，两者口径不同不可直接对账（恒有 total ≤ times）；对账请以明细 total 为人数口径。

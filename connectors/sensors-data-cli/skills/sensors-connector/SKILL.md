@@ -3,12 +3,13 @@ name: sensors-connector
 description: |
   神策连接器统一入口：先按场景路由到神策 AI 对话或 sensors CLI，再按对应 reference 调用。
   AI 链路承接客群发现与运营增长；CLI 链路承接快速洞察、深度分析、规则圈选与数据管理。
-  CLI 能力包括元数据查询、标准分析、只读 SQL、看板与书签、标签与分群管理，以及受控写入。
+  CLI 能力包括元数据查询与口语名绑定（事件/属性/取值/库表列）、标准分析查询、只读 SQL、看板与书签（含书签查询定义导出）、标签管理、分群管理，以及受控写入。
   首次运行未配置时引导用户完成配置。
+  使用时机：请求涉及神策平台数据的查询、分析、创建或受控写入；需要选择 sensors 命令、构造参数、发现输入 Schema、解析结构化输出与错误 request_id；工具调用一律先经工具路由表读取对应工具说明、再按说明构造命令，--help 仅作契约核对回退；CLI 报配置缺失需要引导初始化；用户反馈神策技能在 WorkBuddy 中重复加载等环境冲突时按「环境冲突自检」处理。
   边界：只负责场景路由、命令执行与结果结构化，业务口径与对象选择由调用方确认。
 description_zh: 神策连接器统一入口：AI 与 CLI 场景路由、AI 对话调用、CLI 参数与 Schema 发现、安全执行和结构化输出。
 description_en: "Unified Sensors connector: route scenarios between Sensors AI chat and the Sensors CLI, then execute the referenced contract safely."
-version: 2.0.0
+version: 2.0.1
 author: Sensors Data
 metadata:
   requires:
@@ -17,13 +18,13 @@ metadata:
 
 # sensors-connector
 
-本 Skill 是调用方（用户直接请求或上层业务流程）与神策 AI / `sensors` CLI 之间的统一执行层：先按场景选择链路，再按对应 reference 调用并返回结构化结果。
+本 Skill 是调用方（用户直接请求或上层业务流程）与神策 AI / `sensors` CLI 之间的统一执行层：先按场景选择链路，再按对应 reference 调用并返回结构化结果；CLI 链路先在工具路由表选定工具、读取其工具说明，命令与参数以工具说明为准（执行纪律见「工具路由」）。
 
 ## 边界
 
 - 负责 AI/CLI 场景路由、AI 对话调用、CLI 命令路由、参数与输入 Schema、结构化输出、错误与 `request_id`。
 - 不做业务决策：不选择分析模型、不替用户在多个业务对象间做决定、不解释业务结论；这些由调用方（用户或上层流程）完成。
-- CLI 的实时 `--help`、`--schema`（如命令支持）与 `--dry-run` 请求预览是 CLI 参数契约的最终事实源；AI 命令以 [execute-ai-chat.md](references/execute-ai-chat.md) 为准。
+- 参数契约按固定顺序获取：**工具说明是第一来源**，命令、flag 与输入 Schema 从对应工具的 Reference 取得，`--dry-run` 请求预览仅用于写操作安全预览与请求结构排查。仅当按 Reference 构造后命令仍报参数错误、或 Reference 明确声明某契约未收录时，才回退到实时 `--schema` / `--help` 核对差项，并以 CLI 输出为准修正本次调用；`--help` 不是参数发现手段，未读 Reference 前不得用它探索命令。AI 命令以 [execute-ai-chat.md](references/execute-ai-chat.md) 为准。
 - 不绕过 CLI 用 HTTP、`curl` 或未登记脚本调用产品接口。
 
 ## 场景路由：AI 还是 CLI
@@ -40,7 +41,7 @@ metadata:
 | 数据管理 | B · CLI | 埋点方案设计、埋点实施、埋点测试 |
 
 - 完整场景表、判定兜底和易错点见 `analyze.scenarios`（[analyze-scenarios.md](references/analyze-scenarios.md)），判断不清时先读它；跨模式请求拆成多个步骤，分别执行 A/B 并交叉引用结果。
-- 链路 A：调用 `ai.chat`，执行前必须读 [execute-ai-chat.md](references/execute-ai-chat.md)；content 原样传入、会话 ID 复用、执行模式、超时恢复与结果取用规则以该文件为唯一事实源。
+- 链路 A：调用 `ai.chat`，执行前必须读 [execute-ai-chat.md](references/execute-ai-chat.md)；content 原样传入、会话 ID 复用、执行模式、超时恢复与结果取用规则以该文件为唯一事实源。预测、归因、大盘生成等长任务改用 `--stream`（SSE 长连接，超时按相邻帧间隔判定，不会被总时长掐断），需要等待期可见性时再加 `--progress` / `--progress-file`。
 - 链路 B：按「上下文与调用前置」→「元数据解析」→「工具路由」执行；AI reference 不替代 CLI reference。
 
 ## 上下文与调用前置
@@ -59,8 +60,9 @@ sensors context session-start --ai-goal "<不超过 30 字的目标摘要>" --fo
 
 - 首次真实请求或用户目标切换时执行一次；输出 `ai_session_id`、`default_project_name`、`number_of_projects` 等字段。
 - 同一目标内的追问、下钻、参数调整必须复用已有 `ai_session_id`，不得重复 `session-start`。
-- 后续真实业务命令携带 `--ai-session-id <ai_session_id>`；`--schema`、`--dry-run` 等不发请求的预览按目标命令帮助执行。
+- 后续真实业务命令携带 `--ai-session-id <ai_session_id>`；`--schema`、`--dry-run` 等不发请求的预览按目标工具说明执行。
 - 复合协议 `context.ensure`：无可用 session 时执行 `session-start`，已有则直接复用——不要重复建立。
+- 本节的会话建立只服务链路 B。链路 A（`sensors ai chat`）不建立也不接收 `ai_session_id`：`--ai-session-id` 不是它的选项（传入即报 Unknown option）；AI 链路有自己的一套会话纪律，见 [execute-ai-chat.md](references/execute-ai-chat.md) 的「会话纪律」。
 
 ### 解析项目：`context.project-get` / `context.project-list`
 
@@ -72,6 +74,14 @@ sensors context project-list --ai-session-id <id> [--product-name SA|SF|Horizon]
 - 仅当默认项目不是目标项目、用户要求切换或项目不明确时执行。
 - `project-get` 的 `--project-id` 与 `--project-name` 至少提供一个；输出 `id`、`name`、`display_name`、`product_name`、`status` 等。`--project-id` 仅是本命令的查询条件，不代表其它命令接受数字 ID——其它命令一律用项目英文名（见「公共调用规则」）。
 - `project-list` 输出 `projects[]`；多候选且用户未指定时返回候选清单请调用方确认，**禁止猜测**；空结果或无权限时停止，不静默换项目重试。
+
+### 环境冲突自检（WorkBuddy）
+
+用户反馈「神策技能重复加载 / 出现两份同名技能 / 行为不一致」，或会话中出现疑似重复触发症状时执行；不做每次会话的常态前置检查：
+
+1. 执行 `sensors connector conflict-check` 确认状态：输出 JSON 中 `conflict=true` 表示 WorkBuddy 官方连接器与 `~/.workbuddy/skills/` 下手动安装的神策 skills 并存，`sensors-connector` 会被 WorkBuddy 重复加载；`needs_attention=true` 但 `conflict=false` 表示只有旧版本残留。
+2. 向用户说明影响（重复触发、版本口径不一致）后，经用户**明确确认**执行 `sensors connector conflict-check --fix --yes`：清理 `~/.workbuddy/skills/` 下全部神策 skills（含旧版本残留）；分群、标签、看板等业务技能会一并移除，完整重装手动 skills 会再次安装基座并产生重复。
+3. 告知用户需重启 WorkBuddy 生效，然后回到原任务重试。
 
 ## 元数据解析
 
@@ -115,7 +125,16 @@ sensors context project-list --ai-session-id <id> [--product-name SA|SF|Horizon]
 
 ## 工具路由
 
-本表按用途路由到工具说明；各工具的精确命令、flag 与输入 Schema 在其说明文件（Reference 列）中，不在本表登记。一次任务只加载目标工具的一个 reference；Analytics 查询先读公共输入契约 `analytics/analytics-query-schema.md`。禁止预加载多个工具文档或全部领域。
+本表按用途路由到工具说明；各工具的精确命令、flag 与输入 Schema 在其说明文件（Reference 列）中，不在本表登记。
+
+执行纪律——先读文档、后拼命令，任何工具调用前依次完成：
+
+1. **路由**：按意图在本表选定唯一工具。
+2. **阅读**：完整读取该工具的 Reference（含参数表、构造流程、输出与错误排查），Analytics 查询先读公共输入契约 `analytics/analytics-query-schema.md`；未读完前不构造、不执行该工具。
+3. **构造**：按 Reference 的「参数」与「构造流程」生成命令与 `--input`，对照校验速记自检后直接执行。查询（读）类工具**不要求 `--dry-run` 预览**：参数问题在真实执行时本地校验或服务端会立即返回结构化错误（带 `request_id`），按错误修正重试即可，`--dry-run` 仅用于排查请求结构问题；写操作必须预览（见「写操作安全联锁」）。
+4. **回退**：仅当按 Reference 构造后命令仍报参数/契约错误，或 Reference 明确声明某信息未收录时，才运行目标命令的 `--schema` / `--help` 核对差项，以 CLI 输出为准修正本次调用。
+
+一次任务可同时加载当前步骤需要的多个 reference（目标工具说明 + 配套的元数据查询工具说明 + 共享 Schema 文件），建议并行读取以减少往返；仍禁止预加载与当前任务无关的工具文档或全部领域。
 
 ### 神策 AI（命令组 `sensors ai`）
 
@@ -125,6 +144,8 @@ sensors context project-list --ai-session-id <id> [--product-name SA|SF|Horizon]
 | （路由）`analyze.scenarios` | AI 与 CLI 链路及具体场景边界判定 | 路由 | [analyze-scenarios.md](references/analyze-scenarios.md) |
 
 ### 标准分析（命令组 `sensors analytics`）
+
+**分析报表**：
 
 | 工具 | 用途 | 类型 | Reference |
 |---|---|---|---|
@@ -138,19 +159,28 @@ sensors context project-list --ai-session-id <id> [--product-name SA|SF|Horizon]
 | `analysis.attribution` | 归因分析: 看转化贡献归属：目标转化前各触点 / 渠道的贡献占比，支持首触 / 末触 / 线性 / 时间衰减模型对比 | 查询 | [analytics/analyze-attribution.md](references/analytics/analyze-attribution.md) |
 | `analysis.user-path` | 路径分析: 看用户行为轨迹：起始事件后的后续路径、结束事件前的前序路径与流转关系 | 查询 | [analytics/analyze-user-path.md](references/analytics/analyze-user-path.md) |
 | `analysis.user-property` | 属性分析: 按属性维度看分布：用户 / 事件属性的分组统计与交叉分布（属性分析报表） | 查询 | [analytics/analyze-user-property.md](references/analytics/analyze-user-property.md) |
-| `analysis.user-list` | 用户列表: 找具体用户：按用户 ID / 属性 / 固定分群筛选用户明细（用户细查），返回指定属性列 | 查询 | [analytics/analyze-user-list.md](references/analytics/analyze-user-list.md) |
 | `analysis.personas` | 用户群画像: 看人群画像特征：目标 / 对比人群的标签与属性分布、行为指标，可带 TGI 差异 | 查询 | [analytics/analyze-personas.md](references/analytics/analyze-personas.md) |
 | `analysis.rfm` | RFM 分析: 做客户价值分层：按最近一次行为（R）、频次（F）、价值（M）划分高价值 / 保持 / 发展 / 挽留客户 | 查询 | [analytics/analyze-rfm.md](references/analytics/analyze-rfm.md) |
 | `analysis.session-create` | Session 分析: 创建自定义 Session 定义，供 Session 分析以名称引用 | 写入 | [analytics/create-session-definition.md](references/analytics/create-session-definition.md) |
 | `analysis.session-list` | Session 分析: 查询当前项目下全部自定义 Session 定义 | 查询 | [analytics/list-session-definitions.md](references/analytics/list-session-definitions.md) |
 | `analysis.session-update` | Session 分析: 按 id 部分更新已有自定义 Session 定义（`name` 不可变） | 写入 | [analytics/update-session-definition.md](references/analytics/update-session-definition.md) |
-| `analysis.funnel-users` | 漏斗明细: 下钻漏斗某一步的转化 / 流失用户名单（分析参数与漏斗报表一致，`slice_step` + `wastage` 定位步骤） | 查询 | [analytics/list-funnel-users.md](references/analytics/list-funnel-users.md) |
-| `analysis.retention-users` | 留存明细: 下钻某天初始行为在第 N 周期的留存 / 流失用户名单（`slice_date` + `slice_interval` + `wastage`） | 查询 | [analytics/list-retention-users.md](references/analytics/list-retention-users.md) |
-| `analysis.segmentation-users` | 事件分析明细: 下钻某指标 / 分组 / 日期的触发用户名单（`slice_by_values` + `slice_date`） | 查询 | [analytics/list-segmentation-users.md](references/analytics/list-segmentation-users.md) |
-| `analysis.distribution-users` | 分布明细: 下钻分布值落入某区间的用户名单（`slice_by_value` 定位单元格 + `slice_freq` 定位区间） | 查询 | [analytics/list-distribution-users.md](references/analytics/list-distribution-users.md) |
-| `analysis.ltv-users` | LTV 明细: 下钻某个起始日期 cohort 的用户名单（`slice_date` 取报表 cohort 日期） | 查询 | [analytics/list-ltv-users.md](references/analytics/list-ltv-users.md) |
-| `analysis.session-users` | Session 明细: 下钻某天 Session 指标的用户名单（`session_name` + `slice_date` 必填） | 查询 | [analytics/list-session-users.md](references/analytics/list-session-users.md) |
-| `analysis.user-path-users` | 路径明细: 下钻经过路径图某节点的用户名单（`slice_element_filters` + `session_level` + `edge_type`） | 查询 | [analytics/list-user-path-users.md](references/analytics/list-user-path-users.md) |
+
+**用户名单**——先按口径选路，再选工具：
+
+- **档案口径**：按用户 ID / 用户属性 / 固定分群找用户，不涉及事件行为条件 → `analysis.user-list`。
+- **行为口径**：找「做过某事件 / 满足某分析口径」的用户，如某报表 UV 的人群、漏斗某步的转化 / 流失人群、报表各分组下的人数 → 对应分析模型的明细下钻工具（下表），复用该模型已验证的查询体。
+- 两类口径的人群规模可能相差悬殊（如档案口径含大量从未触发目标行为的账号），不得互相替代或混用。
+
+| 工具 | 用途 | 类型 | Reference |
+|---|---|---|---|
+| `analysis.user-list` | 用户列表（档案口径）: 找具体用户：按用户 ID / 用户属性 / 固定分群筛选用户明细（用户细查），返回指定属性列；不支持「做过某事件」的行为条件，行为口径名单用本组明细下钻工具 | 查询 | [analytics/analyze-user-list.md](references/analytics/analyze-user-list.md) |
+| `analysis.segmentation-users` | 事件分析明细（行为口径）: 找触发过某指标的用户名单，可按分组值 / 日期定位到报表单元格（`slice_by_values` + `slice_date`；分析参数复用 `analysis.events` 查询体） | 查询 | [analytics/list-segmentation-users.md](references/analytics/list-segmentation-users.md) |
+| `analysis.funnel-users` | 漏斗明细（行为口径）: 找完成 / 未完成漏斗某一步的用户名单；分析参数复用 `analysis.funnel` 查询体（`slice_step` + `wastage` 定位步骤） | 查询 | [analytics/list-funnel-users.md](references/analytics/list-funnel-users.md) |
+| `analysis.retention-users` | 留存明细（行为口径）: 找某天初始行为在第 N 周期回访 / 流失的用户名单（`slice_date` + `slice_interval` + `wastage`） | 查询 | [analytics/list-retention-users.md](references/analytics/list-retention-users.md) |
+| `analysis.distribution-users` | 分布明细（行为口径）: 找数值属性落入某区间的用户名单（`slice_by_value` 定位单元格 + `slice_freq` 定位区间） | 查询 | [analytics/list-distribution-users.md](references/analytics/list-distribution-users.md) |
+| `analysis.ltv-users` | LTV 明细（行为口径）: 找某个起始日期 cohort 的用户名单（`slice_date` 取报表 cohort 日期） | 查询 | [analytics/list-ltv-users.md](references/analytics/list-ltv-users.md) |
+| `analysis.session-users` | Session 明细（行为口径）: 找某天产生 Session 指标的用户名单（`session_name` + `slice_date` 必填） | 查询 | [analytics/list-session-users.md](references/analytics/list-session-users.md) |
+| `analysis.user-path-users` | 路径明细（行为口径）: 找经过路径图某节点的用户名单（`slice_element_filters` + `session_level` + `edge_type`） | 查询 | [analytics/list-user-path-users.md](references/analytics/list-user-path-users.md) |
 | （共享）Analytics 公共输入/输出契约 | 标准分析查询共享的字段路径、过滤树、聚合器、日期范围与公共输出契约；查询类工具构造输入前先读 | — | [analytics/analytics-query-schema.md](references/analytics/analytics-query-schema.md) |
 
 ### SQL 查询（命令挂在 analytics 组下）
@@ -168,6 +198,7 @@ sensors context project-list --ai-session-id <id> [--product-name SA|SF|Horizon]
 | `dashboard.create` | 创建一个新的空看板（不接收初始书签） | 写入 | [dashboard/create-dashboard.md](references/dashboard/create-dashboard.md) |
 | `dashboard.update` | 全量更新看板：覆盖名称并按提交顺序整体替换书签列表 | 写入 | [dashboard/update-dashboard.md](references/dashboard/update-dashboard.md) |
 | `dashboard.bookmark-query` | 按书签 ID 执行已保存书签的分析查询并返回原始结果 | 查询 | [dashboard/query-bookmark.md](references/dashboard/query-bookmark.md) |
+| `dashboard.bookmark-export` | 把书签保存的查询定义导出为对应分析模型的输入 schema JSON，供修改口径后重新执行 | 查询 | [dashboard/export-bookmark.md](references/dashboard/export-bookmark.md) |
 | `dashboard.bookmark-add` | 向已有看板的书签列表末尾追加一个或多个书签 | 写入 | [dashboard/add-bookmark.md](references/dashboard/add-bookmark.md) |
 | `dashboard.bookmark-remove` | 从看板中按书签 ID 移除一个或多个书签 | 写入 | [dashboard/remove-bookmark.md](references/dashboard/remove-bookmark.md) |
 | `dashboard.bookmark-copy` | 把源看板的已有书签复制到目标看板，可选迁移语义（复制后从源移除） | 写入 | [dashboard/copy-bookmark.md](references/dashboard/copy-bookmark.md) |
@@ -220,11 +251,21 @@ sensors context project-list --ai-session-id <id> [--product-name SA|SF|Horizon]
 - 项目参数统一使用**项目英文名**：全局 `--project <name>`（如 `--project default`）。
   - 除 `context.project-get`（按 ID 反查详情的查询条件）外，**任何业务命令都没有 `--project-id` 选项**；数字项目 ID 由 CLI 内部自动解析并缓存，调用方永远不需要、也不要尝试传 ID。
   - `session-start` 输出的 `default_project_id` 与 `project-get` 输出的 `id` 仅供展示，禁止据此构造 `--project-id` 或把数字当 `--project` 的值。
-- 复杂输入优先使用结构化 JSON（`--input -` + 单引号 heredoc）；具体传参方式以目标命令实时帮助为准。
+- 复杂输入优先使用结构化 JSON（`--input -` + 单引号 heredoc）；具体传参方式以目标工具说明的「参数」与「构造流程」为准。
+- 全局 flag 所有业务命令通用（工具说明不重复登记，构造命令无需查 `--help`）：
+
+| 全局 flag | 取值 / 默认 | 说明 |
+|---|---|---|
+| `--ai-session-id <id>` | 字符串 | 业务命令必填（服务端链路追踪）；`--dry-run` / `--schema` 预览豁免 |
+| `--project <name>` | 项目英文名 | 临时覆盖默认项目；没有 `--project-id`，见上 |
+| `--format <fmt>` | `json`（默认）/ `pretty` | 输出格式；结构化解析统一用 `json` |
+| `--timeout <秒>` | 默认 `300`；`sensors analytics` 命令组默认 `1800` | 请求超时秒数 |
+| `--context` / `--org-id` | — | 临时切换配置上下文 / 覆盖 org_id，常规任务不使用 |
 - `--schema`（如命令支持）与 `--dry-run` 请求预览不等于服务端校验；`--dry-run` 服务端预览不等于真实写入。
 - 多候选、目标对象不唯一时把候选交还调用方，不自行选择。
 - 同一任务内已定位的唯一对象（概览、书签、标签、分群、事件、属性等）直接复用其 ID 与已确认属性，不重复定位或重查。
 - 参数或 Schema 错误只根据当前契约修正；认证、权限、项目或写开关错误立即停止并返回修复提示。
+- 平台业务报错输出中的 `hint` 与 `error_code` 是服务端给出的真实失败原因（如参数校验错误直接给出 `name should not be null` 这类字段级原因），排查报错先读它们再决定修正或上报，不得忽略后盲目重试。
 - 暂时性网络错误可有限重试；明确不支持的能力返回 `unsupported`，不寻找旁路。
 - 采样、截断、空结果等结构事实必须原样保留并传回，业务含义由调用方判断。
 
@@ -241,3 +282,5 @@ sensors context project-list --ai-session-id <id> [--product-name SA|SF|Horizon]
 ## 完成输出
 
 向调用方返回：使用的工具、目标对象、执行阶段、结构化结果、截断或采样状态、`request_id`，以及任何未解决的配置、权限或业务确认问题。
+
+链路 A 还必须返回会话标识以便续聊：`sensors ai chat` 的 `data.session_id`、`data.session_source` 与 `data.hint`（`new_session` 表示本轮新开了一条会话线）。**同一对话内默认不传任何会话参数（CLI 自动续聊该对话最近 12 小时内的会话线）；换话题用 `--new-session`；切回旧任务线或跨对话续聊才需要 `--session-id`（取值见 `sensors ai sessions list`）**。把「本轮是否新开会话线」如实告知调用方；链路 B 返回本次 `ai_session_id`。会话标识缺失时如实说明，不要编造。

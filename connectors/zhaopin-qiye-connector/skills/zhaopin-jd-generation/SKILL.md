@@ -1,16 +1,16 @@
 ---
 name: zhaopin-jd-generation
-display_name: JD生成
+display_name: 职位描述生成
 display_name_en: JD Generation
 description: "根据已确认的岗位目标、核心职责、任职资格、薪酬福利和公司信息生成完整JD，并支持润色、修改、扩写、缩写、卖点提炼、版本对比、翻译、关键词优化和渠道适配；输出：标准版JD、渠道定制版本、版本差异及待确认内容；不得虚构岗位职责、薪酬福利或任职条件。"
 description_zh: "根据已确认的岗位目标、核心职责、任职资格、薪酬福利和公司信息生成完整JD，并支持润色、修改、扩写、缩写、卖点提炼、版本对比、翻译、关键词优化和渠道适配；输出：标准版JD、渠道定制版本、版本差异及待确认内容；不得虚构岗位职责、薪酬福利或任职条件。"
 description_en: Generates and adapts complete JDs from confirmed role facts without inventing responsibilities, compensation or qualifications.
 category: 人力招聘
-version: 1.0.2
+version: 1.0.3
 author: 智联招聘
 ---
 
-# 智联招聘｜JD生成
+# 智联招聘｜职位描述生成
 
 ## 目标与边界
 

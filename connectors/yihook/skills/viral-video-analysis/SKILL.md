@@ -3,9 +3,9 @@ name: viral-video-analysis
 description: 分析一条短视频分享页或已上传视频，查询原任务并在对话中整理结构化拆解报告。
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
 metadata:
-  version: 0.7.8
+  version: 0.8.1
   author: yihook
-version: 0.7.8
+version: 0.8.1
 display_name: 爆款短视频拆解与创意分析
 display_name_en: Viral Video Analysis
 description_zh: 分析一条短视频分享页或已上传视频，查询原任务并在对话中整理结构化拆解报告。
@@ -29,13 +29,13 @@ author: yihook
 
 上传时由宿主生成并保存 `upload_request_id`，计算 SHA-256，以 `purpose: "video"`、文件名、MIME、大小创建 `create_agent_file_upload` 会话。按返回的 `upload.url` 和全部 `upload.fields` 构造 multipart/form-data，最后追加 `file` 字段，将完整字节 POST 直传 OSS。不手设 multipart Content-Type，不携带 OAuth，不跟随重定向。调用 `complete_agent_file_upload` 确认服务端校验成功，只使用完成后的 `upload_id`。响应不明时按原 ID 调用 `get_agent_file_upload` 并尝试完成确认；OSS 409 不等于校验成功。票据过期且明确缺少对象时才续签，不能向用户展示凭证或票据。
 
-预检免费，展示视频来源、分析范围、`quote.credits` 积分、`quote.quotaUnits` 额度及有效期。不可提交时说明 `quote.reason`；没有可信报价时停止。报价 ID、上传 ID 和请求 ID 由宿主处理，不要求用户手填。只有用户明确要求分析且费用在其预算内时创建。
+预检免费，展示视频来源、分析范围、总费用、研策专用积分与通用积分拆分、逐项报价及有效期，具体字段见下方运行契约。不可提交时说明 `quote.reason`；没有可信报价时停止。报价 ID、上传 ID 和请求 ID 由宿主处理，不要求用户手填。只有用户明确要求分析且两种积分支出在其授权范围内时创建。
 
 ## 单条创建与恢复
 
 保存 `request_id` 后调用 `create_viral_analysis({request_id, quote_id})`。报价绑定当前账号与单条输入，最长有效 600 秒；不修改预检输入，不传数量或批量列表。多个视频逐条预检、汇总费用、逐条创建，为每条记录 WorkBuddy 渠道、原请求 ID、任务 ID、状态与实际结算。
 
-同请求 ID、同报价返回原任务；更换报价属于异参冲突。报价到期或费用变化且服务端明确未创建或已回滚时，只刷新免费预检，展示新费用；费用增加先取得确认。新建调用使用新的请求 ID，保留旧请求记录。**一旦提交响应不明，只调用 `get_viral_analysis_request` 查询原请求；查不到就停止，不能用刷新报价、换 ID 或重传文件来重试收费。** 已知任务 ID 则调用 `get_viral_analysis`。解析令牌过期不影响已提交任务的原请求查询。
+同请求 ID、同报价返回原任务；更换报价属于异参冲突。报价到期或费用变化且服务端明确未创建或已回滚时，只刷新免费预检，展示新费用；费用增加或费用来源变化时先取得确认。新建调用使用新的请求 ID，保留旧请求记录。**一旦提交响应不明，只调用 `get_viral_analysis_request` 查询原请求；查不到就停止，不能用刷新报价、换 ID 或重传文件来重试收费。** 已知任务 ID 则调用 `get_viral_analysis`。解析令牌过期不影响已提交任务的原请求查询。
 
 按 `poll_after_seconds` 轮询；`unknown` 保留未知状态，不断言退款，不持续自动轮询或重试创建。明确 `failed` 时展示失败原因和实际结算后结束。只有用户明确要求再做一次，才能重新报价并创建。链接失效、失败或退款都不是重建授权。已有成功报告可能由主站免费复用，按 `cached` 与真实报价说明。
 
@@ -59,6 +59,16 @@ author: yihook
 仅发行 WorkBuddy 原生 Skill，使用已连接的 Yihook 主站 MCP 与原生 OAuth。免费预检、报告和原请求读取需要 `analysis:read`；收费创建需要 `analysis:create`；视频上传需要 `file:upload`。旧授权缺少工具时请用户补授权，不退回其他渠道。
 
 主站账号、积分、素材与任务独立。此包不使用开放平台 API Key、HTTP 脚本客户端、SkillHub 包；不得切换后端恢复任务。工具错误中的 `next_action` 是后续操作提示，`retryable: false` 禁止自动重发创建。
+
+## AI 研策报价与确认
+
+研策专用积分优先，不足由通用积分补差。未开通套餐也可按当前报价使用通用积分分析，不自动购买套餐、充值或升档；监控席位不是分析次数额度。周期赠送积分到期重置、不结转，不能用套餐赠送总量代替本次可用余额。视频平台与输入范围仍由真实预检判断，不因登记了价格就承诺支持。
+
+免费预检展示 `quote.totalCredits` 总费用、`quote.researchCredits` 专用积分、`quote.generalCredits` 通用积分、`quote.quoteUnits` 各单元费用与复用情况、`quote.priceVersion` 及 `expires_at`。金额取本次响应，不硬编码单价，不把总费用当成通用积分实扣。`quote.researchCreditsAvailable` / `quote.generalCreditsAvailable` 是报价时可用余额，不保证提交时不变。
+
+检查 `quote.canSubmit`，有收费单元时还需 `quote.available=true`；免费复用也以服务端报价和允许提交为准。缺少完整总额、双积分拆分或逐项报价时停止，不将缺失值填成 0。余额不足、能力未开放、供应商预算暂停、执行未决按真实 `quote.reason` 分别说明。两种积分支出在用户授权范围内时才用原 `quote_id` 创建，不自行增加 `expectedQuote` 等工具未声明的参数。
+
+报价失效或冲突且已确认未创建/已回滚时，重新免费预检；费用增加或费用来源变化时重新确认。响应未知仍只查原请求，不通过重新报价重建任务。完成、失败或未决结果的实际双积分结算按 [分析报告字段](references/analysis-report.md) 展示。
 
 
 ## 按需参考

@@ -1,0 +1,113 @@
+{
+  "description": "AIWHO 指挥台连接器内置 hook：宿主每轮 / 待办 / 权限事件自动推到大屏（无需再单独装本地 hook）",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/bin/warroom-hook.cjs\"",
+            "description": "会话开始：校验接收端配置（未配置则静默跳过，不打扰用户）",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/bin/warroom-hook.cjs\"",
+            "description": "用户下达指令 → 推「🙋 收到指令」，并结算上一轮遗留待办",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/bin/warroom-hook.cjs\"",
+            "description": "本轮收尾 → 推「✅ {source} 任务完成」（待办合并成一条，不刷屏）",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/bin/warroom-hook.cjs\"",
+            "description": "本轮异常收尾 → 推失败提示，避免大屏停在「进行中」",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/bin/warroom-hook.cjs\"",
+            "description": "会话结束：兜底清空队列里没结算的待办",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/bin/warroom-hook.cjs\"",
+            "description": "宿主通知（如等待输入、空闲）→ 推对应级别提示",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/bin/warroom-hook.cjs\"",
+            "description": "需要用户授权的动作 → 推 urgent 级（触发语音播报），别让人错过",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "TaskCreated": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/bin/warroom-hook.cjs\"",
+            "description": "新建待办 → 即时推「📋 {source} 新建任务计划」",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/hooks/bin/warroom-hook.cjs\"",
+            "description": "完成待办 → 入队合并，随本轮收尾一起推（避免一轮连完 3 条刷屏）",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

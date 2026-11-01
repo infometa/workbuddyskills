@@ -1,23 +1,24 @@
 ---
 name: xdjz-ecommerce-business-analysis-diagnosis
-display_name: 小蝶记账-电商经营分析与诊断
-display_name_en: Kingdee Xiaodie - E-commerce Business Analysis & Diagnosis
+display_name: 电商经营分析与诊断
+display_name_en: E-commerce Business Analysis & Diagnosis
 description: >-
-  小蝶记账-电商经营分析与诊断。用户用自然语言描述分析需求，系统自动查询数据并生成经营分析报告。
-  涵盖销售趋势分析、收支对比、经营状况评估、业务指标解读等。
-  适用于"怎么样""分析""趋势""对比""为什么"等评价性/分析性提问。
-  触发词：经营分析、分析一下、帮我看看经营状况、今年利润怎么样。
-description_zh: 将经营数据转化为决策洞察，发现销售、采购、费用支出等经营中的问题，并提供经营建议。
+  电商经营分析与诊断。用户用自然语言描述分析需求，系统自动查询数据并生成经营分析报告。
+  涵盖销售趋势分析、收支对比、经营状况评估、业务指标解读、商品销量排行榜分析、库存补货建议等。
+  适用于"怎么样""分析""趋势""对比""为什么"等评价性/分析性提问，以及带分析、建议意图的查数请求（统计销量排行榜找问题商品、结合销量给补货建议等）。
+  触发词：经营分析、分析一下、帮我看看经营状况、今年利润怎么样、商品销量排行榜、补货建议、库存周转。
+description_zh: 将经营数据转化为决策洞察，发现销售、采购、费用支出等经营中的问题，并提供经营建议，支持商品排行榜分析与库存补货建议。
 description_en: Analyze sales trends, income and expenses, business performance, and operating indicators.
 category: business
-version: 1.2.0
+version: 1.5.1
 author: 金蝶
 when_to_use:
   - 用户需要经营分析（销售趋势、收支对比、经营状况、指标解读等）
   - 用户用"怎么样""好不好""为什么""分析""趋势"等评价性/分析性表述提问
-  - '触发词：分析一下这个月经营状况、本月和上月销售对比、今年营收趋势、今年利润怎么样、经营分析'
+  - 用户的查数请求带分析、建议意图（统计商品销量排行榜找问题商品并挑主推款、结合销量给补货建议、计算平均日销量/库存周转天数/缺货风险并分类推荐等）
+  - '触发词：分析一下这个月经营状况、本月和上月销售对比、今年营收趋势、今年利润怎么样、经营分析、商品销量排行榜、补货建议、库存周转'
 when_not_to_use:
-  - 仅查询具体数据数值 → 不支持，直接告知用户
+  - 仅查询具体数据数值（不带分析、建议意图）→ 不属于本技能，引导改用「智能查数」
   - 创建正式ERP单据 → 不支持，直接告知用户
   - 快速记账 → 不支持，直接告知用户
   - 企业风险分析 → 不支持，直接告知用户
@@ -50,7 +51,7 @@ allowed-tools:
 第一步：调用 search_plugins
         参数：type = "connector"
               keywords = ["小蝶记账", "金蝶", "记账"]
-第二步：从返回结果中找到「小蝶记账」，取其 id（通常为 xdjz-mcp，以实际返回为准）
+第二步：从返回结果中找到「小蝶记账」，取其 id（通常为 kingbot-xiaodie，以实际返回为准）
 第三步：调用 suggest_plugin_install
         参数：type = "connector"
               pluginId1 = <第二步取得的 id>
@@ -92,7 +93,7 @@ allowed-tools:
 执行细节与用户输出**严格分离**。以下内容**仅用于内部执行**，**禁止**出现在任何对用户的回复中：
 
 - 工具名：如 `kingbot_chat`、MCP、stellar 等
-- 参数名：如 `title`、`input`、`variables`、`messageType`、`agent_id`、`skills` 等
+- 参数名：如 `title`、`input`、`variables`、`messageType`、`agent_id`、`skills`、`source_agent_id`、`source_agent_name`、`source_skill_id`、`source_skill_name`、`source_type` 等
 - 后端标识：如 `OrchestratorAgent`、`agent_id`、`sid`、`deviceId`、`SendCursor`、`uuid` 等
 - 对话 ID / 会话 ID 等技术标识
 - **查询 SQL**：服务返回内容中的完整 SQL 语句（`SELECT ... FROM ... WHERE ...` 等）及其代码块，属于内部实现细节，必须过滤（详见「结果处理 → SQL 过滤规则」）
@@ -124,6 +125,8 @@ allowed-tools:
 - 多维度分析："各产品线销售占比分析"、"客户分布分析"
 - 指标解读："利润率为什么下降"、"库存周转率分析"
 - 评价性提问："经营状况好不好"、"这个月业绩怎么样"
+- 商品排行榜分析："统计本月商品销量排行榜，找卖得多没赚钱和销量不高但利润好的商品，各挑一个主推流量款和利润款"
+- 补货建议分析："查当前库存清单，结合销量给我补货建议"、"计算平均日销量、库存周转天数和缺货风险，按高动销低库存/低动销高库存/平稳商品分类，给我最该补货的3款与最需清理的3款"
 
 **意图路由规则**：
 
@@ -133,11 +136,16 @@ allowed-tools:
 | 分析 / 趋势 / 对比 | → 经营分析 | "分析一下经营状况" |
 | 评估 / 解读 / 原因 | → 经营分析 | "利润率为什么下降" |
 | 经营状况 / 业绩 / 表现 | → 经营分析 | "这个月业绩怎么样" |
-| 是多少 / 有多少 / 多少 | → 查数 | "今年利润是多少" |
-| 查一下 / 帮我查 / 具体数字 | → 查数 | "帮我查一下本月销售额" |
+| 统计 / 排行榜 / TOP榜 + 找问题 / 挑主推款 | → 经营分析 | "统计本月商品销量排行榜，找卖得多没赚钱的" |
+| 查询 / 查 / 统计 + 建议 / 推荐 / 补货 / 该不该 | → 经营分析 | "查当前库存，结合销量给我补货建议" |
+| 计算指标（周转天数 / 缺货风险 / 平均日销量）+ 分类 / 推荐 | → 经营分析 | "算库存周转天数，给我最该补货的3款" |
+| 是多少 / 有多少 / 多少（仅要具体数值，不带分析、建议意图）| → 查数 | "今年利润是多少" |
+| 查一下 / 帮我查 / 具体数字（仅要具体数值，不带分析、建议意图）| → 查数 | "帮我查一下本月销售额" |
+
+> 路由原则（强制）：**带分析、建议意图的查数请求走经营分析**——即使表述含"统计""查询""查一下""排行榜"，只要落点是排行找问题、给建议/推荐、算指标做分类决策，就走本技能；仅要具体数值的才走「智能查数」。
 
 **不包含**：
-- 仅查询具体数据数值 → 不支持，直接告知用户
+- 仅查询具体数据数值（不带分析、建议意图）→ 不属于本技能，引导改用「智能查数」
 - 创建正式 ERP 单据 → 不支持，直接告知用户
 - 快速记账 → 不支持，直接告知用户
 - 企业风险分析 → 不支持，直接告知用户
@@ -165,12 +173,12 @@ allowed-tools:
 |------|------|------|------|
 | title | string | 是 | 对话标题，固定使用 `"新对话"` |
 | input | string | 是 | 发送给服务的消息内容，默认使用用户原话；仅允许做最小必要改写，不得扩展用户未明确表达的分析范围 |
-| sid | string | 是 | 当前轮次的会话 ID，从当前工作目录路径中提取 UUID 作为其値，原样传入 |
-| variables | object | 是 | 对话变量，需填充 messageType=Message、agent_id=OrchestratorAgent、skills=business-analytics,report-data-query-guide-v2 |
+| sid | string | 是 | 当前轮次的会话 ID，按「调用要点」规则取值后原样传入 |
+| variables | object | 是 | 对话变量，需填充 messageType=Message、agent_id=OrchestratorAgent、skills=business-analytics,report-data-query-guide-v2，以及来源参数 source_agent_id=""、source_agent_name=""、source_skill_id=xdjz-ecommerce-business-analysis-diagnosis、source_skill_name=电商经营分析与诊断、source_type=workbuddy |
 
 **调用要点**：
 - `input` **默认使用用户原话**：只有主 Agent 对话上下文中存在明确、可引用的信息，且用户当前问题包含指代或省略时，才允许基于该上下文做最小必要改写；如果没有主 Agent 对话上下文信息，必须原样传递用户问题，不得改写
-- `sid` **必须传入**当前轮次的会话 ID；取値方式：从当前工作目录路径中提取 UUID（格式为 `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`），原样传入；不可为空、不可伪造；如路径中无法识别 UUID，则告知用户“服务暂时无法获取会话信息，请稍后重试”，**禁止**在无法获取 sid 的情况下发起调用
+- `sid` **必须传入**当前轮次的会话 ID；取值方式：Windows 端取 `~/.workbuddy/workspace/sessions/` 下与当前工作目录创建时刻对应的 UUID 目录名（注意：工作目录名本身是时间戳，不是 UUID，不可直接用作 sid），原样传入；其他端该目录位置不一定相同；若不存在该目录，由你自行寻找会话 ID（可依据会话上下文、本机会话记录等线索，如 `~/.workbuddy/sessions/*.json` 中 cwd 匹配记录的 sessionId）；确实无法确定时，自行随机生成一个 UUID 作为 sid 传入，且当前轮次内保持一致（同一轮次的多次调用复用同一个随机 UUID，不得中途更换）
 - `title` 固定为 `"新对话"`，用户不可见
 - `variables` 必须传入，格式如下：
 
@@ -178,7 +186,12 @@ allowed-tools:
 {
   "messageType": "Message",
   "agent_id": "OrchestratorAgent",
-  "skills": "business-analytics,report-data-query-guide-v2"
+  "skills": "business-analytics,report-data-query-guide-v2",
+  "source_agent_id": "",
+  "source_agent_name": "",
+  "source_skill_id": "xdjz-ecommerce-business-analysis-diagnosis",
+  "source_skill_name": "电商经营分析与诊断",
+  "source_type": "workbuddy"
 }
 ```
 
@@ -218,11 +231,16 @@ allowed-tools:
 {
   "title": "新对话",
   "input": "分析一下这个月的经营状况",
-  "sid": "<当前工作目录路径中提取的UUID>",
+  "sid": "<按「调用要点」规则取得的会话ID>",
   "variables": {
     "messageType": "Message",
     "agent_id": "OrchestratorAgent",
-    "skills": "business-analytics,report-data-query-guide-v2"
+    "skills": "business-analytics,report-data-query-guide-v2",
+    "source_agent_id": "",
+    "source_agent_name": "",
+    "source_skill_id": "xdjz-ecommerce-business-analysis-diagnosis",
+    "source_skill_name": "电商经营分析与诊断",
+    "source_type": "workbuddy"
   }
 }
 ```
@@ -343,9 +361,9 @@ kingbot_chat 返回对话 ID 和 AI 回复内容。处理方式：
 
 ```
 1. 意图识别
-   ├─ 确认用户意图为经营分析（而非简单查数/创建单据/记账）
+   ├─ 确认用户意图为经营分析（而非简单查数/创建单据/记账）；带分析、建议意图的查数请求（排行榜找问题、补货建议、周转/缺货风险分类推荐等）属于经营分析，按本流程执行
    ├─ 排除场景：含“创建/新增/记账/风险评估”等 → 直接告知不支持
-   ├─ 区分：简单数据查询 → 直接告知不支持
+   ├─ 区分：仅要具体数值的简单数据查询（不带分析、建议意图）→ 引导改用「智能查数」
    └─ 确认用户提供了分析需求描述
 
 2. 输入校验
@@ -354,9 +372,9 @@ kingbot_chat 返回对话 ID 和 AI 回复内容。处理方式：
 
 3. 调用经营分析服务
    ├─ input = 用户原话或基于主 Agent 对话上下文的最小必要改写（无上下文时禁止改写；禁止补充用户未明确表达的年份、月份拆分、分析维度等）
-   ├─ sid = 从当前工作目录路径中提取的 UUID（必填；路径中无 UUID 时终止并告知用户）
+   ├─ sid = 按调用要点规则取得的会话 ID（必填；确实无法确定时随机生成一个 UUID，当前轮次内保持一致）
    ├─ title = "新对话"
-   └─ variables = {messageType=Message, agent_id=OrchestratorAgent, skills=business-analytics,report-data-query-guide-v2}
+   └─ variables = {messageType=Message, agent_id=OrchestratorAgent, skills=business-analytics,report-data-query-guide-v2, source_agent_id="", source_agent_name="", source_skill_id=xdjz-ecommerce-business-analysis-diagnosis, source_skill_name=电商经营分析与诊断, source_type=workbuddy}
 
 4. 结果展示
    ├─ 成功 → 先按【SQL 过滤规则】删除 SQL 语句、按【tipsjson 展示规则】转换提示数据，再按结构化业务语义展示分析结果

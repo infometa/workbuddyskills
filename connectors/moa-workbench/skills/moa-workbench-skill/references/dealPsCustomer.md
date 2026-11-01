@@ -14,7 +14,7 @@
 | batchImportCustomer | 批量导入（客户导入流程最后一步，单批最多 1000 行；需【导入客户】权限） |
 | getAllPubSea | 获取有管理权限的全部公海 |
 | getPsCustomerList | 获取指定公海未分配客户列表（游标翻页） |
-| getYesterdayOrderRank | 获取昨日员工成交排行（分配规则参考数据） |
+| getOrderRank | 获取员工成交排行（需指定 startTime/endTime；分配规则参考数据） |
 | batchAllocPsCustomer | 批量分配公海客户到员工（需【分配客户】权限） |
 | whoami | 查询当前登录用户的简要信息（pid/did/姓名），用于确认当前登录身份 |
 | getAllPerson | 获取通讯录成员信息（含职位与所属部门；传 gid 时含其子部门，不传为公司全部成员），用于把员工姓名转换为 pid |
@@ -72,9 +72,9 @@ convertImportCustomerData 的入参为 `{titles, rows}` 结构化数据（titles
 
 ### 3. 获取分配依据（可选）
 
-调用 getYesterdayOrderRank：
+调用 getOrderRank：
 
-- 返回昨日员工成交排行（ranking/pid/orderMoney/orderCnt，按名次升序）；分配规则（按业绩倾斜、平均分配等）由用户确定，本工具只提供数据。
+- 返回员工成交排行（ranking/pid/orderMoney/orderCnt，按名次升序）；需指定 startTime/endTime（GMT 毫秒时间戳）。分配规则（按业绩倾斜、平均分配等）由用户确定，本工具只提供数据。
 
 ### 4. 生成分配清单并批量分配
 
@@ -93,7 +93,7 @@ convertImportCustomerData 的入参为 `{titles, rows}` 结构化数据（titles
 
 | 现象 | 处理方式 |
 |---|---|
-| 401 / 未授权 | 提示用户重新发起扫码授权（WorkBuddy 会自动打开授权页） |
+| 401 / 未授权 | 提示用户重新发起扫码授权（AGENT 会自动打开授权页） |
 | 导入 errors 非空 | 逐行展示失败原因，修改后对失败行重试 |
 | 分配报"客户须仍在公海中/员工须为公海成员" | 重新拉取最新公海客户与成员，修正清单后重试 |
 | 导入/分配报权限错误 | 需对应【导入客户】/【分配客户】权限，提示用户联系管理员在权限组中分配 |
@@ -101,4 +101,4 @@ convertImportCustomerData 的入参为 `{titles, rows}` 结构化数据（titles
 ## 注意事项
 
 - 单批上限：checkImportCustomerSimilar/batchImportCustomer 单批最多 1000 行，超出分批调用；getPsCustomerList 单批最多 200；batchAllocPsCustomer 单项 cids 最多 1000。
-- 不要臆造 psid/custmid/pid：一切 ID 来自工具返回（公海来自 getAllPubSea，客户来自 getPsCustomerList/searchCustomer，员工来自 getYesterdayOrderRank、getAllPerson 或用户提供）。
+- 不要臆造 psid/custmid/pid：一切 ID 来自工具返回（公海来自 getAllPubSea，客户来自 getPsCustomerList/searchCustomer，员工来自 getOrderRank、getAllPerson 或用户提供）。

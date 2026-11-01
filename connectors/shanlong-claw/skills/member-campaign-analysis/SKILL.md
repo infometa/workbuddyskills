@@ -1,43 +1,39 @@
 ---
 name: member-campaign-analysis
 description: >-
-  仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。
-  全面分析会员营销活动效果，支持按时间、活动名称和活动创建人，查询发券量、用券量、收益等活动明细和核销情况。实现营销活动ROI自动分析、重点活动与异常表现，为活动复盘、营销策略优化和经营决策提供可靠的数据依据。
+  全面分析会员营销活动效果，支持按时间、活动名称和活动创建人，查询发券量、用券量、收益等活动明细和核销情况。
+  适用于用户问“最近营销活动效果怎么样”“活动收益和用券情况如何”“有哪些活动值得关注”。
   只使用本文固定命令；不使用近似指标或其它业务概念替代。
   当用户的本业务问题提到“整个集团”“集团视角”“不区分门店”或未指定门店时，仍按当前账号/当前上下文默认权限范围执行，不得仅因未指定门店而拒绝或改用其它 Skill。
-version: "1.0.168"
+version: "1.0.174"
 author: shanglong-skill-creator
 ---
 
 # 活动分析业务 Skill
 
-## 适用客户（CRM8）
-
-仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。
-
-- 开始分析时明确提示上述适用范围。当前用户或连接器上下文已明确为非 CRM8 时，说明没有数据并停止业务查询，不输出零值报告。
-- 客户版本未知时，不凭空认定其为 CRM8 或非 CRM8；按当前已认证连接器权限执行本文固定查询，并保留适用范围提示。
-- 空结果不能用来判定客户版本。区分非 CRM8 不适用、CRM8 当前筛选无数据、查询失败和真实指标为 0；查询失败不解释为零。
-
 ## Skill 路由（WorkBuddy）
 
-本连接器提供公司介绍和 8 项会员分析。本 Skill 处理营销活动效果 / ROI / 活动发券用券核销 / 活动列表与状态数量；储值、卡券、复购、数据概览、消费、用户画像和积分分别由对应会员 Skill 处理，保持各页面口径。
+本连接器当前 **仅** 提供本 Skill：营销活动效果 / ROI / 发券用券核销 / 活动列表与状态数量。
 
 - Agent 元数据见 [`agents/claw.yaml`](agents/claw.yaml)、[`agents/openai.yaml`](agents/openai.yaml)。
-- WorkBuddy 按本 Skill 的 `description` + `agents/*` 选择；公司介绍问题由 `tcsl-company-intro` 处理。
+- WorkBuddy 按本 Skill 的 `description` + `agents/*` 选择；包内无其它业务 Skill。
 - 仓库 OpenClaw Agent（`generated/agents/agent-group|agent-store`）挂的是 L1 `marketing_crm`，与本 WorkBuddy Skill **不是同一加载链路**，不会自动互跳。
 
 ---
 
 ## ⚠️ WorkBuddy 运行兼容（强制）
 
-所有业务查询直接执行连接器安装的 **`sl-sea` 二进制**：Windows 为 `sl-sea.exe`，macOS/Linux 为 `sl-sea`。`<sl-sea-absolute>` 表示按附带运行规则解析出的二进制绝对路径，不能原样执行占位符。禁止调用旧版裸命令 `sl`、`sl.cmd`、`sl.ps1` 或 Node CLI 入口。正文命令模板按当前操作系统使用 PowerShell 或 Bash 直接执行；查询不依赖 Node.js。
-
 > 完整细则：[rules/workbuddy-runtime.md](rules/workbuddy-runtime.md)
+
+### CLI 可执行路径
+
+所有查询通过连接器安装的 `sl-sea` 二进制和当前 AI Gateway 执行。先读取
+[`rules/workbuddy-runtime.md`](rules/workbuddy-runtime.md) 定位绝对路径；正文中的
+`<sl-sea-absolute>` 是占位符，执行前替换为实际路径，不使用 PATH 或开发版入口。
 
 ### 执行边界与隐私
 
-- 禁止 `--verbose` / `-v`、`--header`、`--envPath`、`--body-file`、`<sl-sea-absolute> token show`。
+- 禁止 `--verbose` / `-v`、`--header`、`--envPath`、`--body-file`，也不要使用旧的 token 查看命令。
 - 禁止动态 DataCube、可变任务 ID、`title/where`、直连 MCP/数据库。
 - 不输出 token / session / cookie / 密钥 / 认证参数；错误业务化，不贴原始堆栈。
 - 不主动执行发券、触达、导出明细、修改活动。
@@ -50,13 +46,13 @@ WorkBuddy 按轮次/工具调用计费。槽位齐全时：解析时间参数 �
 
 ## 关键执行规范
 
-1. 使用连接器安装并认证的 CLI 执行下文三个固定只读命令。先按运行规则定位绝对路径；认证上下文由连接器维护，不手工填写认证参数。
+1. 本 Skill 只能使用下方列出的固定 `<sl-sea-absolute> marketing_crm` CLI。
 2. 不得搜索命令列表、不得执行 help、不得尝试其它接口路径，不得临场改写接口口径。
 3. 固定接口模块失败、返回空对象/空列表、指标为 0 必须分开说明；失败不能写成 0。
-4. 默认业务查询模块是 2 个：活动核心指标、活动分析列表。活动类型选项只在用户要求查看/校验活动类型时执行。
+4. 认证业务查询模块只有 3 个：活动核心指标、活动分析列表、按需查询的活动类型选项。
 5. 不主动执行发券、触达、导出明细、修改活动等操作。
 6. 不输出 token、session、cookie、密钥、认证参数；涉及活动 ID、创建人等明细时只展示分析必要字段。
-7. 本组固定接口没有门店筛选入参；用户问门店范围时，只能说明按当前连接器认证上下文权限执行，不能自行添加门店参数。
+7. 本组固定接口没有门店筛选入参；用户问门店范围时，只能说明按当前 Gateway 账号授权范围执行，不能自行添加门店参数。
 
 ## 用途
 
@@ -124,14 +120,14 @@ preEndDate = endDate - rangeDays days
 
 ## 固定接口模块
 
+> 每条命令都必须通过 `<sl-sea-absolute>` 绝对路径执行；不读取认证文件或产品凭据。
+
 ### 1. 活动核心指标固定查询
 
 用途：查询活动未开始、进行中、已结束数量，以及发券数量、活动收益、用券数量和券核销率。
 
-将「时间与参数」中的占位符与筛选条件替换为实际值，再按当前系统运行规则直接执行：
-
 ```text
-<sl-sea-absolute> marketing_crm get-campaign-data --params '{"beginDate":"<beginDate>","endDate":"<endDate>","preBeginDate":"<preBeginDate>","preEndDate":"<preEndDate>","campaignName":null,"creatorName":null,"campaignStates":[],"campaignTypes":[],"sendBeginDate":"","sendEndDate":"","createBeginDate":"","createEndDate":"","campaignBeginDate":"","campaignEndDate":""}' --format json
+<sl-sea-absolute> marketing_crm get-campaign-data --skill-ref member-campaign-analysis@1.0.174 --params '{"beginDate":"<beginDate>","endDate":"<endDate>","preBeginDate":"<preBeginDate>","preEndDate":"<preEndDate>","campaignName":null,"creatorName":null,"campaignStates":[],"campaignTypes":[],"sendBeginDate":"","sendEndDate":"","createBeginDate":"","createEndDate":"","campaignBeginDate":"","campaignEndDate":""}' --format json
 ```
 
 输出字段：
@@ -154,10 +150,8 @@ preEndDate = endDate - rangeDays days
 
 用途：分页查询活动列表，返回活动名称、状态、收益、用券金额、发券数、用券数和核销率。
 
-沿用核心指标的筛选参数，增加实际分页值（默认如下）：
-
 ```text
-<sl-sea-absolute> marketing_crm get-campaign-analysis --params '{"beginDate":"<beginDate>","endDate":"<endDate>","preBeginDate":"<preBeginDate>","preEndDate":"<preEndDate>","campaignName":null,"creatorName":null,"campaignStates":[],"campaignTypes":[],"sendBeginDate":"","sendEndDate":"","createBeginDate":"","createEndDate":"","campaignBeginDate":"","campaignEndDate":"","page":1,"size":10}' --format json
+<sl-sea-absolute> marketing_crm get-campaign-analysis --skill-ref member-campaign-analysis@1.0.174 --params '{"beginDate":"<beginDate>","endDate":"<endDate>","page":1,"size":10}' --format json
 ```
 
 输出字段：
@@ -166,8 +160,6 @@ preEndDate = endDate - rangeDays days
 |---|---|
 | `total` | 总条数。 |
 | `list[].campaignName` | 活动名称。 |
-| `list[].campaignId` | 活动 ID。 |
-| `list[].campaignTypeId` | 活动类型 ID。 |
 | `list[].campaignStatus` | 活动状态。 |
 | `list[].incomeMoney` | 收益金额。 |
 | `list[].useCouponMoney` | 用券金额。 |
@@ -182,7 +174,7 @@ preEndDate = endDate - rangeDays days
 只有用户要求查看可选活动类型，或用户给了活动类型 ID 需要校验时执行。
 
 ```text
-<sl-sea-absolute> marketing_crm get-marketing-type-list --format json
+<sl-sea-absolute> marketing_crm get-marketing-type-list --skill-ref member-campaign-analysis@1.0.174 --format json
 ```
 
 固定过滤规则：
@@ -191,18 +183,7 @@ preEndDate = endDate - rangeDays days
 2. 保留子活动类型 `id in [2, 17, 19, 20, 21, 42, 43, 44, 45, 47]`。
 3. 将保留项按子活动类型 ID 去重，整理为可用的 `campaignTypeId` 列表；只使用接口实际返回的选项。
 
-输出字段：
-
-| 字段 | 说明 |
-|---|---|
-| `id` | 顶层营销分类 ID。 |
-| `name` | 顶层营销分类 key。 |
-| `campaignTypes[].id` | 活动类型 ID。 |
-| `campaignTypes[].name` | 活动类型 key。 |
-| `campaignTypes[].permissionCode` | 权限码。 |
-| `campaignTypes[].status` | 状态。 |
-
-如果用户只给了模糊中文活动类型名，而当前上下文无法和返回 key 做确定映射，应明确说明无法稳定解析，不要硬猜。
+输出字段为顶层分类的 `id`、`name`，以及子活动类型的 `id`、`name`、`permissionCode`、`status`。如果用户只给了模糊中文活动类型名，而当前上下文无法和返回 key 做确定映射，应明确说明无法稳定解析，不要硬猜。
 
 ## 执行顺序
 

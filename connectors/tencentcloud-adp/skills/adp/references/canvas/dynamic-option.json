@@ -1,0 +1,410 @@
+{
+ "ProtoVersion": "V2_6",
+ "WorkflowID": "",
+ "WorkflowName": "zz-demo-dynamic-option",
+ "WorkflowDesc": "Offer options computed by a code node, then branch on the choice with IN",
+ "Nodes": [
+  {
+   "NodeID": "start",
+   "NodeName": "Start",
+   "NodeDesc": "",
+   "NodeType": "START",
+   "StartNodeData": {},
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "code1"
+   ]
+  },
+  {
+   "NodeID": "code1",
+   "NodeName": "城市",
+   "NodeDesc": "",
+   "NodeType": "CODE_EXECUTOR",
+   "CodeExecutorNodeData": {
+    "Code": "def main(params: dict) -> dict:\n    q = str(params.get('q', ''))\n    cities = ['北京', '上海', '广州'] if 'many' in q else ['北京']\n    return {'cities': cities, 'n': len(cities)}\n",
+    "Language": "PYTHON3"
+   },
+   "Inputs": [
+    {
+     "Name": "q",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "SYSTEM_VARIABLE",
+      "SystemVariable": {
+       "Name": "SYS.UserQuery"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "cities",
+       "Type": "ARRAY_STRING"
+      },
+      {
+       "Title": "n",
+       "Type": "INT"
+      }
+     ],
+     "Desc": "",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "logic1"
+   ]
+  },
+  {
+   "NodeID": "logic1",
+   "NodeName": "够多",
+   "NodeDesc": "",
+   "NodeType": "LOGIC_EVALUATOR",
+   "LogicEvaluatorNodeData": {
+    "Group": [
+     {
+      "Logical": {
+       "LogicalOperator": "AND",
+       "Compound": [
+        {
+         "LogicalOperator": "UNSPECIFIED",
+         "Compound": [],
+         "Comparison": {
+          "Left": {
+           "InputType": "REFERENCE_OUTPUT",
+           "Reference": {
+            "NodeID": "code1",
+            "JsonPath": "Output.n"
+           }
+          },
+          "LeftType": "INT",
+          "Operator": "GE",
+          "Right": {
+           "InputType": "USER_INPUT",
+           "UserInputValue": {
+            "Values": [
+             "2"
+            ],
+            "FileNames": []
+           }
+          },
+          "MatchType": "PRECISE"
+         }
+        },
+        {
+         "LogicalOperator": "UNSPECIFIED",
+         "Compound": [],
+         "Comparison": {
+          "Left": {
+           "InputType": "REFERENCE_OUTPUT",
+           "Reference": {
+            "NodeID": "code1",
+            "JsonPath": "Output.cities"
+           }
+          },
+          "LeftType": "ARRAY_STRING",
+          "Operator": "NOT_CONTAINS",
+          "Right": {
+           "InputType": "USER_INPUT",
+           "UserInputValue": {
+            "Values": [
+             "火星"
+            ],
+            "FileNames": []
+           }
+          },
+          "MatchType": "PRECISE"
+         }
+        }
+       ]
+      },
+      "NextNodeIDs": [
+       "opt"
+      ]
+     },
+     {
+      "NextNodeIDs": [
+       "ans_few"
+      ]
+     }
+    ]
+   },
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": []
+  },
+  {
+   "NodeID": "opt",
+   "NodeName": "选城市",
+   "NodeDesc": "",
+   "NodeType": "OPTION_CARD",
+   "OptionCardNodeData": {
+    "Question": "请选择城市：",
+    "Options": [],
+    "CardFrom": "DYNAMIC",
+    "DynamicOptionsRefInputName": "cities",
+    "DynamicOptionsRefNextNodeIDs": [
+     "logic2"
+    ],
+    "DynamicOptionsElseNextNodeIDs": [
+     "ans_else"
+    ],
+    "SystemPrompt": "",
+    "ModelName": "Hunyuan/hy3"
+   },
+   "Inputs": [
+    {
+     "Name": "cities",
+     "Type": "ARRAY_STRING",
+     "Input": {
+      "InputType": "REFERENCE_OUTPUT",
+      "Reference": {
+       "NodeID": "code1",
+       "JsonPath": "Output.cities"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [],
+   "NextNodeIDs": []
+  },
+  {
+   "NodeID": "logic2",
+   "NodeName": "一线",
+   "NodeDesc": "",
+   "NodeType": "LOGIC_EVALUATOR",
+   "LogicEvaluatorNodeData": {
+    "Group": [
+     {
+      "Logical": {
+       "LogicalOperator": "UNSPECIFIED",
+       "Compound": [],
+       "Comparison": {
+        "Left": {
+         "InputType": "REFERENCE_OUTPUT",
+         "Reference": {
+          "NodeID": "opt",
+          "JsonPath": "Output.OptionContent"
+         }
+        },
+        "LeftType": "STRING",
+        "Operator": "IN",
+        "MatchType": "PRECISE",
+        "Right": {
+         "InputType": "USER_INPUT",
+         "UserInputValue": {
+          "Values": [
+           "北京",
+           "上海"
+          ],
+          "FileNames": []
+         }
+        }
+       }
+      },
+      "NextNodeIDs": [
+       "ans_in"
+      ]
+     },
+     {
+      "NextNodeIDs": [
+       "ans_notin"
+      ]
+     }
+    ]
+   },
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": []
+  },
+  {
+   "NodeID": "ans_few",
+   "NodeName": "ans_few",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "FEW"
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "ans_else",
+   "NodeName": "ans_else",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "ELSE"
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "ans_in",
+   "NodeName": "ans_in",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "IN-OK"
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "ans_notin",
+   "NodeName": "ans_notin",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "NOT-IN"
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "end",
+   "NodeName": "End",
+   "NodeDesc": "",
+   "NodeType": "END",
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": []
+  }
+ ],
+ "Mode": "NORMAL"
+}

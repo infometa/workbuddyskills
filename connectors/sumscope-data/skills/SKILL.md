@@ -1,7 +1,7 @@
 ---
 name: sumscope-data
 description: 通过 Sumscope qeubee MCP 服务器查询金融数据（行情、债券、资金等）。当用户需要查询 qeubee 相关数据、了解可用的数据 API、或要求获取某类金融数据时使用。必须按"先获取 API 清单和参数定义，再调用"的流程执行。
-version: 1.0.1
+version: 1.0.0
 author: Sumscope MCP
 ---
 

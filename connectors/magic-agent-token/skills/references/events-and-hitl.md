@@ -6,9 +6,11 @@
 
 所有事件带 `runId`、`seq`、`emittedAt`、`type`，按 `(runId, seq)` 去重。
 
+`runId` 是 CLI 的单次任务句柄，不能当成 WorkBuddy 主会话 ID 或 Magic sessionId。有宿主 ID 时按强绑定校验，同一主会话的子代理共用绑定；无宿主 ID 的兼容任务依靠 sessionId / runId 续接，无法保证会话一一对应。已有任务以保存的模式为准，不因环境变量缺失而降级。不要手动设置宿主 ID，也不要跨宿主使用已绑定任务。首次创建未确认时保留句柄供核查，不通过新建任务或删除绑定恢复。
+
 | type | 展示动作 |
 | --- | --- |
-| started | 记下 runId、readCommand、outputDirectory；简短告诉用户已开始 |
+| started | 记下 runId、readCommand、outputDirectory；bindingMode 为 host 或 legacy，后者不能保证宿主会话一一对应。表示本机调用已启动，不能仅凭它断言远端任务已受理 |
 | progress | 阶段变化时简短更新，不逐条复述 |
 | public_summary | 助手面向用户的说明或阶段摘要，照原意展示，不称为“内部思考”；`partial: true` 是当前正文的累计预览，更新展示，后续完整摘要或 answer 不与预览重复拼接 |
 | remote_tool | 营销云在远端执行的工具记录，只展示名称、状态和 summary；不要再调用同名工具，不说是 WorkBuddy 执行的 |
@@ -21,8 +23,16 @@
 | files_ready | 用 present_files 展示 paths |
 | stream_paused | 本地读取暂停，远端未取消；先简短展示新进度，再运行事件里的 `next`（`chat watch`） |
 | progress + `code: DAG_UNAVAILABLE` | 本次执行图读取失败（`reason` 是原因分类）。任务本身不受影响；有 `dagRef` 时它是上一次读到的状态，不是当前进度 |
-| file_unavailable | 该文件没下载成功；用 `chat files` 重试，不重跑任务 |
-| completed / cancelled / failed | 终态；failed 不自动重跑。带 `dagRef` 时按 DAG 规则展示最终执行图。`status: rejected` 是服务端在创建任务前拒绝（带 `httpStatus`），按错误恢复处理；`start_unconfirmed` 不确定是否已创建，不自动重发 |
+| file_unavailable | 单个文件未下载，保留 filename、subdirectory、code、reason 和可用的 httpStatus；OAuth 错误还保留 retryable、reauthRequired。恢复原授权后用原 runId 重试 `chat files`，不重发分析。`ARTIFACT_METADATA_UNAVAILABLE` 表示旧任务定位信息无法恢复，不推断为服务端未注册 |
+| files_failed | 文件交付未全部完成，failedCount 是失败数，downloadedCount 是本次成功数；已成功文件照常展示。处理失败原因后运行 next，不重跑分析，不因相同错误反复重试 |
+| failed + `status: not_sent` | `requestSent: false` 表示创建请求尚未发送；保留 OAuth 恢复字段。可重试错误消除后按原参数重新调用 `chat start`，不删除绑定；本次 runId 没有远端任务，不能续读 |
+| completed / cancelled / failed | 终态；除明确 `not_sent` 外，failed 不自动重跑。带 `dagRef` 时按 DAG 规则展示最终执行图。`status: rejected` 是服务端在创建任务前拒绝（带 `httpStatus`），按错误恢复处理；`start_unconfirmed` 不确定是否已创建，不自动重发 |
+
+`completed.fileStatus: failed` 表示远端分析已完成，但本机文件下载未全部完成；命令退出码为 1，不能据此重新发起任务。`ready` 表示本次有文件成功下载且没有失败，`none` 表示本次无需下载。
+
+`chat files` 没有新下载且没有失败时，输出 `event: files_none` 汇总：`reason: already_downloaded` 表示已记录文件均已下载；`reason: no_artifacts` 表示本机任务未收到产物记录。发生下载失败时不输出该汇总。
+
+旧任务恢复统一校验模式、授权和会话：完整宿主记录继续强绑定；完全没有宿主字段、保留可验证 OAuth profile / credentialId 的旧任务，可通过原 runId 恢复文件定位并下载。`HOST_SESSION_RECORD_INVALID` 表示绑定记录损坏，`LEGACY_RUN_OWNER_UNVERIFIABLE` 表示没有可验证的历史身份；均需保留记录并在营销云原会话核查。身份、环境或已有宿主绑定冲突时拒绝。回放仍只恢复原任务产物，会话标识不一致时停止，不重发分析。
 
 ## 增量读取
 
@@ -30,6 +40,7 @@
 
 - 默认 `--view compact`：同一执行图只返回最新版本，工具记录只保留最新状态，进度只保留最后一条，已处理的问题不再返回；`superseded` 记录被合并的条数。需要完整记录时用 `--view full`。被合并掉的旧图仍可通过边界事件的 `dagRef.files` 读到，已结束的问题不会因为图引用重新出现。
 - `events` 只读本机已落盘的事件：不访问服务端、不生成文件、不刷新执行图。要刷新执行图用 `chat pending` 或 `chat watch`。
+- OAuth access token 到期时，本机事件回放仍只核对已有身份和会话归属，不触发续期；不能用事件回放成功证明远端授权当前有效。
 - 可加 `--wait-seconds N`（≤120）有界等待新事件，超时返回 noChange。这仍是主动读取，不要称为自动推送；不要高频循环读取。
 - 只在阶段、关键 DAG、待答、可交付文件或终态变化时更新聊天。
 

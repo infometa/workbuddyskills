@@ -39,6 +39,8 @@ lovrabet app list
 
 ## 标准决议流程
 
+以下示例按数据集名称使用 `--name`。用户提供物理表名时，改用 `--table-name <表名前缀>`，可单独使用，无需同时提供 `--name` 或 `--code`；多个筛选条件按 AND 组合。匹配规则见 [数据集发现](../references/dataset-discovery-workflow.md)。
+
 1. 先看是否已有明确 app 上下文
 2. 没有明确上下文但有 `defaultApp` 时，先验证默认候选：
 

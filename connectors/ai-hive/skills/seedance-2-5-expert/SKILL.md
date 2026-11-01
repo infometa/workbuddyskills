@@ -6,14 +6,14 @@ description: "通过指导agent智能调度 Seedance 2.5 模型，针对\"原生
 description_zh: "通过指导agent智能调度 Seedance 2.5 模型，针对\"原生 30 秒长视频、最多 50 个全模态参考、专业级视频编辑与延长、首尾帧、关键帧/分镜、白模渲染、一键成片、无缝转场、多语言叙事\"等场景深度优化 prompt 工程，输出电影级、强角色一致性的高质量视频。"
 description_en: "Agent optimizes Seedance 2.5 prompts for 30s long-form, up to 50 multimodal references, video editing, extension, first/last frame, keyframe, storyboard, white-model render, one-click, seamless transition, multilingual narrative."
 category: media
-version: 1.1.4
+version: 1.2.1
 author: 极睿科技（Infimind）/ AI-HIVE 团队
 permissions:
   provisional: true
   read:
   - 仅限当前对话中用户主动选择的本地图片、视频与音频
   network:
-  - 仅通过已启用的 AI-HIVE Connector 调用 get_user_info、list_models、upload_media_from_path、generate_video 与 get_generation_task
+  - 仅通过已启用的 AI-HIVE Connector 调用 get_user_info、list_models、get_model、upload_media_from_path、generate_video 与 get_generation_task
 triggers:
 - "Seedance 2.5"
 - "seedance 2.5"
@@ -41,6 +41,12 @@ triggers:
 
 ### `list_models`
 - `modelType`（可选，string）：资源类型枚举 `TEXT` / `IMAGE` / `VIDEO`（本 Skill 用 `VIDEO`）
+- `detail`（可选，string）：`lite` 只返回各路由售价摘要用于选型；`full`（默认）返回完整公开详情（含 `pricingSnapshot`）
+
+### `get_model`
+- `publicModelId`（必填，string）：来自 `list_models` 的当前模型 ID
+- `routingMode`（可选，string）：获取指定线路的专属契约
+- 返回该模型当前唯一调用契约：`paramsSchema`、媒体要求、计费因素、示例与 `pricingSnapshot`
 
 ### `upload_media_from_path`
 - `path`（必填，string）：用户授权的本地文件绝对路径
@@ -57,7 +63,9 @@ triggers:
 - `audioMediaIds`（可选，array）：外部参考音频 mediaId 列表；默认空数组，仅用于当前模型配置明确支持参考音频的组合
 - `firstFrameMediaId` / `lastFrameMediaId`（可选，string）：首尾帧 mediaId
 - `params`（可选，object）：时长、画幅、分辨率、声音等模型专属参数；键、类型和值以当前模型配置为准
-- `pricingSnapshot`（必填，object）：选中模型与路由返回的价格快照，原样传入
+- `dryRun`（可选，boolean）：`true` 时只校验参数与媒体并返回预估费用，不创建任务、不扣费，此时省略 `pricingSnapshot` 与 `clientRequestId`
+- `clientRequestId`（付费调用必传，string）：稳定 UUID 幂等键；传输中断或刷新过期快照后用原值同参重试，修正业务参数后必须换新
+- `pricingSnapshot`（付费调用必传，object）：`list_models(detail="full")`、`get_model` 或 dry-run 返回的价格快照，原样回传，不自行构造或修改
 
 ### `get_generation_task`
 - `taskId`（必填，string）：`generate_video` 真实返回的 taskId
@@ -381,7 +389,7 @@ Seedance 2.5 可把参考图、视频和音频分配为不同素材职责。三�
 
 ## 事实与合规边界
 
-1. 只使用 list_models 真实返回的 publicModelId 与 pricingSnapshot。
+1. 只使用 list_models 与 get_model 真实返回的 publicModelId、参数契约与 pricingSnapshot。
 2. 不虚构商品信息、不制造虚假代言。
 3. 不擅自改变参考图中人物的外观或身份特征。
 4. 涉及真人时须确认用户拥有合法授权，不制造公众人物虚假内容。

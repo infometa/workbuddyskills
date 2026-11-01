@@ -1,0 +1,30 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": "20"
+  },
+  "init": {
+    "darwin": "npm install -g @wondershare-plugins/reelmate-cli@1.0.5",
+    "linux": "npm install -g @wondershare-plugins/reelmate-cli@1.0.5",
+    "win32": "npm install -g @wondershare-plugins/reelmate-cli@1.0.5"
+  },
+  "auth": {
+    "darwin": "reelmate login",
+    "linux": "reelmate login",
+    "win32": "reelmate.cmd login"
+  },
+  "unAuth": {
+    "darwin": "reelmate logout",
+    "linux": "reelmate logout",
+    "win32": "reelmate.cmd logout"
+  },
+  "status": {
+    "darwin": "reelmate account info --json",
+    "linux": "reelmate account info --json",
+    "win32": "reelmate.cmd account info --json"
+  },
+  "statusMatch": "credentialStore",
+  "authUrlDomain": "accounts.wondershare.cn",
+  "authWaitForExit": true,
+  "authSuppressBrowser": true
+}

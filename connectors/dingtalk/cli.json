@@ -14,12 +14,12 @@
             "linux": "dws --version",
             "win32": "dws.cmd --version"
         },
-        "minVersion": "1.0.64"
+        "minVersion": "1.0.65"
     },
     "auth": {
-        "darwin": "dws auth login -y",
-        "linux": "dws auth login -y",
-        "win32": "dws.cmd auth login -y"
+        "darwin": "dws auth login -y --no-browser",
+        "linux": "dws auth login -y --no-browser",
+        "win32": "dws.cmd auth login -y --no-browser"
     },
     "unAuth": {
         "darwin": "dws auth reset",
@@ -36,6 +36,6 @@
         "authenticated": "true"
     },
     "authUrlDomain": "login.dingtalk.com",
-    "authSuppressBrowser": true,
+    "authSuppressBrowser": false,
     "authWaitForExit": true
 }

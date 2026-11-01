@@ -1,7 +1,7 @@
 ---
 name: member-coupon-analysis
-description: 仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。会员业务 Skill：使用固定卡券接口 CLI 分析发券、用券、作废、收益、抵扣、撬动、响应时间、券模板和门店表现。适用于用户问“卡券分析”“最近发券用券效果怎么样”“哪些券核销表现好”。只使用本文固定命令和固定门店编码获取 CLI；不使用近似指标或其它业务概念替代。当用户的本业务问题提到“整个集团”“集团视角”“不区分门店”或未指定门店时，仍按当前账号/当前上下文默认权限范围执行，不得仅因未指定门店而拒绝或改用其它 Skill。
-version: "1.0.168"
+description: 仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。会员业务 Skill：使用固定卡券接口 CLI 分析发券、用券、作废、收益、抵扣、撬动、响应时间、券模板和门店表现。适用于用户问“卡券分析”“最近发券用券效果怎么样”“哪些券核销表现好”。只使用本文固定命令和 Gateway 门店选择引用；不使用近似指标或其它业务概念替代。当用户的本业务问题提到“整个集团”“集团视角”“不区分门店”或未指定门店时，仍按当前账号/当前上下文默认权限范围执行，不得仅因未指定门店而拒绝或改用其它 Skill。
+version: "1.0.174"
 author: shanglong-skill-creator
 ---
 
@@ -25,7 +25,7 @@ Agent 元数据见 [agents/claw.yaml](agents/claw.yaml) 与 [agents/openai.yaml]
 
 ## 关键执行规范（最高优先级）
 
-1. 本 Skill 只能使用下方列出的固定 `<sl-sea-absolute> coupon` CLI 和固定门店编码获取 CLI。
+1. 本 Skill 只能使用下方列出的固定 `<sl-sea-absolute> coupon` CLI 和 Gateway 门店选择引用。
 2. 不得搜索命令列表、不得执行 help、不得尝试其它接口路径，不得临场改写接口口径。
 3. 固定接口模块失败、返回空对象/空列表、指标为 0 必须分开说明；失败不能写成 0。
 4. 默认业务查询模块是 5 个：核心指标、发券趋势、用券趋势、响应时间、券模板表现。只有用户要求门店维度，或整体分析明确需要门店表现时，才执行门店券列表和门店表现 2 个模块。
@@ -56,9 +56,9 @@ preBeginDate = beginDate - rangeDays days
 preEndDate = endDate - rangeDays days
 ```
 
-## 门店编码获取 CLI
+## Gateway 门店选择引用
 
-用户指定门店名称、简称、别名或门店 ID 时，先按运行规则定位二进制，执行固定 CRM 门店查询；未指定门店时按本文默认权限范围执行。
+用户指定门店名称、简称、别名或门店 ID 时，通过当前 Gateway 的门店选择能力取得短期 `selectionToken`；未指定门店时按当前账号授权范围执行。
 
 ```text
 <sl-sea-absolute> store find --type crm --name '<门店关键词>' --format json
@@ -70,11 +70,11 @@ preEndDate = endDate - rangeDays days
 <sl-sea-absolute> store find --type crm --keyword '<门店关键词或门店ID>' --format json
 ```
 
-先检查进程退出码和业务状态，再读取业务结果。候选为空时停止并提示未找到门店；只有一个候选时使用其 `omShopCode`；多个候选时展示候选名称供用户确认，不静默选择第一条，不展示完整内部编码。用户确认多个门店后使用对应编码数组。
+先检查进程退出码和业务状态。候选为空时停止并提示未找到门店；多个候选时展示候选名称供用户确认，不静默选择第一条，不展示原始门店编码；确认后只使用 Gateway 返回的短期 `selectionToken`。
 
-门店清单缺失或认证失败时，引导用户在连接器重新认证，再重试原门店查询一次；不读取认证文件、不手工刷新或填写认证参数。
+门店选择失败时，引导用户在连接器重新认证，再重试原门店选择一次；不读取认证文件、不手工刷新或填写认证参数。
 
-数据概览把选定编码放入 `shopIds`，未指定门店时省略该字段；其它会员分析放入 `shopFilterTypeValue`，并设 `shopFilterType=1`。卡券分析分别设置发券门店 `shopFilterTypeValue` 和核销门店 `useShopFilterTypeValue`。相同筛选必须应用到本轮所有相关查询。
+数据概览和其它会员分析只传 Gateway 认可的选择引用字段；这些字段由 Gateway 从 `selectionToken` 解析，Skill 不读取或拼装原始门店编码。相同筛选必须应用到本轮所有相关查询。
 
 ## 通用参数
 

@@ -1,7 +1,7 @@
 ---
 name: member-data-overview-analysis
-description: 仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。会员业务 Skill：使用固定数据概览接口 CLI 输出活跃用户、消费转化、新增会员、会员来源、卡型、消费金额、消费笔数、客单价、营销活动状态和储值趋势。适用于用户问“分析 CRM 数据概览整体表现”“会员数据概览怎么样”。只使用本文固定命令和固定门店编码获取 CLI；不使用近似指标或其它业务概念替代。当用户的本业务问题提到“整个集团”“集团视角”“不区分门店”或未指定门店时，仍按当前账号/当前上下文默认权限范围执行，不得仅因未指定门店而拒绝或改用其它 Skill。
-version: "1.0.168"
+description: 仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。会员业务 Skill：使用固定数据概览接口 CLI 输出活跃用户、消费转化、新增会员、会员来源、卡型、消费金额、消费笔数、客单价、营销活动状态和储值趋势。适用于用户问“分析 CRM 数据概览整体表现”“会员数据概览怎么样”。只使用本文固定命令和 Gateway 门店选择引用；不使用近似指标或其它业务概念替代。当用户的本业务问题提到“整个集团”“集团视角”“不区分门店”或未指定门店时，仍按当前账号/当前上下文默认权限范围执行，不得仅因未指定门店而拒绝或改用其它 Skill。
+version: "1.0.174"
 author: shanglong-skill-creator
 ---
 
@@ -25,7 +25,7 @@ Agent 元数据见 [agents/claw.yaml](agents/claw.yaml) 与 [agents/openai.yaml]
 
 ## 关键执行规范
 
-1. 本 Skill 只能使用下方列出的固定 `<sl-sea-absolute> crm_data_overview` CLI 和固定门店编码获取 CLI。
+1. 本 Skill 只能使用下方列出的固定 `<sl-sea-absolute> crm_data_overview` CLI 和 Gateway 门店选择引用。
 2. 不得搜索命令列表、不得执行 help、不得尝试 DataCube task，不得临场改写接口口径。
 3. 固定接口模块失败、返回空对象/空列表、指标为 0 必须分开说明；失败不能写成 0。
 4. 用户只问单个模块时，只执行对应固定查询；用户问整体概览时，按执行顺序尽量完整执行。
@@ -36,9 +36,9 @@ Agent 元数据见 [agents/claw.yaml](agents/claw.yaml) 与 [agents/openai.yaml]
 
 用于分析指定时间和门店筛选范围内的会员经营概览，输出活跃、消费转化、新增会员、会员来源、卡型结构、会员/非会员消费、营销活动状态和储值表现。
 
-## 门店编码获取 CLI
+## Gateway 门店选择引用
 
-用户指定门店名称、简称、别名或门店 ID 时，先按运行规则定位二进制，执行固定 CRM 门店查询；未指定门店时按本文默认权限范围执行。
+用户指定门店名称、简称、别名或门店 ID 时，通过当前 Gateway 的门店选择能力取得短期 `selectionToken`；未指定门店时按当前账号授权范围执行。
 
 ```text
 <sl-sea-absolute> store find --type crm --name '<门店关键词>' --format json
@@ -50,11 +50,11 @@ Agent 元数据见 [agents/claw.yaml](agents/claw.yaml) 与 [agents/openai.yaml]
 <sl-sea-absolute> store find --type crm --keyword '<门店关键词或门店ID>' --format json
 ```
 
-先检查进程退出码和业务状态，再读取业务结果。候选为空时停止并提示未找到门店；只有一个候选时使用其 `omShopCode`；多个候选时展示候选名称供用户确认，不静默选择第一条，不展示完整内部编码。用户确认多个门店后使用对应编码数组。
+先检查进程退出码和业务状态。候选为空时停止并提示未找到门店；多个候选时展示候选名称供用户确认，不静默选择第一条，不展示原始门店编码；确认后只使用 Gateway 返回的短期 `selectionToken`。
 
-门店清单缺失或认证失败时，引导用户在连接器重新认证，再重试原门店查询一次；不读取认证文件、不手工刷新或填写认证参数。
+门店选择失败时，引导用户在连接器重新认证，再重试原门店选择一次；不读取认证文件、不手工刷新或填写认证参数。
 
-数据概览把选定编码放入 `shopIds`，未指定门店时省略该字段；其它会员分析放入 `shopFilterTypeValue`，并设 `shopFilterType=1`。卡券分析分别设置发券门店 `shopFilterTypeValue` 和核销门店 `useShopFilterTypeValue`。相同筛选必须应用到本轮所有相关查询。
+数据概览和其它会员分析只传 Gateway 认可的选择引用字段；这些字段由 Gateway 从 `selectionToken` 解析，Skill 不读取或拼装原始门店编码。相同筛选必须应用到本轮所有相关查询。
 
 ## 时间与参数
 
@@ -79,7 +79,7 @@ preEndDate = endDate - rangeDays days
 带门店的命令示例：
 
 ```text
-<sl-sea-absolute> crm_data_overview summary --params '{"shopIds":["<omShopCode>"],"dateType":1,"beginDate":"<beginDate>","endDate":"<endDate>","preBeginDate":"<preBeginDate>","preEndDate":"<preEndDate>"}' --format json
+<sl-sea-absolute> crm_data_overview summary --params '{"shopIds":["<selectionToken>"],"dateType":1,"beginDate":"<beginDate>","endDate":"<endDate>","preBeginDate":"<preBeginDate>","preEndDate":"<preEndDate>"}' --format json
 ```
 
 ## 固定接口模块

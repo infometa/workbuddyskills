@@ -1,0 +1,33 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "npmRegistries": [
+    "https://registry.npmmirror.com",
+    "https://registry.npmjs.org"
+  ],
+  "init": {
+    "darwin": "npm install -g @kriston-ai/kst-im-cli",
+    "linux": "npm install -g @kriston-ai/kst-im-cli",
+    "win32": "npm install -g @kriston-ai/kst-im-cli"
+  },
+  "auth": {
+    "darwin": "kst-im-cli auth login --web",
+    "linux": "kst-im-cli auth login --web",
+    "win32": "kst-im-cli.cmd auth login --web"
+  },
+  "unAuth": {
+    "darwin": "kst-im-cli auth logout",
+    "linux": "kst-im-cli auth logout",
+    "win32": "kst-im-cli.cmd auth logout"
+  },
+  "status": {
+    "darwin": "kst-im-cli auth status",
+    "linux": "kst-im-cli auth status",
+    "win32": "kst-im-cli.cmd auth status"
+  },
+  "statusMatch": "\"ok\"\\s*:\\s*true",
+  "authUrlDomain": "stiau.kuaishang.cn",
+  "authSuppressBrowser": true
+}

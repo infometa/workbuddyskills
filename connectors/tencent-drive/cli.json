@@ -1,0 +1,33 @@
+{
+  "init": {
+    "darwin": "t=$(mktemp) && curl --fail --location --proto '=https' --tlsv1.2 -sSo \"$t\" \"https://ai-drivecli-1251316161.cos.ap-guangzhou.myqcloud.com/1.1.1-beta/install.sh\" && sh \"$t\"; rc=$?; rm -f \"$t\"; exit $rc",
+    "linux": "t=$(mktemp) && curl --fail --location --proto '=https' --tlsv1.2 -sSo \"$t\" \"https://ai-drivecli-1251316161.cos.ap-guangzhou.myqcloud.com/1.1.1-beta/install.sh\" && sh \"$t\"; rc=$?; rm -f \"$t\"; exit $rc",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$ErrorActionPreference='Stop'; $t=Join-Path $env:TEMP ('tdrive-install-'+[Guid]::NewGuid().ToString('N')+'.ps1'); try { Invoke-WebRequest -UseBasicParsing -Uri 'https://ai-drivecli-1251316161.cos.ap-guangzhou.myqcloud.com/1.1.1-beta/install.ps1' -OutFile $t; $s=[IO.File]::ReadAllText($t,[Text.UTF8Encoding]::new($false,$true)); [IO.File]::WriteAllText($t,$s,[Text.UTF8Encoding]::new($true)); & powershell -NoProfile -ExecutionPolicy Bypass -File $t; exit $LASTEXITCODE } finally { Remove-Item -Force $t -ErrorAction SilentlyContinue }\""
+  },
+  "auth": {
+    "darwin": "/usr/bin/env \"$HOME/.local/bin/tdrive\" login -a --detach --agent-name WorkBuddy",
+    "linux": "/usr/bin/env \"$HOME/.local/bin/tdrive\" login -a --detach --agent-name WorkBuddy",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& (Join-Path $env:LOCALAPPDATA 'Programs\\tdrive\\tdrive.exe') login -a --detach --agent-name WorkBuddy; exit $LASTEXITCODE\""
+  },
+  "unAuth": {
+    "darwin": "/usr/bin/env \"$HOME/.local/bin/tdrive\" logout --agent-name WorkBuddy",
+    "linux": "/usr/bin/env \"$HOME/.local/bin/tdrive\" logout --agent-name WorkBuddy",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& (Join-Path $env:LOCALAPPDATA 'Programs\\tdrive\\tdrive.exe') logout --agent-name WorkBuddy; exit $LASTEXITCODE\""
+  },
+  "status": {
+    "darwin": "/usr/bin/env \"$HOME/.local/bin/tdrive\" account --agent-name WorkBuddy",
+    "linux": "/usr/bin/env \"$HOME/.local/bin/tdrive\" account --agent-name WorkBuddy",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& (Join-Path $env:LOCALAPPDATA 'Programs\\tdrive\\tdrive.exe') account --agent-name WorkBuddy; exit $LASTEXITCODE\""
+  },
+  "statusMatch": "tdrive-status: connected",
+  "authUrlDomain": "drive.tencent.com",
+  "versionCheck": {
+    "command": {
+      "darwin": "\"$HOME/.local/bin/tdrive\" --version 2>/dev/null || echo 'tdrive 0.0.0'",
+      "linux": "\"$HOME/.local/bin/tdrive\" --version 2>/dev/null || echo 'tdrive 0.0.0'",
+      "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$e=Join-Path $env:LOCALAPPDATA 'Programs\\tdrive\\tdrive.exe'; if (Test-Path $e) { & $e --version } else { 'tdrive 0.0.0' }\""
+    },
+    "minVersion": "1.1.1",
+    "versionPattern": "tdrive v?(\\d+\\.\\d+\\.\\d+)"
+  }
+}

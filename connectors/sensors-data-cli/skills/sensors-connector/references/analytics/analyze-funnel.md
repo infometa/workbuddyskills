@@ -92,7 +92,7 @@
 
 ### 第七步：自检并执行
 
-对照校验速记逐项过（步骤数、窗口格式、step 范围、`$time` 位置、步骤 filter 事件名）→ `--dry-run` → 执行。
+对照校验速记逐项过（步骤数、窗口格式、step 范围、`$time` 位置、步骤 filter 事件名）→ 执行。
 
 ### 端到端推导示例
 
@@ -104,7 +104,7 @@
 4. 定时间：「上周」换算为 2026-06-15 ~ 2026-06-21；未要求全步骤落在区间内 → `steps_must_be_within_date_range: false`。
 5. 定过滤：无额外条件 → 不填 `filter`。
 6. 定拆分：注册渠道确认为 `event.register.$utm_source`，作用在注册步 → `by_fields: [{field: "event.register.$utm_source", step: 0}]`。
-7. `--dry-run` → 执行。
+7. 执行。
 
 ### 调用示例
 

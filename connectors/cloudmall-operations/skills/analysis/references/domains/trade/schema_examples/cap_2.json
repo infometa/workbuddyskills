@@ -1,0 +1,48 @@
+{
+  "_doc": "门店分析报告 JSON 组装示例。⚠️ SQL 返回中文列名，必须按 _column_map 转为英文 key。带 ★ 为必填。",
+
+  "_column_map": {
+    "_doc": "Q-3 SQL 中文列名 → JSON 英文 key（逐项对照）",
+    "store_name": "store_name",
+    "gmv": "gmv",
+    "支付人数": "pay_uv",
+    "下单人数": "order_uv",
+    "销量": "sales_qty",
+    "成交订单数": "pay_cnt",
+    "退款金额": "refund_amt"
+  },
+
+  "meta": {
+    "_doc": "★ capability_id/start_date/end_date 必填",
+    "capability_id": 2,
+    "brand_name": "商家名称",
+    "title": "门店分析报告",
+    "start_date": "yyyyMMdd",
+    "end_date": "yyyyMMdd",
+    "period": "MM-DD ~ MM-DD",
+    "domain": "trade",
+    "generated_at": ""
+  },
+
+  "_stores_doc": "★ 必填。Q-3 当期结果，每店一行，按 GMV 降序。按 _column_map 转换列名。prev_gmv 来自环比期 Q-3（推荐，缺少则环比列显示 -）",
+  "stores": [
+    {"store_name": "门店名", "gmv": 0, "prev_gmv": 0, "pay_uv": 0, "order_uv": 0, "sales_qty": 0, "pay_cnt": 0, "refund_amt": 0}
+  ],
+
+  "_previous_stores_doc": "可选。有 prev_gmv 则可省略",
+  "previous_stores": [],
+
+  "_narratives_doc": "可选。4 段文案覆盖自动 findings。不提供则渲染器自动生成",
+  "finding_narratives": [],
+
+  "_narrative_doc": "强烈推荐填写（缺少则对应区域空白）",
+  "executive_summary": "<p>一段话总结（HTML）</p>",
+  "highlights": {
+    "positive": {"label": "亮点", "text": ""},
+    "negative": {"label": "痛点", "text": ""}
+  },
+  "insights": ["洞察 1", "洞察 2"],
+  "recommendations": [
+    {"priority": "P0", "title": "建议标题", "items": ["行动 1"]}
+  ]
+}

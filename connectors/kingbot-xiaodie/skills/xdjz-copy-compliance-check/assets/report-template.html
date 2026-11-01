@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!--
+  内容社区文案合规检测 · HTML 报告模板
+
+  使用方式：复制本文件，把全部占位符替换为实际内容，按下方规则删除不适用的可选区块，
+  最后删除本说明注释，保存为「内容社区合规检查报告-关键词.html」。
+
+  占位符（语法统一为双花括号包裹的大写下划线名称）：
+    {{REPORT_KEYWORD}}        笔记标题关键词，title 与文件名共用
+    {{CHECK_TARGET}}          检查对象：笔记标题 + 关联商品名称
+    {{CONTENT_TYPE}}          笔记+商品联动 / 仅笔记 / 仅商品
+    {{INDUSTRY}}              识别出的行业类目
+    {{CHECK_TIME}}            检查时间，如 2026-01-01 10:30
+    {{CHECK_DATE}}            检查日期，如 2026-01-01（页脚使用）
+    {{OVERALL_RISK_CLASS}}    risk-high / risk-medium / risk-low 三选一
+    {{OVERALL_RISK_LABEL}}    「🔴 高风险」/「🟡 中风险」/「🟢 低风险」
+    {{PART_A_ISSUE_SUMMARY}}  共发现 N 个问题及三色计数徽章，格式：
+                              共发现 3 个问题（<span class="severity-tag severity-red">🔴 1</span>
+                              <span class="severity-tag severity-yellow">🟡 1</span>
+                              <span class="severity-tag severity-blue">🔵 1</span>）
+    {{PART_A_CONSEQUENCE}}    去重后的后果提示，用「 · 」拼接，如：
+                              可能面临：责令改正+罚款10万以下 · 系统拦截+停止推荐+扣信用分
+    {{PART_A_RED_ROWS}}       🔴 严重问题表格行
+    {{PART_A_YELLOW_ROWS}}    🟡 警告表格行
+    {{PART_A_BLUE_ROWS}}      🔵 建议表格行
+                              Part A 每行 5 列：序号 / 违规内容 / 问题类型 / 法规依据 / 修改建议，如：
+                              <tr><td>1</td><td>"全网最低价"</td><td>极限词</td><td>《广告法》第九条第（三）项</td><td>改为"优惠价格"</td></tr>
+    {{PART_B_BLOCKS}}         每个关联商品一个区块，多个商品依次排列，格式：
+                              <h3>商品 1：商品名称</h3>
+                              <p class="issue-count">共发现 N 个问题（三色计数徽章，同 Part A）</p>
+                              <table>
+                                <thead><tr><th>#</th><th>违规内容</th><th>所在区域</th><th>问题类型</th><th>法规依据</th><th>修改建议</th></tr></thead>
+                                <tbody><tr><td>1</td><td>"100%纯天然"</td><td>商品标题</td><td>虚假宣称</td><td>《广告法》第二十八条</td><td>改为"天然植物成分"</td></tr></tbody>
+                              </table>
+                              无关联商品时替换为一段说明：
+                              <p class="issue-count">该笔记未挂载商品链接</p> 或
+                              <p class="issue-count">该笔记已挂载商品，但未登录状态下无法获取商品详情，建议登录后重新检查或提供商品链接</p>
+    {{PART_C_ROWS}}           一致性检查行，每行 5 列：序号 / 检查项 / 笔记描述 / 商品实际 / 结论，
+                              结论单元格用 status-pass / status-fail / status-warn，如：
+                              <tr><td>1</td><td>功效宣称</td><td>"美白淡斑"</td><td>普通化妆品无特妆批号</td><td class="status-fail">❌ 不一致</td></tr>
+                              <tr><td>2</td><td>成分描述</td><td>"含玻尿酸"</td><td>成分表含透明质酸钠</td><td class="status-pass">✅ 一致</td></tr>
+                              无矛盾时在末尾追加总结行：
+                              <tr><td colspan="5" class="status-pass">未发现笔记与商品之间的矛盾表述，一致性良好。</td></tr>
+    {{HIGHLIGHT_ITEMS}}       2 至 4 条合规亮点，每条一个 li 元素
+    {{SUGGESTION_NOTE}}       笔记修改文案，修改处用「」标注，格式：
+                              <h4>标题</h4><p><strong>原文</strong>：原标题 → <strong>建议</strong>：修改后的标题</p>
+                              <h4>正文</h4><p>完整修改后文案</p>
+                              <h4>标签</h4><p><strong>建议标签</strong>：修改后的标签</p>
+    {{SUGGESTION_GOODS}}      商品修改文案，修改处用「」标注，格式：
+                              <h4>商品标题</h4><p><strong>原文</strong>：原标题 → <strong>建议</strong>：修改后的标题</p>
+                              <h4>商品描述/卖点</h4><p><strong>原文</strong>：原描述 → <strong>建议</strong>：修改后的描述</p>
+
+  可选区块（成对注释标记 BEGIN:名称 与 END:名称，删除时连同两行标记整段删除；保留时只删标记行）：
+    PART_A_RED        无 🔴 严重问题时删除
+    PART_A_YELLOW     无 🟡 警告时删除
+    PART_A_BLUE       无 🔵 建议时删除
+    PART_A            仅商品场景：整块替换为
+                      <div class="section-card"><h2>📝 Part A：笔记内容检查</h2><p class="issue-count">链接为商品直链，无笔记内容</p></div>
+    PART_B            始终保留；无关联商品时按 PART_B_BLOCKS 说明替换为说明文字
+    PART_C            仅商品场景或无关联商品时删除
+    SUGGESTION_GOODS  无关联商品或商品无需修改时删除
+
+  生成规则：无问题的严重等级分组整段省略，不输出空表格；报告中不附笔记原文全文，只引用违规片段。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>合规检查报告 - {{REPORT_KEYWORD}}</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f5f7; color: #1d1d1f; line-height: 1.6; padding: 24px; }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* 头部卡片 */
+  .header-card { background: #fff; border-radius: 16px; padding: 28px 32px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .header-card h1 { font-size: 22px; font-weight: 700; margin-bottom: 16px; }
+  .meta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px 24px; }
+  .meta-item { font-size: 14px; color: #6e6e73; }
+  .meta-item strong { color: #1d1d1f; }
+
+  /* 风险等级徽章 */
+  .risk-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+  .risk-high { background: #fff2f2; color: #d32f2f; border: 1px solid #ffcdd2; }
+  .risk-medium { background: #fff8e1; color: #f57f17; border: 1px solid #ffecb3; }
+  .risk-low { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+
+  /* 区块卡片 */
+  .section-card { background: #fff; border-radius: 16px; padding: 24px 32px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .section-card h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .section-card .subtitle { font-size: 13px; color: #86868b; margin-bottom: 16px; line-height: 1.5; border-left: 3px solid #e5e5ea; padding-left: 12px; }
+  .issue-count { font-size: 14px; color: #6e6e73; margin-bottom: 16px; }
+
+  /* 严重等级标签 */
+  .severity-tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 10px; margin-right: 4px; }
+  .severity-red { background: #ffebee; color: #c62828; }
+  .severity-yellow { background: #fff8e1; color: #f57f17; }
+  .severity-blue { background: #e3f2fd; color: #1565c0; }
+
+  /* 问题表格 */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }
+  thead th { background: #f5f5f7; text-align: left; padding: 10px 12px; font-weight: 600; color: #1d1d1f; border-bottom: 2px solid #e5e5ea; white-space: nowrap; }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #fafafa; }
+
+  .consequence-summary { font-size: 13px; color: #86868b; margin-bottom: 16px; padding: 8px 14px; background: #f9f9fb; border-radius: 8px; }
+
+  /* 一致性检查表 */
+  .consistency-table td:last-child { font-weight: 600; }
+  .status-pass { color: #2e7d32; }
+  .status-fail { color: #d32f2f; }
+  .status-warn { color: #f57f17; }
+
+  /* 合规亮点 */
+  .highlights { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 16px 20px; margin-top: 8px; }
+  .highlights h3 { font-size: 15px; color: #166534; margin-bottom: 8px; }
+  .highlights li { font-size: 14px; color: #166534; margin-bottom: 4px; margin-left: 16px; }
+
+  /* 修改建议文案区 */
+  .suggestion-card { background: #fefce8; border: 1px solid #fde68a; border-radius: 16px; padding: 24px 32px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .suggestion-card h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #92400e; }
+  .suggestion-card h3 { font-size: 15px; font-weight: 600; margin: 16px 0 8px; color: #78350f; }
+  .suggestion-card h4 { font-size: 14px; font-weight: 600; margin: 12px 0 6px; color: #78350f; }
+  .suggestion-card p, .suggestion-card li { font-size: 14px; color: #451a03; }
+  .suggestion-card ol, .suggestion-card ul { margin-left: 20px; }
+
+  /* 页脚 */
+  .footer { text-align: center; font-size: 12px; color: #86868b; padding: 20px 0; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .container { max-width: 100%; }
+    .section-card, .header-card, .suggestion-card { box-shadow: none; border: 1px solid #e5e5ea; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 头部信息 -->
+  <div class="header-card">
+    <h1>📋 合规检查报告</h1>
+    <div class="meta-grid">
+      <div class="meta-item"><strong>检查对象</strong> {{CHECK_TARGET}}</div>
+      <div class="meta-item"><strong>内容类型</strong> {{CONTENT_TYPE}}</div>
+      <div class="meta-item"><strong>所属行业</strong> {{INDUSTRY}}</div>
+      <div class="meta-item"><strong>检查时间</strong> {{CHECK_TIME}}</div>
+      <div class="meta-item"><strong>整体风险</strong> <span class="risk-badge {{OVERALL_RISK_CLASS}}">{{OVERALL_RISK_LABEL}}</span></div>
+    </div>
+  </div>
+
+  <!-- BEGIN:PART_A -->
+  <!-- Part A：笔记内容检查 -->
+  <div class="section-card">
+    <h2>📝 Part A：笔记内容检查</h2>
+    <div class="subtitle">
+      检查依据：《广告法》第二章 · 《互联网广告管理办法》第九条 · 《广告绝对化用语执法指南》 · 内容社区《社区规范》 · 内容社区《商业导流治理规则》
+    </div>
+    <p class="issue-count">{{PART_A_ISSUE_SUMMARY}}</p>
+    <p class="consequence-summary">{{PART_A_CONSEQUENCE}}</p>
+
+    <!-- BEGIN:PART_A_RED -->
+    <h3><span class="severity-tag severity-red">🔴 严重问题</span></h3>
+    <table>
+      <thead><tr><th>#</th><th>违规内容</th><th>问题类型</th><th>法规依据</th><th>修改建议</th></tr></thead>
+      <tbody>
+        {{PART_A_RED_ROWS}}
+      </tbody>
+    </table>
+    <!-- END:PART_A_RED -->
+
+    <!-- BEGIN:PART_A_YELLOW -->
+    <h3><span class="severity-tag severity-yellow">🟡 警告</span></h3>
+    <table>
+      <thead><tr><th>#</th><th>违规内容</th><th>问题类型</th><th>法规依据</th><th>修改建议</th></tr></thead>
+      <tbody>
+        {{PART_A_YELLOW_ROWS}}
+      </tbody>
+    </table>
+    <!-- END:PART_A_YELLOW -->
+
+    <!-- BEGIN:PART_A_BLUE -->
+    <h3><span class="severity-tag severity-blue">🔵 建议</span></h3>
+    <table>
+      <thead><tr><th>#</th><th>违规内容</th><th>问题类型</th><th>法规依据</th><th>修改建议</th></tr></thead>
+      <tbody>
+        {{PART_A_BLUE_ROWS}}
+      </tbody>
+    </table>
+    <!-- END:PART_A_BLUE -->
+  </div>
+  <!-- END:PART_A -->
+
+  <!-- BEGIN:PART_B -->
+  <!-- Part B：关联商品检查 -->
+  <div class="section-card">
+    <h2>🛒 Part B：关联商品检查</h2>
+    <div class="subtitle">
+      检查依据：《广告法》第二章 · 《消费者权益保护法》第二十条 · 《电子商务法》第十七条 · 内容社区《电商商品发布规范》
+    </div>
+    {{PART_B_BLOCKS}}
+  </div>
+  <!-- END:PART_B -->
+
+  <!-- BEGIN:PART_C -->
+  <!-- Part C：一致性检查 -->
+  <div class="section-card">
+    <h2>🔗 Part C：笔记-商品一致性检查</h2>
+    <table class="consistency-table">
+      <thead><tr><th>#</th><th>检查项</th><th>笔记描述</th><th>商品实际</th><th>结论</th></tr></thead>
+      <tbody>
+        {{PART_C_ROWS}}
+      </tbody>
+    </table>
+  </div>
+  <!-- END:PART_C -->
+
+  <!-- 合规亮点 -->
+  <div class="highlights">
+    <h3>✅ 合规亮点</h3>
+    <ul>
+      {{HIGHLIGHT_ITEMS}}
+    </ul>
+  </div>
+
+  <!-- 修改建议文案 -->
+  <div class="suggestion-card">
+    <h2>✏️ 修改建议文案</h2>
+
+    <h3>笔记修改</h3>
+    {{SUGGESTION_NOTE}}
+
+    <!-- BEGIN:SUGGESTION_GOODS -->
+    <h3>商品修改</h3>
+    {{SUGGESTION_GOODS}}
+    <!-- END:SUGGESTION_GOODS -->
+  </div>
+
+  <div class="footer">由 内容社区文案合规检测 生成 · {{CHECK_DATE}}<br>本内容基于公开信息整理，仅供个人学习参考，不得用于商业用途；如用于商业用途，相关责任由使用者自行承担。</div>
+</div>
+</body>
+</html>

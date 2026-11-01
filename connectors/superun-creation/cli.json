@@ -1,0 +1,39 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": "22"
+  },
+  "npmRegistry": "https://registry.npmjs.org",
+  "init": {
+    "darwin": "npm install -g superun-ai-cli@latest",
+    "linux": "npm install -g superun-ai-cli@latest",
+    "win32": "npm.cmd install -g superun-ai-cli@latest"
+  },
+  "auth": {
+    "darwin": "superun-ai auth login",
+    "linux": "superun-ai auth login",
+    "win32": "superun-ai.cmd auth login"
+  },
+  "status": {
+    "darwin": "superun-ai auth status",
+    "linux": "superun-ai auth status",
+    "win32": "superun-ai.cmd auth status"
+  },
+  "unAuth": {
+    "darwin": "superun-ai auth logout",
+    "linux": "superun-ai auth logout",
+    "win32": "superun-ai.cmd auth logout"
+  },
+  "statusMatch": "\"state\"\\s*:\\s*\"CONFIGURED\"",
+  "authWaitForExit": true,
+  "authSuppressBrowser": true,
+  "authUrlDomain": "superun.com",
+  "versionCheck": {
+    "command": {
+      "darwin": "superun-ai version",
+      "linux": "superun-ai version",
+      "win32": "superun-ai.cmd version"
+    },
+    "minVersion": "0.1.44"
+  }
+}

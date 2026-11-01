@@ -23,7 +23,7 @@
 
 - `{品类} 市场规模 趋势 报告`
 - `{品类} 电商 销量 价格带 竞品`
-- `{品类} 淘宝 拼多多 抖音 小红书 爆款 痛点`
+- `{品类} 淘宝 拼多多 抖音 内容社区 爆款 痛点`
 - `{品类} 差评 痛点 售后`
 - `{品类} 供应链 成本 利润`
 - `{product/category} market size trend report`
@@ -50,7 +50,7 @@
 - `{品类} 品牌 排名 竞品`
 - `{品类} 爆款 商品 价格 对比`
 - `{竞品名} 卖点 评价 差评`
-- `{竞品名} 抖音 小红书 淘宝 拼多多`
+- `{竞品名} 抖音 内容社区 淘宝 拼多多`
 - `{competitor} reviews complaints`
 - `{product/category} top brands Amazon`
 - `{competitor} pricing features comparison`
@@ -79,7 +79,7 @@
 - `{品类} 行业趋势 2024 2025 2026`
 - `{品类} 平台趋势 报告`
 - `{品类} 消费趋势 用户需求`
-- `{品类} 小红书 抖音 趋势`
+- `{品类} 内容社区 抖音 趋势`
 - `{product/category} trend 2024 2025 2026`
 - `{product/category} consumer trend report`
 - `{product/category} ecommerce trend Amazon TikTok Shop`
@@ -103,7 +103,7 @@
 
 - `{品类} 用户画像 购买动机`
 - `{品类} 使用场景 痛点 差评`
-- `{品类} 小红书 种草 真实评价`
+- `{品类} 内容社区 种草 真实评价`
 - `{品类} 知乎 豆瓣 抖音 评论`
 - `{product/category} customer reviews pain points`
 - `{product/category} buyer persona use cases`
@@ -127,4 +127,4 @@
 | --- | --- | --- |
 | 官方报告/平台公告/财报 | 政府、协会、平台官方、上市公司财报、招股书 | 优先使用，可支撑核心趋势与大盘判断 |
 | 行业媒体/研究机构 | 艾瑞、魔镜、飞瓜、雨果跨境、Marketplace Pulse、eMarketer 等 | 可支撑行业观察、平台趋势、竞争格局，但需注意样本与口径 |
-| 社区讨论/社媒/问答 | 小红书、抖音、知乎、Reddit、论坛、商品评价 | 适合洞察痛点与真实反馈，不宜单独支撑大盘结论 |
+| 社区讨论/社媒/问答 | 内容社区、抖音、知乎、Reddit、论坛、商品评价 | 适合洞察痛点与真实反馈，不宜单独支撑大盘结论 |

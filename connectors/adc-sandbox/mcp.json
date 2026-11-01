@@ -1,12 +1,9 @@
 {
-  "_comment": "本连接器只配置一个 MCP Server（平台硬约束）。凭据占位符由用户在客户端本机填写。端点 2026-10-08 由占位符改为**真实端点** —— 与 `adc-approval` **同一宿主、不同路径**（`/mcp/adc-sandbox`）。⚠️ 若将来要用 `disabledTools` 收窄工具面，里面的名字**必须与本端点 `tools/list` 的真实工具名逐字一致**（`app/mcp/tools_*.py` 的 specs）：写错不会报任何错，只会「看着像护栏、实际什么都没拦」—— 本文件此前写的 `submit_job` / `cancel_job` 是上一代抽象名，从未在本宿主注册过，那道闸一直是空转的（2026-10-09 收口，守护用例 UT-MCP-254 盯着这条）。**2026-10-11 起写侧开放**：现役写工具不再隐藏（权威清单见服务端 `app/mcp/scopes.py::RUNTIME_WRITE_TOOLS`，本文件**不抄数量**：加一个工具就会过期），改由**工具层的两段式确认 + 幂等**（`confirm_text` 必须原样回传）+ 跳板机的**两道硬拦（服务/启动项类 A 档 + 不可逆操作类 E 档，后者连确认都不给）**兜住；云 API 那个写工具还多一道闸 —— 要过服务端的**写动作白名单**（不在名单里一律拒）。只读工具从来不在黑名单口径内。",
+  "_comment": "本连接器只配置一个 MCP Server（平台硬约束）。2026-10-21 端点合并后，它是**唯一**的 source 维度：审批 / 工单 / 运行域的工具都在 `/mcp/adc-sandbox` 上（旧 `/mcp/adc-approval` 端点在过渡期继续服务存量调用方，到期下线）。2026-10-20 起改为 **MCP 自带 OAuth 2.1**：不再声明 Authorization 头，令牌由客户端在 401 挑战之后按 OAuth 授权流程自动获取并注入；服务端 auth_mode=both 仍兼容静态令牌，但资产侧不再引导用户手填。⚠️ 若将来要用 `disabledTools` 收窄工具面，里面的名字**必须与本端点 `tools/list` 的真实工具名逐字一致**（`app/mcp/tools_*.py` 的 specs）：写错不会报任何错，只会「看着像护栏、实际什么都没拦」（守护用例 UT-MCP-254 盯着这条）。**写侧开放**：现役写工具不隐藏（权威清单见服务端 `app/mcp/scopes.py` 的两个写集合，本文件**不抄数量**：加一个工具就会过期），改由**工具层的两段式确认 + 幂等**（`confirm_text` 必须原样回传）+ 跳板机的**两道硬拦（服务/启动项类 A 档 + 不可逆操作类 E 档，后者连确认都不给）**兜住；云 API 那个写工具还多一道闸 —— 要过服务端的**写动作白名单**（不在名单里一律拒）。只读工具从来不在黑名单口径内。",
   "mcpServers": {
     "adc-sandbox": {
       "type": "streamableHttp",
       "url": "https://adc-bridgeservice.map.qq.com/mcp/adc-sandbox",
-      "headers": {
-        "Authorization": "Bearer ${ADC_MCP_TOKEN}"
-      },
       "timeout": 30000,
       "disabledTools": []
     }

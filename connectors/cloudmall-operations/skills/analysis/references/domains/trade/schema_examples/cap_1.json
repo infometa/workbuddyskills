@@ -1,0 +1,84 @@
+{
+  "_doc": "经营周报 JSON 组装示例。⚠️ SQL 返回中文列名，必须按 _column_map 转为英文 key。带 ★ 为必填。",
+
+  "_column_map": {
+    "_doc": "SQL 中文列名 → JSON 英文 key（逐项对照）",
+    "gmv": "gmv",
+    "支付人数": "pay_uv",
+    "成交订单数": "pay_cnt",
+    "下单人数": "order_uv",
+    "下单订单数": "order_cnt",
+    "下单金额": "order_amt",
+    "销量": "sales_qty",
+    "退款金额": "refund_amt",
+    "退款人数": "refund_uv",
+    "访问次数": "visit_pv",
+    "访问人数": "visit_uv",
+    "浏览次数": "browse_pv",
+    "浏览人数": "browse_uv",
+    "注册人数": "register_uv"
+  },
+
+  "meta": {
+    "_doc": "★ capability_id/start_date/end_date 必填",
+    "capability_id": 1,
+    "brand_name": "商家名称",
+    "title": "经营周报",
+    "start_date": "yyyyMMdd",
+    "end_date": "yyyyMMdd",
+    "period": "MM-DD ~ MM-DD",
+    "domain": "trade",
+    "generated_at": ""
+  },
+
+  "_overview_doc": "★ 必填。Q-1 当期查询结果，按 _column_map 转换列名后填入",
+  "overview": {
+    "gmv": 0, "pay_uv": 0, "pay_cnt": 0,
+    "order_uv": 0, "order_cnt": 0, "order_amt": 0,
+    "sales_qty": 0, "refund_amt": 0, "refund_uv": 0,
+    "visit_pv": 0, "visit_uv": 0,
+    "browse_pv": 0, "browse_uv": 0,
+    "register_uv": 0
+  },
+
+  "_previous_overview_doc": "★ 必填。Q-1 环比期查询结果，字段与 overview 完全相同",
+  "previous_overview": {
+    "gmv": 0, "pay_uv": 0, "pay_cnt": 0,
+    "order_uv": 0, "order_cnt": 0, "order_amt": 0,
+    "sales_qty": 0, "refund_amt": 0, "refund_uv": 0,
+    "visit_pv": 0, "visit_uv": 0,
+    "browse_pv": 0, "browse_uv": 0,
+    "register_uv": 0
+  },
+
+  "_daily_summary_doc": "★ 必填。A-3 当期逐日结果，每天一行。列名映射同 _column_map。缺少则逐日走势图为空",
+  "daily_summary": [
+    {"stat_date": "yyyyMMdd", "gmv": 0, "pay_uv": 0, "pay_cnt": 0, "order_uv": 0, "order_cnt": 0, "order_amt": 0, "sales_qty": 0, "refund_amt": 0}
+  ],
+
+  "_previous_daily_summary_doc": "推荐。A-3 环比期逐日结果，字段同上。缺少则对比线不显示",
+  "previous_daily_summary": [
+    {"stat_date": "yyyyMMdd", "gmv": 0, "pay_uv": 0, "pay_cnt": 0, "order_uv": 0, "order_cnt": 0, "order_amt": 0, "sales_qty": 0, "refund_amt": 0}
+  ],
+
+  "_weekly_trend_doc": "推荐。多周趋势（至少 2 周）。缺少则多周退款趋势图不显示",
+  "weekly_trend": [
+    {"week_label": "W16（04-06~04-12）", "gmv": 0, "pay_uv": 0, "pay_cnt": 0, "order_uv": 0, "refund_amt": 0}
+  ],
+
+  "_refund_doc": "推荐。Q-2b 品类退款结果。缺少则品类退款明细不显示",
+  "refund_by_category": [
+    {"category_name": "", "refund_amt": 0, "refund_cnt": 0, "gmv": 0}
+  ],
+
+  "_narrative_doc": "强烈推荐填写（缺少则对应区域空白）",
+  "executive_summary": "<p>一段话总结（HTML）</p>",
+  "highlights": {
+    "positive": {"label": "亮点标签", "text": ""},
+    "negative": {"label": "痛点标签", "text": ""}
+  },
+  "insights": ["洞察 1", "洞察 2", "洞察 3"],
+  "recommendations": [
+    {"priority": "P0", "title": "建议标题", "items": ["行动 1", "行动 2"]}
+  ]
+}

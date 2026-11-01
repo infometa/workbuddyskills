@@ -33,6 +33,14 @@
         },
         {
             "command": {
+                "darwin": "lark-cli auth scopes",
+                "linux": "lark-cli auth scopes",
+                "win32": "lark-cli.cmd auth scopes"
+            },
+            "authWaitForExit": true
+        },
+        {
+            "command": {
                 "darwin": "lark-cli auth login --recommend || [ $? -eq 3 ]",
                 "linux": "lark-cli auth login --recommend || [ $? -eq 3 ]",
                 "win32": "lark-cli.cmd auth login --recommend & if errorlevel 4 exit /b 1 & if errorlevel 3 exit /b 0"
@@ -46,6 +54,18 @@
         "linux": "lark-cli config remove",
         "win32": "lark-cli.cmd config remove"
     },
+    "authFailureCleanup": {
+        "errorPattern": "\"type\"\\s*:\\s*\"policy\"[\\s\\S]*\"code\"\\s*:\\s*21001",
+        "retry": false
+    },
+    "authFailureCleanups": [
+        {
+            "errorPattern": "\"type\"\\s*:\\s*\"policy\"[\\s\\S]*\"code\"\\s*:\\s*21001",
+            "errorMessage": "仅支持飞书/Lark 账号登录，不支持豆包账号登录",
+            "errorMessageEn": "Only Feishu/Lark accounts are supported. Doubao accounts cannot sign in here.",
+            "retry": false
+        }
+    ],
     "status": {
         "darwin": "lark-cli auth status",
         "linux": "lark-cli auth status",

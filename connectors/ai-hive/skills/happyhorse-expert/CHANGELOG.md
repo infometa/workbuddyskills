@@ -1,7 +1,15 @@
 # 更新日志 (CHANGELOG)
 
-> 本文件随 AI-HIVE Connector 包版本更新。Connector 包当前版本：**1.1.4**。
-> 日期：2026-08-21
+> 本文件随 AI-HIVE Connector 包版本更新。Connector 包当前版本：**1.2.1**。
+> 日期：2026-09-14
+
+## 1.2.1 — 2026-09-14
+
+- 修复 2026-09-09 平台审核驳回：`cli.json` 补齐 `init` 三平台安装命令，解决干净 Windows 环境安装步骤读取 `cliConfig.init` 崩溃（`Cannot read properties of undefined (reading 'win32')`）；技能内容不变。
+
+## 1.2.0 — 2026-09-09
+
+- 对齐 `@infimind-next/ai-hive-mcp@0.3.0`：新增 `get_model` 模型契约查询；`generate_image` / `generate_video` 新增 `dryRun` 只读预检与 `clientRequestId` 幂等键，`chat_text` 新增 `clientRequestId`；`pricingSnapshot` 来源扩展为 `list_models(detail="full")`、`get_model` 或 dry-run，付费调用原样回传。
 
 ## 1.1.4 — 2026-08-21
 

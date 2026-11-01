@@ -1,0 +1,161 @@
+{
+ "ProtoVersion": "V2_6",
+ "WorkflowID": "",
+ "WorkflowName": "zz-demo-llm",
+ "WorkflowDesc": "Answer the user query with an LLM",
+ "Nodes": [
+  {
+   "NodeID": "start",
+   "NodeName": "Start",
+   "NodeDesc": "",
+   "NodeType": "START",
+   "StartNodeData": {},
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "llm1"
+   ]
+  },
+  {
+   "NodeID": "llm1",
+   "NodeName": "大模型",
+   "NodeDesc": "",
+   "NodeType": "LLM",
+   "LLMNodeData": {
+    "ModelName": "Hunyuan/hy3",
+    "ModelParams": {
+     "Temperature": 0.3,
+     "TopP": 0.8,
+     "MaxTokens": 128
+    },
+    "SystemPrompt": "Reply with exactly LLM-V2: followed by the user text and nothing else.",
+    "Prompt": "{{q}}"
+   },
+   "Inputs": [
+    {
+     "Name": "q",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "SYSTEM_VARIABLE",
+      "SystemVariable": {
+       "Name": "SYS.UserQuery"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Content",
+       "Type": "STRING"
+      }
+     ],
+     "Desc": "",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "answer1"
+   ],
+   "ExceptionHandling": {
+    "Switch": "OFF",
+    "MaxRetries": "3",
+    "RetryInterval": "1",
+    "AbnormalOutputResult": "",
+    "HandleMethod": "EXCEPTION_OUTPUT",
+    "NextNodeIDs": [],
+    "AbnormalRetrySwitch": "ABNORMAL_RETRY_ON",
+    "Timeout": "60"
+   }
+  },
+  {
+   "NodeID": "answer1",
+   "NodeName": "回答",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "{{content}}"
+   },
+   "Inputs": [
+    {
+     "Name": "content",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "REFERENCE_OUTPUT",
+      "Reference": {
+       "NodeID": "llm1",
+       "JsonPath": "Output.Content"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "end",
+   "NodeName": "End",
+   "NodeDesc": "",
+   "NodeType": "END",
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [],
+     "Desc": "Output content",
+     "Value": {
+      "InputType": "USER_INPUT"
+     },
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": []
+  }
+ ],
+ "Mode": "NORMAL"
+}

@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "tccc": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@tencentcloud/tccc-mcp-server"],
+      "env": {
+        "TENCENTCLOUD_SECRET_ID": "${TENCENTCLOUD_SECRET_ID}",
+        "TENCENTCLOUD_SECRET_KEY": "${TENCENTCLOUD_SECRET_KEY}"
+      },
+      "runtime": {
+        "type": "node",
+        "version": "20"
+      },
+      "npmRegistries": [
+        "https://registry.npmmirror.com",
+        "https://registry.npmjs.org"
+      ],
+      "timeout": 60000
+    }
+  }
+}

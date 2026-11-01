@@ -1,7 +1,7 @@
 ---
 name: jufa-legal-data
 description: 聚法为智能体提供司法案例、法律法规、检察文书、合同模板、招投标、企业信息及风险数据的检索与详情查询能力。
-version: 1.1.0
+version: 1.1.1
 author: 聚法科技（长春）有限公司
 ---
 

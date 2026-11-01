@@ -1,0 +1,28 @@
+{
+  "title": "腾讯云联络中心（TCCC）对接配置",
+  "title_en": "Tencent Cloud Contact Center (TCCC) Configuration",
+  "description": "填写腾讯云 API 密钥以管理你的 TCCC 资源。凭证仅存储在本机 ~/.workbuddy 目录下，不经过云端。建议使用 CAM 子账号密钥并授予最小权限。",
+  "description_en": "Enter your Tencent Cloud API key to manage TCCC resources. Credentials are stored locally under ~/.workbuddy only. Use a CAM sub-account key with least privilege.",
+  "docUrl": "https://console.cloud.tencent.com/cam/capi",
+  "docLabel": "如何获取 SecretId / SecretKey？",
+  "fields": [
+    {
+      "key": "TENCENTCLOUD_SECRET_ID",
+      "label": "SecretId",
+      "label_en": "SecretId",
+      "type": "password",
+      "required": true,
+      "placeholder": "AKID 开头，在 腾讯云控制台 → 访问管理 → API 密钥管理 中获取",
+      "description": "腾讯云 API 密钥的 SecretId，以 AKID 开头。"
+    },
+    {
+      "key": "TENCENTCLOUD_SECRET_KEY",
+      "label": "SecretKey",
+      "label_en": "SecretKey",
+      "type": "password",
+      "required": true,
+      "placeholder": "32 位随机字符串，与 SecretId 在同一处获取",
+      "description": "腾讯云 API 密钥的 SecretKey，请勿与 SecretId 填反。"
+    }
+  ]
+}

@@ -10,7 +10,7 @@
 |---|---|
 | whoami | 查询当前登录用户的简要信息（pid/did/姓名），用于确认当前登录身份 |
 | findPersons / getAllPerson | 按姓名批量查找成员 / 获取部门（含子部门）或全公司成员，解析员工范围 |
-| getLfCustomerList | 按最后跟进时间获取客户列表，支持分页与多条件过滤：最后跟进时间范围、成交状态、跟进人 |
+| getLfCustomerList | 按最后跟进时间获取客户列表，支持多条件过滤，一次返回全部符合条件的客户 |
 | getCustomersByIds | 批量获取客户详情（标签/成交状态等），用于写入前校验客户存在性 |
 | getCustomerFollowRecords | 按客户 ID 查跟进记录（支持时间范围过滤），用于统计每个客户的跟进次数 |
 | getCustomerOrders | 按客户 ID 查销售订单列表，确认是否成交（status=2/8） |
@@ -32,9 +32,9 @@
 
 调用 getLfCustomerList：
 
-- 入参：followerPids/followerGids（步骤 1 解析）、lftimeStart（近 N 天起始时间戳，N 由用户指定）、transStatus=1（未成交）、size/skip（分页，默认 50，上限 200）。
-- **循环拉取**：若 ended=false，用 skip 续拉，直到 ended=true。
-- 返回空列表时，输出"该范围/时间窗内无符合条件的客户"。
+- 入参：followerPids/followerGids（步骤 1 解析）、lftimeStart（近 N 天起始时间戳，N 由用户指定）、transStatus=1（未成交）。
+- 工具内部自动分批拉取，一次返回全部结果，无需手动翻页。
+- 返回空列表时，输出“该范围/时间窗内无符合条件的客户”。
 
 ### 3. 逐客户统计跟进次数并筛选高频
 
@@ -79,8 +79,7 @@
 
 | 现象 | 处理方式 |
 |---|---|
-| 401 / 未授权 | 提示用户重新发起扫码授权（WorkBuddy 会自动打开授权页） |
-| 参数校验失败（code 为 MERR_MOA_PARA） | 按工具 schema 核对字段名、类型与必填项 |
+| 401 / 未授权 | 提示用户重新发起扫码授权（AGENT 会自动打开授权页） |
 | getLfCustomerList 返回空列表 | 输出"该范围/时间窗内无符合条件的客户" |
 | getCustomerOrders 返回空 | 视为"未成交"（无订单） |
 | batchCreateCustomerFollowRecords 失败 | 输出错误信息，建议检查客户状态后重试 |

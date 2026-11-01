@@ -6,7 +6,7 @@ description: 质检服务 MCP 连接器（OAuth 2.1 授权）。把标准落成�
 description_zh: 质检服务 MCP 连接器。通过 OAuth 登录后配置规则与 SOP、提交正式质检，并解读分数、命中和客户高频问。
 description_en: Quality inspection MCP connector. After OAuth sign-in, land rules and SOPs, submit formal inspections, and explain scores, hits, and frequent customer questions.
 category: automotive
-version: 1.0.0
+version: 1.1.0
 author: Tencent Automotive Industry
 ---
 
@@ -24,8 +24,9 @@ author: Tencent Automotive Industry
 ## 鉴权说明
 
 - **Connector 类型**：MCP Streamable HTTP。认证类型由服务端 401 发现，不在包内写 `client_id` / `client_secret`
-- **MCP 地址**：`http://129.204.159.232:8787/mcp`
-- **发现文档**：`http://129.204.159.232:8787/.well-known/oauth-protected-resource` 与 `/.well-known/oauth-authorization-server`
+- **MCP 地址**：`https://iautomark.sdm.qq.com/qc-manage-mcp/mcp`
+- **发现文档**：`https://iautomark.sdm.qq.com/qc-manage-mcp/.well-known/oauth-protected-resource` 与 `/.well-known/oauth-authorization-server`
+- 按 RFC 8414 路径插入的域名根别名是 `https://iautomark.sdm.qq.com/.well-known/oauth-*/qc-manage-mcp`，由网关转发到同一服务
 - 服务端返回 `401` 时带 `WWW-Authenticate`，由 WorkBuddy 打开登录页
 
 ## 工具清单

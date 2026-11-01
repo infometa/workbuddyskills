@@ -1,0 +1,155 @@
+{
+ "ProtoVersion": "V2_6",
+ "WorkflowID": "",
+ "WorkflowName": "zz-demo-single",
+ "WorkflowDesc": "Echo the user query as WF-OK:{query}",
+ "Nodes": [
+  {
+   "NodeID": "start",
+   "NodeName": "Start",
+   "NodeDesc": "",
+   "NodeType": "START",
+   "StartNodeData": {},
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "code1"
+   ]
+  },
+  {
+   "NodeID": "code1",
+   "NodeName": "拼接",
+   "NodeDesc": "",
+   "NodeType": "CODE_EXECUTOR",
+   "CodeExecutorNodeData": {
+    "Code": "def main(params: dict) -> dict:\n    return {\"result\": \"WF-OK:\" + str(params.get(\"q\", \"\"))}\n",
+    "Language": "PYTHON3"
+   },
+   "Inputs": [
+    {
+     "Name": "q",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "SYSTEM_VARIABLE",
+      "SystemVariable": {
+       "Name": "SYS.UserQuery"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "result",
+       "Type": "STRING"
+      }
+     ],
+     "Desc": "",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "answer1"
+   ],
+   "ExceptionHandling": {
+    "Switch": "OFF",
+    "MaxRetries": "3",
+    "RetryInterval": "1",
+    "AbnormalOutputResult": "",
+    "HandleMethod": "EXCEPTION_OUTPUT",
+    "NextNodeIDs": [],
+    "AbnormalRetrySwitch": "ABNORMAL_RETRY_ON",
+    "Timeout": "60"
+   }
+  },
+  {
+   "NodeID": "answer1",
+   "NodeName": "回答",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "{{content}}"
+   },
+   "Inputs": [
+    {
+     "Name": "content",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "REFERENCE_OUTPUT",
+      "Reference": {
+       "NodeID": "code1",
+       "JsonPath": "Output.result"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "end",
+   "NodeName": "End",
+   "NodeDesc": "",
+   "NodeType": "END",
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [],
+     "Desc": "Output content",
+     "Value": {
+      "InputType": "USER_INPUT"
+     },
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": []
+  }
+ ],
+ "Mode": "NORMAL"
+}

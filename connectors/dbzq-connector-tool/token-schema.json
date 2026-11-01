@@ -1,22 +1,22 @@
 {
     "title": "东北证券 API Key 配置",
-    "title_en": "NESC API Key Configuration",
-    "description": "粘贴前请注意：只填 Key 本体，不要带空格、换行、引号或 Bearer 前缀（服务端会自动补 Bearer）——多一个字符就会连接失败。\n凭证只保存在你的本机，不会上传。\n连不上时：提示「认证凭证缺失或有误」= 没填或格式不对；提示「签名未找到对应的aksk信息」= Key 无效或已过期，请重新领取。\n若显示「连接成功」但提问时报 Unauthorized，说明 Key 未开通该服务权限，请重新领取后重试。",
-    "description_en": "Before pasting: enter the key itself only — no spaces, line breaks, quotes, or a Bearer prefix (the Bearer scheme is added automatically). One extra character breaks the connection.\nThe credential is stored locally on your machine and never uploaded.\nIf it fails: \"Missing or invalid credentials\" = empty or malformed; \"No aksk found for signature\" = invalid or expired key, please request a new one.\nIf it shows \"connected\" but queries return Unauthorized, the key lacks permission for that service.",
-    "docUrl": "https://activity.nesc.cn/cms-h5/index.html?works_link_id=f9Zp7ZSMIb",
-    "docLabel": "如何领取 API Key 并配置东北证券 MCP",
-    "docLabel_en": "How to get your NESC API Key and configure the MCP",
+    "title_en": "Northeast Securities API Key Configuration",
+    "description": "连接东北证券 MCP，用自然语言查询 A 股、港股、基金与宏观行业的行情、财务、估值、资金流、公告、研报、资讯舆情等结构化数据，支持多维选股、多维选基、行业速报、政策解读与舆情风险预警等。Token 与接口地址仅存储在本机~/.workbuddy 下。",
+    "description_en": "Connect to the Northeast Securities MCP to query structured data in natural language — quotes, financials, valuation, fund flows, announcements, research reports and news sentiment for A-shares, Hong Kong stocks, funds and macro industries — supporting multi-dimensional stock screening, fund screening, industry briefs, policy interpretation and sentiment risk alerts. The token and endpoint URL are stored locally under ~/.workbuddy on your machine only.",
+    "docUrl": "https://mgw.nesc.cn/h5-member-center/apikey-register",
+    "docLabel": "如何登录开通引导页面获取 API Key 并配置东北证券 MCP",
+    "docLabel_en": "How to sign in and get your Northeast Securities API Key, then configure the MCP",
     "fields": [
         {
             "key": "DBZQ_TOKEN",
-            "label": "NESC API Key",
-            "label_en": "NESC API Key",
-            "placeholder": "32 位 Key，不含空格与 Bearer 前缀",
-            "placeholder_en": "32-char key, no spaces, no Bearer prefix",
+            "label": "Northeast Securities API Key",
+            "label_en": "Northeast Securities API Key",
+            "placeholder": "请填写东北证券 API Key",
+            "placeholder_en": "Enter your Northeast Securities API Key",
             "type": "password",
             "required": true,
-            "description": "只填 Key 本体，不要带空格、换行、引号或 Bearer 前缀。",
-            "description_en": "Enter the key itself only — no spaces, line breaks, quotes, or Bearer prefix."
+            "description": "用于访问东北证券 MCP 的个人访问令牌，只填写 API Key 本体。",
+            "description_en": "Personal access token for the Northeast Securities MCP. Enter the API Key itself only."
         }
     ]
 }

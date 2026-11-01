@@ -1,11 +1,15 @@
 {
   "runtime": {
-    "type": "node"
+    "type": "node",
+    "version": ">=18"
+  },
+  "env": {
+    "SQT_AUTH_CLIENT_NAME": "workbuddy"
   },
   "init": {
-    "darwin": "npm install -g https://s3plus.meituan.net/static-prod01/com.sankuai.sqtaiposp.static.aiteam/sqt-auth-cli.tgz",
-    "linux": "npm install -g https://s3plus.meituan.net/static-prod01/com.sankuai.sqtaiposp.static.aiteam/sqt-auth-cli.tgz",
-    "win32": "npm install -g https://s3plus.meituan.net/static-prod01/com.sankuai.sqtaiposp.static.aiteam/sqt-auth-cli.tgz"
+    "darwin": "npm install -g https://s3plus.meituan.net/static-prod01/com.sankuai.sqtaiposp.static.aiteam-files/public/sqt-auth-cli.tgz",
+    "linux": "npm install -g https://s3plus.meituan.net/static-prod01/com.sankuai.sqtaiposp.static.aiteam-files/public/sqt-auth-cli.tgz",
+    "win32": "npm install -g https://s3plus.meituan.net/static-prod01/com.sankuai.sqtaiposp.static.aiteam-files/public/sqt-auth-cli.tgz"
   },
   "auth": {
     "darwin": "sqt-auth-cli login",
@@ -31,7 +35,7 @@
       "linux": "sqt-auth-cli version",
       "win32": "sqt-auth-cli.cmd version"
     },
-    "minVersion": "0.3.8",
+    "minVersion": "0.3.10",
     "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
   }
 }

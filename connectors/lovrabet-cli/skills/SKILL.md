@@ -1,7 +1,7 @@
 ---
 name: lovrabet
 displayName: Lovrabet 运行态 CLI
-version: 2.3.5
+version: 2.3.6
 description: "Lovrabet 运行态 CLI — 面向业务场景的 AI 操作套件，通过 lovrabet 命令管理应用目录、业务角色与权限、用户级外部账号、Service Tree 业务命令、API 文档发现、数据集查询、Instant API 数据操作、可恢复 Excel 导入、Custom SQL/Backend Function、Personal Backend Function、文件上传、面向票证类业务材料文字与结构化字段提取的 OCR、审批待办与任务办理、定时任务、Skill、知识库与运行态 app-config key 状态检查。触发词：云图、lovrabet、lovrabet-cli、业务角色、角色成员、页面权限、菜单权限、数据集权限、user-account bind、provider 外部账号绑定、钉钉 userId 绑定、service tree、业务服务树、api-doc、dataset、data filter、Excel 导入、data import-excel、file upload、file query-url、ocr recognize、OCR 识别、票证文字提取、票证字段提取、发票识别、票据识别、证照识别、附件上传、personal-bff、approval、审批、待办、approve、reject、transfer、schedule、定时任务、cron、kb、skill、sql exec、bff exec、app-config、accessKey、compress、jq。"
 metadata:
   requires:
@@ -204,11 +204,13 @@ Service Tree 未命中不是失败条件，也不代表业务能力不存在。�
 
 这种情况下，直接进入：
 
-1. `dataset list --name ...`
+1. 按数据集名称用 `dataset list --name ...`；已知物理表名时用 `dataset list --table-name ...`
 2. `dataset detail --code ...`
 3. `data filter/getOne/create/batchCreate/update/delete`
 
 不要先多打一轮应用发现命令制造噪音。
+
+下面的名称关键词示例也适用于默认候选和其他候选 app 的验证：用户提供物理表名时，将 `--name <关键词>` 换成 `--table-name <表名前缀>`，不要把物理表名当作数据集名称搜索。筛选参数均可单独使用；同时传入时按 AND 组合，不要求补齐其他筛选条件。匹配规则见 [数据集发现](references/dataset-discovery-workflow.md)。
 
 `defaultApp` 只是弱候选，不是强上下文。未显式指定 app 时，如果本地已有 `defaultApp`，应先在默认候选里按需求关键词做数据集验证；无命中、弱命中或语义不合理时，再扩大到 `app list` 里查找其他应用。
 
@@ -405,7 +407,7 @@ Service Tree 未命中不是失败条件，也不代表业务能力不存在。�
 
 | 意图 | 命令 |
 |------|------|
-| 找数据集 | `lovrabet dataset list [--name 关键词] [--code 精确码]` |
+| 找数据集 | `lovrabet dataset list [--name 关键词] [--table-name 表名前缀] [--code 精确码]` |
 | 看数据集字段、关联信息和操作 | `lovrabet dataset detail --code <code> [--format json]` |
 | 查运行态 API 文档 | `lovrabet api-doc list [--category dataset] [--keyword aggregate]` |
 | 看 API 文档详情 | `lovrabet api-doc detail --code dataset_list` |
@@ -728,3 +730,5 @@ personal KB 使用文件型 create/update。更新前先 `kb detail` 查看正�
 | 知识库工作流 | [lovrabet-kb-workflow.md](references/lovrabet-kb-workflow.md) |
 | 定时任务工作流 | [lovrabet-schedule-workflow.md](references/lovrabet-schedule-workflow.md) |
 | 日志 | [lovrabet-logs.md](references/lovrabet-logs.md) |
+
+METADATA 原生 Excel 图片导入支持浮动图片、Microsoft Excel 单元格 richData 和独立 WPS DISPIMG。图片列映射到 IMAGE 字段；先 `--dry-run` 核验服务端能力，恢复时保留主检查点与 `.rows.json`，详见[可恢复 Excel 导入](references/lovrabet-excel-import.md)。

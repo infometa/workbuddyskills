@@ -1,6 +1,6 @@
 # 模型擅长场景速查表（references/model-scenarios.md）
 
-适用版本：AI-HIVE Connector 1.1.4
+适用版本：AI-HIVE Connector 1.2.0
 更新日期：2026-08-13
 
 > 本表帮助 agent 在调用 `list_models` 后，结合用户任务特点快速匹配擅长模型。
@@ -82,12 +82,14 @@
 | veo3.1-pro | 高质量模式，首尾帧+音画 | SUCCESS_FIRST（高质量音画） |
 | sora-2 | 物理精准，同步对话音效 | SUCCESS_FIRST（物理精准） |
 | minimax/video-01 | 高清节奏稳定 | SPEED_FIRST（快速生成） |
+| wan-3.0（Wan 3.0 标准/Pro） | 电影短剧、对白口播、品牌 TVC、电商展示、材质微距，2-30s 多镜头，T2V/I2V/R2V 与音画同生 | 以 list_models 返回为准（叙事·电商·多模态参考） |
 | minimax-h3（H3 / MiniMax H3） | 全模态上下文、原生立体声、首尾帧/Ref2V/视频编辑/动作迁移，最长 15s/2K | SUCCESS_FIRST（全模态·立体声·编辑迁移） |
 
 > **OpenAPI 交叉验证 ID（参考，2026-08）**：下表为 AI-HIVE OpenAPI 的 `publicModelId`，经 SDK `models-reference.md` 交叉验证。Connector 内部 `list_models` 返回的具体 ID 以运行时为准。
 > - Seedance 2.5：`public_model_seedance_2_5_t2v` / `_i2v` / `_r2v` / `_video_edit` / `_video_extend`
 > - MiniMax H3：`public_model_minimax_h3_t2v` / `_i2v` / `_r2v`
 > - Happyhorse：`public_model_happyhorse_t2v` / `_i2v` / `_r2v` / `_video_edit`
+> - Wan 3.0：`public_model_wan_3_0_video` / `_i2v` / `_r2v` / `_prime` / `_prime_i2v` / `_prime_r2v`
 
 ### 选派逻辑
 
@@ -97,6 +99,7 @@
 - **首尾帧过渡**：seedance-1-5-pro 或 seedance-1-0-pro
 - **多图参考保持一致**：happyhorse-1.0-r2v（最多 9 张参考）
 - **长视频 / 强参考 / 专业编辑 / 延长**：seedance-2-5（原生 30s、最多 50 参考、编辑/延长/首尾帧/关键帧/分镜/白模）
+- **电影短剧 / 对白口播 / 品牌 TVC / 电商多卖点**：wan-3.0（Wan 3.0 标准/Pro，2-30s 多镜头、混合参考与音画同生）
 - **全模态 / 原生立体声 / 动作迁移 / 产品设计 / 排版界面动画**：minimax-h3（H3）
 - **需要声音 / 音画同步**：veo3 或 sora-2
 - **快速预览**：seedance-1-0-pro-fast 或 minimax/video-01

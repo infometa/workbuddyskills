@@ -1,7 +1,7 @@
 ---
 name: meituan-for-business
 description: 美团企业版连接器，用于连接美团企业版账号、完成授权登录并在本机维护登录态。当用户提到美团企业版、Meituan for Business、企业版登录、登录态、sqt-auth-cli，或各项功能提示未登录、凭据缺失时使用。当前版本仅提供登录态维护能力（登录/登出/状态检查），依赖登录态的下游企业服务能力尚未接入；凭据仅存储于本机安全存储，任何情况下都不要读取、打印或记录凭据值。
-version: "1.0.2"
+version: "1.0.5"
 author: "panheyi"
 ---
 

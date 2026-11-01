@@ -77,13 +77,15 @@ sensors analytics bookmark-query --ai-session-id <ai_session_id> --bookmark-id 5
 | `status` | 执行状态：`success` / `error` / `unsupported` | `success` |
 | `data` | 仅 `status=success` 时存在；对应分析模型的原始结果，结构随模型不同而不同 | `{"column_infos":[...],"detail_rows":[[126410.0]],"truncated":false}` |
 | `error` | 仅 `status=error` 或 `unsupported` 时存在；说明失败原因 | `参数校验异常` |
+| `error_code` | 仅 `status=error` 且为平台业务错误时存在；平台错误码，用于定位错误类别 | `COMMON-D-27-1` |
+| `hint` | 仅 `status=error` 且为平台业务错误时存在；服务端真实失败原因（如参数校验的具体字段 `name should not be null`），排查错误时**先看此字段** | `name should not be null` |
 
 三态结构解读：
 
 | `status` | 含义 | 读取方式 |
 |---|---|---|
 | `success` | 书签执行成功 | `data` 是对应分析模型的原始 response，按 `type` 选择解释口径 |
-| `error` | 执行出错 | 无 `data`；`error` 说明失败原因（常见为书签保存的查询参数与当前数据结构不兼容） |
+| `error` | 执行出错 | 无 `data`；`error` 说明失败原因，平台业务错误另附 `error_code` 与 `hint`（真实失败原因），常见为书签保存的查询参数与当前数据结构不兼容 |
 | `unsupported` | 书签类型不在可执行列表 | 无 `data`；原样透传，不改写查询或用 SQL / HTTP 兜底 |
 
 单书签 / 批量 / 混合的输出结构：
@@ -100,7 +102,8 @@ sensors analytics bookmark-query --ai-session-id <ai_session_id> --bookmark-id 5
 | `书签 ID X 在 Dashboard Y 中不存在` | 书签与看板不匹配，或书签已被删除 | 先 `dashboard-get --id <dashboard_id>` 复核书签列表 |
 | `--to-date` 单独传报错 | 未同时提供 `--from-date` | 补传 `--from-date`，或改用 `Nd` 相对日期 |
 | 日期格式 / 顺序错误 | 非 `yyyy-MM-dd` / `Nd`、非法日历日期、from 晚于 to | 按错误提示改用合法格式与顺序 |
-| `status: error` | 书签保存的查询参数执行失败或与当前结构不兼容 | 原样返回 `error`；书签可能需要在平台侧更新 |
+| `status: error` + `error_code: COMMON-D-27-1` | 书签保存的查询参数未通过服务端校验；`hint` 给出具体原因（老书签缺 `measures[].name` 的场景 CLI 已自动补默认名，仍报此错时多为其他字段缺失） | 按 `hint` 定位缺失字段；书签定义过旧时建议在平台 UI 重新保存该书签 |
+| `status: error`（其他 `error_code`） | 书签保存的查询参数执行失败或与当前结构不兼容 | 原样返回 `error` / `error_code` / `hint`；书签可能需要在平台侧更新 |
 | `status: unsupported` | 书签类型不在可执行列表 | 原样返回，不改写查询或用 SQL / HTTP 兜底 |
 | 结果与平台 UI 口径不一致 | 时间覆盖、采样或缓存差异 | 说明本次实际查询时间范围，保留结构事实由调用方判断 |
 

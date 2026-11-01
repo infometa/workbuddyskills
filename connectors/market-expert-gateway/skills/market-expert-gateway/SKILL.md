@@ -1,13 +1,16 @@
 ---
 name: market-expert-gateway
-description: 通过客达 Market Expert Gateway 完成真实 CDP 人群圈选/预估/创建/拆包/导出、PA 三方洞察、企微客户群发、短信触达、内容中心检索生成与分发、落地页、公众号阅读数据与舆情查询。用户提到圈人群、人群预估、PA 画像、企微群发、发短信、生成/分发文章、落地页、阅读数据、舆情时使用。
+description: 通过腾讯汽车行业营销网关（Market Expert Gateway）完成真实 CDP 人群圈选/预估/创建/拆包/导出、PA 三方洞察、企微客户群发、短信触达、内容中心检索生成与分发、落地页、公众号阅读数据与舆情查询。用户提到圈人群、人群预估、PA 画像、企微群发、发短信、生成/分发文章、落地页、阅读数据、舆情时使用。
 ---
 
-# 客达营销网关（Market Expert Gateway）
+# 腾讯汽车行业营销网关（Market Expert Gateway）
 
-本 Skill 配合 `market-expert-gateway` MCP Server（streamableHttp，用户自填 Token 模式）使用。所有工具均由网关代理真实业务系统，凭证与 access_token 始终由后端管理。
+本 Skill 配合 `market-expert-gateway` MCP Server（streamableHttp，MCP OAuth 2.1 / VCam 登录模式）使用。所有工具均由网关代理真实业务系统，凭证与 access_token 始终由 WorkBuddy 与后端管理。
 
-网关地址已内置在 `mcp.json` 中，用户只需在连接表单填写访问令牌。若网关迁移，只需修改 `mcp.json` 的 `url`，无需改动 `token-schema.json`。
+连接入口 `https://iautomark.sdm.qq.com/market-expert/mcp` 已内置在 `mcp.json` 中（云原生网关 HTTPS 域名）。首次连接时 WorkBuddy 会打开浏览器跳转 VCam 登录，登录完成后自动保存并刷新令牌，用户无需填写任何令牌或地址。若网关迁移，只需修改 `mcp.json` 的 `url`。
+
+- 未登录或登录已失效时返回 `401`，应提示用户在连接器中重新连接（重新走 VCam 登录），不要重试，也不要索要令牌。
+- 网关为无状态 Streamable HTTP：`initialize` 直接返回 JSON、不下发 session id，调用工具时无需回传会话头。
 
 ## 通用规则
 
@@ -15,7 +18,6 @@ description: 通过客达 Market Expert Gateway 完成真实 CDP 人群圈选/�
 - 返回 `running` / `preparing` 时按 `retry_after_seconds` 串行轮询对应 `get_*_status`，不得把运行中当作完成，也不得重复提交 confirm。
 - 结果未知（超时、网络错误）时先查状态，不要重试 confirm。
 - 不在对话、日志或画布中输出 Token、`qrToken`、`package_code`、手机号明文、腾讯云模板/签名 ID。
-- 返回 401/403 时提示用户在连接器设置中重新填写访问令牌。
 
 ## 工具分组
 

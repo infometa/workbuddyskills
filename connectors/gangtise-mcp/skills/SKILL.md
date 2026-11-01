@@ -1,7 +1,7 @@
 ---
 name: gangtise-mcp
-description: "Use Gangtise MCP tools for financial quotes, research reports, knowledge base, stock pools. WorkBuddy connects with open-platform AK/SK form fields."
-version: 1.0.8
+description: "Use Gangtise MCP tools for financial quotes, research reports, knowledge base, stock pools. WorkBuddy connects via standard MCP OAuth."
+version: 1.1.0
 author: Gangtise
 metadata:
   category: connector
@@ -13,12 +13,12 @@ metadata:
 
 ## 连接与凭证（WorkBuddy）
 
-- **端点**：`https://openapi.gangtise.com/application/open-mcp/`
-- **鉴权**：用户自填开放平台 **Access Key / Secret Key**；WorkBuddy 注入请求头 `accessKey` / `secretKey`，服务端识别后 loginV2。
-- 凭证获取：[开放平台](https://open-platform.gangtise.com/) → 我的账号 → 账号列表
-- 若 401 / 凭证无效：提示用户在连接器设置中更新 AK/SK，或到开放平台重新生成后重新连接。
+- **端点**：`https://open.gangtise.com/application/open-mcp/`
+- **鉴权**：标准 MCP OAuth（OAuth 2.1 + PKCE）。用户点击连接后，WorkBuddy 自动完成元数据发现、动态客户端注册、浏览器授权，并在后续请求中注入 `Authorization: Bearer <access_token>`。
+- **注册地址**（DCR）：`https://open.gangtise.com/application/oauth2server/oauth/register`
+- 若授权失败 / 401：提示用户在连接器中重新连接并完成浏览器授权。
 
-凭证仅存用户本机；后台亦支持 `Authorization`、`X-GTS-Credentials`（非本 Connector 表单）。
+无需用户填写 Access Key / Secret Key。
 
 ## 能力总览（五域）
 
@@ -52,5 +52,5 @@ metadata:
 ## English
 
 - Transport: remote streamable HTTP.
-- Auth (WorkBuddy): user-supplied open-platform AK/SK injected as `accessKey` / `secretKey` headers.
+- Auth (WorkBuddy): standard MCP OAuth (PKCE); WorkBuddy injects Bearer access token after browser consent.
 - Prefer MCP tool schemas for parameters; see core tools table above for quick reference.

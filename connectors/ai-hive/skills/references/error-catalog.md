@@ -1,7 +1,7 @@
 # AI-HIVE 错误代码字典（references/error-catalog.md）
 
-适用版本：AI-HIVE Connector 1.1.4 / `@infimind-next/ai-hive-mcp`（不锁版本，npx 运行时自动拉取最新）
-更新日期：2026-08-21
+适用版本：AI-HIVE Connector 1.2.0 / `@infimind-next/ai-hive-mcp`（不锁版本，npx 运行时自动拉取最新）
+更新日期：2026-09-09
 
 ## AI-HIVE 官方资源
 
@@ -56,6 +56,10 @@ MCP 同步请求失败时，客户端会抛出服务端返回的可读 `message`
 | Seedance 2.0 仅提供参考音频 | 补充该模型当前配置要求的参考图片或视频；不要把参考音频作为唯一参考输入 |
 | 上游失败或超时 | 说明结果未确认；先查询已有任务，避免重复创建计费任务 |
 | 任务不存在 | 检查是否使用了当前用户生成工具真实返回的 `taskId` |
+| 消息提示模型价格已更新或快照过期 | 重新调用 `get_model` 或 dry-run 获取新快照，用原 `clientRequestId` 和相同业务参数重试 |
+| 消息提示 `clientRequestId` 冲突 | 同一幂等键被用于不同参数；保留原任务，修正后用新的 UUID 重试 |
+| 消息提示「该模型是视频模型，请改用 generate_video」等类型不匹配 | 按提示改用与模型类型匹配的工具重新调用 |
+| 消息提示 `REQUEST_OUTCOME_UNKNOWN` | 停止自动重试；先用 `get_generation_task` 和账户记录人工核查是否已创建任务或扣费 |
 
 ## 账户与费用问题完整处理
 

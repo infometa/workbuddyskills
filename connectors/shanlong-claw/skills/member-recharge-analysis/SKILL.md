@@ -1,7 +1,7 @@
 ---
 name: member-recharge-analysis
 description: 仅支持 CRM8 客户使用；非 CRM8 客户使用没有数据。会员业务 Skill：组合固定储值分析接口，输出储值基础指标、扣减、趋势、规则、渠道、会员明细和档位分析。适用于用户问“分析近一个月储值整体情况”“储值金额、扣减、趋势和结构怎么样”。用于储值发生额与结构分析；不要替代储值余额、储值转化率或余额预警分析。当用户的本业务问题提到“整个集团”“集团视角”“不区分门店”或未指定门店时，仍按当前账号/当前上下文默认权限范围执行，不得仅因未指定门店而拒绝或改用其它 Skill。
-version: "1.0.168"
+version: "1.0.174"
 author: shanglong-skill-creator
 ---
 
@@ -95,12 +95,12 @@ preEndDate = endDate - rangeDays days
 | `dateType` | 默认 `1` 按天；用户问月趋势/按月时用 `2` |
 | `cardTypeIds` | 未指定卡型时传 `[]` |
 | `shopFilterType` | 默认 `1` |
-| `shopFilterTypeValue` | 未指定门店时传 `[]`；指定门店时先按“门店编码获取 CLI”得到唯一 `omShopCode`，再传 `['<omShopCode>']` |
+| `shopFilterTypeValue` | 未指定门店时传 `[]`；指定门店时使用 Gateway 返回的短期 `selectionToken`，再传入由 Gateway 校验的选择引用数组 |
 | 明细分页 | 默认 `page=1,size=10`；用户要求更多时再提高，但不要无边界拉全量 |
 
-## 门店编码获取 CLI
+## Gateway 门店选择引用
 
-用户指定门店名称、简称、别名或门店 ID 时，先按运行规则定位二进制，执行固定 CRM 门店查询；未指定门店时按本文默认权限范围执行。
+用户指定门店名称、简称、别名或门店 ID 时，通过当前 Gateway 的门店选择能力取得短期 `selectionToken`；未指定门店时按当前账号授权范围执行。
 
 ```text
 <sl-sea-absolute> store find --type crm --name '<门店关键词>' --format json
@@ -112,11 +112,11 @@ preEndDate = endDate - rangeDays days
 <sl-sea-absolute> store find --type crm --keyword '<门店关键词或门店ID>' --format json
 ```
 
-先检查进程退出码和业务状态，再读取业务结果。候选为空时停止并提示未找到门店；只有一个候选时使用其 `omShopCode`；多个候选时展示候选名称供用户确认，不静默选择第一条，不展示完整内部编码。用户确认多个门店后使用对应编码数组。
+先检查进程退出码和业务状态。候选为空时停止并提示未找到门店；多个候选时展示候选名称供用户确认，不静默选择第一条，不展示原始门店编码；确认后只使用 Gateway 返回的短期 `selectionToken`。
 
-门店清单缺失或认证失败时，引导用户在连接器重新认证，再重试原门店查询一次；不读取认证文件、不手工刷新或填写认证参数。
+门店选择失败时，引导用户在连接器重新认证，再重试原门店选择一次；不读取认证文件、不手工刷新或填写认证参数。
 
-数据概览把选定编码放入 `shopIds`，未指定门店时省略该字段；其它会员分析放入 `shopFilterTypeValue`，并设 `shopFilterType=1`。卡券分析分别设置发券门店 `shopFilterTypeValue` 和核销门店 `useShopFilterTypeValue`。相同筛选必须应用到本轮所有相关查询。
+数据概览和其它会员分析只传 Gateway 认可的选择引用字段；这些字段由 Gateway 从 `selectionToken` 解析，Skill 不读取或拼装原始门店编码。相同筛选必须应用到本轮所有相关查询。
 
 ## 统一参数模板
 

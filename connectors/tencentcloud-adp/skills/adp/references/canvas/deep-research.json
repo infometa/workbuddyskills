@@ -1,0 +1,267 @@
+{
+ "ProtoVersion": "V2_6",
+ "WorkflowID": "",
+ "WorkflowName": "deep-research-main",
+ "WorkflowDesc": "Deep research: plan, research, summarize the user question",
+ "Nodes": [
+  {
+   "NodeID": "start",
+   "NodeName": "Start",
+   "NodeDesc": "",
+   "NodeType": "START",
+   "StartNodeData": {},
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "ref_plan"
+   ]
+  },
+  {
+   "NodeID": "ref_plan",
+   "NodeName": "拆解问题",
+   "NodeDesc": "",
+   "NodeType": "WORKFLOW_REF",
+   "WorkflowRefNodeData": {
+    "WorkflowID": "<PLAN_WORKFLOW_ID>",
+    "RefInputs": [
+     {
+      "Name": "topic",
+      "Type": "STRING",
+      "Input": {
+       "InputType": "SYSTEM_VARIABLE",
+       "SystemVariable": {
+        "Name": "SYS.UserQuery"
+       }
+      }
+     }
+    ]
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "result",
+       "Name": "result",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "",
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "ref_research"
+   ],
+   "ExceptionHandling": {
+    "Switch": "OFF",
+    "MaxRetries": "3",
+    "RetryInterval": "1",
+    "AbnormalOutputResult": "",
+    "HandleMethod": "EXCEPTION_OUTPUT",
+    "NextNodeIDs": [],
+    "AbnormalRetrySwitch": "ABNORMAL_RETRY_ON",
+    "Timeout": "0"
+   }
+  },
+  {
+   "NodeID": "ref_research",
+   "NodeName": "检索研究",
+   "NodeDesc": "",
+   "NodeType": "WORKFLOW_REF",
+   "WorkflowRefNodeData": {
+    "WorkflowID": "<RESEARCH_WORKFLOW_ID>",
+    "RefInputs": [
+     {
+      "Name": "topic",
+      "Type": "STRING",
+      "Input": {
+       "InputType": "REFERENCE_OUTPUT",
+       "Reference": {
+        "NodeID": "ref_plan",
+        "JsonPath": "Output.result"
+       }
+      }
+     }
+    ]
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "result",
+       "Name": "result",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "",
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "ref_summarize"
+   ],
+   "ExceptionHandling": {
+    "Switch": "OFF",
+    "MaxRetries": "3",
+    "RetryInterval": "1",
+    "AbnormalOutputResult": "",
+    "HandleMethod": "EXCEPTION_OUTPUT",
+    "NextNodeIDs": [],
+    "AbnormalRetrySwitch": "ABNORMAL_RETRY_ON",
+    "Timeout": "0"
+   }
+  },
+  {
+   "NodeID": "ref_summarize",
+   "NodeName": "汇总结论",
+   "NodeDesc": "",
+   "NodeType": "WORKFLOW_REF",
+   "WorkflowRefNodeData": {
+    "WorkflowID": "<SUMMARIZE_WORKFLOW_ID>",
+    "RefInputs": [
+     {
+      "Name": "topic",
+      "Type": "STRING",
+      "Input": {
+       "InputType": "REFERENCE_OUTPUT",
+       "Reference": {
+        "NodeID": "ref_research",
+        "JsonPath": "Output.result"
+       }
+      }
+     }
+    ]
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "result",
+       "Name": "result",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "",
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "answer1"
+   ],
+   "ExceptionHandling": {
+    "Switch": "OFF",
+    "MaxRetries": "3",
+    "RetryInterval": "1",
+    "AbnormalOutputResult": "",
+    "HandleMethod": "EXCEPTION_OUTPUT",
+    "NextNodeIDs": [],
+    "AbnormalRetrySwitch": "ABNORMAL_RETRY_ON",
+    "Timeout": "0"
+   }
+  },
+  {
+   "NodeID": "answer1",
+   "NodeName": "回复",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "MAIN:{{r}}"
+   },
+   "Inputs": [
+    {
+     "Name": "r",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "REFERENCE_OUTPUT",
+      "Reference": {
+       "NodeID": "ref_summarize",
+       "JsonPath": "Output.result"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "end",
+   "NodeName": "End",
+   "NodeDesc": "",
+   "NodeType": "END",
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [],
+     "Desc": "Output content",
+     "Value": {
+      "InputType": "USER_INPUT"
+     },
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": []
+  }
+ ],
+ "Mode": "NORMAL"
+}

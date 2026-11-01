@@ -1,5 +1,7 @@
 # WorkBuddy 二进制执行规则
 
+所有业务查询通过 Gateway 代理；Skill 不读取认证文件、不拼装产品 Token、请求头或原始门店编码，门店范围使用 Gateway 返回的短期 `selectionToken`。
+
 本技能只执行正文登记的固定只读查询。所有查询直接启动连接器安装并认证的 `sl-sea` 二进制，无需额外 Node.js 或 Python 环境，不需要拼装 JavaScript 查询脚本。
 
 ## 定位规则

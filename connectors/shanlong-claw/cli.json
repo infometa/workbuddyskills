@@ -1,41 +1,37 @@
 {
-  "runtime": {
-    "type": "node",
-    "version": ">=18"
-  },
   "init": {
-    "darwin": "bash \"$SL_CONNECTOR_HOME/install.sh\"",
-    "linux": "bash \"$SL_CONNECTOR_HOME/install.sh\"",
-    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\install.ps1\""
+    "darwin": "bash -c 'set -euo pipefail; t=$(mktemp); trap \"rm -f \\\"$t\\\"\" EXIT; curl -fsSL --connect-timeout 20 --max-time 180 https://chat-cdn.tcsl.com.cn/slclaw/workbuddy-cli-new/connector-runtime/21b2898d76ea542a370806cd/bootstrap.sh -o \"$t\"; h=$(shasum -a 256 \"$t\" | cut -d \" \" -f 1); test \"$h\" = 7bb063066c7345d0e87b0145c6f57d4bb9f0e7f5b141b6794088c27d9a13e47b || { echo installer-hash-mismatch >&2; exit 1; }; bash \"$t\"'",
+    "linux": "bash -c 'set -euo pipefail; t=$(mktemp); trap \"rm -f \\\"$t\\\"\" EXIT; curl -fsSL --connect-timeout 20 --max-time 180 https://chat-cdn.tcsl.com.cn/slclaw/workbuddy-cli-new/connector-runtime/21b2898d76ea542a370806cd/bootstrap.sh -o \"$t\"; h=$(sha256sum \"$t\" | cut -d \" \" -f 1); test \"$h\" = 7bb063066c7345d0e87b0145c6f57d4bb9f0e7f5b141b6794088c27d9a13e47b || { echo installer-hash-mismatch >&2; exit 1; }; bash \"$t\"'",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$ErrorActionPreference='Stop'; $t=Join-Path $env:TEMP ([guid]::NewGuid().ToString('n')+'.ps1'); try { Invoke-WebRequest -UseBasicParsing -Uri 'https://chat-cdn.tcsl.com.cn/slclaw/workbuddy-cli-new/connector-runtime/21b2898d76ea542a370806cd/bootstrap.ps1' -OutFile $t -TimeoutSec 180; if (([BitConverter]::ToString([Security.Cryptography.SHA256]::Create().ComputeHash([IO.File]::ReadAllBytes($t)))).Replace('-','').ToLowerInvariant() -ne '9990b71d4fccecc58ba3d4202204e717a77037e3dca5ede091a2322c5bd1c846') { throw 'installer-hash-mismatch' }; & $t } finally { Remove-Item -LiteralPath $t -Force -ErrorAction SilentlyContinue }\""
   },
   "auth": {
-    "darwin": "bash \"$SL_CONNECTOR_HOME/launch.sh\" auth",
-    "linux": "bash \"$SL_CONNECTOR_HOME/launch.sh\" auth",
-    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\launch.ps1\" -Action auth"
+    "darwin": "bash -c 'r=\"${SL_CONNECTOR_HOME:?Missing SL_CONNECTOR_HOME in cli.json env}/releases/21b2898d76ea542a370806cd\"; for f in launch.sh launch.ps1 launch.cjs install.sh install.ps1 install-url.conf cli.json ready; do if [ ! -f \"$r/$f\" ]; then echo \"Connector runtime missing; run WorkBuddy init first\" >&2; exit 1; fi; done; bash \"$r/launch.sh\" auth'",
+    "linux": "bash -c 'r=\"${SL_CONNECTOR_HOME:?Missing SL_CONNECTOR_HOME in cli.json env}/releases/21b2898d76ea542a370806cd\"; for f in launch.sh launch.ps1 launch.cjs install.sh install.ps1 install-url.conf cli.json ready; do if [ ! -f \"$r/$f\" ]; then echo \"Connector runtime missing; run WorkBuddy init first\" >&2; exit 1; fi; done; bash \"$r/launch.sh\" auth'",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$ErrorActionPreference='Stop'; if (-not $env:SL_CONNECTOR_HOME) { throw 'Missing SL_CONNECTOR_HOME in cli.json env' }; $r=Join-Path $env:SL_CONNECTOR_HOME 'releases/21b2898d76ea542a370806cd'; foreach ($f in @('launch.sh','launch.ps1','launch.cjs','install.sh','install.ps1','install-url.conf','cli.json','ready')) { if (-not (Test-Path -LiteralPath (Join-Path $r $f) -PathType Leaf)) { throw 'Connector runtime missing; run WorkBuddy init first' } }; & (Join-Path $r 'launch.ps1') -Action auth; exit $LASTEXITCODE\""
   },
   "unAuth": {
-    "darwin": "bash \"$SL_CONNECTOR_HOME/launch.sh\" unauth",
-    "linux": "bash \"$SL_CONNECTOR_HOME/launch.sh\" unauth",
-    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\launch.ps1\" -Action unauth"
+    "darwin": "bash -c 'r=\"${SL_CONNECTOR_HOME:?Missing SL_CONNECTOR_HOME in cli.json env}/releases/21b2898d76ea542a370806cd\"; for f in launch.sh launch.ps1 launch.cjs install.sh install.ps1 install-url.conf cli.json ready; do if [ ! -f \"$r/$f\" ]; then echo \"Connector runtime missing; run WorkBuddy init first\" >&2; exit 1; fi; done; bash \"$r/launch.sh\" unauth'",
+    "linux": "bash -c 'r=\"${SL_CONNECTOR_HOME:?Missing SL_CONNECTOR_HOME in cli.json env}/releases/21b2898d76ea542a370806cd\"; for f in launch.sh launch.ps1 launch.cjs install.sh install.ps1 install-url.conf cli.json ready; do if [ ! -f \"$r/$f\" ]; then echo \"Connector runtime missing; run WorkBuddy init first\" >&2; exit 1; fi; done; bash \"$r/launch.sh\" unauth'",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$ErrorActionPreference='Stop'; if (-not $env:SL_CONNECTOR_HOME) { throw 'Missing SL_CONNECTOR_HOME in cli.json env' }; $r=Join-Path $env:SL_CONNECTOR_HOME 'releases/21b2898d76ea542a370806cd'; foreach ($f in @('launch.sh','launch.ps1','launch.cjs','install.sh','install.ps1','install-url.conf','cli.json','ready')) { if (-not (Test-Path -LiteralPath (Join-Path $r $f) -PathType Leaf)) { throw 'Connector runtime missing; run WorkBuddy init first' } }; & (Join-Path $r 'launch.ps1') -Action unauth; exit $LASTEXITCODE\""
   },
   "status": {
-    "darwin": "bash \"$SL_CONNECTOR_HOME/launch.sh\" status",
-    "linux": "bash \"$SL_CONNECTOR_HOME/launch.sh\" status",
-    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\launch.ps1\" -Action status"
+    "darwin": "bash -c 'r=\"${SL_CONNECTOR_HOME:?Missing SL_CONNECTOR_HOME in cli.json env}/releases/21b2898d76ea542a370806cd\"; for f in launch.sh launch.ps1 launch.cjs install.sh install.ps1 install-url.conf cli.json ready; do if [ ! -f \"$r/$f\" ]; then printf \"{\\\"authenticated\\\":false}\\n\"; exit 0; fi; done; bash \"$r/launch.sh\" status'",
+    "linux": "bash -c 'r=\"${SL_CONNECTOR_HOME:?Missing SL_CONNECTOR_HOME in cli.json env}/releases/21b2898d76ea542a370806cd\"; for f in launch.sh launch.ps1 launch.cjs install.sh install.ps1 install-url.conf cli.json ready; do if [ ! -f \"$r/$f\" ]; then printf \"{\\\"authenticated\\\":false}\\n\"; exit 0; fi; done; bash \"$r/launch.sh\" status'",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$ErrorActionPreference='Stop'; if (-not $env:SL_CONNECTOR_HOME) { throw 'Missing SL_CONNECTOR_HOME in cli.json env' }; $r=Join-Path $env:SL_CONNECTOR_HOME 'releases/21b2898d76ea542a370806cd'; foreach ($f in @('launch.sh','launch.ps1','launch.cjs','install.sh','install.ps1','install-url.conf','cli.json','ready')) { if (-not (Test-Path -LiteralPath (Join-Path $r $f) -PathType Leaf)) { Write-Output ('{' + [char]34 + 'authenticated' + [char]34 + ':false}'); exit 0 } }; & (Join-Path $r 'launch.ps1') -Action status; exit $LASTEXITCODE\""
   },
   "statusMatch": "\"authenticated\"\\s*:\\s*true",
   "authWaitForExit": true,
   "authUrlDomain": "sly.tcsl.com.cn",
   "env": {
     "SL_CLI_HOME": "$HOME/.slclaw",
-    "SL_CONNECTOR_HOME": "$HOME/.workbuddy/connectors-marketplace/connectors/shanlong-claw"
+    "SL_CONNECTOR_HOME": "$HOME/.shanglong/connector"
   },
   "versionCheck": {
     "command": {
-      "darwin": "bash \"$SL_CONNECTOR_HOME/launch.sh\" version",
-      "linux": "bash \"$SL_CONNECTOR_HOME/launch.sh\" version",
-      "win32": "powershell -NoProfile -ExecutionPolicy Bypass -File \"%SL_CONNECTOR_HOME%\\launch.ps1\" -Action version"
+      "darwin": "bash -c 'r=\"${SL_CONNECTOR_HOME:?Missing SL_CONNECTOR_HOME in cli.json env}/releases/21b2898d76ea542a370806cd\"; for f in launch.sh launch.ps1 launch.cjs install.sh install.ps1 install-url.conf cli.json ready; do if [ ! -f \"$r/$f\" ]; then printf \"0.0.0\\n\"; exit 0; fi; done; bash \"$r/launch.sh\" version'",
+      "linux": "bash -c 'r=\"${SL_CONNECTOR_HOME:?Missing SL_CONNECTOR_HOME in cli.json env}/releases/21b2898d76ea542a370806cd\"; for f in launch.sh launch.ps1 launch.cjs install.sh install.ps1 install-url.conf cli.json ready; do if [ ! -f \"$r/$f\" ]; then printf \"0.0.0\\n\"; exit 0; fi; done; bash \"$r/launch.sh\" version'",
+      "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$ErrorActionPreference='Stop'; if (-not $env:SL_CONNECTOR_HOME) { throw 'Missing SL_CONNECTOR_HOME in cli.json env' }; $r=Join-Path $env:SL_CONNECTOR_HOME 'releases/21b2898d76ea542a370806cd'; foreach ($f in @('launch.sh','launch.ps1','launch.cjs','install.sh','install.ps1','install-url.conf','cli.json','ready')) { if (-not (Test-Path -LiteralPath (Join-Path $r $f) -PathType Leaf)) { Write-Output '0.0.0'; exit 0 } }; & (Join-Path $r 'launch.ps1') -Action version; exit $LASTEXITCODE\""
     },
-    "minVersion": "1.0.168"
+    "minVersion": "1.0.174"
   }
 }

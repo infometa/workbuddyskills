@@ -1,0 +1,44 @@
+{
+  "title": "连接快消通Agent",
+  "title_en": "Connect Kuaixiaotong Agent",
+  "description": "填写管理员开通时提供的接入凭证。凭证仅保存在本机 ~/.workbuddy 目录，连接时注入请求头，不经云端中转。",
+  "description_en": "Enter the credentials provided when your account was provisioned. Credentials are stored locally only (~/.workbuddy) and injected into request headers on connection.",
+  "fields": [
+    {
+      "key": "TID",
+      "label": "租户 ID",
+      "label_en": "Tenant ID",
+      "type": "text",
+      "required": true,
+      "placeholder": "开通时提供的租户 ID",
+      "description": "租户编号，由管理员开通时提供。"
+    },
+    {
+      "key": "USERID",
+      "label": "用户 ID",
+      "label_en": "User ID",
+      "type": "text",
+      "required": true,
+      "placeholder": "开通时提供的用户 ID",
+      "description": "账号对应的用户编号，由管理员开通时提供。"
+    },
+    {
+      "key": "ACCESS_KEY_ID",
+      "label": "AccessKey ID",
+      "label_en": "AccessKey ID",
+      "type": "text",
+      "required": true,
+      "placeholder": "开通时提供的接入密钥 ID",
+      "description": "接入密钥 ID，由管理员开通时提供。"
+    },
+    {
+      "key": "ACCESS_KEY_SECRET",
+      "label": "AccessKey Secret",
+      "label_en": "AccessKey Secret",
+      "type": "password",
+      "required": true,
+      "placeholder": "开通时提供的接入密钥 Secret",
+      "description": "接入密钥，敏感信息，仅存储在本机。"
+    }
+  ]
+}

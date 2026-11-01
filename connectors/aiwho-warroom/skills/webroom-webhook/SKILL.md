@@ -5,23 +5,31 @@ display_name_en: AIWHO War Room Push
 description: 向 AIWHO WEBHOOK中台（作战室）推送 webhook 消息：告警、任务完成通知、新建任务计划/已完成任务计划通知、待办阻塞提醒、AI 接入时的服务上线通知。当用户要求「推一条消息到作战室 / 大屏 / 群播报」「通知工位 ch-xxx」「推送构建失败/部署完成/异常告警」「推一条新建任务计划 / 已完成任务计划」时使用。含端点、鉴权、level 口径、幂等键（externalId）、载荷样例与排错表。
 description_zh: 把告警、任务完成、待办等消息推送到 AIWHO 指挥台（作战室大屏），紧急事件自动语音播报；覆盖端点、鉴权、级别口径、幂等键与排错。
 description_en: Push alerts, task updates, to-dos and connectivity notices to the AIWHO War Room dashboard, with voice broadcast for urgent events; covers endpoint, auth, level rules, idempotency keys and troubleshooting.
-version: 1.0.0
+version: 2.0.1
 author: AIWHO
 ---
 
-# webroom-webhook · 往作战室推一条消息（客户端集成套件）
+# webroom-webhook · 往作战室推一条消息
 
-本 Skill 是 **AIWHO 指挥台（作战室）的客户端集成套件**——它**只包含客户端侧的东西**：
-MCP 服务（`mcp/warroom-webhook.cjs`）、宿主 Hook（`.workbuddy/hooks/warroom-hook.cjs`）、
-安装器（`scripts/install-hook.mjs`）、契约唯一来源（`lib/mcp-contract.mjs` / `lib/demo-secret.mjs`）与本文档。
+本 Skill 说明如何把消息推送到 **AIWHO 指挥台（作战室）**。中台（AIWHO WEBHOOK中台）是
+**独立部署的云端服务**，地址与凭证由部署方提供。
 
-> 🔴 **本套件不含、也不需要后端服务**。**后端（AIWHO WEBHOOK中台 / 作战室）是独立部署的云端服务**，
-> 你推消息是推给那个已经在跑的中台，不是推给你本地。
-> **不要为了用本套件去 clone 或启动任何后端**——MCP / Hook 只与云端中台对话。
-> 中台地址与工位密钥由部署方提供，或经你所在平台的密钥管理注入。
+> 🔴 **本 Skill 不含、也不需要后端服务** —— MCP / Hook 只与云端中台对话。
+> **不要为了用它去 clone 或启动任何后端**；你本地没有中台，手拼 `localhost:3500` 一定不通（见 §八）。
 
-它同时是**通道 A（MCP）与通道 C（裸 HTTP）共用的契约说明**：
-`mcp/warroom-webhook.cjs` 暴露的两个工具与本文件口径必须一致，
+接入有三条路，**先按「你手里有什么」选一条**（详见 §〇）：
+
+| 你手里有什么 | 走哪条 | 配置量 | 可用 MCP 工具 |
+|---|---|---|---|
+| 从 **WorkBuddy 连接器市场**装的「AIWHO 指挥台」 | **OAuth 直连中台**（§〇·路径 1） | 点「连接」→ 网页授权，**零手填** | **5 个**（HTTP 传输） |
+| 完整客户端套件（含 `mcp/`、`lib/`、`scripts/`） | **本地 stdio MCP**（§〇·路径 2） | 写一条 `mcp.json` | **7 个** |
+| 只有 shell / curl | **裸 HTTP**（§一） | 三行环境变量 | 0（自己拼请求） |
+
+> ⚠️ 三者**不是同一套东西**：市场连接器给「5 个工具 + 自动令牌」，比完整套件少的只有
+> `notify_turn_start` / `notify_turn_end` 两个轮次工具；裸 HTTP 一个工具都没有，得自己拼请求。
+> 混用会得到「未知工具」或 `401` —— 先确认自己走的是哪条（见 §7.2）。
+
+它同时是**三条通道共用的契约说明**：MCP 工具与本文档口径必须一致，
 由 `node scripts/webroom-contract-check.mjs` 做十字校验（改一边不改另一边即失败）。
 
 > ⚠️ 四条先读：
@@ -33,27 +41,71 @@ MCP 服务（`mcp/warroom-webhook.cjs`）、宿主 Hook（`.workbuddy/hooks/warr
 
 ---
 
-## 〇、安装三步（客户端侧，无需后端）
+## 〇、接入：先选一条路
 
-把本套件装进你的 AI 宿主即可，**不用 clone 服务端、不用起任何服务**：
+### 路径 1 · 从连接器市场装（推荐，零配置）
 
-1. **放 Skill**：把 `.agents/skills/webroom-webhook/` 整个目录放进你的宿主 skills 目录。
-   不同宿主目录不同，例如：WorkBuddy 是 `~/.workbuddy/skills/` 或 `<项目>/.workbuddy/skills/`；
-   Claude Code 是 `~/.claude/skills/`；Codex 是 `~/.codex/skills/` 或 `.agents/skills/`；
-   其他宿主请查自身文档。
-2. **接 MCP（主线 stdio，可选 HTTP）**：
-   - **🌟 主线 · stdio（服务端直接接收 `?key=`）**：在 MCP 配置加 `warroom-webhook`，`command` 指向
-     `mcp/warroom-webhook.cjs`，用**系统 node 绝对路径**（见 §7.3，别写死托管/IDE 管理的 node 版本路径）。
-     接好后调 `setup_receiving_endpoint(endpoint=<含 ?key= 的入站 URL>)` 完成绑定。
-   - **可选 · HTTP 传输（零本地依赖）**：在宿主 MCP 配置加一条 `streamableHttp` / `http`，
-     指向中台 `POST /api/v1/mcp`，带 `Authorization: Bearer <ApiToken>`（见 §2.7）。**根本不需要本地 node**。
-     若只能弹窗/设置页添加：显示名称 `warroom-webhook`、协议 **HTTP Streamable**（别选 SSE）、
-     Server 地址 `<中台>/api/v1/mcp`、认证方式 **Bearer Token**、Token 填 `<ApiToken>`（注意不是 `?key=`）。
-3. **装宿主 Hook（可选，用于事件自动推送）**：跑 `node scripts/install-hook.mjs`，把
-   `.workbuddy/hooks/warroom-hook.cjs` 注册进宿主配置（见 §7.4）。不装也能用，只是少了「收到指令 / 会话恢复」等自动播报。
-   仅部分宿主支持 hook（见 §7.4 支持矩阵），不支持的宿主直接用 MCP 工具推送即可。
+在 **WorkBuddy 连接器市场**找到「AIWHO 指挥台」→ 点 **连接**。之后全自动，
+**你不需要填地址，也不需要填任何 token**：
 
-> ⚠️ **就这三步。你不需要「本地起一个中台再推」——那个中台由部署方提供，是云端独立服务。**
+1. **发现**：客户端读中台的 `/.well-known/oauth-authorization-server` 与
+   `/.well-known/oauth-protected-resource`，自动得知 MCP 端点与授权端点。
+2. **动态注册**：客户端按 RFC 7591 调 `POST /oauth/register` 取 `client_id`（公共客户端，无密钥）。
+3. **授权（PKCE S256）**：浏览器打开 `GET /oauth/authorize`。
+   - 你**已登录**中台 → 直接回调。**首次连接会先出一张确认页**（应用名 / 用途 / 权限，可逐项去掉），
+     同意过一次之后不再打扰 —— 同一账号 + 同一应用 + 权限没变时静默签发；换了账号、撤过授权、
+     或这次多要了一档权限，都会重新问一次；
+   - **未登录** → 出现中台托管登录页：填**邮箱 + 密码**；若账号不是邮箱（如运维管理员），还要填**团队标识**（`t_` 开头那串）。页面上另有两条出口：没账号 → 「注册并开通」，忘了密码 → 「忘记密码」——不用自己猜 URL。
+4. **换令牌**：客户端带 PKCE `code_verifier` 调 `POST /oauth/token`，拿到 access（**1 小时**）/
+   refresh（**30 天**），由 WorkBuddy 的 OAuth 管理器**自动以 `Authorization: Bearer` 注入**每次 MCP 调用；
+   过期自动刷新，全程无感。
+
+之后直接调这 5 个工具：`push_warroom_event`（通用推送）、`notify_task_complete`（任务完成）、
+`notify_task_created`（新建待办）、`notify_task_done`（待办完成）、`setup_receiving_endpoint`（接入确认）。
+
+> 🔴 **MCP 端点要求 `write` scope**（`admin` 可代 `write`）。若授权只拿到 `read`，
+> 调用会 `403 AUTH_SCOPE_INSUFFICIENT`。
+> 🔴 **HTTP 通道有这 5 个工具**（2026-10-17 补齐，与 stdio 侧同名同参数）。还有 2 个 ——
+> `notify_turn_start`、`notify_turn_end` —— **只在本地 stdio MCP 里有**：它们是给「无 hook 宿主」
+> 补轮次播报的，而走 HTTP 的云端 / 浏览器 AI 自有会话事件源，不需要。见 §7.2。
+>
+> 🟢 **自动播报：连接器包里自带 hook，不用另装任何东西。**
+> 授权完成后还剩**唯一一步**：把工位接收端写到本地（hook 是独立进程，拿不到 OAuth 令牌），
+> 由 AI 执行一条命令即可（把 URL 换成用户在用户中心「接入凭证 → 工位」复制的那条）：
+>
+> ```bash
+> # 1) 定位包目录（版本号目录会变，别写死）
+> ls -d ~/.workbuddy/plugins/cache/*/aiwho-warroom/*/
+> # 2) 落盘接收端（hook 与 CLI 读的是同一份 ~/.warroom/receiving-endpoint[.<scope>].json）
+> node "<上一步的包目录>/mcp/warroom-webhook.cjs" --setup "<用户中心复制的完整入站地址>"
+> ```
+>
+> 成功会回显基址 / 租户 / 工位 / 密钥（脱敏）与落盘路径。之后 9 个宿主事件
+> （收到指令 / 任务完成 / 待办新建与完成 / 需要授权 / 会话结束…）自动上屏，
+> 与本地 stdio 版的 hook **同一份脚本、同一套标题模板**。未配置时 hook 静默跳过，不报错、不刷屏。
+
+### 路径 2 · 本地 stdio MCP（工具最全，需完整套件）
+
+把**完整客户端套件**（含 `mcp/warroom-webhook.cjs`、`lib/`、`scripts/`）放进你的宿主，
+并在宿主的 MCP 配置里加一条：
+
+- `command` 用**系统 node 绝对路径**，参数指向该套件里的 `mcp/warroom-webhook.cjs`
+  （🔴 **别写死托管 / IDE 管理的 node 版本路径**，原因见 §7.3）。
+- 接好后调 `setup_receiving_endpoint(endpoint=<用户中心「接入凭证 → 工位」复制的完整入站地址>)` 完成绑定，见 §7.1.2。
+
+可选再装**宿主 Hook**（`node scripts/install-hook.mjs`）用于事件自动推送 —— 不装也能用，
+只是少了「收到指令 / 会话恢复」等自动播报；支持情况见 §7.4。
+
+> ℹ️ **市场连接器包里有的是**：`hooks/`（自动播报用）+ `mcp/warroom-webhook.cjs` + `lib/` + `skills/`，
+> 因为包内置 hook 需要它们；**没有的是** `scripts/`（`install-hook.mjs` 这类安装器）与 `.agents/`。
+> ✅ 完整套件仍可自取：从公开归档 `https://cnb.cool/aiwho/tools/warroom-integration/-/git/archive/v2.0.1.zip`
+> 下载解压即得（含 `mcp/` `lib/` `scripts/` `.agents/skills/`）—— 想用 stdio 通道或装 Claude Code hook 时走路径 2。
+> ✅ **套件里的 stdio 客户端已支持 v2 双段寻址**（`/api/v2/webhook/<租户>/<工位>`），
+> 并向后兼容旧部署的单段 `/api/v1/webhook/<工位>` —— 详见 §7.6。
+
+### 路径 3 · 裸 HTTP（只有 shell / curl 时）
+
+见 §一：三行环境变量 + 一条 curl，不需要任何 MCP。
 
 ---
 
@@ -62,16 +114,18 @@ MCP 服务（`mcp/warroom-webhook.cjs`）、宿主 Hook（`.workbuddy/hooks/warr
 ```bash
 # 必需环境变量（缺一个就直接失败退出，不做任何猜测）
 export WARROOM_API_BASE="https://<你的中台域名>"        # 后端基址，由部署方提供
+export WARROOM_TENANT="<租户 id>"                    # 🔴 v2 起路径必须带租户段，别漏
 export WARROOM_CHANNEL="ch-workbuddy"               # 目标工位 channelId
 export WARROOM_WEBHOOK_KEY="<工位密钥>"              # 真密钥；不设则回落演示推导值（仅本地）
 ```
 
-> **不确定 `WARROOM_API_BASE` 该填什么？** 问你的中台管理员，或从中台「工位管理」复制的
-> 「复制即用」入站 URL 里取（形如 `https://<中台>/api/v1/webhook/<工位>?key=<密钥>`）。
-> **别手拼 localhost**——你本地没有中台服务（见 §八）。
+> **不确定这几个值该填什么？** 问中台管理员，或登录用户中心 →「接入凭证」→ 选中工位，
+> 复制那条**完整入站地址** —— 形如 `https://<中台>/api/v2/webhook/<租户id>/<工位channelId>?key=<密钥>`，
+> 四段里已经把「基址 / 租户 / 工位 / 密钥」全给了。
+> **别手拼 localhost** —— 你本地没有中台服务（见 §八）。
 
 ```bash
-curl -sS -X POST "$WARROOM_API_BASE/api/v1/webhook/$WARROOM_CHANNEL?key=$WARROOM_WEBHOOK_KEY" \
+curl -sS -X POST "$WARROOM_API_BASE/api/v2/webhook/$WARROOM_TENANT/$WARROOM_CHANNEL?key=$WARROOM_WEBHOOK_KEY" \
   -H 'Content-Type: application/json' \
   -d '{"title":"部署完成","body":"web@1.2.3 已发布到生产","level":"info"}'
 ```
@@ -100,8 +154,9 @@ curl -sS -X POST "$WARROOM_API_BASE/api/v1/webhook/$WARROOM_CHANNEL?key=$WARROOM
 
 | 项 | 值 |
 |---|---|
-| 方法 / 路径 | `POST {WARROOM_API_BASE}/api/v1/webhook/{channelId}?key={secret}` |
-| 备选路径 | `POST /api/v1/ingest/{sourceType}` + `X-Channel-Id` 头（`sourceType` 取 `custom` / `business` 最省事） |
+| 方法 / 路径 | `POST {WARROOM_API_BASE}/api/v2/webhook/{tenantId}/{channelId}?key={secret}` |
+| 路径形状 | 🔴 **v2 起必须带租户段**（`/webhook/{tenantId}/{channelId}`）。旧的单段 `/api/v1/webhook/{channelId}` 与所有 `/api/v1/*` **已硬切、不再服务**（落 404 迁移提示） |
+| 备选鉴权 | 签名头（按工位 `type`，见 §2.2）—— `?key=` 与签名头**二选一**，任一通过即可 |
 | Content-Type | `application/json`（也支持 `text/plain` 与 `application/x-www-form-urlencoded`） |
 | 请求体上限 | 1 MiB（超限 `413 PAYLOAD_TOO_LARGE`） |
 | 限流 | 单工位 **120 请求/分钟**，全局限 1200/分钟；超限 `429 RATE_LIMITED` |
@@ -122,10 +177,11 @@ curl -sS -X POST "$WARROOM_API_BASE/api/v1/webhook/$WARROOM_CHANNEL?key=$WARROOM
 - **`notify_task_created` / `notify_task_done`**：标题分别自动变成 `📋 {source} 新建任务计划：<subject>` 与
   `✅ {source} 已完成任务计划：<subject>`（`<subject>` 是你传的**待办标题**，必填）；不带 `source` 时退回无来源版本。
   这两个工具针对「某条**具体待办被新建 / 完成**」的事件，与 `notify_task_complete`（一轮收尾摘要）正交 —— 别混用。
-- **`externalId` 缺省自动带** `ai:<source>`；给了 `commit` 时优先用 `commit-<hash>`。
-  ⚠️ **缺省键只有「来源」、不含内容也不含时间窗** → 同一来源推的**不同**消息会落到同一条记录、
-  **后推覆盖先推**（看起来「推了但历史里只有最后一条」）。一个来源要推多种事件时，
-  **必须**自带每次都不同的 `externalId`（如 `hook:notify:<sid>:<type>`，见 §四 `--external-id`）。
+- **`externalId` 缺省按内容自动生成**，不需要你操心：
+  `notify_task_created` → `mcp:task-created:<source>:<待办标题指纹>`，`notify_task_done` → `mcp:task-done:<source>:<标题指纹>`；
+  `push_warroom_event` → `mcp:push:<source>:<标题指纹>:<30s桶>`；给了 `commit` 的 `notify_task_complete` → `commit-<hash>`。
+  ✅ **不同内容天然不同键，各占一条**（不再「后推覆盖先推」）；同一条待办重推折叠；30s 内抖动重调也折叠。
+  只有「同一标题要在不同时间各推一次」「重试必须严格同键」这类语义，才需要显式传 `externalId`。
 - **裸 HTTP 直推**：服务端只按 §2.3 的键抽取，**不认 `source` 键** ——
   请自己把来源写进 `title`，并自带 `externalId`（如 `{"title":"✅ CodeBuddy 任务完成","externalId":"ai:CodeBuddy"}`）。
 
@@ -133,21 +189,27 @@ curl -sS -X POST "$WARROOM_API_BASE/api/v1/webhook/$WARROOM_CHANNEL?key=$WARROOM
 > 标题模板与 `externalId` 前缀改一处必须改三处（契约 / MCP stdio / HTTP 传输），
 > 由 `scripts/mcp-contract-check.mjs` 十字校验。
 
-### 2.7 MCP over HTTP（可选，零本地依赖）
+### 2.7 MCP over HTTP（**市场连接器走的就是这条**）
 
-没有 shell 的 AI（浏览器里的、云端的）走不了本文 §一 的 curl，也 spawn 不了 MCP 子进程。
-为此**中台**内置了一条 **HTTP 型 MCP 传输**（这是中台的能力，不是本套件要你部署的）：
+没有 shell 的 AI（浏览器里的、云端的）走不了 §一 的 curl，也 spawn 不了 MCP 子进程。
+为此**中台**内置了一条 **HTTP 型 MCP 传输**（这是中台的能力，不是本 Skill 要你部署的）：
 
 | 项 | 值 |
 |---|---|
-| 端点 | `POST {WARROOM_API_BASE}/api/v1/mcp` |
+| 端点 | `POST {WARROOM_API_BASE}/api/v2/mcp` |
 | 报文 | JSON-RPC 2.0，`Content-Type: application/json`（单个对象或数组皆可） |
-| 鉴权 | `Authorization: Bearer <ApiToken>`（**必须**，且**不接受**任何演示推导密钥） |
+| 鉴权 | `Authorization: Bearer <令牌>`（**必须**）。令牌可以是**手工签发的 ApiToken**，也可以是 **OAuth 签发的 access token**（两者在服务端走同一条校验路径）；**不接受** `?key=`，也不接受任何演示推导密钥 |
+| 需要 scope | **`write`**（`admin` 可代 `write`）；只有 `read` 会得到 `403` |
+| **可用工具** | **5 个**：`push_warroom_event`、`notify_task_complete`、`notify_task_created`、`notify_task_done`、`setup_receiving_endpoint`（见 §7.2） |
 | 支持方法 | `initialize` / `ping` / `tools/list` / `tools/call` |
 | **不支持** | `resources/*` / `prompts/*` / `completion/*` / GET 长连接（SSE）/ 上行通知 |
 
+> 🔴 **HTTP 通道缺的只有轮次工具。** `notify_turn_start` / `notify_turn_end` 只存在于本地 stdio MCP
+> （它们是给「无 hook 宿主」补轮次播报的）。拿这两个名字调 HTTP 端点会报「未知工具」。
+> 其余 5 个工具 HTTP 与 stdio **同名同参数**。
+
 ```bash
-curl -sS -X POST "$WARROOM_API_BASE/api/v1/mcp" \
+curl -sS -X POST "$WARROOM_API_BASE/api/v2/mcp" \
   -H "Authorization: Bearer $WARROOM_API_TOKEN" -H 'Content-Type: application/json' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"push_warroom_event","arguments":{"title":"部署完成","body":"web@1.2.3 已发布","level":"info","channelId":"ch-workbuddy","source":"CodeBuddy"}}}'
 ```
@@ -175,7 +237,7 @@ curl -sS -X POST "$WARROOM_API_BASE/api/v1/mcp" \
 **方式 A · URL 共享密钥（推荐给 AI，最省事）**：`?key=<工位密钥>`。
 适用于只允许填 URL 的平台，也适用于本 Skill 的 curl 模板。
 
-**方式 B · 请求头**（打 `/webhook/{channelId}` 时按工位 `type` 决定）：
+**方式 B · 请求头**（打 `/api/v2/webhook/{tenantId}/{channelId}` 时按工位 `type` 决定）：
 
 | 工位 type | 必须的头 | 值 |
 |---|---|---|
@@ -225,8 +287,10 @@ curl -sS -X POST "$WARROOM_API_BASE/api/v1/mcp" \
 
 去重键 `dedupeHash`：
 
-- **带 `externalId`** → `sha256(channelId \x1f externalId)`。同一 `externalId` **永远**只落一条。
-- **不带 `externalId`** → `sha256(channelId \x1f title \x1f body \x1f 时间窗)`，时间窗默认按去重窗口切桶。
+- **带 `externalId`** → `sha256(tenantId \x1f channelId \x1f externalId)`。同一 `externalId` **永远**只落一条。
+- **不带 `externalId`** → `sha256(tenantId \x1f channelId \x1f title \x1f body \x1f 时间窗)`，时间窗默认按去重窗口切桶。
+
+> v2 把 `tenantId` 补成了材料第一段（v1 没有）—— 所以**同一 `externalId` 在不同租户下互不干扰**。
 
 命中同一去重键时，服务端**不忽略、而是原地 upsert**：
 
@@ -241,7 +305,7 @@ curl -sS -X POST "$WARROOM_API_BASE/api/v1/mcp" \
 2. **"我推了但没上屏"**：多半是撞了去重键且内容没变 → 想强制产生新消息，就改 `title`/`body`，
    或带一个每次都不同的 `externalId`（如 `deploy-20260919-0201`）。
 3. **同一 `externalId` 换了内容 ≠ 新消息**：它会把**旧那条改掉**（大屏上不新增、数量不涨）。
-   想追加而非改写，必须换 `externalId`；想改已落记录也可走 `PATCH /api/v1/messages/{id}`（需 ApiToken）。
+   想追加而非改写，**必须换 `externalId`**。
 4. ⚠️ **同键「抬级别」会二次播报**：`level` 从 `info` 改成 `urgent` 是「内容有差异」，
    服务端 upsert 后**无条件** `broadcastMessage`，浏览器侧 `TtsEngine` 收到一条新的 `urgent` → **又播一遍**。
    这既不是新增、也不是幂等，是**重复打扰**。重试时请保持 payload **逐字不变**。
@@ -258,8 +322,8 @@ curl -sS -X POST "$WARROOM_API_BASE/api/v1/mcp" \
 | `task-complete-cursor.json` | 第二个 AI 的同工位通知（演示多 AI 分辨） | `info` |
 | `task-created.json` | 新建一条待办通知（subject 写待办标题，标题带来源） | `info` |
 | `task-done.json` | 某条具体已完成任务计划通知（subject 写待办标题，标题带来源） | `info` |
-| `turn-start.json` | 轮次开始「🙋 收到指令」（**仅无 hook 宿主**，AI 每轮调 `notify_turn_start`） | `info` |
-| `turn-end.json` | 轮次结束「✅ {source} 任务完成」（**仅无 hook 宿主**，AI 每轮调 `notify_turn_end`） | `info` |
+| `turn-start.json` | 轮次开始「🙋 收到指令」（**判定无 hook 覆盖时**才由 AI 每轮调 `notify_turn_start`，见 §7.2 C） | `info` |
+| `turn-end.json` | 轮次结束「✅ {source} 任务完成」（同上，`notify_turn_end`） | `info` |
 | `alert-critical.json` | 生产紧急告警（会播报） | `urgent` |
 | `build-failed.json` | CI 构建失败 | `urgent` |
 | `need-action.json` | 待你操作 / 阻塞 | `warning` |
@@ -298,8 +362,8 @@ node mcp/warroom-webhook.cjs --notify --title "⚠️ 需要你操作：证书 3
 `--commit` 省略时自动 `git rev-parse --short HEAD`。
 `--source` 也可用环境变量 `WARROOM_AI_NAME` 固定（各宿主在 `mcp.json` 里设一次即可）。
 
-**`--external-id <key>`（幂等键，强烈建议显式给）**：不给时的缺省是 `ai:<source>`（有 `commit` 则 `commit-<hash>`）。
-⚠️ **缺省值不含内容、也不含时间窗** —— 同一个 `source` 推的**不同**消息会落到同一条记录、**后推覆盖先推**。
+**`--external-id <key>`（可选，一般不用给）**：缺省按内容自动生成 —— `push` 类 `mcp:push:<source>:<标题指纹>:<30s桶>`、
+待办类 `mcp:task-created|task-done:<source>:<标题指纹>`、有 `commit` 的 `commit-<hash>`。**不同内容不会再互相覆盖。**
 所以「一个来源推多种事件」（如宿主 hook 的「收到指令 / 任务完成 / 需要你操作」）**必须**各自显式给 key，例如：
 
 | 事件 | `--external-id` 写法 | 语义 |
@@ -360,14 +424,14 @@ node mcp/warroom-webhook.cjs --notify --title "⚠️ 需要你操作：证书 3
 | 401 | `SIG_INVALID` | 密钥不对；或 HMAC 对的是 parse 后的 body 而非原始字节 |
 | 401 | `SIG_TIMESTAMP_SKEW` | 走**签名头**路径且传了 `X-Request-Timestamp`，与本机时钟差 > ±300s。→ 校准，或干脆别传（带 `?key=` 时不会出这个码） |
 | 403 | `SSRF_BLOCKED` | 只在出站转发路径出现，入站不会 — 若见到说明打错端点了 |
-| 404 | `RESOURCE_NOT_FOUND` | `channelId` 不存在。→ 去「设置 → 工位管理」核对 |
+| 404 | `RESOURCE_NOT_FOUND` | `channelId` 不存在；**或路径漏了租户段**（v2 必须是 `/webhook/{tenantId}/{channelId}`）。→ 去用户中心「接入凭证 → 工位」核对 |
 | 410 | `CHANNEL_DISABLED` | 工位被禁用（不是不存在）。→ 启用工位，或换一个 |
 | 413 | `PAYLOAD_TOO_LARGE` | 请求体 > 1 MiB。→ 精简 `body`（大日志只放摘要 + 链接） |
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | Content-Type 畸形/不支持。→ 老老实实写 `application/json` |
 | 422 | `UNSUPPORTED_SOURCE_TYPE` | `im_feishu` / `im_dingtalk` / `im_wecom` 属 P1，未启用 |
 | 429 | `RATE_LIMITED` | 超 120/min/工位。→ 按 `Retry-After` 退避后重投（去重保证不重复） |
 | 500 | `INTERNAL_ERROR` | 服务端异常。→ 重试 2 次仍失败则上报 |
-| **HTTP 传输** 401 | `AUTH_TOKEN_MISSING` | 打 `/api/v1/mcp` 没带 `Authorization: Bearer`。→ 补上（该端点**不接受** `?key=`） |
+| **HTTP 传输** 401 | `AUTH_TOKEN_MISSING` | 打 `/api/v2/mcp` 没带 `Authorization: Bearer`。→ 补上（该端点**不接受** `?key=`） |
 | **HTTP 传输** 401 | `AUTH_TOKEN_INVALID` | Bearer 令牌不对 / 已吊销；**用演示密钥当令牌也会落到这一码**。→ 换真实 ApiToken |
 | **HTTP 传输** 403 | `AUTH_SCOPE_INSUFFICIENT` | 令牌没有 `write` scope。→ 换有写权限的令牌 |
 | **HTTP 传输** 405 | `METHOD_NOT_ALLOWED` | 用 GET 打了端点。→ 只支持 POST（无 SSE） |
@@ -383,8 +447,8 @@ node mcp/warroom-webhook.cjs --notify --title "⚠️ 需要你操作：证书 3
 
 ## 六、AI 调用时请遵守
 
-1. **别猜 `channelId`**。默认工位是 `ch-workbuddy`；不确定就问用户，或从
-   `GET /api/v1/stations`（需 ApiToken）取。
+1. **别猜 `channelId` / `tenantId`**。默认工位是 `ch-workbuddy`；不确定就问用户，或从
+   `GET /api/v2/stations`（需 ApiToken）取。租户段同样不能猜。
 2. **别在代码/文档里写死密钥**。用 `$WARROOM_WEBHOOK_KEY`。若某平台只能填静态 URL，
    把密钥放环境变量或密钥管理，不要提交进仓库。
 3. **级别宁低勿高**。`urgent` 会打断人（语音播报）。只有真的需要人立刻看时才用。
@@ -398,81 +462,161 @@ node mcp/warroom-webhook.cjs --notify --title "⚠️ 需要你操作：证书 3
    **来源名用稳定的短标识**（`CodeBuddy` / `Cursor` / `ci-bot`），不要每次都带时间戳 —— 那样每条都是新消息、刷屏。
 6. **重试无害**，但要幂等：优先带 `externalId`。
 7. **本 Skill 只负责推送**。查工位、看消息、改配置需要 ApiToken，
-   走 `POST /api/v1/auth/login` + `Authorization: Bearer <token>`，不在本 Skill 范围。
-8. **轮次事件看宿主**（详见 §7.2 C）：有 hook 的宿主由 hook 推「收到指令 / 任务完成」，**不要**再调
-   `notify_turn_start` / `notify_turn_end`；无 hook 的宿主**每轮**都要调（开始 `notify_turn_start`、
-   结束 `notify_turn_end`，**含普通对话**），否则大屏看不到轮次边界。
+   走 `POST /api/v2/auth/login` + `Authorization: Bearer <token>`，不在本 Skill 范围。
+8. **轮次事件先判归属，再决定调不调**（详见 §7.2 C）：`initialize` 的 instructions 会**现探本机事实**
+   给出 `hook` / `self` / `unknown` 结论 —— 判为「hook 已覆盖」就**不要**调 `notify_turn_start` /
+   `notify_turn_end`；判为「无 hook」则**每轮成对调**（开始 `notify_turn_start`、结束 `notify_turn_end`，
+   **含普通对话**），否则大屏看不到轮次边界。
+   🔴 别按宿主品牌猜（WorkBuddy 上 hook 也可能压根没生效）；也**别指望轮询** —— MCP 没有任何定时唤醒原语，
+   漏调就是静默缺失，事后补不回来。
 
 ---
 
 ## 七、与 MCP 的关系（三条通道怎么选）
 
-| | MCP stdio（`mcp/warroom-webhook.cjs`） | 本 Skill（裸 HTTP / CLI） | MCP over HTTP（`POST /api/v1/mcp`） |
+| | MCP stdio（`mcp/warroom-webhook.cjs`） | 裸 HTTP / CLI | MCP over HTTP（`POST /api/v2/mcp`，**市场连接器走这条**） |
 |---|---|---|---|
 | 适用宿主 | 能 spawn 子进程的本地客户端 | **任何有 shell 的 AI** | **没有 shell 的 AI**：浏览器里的 / 云端 Agent |
 | 需要配置 | `mcp.json` | 零配置（读本文件即可） | 一个端点 + 一个 Bearer 令牌 |
 | 浏览器里的 AI | 接不进来 | 接不进来 | **可以了**（本文件 §2.7） |
-| 鉴权 | 本机环境变量（可回落演示密钥） | `?key=` 或签名头 | **必须** ApiToken（不接受演示密钥） |
-| 契约定义 | 写在 `inputSchema` 里 | 写在本文件里 | 同 stdio（工具口径一致） |
+| 鉴权 | 本机环境变量（可回落演示密钥） | `?key=` 或签名头 | **必须** Bearer 令牌（ApiToken **或** OAuth access token；不接受 `?key=` 与演示密钥） |
+| 工具数 | **7 个** | 0（自己拼 HTTP） | **5 个**（缺 `notify_turn_start` / `notify_turn_end`） |
+| 契约定义 | 写在 `inputSchema` 里 | 写在本文件里 | 与 stdio 的**命名 / 参数口径同源**，5 个工具同名同参数 |
 
-### 7.1 接入流程：先装服务，后给接收端（不再握手即推）
+### 7.1 接入流程：按通道分两种
+
+#### 7.1.1 HTTP 通道（市场连接器 / OAuth）：**工具不需要配接收端，自动播报需要一次 `--setup`**
+
+走 §〇·路径 1 或 §2.7 时，**不需要用 `setup_receiving_endpoint` 去做「绑定」** —— 地址与身份
+**已经在配置里定死**：
+
+- **地址**：连接器包里写死 `https://<中台>/api/v2/mcp`；
+- **身份**：OAuth 令牌由 WorkBuddy 的 OAuth 管理器自动以 `Authorization: Bearer` 注入；
+- **租户**：服务端从**令牌归属**取；工具参数里没有、也**不接受** `tenantId`；
+- **工位**：取工具参数 `channelId`（缺省 `ch-workbuddy`）。
+
+所以**工具侧**的「接入」= 点连接 + 授权完成，之后直接调 §7.2 的 5 个工具。
+`setup_receiving_endpoint` 在这条通道上仍然可用，但语义不同：它**不做绑定**（没有可绑的东西），
+只做「推一条 🟢 服务上线 + 回显本工位模板」，供用户问「接好了吗」时用一次。
+
+**🟢 但「自动播报」需要一次本地落盘 —— 因为 hook 是独立进程，拿不到 OAuth 令牌。**
+连接器包里带 `hooks/hooks.json`（9 个宿主事件），它读的是本地文件
+`~/.warroom/receiving-endpoint[.<scope>].json`。所以授权完成后要补这一步（AI 执行，用户只需贴 URL）：
+
+```bash
+node "<包目录>/mcp/warroom-webhook.cjs" --setup "<用户给的完整入站地址>"
+```
+
+包目录形如 `~/.workbuddy/plugins/cache/<市场>/aiwho-warroom/<版本>/`，**不要写死版本号**，
+先 `ls -d ~/.workbuddy/plugins/cache/*/aiwho-warroom/*/` 定位。
+
+**这一步就是「示例词」该干的事** —— hook 本身不需要装（随包生效），示例词负责的是把
+「用户手里的密钥」交给本地进程。用户说完下面这类话之后，按 4 步走：
+
+> 「帮我确认指挥台的自动播报装好了没，没装就装上」
+
+1. `ls -d ~/.workbuddy/plugins/cache/*/aiwho-warroom/*/` 拿到包目录（**别猜版本号**）；
+2. 要一条完整入站地址：用户中心 → 接入凭证 → 工位 → 「复制完整地址」（形如
+   `https://<中台>/api/v2/webhook/<租户>/<工位>?key=…`）；
+3. 跑上面那条 `--setup`，它会把基址 / 租户 / 工位 / 密钥写进 `~/.warroom/receiving-endpoint[.<scope>].json`；
+4. 回报「目标 = 哪个中台 / 哪个工位」，并让用户随便发一句话验一次（见下面的排查）。
+
+> 没做这一步也不报错：hook 会识别出「插件形态且没有接收端」并**静默跳过**，
+> 大屏上只是没有自动消息（AI 主动调工具仍正常）。
+
+**用户说「装完不自动播报」时的排查顺序**（别一上来就重装）：
+
+| # | 检查 | 判读 |
+|---|---|---|
+| 1 | `~/.warroom/receiving-endpoint[.<scope>].json` 是否存在 | 不存在 = `--setup` 没跑过（**最常见**） |
+| 2 | `~/.workbuddy/logs/warroom-hook.log` 有没有**今天**的事件 | 有 = hook 在跑、只是推送失败（看日志里的 HTTP 状态） |
+| 3 | 主日志搜 `Loaded hooks configuration from extension: aiwho-warroom` | **有** = 引擎已加载插件 hooks，不用再装；**没有** = 走第 4 步 |
+| 4 | 兜底：`node "<包目录>/scripts/install-hook.mjs" --host=workbuddy` | 把 9 个事件直接写进 `~/.workbuddy/settings.json`（幂等、写前备份、只动它自己写的 handler） |
+
+> 🔴 第 4 步**只在第 3 步为空时做**。插件 hooks 已生效还去写 settings.json，等于每个事件跑两遍
+> （虽然后端靠幂等键会折叠成一条，但每轮白起两个 node 进程）。
+> 想撤掉旧的 settings.json 注册：`node scripts/install-hook.mjs --uninstall`。
+
+#### 7.1.2 stdio 通道：先装服务，后给接收端（不再握手即推）
 
 旧版在 `initialize` 握手时**自动**推一条「🟢 服务上线」，发生在用户还没给服务端地址 / 工位 / 密钥之前，
 等于「连上即推测试」。现已改为**两步分离** —— 把「安装」和「推送」彻底拆开：
 
 1. **安装服务（仅接线）**：MCP stdio 接入后**不会**向任何地址发消息；AI 读到这里也只是知道有哪些工具可用。
-2. **用户给接收端**：用户从服务端「工位管理」复制该工位的「复制即用」入站 URL
-   （形如 `https://<中台>/api/v1/webhook/<工位channelId>?key=<密钥>`）贴给 AI。
-3. **AI 识别接收端**：AI 调用 `setup_receiving_endpoint(endpoint=<那条URL>)`，自动解析出
-   **服务端基址 / 工位 channelId / 密钥**，并设为本次会话的默认推送目标。
+2. **用户给接收端**：用户登录用户中心 → 接入凭证 → 选中该工位，复制完整入站地址
+   （形如 `https://<中台>/api/v2/webhook/<租户id>/<工位channelId>?key=<密钥>`）贴给 AI。
+3. **AI 识别接收端**：AI 调用 `setup_receiving_endpoint(endpoint=<那条URL>)`，解析出
+   **基址 / 租户 / 工位 channelId / 密钥**，并设为本次会话的默认推送目标。
 4. **确认连接**：在这一步才推送一条 `🟢 服务上线：<source>`（`level=info`）—— 此时地址与密钥才是真的。
-5. **回显全部模板**：工具返回**本工位会出现的全部消息模板清单（A=AI 主动推送 + B=宿主 Hook 自动推送，见 §7.2）**，告诉用户每种事件会出现什么。
-6. **咨询是否修改模板（必须，不可跳过）**：回显后**向用户提问**，例如：「上面这些模板的标题 / 文案需要改吗？比如把「✅ {source} 任务完成」换个说法，或哪一类事件不希望出现在大屏上？」
-   - 用户**不改** → 直接进第 7 步；
-   - 用户**要改** → 逐项记清「哪个模板 + 改成什么」，按 §7.2 的落地位置改 `lib/mcp-contract.mjs`（标题模板唯一来源）与 `mcp/warroom-webhook.cjs` 的 `TEMPLATE_GUIDE`（回显清单），改完跑 §七 两个契约检查，回显确认后再进第 7 步；
-   - ⚠️ 模板是**本仓库代码级**的，改了会影响所有走这套件的工位，不是「单工位开关」；若用户只是想让某一类事件「不出现」，用「不调对应工具 / 不装对应 Hook」实现，而非改文案。
-7. 之后 AI 才能用 `notify_task_complete` / `notify_task_created` / `notify_task_done` / `notify_turn_start` / `notify_turn_end` / `push_warroom_event` 真正推事件。
+5. **回显全部模板**：工具返回**本工位会出现的全部消息模板清单（A=AI 主动推送 + B=宿主 Hook 自动推送，见 §7.2）**。
+6. **咨询是否修改模板（必须，不可跳过）**：回显后**向用户提问**，例如：「上面这些模板的标题 / 文案需要改吗？」
+   - 用户**不改** → 进第 7 步；
+   - 用户**要改** → 记清「哪个模板 + 改成什么」，改 `lib/mcp-contract.mjs`（标题模板唯一来源）与
+     `mcp/warroom-webhook.cjs` 的 `TEMPLATE_GUIDE`（回显清单），改完跑 §七 两个契约检查，回显确认后再进第 7 步；
+   - ⚠️ 模板是**代码级**的，改了会影响所有走这套件的工位，不是「单工位开关」；只想让某类事件「不出现」，
+     用「不调对应工具 / 不装对应 Hook」实现，而非改文案。
+7. 之后 AI 才能用 §7.2 的全部 7 个工具推事件。
 
 > 🔑 **绑定会持久化（2026-10-10 修复）**：`setup_receiving_endpoint` 解析出的基址 / 工位 / 密钥会写进本地状态文件
-> （`WARROOM_RECEIVING_STATE` 环境变量 > `~/.warroom/receiving-endpoint.json`），**进程重启 / 宿主重新信任连接器 /
+> （`WARROOM_RECEIVING_STATE` 环境变量 > `~/.warroom/receiving-endpoint[.<scope>].json`），**进程重启 / 宿主重新信任连接器 /
 > 升级都不会丢**，也不会再回落 `http://localhost:3500`（本机 dev 端口，平时不开 → 静默推失败）。
 > 宿主 Hook（独立进程）也读这份状态文件，所以用户设一次接收端，A 列 MCP 工具与 B 列 Hook 自动推送都能用。
-> 想改工位 / 服务端，重新调一次 `setup_receiving_endpoint` 即可覆盖；想彻底清掉，删该状态文件。
+> 想改工位 / 服务端，重新调一次 `setup_receiving_endpoint` 覆盖；想彻底清掉，删该状态文件。
 
 | 项 | 值 |
 |---|---|
 | 触发「服务上线」的时机 | **用户给出接收端后**，`setup_receiving_endpoint` 内部推（不再在 `initialize` 推） |
-| 绑定落盘位置 | `WARROOM_RECEIVING_STATE` > `~/.warroom/receiving-endpoint.json`（重启 / Hook 均读回） |
+| 绑定落盘位置 | `WARROOM_RECEIVING_STATE` > `~/.warroom/receiving-endpoint[.<scope>].json`（重启 / Hook 均读回） |
+| 落盘的 scope | 取 `WARROOM_AI_NAME`（多 AI 同机时各占一份，互不覆盖；未配则共用 `receiving-endpoint.json`，见 §7.2 C-2） |
 | 身份来源 | `setup_receiving_endpoint` 的 `source` / `aiName`，其次环境变量 `WARROOM_AI_NAME`，再次 `未署名客户端` |
-| 工位 / 密钥来源 | 从接收端 URL 的 `/webhook/<channelId>` 路径与 `?key=` 解析，**不靠手填** |
+| 租户 / 工位 / 密钥来源 | 从接收端 URL 的 `/webhook/<租户>/<channelId>` 路径与 `?key=` 解析，**不靠手填** |
 | 幂等键 | `mcp:online:<name>:<10 分钟桶>` —— 抖动重连折叠，隔段时间再接入算新一次；`<name>` slug 化，纯中文名记成 `unknown` |
 | 关闭上线通知 | 环境变量 `WARROOM_ONLINE_NOTIFY=0`（默认开；护栏脚本会设它避免污染抓包断言） |
 
-⚠️ **MCP over HTTP 传输（§2.7）无此流程** —— 它无会话概念，且 AI 已通过 Bearer 令牌直连服务端，不需要再解析接收端。
+> ⚠️ 本节流程**只属于 stdio 通道**。市场连接器包的 MCP 是**远端 HTTP**（`connector/mcp.json` 里
+> `type=streamableHttp` → `https://<中台>/api/v2/mcp`），**本机不跑 MCP 进程**，所以那里**没有「绑定接收端」这一步**
+> —— `?key=` 与 `WARROOM_RECEIVING_STATE` 只对本地 stdio 侧有意义。
+> 包里的 `mcp/warroom-webhook.cjs` 与 `lib/` 确实会打进去，但它是**随包 hook 的运行时依赖**
+> （`hooks/bin/warroom-hook.cjs` 用 `--notify` 复用它推送），**不是**连接器的 MCP 入口。
+> 连接器形态的接收端落盘由随包 hook 的 `--setup` 完成（§7.1.1）；
+> 工具侧 `setup_receiving_endpoint` 在 HTTP 通道上只做**接入确认**：推一条 🟢 服务上线并回显模板，见 §7.1.1。
 
 ### 7.2 工具与「本工位会出现的全部消息模板」
 
 ⚠️ 区分两个来源，否则会误以为「模板只有 4 个」：
 
-- **A. AI 主动推送**：AI 通过本 MCP 的工具**显式调用**产生（需 AI 调）。
-- **B. 宿主 Hook 自动推送**：宿主事件驱动、**无需 AI 调用** —— ⚠️ 但**必须先装**（见 §7.4）：
-  脚本在本套件 `.workbuddy/hooks/warroom-hook.cjs`（**不是** `~/.workbuddy/hooks/`，那儿没有这个目录），
-  注册进**宿主自己的** hook 配置。🔴 **连接器包里没有 hook 槽位** ——
-  装了连接器市场包**也不会**自动推 B 列这些事件。
+- **A. AI 主动推送**：AI 通过 MCP 工具**显式调用**产生（需 AI 调）。
+- **B. 宿主 Hook 自动推送**：宿主事件驱动、**无需 AI 调用** —— 但它要**真的在跑**才算数（判定见 §7.2 C）：
+  脚本本体在 `.workbuddy/hooks/warroom-hook.cjs`（**不是** `~/.workbuddy/hooks/`，那儿没有这个目录）。
+  连接器包会把它复制成 `hooks/bin/warroom-hook.cjs` 并靠随包的 `hooks/hooks.json` **自动生效**（§7.4）；
+  stdio 套件则要用 `scripts/install-hook.mjs` 注册进宿主配置。
+  🔴 两种形态都还需要**一次接收端落盘**（连接器跑 `--setup`、stdio 调 `setup_receiving_endpoint`），
+  缺了它 hook 会**静默跳过**（不报错、不刷屏，大屏就是没有）。
 
-#### A. AI 主动推送（本 MCP 工具）
+#### A. AI 主动推送（MCP 工具）—— ⚠️ 先确认你的通道有几个工具
 
-| 工具 | 触发场景 | 大屏标题 / 模板 |
-|---|---|---|
-| `setup_receiving_endpoint`（**接入第一步·必调**） | 用户贴接收端 URL → 识别工位+密钥、确认连接 | 推「🟢 服务上线：<source>」并回显下方模板 |
-| `notify_task_complete` | 一轮任务收尾 / post-commit | `✅ {source} 任务完成` |
-| `notify_task_created` | 新建一条待办 | `📋 {source} 新建任务计划：<待办标题>` |
-| `notify_task_done` | 某条具体已完成任务计划 | `✅ {source} 已完成任务计划：<待办标题>` |
-| `notify_turn_start` | **仅无 hook 宿主**：每轮开始（收到用户消息） | `🙋 收到指令` |
-| `notify_turn_end` | **仅无 hook 宿主**：每轮结束（含普通对话） | `✅ {source} 任务完成` |
-| `push_warroom_event` | 通用（告警 / 阻塞 / 进展）→ 自定义标题 | 你给的 `title`；`level=urgent/warning` ⇒ `⚠️ 需要你操作`，触发语音播报 |
+| 工具 | 哪个通道有 | 触发场景 | 大屏标题 / 模板 |
+|---|---|---|---|
+| `push_warroom_event` | **HTTP + stdio** | 通用（告警 / 阻塞 / 进展）→ 自定义标题 | 你给的 `title`；`level=urgent/warning` ⇒ `⚠️ 需要你操作`，触发语音播报 |
+| `notify_task_complete` | **HTTP + stdio** | 一轮任务收尾 / post-commit | `✅ {source} 任务完成` |
+| `setup_receiving_endpoint` | **HTTP + stdio**（语义不同） | 用户问「接好了吗 / 还缺什么」→ 确认连通并回显模板 | 推「🟢 服务上线：<source>」+ 回显下方模板。stdio 侧还兼「绑定接收端」（§7.1.2） |
+| `notify_task_created` | **HTTP + stdio** | 新建一条待办 | `📋 {source} 新建任务计划：<待办标题>` |
+| `notify_task_done` | **HTTP + stdio** | 某条具体已完成任务计划 | `✅ {source} 已完成任务计划：<待办标题>` |
+| `notify_turn_start` | 仅 stdio（HTTP 通道**没有**此工具） | 每轮开始（收到用户消息） | `🙋 收到指令` —— ⚠️ **只在 §7.2 C 判为 `self` / `unknown` 时调**；hook 已覆盖时调它 = 重复两条 |
+| `notify_turn_end` | 仅 stdio（HTTP 通道**没有**此工具） | 每轮结束（含普通对话） | `✅ {source} 任务完成` —— 同上 |
 
-#### B. 宿主 Hook 自动推送（⚠️ 需先注册宿主 hook，装好后无需 AI 调用）
+> 🔴 **HTTP 通道有 5 个，只缺 `notify_turn_start` / `notify_turn_end`**（轮次工具，仅 stdio）。
+> 拿这两个名字调 HTTP 端点会报「未知工具」。
+> 🟢 **轮次播报不需要装 stdio**：连接器包自带 hook（§7.4），9 个宿主事件含
+> 「🙋 收到指令 / ✅ 任务完成」，跑一次 `--setup` 就有了。stdio 侧这两个工具只留给「宿主没有 hook」的场景。
+> ⚠️ 但「自带」不等于「已在跑」—— 它同样需要接收端、且可能静默失效。
+> **判断靠 §7.2 C 的 `--coverage`（或 instructions 里的现探结论），不要靠宿主品牌。**
+>
+> ✅ **不同待办 / 不同标题天然各占一条**（Issue #2 已修）：`notify_task_created` 缺省键是
+> `mcp:task-created:<source>:<待办标题指纹>`，`notify_task_done` 是 `mcp:task-done:…`，
+> `push_warroom_event` 是 `mcp:push:<source>:<标题指纹>:<30s桶>` —— 不必再手工构造 `externalId`。
+
+#### B. 宿主 Hook 自动推送（连接器包随包生效；stdio 套件需 `install-hook.mjs` 注册。装好后无需 AI 调用）
 
 | 宿主事件 | 大屏模板 |
 |---|---|
@@ -482,28 +626,89 @@ node mcp/warroom-webhook.cjs --notify --title "⚠️ 需要你操作：证书 3
 | `compact`（上下文压缩） | 🗜️ 上下文已压缩 |
 | `session-end`（一个会话一条） | （会话结束） |
 
-> `setup_receiving_endpoint` 的入参：**`endpoint`（必填）** ＝ 服务端「复制即用」入站 URL；
-> `source` 可选（多 AI 分辨，否则回落「未署名客户端」）。调用它之前，本服务**不会**向任何地址发消息。
+> `setup_receiving_endpoint` 的入参：**stdio 侧 `endpoint` 必填** ＝ 用户中心「接入凭证 → 工位」复制的完整入站地址；
+> `source` 可选（多 AI 分辨，否则回落「未署名客户端」）。stdio 侧调用它之前，本服务**不会**向任何地址发消息。
+>
+> **HTTP 侧 `endpoint` 可选**：可以传同形状 URL（其中的 `?key=` 会被**忽略且不保存**），
+> 也可以直接传裸 `channelId`，或只传 `source` 走默认 `ch-workbuddy`。
+> 鉴权只认 Bearer 令牌、租户由令牌决定；URL 的租户段若与令牌归属租户不一致会**直接被拒**（防串租户）。
 
-#### C. 轮次事件 × 谁负责（🔴 别两头都推）
+#### C. 轮次事件 × 谁负责（🔴 别两头都推，更别两头都不推）
 
 「🙋 收到指令 / ✅ 任务完成」是**轮次级**事件。MCP 是**客户端驱动**协议 —— 服务端只在客户端发 `tools/call`
-时才知道发生了什么，**没有原语**能感知「用户刚开口 / 助手刚答完」。所以这两个信号只能由**宿主 hook** 产生，
-或由 **AI 每轮自己调工具**。两条路**互斥**，两头都推 = 同一轮在大屏重复两条：
+时才知道发生了什么，**没有原语**能感知「用户刚开口 / 助手刚答完」，也**没有轮询**（服务端不能反过来问 AI
+「上一轮推了吗」，AI 也不会被定时唤醒）。所以这两个信号只有两种来源，**互斥**：
 
-| 宿主类型 | 收到指令 | 任务完成（轮次） | AI 该怎么做 |
-|---|---|---|---|
-| **有 hook**（WorkBuddy / Claude Code，见 §7.4） | Hook `UserPromptSubmit` 自动推 | Hook `Stop` 自动推 | **不要**调 `notify_turn_start` / `notify_turn_end` / `notify_task_complete` |
-| **无 hook**（OpenClaw / Codex / Gemini CLI 等） | AI 每轮调 `notify_turn_start` | AI 每轮调 `notify_turn_end` | 每轮**开始**与**结束**各调一次（含普通对话） |
+| 来源 | 触发方式 | 可靠性 |
+|---|---|---|
+| 宿主 hook 的 `UserPromptSubmit` / `Stop` | 事件驱动，宿主每轮必触发 | ✅ **高** —— 唯一不依赖模型自觉的 |
+| AI 每轮主动调 `notify_turn_start` / `notify_turn_end` | 靠模型自己记得 | ⚠️ **低** —— 漏调就静默缺失，且无法事后补偿 |
+
+> 🔴 **别用「宿主品牌」判断该走哪条。** hook 的真实生效条件是三件事**同时**成立：
+> ① 宿主注册了 hook（settings.json / 插件 `hooks/hooks.json`）② 有可用接收端 ③ 进程真跑起来且推成功。
+> 所以 `WorkBuddy + stdio 套件但没跑 install-hook.mjs`、`连接器但没跑 --setup`、
+> `settings.json 里的路径指向已删除的目录` —— 这三种都是**零报错、大屏就是没有**，
+> 而按品牌判断会得出「有 hook，我不用管」→ 轮次静默全丢。
+
+**怎么判断（一条命令，读本地事实而不是猜）：**
+
+```bash
+node "<包目录>/mcp/warroom-webhook.cjs" --coverage
+```
+
+它读 hook 日志最近活动 / 接收端文件 / hook 注册痕迹，给出 `mode`：
+
+| mode | 含义 | AI 该怎么做 |
+|---|---|---|
+| `hook` | 近 24h 有 hook 轮次事件且推送成功 | **不要**调那两个工具（同一轮会重复两条） |
+| `self` | 无注册、无日志 → 完全没有自动来源 | **每轮成对调**（含普通对话），否则大屏没有轮次边界 |
+| `unknown` | 有注册痕迹但近 24h 无活动 | 先问用户「大屏上有『🙋 收到指令』吗」，看不到再由你补 |
+
+> ℹ️ 若输出里还有 `target=differs(...)`（hook 推的工位 ≠ 状态文件记的工位），**通常不是故障**：
+> 状态文件全机共享，同一台机器装多个 AI 时各自工位不同很正常（实测本机 WorkBuddy 推 `ch-workbuddy`、
+> 另一套 AI 写的是 `qclaw`）。只有确认「这两者本应相同」时才需要排查。要彻底避免这类混淆，
+> 见下面的「多 AI 同机」。
+
+> 💡 MCP 在 `initialize` 的 `instructions` 里**已经带了这个判定**（每次握手现探一次），AI 不需要手动跑命令 ——
+> 命令是给人排查/验收用的。`notify_turn_start` / `notify_turn_end` 的返回值还会附一句
+> 「本条可能与 hook 重复」的事实提示，所以**即使 AI 判断错了，也不会静默重复刷屏**。
+
+> 🔴 **本节「AI 每轮调工具」只对 stdio 通道成立**（那两个 tool 在 HTTP 通道上不存在）。
+> 走市场连接器（HTTP）时，轮次事件**只能**靠宿主 hook；拿 `notify_turn_end` 去调 HTTP 端点会报「未知工具」。
+> 也就是说连接器用户若 hook 没生效，**没有任何 AI 侧兜底** —— 唯一出路是把 hook 修好（§7.1.1 / §7.4）。
+
+#### C-2. 多 AI 同机（🔴 一台机器上装两套以上 AI 时必读）
+
+接收端绑定落在 `~/.warroom/receiving-endpoint[.<scope>].json`，`scope` 取 **`WARROOM_AI_NAME`**。
+不配 scope 时只有**一份**全机共享的 `receiving-endpoint.json` —— 谁最后跑 setup 谁覆盖它，
+于是**所有 AI 都往同一个工位推**（零报错，只是「另一个 AI 的大屏上冒出别人的消息」）。
+
+> 实测现场（2026-10-23）：本机同时装着 WorkBuddy 与 QClaw，
+> `receiving-endpoint.json` 里是 QClaw 写的 `qclaw`，而 WorkBuddy 的 hook 推 `ch-workbuddy`。
+> 当时没炸，只因为两者跑的都是**不读该文件**的旧构建；一旦本仓（会读）装进 WorkBuddy，
+> 它的 `push_warroom_event` 就会推到 QClaw 的工位上去。
+
+**做法：给每个宿主的 `mcp.json` 各配一个 `WARROOM_AI_NAME`**（这个变量本来就该配，用于多 AI 分辨来源）：
+
+```json
+"env": { "WARROOM_AI_NAME": "WorkBuddy", "WARROOM_API_BASE": "https://…" }
+```
+
+→ 各自写 `receiving-endpoint.WorkBuddy.json` / `receiving-endpoint.QClaw.json`，互不覆盖。
+Hook 是宿主 spawn 的独立进程、**拿不到** `mcp.json` 里的 env，所以它启动时会自己把从 `mcp.json`
+读到的 `WARROOM_AI_NAME` 补进进程环境（`warroom-hook.cjs` 的 `connection()`），保证两边读同一份。
+
+> `WARROOM_RECEIVING_STATE` 优先级最高（可直接指到各不相同的路径），适合特殊部署 / 测试隔离。
 
 > 🔴 纯 MCP 宿主上「任务完成」用 `notify_turn_end`，**别用 `notify_task_complete`**：后者的缺省幂等键是
 > `commit-<hash>`，在两次提交之间是**常量** → 第二轮起命中去重（**去重命中不更新正文**）→ 大屏永远只有第一条，
 > 现场就是「调了也白调」。`notify_turn_end` 的键按「摘要指纹 + 30s 桶」生成，每轮天然不同。
 >
-> 🔴 「每轮必调」**没法由 MCP 协议强制**（协议不定义轮次边界），只能靠三层约规兜底：
-> ① `initialize.instructions`（服务端唯一能在会话开始发声处）② 本文件 ③ **宿主常驻规则文件**
-> （AGENTS.md / 系统提示 / custom instructions —— 等价于给纯 MCP 宿主装一个「软件 hook」）。
-> 若宿主连常驻规则都没有，则退回 A 列（AI 主动推送告警）或 git `post-commit` 兜底。
+> 🔴 **「每轮必调」没法由 MCP 协议强制，也没法轮询补**（协议不定义轮次边界，AI 不会被定时唤醒）。
+> 只能靠三层约规兜底：① `initialize.instructions`（服务端唯一能在会话开始发声处）② 本文件
+> ③ **宿主常驻规则文件**（AGENTS.md / 系统提示 / custom instructions —— 等价于给纯 MCP 宿主装一个「软件 hook」）。
+> 若宿主连常驻规则都没有，则退回 A 列（AI 主动推送告警）或 git `post-commit` 兜底 ——
+> **别指望「AI 会记得每轮调」能兜住**，这是整套机制最薄的一环；能装 hook 就装 hook。
 
 ### 7.3 🔴 配置 `mcp.json` / `settings.json`：node 路径陷阱（会被升级静默打断）
 
@@ -523,7 +728,8 @@ C:/Users/<你>/.workbuddy/binaries/node/versions/22.22.2-6/node.exe
 
 | 做法 | 配置示例 | 说明 |
 |---|---|---|
-| **零本地依赖（最稳）** | MCP 改用 HTTP 传输：`"type":"streamableHttp","url":"https://<中台>/api/v1/mcp","headers":{"Authorization":"Bearer <ApiToken>"}`（见 §2.7） | 根本不需要本地 node，升级永不断链；Hook 无此选项 |
+| **零本地依赖（最稳）** | 装**市场连接器**，走 OAuth 自动注入：`"type":"streamableHttp","url":"https://<中台>/api/v2/mcp"`（**不写 headers**，令牌由 OAuth 管理器注入；见 §2.7 / §〇·路径 1） | 根本不需要本地 node，升级永不断链；Hook 无此选项 |
+| 手工令牌（无 OAuth 时） | `"type":"streamableHttp","url":"https://<中台>/api/v2/mcp","headers":{"Authorization":"Bearer <ApiToken>"}` | 需要自己有 ApiToken，且**要自己管过期**；能走 OAuth 就别用这条 |
 | **系统 node 绝对路径（宿主型推荐）** | `"command":"C:/Program Files/nodejs/node.exe"` | 系统 node 在 `Program Files` 下，IDE/宿主托管升级删的是它自己的版本目录，碰不到系统 node；node 官方升级是原地覆盖同路径，也稳 |
 | `runtime` 托管（官方文档写法） | `"command":"node","runtime":{"type":"node"}` | **仅市场连接器包**可靠；个人配置文件可能不解析 `runtime`，且宿主自身 PATH 缺 node 时裸 `command:"node"` 会 spawn 失败 —— 本机用系统 node 绝对路径更稳 |
 
@@ -544,16 +750,24 @@ C:/Users/<你>/.workbuddy/binaries/node/versions/22.22.2-6/node.exe
 > 写前**备份**，并且 `--check` 可干跑比对、`--uninstall` 可干净移除（只动它自己写的 handler，不碰别人的）。
 > 宿主支持矩阵与「为什么 Claude Code 要带 `--host=claude-code`」见 §7.4。
 
-### 7.4 宿主 × 自动推送：hook 装得上吗（连接器包**不含** hook）
+### 7.4 宿主 × 自动推送：hook 装得上吗
 
-🔴 **先说结论**：市场连接器包的规范一般只有
-`connector-meta.json` / `mcp.json` / `token-schema.json` / `icon.svg` / `skills/` —— **没有 hook 槽位**。
-所以上面 B 列那些事件**不会随连接器安装而生效**，必须在**用户机上另装一次**。
+🟢 **WorkBuddy 上不用「另装」**：连接器包落盘后就是插件包（`.codebuddy-plugin/plugin.json`），
+包根下有 `hooks/hooks.json`，引擎的 `HookExtensionLoader` 会**自动发现**它（源码里是无条件
+`pathExists(<插件根>/hooks/hooks.json)`），并把 `${CODEBUDDY_PLUGIN_ROOT}` 注入 hook 命令。
+**唯一要补的是接收端地址**（hook 是独立进程，拿不到 OAuth 令牌）—— 见 §7.1.1 的 `--setup` 那一条命令。
+
+> 这套机制与内置插件同源：腾讯文档插件的 `hooks/hooks.json` **也没有在 plugin.json 里声明**，照样被加载。
+> 🔴 **不要**在 `plugin.json` 里再写 `"hooks"` 键：引擎「声明」与「自动发现」两条路都会读，
+> 而合并是数组拼接、**不去重** → 9 个事件变 18 条，每个事件白跑一次 1250 行的子进程。
+> （`scripts/build-connector-marketplace-zip.mjs` 里刻意不写，`connector-check` 有反向断言钉住。）
+> 以前「连接器只有工具、没有自动推送」的说法已作废：那是包内**没放** hooks，不是规范不支持。
 
 | 宿主 | B 列自动推送 | 怎么装 | 备注 |
 |---|---|---|---|
-| **WorkBuddy** | ✅ | `node scripts/install-hook.mjs` | 注册 9 个事件到 `~/.workbuddy/settings.json` |
-| **Claude Code** | ✅ | `node scripts/install-hook.mjs --host=claude-code` | 写 `~/.claude/settings.json`；事件名与配置结构与 WorkBuddy **同源** |
+| **WorkBuddy（连接器市场）** | ✅ **随包生效** | 装连接器 → 跑一次 `--setup <入站 URL>` | 包内 `hooks/hooks.json`，9 个事件 |
+| **WorkBuddy（stdio 套件）** | ✅ | `node scripts/install-hook.mjs` | 写 `~/.workbuddy/settings.json`，与包内 hook 同一份脚本 |
+| **Claude Code** | ✅ | `node scripts/install-hook.mjs --host=claude-code` | 写 `~/.claude/settings.json`；事件名与结构**同源** |
 | Cursor / Copilot CLI / Windsurf | ⚠️ **有** hook，但**未适配** | 装不上（事件名与配置结构都不同） | 退回 A 列（MCP 工具） |
 | Codex / Gemini CLI / Cline / Roo / Continue / Zed | ❌ 无 hook 机制 | 装不上 | 退回 A 列 |
 | 任何会 `git commit` 的 AI | ✅（与 AI 品牌无关） | 在你的仓库加 post-commit 推送 | 提交后自动推一条 |
@@ -568,8 +782,10 @@ C:/Users/<你>/.workbuddy/binaries/node/versions/22.22.2-6/node.exe
 所以注册到 Claude Code 时**必须**带 `--host=claude-code`（脚本据此闭嘴），异步交给 handler 的 `"async": true`。
 `install-hook.mjs` 已把这两点都处理好了 —— **别手抄命令**。
 
-> ⚠️ 只装了**连接器市场包**、手里没有本套件的用户：拿不到 `scripts/install-hook.mjs`，
-> B 列就装不上 —— 老老实实用 A 列（MCP 工具）或 git hook。这是宿主级机制，绕不过去。
+> 📦 **连接器包内 hooks 的运行时要怎么铺**（改包 / 排查时看）：
+> `hooks/hooks.json` + `hooks/bin/warroom-hook.cjs`，并按仓库同一套相对层级带上
+> `mcp/warroom-webhook.cjs` 与整个 `lib/`（`mcp-contract` / `demo-secret` / `receiving-endpoint`）。
+> 少一个文件不会报错，只会让 hook 后台进程静默失败 —— 所以两个打包脚本都按**目录**枚举 `lib/`。
 
 **兜底顺序**（宿主装不了 hook 时）：
 1. **MCP 工具**（A 列）—— 所有宿主通用，但要求 AI「想起来调」；
@@ -604,6 +820,21 @@ node scripts/webroom-contract-check.mjs --server-root=<webhookroom 仓根>
 ```
 
 不传这些参数时，服务端相关检查整体跳过，保证「只拿本套件」也能全绿。
+
+### 7.6 stdio 客户端的寻址形状：v2 双段 + v1 单段兼容
+
+`setup_receiving_endpoint` 会按接收端 URL 的**段数**自动判定目标中台版本，**不需要你手选**：
+
+| 接收端 URL 形状 | 客户端发出的目标 | 适用中台 |
+|---|---|---|
+| `…/api/v2/webhook/<租户>/<工位>?key=…`（两段） | `POST {基址}/api/v2/webhook/{租户}/{工位}?key=…` | **v2（SaaS）** |
+| `…/api/v1/webhook/<工位>?key=…`（一段） | `POST {基址}/api/v1/webhook/{工位}?key=…` | v1（自托管旧部署） |
+
+- **租户段来源**：接收端 URL 的第二段（`setup_receiving_endpoint` 解析）或环境变量 `WARROOM_TENANT`，**不靠手填**。
+  绑定后写进本地状态文件，重启 / Hook 均读回。
+- **兜底校验**：若给了 `/api/v2/webhook/…` 却只有一段（手删了租户段），客户端会**显式报错**，
+  而不是把地址发到已下线路由；多余段（`/webhook/a/b/c`）同样直接拒绝，不再静默截断。
+- **HTTP 传输（市场连接器）不走这条** —— 它的地址由连接器写死为 `…/api/v2/mcp`，见 §〇·路径 1。
 
 ---
 
@@ -656,7 +887,7 @@ env | grep -c '^WARROOM_'                                     # 0 = 没人替你
 ```bash
 case "$BASE" in
   ''|*localhost*|*127.0.0.1*|*0.0.0.0*) echo "回环 / 未配置 → 渲染型推不了，别推"; ;;
-  *) echo "可用基址前缀：$BASE/api/v1/webhook/<工位标识>" ;;
+  *) echo "可用基址前缀：$BASE/api/v2/webhook/<租户id>/<工位标识>" ;;
 esac
 ```
 

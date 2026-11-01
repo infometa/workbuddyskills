@@ -1,0 +1,42 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=20"
+  },
+  "init": {
+    "darwin": "npm install -g @tencentcloudadp/cli && adp install-source mark workbuddy",
+    "linux": "npm install -g @tencentcloudadp/cli && adp install-source mark workbuddy",
+    "win32": "npm install -g @tencentcloudadp/cli && adp.cmd install-source mark workbuddy"
+  },
+  "env": {
+    "ADP_INSTALL_SOURCE": "workbuddy"
+  },
+  "status": {
+    "darwin": "adp auth status --format json",
+    "linux": "adp auth status --format json",
+    "win32": "adp.cmd auth status --format json"
+  },
+  "statusMatchJson": {
+    "ok": "true"
+  },
+  "auth": {
+    "darwin": "adp auth login --web --format text",
+    "linux": "adp auth login --web --format text",
+    "win32": "adp.cmd auth login --web --format text"
+  },
+  "authUrlDomain": "127.0.0.1",
+  "authWaitForExit": true,
+  "unAuth": {
+    "darwin": "adp auth logout --yes",
+    "linux": "adp auth logout --yes",
+    "win32": "adp.cmd auth logout --yes"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "adp --version --format text",
+      "linux": "adp --version --format text",
+      "win32": "adp.cmd --version --format text"
+    },
+    "minVersion": "0.1.2"
+  }
+}

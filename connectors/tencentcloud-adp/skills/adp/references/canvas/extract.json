@@ -1,0 +1,109 @@
+{
+ "ProtoVersion": "V2_6",
+ "WorkflowID": "",
+ "WorkflowName": "zz-demo-extract",
+ "WorkflowDesc": "Extract a date (YYYY-MM-DD) from the user's message and echo it",
+ "Nodes": [
+  {
+   "NodeID": "start",
+   "NodeName": "Start",
+   "NodeDesc": "",
+   "NodeType": "START",
+   "StartNodeData": {},
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "pe1"
+   ]
+  },
+  {
+   "NodeID": "pe1",
+   "NodeName": "提取日期",
+   "NodeDesc": "",
+   "NodeType": "PARAMETER_EXTRACTOR",
+   "ParameterExtractorNodeData": {
+    "Parameters": [
+     {
+      "Name": "date",
+      "Type": "STRING",
+      "Desc": "用户提到的日期，统一为 YYYY-MM-DD（例如 2026年10月20日 → 2026-10-20）。没有给出日期时置空。",
+      "Required": true,
+      "CorrectExamples": [
+       "2026-10-20",
+       "2026-01-02"
+      ],
+      "IncorrectExamples": [
+       "明天",
+       "10月20日"
+      ]
+     }
+    ],
+    "UserConstraint": "Reply in the same language as the user. If the date is missing, ask for it briefly.",
+    "ModelName": "Hunyuan/hy3",
+    "ModelParams": {
+     "Temperature": 0.3,
+     "TopP": 0.6,
+     "MaxTokens": 1024
+    }
+   },
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "ans"
+   ]
+  },
+  {
+   "NodeID": "ans",
+   "NodeName": "回复日期",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "DATE={{d}}"
+   },
+   "Inputs": [
+    {
+     "Name": "d",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "REFERENCE_OUTPUT",
+      "Reference": {
+       "NodeID": "pe1",
+       "JsonPath": "Output.date"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "end",
+   "NodeName": "End",
+   "NodeDesc": "",
+   "NodeType": "END",
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [],
+     "Desc": "Output content",
+     "Value": {
+      "InputType": "USER_INPUT"
+     },
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": []
+  }
+ ],
+ "Mode": "NORMAL"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "腾讯营销联盟 MCP 接入配置",
+    "title_en": "Tencent Marketing Union MCP Configuration",
+    "description": "填入在腾讯营销联盟开发者平台生成的 MCP API Key，即可查询本账号的报表数据、生成诊断报告并检索平台知识库。API Key 仅保存在本机 ~/.workbuddy 下，只在调用时随请求发送给腾讯营销联盟 MCP 服务。",
+    "description_en": "Enter the MCP API Key generated on the Tencent Marketing Union developer platform to query your account's reports, generate diagnosis reports, and search the platform knowledge base. The API Key is stored locally in ~/.workbuddy only and is sent only to the Tencent Marketing Union MCP service with each request.",
+    "docUrl": "https://adnet.qq.com/resource/mcp",
+    "docLabel": "如何获取 API Key？",
+    "docLabel_en": "How to get an API Key?",
+    "fields": [
+        {
+            "key": "UNION_MCP_API_KEY",
+            "label": "API Key",
+            "placeholder": "在开发者平台 → 接入中心 → MCP接入 中生成，以 umcp_ 开头",
+            "placeholder_en": "Generate in Developer Platform → Integration Center → MCP, starts with umcp_",
+            "type": "password",
+            "required": true,
+            "description": "仅超级管理员可生成，明文只展示一次。API Key 等同于账号访问凭证，请勿泄露；可用能力以 Key 的授权范围为准。",
+            "description_en": "Only super administrators can generate it, and the plaintext is shown only once. The API Key is equivalent to an account credential, keep it secret. Available capabilities depend on the key's authorized scopes."
+        }
+    ]
+}

@@ -1,0 +1,125 @@
+{
+ "ProtoVersion": "V2_6",
+ "WorkflowID": "",
+ "WorkflowName": "research-step",
+ "WorkflowDesc": "Sub-workflow: takes topic, returns SUB:{topic}",
+ "Nodes": [
+  {
+   "NodeID": "start",
+   "NodeName": "Start",
+   "NodeDesc": "",
+   "NodeType": "START",
+   "StartNodeData": {},
+   "Inputs": [
+    {
+     "Name": "topic",
+     "Type": "STRING",
+     "Desc": "topic",
+     "IsRequired": true,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "code1"
+   ]
+  },
+  {
+   "NodeID": "code1",
+   "NodeName": "子处理",
+   "NodeDesc": "",
+   "NodeType": "CODE_EXECUTOR",
+   "CodeExecutorNodeData": {
+    "Code": "def main(params: dict) -> dict:\n    return {\"result\": \"SUB:\" + str(params.get(\"topic\", \"\"))}\n",
+    "Language": "PYTHON3"
+   },
+   "Inputs": [
+    {
+     "Name": "topic",
+     "Type": "STRING",
+     "Input": {
+      "InputType": "REFERENCE_OUTPUT",
+      "Reference": {
+       "NodeID": "start",
+       "JsonPath": "topic"
+      }
+     },
+     "Desc": "",
+     "IsRequired": false,
+     "SubInputs": [],
+     "DefaultValue": "",
+     "DefaultFileName": ""
+    }
+   ],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "result",
+       "Type": "STRING"
+      }
+     ],
+     "Desc": "",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ],
+   "ExceptionHandling": {
+    "Switch": "OFF",
+    "MaxRetries": "3",
+    "RetryInterval": "1",
+    "AbnormalOutputResult": "",
+    "HandleMethod": "EXCEPTION_OUTPUT",
+    "NextNodeIDs": [],
+    "AbnormalRetrySwitch": "ABNORMAL_RETRY_ON",
+    "Timeout": "60"
+   }
+  },
+  {
+   "NodeID": "end",
+   "NodeName": "End",
+   "NodeDesc": "",
+   "NodeType": "END",
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "result",
+       "Name": "result",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "",
+       "AnalysisMethod": "COVER",
+       "Value": {
+        "InputType": "REFERENCE_OUTPUT",
+        "Reference": {
+         "NodeID": "code1",
+         "JsonPath": "Output.result"
+        }
+       }
+      }
+     ],
+     "Desc": "Output content",
+     "Value": {
+      "InputType": "USER_INPUT"
+     },
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": []
+  }
+ ],
+ "Mode": "NORMAL"
+}

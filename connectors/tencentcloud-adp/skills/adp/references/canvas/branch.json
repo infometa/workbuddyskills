@@ -1,0 +1,159 @@
+{
+ "ProtoVersion": "V2_6",
+ "WorkflowID": "",
+ "WorkflowName": "zz-demo-branch",
+ "WorkflowDesc": "Reply BR-YES when the query contains yes, otherwise BR-NO",
+ "Nodes": [
+  {
+   "NodeID": "start",
+   "NodeName": "Start",
+   "NodeDesc": "",
+   "NodeType": "START",
+   "StartNodeData": {},
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": [
+    "logic1"
+   ]
+  },
+  {
+   "NodeID": "logic1",
+   "NodeName": "判断",
+   "NodeDesc": "",
+   "NodeType": "LOGIC_EVALUATOR",
+   "LogicEvaluatorNodeData": {
+    "Group": [
+     {
+      "Logical": {
+       "LogicalOperator": "UNSPECIFIED",
+       "Compound": [],
+       "Comparison": {
+        "Left": {
+         "InputType": "SYSTEM_VARIABLE",
+         "SystemVariable": {
+          "Name": "SYS.UserQuery"
+         }
+        },
+        "LeftType": "STRING",
+        "Operator": "CONTAINS",
+        "Right": {
+         "InputType": "USER_INPUT",
+         "UserInputValue": {
+          "Values": [
+           "yes"
+          ],
+          "FileNames": []
+         }
+        },
+        "MatchType": "PRECISE"
+       }
+      },
+      "NextNodeIDs": [
+       "ans_yes"
+      ]
+     },
+     {
+      "NextNodeIDs": [
+       "ans_no"
+      ]
+     }
+    ]
+   },
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": []
+  },
+  {
+   "NodeID": "ans_yes",
+   "NodeName": "ans_yes",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "BR-YES"
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "ans_no",
+   "NodeName": "ans_no",
+   "NodeDesc": "",
+   "NodeType": "ANSWER",
+   "AnswerNodeData": {
+    "Answer": "BR-NO"
+   },
+   "Inputs": [],
+   "Outputs": [
+    {
+     "Title": "Output",
+     "Type": "OBJECT",
+     "Required": [],
+     "Properties": [
+      {
+       "Title": "Answer",
+       "Type": "STRING",
+       "Required": [],
+       "Properties": [],
+       "Desc": "Reply to User Message",
+       "Value": {
+        "InputType": "USER_INPUT",
+        "UserInputValue": {
+         "Values": [
+          ""
+         ],
+         "FileNames": []
+        }
+       },
+       "AnalysisMethod": "COVER"
+      }
+     ],
+     "Desc": "Output content",
+     "AnalysisMethod": "COVER"
+    }
+   ],
+   "NextNodeIDs": [
+    "end"
+   ]
+  },
+  {
+   "NodeID": "end",
+   "NodeName": "End",
+   "NodeDesc": "",
+   "NodeType": "END",
+   "Inputs": [],
+   "Outputs": [],
+   "NextNodeIDs": []
+  }
+ ],
+ "Mode": "NORMAL"
+}

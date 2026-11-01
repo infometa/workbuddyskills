@@ -34,7 +34,9 @@
 
 定位到唯一客户后，按用户关注的分析目标与时间范围调用对应查询工具（均传 custmid）：
 
-- **getCustomerFollowRecords**：返回该客户跟进记录（沟通/通话记录与外勤记录两类合并，时间倒序，合计取前 9999 条）；支持 timeStart/timeEnd（GMT 毫秒时间戳）按跟进记录时间范围过滤，不传则不限；source=talk 为沟通/通话记录，crdid 非零为电销通话记录（含通话状态/方向与 AI 外呼标记，关联商机见 scid），source=legwork 为外勤记录（含签到/签退位置与目标地址距离）；跟进内容在 content（纯语音外勤为占位文本）；图片在 pictures、附件在 atts、语音在 voices（均带下载链接，获取失败时为空不影响主体数据）；自定义表单在 forms（value 已解析，选项类已映射为选项文本；值为空的表单项整项不返回）。
+- **getCustomerFollowRecords**：返回该客户跟进记录（沟通/通话记录与外勤记录两类合并，时间倒序，合计取前 9999 条）；支持 timeStart/timeEnd（GMT 毫秒时间戳）按跟进记录时间范围过滤，不传则不限；source=talk 
+  为沟通/通话记录，crdid 非零为电销通话记录（含通话状态/方向与内容，关联商机见 scid），source=legwork 为外勤记录（含签到/签退位置与目标地址距离）；跟进内容在 content（纯语音外勤为占位文本）；图片在 pictures、附件在 atts、语音在 
+  voices（均带下载链接，获取失败时为空不影响主体数据）；自定义表单在 forms（value 已解析，选项类已映射为选项文本；值为空的表单项整项不返回）。
 - **getCustomerSalesChances**：返回该客户全部商机（内部自动分批拉全）；列表含当前阶段编号与阶段历史（名称/占比/进出时间）；阶段 5=赢单、6=输单，其余为自定义阶段（名称见 stepInfos）。
 - **getCustomerOrders**：返回该客户全部订单（内部自动分批拉全）；订单状态含语义描述（statusDesc）；回款/退款为汇总金额与笔数；商品明细在 products；订单属性在 myProps（value 已解析为可读值）；附件在 atts（带下载链接）。
 - **getOrderReceivePayments**：关注回款/退款明细时先用 getCustomerOrders 拿到订单再按 orderId 查（orderId 取自 getCustomerOrders 返回，不要臆造）；返回该订单全部回款与退款（内部自动分批拉全）；状态含语义描述（statusDesc：待确认/已确认/已驳回/已作废/未设置审批人）。
@@ -73,8 +75,7 @@
 
 | 现象 | 处理方式 |
 |---|---|
-| 401 / 未授权 | 提示用户重新发起扫码授权（WorkBuddy 会自动打开授权页） |
-| 参数校验失败（code 为 MERR_MOA_PARA） | 按工具 schema 核对字段名、类型与必填项 |
+| 401 / 未授权 | 提示用户重新发起扫码授权（AGENT 会自动打开授权页） |
 | 搜索命中多条客户 | 展示候选列表让用户确认唯一客户，不要自行猜测 |
 | 创建跟进记录报错 | 核对 customerId 是否为搜索返回的真实客户；content 不得为空 |
 | 创建跟进记录报权限错误 | 需【创建跟进记录】权限，提示用户联系管理员在权限组中分配 |

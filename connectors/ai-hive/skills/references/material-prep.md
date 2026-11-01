@@ -1,6 +1,6 @@
 # 素材准备指南（references/material-prep.md）
 
-适用版本：AI-HIVE Connector 1.1.4
+适用版本：AI-HIVE Connector 1.2.0
 更新日期：2026-08-21
 
 > 本指南告诉 agent：针对每个用户场景，该引导用户准备哪些素材、什么规格、怎么拍/选、常见坑。

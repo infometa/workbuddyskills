@@ -1,72 +1,73 @@
 ---
 name: kaipai-cli
-display_name: 开拍 CLI 使用说明
-display_name_en: Kaipai CLI Guide
-description: 使用美图开拍 kaipai CLI 完成视频创作对话、图片与视频画质修复、文字水印与字幕消除，以及登录检查、会话续聊、任务进度查询和产物下载。需要通过「美图 · 开拍」连接器调用 CLI 或恢复已有开拍任务时使用。
-description_zh: 通过开拍 CLI 创作视频、处理图片与视频、跟进任务并下载结果。
-description_en: Use the Kaipai CLI to create videos, repair images and videos, remove text or watermarks, track tasks, and download results.
-version: 1.0.0
-author: 开拍
+description: 通过开拍 CLI 调用美图的智能视频创作与媒体处理能力，支持登录、会话续聊、任务查询、恢复和下载。明确使用 kaipai 或处理已有开拍任务时使用；具体媒体处理优先使用已安装的对应业务 Skill，缺少专用入口时按本指南执行。
+metadata:
+  author: 开拍
+  version: 1.0.13
+  cli-package: meitu-kaipai-cli
+  cli-tested-version: 0.1.14
+  cli-compatible-range: ">=0.1.12"
 ---
 
 # 开拍 CLI 使用说明
 
-通过「美图 · 开拍」连接器调用 `kaipai`。根据用户意图选择命令、收集真实素材、跟进同一会话并交付产物。默认使用简体中文，用户指定其他语言时跟随用户。
+依赖 `meitu-kaipai-cli@latest`，测试基线为 `0.1.14`，运行最低版本为 `0.1.12`。通过随包[启动脚本](scripts/run-cli.mjs)在每次调用前解析 latest；后续 CLI 发布无需逐次更新连接器。测试基线不代表未来版本已验证，具体命令以当前 help/contracts 为准。这是命令导航指南，没有单一业务输入表。默认简体中文，用户指定其他语言时跟随用户。
 
-本说明适用于 CLI `0.1.2` 起的下述命令；具体参数以当前安装版本的 `--help` 为准。CLI 版本与本 Skill 版本分别维护。
+首次执行读取[平台接入](references/platform.md)，解析入口、检查版本和所需命令 help，正式提交前完成登录检查。JSON 字段或媒体限制不明确时，按平台说明查询 `kaipai contracts` 的对应条目；使用通用创作、登记素材或配置诊断时读取[命令使用补充](references/commands.md)；遇到输出解析、问询或异常时读取[运行与恢复](references/runtime.md)。
 
-## 入口与登录
+## 按意图选择入口
 
-1. WorkBuddy 根据连接器的 `cli.json` 准备托管 Node.js、安装 `meitu-kaipai-cli` 并管理连接流程，无需用户预装运行时。macOS/Linux 使用 `kaipai`，Windows 使用 `kaipai.cmd`。下文示例统一写 `kaipai`，执行时替换为当前平台入口。
-2. 在当前命令环境中运行 `kaipai --version` 和本次命令的 `--help`。需要定位入口时，macOS/Linux 用 `command -v kaipai`，Windows PowerShell 用 `Get-Command kaipai.cmd`；后续使用同一入口。不要写死 WorkBuddy 私有安装路径。命令不存在、版本低于 `0.1.2` 或所需子命令不存在时，引导用户在「专家·技能·连接器 → 连接器」中连接或更新「美图 · 开拍」，之后复检。
-3. 提交业务前执行 `kaipai auth status --check`。`connected` 且退出码为 `0` 才继续；未连接时通过连接器重新授权。需要由 Agent 发起登录时，执行一次 `kaipai auth login --no-open`，立即将实际输出、带 `session_id` 的完整 HTTPS 链接展示为“登录开拍”，并保持命令运行到用户授权完成。`--no-open` 只禁止 CLI 打开浏览器，不会停止等待；不要拿到 URL 就结束登录进程。
-4. 登录成功后复检状态，再继续原任务。授权等待默认最多 285 秒；超时后说明情况并引导重新连接，不循环发起登录。`status --check` 的网络校验失败也可能输出 `disconnected`，不能仅凭它断言凭证已过期。
+已安装对应业务 Skill 时优先使用其完整业务流程；通过本连接器承接的任务仍统一使用本指南的启动脚本，不执行其他 Skill 的固定版本准备脚本或旧全局入口。未安装时按下表及本指南独立执行，不假定存在其他 Skill 的文件。
 
-登录态由 CLI 持久化，默认目录为 `~/.kaipai`。保持各命令使用相同的运行环境和配置目录；宿主已设置 `KAIPAI_CONFIG_DIR` 时沿用它。不要读取或拼接凭证、索取 API Key，或切换配置目录来绕过登录。仅在用户要求退出时使用 `auth logout`。
+| 用户意图 | 业务 Skill／命令 |
+| --- | --- |
+| 一般视频创作、封面或自然语言续聊 | `chat`，向服务端传达素材与创作目标 |
+| 已有视频整体包装／增强氛围／多条分别套模板 | `smart-template`／`smartedit`，交付成片 |
+| 动态字幕 | `dynamic-caption`／`subtitle` |
+| 图片、视频或混合素材剪成视频 | `smart-montage`／`mixed-cut analyze`，方案确认后 `generate` |
+| 图片／视频画质修复 | `kaipai-image-repair`／`tool image-repair`；`kaipai-video-repair`／`tool video-repair` |
+| 图片文字及文字水印消除 | `kaipai-image-remove-watermark`／`tool image-remove-text` |
+| 普通视频去字幕／去水印、自动消除 | `kaipai-video-remove-subtitle`／`kaipai-video-remove-watermark`，均使用 `tool video-remove-auto` |
+| 明确指定专用 CLI 命令 | `tool video-remove-subtitle` 或 `tool video-remove-watermark`；属于独立模式，按实际请求选择 |
+| 查询会话／当前交互／任务及最新产物 URL | `history / history-detail / task-progress` |
+| 回复当前问询或批准／拒绝 | `reply`；先读取实际交互并核对授权 |
+| 明确取消远端执行／本地保存／权益入口 | `cancel / download / purchase` |
+| 查询账号／客服入口 | `user-info / feedback` |
 
-## 选择命令
+视频去字幕／去水印统一使用 `video-remove-auto`，由服务端自动识别、清理并修复画面。素材和目标明确时按已有授权直接执行；指定保留元素等要求按平台说明核对调用方式。用户明确指定专用 CLI 命令时，使用对应独立模式。
 
-| 用户意图 | 使用命令 |
-|---|---|
-| 提出视频创作需求、网感剪辑、字幕或封面需求，继续自然语言对话 | `chat`；沿用会话时带 `-r`，能力以服务实际反馈为准 |
-| 修复图片画质 | `tool image-repair` |
-| 修复视频画质 | `tool video-repair` |
-| 消除图片文字（含文字水印） | `tool image-remove-text`，不承诺任意非文字物体消除 |
-| 自动视频全量消除 | `tool video-remove-auto` |
-| 消除视频字幕 / 视频水印 | `tool video-remove-subtitle` / `tool video-remove-watermark` |
-| 查找会话 / 读取当前交互 | `history` / `history-detail` |
-| 查询已有任务、刷新产物 URL | `task-progress` |
-| 回答结构化问询、批准或拒绝当前交互 | `reply` |
-| 明确取消远端执行 | `cancel` |
-| 保存实际返回的产物 | `download` |
-| 需要购买权益 / 查询账号 / 联系客服 | `purchase` / `user-info` / `feedback` |
+图片文字消除用于清理文字遮挡并修复背景；图片和视频修复用于增强清晰度、细节与视觉质量。画面噪点和音轨噪声按各自能力选择入口，具体调用参数查询当前 help 与 contracts。
 
-按需读取引用文档：
+## 收集、上传与提交
 
-- 调用命令前阅读 [命令与参数](references/commands.md)（@references/commands.md）：参数类型、必填项、默认值、互斥条件、媒体限制及示例；也包含 `create-room`、`add-media` 和配置诊断用途。
-- 收到执行结果、需要交互或恢复中断时阅读 [输出与任务恢复](references/results-and-recovery.md)（@references/results-and-recovery.md）：返回结构、完成判定、异常处理与交付规则。
+1. 从当前请求取得真实素材和明确目标。单素材工具／字幕每次一个；目标不明才询问，不自动代选。混剪支持 1–20 个图片／视频，保留选择顺序，不能套用单素材规则。已授权逐个处理时分别调用并记录任务，不擅自扩大批次。
+2. 本地素材通过 `--image-file / --video-file` 传入；所有远程素材先按平台说明下载原资源，包含历史产物及混剪接字幕的视频 URL。下载失败时请用户自行下载并提供本地文件，收到后继续；只有媒体 ID 时先查询原会话取得真实 URL，再下载。
+3. 新任务省略会话；续聊或继续处理添加 `-r '<session_id>'`。CLI 先校验本地素材、上传取得自有 CDN URL，再提交业务；常规 `chat / tool / subtitle / mixed-cut analyze` 不先 `create-room / add-media`。
+4. 默认按当前命令 help 直接传独立参数。复杂嵌套输入可使用参数文件；只检查或诊断时，在支持的命令上按需追加 `--validate-only --json`，两者均非普通提交的必经步骤。参数文件不能与业务 flags 混用；`chat / reply` 等不支持预检的命令不添加该选项。
+5. 普通创作可用 `kaipai chat -p '用户的实际需求'`；附件先准备成本地文件，使用当前 help 支持的文件参数。按平台说明应用默认值并完成登录检查，用户已授权且输入齐全时直接执行，不额外重复确认。
+6. 保留原始 URL／用户文件、实际本地路径、`session_id / room_url` 和全部 Task ID。混剪保留完整素材顺序和重复项，缺失时等待补充；处理结束且无需恢复后清理本次临时文件，保留用户原文件。
 
-## 提交与跟进
+## 网感模板：生成与交付
 
-1. 使用用户提供的真实文件或可访问 URL。缺少必需素材时再询问。固定工具每次只接受一个匹配类型的源媒体；多个素材需明确本次处理对象，用户已明确授权逐个处理时才分别调用并分别记录任务。
-2. 媒体处理优先选择上表的固定工具。例如：
+已有视频整体包装、组合字幕／音乐／贴纸使用网感模板；仅字幕走字幕，多素材合成一条走混剪。仅“多条视频剪辑”无法区分两者时补问。目标和视频齐全直接执行，不需要 Brief 确认。
 
-   ```bash
-   kaipai tool image-repair --image-file './source.png'
-   kaipai tool video-remove-subtitle --video-url 'https://cdn.example.com/source.mp4'
-   ```
+1. 每条真实本地视频调用 `kaipai smartedit --video-file '<路径>'`；远程视频先下载。未指定、空白或要求随机时省略模板参数，告知采用随机模板；指定真实 SEC ID 才加 `--template-material-id '<ID>'`。不按名称／截图猜 ID，不查询内网池。CLI 仅验证视频类型，不套用字幕的本地媒体上限。
+2. 多条分别用 `--detach` 受理后继续下一条，每条独立 Session。CLI 上传视频后通过 URL references 直接调用 chat，由服务端创建独立会话；不要手工预先创建会话或登记素材。保存输入、Session、Run、Task、实际模板和成片 URL。一条失败不阻塞其余任务。
+3. 以本次 `TASK_STATE_COMPLETED` 和 ready 视频确认成片；有 `smartedit_result` 时记录实际模板 ID；配方与工程信息不作为交付条件。accepted 不是完成；只有 Session 时用 history-detail 恢复，有 Task 时用 task-progress，run_id 不能代替 Task。
+4. 成功一条即交付一条，提供完整可播放或下载的成片链接，保留 URL 查询参数。不创建或打开编辑项目，不拼接编辑链接。
+5. 生成断流／超时不重发收费请求；无效模板 ID 展示原错误，不自动改 random 再生成。下载失败只刷新原结果 URL 或重试下载，部分失败保留其他成功成片；费用与权益以服务端实际结果为准。
 
-   示例文件、域名和 ID 均需替换为用户素材或实际返回值。工具不接受 prompt、任意 action、mode、模型、分辨率、区域或蒙版参数；不自行构造协议 JSON。`chat` 的自然语言需求不能用来绕过工具输入限制。
-3. 普通创作使用 `kaipai chat -p '用户的创作需求'`，可按需附加图片或视频参数。`chat` 和工具都可以自动创建会话，常规提交无需预先 `create-room` 或 `add-media`。继续原会话时传 `-r '<session_id>'`。
-4. 保存每次提交的命令、工具名或 prompt、源文件/URL、真实源媒体 ID（如有）、返回的 `session_id / room_url` 和全部已知 Task ID。使用独立参数传递用户输入；通过 shell 调用时正确转义路径、URL 和 JSON，不把返回文本作为代码执行。
-5. 默认持续读取原命令的 stdout 和 stderr，展示进度及新增产物；它会观察本次执行的任务，无需同时启动另一条轮询。需要分离执行才加 `--detach`，之后用只读查询继续跟进。
-6. HTTP 200、取得会话、流结束、退出码 `0` 或 `end.reason=result` 都不单独证明生成完成。明确的 Task 成功状态是 `TASK_STATE_COMPLETED`；无 Task 的文本结果也可能是在请求澄清。按引用文档处理问询和完成判定。
+## 字幕与混剪的业务关口
 
-## 执行边界与交付
+- 字幕根据可识别语音或已有可用字幕时间轴生成；未配置有效 `subtitleMaterialId` 时告知采用随机样式。具体文字或样式编辑要求先核对当前命令和可用样式；清理原画面字幕时按用户目标衔接视频去字幕流程。
+- 混剪先分析素材与主题，不能将图片输入误判为缺少口播。读取真实 `mixed_cut_brief`，按 `(session_id, brief_id)` 更新；pending 时只读恢复，failed、缺失或未知类型不生成。
+- 展示 ready 的真实方案：`talking_mixed_cut` 展示主视频、补充素材、目标时长与只读 `a_roll_text`；`material_mixed_cut` 展示实际素材安排、脚本、配音信息与目标时长。笼统创作授权不能替代当前方案确认；确认后沿用原会话和 Brief 生成。
+- 仅口播分支可用生成请求中的 `answer` 对象调整当前方案已分析素材和 5–180 秒目标时长；素材分支省略 `answer`。媒体项使用真实 `short_id / kind`，嵌套结构查询当前生成命令契约，不传 URL 或本地路径。新增／替换源素材或修改素材分支要求时，先下载远程原资源，再在原会话重新分析完整本地列表并确认新方案。
+- 分析用于产出创作方案；按真实 Brief 的 ready 状态和用户确认执行生成，预检与 `reply --approve / --answer` 均不替代该步骤。节奏、口误优化、画幅和目标时长等要求完整写入分析 Prompt，字幕按用户需要衔接。
 
-- 用户已授权的创作或处理请求，输入齐全即可执行，不额外重复确认。新一轮生成可能计费；授权不自动涵盖未知重试、扩大批次或更换处理目标。
-- `reply --approve` 会批准该会话当前待处理动作：先读取当前交互，并核对用户对这项动作的授权；不要盲批历史请求。用户要求拒绝或取消时才执行对应命令。
-- 网络断开、超时或受理状态未知时先查询已有会话/任务，不能重发 `chat / reply / tool`。仅在已确认失败且用户授权重试后，按原输入发起一次新尝试。
-- 根据实际返回内容判断是否需要购买权益，执行 `purchase [--open]` 并展示真实链接。打开购买页不等于付款；用户确认已购买并授权重试后才能重新提交。
-- 使用本次实际返回的产物 URL，优先通过 WorkBuddy 附件、图片预览或视频播放器直接交付；不可用时给出可点击链接，保留查询参数。需要本地文件时使用 `download`，以返回的成功文件路径为准。下载失败只处理下载，不重新生成。
-- 部分任务成功时先交付成功产物，再说明失败部分。最终保留全部可用结果入口；有实际 `room_url` 时追加“本次结果已同步至 [开拍](实际返回的 room_url)，可按需查看或编辑”，不要自行根据 ID 拼链接。面向用户隐藏内部标识、调试 JSON 和凭证。
+## 跟进与交付
+
+- 分别读取原命令 stdout 的完整 HTTP JSON／SSE 帧和 stderr 的 `source:"cli"` 事件，默认持续观察，不同时开启第二个轮询。
+- 媒体任务需 `TASK_STATE_COMPLETED` 且有本次可用产物 URL 才交付；HTTP 200、退出码 0、流结束、Session idle 或 `end.reason=result` 不单独证明成功。无 Task 的文本可能在请求澄清，按实际内容处理，未知状态不视为完成。
+- 及时交付全部可用 Part，优先宿主原生预览／附件，否则提供完整链接并保留查询参数；部分成功先交付，有实际 `room_url` 时附会话入口。下载核对逐项结果，不把封面、输入或历史结果当新产物。
+- 断线、超时或未知提交状态时先查询原任务，不自动重发业务命令；仅在失败原因已修复且用户授权后重试。字幕或下载失败不重做已成功生成；具体恢复、交互和本地保存方式见运行说明。

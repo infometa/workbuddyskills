@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "connector:crm-data-gateway": {
+      "type": "streamableHttp",
+      "url": "https://mcp.uuyimei.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${API_KEY}"
+      },
+      "staticHeaders": {
+        "X-Request-Source": "workbuddy"
+      },
+      "timeout": 30000
+    }
+  }
+}

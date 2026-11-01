@@ -1,12 +1,21 @@
 {
   "runtime": {
     "type": "node",
-    "version": ">=20"
+    "version": ">=24"
   },
   "init": {
-    "darwin": "npm install -g meitu-kaipai-cli",
-    "linux": "npm install -g meitu-kaipai-cli",
-    "win32": "npm install -g meitu-kaipai-cli"
+    "darwin": "npm install -g --include=optional meitu-kaipai-cli@latest --registry=https://registry.npmjs.org/",
+    "linux": "npm install -g --include=optional meitu-kaipai-cli@latest --registry=https://registry.npmjs.org/",
+    "win32": "npm install -g --include=optional meitu-kaipai-cli@latest --registry=https://registry.npmjs.org/"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "kaipai --version",
+      "linux": "kaipai --version",
+      "win32": "kaipai.cmd --version"
+    },
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)",
+    "minVersion": "0.1.12"
   },
   "auth": {
     "darwin": "kaipai auth login --no-open",

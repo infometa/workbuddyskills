@@ -137,8 +137,8 @@ __SENSORS_QUERY__
 
 | 字段 | 含义 | 示例值 |
 |---|---|---|
-| `nodes` | 路径节点分层列表；`nodes[i]` 为第 i 列节点集合 | `[{"times":5513.0,"event_name":"$AppStart","id":"0_$AppStart"}]` |
-| `links` | 路径连线分层列表；`links[i]` 为第 i 列到第 i+1 列的流转 | `[{"times":4.0,"source":"0_$AppStart","target":"1_$AppViewScreen"}]` |
+| `nodes` | 路径节点分层列表；`nodes[i]` 为第 i 列节点集合。**`times` 是 Session 内步骤出现次数（非去重用户数）**，与明细人数口径不同，不可直接对账 | `[{"times":5513.0,"event_name":"$AppStart","id":"0_$AppStart"}]` |
+| `links` | 路径连线分层列表；`links[i]` 为第 i 列到第 i+1 列的流转（`times` 同为 Session 次数口径） | `[{"times":4.0,"source":"0_$AppStart","target":"1_$AppViewScreen"}]` |
 | `truncate_rows` | 各列节点截断数量 | `[]` |
 | `truncate_col` | 路径列是否截断 | `false` |
 | `truncated` | 整份结果是否截断 | `false` |

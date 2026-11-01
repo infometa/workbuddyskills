@@ -1,22 +1,23 @@
 ---
 name: beisen-employee-profile
-version: 1.2.13
+version: 3.2.1
 description: "北森员工档案查询。本 Skill 用于查询员工基本信息、任职信息、语言能力、教育背景、考核结果、证书执照、项目经历、专业技能、工作履历、表彰奖励、晋升结果。所有查询通过 beisen-data-query 通用数据查询流水线执行。当用户询问个人信息、任职、学历、绩效、证书、项目、技能、履历、奖项、晋升等员工档案相关问题时触发。"
-category: 人力资源/员工档案
 author: beisen
-agent_created: false
-allowed-tools: Bash, Read
+display_name: "北森员工档案"
+display_name_en: "Beisen Employee Profile"
+description_zh: "北森员工档案查询。本 Skill 用于查询员工基本信息、任职信息、语言能力、教育背景、考核结果、证书执照、项目经历、专业技能、工作履历、表彰奖励、晋升结果。所有查询通过 beisen-data-query 通用数据查询流水线执行。当用户询问个人信息、任职、学历、绩效、证书、项目、技能、履历、奖项、晋升等员工档案相关问题时触发。"
+description_en: "Beisen employee-profile query. This Skill queries an employee's basic information, employment information, language ability, education background, performance-review results, certificates and licenses, project experience, professional skills, work history, awards and recognitions, and promotion results. All queries run through the beisen-data-query universal data-query pipeline. Trigger when the user asks employee-profile questions about personal info, employment, education, performance, certificates, projects, skills, work history, awards, or promotions."
+category: productivity
 requires-skills:
   - beisen-shared
   - beisen-data-query
-requires-cli: ">=1.0.8"
 ---
 
 # 员工档案
 
 **CRITICAL — 开始前 MUST 读取：**
-1. **[../beisen-shared/SKILL.md](../beisen-shared/SKILL.md)** — 认证、安全规则、门禁协议
-2. **[../beisen-data-query/SKILL.md](../beisen-data-query/SKILL.md)** — 通用数据查询流水线（本 Skill 所有场景均走此流水线）
+1. **[references/beisen-shared.md](references/beisen-shared.md)** — 连接器与授权、安全规则、写操作门禁
+2. **[references/beisen-data-query.md](references/beisen-data-query.md)** — 通用数据查询流水线（本 Skill 所有场景均走此流水线）
 
 ## 路由优先级
 
@@ -29,7 +30,7 @@ requires-cli: ">=1.0.8"
 
 ## 场景清单
 
-以下场景统一使用 [beisen-data-query](../beisen-data-query/SKILL.md) 的 SceneTool → SceneToolMessage → SearchFormTool → BusinessDataTool → 生成回答 → 展示关联菜单 6 步流水线：
+以下场景统一按 [beisen-data-query](references/beisen-data-query.md) 的 6 步流水线执行：场景发现 → 场景说明（输出要求与关联菜单）→ 场景字段 → 数据查询 → 生成回答 → 展示关联菜单。
 
 ### 基础信息类
 
@@ -56,25 +57,18 @@ requires-cli: ">=1.0.8"
 | 查询表彰与奖励 | 租户配置的"表彰与奖励"场景 | L1 |
 | 查询晋升结果 | 租户配置的"晋升结果"场景 | L2 |
 
-> 实际查询场景名称由租户在后台配置决定，Agent 必须通过 `SceneTool` 动态获取，不可硬编码。
+> 实际查询场景名称由租户在后台配置决定，Agent 必须通过场景发现工具动态获取，不可硬编码。
 
 ## 执行原则
 
-- 所有查询走 beisen-data-query 流水线，Agent 按 6 步流程执行
-- 默认查询当前用户自己的信息（员工字段 value=`"当前用户"`）
-- 查询他人信息时，员工字段 value 填具体人名；查询团队时 value 不传
+- 所有查询走 beisen-data-query 流水线，Agent 按 6 步流程执行；工具选择与参数格式以连接器工具清单和各工具 inputSchema 为准
+- 默认查询当前用户自己的信息；查询他人时主体为具体人名（原文透传）；查询团队时按流水线的组织范围判定处理
 - 考核结果、晋升结果属于 L2 敏感数据：
   - 查自己 → 完整展示
-  - 查他人 → 仅展示摘要，不回显原始 JSON
-- dataList 中的员工字段值已含消歧信息（如"姓名(部门)"），直接使用
+  - 查他人 → 仅展示摘要，不回显原始返回
+- 返回记录中的员工姓名通常已含消歧信息（如"姓名(部门)"），直接使用
+- 用户未提及日期时不传时间条件
 - 多轮对话时，结合上下文将代词替换为前文已出现的具体人名
-
-## 参数提取要点
-
-- 员工字段：查自己 → `"当前用户"`；查他人 → 具体人名；查团队 → 不传
-- 日期字段：用户未提及日期时不传该字段
-- 选项字段：从 `dataSourceItems` 匹配用户表达，value 填匹配项的 id
-- 详细提取规则见 [../beisen-data-query/references/business-rules.md](../beisen-data-query/references/business-rules.md)
 
 ## Playbook 案例
 
@@ -83,27 +77,22 @@ requires-cli: ">=1.0.8"
 用户问："我的任职信息是什么？"
 
 执行步骤：
-1. 前置检查
-2. 按 beisen-data-query 6 步流水线执行
-3. SceneTool 匹配"员工档案"/"任职信息"场景
-4. SearchFormTool 获取字段，员工字段 value=`"当前用户"`
-5. BusinessDataTool 查询数据
-6. 生成回答，展示关联菜单
+1. 按 beisen-data-query 6 步流水线执行
+2. 场景发现匹配"员工档案"/"任职信息"场景
+3. 场景字段返回筛选字段 → 提取：主体=本人
+4. 数据查询 → 生成回答 → 展示关联菜单
 
 ### 案例 2：查询他人考核结果（L2 敏感）
 
 用户问："李白最近的考核结果怎么样？"
 
 执行步骤：
-1. 前置检查
-2. 按 6 步流水线执行，员工字段 value=`"李白"`
-3. 查询结果为 L2 敏感数据，仅展示摘要
-4. 不回显原始 JSON
+1. 按 6 步流水线执行：主体=指定人"李白"
+2. 查询结果为 L2 敏感数据，仅展示摘要
+3. 不回显原始返回
 
-## 详细参考
+## 不在本 Skill 范围
 
-- [references/basic-info.md](references/basic-info.md)：基础信息场景说明
-- [references/education-skills.md](references/education-skills.md)：教育技能类场景说明
-- [references/performance-promotion.md](references/performance-promotion.md)：绩效晋升类场景说明（含 L2 敏感数据处理规则）
-- [../beisen-data-query/SKILL.md](../beisen-data-query/SKILL.md)：通用查询流水线完整步骤
-- [../beisen-data-query/references/business-rules.md](../beisen-data-query/references/business-rules.md)：参数提取规则与输出格式要求
+- 考勤/休假数据 → [../beisen-attendance-leave/SKILL.md](../beisen-attendance-leave/SKILL.md)
+- 组织层面信息 → [../beisen-organization/SKILL.md](../beisen-organization/SKILL.md)
+- 企业知识制度查询 → [../beisen-knowledge/SKILL.md](../beisen-knowledge/SKILL.md)

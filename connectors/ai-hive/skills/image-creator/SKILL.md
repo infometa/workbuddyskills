@@ -6,14 +6,14 @@ description: "通过指导agent智能调度 Nano-Banana、GPT-image、Seedream �
 description_zh: "通过指导agent智能调度 Nano-Banana、GPT-image、Seedream 等顶尖图片模型，按\"文字渲染/真实质感/艺术风格\"自动匹配最优模型，完成 PPT 配图、信息图、营销海报、商品主图、详情页长图、电商素材与多画幅视觉，支持 1:1、3:4、9:16 多比例输出。"
 description_en: "Agent routes Nano-Banana/GPT-image/Seedream for PPT art, infographics, posters, product images, multi-aspect."
 category: design
-version: 1.1.4
+version: 1.2.1
 author: 极睿科技（Infimind）/ AI-HIVE 团队
 permissions:
   provisional: true
   read:
   - 仅限当前对话中用户主动选择的本地图片
   network:
-  - 仅通过已启用的 AI-HIVE Connector 调用 get_user_info、list_models、upload_media_from_path、generate_image
+  - 仅通过已启用的 AI-HIVE Connector 调用 get_user_info、list_models、get_model、upload_media_from_path、generate_image
     与 get_generation_task
 triggers:
 - 图片生成
@@ -205,6 +205,16 @@ AI-HIVE 图片生成 Skill 通过 AI-HIVE Connector 完成端到端图片创作�
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |---|---|---|---|---|
 | `modelType` | string | 可选 | — | `TEXT` / `IMAGE` / `VIDEO`；本 Skill 显式传入 `"IMAGE"` |
+| `detail` | string | 可选 | `full` | `lite` 只返回售价摘要用于选型；`full` 返回完整公开详情（含 `pricingSnapshot`） |
+
+### `get_model`
+
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|---|---|---|---|---|
+| `publicModelId` | string | ✅ | — | 来自 `list_models` 的当前模型 ID |
+| `routingMode` | string | 可选 | — | 获取指定线路的专属契约 |
+
+返回该模型当前唯一调用契约：`paramsSchema`、媒体要求、计费因素、示例与 `pricingSnapshot`。
 
 ### `upload_media_from_path`
 
@@ -228,7 +238,9 @@ AI-HIVE 图片生成 Skill 通过 AI-HIVE Connector 完成端到端图片创作�
 | `batchSize` | integer | 可选 | 1 | 1–10；候选数量会影响费用 |
 | `imageMediaIds` | array | 可选 | 空 | 参考图片 mediaId 列表 |
 | `params` | object | 可选 | 空对象 | 当前模型支持的画幅、分辨率、质量等字段 |
-| `pricingSnapshot` | object | ✅ | — | 对应模型与路由的价格快照，原样传入 |
+| `dryRun` | boolean | 可选 | false | `true` 时只校验参数与媒体并返回预估费用，不创建任务、不扣费，此时省略 `pricingSnapshot` 与 `clientRequestId` |
+| `clientRequestId` | string | 付费必传 | — | 稳定 UUID 幂等键；传输中断或刷新过期快照后用原值同参重试，修正业务参数后必须换新 |
+| `pricingSnapshot` | object | 付费必传 | — | `list_models(detail="full")`、`get_model` 或 dry-run 返回的价格快照，原样回传 |
 
 ### `get_generation_task`
 

@@ -1,0 +1,87 @@
+version: 1
+routes:
+  - id: new-customer-finance-setup
+    domain: reimbursement
+    reference: reimbursement/new-customer-finance-setup/SKILL.md
+    connectors: [sealai-finance]
+    intent: 明确初始化新客默认模板和缺失企业规则；演示导入和演示审核分别确认，不覆盖已有配置。
+  - id: sealai-finance-access
+    domain: reimbursement
+    reference: reimbursement/sealai-finance-access/SKILL.md
+    connectors: []
+    intent: 公开说明财务能力范围和 OAuth 连接方式，不执行任何业务动作。
+  - id: reimbursement-material-preparation
+    domain: reimbursement
+    reference: reimbursement/reimbursement-material-preparation/SKILL.md
+    connectors: []
+    intent: 公开准备报销字段和附件清单，普通票据字段用豆包视觉，不做官方验真或审核。
+  - id: reimbursement-draft-submit
+    domain: reimbursement
+    reference: reimbursement/reimbursement-draft-submit/SKILL.md
+    connectors: [sealai-finance]
+    intent: 保存或修改当前一张真实报销草稿，经明确确认具体 revision 后提交 AI 审核。
+  - id: personal-reimbursement-progress
+    domain: reimbursement
+    reference: reimbursement/personal-reimbursement-progress/SKILL.md
+    connectors: [sealai-finance]
+    intent: 只读查询当前用户本人报销及 AI 审核进度，不扩大到企业汇总或他人。
+  - id: domestic-invoice-verification
+    domain: reimbursement
+    reference: reimbursement/domestic-invoice-verification/SKILL.md
+    connectors: [sealai-finance]
+    intent: 用户明确要求中国大陆发票官方验真时调用验真并查询同一任务。
+  - id: overseas-receipt-inspection
+    domain: reimbursement
+    reference: reimbursement/overseas-receipt-inspection/SKILL.md
+    connectors: [sealai-finance]
+    intent: 用户明确要求 SealAI 境外消费小票专项识别时调用并查询同一任务。
+  - id: finance-rule-selection
+    domain: audit
+    reference: audit/finance-rule-selection/SKILL.md
+    connectors: [sealai-finance]
+    intent: 只读查看企业规则并基于真实可见规则提建议，或选择本次规则来源；行业修改转 custom，不发布或修改持久规则，不自动审核。
+  - id: enterprise-rule-management
+    domain: audit
+    reference: audit/enterprise-rule-management/SKILL.md
+    connectors: [sealai-finance]
+    intent: 明确持久修改企业规则时预览并独立确认发布，不做新客初始化或临时选择。
+  - id: feishu-document-audit
+    domain: audit
+    reference: audit/feishu-document-audit/SKILL.md
+    connectors: [sealai-finance]
+    intent: 按飞书单号确认规则后审核费用；已有飞书 job 只查 status 查看结果和评论预览，不重新 prepare 或 start，不自动写回。
+  - id: conversation-material-audit
+    domain: audit
+    reference: audit/conversation-material-audit/SKILL.md
+    connectors: [sealai-finance]
+    intent: 确认规则后审核当前对话材料；已有材料 job 只查 status 继续查看结果，不重新 prepare 或 start，不写回评论。
+  - id: audit-comment-writeback
+    domain: audit
+    reference: audit/audit-comment-writeback/SKILL.md
+    connectors: [sealai-finance]
+    intent: 飞书审核完成且评论预览后，仅凭当前会话明确确认写回评论。
+  - id: audit-progress-overview
+    domain: audit
+    reference: audit/audit-progress-overview/SKILL.md
+    connectors: [sealai-finance]
+    intent: 只读查询企业审核覆盖、数量、状态和持久记录，不启动审核或分析风险。
+  - id: expense-risk-insights
+    domain: audit
+    reference: audit/expense-risk-insights/SKILL.md
+    connectors: [sealai-finance]
+    intent: 根据真实企业审核统计和证据分析风险及建议，不自动修改规则或处置。
+  - id: approval-document-template-management
+    domain: documents
+    reference: documents/approval-document-template-management/SKILL.md
+    connectors: [sealai-finance]
+    intent: 确认完整业务字段定义后幂等维护模板，并按真实标识查询核对。
+  - id: approval-document-write
+    domain: documents
+    reference: documents/approval-document-write/SKILL.md
+    connectors: [sealai-finance]
+    intent: 按已保存模板和稳定来源标识幂等保存单据，不发起审核、审批或付款。
+  - id: approval-document-query
+    domain: documents
+    reference: documents/approval-document-query/SKILL.md
+    connectors: [sealai-finance]
+    intent: 按真实单据 ID 或来源标识只读核对当前企业单据，不创建数据或切换企业。

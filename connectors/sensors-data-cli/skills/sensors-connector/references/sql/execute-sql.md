@@ -35,20 +35,20 @@
 3. **跨库与跨项目是同一机制**：神策库名全局唯一（`horizon_{项目英文名}_{项目id}`），SQL 层没有「项目边界」，只有「先按项目把对应库名找出来」。库名发现方式：同项目多库一次 `sensors metadata databases` 可见；跨项目需对每个项目（`--project <项目英文名>`）各调一次 `sensors metadata databases` 确认库名，确认后直接写 `dbA.table JOIN dbB.table`。
 4. **自带 SQL 的命令层处理**：表名带不带 `database.` 前缀都**原样执行**，不静默补库、也不强制补全为全限定名；不因字段不存在、事件值未知或枚举值未确认而改写或回退——字段 / 语法 / 权限问题由执行层错误原样返回。
 5. **行数控制**：`--limit` 控制最大返回行数（默认 1000、上限 50000）；SQL 内自身的 `LIMIT` 与 `--limit` 各自生效，需要约束结果规模时两者都要检查。
-6. **两步执行**：先 `--dry-run` 预览请求 JSON，确认 SQL 形态后去掉该 flag 真实执行；`current_database` 回显传入的 `--database`。
+6. **执行**：SQL 形态核对无误后直接执行；需要核对请求 JSON 或排查问题时加 `--dry-run` 预览（`current_database` 回显传入的 `--database`）。
 
 示例变体：
 
 ```bash
-# 先预览请求，不发起真实请求（--database 必填）
-sensors analytics sql --ai-session-id <ai_session_id> \
-  --sql "SELECT count(*) FROM events WHERE date = '2026-06-21'" \
-  --database <database_name> --limit 100 --dry-run
-
-# 确认后真实执行（不带库名前缀的表由服务端按当前项目解析）
+# 真实执行（--database 必填；不带库名前缀的表由服务端按当前项目解析）
 sensors analytics sql --ai-session-id <ai_session_id> \
   --sql "SELECT count(*) FROM events WHERE date = '2026-06-21'" \
   --database <database_name> --limit 100
+
+# 请求预览（排查问题时选用，不发起真实请求）
+sensors analytics sql --ai-session-id <ai_session_id> \
+  --sql "SELECT count(*) FROM events WHERE date = '2026-06-21'" \
+  --database <database_name> --limit 100 --dry-run
 
 # 跨库表：SQL 内用 <database>.<table> 指定其它库
 sensors analytics sql --ai-session-id <ai_session_id> \
@@ -109,7 +109,7 @@ sensors analytics sql --ai-session-id <ai_session_id> \
 ## 使用约束
 
 - 只执行只读 SQL：仅 `SELECT` / `WITH ... SELECT`；不执行任何 DDL / DML（INSERT / UPDATE / DELETE / CREATE / DROP 等）。
-- 真实执行前先 `--dry-run` 预览请求；门禁不通过时不执行真实查询，先返回修正原因。
+- `--dry-run` 仅用于核对请求 JSON，不是必经步骤；只读门禁不通过时不执行真实查询，直接返回修正原因。
 - 展示、落表或二次处理时必须以返回的 `columns` 数组为准逐位置标注 `data`（列名取各列 `name`），禁止按 SQL 书写顺序或字母序重排后套用，否则会发生数据错位。
 - 表名是否带 `database.` 前缀都原样执行，不静默补库；执行后关注 `current_database` / `db_notice` 确认落在预期库上。
 - 不在执行阶段重新猜字段、事件或枚举值；不在展示时把 shell 转义写回 SQL 正文。

@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "tourmind-hotel-booking-token": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "--input-type=module",
+        "--eval",
+        "const { homedir } = await import('node:os'); const { join } = await import('node:path'); const { pathToFileURL } = await import('node:url'); const { readdir, stat } = await import('node:fs/promises'); const configRoot = process.env.WORKBUDDY_CONFIG_DIR || process.env.CODEBUDDY_CONFIG_DIR || join(homedir(), '.workbuddy'); const relativeEntry = ['connectors', 'tourmind-hotel-booking-token', 'server', 'index.mjs']; const marketsRoot = join(configRoot, 'plugins', 'marketplaces'); const isFile = async (file) => { try { return (await stat(file)).isFile(); } catch (error) { if (['ENOENT', 'ENOTDIR'].includes(error.code)) return false; throw error; } }; let markets = []; try { markets = await readdir(marketsRoot); } catch (error) { if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error; } const entries = []; for (const market of markets.sort()) { const candidate = join(marketsRoot, market, ...relativeEntry); if (await isFile(candidate)) entries.push(candidate); } if (entries.length > 1) throw new Error('TourMind Connector found in multiple WorkBuddy marketplaces; keep only one installed copy: ' + entries.join(', ')); let entry = entries[0]; if (!entry) { const legacy = join(configRoot, 'connectors-marketplace', ...relativeEntry); if (await isFile(legacy)) entry = legacy; } if (!entry) throw new Error('TourMind Connector adapter not found. Reinstall the Connector. Searched ' + marketsRoot + '/<marketplace>/' + relativeEntry.join('/') + ' and ' + join(configRoot, 'connectors-marketplace', ...relativeEntry)); await import(pathToFileURL(entry).href);"
+      ],
+      "env": {
+        "TOURMIND_USER_KEY": "${TOURMIND_USER_KEY}"
+      },
+      "runtime": {
+        "type": "node",
+        "version": "^22.0.0"
+      },
+      "timeout": 60000
+    }
+  }
+}

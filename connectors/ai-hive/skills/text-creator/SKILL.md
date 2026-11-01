@@ -6,14 +6,14 @@ description: 通过指导agent智能调度 Deepseek、Kimi、Claude 等顶尖文
 description_zh: 通过指导agent智能调度 Deepseek、Kimi、Claude 等顶尖文本模型，按办公任务类型自动匹配最优模型与调用策略，完成周报纪要、合同要点、邮件拟稿、多语言稿件、长报告总结、汇报大纲、多步推理与结构化改写，支持长文档处理。
 description_en: "Agent routes Deepseek/Kimi/Claude for reports, contracts, emails, multilingual drafts, summaries, structured rewriting."
 category: writing
-version: 1.1.4
+version: 1.2.1
 author: 极睿科技（Infimind）/ AI-HIVE 团队
 permissions:
   provisional: true
   read:
   - 仅限当前对话中用户主动选择的本地文档
   network:
-  - 仅通过已启用的 AI-HIVE Connector 调用 get_user_info、list_models 与 chat_text
+  - 仅通过已启用的 AI-HIVE Connector 调用 get_user_info、list_models、get_model 与 chat_text
 triggers:
 - 文本生成
 - 写文案
@@ -197,6 +197,16 @@ AI-HIVE 文本生成 Skill 通过 AI-HIVE Connector 完成端到端文本任务�
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
 |---|---|---|---|---|
 | `modelType` | string | 可选 | — | `TEXT` / `IMAGE` / `VIDEO`；本 Skill 显式传入 `"TEXT"` |
+| `detail` | string | 可选 | `full` | `lite` 只返回售价摘要用于选型；`full` 返回完整公开详情（含 `pricingSnapshot`） |
+
+### `get_model`
+
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|---|---|---|---|---|
+| `publicModelId` | string | ✅ | — | 来自 `list_models` 的当前模型 ID |
+| `routingMode` | string | 可选 | — | 获取指定线路的专属契约 |
+
+返回该模型当前唯一调用契约：`paramsSchema`、媒体要求、计费因素、示例与 `pricingSnapshot`。
 
 ### `chat_text`
 
@@ -206,7 +216,8 @@ AI-HIVE 文本生成 Skill 通过 AI-HIVE Connector 完成端到端文本任务�
 | `routingMode` | string | ✅ | — | 选中模型实际返回的路由 |
 | `messages` | array | ✅ | — | 至少一条；每条包含 `role`、非空 `content` 与可选 `mediaIds` |
 | `thinkingEnabled` | boolean | 可选 | 服务端默认 | 仅在模型支持时使用 |
-| `pricingSnapshot` | object | ✅ | — | 选中模型与路由的价格快照，原样传入 |
+| `clientRequestId` | string | 付费必传 | — | 稳定 UUID 幂等键；传输中断或刷新过期快照后用原值同参重试，修正业务参数后必须换新 |
+| `pricingSnapshot` | object | 付费必传 | — | `list_models(detail="full")`、`get_model` 或 dry-run 返回的价格快照，原样回传 |
 
 ## 费用授权
 

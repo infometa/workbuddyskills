@@ -1,0 +1,44 @@
+{
+  "mcpServers": {
+    "itjuzi-mcp": {
+      "type": "streamableHttp",
+      "url": "https://mcp.itjuzi.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${ITJUZI_MCP_API_KEY}"
+      },
+      "timeout": 30000,
+      "x-workbuddy": {
+        "displayName": "IT桔子",
+        "displayNameEn": "ITJuzi",
+        "description": "连接远程 IT桔子 MCP 服务，查询一级市场结构化数据。",
+        "descriptionEn": "Connect to the hosted IT Juzi MCP service to query structured primary market data.",
+        "icon": "./avatars/itjuzi.png",
+        "auth": {
+          "type": "token",
+          "tokenSchema": {
+            "title": "IT桔子 MCP 连接配置",
+            "title_en": "ITJuzi MCP Connection Configuration",
+            "description": "请输入 IT桔子提供的 MCP API Key。凭证仅用于连接远程 MCP 服务。",
+            "description_en": "Enter the ITJuzi MCP API Key provided after activation. The credential is only used to connect to the hosted MCP service.",
+            "docUrl": "https://github.com/lgyers/itjuzi-mcp#readme",
+            "docLabel": "查看接入说明",
+            "docLabel_en": "View setup guide",
+            "fields": [
+              {
+                "key": "ITJUZI_MCP_API_KEY",
+                "label": "API Key",
+                "label_en": "API Key",
+                "type": "password",
+                "required": true,
+                "placeholder": "请输入 IT桔子 MCP API Key",
+                "placeholder_en": "Enter your ITJuzi MCP API Key",
+                "description": "用于访问 IT桔子远程 MCP 服务，请勿在对话、截图或公开仓库中暴露。",
+                "description_en": "Used to access the hosted ITJuzi MCP service. Do not expose it in chats, screenshots, or public repositories."
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

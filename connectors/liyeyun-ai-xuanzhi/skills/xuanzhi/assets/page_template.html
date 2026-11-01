@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  :root{
+    --bg:#FAF7F6;--card:#FFFFFF;--bd:rgba(0,0,0,.10);
+    --tx:#1F1F1E;--tx2:#6B6A65;--tx3:#9A9891;
+    --brand:#C0322B;--brand-d:#9E2823;--brand-tint:#FBEAE8;--brand-line:#E8A9A3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:24px;background:var(--bg);color:var(--tx);
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+       font-size:13px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto}
+  .head{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+  .head .bar{width:4px;height:17px;border-radius:2px;background:var(--brand)}
+  .head h1{font-size:16px;font-weight:500;margin:0}
+  .head span{font-size:12px;color:var(--tx3)}
+  .sub{font-size:12px;color:var(--tx2);margin:0 0 18px 13px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;justify-items:center}
+  .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;width:100%;max-width:400px}
+  .thumb{position:relative;background:#F2EDEB;aspect-ratio:2/1;overflow:hidden}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .tag-type{position:absolute;top:10px;left:10px;background:#fff;color:var(--brand);border:1px solid rgba(192,50,43,.28);border-radius:999px;font-size:12px;padding:2px 10px;font-weight:500}
+  .tag-badge{position:absolute;top:10px;right:10px;background:var(--brand);color:#fff;border-radius:999px;font-size:12px;padding:2px 10px;font-weight:500}
+  /* —— 紧凑版（左图右文，用于对话内卡片：图按原生尺寸 1:1 显示，不放大所以不模糊）—— */
+  .hd{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+  .thumb-sm{flex:0 0 auto;width:104px;height:104px;border-radius:10px;overflow:hidden;background:#F2EDEB}
+  .thumb-sm img{width:100%;height:100%;object-fit:cover;display:block}
+  /* —— 图片可点击：跳转立业云详情页 —— */
+  .imglink{display:block;width:100%;height:100%;cursor:pointer}
+  .imglink img{transition:transform .25s ease}
+  .imglink:hover img{transform:scale(1.05)}
+  /* 压在图上方的标签不吃点击，让点击穿透到底层链接 */
+  .thumb .tag-type,.thumb .tag-badge{pointer-events:none}
+  .hdtx{min-width:0;flex:1;padding-top:2px}
+  .hdrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+  .pill{font-size:12px;line-height:1.5;border-radius:999px;padding:1px 9px;font-weight:500;white-space:nowrap}
+  .pill-type{background:#fff;color:var(--brand);border:1px solid rgba(192,50,43,.28)}
+  .pill-badge{background:var(--brand);color:#fff}
+  .hd h3{font-size:14.5px;font-weight:500;line-height:1.35;margin:0 0 3px;
+         display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .hd .addr{font-size:12px;color:var(--tx2);margin:0}
+  .body{padding:14px 16px 16px}
+  h3{font-size:15px;font-weight:500;margin:0 0 4px}
+  .addr{font-size:12.5px;color:var(--tx2);margin:0 0 14px}
+  .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+  .metric{background:#FBF4F3;border-radius:8px;padding:8px 10px;min-width:0}
+  .mk{display:block;font-size:12px;color:#8A7E7C;margin-bottom:2px}
+  .mv{font-size:14px;font-weight:500}
+  .mv em{font-style:normal;font-size:12px;font-weight:400;color:var(--tx2);margin-left:3px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .chip{font-size:12px;background:#F4F2F0;color:#6B6A65;border:1px solid #DBD7D4;border-radius:999px;padding:2px 9px}
+  .chip-hi{background:var(--brand-tint);color:var(--brand-d);border-color:var(--brand-line)}
+  .remark{font-size:12.5px;color:var(--tx2);margin:0 0 14px}
+  .broker{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:var(--brand)}
+  .avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.20);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;flex:0 0 auto;overflow:hidden}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .bwrap{min-width:0;flex:1}
+  .bn{font-size:14px;font-weight:500;margin:0 0 1px;color:#fff}
+  .bn em{font-style:normal;font-weight:400;color:rgba(255,255,255,.74);font-size:12px;margin-left:6px}
+  .bp{font-size:17px;font-weight:500;color:#fff;letter-spacing:.4px;font-variant-numeric:tabular-nums;display:inline-block}
+  .foot{margin-top:18px;font-size:12px;color:var(--tx3);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><span class="bar"></span><h1>{{HEAD_TITLE}}</h1><span>{{HEAD_COUNT}}</span></div>
+  <p class="sub">{{SUBTITLE}}</p>
+  <div class="grid">
+{{CARDS}}
+  </div>
+  <p class="foot">{{FOOT}}</p>
+</div>
+</body>
+</html>

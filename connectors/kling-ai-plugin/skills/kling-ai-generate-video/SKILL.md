@@ -19,16 +19,13 @@ description: 在 WorkBuddy 中用 Kling AI 文生视频、图生视频、全能�
 
 生成前按[能力发现](../kling-ai-plugin/references/capability-discovery.md)获取候选，遵守[账号可见性](../kling-ai-plugin/SKILL.md#模型可见性与灰度)。选定模型后读取[参数模块加载表](../kling-ai-plugin/references/model-parameters.md)，只加载满足触发条件的文件；提交时读[生成流程](../kling-ai-plugin/references/tool-workflows.md)。只查已有任务直接读[任务结果](../kling-ai-plugin/references/task-results.md)。
 
-## 按能力加载推荐
+## 默认视频推荐
 
-只查已有任务时，直接进入任务结果流程，不加载生成推荐或创作参考。新生成先读取当前连接完整的 `tools/list`（有 `nextCursor` 时继续读取），再只读取下列一份文件：
+`omni_ref_video` 已全量开放。视频生成默认推荐 `omni_ref_video` 的 可灵 4.0 模型，普通文生视频、图生视频、关键帧及主体库、音频等全能参考请求均从此入口选型。
 
-| 工具发现结果 | 读取文件 |
-| --- | --- |
-| 没有 `omni_ref_video` | [基础视频推荐](references/standard-video.md) |
-| 存在 `omni_ref_video` | [全能参考与新模型推荐](references/omni-video.md)；文件内继续按实际模型集合判断新旧分支 |
+新生成直接读取[全能参考与 可灵 4.0 视频推荐](references/omni-video.md)，按[视频候选入口](../kling-ai-plugin/references/capability-discovery.md#视频候选入口)查询实时模型与参数。只查已有任务直接进入任务结果流程。
 
-选定分支后按[视频候选入口](../kling-ai-plugin/references/capability-discovery.md#视频候选入口)查询模型：存在 `omni_ref_video` 时，普通文生/图生视频必须将它与原入口一起查询，再判断当前账号模型是否满足输入要求。推荐文件只负责选型，具体参数按模块加载表读取。不要同时预加载两份推荐，也不要按工具总数分流。发现失败不能当作“没有新工具”而走基础分支；说明无法读取能力并停止选型。切换账号、环境或重新连接后重新判断，失效的旧分支不再作为依据。
+用户明确指定其他入口时，按其当前模型能力处理；动作迁移使用 `motion_control`，必填主体图，动作库 `motionId` 与来源视频二选一，具体绑定按[素材工作流](../kling-ai-plugin/references/asset-workflows.md#动作库与动作控制)执行。发现失败时说明无法读取能力并停止选型；重新连接后刷新实时能力。
 
 ## 工作流程
 

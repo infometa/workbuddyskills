@@ -1,35 +1,38 @@
 ---
 name: adc-sandbox-usage
 description: >
-  How to use the ADC zone runtime-domain connector correctly: which tools to call, in what order,
-  what the guardrails reject, and how to read a failed job. Covers the ADC job workflow (template -> task ->
-  Argo log), data files, collect plans, mining and multimodal retrieval, read-only host triage and read-only
-  kubectl triage, read-only cloud resource queries, and image build/push to the zone registry. Write tools
-  (create / dispatch / retry a job, copy a template, run host commands, submit or cancel an image build)
-  ARE available here, but every write needs a two-phase confirmation (show the summary to the user, then
-  send back the exact confirm_text) and is idempotent — never write without it.
+  How to use the ADC zone runtime-domain connector correctly. It is the execution face shared by the
+  environment-setup, zone-ops and data-management work modes: the ADC job workflow (template -> task ->
+  Argo log) for training, QC and labeling jobs, data files, collect plans, mining and multimodal retrieval,
+  host and TKE evidence collection, cloud resource queries, and image build/push to the zone registry.
+  Covers call order, the write gate (two-phase confirmation; show the summary to the user, then send back
+  the exact confirm_text, idempotent), what the guardrails reject, and how to read a failed job.
   Use when a task needs this connector capability inside the ADC zone. Boundary: this skill only
   explains tool usage, it performs no actions itself.
 description_zh: >
-  智驾专区运行域 连接器的正确用法：作业动线（模板 → 任务 → Argo 日志）、数据文件与采集计划、挖掘与
-  多模态检索、主机与 kubectl 只读排障、云资源查询（读动作按前缀放行、写动作走服务端白名单 + 确认）、镜像构建推送（把代码 / 镜像推到专区仓库），
-  以及会被拒绝的操作与失败怎么读。触发词：需要该
-  连接器能力的智驾专区任务。边界：本技能只讲用法，不执行任何动作。注意：写工具（建任务 / 下发 / 重试 /
-  复制模板、跳板机执行命令、提交或取消镜像构建）**可用**，但**每次写都要两段式确认**（把 summary 念给用户，同意后带原样
-  `confirm_text` 再调），且服务端有幂等键。
+  智驾沙箱连接器（运行侧）的正确用法。它是环境搭建 / 智能运维 / 数据管理三个工作模式共用的执行面：
+  作业动线（模板 → 任务 → Argo 日志，覆盖训练 / 质检 / 标注 / 挖掘编排）、数据文件与采集计划、
+  多模态检索、主机与 TKE 取证排障、云资源查询、镜像构建推送（把代码 / 镜像推到专区仓库），
+  以及会被拒绝的操作与失败怎么读。触发词：需要该连接器能力的智驾专区任务。
+  边界：本技能只讲用法，不执行任何动作；工具面一律以运行时 `tools/list` 为准。
+  写操作（建任务 / 下发 / 重试 / 复制模板、跳板机执行命令、提交或取消镜像构建）一律两段式确认
+  （把 summary 念给用户，同意后带原样 `confirm_text` 再调），服务端有幂等键。
+  审批与工单的能力在同一连接器上，用法见 `adc-approval-usage`。
 description_en: >
-  How to use the ADC zone runtime-domain connector correctly, including the job workflow, host and kubectl
-  triage, cloud resource queries (read actions by verb prefix; write actions only via the server-side allowlist)
-  and image build/push to the zone registry; call order, guardrails and how
-  to read failures. Write tools are available and gated by a two-phase confirmation.
+  How to use the ADC sandbox connector (runtime side) correctly: the execution face shared by the
+  environment-setup, zone-ops and data-management work modes, including the job workflow, host and TKE
+  triage, cloud resource queries (read actions by verb prefix; write actions only via the server-side
+  allowlist) and image build/push to the zone registry; call order, guardrails and how to read failures.
+  Every write is gated by a two-phase confirmation and is idempotent.
+  Approval and tickets live on the same connector — see `adc-approval-usage`.
 display_name: 运行域连接器用法
 display_name_en: ADC Sandbox Connector Usage
-version: 0.4.10
+version: 0.4.14
 author: ADC Copilot Team
 ---
 
 
-# 智驾专区运行域 使用说明
+# 智驾沙箱连接器 · 运行侧 使用说明
 
 ## 工具面（**一律以运行时为准**）
 
@@ -39,16 +42,17 @@ author: ADC Copilot Team
 工具名与参数一律以**运行时**看到的为准（`tools/list`，或先搜一次把工具找出来）；
 **不要凭印象"补"出一个工具名，也不要编造结果**。
 
-本连接器按上游分这几组能力：
+本连接器按上游分这几组能力（审批与工单那两组见 `adc-approval-usage`）：
 
 | 上游 | 能做什么 | 写侧 |
 |---|---|---|
-| **作业域（DMS 直连）** | 作业模板、作业任务与 Argo 日志、数据文件与采集计划、数据挖掘与多模态检索、本层动作自查 | 有 |
+| **作业域（DMS 直连）** | 作业模板、作业任务与 Argo 日志（训练 / 质检 / 标注 / 挖掘编排）、数据文件与采集计划、多模态检索、本层动作自查 | 有 |
 | **主机排障（跳板机）** | 连通性探测、白名单只读命令（⚠️ 见下方「`>` 字符陷阱」）、**经确认的**写命令与脚本 | 有 |
 | **TKE 排障** | kubectl **只读**工具（对象 / 描述 / 事件 / 日志 / 资源用量） | 无（写操作经主机排障那组）|
 | **云资源查询** | 任意**只读**云 API 动作（Describe / Get / List / Search / Check / Query / Inquire）；写动作只放行**服务端白名单**里的那几个，未列入的一律拒 | 有（**经确认的**白名单写动作，须两段式确认 + 幂等）|
 | **镜像构建推送** | 服务状态、提交构建、轮询与取消、常驻运行时直发代码 | 有 |
-| **库存与客户资源（ADCM）** | 可用区机型余量、趋势、告警、预扣、客户已用量 | 无 |
+| **库存与客户资源（ADCM）** | 可用区机型余量、趋势、告警、预扣、客户已用量（按服务端配置注册）| 无 |
+| **反馈采集** | 用户评价/异议的回执采集；只回执、不落库（契约如此，不随上游配置变化） | 有（提交回执，不需要两段式确认）|
 | **CLS 日志 / 网络诊断** | **没有专用工具** —— 查询面经云 API 的只读动作可达 | 无 |
 
 > ⚠️ **TKE 没有自己的写工具**：`kubectl apply` / `delete` / `scale` / `rollout restart` 这类写操作，
@@ -59,7 +63,7 @@ author: ADC Copilot Team
 > 连 `struct.unpack(">I")`、`if v>m` 这种**比较 / 格式符**也会命中 ✗。判据不改，改写法：
 > 用 `int.from_bytes(b, "big")` 代替 `">I"`，用 `if m<v` 代替 `if v>m`。
 
-> ⚠️ **写侧已开放（2026-10-11 起）**：作业域、跳板机、镜像构建三组的写工具默认都在工具面里，
+> ⚠️ **写工具出现在工具面里时**：作业域、跳板机、镜像构建三组的写操作，
 > **每一次写都必须两段式确认 + 幂等**（见下节「写操作」）—— 缺 `confirm_text` 会被拒，且**不会触达上游**。
 > 跳板机的写命令还受**两道硬拦**（都拦在两段式确认**之前**）：**A 档** = 服务/启动项类命令直接拒；
 > **E 档** = **不可逆操作类**（`rm -r /`、`mkfs`、`dd of=/dev/…`、清空防火墙 / 关网卡这类会切断
@@ -189,7 +193,6 @@ author: ADC Copilot Team
 
 ## 风险（如实告知，别淡化）
 
-⚠️ DMS 的写接口当前**没有鉴权**（文档原话是"内网可达即可调用"）。本形态的写侧**已开放**，
-所以"连接器层隐藏"那道老护栏**已经不存在** —— 现在的门槛是**工具层的两段式确认 + 幂等**
-（再加跳板机的危险动词黑名单 / A 档硬拦）。在 DMS 侧补上鉴权之前，**不要把本形态的写能力当作用户已授权**；
-用户没说清对象与影响范围时，也不要替他确认。
+⚠️ DMS 的写接口**没有鉴权**（文档原话是"内网可达即可调用"）。写侧是否可用**只看工具面**：
+`tools/list` 里有写工具，门槛就是**工具层的两段式确认 + 幂等**（跳板机另叠危险动词黑名单 / A/E 档硬拦）。
+在 DMS 侧补上鉴权之前，**不要把写能力当作用户已授权**；用户没说清对象与影响范围时，也不要替他确认。

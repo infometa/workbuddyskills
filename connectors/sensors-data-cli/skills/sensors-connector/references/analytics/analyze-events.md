@@ -139,7 +139,7 @@
 3. 定过滤：`lib_version` 条件只作用于支付相关指标 → 写进各 `measures[].filter`（或顶层 `filter`，因三个指标都涉及 purchase）。
 4. 定时间：「最近 7 天」换算为绝对 `date_range`；`unit: "day"`。
 5. 定命名：显式 `name`「支付金额」「支付人数」「客单价」。
-6. `--dry-run` → 执行。
+6. 执行。
 
 ### 调用示例
 

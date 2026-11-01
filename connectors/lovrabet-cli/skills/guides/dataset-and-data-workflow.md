@@ -20,15 +20,24 @@ lovrabet api-doc detail --code dataset_data_filter
 
 3. 定位数据集
 
+根据已有线索选择一个筛选参数即可：数据集名称用 `--name`，物理表名用 `--table-name`，数据集 code 用 `--code`。不要要求用户补齐另外两个参数。
+
 ```bash
 lovrabet dataset list --name "<关键词>"
+
+# 已知物理表名时
+lovrabet dataset list --table-name crm_product
 ```
+
+多个筛选参数同时传入时按 AND 组合。表名采用前缀匹配，可能返回多个候选；先核对返回的 `table`、`name` 和 `code`。详细规则见 [数据集发现](../references/dataset-discovery-workflow.md)。
 
 如需限定候选 app：
 
 ```bash
 lovrabet dataset list --app <name> --name "<关键词>"
 ```
+
+已知物理表名时，将上述 `--name "<关键词>"` 换成 `--table-name "<表名前缀>"`。
 
 4. 看数据集结构
 
@@ -75,7 +84,7 @@ lovrabet data filter --code <datasetCode> --params '{"where":{"status":{"$eq":"a
 以下情况只用 `dataset list` 就够：
 
 - 用户只是问“有哪些数据集”
-- 用户只是想按名称搜索数据集
+- 用户只是想按数据集名称或物理表名前缀搜索数据集
 - 只需要数据集 code 和字段名数组
 
 ## 什么时候必须看 `dataset detail`

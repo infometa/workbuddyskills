@@ -19,6 +19,8 @@ description: 当用户要在 WorkBuddy 中用 Kling AI 文生图、图生图、�
 
 生成前按[能力发现](../kling-ai-plugin/references/capability-discovery.md)获取候选，遵守[账号可见性](../kling-ai-plugin/SKILL.md#模型可见性与灰度)。选定模型后读取[参数模块加载表](../kling-ai-plugin/references/model-parameters.md)，只加载满足触发条件的文件；提交时读[生成流程](../kling-ai-plugin/references/tool-workflows.md)。只查已有任务直接读[任务结果](../kling-ai-plugin/references/task-results.md)。
 
+未指定模型时，默认推荐满足需求的可用图像模型。
+
 ## 工作流程
 
 只查已有任务时不执行以下生成步骤。

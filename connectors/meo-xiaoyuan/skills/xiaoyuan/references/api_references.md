@@ -39,7 +39,7 @@
 | sort_type | number | - | 0不排序 1 VIP到展 2综合（默认） |
 | search_similarity | boolean | - | 精准结果后是否扩展相似搜索 |
 | backend_param | string | - | 翻页游标：上一轮 `data.backendParam` 原样回传，同时把 `page_num` 改为下一页。只传其一不生效 |
-| supplier_category_vo_list | object[] | - | 采购类目；先 `xiaoyuan_all_category`，路径 id 填 t1TagId~t4TagId |
+| supplier_category_vo_list | object[] | - | 采购类目；通过实际开放的 `xiaoyuan_all_category` 类目查询取得路径 id，再填 t1TagId~t4TagId；不猜测路径 |
 | buyer_type_ids | string[] | - | 新买家类型 id（多值 OR）；先 `xiaoyuan_list_buyer_type` 取 id |
 
 ### xiaoyuan_list_buyer_type - 买家类型维度列表
@@ -65,13 +65,7 @@
 |------|------|:----:|------|
 | company_cdp_id | string | ✅ | 买家 companyCdpId |
 
-### xiaoyuan_get_buyer_contacts - 买家联系人
-
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|:----:|------|
-| company_cdp_ids | string[] | ✅ | 一个或多个 companyCdpId |
-| page_num | number | - | 页码，从 1 |
-| page_size | number | - | 默认 10 |
+联系人在返回列表首条的 `cdpContactVO`。`hunterBuyerFlag=1` 改调 `xiaoyuan_get_hunter_buyer_detail`，同样带 `cdpContactVO`。须用户明确要看联系方式再调。
 
 ---
 
@@ -83,22 +77,166 @@
 
 ### xiaoyuan_list_whatsapp_templates - 拉取可发送的 WhatsApp 模板
 
-无参数。只返回当前发送号能发的已审核正文模板。发送前先调本工具。
+无参数。只返回当前发送号能发的已审核正文模板（发送号 WABA 域内）。发送前先调本工具。
 
-结果每条读 `templateName`、`language`、`category`、`bodyText`、`bodyParamCount`。同名多语言各占一条。
+结果每条读 `templateName`、`language`、`category`、`bodyText`、`bodyParamNames`（正文占位符名，按出现顺序，含 `{{name}}` 具名式）、`bodyParamCount`。
 
 ### xiaoyuan_send_whatsapp_template - 发送 WhatsApp 模板消息
 
-会真实发给收件人。须用户确认收件号、模板和填好的正文后再调。重复调用会再发一条。`template_name` 与 `language` 必须来自上一工具。
+会真实发给收件人。须用户确认收件号、模板和填好的正文后再调。重复调用会再发一条。`template_name` 与 `language` 必须来自上一工具（服务端在发送号 WABA 域内解析，列表可见即可发）。发送号是本企业绑定的 WhatsApp 号（用 `xiaoyuan_whatsapp_sender_info` 查状态）。
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
 | to | string | 是 | 收件 WhatsApp 号码，可带或不带 `+` |
-| template_name | string | 是 | 模板名 |
-| language | string | - | 语言码，如 `en`、`zh_CN`；同名多语言时必填 |
-| body_parameters | string[] | - | 正文变量，顺序对应 `{{1}}`、`{{2}}`；个数须等于 `bodyParamCount`，无变量不传 |
+| template_name | string | 是 | 模板名，须来自列表 |
+| language | string | - | 语言码，如 `en`、`en_US`；同名多语言时必填 |
+| body_parameters | string[] | - | 正文变量，顺序对位 `bodyParamNames`（`{{1}}` 序号式与 `{{name}}` 具名式均按位）；个数须等于 `bodyParamCount`，无变量不传 |
 
-### xiaoyuan_get_notice_list - 收到的消息列表
+成功读 `messageId`、`wamid`、`status`、`externalId`；受理≠送达，`externalId` 用于后续 `xiaoyuan_whatsapp_message_status` 查终态。
+
+### xiaoyuan_whatsapp_sender_info - 查询 WhatsApp 发送号状态
+
+无参数。读 `senderNumber`、`wabaId`、`phoneStatus`。失败码 40401=发送号未配置（联系运营开通）、40402=号码未接入 YCloud（先完成 WABA 接入）；出现这两个码不要重试发送。
+
+### xiaoyuan_send_whatsapp_text - 发送 WhatsApp 文本消息
+
+会真实发给收件人，重复调用会再发一条。仅 24 小时会话窗口内可送达（看 `xiaoyuan_list_whatsapp_conversations` 的 `windowOpen`）。**受理（accepted）≠送达**：窗口外本工具仍会受理，随后被 WhatsApp 上游异步拒绝（错误码如 131047），发送后必须用 `xiaoyuan_whatsapp_message_status` 查 `externalId` 终态确认；仅 YCloud 同步拒绝时返回 40901（改用模板）。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| to | string | 是 | 收件 WhatsApp 号码，可带或不带 `+` |
+| text | string | 是 | 文本正文 |
+
+成功读 `messageId`、`wamid`、`status`、`externalId`。
+
+### xiaoyuan_list_whatsapp_messages - 查询 WhatsApp 消息记录
+
+双向消息按落库时间倒序，翻页用返回的 `nextCursor`。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| to | string | - | 按对端号码过滤，可带或不带 `+` |
+| status | string | - | RECEIVED/ACCEPTED/SENT/DELIVERED/READ/FAILED |
+| cursor | string | - | 上一页返回的 nextCursor |
+| limit | number | - | 单页条数，默认 20，最大 100 |
+
+### xiaoyuan_whatsapp_message_status - 查询消息发送状态
+
+按发送返回的 externalId 查本地记录；非终态时服务端主动向 YCloud 刷新。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| external_id | string | 是 | 发送工具返回的 externalId（`agwa:` 前缀） |
+
+### xiaoyuan_list_whatsapp_conversations - 查询 WhatsApp 会话列表
+
+按对端号码聚合，最后消息时间倒序。每条读 `contactMobile`、`lastMessageSnippet`、`lastMessageAt`、`lastDirection`、`windowOpen`（最近买家入站<24h，可发自由文本）、`unreadCount`。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| cursor | string | - | 上一页返回的 nextCursor |
+| limit | number | - | 单页条数，默认 20，最大 100 |
+
+### xiaoyuan_list_conversation_messages - 查询会话消息流
+
+单个对端号码的双向消息流；调用即把该会话入站消息置已读。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| contact_mobile | string | 是 | 对端号码（conversations 返回的 contactMobile） |
+| cursor | string | - | 上一页返回的 nextCursor |
+| limit | number | - | 单页条数，默认 20，最大 100 |
+
+### xiaoyuan_create_wa_push_task - 创建 WhatsApp 获客推送任务
+
+会进入圈选/补盘并发模板，**须用户确认后再调**。下游 `POST /agent/wa/push-tasks`。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| template_family | string | 是 | `hunter_invite_v1` 到展邀约 / `hunter_match` 挖掘采购需求 |
+| buyers | object[] | - | 圈选买家，`{"whatsapp","email"}` 至少填一类 |
+| countries | string[] | - | 补盘国家二字码 |
+| keywords | string[] | - | 补盘关键词；空则不补 |
+| remark | string | - | 备注 |
+| exhibition_id | string | - | 邀展必填；`hunter_match` 禁止携带 |
+| image_url | string | - | 公网图片 URL；本地文件请走 CLI |
+
+成功读 `data.taskId`、`status`、`estimatedSend`。
+
+### xiaoyuan_get_wa_push_progress - 查询获客推送进度
+
+不传 page/limit 默认最新 10 条；可传 `task_id` 只查一条。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| task_id | string | - | 任务 ID |
+| page | number | - | 页码，从 1 |
+| limit | number | - | 每页条数 |
+
+### xiaoyuan_get_wa_push_detail - 查询获客推送圈选明细
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| task_id | string | 是 | 任务 ID（来自创建或进度） |
+
+结果读 `data.submittedBuyers`。
+
+### xiaoyuan_get_wa_push_buyers - 查询本次任务已匹配买家
+
+task_id 必填，须属当前用户。只含已匹配进发送集合的买家，不含圈选被拒。匹配未完成时 `buyers` 可能为空，看 `data.matchStatus`。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| task_id | string | 是 | 任务 ID（来自创建或进度） |
+
+每条买家含 userId、purchaserId、purchaserCode、firstName、companyName、jobTitle、businessType、mainBusiness、productName、exhibitionName、email、cdpId；缺项为空串。
+
+### xiaoyuan_get_wa_buyer_behavior_suppliers - 查询买家主动行为涉及的企业
+
+用匹配买家返回的 email 或 userId 查该买家主动行为涉及的企业。行为除 RFQ 外都计入。下游 `POST /agent/wa/buyer-behavior-suppliers`。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| email | string | - | 匹配买家邮箱；与 user_id 至少填一个 |
+| user_id | string | - | 匹配买家联系人 ID；与 email 至少填一个 |
+
+结果读 `data`，每项 `supplierId`（企业ID）、`supplierName`（企业名称）、`types`（该企业行为类型合集）。
+
+### xiaoyuan_wa_inquiry_list - 询盘线索列表
+
+轮询感知询盘产生与状态变化（平台不推送；WorkBuddy 下以定时任务按约 5 分钟基线拉取，展示与提醒规范见 `ai-hunter-inquiries.md`）。空列表是常态——未到本家时段的线索不下发。翻页原样回传上轮 `next_cursor`。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| cursor | string | - | 分页游标：原样回传上轮 next_cursor，首页不传 |
+| limit | number | - | 每页条数，默认 50，上限 100 |
+| status | string[] | - | 五态筛选，不传=全部：UNLOCK_PENDING 待解锁 / COMMUNICATING 沟通中 / CLOSED_FORFEIT_UNLOCK_EXPIRED 本段未解锁弃权 / CLOSED_FORFEIT_ZERO_REPLY 段内零回复弃权 / CLOSED_HANDOFF_FULFILLED 已履约交接 |
+| include_pending | boolean | - | 对账专用：true 关闭时段过滤返回全部（含未到时段）；正常轮询勿开，默认 false |
+
+结果读 `data.items[]`（按 generated_at 倒序）与 `data.next_cursor`（null=末页）。条目含 inquiry_id、inquiry_summary、inquiry_status、unlocked、generated_at、window_ends_at（批次级）、slot_start/slot_end（本家时段，倒计时锚 slot_end）、queue_index、slot_state、chat_enterable。
+
+### xiaoyuan_wa_inquiry_detail - 询盘详情
+
+状态时间线；`buyer_contact` 解锁后才有值，待解锁为 null（键恒在）。详情不做时段过滤，任何属于本企业的询盘都可查（终态回看与对账）。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| inquiry_id | string | 是 | 询盘 ID，来自询盘列表 |
+
+出参含列表条目全部字段，追加：`buyer_contact`（`{"wa_number","nickname"}`，解锁后必填）、`status_timeline`（`[{event, occurred_at}]` 升序：CREATED / SLOT_STARTED / UNLOCKED / FULFILLED / 终态三选一；SLOT_STARTED 恒出现且可为未来时刻=平台预排）、`slot_state` 详情可出现 PENDING。
+
+### xiaoyuan_wa_unlock - 解锁询盘买家联系方式
+
+扣 credit，同键幂等不二次扣费，拒绝类结果一律不扣费，**须用户确认后调**。解锁与 AI 转发共持会话锁，等锁可达 60s，客户端超时须盖过（连接器 mcp.json 已配 120s）。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| inquiry_id | string | 是 | 询盘 ID，来自询盘列表 |
+| operator_id | string | - | 触发解锁的坐席标识，仅审计 |
+
+看 `data.provision_result`：OPENED 开通成功 / OPENED_REPLAY 同键重放 / ALREADY_OPENED_OTHER_KEY 他键已开通 / REJECTED_CLOSED 已终态 / REJECTED_NOT_FOUND 不存在 / REJECTED_MISMATCH 归属不符 / REJECTED_SLOT_UNAVAILABLE 本家时段不可解锁（确定性终答，禁止重试）/ REJECTED_CREDIT_INSUFFICIENT 余额不足（充值后同键重试）。`unlocked_at` 仅 OPENED/OPENED_REPLAY 有值；超时或结果未知时同参重试即可。
+
+### xiaoyuan_get_notice_list - 小元站内通知列表（非 WhatsApp/邮件回信）
 
 结果读 `data.records`。
 
@@ -269,7 +407,7 @@
 
 ### xiaoyuan_wits_tariff - WITS MFN/FTA 关税
 
-数据停在 2023，答复时需说明。
+原工具资料的数据基线为 2023；答复时标明实际返回年份，不把历史数据当作现行税率。
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
@@ -375,7 +513,7 @@
 
 ### xiaoyuan_arounddeal_find_contacts - 找公司联系人
 
-按条计费，约 $0.50/人。`limit` 上限 5。
+按条计费，`limit` 上限 5。原资料的约 $0.50/人属于历史说明，当前收费按企业实际计费信息确认后调用。
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|

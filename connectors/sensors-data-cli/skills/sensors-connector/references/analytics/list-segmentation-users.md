@@ -26,7 +26,7 @@
 | `slice_date` | string | 否 | `yyyy-MM-dd` | 查看哪一天的用户；取值来自报表时间列 | `2026-06-08` |
 | `page` | int | 否 | 默认 `1`，1 起 | 页码（从 1 开始） | `1` |
 | `page_size` | int | 否 | 默认 `30`，1~100 | 每页用户数 | `10` |
-| `profiles` | string[] | 否 | 默认 `[]`（全部属性） | 返回的用户属性列，`user.<属性名>` 形式 | `["user.$name"]` |
+| `profiles` | string[] | 否 | 默认 `[]`（全部属性） | 返回的用户属性列，`user.<属性名>` 形式；列先经 `metadata.fields` 确认存在，示例列因项目而异 | `["user.$first_id","user.$update_time"]` |
 | `detail` | bool | 否 | 默认 `true` | `true` 按 `profiles` 返回属性列；`false` 只返回 id 标识列 | `true` |
 
 注意：明细命令不提供 `limit` 参数，返回量由 `page` / `page_size` 控制；时间类分组字段（如 `event.<事件>.$time`）在明细中不注入时间分桶参数，`slice_by_values` 的取值以报表返回的分组值为准。
@@ -47,11 +47,11 @@
 
 ### 第三步：定返回列与分页
 
-`profiles[]` 填 `user.<属性名>` 形式；`page` 从 1 起、`page_size` 1~100 默认 30。
+`profiles[]` 填 `user.<属性名>` 形式，列先经 `metadata.fields` 确认存在（`$name` 等属性并非所有项目都有）；`page` 从 1 起、`page_size` 1~100 默认 30。
 
 ### 第四步：自检并执行
 
-对照校验速记过一遍 → `--dry-run` → 执行。
+对照校验速记过一遍 → 执行。
 
 ### 调用示例
 
@@ -67,7 +67,7 @@ sensors analytics segmentation-users --ai-session-id <ai_session_id> --input - <
   "slice_date": "2026-06-08",
   "page": 1,
   "page_size": 10,
-  "profiles": ["user.$name"]
+  "profiles": ["user.$first_id", "user.$update_time"]
 }
 __SENSORS_QUERY__
 ```
@@ -79,7 +79,7 @@ __SENSORS_QUERY__
 ```json
 {
   "users": [
-    { "id": "322340429274340974", "first_id": "e2e_user_0001", "second_id": "", "distinct_id": "", "profiles": { "$name": "张三" } }
+    { "id": "322340429274340974", "first_id": "e2e_user_0001", "second_id": "", "distinct_id": "", "profiles": { "$first_id": "e2e_user_0001", "$update_time": "2026-06-08 10:21:37" } }
   ],
   "page": { "current_page": 1, "page_count": 8, "total": 40 },
   "request_id": "..."

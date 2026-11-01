@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>简历核验与面试提问简报 - {{candidate_alias}}</title>
+  <style>
+    :root { --bg:#0b1018; --surface:#141c27; --surface-2:#1a2431; --line:#2c3848; --text:#edf3fb; --muted:#aab8c9; --red:#ff5b61; --yellow:#f4b53f; --blue:#56a8ff; --green:#54d2a5; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+    main { max-width:1180px; margin:0 auto; padding:48px 32px 64px; }
+    .eyebrow { display:inline-block; color:var(--blue); border:1px solid #245487; border-radius:999px; padding:3px 10px; font-size:12px; }
+    h1 { margin:12px 0 4px; font-size:32px; letter-spacing:.02em; }
+    .meta,.muted { color:var(--muted); }
+    .notice { margin:22px 0; padding:12px 16px; color:#f6d77a; border-left:3px solid var(--yellow); background:#2a2414; border-radius:7px; }
+    .section { margin-top:32px; }
+    h2 { margin:0 0 14px; font-size:20px; }
+    .cards { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+    .card { min-height:126px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; border:1px solid var(--line); border-top:3px solid var(--accent); border-radius:12px; background:var(--surface); }
+    .card .label { color:var(--muted); font-weight:650; }
+    .card .value { color:var(--accent); font-size:34px; line-height:1; font-weight:750; }
+    .flow { display:flex; align-items:center; gap:18px; margin:14px 0; }
+    .flow .node { position:relative; flex:1; padding:12px 8px; text-align:center; border:1px solid var(--line); border-radius:8px; background:var(--surface-2); }
+    .flow .node:not(:last-child)::after { content:"→"; position:absolute; right:-17px; top:50%; transform:translateY(-50%); color:#73859b; font-size:20px; }
+    .panel,.table-wrap { overflow:auto; border:1px solid var(--line); border-radius:10px; background:var(--surface); }
+    .panel { padding:18px; }
+    table { width:100%; border-collapse:collapse; min-width:680px; }
+    th,td { padding:12px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); }
+    th { color:#c9d7e6; font-weight:650; background:var(--surface-2); }
+    tr:last-child td { border-bottom:0; }
+    .red { color:var(--red); } .yellow { color:var(--yellow); } .blue { color:var(--blue); } .green { color:var(--green); }
+    .footer { margin-top:36px; color:var(--muted); font-size:13px; }
+    @media (max-width:760px) { main { padding:30px 16px; } .cards { grid-template-columns:repeat(2,minmax(0,1fr)); } .flow { flex-direction:column; } .flow .node { width:100%; } .flow .node:not(:last-child)::after { content:"↓"; right:auto; top:auto; bottom:-23px; left:50%; transform:translateX(-50%); } }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="eyebrow">智联招聘 · 人工核验准备</span>
+    <h1>简历核验与面试提问简报</h1>
+    <p class="meta">候选人：{{candidate_alias}}　|　目标岗位：{{target_role_or_pending}}　|　材料范围：{{material_scope}}</p>
+    <div class="notice">{{one_sentence_conclusion}} 本报告仅用于人工核验与面试准备，不构成真实性、诚信、能力、录用或淘汰结论。</div>
+
+    <section class="section">
+      <h2>核验决策图谱</h2>
+      <div class="cards">
+        <div class="card" style="--accent:var(--red)"><div class="label">🔴 红线级核验</div><div class="value">{{red_count}} 项</div></div>
+        <div class="card" style="--accent:var(--yellow)"><div class="label">🟡 黄线级核验</div><div class="value">{{yellow_count}} 项</div></div>
+        <div class="card" style="--accent:var(--green)"><div class="label">🧩 待补信息</div><div class="value">{{missing_count}} 项</div></div>
+        <div class="card" style="--accent:var(--blue)"><div class="label">🔵 业务面试提问</div><div class="value">{{business_question_count}} 题</div></div>
+      </div>
+      <div class="flow"><div class="node">材料线索</div><div class="node">事实冲突门</div><div class="node">红 / 黄线分流</div><div class="node">最小核验问题</div><div class="node">人工复核</div></div>
+    </section>
+
+    <section class="section"><h2>本轮核验结论</h2><div class="panel">{{scope_and_limitations}}</div></section>
+    <section class="section"><h2>核验优先矩阵</h2><div class="table-wrap">{{priority_matrix_table}}</div></section>
+    <section class="section"><h2 class="red">红线级核验重点</h2><div class="table-wrap">{{red_line_table}}</div></section>
+    <section class="section"><h2 class="yellow">黄线级核验重点</h2><div class="table-wrap">{{yellow_line_table}}</div></section>
+    <section class="section"><h2 class="blue">业务面试提问</h2><div class="table-wrap">{{business_question_table}}</div></section>
+    <section class="section"><h2>待补充信息与下一步</h2><div class="table-wrap">{{next_step_table}}</div></section>
+    <p class="footer">本报告仅依据当前授权材料生成。材料缺失、来源不明或授权不清的内容不作推断；涉及外部事实的核验应由具有相应权限的人员依规完成。</p>
+  </main>
+</body>
+</html>

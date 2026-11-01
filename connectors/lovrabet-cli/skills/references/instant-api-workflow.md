@@ -17,6 +17,8 @@ lovrabet data <command> --code <datasetCode> --params '<json>'
 
 因此决策顺序应该是：
 
+以下 `--name` 示例用于数据集名称关键词；已知物理表名时改用 `--table-name <表名前缀>`，无需同时提供名称。多个筛选条件按 AND 组合，详见 [数据集发现](dataset-discovery-workflow.md)。
+
 1. 先判断当前 app 是否已明确
 2. 当前 app 明确时，直接 `dataset list --name ...`
 3. 当前 app 不明确但有 `defaultApp` 时，先 `dataset list --name <关键词>` 验证默认候选

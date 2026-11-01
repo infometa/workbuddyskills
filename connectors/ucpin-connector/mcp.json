@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "ucpin": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "ucpin-connector@latest"],
+      "runtime": {
+        "type": "node",
+        "version": "20"
+      },
+      "npmRegistry": "https://registry.npmmirror.com",
+      "timeout": 60000,
+      "env": {
+        "UCPIN_BASE_URL": "https://hire-api.ucpin.com/api",
+        "UCPIN_WEB_BASE_URL": "https://jl.ucpin.com"
+      }
+    }
+  }
+}

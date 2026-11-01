@@ -100,13 +100,13 @@
 分析模型统一通过 `--input` 传 JSON 查询对象，典型调用：
 
 ```bash
-sensors analytics <subcommand> --ai-session-id <ai_session_id> --input - --dry-run <<'__SENSORS_QUERY__'
+sensors analytics <subcommand> --ai-session-id <ai_session_id> --input - <<'__SENSORS_QUERY__'
 { ... }
 __SENSORS_QUERY__
 ```
 
 - `--input` 支持内联 JSON、文件路径、`-`（stdin）；heredoc 标记使用单引号，避免 shell 展开 JSON。
-- `--dry-run` 仅输出转换后的 OpenAPI Request JSON，不发起真实请求；通过后去掉 `--dry-run` 执行同一份输入，输入变化后重新预览。dry-run 用于确认：事件名、聚合器、过滤条件位置、分组/拆分字段、`bucket_params` 是否符合预期。
+- 查询直接执行，**不需要先跑 `--dry-run`**：参数问题（事件名、聚合器、过滤结构、字段路径等）在真实执行时会立即以结构化错误返回（带 `request_id`），按错误修正重试即可。`--dry-run` 仅输出转换后的 OpenAPI Request JSON、不发起真实请求，用于排查请求结构问题（核对事件名、聚合器、过滤条件位置、分组/拆分字段、`bucket_params`）；写操作的预览要求见 SKILL.md「写操作安全联锁」。
 - 对某个子命令的 `--input` 字段定义不确定时，运行 `sensors analytics <subcommand> --help` 查看完整 Schema。
 - 模型选择、维度收口、时间粒度调整等业务决策由调用方决定；结构事实（采样、截断、空结果）原样传回。
 
@@ -150,7 +150,7 @@ __SENSORS_QUERY__
 - 长时间跨度 × 小时间粒度：如一年 × `hour` 会产生超大时间轴；趋势类问题优先 `day` / `week`，需要细看某段再缩小范围加粒度。
 - 空结果：不编造「没有数据」「没有贡献」；口径自检通过（参数与用户意图一致、事件/字段已经元数据解析——解析时已顺带确认有上报、时间范围与过滤如实转写）后，0/空即为合法结果，直接报告。报告可附排查建议（日期范围是否覆盖数据、过滤是否过严）供用户选择。禁止为「凑出结果」换事件名、放宽条件后自行重试，也禁止自动发起交叉验证、换模型复算或 SQL 复算等排查性查询。
 - 服务端错误（HTTP 5xx 等）：同参数重试至多 1 次；仍失败则如实上报服务端返回的错误信息与 request_id 后停止，不自动换工具、换口径或转 SQL 硬闯。
-- 慢查询 / 超时：大跨度、多维度、复杂 `filter` 易超时；先 `--dry-run` 确认查询对象无误，再收口范围（缩短日期、减少维度）后执行；不通过反复重试硬刷。
+- 慢查询 / 超时：大跨度、多维度、复杂 `filter` 易超时；核对查询对象无误后收口范围（缩短日期、减少维度）再执行；不通过反复重试硬刷。
 
 ## 结果解读顺序
 

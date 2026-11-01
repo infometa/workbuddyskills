@@ -25,13 +25,11 @@
 | `wastage` | bool | 否 | 默认 `false` | `true` 查看流失用户（初始行为后未回访）；`false` 查看留存用户 | `false` |
 | `slice_date` | string | 否 | `yyyy-MM-dd` | 查看哪一天（初始行为日）的用户；取值来自 `analysis.retention` 报表的日期列 | `2026-06-01` |
 | `slice_interval` | int/string | 否 | 数字或数字字符串 | 查看第几个留存周期：`0` 表示当天（首日），`3` 表示第 3 个周期；不传表示全部周期 | `0` |
-| `slice_by_value` | string | 否 | — | 按分组值下钻，取值来自 `by_fields` 分组字段的维度值 | `"北京"` |
+| `slice_by_value` | string | 否 | — | 按分组值下钻，取值来自 `by_fields` 分组字段的维度值；必须与 `by_fields`、`slice_date` 配套使用 | `"iOS"` |
 | `page` | int | 否 | 默认 `1`，1 起 | 页码（从 1 开始） | `1` |
 | `page_size` | int | 否 | 默认 `30`，1~100 | 每页用户数 | `10` |
 | `profiles` | string[] | 否 | 默认 `[]`（全部属性） | 返回的用户属性列，`user.<属性名>` 形式 | `["user.$name"]` |
 | `detail` | bool | 否 | 默认 `true` | `true` 按 `profiles` 返回属性列；`false` 只返回 id 标识列 | `true` |
-| `sort_by_field` | string | 否 | 无 | 排序字段（仅 v2 接口支持） | `user.$name` |
-| `asc` | bool | 否 | 无 | 是否升序（仅 v2 接口支持） | `true` |
 
 注意：`by_fields` 在明细命令中最多 1 个分组维度（接口限制）；明细命令不提供 `limit` 参数，返回量由 `page` / `page_size` 控制。
 
@@ -58,7 +56,7 @@
 
 ### 第四步：自检并执行
 
-对照校验速记过一遍 → `--dry-run` → 执行。
+对照校验速记过一遍 → 执行。
 
 ### 调用示例
 
@@ -121,7 +119,9 @@ __SENSORS_QUERY__
 ## 使用约束
 
 - 分析参数必须与 `analysis.retention` 报表口径完全一致：先用报表确认日期列与周期列，再下钻。
-- 版本路由：SA ≥ 3.0.4 走 v2 明细接口（支持 `user_filter` / `sort_by_field`），旧版本走 v1；CLI 统一 1-based page，分页字段自动适配。
-- 已知服务端问题（部分版本如 SA 3.0.5.314 实测）：v2 明细翻页结果可能无稳定排序、`page.current_page` 回显差一；名单结论以 `total` 为准，翻页异常时如实上报 request_id，不反复重试。
+- 版本路由：SA ≥ 3.0.4 走 v2 明细接口（官方推荐，与 v2 报表口径严格一致），旧版本走 v1；CLI 统一 1-based page。v2 的日期/分组定位与口径字段由 CLI 自动适配（`slice_date`/`wastage` 在 v2 执行器中不被消费，CLI 已改写为 `slice_by_fields`/`slice_by_values` 通道与 `retention_mode`），调用方正常传 `slice_date`/`wastage`/`slice_by_value` 即可。
+- 口径说明：`wastage=false` 为第 N 期点查留存（SELECTED_RETENTION），`wastage=true` 为连续流失（CONTINUOUS_WASTE），两者均与报表列口径一致；CLI 报表命令当前不提供流失报表入口，流失明细可与报表流失人群交叉验证。
+- 已知服务端问题（部分版本实测）：明细翻页结果可能无稳定排序、`page.current_page` 回显差一；名单结论以 `total` 为准，翻页异常时如实上报 request_id，不反复重试。
+- `slice_by_value` 必须与 `by_fields`（1 个分组维度）和 `slice_date` 配套：只传 `slice_by_value` 而缺任一配套项会被 CLI 拒绝（v2 定位通道要求「日期在前、分组值在后」的前缀对齐，无法单独按分组定位）。
 - v1 环境不支持 `user_filter`（接口无该字段）：需要按用户属性筛人群时，先用 `analysis.retention` 报表确认，或将条件改写进事件过滤。
 - `slice_date` + `slice_interval` 定位的单元格应先用报表确认有用户；`total: 0` 且无报错时是合法空结果，直接报告。

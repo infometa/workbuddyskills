@@ -2,10 +2,10 @@
 name: image-generation
 description: 使用 yihook 主站 MCP 生成单张图片，按原请求或任务查询结算。
 metadata:
-  version: 0.7.8
+  version: 0.8.1
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.7.8
+version: 0.8.1
 display_name: yihook 图片生成
 display_name_en: Yihook Image Generation
 description_zh: 使用 yihook 主站 MCP 生成单张图片，按原请求或任务查询结算。

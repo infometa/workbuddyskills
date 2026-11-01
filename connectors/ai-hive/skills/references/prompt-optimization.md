@@ -1,6 +1,6 @@
 # 提示词优化参考（Prompt Optimization）
 
-适用版本：AI-HIVE Connector 1.1.4 / `@infimind-next/ai-hive-mcp`（不锁版本，npx 运行时自动拉取最新）
+适用版本：AI-HIVE Connector 1.2.0 / `@infimind-next/ai-hive-mcp`（不锁版本，npx 运行时自动拉取最新）
 资料来源：OpenAI / Anthropic / Google 官方提示工程指南 + Midjourney / Seedance / Runway 社区最佳实践（2025–2026，多源交叉验证）
 
 ## 一、通用原则（2026 共识）
