@@ -1,0 +1,297 @@
+/* ===== 背书匠 - 全局样式 ===== */
+:root {
+  --bg: #f2f3f5;
+  --bg-soft: #eaebed;
+  --bg-plain: #f5f6f8;
+  --surface: #ffffff;
+  --btn: #222222;
+  --btn-hover: #3c4249;
+  --accent-tint: #eaecfc;
+  --ink: #222222;
+  --ink-2: #484d54;
+  --ink-3: #abb2b6;
+  --ink-4: #c4c5ca;
+  --float: #7c838c;
+  --float-ink: #6b727b;
+  --disable: #c4c5ca;
+  --line: #e5e7ec;
+  --line-2: #eff1f5;
+  --line-strong: #c4c5ca;
+  --accent: #4f5ce7;
+  --accent-weak: #e3e5ff;
+  --accent-weak-2: #d3d7ff;
+  --accent-ink: #3e49c9;
+  --brand: #f5c400;
+  --brand-ink: #7a5a00;
+  --member: #fff3e0;
+  --member-ink: #9a6b1a;
+  --warn: #b5780a;
+  --warn-weak: #fbf2dd;
+  --danger: #d24339;
+  --success: #1f9e6b;
+  --cloze: #4f5ce7;
+  --cloze-bg: #e3e5ff;
+  --cloze-line: #b0b7f5;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --r-pill: 999px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --shadow-sm: 0 1px 2px rgba(20, 22, 30, 0.06), 0 1px 1px rgba(20, 22, 30, 0.04);
+  --shadow-md: 0 6px 18px rgba(20, 22, 30, 0.10);
+  --shadow-lg: 0 18px 48px rgba(20, 22, 30, 0.18);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: var(--line);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== Shared shell ===== */
+.shell {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.rail {
+  width: 268px;
+  flex: 0 0 268px;
+  max-width: 268px;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  padding: 16px 14px 12px;
+  gap: 12px;
+  min-height: 0;
+  overflow: hidden;
+  transition:
+    width 0.45s cubic-bezier(0.25, 0.1, 0.25, 1),
+    flex-basis 0.45s cubic-bezier(0.25, 0.1, 0.25, 1),
+    max-width 0.45s cubic-bezier(0.25, 0.1, 0.25, 1),
+    padding 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.rail > * {
+  transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.rail-off .rail {
+  width: 56px;
+  flex: 0 0 56px;
+  max-width: 56px;
+  padding: 12px 6px;
+  align-items: center;
+  overflow: hidden;
+}
+
+.rail-off .brand-head {
+  width: 100%;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.rail-off .brand-row {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rail-off .brand-row .word,
+.rail-off .cta-rail,
+.rail-off .card,
+.rail-off .account {
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.rail-off .brand-row .word {
+  flex: 0 0 0;
+  width: 0;
+  min-width: 0;
+  height: 0;
+}
+
+.rail-off .cta-rail,
+.rail-off .card,
+.rail-off .account {
+  height: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border-width: 0;
+  flex: 0 0 0 !important;
+}
+
+/* 阅读页收到 0：不设未过渡的 max-width 初值 */
+.shell.rail-hidden > .rail {
+  width: 0;
+  flex: 0 0 0;
+  max-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-right-width: 0;
+  pointer-events: none;
+}
+
+.shell.rail-hidden > .rail > * {
+  min-width: 240px;
+  flex-shrink: 0;
+  transform: translateX(-100%);
+}
+
+.rail-expand {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.rail-expand .app-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.rail-expand:hover {
+  background: var(--bg-soft);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 28px 14px;
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.body {
+  flex: 1;
+  overflow: auto;
+  padding: 4px 28px 48px;
+}
+
+/* ===== Shared animations ===== */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@keyframes aiPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.55); opacity: 0.55; }
+}
+
+@keyframes aiTextIn {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes aiBarFill {
+  to { width: 100%; }
+}
+
+@keyframes aiClozeIn {
+  from { background: var(--accent-weak); box-shadow: 0 0 0 3px rgba(79, 92, 231, 0.18); }
+  to { background: transparent; box-shadow: none; }
+}
+
+@keyframes aiBlkIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes landPulse {
+  50% { transform: scale(1.06); }
+}

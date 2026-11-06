@@ -184,5 +184,5 @@ tmeet control waiting-room \
 
 - [tmeet](../SKILL.md) — 全部命令概览
 - [tmeet-report](tmeet-report.md) — 会议报告（**`kick` 及`waiting-room` 操作的成员 `open_id` / `ms_open_id` 必须来自 `report participants` 或 `report waiting-room-log`**）
-- [tmeet-contact](tmeet-contact.md) — 通讯录搜索（仅用于 `control call` 邀请会外成员入会获取 `open_id`，不用于 `waiting-room` 和 `kick`）
+- [tmeet-contact](tmeet-contact.md) — 通讯录搜索（可用于 `control call` 解析 `open_id`；**不用于 `kick` / `waiting-room`**，这两条命令的成员须来自 `report participants` / `report waiting-room-log`）
 - [tmeet-meeting](tmeet-meeting.md) — 会议管理（受邀者管理）

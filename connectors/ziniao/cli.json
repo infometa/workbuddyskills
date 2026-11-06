@@ -1,0 +1,25 @@
+{
+  "runtime": { "type": "node", "version": ">=20" },
+  "init": {
+    "darwin": "npm install -g @ziniao-open/cli",
+    "linux": "npm install -g @ziniao-open/cli",
+    "win32": "npm install -g @ziniao-open/cli"
+  },
+  "auth": {
+    "darwin": "ziniao-cli workbuddy login",
+    "linux": "ziniao-cli workbuddy login",
+    "win32": "ziniao-cli.cmd workbuddy login"
+  },
+  "unAuth": {
+    "darwin": "ziniao-cli workbuddy logout",
+    "linux": "ziniao-cli workbuddy logout",
+    "win32": "ziniao-cli.cmd workbuddy logout"
+  },
+  "status": {
+    "darwin": "ziniao-cli workbuddy status",
+    "linux": "ziniao-cli workbuddy status",
+    "win32": "ziniao-cli.cmd workbuddy status"
+  },
+  "statusMatch": "Logged in as",
+  "authUrlDomain": "open.ziniao.com"
+}

@@ -1,10 +1,10 @@
 # 开始使用
 
-在 Agent 实际执行命令的环境检查 `tiana version`。本技能要求 CLI 1.0.0 或更新正式版，具备分步登录、sqlite、git、web、list-template/init-template 和 version check。CLI 不存在时执行下面的 npm 安装并重新核验；已有版本过低时按更新流程取得用户确认后升级，再执行资源操作。不要仅凭同名命令存在跳过版本核验。
+在 Agent 实际执行命令的环境检查 `tiana version`。本技能要求 CLI 1.0.4 或更新正式版，具备分步登录、sqlite、git、web、file、list-template/init-template 和 version check。CLI 不存在时执行下面的 npm 安装并重新核验；已有版本过低时按更新流程取得用户确认后升级，再执行资源操作。不要仅凭同名命令存在跳过版本核验。
 
 最低版本核验独立于更新提醒：0.x、预发行版、dev 或无法核实的版本不满足本技能基线。即使 `should_notify=false` 或更新检查不可用，也不能据此跳过最低版本要求；先完成已获授权的升级，尚未获授权时说明需要升级，暂缓依赖新版 CLI 的资源操作。CLI 与 Skills 独立编号，`--skills-version` 仍传实际加载的 Skills 版本。
 
-最低版本升级已获授权但更新检查不可用时，可安装已发布基线 `npm install -g @tianacloud/cli@1.0.0 --registry=https://registry.npmjs.org/`，随后核验 `tiana version`；下载失败则报告实际错误，不继续资源操作。
+最低版本升级已获授权但更新检查不可用时，可安装已发布基线 `npm install -g @tianacloud/cli@1.0.4 --registry=https://registry.npmjs.org/`，随后核验 `tiana version`；下载失败则报告实际错误，不继续资源操作。
 
 ## 安装
 
@@ -28,7 +28,7 @@ npx --yes @tianacloud/agent-skills@latest install --agent codex
 
 ## 更新
 
-四个入口执行 `tiana version check --skills-version VERSION --json`；VERSION 来自本次加载的 Skill metadata.version。结果是直接 JSON，包含 should_notify、check_status 和 updates。
+四个入口共享会话内的更新检查记录：CLI 满足最低版本后，仅本会话首次使用 Tiana 技能时执行 `tiana version check --skills-version VERSION --json`；VERSION 来自本次加载的 Skill metadata.version。调用前在会话上下文中记录已尝试，返回后保留检查结果及用户的升级选择；失败或不可用也计为已尝试。后续轮次、重复加载和跨技能调用直接复用记录，不再自动检查；上下文压缩或任务交接时保留该记录，新会话重新检查。结果是直接 JSON，包含 should_notify、check_status 和 updates。
 
 仅在 should_notify 为 true 时简短告诉用户 updates 中当前版本和新版本，并询问是否升级。不要因 updates 非空却 should_notify=false 再次提醒。CLI 保存两个包各自的检查尝试时间和共同的提醒时间，滚动 24 小时最多提醒一次；已核实 CLI 满足最低版本时，断网、更新状态不可写或待检查包版本未知不阻断任务。
 
@@ -65,3 +65,6 @@ Console/管理 API、用户 Web 地址、数据库 Endpoint 各有用途：全�
 4. 链接失效后再 start。CLI 保存账号会话，不需要读取凭据文件。
 
 普通终端也可执行 `tiana login`。用量接口失败不代表退出登录；命令与恢复见 [CLI 指引](cloud-cli.md)。
+
+
+配套修复后的 CLI 在缺少 pending 时返回 `NO_PENDING_AUTH`、`pending_auth:false`，不据此否定当前登录；用 `tiana status --json` 单独核实。`logged_in` 仅在本次已确认登录成功时为 true，其他登录结果可能省略；省略 `pending_auth` 表示无法确认 pending 是否仍在，保存/网络失败后不能假定授权已丢失。按错误 code/message/next_action 处理目录、锁、过期或拒绝，不机械重复 start。先通过 `--help` 核实当前安装版本的新 JSON 能力。

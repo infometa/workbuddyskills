@@ -1,16 +1,16 @@
 ---
 name: tiana
 description: 使用 Tiana Cloud 管理实例、安装 CLI、登录和恢复账号会话。通用 Tiana 任务从此技能开始；Web 应用创建发布使用 tiana-web，数据库和分支使用 tiana-sqlite，Git 仓库和源码同步使用 tiana-git。
-license: MIT
+license: Apache-2.0
 metadata:
   author: Tiana Cloud
-  version: "1.0.0"
+  version: "1.0.5"
   source: https://github.com/tianacloud/agent-skills/tree/main/skills/tiana
 display_name: "Tiana Cloud"
 display_name_en: "Tiana Cloud"
 description_zh: "Tiana 通用入口：CLI 安装、账号登录与实例管理。"
 description_en: "Tiana CLI installation, account login and instance management."
-version: "1.0.0"
+version: "1.0.5"
 author: "Tiana Cloud"
 ---
 
@@ -18,9 +18,11 @@ author: "Tiana Cloud"
 
 本技能使用 `@tianacloud/cli`，包内提供 `tiana` 和 `git-remote-tiana`。安装与登录阅读[开始使用](references/getting-started.md)；Windows 安装或命令找不到时阅读 [Windows CLI 安装](references/windows-install.md)和 [PATH 与 helper 排查](references/windows-git-helper.md)。在 Agent 实际执行命令的环境中操作。默认 online；用户在任务中明确指定环境时，按开始使用中的环境规则传给每次 CLI/Git 调用。
 
-## 每次调用的更新检查
+## 每个会话一次的更新检查
 
-CLI 已满足最低版本要求后，执行 `tiana version check --skills-version 1.0.0 --json`，传入本次实际加载的 metadata.version。只在 `should_notify=true` 时简短提醒可用版本并询问是否升级；用户稍后再升级时继续原任务。检查不可用也继续任务。本地 CLI 统一控制检查缓存和 24 小时一次提醒，无需自行记忆或计时。用户确认后的升级及重载见[开始使用](references/getting-started.md#更新)。
+四个 Tiana 技能共享当前会话的更新检查记录。CLI 已满足最低版本要求且本会话尚未尝试检查时，执行 `tiana version check --skills-version 1.0.5 --json`，使用实际加载的 metadata.version。调用前在会话上下文中记为已尝试；后续轮次、重复加载或切换技能均复用该记录，检查失败也不自动重试。上下文压缩或任务交接时保留记录，新会话重新检查。
+
+仅在 `should_notify=true` 时简短提醒并询问是否升级；用户选择稍后或检查不可用时继续原任务。CLI 仍管理检查缓存和共同的 24 小时提醒额度。升级及重载见[开始使用](references/getting-started.md#更新)。
 
 ## 选择工作流程
 

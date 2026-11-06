@@ -6,7 +6,7 @@ description: 从组卷要求或双向细目表出发，智能匹配知识点、�
 description_zh: 从组卷要求或双向细目表出发，实时选题、逐题取解析，一键产出试卷、解析与细目表三件套。
 description_en: Composes exam papers from requirements or a blueprint with live question selection and per-question analysis, delivering paper, solutions and blueprint in one run.
 category: education
-version: 1.0.0
+version: 1.0.1
 author: 知网 edu
 ---
 
@@ -20,17 +20,22 @@ author: 知网 edu
 
 ## 🔐 前置权限校验（最高优先级，必须最先执行）
 
+> 权限校验的「三态诊断 / 通用版兜底 / 强制转化卡 / 连接器加载指引」统一见本技能 `references/_shared.md`「一、权限固定提示」，本章节仅保留本技能专属说明，不重复展开。
+
+> **本技能属①档强依赖**：核心产出需知网数据支撑，无权益即停止、不编造（通用版兜底与转化卡原文见 `references/_shared.md`「一、权限固定提示」）。
+
 本技能的**全部真实数据**（题库真题 / 官方解析 / 知识点 / 学科码 / 教材目录）均来自「知网 edu（基教）」MCP，即 `edu` 连接器的 `tk*` 工具（`mcp__<SERVER>__tkSearchQuestion` / `mcp__<SERVER>__tkSearchSubjectQuestion` / `mcp__<SERVER>__tkQuestionAnalysis` / `mcp__<SERVER>__tkPoint` / `mcp__<SERVER>__tkSubject` / `mcp__<SERVER>__tkBook` 等），需账号拥有「知网基教」权益才能调用。在调用**任何** edu MCP 数据工具**之前**，必须先做权限校验：
 
+0. **先 `ToolSearch(tool_names:["userState"])` 确认 edu 工具在本会话「可解析」**：若查不到 → 属**态 A（连接器未加载/掉线）**，按`references/_shared.md`「一、权限固定提示」给「连接器加载指引」，**不要**直接给购买权益卡，也不要调用任何 edu 工具。
 1. 调用 `mcp__<SERVER>__userState` 工具（edu MCP 提供的权益校验接口，**无参数**）。
    - 工具名写法：`mcp__<SERVER>__userState`（`<SERVER>` 取自连接器「显示名」，会随重命名变化；若查不到，用 `ToolSearch(tool_names:["userState"])` 反查真实名称后再调用）。
 2. **返回 `true`** → 账号有基教权益，正常进入流程。
-3. **返回 `false`** → 账号**没有**基教权益：
-   - 向用户**原样输出**下方固定提示并**立即中止**，不再调用任何 `tk*` 工具；
+3. **返回 `false`（态 B）** → 账号**没有**基教权益，按`references/_shared.md`「一、权限固定提示」「通用版兜底 + 强制转化卡」处理：
+   - 不调用任何 `tk*` 工具，改走通用版完成不依赖知网数据的部分；
    - 也不要用"接口报错 / 无结果 / 题库无覆盖"去猜测原因——根因就是没权限；
-   - **⛔ 严禁绕过接口寻找替代方法**：不得改用大模型自身知识、公开网络资料、本地文件等非知网接口数据来"凑"出题库 / 解析 / 知识点；没有权益即严格终止，由用户自行开通权益后重试。
+   - **⛔ 严禁编造知网数据**：不得改用大模型自身知识、公开网络资料、本地文件等非知网接口数据来"凑"出标为知网来源的题库 / 解析 / 知识点；通用版完成不依赖知网数据的部分，并原样输出「解锁知网数据增强层」。
 
-> ⚠️ 无基教权益时的固定提示（原样输出、立即中止、严禁绕过接口）统一见 [_shared.md](references/_shared.md)「权限固定提示」，本 skill 不再重复誊写。
+> ⚠️ 无基教权益时的处理（通用版兜底 + 强制转化卡）统一见 [_shared.md](references/_shared.md)「权限固定提示」，本 skill 不再重复誊写。
 
 ## 何时使用
 - 用户给出**组卷要求**：学段 / 学科 / 范围 / 题型 / 题量 / 来源 / 难度 / 分数
@@ -230,4 +235,4 @@ author: 知网 edu
 
 ## 跨场景公共约定
 
-权限固定提示 / 干净输出红线 / 触发词格式 / 版本与完工标准 / MCP 前缀自检：统一见 [_shared.md](references/_shared.md)。本 skill 的前置权限校验口径与「严禁绕过接口」红线均与之对齐。
+权限固定提示 / 干净输出红线 / 触发词格式 / 版本与完工标准 / MCP 前缀自检：统一见 [_shared.md](references/_shared.md)。本 skill 的前置权限校验口径与「严禁编造知网数据」红线均与之对齐。

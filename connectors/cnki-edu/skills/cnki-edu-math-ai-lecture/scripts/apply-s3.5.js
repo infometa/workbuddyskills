@@ -37,6 +37,17 @@
 const fs = require('fs');
 const path = require('path');
 
+const SKILL = path.join(__dirname, '..');
+
+// 输出路径白名单：仅允许写回工作区(cwd)或技能目录(SKILL)内。
+function assertSafeOutPath(p) {
+    const abs = path.resolve(p);
+    const roots = [process.cwd(), SKILL];
+    const ok = roots.some(r => { const rp = path.resolve(r); return abs === rp || abs.startsWith(rp + path.sep); });
+    if (!ok) { console.error('❌ 输出路径越界（仅允许工作区/技能目录内）：' + abs); process.exit(2); }
+    return abs;
+}
+
 const argv = process.argv.slice(2);
 let outOpt = null;
 const positional = [];
@@ -138,6 +149,7 @@ if (report && !/校对报告|校验报告|画布全面校对/.test(report)) prob
 if (mode === 'patch' && applied === 0) problems.push('patch 模式但零处应用');
 
 const outPath = outOpt || rawPath.replace(/\.(js|md|txt)$/i, '') + '.applied.js';
+assertSafeOutPath(outPath);
 fs.writeFileSync(outPath, out, 'utf8');
 
 console.log('模式　：' + mode);

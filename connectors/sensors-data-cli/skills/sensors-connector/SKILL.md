@@ -1,5 +1,7 @@
 ---
 name: sensors-connector
+display_name: 神策数据连接器
+display_name_en: Sensors Data Connector
 description: |
   神策连接器统一入口：先按场景路由到神策 AI 对话或 sensors CLI，再按对应 reference 调用。
   AI 链路承接客群发现与运营增长；CLI 链路承接快速洞察、深度分析、规则圈选与数据管理。
@@ -9,7 +11,7 @@ description: |
   边界：只负责场景路由、命令执行与结果结构化，业务口径与对象选择由调用方确认。
 description_zh: 神策连接器统一入口：AI 与 CLI 场景路由、AI 对话调用、CLI 参数与 Schema 发现、安全执行和结构化输出。
 description_en: "Unified Sensors connector: route scenarios between Sensors AI chat and the Sensors CLI, then execute the referenced contract safely."
-version: 2.0.1
+version: 2.0.2
 author: Sensors Data
 metadata:
   requires:
@@ -194,7 +196,7 @@ sensors context project-list --ai-session-id <id> [--product-name SA|SF|Horizon]
 | 工具 | 用途 | 类型 | Reference |
 |---|---|---|---|
 | `dashboard.list` | 查询可见看板（概览）导航列表与真实书签数量，获取看板 ID 候选 | 查询 | [dashboard/list-dashboards.md](references/dashboard/list-dashboards.md) |
-| `dashboard.get` | 按看板 ID 获取看板基本信息与全部书签列表，确定书签 ID 与分析类型 | 查询 | [dashboard/get-dashboard.md](references/dashboard/get-dashboard.md) |
+| `dashboard.get` | 按看板 ID 获取看板基本信息、所属分组、文本便签与全部书签摘要（`items` 按页面顺序混排书签与便签），确定书签 ID 与分析类型；书签不返回查询口径与展示配置，取保存口径用 `dashboard.bookmark-export` | 查询 | [dashboard/get-dashboard.md](references/dashboard/get-dashboard.md) |
 | `dashboard.create` | 创建一个新的空看板（不接收初始书签） | 写入 | [dashboard/create-dashboard.md](references/dashboard/create-dashboard.md) |
 | `dashboard.update` | 全量更新看板：覆盖名称并按提交顺序整体替换书签列表 | 写入 | [dashboard/update-dashboard.md](references/dashboard/update-dashboard.md) |
 | `dashboard.bookmark-query` | 按书签 ID 执行已保存书签的分析查询并返回原始结果 | 查询 | [dashboard/query-bookmark.md](references/dashboard/query-bookmark.md) |
@@ -242,7 +244,10 @@ sensors context project-list --ai-session-id <id> [--product-name SA|SF|Horizon]
 | `segment.get` | 获取单个分群详情（始终含规则引用与完整规则条件） | 查询 | [segment/get-segment.md](references/segment/get-segment.md) |
 | `segment.create` | 创建分群定义，支持 `dry_run` 只校验不落库 | 写入 | [segment/create-segment.md](references/segment/create-segment.md) |
 | `segment.update` | 同创建类型安全更新分群（规则、名称、描述、调度、保留、可见性），先预览差异再用审批指纹执行 | 写入 | [segment/update-segment.md](references/segment/update-segment.md) |
-| `segment.evaluate` | 触发一个或多个分群计算并默认同步等待终态 | 写入（触发计算） | [segment/evaluate-segment.md](references/segment/evaluate-segment.md) |
+| `segment.evaluate` | 触发分群计算并默认同步等待终态；多定义自动拆成多次单定义请求，`base_time` 自动归一到天 | 写入（触发计算） | [segment/evaluate-segment.md](references/segment/evaluate-segment.md) |
+| `segment.task-get` | 按基准时间查分群任务状态（`SEGMENT_TASK_*`）与失败原因；`base_time` 为等值匹配，是核对落库日期的唯一入口 | 查询 | [segment/get-segment-task.md](references/segment/get-segment-task.md) |
+| `segment.item-list` | 列出分群结果包（`base_time` / `segment_ready` / `count`）；**取分群人数的官方途径**，不依赖 SQL | 查询 | [segment/list-segment-items.md](references/segment/list-segment-items.md) |
+| `segment.valid-check` | 批量判定分群是否已有可用结果包（`has_valid_segment` 不随响应返回，只能反向判定） | 查询 | [segment/validate-segment-validity.md](references/segment/validate-segment-validity.md) |
 | （共享）分群规则输入 Schema | `segment.create` / `segment.update` 的 `rule_draft` 规则对象结构与业务语义 | — | [segment/segment-rule-schema.md](references/segment/segment-rule-schema.md) |
 | （共享）行为序列输入 Schema | `rule_draft` 中 `event_sequence`（「先 A 再 B 在 N 天内」）条件的结构与时间窗口约束 | — | [segment/segment-event-sequence-schema.md](references/segment/segment-event-sequence-schema.md) |
 

@@ -6,7 +6,7 @@ description: 中小学（含幼儿园、中职）教师教研论文预审：从�
 description_zh: 中小学（含幼儿园、中职）教师的论文预审助手：教学策略、课例与教学设计、教育叙事与案例反思、德育与班级管理、调查研究等各类教研论文都能评。像期刊审稿人一样，从选题、结构、论证、材料、语言、文献六个维度找出真问题、说清为什么、给出可落地的修改方向；并依据知网文献等资源，核实教学内容与课标教材是否贴合、判断选题新意与论据依据、核对参考文献真实性与相关性，让每条意见有据可依。
 description_en: A pre-review assistant for K-12 (including kindergarten and vocational-secondary) teachers' papers of all common types—teaching-strategy essays, lesson case studies, teaching narratives, moral-education and class-management papers, survey studies, and more. Acting like a journal reviewer, it locates real problems across six dimensions—topic, structure, argument, evidence, language, and literature—explains why each matters, and gives concrete, actionable revision directions. Drawing on CNKI literature and other resources, it verifies teaching content against curriculum standards and textbooks, assesses the novelty and grounding of claims, and checks reference authenticity and relevance, so every comment is evidence-based.
 category: education
-version: 1.0.0
+version: 1.0.1
 author: 知网 edu
 
 ---
@@ -15,17 +15,22 @@ author: 知网 edu
 
 ## 🔐 前置权限校验（最高优先级，必须最先执行）
 
+> 权限校验的「三态诊断 / 通用版兜底 / 强制转化卡 / 连接器加载指引」统一见本技能 `references/_shared.md`「一、权限固定提示」，本章节仅保留本技能专属说明，不重复展开。
+
+> **本技能属①档强依赖**：核心产出需知网数据支撑，无权益即停止、不编造（通用版兜底与转化卡原文见 `references/_shared.md`「一、权限固定提示」）。
+
 本技能被触发后，**第一步**即调 `mcp__<SERVER>__userState` 做权益校验（在调用任何 edu MCP 数据资源之前，也是整个技能的第一个动作）；其结论决定是否启用「资源核对」能力（文献检索 / 教材与课标核对 / 知识点与课标对应核对 / 认知与证据核对——即 references 中的"已接入的文献与课标资源"，均来自「知网 edu（基教）」MCP，需账号拥有「知网基教」权益）：
 
+0. **先 `ToolSearch(tool_names:["userState"])` 确认 edu 工具在本会话「可解析」**：若查不到 → 属**态 A（连接器未加载/掉线）**，按`references/_shared.md`「一、权限固定提示」给「连接器加载指引」，**不要**直接给购买权益卡，也不要调用任何 edu 工具。
 1. 调用 `mcp__<SERVER>__userState` 工具（edu MCP 提供的权益校验接口，**无参数**）。
    - 工具名写法：`mcp__<SERVER>__userState`（`<SERVER>` 取自连接器「显示名」，会随重命名变化；若查不到，用 `ToolSearch(tool_names:["userState"])` 反查真实名称后再调用）。
 2. **返回 `true`** → 账号有基教权益，正常进入资源核对。
-3. **返回 `false`** → 账号**没有**基教权益：
-   - 向用户**原样输出**固定提示（原文见 [_shared.md](references/_shared.md)「权限固定提示」：前往 **https://e.cnki.net** 开通 / 购买「知网基础教育（基教）」服务权益）；
-   - **立即硬中止，不再交付任何产物**（不产出预审报告、不做模型诊断、不进入任何后续步骤）；
-   - **⛔ 严禁绕过接口寻找替代方法**：不得改用大模型自身知识、公开网络资料、通用教研经验等非知网接口数据来"凑"出文献 / 教材 / 课标核对结论；交付报告里**不得出现**"经知网核实""资源核对""本库"等冒充知网来源的表述（资源不可用统一用"未命中本库"等中性措辞，不得暗示已核实）。
+3. **返回 `false`（态 B）** → 账号**没有**基教权益：
+   - 向用户**原样输出**「解锁知网数据增强层」（原文见 [_shared.md](references/_shared.md)「权限固定提示」）；
+   - **通用版兜底 + 强制转化卡**（详见`references/_shared.md`「一、权限固定提示」）：不调用任何 edu 数据工具，改走通用版完成不依赖知网数据的部分；
+   - **⛔ 严禁编造知网数据（通用版兜底红线）**：不得改用大模型自身知识、公开网络资料、通用教研经验等非知网接口数据来"凑"出文献 / 教材 / 课标核对结论；交付报告里**不得出现**"经知网核实""资源核对""本库"等冒充知网来源的表述（资源不可用统一用"未命中本库"等中性措辞，不得暗示已核实）。
 
-> 注意：未通过基教权限校验或未连接时，本技能**不交付任何产物**（不产出预审报告），只原样输出 e.cnki.net 购买引导并停止；根因就是没权限 / 没连接，不要解释成"接口故障 / 资源未覆盖"。
+> 注意：权益校验非 `true` 时，本技能走「通用版兜底 + 强制转化卡」——通用版完成不依赖知网数据的部分，并原样输出「解锁知网数据增强层」；根因就是没权限 / 没连接，不要解释成"接口故障 / 资源未覆盖"。
 
 ## 基本原则
 
@@ -183,4 +188,4 @@ author: 知网 edu
 
 ## 跨场景公共约定
 
-权限固定提示 / 干净输出红线 / 触发词格式 / 版本与完工标准 / MCP 前缀自检：统一见 [_shared.md](references/_shared.md)。本 skill 的前置权限校验口径与「严禁绕过接口」红线均与之对齐。
+权限固定提示 / 干净输出红线 / 触发词格式 / 版本与完工标准 / MCP 前缀自检：统一见 [_shared.md](references/_shared.md)。本 skill 的前置权限校验口径与「严禁编造知网数据」红线均与之对齐。

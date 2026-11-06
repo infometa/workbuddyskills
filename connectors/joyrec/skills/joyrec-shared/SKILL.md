@@ -34,9 +34,9 @@ v1 **全部只读**：不要尝试上传、删除、转写、归纳或修改录�
 
 ## 鉴权
 
-- 访问令牌由用户在 JOY App「设置 → MCP 访问」生成，仅保存在连接器配置里。
-- **不要要求用户在对话中粘贴令牌**，也不要回显令牌。
-- 令牌 scope 决定可用能力：`profile` / `files` / `notes` / `transcripts` / `audio`。
+- 当前连接器使用 OAuth：用户点击连接后，在 JOY 登录页完成登录并同意授权；**不要要求用户在对话中粘贴令牌**，也不要回显令牌。
+- 内部/脚本调用仍可使用 JOY App「设置 → MCP 访问」生成的 `mcp_` 令牌，通过 `Authorization: Bearer` 访问。
+- 授权 scope 决定可用能力：`profile` / `files` / `notes` / `transcripts` / `audio`。
 - 缺少 `audio` 时 `get_file` 的 `audio_url` 为空，属于正常情况，不要报错。
 
 ## 输出格式约定

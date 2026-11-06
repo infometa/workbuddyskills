@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-cnki-tier="T3" data-cnki-stage="junior">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>地球运动 参照样板 · 画质基准件（初中地理）</title>
+<style>
+  /* 初中地理：地貌棕基底 + 天蓝/青绿主色 */
+  :root{
+    --bg:#f3ede2; --primary:#0e7490; --secondary:#16a34a; --accent:#f59e0b;
+    --card:#ffffff; --text:#263238; --muted:#6b7785; --line:rgba(0,0,0,.10);
+    --radius:14px; --shadow:0 6px 18px rgba(40,30,20,.12);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%; font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; background:var(--bg); color:var(--text); overflow:hidden;}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+  }
+  #app{position:fixed; inset:0; display:flex; flex-direction:column;}
+  header{display:flex; align-items:center; gap:10px; padding:10px 16px; background:var(--card); box-shadow:var(--shadow); z-index:6;}
+  header h1{font-size:16px; margin:0; flex:1; font-weight:700;}
+  .btn{font-size:13px; min-height:44px; min-width:44px; padding:0 13px; border:1.5px solid var(--line); border-radius:10px; background:var(--card); cursor:pointer; touch-action:manipulation;}
+  .btn.primary{background:var(--primary); color:#fff; border-color:var(--primary);}
+  #stage{flex:1; position:relative;}
+  canvas{position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none;}
+  #termBar{position:absolute; top:12px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:8px;
+    background:var(--card); border-radius:999px; padding:6px 12px; box-shadow:var(--shadow); z-index:5;}
+  #termBar select{font-size:14px; min-height:44px; padding:0 8px; border:1px solid var(--line); border-radius:10px; background:var(--card); color:var(--text); font-weight:700;}
+  #readout{position:absolute; left:50%; transform:translateX(-50%); bottom:84px; text-align:center; font-size:14px;
+    background:rgba(255,255,255,.85); border-radius:10px; padding:8px 14px; box-shadow:var(--shadow); max-width:90%;}
+  #readout b{color:var(--primary);}
+  #hint{position:absolute; left:0; right:0; bottom:48px; text-align:center; font-size:13px; color:var(--muted);}
+  #feedback{position:absolute; left:0; right:0; bottom:16px; text-align:center; font-size:14px; font-weight:600; color:var(--primary); min-height:20px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>地球运动 · 昼夜更替与节气</h1>
+    <button class="btn" id="resetBtn">重置</button>
+    <button class="btn primary" id="fsBtn">全屏</button>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="termBar">
+      <button class="btn" id="prevBtn" style="min-height:44px;padding:0 14px;">‹</button>
+      <select id="termSel"></select>
+      <button class="btn" id="nextBtn" style="min-height:44px;padding:0 14px;">›</button>
+    </div>
+    <div id="readout"></div>
+    <div id="hint">拖动旋转地球；切换节气观察晨昏线与极昼极夜</div>
+    <div id="feedback"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+  var W=0,H=0, DPR=Math.min(window.devicePixelRatio||1,2);
+  var D2R=Math.PI/180;
+  var eps=23.5*D2R;            // 黄赤交角
+  var spin=0;                  // 地球自转（时角相位）
+  var delta=0;                 // 太阳赤纬（由节气决定）
+  var Rpix=0, cx=0, cy=0;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var TERMS=['立春','雨水','惊蛰','春分','清明','谷雨','立夏','小满','芒种','夏至','小暑','大暑','立秋','处暑','白露','秋分','寒露','霜降','立冬','小雪','大雪','冬至','小寒','大寒'];
+  var idx=9; // 默认夏至
+
+  // 大陆斑块（示意，非精确地图）：经度, 纬度, 半径(度)
+  var LAND=[[-100,-40,30],[20,-12,40],[110,52,30],[10,52,16],[135,-25,28],[70,20,14],[-60,5,16],[25,30,10],[-120,45,16],[150,60,12],[-10,-30,18],[90,10,10]];
+
+  function resize(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+    cx=W/2; cy=H/2; Rpix=Math.min(W,H)*0.30; }
+  function projectSphere(lat,lon){
+    var la=lat*D2R, lo=lon*D2R;
+    var x0=Math.cos(la)*Math.cos(lo), y0=Math.sin(la), z0=Math.cos(la)*Math.sin(lo);
+    var c=Math.cos(spin), s=Math.sin(spin);
+    var x1=x0*c+z0*s, z1=-x0*s+z0*c, y1=y0;          // 自转(绕Y)
+    var ce=Math.cos(eps), se=Math.sin(eps);
+    var y2=y1*ce - z1*se, z2=y1*se + z1*ce, x2=x1;    // 黄赤交角倾斜(绕X)
+    if(z2 < -0.04) return null;
+    return {x:cx+x2*Rpix, y:cy-y2*Rpix, z:z2};
+  }
+  function isLit(lat,lon){ // 真实光照：sin_alt = sinλ sinδ + cosλ cosδ cos h
+    var la=lat*D2R, lo=lon*D2R, h=spin+lo;
+    var s=Math.sin(la)*Math.sin(delta)+Math.cos(la)*Math.cos(delta)*Math.cos(h);
+    return s>0;
+  }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    // 背景
+    var bg=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.7);
+    bg.addColorStop(0,'#eaf3ff'); bg.addColorStop(1,'#cfe0f2');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    // 海洋球体底（径向渐变，满足 T2/T3 渐变要求）
+    var g=ctx.createRadialGradient(cx-Rpix*0.35,cy-Rpix*0.4,Rpix*0.1,cx,cy,Rpix*1.05);
+    g.addColorStop(0,'#bfe0ff'); g.addColorStop(0.6,'#3b82c4'); g.addColorStop(1,'#0b3a66');
+    ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,Rpix,0,7); ctx.clip(); ctx.fillStyle=g; ctx.fillRect(cx-Rpix,cy-Rpix,Rpix*2,Rpix*2);
+
+    // 经纬网格（按昼夜着色）
+    ctx.lineWidth=1;
+    for(var lat=-60;lat<=60;lat+=30){ ctx.beginPath(); var started=false;
+      for(var lon=-180;lon<=180;lon+=6){ var p=projectSphere(lat,lon); if(!p){started=false; continue;}
+        var col=isLit(lat,lon)?'rgba(255,255,255,.30)':'rgba(20,30,60,.42)';
+        if(!started){ctx.moveTo(p.x,p.y); started=true;} else ctx.lineTo(p.x,p.y); }
+      ctx.strokeStyle=col; ctx.stroke(); }
+    for(var lon2=-180;lon2<180;lon2+=30){ ctx.beginPath(); var st=false;
+      for(var lat2=-88;lat2<=88;lat2+=6){ var p2=projectSphere(lat2,lon2); if(!p2){st=false; continue;}
+        var c2=isLit(lat2,lon2)?'rgba(255,255,255,.22)':'rgba(20,30,60,.40)';
+        if(!st){ctx.moveTo(p2.x,p2.y); st=true;} else ctx.lineTo(p2.x,p2.y); }
+      ctx.strokeStyle=c2; ctx.stroke(); }
+
+    // 大陆（昼夜着色：白天绿、夜晚深）
+    for(var i=0;i<LAND.length;i++){ var L=LAND[i]; var p=projectSphere(L[1],L[0]); if(!p) continue;
+      var r=L[2]/90*Rpix;
+      ctx.beginPath(); ctx.ellipse(p.x,p.y,r,r*0.66,0,0,7);
+      ctx.fillStyle=isLit(L[1],L[0])?'rgba(86,150,86,.95)':'rgba(40,70,46,.9)'; ctx.fill();
+      ctx.strokeStyle='rgba(20,50,30,.5)'; ctx.lineWidth=1; ctx.stroke(); }
+    ctx.restore();
+
+    // 大气圈
+    var atmo=ctx.createRadialGradient(cx,cy,Rpix*0.95,cx,cy,Rpix*1.12);
+    atmo.addColorStop(0,'rgba(150,200,255,0)'); atmo.addColorStop(1,'rgba(150,200,255,.5)');
+    ctx.fillStyle=atmo; ctx.beginPath(); ctx.arc(cx,cy,Rpix*1.12,0,7); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,cy,Rpix,0,7); ctx.strokeStyle='rgba(180,220,255,.3)'; ctx.lineWidth=1.5; ctx.stroke();
+
+    // 地轴（黄赤交角倾斜）+ 两极
+    var np=projectSphere(89,0), sp2=projectSphere(-89,0);
+    ctx.strokeStyle='rgba(245,158,11,.95)'; ctx.lineWidth=2.5;
+    if(np&&sp2){ ctx.beginPath(); ctx.moveTo(np.x,np.y); ctx.lineTo(sp2.x,sp2.y); ctx.stroke(); }
+    ctx.font='bold 14px sans-serif'; ctx.textAlign='center';
+    if(np){ ctx.fillStyle='#e2e8f0'; ctx.fillText('N',np.x,np.y-6); }
+    if(sp2){ ctx.fillStyle='#e2e8f0'; ctx.fillText('S',sp2.x,sp2.y+16); }
+    // 太阳方向指示（赤纬 δ）：在天球上画一个太阳图标
+    var sunY=cy - Math.sin(delta)*Rpix*2.2, sunX=cx + Math.cos(delta)*0; // 简化：顶部按δ升降
+    ctx.fillStyle='rgba(245,158,11,.95)'; ctx.beginPath(); ctx.arc(cx+Rpix*1.5, sunY, 14,0,7); ctx.fill();
+    ctx.fillStyle='#92400e'; ctx.font='12px sans-serif'; ctx.fillText('太阳', cx+Rpix*1.5, sunY+28);
+
+    if(!reduce){ spin += 0.004; }
+    requestAnimationFrame(frame);
+  }
+
+  function applyTerm(){ delta = eps*Math.cos(2*Math.PI*(idx-9)/24); // 夏至(idx9)=+ε, 冬至(idx21)=-ε
+    var name=TERMS[idx];
+    var cond = delta>0.5*D2R ? '北极圈极昼 · 南极圈极夜' : (delta<-0.5*D2R ? '北极圈极夜 · 南极圈极昼' : '全球昼夜平分（赤道昼夜等长）');
+    document.getElementById('readout').innerHTML = '<b>'+name+'</b> · 太阳赤纬 δ='+(delta/D2R).toFixed(1)+'° · '+cond;
+    document.getElementById('termSel').value=String(idx);
+  }
+
+  // UI
+  var sel=document.getElementById('termSel');
+  TERMS.forEach(function(t,i){ var o=document.createElement('option'); o.value=i; o.textContent=t; sel.appendChild(o); });
+  sel.addEventListener('change', function(){ idx=+sel.value; applyTerm(); });
+  document.getElementById('prevBtn').addEventListener('pointerdown', function(){ idx=(idx+23)%24; applyTerm(); });
+  document.getElementById('nextBtn').addEventListener('pointerdown', function(){ idx=(idx+1)%24; applyTerm(); });
+  document.getElementById('resetBtn').addEventListener('pointerdown', function(){ spin=0; idx=9; applyTerm(); });
+  document.getElementById('fsBtn').addEventListener('pointerdown', function(){ var el=document.documentElement;
+    if(!document.fullscreenElement){ (el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);} else {(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);} });
+
+  // 交互：拖拽自转
+  var drag=false,lx=0;
+  cv.addEventListener('pointerdown', function(e){ drag=true; lx=e.clientX; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointerup', function(){ drag=false; });
+  cv.addEventListener('pointermove', function(e){ if(!drag) return; spin += (e.clientX-lx)*0.01; lx=e.clientX; });
+
+  window.addEventListener('resize', resize); resize(); applyTerm(); requestAnimationFrame(frame);
+
+  /* __selfTest：黄赤交角、节气数、冬至/夏至极区逻辑（verify_render.py 契约） */
+  window.__selfTest = function(){
+    var dSol=eps*Math.cos(2*Math.PI*(9-9)/24);   // 夏至 δ
+    var dWin=eps*Math.cos(2*Math.PI*(21-9)/24);  // 冬至 δ
+    var cases=[
+      {name:"黄赤交角", ok:Math.abs(eps/D2R-23.5)<0.01, expect:23.5, actual:+(eps/D2R).toFixed(2)},
+      {name:"节气总数", ok:TERMS.length===24, expect:24, actual:TERMS.length},
+      {name:"夏至δ=+23.5°(北极极昼)", ok:dSol/D2R>23, expect:23.5, actual:+(dSol/D2R).toFixed(2)},
+      {name:"冬至δ=-23.5°(北极极夜)", ok:dWin/D2R<-23, expect:-23.5, actual:+(dWin/D2R).toFixed(2)}
+    ];
+    return { pass: cases.every(function(c){return c.ok===true;}), cases:cases };
+  };
+})();
+</script>
+</body>
+</html>

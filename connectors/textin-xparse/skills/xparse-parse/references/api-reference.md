@@ -4,6 +4,18 @@ Based on [Textin Parse API v1](https://docs.textin.com/xparse/v1/).
 
 ## Command Syntax
 
+Domestic image services use separate commands and packages:
+
+| Command | Quota service | Output |
+|---|---|---|
+| `crop-enhance <FILE|URL>` | `crop_enhance_image` | Result JSON and all processed JPEGs; positions only with `--only-position 1` |
+| `detect-manipulation <FILE|URL>` | `manipulation_detection` | Risk metadata and optional JPEG heatmap |
+
+Both accept `--task-context <FILE>`, `--output <DIR>`, `--view json`, and
+one-call `--approve-paid` after explicit user approval when free quota is
+unknown or exhausted. They do not create parsing Tasks or use `--api paid`.
+See [the Skill](../SKILL.md) for processing options and billing rules.
+
 ```bash
 xparse-cli parse <FILE> [options]
 ```

@@ -14,7 +14,7 @@
 | `--page-size` | int | 否 | 服务端决定 | 每页返回条数 | `100` |
 | `--page` | int ≥0 | 否 | 服务端决定 | 页码，从 0 开始 | `0` |
 | `--names` | string | 否 | — | 按分群定义名称过滤，多个名称用逗号分隔（精确匹配内部 `name`） | `active_user_7_days,xiaofangdekehu` |
-| `--has-valid-segment` | flag | 否 | 关 | 仅返回有效分群包（已完成计算） | `—` |
+| `--has-valid-segment` | flag | 否 | 关 | 仅返回有效分群包（已完成计算）。这是**请求侧过滤器**，过滤生效，但响应不回传该字段 | `—` |
 | `--show-deleted` | flag | 否 | 关 | 包含已删除的分群 | `—` |
 | `--only-brief` | flag | 否 | 关 | 仅返回简要信息，不含规则详情（提升查询性能） | `—` |
 | `--verbose` | flag | 否 | 关 | 同时返回规则引用摘要（`segment_rule_ref`） | `—` |
@@ -71,7 +71,6 @@ sensors segment list --ai-session-id <ai_session_id> --entity-name 'user' --name
 | `status` | 分群定义状态 | `ACTIVE` |
 | `create_type` | 分群创建方式 | `QUERY_RESULT` |
 | `visible` | 是否可见 | `true` |
-| `has_valid_segment` | 是否已有可用分群结果（计算成功），不代表规模 | `—` |
 | `create_time` / `update_time` | 创建 / 最近更新时间 | `2021-06-05T08:29:57Z` / `2024-07-05T09:33:57.708Z` |
 | `trigger_type` | 触发类型，如 `MANUAL` / `PERIODIC` / `CRON` | `MANUAL` |
 
@@ -82,7 +81,7 @@ sensors segment list --ai-session-id <ai_session_id> --entity-name 'user' --name
   "segment_definitions": [
     {
       "name": "<segment_name>", "display_name": "<展示名>", "entity_name": "user",
-      "status": "…", "create_type": "…", "visible": true, "has_valid_segment": true,
+      "status": "…", "create_type": "…", "visible": true,
       "create_time": "…", "update_time": "…", "trigger_type": "CRON",
       "segment_rule_ref": {"segment_rule_name": "…", "version": "…", "expression": {"type": "EQL_BASED"}}
     }
@@ -94,7 +93,7 @@ sensors segment list --ai-session-id <ai_session_id> --entity-name 'user' --name
 结构性解读：
 
 - `total` 为筛选条件下的总数（服务端返回，缺失时为本页条数）；`page` 从 0 开始，翻页用 `page` / `page_size` 组合推进。
-- `has_valid_segment` 是"定义已有可用计算结果"的结构标志：`false` 表示尚无成功计算的分群包，不代表分群不存在，也不代表规模为 0。
+- 响应里不含 `has_valid_segment`：它只作为请求侧过滤器使用，不回传。需要逐个判断「有没有可用结果包」时用 `segment valid-check`；需要人数时用 `segment item-list`（`count`）。
 - `--verbose` 时每项追加 `segment_rule_ref`：`segment_rule_name`、`version`、`expression` 摘要（`type` 如 `SQL_BASED` / `EQL_BASED` / `LOADING_BASED`；复杂结构只给计数：`group_expression_rule.groups_count`、`event_sequence_rule.sequence_count`、`entity_set_rules_count`）。`expression.type` 只说明规则类型，具体条件内容须用 `segment.get` 展开。
 
 ## 错误
@@ -110,4 +109,4 @@ sensors segment list --ai-session-id <ai_session_id> --entity-name 'user' --name
 
 - `--names` 只匹配内部 `name`（精确匹配）；只知 `display_name` 时先全量列出再按 `display_name` 匹配候选，由调用方确认。
 - `--has-valid-segment` 只筛"已有计算结果"的分群，不能用来判断分群定义是否存在。
-- 空结果、`has_valid_segment=false` 等结构事实原样传回，业务含义由调用方判断；按名称筛选列表不等于已查看详情，详情用 `segment.get`。
+- 空结果不是错误：原样返回空列表与 total，业务含义由调用方判断；按名称筛选列表不等于已查看详情，详情用 `segment.get`。

@@ -1,0 +1,22 @@
+{
+  "title": "慧博投研 MCP 连接配置",
+  "title_en": "Hibor Research MCP Connection",
+  "description": "请输入慧博投研服务的 Bearer Token，用于连接远程 MCP 服务。Token凭证仅存储在本机 ~/.workbuddy 下。请勿将 Token 分享给他人。",
+  "description_en": "Please enter the Bearer Token for the Hibor Research service to connect to the remote MCP service. The token credentials are stored locally under ~/.workbuddy only. Do not share the token with others.",
+  "docUrl": "https://www.hibor.com.cn/mcp/",
+  "docLabel": "请前往 慧博开发者平台 联系客服申请 API token，申请后将 token 填入下方输入框。",
+  "docLabel_en": "Visit Hibor to learn about the service and credentials",
+  "fields": [
+    {
+      "key": "HIBOR_RESEARCH_TOKEN",
+      "label": "慧博投研服务 Token",
+      "label_en": "Hibor Research Token",
+      "type": "password",
+      "required": true,
+      "placeholder": "粘贴由服务管理员提供或通过官方渠道获取的 Token",
+      "placeholder_en": "Paste the token provided by your service administrator or obtained through an official channel",
+      "description": "仅填写 Token 本身，不要添加“Bearer ”前缀。MCP 请求会自动通过 Authorization: Bearer 请求头发送。",
+      "description_en": "Enter the token only, without the 'Bearer ' prefix. The MCP request sends it in the Authorization: Bearer header."
+    }
+  ]
+}

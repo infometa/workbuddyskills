@@ -1,0 +1,32 @@
+{
+  "title": "登录机械指挥官",
+  "title_en": "Sign in to Machine Commander",
+  "description": "填写网页登录账号。凭证只保存在本机，连接时通过请求头发送。",
+  "description_en": "Enter your web login. Credentials stay on this device and are sent as request headers.",
+  "fields": [
+    {
+      "key": "SAAS_USERNAME",
+      "label": "账号",
+      "label_en": "Account",
+      "type": "text",
+      "required": true,
+      "placeholder": "网页登录账号"
+    },
+    {
+      "key": "SAAS_PASSWORD",
+      "label": "密码",
+      "label_en": "Password",
+      "type": "password",
+      "required": true
+    },
+    {
+      "key": "SAAS_TENANT_ID",
+      "label": "租户 ID",
+      "label_en": "Tenant ID",
+      "type": "text",
+      "required": false,
+      "description": "账号只有一个租户时可以不填。多个租户时填写要进入的租户 ID。",
+      "description_en": "Leave empty when the account has one tenant. Enter the tenant ID when it has several."
+    }
+  ]
+}

@@ -6,7 +6,7 @@ description: 中小学各学科分层作业设计：课标对齐、CNKI 学术�
 description_zh: 中小学各学科分层作业设计：课标对齐、学术溯源、政策红线校验与排版交付一体化。
 description_en: "Tiered K-12 homework design across subjects: curriculum alignment, academic sourcing, policy compliance checks and ready-to-deliver formatting."
 category: education
-version: 1.0.0
+version: 1.0.1
 author: 知网 edu
 ---
 
@@ -58,14 +58,18 @@ author: 知网 edu
 
 ### 🔐 前置权限校验（最高优先级，必须最先执行）（开工前置三步，顺序不能乱）
 
+> 权限校验的「三态诊断 / 通用版兜底 / 强制转化卡 / 连接器加载指引」统一见本技能 `references/_shared.md`「一、权限固定提示」，本章节仅保留本技能专属说明，不重复展开。
+
+> **本技能属①档强依赖**：核心产出需知网数据支撑，无权益即停止、不编造（通用版兜底与转化卡原文见 `references/_shared.md`「一、权限固定提示」）。
+
 | 步 | 动作 | 失败意味着什么 |
 |---|---|---|
-| 1 | **`ToolSearch(tool_names=["userState"])` 反查真实工具名，再调 `mcp__<SERVER>__userState`（无参数，成本极低）——本技能第一个工具调用** | 返回 **false** / 查不到该工具 / 调用报错＝**账号没基教权益或 edu 连接器未连**：① **立即中止**，不再调用任何 `tk*`/`mcp__<SERVER>__searchVectorBJ` 工具；② 向用户输出固定提示（见下）；**不要把"查不到题"误判成"题库无覆盖"** |
+| 1 | **`ToolSearch(tool_names=["userState"])` 反查真实工具名，再调 `mcp__<SERVER>__userState`（无参数，成本极低）——本技能第一个工具调用** | 返回 **false**（态 B）→ 账号没基教权益：按`references/_shared.md`「一、权限固定提示」「通用版兜底 + 强制转化卡」处理——① 不调用任何 `tk*`/`mcp__<SERVER>__searchVectorBJ` 工具；② 通用版完成不依赖知网数据的部分，并原样输出「解锁知网数据增强层」；**不要把"查不到题"误判成"题库无覆盖"**。**态 A｜查不到该工具 / 调用报错**（连接器未加载/掉线）→ 按 `references/_shared.md`「一、权限固定提示」给「连接器加载指引」、**不**输出转化卡，也不要调用任何 edu 工具。 |
 | 2 | 仅当 `mcp__<SERVER>__userState` 返回 **true** 时，再 `ToolSearch(tool_names=["tkSearchQuestion"])` 精确查名，确认题库接口可装载 | 查不到＝**连接器没连 / 工具未装载**（去连接器管理页启用），不是接口坏了 |
 | 3 | 仅当 `mcp__<SERVER>__userState` 返回 **true** 且 `mcp__<SERVER>__tkSearchQuestion` 可装载时，按技能主流程第 1–3 步正常往下跑 | — |
 
-> 🛑 **无权益时的固定提示（`mcp__<SERVER>__userState` 返回 false 必须原样输出，不得继续生成）**：
-> 固定提示原文与"严禁绕过接口"条款统一见 [_shared.md](references/_shared.md)「权限固定提示」，本 skill 不再重复誊写——无权益时原样引用并立即中止。
+> 🛑 **无权益时的处理（`mcp__<SERVER>__userState` 返回 false / 工具不可达 一律走「通用版兜底 + 强制转化卡」）**：
+> 转化卡原文与"严禁编造知网数据"条款统一见 [_shared.md](references/_shared.md)「权限固定提示」，本 skill 不再重复誊写——无权益时走通用版并原样输出转化卡。
 
 现象区分与降级策略见 **`references/workbuddy-mcp.md`**。
 
@@ -304,7 +308,7 @@ python homework_kit.py render   --items OUTDIR/items.json --subject 数学 --sta
 #### B. 用 CNKI 基础教育 MCP 取真实文献（学术溯源）
 
 文献检索走 `mcp__<SERVER>__searchVectorBJ`（**它是 edu MCP 里唯一的文献检索入口**）。
-`mcp__edu__searchLiteratureKnowledge` 在当前 edu MCP 中**不存在**，别照抄旧文档——已登记在 `mcp_adapters.py` 的 `DEPRECATED_TOOLS` 里。
+`mcp__<SERVER>__searchLiteratureKnowledge` 在当前 edu MCP 中**不存在**，别照抄旧文档——已登记在 `mcp_adapters.py` 的 `DEPRECATED_TOOLS` 里。
 
 ```bash
 # 1) 调 mcp__<SERVER>__searchVectorBJ(text="阿基米德原理 探究教学", query_type=3, type="0")
@@ -427,6 +431,20 @@ python scripts/homework_kit.py render --items llm_out.json --subject 数学 --st
 ```
 
 每题显示「题库原题/改编变式/原创生成」标签 + 原题出处（附带新鲜度「近3年·期末卷·校级」）+ 改编自 + **答案一致性验算过程**（改编题）；`retrieve` 真题只显示原题出处、**不挂「学术溯源」**（直接使用原题不须走文献接口）；「学术溯源」仅在改编/原创结合了 CNKI 文献时出现；答案折叠；末尾给题目来源统计。
+
+**🎓 双版本交付（强制，不可省略）**：渲染交付时必须**同时产出两份文件**——「学生作答版」与「教师讲评版」，两版题目须完全一致：
+- **学生作答版**：`--audience student`，仅含题干、选项与作答区，**绝不含答案、解析、溯源**（严守 skill 红线「学生区绝不含答案」）；直接打印发学生独立作答。
+- **教师讲评版**：`--audience teacher`（缺省即此），含答案、解析、原题出处、课标/素养标注，供审题与讲评。
+脚本原生支持 `student` / `teacher` / `both`（`both` = 学生作业纸 + 教师备课参考合册）。**不得只交付合并版或只交付教师版——缺学生版等于把答案直接发给学生。** 无论用脚本还是模型自渲染（无脚本 / 通用版手写 HTML·MD），都须落地这两份独立文件。两份示例：
+
+```bash
+# 学生作答版（无答案）
+python scripts/homework_kit.py render --items llm_out.json --subject 数学 --stage "初中(7-9)" \
+    --format docx --audience student --out 作业单_学生版.docx
+# 教师讲评版（含答案/解析/出处）
+python scripts/homework_kit.py render --items llm_out.json --subject 数学 --stage "初中(7-9)" \
+    --format docx --audience teacher --out 作业单_教师版.docx
+```
 
 **给老师的交付格式（推荐 Word）**：加 `--format docx` 可直接产出 A4 版 `.docx`（课标/素养/题目来源信息卡、分层学情与培养目标、来源标签配色、答案核验），老师可直接打印或二次编辑。需本机装有 `python-docx`；缺 `docx` 依赖时回退为 `--format md`。**严禁向成品写入 SID 等内部流水号，也不印「著录缺口」内部说明块——这些仅在校验器/开发侧使用。**（内部标识不进入成品的通用红线见 [_shared.md](references/_shared.md)「干净输出红线」）
 

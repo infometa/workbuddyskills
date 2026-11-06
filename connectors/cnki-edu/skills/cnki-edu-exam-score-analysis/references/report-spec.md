@@ -225,3 +225,18 @@ PY="$HOME/.workbuddy/binaries/python/envs/default/Scripts/python.exe"
 - 中文标题与标签；关键值直接标注在图上；柱状图柱顶标数值；警戒线用虚线并标注名称与数值
 - 多科模式：每张图标题加学科名前缀（如「【物理】逐题得分率」）；单科模式图表尺寸可稍大
 - 每张图下必须有图注（cap），说明坐标轴含义与读图方法
+
+## 知网文献引用规范（链接挂在篇名，不在作者）
+
+权益 `true` 时，教学解读 / 改进建议可引知网实证文献提质（详见 SKILL.md「权益 ≠ 引用」段）。引用渲染**只有一种标准形态**，由 `report_builder.cnki_ref(author, year, title, url)` 统一产出，禁止手写拼接：
+
+```
+（作者，年《篇名(可点击)》）
+```
+
+- **可点击元素只能是篇名**：`<a href="…ix.cnki.net…" target="_blank" rel="noopener" style="text-decoration:none;color:#1F3864">篇名</a>`；
+- **作者名与「（作者，年）」署名一律纯文本、不可点**，绝不能用 `<a>` 包裹作者名（2026-10-21 复盘：曾误把作者名染成链接，现已在 `_shared.md` 干净输出红线与 `selftest` 中锁死）；
+- 正文署名引用、文末「参考文献（知网基教溯源）」列表都用同一函数，形态一致；
+- 文末每条参考文献须带**来源**（`narrative.references[].source`，如「西南大学（硕士学位论文）」「《天府数学》（期刊）」），渲染为「篇名 —— 作者，年。来源：xxx。」；来源取自接口 `Source`/`JournalName`（CMFD 取授予单位、CJFD 取刊名、CAPJ 取资源库名），缺失时不显示该字段；
+- 直链 URL（含 `filename=…nh`、`dbcode=…`）只进 `href`，渲染后不可见（见 `_shared.md` 干净输出红线，不得出现在可见文本里）；
+- 权益非 `true`（态 B）时**不产出任何知网来源表述与链接**，照常走通用版兜底。

@@ -130,6 +130,8 @@
 # 输入材料
 你将收到以下输入：
 1. **试题 Markdown 数据**（JSON 格式，含 Method/Analyse 解析）
+
+> **🌐 通用版分支（态 A / 态 B：无知网题库 JSON 时）**：若 S0 转入通用版，本步**没有**题库 JSON（Method/Analyse）输入，解析数值由你基于初中数学常识推导；校对所有「期望值」时以**题面文字 + 你推导的解析**为准，**严禁引用或编造任何知网 / 题库来源数据**。其余七个层面校规照旧。
 2. **Step 1 产出的 sentences / translations**
 3. **Step 2 产出的完整讲题方案对象**（含 `subQuestions` 各 `stages` 四环、`subSteps`；**`voiceText` 已按 v3 规范全中文化**；**`canvasChange` 末尾带 `（持久）/（临时）` 后缀**）
 4. **Step 3 产出的完整绘图代码**（v6.7 形态：顶部档位声明 → `W/H`/`COLORS` → 两块内联库 `LIB` → 解构语句（**不含 `recordToAccumulator`**）→ `qAcc/switchQ/recQ` → 构造与校验区 → `drawBaseScene` → `drawFrame_N`（六层结构）→ `navigationMap` → `drawFunctions` → **抄写自检日志注释块**）

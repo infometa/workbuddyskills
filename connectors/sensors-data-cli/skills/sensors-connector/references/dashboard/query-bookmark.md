@@ -22,6 +22,8 @@
 
 本工具无复杂 JSON 输入，通过 flag 定位书签并可选覆盖时间范围。可覆盖的查询参数只有时间范围一项：书签保存的维度、过滤条件、指标、粒度等其余查询参数不可覆盖，一律按书签保存配置原样执行。
 
+历史配置兼容：分布分析书签的 `measure_type` 缺失、为 `null`、空字符串或纯空白时，执行请求自动补 `times`，与普通分布分析命令的默认值一致；已有 `period` 等非空值原样保留。补齐仅作用于本次请求，不回写书签，也不影响其他分析类型的同名字段。
+
 ## 构造流程
 
 从业务输入到合法命令参数的构造映射：
@@ -102,7 +104,7 @@ sensors analytics bookmark-query --ai-session-id <ai_session_id> --bookmark-id 5
 | `书签 ID X 在 Dashboard Y 中不存在` | 书签与看板不匹配，或书签已被删除 | 先 `dashboard-get --id <dashboard_id>` 复核书签列表 |
 | `--to-date` 单独传报错 | 未同时提供 `--from-date` | 补传 `--from-date`，或改用 `Nd` 相对日期 |
 | 日期格式 / 顺序错误 | 非 `yyyy-MM-dd` / `Nd`、非法日历日期、from 晚于 to | 按错误提示改用合法格式与顺序 |
-| `status: error` + `error_code: COMMON-D-27-1` | 书签保存的查询参数未通过服务端校验；`hint` 给出具体原因（老书签缺 `measures[].name` 的场景 CLI 已自动补默认名，仍报此错时多为其他字段缺失） | 按 `hint` 定位缺失字段；书签定义过旧时建议在平台 UI 重新保存该书签 |
+| `status: error` + `error_code: COMMON-D-27-1` | 书签保存的查询参数未通过服务端校验；`hint` 给出具体原因（老书签缺 `measures[].name`、分布书签缺失或留空的 `measure_type` 已由 CLI 自动补齐） | 按 `hint` 定位其他缺失或非法字段；书签定义过旧时建议在平台 UI 重新保存该书签 |
 | `status: error`（其他 `error_code`） | 书签保存的查询参数执行失败或与当前结构不兼容 | 原样返回 `error` / `error_code` / `hint`；书签可能需要在平台侧更新 |
 | `status: unsupported` | 书签类型不在可执行列表 | 原样返回，不改写查询或用 SQL / HTTP 兜底 |
 | 结果与平台 UI 口径不一致 | 时间覆盖、采样或缓存差异 | 说明本次实际查询时间范围，保留结构事实由调用方判断 |

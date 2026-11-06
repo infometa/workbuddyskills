@@ -32,6 +32,33 @@
  */
 
 const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+
+const SKILL = path.join(__dirname, '..');
+
+/* ── 安全工具：锁定 vm 解析模型产物 + 输出路径白名单 ── */
+function safeRun(code, filename) {
+    const sandbox = {
+        Math, JSON, Date, Array, Object, String, Number, Boolean, RegExp, Error,
+        isNaN, isFinite, parseInt, parseFloat,
+        console: { log() {}, error() {}, warn() {} }
+    };
+    sandbox.globalThis = sandbox;
+    sandbox.window = sandbox;
+    vm.createContext(sandbox);
+    // 包裹成 IIFE：模型产物以 `return (...)` 形式求值（原 new Function 行为），
+    // 而在 vm 脚本里顶层 return 非法，必须放进函数体内。
+    return vm.runInContext('(function(){\n' + code + '\n})()', sandbox, { filename: filename || 'safe-eval.js' });
+}
+
+function assertSafeOutPath(p) {
+    const abs = path.resolve(p);
+    const roots = [process.cwd(), SKILL];
+    const ok = roots.some(r => { const rp = path.resolve(r); return abs === rp || abs.startsWith(rp + path.sep); });
+    if (!ok) { console.error('❌ 输出路径越界（仅允许工作区/技能目录内）：' + abs); process.exit(2); }
+    return abs;
+}
 
 const argv = process.argv.slice(2);
 let outOpt = null, injectPath = null, asJson = false, file = null;
@@ -55,7 +82,7 @@ let s2;
 {
     let t = read(file).trim().replace(/;\s*$/, '');
     if (!/^\{/.test(t)) { console.error('❌ S2 不是裸对象（应以 { 开头）'); process.exit(1); }
-    try { s2 = new Function('return (' + t + ');')(); }
+    try { s2 = safeRun('return (' + t + ');'); }
     catch (e) { console.error('❌ S2 解析失败：' + e.message); process.exit(1); }
 }
 if (!s2 || !Array.isArray(s2.subQuestions)) { console.error('❌ S2 缺 subQuestions 数组'); process.exit(1); }
@@ -182,6 +209,7 @@ if (asJson) {
 }
 
 if (outOpt) {
+    assertSafeOutPath(outOpt);
     fs.writeFileSync(outOpt, injected !== null ? injected : block, 'utf8');
     console.log('已写出：' + outOpt + '（' + Buffer.byteLength(injected !== null ? injected : block, 'utf8') + ' 字节）');
 } else if (injected === null) {

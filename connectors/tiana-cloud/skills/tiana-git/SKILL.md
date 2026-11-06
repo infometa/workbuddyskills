@@ -1,17 +1,17 @@
 ---
 name: tiana-git
 description: 使用 Tiana Git 管理 Git 实例和原生仓库，关联项目远程地址、同步源码分支及应用版本。SQLite 数据库分支使用 tiana-sqlite；托管 Web 构建发布使用 tiana-web。
-license: MIT
+license: Apache-2.0
 metadata:
   author: Tiana Cloud
-  version: "1.0.0"
+  version: "1.0.5"
   parent: tiana
   source: https://github.com/tianacloud/agent-skills/tree/main/skills/tiana-git
 display_name: "Tiana Git"
 display_name_en: "Tiana Git"
 description_zh: "用户 Git 实例、原生仓库与应用源码版本同步。"
 description_en: "User Git instances, native repositories and application source versions."
-version: "1.0.0"
+version: "1.0.5"
 author: "Tiana Cloud"
 ---
 
@@ -19,9 +19,11 @@ author: "Tiana Cloud"
 
 安装 CLI、浏览器登录和通用资源恢复见 [Tiana](../tiana/SKILL.md)。本技能操作用户自己的 Git 实例；使用原生 Git 和包内的 `git-remote-tiana`。
 
-## 每次调用的更新检查
+## 每个会话一次的更新检查
 
-CLI 已满足最低版本要求后执行 `tiana version check --skills-version 1.0.0 --json`，使用本次加载的 metadata.version。仅在 `should_notify=true` 时提醒并询问是否升级；用户稍后或检查不可用时继续原任务。升级和会话重载见 [开始使用](../tiana/references/getting-started.md#更新)。CLI 控制共同的 24 小时提醒额度。
+四个 Tiana 技能共享当前会话的更新检查记录。CLI 已满足最低版本要求且本会话尚未尝试检查时，执行 `tiana version check --skills-version 1.0.5 --json`，使用实际加载的 metadata.version。调用前在会话上下文中记为已尝试；后续轮次、重复加载或切换技能均复用该记录，检查失败也不自动重试。上下文压缩或任务交接时保留记录，新会话重新检查。
+
+仅在 `should_notify=true` 时简短提醒并询问是否升级；用户选择稍后或检查不可用时继续原任务。CLI 仍管理检查缓存和共同的 24 小时提醒额度。升级及重载见[开始使用](../tiana/references/getting-started.md#更新)。
 
 ## 实例与仓库
 

@@ -4,104 +4,81 @@
 
 ## 用途
 
-触发一个或多个标签定义的计算，并默认同步等待任务进入终态。用于手动触发（`MANUAL`）标签出值，或按指定 `base_time` 复现历史计算口径；只生成新的标签值结果，不修改标签定义。
+触发一个或多个标签定义的计算，默认分别等待任务进入终态。304 服务端只接受同一定义的任务，CLI 将输入拆成单项请求，逐项触发并等待；本命令不修改标签定义。
 
 ## 参数
 
 | 参数 | 类型 | 必填 | 默认 | 说明 | 示例值 |
 | --- | --- | --- | --- | --- | --- |
-| `--entity-name` | string | 是 | — | 实体名称，如 `user`（用户标签）或其他已注册实体 | `user` |
-| `--input` | string | 是 | — | JSON 输入；`-` 从 stdin 读，也可传文件路径；格式为 `evaluate_params` 数组或含 `evaluate_params` 键的对象 | `-` |
-| `--no-wait` | flag | 否 | 关 | 触发后立即返回，不轮询等待任务完成 | `—` |
-| `--poll-timeout` | int ≥1 | 否 | 3600 | 轮询总等待秒数；与单次 HTTP `--timeout` 独立，超时后抛出错误 | `—` |
-| `--dry-run` | flag | 否 | 关 | 仅打印请求 JSON，不发起真实请求，用于调试参数 | `—` |
+| `--entity-name` | string | 是 | — | 标签所属实体 | `user` |
+| `--input` | string | 是 | — | 内联 JSON 数组/对象、文件路径或 `-`（stdin） | `params.json` |
+| `--server-timezone` | string | 否 | 本机时区 | 服务端 JVM 的 IANA 时区；本机与部署不同时必须指定 | `Asia/Shanghai` |
+| `--no-wait` | flag | 否 | 关 | 仅触发，不等待终态 | `—` |
+| `--poll-timeout` | int ≥1 | 否 | 3600 | 每项轮询等待上限秒数，与 HTTP `--timeout` 独立 | `600` |
+| `--dry-run` | flag | 否 | 关 | 打印所有待发送的请求，不访问服务端 | `—` |
 
-全局 flag：`--format json|pretty`（默认 json）、`--context`、`--project`、`--org-id`、`--timeout`（默认 300 秒）、`--ai-session-id`（真实请求必填；`--dry-run` 豁免）。
-
-调用示例：
+全局参数：`--format json|pretty`（默认 json）、`--context`、`--project`、`--org-id`、`--timeout`（默认 300 秒）、`--ai-session-id`（真实请求必填，dry-run 豁免）。
 
 ```bash
-sensors tag evaluate --ai-session-id <ai_session_id> --entity-name 'user' --input '[{"tag_definition_name":"<tag_name>"}]' --format json
-sensors tag evaluate --ai-session-id <ai_session_id> --entity-name 'user' --input params.json --no-wait --format json
+sensors tag evaluate --ai-session-id <ai_session_id> --entity-name user \
+  --server-timezone Asia/Shanghai --input '[{"tag_definition_name":"<tag_name>"}]'
 ```
 
 ## 输入 Schema
 
-`--input` 支持两种等价形状：
+支持参数数组或 `{"evaluate_params": [...]}` 对象。
 
 ```json
-[{"tag_definition_name": "<标签机器名>", "base_time": "<RFC 3339 时间，可省略>"}]
-```
-
-```json
-{"evaluate_params": [{"tag_definition_name": "<标签机器名>"}]}
+[{"tag_definition_name": "<标签机器名>", "base_time": "2026-10-25T16:00:00Z"}]
 ```
 
 | 字段 | 类型 | 必填 | 说明 | 示例值 |
 | --- | --- | --- | --- | --- |
-| `evaluate_params[].tag_definition_name` | string | 是 | 目标标签定义机器名 | `user_tag_1` |
-| `evaluate_params[].base_time` | string | 否 | 计算基准时间（RFC 3339）；省略时 CLI 自动填充当前时间（带时区、秒级精度） | `2026-09-27T09:54:41+08:00` |
+| `evaluate_params[].tag_definition_name` | string | 是 | 标签定义机器名；由列表查询确认 | `user_tag_1` |
+| `evaluate_params[].base_time` | string | 否 | 带时区的 RFC 3339 时间；省略时取服务端今天零点 | `2026-10-26T00:00:00+08:00` |
+| `evaluate_params[].tag_task_params` | object | 否 | 服务端支持的任务参数 | `—` |
 
-`--entity-name` 作为整次请求的实体名。以 `--help` 与 `--dry-run` 请求 JSON 为最终事实源。
+CLI 先将时间转换到 `--server-timezone`，再按天截断，并以同一值轮询。服务端为 Asia/Shanghai 时，`2026-10-25T16:00:00Z` 与 `2026-10-26T00:00:00+08:00` 是同一批次；不能先把 UTC 时分秒清零。
+
+同一标签、同一归一化基准时间、相同参数只触发一次；同一批次存在不同任务参数时报入参错误。dry-run 单项输出一个请求对象，多项输出请求数组。
 
 ## 构造流程
 
-1. 定位目标标签：机器名取自 `tag.list` 返回的 `name`（只知显示名先列出匹配候选），作为 `--input` 每项的 `tag_definition_name`。
-2. 组装 `--input`：单定义传 `[{"tag_definition_name":"<机器名>"}]`；多定义批量触发时逐项追加；需复现历史口径时为对应项显式提供 `base_time`（RFC 3339），省略时 CLI 统一填充触发时刻（带时区、秒级精度）。
-3. `--entity-name` 传目标实体（如 `user`），作为整次请求实体名；与标签定义所属实体不一致时以 flag 为准。
-4. 等待模式选择：默认同步等待终态；不需要等结果时加 `--no-wait`（返回触发响应，结果另行查询）；预计耗时长的任务可调大 `--poll-timeout`。
+1. 先用 `tag.list` 确认标签机器名与所属实体。
+2. 将每个目标写入参数数组；历史批次显式提供带时区的基准时间，并核对服务端时区。
+3. 先预览待发送的单项请求；默认逐项等待，确实只需触发时使用 `--no-wait`。
 
 ```bash
-sensors tag evaluate --ai-session-id <ai_session_id> --entity-name 'user' \
-  --input '[{"tag_definition_name":"user_tag_<名称>"}]' --format json
+sensors tag evaluate --entity-name user --server-timezone Asia/Shanghai \
+  --input '[{"tag_definition_name":"user_tag_1","base_time":"2026-10-25T16:00:00Z"}]' --dry-run
 ```
 
 ## 输出
 
-同步等待模式（默认），返回任务状态：
-
-```json
-{
-  "tasks": [
-    {
-      "status": "COMPLETED",
-      "tag_name": "<tag_name>",
-      "base_time": "2026-09-24T10:00:00+08:00"
-    }
-  ]
-}
-```
+默认等待模式返回合并的 `tasks[]`：
 
 | 字段 | 说明 | 示例值 |
 | --- | --- | --- |
-| `tasks[]` | 任务列表 | `—` |
-| `tasks[].status` | 任务状态：`PENDING` / `RUNNING` / `COMPLETED` / `FAILED` / `CANCELLED` | `—` |
-| `tasks[].tag_name` | 标签定义名 | `user_tag_1` |
-| `tasks[].base_time` | 计算基准时间（RFC 3339） | `2026-09-27T09:54:41+08:00` |
+| `tasks[].status` | 过程态 TAG_PREPARING / TAG_WAITING_DATA / TAG_COMPUTING，终态 TAG_SUCCESS / TAG_FAILED / TAG_TASK_CANCELLED | `TAG_SUCCESS` |
+| `tasks[].tag_definition_name` | 标签定义名（查询请求使用 tag_name，任务响应字段为 tag_definition_name） | `user_tag_1` |
+| `tasks[].base_time` | 实际基准时间 | `2026-10-25T16:00:00Z` |
 
-结构性解读：
+每项每 5 秒轮询一次；连续 6 次空任务会提前报错，并提示核对基准时间与服务端时区。所有项均计算成功才正常退出。
 
-- 状态语义：`PENDING` / `RUNNING` 表示任务仍在执行或排队；`COMPLETED` 表示计算完成；`FAILED` / `CANCELLED` 是任务终态失败或取消——后两者是任务结果而非命令错误，原样传回调用方，不改写为命令失败。
-- `--no-wait` 模式：原样返回服务端触发响应（通常包含任务 ID 或确认信息），不包含最终任务状态；需要终态时另行查询或改用默认等待模式。
+`--no-wait` 单项保留服务端触发响应；多项返回 `results[]`，每项含标签名、基准时间及 `response`。触发成功不代表计算完成。
 
-轮询机制（命令层事实）：触发后每 5 秒轮询一次任务接口，直到所有任务进入终态（`COMPLETED` / `FAILED` / `CANCELLED`）或达到 `--poll-timeout` 上限；多定义批量触发时，轮询查询按第一个 `evaluate_params` 项构造（以 `base_time` 为起始区间），批量任务较多时以逐项状态为准。
+部分失败使用统一工作流错误：`stage=tag.evaluate`、非零退出码，`data` 保留 `tasks[]`、`failed[]`（触发失败）、`poll_errors[]`（查询失败）；`--no-wait` 的已成功提交项保留在 `results[]`。错误体的 `partial_success` 表示是否有已确认成功项。可用的错误码、`request_id` 与 hint 会保留。HTTP 触发超时或传输异常项带 `outcome_unknown=true`，应先确认任务状态，避免重复提交。
 
-计算语义（命令层事实）：`trigger_type=MANUAL`（手动更新）的标签不自动计算，需通过本命令触发；`trigger_type=CRON` / `PERIODIC` 的标签由平台按调度自动计算。本命令只生成新的标签值结果，不修改标签定义。
+网络异常以 `code=network` 记录在 `failed[]` 或 `poll_errors[]`，保留其他项结果并继续处理，不自动重试异常项；查询异常不标记为未知提交。
 
 ## 错误
 
 | 错误 | 触发条件 | 修正方式 |
 | --- | --- | --- |
-| UsageError：必须提供 `evaluate_params` 列表 | 输入为空数组或对象中无该键 | 提供至少一项含 `tag_definition_name` 的参数 |
-| UsageError：`evaluate_params` 校验失败 | 某项缺少 `tag_definition_name` 或 `base_time` 非 RFC 3339 | 按错误修正对应项 |
-| 轮询超时错误 | 超过 `--poll-timeout` 秒仍未全部终态 | 增大 `--poll-timeout`，或改用 `--no-wait` 后另行查询 |
-| 任务 `FAILED` / `CANCELLED` | 计算任务本身失败或被取消 | 是任务终态而非命令错误；原样返回状态，不重写为命令失败 |
-| 标签不存在 / 无权限 | 名称无匹配或权限不足 | 核对机器名（先用 `tag.list`），权限问题停止并返回修复提示 |
+| UsageError | 无参数列表、元素不是对象、时间缺时区/格式错误、时区无效或同批次参数冲突 | 修正输入后重新预览 |
+| 连续空任务 | 基准时间与服务端落库时间点不一致等 | 核对服务端 JVM 时区及归一化请求；不要仅延长 HTTP 超时 |
+| 轮询超时 | 每项等待超过 `--poll-timeout` | 查询现有任务状态；必要时延长轮询上限 |
+| TAG_FAILED / TAG_TASK_CANCELLED | 计算失败或取消 | 命令非零退出，保留各项任务状态；不能报告全部成功 |
+| 不存在 / 无权限 | 机器名或权限无效 | 核对目标及权限；保留其他项已完成结果 |
 
-## 使用约束
-
-- 本命令触发真实计算（非 `--dry-run`），不属于只读查询；触发即产生新的计算任务。
-- 重复触发同一定义会生成新的计算任务；`base_time` 决定计算基准，需要复现历史口径时显式提供。
-- 触发结果中原样保留任务状态与 `request_id`；是否需要触发由调用方决定。
-- 计算触发失败不影响定义本身的存在与有效性：创建/更新成功而 evaluate 失败时，如实分别报告两个结果，不把定义状态改写为失败。
-- 确认计算结果状态时用 `tag.get` 回读任务状态与结果可用性，不通过再次 evaluate 验证。
+本命令会产生真实计算任务，不能用重复 evaluate 验证已有结果。定义创建/更新成功与计算成功应分别报告。

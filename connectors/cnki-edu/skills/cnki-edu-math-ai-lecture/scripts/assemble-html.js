@@ -42,6 +42,33 @@ const vm = require('vm');
 const SKILL = path.join(__dirname, '..');
 const TPL_PATH = path.join(SKILL, 'references', 'html-template.html');
 
+/* ── 安全工具：锁定 vm 解析模型产物 + 输出路径白名单 ── */
+// safeRun：仅暴露纯数据构造所需最小全局，不挂 process/require/fs，
+// 避免模型产物经 new Function 在 Node 主上下文拿到敏感全局（如 process）。
+function safeRun(code, filename) {
+    const sandbox = {
+        Math, JSON, Date, Array, Object, String, Number, Boolean, RegExp, Error,
+        isNaN, isFinite, parseInt, parseFloat,
+        console: { log() {}, error() {}, warn() {} }
+    };
+    sandbox.globalThis = sandbox;
+    sandbox.window = sandbox;
+    vm.createContext(sandbox);
+    // 包裹成 IIFE：模型产物以 `return (...)` 形式求值（原 new Function 行为），
+    // 而在 vm 脚本里顶层 return 非法，必须放进函数体内。
+    return vm.runInContext('(function(){\n' + code + '\n})()', sandbox, { filename: filename || 'safe-eval.js' });
+}
+
+// assertSafeOutPath：仅允许写回工作区(cwd)或技能目录(SKILL)内，
+// 拒绝越界绝对路径（如系统目录），满足沙箱 FS 检测。
+function assertSafeOutPath(p) {
+    const abs = path.resolve(p);
+    const roots = [process.cwd(), SKILL];
+    const ok = roots.some(r => { const rp = path.resolve(r); return abs === rp || abs.startsWith(rp + path.sep); });
+    if (!ok) { console.error('❌ 输出路径越界（仅允许工作区/技能目录内）：' + abs); process.exit(2); }
+    return abs;
+}
+
 /* ── 参数解析 ── */
 const argv = process.argv.slice(2);
 const flags = {};
@@ -52,6 +79,7 @@ for (let i = 0; i < argv.length; i++) {
     if (a === '--title') { flags.title = argv[++i]; continue; }
     if (a === '--qtitle') { flags.qtitle = argv[++i]; continue; }
     if (a === '--out') { flags.out = argv[++i]; continue; }
+    if (a === '--generic') { flags.generic = true; continue; }
     if (a.startsWith('--')) { console.error('未知参数：' + a); process.exit(2); }
     positional.push(a);
 }
@@ -77,9 +105,9 @@ function parseS1(src) {
     const cleaned = src.replace(/^\s*\/\/.*$/gm, '').trim();
     let obj;
     if (/^\{/.test(cleaned)) {
-        obj = new Function('return (' + cleaned + ');')();
+        obj = safeRun('return (' + cleaned + ');');
     } else {
-        obj = new Function(cleaned + '\n;return { sentences: sentences, translations: translations };')();
+        obj = safeRun(cleaned + '\n;return { sentences: sentences, translations: translations };');
     }
     if (!obj || !Array.isArray(obj.sentences) || !Array.isArray(obj.translations)) {
         throw new Error('S1 未能解析出 sentences / translations 数组');
@@ -147,8 +175,15 @@ let syntaxOk = false, syntaxMsg = '';
 }
 check('内联主脚本语法可编译', syntaxOk, syntaxMsg);
 
+/* ── 6.5) 通用版横幅（--generic 时注入，替换模板占位） ── */
+const genericBanner = flags.generic
+    ? '<div class="generic-banner">⚠ 通用版 · 未接入知网基教，本题解析由模型生成，非知网标准解析</div>'
+    : '';
+tpl = tpl.replace('<!-- @@GENERIC_BANNER@@ -->', genericBanner);
+
 /* ── 7) 写出 ── */
 const outPath = flags.out || s3Path.replace(/\.js$/i, '') + '.html';
+assertSafeOutPath(outPath);
 fs.writeFileSync(outPath, tpl, 'utf8');
 
 const failed = checks.filter(c => !c.pass);

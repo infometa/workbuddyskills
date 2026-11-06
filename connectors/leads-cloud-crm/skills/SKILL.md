@@ -1,21 +1,22 @@
 ---
 name: leads-cloud-crm
-description: 询盘云 CRM 只读查询技能 - 分页查询线索、客户、联系人、商机、触点联系人、SKU、订单、订单明细，按对象查跟进记录与互动时间线，按触点值或对象查画像，查询 WhatsApp 会话与消息
+description: 询盘云 Marketing CRM 只读查询技能（OAuth）- 分页查询线索、客户、联系人、商机、触点联系人、SKU、订单、订单明细，按对象查跟进记录与互动时间线，按触点值或对象查画像，查询 WhatsApp 会话与消息
 version: "1.0.0"
 author: "Leads Cloud"
 ---
 
-# 询盘云 CRM Skill
+# 询盘云 Marketing CRM Skill（OAuth）
 
-本 Skill 通过已配置的 Leads Cloud MCP（`https://mcp.leadscloud.com/mcp`，Streamable HTTP）查询询盘云 CRM 与 WhatsApp 数据。全部 12 个 Tool 均为只读；服务端按 PAT 实时向 CRM 认证，并固定租户、组织、用户、对象、数据域和权限。若在线 Tool Schema 与本文不一致，以在线 Schema 为准。
+本 Skill 通过已配置的询盘云 Marketing CRM MCP（`https://mcp.leadscloud.com/mcp`，Streamable HTTP）查询询盘云 Marketing CRM 与 WhatsApp 数据。全部 12 个 Tool 均为只读；服务端按 OAuth Access Token 向 CRM 认证，并固定租户、组织、用户、对象、数据域和权限（取用户同意范围与当前 CRM 权限的交集）。若在线 Tool Schema 与本文不一致，以在线 Schema 为准。
 
 ## 认证与安全
 
-- WorkBuddy 在本机保存用户填写的 PAT，并在每次请求注入 `Authorization: Bearer <PAT>`；PAT 由用户在 CRM「个人设置 → MCP Token」创建。
-- Token 失效、被禁用或权限不足时，提示用户到 CRM 重新创建 Token 或在 WorkBuddy 中更新配置；不要向用户索要 PAT 明文。
-- 禁止把 PAT、Authorization Header、Token、密码写入对话、报告、示例或 Tool 参数。
+- 本 Connector **不使用 PAT / 自填 Token**。WorkBuddy 按 MCP OAuth 2.1 + PKCE 自动完成发现、动态客户端注册、浏览器授权、换码与 Token 刷新；Access Token 由 WorkBuddy 安全存储并注入 `Authorization: Bearer <access_token>`。
+- 用户首次连接时在浏览器完成询盘云登录，并在 CRM 授权页显式同意权限与数据范围；同意后客户端方可调用工具。
+- Token 过期时由 WorkBuddy 自动 refresh；refresh 失败、授权被撤销或权限不足时，提示用户在 WorkBuddy 中重新连接 / 重新授权；不要向用户索要 Token、PAT、密码或 Authorization Header 明文。
+- 禁止把 Access Token、Refresh Token、Authorization Header、PAT、密码写入对话、报告、示例或 Tool 参数。
 - 禁止在 Tool 参数中传入 `tenantId`、`orgId`、CRM 调用方 `userId`、`objApiKey`、数据域、下游 URL 或数据库信息；所有 Tool Schema 均为 `additionalProperties=false`，多余字段会被拒绝。
-- 每个 Tool 对应一个 CRM 权限码，由 CRM 实时判定；缺少权限时 Tool 返回拒绝，而不是空结果。
+- 每个 Tool 对应一个 CRM 权限码；实际可调用范围不超过用户 OAuth 同意的 grants，也不超过该用户当前 CRM 权限。缺少权限时 Tool 返回拒绝，而不是空结果。用户可在 CRM「已连接应用」中撤销授权，撤销立即生效。
 
 | Tool | 数据域 | 权限码 |
 |------|--------|--------|
@@ -45,9 +46,9 @@ author: "Leads Cloud"
 | 场景 | 表现 | 处理 |
 |------|------|------|
 | 参数错误 | 参数校验/Schema 错误消息 | 按在线 Schema 修正一次后重试；不要反复重放相同请求，也不要补身份字段。参数错误不表示没有数据 |
-| 认证失败 | HTTP 401 Problem Details（`MCP Bearer 凭据缺失或无效`） | 提示用户检查或重建 PAT；不要索要凭证 |
+| 认证失败 / 需重新授权 | HTTP 401 Problem Details 或 OAuth 质询 | 提示用户在 WorkBuddy 中重新连接本 Connector 并完成浏览器授权；不要索要凭证，也不要让用户去填写 PAT |
 | 鉴权依赖故障 | HTTP 503 Problem Details（`CRM 鉴权服务暂时不可用`） | 稍后重试一次；持续失败时如实报告服务不可用 |
-| 权限或范围拒绝 | 拒绝类错误（ACCESS_DENIED） | 说明缺少的权限码或对象不可见，请用户使用已授权账号；不要换参数绕过 |
+| 权限或范围拒绝 | 拒绝类错误（ACCESS_DENIED） | 说明缺少的权限码或对象不可见，请用户使用已授权账号，或到 CRM 重新授权并勾选对应权限与数据范围；不要换参数绕过 |
 | 请求额度耗尽 | `MCP 请求额度已耗尽…reason=organization-daily` 或 `user-daily` | 告知用户组织或个人日额度已用完，等待窗口恢复；不要循环重试 |
 | 空结果 | 成功返回且 `total=0` / 空列表 | 这是当前授权范围内的有效结果；不要推断全系统无数据 |
 | CRM metadata、布局、下游错误 | 带 CRM 错误码/消息 | 保留 Tool 名、安全输入和精确错误信息报告；不要绕过 MCP 直接查库或调下游 |
@@ -305,7 +306,7 @@ author: "Leads Cloud"
 
 ### customer_development_query_whatsapp_conversations - 查询 WhatsApp 会话
 
-查询当前 PAT 与 CRM 实时权限交集内有效成员的 WhatsApp 会话；省略 `memberUserId` 时服务端枚举全部有效成员并逐成员解析真实绑定账号。
+查询当前 OAuth 授权与 CRM 实时权限交集内有效成员的 WhatsApp 会话；省略 `memberUserId` 时服务端枚举全部有效成员并逐成员解析真实绑定账号。
 
 **参数**：
 
@@ -380,6 +381,7 @@ author: "Leads Cloud"
 ## 注意事项
 
 - 本 Connector 仅有查询能力，没有创建、更新、删除或发送消息能力。
-- WhatsApp 消息默认先查元数据；只有用户明确需要正文或媒体且当前 PAT 有内容权限时才设置 `includeContent=true`。
+- 使用前需完成 OAuth 授权；未授权或授权失效时引导用户重新连接，不要引导填写 PAT。
+- WhatsApp 消息默认先查元数据；只有用户明确需要正文或媒体且当前授权含内容权限时才设置 `includeContent=true`。
 - 权限范围内没有数据时如实报告空结果和范围（含 `complete=false`、`unboundMemberUserIds` 等范围提示）。
 - 回答先给业务结论，再说明关键 Tool、筛选条件、分页覆盖和授权范围；严格区分返回事实与推断。

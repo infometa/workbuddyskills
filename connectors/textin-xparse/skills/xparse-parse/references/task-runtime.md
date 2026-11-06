@@ -220,7 +220,8 @@ command with the same `operation_id` instead.
 
 ## Task context
 
-The private `xparse_task_context.v1` file described in the main Skill applies to
-Task Runtime too. Add `--task-context <FILE>` only to the first xParse invocation
-for the user request, including when that first invocation is `task run`, and
-delete the file immediately after the command consumes it.
+The private `xparse_task_context.v1` file and lifecycle described in the main
+Skill apply to Task Runtime too. Pass `--task-context <FILE>` on every Task
+Runtime invocation, reusing the same file for retries, polling, exports, and
+concurrent calls. Keep it until the user request is complete and all calls have
+ended; do not delete it after submission or a quota precheck.

@@ -55,6 +55,10 @@ JSON 中要正确转义字符串，SQL 中按实际语法处理，源码中保�
 
 SQL 返回失败、断线或未知结果时停止后续发布，用独立只读查询核对已完成的结构与数据，不自动重放写入。初始化成功后进行应用定制、依赖安装、源码同步、构建及发布；工程 README 中的步骤与实际帮助一起核对。
 
+## 模板图标
+
+模板的源 `icon.png` 是用户应用的初始图标，保留图片并复用工程的静态资源复制配置。变量替换时不把 PNG 当文本处理。若下载模板没有源图标，按[应用图标](csr-apps.md#应用图标)由 Agent 自动生成并保存。干净构建后确认产物根目录 `icon.png` 可以解码，再发布；以后更新模板本身不会直接改变已有用户应用的图标。
+
 ## 构建和来源
 
 模板 `source.repository`、`source.commit` 说明下载包的源工程来源，区别于用户应用自己的 Git 提交。创建用户仓库后记录实际 git_instance_id；提交和构建按 [源码流程](../../tiana-git/references/source-releases.md)。按下载工程的 README 和构建脚本确定命令、入口与产物目录。若脚本接收源码提交号并输出 TIANA_PROJECT_PARAMS，核对其中的 entry、database_instance_id、git_instance_id 和 source_commit，再用于配置 MGR Web 项目；database_instance_id 必须与本次执行 schema/seeds 的 SQLite 一致。核对模块、资源及 MGR Web 项目的 SQLite/Git 绑定后执行 `web publish`，再用 publish_id 查询状态。

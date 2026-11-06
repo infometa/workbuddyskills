@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "saas-mcp": {
+      "type": "streamableHttp",
+      "url": "https://saas-gateway.zhgcloud.com/saas-ext-mcp/mcp",
+      "headers": {
+        "X-Saas-Username": "${SAAS_USERNAME}",
+        "X-Saas-Password": "${SAAS_PASSWORD}",
+        "X-Saas-Tenant-Id": "${SAAS_TENANT_ID}"
+      },
+      "timeout": 30000
+    }
+  }
+}

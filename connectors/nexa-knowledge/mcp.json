@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "nexa-knowledge": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "nexa-knowledge-mcp@0.1.0-beta.1"],
+      "runtime": {
+        "type": "node",
+        "version": "20"
+      },
+      "npmRegistries": ["https://registry.npmmirror.com", "https://registry.npmjs.org"],
+      "env": {
+        "TENCENTCLOUD_SECRET_ID": "${TENCENTCLOUD_SECRET_ID}",
+        "TENCENTCLOUD_SECRET_KEY": "${TENCENTCLOUD_SECRET_KEY}",
+        "NEXA_ENDPOINT": "${NEXA_ENDPOINT}"
+      },
+      "timeout": 30000
+    }
+  }
+}

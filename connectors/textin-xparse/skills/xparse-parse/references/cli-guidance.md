@@ -4,6 +4,16 @@
 
 ## Authentication and paid API
 
+For domestic image processing, use `crop-enhance <FILE|URL>` and query
+`quota --service crop_enhance_image --output json`. It is independent of parse
+and manipulation quota. Omitted options preserve service defaults; enhancement
+alone needs `--crop-image 0 --dewarp-image 0 --enhance-mode <1-6>`.
+`--correct-direction 1` enables rotation correction; `--only-position 1` returns
+positions without images. Pass `--task-context <FILE>` on each processing call.
+Unknown or exhausted free quota requires approval for one `--approve-paid` call.
+Report the returned JSON/JPEG paths and do not automatically repeat a charged
+request after timeout or output failure.
+
 ```bash
 xparse-cli auth                                    # Standalone interactive menu
 xparse-cli auth app-key                            # Interactive AppKey setup

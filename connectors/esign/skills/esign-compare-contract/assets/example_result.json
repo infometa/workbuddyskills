@@ -1,0 +1,93 @@
+{
+  "schema_version": "2.0",
+  "files": {
+    "base": "原稿（虚构示例）.docx",
+    "compare": "回传稿（虚构示例）.pdf"
+  },
+  "coverage": {
+    "status": "complete",
+    "base_scope": "虚构文本标题及第一至第五条",
+    "compare_scope": "虚构文本标题及第一至第五条",
+    "limitations": [
+      "第五条金额字符不清，需核对清晰原件后确认该项是否变化。"
+    ]
+  },
+  "differences": [
+    {
+      "id": "D001",
+      "operation": "modify",
+      "classification": "material",
+      "base_location": "第一条",
+      "compare_location": "第一条",
+      "before": "甲方应于收到合格发票后30日内付款。",
+      "after": "甲方应于收到合格发票后60日内付款。",
+      "analysis": "付款期限延长30日，甲方可以更晚付款，乙方等待回款的时间增加。",
+      "basis": "明确约定的付款期限发生变化。",
+      "questions": []
+    },
+    {
+      "id": "D002",
+      "operation": "replace",
+      "classification": "material",
+      "base_location": "第二条",
+      "compare_location": "第二条",
+      "before": "乙方应于合同生效后10日内一次性交付全部设备。",
+      "after": "乙方分三批交付，具体数量和日期由双方另行书面确认。",
+      "analysis": "一次性交付改为分批交付，原明确期限被另行确认机制取代。",
+      "basis": "交付方式与期限确定机制发生实质变化。",
+      "questions": [
+        "双方是否已有书面确认的分批交付计划？"
+      ]
+    },
+    {
+      "id": "D003",
+      "operation": "modify",
+      "classification": "non_material",
+      "base_location": "第三条标题及正文",
+      "compare_location": "第三条标题及正文",
+      "before": "第三条 保密：双方对履约中获悉的商业秘密承担保密义务。",
+      "after": "第三条 保密义务：双方对履约中获悉的商业秘密承担保密义务。",
+      "analysis": "标题由保密调整为保密义务，本例正文不变且未见相关交叉引用变化。",
+      "basis": "仅标题表达调整，未发现保密义务内容改变。",
+      "questions": []
+    },
+    {
+      "id": "D004",
+      "operation": "delete",
+      "classification": "material",
+      "base_location": "第四条",
+      "compare_location": "",
+      "before": "第四条 违约：乙方逾期交付的，每日按合同总价的0.1%支付违约金。",
+      "after": "",
+      "analysis": "删除了原明确约定的逾期交付违约金计算条款，不能据此推断逾期交付不再承担任何责任。",
+      "basis": "完整虚构回传正文中未找到对应的违约金约定；新第四条是另一项独立通知义务。",
+      "questions": []
+    },
+    {
+      "id": "D005",
+      "operation": "add",
+      "classification": "material",
+      "base_location": "",
+      "compare_location": "第四条",
+      "before": "",
+      "after": "第四条 通知：甲方变更收货地址应提前5日书面通知乙方。",
+      "analysis": "新增甲方变更收货地址时提前5日书面通知的义务。",
+      "basis": "增加了通知时限和书面形式要求。",
+      "questions": []
+    },
+    {
+      "id": "D006",
+      "operation": null,
+      "classification": "uncertain",
+      "base_location": "第五条",
+      "compare_location": "第五条抽取文本",
+      "before": "设备维护费为100,000元。",
+      "after": "设备维护费为10O,000元。",
+      "analysis": "第五条金额字符存在识别歧义，该项金额变化尚不能确认。",
+      "basis": "抽取文本包含字母O；本例没有可核对的原始扫描图像，金额是否变化无法确认。",
+      "questions": [
+        "请提供第五条清晰原件，核对金额数字。"
+      ]
+    }
+  ]
+}

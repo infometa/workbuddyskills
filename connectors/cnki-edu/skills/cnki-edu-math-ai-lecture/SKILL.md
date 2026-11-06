@@ -6,7 +6,7 @@ description: 初中数学试题一键生成 AI 讲题网页：画布动画 + 语
 description_zh: 初中数学试题一键生成 AI 讲题网页：画布动画 + 语音旁白 + 步骤卡片，离线单文件可直接运行。
 description_en: 'One-shot pipeline that turns a single junior-high math question into a runnable interactive lecture web page. The teaching paradigm and quality gates are strictly preserved; the full-chain speedup acts only on the mechanical input/output side: script-generated navigation structure, report/patch-only Step 3.5 (no full code re-transcription), script-assembled Step 4 (no full HTML re-write), one-command mechanical checks, tiered reading of reference docs.'
 category: education
-version: 1.0.0
+version: 1.0.1
 author: 知网 edu
 ---
 
@@ -62,10 +62,17 @@ author: 知网 edu
 ## 二、开始前的前置检查（必做）
 
 0. **🔐 前置权限校验（最高优先级，必须最先执行）**：本 skill 依赖 edu 题库 MCP（`mcp__<SERVER>__tkSearchQuestion` / `mcp__<SERVER>__tkQuestionAnalysis` 等），需账号拥有「知网基教」权益才能调用。进入任何生成环节、**调用任何 `tk*` 工具之前**，先调 `mcp__<SERVER>__userState`（edu MCP 的权益校验接口，**无参数**；工具名前缀取自连接器「显示名」，会随重命名变化，查不到时用 `ToolSearch(tool_names:["userState"])` 反查）。
+
+> 权限校验的「三态诊断 / 通用版兜底 / 强制转化卡 / 连接器加载指引」统一见本技能 `references/_shared.md`「一、权限固定提示」，本章节仅保留本技能专属说明，不重复展开。
+
+> **本技能属②档弱依赖**：讲题网页本体可由模型直接产出，知网题库召回仅作标准解析/溯源增强层；无权益/未连接时走通用版并标注「⚠ 通用版 · 非知网标准解析」（详见 `references/_shared.md`「一、权限固定提示」）。
    - **返回 `true`** → 具备知网基教权益，继续下方检查。
-   - **返回 `false` / MCP 未连接 / 查不到该工具 / 调用报错** → 一律视为**未开通知网基教权益**：向用户**原样输出**固定提示（原文见 [_shared.md](references/_shared.md)「权限固定提示」：前往 **https://e.cnki.net** 开通 / 购买「知网基础教育（基教）」服务权益）并**立即中止**；⛔ **严禁绕过接口寻找替代方法**——不得改用大模型自身知识解题、公开网络资料、通用教研经验等非知网接口数据来"凑"出标准解析；没有权益即严格终止，由用户开通权益后重试。
-   - 不得把失败原因解释成别的（不要说"题库没这题""接口有问题"）——`mcp__<SERVER>__userState` 返回 `false` 的根因就是没权限。
-1. **题库 MCP 是否可用（连接层）**：已通过权益校验后，确认 `mcp__<SERVER>__tkSearchQuestion` / `mcp__<SERVER>__tkQuestionAnalysis` 可调用（连接器已启用、工具可装载）。若连接器未启用 / 工具装载失败，引导用户到连接器管理页启用 `edu` 连接器后重试；不要用模型自行解题替代。
+   - **明确返回 `false`（态 B）** → 视为**未开通知网基教权益**：按`references/_shared.md`「一、权限固定提示」「通用版兜底 + 强制转化卡」处理（不调用任何 `tk*` 工具、不编造知网数据、不伪造 CNKI 溯源），并原样输出「解锁知网数据增强层」（原文见 [_shared.md](references/_shared.md)「权限固定提示」）；随后**继续产出讲题网页（通用版）**，交付物开头标注「⚠ 通用版 · 未接入知网基教，解析由模型生成、非知网标准解析」。
+   - **态 A｜工具不可达**（`ToolSearch` 查不到 `userState`）→ 连接器未加载/掉线，按`references/_shared.md`「一、权限固定提示」给「连接器加载指引」（**非阻塞提示，不中止流程**）、**不**输出转化卡，也不要调用任何 `tk*` 工具；随后**转入通用版流程继续产出讲题网页**。
+   - 不得把失败原因解释成别的（不要说"题库没这题""接口有问题"）——`mcp__<SERVER>__userState` 校验非 `true` 的根因就是没权限 / 没连接。
+
+> **知网依赖度（本技能适用 · ② 弱依赖 / 可选增强）**：讲题网页本体（四环三阶讲解 + 画布动画 + 语音）可由模型基于题干与图形**直接产出**；知网题库召回（`mcp__<SERVER>__tkSearchQuestion` / `mcp__<SERVER>__tkQuestionAnalysis`）只作为**标准解析 / 溯源增强层**——命中时挂上权威解析，缺失时降级为模型通用讲解。**权益 ≠ 闸门**：无权益 / 未连接时仍产出讲题网页（通用版），仅在交付物开头标注「⚠ 通用版 · 未接入知网基教，解析由模型生成、非知网标准解析」，且**严禁编造**任何知网数据与 CNKI 溯源。
+1. **题库 MCP 是否可用（连接层）**：已通过权益校验后，确认 `mcp__<SERVER>__tkSearchQuestion` / `mcp__<SERVER>__tkQuestionAnalysis` 可调用（连接器已启用、工具可装载）。若连接器未启用 / 工具装载失败 → 视为**态 A（未接入知网 edu 连接器）**，按 `references/_shared.md`「一、权限固定提示」给「连接器加载指引」、**不**输出转化卡（不要用模型自行解题替代）。
 2. **输入是否是一张试题图**：若用户只给文字，可以继续（Step 1 支持文本输入），但要明确告知"无原图，图形关系靠文字推断，画布还原度会下降"。
 3. **学段学科**：本 skill 当前只覆盖**初中数学**（`subjectCode = 20`）。其他学段/学科请先确认。
 
@@ -77,7 +84,7 @@ author: 知网 edu
 用户发图
   │
   ├─ S0  识题 + 题库召回  ── 命中 → 拿到标准解析 JSON
-  │                        └─ 未命中 → ⛔ 停下，提示「未在题库中找到试题」，结束
+  │                        └─ 未命中 / 无连接器 / 无权益 → 转入通用版（模型生成解析，继续 S1→S4）
   │
   ├─ S1  试题结构化        → { sentences, translations }        （裸 JS 对象）
   ├─ S2  讲题方案          → questionData 对象（四环三阶 + voiceText 全中文）
@@ -105,7 +112,7 @@ node scripts/assemble-html.js   <s1.js> <s2.js> <s3.5.js> --qtitle "题型" --ou
 
 ## 四、S0 · 识题 + 题库召回
 
-> 口径（用户 2026-09-29 确认）：**召回不到就停下**，不做"推相似题"、不让模型自行解题。
+> 口径（2026-10-21 修订）：召回命中即用知网标准解析；召回不到 / 无连接器 / 无权益时**不编造知网数据**，由模型基于题干 + 图形生成「通用版解析」继续后续流程（S1→S4），交付物开头标注非知网标准解析。
 
 1. **读图**：用多模态能力读出题干全文、图形关系（点/线/角/位置）、图中标注（如 `AB=6`、`∠ABC=90°`）。
 2. **关键词召回**：`mcp__<SERVER>__tkSearchQuestion({ keyword, subjectCode: 20, ps: 5, pi: 1 })`
@@ -115,8 +122,13 @@ node scripts/assemble-html.js   <s1.js> <s2.js> <s3.5.js> --qtitle "题型" --ou
 4. **取解析**：`mcp__<SERVER>__tkQuestionAnalysis({ SID, subjectCode: 20 })` → 返回 `Analyse / Method / Discuss / DisplayAnswer / Points / Topics/ SubStruct` 全字段。
 5. **兜底召回**（第 2 步关键词召回为空时）：
    - `mcp__<SERVER>__tkPoint({ subjectCode: 20 })` 取考点列表 → `mcp__<SERVER>__tkSearchSubjectQuestion({ point: [...], subjectCode: 20, ps, pi, dg: 0 })`
-6. **未命中处理**：两种召回都无合适候选 → **停止**，回复：「未在题库中找到该试题，无法获取标准解析。请补充题干文字 / 换一张更清晰的图 / 确认是否为本题库收录范围。」
-   然后**结束本次任务**（不要继续跑 Step 1）。
+6. **未命中 / 无连接器 / 无权益处理**：以下四种情形统一转入通用版，**不编造知网数据**、不停止任务：
+   - 关键词召回无候选；
+   - 兜底召回（第 5 步）无候选；
+   - 连接器不可用（态 A，工具不可解析）；
+   - 权益校验非 `true`（态 B）。
+   均由模型基于题干 + 图形生成解析，继续 S1→S4；交付物开头以「⚠ 通用版 · 未接入知网基教，解析由模型生成、非知网标准解析」标注。通用版解析仅供参考，知网标准解析需接入后获取。
+7. **通用版装配**：通用版流程在 S4 调用 `assemble-html.js` 时加 `--generic` 标志（如 `node scripts/assemble-html.js <S1.js> <S2.js> <S3.js> --generic --out <讲题.html>`），脚本会在页面顶部注入「⚠ 通用版」标注横幅（替换模板占位 `<!-- @@GENERIC_BANNER@@ -->`）。态 B 仍另在文末原样输出「解锁知网数据增强层」转化卡。
 
 ### ⚠️ 合规约束（来自题库方 API 约定，必须遵守）
 
@@ -408,4 +420,4 @@ node build-slim-step3.js
 
 ## 跨场景公共约定
 
-权限固定提示 / 干净输出红线 / 触发词格式 / 版本与完工标准 / MCP 前缀自检：统一见 [_shared.md](references/_shared.md)。本 skill 的前置权限校验口径与「严禁绕过接口」红线均与之对齐。
+权限固定提示 / 干净输出红线 / 触发词格式 / 版本与完工标准 / MCP 前缀自检：统一见 [_shared.md](references/_shared.md)。本 skill 的前置权限校验口径与「严禁编造知网数据」红线均与之对齐。

@@ -1,0 +1,30 @@
+{
+  "title": "MASTER 智序 MOM 连接配置",
+  "title_en": "MASTER MOM Connection",
+  "description": "填写 MOM 平台管理员发放的访问令牌以启用开发运维能力。凭证仅加密保存在你本机 ~/.workbuddy 目录下，不会上传云端。",
+  "description_en": "Enter the access token issued by your MOM platform administrator. The credential is stored locally on your machine (~/.workbuddy) only and never uploaded.",
+  "fields": [
+    {
+      "key": "MOM_ACCESS_TOKEN",
+      "label": "MOM 访问令牌",
+      "label_en": "MOM Access Token",
+      "type": "password",
+      "required": true,
+      "placeholder": "momdev_ 开头的访问令牌（由管理员发放）",
+      "placeholder_en": "Access token starting with momdev_ (issued by your admin)",
+      "description": "由 MOM 平台管理员线下发放，一人一令。尚未收到，或令牌失效/被回收时，请联系平台管理员重新发放。请勿在聊天中粘贴或分享给他人。",
+      "description_en": "Issued offline by your MOM platform administrator, one token per user. Contact the administrator if you have not received one, or if it expired or was revoked. Do not paste it in chat or share it with others."
+    },
+    {
+      "key": "MOM_MCP_HOST",
+      "label": "MCP 服务域名",
+      "label_en": "MCP Host",
+      "type": "text",
+      "required": true,
+      "defaultValue": "www.mste.com.cn",
+      "placeholder": "www.mste.com.cn",
+      "description": "MOM MCP 服务的域名，不含 https:// 前缀。私有部署或内网环境请填写管理员提供的域名。",
+      "description_en": "Domain of the MOM MCP service, without the https:// prefix. For private or on-premise deployments, use the domain provided by your administrator."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "title": "千尺物联",
+  "title_en": "Qianchi IoT",
+  "description": "填写您的千尺物联管理后台个人中心里获取到的Token。凭证仅保存在本机 ~/.workbuddy 目录下，连接时通过请求头注入 MCP 网关，不经过云端。",
+  "description_en": "Fill in the Token obtained from the Personal Center of your Qianchi IoT management backend. The credential is stored locally only in the `~/.workbuddy` directory on your machine. It is injected into the MCP gateway via request headers during connection and will not pass through the cloud.",
+  "fields": [
+    {
+      "key": "SERVICE_TOKEN",
+      "label": "账号AI秘钥",
+      "label_en": "Access Token",
+      "type": "password",
+      "required": true,
+      "placeholder": "千尺物联小程序后台 → 个人中心 → 智能AI秘钥 → 生成Token",
+      "description": "登录千尺物联小程序后台，在个人中心页面的「智能AI秘钥」里生成并复制 Token。所有查询与操作都以该账号的身份和权限执行，只能看到自己名下的数据。⚠️ 千尺物联的登录密码修改后，旧 Token 会失效，需要重新生成并在此处更新，否则工具会返回鉴权失败。"
+    }
+  ]
+}

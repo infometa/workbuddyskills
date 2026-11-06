@@ -5,7 +5,7 @@
 ## 查询与连接
 
 ```sh
-tiana sqlite branch list INSTANCE
+tiana sqlite branch list INSTANCE --json
 tiana sqlite branch list INSTANCE --search preview
 tiana sqlite branch list INSTANCE --after BRANCH_CURSOR
 tiana sqlite show INSTANCE --branch preview
@@ -13,9 +13,12 @@ tiana sqlite show INSTANCE --branch preview --url
 tiana sqlite shell INSTANCE --branch preview -e 'SELECT 1' --format json
 ```
 
-`branch list` 每次只返回一页，显示名称、分支 ID、默认标记、生命周期、运行状态和 Endpoint。需要继续查找时将返回的 `Next cursor` 传给 `--after`，保持原实例及筛选条件；一页未找到不能认定分支不存在。`--search` 是名称子串过滤，创建来源、删除目标和连接选择使用精确名称。
+`branch list` 自动取完所有匹配页；`--json` 返回 `data.items`，包含名称、分支 ID、默认标记、生命周期、运行状态和 Endpoint。`--after` 仅指定起始游标，`--search` 是名称子串过滤并在所有页保持一致；创建来源、删除目标和连接选择使用精确名称。
 
-`show` 显示所选分支信息；`--url` 只输出连接 URL。未传 `--branch` 时选择 ID 为 `main` 的默认分支。`--branch` 接受名称，不是分支 ID；SQL 与认证规则见 [CLI 连接](cli.md)。这些分支管理命令没有 `--json`，SQL 的 `--format json` 仅用于查询结果。
+配套修复后的 CLI 为 branch list/create/delete 与 show 提供 `--json`，执行前检查 `--help`，不把尚未发布的源码能力当成当前安装版本支持。`show --json` 返回实例与所选分支信息；`--url` 只输出连接 URL，与 `--json` 互斥。未传 `--branch` 时选择 ID 为 `main` 的默认分支。`--branch` 接受名称，不是分支 ID。SQL 的 `--format json` 与非交互 `--json` 别名描述查询结果，不是管理信封。
+
+管理 JSON 使用 `status/data/error`：不等待为 `accepted`，等待确认成功为 `succeeded`；已知操作失败为 `failed`，回执/完成结果不可确认为 `unknown`。保留原实例、分支与 Operation ID；分支创建没有本地恢复记录，不能盲目重复创建。JSON 删除仍要求已授权该删除并显式传入 `--force`。
+
 
 ## 创建
 

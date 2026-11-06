@@ -1767,6 +1767,32 @@ def test_report_footer_has_no_tool_branding():
     check("页脚检查" in txt, "页脚应保留考试名")
 
 
+@case
+def test_cnki_citation_links_title_not_author():
+    """知网文献引用：链接必须挂在篇名上，作者名不得作为 <a> 载体（2026-10-21 复盘）。
+
+    防止「把 (作者，年) 染成链接」这类错挂——统一用 report_builder.cnki_ref，
+    作者署名纯文本、篇名才是可点击元素；此规则是 _shared.md 干净输出红线的一部分。
+    """
+    from report_builder import cnki_ref
+    url = ("https://ix.cnki.net/read/article/readonline?dbcode=CMFD"
+           "&tablename=CMFD202601&filename=1026206441.nh&fileSourceType=1")
+    out = cnki_ref("何倩", "2025",
+                   "基于认知负荷理论的高中数学解析几何教学策略研究", url)
+    # 作者名不得被 <a> 包裹（不能是链接文本，也不能紧邻 </a>）
+    check("何倩</a>" not in out and "</a>何倩" not in out,
+          "作者名不得作为链接载体，实际：%s" % out)
+    # 篇名必须是可点击元素，且指向知网在线阅读页
+    check('href="%s"' % url in out, "篇名应指向知网在线阅读页，实际：%s" % out)
+    check("基于认知负荷理论的高中数学解析几何教学策略研究</a>" in out,
+          "篇名应是 <a> 的可点击文本，实际：%s" % out)
+    # 篇名链接无下划线
+    check("text-decoration:none" in out, "篇名链接须 text-decoration:none，实际：%s" % out)
+    # 作者署名在 <a> 之外（纯文本、可见）
+    prefix = out.split("<a", 1)[0]
+    check("何倩，2025" in prefix, "作者署名应作为纯文本位于 <a> 之前，实际：%s" % out)
+
+
 # --------------------------------------------------------------------------- #
 def main(argv=None):
     ap = argparse.ArgumentParser(description="cnki-edu-exam-score-analysis 回归自测")

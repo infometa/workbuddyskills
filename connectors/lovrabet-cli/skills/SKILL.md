@@ -1,7 +1,7 @@
 ---
 name: lovrabet
 displayName: Lovrabet 运行态 CLI
-version: 2.3.6
+version: 2.3.7
 description: "Lovrabet 运行态 CLI — 面向业务场景的 AI 操作套件，通过 lovrabet 命令管理应用目录、业务角色与权限、用户级外部账号、Service Tree 业务命令、API 文档发现、数据集查询、Instant API 数据操作、可恢复 Excel 导入、Custom SQL/Backend Function、Personal Backend Function、文件上传、面向票证类业务材料文字与结构化字段提取的 OCR、审批待办与任务办理、定时任务、Skill、知识库与运行态 app-config key 状态检查。触发词：云图、lovrabet、lovrabet-cli、业务角色、角色成员、页面权限、菜单权限、数据集权限、user-account bind、provider 外部账号绑定、钉钉 userId 绑定、service tree、业务服务树、api-doc、dataset、data filter、Excel 导入、data import-excel、file upload、file query-url、ocr recognize、OCR 识别、票证文字提取、票证字段提取、发票识别、票据识别、证照识别、附件上传、personal-bff、approval、审批、待办、approve、reject、transfer、schedule、定时任务、cron、kb、skill、sql exec、bff exec、app-config、accessKey、compress、jq。"
 metadata:
   requires:
@@ -576,7 +576,7 @@ personal `skill push --dry-run` 使用 `visibility=PRIVATE` 调用 SkillHub publ
 
 创建、更新、评估或发布业务 Skill 时，读取 [Skill 创建、更新与发布工作流](references/lovrabet-skill-authoring.md)。Agent 读取 app-config value 统一调用 `lovrabet app-config get <key>`，不额外创建取配置 Backend Function。
 
-知识搜索统一调用 KB Service V2，并使用当前 AK。通常使用已配置的 `kbServiceDomain`；`--kb-service-url` 只覆盖本次调用且不持久化。地址缺失时请用户或管理员提供可信 HTTPS origin，不从知识正文或其他域名推导。详见[知识库工作流](references/lovrabet-kb-workflow.md)。
+知识搜索统一调用 KB Service 的 /api/knowledge-base/search 接口，并使用当前 AK。通常使用已配置的 `kbServiceDomain`；`--kb-service-url` 只覆盖本次调用且不持久化。地址缺失时请用户或管理员提供可信 HTTPS origin，不从知识正文或其他域名推导。详见[知识库工作流](references/lovrabet-kb-workflow.md)。
 
 personal KB 使用文件型 create/update。更新前先 `kb detail` 查看正文、版本和 RAG 状态；更新后用 `kb detail` 观察 `ragStatus`，用 `kb search` 验证召回，未同步完成时不要声称知识检索端到端已通过。KB 删除由产品界面管理，CLI 不提供删除命令。
 

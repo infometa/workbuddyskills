@@ -1,0 +1,28 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=22"
+  },
+  "init": {
+    "darwin": "npm install -g @esign-ai/esign-cli",
+    "linux": "npm install -g @esign-ai/esign-cli",
+    "win32": "npm install -g @esign-ai/esign-cli"
+  },
+  "auth": {
+    "darwin": "esign auth login",
+    "linux": "esign auth login",
+    "win32": "esign.cmd auth login"
+  },
+  "unAuth": {
+    "darwin": "esign auth logout",
+    "linux": "esign auth logout",
+    "win32": "esign.cmd auth logout"
+  },
+  "status": {
+    "darwin": "esign auth status",
+    "linux": "esign auth status",
+    "win32": "esign.cmd auth status"
+  },
+  "statusMatch": "已登录的环境",
+  "authUrlDomain": "h5.esign.cn"
+}

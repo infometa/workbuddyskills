@@ -45,3 +45,12 @@
 ```
 
 只有唯一匹配时，才把 conditionId 填入 queryPersonPerformance.personId。
+
+## 歌曲运营来源及快照筛选
+
+工具：pageQuerySongOperationDataForMcp。示例为北京时间2026-10-20一天，使用时替换为用户实际日期；不以该日期重定义快照筛选期。
+```json
+{"startDate":1792425600000,"endDate":1792425600000,"metricRangeField":"JS_PLAY_CNT","metricMinValue":10000,"metricSortField":"SRCH_JS_PLAY_CNT_DIFF","metricSortDirection":"DESC","pageNo":1,"pageSize":10}
+```
+
+结果只展示歌曲ID和每日播放来源，不能展示筛选/排序指标的具体数值。

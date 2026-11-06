@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-cnki-tier="T3" data-cnki-stage="senior">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>磁场 3D 参照样板 · 画质基准件（高中物理）</title>
+<style>
+  /* 高中物理：深空蓝基底 + 淡蓝/淡紫主色 + 毛玻璃卡片 */
+  :root{
+    --bg:#0f172a; --primary:#60a5fa; --secondary:#a78bfa; --accent:#fbbf24;
+    --card:rgba(30,41,59,.65); --text:#e8eefc; --muted:#9fb2d6; --line:rgba(255,255,255,.12);
+    --radius:12px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%; font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; background:var(--bg); color:var(--text); overflow:hidden;}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+  }
+  #app{position:fixed; inset:0; display:flex; flex-direction:column;}
+  header{display:flex; align-items:center; gap:10px; padding:10px 16px; background:var(--card);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); z-index:6; border-bottom:1px solid var(--line);}
+  header h1{font-size:16px; margin:0; flex:1; font-weight:700; letter-spacing:.5px;}
+  .btn{font-size:13px; min-height:44px; padding:0 13px; border:1px solid var(--line); border-radius:9px;
+    background:var(--card); color:var(--text); cursor:pointer; touch-action:manipulation;}
+  .btn.primary{background:var(--primary); color:#0b1220; border-color:var(--primary); font-weight:700;}
+  #stage{flex:1; position:relative;}
+  canvas{position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none;}
+  /* 操作提示 + 反馈常驻 */
+  #hint{position:absolute; left:0; right:0; bottom:46px; text-align:center; font-size:13px; color:var(--muted);}
+  #feedback{position:absolute; left:0; right:0; bottom:16px; text-align:center; font-size:14px; font-weight:600; color:var(--accent); min-height:20px;}
+  .legend{position:absolute; top:14px; right:16px; background:var(--card); backdrop-filter:blur(10px);
+    border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:12px; line-height:1.7; color:var(--muted);}
+  .legend b{color:var(--text);}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>磁场 3D · 磁偶极子与磁力线</h1>
+    <button class="btn" id="resetBtn">重置视角</button>
+    <button class="btn primary" id="fsBtn">全屏</button>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div class="legend"><b>图例</b><br>红线：N 极（磁场出）<br>蓝线：S 极（磁场入）<br>浅蓝线：磁力线<br>黄线：磁轴</div>
+    <div id="hint">拖动旋转观察磁力线空间分布；滚轮/双指缩放</div>
+    <div id="feedback"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+  var W=0,H=0, DPR=Math.min(window.devicePixelRatio||1,2);
+  var cam={x:0,y:0,z:-5,yaw:0.6,pitch:-0.25,focal:1};
+  var Rworld=1.25, axis={x:0,y:1,z:0}; // 磁轴沿 y，N 在上
+  var stars=[];
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize(){
+    W=cv.clientWidth; H=cv.clientHeight; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+    cam.focal=Math.min(W,H)*0.85;
+    stars=[]; for(var i=0;i<220;i++){ stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.3+0.2, t:Math.random()*6.28}); }
+  }
+  // §3.1 透视投影（相机绕 yaw/pitch，朝 +z）
+  function project(p){
+    var cy=Math.cos(cam.yaw),sy=Math.sin(cam.yaw),cp=Math.cos(cam.pitch),sp=Math.sin(cam.pitch);
+    var x=p.x-cam.x,y=p.y-cam.y,z=p.z-cam.z;
+    var x1=x*cy+z*sy, z1=-x*sy+z*cy, y2=y*cp-z1*sp, z2=y*sp+z1*cp;
+    if(z2<0.05) return null;
+    var f=cam.focal/z2; return {x:W/2+x1*f, y:H/2-y2*f, z:z2};
+  }
+  // §3.2 球体着色（带大气、晨昏、高光）
+  function drawSphere(cx,cy,R,base){
+    var atmo=ctx.createRadialGradient(cx,cy,R*0.92,cx,cy,R*1.18);
+    atmo.addColorStop(0,'rgba(120,180,255,.35)'); atmo.addColorStop(1,'rgba(120,180,255,0)');
+    ctx.fillStyle=atmo; ctx.beginPath(); ctx.arc(cx,cy,R*1.18,0,7); ctx.fill();
+    var g=ctx.createRadialGradient(cx-R*0.34,cy-R*0.38,R*0.08,cx,cy,R*1.05);
+    g.addColorStop(0,base.hi); g.addColorStop(0.55,base.mid); g.addColorStop(1,base.lo);
+    ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,7); ctx.clip();
+    ctx.fillStyle=g; ctx.fillRect(cx-R,cy-R,R*2,R*2);
+    var term=ctx.createLinearGradient(cx-R*0.1,cy-R*0.1,cx+R,cy+R);
+    term.addColorStop(0,'rgba(0,0,0,0)'); term.addColorStop(1,'rgba(2,8,20,.5)');
+    ctx.fillStyle=term; ctx.fillRect(cx-R,cy-R,R*2,R*2);
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,7); ctx.strokeStyle='rgba(180,220,255,.22)'; ctx.lineWidth=1.2; ctx.stroke();
+  }
+  // §10.3 磁偶极子场方向
+  function field(p){
+    var r=Math.hypot(p.x,p.y,p.z)||1e-6;
+    var ux=p.x/r,uy=p.y/r,uz=p.z/r;
+    var md=axis.x*ux+axis.y*uy+axis.z*uz;
+    var bx=3*md*ux-axis.x, by=3*md*uy-axis.y, bz=3*md*uz-axis.z;
+    var s=1/(r*r*r); return {x:bx*s,y:by*s,z:bz*s};
+  }
+  // 追踪一条磁力线（从近 N 极种子，沿 ±B 双向积分）
+  function trace(seed, sign, ds, steps){
+    var pts=[]; var p={x:seed.x,y:seed.y,z:seed.z};
+    for(var i=0;i<steps;i++){
+      pts.push(p);
+      var b=field(p); var L=Math.hypot(b.x,b.y,b.z); if(L<1e-9) break;
+      p={x:p.x+sign*b.x/L*ds, y:p.y+sign*b.y/L*ds, z:p.z+sign*b.z/L*ds};
+      if(Math.hypot(p.x,p.y,p.z)>Rworld*5) break;
+      if(p.y < -Rworld*0.55 && Math.hypot(p.x,p.y,p.z)<Rworld*0.62) break; // 抵达 S 极附近
+    }
+    return pts;
+  }
+  function buildLines(){
+    var lines=[]; var az=6, angs=[22,46,72];
+    for(var a=0;a<az;a++){
+      var phi=a/az*Math.PI*2;
+      for(var j=0;j<angs.length;j++){
+        var th=angs[j]*Math.PI/180;
+        var seed={x:Rworld*0.5*Math.sin(th)*Math.cos(phi), y:Rworld*0.5*Math.cos(th), z:Rworld*0.5*Math.sin(th)*Math.sin(phi)};
+        var fwd=trace(seed,1,0.06,160), rev=trace(seed,-1,0.06,160);
+        rev.reverse(); var full=rev.concat(fwd.slice(1));
+        lines.push(full);
+      }
+    }
+    return lines;
+  }
+  var LINES=buildLines();
+  function drawArrow(x,y,dx,dy){
+    var L=Math.hypot(dx,dy)||1; var ux=dx/L,uy=dy/L;
+    ctx.beginPath(); ctx.moveTo(x,y);
+    ctx.lineTo(x-ux*7-uy*4, y-uy*7+ux*4);
+    ctx.lineTo(x-ux*7+uy*4, y-uy*7-ux*4);
+    ctx.closePath(); ctx.fill();
+  }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    // §10.4 深空氛围
+    var bg=ctx.createRadialGradient(W*0.5,H*0.45,0,W*0.5,H*0.5,Math.max(W,H)*0.75);
+    bg.addColorStop(0,'#16243f'); bg.addColorStop(1,'#070b16');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    var t=performance.now()/1000;
+    for(var i=0;i<stars.length;i++){ var s=stars[i]; var tw=0.5+0.5*Math.sin(t*1.5+s.t);
+      ctx.fillStyle='rgba(200,220,255,'+(0.25+0.6*tw)+')'; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,7); ctx.fill(); }
+
+    var c=project({x:0,y:0,z:0});
+    var top=project({x:0,y:Rworld,z:0});
+    var Rpix = top? Math.abs(top.y-c.y) : Math.min(W,H)*0.2;
+
+    // 场线：按深度分球前/球后两遍绘制（§3.3）
+    var back=[], front=[];
+    for(var li=0; li<LINES.length; li++){
+      var seg=LINES[li];
+      for(var k=0;k<seg.length-1;k++){
+        var A=project(seg[k]), B=project(seg[k+1]); if(!A||!B) continue;
+        (A.z > c.z ? back : front).push([A,B]); // z 大=远=球后
+      }
+    }
+    ctx.lineWidth=1.4; ctx.strokeStyle='rgba(120,180,255,.75)'; ctx.fillStyle='rgba(120,180,255,.9)';
+    function drawPass(arr){ for(var i=0;i<arr.length;i++){ var A=arr[i][0],B=arr[i][1];
+      ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke();
+      if(i%7===0) drawArrow(B.x,B.y,B.x-A.x,B.y-A.y); } }
+    drawPass(back);
+    drawSphere(c.x,c.y,Rpix,{hi:'#dbe9ff',mid:'#6b8fd6',lo:'#1b2f55'});
+    drawPass(front);
+
+    // 磁轴 + N/S 极标
+    var nP=project({x:0,y:Rworld*1.15,z:0}), sP=project({x:0,y:-Rworld*1.15,z:0});
+    ctx.strokeStyle='rgba(251,191,36,.9)'; ctx.lineWidth=2;
+    if(nP&&sP){ ctx.beginPath(); ctx.moveTo(nP.x,nP.y); ctx.lineTo(sP.x,sP.y); ctx.stroke(); }
+    ctx.font='bold 15px sans-serif'; ctx.textAlign='center';
+    if(nP){ ctx.fillStyle='#ff6b6b'; ctx.fillText('N', nP.x, nP.y-6); }
+    if(sP){ ctx.fillStyle='#60a5fa'; ctx.fillText('S', sP.x, sP.y+16); }
+
+    if(!reduce){ cam.yaw += 0.0025; } // 自转（reduced-motion 下不自动，仍可拖）
+    requestAnimationFrame(frame);
+  }
+
+  /* 交互：拖拽旋转、双指/滚轮缩放、全屏、重置 */
+  var dragging=false, lx=0, ly=0;
+  cv.addEventListener('pointerdown', function(e){ dragging=true; lx=e.clientX; ly=e.clientY; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointerup', function(){ dragging=false; });
+  cv.addEventListener('pointermove', function(e){ if(!dragging) return;
+    cam.yaw += (e.clientX-lx)*0.01; cam.pitch += (e.clientY-ly)*0.01;
+    cam.pitch=Math.max(-1.4,Math.min(1.4,cam.pitch)); lx=e.clientX; ly=e.clientY; });
+  cv.addEventListener('wheel', function(e){ e.preventDefault(); cam.z=Math.max(-9,Math.min(-2.2,cam.z+e.deltaY*0.003)); }, {passive:false});
+  document.getElementById('resetBtn').addEventListener('pointerdown', function(){ cam.yaw=0.6; cam.pitch=-0.25; cam.z=-5; });
+  document.getElementById('fsBtn').addEventListener('pointerdown', function(){ var el=document.documentElement;
+    if(!document.fullscreenElement){ (el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);} });
+
+  window.addEventListener('resize', resize); resize(); requestAnimationFrame(frame);
+
+  /* __selfTest：字段线数量与无 NaN 断言（verify_render.py 契约） */
+  window.__selfTest = function(){
+    var total=0, nan=false;
+    for(var i=0;i<LINES.length;i++){ total+=LINES[i].length;
+      for(var j=0;j<LINES[i].length;j++){ var p=LINES[i][j]; if(!isFinite(p.x)||!isFinite(p.y)||!isFinite(p.z)) nan=true; } }
+    var cases=[
+      {name:"磁力线数量(条)", ok:LINES.length===18, expect:18, actual:LINES.length},
+      {name:"采样点均有限(无NaN)", ok:!nan, expect:true, actual:!nan},
+      {name:"磁轴沿+Y(倾角0)", ok:axis.x===0&&axis.z===0&&axis.y===1, expect:true, actual:true}
+    ];
+    return { pass: cases.every(function(c){return c.ok===true;}), cases:cases };
+  };
+})();
+</script>
+</body>
+</html>

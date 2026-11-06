@@ -28,6 +28,70 @@ import tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import svg_charts as C  # noqa: E402
 
+
+# --------------------------------------------------------------------------- #
+# 知网文献引用：链接必须挂在篇名上（作者名不得作为链接载体）
+# --------------------------------------------------------------------------- #
+def cnki_ref(author, year, title, url):
+    """生成规范的知网文献内联引用（技能唯一标准形态）。
+
+    返回「（作者，年《篇名(可点击)》）」：作者署名保持纯文本（不可点），
+    仅篇名作为 <a> 超链接指向知网在线阅读页。正文署名引用 / 文末参考文献
+    都不得把 <a> 挂在作者名上——链接只能落在篇名。
+
+    :param author: 作者，如 ``何倩``
+    :param year:   发表年，如 ``2025``
+    :param title:  篇名，如 ``基于认知负荷理论的高中数学解析几何教学策略研究``
+    :param url:    知网在线阅读直链（只出现在 href，渲染后不可见）
+    """
+    link = ('<a href="%s" target="_blank" rel="noopener" '
+            'style="text-decoration:none;color:#1F3864">%s</a>') % (url, title)
+    return '（%s，%s《%s》）' % (author, year, link)
+
+
+# --------------------------------------------------------------------------- #
+# 知网文献引用：从 narrative.references 自动渲染（链接挂在篇名，不在作者）
+# --------------------------------------------------------------------------- #
+_CNKI_REFS = {}  # (author, year) -> (title, url)，build_html 每次渲染前重建
+
+
+def link_cnki(htm):
+    """把已 inline_md 化的 HTML 中「(作者，年)」署名引用，自动接成规范篇名链接。
+
+    仅对 ``narrative.references`` 中登记过的 (作者，年) 生效；未登记的普通文本不动。
+    链接挂在篇名上（``cnki_ref`` 形态），作者名保持纯文本——绝不会把 ``<a>`` 挂到作者名。
+    """
+    if not _CNKI_REFS:
+        return htm
+    for (author, year), (title, url, _src) in _CNKI_REFS.items():
+        inner = cnki_ref(author, year, title, url)[1:-1]  # 去掉外层（），正文里已有括号
+        for sep in ("，", ","):
+            pat = re.compile(re.escape(author) + sep + r"\s*" + re.escape(str(year)) + r"(?!《)")
+            htm = pat.sub(inner, htm)
+    return htm
+
+
+def build_cnki_refs_section():
+    """依据 ``_CNKI_REFS`` 生成文末「参考文献（知网基教溯源）」区块（篇名可点、作者不可点）。"""
+    if not _CNKI_REFS:
+        return ""
+    items = []
+    for (author, year), (title, url, source) in _CNKI_REFS.items():
+        link = ('<a href="%s" target="_blank" rel="noopener" '
+                'style="text-decoration:none;color:#1F3864">%s</a>') % (url, title)
+        # 来源缺失（空/未提供）时不显示「来源：」字段，避免空标签
+        src_part = (" 来源：%s。" % esc(source)) if source else "。"
+        items.append("<li style='margin:5px 0'>%s —— %s，%s%s</li>"
+                     % (link, esc(author), esc(str(year)), src_part))
+    return ('<section style="margin-top:34px;border-top:1px solid #DDD;padding-top:18px">'
+            '<h3 style="font-size:12.5pt;color:#1F3864;margin:0 0 10px">参考文献（知网基教溯源）</h3>'
+            '<ol style="margin:0 0 0 20px;padding:0;font-size:10pt;line-height:1.95;color:#333">'
+            + "".join(items) +
+            '</ol>'
+            '<p style="font-size:9pt;color:#888;margin:10px 0 0">'
+            '以上文献经知网基教检索命中，篇名链接至知网在线阅读页，供溯源核对。</p>'
+            '</section>')
+
 SUBJECT_TINT = ["#EEF3FB", "#FDF1E9", "#EFF6EC", "#FBEEEE", "#F3EEF9", "#E9F6FB"]
 
 CSS = """
@@ -323,13 +387,13 @@ def sanitize_narrative(narr):
 def block(text, css="note") -> str:
     if not text:
         return ""
-    return '<div class="%s">%s</div>' % (css, inline_md(text))
+    return '<div class="%s">%s</div>' % (css, link_cnki(inline_md(text)))
 
 
 def ulist(items, css="callout") -> str:
     if not items:
         return ""
-    lis = "".join("<li>%s</li>" % inline_md(x) for x in items)
+    lis = "".join("<li>%s</li>" % link_cnki(inline_md(x)) for x in items)
     return '<div class="%s"><ul>%s</ul></div>' % (css, lis)
 
 
@@ -1369,7 +1433,17 @@ def section_improvement(an, narr):
 # 主渲染
 # --------------------------------------------------------------------------- #
 def build_html(an, narr=None, exam_name=None, gen_charts=True, xl_name=None):
-    narr = sanitize_narrative(narr or {})
+    raw_narr = narr or {}
+    narr = sanitize_narrative(raw_narr)
+    # 重建知网引用登记表：每次渲染前清空，避免跨报告污染（同一模块进程连续渲染多份报告时）
+    global _CNKI_REFS
+    _CNKI_REFS = {}
+    for r in (raw_narr.get("references") or []):
+        if not isinstance(r, dict):
+            continue
+        author, year, title, url = r.get("author"), r.get("year"), r.get("title"), r.get("url")
+        if author and year and title and url:
+            _CNKI_REFS[(author, str(year))] = (title, url, r.get("source"))
     meta = an["meta"]
     exam_name = exam_name or meta["exam_name"]
     subs = meta["subjects"]
@@ -1479,6 +1553,11 @@ def build_html(an, narr=None, exam_name=None, gen_charts=True, xl_name=None):
     # 交付时改为在对话回复里说明（见 SKILL.md 「Step 6 · 交付」）。
     # 页脚**只留考试名与生成时间**（用户要求 2026-10-12）：不带任何生成工具/技能标识，
     # 否则老师、家长拿到的正式报告里会出现内部工具名。
+    # 文末「参考文献（知网基教溯源）」区块：仅在 narrative 登记了 references 时出现；
+    # 篇名可点（链接挂篇名），作者不可点（红线：绝不在作者名上挂 <a>）。
+    refs_section = build_cnki_refs_section()
+    if refs_section:
+        parts.append(refs_section)
     parts.append("<footer>%s 成绩分析报告 · %s</footer>"
                  % (esc(exam_name), esc(meta["generated_at"])))
     parts.append("</div></body></html>")

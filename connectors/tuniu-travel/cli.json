@@ -5,36 +5,38 @@
     "win32": "npm install -g tuniu-cli@latest"
   },
   "auth": {
-    "darwin": "tuniu auth login --daemon",
-    "linux": "tuniu auth login --daemon",
-    "win32": "tuniu auth login --daemon"
+    "darwin": "tuniu auth login --daemon --source workbuddy",
+    "linux": "tuniu auth login --daemon --source workbuddy",
+    "win32": "tuniu auth login --daemon --source workbuddy"
   },
   "unAuth": {
-    "darwin": "tuniu auth logout --daemon",
-    "linux": "tuniu auth logout --daemon",
-    "win32": "tuniu auth logout --daemon"
+    "darwin": "tuniu auth logout --daemon --source workbuddy",
+    "linux": "tuniu auth logout --daemon --source workbuddy",
+    "win32": "tuniu auth logout --daemon --source workbuddy"
   },
   "status": {
-    "darwin": "tuniu auth status --daemon",
-    "linux": "tuniu auth status --daemon",
-    "win32": "tuniu auth status --daemon"
+    "darwin": "tuniu auth status --daemon --source workbuddy",
+    "linux": "tuniu auth status --daemon --source workbuddy",
+    "win32": "tuniu auth status --daemon --source workbuddy"
   },
   "statusMatch": "TUNIU_AUTH_OK",
   "env": {
     "TUNIU_DISCOVERY_ENABLED": "true",
-    "TUNIU_AUTH_TYPE": "oauth"
+    "TUNIU_AUTH_TYPE": "oauth",
+    "TUNIU_AUTH_SOURCE": "workbuddy"
   },
   "runtime": {
     "type": "node",
-    "version": ">=18"
+    "version": "^18.0.0"
   },
+  "npmRegistry": "https://registry.npmjs.org/",
   "versionCheck": {
     "command": {
       "darwin": "tuniu --version",
       "linux": "tuniu --version",
       "win32": "tuniu --version"
     },
-    "minVersion": "1.1.1",
+    "minVersion": "1.1.4",
     "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
   }
 }

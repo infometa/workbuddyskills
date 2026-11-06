@@ -1,0 +1,48 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=22"
+  },
+  "init": {
+    "darwin": "npm install -g @baomihuatop/popcorn-cli@0.3.0 && popcorn-cli config set-url https://baomihua.top",
+    "linux": "npm install -g @baomihuatop/popcorn-cli@0.3.0 && popcorn-cli config set-url https://baomihua.top",
+    "win32": "npm install -g @baomihuatop/popcorn-cli@0.3.0 && popcorn-cli.cmd config set-url https://baomihua.top"
+  },
+  "auth": {
+    "darwin": "popcorn-cli config set-url https://baomihua.top && popcorn-cli auth login --no-browser --adapter workbuddy",
+    "linux": "popcorn-cli config set-url https://baomihua.top && popcorn-cli auth login --no-browser --adapter workbuddy",
+    "win32": "popcorn-cli.cmd config set-url https://baomihua.top && popcorn-cli.cmd auth login --no-browser --adapter workbuddy"
+  },
+  "status": {
+    "darwin": "popcorn-cli config show | node -e \"let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{if(JSON.parse(s).base_url!=='https://baomihua.top'){console.error('Connect to https://baomihua.top');process.exitCode=3}}catch{process.exitCode=1}})\" && popcorn-cli auth status --format workbuddy",
+    "linux": "popcorn-cli config show | node -e \"let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{if(JSON.parse(s).base_url!=='https://baomihua.top'){console.error('Connect to https://baomihua.top');process.exitCode=3}}catch{process.exitCode=1}})\" && popcorn-cli auth status --format workbuddy",
+    "win32": "popcorn-cli.cmd config show | node -e \"let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{if(JSON.parse(s).base_url!=='https://baomihua.top'){console.error('Connect to https://baomihua.top');process.exitCode=3}}catch{process.exitCode=1}})\" && popcorn-cli.cmd auth status --format workbuddy"
+  },
+  "unAuth": {
+    "darwin": "popcorn-cli auth logout",
+    "linux": "popcorn-cli auth logout",
+    "win32": "popcorn-cli.cmd auth logout"
+  },
+  "statusMatch": "^Logged in\\r?\\n?$",
+  "authUrlDomain": "baomihua.top",
+  "authWaitForExit": true,
+  "authDeviceFlow": {
+    "uriPattern": "(?:^|\\s)(https://baomihua\\.top/cli/oauth/device\\?client_id=popcorn-workbuddy#device_code=pcv1\\.[A-Za-z0-9_-]{1,32}\\.[A-Za-z0-9_-]{43})(?=\\s|$)",
+    "defaultExpiresInSeconds": 300,
+    "codeEmbeddedInUri": true
+  },
+  "env": {
+    "POPCORN_REQUIRED_AUTH_METHOD": "oauth",
+    "POPCORN_OAUTH_CLIENT_ID": "popcorn-workbuddy"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "popcorn-cli --version",
+      "linux": "popcorn-cli --version",
+      "win32": "popcorn-cli.cmd --version"
+    },
+    "minVersion": "0.3.0",
+    "versionPattern": "^(\\d+\\.\\d+\\.\\d+)\\s*$"
+  },
+  "npmRegistry": "https://registry.npmjs.org"
+}

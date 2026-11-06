@@ -71,7 +71,7 @@ tmeet tshoot feedback --category <分类> --intent <原始意图> [选项]
 | `--intent` | string | ✅ | — | Agent 的原始意图（用户想做什么），最多 **200 字符** |
 | `--actions-tried` | string | — | — | Agent 已尝试过的动作（调用了哪些命令、做了哪些尝试），最多 **500 字符** |
 | `--result` | string | — | — | 已尝试动作的结果或阻塞点（错误信息、为何无法继续），最多 **500 字符** |
-| `--tool-name` | string | — | — | 涉及的 tmeet 子命令名（如 `record address`） |
+| `--tool-name` | string | — | — | 涉及的 tmeet 子命令名（如 `record access`）；具体动作在 `--actions-tried` 中记录，例如 `tmeet record access --action address …` |
 | `--error-code` | string | — | — | 工具返回的业务错误码（若有） |
 
 ### `--category` 枚举值
@@ -91,16 +91,16 @@ tmeet tshoot feedback --category <分类> --intent <原始意图> [选项]
 tmeet tshoot feedback \
   --category "tool_not_found" \
   --intent "批量导出 2026-04 整月所有会议的智能纪要为 markdown" \
-  --actions-tried "查阅了 record list / record smart-minutes 子命令" \
+  --actions-tried "查阅了 record search / record content --action minutes 子命令" \
   --result "未找到批量导出命令，仅能逐个文件查询"
 
-# 2) tool_error：调用 record address 返回错误码
+# 2) tool_error：调用 record access 返回错误码
 tmeet tshoot feedback \
   --category "tool_error" \
   --intent "获取某录制文件的下载地址" \
-  --tool-name "record address" \
+  --tool-name "record access" \
   --error-code "200003" \
-  --actions-tried "tmeet record address --meeting-record-id record_abc123" \
+  --actions-tried "tmeet record access --action address --meeting-record-id record_abc123" \
   --result "接口返回权限不足"
 
 # 3) tool_inadequate：能力/参数不足
@@ -114,7 +114,7 @@ tmeet tshoot feedback \
 tmeet tshoot feedback \
   --category "unexpected_result" \
   --intent "查询近 7 天的所有录制" \
-  --tool-name "record list" \
+  --tool-name "record search" \
   --result "返回的录制条数明显少于实际录制数"
 
 # 5) suggestion：一般性建议

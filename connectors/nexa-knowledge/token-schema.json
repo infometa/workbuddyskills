@@ -1,0 +1,33 @@
+{
+  "title": "连接 Nexa Knowledge",
+  "title_en": "Connect Nexa Knowledge",
+  "description": "填写腾讯云 API 密钥。凭证仅存储在本机 ~/.workbuddy 目录下，只用于对腾讯云 API 请求签名。建议使用只授权了 DescribeDataAgentTools、CallDataAgentTool 的子账号密钥。",
+  "description_en": "Enter a Tencent Cloud API key. Credentials are stored locally under ~/.workbuddy and only used to sign Tencent Cloud API requests. Prefer a sub-account key granted only DescribeDataAgentTools and CallDataAgentTool.",
+  "docUrl": "https://console.cloud.tencent.com/cam/capi",
+  "docLabel": "在访问管理控制台获取 API 密钥",
+  "fields": [
+    {
+      "key": "TENCENTCLOUD_SECRET_ID",
+      "label": "SecretId",
+      "type": "password",
+      "required": true,
+      "placeholder": "访问管理 → API 密钥管理，以 AKID 开头"
+    },
+    {
+      "key": "TENCENTCLOUD_SECRET_KEY",
+      "label": "SecretKey",
+      "type": "password",
+      "required": true,
+      "placeholder": "与 SecretId 成对生成"
+    },
+    {
+      "key": "NEXA_ENDPOINT",
+      "label": "API 地址",
+      "label_en": "API Endpoint",
+      "type": "text",
+      "required": true,
+      "defaultValue": "https://nexa.tencentcloudapi.com",
+      "description": "一般不用改。"
+    }
+  ]
+}

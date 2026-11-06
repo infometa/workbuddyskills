@@ -1,16 +1,25 @@
 {
   "runtime": {
     "type": "node",
-    "version": "22"
+    "version": ">=22"
   },
   "npmRegistry": "https://registry.npmjs.org",
   "env": {
     "AE_CLI_CONFIG_DIR": "${HOME}/.ae-cli-workbuddy"
   },
   "init": {
-    "darwin": "npm install -g @thinkingai/ae-cli@6.0.48-workbuddy.1",
-    "linux": "npm install -g @thinkingai/ae-cli@6.0.48-workbuddy.1",
-    "win32": "npm install -g @thinkingai/ae-cli@6.0.48-workbuddy.1"
+    "darwin": "npm install -g @thinkingai/ae-cli@6.0.48-workbuddy.2",
+    "linux": "npm install -g @thinkingai/ae-cli@6.0.48-workbuddy.2",
+    "win32": "npm install -g @thinkingai/ae-cli@6.0.48-workbuddy.2"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "ae-cli-workbuddy --version",
+      "linux": "ae-cli-workbuddy --version",
+      "win32": "ae-cli-workbuddy.cmd --version"
+    },
+    "minVersion": "6.0.48-workbuddy.2",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?)"
   },
   "auth": [
     {

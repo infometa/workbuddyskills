@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-cnki-tier="T2" data-cnki-stage="junior">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>插画底图 + 交互层 混合范式 · 画质基准件</title>
+<style>
+  /* 初中清新蓝绿 / 低龄可选糖果色。本范式演示：AI 生图底图(美) + 代码文字层(准) + 交互层 */
+  :root{
+    --bg:#eaf6ff; --primary:#0ea5a4; --secondary:#3b82f6; --accent:#f59e0b;
+    --card:#ffffff; --text:#1e293b; --muted:#5b7083; --line:rgba(0,0,0,.08);
+    --radius:14px; --shadow:0 6px 18px rgba(15,23,42,.10);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%; font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; background:var(--bg); color:var(--text);}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+  }
+  #app{position:fixed; inset:0; display:flex; flex-direction:column;}
+  header{display:flex; align-items:center; gap:10px; padding:12px 16px; background:var(--card); box-shadow:var(--shadow); z-index:6;}
+  header h1{font-size:17px; margin:0; flex:1; font-weight:700;}
+  .btn{font-size:14px; min-height:44px; padding:0 14px; border:1.5px solid var(--line); border-radius:10px; background:var(--card); cursor:pointer; touch-action:manipulation;}
+  .btn.primary{background:var(--primary); color:#fff; border-color:var(--primary);}
+  #stage{flex:1; position:relative; overflow:hidden;}
+  /* 底图层：AI 生图内嵌于此。替换方式见下方脚本的 BG 变量说明 */
+  #bg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;}
+  /* 文字层（硬性分离）：所有精确内容用 HTML 叠加，绝不烤进图 */
+  #title{position:absolute; top:18px; left:50%; transform:translateX(-50%); padding:8px 18px;
+    background:rgba(255,255,255,.82); border-radius:999px; font-size:18px; font-weight:700; color:#0b3a4a; box-shadow:var(--shadow);}
+  .hot{position:absolute; width:46px; height:46px; border-radius:50%; border:3px solid #fff; background:rgba(14,165,164,.55);
+    cursor:pointer; touch-action:manipulation; box-shadow:0 3px 10px rgba(0,0,0,.25); transform:translate(-50%,-50%);}
+  .hot:active{background:rgba(245,158,11,.85);}
+  /* 信息卡（交互层） */
+  #card{position:absolute; left:50%; bottom:64px; transform:translateX(-50%); width:min(86%,440px);
+    background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px 18px; display:none;}
+  #card h3{margin:0 0 6px; font-size:16px; color:var(--primary);}
+  #card p{margin:0; font-size:15px; line-height:1.7; color:var(--text);}
+  #card .close{position:absolute; right:10px; top:8px; font-size:18px; color:var(--muted); cursor:pointer; border:none; background:none;}
+  #hint{position:absolute; left:0; right:0; bottom:40px; text-align:center; font-size:14px; color:#0b3a4a; background:rgba(255,255,255,.6);}
+  #feedback{position:absolute; left:0; right:0; bottom:12px; text-align:center; font-size:14px; font-weight:600; color:var(--primary); min-height:20px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>插画底图 + 交互层 · 混合范式</h1>
+    <button class="btn" id="resetBtn">重置</button>
+    <button class="btn primary" id="fsBtn">全屏</button>
+  </header>
+  <div id="stage">
+    <!-- 底图：现用程序化插画示意；接 AI 生图时把 BG 换成 base64 即可（见脚本注释） -->
+    <canvas id="bg"></canvas>
+    <div id="title">池塘边的清晨（文字层：课文原句/标签放这里）</div>
+    <!-- 交互热点：点击弹出精确信息卡 -->
+    <div class="hot" data-k="sun"  style="left:78%; top:22%;"></div>
+    <div class="hot" data-k="tree" style="left:24%; top:58%;"></div>
+    <div class="hot" data-k="water" style="left:60%; top:80%;"></div>
+    <div id="card"><button class="close" id="cardClose">×</button><h3 id="cardTitle"></h3><p id="cardBody"></p></div>
+    <div id="hint">点击画面上的光点，查看精确知识点（文字层）</div>
+    <div id="feedback"></div>
+  </div>
+</div>
+
+<script>
+/* ===== 底图说明 =====
+   真·范式：用 ImageGen 生一张 16:9 插画(加 "NO text, NO letters, NO numbers anywhere")，
+   缩到宽≤1000、转 base64，赋给下面的 BG（或直接设为 <canvas id=bg> 的 background-image）。
+   下方用程序化插画"示例演示"混合分层，真实使用时整段 drawBg() 可删，仅保留文字层+交互层。
+*/
+var BG = null; // 例：BG = "data:image/jpeg;base64,/9j/...."; 填入后底图即换为 AI 插画
+var cv = document.getElementById('bg'), ctx = cv.getContext('2d');
+function resize(){ cv.width = cv.clientWidth; cv.height = cv.clientHeight; drawBg(); }
+function drawBg(){
+  var W=cv.width, H=cv.height; if(!W) return;
+  if(BG){ var im=new Image(); im.onload=function(){ctx.drawImage(im,0,0,W,H);}; im.src=BG; return; }
+  // 程序化插画示意：天空→山→水面倒影（含多处渐变，满足 T2）
+  var sky=ctx.createLinearGradient(0,0,0,H*0.7); sky.addColorStop(0,'#bfe9ff'); sky.addColorStop(1,'#eaf6ff');
+  ctx.fillStyle=sky; ctx.fillRect(0,0,W,H);
+  var sun=ctx.createRadialGradient(W*0.78,H*0.22,4,W*0.78,H*0.22,70); sun.addColorStop(0,'#fff3c4'); sun.addColorStop(1,'rgba(255,243,196,0)');
+  ctx.fillStyle=sun; ctx.beginPath(); ctx.arc(W*0.78,H*0.22,70,0,7); ctx.fill();
+  var hill=ctx.createLinearGradient(0,H*0.45,0,H*0.72); hill.addColorStop(0,'#9bd6a0'); hill.addColorStop(1,'#5fae73');
+  ctx.fillStyle=hill; ctx.beginPath(); ctx.moveTo(0,H*0.72); ctx.quadraticCurveTo(W*0.3,H*0.42,W*0.55,H*0.62); ctx.quadraticCurveTo(W*0.8,H*0.78,W,H*0.6); ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.fill();
+  var water=ctx.createLinearGradient(0,H*0.72,0,H); water.addColorStop(0,'#bfe3ef'); water.addColorStop(1,'#7fc6dd');
+  ctx.fillStyle=water; ctx.fillRect(0,H*0.72,W,H*0.28);
+  // 树（近景，≥3 明度档 + 落影）
+  ctx.fillStyle='rgba(0,0,0,.18)'; ctx.beginPath(); ctx.ellipse(W*0.24,H*0.83,46,12,0,0,7); ctx.fill();
+  var trunk=ctx.createLinearGradient(W*0.235,H*0.55,W*0.245,H*0.8); trunk.addColorStop(0,'#9c6b3f'); trunk.addColorStop(1,'#5e3d22');
+  ctx.fillStyle=trunk; ctx.fillRect(W*0.237,H*0.55,12,H*0.25);
+  var crown=ctx.createRadialGradient(W*0.243,H*0.5,6,W*0.243,H*0.52,42); crown.addColorStop(0,'#7cc98a'); crown.addColorStop(1,'#3e8f57');
+  ctx.fillStyle=crown; ctx.beginPath(); ctx.arc(W*0.243,H*0.51,40,0,7); ctx.fill();
+}
+window.addEventListener('resize', resize); resize();
+
+/* ===== 交互层 ===== */
+var INFO = {
+  sun:  {t:'太阳（光源）', b:'清晨阳光斜射，物体影子较长。光能是地球上几乎所有能量的来源。'},
+  tree: {t:'树（生产者）', b:'绿色植物通过光合作用，把二氧化碳和水变成有机物和氧气。'},
+  water:{t:'池塘（栖息地）', b:'淡水生态系统为鱼、蛙、水草等提供生存空间，水体有自净能力但有限度。'}
+};
+var card=document.getElementById('card'), fb=document.getElementById('feedback');
+document.querySelectorAll('.hot').forEach(function(h){
+  h.addEventListener('pointerdown', function(){
+    var k=h.getAttribute('data-k'), d=INFO[k];
+    document.getElementById('cardTitle').textContent=d.t;
+    document.getElementById('cardBody').textContent=d.b;
+    card.style.display='block'; fb('已打开：'+d.t);
+  });
+});
+document.getElementById('cardClose').addEventListener('pointerdown', function(){ card.style.display='none'; });
+document.getElementById('resetBtn').addEventListener('pointerdown', function(){ card.style.display='none'; fb('已重置'); });
+document.getElementById('fsBtn').addEventListener('pointerdown', function(){
+  var el=document.documentElement;
+  if(!document.fullscreenElement){ (el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el); }
+  else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); }
+});
+
+/* __selfTest：热点数量断言（verify_render.py 契约） */
+window.__selfTest = function(){
+  var n = document.querySelectorAll('.hot').length;
+  var cases=[{name:"热点数量", ok:n===3, expect:3, actual:n}];
+  return { pass: cases.every(function(c){return c.ok===true;}), cases:cases };
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": "20"
+  },
+  "npmRegistries": [
+    "https://registry.npmmirror.com",
+    "https://registry.npmjs.org"
+  ],
+  "init": {
+    "darwin": "npm install -g @zhizai/cli@latest",
+    "linux": "npm install -g @zhizai/cli@latest",
+    "win32": "npm install -g @zhizai/cli@latest"
+  },
+  "auth": {
+    "darwin": "zhizai auth login --no-open",
+    "linux": "zhizai auth login --no-open",
+    "win32": "zhizai.cmd auth login --no-open"
+  },
+  "unAuth": {
+    "darwin": "zhizai auth logout",
+    "linux": "zhizai auth logout",
+    "win32": "zhizai.cmd auth logout"
+  },
+  "status": {
+    "darwin": "zhizai auth status",
+    "linux": "zhizai auth status",
+    "win32": "zhizai.cmd auth status"
+  },
+  "statusMatch": "认证方式:",
+  "authUrlDomain": "www.zzjilu.com",
+  "authWaitForExit": true,
+  "authSuppressBrowser": false,
+  "authDeviceFlow": {
+    "uriPattern": "\\[verify_url\\]\\s+(https?://[^\\s\"']+)",
+    "codePattern": "(?:确认码:\\s*|user_code=)([A-Za-z0-9\\-]+)",
+    "defaultExpiresInSeconds": 300,
+    "codeEmbeddedInUri": true
+  }
+}

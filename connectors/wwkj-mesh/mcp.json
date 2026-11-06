@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "wwkj-mesh": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "--input-type=module",
+        "--eval",
+        "const { homedir } = await import('node:os'); const { join } = await import('node:path'); const { pathToFileURL } = await import('node:url'); const { readdir, stat } = await import('node:fs/promises'); const configRoot = process.env.WORKBUDDY_CONFIG_DIR || process.env.CODEBUDDY_CONFIG_DIR || join(homedir(), '.workbuddy'); const relativeEntry = ['connectors', 'wwkj-mesh', 'server.cjs']; const marketsRoot = join(configRoot, 'plugins', 'marketplaces'); const isFile = async (file) => { try { return (await stat(file)).isFile(); } catch (error) { if (['ENOENT', 'ENOTDIR'].includes(error.code)) return false; throw error; } }; let markets = []; try { markets = await readdir(marketsRoot); } catch (error) { if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error; } const entries = []; for (const market of markets.sort()) { const candidate = join(marketsRoot, market, ...relativeEntry); if (await isFile(candidate)) entries.push(candidate); } if (entries.length > 1) throw new Error('WWKJ Mesh Connector found in multiple WorkBuddy marketplaces; keep only one installed copy: ' + entries.join(', ')); let entry = entries[0]; if (!entry) { const legacy = join(configRoot, 'connectors-marketplace', ...relativeEntry); if (await isFile(legacy)) entry = legacy; } if (!entry) throw new Error('WWKJ Mesh Connector adapter not found. Reinstall the Connector. Searched ' + marketsRoot + '/<marketplace>/' + relativeEntry.join('/') + ' and ' + join(configRoot, 'connectors-marketplace', ...relativeEntry)); await import(pathToFileURL(entry).href);"
+      ],
+      "runtime": {
+        "type": "node",
+        "version": ">=18"
+      },
+      "env": {
+        "WWKJ_GATEWAY_URL": "${WWKJ_GATEWAY_URL}",
+        "WWKJ_ENT": "${WWKJ_ENT}",
+        "WWKJ_UID": "${WWKJ_UID}",
+        "WWKJ_PASSWORD": "${WWKJ_PASSWORD}",
+        "WWKJ_TIMEOUT_MS": "${WWKJ_TIMEOUT_MS}",
+        "WWKJ_IDENTITY_LOCK": "${WWKJ_IDENTITY_LOCK}",
+        "WWKJ_READ_ONLY": "${WWKJ_READ_ONLY}",
+        "WWKJ_WRITE_WHITELIST": "${WWKJ_WRITE_WHITELIST}",
+        "WWKJ_AUDIT_FILE": "${WWKJ_AUDIT_FILE}",
+        "WWKJ_AUDIT_READS": "${WWKJ_AUDIT_READS}",
+        "WWKJ_AUDIT_MAX_BYTES": "${WWKJ_AUDIT_MAX_BYTES}"
+      },
+      "timeout": 60000
+    }
+  }
+}

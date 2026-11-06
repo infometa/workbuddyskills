@@ -6,7 +6,7 @@ description: 面向中小学教师的课堂级 HTML 交互式教学动画生成�
 description_zh: 面向中小学教师的课堂级 HTML 交互式教学动画生成技能。覆盖小学到高中全学段与全部学科，按各学科特点（物理仿真、化学分子、生物结构、地理空间、数学几何、语文情境、英语游戏等）匹配专属动画类型与内容规范，产出插画级 / 真 3D 画面、离线单文件、可直接投屏或嵌入 PPT / 希沃。
 description_en: A classroom-grade HTML interactive teaching-animation generator for K-12 teachers. Covers all grades (primary through senior high) and every subject, matching each subject's character — physics simulation, chemistry molecules, biology structures, geography space, math geometry, Chinese-text context, English games — to dedicated animation types and content rules. Outputs illustration-grade / true-3D visuals as a single offline file that drops into PPT or interactive whiteboards.
 category: education
-version: 1.0.0
+version: 1.0.2
 author: 知网 edu
 
 ---
@@ -64,6 +64,10 @@ author: 知网 edu
 
 ## 🔐 前置权限校验（最高优先级，必须最先执行）（技能触发即查，硬性）
 
+> 权限校验的「三态诊断 / 通用版兜底 / 强制转化卡 / 连接器加载指引」统一见本技能 `references/_shared.md`「一、权限固定提示」，本章节仅保留本技能专属说明，不重复展开。
+
+> **权益 ≠ 引用（本技能适用）**：本技能**动画本体**是纯模型生成、**不依赖知网文献**；但「练习 / 小测题目」环节可调用知网题库（`mcp__<SERVER>__tkSearchQuestion` 等）获取真题素材，属于**弱依赖 / 可选增强**——缺失不影响动画本体，仅少一个真题练习层。无论权益 `true` 与否，动画本体内容与质量一致，差异仅在无权益时不产出依赖题库的练习题目。权益是"能不能用知网能力"的闸门，不是"该不该引用知网文献"的开关（动画本体本就不引用，题库真题才是可选的知网增强）。
+
 > **不是"等要调 edu 接口时才查"，而是本技能一经触发、进入任何生成环节之前，先查一次账号有没有知网基教数据权益。**
 > 理由：是否有权益，直接决定后面能不能走"真题 / 真数据"路径；先定调，避免做完一半才发现没权限、也避免无权限时误用替代内容。
 
@@ -72,22 +76,22 @@ author: 知网 edu
 1. `ToolSearch` 精确查 `mcp__<SERVER>__userState`（工具名前缀会漂移，见 `references/09` §二），**无参数**调用；
 2. 返回 `{"data":true|false,"code":200,...}`——**只看 `data`**；
 3. **`data === true`** → 本会话 edu 相关能力（题库真题检索、知识点/教材数据等）**可用**，后续按 `references/09` 正常使用；
-4. **`data === false`** → **立即硬中止，不再交付任何产物**：不生成动画本体、不产出任何练习 / 小测题目、不进入任何后续生成步骤，也不调用任何 edu 接口、不重试、不换关键词试探。向用户**原样输出** [_shared.md](references/_shared.md)「权限固定提示」的三条原文（⛔ 红线不展示给用户；原文以 `_shared.md` 为唯一可信源，本文不复写）。
+4. **`data === false` / 工具查不到 / 调用报错** → **通用版兜底 + 强制转化卡**（详见`references/_shared.md`「一、权限固定提示」）：不产出任何练习 / 小测题目、不调用任何 edu 接口、不重试、不换关键词试探；**动画本体（不依赖知网数据的部分）照常生成**，仅把依赖题库真题的环节改为"需接入知网后获取"，并原样输出 [_shared.md](references/_shared.md)「权限固定提示」的「解锁知网数据增强层」（⛔ 红线不展示给用户；原文以 `_shared.md` 为唯一可信源，本文不复写）。
 
-**无权益时禁止绕过（红线）**：不得改用 WebSearch / 网络抓题、不得用 LLM 自编题冒充真题、不得在页面或交付说明中标注"选自 CNKI 题库""来源：知网"、不得调用其它数据源当等价替代、不得用历史检索结果充数。
+**无权益时禁止绕过（红线）**：通用版兜底允许用模型完成不依赖知网数据的部分，但**不得**改用 WebSearch / 网络抓题、不得用 LLM 自编题冒充真题、不得在页面或交付说明中标注"选自 CNKI 题库""来源：知网"、不得调用其它数据源当等价替代、不得用历史检索结果充数；强依赖知网数据的环节只能说明"需接入知网后获取"。
 
-**未连接 / 调用失败同样硬中止**：本技能的闸门不区分"无权益"与"未连接"——`mcp__<SERVER>__userState` 工具查不到（即 `edu` 连接器未安装 / 未启用）或调用报错，与 `data:false` 等价，**一律立即硬中止、不交付任何产物**，并提示用户到连接器管理页启用 `edu` 连接器、确认账号拥有「知网基教」权益后重试，不要据此判定为"接口偶发故障"而绕过。只有在 `edu` 连接器已连接、且明确拿到 `data:false` 时，才额外提示前往 e.cnki.net 购买 / 开通权益。若中途 edu 调用报权限相关错误，重查一次 `mcp__<SERVER>__userState` 再下结论。
+**未连接 / 调用失败同样走转化卡**：本技能的闸门不区分"无权益"与"未连接"——`mcp__<SERVER>__userState` 工具查不到（即 `edu` 连接器未安装 / 未启用）或调用报错，与 `data:false` 等价，一律按`references/_shared.md`「一、权限固定提示」「通用版兜底 + 强制转化卡」处理，并提示用户到连接器管理页启用 `edu` 连接器、确认账号拥有「知网基教」权益后重试，不要据此判定为"接口偶发故障"而绕过。只有在 `edu` 连接器已连接、且明确拿到 `data:false` 时，才额外提示前往 e.cnki.net 购买 / 开通权益。若中途 edu 调用报权限相关错误，重查一次 `mcp__<SERVER>__userState` 再下结论。
 
 详见 `references/09-question-bank-api.md` §零。
 
 ## 工作流（Step 0 之后 5 步，信息缺失不阻塞）
 
-> 前置已由 Step 0 给出权益结论：**有权益 → edu 能力可用；无权益 / 未连接 → 立即硬中止、不交付任何产物（含动画本体与练习题目）**，后续步骤不再重复调用 `mcp__<SERVER>__userState`（除非报错需复核）。
+> 前置已由 Step 0 给出权益结论：**有权益 → edu 能力可用；无权益 / 未连接 → 通用版兜底 + 强制转化卡（通用版完成不依赖知网数据的部分，并原样输出「解锁知网数据增强层」）**，后续步骤不再重复调用 `mcp__<SERVER>__userState`（除非报错需复核）。
 
-1. **定教学点与画像**：提取学科、学段、教材版本、教学点、课堂上怎么用。信息不全按 `references/00-clarify.md` 默认值直接推进，不停下追问。生成前先过一遍该知识点的教材标准表述（定义、公式、结论、原文）。**`edu` 工具是否可用，以 Step 0 的权益结论为准**（有权益才调用；无权益 / 未连接则 Step 0 已硬中止、不交付任何产物，本步骤不执行）。**课标对齐默认靠 LLM 通用知识兜底**；`edu` 工具（mcp__<SERVER>__tkPoint/mcp__<SERVER>__tkBook）数据可用但单学科返回 6MB+ 且无关键词过滤，不可内联进本 Skill 生成链，归 Dify 产品层检索节点（详见 `references/06`）。
+1. **定教学点与画像**：提取学科、学段、教材版本、教学点、课堂上怎么用。信息不全按 `references/00-clarify.md` 默认值直接推进，不停下追问。生成前先过一遍该知识点的教材标准表述（定义、公式、结论、原文）。**`edu` 工具是否可用，以 Step 0 的权益结论为准**（有权益才调用；无权益 / 未连接则 Step 0 已走通用版兜底——**动画本体照常生成**，仅题库真题练习层不产出、不进入本步骤）。**课标对齐默认靠 LLM 通用知识兜底**；`edu` 工具（mcp__<SERVER>__tkPoint/mcp__<SERVER>__tkBook）数据可用但单学科返回 6MB+ 且无关键词过滤，不可内联进本 Skill 生成链，归 Dify 产品层检索节点（详见 `references/06`）。
 2. **定类型 × 学科 × 学段 × 介质**：先判**学科**，按 `references/05-subject-specs.md` 加载该学科的强需求、首选形态、内容红线与视觉惯例；再按 `references/01-types-and-interactions.md` 把教学点映射到 10 类形态之一（必要时叠加 1 个辅助类型）；按学段定深度与界面形态；按"画质策略"定渲染介质；并在学段基准上叠加学科种子 + 知识点母题 + 用户风格词，落实「一素材一特点」（见下节）。
 3. **渲染**：插画类先 AI 生图底图再叠加交互；代码类照 `references/02-rendering-and-visual.md` 的配方与设计系统。先画场景 / 主体，再上 UI。
-4. **内容收口**：按 `references/03-content-accuracy.md` 通用规则 + `references/05-subject-specs.md` 该**学科的内容红线**逐条核对（公式、单位、符号、数值、图形、史实、原文引用、安全提示）；确认精确文字都在 HTML 文字层。学科红线与通用规则冲突时以学科红线为准。**动画内的练习 / 小测题目来源走 `references/09-question-bank-api.md`**：按 **Step 0 的权益结论**执行——有权益则检索 CNKI 基教题库真题并标注出处；无权益 / 未连接则本技能已在 Step 0 闸门处硬中止，**不进入本步骤、不产出任何练习题目**（严禁改用网络抓题、自编题冒充真题或"自编仿真题"充数）。
+4. **内容收口**：按 `references/03-content-accuracy.md` 通用规则 + `references/05-subject-specs.md` 该**学科的内容红线**逐条核对（公式、单位、符号、数值、图形、史实、原文引用、安全提示）；确认精确文字都在 HTML 文字层。学科红线与通用规则冲突时以学科红线为准。**动画内的练习 / 小测题目来源走 `references/09-question-bank-api.md`**：按 **Step 0 的权益结论**执行——有权益则检索 CNKI 基教题库真题并标注出处；无权益 / 未连接则**本技能走通用版兜底**（动画本体照常生成），**仅不产出依赖题库真题的练习题目**（严禁改用网络抓题、自编题冒充真题或"自编仿真题"充数，练习层改为说明"需接入知网后获取"）。
 5. **交付前质检（可选，不回灌创意）**：作品先确保画面与教学到位；再跑 `scripts/validate_html.py` 结构自检、`scripts/verify_render.py <文件>` 真浏览器校验（JS 错误 + `__selfTest` + 主视觉占比 + 触控尺寸）、`lint_facts.py` 核对 `data-fact`。校验**只管"能不能跑 / 满不满"**，有 FAIL 优先修"能跑"类问题；若某契约项与画质冲突，**以画质与教学为准**。写到当前工作目录（中文教学点命名），按 `templates/delivery-note.md` 给说明。
 
 ## 学段适配

@@ -66,7 +66,7 @@ SOURCE_PRIORITY = ["journal", "thesis", "newspaper", "book", "chapter", "textboo
 ## 四、文献从哪来：edu MCP 的 mcp__<SERVER>__searchVectorBJ
 
 文献检索**唯一入口**是 `mcp__<SERVER>__searchVectorBJ`。
-早期文档里出现过的 `mcp__edu__searchLiteratureKnowledge` 在当前 edu MCP 中**不存在**（`ToolSearch` 精确查名无结果），
+早期文档里出现过的 `mcp__<SERVER>__searchLiteratureKnowledge` 在当前 edu MCP 中**不存在**（`ToolSearch` 精确查名无结果），
 已登记在 `scripts/mcp_adapters.py` 的 `DEPRECATED_TOOLS` 里，别照抄。
 
 ### 接口只给一半字段

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-cnki-tier="T2" data-cnki-stage="junior">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>空间漫游 参照样板 · 画质基准件（透视+八方向+罗盘+信息卡）</title>
+<style>
+  /* 初中清新蓝绿，园区漫游场景 */
+  :root{
+    --bg:#0b1220; --primary:#16a34a; --secondary:#0ea5a4; --accent:#f59e0b;
+    --card:#ffffff; --text:#1e293b; --muted:#5b7083; --line:rgba(255,255,255,.12);
+    --radius:12px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%; font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; background:var(--bg); color:#e8eefc; overflow:hidden;}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+  }
+  #app{position:fixed; inset:0; display:flex; flex-direction:column;}
+  header{display:flex; align-items:center; gap:10px; padding:10px 16px; background:rgba(15,23,42,.7); backdrop-filter:blur(10px); z-index:6;}
+  header h1{font-size:16px; margin:0; flex:1; font-weight:700;}
+  .btn{font-size:13px; min-height:44px; padding:0 13px; border:1px solid var(--line); border-radius:9px; background:rgba(30,41,59,.7); color:#e8eefc; cursor:pointer; touch-action:manipulation;}
+  .btn.primary{background:var(--primary); color:#06210f; border-color:var(--primary); font-weight:700;}
+  #stage{flex:1; position:relative;}
+  canvas{position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none;}
+  /* 罗盘 */
+  #compass{position:absolute; top:14px; left:50%; transform:translateX(-50%); width:88px; height:88px; border-radius:50%;
+    background:rgba(15,23,42,.7); border:2px solid var(--line); backdrop-filter:blur(8px);}
+  #headingTxt{position:absolute; top:108px; left:50%; transform:translateX(-50%); font-size:13px; color:#9fb2d6;}
+  /* 触屏方向键 */
+  #dpad{position:absolute; right:18px; bottom:18px; width:150px; height:150px;}
+  #dpad .db{position:absolute; width:46px; height:46px; border-radius:10px; background:rgba(30,41,59,.8); border:1px solid var(--line);
+    color:#e8eefc; font-size:18px; display:flex; align-items:center; justify-content:center; touch-action:none; user-select:none;}
+  #dpad .db:active{background:var(--primary); color:#06210f;}
+  #dF{top:0;left:52px;} #dB{bottom:0;left:52px;} #dL{left:0;top:52px;} #dR{right:0;top:52px;}
+  #turn{position:absolute; left:18px; bottom:18px; display:flex; gap:10px;}
+  #turn .tb{width:52px; height:52px; border-radius:50%; background:rgba(30,41,59,.8); border:1px solid var(--line); color:#e8eefc; font-size:22px; display:flex; align-items:center; justify-content:center; touch-action:none;}
+  #turn .tb:active{background:var(--accent); color:#3a2a00;}
+  /* 信息卡 */
+  #card{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(86%,420px); background:#fff; color:#1e293b;
+    border-radius:14px; box-shadow:0 12px 30px rgba(0,0,0,.4); padding:18px 20px; display:none; z-index:7;}
+  #card h3{margin:0 0 8px; font-size:17px; color:var(--primary);}
+  #card p{margin:0; font-size:15px; line-height:1.7;}
+  #card .close{position:absolute; right:12px; top:10px; font-size:20px; color:#94a3b8; border:none; background:none; cursor:pointer;}
+  #hint{position:absolute; left:0; right:0; bottom:176px; text-align:center; font-size:13px; color:#9fb2d6;}
+  #feedback{position:absolute; left:0; right:0; bottom:150px; text-align:center; font-size:14px; font-weight:600; color:var(--accent); min-height:20px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>园区漫游 · 第一人称空间探索</h1>
+    <button class="btn" id="resetBtn">回到入口</button>
+    <button class="btn primary" id="fsBtn">全屏</button>
+  </header>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="compass"></div>
+    <div id="headingTxt">朝向：北</div>
+    <div id="hint">用键盘 WASD/方向键移动，拖动画面转向；点地标查看介绍</div>
+    <div id="feedback"></div>
+    <div id="turn">
+      <div class="tb" id="turnL">⟲</div>
+      <div class="tb" id="turnR">⟳</div>
+    </div>
+    <div id="dpad">
+      <div class="db" id="dF">▲</div><div class="db" id="dB">▼</div>
+      <div class="db" id="dL">◀</div><div class="db" id="dR">▶</div>
+    </div>
+    <div id="card"><button class="close" id="cardClose">×</button><h3 id="cardTitle"></h3><p id="cardBody"></p></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+  var W=0,H=0, DPR=Math.min(window.devicePixelRatio||1,2);
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var px=0, pz=0, yaw=0;      // 玩家位置与朝向(0=朝北，即 -z)
+  var eyeH=1.6;
+  // 地标：[世界x, 世界z, 名称, 介绍]
+  var MARK=[
+    [0,18,'校史馆','建于 1952 年，记录学校七十余年办学历程与名人校友。'],
+    [12,10,'图书馆','藏书 30 万册，设电子检索区与静音自习室。'],
+    [-12,8,'实验楼','物理、化学、生物实验室集中于此，配标准通风与防护。'],
+    [6,-14,'运动场','标准 400 米塑胶跑道，课余与体育课时开放。'],
+    [-8,-10,'食堂','可同时容纳 800 人，提供三餐与清真窗口。']
+  ];
+
+  function resize(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); }
+  // 透视投影：世界点 → 屏幕（含高度 wy）
+  function project(wx,wz,wy){
+    var dx=wx-px, dz=wz-pz;
+    var f = dx*Math.sin(yaw) + dz*Math.cos(yaw);   // 前方分量
+    var r = dx*Math.cos(yaw) - dz*Math.sin(yaw);   // 右方分量
+    if(f < 0.05) return null;
+    var focal=Math.min(W,H)*0.9;
+    var horizon=H*0.42;
+    var sx=W/2 + r*focal/f;
+    var sy=horizon + (eyeH-(wy||0))*focal/f;
+    return {x:sx, y:sy, f:f, scale:focal/f};
+  }
+  function drawWorldLine(x1,z1,x2,z2,color,wy){
+    var N=24;
+    ctx.strokeStyle=color; ctx.lineWidth=1.4; ctx.beginPath(); var pen=false;
+    for(var i=0;i<=N;i++){ var t=i/N; var wx=x1+(x2-x1)*t, wz=z1+(z2-z1)*t;
+      var p=project(wx,wz,wy||0); if(!p){pen=false; continue;}
+      if(!pen){ctx.moveTo(p.x,p.y); pen=true;} else ctx.lineTo(p.x,p.y); }
+    ctx.stroke();
+  }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    // 天空 + 地面（两处渐变，满足 T2）
+    var sky=ctx.createLinearGradient(0,0,0,H*0.45); sky.addColorStop(0,'#1e3a5f'); sky.addColorStop(1,'#3b6ea5');
+    ctx.fillStyle=sky; ctx.fillRect(0,0,W,H*0.45);
+    var gnd=ctx.createLinearGradient(0,H*0.42,0,H); gnd.addColorStop(0,'#4a7c4e'); gnd.addColorStop(1,'#2f5a33');
+    ctx.fillStyle=gnd; ctx.fillRect(0,H*0.42,W,H*0.58);
+
+    var step=2, R=18;
+    var gx0=Math.floor((px-R)/step)*step, gz0=Math.floor((pz-R)/step)*step;
+    for(var k=0;k<=R*2/step;k++){ // 东西向格线(常z)
+      drawWorldLine(gx0, gz0+k*step, gx0+R*2, gz0+k*step, 'rgba(255,255,255,.10)', 0);
+      drawWorldLine(gx0+k*step, gz0, gx0+k*step, gz0+R*2, 'rgba(255,255,255,.10)', 0);
+    }
+    // 地标（远→近绘制）
+    var order=MARK.map(function(m,i){ var d=Math.hypot(m[0]-px,m[1]-pz); return {i:d,m:m}; }).sort(function(a,b){return b.i-a.i;});
+    for(var o=0;o<order.length;o++){ var m=order[o].m;
+      var base=project(m[0],m[1],0), top=project(m[0],m[1],2.4); if(!base||!top) continue;
+      // 落影
+      ctx.fillStyle='rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(base.x,base.y,18*base.scale/120+6,7*base.scale/120+3,0,0,7); ctx.fill();
+      // 立柱
+      ctx.strokeStyle='#caa46a'; ctx.lineWidth=Math.max(2,base.scale/90); ctx.beginPath(); ctx.moveTo(base.x,base.y); ctx.lineTo(top.x,top.y); ctx.stroke();
+      // 标牌
+      var w=Math.max(54, 70*base.scale/120), h=24;
+      ctx.fillStyle='rgba(22,163,74,.92)'; ctx.strokeStyle='#fff'; ctx.lineWidth=1.5;
+      roundRect(ctx, top.x-w/2, top.y-h-6, w, h, 6); ctx.fill(); ctx.stroke();
+      ctx.fillStyle='#fff'; ctx.font='bold '+Math.max(11,13*base.scale/120)+'px sans-serif'; ctx.textAlign='center';
+      ctx.fillText(m[2], top.x, top.y-h+11);
+      m._sx=base.x; m._sy=base.y; m._vis=true;
+    }
+
+    // 罗盘
+    drawCompass();
+    requestAnimationFrame(frame);
+  }
+  function roundRect(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
+  function drawCompass(){
+    var el=document.getElementById('compass'); var cw=el.clientWidth||88, ch=el.clientHeight||88;
+    // 用独立离屏绘制到 canvas 上更顺，但这里直接画在 cv 顶
+    var cx=W/2, cy=14+44, R=40;
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.fillStyle='rgba(15,23,42,.7)'; ctx.beginPath(); ctx.arc(0,0,R,0,7); ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,.25)'; ctx.lineWidth=2; ctx.stroke();
+    // 北针：随 yaw 旋转（北在世界 -z，屏幕上方为北当 yaw=0）
+    ctx.rotate(yaw);
+    ctx.fillStyle='#ef4444'; ctx.beginPath(); ctx.moveTo(0,-R+8); ctx.lineTo(7,4); ctx.lineTo(-7,4); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#e8eefc'; ctx.beginPath(); ctx.moveTo(0,R-8); ctx.lineTo(7,-4); ctx.lineTo(-7,-4); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    // 朝向文本
+    var dirs=['北','东北','东','东南','南','西南','西','西北'];
+    var d=Math.round((-yaw)/(Math.PI/4)); d=((d%8)+8)%8;
+    document.getElementById('headingTxt').textContent='朝向：'+dirs[d];
+  }
+
+  /* 移动 / 转向 */
+  var mv={f:0,b:0,l:0,r:0}, turning=0;
+  var speed=6; // 世界单位/秒
+  function stepMove(dt){
+    var fx=Math.sin(yaw), fz=Math.cos(yaw);     // 前
+    var rx=Math.cos(yaw), rz=-Math.sin(yaw);    // 右
+    px += (mv.f-mv.b)*fx*speed*dt + (mv.r-mv.l)*rx*speed*dt;
+    pz += (mv.f-mv.b)*fz*speed*dt + (mv.r-mv.l)*rz*speed*dt;
+    yaw += turning*1.4*dt;
+    // 靠近地标提示
+    var near=null, nd=3;
+    for(var i=0;i<MARK.length;i++){ var d=Math.hypot(MARK[i][0]-px,MARK[i][1]-pz); if(d<nd){nd=d; near=MARK[i];} }
+    document.getElementById('feedback').textContent = near? ('已靠近「'+near[2]+'」，点击查看介绍') : '';
+  }
+  var last=performance.now();
+  (function loop(){ var now=performance.now(); var dt=Math.min(0.05,(now-last)/1000); last=now;
+    if(!reduce || (mv.f||mv.b||mv.l||mv.r||turning)) stepMove(dt);
+    if(!reduce){} else stepMove(dt); // reduced-motion 下仅手动时移动（上面已处理）
+    requestAnimationFrame(loop); })();
+  // 注意：reduced-motion 时不强制自动；移动只在有输入时发生
+
+  // 键盘
+  var keymap={ArrowUp:'f',KeyW:'f',ArrowDown:'b',KeyS:'b',ArrowLeft:'l',KeyA:'l',ArrowRight:'r',KeyD:'r'};
+  window.addEventListener('keydown', function(e){ if(keymap[e.code]){ mv[keymap[e.code]]=1; e.preventDefault(); } });
+  window.addEventListener('keyup', function(e){ if(keymap[e.code]) mv[keymap[e.code]]=0; });
+  // 触屏方向键
+  function bindHold(id,prop,val){ var el=document.getElementById(id);
+    var on=function(e){ e.preventDefault(); mv[prop]=val; }; var off=function(){ mv[prop]=0; };
+    el.addEventListener('pointerdown',on); el.addEventListener('pointerup',off); el.addEventListener('pointerleave',off); el.addEventListener('pointercancel',off); }
+  bindHold('dF','f',1); bindHold('dB','b',1); bindHold('dL','l',1); bindHold('dR','r',1);
+  document.getElementById('turnL').addEventListener('pointerdown', function(e){e.preventDefault(); turning=-1;});
+  document.getElementById('turnL').addEventListener('pointerup', function(){turning=0;});
+  document.getElementById('turnL').addEventListener('pointerleave', function(){turning=0;});
+  document.getElementById('turnR').addEventListener('pointerdown', function(e){e.preventDefault(); turning=1;});
+  document.getElementById('turnR').addEventListener('pointerup', function(){turning=0;});
+  document.getElementById('turnR').addEventListener('pointerleave', function(){turning=0;});
+  // 拖拽转向
+  var drag=false, lx=0;
+  cv.addEventListener('pointerdown', function(e){ drag=true; lx=e.clientX; // 同时检测点地标
+    for(var i=0;i<MARK.length;i++){ var m=MARK[i]; if(m._vis){ var dx=e.clientX-m._sx, dy=e.clientY-m._sy; if(Math.hypot(dx,dy)<40){ openCard(m); return; } } }
+    cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointerup', function(){ drag=false; });
+  cv.addEventListener('pointermove', function(e){ if(!drag) return; yaw += (e.clientX-lx)*0.005; lx=e.clientX; });
+
+  function openCard(m){ document.getElementById('cardTitle').textContent=m[2]; document.getElementById('cardBody').textContent=m[3]; document.getElementById('card').style.display='block'; }
+  document.getElementById('cardClose').addEventListener('pointerdown', function(){ document.getElementById('card').style.display='none'; });
+  document.getElementById('resetBtn').addEventListener('pointerdown', function(){ px=0; pz=0; yaw=0; document.getElementById('card').style.display='none'; });
+  document.getElementById('fsBtn').addEventListener('pointerdown', function(){ var el=document.documentElement;
+    if(!document.fullscreenElement){ (el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);} else {(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);} });
+
+  window.addEventListener('resize', resize); resize(); requestAnimationFrame(frame);
+
+  /* __selfTest：地标数量断言（verify_render.py 契约） */
+  window.__selfTest = function(){
+    var cases=[{name:"地标数量", ok:MARK.length===5, expect:5, actual:MARK.length}];
+    return { pass: cases.every(function(c){return c.ok===true;}), cases:cases };
+  };
+})();
+</script>
+</body>
+</html>

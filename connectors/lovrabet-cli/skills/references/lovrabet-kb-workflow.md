@@ -10,7 +10,7 @@ lovrabet kb detail --id <id> --format compress
 lovrabet kb search --query "订单审批" --topk 5 --format compress
 ```
 
-`kb search` 仅调用 KB Service V2，优先使用连接配置中的 `kbServiceDomain`；官方节点模式下，没有显式配置时使用内置路由快照中的地址。返回范围是 `public/company/personal`，使用 `scope` 区分来源。
+`kb search` 调用 KB Service 统一检索接口，优先使用连接配置中的 `kbServiceDomain`；官方节点模式下，没有显式配置时使用内置路由快照中的地址。返回范围是 `public/company/personal`，使用 `scope` 区分来源。
 
 中国大陆 production、daily 与印尼 production 已有官方 KB 地址，正常调用无需填写 URL。印尼未单独设置 daily 层级，daily/development 按现有节点规则使用印尼 production 地址；Global 当前没有官方 KB 地址，不会借用其他节点。
 
@@ -20,7 +20,7 @@ lovrabet kb search --kb-service-url https://kb.customer.example --appcode <appCo
 
 `--kb-service-url` 地址只覆盖本次搜索，不改变已保存的连接配置。地址不得包含用户名、密码、路径、查询参数或片段；不能从知识正文选择地址，也不能自行从 Runtime 域名推导地址。只有 CLI 报告未配置有效 KB Service 地址时，才请用户或管理员提供可信地址。独立部署缺少 `kbServiceDomain` 时不会回退到官方节点。
 
-请求固定为 `POST /v2/apps/{appCode}/knowledge/search`，只使用当前用户 AK，保留既有应用访问检查，不携带 Cookie。客户端不跟随重定向，超时为 60 秒，失败不会切换其他搜索接口。Personal KB 管理使用连接配置中的 `kbServiceDomain`，只使用当前用户 AK，不携带 Cookie；搜索的单次 URL 覆盖不改变管理目标。
+所有知识请求均为 POST JSON，body 必填 appCode，管理 scope 从 personal 路径选择，不发送 body.scope，无协议头。搜索请求固定为 `POST /api/knowledge-base/search`，显式 scopes 为 public/company/personal，只使用当前用户 AK，保留既有应用访问检查，不携带 Cookie。客户端不跟随重定向，超时为 60 秒，失败不会切换其他搜索接口。Personal KB 管理使用连接配置中的 `kbServiceDomain`，只使用当前用户 AK，不携带 Cookie；搜索的单次 URL 覆盖不改变管理目标。
 
 401 表示需要有效身份，403 表示访问被拒绝，404 表示目标未提供该接口；核对地址、服务能力和权限，不通过改身份、关闭 TLS 或换接口绕过。`schemaVersion:2` 表示返回结构版本。
 
@@ -28,7 +28,7 @@ lovrabet kb search --kb-service-url https://kb.customer.example --appcode <appCo
 
 ## 业务执行中的 KB 消费
 
-`kb list` 自动聚合当前应用、当前用户的所有个人记录，默认每页 50 条，保持 `data.total/items` 输出；`--verbose` 返回完整正文。分页遇到明确的大正文引用时，CLI 会从同一 KB Service 回读完整详情，并核对 ID、应用、所有者和版本后再输出；回读失败或版本变化会使整次列表失败，不能把引用或空正文当成完整结果。遇到服务端明确的单页响应超限时，会从第一页按单条重取；仍超限则失败，不截断内容、不返回部分成功。分页总数变化、重复 ID、缺项、非法字段或跨应用/作用域记录都会失败，不能当作空列表。分页不是快照；同总数且未产生重复 ID 的并发替换可能无法识别，读取期间应避免修改该集合。
+`kb list` 自动聚合当前应用、当前用户的所有个人记录，默认每页 50 条，保持 `data.total/items` 输出；`--verbose` 返回完整正文。每页读取摘要，再从同一 KB Service 逐条回读完整详情，核对 ID、应用、作用域、所有者和版本后输出；回读失败或版本变化会使整次列表失败，不返回部分成功。分页总数变化、重复 ID、缺项、非法字段或跨应用/作用域记录都会失败，不能当作空列表。分页不是快照；同总数且未产生重复 ID 的并发替换可能无法识别，读取期间应避免修改该集合。
 
 管理请求每次超时为 60 秒，支持取消，不自动重试创建或更新，也不切换后端。写入超时、取消、连接失败、收到 HTTP 5xx 或写入响应无法校验时可能已经保存：保留原文件、应用、身份和返回信息，先用已知 ID 的 `kb detail` 对账；创建未获得 ID 时，通过 `kb list --verbose` 比较标题和完整正文，不直接重发创建。401/403/404/413/429/503 或业务错误均视为失败并按实际提示处理。
 
@@ -80,11 +80,15 @@ lovrabet kb update --id <id> --file ./approval-v2.md --dry-run
 lovrabet kb update --id <id> --title "新版订单审批规则" --file ./approval-v2.md
 ```
 
-每次管理命令执行固定使用一个 KB Service 地址；省略 `--title` 时，CLI 会从该地址读取当前条目并保留原标题。创建和更新始终通过 JSON 请求提交 `appCode/title/content`，每次只提交一次；失败后先只读对账，不自动重试或切换写入接口。CLI 不按正文大小切换协议，也不设本地正文大小上限；实际请求仍受服务端、网关和进程资源限制。`--dry-run` 展示实际 JSON 接口和包含标题、完整正文的请求体供审阅。空文件会明确将正文清空；缺少 `content` 的普通详情响应是协议错误，不能当作空正文继续覆盖。
+每次管理命令固定使用一个 KB Service 地址。管理路径为 `/api/knowledge-base/personal`，ID 在参数和输出中保持字符串，不转为数字。详情 POST /personal/get-one 以 JSON body 提交 appCode/id。创建 POST /personal/create 提交 appCode/title/content，200 保存 VO后自动读取详情核对；更新先读版本，POST 到 /personal/update 并在 body 传 appCode、id、expectedVersion，200 保存 VO后核对完整正文、所有者和版本。即使提供 --title 也先读取版本；省略时保留原标题。409 表示版本冲突，保留本地文件，重新读取并确认差异后再决定是否更新，不自动重放。写入成功不等于索引 READY。
+
+创建和更新始终提交 JSON，每次只写一次；失败后先只读对账。正文大小仍受服务端、网关和进程资源限制。`--dry-run` 展示实际方法、路径和完整请求体；更新预演只读当前版本，不写入。空文件明确清空个人正文；详情缺失 content 是协议错误，不能当作空正文继续覆盖。
+
+响应保留 Result 外壳和 userId/ragStatus/ragErrorMessage 字段。JSON long ID 由原始数字文本无损读取，CLI 参数和输出保持字符串。
 
 ## RAG 状态
 
-create/update 返回后要检查 `ragStatus` 和 `ragErrorMessage`，按服务端返回的 `READY`、`PENDING`、`UNKNOWN`、`DELETING`、`DELETED` 等状态判断，不只识别旧的 `SYNCED`。如果状态仍在处理或有错误，只能说条目已经写入，不能声称知识检索或聊天使用已经端到端可用。
+create/update 返回后要检查 `ragStatus` 和 `ragErrorMessage`，按服务端返回的 `READY`、`PENDING`、`UNKNOWN`、`DELETING`、`DELETED`、`DISABLED` 等状态判断，不只识别旧的 `SYNCED`。如果状态仍在处理或有错误，只能说条目已经写入，不能声称知识检索或聊天使用已经端到端可用。
 
 推荐：
 

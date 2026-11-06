@@ -283,11 +283,11 @@ tmeet meeting get --meeting-code "123456789"
 
 > **注意**：`sub_meetings[]` 仅含 `sub_meeting_id` / `start_time` / `end_time` / `status` 四个基本字段，**不含 `records[]`**。周期性会议的录制统一在顶层 `records[]` 中返回；`records[]` 条目**不含 `sub_meeting_id`**，需按 `media_start_time` 与子会议的起止时间对齐归属到具体子会议。
 
-> **⚠️ records 分页限制**：`meeting get` **不支持分页参数**（无 `--page-token`/`--page-size`）。当 `records_total_count` 大于实际返回条数时（`records[]` 仅返回最近若干条），**无法通过 `meeting get` 翻页获取全部录制**。如需完整录制列表，按时间范围 `meeting list-ended` 分批查询（含 `permission_status`）；`record list` 虽支持分页，但只返回已有权限的录制、无 `permission_status`，仅适用于查自己的录制。
+> **⚠️ records 分页限制**：`meeting get` **不支持分页参数**（无 `--page-token`/`--page-size`）。当 `records_total_count` 大于实际返回条数时（`records[]` 仅返回最近若干条），**无法通过 `meeting get` 翻页获取全部录制**。如需完整录制列表，按时间范围 `meeting list-ended` 分批查询（含 `permission_status`）；`record search` 支持分页且是录制检索的统一入口，但只返回已有权限的录制、不含 `permission_status`，仅适用于查自己有权限的录制。
 
 > **`permission_status` 决策规则**：
 > - `can_view`：直接展示录制信息（标题、时长、播放地址），可继续获取智能纪要/转写
-> - `can_apply`：需申请权限，询问是否发起申请（走 `permission-apply-prepare` → 用户确认 → `permission-apply-commit` 流程）
+> - `can_apply`：允许申请录制权限。先 `record permission-apply --action prepare` 展示申请预览并等待用户明确确认，再 `record permission-apply --action commit` 提交；录制中 / 转码中不得发起申请，申请前后用户确认不可省略。
 > - `closed`：告知用户录制已被关闭，无法查看
 > - `deleted`：告知用户录制已被删除，无法查看
 > - `password_required`：告知用户需要密码，请用户提供密码后重试
@@ -349,19 +349,21 @@ tmeet meeting list-ended \
 
 | 参数 | 必填 | 默认值 | 说明 |
 |------|------|--------|------|
-| `--start <time>` | 否 | — | 查询起始时间（ISO 8601，含时区）。**与 `--end` 的区间不得超过 90 天**，超出返回 `190004` |
-| `--end <time>` | 否 | — | 查询结束时间（ISO 8601，含时区）。**与 `--start` 的区间不得超过 90 天**，超出返回 `190004` |
+| `--start <time>` | 否 | 最近 30 天起点 | 查询起始时间（ISO 8601，含时区）；未传时默认取「当前时间往前推 30 天」。**与 `--end` 的区间不得超过 90 天**，超出返回 `190004` |
+| `--end <time>` | 否 | 当前时间 | 查询结束时间（ISO 8601，含时区）；未传时默认取当前时间。**与 `--start` 的区间不得超过 90 天**，超出返回 `190004` |
 | `--page-token <token>` | 否 | — | 分页游标，首页不传；后续翻页传入上一次响应的 `next_page_token` |
 | `--page-size <n>` | 否 | `30` | 每页数量，默认 30，最大 30 |
 | `--page <n>` | 否 | — | ⚠️ **已弃用**：页码（从 1 开始），请改用 `--page-token` |
 
 > **⚠️ 90 天区间上限**：`--start` 与 `--end` 的跨度**超过 90 天时返回 `190004`**，需查更长时间范围时，**主动拆成多个 ≤90 天的区间顺序查询**，不要先撞错误再拆。拆段时相邻区间的端点应连续（前段 `--end` = 后段 `--start`），避免漏查。
 
+> **默认时间窗**：未同时提供 `--start` / `--end` 时，服务端默认返回最近 30 天内的已结束会议（以当前时间为终点向前推 30 天）。若用户需要查询 30 天以前的历史会议（如「上季度的会」「今年 3 月的会」等），必须显式传入 `--start` / `--end`，否则会漏召回。
+
 ### 响应关键字段
 
 `meeting list-ended` 的响应结构与 `meeting get` 一致，`meeting_info_list[].records[]` 同样含 `permission_status` / `state` / `record_file_id` / `url` 等字段。**批量查询录制时无需逐场调 `meeting get`，一步获取。**
 
-> **与 `record list` 的区别**：`record list` 返回 `record_meetings[]`，**不含顶层 `permission_status` / `url`**（`record_file_id` 不在顶层，仅在部分条目的 `record_files[]` 内）；`list-ended` 返回 `meeting_info_list[].records[]`，每条**含** `permission_status` / `record_file_id` / `url`。需权限状态时用 `list-ended`，找用户已有权限的录制用 `record list`。
+> **与 `record search` 的区别**：`record search` 仅返回当前用户有权限的录制，**不含顶层 `permission_status` / `url`**（`record_file_id` 不在顶层，仅在部分条目的 `record_files[]` 内）；`list-ended` 返回 `meeting_info_list[].records[]`，每条**含** `permission_status` / `record_file_id` / `url`。需权限状态（含无权限录制的可见性）时用 `list-ended`；按录制内容或跨会议找自己有权限的录制用 `record search`。
 
 > **分页**：当 `has_more` 为 `true` 或 `next_page_token` 非空时，使用 `--page-token` 翻页获取完整列表。首次查询不传 `--page-token`，翻页时传入上一次响应的 `next_page_token`。`meeting list-ended` 支持 `--page-token` / `--page-size` 分页参数（注意：`meeting get` **不支持**分页参数）。
 
@@ -405,12 +407,14 @@ tmeet meeting search \
 | `--query <text>` | string | 否 | — | 搜索关键词 |
 | `--query-field <f>` | string | 否 | `all` | `--query` 的搜索字段：`subject`-会议主题；`creator`-创建者昵称/备注名；`note`-用户对会议的备注；`all`-搜索所有字段 |
 | `--meeting-code <code>` | string | 否 | — | 按会议号过滤（精确匹配，仅数字，无短横线） |
-| `--start <time>` | string | 否 | — | 搜索时间窗下限（ISO 8601）。匹配条件：会议预约开始时间、实际开始时间或当前用户加入时间任一落在窗口内 |
-| `--end <time>` | string | 否 | — | 搜索时间窗上限（ISO 8601），语义同上 |
+| `--start <time>` | string | 否 | 当前时间往前 30 天 | 搜索时间窗下限（ISO 8601）。匹配条件：会议预约开始时间、实际开始时间或当前用户加入时间任一落在窗口内；**与 `--end` 均未传时，服务端默认取「当前时间往前 30 天」** |
+| `--end <time>` | string | 否 | 当前时间往后 30 天 | 搜索时间窗上限（ISO 8601），语义同上；**与 `--start` 均未传时，服务端默认取「当前时间往后 30 天」**（`meeting search` 支持搜未来已安排的会议，与仅能查历史的 `list-ended` / `record search` 不同） |
 | `--page-token <token>` | string | 否 | — | 分页游标，首页不传；翻页时传入上一次响应的 `next_page_token` |
 | `--page-size <n>` | int | 否 | `30` | 每页大小，默认 30，最大 30 |
 
 > **`meeting search` vs `record search` 的分流**：按**会议级线索**（会议主题 / 创建人 / 会议号）找会议或其录制 → `meeting search` / `meeting get`；按**录制内容**检索（转写原文 / 纪要关键词）→ `record search`（见 [`tmeet-record.md`](tmeet-record.md)）。
+
+> **默认时间窗**：未同时提供 `--start` / `--end` 时，服务端默认返回**当前时间前后各 30 天**范围内的会议（即 `[now-30d, now+30d]`，既含最近 30 天已发生的会议，也含未来 30 天内已安排的会议）。若用户需要查询 30 天以前的历史会议（如「上季度的会」「今年 3 月的会」）或 30 天以后的未来会议，必须显式传入 `--start` / `--end`，否则会漏召回。
 
 ---
 

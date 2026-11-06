@@ -1,17 +1,17 @@
 ---
 name: tiana-sqlite
 description: 查询 Tiana SQLite 表结构、执行 SQL、选择数据库分支并连接命令行与 JavaScript 应用。创建实例和登录使用 tiana；Web 应用发布使用 tiana-web。
-license: MIT
+license: Apache-2.0
 metadata:
   author: Tiana Cloud
-  version: "1.0.0"
+  version: "1.0.5"
   parent: tiana
   source: https://github.com/tianacloud/agent-skills/tree/main/skills/tiana-sqlite
 display_name: "Tiana SQLite"
 display_name_en: "Tiana SQLite"
 description_zh: "SQLite 表结构、SQL、应用连接和数据库分支管理。"
 description_en: "SQLite schemas, SQL, application connections and database branches."
-version: "1.0.0"
+version: "1.0.5"
 author: "Tiana Cloud"
 ---
 
@@ -19,9 +19,11 @@ author: "Tiana Cloud"
 
 执行 SQL 前阅读 [SQL 命令](references/sql.md)；JavaScript 应用直接阅读下方应用连接指引。实例创建与登录使用 [Tiana](../tiana/SKILL.md)，应用发布使用 [Tiana Web](../tiana-web/SKILL.md)。相对路径以本 `SKILL.md` 所在目录为基准；客户端分开存放技能时，从已安装技能目录表定位同名依赖，不向上遍历仓库寻找安装或 Connector 文档。
 
-## 每次调用的更新检查
+## 每个会话一次的更新检查
 
-CLI 已满足最低版本要求后执行 `tiana version check --skills-version 1.0.0 --json`，使用本次加载的 metadata.version。仅在 `should_notify=true` 时提醒并询问是否升级；用户选择稍后或检查不可用时继续原任务。用户确认后的升级和重载见 [开始使用](../tiana/references/getting-started.md#更新)。CLI 管理共同的 24 小时提醒额度。
+四个 Tiana 技能共享当前会话的更新检查记录。CLI 已满足最低版本要求且本会话尚未尝试检查时，执行 `tiana version check --skills-version 1.0.5 --json`，使用实际加载的 metadata.version。调用前在会话上下文中记为已尝试；后续轮次、重复加载或切换技能均复用该记录，检查失败也不自动重试。上下文压缩或任务交接时保留记录，新会话重新检查。
+
+仅在 `should_notify=true` 时简短提醒并询问是否升级；用户选择稍后或检查不可用时继续原任务。CLI 仍管理检查缓存和共同的 24 小时提醒额度。升级及重载见[开始使用](../tiana/references/getting-started.md#更新)。
 
 ## 查询与命令行
 

@@ -29,7 +29,7 @@ sensors segment get --ai-session-id <ai_session_id> --name "<segment_name>" --en
 
 ## 输出
 
-`segment_definition` 对象：`name`、`display_name`、`entity_name`、`status`、`create_type`、`visible`、`has_valid_segment`（是否已有可用计算结果）、`create_time`、`update_time`、`trigger_type`（如 `MANUAL` / `PERIODIC` / `CRON`）。
+`segment_definition` 对象：`name`、`display_name`、`entity_name`、`status`、`create_type`、`visible`、`create_time`、`update_time`、`trigger_type`（如 `MANUAL` / `PERIODIC` / `CRON`）。
 
 输出示例：
 
@@ -37,7 +37,7 @@ sensors segment get --ai-session-id <ai_session_id> --name "<segment_name>" --en
 {
   "segment_definition": {
     "name": "…", "display_name": "…", "entity_name": "user",
-    "trigger_type": "CRON", "has_valid_segment": true,
+    "trigger_type": "CRON",
     "segment_rule_ref": {
       "segment_rule_name": "…", "version": "…",
       "expression": {"type": "SQL_BASED", "sql_segment_rule": {"sql": "…"}}
@@ -45,6 +45,10 @@ sensors segment get --ai-session-id <ai_session_id> --name "<segment_name>" --en
   }
 }
 ```
+
+注意：响应里**没有** `has_valid_segment`。它是 list 接口的请求侧过滤器（proto 中的
+`BoolValue`），响应不回传，因此不存在「值为 null」的分群——判断「有没有可用结果包」
+请用 `segment valid-check`（批量）或 `segment item-list`（看 `segment_ready` / `count`）。
 
 `segment_rule_ref`：`segment_rule_name`（规则名）、`version`（规则版本）、`expression`（完整规则条件）。`expression` 字段：
 
@@ -76,7 +80,9 @@ sensors segment get --ai-session-id <ai_session_id> --name "<segment_name>" --en
 
 结构性解读：
 
-- 先区分"定义存在"与"有可用计算结果"：`has_valid_segment` 只表示后者，两者是不同字段层的概念，不混合解释。
+- 先区分"定义存在"与"有可用计算结果"：本命令只证明前者；后者要看结果包（`segment
+  item-list` 的 `segment_ready`）或批量判定（`segment valid-check`），不要靠响应里的
+  某个字段猜。
 - 解释规则时先给 `expression.type` 规则类型，再按需摘取核心 SQL / EQL / 导入规则 / 条件组具体条件；规则内容与定义状态字段分开说明。
 - 输出中保留 `name`（机器名），供后续查询、分析或更新链路复用。
 

@@ -9,6 +9,13 @@
 >      --title "页面标题" --qtitle "题型标题" --out <输出.html>
 > ```
 >
+> **🌐 通用版装配**：当 S0 为通用版（无连接器 / 无权益）时，命令须加 `--generic` 标志，脚本会在页面顶部注入「⚠ 通用版 · 非知网标准解析」横幅：
+> ```bash
+> node scripts/assemble-html.js <S1.js> <S2.js> <S3.js> \
+>      --generic --title "页面标题" --qtitle "题型标题" --out <输出.html>
+> ```
+> 态 B 另在页末原样输出「解锁知网数据增强层」转化卡。
+>
 > - **`<S3.js>`** 传 S3.5 的产物（`apply-s3.5.js` 写出的 `*.applied.js`，或旧格式的 `s3.5.js`）。
 > - 骨架来自 `references/html-template.html`（由 `scripts/build-template.js` 从**本文件下方的 HTML 模板块**抽取 + 注入 6 个槽位标记，**单一真源**）。
 > - 脚本会做 14 项自检（`<!DOCTYPE html>` 开头 / 无残留 `@@` / 四个数据区齐全 / 档位声明 / 两块库 / `qAcc,switchQ,recQ` / `navigationMap`+`drawFunctions` / `cleanVoiceText`+`latexToSpeech` / `ctx` 前置 / 抄写自检日志块 / `questionData` 无 `highlight` 字段 / 主脚本语法可编译），全过才写出。

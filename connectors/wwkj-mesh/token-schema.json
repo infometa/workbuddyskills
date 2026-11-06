@@ -1,0 +1,113 @@
+{
+  "title": "微未科技 mesh 后端对接配置",
+  "title_en": "Weiweikeji Mesh Backend Configuration",
+  "description": "填写微未科技软件管理系统的网关地址与登录信息。凭证仅保存在本机，连接时注入 MCP 服务，不会上传云端。网关地址与企业编码必填；登录账号、密码可留空——留空后可在对话中选择「账号密码」或「短信验证码」两种方式完成登录认证。",
+  "description_en": "Configure the gateway endpoint and login identity of the weiweikeji management system. Credentials are stored locally only and injected into the MCP server at connect time; they are never uploaded. Gateway URL and enterprise code are required. The account and password may be left blank, in which case you sign in from the chat, either by password or by SMS verification code.",
+  "fields": [
+    {
+      "key": "WWKJ_GATEWAY_URL",
+      "label": "网关地址",
+      "label_en": "Gateway URL",
+      "type": "text",
+      "required": true,
+      "defaultValue": "https://openapi.wwkjcn.com",
+      "placeholder": "http://10.0.0.10:9092",
+      "description": "openapi-gateway 的访问地址，形如 http://主机:9092 或 https://域名，不要带结尾斜杠。这是连接器访问后端的唯一入口，全部请求只走网关的两个前缀：/shellauth/**（登录认证）与 /shell/**（业务代理）。填错的表现是所有工具都连不通。"
+    },
+    {
+      "key": "WWKJ_ENT",
+      "label": "企业编码 ent",
+      "label_en": "Enterprise Code (ent)",
+      "type": "text",
+      "required": true,
+      "placeholder": "1001",
+      "description": "微未系统的企业编码，登录时作为默认值（短信验证码登录时，若该手机号只对应一个账号也可由后端回填）。调用时实际生效的身份以壳登录成功后签发的令牌为准：ent/uid/uname 由网关按令牌覆盖，调用参数里写什么都不起作用（防越权）。"
+    },
+    {
+      "key": "WWKJ_UID",
+      "label": "登录账号 uid（可留空，推荐留空）",
+      "label_en": "Login Account (uid, optional)",
+      "type": "text",
+      "required": false,
+      "placeholder": "留空则每次会话在对话中登录",
+      "description": "推荐留空。留空后采用「对话式登录」，由用户在 WorkBuddy 对话中选择：① 账号密码（工具 wwkj_login）；② 手机号收码后凭验证码登录（工具 wwkj_login_send_code → wwkj_login_vcode）。填写后仅作为登录默认账号，仍需在对话中触发一次登录以取得令牌。同一会话只允许一个身份，登录后不能换人（换人需重开会话）。"
+    },
+    {
+      "key": "WWKJ_PASSWORD",
+      "label": "登录密码（可留空，推荐留空）",
+      "label_en": "Login Password (optional)",
+      "type": "password",
+      "required": false,
+      "placeholder": "留空则在对话中输入密码，或改用短信验证码",
+      "description": "推荐留空。留空后在对话中提供密码（仅存于本机进程内存，不回显、不落盘、不进审计日志）；也可完全不提供密码，改用短信验证码登录。填写后仍需在对话中触发一次登录，只是无需再输入密码（等价于把密码交给本机保存，安全性略低）。"
+    },
+    {
+      "key": "WWKJ_TIMEOUT_MS",
+      "label": "单请求超时(毫秒)",
+      "label_en": "Request Timeout (ms)",
+      "type": "text",
+      "required": false,
+      "defaultValue": "30000",
+      "placeholder": "30000",
+      "description": "连接器发往网关的**单次** HTTP 请求超时，默认 30000 毫秒。注意：MCP 层的工具调用超时在 mcp.json 里另有设置（当前 60000），调大本项时请同步调大那一项，否则会先被客户端掐断、看不到连接器给出的具体报错。"
+    },
+    {
+      "key": "WWKJ_IDENTITY_LOCK",
+      "label": "身份冻结",
+      "label_en": "Identity Lock",
+      "type": "text",
+      "required": false,
+      "defaultValue": "true",
+      "placeholder": "true 或 false",
+      "description": "★强烈建议保持 true★。开启后，任何调用参数或业务参数里出现 ent/uid/uname（以及组织上下文 orgName/uorg/uobject/udepart 等）都会被直接拒绝，避免「以为查了别人、实际查了自己」这类静默错答。唯一的例外是 org：读类接口允许把它当筛选条件传入（写类接口仍然拦），不传则由令牌里的组织兜底。"
+    },
+    {
+      "key": "WWKJ_READ_ONLY",
+      "label": "只读模式",
+      "label_en": "Read Only Mode",
+      "type": "text",
+      "required": false,
+      "defaultValue": "true",
+      "placeholder": "true 或 false",
+      "description": "★建议保持 true★。开启时所有写操作（路径段命中 create/modify/remove/active/batch/export 等动词）一律拒绝。确需写操作时改为 false，届时每次调用仍须显式传 confirm=true 做二次确认。"
+    },
+    {
+      "key": "WWKJ_WRITE_WHITELIST",
+      "label": "写操作路径白名单",
+      "label_en": "Write Path Whitelist",
+      "type": "text",
+      "required": false,
+      "placeholder": "如 /rest/todo",
+      "description": "仅当只读模式关闭时生效。填写后，只有以这些前缀开头的路径允许写入（英文逗号分隔多个）。留空表示不额外限制。建议按最小权限原则只放开确有需要的路径。"
+    },
+    {
+      "key": "WWKJ_AUDIT_FILE",
+      "label": "审计留痕文件",
+      "label_en": "Audit Log File",
+      "type": "text",
+      "required": false,
+      "placeholder": "留空 = ~/.wwkj-mesh/audit.log",
+      "description": "写操作与鉴权动作的留痕文件（JSONL，每行一条，便于用 jq/grep 检索）。留空使用默认路径 ~/.wwkj-mesh/audit.log；填 off 或 - 可关闭留痕。文件中不含密码，票据统一脱敏为前 8 位 + ****。"
+    },
+    {
+      "key": "WWKJ_AUDIT_READS",
+      "label": "审计记录只读调用",
+      "label_en": "Audit Read Calls",
+      "type": "text",
+      "required": false,
+      "defaultValue": "false",
+      "placeholder": "true 或 false",
+      "description": "默认 false，只留痕写操作、鉴权动作与失败调用。改为 true 后所有查询调用也会留痕（文件增长较快）。"
+    },
+    {
+      "key": "WWKJ_AUDIT_MAX_BYTES",
+      "label": "审计文件大小上限(字节)",
+      "label_en": "Audit File Max Bytes",
+      "type": "text",
+      "required": false,
+      "defaultValue": "5242880",
+      "placeholder": "5242880",
+      "description": "单个审计文件的大小上限，默认 5MB（5242880 字节）。超过后自动轮转为 audit.log.1。"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 name: xparse-parse
-description: "Parse, read, search, navigate, summarize, extract, or check images and documents for manipulation through xparse-cli. Use for document conversion and navigation, durable Task workflows, structured extraction, and domestic TextIn manipulation/AIGC detection of a local file or URL. Prefer it over raw PDF readers or custom OCR scripts."
+description: "Parse, read, search, navigate, summarize, extract, crop, enhance, dewarp, or check images and documents for manipulation through xparse-cli. Use for document conversion, durable Task workflows, structured extraction, and domestic TextIn image processing or manipulation/AIGC detection of a local file or URL. Prefer it over raw PDF readers or custom OCR scripts."
 ---
 
 # xparse-parse
@@ -17,8 +17,8 @@ this section override standalone installation and authentication examples in
 the shared Skill and its references:
 
 - Invoke every `xparse-cli` command as
-  `xparse-cli --profile workbuddy <command> ...`. This includes the first
-  invocation carrying `--task-context`. Examples elsewhere omit this prefix
+  `xparse-cli --profile workbuddy <command> ...`. Every business invocation
+  carries `--task-context`. Examples elsewhere omit this prefix
   only for readability.
 - Use the Connector-managed CLI version already supplied by WorkBuddy. Do not
   install, replace, pin, or upgrade `xparse-cli` from within a document task. If
@@ -50,6 +50,16 @@ the shared Skill and its references:
   reconstruct, or separately expose its grant. If WorkBuddy cannot open the
   page, return the exact URL as a clickable link, explain that automatic opening
   failed, and continue bounded status checks on the accepted Task.
+
+### Local state failures
+
+The CLI saves state natively; do not request directory authorization or change
+WorkBuddy security settings. On a local state error before execution, stop and
+report it. For `xparse_error.v1` with `details.failure_stage=telemetry_persist`,
+these rules override the shared error gate: when `details.business_succeeded=true`,
+report the telemetry warning, preserve stdout and accepted identifiers, and do
+not repeat the business command or paid parse. When `business_succeeded=false`,
+follow the actual business error and its recovery rules.
 
 ### Same-conversation extraction continuation
 
@@ -127,10 +137,17 @@ first xParse command:
 }
 ```
 
-- Preserve the user's wording and keep the operational reason brief.
+- Preserve the user's wording and keep the operational reason brief and
+  task-level. Keep `user_intent` and `tool_call_reason` unchanged within the request.
 - Never include hidden reasoning, credentials, document content, or the final answer.
-- Pass `--task-context <FILE>` only on the first xParse invocation for that request.
-- Delete the temporary file after that invocation. Later commands inherit the task.
+- Pass `--task-context <FILE>` on every business invocation, including parsing,
+  navigation, Task Runtime commands, retries, polling, and exports. Reuse the
+  same file for concurrent calls; examples below omit this flag for readability.
+- A `quota` precheck does not consume or cache the context. Keep the file and
+  pass it again to the subsequent business command.
+- Keep the file while follow-up queries or recovery remain. Delete it in a
+  separate shell call only after the request is complete and all concurrent
+  calls have ended. A new user request gets a new file.
 - Do not pass inline JSON through shell arguments, `echo`, or a heredoc.
 
 ## Command integrity and structured error gate
@@ -255,6 +272,42 @@ conclusion and risk types as detection signals, not proof of provenance. Do not
 send this domestic-only request to a global endpoint or silently substitute
 another detector. Check `detect-manipulation --help` when the installed CLI may
 predate this command.
+
+### Crop, enhance, and dewarp (domestic service only)
+
+Use `xparse-cli crop-enhance <FILE|URL>` for processed document images. This
+independent service returns images; parsing's `crop_dewarp` option does not
+replace it. Omitted parameters preserve the service defaults: cropping and
+geometric dewarping on, enhancement and orientation correction off.
+
+- Select `--enhance-mode` for the requested effect: 1 brighten, 2 enhance and
+  sharpen, 3 black/white, 4 grayscale, 5 remove shadows, 6 dot matrix, -1 off.
+- For enhancement alone, set `--crop-image 0 --dewarp-image 0` explicitly.
+- Orientation correction uses `--correct-direction 1`; it is separate from
+  geometric dewarping. `--only-position 1` returns corner positions without images.
+- Other options: `--deblur-image`, `--round-image`, `--jpeg-quality`, and
+  `--size-and-position`. Consult `crop-enhance --help` for their accepted values.
+
+Query `xparse-cli quota --service crop_enhance_image --output json` for its
+independent package. Only matching, authenticated `free_package` data is usable;
+missing data is unknown. Never substitute parse or manipulation quota. The CLI
+prechecks before calling. If exhausted or unknown, obtain approval for this
+single potentially charged call, then add `--approve-paid` to the same input.
+Approval is not transferable to later calls; a precheck is not a billing
+reservation. Service mismatch or authentication failures require remediation.
+
+Pass the current request's `--task-context` on every call. The CLI saves
+`result.json` and all original JPEG outputs in a unique folder under
+`./xparse-results/` or `--output <DIR>`, preserving order, dimensions, corners,
+angles, and other service metadata. Report absolute paths, not Base64. No image
+is expected with `--only-position 1`. Never overwrite the input, silently shrink
+images, or automatically repeat a possibly charged request after a timeout or
+local saving failure. Do not send this service to a global endpoint.
+
+```bash
+xparse-cli crop-enhance input.jpg --task-context <FILE> --enhance-mode 5 --view json
+xparse-cli crop-enhance input.jpg --task-context <FILE> --crop-image 0 --dewarp-image 0 --enhance-mode 2
+```
 
 ## Choose the workflow
 
@@ -585,8 +638,7 @@ workspace operations in the global region; do not bypass this restriction.
   refresh versions and automatically resend a mutation, loop task-wide retries,
   or create replacement tasks. Respect the server's regional availability and
   capability errors. Successful submission is not completed extraction.
-- These workspace commands require CLI 2.4.4-beta.7 or a later matching release.
-  Do not assume an older installed beta includes them. Check CLI help first.
+- Check CLI help for the required workspace subcommands before using them.
 
 #### Extraction billing and recovery
 

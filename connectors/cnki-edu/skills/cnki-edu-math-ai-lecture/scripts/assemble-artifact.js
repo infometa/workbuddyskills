@@ -31,6 +31,15 @@ const path = require('path');
 const SKILL = path.join(__dirname, '..');
 const LIBDIR = path.join(SKILL, 'references');
 
+// 输出路径白名单：仅允许写回工作区(cwd)或技能目录(SKILL)内。
+function assertSafeOutPath(p) {
+    const abs = path.resolve(p);
+    const roots = [process.cwd(), SKILL];
+    const ok = roots.some(r => { const rp = path.resolve(r); return abs === rp || abs.startsWith(rp + path.sep); });
+    if (!ok) { console.error('❌ 输出路径越界（仅允许工作区/技能目录内）：' + abs); process.exit(2); }
+    return abs;
+}
+
 const BANKS = [
     {
         tag: '几何内核', file: '几何内核.js', ver: 'v2.2',
@@ -185,6 +194,7 @@ if (CHECK_ONLY) {
     process.exit(problems.length ? 1 : 0);
 }
 
+assertSafeOutPath(outPath);
 fs.writeFileSync(outPath, text, 'utf8');
 console.log('\n✅ 已写出：' + outPath);
 console.log('   行数：' + lines.length + ' → ' + out.length +

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-cnki-tier="T2" data-cnki-stage="junior">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>通用动画骨架 · 画质基准件</title>
+<style>
+  /* 三学段设计系统（基准默认，可按学科种子覆盖）。此为「骨架」，填内容时改 :root 变量即可。
+     小学1-6 暖白#fffbf0 珊瑚红#ff6b6b+薄荷绿#4ecdc4；初中7-9 浅灰白#f8fafc 天蓝#3b82f6+青绿#06b6d4；
+     高中10-12 深蓝#0f172a 淡蓝#60a5fa+淡紫#a78bfa。 */
+  :root{
+    --bg:#f8fafc; --primary:#3b82f6; --secondary:#06b6d4; --accent:#f59e0b;
+    --card:#ffffff; --text:#1e293b; --muted:#64748b; --line:rgba(0,0,0,.08);
+    --radius:14px; --shadow:0 6px 18px rgba(15,23,42,.08);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%; font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--bg); color:var(--text);}
+  /* reduced-motion：闸门会查这条；不自动播放但仍可手动步进/拖动 */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+  }
+  #app{position:fixed; inset:0; display:flex; flex-direction:column;}
+  header{display:flex; align-items:center; gap:10px; padding:12px 16px; background:var(--card);
+    box-shadow:var(--shadow); z-index:5;}
+  header h1{font-size:17px; margin:0; flex:1; font-weight:700;}
+  .btn{font-size:14px; min-height:44px; padding:0 14px; border:1.5px solid var(--line); border-radius:10px;
+    background:var(--card); color:var(--text); cursor:pointer; touch-action:manipulation;}
+  .btn:active{border-color:var(--primary);}
+  .btn.primary{background:var(--primary); color:#fff; border-color:var(--primary);}
+  #stage{flex:1; position:relative; overflow:hidden;}
+  /* 主视觉：全屏 canvas（画质基准件示例；骨架里用柔和渐变底图，正式动画替换为你的主体） */
+  #bg{position:absolute; inset:0; width:100%; height:100%; display:block; z-index:0;}
+  /* 画布/内容区：在此放置你的动画主体 */
+  #scene{position:absolute; inset:0; z-index:1; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;}
+  /* 选中态：当前项高亮描边，未选灰显 */
+  .option{font-size:16px; min-height:48px; min-width:140px; padding:0 18px; border-radius:12px;
+    border:2px solid var(--line); background:var(--card); color:var(--muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; touch-action:manipulation; transition:all .2s;}
+  .option.sel{border-color:var(--primary); color:var(--text); background:#eef4ff; box-shadow:0 4px 12px rgba(59,130,246,.18);}
+  .row{display:flex; gap:14px; flex-wrap:wrap; justify-content:center;}
+  /* 常驻操作提示 */
+  #hint{position:absolute; left:0; right:0; bottom:54px; text-align:center; font-size:14px; color:var(--muted);}
+  /* 即时反馈（操作后 300ms 内出） */
+  #feedback{position:absolute; left:0; right:0; bottom:14px; text-align:center; font-size:15px; font-weight:600; color:var(--primary); min-height:22px;}
+  footer{font-size:12px; color:var(--muted); text-align:center; padding:6px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>通用动画骨架（在此改标题）</h1>
+    <button class="btn" id="resetBtn">重置</button>
+    <button class="btn primary" id="fsBtn">全屏</button>
+  </header>
+  <div id="stage">
+    <canvas id="bg" data-cnki-visual></canvas>
+    <div id="scene">
+      <!-- 示例：可选项 + 选中态 + 确认反馈，替换为你的教学内容 -->
+      <div class="row" id="opts">
+        <div class="option" data-v="A">选项 A</div>
+        <div class="option" data-v="B">选项 B</div>
+        <div class="option" data-v="C">选项 C</div>
+      </div>
+      <button class="btn primary" id="confirmBtn" style="min-height:44px;">确认</button>
+    </div>
+    <div id="hint">提示：点击选项选中，再点「确认」查看反馈</div>
+    <div id="feedback"></div>
+  </div>
+  <footer>骨架模板 · 六必带控件已齐：全屏 / 选中态 / 操作提示 / 即时反馈 / 重置 / 触屏</footer>
+</div>
+
+<script>
+/* ============ 通用骨架：把下面三段替换成你的教学逻辑即可 ============ */
+(function(){
+  /* 主视觉示例：柔和动态渐变（画质基准件的 canvas 底图，正式动画替换为你的主体） */
+  var bg=document.getElementById('bg'), bx=bg.getContext('2d');
+  function resizeBg(){ bg.width=bg.clientWidth; bg.height=bg.clientHeight; }
+  function drawBg(t){
+    var W=bg.width,H=bg.height; if(!W) return;
+    var g=bx.createLinearGradient(0,0,W,H); var s=0.5+0.5*Math.sin(t/2600);
+    g.addColorStop(0,'#eaf2ff'); g.addColorStop(0.5, s>0.5?'#dbe9ff':'#e7f0ff'); g.addColorStop(1,'#cfe0f2');
+    bx.fillStyle=g; bx.fillRect(0,0,W,H);
+  }
+  window.addEventListener('resize', resizeBg); resizeBg();
+  (function loop(t){ drawBg(t||0); requestAnimationFrame(loop); })();
+
+  var sel = null;
+  var opts = document.querySelectorAll('#opts .option');
+  opts.forEach(function(el){
+    el.addEventListener('pointerdown', function(){
+      opts.forEach(function(o){o.classList.remove('sel');}); // 选中态
+      el.classList.add('sel');
+      sel = el.getAttribute('data-v');
+      fb('已选择：' + el.textContent.trim());
+    });
+  });
+  var fbEl = document.getElementById('feedback');
+  function fb(msg){ fbEl.textContent = msg; } // 即时反馈
+
+  document.getElementById('confirmBtn').addEventListener('pointerdown', function(){
+    if(!sel){ fb('请先选一项'); return; }
+    fb('正确！你选了「' + sel + '」（此处接你的判定逻辑）');
+  });
+
+  document.getElementById('resetBtn').addEventListener('pointerdown', function(){
+    opts.forEach(function(o){o.classList.remove('sel');});
+    sel = null; fb('已重置');
+  });
+
+  document.getElementById('fsBtn').addEventListener('pointerdown', function(){
+    var el = document.documentElement;
+    if(!document.fullscreenElement){ (el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el); }
+    else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); }
+  });
+
+  /* __selfTest：本骨架无可断言数值，返回空集但接口不能省（verify_render.py 契约） */
+  window.__selfTest = function(){
+    var cases = [
+      { name:"选项数量", ok: opts.length===3, expect:3, actual:opts.length }
+    ];
+    return { pass: cases.every(function(c){return c.ok===true;}), cases: cases };
+  };
+})();
+</script>
+</body>
+</html>
