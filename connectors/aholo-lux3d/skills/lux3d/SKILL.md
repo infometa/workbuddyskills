@@ -1,26 +1,18 @@
 ---
 name: lux3d
-description: "Use the existing Aholo Lux3D MCP server to check balance, quote and create 3D or image tasks, and retrieve results."
-version: "1.2.1"
+description: "通过 Aholo Lux3D MCP 查询余额和报价、创建 3D 或图片任务，并获取结果。"
+version: "1.2.2"
 author: "Aholo"
 ---
 
-# Aholo Lux3D MCP
+# Aholo Lux3D
 
 <a id="workbuddy-connection"></a>
 
-This is the **China WorkBuddy distribution**, bound to region `cn`.
-It registers only `lux3d-mcp` at `https://api.aholo3d.cn/lux3d-mcp/mcp`.
-Configure only `LUX3D_CN_API_KEY` from [the regional API Key page](https://labs.aholo3d.cn/api-keys?from=lux3d).
-Use the raw regional key in Authorization, without Bearer. Never request it in chat.
-Verify live tools and getlux3daccountbalance before use. Use source 4 and agentName workbuddy.
-To use the other region, install its separately published connector on the corresponding
-WorkBuddy platform. Existing tasks, quotes and reports stay on their original route;
-never automatically switch accounts or replay an uncertain create in another region.
-
-The build appends the canonical shared Connector workflow, tool map, input
-upload protocol and review policy into this same file. This source contains
-only WorkBuddy metadata, credentials and identity adaptation.
+这是 **WorkBuddy 国内版**，仅连接 `lux3d-mcp`（`https://api.aholo3d.cn/lux3d-mcp/mcp`）。
+默认使用简体中文回复；用户指定语言时按其要求回复。请在 WorkBuddy 中授权国内 Aholo 账号，不要把凭证复制到对话。
+使用前发现工具并调用 getlux3daccountbalance 确认账号可用。使用 source 4 和 agentName workbuddy。
+使用国际区须安装对应的连接器。现有任务、报价和上报仍走原连接；不要自动切换账号或跨区重试结果不明的创建请求。
 
 Use source 4 and agentName workbuddy for account and quote calls, according
 to the live schema or verified server injection. Do not ask users to select
@@ -30,13 +22,21 @@ embedded sections, not to missing local files.
 ## WorkBuddy quote envelope example
 
 For example, when planning `post_createtextto3dtask` with request body
-`{"prompt":"a wooden chair","version":"G1"}`, the quote call's body is:
+`{"prompt":"a wooden chair","version":"G1"}`, pass the following shape as the
+`body` argument to `post_quotelux3dopenapirequests`. Replace the placeholders
+with the balance response's `uniqueId` and the host's task UUID. Use the actual
+user input and plan; add only observed metadata to `context`.
 
 ```json
 {
   "source": 4,
   "agentName": "workbuddy",
   "uniqueId": "<uniqueId returned by getlux3daccountbalance>",
+  "pluginTaskId": "<UUID persisted for this creative task>",
+  "planVersion": 1,
+  "plan": "1. Generate one wooden chair from text using G1. 2. Check the task result and deliver the model.",
+  "userInputs": "{\"prompt\":\"a wooden chair\"}",
+  "context": "{\"harness\":\"workbuddy\"}",
   "items": {
     "1": {
       "endpoint": {
@@ -70,7 +70,7 @@ For example, when planning `post_createtextto3dtask` with request body
 
 <a id="shared-skill-md"></a>
 
-# Aholo Lux3D MCP
+## MCP workflow
 
 When this Skill is selected or the user requests Aholo Lux3D, execute the requested
 operation through **Aholo Lux3D MCP**. Aholo Lux3D supports **2D image operations as well as
@@ -114,8 +114,7 @@ depend on finding a parent directory:
 
 ## Package region
 
-This artifact is fixed to `cn`. Use only `lux3d-mcp` at `https://api.aholo3d.cn/lux3d-mcp/mcp`, with `LUX3D_CN_API_KEY`.
-Get its key from [the regional API Key page](https://labs.aholo3d.cn/api-keys?from=lux3d).
+This artifact is fixed to `cn`. Use only `lux3d-mcp` at `https://api.aholo3d.cn/lux3d-mcp/mcp` with host-managed OAuth.
 Discover live schemas, verify account access, and keep quote, create, query, REPORT and FEEDBACK
 on this connection. The other region requires its separately published package.
 Retain original task/account context; do not migrate tasks or replay uncertain submissions.
@@ -129,6 +128,7 @@ outer `body` shape when the schema is available.
 
 | Task / operation | Expected tool | How to use it |
 | --- | --- | --- |
+| `upload-token` | `get_upload_token` | Obtain a temporary OUS descriptor with no arguments through this OAuth account. |
 | `account` | `getlux3daccountbalance` | Read current account facts and the quote `uniqueId`. |
 | `quote` | `post_quotelux3dopenapirequests` | Price the numbered plan of canonical OpenAPI create requests. |
 | `multimodal-image` | `post_createmultimodaltoimagetask` | **2D** image generation or reference-based image changes using the discovered text/image inputs; inspect this for hair, clothing or background edits. |
@@ -203,10 +203,7 @@ before parallel dispatch; see [Execution limits](#shared-references-execution-md
 
 ## Upload every file input through Asset/OUS
 
-Upload is supported through the public Asset API, **not** provided by the mapped MCP
-tools: `GET /asset/v1/token → OUS upload → successful status URL`. It uses the
-**same selected-region API Key as MCP**, securely injected into the Asset request;
-MCP login alone does not expose the stored secret to an HTTP tool.
+The selected OAuth MCP connection issues a temporary upload descriptor through get_upload_token with no arguments. The host passes that descriptor to the OUS uploader; follow the exact protocol below. No separate long-lived credential is required.
 
 Local files are uploaded; external and host-attachment URLs must first be
 downloaded and then uploaded through this same chain. Only a completed unified
@@ -227,13 +224,12 @@ The [connection descriptor](#shared-connection-json) and [tool map](#shared-tool
 define the shared MCP workflow used by the public-portal Connector and native
 ecosystem MCP plugins. Follow the [installation guide](#workbuddy-connection) to verify or
 create the local host connection; reuse registration supplied by a native wrapper.
-Do not import the descriptor as a native manifest or assume environment-variable interpolation. The embedded descriptor lists only this distribution's endpoint. Use only
+Do not import the descriptor as a native manifest or assume environment-variable interpolation. The descriptor lists the supplied China and international endpoints. Use only
 the explicitly selected connection; URL configuration alone does not prove live acceptance.
 
 ## Package region
 
-This artifact is fixed to `cn`. Use only `lux3d-mcp` at `https://api.aholo3d.cn/lux3d-mcp/mcp`, with `LUX3D_CN_API_KEY`.
-Get its key from [the regional API Key page](https://labs.aholo3d.cn/api-keys?from=lux3d).
+This artifact is fixed to `cn`. Use only `lux3d-mcp` at `https://api.aholo3d.cn/lux3d-mcp/mcp` with host-managed OAuth.
 Discover live schemas, verify account access, and keep quote, create, query, REPORT and FEEDBACK
 on this connection. The other region requires its separately published package.
 Retain original task/account context; do not migrate tasks or replay uncertain submissions.
@@ -250,19 +246,11 @@ Use host-provided capability evidence and live tool discovery. Required connecto
 capabilities are remote MCP, tool discovery and per-user credential injection.
 Upload, download and Blender capabilities depend on the requested work. Every
 file input requires the [unified Asset/OUS upload](#shared-references-upload-md); an
-external URL also requires host download access first. The mapped MCP tools do not
-provide upload. A host may supply this exact upload integration or securely run
-the documented HTTP flow. Arbitrary accessible URLs and unrelated upload tools
+external URL also requires host download access first. Call get_upload_token on the selected MCP connection and use the host uploader or bundled OUS helper for the actual bytes. Arbitrary accessible URLs and unrelated upload tools
 are not substitutes. Text-only requests need no upload. Record specific missing
 capabilities before promising an affected operation.
 
-The host resolves the selected region's logical secret reference to that region's
-Aholo Lux3D API Key and sends it as the raw `Authorization` value, without `Bearer`.
-Use [this distribution's API Key page](https://labs.aholo3d.cn/api-keys?from=lux3d) for the fixed `cn` region.
-Never request it in chat, expose it in arguments, or save it in generated files.
-For `appKey missing` or confirmed authentication failure, use the host's credential
-settings and reconnect; a timeout alone is not evidence of an invalid key.
-Never forward the key to another origin, to downloads, or across user connections.
+The host manages OAuth for this connection. Reconnect the original account when authorization expires. A timeout alone is not proof of expired authorization. Temporary OUS credentials come only from get_upload_token; keep them out of logs and user deliverables.
 
 This WorkBuddy adapter uses source 4 and agentName workbuddy from the embedded host identity registry. No Python identity helper or local resource lookup is required.
 
@@ -285,6 +273,12 @@ they indicate that the package alone cannot prove live-host acceptance.
 This skill enforces these steps through instructions. It does not install a
 server-side spending gate, cross-process lock or idempotency service. If a host
 requires those guarantees, the host must implement and verify them before use.
+
+## 定价与购买
+
+用户询问套餐、积分或余额不足时，只提供国内 WorkBuddy 的[查看定价](https://lux3d.aholo3d.cn/pricing?channel=workbuddy)链接。
+链接使用 channel=workbuddy，不附带账号标识或凭证。不代用户购买，也不切换区域。
+用户完成购买后，按需刷新余额和报价。打开定价页不代表已经支付，也不代表用户同意创建任务。
 
 ## Discover and route operations
 
@@ -365,6 +359,10 @@ cost. Future inputs that affect price require staged quotes. Do not invent fixed
 prices or interpret an error, unknown price or trial entitlement as zero cost.
 A quote is an estimate, not a reservation or proof of settled charges.
 
+For plan/credit questions or insufficient credits, follow the pricing-page rules
+in [the MCP workflow](#shared-body-md): keep the selected region and include the actual
+host's canonical `channel` in the link. A purchase does not authorize a new task.
+
 Show the returned total, relevant item costs and validity before applying the
 shared [Review and approval](#shared-references-review-md) rules. Refresh a quote when its plan,
 account, region, identity, context or validity changes. Account refresh can
@@ -415,7 +413,7 @@ use at most the free limit while the other account/quote requirements remain met
 
 These limits count unfinished asynchronous tasks, not simultaneous HTTP requests
 or calls per second. States 0, 1 and 2 occupy slots. Count the account's existing
-active tasks across operations, API keys, hosts and Skill/MCP sessions; changing
+active tasks across operations, OAuth connections, hosts and Skill/MCP sessions; changing
 source, quoteId or connection does not create a fresh quota. All nine generation
 operations, including retopology, articulation, auto-rig and animation retargeting,
 share this pool. One retarget create with several action IDs occupies one slot.
@@ -483,13 +481,16 @@ URLs may expire. Do not represent remote filesystem paths as local files.
 Check the live tool schema and returned asset metadata for available model
 formats; unsupported output formats cannot be inferred from a ZIP. Preserve
 source models and identify partial success honestly.
-The shared review's mention of output-format helpers applies only when the host
-actually provides such a helper. This Connector bundles none; use the live
-schema and returned metadata above instead of looking for a missing script.
+Use an output-format helper when the installed Skill or host provides it.
+Local Skill/Suite packages include upload and delivery/preview helpers; follow
+their entry instructions and setup script. Connector-only packages contain
+protocol instructions and require equivalent host capabilities instead.
 
 Offline preview, Blender assembly, scene rendering and local inspection depend
 on available host capabilities. Do not promise these outputs unless the host can
-produce and verify them. This single-file WorkBuddy projection uses the embedded identity registry; it does not bundle Python, local 3D execution or a viewer.
+produce and verify them. Confirm the capabilities of the installed artifact:
+a local helper being packaged does not prove Python, Blender or rendering is
+available in the current session.
 Diagnose failures with redacted error codes, mode, resolved host, region and operation
 reference; keep credentials, signed URLs and other users' records out of logs.
 
@@ -509,7 +510,7 @@ consent to its exact version after delivery.
 # Prepare every input through the unified Asset upload
 
 Every image, view, model or other file URL passed into a Aholo Lux3D operation must
-come from the unified **Asset token → OUS upload → successful status URL**
+come from the unified **OAuth MCP get_upload_token → OUS upload → successful status URL**
 flow below. A URL being accessible to the host does not prove Aholo Lux3D's internal
 services can read it. Do not pass an arbitrary user URL, attachment URL,
 third-party storage URL, data URL or local path directly to a create tool.
@@ -534,29 +535,48 @@ requirement applies when a URL becomes an input to another Aholo Lux3D operation
 
 ## Check the actual upload capability
 
-The mapped Connector tools do not include upload. Input preparation may use a host
-tool that implements this exact unified Asset/OUS flow, or the host's local
-file and HTTPS facilities following the requests below. An unrelated uploader
-returning a public URL does not satisfy this requirement. Upload is auxiliary
-input preparation; account, quote, generation and task operations still use MCP.
+The selected regional OAuth MCP connection supplies the no-argument tool
+`get_upload_token`. Discover its live schema and call it with `{}`. The host keeps
+the connection/account/region and the returned descriptor together. Actual bytes
+are transferred by the host's file/HTTPS facilities or bundled `asset_uploader.py`;
+MCP itself returns credentials, not a file transfer endpoint. Download remote
+inputs first. Do not pass an arbitrary userId or extract the host's OAuth cache.
 
-For direct HTTP upload, the host needs file access (and download capability for
-remote inputs), hashing, HTTP multipart requests, and secure credential injection
-for the China Asset token endpoint. An established MCP connection does **not**
-mean its stored key can be read by a command or another HTTP tool. Use supported
-host secret injection; never extract the key from private application files,
-request it in chat, or place it in command arguments or generated scripts.
+Check MCP errors before reading the descriptor. Unwrap the tool's structured JSON
+or JSON text content only after confirming `isError` is false; the raw successful
+object contains `ousToken`, `globalDomain` and `blockSize`. It is not necessarily
+inside an HTTP `d` envelope. Missing tools, `-32601 Method not found`, 401/403 or
+malformed descriptors block upload. Report the stage and safe trace ID; preserve
+the plan. Inconsistent server tool versions require an operator fix. Never hide
+that condition by switching account/region or using a different credential path.
 
-If a required capability or credential route is unavailable, explain that
-specific gap and preserve the prepared plan. Ask for an accessible file or the
-missing host upload configuration as appropriate. **Do not bypass the gap by
-passing the original URL to Aholo Lux3D**, and do not switch to an unrelated storage
-service. A publicly readable URL still needs this unified upload.
+## Host-to-uploader contract
 
-## Regional upload routing
+Use the Python API `upload_file(path, region=selected_region,
+upload_descriptor={"region": selected_region, "descriptor": mcp_result})`, or
+run the CLI below and write the same JSON envelope through its stdin using a
+host-controlled pipe. No credentials in command arguments, environment variables,
+temporary descriptor files or logs. The example intentionally contains no token:
 
-Use the fixed `cn` region for this package. Asset base URL: `https://api.aholo3d.cn`; token: `https://api.aholo3d.cn/asset/v1/token`. MCP URL: `https://api.aholo3d.cn/lux3d-mcp/mcp`. Inject only `LUX3D_CN_API_KEY` securely.
-Keep upload receipts and credentials on this route; never fall back to another region.
+```text
+python asset_uploader.py upload <local-file> --region cn --descriptor-stdin
+```
+
+For International use `--region international` and obtain a fresh descriptor from
+`lux3d-mcp-international`. The uploader validates the explicit region match and an
+HTTPS origin (no userinfo, path, query, fragment or nonstandard port), sends the
+temporary credential only to that origin and rejects redirects. It never reads
+host OAuth credentials. The host must preserve account provenance and obtain a
+fresh descriptor for each file; the token response itself has no account claim
+that the uploader can independently verify. MCP results/tool arguments may enter
+the host/model context: do not claim credentials never reach the model. Keep them
+transient and exclude them from user deliverables and telemetry.
+
+Only Aholo's OAuth-authorized MCP signs the descriptor. Do not forward OAuth
+access/refresh tokens to OUS. When an upload is uncertain, retain its descriptor
+in private transient memory and reconcile status on the original connection
+before restarting. A completed URL is bound to the original account/region;
+never reuse it across accounts merely because both use the same OUS hostname.
 
 ## Upload protocol
 
@@ -569,16 +589,14 @@ shape, resolve that mismatch before continuing instead of guessing parameters.
    **bytes**, and compute the **whole-file MD5 as a hexadecimal string before
    sending the upload**. Do not use a filename hash or an individual part's hash.
    Keep the file bytes unchanged through upload.
-2. Call `GET <selected-region Asset base URL>/asset/v1/token` with that region's API Key as the
-   raw `Authorization` header, without `Bearer`. This is the same regional key
-   used by MCP, not a separately issued upload credential. Check the success response and
-   obtain `ousToken`, HTTPS `globalDomain` and positive integer `blockSize` from
-   its data object (`d` when wrapped). The token belongs to this upload; do not
-   reuse it for a different file. Use the returned domain and threshold, never
-   a hard-coded OUS hostname or a fixed "5 MB" rule.
+2. Call `get_upload_token` with no arguments through the selected authenticated
+   regional MCP connection. Obtain nonempty `ousToken`, HTTPS-origin `globalDomain`
+   and positive integer `blockSize`. Bind them to the current account, region and
+   file in private transient state. Use the returned domain and threshold rather
+   than a fixed hostname or size rule.
 3. For requests in the table, send only the temporary
-   `ous-token-v2: <ousToken>` credential to the returned OUS origin. **Never send
-   the Aholo Lux3D API Key to OUS, a source URL, a download URL or a redirected origin.**
+   `ous-token-v2: <ousToken>` credential to that exact OUS origin. Reject every
+   redirect and keep source/download requests separate and credential-free.
    Let the HTTP client generate multipart boundaries.
 
 | Condition / stage | Request relative to `globalDomain` | Fields |
@@ -1017,11 +1035,9 @@ This is embedded reference metadata. File names refer to the embedded sections, 
   "descriptorIsHostNative": false,
   "transport": "streamable-http",
   "authentication": {
-    "type": "api-key",
-    "header": "Authorization",
-    "prefix": "",
-    "scope": "per-user-connection",
-    "redirectPolicy": "same-origin-only"
+    "type": "oauth",
+    "scope": "get_user_info",
+    "tokenManagement": "host-managed-per-region"
   },
   "identity": {
     "mode": "automatic-host",
@@ -1102,10 +1118,8 @@ This is embedded reference metadata. File names refer to the embedded sections, 
     "cn": {
       "serverKey": "lux3d-mcp",
       "endpoint": "https://api.aholo3d.cn/lux3d-mcp/mcp",
-      "secretRef": "lux3d.cn.apiKey",
-      "environmentVariable": "LUX3D_CN_API_KEY",
-      "apiKeyPage": "https://labs.aholo3d.cn/api-keys?from=lux3d",
-      "assetBaseUrl": "https://api.aholo3d.cn"
+      "resource": "https://api.aholo3d.cn",
+      "authorizationServerBase": "https://www.aholo3d.cn"
     }
   }
 }
@@ -1249,6 +1263,20 @@ This is embedded reference metadata. File names refer to the embedded sections, 
         "method": "POST",
         "path": "/lux3d/v1/feedback/experience"
       }
+    },
+    "upload-token": {
+      "tool": "get_upload_token",
+      "kind": "read",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "outputFields": [
+        "ousToken",
+        "globalDomain",
+        "blockSize"
+      ]
     }
   },
   "inputSchemaAuthority": "live-discovery",
@@ -1443,7 +1471,7 @@ This is embedded reference metadata. File names refer to the embedded sections, 
             "properties": {
               "img": {
                 "type": "string",
-                "description": "单张参考图片 URL，可单独使用或与 prompt 组合。img 和 prompt 至少提供一个，传入的值不能为空白。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。"
+                "description": "单张参考图片 URL，可单独使用或与 prompt 组合。img 和 prompt 至少提供一个，传入的值不能为空白。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。"
               },
               "prompt": {
                 "type": "string",
@@ -1494,7 +1522,7 @@ This is embedded reference metadata. File names refer to the embedded sections, 
             "properties": {
               "img": {
                 "type": "string",
-                "description": "单张图片 URL。img 和 prompt 至少提供一个，传入的值不能为空白。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。"
+                "description": "单张图片 URL。img 和 prompt 至少提供一个，传入的值不能为空白。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。"
               },
               "prompt": {
                 "type": "string",
@@ -1545,11 +1573,11 @@ This is embedded reference metadata. File names refer to the embedded sections, 
             "properties": {
               "img": {
                 "type": "string",
-                "description": "单张图片 URL，G1 和 G1-Turbo 均支持。img 与 imgs 必须且只能提供一个，图片 URL 不能为空白。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。"
+                "description": "单张图片 URL，G1 和 G1-Turbo 均支持。img 与 imgs 必须且只能提供一个，图片 URL 不能为空白。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。"
               },
               "imgs": {
                 "type": "array",
-                "description": "G1 / G1-Turbo 的 1-32 张图片 URL。保留输入顺序，第一张图作为主要参考；与 img 互斥。使用 imgs 时必须显式传入 version=G1 或 version=G1-Turbo。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。",
+                "description": "G1 / G1-Turbo 的 1-32 张图片 URL。保留输入顺序，第一张图作为主要参考；与 img 互斥。使用 imgs 时必须显式传入 version=G1 或 version=G1-Turbo。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。",
                 "items": {
                   "type": "string"
                 }
@@ -1632,7 +1660,7 @@ This is embedded reference metadata. File names refer to the embedded sections, 
               },
               "img": {
                 "type": "string",
-                "description": "可选的参考图片 URL。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。"
+                "description": "可选的参考图片 URL。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。"
               },
               "version": {
                 "type": "string",
@@ -1706,11 +1734,11 @@ This is embedded reference metadata. File names refer to the embedded sections, 
             "properties": {
               "img": {
                 "type": "string",
-                "description": "材质参考图片 URL。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。"
+                "description": "材质参考图片 URL。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。"
               },
               "meshUrl": {
                 "type": "string",
-                "description": "模型 GLB 文件 URL。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。"
+                "description": "模型 GLB 文件 URL。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。"
               },
               "version": {
                 "type": "string",
@@ -1781,7 +1809,7 @@ This is embedded reference metadata. File names refer to the embedded sections, 
             "properties": {
               "modelUrl": {
                 "type": "string",
-                "description": "模型公网 URL，支持 .zip 或 .glb。ZIP 输入必须来自 Lux3D 生成任务；GLB 输入时 outputFormat 不能为空。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段；其中 ZIP 仍必须是 Lux3D 生成任务产物。"
+                "description": "模型公网 URL，支持 .zip 或 .glb。ZIP 输入必须来自 Lux3D 生成任务；GLB 输入时 outputFormat 不能为空。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段；其中 ZIP 仍必须是 Lux3D 生成任务产物。"
               },
               "outputFormat": {
                 "type": "array",
@@ -1846,7 +1874,7 @@ This is embedded reference metadata. File names refer to the embedded sections, 
                 "type": "string",
                 "format": "uri",
                 "minLength": 1,
-                "description": "待重拓扑模型的公网 HTTP(S) URL，必须可由服务端访问。\n仅支持静态、非 Draco 压缩的 GLB。\n如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。\n",
+                "description": "待重拓扑模型的公网 HTTP(S) URL，必须可由服务端访问。\n仅支持静态、非 Draco 压缩的 GLB。\n如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。\n",
                 "example": "https://qhstaticssl.kujiale.com/application/octetstream/1784776896628/model.glb"
               },
               "quad": {
@@ -1935,7 +1963,7 @@ This is embedded reference metadata. File names refer to the embedded sections, 
                 "type": "string",
                 "format": "uri",
                 "minLength": 1,
-                "description": "输入 GLB 模型的公网 HTTP(S) URL，必须可由服务端访问。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。",
+                "description": "输入 GLB 模型的公网 HTTP(S) URL，必须可由服务端访问。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。",
                 "example": "https://assets.aholo3d.cn/examples/cubely/joint-motion/target-model.glb"
               },
               "prompt": {
@@ -2003,7 +2031,7 @@ This is embedded reference metadata. File names refer to the embedded sections, 
               "modelUrl": {
                 "type": "string",
                 "format": "uri",
-                "description": "GLB 模型的公网 HTTPS URL。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。"
+                "description": "GLB 模型的公网 HTTPS URL。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。"
               }
             },
             "argsPosition": "body"
@@ -2063,7 +2091,7 @@ This is embedded reference metadata. File names refer to the embedded sections, 
               "rigModelUrl": {
                 "type": "string",
                 "format": "uri",
-                "description": "已绑骨 GLB 模型的公网 HTTPS URL。如需上传本地文件，请先调用 [Asset 文件上传接口](https://labs.aholo3d.cn/api-docs/api-reference#tag/asset)，再将返回的 URL 填入此字段。",
+                "description": "已绑骨 GLB 模型的公网 HTTPS URL。如需上传本地文件，请先调用 MCP 工具 get_upload_token，按 OUS 协议上传，再将 status=5 返回的文件 URL 填入此字段。",
                 "example": "https://qhstaticssl.kujiale.com/application/octetstream/1790240555913/rigModel.glb"
               },
               "animationIds": {

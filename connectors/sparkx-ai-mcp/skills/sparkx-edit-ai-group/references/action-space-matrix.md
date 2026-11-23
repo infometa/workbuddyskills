@@ -17,10 +17,11 @@ it's not supported for that ad type and don't send it.
   `rosMin`, `rosMax`, `structPauseProductStatus`, `structPauseCampaignStatus`. Sending `0` /
   `null` is fine; only an enabled value trips it.
 - **One exception: a template applied cross-type is sanitized, not rejected.** When you apply
-  an SP template to an SB group **and omit `aiActionSettings`**, the server zeroes the
-  template's SP-only fields and the call succeeds. That safety net disappears the moment you
-  send `aiActionSettings` yourself - then the template's action-space config is skipped and
-  the check above applies to your values.
+  an SP template to an existing SB group, the server zeroes the template's SP-only fields and
+  the call succeeds; the response summary lists the switches that were turned off. If you also send `aiActionSettings`, the template's values are still
+  merged in (current config <- template <- yours) and still sanitized; only SP-only switches
+  **you** turn on go through the check above. (Creating an SB group from such a template
+  turns them off the same way and lists them in the summary - see `sparkx-create-ai-group`.)
 - **Everything else unsupported may still be silently ignored** - looks like success, changes
   nothing.
 
@@ -28,9 +29,11 @@ Either way the instruction is the same: don't send an unsupported field. But kno
 a single stray switch now costs you the whole write, so check before you send rather than
 letting the error teach you.
 
-> Create mode is **AI mode only**. So at create time, only enable capabilities that
-> support **AI** for the group's ad type. Rule-only or unsupported ones don't belong
-> in a create call.
+> Create mode is **AI mode only** for your `aiAutomation` parameter (a `1` is rejected). So
+> at create time, only enable capabilities that support **AI** for the group's ad type.
+> Rule-only or unsupported ones don't belong in a create call. The one exception is SP/SB
+> template create without `aiAutomation`: the template's rules, Rule mode included, are
+> carried over as-is.
 
 ## Platform support != what the write tool exposes
 

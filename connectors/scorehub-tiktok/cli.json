@@ -1,0 +1,34 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": "20"
+  },
+  "npmRegistry": "https://registry.npmmirror.com",
+  "init": {
+    "darwin": "npm install -g @scorehub/mcp-server@latest",
+    "linux": "npm install -g @scorehub/mcp-server@latest",
+    "win32": "npm install -g @scorehub/mcp-server@latest"
+  },
+  "auth": {
+    "darwin": "scorehub-mcp auth login",
+    "linux": "scorehub-mcp auth login",
+    "win32": "scorehub-mcp.cmd auth login"
+  },
+  "unAuth": {
+    "darwin": "scorehub-mcp auth logout",
+    "linux": "scorehub-mcp auth logout",
+    "win32": "scorehub-mcp.cmd auth logout"
+  },
+  "status": {
+    "darwin": "scorehub-mcp auth status",
+    "linux": "scorehub-mcp auth status",
+    "win32": "scorehub-mcp.cmd auth status"
+  },
+  "statusMatch": "Logged in as",
+  "authUrlDomain": "app.scorehub.cn",
+  "authWaitForExit": true,
+  "env": {
+    "SCOREHUB_REMOTE_MCP_URL": "https://app.scorehub.cn/mcp",
+    "SCOREHUB_CLIENT_HOST": "workbuddy"
+  }
+}

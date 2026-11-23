@@ -245,6 +245,8 @@ All are `0`/`1` except `targetPausedAddStatus` which is `0`/`1`/`2`.
 
 ## asinIsDelete
 
+> ⚠️ **This tool never returns this field.** `asinIsDelete` is a **filter parameter only** on `get_entity_metadata` — it is not in the `asin` entity's output field list, and putting it in `select` is silently ignored (`meta.hint` says `Unknown select fields ignored: [asinIsDelete]` and the call still succeeds). Use it as a filter (`{"asinIsDelete": 1}` returns the deleted ones), or read the value from `get_ads_perf`'s dimension `asin.asinIsDelete_`. The labels below apply to those two uses.
+
 | API value | EN | ZH | JA |
 |---|---|---|---|
 | `0` | Active | 正常 | 有効 |

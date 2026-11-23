@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "kece-scrm": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "kece-skill-mcp@latest"],
+      "runtime": { "type": "node", "version": ">=20" },
+      "env": {
+        "KECE_APP_KEY": "${KECE_APP_KEY}",
+        "KECE_APP_SECRET": "${KECE_APP_SECRET}",
+        "KECE_BASE_URL": "${KECE_BASE_URL}"
+      },
+      "timeout": 30000
+    }
+  }
+}

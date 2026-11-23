@@ -1,7 +1,7 @@
 ---
 name: youshu-promotion-followup-prod
 display_name: 音为有数 生产环境 宣推跟进
-version: 1.3.10
+version: 1.3.13
 description: 生产环境：使用音为有数已有宣推接口确认歌曲、创建计划和轮次、添加抖音视频/BGM/话题链接并查看结果。用于站外宣推跟进，不用于发布、付费投放或费用申请。
 ---
 
@@ -46,7 +46,12 @@ description: 生产环境：使用音为有数已有宣推接口确认歌曲、�
 
 写入后查详情和轮次。视频使用queryPromotionVideos，taskId取monitorTaskId，videoType=link查关联视频，可按scheduleId筛轮次；BGM用queryPromotionBgms，话题用queryPromotionTopics。前5条可传pageNo=1/pageSize=5，展示名称、允许返回的指标及链接，总数以原分页为准。保持页面排序，话题前5条不自动称作播放量Top5。原接口可能在依赖失败时降级为空页/零值，结合提示及采集状态说明不确定性，不以当前页推算全量。
 
-getPromotionEntry通过页面详情鉴权，复用公共组制码并返回PC详情、小程序URL Link及真实码图片。扫码由小程序通过共享resolveCodeScene解析，仍按原页面权限访问。创建或追加成功后自动调用本工具，展示PC链接与小程序URL Link；READY时以图片展示miniProgramCodeUrl并说明约1小时有效，FAILED/UNAVAILABLE时说明不可用并保留已有入口，不将普通网页二维码当作小程序码。入口失败不重建计划。
+### 小程序码必须作为图片展示
+
+1. 创建计划成功后，用返回的真实 `planTrackId` 调用 `getPromotionEntry`；追加资源成功后同样回查入口。多个计划逐个获取，按计划名称和 ID 将入口与码图对应。
+2. `miniProgramCodeStatus=READY` 且 `miniProgramCodeUrl` 非空、未过期时，在最终回复中为该计划单独放一张可扫码图片。优先使用 WorkBuddy 当前支持的图片展示能力；使用 Markdown 时，单独一行输出 `![微信扫码查看宣推计划](<MINI_PROGRAM_CODE_URL>)`，将占位符替换成响应中的完整 `miniProgramCodeUrl`，保留原始协议及签名参数。实际回复中图片语法不要放进代码块、反引号或表格；不要只写“READY”“见接口返回”或贴 COS 裸地址。
+3. 同时展示可用的 PC 详情入口和小程序短链，提示短链可复制到微信打开；短链取 `miniProgramUrl`，不能拿它生成或替代小程序码。优先按 `miniProgramCodeExpireAt` 展示失效时间，缺失时可说明图片通常约 1 小时有效。
+4. 若确认图片链接过期，可用同一计划 ID 重新获取入口一次。客户端无法内嵌或已知渲染失败时，优先用当前客户端允许的图片附件能力展示该码图；仍不能展示时给出“打开小程序码图片”的链接，并说明图片未能内嵌。若为 FAILED/UNAVAILABLE、地址为空或刷新后仍失效，说明码图暂不可用并保留可用入口。获取或展示失败不重建计划，也不重复追加资源。
 
 
 ## 已配置负责人和显式撤销

@@ -14,7 +14,7 @@ Creates a new **Sponsored Display** AI managed group. SD-only - for SP/SB use
 | `budgetChange` | boolean | No | `true` = apply `budget`, `false`/omit = ignore budget |
 | `acos` | number | No | Target ACOS on the **x100 scale** - user's `25%` -> send `25` (not `0.25`) |
 | `optimizeType` | int | No | `1`=drive growth, `2`=maintain stability |
-| `status` | int | No | AI status at creation: **`0`=off, `1`=on only** (`2`=cancelled is a lifecycle state, not a valid create input) |
+| `status` | int | No | AI status at creation: **`0`=off, `1`=on only** (`2`=cancelled is a lifecycle state, not a valid create input). Defaults to `1` when omitted |
 | `budgetDynamicStatus` | int | No | **Not supported on SD — send `0` or omit it.** A non-zero value is rejected outright (`budgetDynamicStatus is not supported for SD (Sponsored Display)`). Historical values: `0`=off, `1`=on |
 | `numType` | int | No | **Do not send for SD creation.** It is only meaningful with the unsupported dynamic-budget switch |
 | `num` | number | No | **Do not send for SD creation.** It is only meaningful with the unsupported dynamic-budget switch |
@@ -27,11 +27,10 @@ Only `profileId`, `smartCreationName`, `campaignIds` are required. Everything el
 takes a platform default if omitted - only send the optional fields the user
 actually wants to set.
 
-**One exception: always send `status`.** It is optional at the interface, but omitting it
-does not give you a reliable default - it falls back to a template value if a template is
-involved, and to nothing otherwise. SD did not get the server-side "default to on" that
-SP/SB's `aiStatus` has. Send `1` to start the group, `0` when the user asked for it not
-to.
+**`status` defaults to `1` (on) when omitted** - same as SP/SB's `aiStatus`, with or
+without a template. It is never inherited from the template (template `status` means
+active/paused/archived, not AI on/off). Omit it (or send `1`) to start the group; send `0`
+when the user asked for it not to start.
 
 ## Coupled fields (send together or not at all)
 
@@ -43,8 +42,8 @@ to.
 
 ## Example - create an SD group the user asked not to start yet
 
-(`status: 0`. For the normal case send `status: 1`, and say in the preview that the group
-starts optimizing immediately.)
+(`status: 0`. For the normal case omit `status` or send `1`, and say in the preview that the
+group starts optimizing immediately.)
 
 ```json
 {

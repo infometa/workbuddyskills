@@ -3,13 +3,13 @@ name: sparkx-monthly-ads-report
 description: >-
   Generate a monthly ad performance recap for ads managers / account managers at month-end.
   Includes full-month KPIs (MoM + YoY), goal attainment, structural breakdown (campaign type /
-  site / portfolio share), product analysis (Top ASIN changes, new products, long-tail), keyword
-  analysis (Top keywords, new keyword opportunities, negative-keyword candidates), an issues list
-  with attribution, and next-month structural recommendations. Use when the user says "出个月报",
+  site / portfolio share), product analysis (Top ASIN changes, newly advertised products, long-tail), keyword
+  performance (Top keywords; search-term negatives / harvesting go to sparkx-search-term-diagnosis),
+  an issues list with attribution, and next-month structural recommendations. Use when the user says "出个月报",
   "月度复盘", "这个月表现如何", "monthly report". Not for weekly recaps (use sparkx-weekly-ads-report) or
   quarterly/QBR-level strategic review (use quarterly-ads-report, not yet built).
 metadata:
-  version: 1.0.6
+  version: 1.2.1
 ---
 
 # Monthly Ads Report
@@ -22,7 +22,7 @@ This skill does **not** map to a single MCP tool of its own — it orchestrates 
 - `get_operation_log` → [sparkx-query-operation-log](../sparkx-query-operation-log/SKILL.md)
 - `get_entity_metadata` → [sparkx-query-entity-metadata](../sparkx-query-entity-metadata/SKILL.md)
 
-> **Dependency — install these three base skills alongside this one:** `sparkx-query-ads-performance`, `sparkx-query-entity-metadata`, `sparkx-query-operation-log`. Skills install as sibling directories under your current agent's skills root (`.claude/skills/<name>/` for Claude Code; the equivalent root for other agents — see the [supported-agents table](../../README.md)), which is exactly what the `../query-.../…` links above (and elsewhere in this doc) resolve against — if a base skill isn't installed there, those links won't resolve and this skill can't run. Install all three first.
+> **Dependency — install these three base skills alongside this one:** `sparkx-query-ads-performance`, `sparkx-query-entity-metadata`, `sparkx-query-operation-log`. Skills install as sibling directories under your current agent's skills root (`.claude/skills/<name>/` for Claude Code; the equivalent root for other agents — see the installation notes in [README](../README.md)), which is exactly what the `../query-.../…` links above (and elsewhere in this doc) resolve against — if a base skill isn't installed there, those links won't resolve and this skill can't run. Install all three first.
 
 **Read those three SKILL.md files first** (parameter formats, field-naming rules, the Ratio Metric Display Rule) plus [`references/platform-notes.md`](references/platform-notes.md) (auth flow, error handling, pagination, date-range limits, currency rules — shared by all three underlying tools). This document only covers logic specific to the monthly-report use case; it doesn't repeat what the three base skills already document.
 
@@ -72,6 +72,55 @@ Case 4's threshold exists because this is a customer-facing report: a silent mul
 
 **Determining whether to include an AI-managed section**: call `get_entity_metadata` (`entity: aiGroup`, filtered to the relevant `profileIds`; **add `filters: {"aiStatus": 1}`, or fully paginate — default page size is 100, so a running AI group sitting past page 1 would otherwise be missed and the section wrongly skipped**) — if any returned row has `aiStatus: 1`, include an AI-managed performance callout in the KPI section; otherwise omit it. **This check only decides whether to show the callout — it doesn't supply the callout's actual data.** For the content itself, add `AISales`/`AIACOS`/`AIROAS` to Steps 2a/2b/2c's existing `metrics` list (these are campaign-level-only metrics per the platform notes, which is already `factEntity: campaign` for these calls, so no separate call is needed) whenever the callout applies, and report those alongside the regular KPI table — don't include the callout with only a "yes, AI management is on" statement and no actual performance figures.
 
+## Shared Rules: Target ACOS, Thresholds, Managed Groups, Promotions
+
+These rules match `sparkx-search-term-diagnosis` and `sparkx-promo-reset`, so the same store
+gets the same numbers whichever skill answers. Those two skills are separate installs: mention
+them as "if installed", and when the user doesn't have them, say what to look at instead -
+never promise to run a skill that may not be there.
+
+- **One target ACOS.** Use the store-wide target the user gives (ask "整店希望 ACOS 控制在多少"
+  when a threshold depends on it); without one, use the store's own ACOS for the period and say
+  so where the threshold is first used. Never use managed groups' `targetAcos` as thresholds -
+  one store can have dozens, from single digits to over 200%, and rank-push or launch groups set
+  it high on purpose.
+- **"High spend, zero orders" means spend >= `T`**, where `T` = average order value x target
+  ACOS = `(Sales / Conversions) x target ACOS` over the report's scope and period (target ACOS as
+  a fraction: `get_ads_perf`'s `ACOS` value `35` is `0.35`). `T` is one order's allowed spend -
+  the entity already spent what an order may cost and got none. It works in every currency and
+  price range, so there is no fixed money floor. No orders or no sales in the period -> `T`
+  can't be derived; say so instead of flagging.
+- **Campaigns in a running managed group get group-level advice.** A campaign's group is
+  `campaign.aiGroupId_` in `get_ads_perf` (or `aiGroupId` on `get_entity_metadata`'s `campaign`
+  entity; an unmanaged campaign has `0`); the group's `aiStatus` comes from
+  `get_entity_metadata` (`entity: aiGroup`). The AI sets those campaigns' bids and budgets, so a
+  manual bid or budget change gets overwritten: recommend the group's levers instead (target
+  ACOS, group budget, an action-space switch) or say the AI is handling it. **No bid advice with
+  numbers anywhere**; for an unmanaged campaign give at most a direction ("consider lowering
+  bids on ..."). Keyword-level actions (pausing a zero-order exact keyword, negatives) need
+  keyword and search-term data - point to `sparkx-search-term-diagnosis` (if installed).
+- **People vs machines in the operation log.** Query without `changeBy` and classify
+  `changedBy` client-side: an email or `Manual` is a person. **`Amazon Console` says where a change came from, not who made it** - Amazon's side. Report it as an Amazon-side change, not as a person. Everything else
+  (`AI`, `Automation`, `AI-Custom Rule`, `Budget Management`, `Lock Ranking`, `API`, `Labels`,
+  `System`) is a machine. **`changeBy=manual` is rejected by the server** (case-insensitive, in `IN`, `NOT_IN` or mixed) — it was a UI category, not an operator, and never covered changes recorded under a user's email. Inside
+  managed groups the AI moves `currentBudget` every hour and those rows are also
+  `Budget Increased` - leave them out of counts and "what changed" lists (a person's budget
+  change is on `dailyBudget`). Group setting changes (target ACOS, personality, switches) are
+  `aiGroup` rows, not campaign rows; their timestamps are UTC, while campaign rows are
+  store-local when one profile is queried - label the clock.
+- **Promotions distort period comparisons - but only the user confirms one.** Signals that
+  one may be involved: the period or its baseline overlaps a major event (Prime Day, Prime Big
+  Deal Days, Black Friday / Cyber Monday), or the operation log shows a burst of human budget /
+  bid increases in or shortly before it. A signal is not a verdict: still report every anomaly
+  and decline, label the affected ones "possibly promotion-related", and ask the user. Only
+  after the user confirms, say so at the top and treat the swing as promo-driven. After a
+  confirmed promotion whose human increases haven't been reversed, mention that
+  `sparkx-promo-reset` (if installed) restores them.
+
+In the monthly report: when `monthlyTarget` is an ACOS target, that is the target ACOS above.
+When the user confirms a promotion in this month or last month, MoM is misleading - put the
+YoY column first when it was pulled.
+
 ## Workflow
 
 ### Step 1 · Define Time Windows
@@ -115,7 +164,7 @@ No dimension in `select` — global aggregate across all campaigns. **If the AI-
   "factEntity": "adGroup",
   "dateStart": "{this month start}",
   "dateEnd": "{this month end}",
-  "select": ["adGroup.adGroupId_", "adGroup.adGroupName_", "campaign.campaignId_", "campaign.campaignName_", "campaign.campaignType_", "portfolio.portfolioId_", "portfolio.portfolioName_", "profile.countryCode_"],
+  "select": ["adGroup.adGroupId_", "adGroup.adGroupName_", "campaign.campaignId_", "campaign.campaignName_", "campaign.campaignType_", "campaign.aiGroupId_", "portfolio.portfolioId_", "portfolio.portfolioName_", "profile.countryCode_"],
   "metrics": ["Impressions", "Clicks", "Spend", "Sales", "Conversions"],
   "pageSize": 500,
   "userContext": "Monthly report - this month's adGroup-level data for structure analysis"
@@ -139,17 +188,29 @@ No dimension in `select` — global aggregate across all campaigns. **If the AI-
 ```
 **g. Last month, Top ASINs** — same shape as (f), shifted back one month, for MoM product comparison (Step 6).
 
-**h. New-product identification**: `get_entity_metadata` (`entity: asin`). **`asinOpenDate` is NOT a filterable field** — asin's filterable fields are `asin`/`parentAsin`/`sku`/`asinBrand`/`asinTitle`/`asinBsr`/`asinPrice`/`asinInventoryStatus`/the eligibility flags/`asinIsDelete`/`productLine*` — so you can't filter the call by open date. Instead, pull the asin metadata (**fully paginate — loop `page` while `hasNextPage` is `true`; default page size is 100, so a catalog past one page silently truncates otherwise**), then read the returned `asinOpenDate` field and filter to this month's window **client-side**. `asinOpenDate` is a datetime-with-timezone string, e.g. `"2026-06-01 00:00:00 PST"` — not `YYYYMMDD`, and not the `YYYY-MM-DD` used by `dateStart`/`dateEnd` — so parse it and mind the **PST timezone** when judging whether an ASIN opened inside the month, to avoid month-boundary misclassification. (`campaignStartDate`/`EndDate` are strings of no guaranteed shape — a different problem again, not this field's format.)
+**h. Newly-advertised-product identification** (first SP go-live this month — see the caveat at the end of this step, this is **not** the same as newly listed): `get_entity_metadata` (`entity: asin`). **`asinOpenDate` is NOT a filterable field** — asin's filterable fields are `asin`/`parentAsin`/`sku`/`asinBrand`/`asinTitle`/`asinBsr`/`asinPrice`/`asinInventoryStatus`/the eligibility flags/`asinIsDelete`/`productLine*` — so you can't filter the call by open date. Instead, pull the asin metadata (**fully paginate — loop `page` while `hasNextPage` is `true`; default page size is 100, so a catalog past one page silently truncates otherwise**), then read the returned `asinOpenDate` field and filter to this month's window **client-side**. `asinOpenDate` is a datetime-with-timezone string, e.g. `"2026-06-01 00:00:00 PST"` — not `YYYYMMDD`, and not the `YYYY-MM-DD` used by `dateStart`/`dateEnd` — so parse it and mind the **PST timezone** when judging whether an ASIN opened inside the month, to avoid month-boundary misclassification. (`campaignStartDate`/`EndDate` are strings of no guaranteed shape — a different problem again, not this field's format.)
+
+⚠️ **`asinOpenDate` is the SP go-live date, not the date the product was first listed.** The underlying column is `sp_open_date`. An ASIN that has sold for years and only started running Sponsored Products this month carries a this-month `asinOpenDate`, so a naive read reports it as a new product. Two things follow:
+- Call it **newly advertised** rather than **newly listed** in the report, or say "first ran SP this month".
+- **Falsify it against sales that predate the SP go-live date.** **Step 2f cannot do this** — it covers this month only and returns a single aggregate per ASIN, so it can neither reach earlier months nor show whether this month's sales fell before or after `asinOpenDate`. Use instead:
+  - **at minimum, Step 2g** (last month, same shape): any `TotalSalesAmount` there is sales that predate a this-month `asinOpenDate`;
+  - **when it matters, one extra `get_ads_perf`** — the only check that works when an ASIN went live mid-month, or when there is no MoM baseline. **Candidates have different `asinOpenDate`s, so there is no single `dateEnd` that serves them all.** Pick one of these two shapes, don't improvise a third:
+    - **Daily grain, one call** (preferred): `factEntity: asin`, `filters` on `asin.asin_` for every candidate, `dateStart` = the earliest candidate's `asinOpenDate` minus the lookback you choose, `dateEnd` = the **latest** candidate's `asinOpenDate - 1 day`, and **`date` in `select`** so rows stay per-day. Then, client-side, keep only each ASIN's rows strictly before **its own** `asinOpenDate`. Without `date` in `select` the response is one aggregate per ASIN and the per-ASIN cutoff cannot be applied — that is the mistake this shape exists to prevent.
+    - **Group by `asinOpenDate`, one call per group**: simpler to reason about and the right choice when the dates cluster, but it costs one call per distinct date.
+    Respect the 90-day span and 15-month lookback caps either way, splitting the window if needed.
+  - **State the span you actually checked.** "No earlier sales" only ever means "none in the window queried". Write the window into the report ("no sales in the 6 months before its SP go-live date"), so nobody reads a 30-day check as proof the product is new.
+  An ASIN with sales before its `asinOpenDate` is an **existing product newly put on SP**. Report it on its own line rather than mixing it into the new-product section, where it would distort every "how are new launches doing" comparison.
+- **The check only works in one direction.** Finding earlier sales *disproves* "new product". Finding none **does not prove** the product is newly listed — it may have been listed for a year and simply never sold, or sold outside the window you queried. So call the remaining group what the data actually supports: **first ran SP this month, no earlier sales observed**. Don't promote it to "new product", and if a customer needs true listing age, say this field cannot provide it.
+
+⚠️ **One ASIN returns several rows, one per SKU, each with its own `asinOpenDate`** (some on `Inactive` SKUs). Take the **earliest** date across an ASIN's rows — that is when the ASIN first went live on SP; the later ones are re-listings of individual SKUs, and picking whichever row arrives first gives a different answer run to run. The parent-level `parentAsinOpenDate` is `any(sp_open_date)` and is not reproducible at all — derive a parent's SP age from the minimum of its children instead.
 
 **i. Keyword-level performance**: `get_ads_perf` with `factEntity: target`, `queryType: keyword`, this month's window, `select` including `target.targetId_`/`target.targetText_`/`target.targetMatchType_`, metrics `Impressions/Clicks/Spend/Sales/Conversions/ACOS`.
 
-**j. Search-term data (feeds new-keyword and negative-keyword candidates)**: `get_ads_perf` with `factEntity: searchTerm`, this month's window, `select` including `query_`/`matchType_`/`targetId_`/`adGroupId_`/`campaignId_`, metrics `Impressions/Clicks/Spend/Sales/Conversions/ACOS`.
-
-**k. This month's operation log** (feeds Step 8's attribution): `get_operation_log`, this month's window, no `changeBy` filter (capture manual + AI + automation), `pageSize: 200`. **Check `truncated`** — if `true`, follow `sparkx-query-operation-log`'s "Getting a Complete Count" procedure (split into non-overlapping sub-windows) rather than treating one page as the full month.
+**k. Operation log** (feeds Step 8's attribution and the promotion signal): `get_operation_log` from 7 days before last month's start through this month's end (within the 90-day cap), no `changeBy` filter, `pageSize: 200`. Attribution uses this month's rows; the earlier rows only feed the promotion signal for the MoM baseline. The YoY baseline has no log here - for it, rely on the event calendar and ask; classify people vs machines and drop the hourly `currentBudget` rows per "Shared Rules". **Check `truncated`** — if `true`, follow `sparkx-query-operation-log`'s "Getting a Complete Count" procedure (split into non-overlapping sub-windows) rather than treating one page as the full month.
 
 **Step 2k as a whole is best-effort, not a hard dependency for the rest of the report.** If splitting into sub-windows still times out or keeps erroring, don't let it block the rest of the report from completing — produce Steps 3-7/9 normally and mark Step 8's attribution as "operation log data incomplete this month" (or similar, in the report's own language) rather than failing the entire report over one section.
 
-**Fully paginate (d)/(e)/(f)/(g)/(i)/(j) before analyzing** — loop `page` while `hasNextPage` is `true`. **If full pagination across many profiles/entities would be impractical at scale**, you may fall back to a spend-ranked sample (top N by `Spend`/`TotalSalesAmount` via `orderBy` + a capped `pageSize`) instead of the full population — but this fallback **must be disclosed explicitly** in the relevant section (e.g. "structure breakdown based on top-spend sample, not full population"), stating concretely what was actually covered (how many profiles/entities, how many pages, whether `hasNextPage` was still `true` when you stopped), never silently presented as complete. **A degraded or failed section (structure, product, or keyword analysis) must not fail the whole report** — produce whatever sections do have complete data normally, and present only the affected section as partial/unavailable rather than aborting report generation entirely.
+**Fully paginate (d)/(e)/(f)/(g)/(i) before analyzing** — loop `page` while `hasNextPage` is `true`. **If full pagination across many profiles/entities would be impractical at scale**, you may fall back to a spend-ranked sample (top N by `Spend`/`TotalSalesAmount` via `orderBy` + a capped `pageSize`) instead of the full population — but this fallback **must be disclosed explicitly** in the relevant section (e.g. "structure breakdown based on top-spend sample, not full population"), stating concretely what was actually covered (how many profiles/entities, how many pages, whether `hasNextPage` was still `true` when you stopped), never silently presented as complete. **A degraded or failed section (structure, product, or keyword analysis) must not fail the whole report** — produce whatever sections do have complete data normally, and present only the affected section as partial/unavailable rather than aborting report generation entirely.
 
 ### Step 3 · Full-Month KPIs (MoM + YoY)
 
@@ -186,7 +247,7 @@ Report both months' share percentages and the point-change (e.g. "SP share: 62% 
 
 **Top ASIN MoM changes**: follow the same rigorous join procedure as [sparkx-query-ads-performance's Period-over-Period and Top Movers example](../sparkx-query-ads-performance/references/example-period-comparison-top-movers.md) — join Step 2's (f)/(g) by `asin.asin_` (not by title), bucket into new/disappeared/present-in-both, floor the "% change" ranking on the **prior month's** (denominator) value, and show both months' raw values plus the absolute delta alongside any percentage.
 
-**New-product performance**: for ASINs identified in Step 2h (opened this month), report their this-month `TotalSalesAmount`/`OrderCount`/`TACOS` from Step 2f (the actual metrics that call requests — not `Sales`/`Conversions`, which aren't part of it) — there is no "last month" baseline for these by definition, so don't compute a MoM % for them; present as "new this month" with their standalone numbers. **Don't assume every new ASIN is present in Step 2f**: if 2f was reduced to a disclosed spend/sales-ranked sample (per Step 2's pagination fallback), newly-opened products — which usually have low sales — likely fall outside the top sample. In that case, issue a separate `get_ads_perf` (`factEntity: asin`) call scoped to the Step 2h ASIN list (`filters` on `asin.asin_`) to fetch their performance, rather than reporting them as "no data" just because they weren't in the Top-ASIN sample. **If Step 2h's new-ASIN list is large, batch this supplemental call** — split the ASIN list into chunks of a reasonable size for the `in` filter rather than one unbounded `asin.asin_: {"in": [...hundreds...]}` call, fully paginate each batch (`hasNextPage`), and merge/dedupe the batches' results by `asin.asin_` before reporting — don't silently drop ASINs because a single oversized call or an unpaginated batch left some out.
+**Newly-advertised-product performance**: for ASINs identified in Step 2h (first ran SP this month, no earlier sales observed — excluding the ones Step 2h flagged as existing products newly put on SP), report their this-month `TotalSalesAmount`/`OrderCount`/`TACOS` from Step 2f (the actual metrics that call requests — not `Sales`/`Conversions`, which aren't part of it) — there is no "last month" **advertising** baseline for these, so don't compute a MoM % for them; present as "first advertised this month" with their standalone numbers, and never as "newly launched" unless the customer confirmed the listing date from their own records. **Don't assume every newly advertised ASIN is present in Step 2f**: if 2f was reduced to a disclosed spend/sales-ranked sample (per Step 2's pagination fallback), first-SP-go-live candidates — which usually have low sales — likely fall outside the top sample. In that case, issue a separate `get_ads_perf` (`factEntity: asin`) call scoped to the Step 2h ASIN list (`filters` on `asin.asin_`) to fetch their performance, rather than reporting them as "no data" just because they weren't in the Top-ASIN sample. **If Step 2h's candidate list is large, batch this supplemental call** — split the ASIN list into chunks of a reasonable size for the `in` filter rather than one unbounded `asin.asin_: {"in": [...hundreds...]}` call, fully paginate each batch (`hasNextPage`), and merge/dedupe the batches' results by `asin.asin_` before reporting — don't silently drop ASINs because a single oversized call or an unpaginated batch left some out.
 
 **Long-tail situation**: from Step 2f's full (paginated) ASIN list, compute what share of total Sales comes from the top N ASINs vs the rest (a simple Pareto-style cut, e.g. "top 20% of ASINs account for X% of Sales") — this characterizes concentration, not a specific product recommendation.
 
@@ -194,15 +255,15 @@ Report both months' share percentages and the point-change (e.g. "SP share: 62% 
 
 **Top keyword performance**: from Step 2i, rank by Spend or Sales, report Impressions/Clicks/Spend/Sales/ACOS per keyword. If a MoM comparison is wanted, pull the same-shape data for last month and join by `target.targetId_` the same way as Step 6.
 
-**New keyword opportunities**: from Step 2j's search-term data, find search terms with strong performance (e.g. meaningful Conversions and non-zero-Sales ACOS at or below account average — see the zero-Sales handling below) that **do not already exist as an explicit keyword target in the same adGroup**. Cross-reference against `get_entity_metadata` (`entity: target`, `filters: {"targetMatchType": {"in": ["exact", "phrase", "broad"]}, "adGroupId": {"in": [...]}}`) — **narrow by the specific `adGroupId`(s) the search term actually appeared under** (Step 2j's own `adGroupId_` field on that row), not a bare account-wide `targetMatchType` filter. The same search-term text can legitimately be a promoted keyword in one adGroup and not yet promoted in another; without narrowing by adGroup, a term already targeted elsewhere in the account would be wrongly excluded here, or a genuinely-new-to-this-adGroup term could be wrongly treated as already covered. **Narrowing by adGroup alone isn't sufficient** — that call returns the adGroup's existing keyword targets, but you still need to check whether *this specific search term* is among them: normalize both sides (case-fold, trim whitespace) and compare each search term's `query_` against the returned targets' `target.targetText_` for an exact match. Only a search term with no exact-text match among that adGroup's existing keyword targets counts as genuinely new; only flag those.
+**Search-term negatives and harvesting are out of scope here.** Doing them properly needs brand terms, a whitelist, own ASINs, the exact keywords already running, match-type sources and order thresholds by product stage - that is `sparkx-search-term-diagnosis` (if installed). In the report, add one line pointing to it ("要看该否哪些词、哪些词值得单独投，可以跑搜索词诊断"), and offer to run it for the same month.
 
-**Zero-Sales ACOS handling** (applies to both Step 2i and Step 2j wherever `ACOS` is used to rank or filter): a row with `Sales = 0` has an undefined `ACOS` (division by zero) — never treat it as "infinite" or sort it to the extreme end of an ACOS-based ranking. Exclude zero-Sales rows from any ACOS-based comparison (like the "new keyword opportunities" filter above); they belong in the negative-keyword-candidate check below instead, which is keyed on Spend + near-zero Conversions, not ACOS.
-
-**Negative-keyword candidates**: from Step 2j, search terms with meaningful Spend and zero (or near-zero) Conversions over the full month — same underlying logic as a high-spend/zero-order anomaly, applied at the search-term level. **Currency-aware, same caveat as the weekly skill**: don't hardcode a bare dollar figure as the "meaningful spend" floor if the store is in a non-USD currency — use a floor that's actually meaningful in that store's local currency (or the account's typical spend distribution), and for a multi-profile USD-aggregated report, a USD floor is reasonable.
+**Zero-Sales ACOS handling** (Step 2i): a keyword with `Sales = 0` has an undefined `ACOS` - never treat it as "infinite" or sort it to the extreme end of an ACOS ranking; show its Spend and "no sales" instead.
 
 ### Step 8 · Issues List + Attribution
 
 Compile the notable findings from Steps 3/5/6/7 (e.g. "ACOS worsened driven by a mix shift toward SD," "ASIN X's sales collapsed," "Portfolio Y's share shrank") and cross-reference Step 2k's operation log for changes in the same window that might explain them.
+
+Correlate with **human** changes first (people's budget / bid / status / managed-group setting changes); the AI's own adjustments are its normal operation, not a finding on their own. If the month or its baseline covers a promotion **the user confirmed**, attribute the swing to it before anything else; an unconfirmed signal only gets the "possibly promotion-related" label (see "Shared Rules").
 
 **Correlation, not causation** — same discipline as the weekly skill: say "ACOS rose in the same window a bid change was recorded on this campaign" rather than "the bid change caused the ACOS rise," unless the operation log pinpoints the exact change and the timing lines up precisely enough to say so with confidence.
 
@@ -211,8 +272,8 @@ Compile the notable findings from Steps 3/5/6/7 (e.g. "ACOS worsened driven by a
 Derive 3-6 structural-adjustment recommendations from Steps 5-8, e.g.:
 - Structural share shift toward an underperforming type → recommend rebalancing budget back toward the higher-ROAS type
 - A long-tail concentration finding → recommend consolidating spend toward top performers or testing budget on emerging mid-tier ASINs
-- New keyword opportunities found → recommend promoting them to explicit keyword targets
-- Negative-keyword candidates found → recommend adding them as negatives
+- Search-term work (negatives, harvesting) → recommend running `sparkx-search-term-diagnosis` (if installed) for the month
+- Campaigns in a running managed group → recommend the group's levers, not bids / budgets (see "Shared Rules")
 
 **Every recommendation must have**: action + target (specific campaign/ASIN/keyword) + evidence (data) — same requirement as the weekly skill.
 
@@ -299,8 +360,9 @@ Remember: **the section headers and labels below are structural placeholders (sh
 |---|---|---|---|
 | ... | ... | ... | ... |
 
-### New Products This Month
+### First Advertised This Month
 {table — standalone figures, no MoM %}
+{Say in one line that this is first SP go-live, not listing date, and name separately any ASIN that already had sales before it.}
 
 ### Long-Tail Concentration
 {one or two sentences + a simple share breakdown}
@@ -310,11 +372,7 @@ Remember: **the section headers and labels below are structural placeholders (sh
 ### Top Keywords
 {table}
 
-### New Keyword Opportunities
-{list — search terms not yet promoted to explicit targets}
-
-### Negative-Keyword Candidates
-{list — high spend, ~zero conversions}
+{Only if sparkx-search-term-diagnosis is installed: one line pointing to it for search-term negatives / harvesting, and offer to run it for this month. Otherwise omit this line}
 
 ## 6. Issues List
 
@@ -346,19 +404,19 @@ Output JSON schema:
   },
   "productAnalysis": {
     "topAsinChanges": [...],
-    "newProducts": [...],
+    "newlyAdvertisedProducts": [...],
+    "existingProductsNewlyAdvertised": [...],
     "longTail": {"topSharePct": ..., "topNCount": ...}
   },
   "keywordAnalysis": {
     "topKeywords": [...],
-    "newOpportunities": [...],
-    "negativeCandidates": [...]
+    "searchTermPointer": null
   },
   "issues": [{"issue": "...", "evidence": "...", "correlatedChange": "..."}],
   "nextMonthPlan": [{"priority": 1, "action": "...", "target": "...", "evidence": "..."}]
 }
 ```
-`kpiCards[].momValue`/`momPct` and `yoyValue`/`yoyPct` should be `null` for whichever baseline `compareBaseline` didn't request (e.g. all four stay populated for `mom+yoy`, but both `yoyValue` and `yoyPct` are `null` throughout when `compareBaseline=mom`) — never fabricate a value for a baseline that wasn't computed. `momValue`/`yoyValue` carry the baseline period's own raw figure (not just the % change), matching the markdown template's "raw value / % change" cell format.
+`keywordAnalysis.searchTermPointer` is `"sparkx-search-term-diagnosis"` only when that skill is installed, otherwise `null`. `kpiCards[].momValue`/`momPct` and `yoyValue`/`yoyPct` should be `null` for whichever baseline `compareBaseline` didn't request (e.g. all four stay populated for `mom+yoy`, but both `yoyValue` and `yoyPct` are `null` throughout when `compareBaseline=mom`) — never fabricate a value for a baseline that wasn't computed. `momValue`/`yoyValue` carry the baseline period's own raw figure (not just the % change), matching the markdown template's "raw value / % change" cell format.
 
 ## Data Boundaries
 
@@ -367,7 +425,7 @@ Output JSON schema:
 - **No structural analysis below the AdGroup/portfolio/campaign-type level** — SKU-level margin/profitability analysis is out of scope
 - **Cannot reliably compute "real-time remaining budget"** — same caveat as sparkx-weekly-ads-report; `dailyBudget`/`currentBudget` are configuration values, not a live spend ledger
 - **`get_entity_metadata` has no historical-snapshot capability** — "this month's config vs last month's config" can only be inferred from `get_operation_log`'s change records, not from querying current config as if it were historical
-- **New-keyword and negative-keyword candidates are heuristic suggestions**, not a guarantee of correctness — always show the underlying data (spend, conversions) so the customer can judge, don't present them as an automated decision
+- **No search-term negatives or harvesting** — those come from `sparkx-search-term-diagnosis` (if installed), which applies brand / whitelist / exact-keyword checks this report doesn't
 
 ## Example Call
 
@@ -399,3 +457,5 @@ Follows the shared error envelope used by all three underlying tools (`isError`/
 - Quarterly/QBR strategic review → `quarterly-ads-report` (not yet built)
 - Deep root-cause attribution on a single campaign → [ACOS root-cause investigation example](../sparkx-query-ads-performance/references/example-acos-root-cause-investigation.md)
 - SKU-level margin/profitability analysis (needs the customer's own cost data, not just ad data)
+- Search-term negatives and harvesting → `sparkx-search-term-diagnosis` (if installed)
+- Restoring bids / budgets / managed-group settings after a promotion → `sparkx-promo-reset` (if installed)

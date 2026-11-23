@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "qijingke-scrm": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@dhcc-npm/mcp-server-qijingke-scrm@latest"
+      ],
+      "runtime": {
+        "type": "node",
+        "version": ">=18"
+      },
+      "npmRegistry": "https://registry.npmmirror.com",
+      "timeout": 30000,
+      "env": {
+        "SCRM_APP_KEY": "${SCRM_APP_KEY}"
+      },
+      "staticEnv": {
+        "SCRM_BASE_URL": "https://api.qijingke.com"
+      }
+    }
+  }
+}

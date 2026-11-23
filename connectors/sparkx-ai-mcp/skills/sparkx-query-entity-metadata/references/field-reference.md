@@ -23,6 +23,8 @@
 | `suggestedKeyword` | SuggestedKeywordMetadataProvider | Keyword suggestions — **requires `filters.asin`; one profileId; not paginated** |
 | `suggestedTarget` | SuggestedTargetMetadataProvider | Product **and** category targeting suggestions — **requires `filters.asin`; one profileId; not paginated** |
 | `suggestedBid` | SuggestedBidMetadataProvider | Suggested bid for a keyword or for auto targeting — **requires `filters.asin` plus one of the two modes; one profileId; not paginated** |
+| `sdCategory` | SdCategoryMetadataProvider | Marketplace category tree flattened into rows — **one profileId; requires keyword, parentCategoryId or level; not paginated; capped at 500** |
+| `categoryBrand` | CategoryBrandMetadataProvider | Brands available to refine one category — **one profileId; requires one categoryId; not paginated** |
 
 ### `currency` - a per-row field, plus an envelope fallback
 
@@ -50,7 +52,7 @@ so you never have to list it.
 | `aiGroup` | `meta.currency` only | `meta.currency` is **`"USD"`**, and amounts are **not** converted — see below |
 | `aiGroup_schedule` | `meta.currency` only | n/a — **it requires exactly one `profileId`**; asking for several is an error, not a fallback |
 | `keywordGroup`, `suggestedKeyword`, `suggestedBid` | `meta.currency` only | n/a — these accept exactly one profile |
-| `automationRule`, `amcAudience`, `suggestedTarget` | none | none — they return no amounts |
+| `automationRule`, `amcAudience`, `suggestedTarget`, `sdCategory`, `categoryBrand` | none | none — they return no amounts |
 
 ⚠️ **The two read-failure modes are opposite, so trust them differently.** When AdsList
 cannot resolve a currency it **removes** `meta.currency` and flags it in `meta.hint` - absence
@@ -83,9 +85,14 @@ When a customer needs the currency behind an `aiGroup` budget and you only have 
 
 - **Decimal strings** such as `"100.00"`: `dailyBudget`, `currentBudget`, `defaultBid`,
   `targetBid`, `portfolioBudget`, `profileDailyBudgetCap`, and `placement.multiplier` (which
-  is a **percentage ratio, not an amount**).
+  is a **percentage, not an amount**: `"50.00"` = +50%).
 - **Numbers**: the `keyword` entity's `keywordBid` and `keywordCurrentBid`. These are the
   exception - do not assume the string form just because every other money field uses it.
+  ⚠️ **`keywordCurrentBid` can be `0` for an entire store.** Observed in production:
+  76,257 keywords in one profile all reading `0.00` while `keywordBid` was populated
+  normally, and a second profile where the two fields matched row for row. Treat `0` as
+  "no value", never as a bid, and never filter on it (`keywordCurrentBid >= 0.01` silently
+  empties such a store and looks exactly like "no keywords matched").
 
 MCP does not coerce either way. Parse the string form before doing arithmetic, and never
 compare those as strings (`"9.00" > "10.00"` is true as text).
@@ -147,8 +154,8 @@ no id/name split: report `audienceName` (with `audienceId` when binding one), `k
 
 ### campaign
 
-**Every campaign return field is filterable** - per the underlying ads API, for the campaign
-entity the filterable set = **all return fields, no exceptions** (so `aiGroupId`,
+**Every campaign return field except `processStatus` is filterable** - per the underlying ads API, for the campaign
+entity the filterable set otherwise follows the return fields (so `aiGroupId`,
 `portfolioId` and `campaignStartDate`/`campaignEndDate` can all be used in `filters`, not
 just the core fields below; the `campaignAi*Date` fields are placeholders and not worth
 filtering on). The two tables are split for
@@ -164,12 +171,13 @@ readability only.
 | campaignName | string | — |
 | campaignType | string | `sponsoredProducts` / `sponsoredBrands` / `sponsoredDisplay` |
 | campaignState | string | `enabled` / `paused` / `archived` |
+| processStatus | string/null | Enriched delivery status. Selectable but **not filterable or sortable**; empty is unknown, not enabled/delivering |
 | biddingStrategy | string | `legacyForSales` / `autoForSales` / `manual` / `ruleBased` |
 | targetingType | string | `auto` / `manual` |
 | costType | string | `cpc` / `vcpm` |
 | isAiCreate | int | `1` / `0` |
 | dailyBudget | string | Local-currency **decimal string**, e.g. `"100.00"` |
-| currentBudget | string | Decimal string. **Not the same field the write path adjusts** — budget writes and their previews are based on `dailyBudget` |
+| currentBudget | string | Decimal string. **Not the same field the write path adjusts** — budget writes and their previews are based on `dailyBudget`. **`0` is not a budget of zero**: it means no AI-adjusted value is recorded for the day. Never report "this campaign's budget is 0" from this field — read `dailyBudget` |
 
 **Campaign ID contract:** `campaignId` and `amazonCampaignId` are different identifiers.
 Managed-group create/edit tools accept the internal integer `campaignId`. When starting
@@ -266,6 +274,7 @@ client-side instead. See the date note below.
 | campaignId | number | **Internal** parent-campaign id. ⚠️ This entity returns **no `amazonCampaignId`** — to report the parent campaign (by name, or by its Amazon id) read the `campaign` entity keyed on this value. Never pass this number off as the Amazon campaign id |
 | adGroupName | string | — |
 | adGroupState | string | `enabled` / `paused` / `archived` |
+| processStatus | string/null | This ad group's enriched delivery status, not its parent's. Selectable but **not filterable or sortable**; empty is unknown |
 | defaultBid | string | Local-currency **decimal string**, e.g. `"0.50"` |
 | sdBidOptimization | string | `clicks` / `conversions` / `reach` (SD only) |
 
@@ -318,7 +327,7 @@ client-side instead. See the date note below.
 | matchType | string | `exact` / `phrase` / `broad` / `group` / `theme` |
 | keywordState | string | `enabled` / `paused` / `archived` |
 | keywordBid | number | Configured bid — a **number** here, unlike most money fields |
-| **keywordCurrentBid** | number | Currently effective bid (a **number**, unlike most money fields) — use this as the basis for a bid change |
+| **keywordCurrentBid** | number | The AI-adjusted current bid (a **number**, unlike most money fields). **`0` is not a bid** — it means no AI override is recorded, and on some stores every keyword reads `0`. **Never use it as the basis for a bid change without checking for `0` first**; fall back to `keywordBid` |
 
 - When `matchType = "group"`, `keywordText` is **not plain text**: it is a JSON string of the
   form `[{"type":"keywordGroupSameAs","value":"..."}]`. Don't show it raw to a customer and
@@ -464,16 +473,13 @@ One row per campaign × placement combination.
 | campaignType | string | returned, but **not filterable** |
 | placement | string | SP: `topOfSearch` / `productPage` / `restOfSearch` / `siteAmazonBusiness`. SB: `topOfSearch` / `home` / `detailPage` / `other` — **four each**, and `topOfSearch` means a different placement on the two |
 | placementText | string | Localized label — **only the SP values are translated**; SB rows echo the raw value (`home`, `detailPage`, `other`). Use `enum-i18n.md` for SB |
-| multiplier | string | Bid-adjustment **percentage** as a decimal string, e.g. `"1.00"` — **it is a ratio, not a money amount** |
+| multiplier | string | Bid-adjustment **percentage** as a decimal string: `"50.00"` = +50%, `"0.00"` = no adjustment — **not a money amount**. Range 0–900; a stored value outside it (historically `-99`) comes back `null` - report that adjustment as unavailable, never as 0% |
 | writeField | string | The `batch_update_ads` field for this placement (`topAdjustment`, `homeAdjustment`, …) — use it rather than mapping the label yourself. Comes back **empty** on SB `topOfSearch`; fall back to the placement-field table in `sparkx-edit-ads`'s `references/write-campaign.md` |
 
-**This is the authoritative source for placement bid adjustments, SB especially.** The
-`placement` **performance** entity (`get_ads_perf(factEntity='placement')`) is not: it returns
-only three rows per campaign type, uses `SP-`/`SB-`-prefixed values, and its
-`SB-Top of Search on-Amazon` row carries the **Home / 首页** adjustment instead of
-top-of-search. Measured on one campaign: this entity reported `topOfSearch` = 50%, the
-performance entity reported 0% for what it calls the same placement. Never read an SB placement
-adjustment from the performance side.
+**This and the placement performance entity agree on SB now.** Both return SB's four
+placements with their own values (the performance entity used to return three and put the
+Home value on its top-of-search row). This entity is still the one to use before a write,
+because it carries `writeField`.
 
 ### aiGroup (AI Managed Group)
 
@@ -481,6 +487,21 @@ Sourced from a separate backend (`td-api getSaAiGroupList`), aggregated from the
 
 **Return fields** (partial — full list is long):
 `aiGroupId`, `aiGroupName`, `aiStatus` (`0`=AI never turned on, `1`=AI currently running, `2`=AI turned off), `campaignType`, `targetType` (`1`=Drive growth/推动增长, `2`=Optimize ROAS/保持订单稳定, `3`=Promotion sales boost/活动冲量), `targetAcos`, `aiPersonality` (1-5), `aiPersonalityUpdatedAt`, `profileId`, `profileName`, `countryCode`, `numCampaign`, `numProduct`, `campaignNameSign`, `createTime`, `createBy`, `createUid`, `hasEditAuth`, `isAutoPacing`, `statusOnDate`, `lastStatusOnDate`, `lastStatusOffDate`, `lastOnDays`, `lastOnDaysBegin`, `lastOnDaysEnd`, `totalBudget`, `totalDailyBudget`, `sbStyleNum`, `aiActionSettings`, `aiAutomation`
+
+**`hasAdvice`** (intensity-enabled accounts only) says whether an AI personality recommendation is
+waiting for this group — it is the cheap way to find the groups worth calling
+`get_sp_sb_ai_personality_recommendation` on, instead of asking group by group.
+
+| Value | Meaning |
+|---|---|
+| `true` | a recommendation exists **and can be applied directly**: it was computed against the group's current campaigns / ASINs / targetType |
+| `false` | none available |
+| `null` | the recommendation service was temporarily unavailable — **unknown, not "no"**; say so rather than reporting "no recommendation" |
+
+- **Always `false` for `sponsoredDisplay` groups and for any group whose AI is not running** (`aiStatus != 1`). A `false` on those tells you nothing about whether advice could exist — it is structural.
+- **Not a filter.** There is no `hasAdvice` filter; pull the rows and group them client-side.
+- **An absent field is "unknown", not `false`, and not proof of a legacy account.** The field is omitted on legacy (non-intensity) accounts **and** whenever the capability check itself fails (`CapabilityDecision.QUERY_FAILED` falls back to the legacy output path). Those two look identical in the response, so read absence as "not enabled, or could not be determined" — never as "this account has no per-action-space intensities".
+- `true` is not an authorisation to write. It only says advice exists; applying it is still the separate user-approved step described in the create / edit skills.
 
 Display `aiPersonality` as its numeric value `1`-`5` in customer-facing group and schedule
 configuration output. Do not replace it with `aiPersonalityText` or append a personality label.
@@ -612,6 +633,40 @@ Pagination and `orderBy` are ignored; all schedules for the group come back in o
 
 **⚠️ `weekDays` read vs write encodings differ.** The values above (`1`=Monday … `7`=Sunday) are what the **read** side (`get_entity_metadata`) returns. The **write** tool `save_sp_sb_ai_group_schedule` expects a **different** encoding — `0`=Sunday … `6`=Saturday. Do **not** echo a `weekDays` value read here straight into a save-schedule call; translate between the two encodings first.
 
+### sdCategory
+
+Returns a flattened marketplace category tree. Exactly one authorized profile is required.
+At least one of `keyword` (case-insensitive name substring), `parentCategoryId` (direct
+children only), or `level` (integer >=1) must be supplied. `targetableOnly` is optional but
+does not count as narrowing on its own. All filters are single-valued and combine with AND.
+
+| Field | Type | Notes |
+|---|---|---|
+| categoryId | string | Copy unchanged into `asinCategorySameAs.value` |
+| categoryName | string | Display name; use in the matching resolved expression |
+| targetable | number | 0 or missing means Amazon will not accept it as a target |
+| level | number | 1 is top level |
+| parentCategoryId | string | omitted for top-level rows |
+| childCount | number | direct children; 0 means leaf |
+
+Pagination and sorting are ignored. More than 500 matches returns the first 500 in tree order
+with `meta.truncated=true` and `meta.total`. Narrow the query; never infer unseen ids.
+
+### categoryBrand
+
+Requires exactly one authorized profile and one `filters.categoryId` from `sdCategory`.
+Optional `keyword` filters brand names case-insensitively. It returns:
+
+| Field | Type | Notes |
+|---|---|---|
+| brandId | string | Copy unchanged into `asinBrandSameAs.value` |
+| brandName | string | May be absent |
+| targetExpression | object | Copyable brand fragment; resolved value falls back to the id when name is absent |
+
+For category + brand targeting, prepend the matching category expression to each brand
+target. Multiple brands require multiple targets. A td-api credential error is
+`service_unavailable` with `service: td-api`; do not retry or invent ids.
+
 ### asin (ASIN product info)
 
 Single query returns **child ASIN + parent ASIN + product line info nested together**. By default only returns non-deleted ASINs (`asinIsDelete=0`).
@@ -698,7 +753,7 @@ Multi-profile example:
     ],
     "rowCount": 2
   },
-  "meta": {"effectiveProfileIds": [111, 222]}
+  "meta": {"effectiveProfileIds": [111, 222], "hint": "Limit conclusions to this query's scope. Missing fields are not zero, and empty results do not prove that no matching business data exists. Do not present partial or paginated results as complete. Distinguish returned facts from analytical inferences; state limitations or query further when evidence is insufficient."}
 }
 ```
 Multi-profile does not mean USD here — check each row's `currency` field individually. `asin` was the first entity to behave this way; every AdsList entity now does.
@@ -713,7 +768,7 @@ Multi-profile does not mean USD here — check each row's `currency` field indiv
 | asinBrand | string | `like` / `=` | `{"asinBrand": {"like": "%Samsung%"}}` |
 | asinTitle | string | `like` | `{"asinTitle": {"like": "%wireless%"}}` |
 | asinBsr | number | `>=`, `<=` | `{"asinBsr": {">=": 1, "<=": 1000}}` |
-| asinPrice | number | `>=`, `<=` | `{"asinPrice": {">=": 10.0, "<=": 50.0}}` |
+| asinPrice | number | `>=`, `<=` | `{"asinPrice": {">=": 10.0, "<=": 50.0}}`. **`0` means unpopulated, not free** — treat it as null, never report it as the product's price, and remember a `>=` filter silently drops every such row |
 | asinInventoryStatus | string/array | `in` | `{"asinInventoryStatus": {"in": ["IN_STOCK"]}}` |
 | asinSpEligibilityStatus / asinSbEligibilityStatus / asinSdEligibilityStatus | string | `=` | `{"asinSpEligibilityStatus": "ELIGIBLE"}` |
 | asinIsDelete | number | `=` | `{"asinIsDelete": 1}` (to see deleted ones) |
@@ -805,7 +860,7 @@ Response:
     ],
     "rowCount": 3
   },
-  "meta": {"effectiveProfileIds": [4404871489220462]}
+  "meta": {"effectiveProfileIds": [4404871489220462], "hint": "Limit conclusions to this query's scope. Missing fields are not zero, and empty results do not prove that no matching business data exists. Do not present partial or paginated results as complete. Distinguish returned facts from analytical inferences; state limitations or query further when evidence is insufficient."}
 }
 ```
 

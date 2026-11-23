@@ -1,6 +1,7 @@
 # Two-phase confirmation
 
-Eleven of the 20 routes do not write on the first call. They return a preview plus a
+Twelve of the 25 routes can defer a write on the first call. Seven always do so; five do so
+only when the payload contains `state: "archived"`. They return a preview plus a
 `confirmToken`; the write happens only when you call again with that token.
 
 ## Which routes, and when
@@ -13,6 +14,7 @@ Eleven of the 20 routes do not write on the first call. They return a preview pl
 - `keyword` + `updateBid`
 - `target` + `updateBid`
 - `productAd` + `archive`
+- `portfolio` + `updateBudget`
 
 **Only when the payload contains `state: "archived"`:**
 
@@ -22,8 +24,9 @@ Eleven of the 20 routes do not write on the first call. They return a preview pl
 - `negativeTarget` + `updateStatus` (`request.data`)
 - `negativeKeyword` + `updateStatus` (**`request.updates`**)
 
-The other nine routes execute immediately. `productAd + updateStatus` never needs
-confirmation because it cannot reach `archived` at all (only `enabled` / `paused`).
+The other thirteen routes execute immediately. `productAd + updateStatus` cannot reach
+`archived` at all. `adGroup + updateStatus` does accept `archived`, but that route still
+executes directly; get the user's approval before calling it because archival is irreversible.
 
 Case variants of `archived` (`"Archived"`, `" archived"`) are **rejected up front** with
 `invalid_params`. They do not skip confirmation and they do not execute. Send exactly
@@ -147,6 +150,7 @@ is no single schema. Roughly:
 | `keyword` / `target` + `updateBid` | `id`, `previousBid`, `projectedBid` (+ `campaignType` on target) |
 | `keyword` / `target` / `negativeKeyword` / `negativeTarget` + `updateStatus` | `id`, current text / matchType / state as far as the lookup resolved them, `targetState` |
 | `productAd` + `archive` | `id`, `targetState` (always `archived`) - built from your request only, no lookup |
+| `portfolio` + `updateBudget` | `index`, `id`, `profileId`, `current`, `submitted`, `defaultSources`, `mayBeSkipped` |
 
 **Do not infer which route a preview came from by looking at its keys**, and do not assume a
 key is present. You know the route because you sent it - carry that context yourself rather
@@ -210,8 +214,9 @@ Unattended, the preview is checked by you instead of by the user. Before sending
 
 **The preview's scope differs by route - check against the right baseline.**
 
-Always-confirm routes (`campaign + updateBudget`, `keyword + updateBid`,
-`target + updateBid`, `productAd + archive`) preview the whole request. Conditional routes
+Always-confirm routes (including `campaign + updateBudget`, `portfolio + updateBudget`,
+`keyword + updateBid`, `target + updateBid`, `productAd + archive`, audience and placement
+updates) preview the whole request. Conditional routes
 (the five `updateStatus` routes) preview **only the `archived` items** while Phase 2 executes
 the whole batch, so a batch of 1 archive + 20 pauses correctly previews `1` - comparing that
 against `21` would reject every mixed batch.

@@ -1,0 +1,20 @@
+{
+  "preAuth": "cli",
+  "mcpServers": {
+    "scorehub": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@scorehub/mcp-server@latest"],
+      "env": {
+        "SCOREHUB_REMOTE_MCP_URL": "https://app.scorehub.cn/mcp",
+        "SCOREHUB_CLIENT_HOST": "workbuddy"
+      },
+      "runtime": {
+        "type": "node",
+        "version": "20"
+      },
+      "npmRegistry": "https://registry.npmmirror.com",
+      "timeout": 30000
+    }
+  }
+}

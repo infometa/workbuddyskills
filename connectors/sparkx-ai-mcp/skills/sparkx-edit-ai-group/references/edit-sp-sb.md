@@ -22,7 +22,18 @@ Flat operations use the type selectors and companion values inside `batchParams`
 - When the switch is on, the corresponding `aiAutomation` mode field is `0` = AI or
   `1` = Rule/RBA. Use the exact mapping in `field-reference.md`.
 - Editing may set the mode field to `0` to switch **Rule/RBA -> AI**, but must not set
-  it to `1` to switch **AI -> Rule/RBA**.
+  it to `1` to switch **AI -> Rule/RBA** - a `1` is rejected.
+- Every rule keeps its current mode unless you set it to `0`; omitted rules are untouched
+  (a Rule-mode rule stays Rule).
+- Turning an action-space switch on (`aiActionSettings.xxxStatus=1`, from your params or a
+  template) restores that space's existing mode - if the group's rule is `status=1`, it
+  resumes in Rule mode.
+- **Template edit** (`templateId` > 0, `isSystemTemplate=1` for system presets): if you omit
+  `aiAutomation` and the template contains any Rule-mode rule (`status=1`), the call is
+  rejected before anything is written; the error offers three options (new group with
+  `aiGroupId=0`, platform UI, or retry with an explicit `aiAutomation` so the template's
+  rules are ignored). Ask the user which one before retrying. Archived templates
+  (`status=2`) are rejected; `aiStatus` is never taken from the template.
 - **RBA configuration is readable but not writable.** For a rule in Rule mode,
   `get_entity_metadata(entity='aiGroup')` returns its real conditions, actions, condition
   items, time periods and hour matrices under `aiAutomation.{ruleType}` - you may read and
@@ -39,6 +50,12 @@ Top-level: `aiStatus` (`0`=off, `1`=on), `targetType` (`1` growth / `2` stabilit
 `3` volume / `4` legacy), `acos`, `campaignIds`, `campaignNameSign`,
 `aiPersonality` (`1`-`5`, **>=3 when `targetType=3`**), and the nested
 `aiActionSettings` / `aiAutomation` objects.
+
+⚠️ **`aiPersonality` is group-level and belongs to legacy accounts.** On an account that
+sets personality per action space it is rejected before any downstream call, and the 12
+`*AiPersonality` fields inside `aiActionSettings` take its place. You cannot tell which
+kind of account you are on in advance - read [`ai-personality.md`](ai-personality.md) before
+sending either form.
 
 ## Changing campaign membership - don't assume append
 
@@ -88,6 +105,10 @@ always uses the other tool (`edit_sd_ai_managed_group`) - never in the same call
 
 (`targetType=3` volume requires `aiPersonality >= 3` - 4 is fine.) Then verify by
 reading the group back and confirming `targetType`/`aiPersonality` changed.
+
+**This example is the legacy-account shape.** On a per-action-space account the same call
+is rejected for carrying `aiPersonality`; send `bidPerformanceAiPersonality` and the other
+relevant fields inside `aiActionSettings` instead - see [`ai-personality.md`](ai-personality.md).
 
 > Reminder: if the group's AI is running (`aiStatus=1`), some changes may be silently
 > skipped - verify, and don't turn AI off on your own to force them.

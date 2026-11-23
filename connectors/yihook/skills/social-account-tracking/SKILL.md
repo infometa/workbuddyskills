@@ -2,10 +2,10 @@
 name: social-account-tracking
 description: 查看AI研策套餐、周期赠分与监控席位，首次购买并确认绑定社媒监测账号，查询本人账号概览、已采集作品与单条作品指标。取消监测及套餐或席位变更引导到网页操作。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: 社媒账号追踪与内容动态分析
 display_name_en: Social Account Tracking and Content Updates
 description_zh: 查看AI研策套餐、周期赠分与监控席位，首次购买并确认绑定社媒监测账号，查询本人账号概览、已采集作品与单条作品指标。取消监测及套餐或席位变更引导到网页操作。
@@ -18,7 +18,9 @@ author: yihook
 
 # 社媒账号追踪与内容动态分析
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 ## 场景与输入
@@ -63,7 +65,7 @@ author: yihook
 
 本 Skill 无文件输入、上传、生成模型或生成任务。公共模板带入的上传指引与脚本不适用于主页链接；主页交给账号解析，不下载为素材。
 
-网页入口：[社媒雷达及监测管理](https://app.yihook.cn/social-accounts)；[套餐价格页](https://app.yihook.cn/pricing)。席位、套餐和自动续费管理从社媒雷达页面的研策套餐入口进行，不杜撰取消接口或管理深链。
+网页入口：[社媒雷达及监测管理](https://app.yihook.cn/social-accounts?source=workbuddy)；[套餐价格页](https://app.yihook.cn/pricing?source=workbuddy)。席位、套餐和自动续费管理从社媒雷达页面的研策套餐入口进行，不杜撰取消接口或管理深链。
 
 ### 工具与参数
 

@@ -25,11 +25,11 @@ lovrabet service remove --service crm
 
 `service validate` 只校验 JSON 协议，不写入本地 registry。`service validate/import --file` 同时接受单个 Service Tree manifest 和本地 registry 文件（`~/.lovrabet/service.json`）；传入 registry 时会逐个校验或导入其中保存的原始 manifest。`service import` 会把 manifest 标准化后写入 `~/.lovrabet/service.json`，同一个服务再次导入会替换旧版本。`service export` 从本地 registry 导出 Git 可管理的单个 manifest 文件。`service remove` 只移除本机 registry 条目，不删除 Git 中的 manifest 文件，也不会访问服务端。
 
-## 意图识别与主动发现
+## 显式使用时的发现与验证
 
-当用户说的是业务目标，而不是底层 CLI 命令时，Agent 应先检查本机是否已经导入对应的业务语义服务。典型业务目标包括“查我的需求”“看项目评论”“列出待处理订单”“客户详情”“库存预警”“工单跟进”等。
+本节仅用于用户或可信业务 Skill 明确指定 Service Tree 命令、要求使用或管理 Service Tree 的场景。普通业务诉求按 [主决策矩阵](../SKILL.md#发现与复用顺序) 处理，不先查询本地 registry。
 
-首选发现命令：
+已给出具体服务或命令时直接使用 `service detail`；明确要求使用 Service Tree、但尚未给出服务标识时，才列出本地服务：
 
 ```bash
 lovrabet service list --format compress
@@ -62,7 +62,7 @@ Service Tree 未命中不是失败条件，也不代表业务能力不存在。�
 3. 稳定规则或高风险确定性判断不得直接退化为 Dataset 字段拼装；没有可信能力时输出局部“不判定”，并说明缺少的能力契约。
 4. 只有现有上下文、KB 和只读发现都不能收敛时，才向用户询问一个最关键的补充信息。
 
-用户已经显式给出 `datasetCode`、`sqlCode`、Backend Function 标识，或明确要求执行底层 `data/sql/bff` 命令时，不需要额外跑 Service Tree 发现，直接进入对应 Detail。`--appcode` / `--app` 只是应用上下文，不应单独阻止业务服务发现。
+用户已经显式给出 `datasetCode`、`sqlCode`、Backend Function 标识，或明确要求执行底层 `data/sql/bff` 命令时，不需要额外跑 Service Tree 发现，直接进入对应 Detail。`--appcode` / `--app` 只选择应用上下文，不触发 Service Tree 发现。
 
 ## 推荐 Manifest 写法
 
@@ -128,8 +128,8 @@ lovrabet crm customer detail 10001
 等价的底层能力分别是：
 
 ```bash
-lovrabet data filter --code aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa --params '{"where":{"status":{"$eq":"active"},"customer_name":{"$contain":"科技"}},"currentPage":1,"pageSize":20,"orderBy":[{"updated_at":"desc"}]}'
-lovrabet data getOne --code aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa --params '{"id":10001}'
+lovrabet data filter --appcode app-xxxxxxxx --code aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa --params '{"where":{"status":{"$eq":"active"},"customer_name":{"$contain":"科技"}},"currentPage":1,"pageSize":20,"orderBy":[{"updated_at":"desc"}]}'
+lovrabet data getOne --appcode app-xxxxxxxx --code aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa --params '{"id":10001}'
 ```
 
 ## 顶层字段
@@ -139,7 +139,7 @@ lovrabet data getOne --code aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa --params '{"id":100
 | `service` | 服务编码，进入命令路径，例如 `crm`。也兼容 `{ "code": "crm", "name": "CRM" }`。 |
 | `name` / `description` | 展示名称和说明，会出现在 help、schema、doctor 中。 |
 | `app` | 单应用快捷绑定。可写 appcode 或应用名。 |
-| `apps` | 多应用绑定表，例如 `{ "crm": "app-xxx", "order": { "appcode": "app-yyy", "env": "prod" } }`。 |
+| `apps` | 多应用默认目标，例如 `{ "crm": "app-xxx", "order": { "appcode": "app-yyy" } }`；各应用共享当前连接环境和用户身份。 |
 | `appBindings` | 兼容旧命名，语义同 `apps`。 |
 | `defaults` | 服务级默认底层参数，会被资源和动作继承。 |
 | `resources` | 业务对象树。每个节点可继续嵌套 `resources`。 |
@@ -246,9 +246,11 @@ lovrabet schema --format compress
 lovrabet doctor
 ```
 
-`lovrabet service list/detail` 是 Agent 根据业务意图主动发现本机动态服务的轻量入口；`lovrabet --help` 会列出本地已导入服务及其多级业务命令；`lovrabet schema` 会把动态业务命令作为机器可读 command schema 导出；`lovrabet doctor` 会展示本机 registry 路径、加载状态、服务数、命令数和每个服务的 manifest 来源文件。
+`lovrabet service list/detail` 用于显式使用 Service Tree 时查看本机动态服务；`lovrabet --help` 会列出本地已导入服务及其多级业务命令；`lovrabet schema` 会把动态业务命令作为机器可读 command schema 导出；`lovrabet doctor` 会展示本机 registry 路径、加载状态、服务数、命令数和每个服务的 manifest 来源文件。
 
-动态命令仍走 Lovrabet CLI 的统一 runner：认证、appcode 决议、已发布应用访问限制、risk、dry-run、`--format` 和 `--jq` 都会生效。manifest 的应用绑定只提供默认值；用户显式传入的 `--appcode`、`--app`、`--env` 优先。
+动态命令仍走 Lovrabet CLI 的统一 runner：认证、appcode 决议、已发布应用访问限制、risk、dry-run、`--format` 和 `--jq` 都会生效。manifest 的应用绑定提供能力的默认目标；用户显式传入 `--appcode` 或 `--app` 时，不注入 manifest 的默认应用。两者同时提供时 `--appcode` 优先。显式选择只决定调用目标，不证明已绑定的 Dataset、SQL 或 Backend Function 可用于该目标；执行前仍须按[应用选择指引](../guides/app-resolution.md)核对资源归属与适用范围。
+
+连接环境和用户 AK 沿用本次已解析配置，应用绑定不切换它们。manifest 未声明 `env` 时直接沿用当前环境；已有绑定声明 `env` 时，它只约束能力适用的环境。与当前环境不一致时，执行和 dry-run 都在读取业务上下文或调用业务能力前返回错误，不自动换环境、换 AK 或重试。Agent 应报告环境不匹配，不为消除错误自行修改连接设置。
 
 ## 兼容旧格式
 

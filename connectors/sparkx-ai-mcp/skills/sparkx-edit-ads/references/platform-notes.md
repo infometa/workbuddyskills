@@ -119,7 +119,8 @@ retry blindly.**
 | `scope_missing` / `permission_denied` | Not authorized - stop and tell the user (above) |
 | `token_invalid` / `api_not_authorized` | Auth problem - the user must re-authenticate |
 | `profile_out_of_range` | A profileId is outside the authorized set |
-| `service_unavailable` / `auth_service_unavailable` / `rate_limit_service_unavailable` | Infrastructure - report and stop; do not hammer |
+| `service_unavailable` / `auth_service_unavailable` / `rate_limit_service_unavailable` | Infrastructure - report and stop; do not hammer. **A bad or expired token is not one of these** — it comes back as **401 / 403**, which is permanent: re-authenticate rather than retry |
+| `capability_unavailable` | A dependent capability lookup failed - the request was **not executed** (nothing written). Retry the same call unchanged later; no read-back needed |
 
 Messages from `business_error` are wrapped by the service layer
 (`Service [Amazon_SA_Service] returned an error: ...`); `invalid_params` messages are not.
@@ -140,6 +141,21 @@ serial pass over many entities will hit the ceiling - batch instead of looping, 
 After any write, re-read the entities with `get_entity_metadata` and confirm the fields took
 the values you intended. This is mandatory for anything irreversible, anything bid- or
 budget-related, and anything that returned `ambiguous_write` or `timeout`.
+
+⚠️ **A read-back that disagrees is not automatically a failed write.** The metadata mirror can
+trail Amazon by **20 minutes or more**, so an immediate re-read may still show the old value for a
+write that landed. Never re-send on that basis. Retry the read a couple of times with a short
+wait; if it still disagrees, report the row as **`pending sync`**, and leave it for the user to
+re-check later. What `pending sync` means depends on what the write returned:
+
+- after a **success** envelope — written, not yet visible in the mirror;
+- after **`ambiguous_write`** or **`timeout`** — **outcome unknown.** The old value may mean the
+  write never landed, or that it landed and the mirror trails. Do not assert it was written;
+  say the result is unconfirmed and that the user should re-check before acting on it.
+
+**A third value means a different problem.** If the read-back shows a value that is neither the
+old one nor the one you wrote, this is not sync lag at all — someone or something else wrote
+in between. Report it as a conflicting write and stop; do not re-send.
 
 When reconciling a budget change, remember that the confirmation preview's `currentBudget`
 is the campaign's **`dailyBudget`** - see [`confirmation.md`](confirmation.md).

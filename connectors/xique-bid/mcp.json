@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "喜鹊标书": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "--yes",
+        "--package",
+        "@xqyz/workbuddy-plugin-xique@0.10.45",
+        "xique-workbuddy-mcp"
+      ],
+      "timeout": 180000,
+      "runtime": {
+        "type": "node",
+        "version": "22"
+      },
+      "npmRegistry": "https://registry.npmjs.org/",
+      "env": {
+        "XQ_API_KEY": "${XQ_API_KEY}"
+      },
+      "staticEnv": {
+        "XIQUE_CONNECTOR_MODE": "marketplace",
+        "XQ_DISABLE_AUTO_LOGIN": "1"
+      }
+    }
+  }
+}

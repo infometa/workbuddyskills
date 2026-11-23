@@ -13,6 +13,7 @@ import argparse
 import base64
 import hashlib
 import html
+import importlib.util
 import json
 import os
 import re
@@ -26,6 +27,8 @@ from pathlib import Path
 MAX_PAYLOAD_BYTES = 512 * 1024
 START_MARKER = "[TRIP_PLAN_PAYLOAD_V1]"
 END_MARKER = "[/TRIP_PLAN_PAYLOAD_V1]"
+PREVIEW_REDIS_KEY_PREFIX = "fbt:trip-plan-preview:v1:"
+PREVIEW_ID_RE = re.compile(r"^[A-Za-z0-9_-]{40,64}$")
 
 # 行程类型 → 表头文案，对齐 scheduleCard/index.tsx 的 trip-type 标签
 TRIP_TYPE_LABELS = {
@@ -91,6 +94,45 @@ def _decode_payload(encoded: str, *, require_integrity: bool = True) -> dict:
         raise ValueError("行程预览载荷缺少 trips")
     if require_integrity and not _valid_integrity(payload):
         raise ValueError("行程预览载荷完整性校验失败")
+    return payload
+
+
+def _read_preview_cache(env: str, cache_key: str) -> dict | None:
+    """Load the sibling Redis helper without relying on WorkBuddy PYTHONPATH."""
+    helper_path = Path(__file__).with_name("redis_utils.py")
+    spec = importlib.util.spec_from_file_location(
+        "fenbeitong_workbuddy_redis_utils", helper_path
+    )
+    if spec is None or spec.loader is None:
+        return None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.get_req_data_from_redis_dict(env, cache_key)
+
+
+def _load_payload_by_preview_id(preview_id: str, env: str) -> dict:
+    """Resolve a bounded Redis capability id and validate the cached payload."""
+    if PREVIEW_ID_RE.fullmatch(preview_id) is None:
+        raise ValueError("行程预览 preview_id 格式无效")
+    normalized_env = "prod" if env == "prod" else "fat"
+    payload = _read_preview_cache(
+        normalized_env, f"{PREVIEW_REDIS_KEY_PREFIX}{preview_id}"
+    )
+    if payload is None:
+        raise ValueError("行程预览不存在、已过期或 Redis 暂时不可用")
+    if not isinstance(payload, dict):
+        raise ValueError("Redis 行程预览载荷必须是 JSON object")
+    raw = json.dumps(
+        payload, ensure_ascii=False, separators=(",", ":"), default=str
+    ).encode("utf-8")
+    if len(raw) > MAX_PAYLOAD_BYTES:
+        raise ValueError("Redis 行程预览载荷超过 512 KiB 限制")
+    if payload.get("version") != 1 or payload.get("kind") != "fbt_trip_plan":
+        raise ValueError("不支持的 Redis 行程预览载荷版本")
+    if not isinstance(payload.get("trips"), list):
+        raise ValueError("Redis 行程预览载荷缺少 trips")
+    if not _valid_integrity(payload):
+        raise ValueError("Redis 行程预览载荷完整性校验失败")
     return payload
 
 
@@ -440,7 +482,7 @@ def _card_train(trip: dict) -> str:
 
 def _card_hotel(trip: dict) -> str:
     end_date = _pick(trip, "trip_end_date_show") or _pick(trip, "trip_end_date")
-    start_date = _pick(trip, "trip_start_date")
+    start_date = _pick(trip, "trip_start_date_show") or _pick(trip, "trip_start_date")
     nights = _day_diff(start_date, end_date)
     score = _pick(trip, "commentScore", "comment_score")
     price = _pick(trip, "estimated_price")
@@ -843,17 +885,27 @@ def _write_preview(payload: dict, output_dir: Path) -> Path:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成 WorkBuddy 行程规划预览")
-    # 二选一：优先 --conversation-id（模型只需复制一个 id，不搬运 Base64）
+    # Redis preview_id 是主流程；旧参数暂留用于 Redis 写入失败时回退。
+    parser.add_argument("--preview-id")
+    parser.add_argument("--env", choices=("fat", "prod"), default="fat")
     parser.add_argument("--conversation-id")
     parser.add_argument("--payload-base64")
     parser.add_argument("--output-dir", default="outputs")
     parser.add_argument("--diagnose", action="store_true",
                         help="把会话记录查找过程打到 stderr，用于排查恢复链路")
     args = parser.parse_args()
-    if not args.conversation_id and not args.payload_base64:
-        parser.error("需要 --conversation-id 或 --payload-base64 其中之一")
+    input_count = sum(bool(value) for value in (
+        args.preview_id, args.conversation_id, args.payload_base64
+    ))
+    if input_count != 1:
+        parser.error(
+            "需要且只能指定 --preview-id、--conversation-id 或 "
+            "--payload-base64 其中之一"
+        )
     try:
-        if args.conversation_id:
+        if args.preview_id:
+            payload = _load_payload_by_preview_id(args.preview_id.strip(), args.env)
+        elif args.conversation_id:
             payload = _load_payload_by_conversation(
                 args.conversation_id.strip(), args.diagnose)
         else:

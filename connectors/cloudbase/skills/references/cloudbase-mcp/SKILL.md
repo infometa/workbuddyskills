@@ -1,7 +1,7 @@
 ---
 name: cloudbase-mcp
 description: CloudBase MCP reference. Use when connecting local or remote MCP, calling tools from the shell with mcporter, reading tool schemas, choosing the domestic or international endpoint, setting site, region, cloud mode, or plugin flags, or contributing a fix to the open-source MCP server, skills, or CLI.
-version: 2.36.2
+version: 2.37.6
 license: MIT
 alwaysApply: false
 ---
@@ -44,7 +44,7 @@ If a referenced sibling skill file is missing from this environment, ask the use
 |------|---------|
 | Remote, domestic | `https://tcb-api.cloud.tencent.com/mcp/v1` |
 | Remote, international | `https://tcb-api.tencentcloud.com/mcp/v1` |
-| Local | `npx @cloudbase/cloudbase-mcp@latest` (Node.js 18.15+) |
+| Local | `npx -y @cloudbase/npm-launcher@1.0.0 @cloudbase/cloudbase-mcp@latest` (Node.js 18.15+) |
 
 The hostname decides the site. Remote URLs do not take a `site` query parameter.
 
@@ -103,7 +103,7 @@ If it is missing, add a stdio server named `cloudbase` in `config/mcporter.json`
   "mcpServers": {
     "cloudbase": {
       "command": "npx",
-      "args": ["@cloudbase/cloudbase-mcp@latest"],
+      "args": ["-y", "@cloudbase/npm-launcher@1.0.0", "@cloudbase/cloudbase-mcp@latest"],
       "description": "CloudBase MCP",
       "lifecycle": "keep-alive"
     }

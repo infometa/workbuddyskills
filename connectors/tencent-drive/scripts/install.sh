@@ -4,7 +4,7 @@
 # 由 WorkBuddy 连接器的 `init` 命令下载后执行（见 connector/workbuddy/cli.json）。
 # 非交互、幂等：已是目标版本则跳过下载；每次都会校验并补齐 WorkBuddy 会话钩子。
 #
-# 占位符 https://ai-drivecli-1251316161.cos.ap-guangzhou.myqcloud.com / 1.1.1-beta 由 scripts/package-connector.sh 在打包时替换。
+# 占位符 https://ai-drivecli-1251316161.cos.ap-guangzhou.myqcloud.com / 1.2.0 由 scripts/package-connector.sh 在打包时替换。
 #
 # 安全约定：
 #   - 只访问 DOWNLOAD_BASE_URL 白名单域，严格 TLS（https only, TLS>=1.2）；
@@ -16,7 +16,7 @@ set -eu
 
 main() {
   DOWNLOAD_BASE_URL="https://ai-drivecli-1251316161.cos.ap-guangzhou.myqcloud.com"
-  VERSION="1.1.1-beta"
+  VERSION="1.2.0"
   # 布局与 skill 的 Install 章节一致：真实产物在专属目录，PATH 目录只放符号链接
   INSTALL_DIR="$HOME/.local/share/tdrive/bin"
   LINK_DIR="$HOME/.local/bin"

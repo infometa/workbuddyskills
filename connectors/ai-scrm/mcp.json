@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "ai-scrm": {
+      "type": "streamableHttp",
+      "url": "https://scrm.3mw.com.cn/mcp-bridge/mcp",
+      "headers": {
+        "X-Site-Key": "${SCRM_SITE_KEY}"
+      },
+      "timeout": 30000,
+      "disabledTools": [
+        "smo_geo_pipeline_status",
+        "smo_geo_pipeline_list",
+        "smo_geo_policy_get",
+        "smo_geo_policy_update",
+        "smo_geo_pipeline_run_now",
+        "smo_geo_decision_execute",
+        "smo_geo_bootstrap_project",
+        "smo_geo_kill_switch",
+        "systemone_evaluate",
+        "smo_content_quality_score",
+        "smo_content_draft_list",
+        "smo_content_draft_read",
+        "smo_pub_account_list",
+        "smo_pub_task_create",
+        "smo_pub_task_query",
+        "smo_pub_publish_data_query"
+      ]
+    }
+  }
+}

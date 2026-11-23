@@ -6,37 +6,13 @@
 
 - `sql detail` 和 `sql exec` 使用当前 CLI 认证，默认推荐 **accessKey（client-ak）**
 
-## 先判断 app 是否明确
+## 应用与能力定位
 
-`sql` 命令组也不要默认先查 app。
+应用选择统一遵循[默认应用与应用发现](../guides/app-resolution.md)：未指定目标时先查默认 AppCode（顶层 `appcode` 或 `defaultApp` 解析结果）；仅在成功查询无合理匹配、核对筛选条件且用户未限定范围后，才扩大只读发现。认证、权限或连接错误不触发跨应用重试。
 
-### 可以直接进入 Detail 的场景
+从业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选定位能力，同时核对所属 AppCode；只有应用明确仍不足以直接执行，能力标识、参数与副作用契约也必须明确。缺少可信标识时停止，不猜测，也不通过跨应用逐个执行来探测。
 
-以下情况直接进入 `sql detail`，但不能跳过契约与数据范围核对：
-
-- 用户已经给了 `--appcode`
-- 用户已经给了 `--app <name>`
-- 当前问题明显沿用上文已确认的同一 app 上下文
-- 用户明确说“当前应用”“默认应用”，且没有新的业务域线索
-
-`defaultApp` 只是默认候选。Custom SQL 可能按业务域分布在不同 app 中；用户提到新的业务域且未指定 app 时，先把 `defaultApp` 当第一个候选验证，验证不成立再扩大到应用列表。
-
-### 需要先做应用决议的场景
-
-以下情况才扩大到 `lovrabet app list`：
-
-- 用户只给了业务需求，没有明确说明是哪个应用里的 Custom SQL
-- 当前没有显式 `--appcode` / `--app`，且需求包含业务域线索
-- 同一类业务可能落在多个 app 中
-- 已经把 `defaultApp` 作为候选检查过，但无法确认它承载本次 Custom SQL
-
-推荐方式：
-
-1. 有 `defaultApp` 时，先把它作为第一个候选
-2. 无法确认默认候选承载本次 Custom SQL 时，再 `lovrabet app list`
-3. 用业务关键词选 1-2 个候选 app
-4. 从业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选定位 Custom SQL；无法唯一定位时停止，不猜测
-5. 再回到 `lovrabet sql detail`；契约、参数和数据范围核对通过后才执行 `sql exec`
+`--app` / `--appcode` 只对本次命令生效。临时选择其他应用后，后续每条 `detail`、`data` 或执行命令都必须显式携带该目标；资源标识必须与发现它的 AppCode 配对，不能依靠上一条命令改变默认值。
 
 ## sql detail — 查看 Custom SQL 详情
 
@@ -82,20 +58,19 @@ lovrabet sql exec --sqlcode <code> --params '{"status":"active"}'
 ## 典型工作流
 
 ```bash
-# 0. 如果默认候选验证不成立，再看应用目录
-lovrabet app list
+# 0. 已按应用选择规则确认目标 AppCode；下列 <appcode> 均指同一目标
 
 # 1. 如果不知道 sqlCode，从业务 Skill、可信 Service Tree、
 #    前序已确认上下文或可信 KB 候选定位；无法唯一定位时停止
 
 # 2. 查看 Custom SQL 详情，核对名称、数据库和 SQL 内容
-lovrabet sql detail --sqlcode 2305f915-dd48cd4c
+lovrabet sql detail --appcode <appcode> --sqlcode 2305f915-dd48cd4c
 
 # 3. 核对契约、参数和数据范围后执行 Custom SQL
-lovrabet sql exec --sqlcode 2305f915-dd48cd4c --params '{"status":"active"}'
+lovrabet sql exec --appcode <appcode> --sqlcode 2305f915-dd48cd4c --params '{"status":"active"}'
 
 # 4. 指定 JSON 格式输出，便于程序解析
-lovrabet sql exec --sqlcode 2305f915-dd48cd4c --params '{"status":"active"}' --format json
+lovrabet sql exec --appcode <appcode> --sqlcode 2305f915-dd48cd4c --params '{"status":"active"}' --format json
 ```
 
 ## 注意
@@ -105,7 +80,7 @@ lovrabet sql exec --sqlcode 2305f915-dd48cd4c --params '{"status":"active"}' --f
 - `lovrabet` 没有 `sql list` 命令；`sqlCode` 必须来自用户明确输入、业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选
 - 运行态发现业务能力，不枚举 Custom SQL 实现资产；基础事实查询优先使用已治理 Dataset，稳定规则由业务 Skill 或可信 Service Tree 绑定到可信契约对应的 Custom SQL
 - 不知道 `sqlCode` 时不猜测，也不从 Dataset 原始字段重写已有稳定规则
-- 当业务归属不清时，先验证 `defaultApp`；验证不成立再 `app list` 做应用决议，再去确认 `sqlCode`，而不是直接盲猜当前 app
+- Detail 或执行失败时报告真实错误；不将失败当作无匹配而切换应用重试
 - `--params` 只传当前 Custom SQL 契约定义的业务参数
 
 ## 参考

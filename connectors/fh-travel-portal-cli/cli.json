@@ -1,0 +1,41 @@
+{
+  "_comment": "WorkBuddy runtime:node。init 从 HTTPS 下载地址装 fh-cli tgz（升级改 URL 里的版本号）；连接器 auth 带 --no-browser 只打授权 URL，由宿主打开（authSuppressBrowser:false，官方默认）；authWaitForExit 保 localhost 回调等 CLI 退出。聊天里助手登录仍走 skill 里 auth-login.*（不带 --no-browser，CLI 自己开浏览器）。",
+  "runtime": {
+    "type": "node",
+    "version": ">=18"
+  },
+  "init": {
+    "darwin": "npm install -g https://crm.feiheair.com/download/fh-cli-0.1.4.tgz",
+    "linux": "npm install -g https://crm.feiheair.com/download/fh-cli-0.1.4.tgz",
+    "win32": "npm install -g https://crm.feiheair.com/download/fh-cli-0.1.4.tgz"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "fh --version",
+      "linux": "fh --version",
+      "win32": "fh.cmd --version"
+    },
+    "minVersion": "0.1.4",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  },
+  "timeout": 90,
+  "auth": {
+    "darwin": "fh --base-url https://travel.feiheair.com/api/portal --credentials-file credentials --client-name WorkBuddy auth login --no-browser",
+    "linux": "fh --base-url https://travel.feiheair.com/api/portal --credentials-file credentials --client-name WorkBuddy auth login --no-browser",
+    "win32": "fh.cmd --base-url https://travel.feiheair.com/api/portal --credentials-file credentials --client-name WorkBuddy auth login --no-browser"
+  },
+  "unAuth": {
+    "darwin": "fh --base-url https://travel.feiheair.com/api/portal --credentials-file credentials auth logout",
+    "linux": "fh --base-url https://travel.feiheair.com/api/portal --credentials-file credentials auth logout",
+    "win32": "fh.cmd --base-url https://travel.feiheair.com/api/portal --credentials-file credentials auth logout"
+  },
+  "status": {
+    "darwin": "fh --base-url https://travel.feiheair.com/api/portal --credentials-file credentials auth status",
+    "linux": "fh --base-url https://travel.feiheair.com/api/portal --credentials-file credentials auth status",
+    "win32": "fh.cmd --base-url https://travel.feiheair.com/api/portal --credentials-file credentials auth status"
+  },
+  "statusMatch": "凭据: 已设置",
+  "authUrlDomain": "travel.feiheair.com",
+  "authWaitForExit": true,
+  "authSuppressBrowser": false
+}

@@ -6,8 +6,7 @@
 
 ## 推荐流程
 
-1. 先判断 app 是否明确  
-   不明确时，先看 [app-resolution.md](app-resolution.md)
+1. 按[默认应用与应用发现](app-resolution.md) 选择目标；未指定时优先默认 AppCode。下列无应用参数的示例使用配置中的默认应用。
 
 2. 需要写 Personal Backend Function 或知识库内容时，先做发现
 
@@ -38,6 +37,8 @@ lovrabet dataset list --app <name> --name "<关键词>"
 ```
 
 已知物理表名时，将上述 `--name "<关键词>"` 换成 `--table-name "<表名前缀>"`。
+
+`--app` / `--appcode` 只对本次命令生效。临时选择其他应用后，后续每条 `detail`、`data` 或执行命令都必须显式携带该目标；资源标识必须与发现它的 AppCode 配对，不能依靠上一条命令改变默认值。
 
 4. 看数据集结构
 
@@ -125,7 +126,7 @@ Dataset Detail 只证明字段与操作契约，不会自动把原始数据推�
 
 ## `data` 的使用原则
 
-`data` 命令只依赖 `datasetCode`，不直接做 app 决议。  
+`data` 使用已确认的目标 AppCode 与 `datasetCode`，每次调用必须保持两者配对。
 所以不要在 app 未确定、dataset 未确认时直接构造 `data filter/getOne/create/batchCreate/update/delete`。
 
 ## Instant API 与 HOOK

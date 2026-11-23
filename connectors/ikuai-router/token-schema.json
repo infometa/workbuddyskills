@@ -1,0 +1,29 @@
+{
+  "title": "连接爱快路由器",
+  "title_en": "Connect your iKuai router",
+  "description": "填写路由器的管理地址和开放 API 令牌。凭证仅保存在本机 ~/.workbuddy 目录下，不会上传到云端。WorkBuddy 所在的电脑需要与路由器处于同一网络。",
+  "description_en": "Enter the router's admin address and an Open API token. Credentials are stored locally only and never uploaded. This computer must be on the same network as the router.",
+  "docUrl": "https://github.com/ikuaidev/ikuai-cli#how-to-get-a-token-from-the-router",
+  "docLabel": "如何在路由器后台生成 API 令牌？",
+  "fields": [
+    {
+      "key": "IKUAI_BASE_URL",
+      "label": "路由器管理地址",
+      "label_en": "Router admin URL",
+      "type": "text",
+      "required": true,
+      "defaultValue": "https://192.168.1.1",
+      "placeholder": "https://192.168.1.1 或 https://192.168.1.1:8443",
+      "description": "以 https:// 开头，如有非默认端口请一并填写。"
+    },
+    {
+      "key": "IKUAI_TOKEN",
+      "label": "开放 API 令牌",
+      "label_en": "Open API token",
+      "type": "password",
+      "required": true,
+      "placeholder": "在路由器后台 系统设置 → 开放API 中生成",
+      "description": "令牌决定 AI 可以执行的操作范围，建议按最小权限创建。"
+    }
+  ]
+}

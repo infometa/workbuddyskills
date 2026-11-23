@@ -14,11 +14,16 @@ Getting this wrong is the worst failure mode in this skill: the write can land o
 | promoted product | `get_entity_metadata(entity='productAd')` | `productAdId` |
 | negative keyword | `get_entity_metadata(entity='negativeKeyword')` | `negativeKeywordId` |
 | negative target | `get_entity_metadata(entity='negativeTarget')` | `negativeTargetId` |
+| portfolio | `get_entity_metadata(entity='portfolio')` | `portfolioId` |
 | profile | `get_user_authorized_context` | `profiles[].profileId` |
 
 **Not usable:** anything from `get_ads_perf` or `get_operation_log` (Amazon ids, 15-19
 digits), and the metadata rows' own `amazonKeywordId` / `amazonTargetId` / `amazonAdId`.
 Those are Amazon-side ids. Passing one fails the positive-long check or resolves nothing.
+
+Portfolio membership is the deliberate exception: portfolio edits use internal
+`portfolioId`, while `campaign + addPortfolio` uses the destination's
+`amazonPortfolioId`. Do not infer one from the other.
 
 In the write payload the id goes into the field the route names - usually `id`, but
 `campaignId` / `adGroupId` on the internal routes. See the per-route write references.
@@ -65,7 +70,10 @@ result sets small.
 - When `matchType = "group"`, `keywordText` is **not plain text** - it is a JSON string of
   the form `[{"type":"keywordGroupSameAs","value":"..."}]`. Do not show it raw to the user
   and do not substring-match it as a keyword.
-- For `updateBid` you need `keywordCurrentBid` (the currently effective bid) - see below.
+- For `updateBid` read **both** `keywordBid` and `keywordCurrentBid`, and use `keywordBid`
+  as the base unless `keywordCurrentBid` is a non-zero value you deliberately want to build on.
+  **`keywordCurrentBid` is `0` on some whole stores** (see `sparkx-query-entity-metadata`'s
+  field reference) — computing a new bid from `0` produces a bid floor, not a change.
 
 **negativeKeyword** (11 fields): `negativeKeywordId`, `profileId`, `campaignType`,
 `businessType`, `tableType`, `amazonKeywordId`, `adGroupId`, `campaignId`, `keywordText`,
@@ -125,7 +133,8 @@ result sets small.
 but the server does no arithmetic with it and does not verify it - it is forwarded as-is.
 So:
 
-1. Read the current bid from metadata (`keywordCurrentBid` for keywords) immediately before
+1. Read the current bid from metadata (`keywordBid` for keywords, with `keywordCurrentBid`
+   only as a cross-check and only when non-zero) immediately before
    the write, **one `profileId` per call**. Multi-profile rows do carry their own `currency`,
    so the currency itself is knowable - but re-reading with exactly one profile before a write
    is a **write-safety rule**: it removes the chance of picking a same-named entity from the

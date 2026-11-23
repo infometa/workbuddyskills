@@ -1,6 +1,6 @@
 # workspace — 工作目录配置
 
-`workspace` 用来给**当前工作目录**绑定默认应用。适合 WorkBuddy、Agent 项目目录、客户交付目录这类“打开一个目录就知道默认操作哪个应用”的场景。
+`workspace` 用来给**当前工作目录**设置优先查询的默认应用；默认值不限制查询当前用户有权限的其他应用。适合 WorkBuddy、Agent 项目目录、客户交付目录这类“打开一个目录就知道默认操作哪个应用”的场景。
 
 它解决的是本地使用体验，不是平台权限配置：
 
@@ -12,10 +12,10 @@
 ## 命令
 
 ```bash
-lovrabet workspace init --appcode <appcode> [--env daily]
-lovrabet workspace init --app <name> [--env daily]
-lovrabet workspace use --appcode <appcode> [--env daily]
-lovrabet workspace use --app <name> [--env daily]
+lovrabet workspace init --appcode <appcode>
+lovrabet workspace init --app <name>
+lovrabet workspace use --appcode <appcode>
+lovrabet workspace use --app <name>
 ```
 
 `init` 和 `use` 对应不同的目录生命周期：
@@ -29,25 +29,25 @@ lovrabet workspace use --app <name> [--env daily]
 
 | 参数 | 说明 |
 |------|------|
-| `--app <name>` | 应用名称。CLI 会用当前 AK 在指定环境的已发布应用列表中解析 appcode |
+| `--app <name>` | 应用名称。CLI 会用当前 AK 查询可访问的已发布应用并解析 appcode |
 | `--appcode <code>` | 直接写入 appcode，不需要远端查询 |
-| `--env <env>` | 可选。写入当前目录配置，取值为 `production` / `development` / `daily` |
 
 必须且只能传 `--app` 或 `--appcode` 之一。
 
 ## 写入效果
 
+以下示例从尚未绑定应用的新目录开始，按顺序执行；只设置默认应用，不新增连接设置。已有连接设置会保留，无需为绑定应用选择环境。
+
 直接用 appcode：
 
 ```bash
-lovrabet workspace init --appcode app-64e32817 --env daily
+lovrabet workspace init --appcode app-64e32817
 ```
 
 当前目录 `.lovrabet.json`：
 
 ```json
 {
-  "env": "daily",
   "appcode": "app-64e32817"
 }
 ```
@@ -55,14 +55,13 @@ lovrabet workspace init --appcode app-64e32817 --env daily
 用业务名称绑定默认应用：
 
 ```bash
-lovrabet workspace use --app crm --env daily
+lovrabet workspace use --app crm
 ```
 
 当前目录 `.lovrabet.json`：
 
 ```json
 {
-  "env": "daily",
   "defaultApp": "crm",
   "apps": {
     "crm": {
@@ -74,6 +73,8 @@ lovrabet workspace use --app crm --env daily
 
 ## 注意事项
 
+- 多个应用名称共享当前连接配置与用户 accessKey；`--app` 只改变目标应用。详见 [配置参考](lovrabet-config.md)。
+- 临时查询其他应用不改变当前用户身份，也不需要修改默认应用配置。
 - 不要主动创建或修改工作目录配置；只有用户明确要求“初始化当前目录”“记住这个应用”“绑定这个工作目录”等语义时，才执行 `workspace init/use`
 - 执行前先判断当前目录状态：没有应用绑定用 `workspace init`，已有应用绑定用 `workspace use`
 - 如果连续多次在同一目录使用同一个 app 或 appcode，可以提醒用户是否要写入当前目录 `.lovrabet.json`，但必须先得到明确同意

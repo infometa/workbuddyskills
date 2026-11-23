@@ -54,8 +54,11 @@ no-ops, and the error arrives *instead of* any part of your write being applied:
 - **SP-only batch operations on a batch containing SB groups** -> rejected.
 - **`optimizeType`, `acos`, or `aiPersonality` on a weekly (`timeType=2`) schedule** ->
   rejected; those are inherited from the parent group.
-- **A template whose harvest/negative rules are bound to specific campaigns/ad groups**
-  (`isSelf=2` with `status=1`) -> rejected, because this tool can't carry those bindings.
+- **An SP/SB template whose harvest/negative rules are bound to specific campaigns/ad
+  groups** (`isSelf=2` with `status=1`) -> rejected, because this tool can't carry those
+  bindings: always on template create; on template edit only when `aiAutomation` is not
+  passed (with `aiAutomation` the template's rules are ignored - confirm that change with
+  the user first).
 - **A group whose `campaignType` can't be determined on delete** -> rejected rather than
   guessed.
 

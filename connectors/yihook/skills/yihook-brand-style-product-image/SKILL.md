@@ -3,10 +3,10 @@ name: yihook-brand-style-product-image
 description: 上传真实商品照片，选择白底棚拍、生活场景或品牌氛围与比例，确认费用后使用 Seedream 5.0 Pro
   制作一张静物商拍图；生成后直接交付，支持查询及付费前确认修改。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: Yihook 大牌同款·AI爆款产品商拍库
 display_name_en: Yihook Brand Style Product Image
 description_zh: 上传真实商品照片，选择白底棚拍、生活场景或品牌氛围与比例，确认费用后使用 Seedream 5.0 Pro
@@ -19,7 +19,9 @@ author: yihook
 
 # Yihook 大牌同款·AI爆款产品商拍库
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 以用户真实产品照片为外观依据，使用 Seedream 5.0 Pro，默认 2K，一次制作一张完整静态摄影图。只提供白底棚拍图、生活场景图、品牌氛围图，以及 1:1、3:4、9:16 三种比例。服装采用平铺；人物上身、佩戴、手持、身体交互、视频与海报排版不在本版范围。用户要求这些形式时说明边界并提出静物方案，等待选择。
@@ -71,7 +73,7 @@ author: yihook
 
 ### 素材与图片参数
 
-准备素材前读取 [共用上传指引](references/upload.md)。本地附件和安全取得完整字节的文件直链，均使用 `create_agent_file_upload`（`purpose: "image"`）、随包 `scripts/upload.mjs` 与 `complete_agent_file_upload`；不复制上传脚本，不手写签名。工具完整原始响应保存为私有临时文件，执行 `node scripts/upload.mjs response.json /absolute/path/product.jpg`。只使用完成返回的 `file_url`，未知上传按原会话用 `get_agent_file_upload` 查询，不忽略失败图片。本人已有同渠道资产经归属校验可复用。
+准备素材前读取 [共用上传指引](references/upload.md)。本地附件和安全取得完整字节的文件直链，均使用 `create_agent_file_upload`（`purpose: "image"`）、随包 `scripts/upload.mjs` 与 `complete_agent_file_upload`；不复制上传脚本，不手写签名。创建时传delivery="script"取得transfer.code，执行 `node scripts/upload.mjs --transfer "本次transfer.code" /absolute/path/product.jpg --ticket-url "本次transfer.ticket_url"`。只使用完成返回的 `file_url`，未知上传按原会话用 `get_agent_file_upload` 查询，不忽略失败图片。本人已有同渠道资产经归属校验可复用。
 
 每张不超过 30 MiB，全部输入合计最多 10 张，包含产品图、细节图、风格图与修改时的已认可成片。图片格式和像素等进一步限制以共用上传及领域真实校验为准。超限请用户选择必要素材，不擅自删图。
 

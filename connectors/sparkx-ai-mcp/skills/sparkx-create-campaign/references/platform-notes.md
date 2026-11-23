@@ -1,10 +1,11 @@
 # SparkX AI MCP Campaign Creation — Platform Notes
 
-## The tool
+## The tools
 
-`create_sp_sb_campaign` — batch-create Sponsored Products campaigns, each with ad groups and
-their child objects. `create_sd_campaign` exists in the codebase but is **not registered on
-this server**, so it will not appear in your tool list.
+`create_sp_sb_campaign` batch-creates Sponsored Products campaigns and their children.
+`create_sp_ad_group` adds ad groups to existing SP campaigns; it is non-atomic and has its
+own recovery contract in `create-sp-ad-group.md`. `create_sd_campaign` exists in the codebase
+but is **not registered on this server**, so it will not appear in your tool list.
 
 ## Auth & scope
 
@@ -23,14 +24,13 @@ this server**, so it will not appear in your tool list.
 `profileId` is a single top-level value, not a list. Campaigns for two stores are two calls,
 and each is its own atomic unit.
 
-## The batch is all-or-nothing
+## Campaign-creation batches are all-or-nothing
 
 If any campaign, ad group or child object fails — tool-side validation or the downstream
 write — **nothing is created**. There is no partial batch to reconcile and no "retry the
 rest": fix the input and resend the whole thing.
 
-Note this is specific to SP/SB. The (unregistered) SD path has no transaction, which is one
-reason it is not exposed here.
+This applies to `create_sp_sb_campaign`, not `create_sp_ad_group`.
 
 ## Response envelope
 
@@ -57,6 +57,16 @@ pipeline rejected it:
 ⚠️ **The downstream reports business failures as HTTP 200 with a non-zero code**, so a failure
 is not an exception — it is a message. Read it; do not assume success from the absence of an
 error status.
+
+## Rate limits
+
+The configured write budget is **20 calls/min**, per tenant+tool and per user+tool (reads
+get 120). Whether limiting is enabled is an environment setting, so treat it as a ceiling to
+plan against rather than something you can count on being off.
+
+A confirmation flow costs **two** calls, and a write/read-back loop adds a read each time. A
+serial pass over many entities will hit the ceiling - batch instead of looping, and honour
+`retryAfterSeconds` on `rate_limited`.
 
 ## Non-idempotent
 

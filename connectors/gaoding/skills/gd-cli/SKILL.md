@@ -7,7 +7,7 @@ display_name_en: Gaoding AI
 description_zh: 连接稿定AI创作、素材、模型与编辑器能力，用自然语言完成设计工作。
 description_en: Connect to Gaoding AI creative, asset, model and editor
   capabilities through natural language.
-version: 1.5.6
+version: 1.9.1
 author: 稿定AI
 ---
 
@@ -25,6 +25,8 @@ author: 稿定AI
 按用户目标只读取对应参考：
 
 - 按业务意图选择 Agent / Tool 创作路由、发现 Model 并生成图片、视频或文本：[创作](references/creation.md)
+- 选择图片/视频生成或专用处理工具、准备参考素材及复核 mask：[图片与视频工具选择](references/media-tools.md)
+- 去背景、提取主体、透明 PNG，或补全被遮挡的物体：[抠图](references/matting.md)
 - 操作当前 AI+ Editor 作品：[编辑器](references/editor.md)
 - 发现资源库、文件夹与标签，查询、上传、下载或管理 DAM 资源：[素材管理](references/dam.md)
 - 登录或选择组织：[登录与组织](references/auth-org.md)

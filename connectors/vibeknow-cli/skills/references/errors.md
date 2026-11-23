@@ -1,10 +1,15 @@
 # vibeknow-create Error Reference
 
+With `--output json` or `ndjson`, a failure is written to **stderr** as the
+envelope `{"ok": false, "error": {"type", "message", "hint", "detail"}}` —
+indented for `json`, on one line for `ndjson`. The exit code is the verdict;
+`error.type`, `hint` and `detail` say what to do about it.
+
 ## Exit Codes
 
 | Exit Code | Meaning | Agent Action |
 |-----------|---------|--------------|
-| 0 | Success | Extract `video_url` from stdout (JSON) or last NDJSON `task.succeeded` event |
+| 0 | Success | Take `preview.share_url` from stdout (`--output json`), or `video_url` from the NDJSON `task.succeeded` event |
 | 1 | General error | Read stderr for details |
 | 2 | Invalid arguments | Check `--from` is provided, file exists, URL is valid |
 | 3 | Auth error | Credential missing, expired, or superseded by another login — every command exits this way, and re-running changes nothing. Only a person can fix it, so say so instead of retrying. Where a host manages the login for you (the WorkBuddy connector does), tell the user to reconnect there; where it is your own install, `vibeknow auth status --output json` names the cause and `vibeknow auth login` repairs it. |
@@ -107,12 +112,14 @@ Rules:
   `--confirm`, show the new terms, ask again.
 - Do not reach for `--yes` to get past a block you just received.
 
-### The two boundaries
+### The four boundaries
 
 | `type` | Raised by | What is being agreed to |
 |--------|-----------|-------------------------|
 | `export_confirmation` | `video export`, `create --export` | Rendering the MP4: `{session_id, credits, operation}` |
 | `scene_edit_confirmation` | `video edit` | Rewriting one shot: `{session_id, scene_index, script_only, from, to}` |
+| `revoice_confirmation` | `video revoice` | A new version in another voice: `{session_id, source_revision, voice_id, has_avatar, operation}` |
+| `cover_confirmation` | `video cover` | One AI cover, applied: `{session_id, title, subtitle, billed, operation}` |
 
 A token verifies only against the boundary it was minted for, so one is
 never usable for the other.
@@ -124,6 +131,14 @@ an omission: what an edit costs depends on how much text the model writes
 and how long the resulting speech runs, and the backend does not quote it in
 advance. The `message` names the *kinds* of work being billed instead.
 Do not invent a figure for the user.
+
+What it does carry is the work's free quota, under `context.free_quota`
+next to the payload: within it an edit's speech costs nothing, while text
+generation and any image it draws are billed regardless (listed under
+`context.billed_outside_quota`).
+`context` is shown but **not** hashed — the quota is a reading other edits
+move, not a term of this one — so a token survives it changing. `"free_quota":
+"unavailable"` means it could not be read; treat the edit as fully billed.
 
 Because `from`, `to` and `script_only` are all part of what was agreed to,
 a token is invalidated by editing the proposed text at all, by adding or

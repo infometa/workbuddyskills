@@ -2,10 +2,10 @@
 name: yihook-ugc-video
 description: 根据商品图与可选人物图制作单条 UGC 商品视频；用户确认 2–30 秒时长后生成，查询已有任务和实际结算。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: Yihook UGC 商品视频
 display_name_en: Yihook UGC Product Video
 description_zh: 根据商品图与可选人物图制作单条 UGC 商品视频；用户确认 2–30 秒时长后生成，查询已有任务和实际结算。
@@ -17,7 +17,9 @@ author: yihook
 
 # Yihook UGC 商品视频
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 ## 创意与内置提示词入口

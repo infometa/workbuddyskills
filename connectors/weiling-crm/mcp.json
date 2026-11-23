@@ -1,0 +1,10 @@
+{
+  "_comment": "卫瓴连接器走 MCP 自带 OAuth（OAuth 2.1 + PKCE），因此 connector-meta.json 里【省略 auth_mode】、且【不提供 token-schema.json】—— 用户不需要手填任何凭证。鉴权由 WorkBuddy 走标准 MCP OAuth 流程完成：发现元数据 → 动态注册 → 扫码授权 → 换 token。生产 url 必须 HTTPS。",
+  "mcpServers": {
+    "weiling-crm": {
+      "type": "streamableHttp",
+      "url": "https://scrm-wx.weiling.cn/mcp",
+      "timeout": 30000
+    }
+  }
+}

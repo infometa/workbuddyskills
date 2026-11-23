@@ -1,6 +1,8 @@
 # 生成约束与媒体角色
 
-指定 Model 和动态参数时，只增加一个 Generation Constraints Part；`model` 使用 Model 机器标识，`arguments` 的字段和值取自 `model get`，并如实保留用户指定值：
+指定 Model 和动态参数时，只增加一个 Generation Constraints Part；`model` 使用 Model 机器标识，生成控制项和值取自 `model get`，结合 `agent send --help` 核对 Agent 接受的控制参数范围，并如实保留用户指定值。Model detail 的完整 Tool `inputSchema` 不等于 Agent `arguments` 的字段列表；Tool 的选区、画布、文字替换等执行输入不直接放入生成约束。交给 Agent 规划时，用文本与素材 Part 描述这些任务要求；逐字段直接调用时使用对应 Tool 的 Schema。
+
+生成约束示例：
 
 ```json
 {

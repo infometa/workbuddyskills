@@ -1,0 +1,20 @@
+{
+  "title": "景点数据接口配置",
+  "title_en": "Attraction API Configuration",
+  "description": "填写顺顺旅签接口 token。国家与城市名称在每次查询时由用户在对话中指定（如「查一下巴黎的景点」），无需在此配置。token 仅存储在本机 ~/.workbuddy 目录下，不会上传。",
+  "description_en": "Enter your API token only. Country and city names are provided by the user at query time via tool arguments (e.g. 'attractions in Paris'). The credential is stored locally under ~/.workbuddy and never uploaded.",
+  "docUrl": "https://www.shunshunlyuqian.com",
+  "docLabel": "如何获取接口 Token？",
+  "fields": [
+    {
+      "key": "SSLQAPITOKEN",
+      "label": "接口 Token",
+      "label_en": "API Token",
+      "type": "password",
+      "required": true,
+      "placeholder": "请联系 IT 部门获取 SSLQAPITOKEN",
+      "description": "用于调用景点查询接口的鉴权 token，随请求头 SSLQAPITOKEN 发送。",
+      "description_en": "Token for the attraction API, sent in the SSLQAPITOKEN request header."
+    }
+  ]
+}

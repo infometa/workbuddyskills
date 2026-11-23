@@ -2,10 +2,10 @@
 name: yihook-automotive-video
 description: 根据车辆图制作汽车营销短视频：先策划分镜与口播、统一确认完整方案及真实费用，再生成单条最长15秒的视频；也可只写提示词或查询已有任务。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: Yihook 汽车营销短视频
 display_name_en: Yihook Automotive Marketing Video
 description_zh: 根据车辆图制作汽车营销短视频：先策划分镜与口播、统一确认完整方案及真实费用，再生成单条最长15秒的视频；也可只写提示词或查询已有任务。
@@ -17,7 +17,9 @@ author: yihook
 
 # Yihook 汽车营销短视频
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 方案版本、素材用途、确认范围和任务信息仅由宿主在单次对话中维护。每个渠道固定使用其所属账号、素材、积分和任务；以本包 runtime 的真实契约为准，不通过发现其他工具切换后端。声音通过生成模型与提示词表达，无独立配音、配乐或剪辑收费步骤。
@@ -147,7 +149,7 @@ author: yihook
 
 ### 素材与免费预检
 
-1. 先在对话中建立车辆、版本、图片角度与人物对应关系。至少一张车辆图；人物图可选，两者合计最多九张。图片支持 JPG/JPEG、PNG、WebP、BMP、GIF、TIFF，单张最多30MB，具体内容以领域预检为准。远端文件直链先安全下载完整字节到本地，再按 [公共上传说明](references/upload.md) 调用 `create_agent_file_upload`（`purpose: image`），保存原始票据响应，使用包内 `scripts/upload.mjs` 直传 OSS，最后 `complete_agent_file_upload`；未知上传按 `get_agent_file_upload` 查询。公共上传协议的 `upload_request_id` 只用于上传，不用于视频创建。使用完成响应返回的本人受信图片 URL；不把本地路径、原始直链或其他渠道资产交给视频工具。本人已有受信图片可按工具契约复用。
+1. 先在对话中建立车辆、版本、图片角度与人物对应关系。至少一张车辆图；人物图可选，两者合计最多九张。图片支持 JPG/JPEG、PNG、WebP、BMP、GIF、TIFF，单张最多30MB，具体内容以领域预检为准。远端文件直链先安全下载完整字节到本地，再按 [公共上传说明](references/upload.md) 调用 `create_agent_file_upload`（`purpose: image`），传入 `delivery: "script"` 取得短期 `transfer.code`，使用包内 `scripts/upload.mjs` 直传 OSS，最后 `complete_agent_file_upload`；未知上传按 `get_agent_file_upload` 查询。公共上传协议的 `upload_request_id` 只用于上传，不用于视频创建。使用完成响应返回的本人受信图片 URL；不把本地路径、原始直链或其他渠道资产交给视频工具。本人已有受信图片可按工具契约复用。
 2. 完成创意和时长检查后，调用 `preview_automotive_video`，免费检查图片归属、实际内容、模型规格和积分。使用以下结构，示例 URL 须替换为本次已完成的真实引用：
 
 ```json

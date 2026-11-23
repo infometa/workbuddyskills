@@ -4,9 +4,9 @@
 
 **前置条件 = 无**：一般不需额外密钥或登录即可阅读/使用说明；调用外部服务时平台侧仍可能有限制。
 
-- 技能包：**295** · 连接器：**573** · 专家：**429** · 官方插件：**60** · 团队插件：**30**
+- 技能包：**295** · 连接器：**632** · 专家：**429** · 官方插件：**60** · 团队插件：**30**
 
-> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-11-11
+> 清单自动同步自 WorkBuddy 公开市场；最近同步：2026-11-24
 
 ---
 ## 目录
@@ -368,6 +368,7 @@
 | 目录 | 用来做什么 | 前置条件 |
 |------|------------|----------|
 | [`135ai-editor`](./connectors/135ai-editor/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`21cnjy-edu-resource`](./connectors/21cnjy-edu-resource/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`24haowan-space`](./connectors/24haowan-space/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`3chat-customer-growth`](./connectors/3chat-customer-growth/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`51shebao-hr-tools`](./connectors/51shebao-hr-tools/) | 51社保政策查询技能，覆盖全国 311 城社保与公积金的缴费基数、比例、办理截止日、最低工资、社平工资与产假天数，检索社保政策原文，并读取政策分析报告 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
@@ -377,9 +378,10 @@
 | [`adc-approval`](./connectors/adc-approval/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`adc-sandbox`](./connectors/adc-sandbox/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`agent-earth`](./connectors/agent-earth/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`aholo-lux3d`](./connectors/aholo-lux3d/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`LUX3D_CN_API_KEY` |
+| [`aholo-lux3d`](./connectors/aholo-lux3d/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`ai-hive`](./connectors/ai-hive/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`ai-salesman`](./connectors/ai-salesman/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`ai-scrm`](./connectors/ai-scrm/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SCRM_SITE_KEY` |
 | [`aiclass-teaching`](./connectors/aiclass-teaching/) | 腾讯未来教室（aiclass）教学服务操作技能 | 可能需要启用对应 MCP / 连接器 |
 | [`aidd-saas`](./connectors/aidd-saas/) | AI尽调助手 — 银行对公授信尽调全流程能力（进件识别、行业分析、企业画像、经营分析、财务分析、报告生成） | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`ailit`](./connectors/ailit/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
@@ -392,7 +394,7 @@
 | [`alphapai-lite-mcp`](./connectors/alphapai-lite-mcp/) | 调用 Alpha派 Lite 版投研 MCP。用于上市公司公告检索/详情/PDF/解析正文、结构化金融数据查询（A股、港股、指数、基金/ETF/REITs、债券、期货、期权和宏观… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`amazingdata-mcp`](./connectors/amazingdata-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`AD_PASSWORD` |
 | [`anbcd-enterprise`](./connectors/anbcd-enterprise/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`anguan-service-gateway`](./connectors/anguan-service-gateway/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`PLUGIN_API_KEY`、`PLUGIN_MACHINE_SECRET` |
+| [`anguan-craftsman`](./connectors/anguan-craftsman/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
 | [`archive-hospital-mcp`](./connectors/archive-hospital-mcp/) | 全周期智能管理平台（archive_hospital_server）只读 Connector。围绕当前登录医生的患者档案提供跨域查询能力，覆盖患者/标签画像/生活方式/随访/用药… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`INVALID_TOKEN` |
 | [`at-grid-connector`](./connectors/at-grid-connector/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`atlas-cloud`](./connectors/atlas-cloud/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -403,7 +405,6 @@
 | [`awesun`](./connectors/awesun/) | 向日葵（AweSun）远程控制 CLI 工具。提供设备列表管理、远程会话管理、远程桌面控制、远程命令执行、远程文件传输、端口转发、远程关机/重启/唤醒等功能。用户提到向日葵、Aw… | 需要登录 / OAuth / 扫码授权 |
 | [`baidu-maps`](./connectors/baidu-maps/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
 | [`baidu-netdisk`](./connectors/baidu-netdisk/) | 百度网盘文件管理与智能检索。支持浏览、关键词和语义搜索、文件整理、分享链接、容量查询，以及保存文本内容或通过 URL 转存文件。触发关键词：百度网盘、网盘、baidu、netdi… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
-| [`baijimu-enterprise-ai`](./connectors/baijimu-enterprise-ai/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`baike-oauth`](./connectors/baike-oauth/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`baixiao-mcp`](./connectors/baixiao-mcp/) | 百晓智能 —— 学术检索技能： 中文人文社科文献与政策检索、参考文献核实、引用追溯、投稿期刊与审稿人推荐 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`BAIXIAO_API_KEY` |
 | [`baixyn-traffic-referral`](./connectors/baixyn-traffic-referral/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -416,10 +417,15 @@
 | [`beishujiang`](./connectors/beishujiang/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`beluga-mcp-prod`](./connectors/beluga-mcp-prod/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`biobuddy`](./connectors/biobuddy/) | 当用户提出生物医药研究类需求时使用——抗体/多肽/酶设计、分子结构预测、病理质控、基因突变预测、虚拟空间转录组、疾病靶点发现与评估、单细胞与扰动分析、蛋白质检索、文献情报、专利检… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`biubiu-frame-animation`](./connectors/biubiu-frame-animation/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
+| [`bizerp-mcp`](./connectors/bizerp-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`bizmuse-ai-music-video`](./connectors/bizmuse-ai-music-video/) | 用途：Create a BizMuse AI music video from audio, reference images, and creative direction. … | 可能需要启用对应 MCP / 连接器 |
+| [`bocha-search`](./connectors/bocha-search/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要环境变量：`SERVICE_TOKEN` |
 | [`boya-os`](./connectors/boya-os/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`breezetts`](./connectors/breezetts/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`buddy-pronunciation`](./connectors/buddy-pronunciation/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`bugly-token`](./connectors/bugly-token/) | 查看 Bugly 产品质量概览（崩溃率、ANR 率、FOOM/OOM 率、启动耗时等）。当用户询问应用的大盘质量、版本质量、今日质量等指标时使用。 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`BUGLY_ACCESS_TOKEN` |
+| [`byteda`](./connectors/byteda/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`BYTEDA_API_KEY` |
 | [`c30`](./connectors/c30/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`caihui-mcp`](./connectors/caihui-mcp/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
 | [`caiyue-xiaocaishen`](./connectors/caiyue-xiaocaishen/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SERVICE_TOKEN` |
@@ -431,6 +437,7 @@
 | [`car-saas`](./connectors/car-saas/) | 查询停车场运营数据与车辆信息。当用户想了解停车场今日收入/车流/剩余车位、查询车辆（车牌号/姓名/手机号）、查看通行记录、临停收费记录、收入车流日报、设备与车道状态时使用。触发词… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`carbonstop-ccdb`](./connectors/carbonstop-ccdb/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`cbnb-mcp-gateway`](./connectors/cbnb-mcp-gateway/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`cc-live`](./connectors/cc-live/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`chainlon-geo-mcp`](./connectors/chainlon-geo-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`chanjet-data-service`](./connectors/chanjet-data-service/) | 用友发票查验 操作技能 - 单张发票真伪查验，支持全电票、专票、普票，每日 100 次免费额度 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`charge-order-query`](./connectors/charge-order-query/) | 订单门店查询技能 - 按手机号查询共享充电宝租借订单、按经纬度查询附近门店 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
@@ -455,7 +462,9 @@
 | [`cqq-skills`](./connectors/cqq-skills/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`creatok`](./connectors/creatok/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`cue-parser`](./connectors/cue-parser/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`cue-research`](./connectors/cue-research/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`cyrj-datawise`](./connectors/cyrj-datawise/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`cz-saas`](./connectors/cz-saas/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`d1-tilu-zhongshu`](./connectors/d1-tilu-zhongshu/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`dami-external-mcp`](./connectors/dami-external-mcp/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`MCP_API_KEY` |
 | [`dangkang-insight`](./connectors/dangkang-insight/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -469,24 +478,29 @@
 | [`deli-mcp`](./connectors/deli-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`deployx-dxc`](./connectors/deployx-dxc/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`designkit-buddy-cli`](./connectors/designkit-buddy-cli/) | 使用美图设计室 AI设计 CLI 调用 Team Agent。适用于用户要求创建或继续美图设计室任务，发送文本、图片、视频、文档或音频，查看任务进度，回答普通追问或自定义业务卡片… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权 |
+| [`dianleida-mcp`](./connectors/dianleida-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`dingdanbao`](./connectors/dingdanbao/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`dingke-geo`](./connectors/dingke-geo/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`dingtalk`](./connectors/dingtalk/) | 独立脑图的带内容创建与主题读写使用 dws mind；空白脑图走 wiki，听记内置思维导图走 minutes。 管理钉钉产品能力(Agoal目标管理/AI表格/AI搜问/日历/… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`dingteam-suite`](./connectors/dingteam-suite/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`dknowc-mcp`](./connectors/dknowc-mcp/) | 使用深知可信工作台处理法律、政策、标准、产业研究和公共服务问题；支持可信问答、权威检索、复杂问题拆解、多来源验证和权威原文溯源。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`dnb-global-data`](./connectors/dnb-global-data/) | 使用邓白氏查全球 D&B Global Search 查询企业商业数据，可进行邓白氏编码 (DUNS) 匹配查询目标企业主体，查询工商/注册信息、财务数据、股权与最终受益人 (U… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`DNB_ACCESS_TOKEN` |
-| [`dnb-longyicha-workbuddy`](./connectors/dnb-longyicha-workbuddy/) | 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档案 Server（/v1/company）全部 14 个 Tool，对单一企业开展工商登记、简易注销、变… | 可能需要启用对应 MCP / 连接器 |
+| [`dnb-longyicha-workbuddy`](./connectors/dnb-longyicha-workbuddy/) | 使用邓白氏查全球-龙易查 MCP 企业档案 Server（https://mcp.dnbservice.com.cn/v1/company）全部 16 个 Tool——3 个企业… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`dop-platform-mcp`](./connectors/dop-platform-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`dowsure-ai`](./connectors/dowsure-ai/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`dramabuddy`](./connectors/dramabuddy/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`drbt-retail-insight`](./connectors/drbt-retail-insight/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
 | [`duifene-homework-grading`](./connectors/duifene-homework-grading/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`MCP_API_KEY` |
 | [`duoguan-course`](./connectors/duoguan-course/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`duoguan-fengchao`](./connectors/duoguan-fengchao/) | 夺冠蜂巢（duoguan-fengchao）AI 自媒体内容生产。当用户需要热点选题、口播/图文文案、配图、配音、播客、视频封装、多账号内容运营或发布准备时使用本连接器。连接后先… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`duoguan-fengchao`](./connectors/duoguan-fengchao/) | 夺冠蜂巢（duoguan-fengchao）AI 自媒体内容生产。当用户需要热点选题、口播/图文文案、情景短剧、配图、配音、播客、视频封装、多账号内容运营或发布准备时使用本连接器… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`duoguan-ge`](./connectors/duoguan-ge/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`duoplus-cloud-phone`](./connectors/duoplus-cloud-phone/) | 用途：Use when users ask to query or operate DuoPlus cloud phones, apps, proxies, cloud numb… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`dxy-drug-data`](./connectors/dxy-drug-data/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`CONNECTOR_KEY` |
 | [`dxy-medical-search`](./connectors/dxy-medical-search/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`dzh-mcp`](./connectors/dzh-mcp/) | 大智慧金融 MCP 连接器（`dzh-mcp`），提供 A股/港股/美股/期货/基金 的行情、财务、公司简况、股东与分红、技术指标、龙虎榜与资金流向、指数板块、资讯公告、多维选股… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`easymofang`](./connectors/easymofang/) | 商品文案/图片商标侵权检测，以及电商套图生成与重绘（白底图、场景图、功能图、对比图、尺寸图、普通A+、普通A+裁剪版、高级A+；平台 Amazon/亚马逊、AliExpress/… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`ec-crm-cli`](./connectors/ec-crm-cli/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
-| [`eccang-mfc-reconcile`](./connectors/eccang-mfc-reconcile/) | > | 可能需要启用对应 MCP / 连接器 |
+| [`eccang-mfc-reconcile`](./connectors/eccang-mfc-reconcile/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`edgeone-pages`](./connectors/edgeone-pages/) | >- | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`edu-next`](./connectors/edu-next/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`efunds`](./connectors/efunds/) | 接入易方达基金MCP服务，一句话查透基金画像——业绩、风险收益、持仓结构等核心指标一目了然，还能随时调阅易方达发布的投研观点、产品解读与市场洞察，助力您高效进行投资决策。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
@@ -505,18 +519,20 @@
 | [`fanruan-growth-advisor`](./connectors/fanruan-growth-advisor/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`fastmoss`](./connectors/fastmoss/) | > | 可能需要启用对应 MCP / 连接器 |
 | [`fazhi-law`](./connectors/fazhi-law/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`fazhi-zhiku-law-keyword`](./connectors/fazhi-zhiku-law-keyword/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`MCP_TOKEN` |
 | [`fbs-connector`](./connectors/fbs-connector/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`fedin-vibe`](./connectors/fedin-vibe/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`feishu`](./connectors/feishu/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`fenbeitong`](./connectors/fenbeitong/) | 分贝通 WorkBuddy Connector。用于账号与企业、差旅、申请单、订单、消费规则、发票报销、消费洞察、合规、降本及客服。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`fenbi-baokao-decision`](./connectors/fenbi-baokao-decision/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`fenxiang-ai-shopping`](./connectors/fenxiang-ai-shopping/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`fh-travel-portal-cli`](./connectors/fh-travel-portal-cli/) | 通过 fh CLI 查询、比较国内/国际机票，并跳转飞鹤商旅页面完成预订。适用于飞鹤商旅、国内机票、国际机票、航班查询、航班筛选、差旅预订等请求；命令行调用，宿主零 MCP 依赖… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`file-toolkit`](./connectors/file-toolkit/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`finance-bookkeep-query`](./connectors/finance-bookkeep-query/) | 畅捷通好会计财务做账查账 操作技能 - 做账分录预览 + 余额表/科目/报表/明细账/日记账/凭证查询，返回真实账套数据 | 可能需要启用对应 MCP / 连接器 |
 | [`finenter`](./connectors/finenter/) | 用途：Use the Finenter Investment Research MCP to query institutional insights, research rep… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`fiu-mcp-server`](./connectors/fiu-mcp-server/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
 | [`flomo`](./connectors/flomo/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`flova`](./connectors/flova/) | 当用户在 WorkBuddy 中搜索或提出视频、图片、剧本、短片、短剧、漫剧、AI、文生图、文生视频、图生视频、生成、内容、广告、商品、TVC、设计、电影等创作需求，或希望通过 … | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`flova`](./connectors/flova/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`fosunwealth`](./connectors/fosunwealth/) | 用途：Explore the financial questions that matter to you with thoughtful insight and a clear… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`fubei-invoice`](./connectors/fubei-invoice/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`fuma-ai-callout`](./connectors/fuma-ai-callout/) | 用途：Fuma AI phone callout task creation and lookup tools for WorkBuddy | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ACCESS_TOKEN` |
@@ -536,20 +552,27 @@
 | [`gongyi-open-mcp`](./connectors/gongyi-open-mcp/) | 腾讯公益机构服务平台连接器：用自然语言连接并使用腾讯公益机构服务平台的功能。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`gouchuang-door-window`](./connectors/gouchuang-door-window/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`grain-print`](./connectors/grain-print/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`GRAIN_TOKEN` |
+| [`gravity-engine`](./connectors/gravity-engine/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`gt-generate-sql-data`](./connectors/gt-generate-sql-data/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`guansd`](./connectors/guansd/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`guiputi-intent-card`](./connectors/guiputi-intent-card/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`GPTCN_API_KEY` |
 | [`guojin-securities`](./connectors/guojin-securities/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`guotaihaitong-lingxi`](./connectors/guotaihaitong-lingxi/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`gxpos`](./connectors/gxpos/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`h3c-cloudnet`](./connectors/h3c-cloudnet/) | 新华三 Cloudnet 灵犀 AI 助手 - 网络状态查询、网络问题分析、终端故障排查 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`CLOUDNET_API_KEY` |
 | [`h3yun-connector`](./connectors/h3yun-connector/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`haier-assistant`](./connectors/haier-assistant/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`hanyi-fonts`](./connectors/hanyi-fonts/) | 查询汉仪企业签约主体、合同覆盖字体和权益摘要，并生成字体预览 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`haoxinqing-mood`](./connectors/haoxinqing-mood/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`hefei-city-alerts`](./connectors/hefei-city-alerts/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`heyin-connector`](./connectors/heyin-connector/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`hibor-report-agent`](./connectors/hibor-report-agent/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`HIBOR_RESEARCH_TOKEN` |
+| [`hithink-finance`](./connectors/hithink-finance/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
+| [`hk-ai-connector`](./connectors/hk-ai-connector/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`hl-dolphin-stock`](./connectors/hl-dolphin-stock/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`hose-ai-assistant`](./connectors/hose-ai-assistant/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`hrlink`](./connectors/hrlink/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`htfc-mcp`](./connectors/htfc-mcp/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`QIYINGTONG_API_KEY` |
 | [`huatu-guokao-screening`](./connectors/huatu-guokao-screening/) | 华图国考条件筛岗。用户问“我能报哪些国考岗位”“按学历、专业、地区筛国考职位”时使用：通过华图国考筛岗连接器拉取正式条件选项、收集报考条件、查询当前国考职位表的命中岗位，对话展示… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`huibo-yqz-crm`](./connectors/huibo-yqz-crm/) | 连接器配置与技能 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`huilianyi`](./connectors/huilianyi/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -557,8 +580,11 @@
 | [`huize-insurance-product-recommendation`](./connectors/huize-insurance-product-recommendation/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`huodingdong-erp`](./connectors/huodingdong-erp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`HDD_MCP_KEY` |
 | [`huodongxing-pro`](./connectors/huodongxing-pro/) | 查看活动数据与报名情况，创建并完善活动草稿、票种、报名表和付费条款，或在展示规则后提交活动发布请求。当用户提到「帮我创建活动」「完善活动信息」「看看活动数据」「活动报名怎么样」「… | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
+| [`hxy-data-query`](./connectors/hxy-data-query/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`TENANT_KEY`、`TENANT_SECRET` |
+| [`icosmo`](./connectors/icosmo/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`ifind-mcp`](./connectors/ifind-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`ihr-cli`](./connectors/ihr-cli/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
+| [`ikuai-router`](./connectors/ikuai-router/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`IKUAI_CLI_TOKEN`、`IKUAI_TOKEN` |
 | [`ima-mcp`](./connectors/ima-mcp/) | ima - 腾讯AI知识管家个人版，用于搜索、读取和写入个人账号下的知识库（含"问我的知识库"、"个人知识库"、"我存过的资料"、"存进 ima"、ima.qq.com），并可搜… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`infimind-ecommerce-content`](./connectors/infimind-ecommerce-content/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`intco-ai-platform`](./connectors/intco-ai-platform/) | 英科内部业务系统、RPA、企业数仓和企业付费数据的统一探索与调用入口 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
@@ -584,7 +610,10 @@
 | [`jufa-mcp-server`](./connectors/jufa-mcp-server/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`JUFA_API_KEY` |
 | [`jumper-health`](./connectors/jumper-health/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`jumper-kpi`](./connectors/jumper-kpi/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`juris-ivy`](./connectors/juris-ivy/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`k12-kg`](./connectors/k12-kg/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`kdocs`](./connectors/kdocs/) | 金山文档官方 Skill。对话即操作——知识一键存入、碎片内容整理、接龙转表格、文档转 Markdown、表格美化、收发表生成，全在一句话内完成。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`KINGSOFT_DOCS_TOKEN` |
+| [`kece-scrm`](./connectors/kece-scrm/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`KECE_APP_KEY`、`KECE_APP_SECRET` |
 | [`kelp-study-abroad`](./connectors/kelp-study-abroad/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`KELP_TOKEN` |
 | [`kingbot-xiaodie`](./connectors/kingbot-xiaodie/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`kiwi-merchant`](./connectors/kiwi-merchant/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
@@ -595,10 +624,12 @@
 | [`kuaicha-search`](./connectors/kuaicha-search/) | >- | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`kuaidi100`](./connectors/kuaidi100/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`KUAIDI100_API_KEY` |
 | [`kuaixiaotong-agent`](./connectors/kuaixiaotong-agent/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ACCESS_KEY_ID`、`ACCESS_KEY_SECRET` |
+| [`kuaizi-atom-mcp`](./connectors/kuaizi-atom-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`kujiale-ai-draw`](./connectors/kujiale-ai-draw/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`kuka-mcp`](./connectors/kuka-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`laiye-adp`](./connectors/laiye-adp/) | 通过来也 ADP MCP 处理本地文件、HTTP(S) 文件 URL 或 Base64：上传文件，解析 PDF、图片和 Office 文档，抽取中国票据、海外发票、采购订单及中国… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ADP_API_KEY` |
 | [`lawaken-memory`](./connectors/lawaken-memory/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`lawstar-legal-research`](./connectors/lawstar-legal-research/) | 法律之星法规检索与引用核验。查询中国大陆法律条文原文、按语义找相关规定、列法规清单、核验法条引用真伪时使用。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
 | [`lawyerone`](./connectors/lawyerone/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`APIKEY` |
 | [`leads-cloud-crm`](./connectors/leads-cloud-crm/) | 询盘云 Marketing CRM 只读查询技能（OAuth）- 分页查询线索、客户、联系人、商机、触点联系人、SKU、订单、订单明细，按对象查跟进记录与互动时间线，按触点值或对… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`lemon-agi`](./connectors/lemon-agi/) | 乐檬零售 AGI 能力平台，用于查询乐檬零售生态的批发、仓储、零售等业务数据。当用户需要查询批发销售单、批发退货单、客户信息、批发价、库存、入库出库等业务数据时使用。 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`LEMON_AGI_TOKEN` |
@@ -608,7 +639,6 @@
 | [`libtv`](./connectors/libtv/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`liesun`](./connectors/liesun/) | 猎隼招聘查询与受控写入——查岗位、候选人、面试、录音分析摘要和招聘分析；创建岗位或上传简历必须先预览再确认 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`ligowin`](./connectors/ligowin/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`lingju-ai-assistant`](./connectors/lingju-ai-assistant/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`lingmao-scm-cloud`](./connectors/lingmao-scm-cloud/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`lingxi`](./connectors/lingxi/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`lingxing-mcp`](./connectors/lingxing-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`LINGXING_MCP_KEY` |
@@ -616,11 +646,10 @@
 | [`linkfox`](./connectors/linkfox/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`listinggood`](./connectors/listinggood/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`LISTINGGOOD_API_KEY` |
 | [`liyeyun-ai-xuanzhi`](./connectors/liyeyun-ai-xuanzhi/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`longclaw-research`](./connectors/longclaw-research/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`longclaw-research-dev`](./connectors/longclaw-research-dev/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要环境变量：`SERVICE_TOKEN` |
+| [`longclaw-research`](./connectors/longclaw-research/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要环境变量：`SERVICE_TOKEN` |
 | [`lookai`](./connectors/lookai/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`looki`](./connectors/looki/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`lovrabet-cli`](./connectors/lovrabet-cli/) | Lovrabet 运行态 CLI — 面向业务场景的 AI 操作套件，通过 lovrabet 命令管理应用目录、业务角色与权限、用户级外部账号、Service Tree 业务命令… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；需要环境变量：`ACCESS_KEY`、`LOVRABET_ACCESS_KEY` |
+| [`lovrabet-cli`](./connectors/lovrabet-cli/) | Lovrabet 运行态 CLI — 面向业务场景的 AI 操作套件，通过 lovrabet 命令管理应用目录、业务角色与权限、用户级外部账号、API 文档发现、数据集查询、In… | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；需要环境变量：`ACCESS_KEY`、`LOVRABET_ACCESS_KEY` |
 | [`luoge-uc`](./connectors/luoge-uc/) | 罗格用户中心账号技能 - 发送短信验证码、手机号验证码登录、查询当前登录用户信息 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`luyi-seedinggift`](./connectors/luyi-seedinggift/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`lvshu-hotel-booking`](./connectors/lvshu-hotel-booking/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`LVSHU_API_KEY` |
@@ -638,7 +667,7 @@
 | [`meitu-ai`](./connectors/meitu-ai/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`meitu-kaipai`](./connectors/meitu-kaipai/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`meituan-for-business`](./connectors/meituan-for-business/) | 美团企业版连接器，用于连接美团企业版账号、完成授权登录并在本机维护登录态。当用户提到美团企业版、Meituan for Business、企业版登录、登录态、sqt-auth-c… | 需要登录 / OAuth / 扫码授权 |
-| [`menglar-ozon`](./connectors/menglar-ozon/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ACCESS_TOKEN` |
+| [`menglar-ozon`](./connectors/menglar-ozon/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`meo-xiaoyuan`](./connectors/meo-xiaoyuan/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
 | [`mergerinfo`](./connectors/mergerinfo/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
 | [`metalink-mcp`](./connectors/metalink-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -647,29 +676,33 @@
 | [`mgv-flashcard`](./connectors/mgv-flashcard/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`miaoda`](./connectors/miaoda/) | 秒哒（Miaoda）应用搭建平台交互命令，支持通过自然语言对话创建、生成、修改、发布网页/Web应用/小程序/移动App等。 | 需要登录 / OAuth / 扫码授权 |
 | [`miaozhen-lingmei-insight`](./connectors/miaozhen-lingmei-insight/) | 用途：Miaozhen Lingmei Insight: full-web social analytics — voice & engagement trends, hot t… | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`DATATAP_TOKEN` |
-| [`miki-cursor-catalog`](./connectors/miki-cursor-catalog/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`mindbye-contract-review`](./connectors/mindbye-contract-review/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`moa-workbench`](./connectors/moa-workbench/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`modao-ai`](./connectors/modao-ai/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`MODAO_TOKEN` |
 | [`moka`](./connectors/moka/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`moka-go`](./connectors/moka-go/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`mom-dev`](./connectors/mom-dev/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`MOM_ACCESS_TOKEN` |
 | [`moneypal-mcp`](./connectors/moneypal-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`morningstar`](./connectors/morningstar/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`msy-brandct`](./connectors/msy-brandct/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
 | [`mubu`](./connectors/mubu/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`musegate`](./connectors/musegate/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`musicbuddy`](./connectors/musicbuddy/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`mx-ds-mcp`](./connectors/mx-ds-mcp/) | 基于东方财富数据库，通过自然语言查询A股、基金、债券、指数/板块、美股、港股金融数据，以及期货/期权/日韩台德股、企业发行人与非上市公司等综合品种；宏观经济与行业经济指标；按条件… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`mxdtglobal`](./connectors/mxdtglobal/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`myunker-mcp`](./connectors/myunker-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`mzl-trademark`](./connectors/mzl-trademark/) | 摩知轮商标查询技能 —— 按条件检索商标（文本）与以图搜图（图形近似），覆盖中国及 110+ 海外国家/地区 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`nake-v8`](./connectors/nake-v8/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`neo-crm`](./connectors/neo-crm/) | 用户需要查询、分析、维护销售易 CRM 数据或办理业务流程时使用。通过当前连接能力理解业务、确定对象与范围、执行并核验结果，支持当前已开放的标准业务、企业自定义业务及组合请求。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`neo-eakey`](./connectors/neo-eakey/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`neodata`](./connectors/neodata/) | >- | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
 | [`neodata-workbuddy-app`](./connectors/neodata-workbuddy-app/) | >- | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`neosight`](./connectors/neosight/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`neowow`](./connectors/neowow/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`nexa-knowledge`](./connectors/nexa-knowledge/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` |
 | [`niuguwang-sim-trading`](./connectors/niuguwang-sim-trading/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`notion`](./connectors/notion/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`nova-ai`](./connectors/nova-ai/) | 当用户提到 Nova,或想做短剧剧本(原创创作 / 参考剧本改编 / 润色)、剧集统筹表、角色/场景/道具出图、分镜提示词与分镜批量生成视频、广告视频时使用。可在 Nova 中查… | 可能需要启用对应 MCP / 连接器 |
 | [`novai-studio`](./connectors/novai-studio/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`nowcoder-skills-oauth`](./connectors/nowcoder-skills-oauth/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`noxinfluencer-cli`](./connectors/noxinfluencer-cli/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
@@ -693,6 +726,7 @@
 | [`patsnap-search`](./connectors/patsnap-search/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`pcteam`](./connectors/pcteam/) | 筑享云项目与计划协同技能 - 项目查询、进展分析、计划调整、逻辑关系、关键路径与计划变更 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`penglai-ai-growth`](./connectors/penglai-ai-growth/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`pharmcube`](./connectors/pharmcube/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`picimos-dpe-industrial-mcp`](./connectors/picimos-dpe-industrial-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`picset-commerce-images`](./connectors/picset-commerce-images/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
 | [`picset-video-generation`](./connectors/picset-video-generation/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证 |
@@ -705,10 +739,12 @@
 | [`proboost`](./connectors/proboost/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`property-saas`](./connectors/property-saas/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`qc-manage`](./connectors/qc-manage/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`qcc-company`](./connectors/qcc-company/) | 通过企查查 qcc-company 统一入口查询企业基座、司法与经营风险、知识产权、经营动态、董监高及历史存档六模块数据；具体工具以宿主实际发现与账号权限为准。原工商能力包括股权… | 可能需要启用对应 MCP / 连接器 |
+| [`qcc-company`](./connectors/qcc-company/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`qcc-legal`](./connectors/qcc-legal/) | 通过企查查·法律数据 Connector 检索、研究与核验中国法律法规和司法案例。当用户的请求涉及查找法条依据、定位法规、调取法规/法条逐字原文、类案检索、援引指导性/公报/典型… | 可能需要启用对应 MCP / 连接器 |
 | [`qianchi-iot`](./connectors/qianchi-iot/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SERVICE_TOKEN` |
+| [`qiaocai-finance`](./connectors/qiaocai-finance/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`qibook-mcp`](./connectors/qibook-mcp/) | 查询企业工商登记及相关尽调数据，涵盖主体识别、基本信息、股权与控制关系、变更、人员与组织、年报及上市信息。当用户提及企百科、qibook、工商查询、查企业、企业尽调、企业股东、企… | 可能需要启用对应 MCP / 连接器 |
+| [`qijingke-scrm`](./connectors/qijingke-scrm/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SCRM_APP_KEY` |
 | [`qince`](./connectors/qince/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`qingflow`](./connectors/qingflow/) | 轻流无代码平台操作技能 - 创建应用、管理表单数据、处理审批流程、查询和导出数据 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`qinghu-ai`](./connectors/qinghu-ai/) | 青虎AI电商 SaaS 连接器，覆盖电商数据研究、选品与运营分析，以及 LinkPix 商品图、详情页、广告素材和短视频创作。适用于数据查询、达人与短视频研究、选品调研、生图、生… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
@@ -719,15 +755,15 @@
 | [`qq-mail`](./connectors/qq-mail/) | QQ邮箱(QQ Mail)全功能操作技能。触发场景：看邮箱、查邮件、收件箱、看看邮件、有没有新邮件、未读邮件、帮我看看邮箱、打开邮箱、最近的邮件、邮件列表、发邮件、写邮件、发一封… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`quanlaidian-mcp-tool-all`](./connectors/quanlaidian-mcp-tool-all/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`qudaoyun1`](./connectors/qudaoyun1/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`qveris`](./connectors/qveris/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`QVERIS_API_KEY` |
+| [`qveris`](./connectors/qveris/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`qzd-connector`](./connectors/qzd-connector/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
 | [`rabbitvis`](./connectors/rabbitvis/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`realtrace`](./connectors/realtrace/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`REALTRACE_API_KEY` |
 | [`recording-assistant`](./connectors/recording-assistant/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`reelmate-cli`](./connectors/reelmate-cli/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
+| [`remmy`](./connectors/remmy/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`REMMY_AGENT_TOKEN` |
 | [`renzheai-connector`](./connectors/renzheai-connector/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`replygen`](./connectors/replygen/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`reportgem-research`](./connectors/reportgem-research/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`rhinobird`](./connectors/rhinobird/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`ruyi-creative-oauth`](./connectors/ruyi-creative-oauth/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`rys-business-assistant`](./connectors/rys-business-assistant/) | 使用融易算 MCP 工具选择绑定公司、生成样票并确认开票、查询出票状态与销项发票统计及开票记录，或查询账税月度汇总。用户请求这些业务或排查连接、登录及权限时使用。 | 需要微信/企微相关凭证或扫码登录；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
@@ -739,6 +775,7 @@
 | [`scienceora`](./connectors/scienceora/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`scnet`](./connectors/scnet/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`scnet-omni-ocr`](./connectors/scnet-omni-ocr/) | 一站式文档智能处理 MCP，集成 OCR 文字识别与信息提取、高精度文档解析和文档格式转换三大能力。需要识别图片/文档文字、抽取票据证照字段、解析论文/合同/标书版式为结构化 M… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要环境变量：`ACCESS_TOKEN` |
+| [`scorehub-tiktok`](./connectors/scorehub-tiktok/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`sdc-enterprise-info`](./connectors/sdc-enterprise-info/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`LITEMCP_API_KEY` |
 | [`sealai-finance`](./connectors/sealai-finance/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`securities-open-api`](./connectors/securities-open-api/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -746,6 +783,7 @@
 | [`sellerspace-mcp`](./connectors/sellerspace-mcp/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SELLERSPACE_API_KEY` |
 | [`sellfox-mcp`](./connectors/sellfox-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SELLFOX_MCP_KEY` |
 | [`sensors-data-cli`](./connectors/sensors-data-cli/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
+| [`serviceone-workbuddy-connector`](./connectors/serviceone-workbuddy-connector/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`sesunfox-gateway`](./connectors/sesunfox-gateway/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`CLIENT_SECRET` |
 | [`sf-intra-city`](./connectors/sf-intra-city/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`shanglv-mcp-gateway`](./connectors/shanglv-mcp-gateway/) | 企业级 MCP 授权网关技能 - 聚合财务发票查询与银行账户交易数据（客户/账户/余额/交易/对账单/回单/小时余额），统一走 Keycloak OAuth 2.1 + PKCE… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
@@ -754,11 +792,12 @@
 | [`shanlong-claw`](./connectors/shanlong-claw/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`sharecrm`](./connectors/sharecrm/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`shenhuo-designers`](./connectors/shenhuo-designers/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`shopee-market-intelligence`](./connectors/shopee-market-intelligence/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ACCESS_TOKEN` |
+| [`shopee-market-intelligence`](./connectors/shopee-market-intelligence/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`shopkeeping-oauth`](./connectors/shopkeeping-oauth/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`shuidi-credit`](./connectors/shuidi-credit/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`shuidi-discovery`](./connectors/shuidi-discovery/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`shunong-assistant`](./connectors/shunong-assistant/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
+| [`shunshun-attraction`](./connectors/shunshun-attraction/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SSLQAPITOKEN` |
 | [`sif-mcp`](./connectors/sif-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`sjb-mcp`](./connectors/sjb-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`slgj-finance-engine`](./connectors/slgj-finance-engine/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SLGJ_TOKEN` |
@@ -770,6 +809,7 @@
 | [`sumscope-data`](./connectors/sumscope-data/) | 通过 Sumscope qeubee MCP 服务器查询金融数据（行情、债券、资金等）。当用户需要查询 qeubee 相关数据、了解可用的数据 API、或要求获取某类金融数据时使… | 可能需要启用对应 MCP / 连接器 |
 | [`sungo-device-registry`](./connectors/sungo-device-registry/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SUNGO_TIC_KEY` |
 | [`superun-creation`](./connectors/superun-creation/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
+| [`suuntozh`](./connectors/suuntozh/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`syspetro-service-22065846`](./connectors/syspetro-service-22065846/) | 通过 PROPDB（syspetro-service-22065846） 完整版 MCP 查询组分与物性、执行单位换算，并提交混合物分析、二元 Txy/Pxy、多元闪蒸、纯组分温… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SYSPETRO_MCP_API_KEY` |
 | [`taikang-release`](./connectors/taikang-release/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`tanyuan-assistant`](./connectors/tanyuan-assistant/) | \| | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
@@ -809,6 +849,7 @@
 | [`textin-xparse`](./connectors/textin-xparse/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`thinkingai-agentic-engine`](./connectors/thinkingai-agentic-engine/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`tiana-cloud`](./connectors/tiana-cloud/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
+| [`tiaoyue-vision`](./connectors/tiaoyue-vision/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`ticnote`](./connectors/ticnote/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`tiktok`](./connectors/tiktok/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`timem-space`](./connectors/timem-space/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
@@ -817,7 +858,9 @@
 | [`tmeet`](./connectors/tmeet/) | 通过腾讯会议 CLI（tmeet）完成登录授权、会议管理、录制搜索与播放地址查询、纪要/待办/转写读取、分享与权限申请、元宝纪要、参会报告、会中控制、事件订阅、应用配置及问题反馈… | 需要登录 / OAuth / 扫码授权 |
 | [`today-watermark-camera`](./connectors/today-watermark-camera/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`tongzhou-fin-research`](./connectors/tongzhou-fin-research/) | 连接公开行情、研报检索、行业图谱与同舟投研材料，为股市研究提供可复核证据。 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`tool4seller`](./connectors/tool4seller/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`tourmind-hotel-booking-token`](./connectors/tourmind-hotel-booking-token/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`TOURMIND_USER_KEY` |
+| [`touzhiwang-ashare-market`](./connectors/touzhiwang-ashare-market/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`tplus-api`](./connectors/tplus-api/) | 畅捷通 T+Cloud MCP 使用指导 - 查询/管理销售订单、采购订单、库存单据、生产工单、财务凭证、报表及基础档案。使用 T+ MCP 前请先阅读此技能。 | 可能需要启用对应 MCP / 连接器 |
 | [`tradesparq-data-search`](./connectors/tradesparq-data-search/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`transmind`](./connectors/transmind/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -831,14 +874,17 @@
 | [`tuzheng`](./connectors/tuzheng/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`tyc-mcp`](./connectors/tyc-mcp/) | 天眼查企业数据查询技能 - 聚合式企业数据网关，覆盖企业锚定、基础画像、股权集团、董监高人员、司法风险、知识产权、经营财务、招投标等 160+ 项企业数据能力。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器 |
 | [`ucpin-connector`](./connectors/ucpin-connector/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`ugreen-nas`](./connectors/ugreen-nas/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`upkuajing`](./connectors/upkuajing/) | 通过跨境魔方 MCP 搜索 B2B 企业、职业联系人、海关采购商与供应商、贸易记录及地图商户，补全和分析已有线索；也用于用户明确要求的邮件、短信发送及任务查询。Use UpKua… | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`uten-game-report`](./connectors/uten-game-report/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`uupt`](./connectors/uupt/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`uuyimei-data-gateway`](./connectors/uuyimei-data-gateway/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
+| [`vanward-smart-home`](./connectors/vanward-smart-home/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`variflight-mcp`](./connectors/variflight-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`VARIFLIGHT_MCP_KEY` |
 | [`verya-knowledgebase`](./connectors/verya-knowledgebase/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`viaim`](./connectors/viaim/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`vibeknow-cli`](./connectors/vibeknow-cli/) | VibeKnow 官方视频生成 Skill（vibeknow / vk 命令行）。当用户想把文档、PDF、Word、PPT、网页链接或对话里贴的一段文字做成视频时使用——讲解视频… | 需要登录 / OAuth / 扫码授权 |
+| [`vibeknow-cli`](./connectors/vibeknow-cli/) | VibeKnow 官方视频生成 Skill（vibeknow / vk 命令行）。当用户想把文档、PDF、Word、PPT、网页链接、对话里贴的一段文字，或只用一句话说出的主题做… | 需要登录 / OAuth / 扫码授权 |
+| [`vj-cloud-forms`](./connectors/vj-cloud-forms/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`voc-mcp-oauth-v2`](./connectors/voc-mcp-oauth-v2/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`voko-guest`](./connectors/voko-guest/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`vox-teacher`](./connectors/vox-teacher/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -850,6 +896,7 @@
 | [`wecom`](./connectors/wecom/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`weiban-agent-mcp`](./connectors/weiban-agent-mcp/) | 使用微伴连接器查询授权范围内的员工、客户、企微消息存档和工单，并处理微伴连接与参数错误；写入前确认业务对象与用户授权。 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`WEIBAN_AGENT_SECRET` |
 | [`weibo-cli`](./connectors/weibo-cli/) | 通过 weibo-cli 命令行或微博 MCP 连接器查询和发布微博、管理评论与文章、分析用户和粉丝数据、检索热搜与影视指数。 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要环境变量：`WEIBO_CLI_REFRESH_TOKEN`、`WEIBO_CLI_TOKEN` |
+| [`weiling-crm`](./connectors/weiling-crm/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`weisheng-scrm`](./connectors/weisheng-scrm/) | 当用户需要查询或管理微盛企微管家（企业微信） SCRM 中的客户信息、客户标签、客户群、营销素材、活码、群发、跟进记录、聊天记录、会话存档、联系人、商机、汇报、抽奖、客户日程、客… | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SCRM_APP_KEY` |
 | [`welife-ai-workbench-connector`](./connectors/welife-ai-workbench-connector/) | 查询当前授权餐饮商户的经营指标、经营报告、经营诊断与营销活动事实数据 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`wendao-partner-workbuddy-connector`](./connectors/wendao-partner-workbuddy-connector/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
@@ -859,6 +906,7 @@
 | [`wimo-gen`](./connectors/wimo-gen/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`wind-finance`](./connectors/wind-finance/) | 通过自然语言查询股票、基金、指数、债券、公告、财经新闻和宏观经济数据。 | 可能需要启用对应 MCP / 连接器 |
 | [`wisdom`](./connectors/wisdom/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`wiseany-fuyaomom-mcp`](./connectors/wiseany-fuyaomom-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`wisenote`](./connectors/wisenote/) | 使用百智 WiseNote 会议工具读取已授权的会议列表、会议摘要和会议转写内容。 | 可能需要启用对应 MCP / 连接器 |
 | [`wk-workbuddy`](./connectors/wk-workbuddy/) | 用途：name: wk-mcp | 可能需要启用对应 MCP / 连接器 |
 | [`wm-weight-manage`](./connectors/wm-weight-manage/) | 用途：Use when the adult weight-management MCP needs to be installed/set up in WorkBuddy (co… | 可能需要启用对应 MCP / 连接器 |
@@ -880,15 +928,19 @@
 | [`xinhua-industry-data`](./connectors/xinhua-industry-data/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
 | [`xiniudata`](./connectors/xiniudata/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`API_KEY` |
 | [`xinke-laile-analytics-enterprise`](./connectors/xinke-laile-analytics-enterprise/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`XIANSUO_MCP_TOKEN` |
+| [`xique-bid`](./connectors/xique-bid/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`XQ_API_KEY` |
 | [`xkw`](./connectors/xkw/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
-| [`xmed-figure-mcp`](./connectors/xmed-figure-mcp/) | 用途：Scientific figure generation via X-Med MCP. Volcano, PCA, enrichment, survival, correl… | 可能需要启用对应 MCP / 连接器 |
+| [`xmed-figure-mcp`](./connectors/xmed-figure-mcp/) | 用途：Scientific figure generation via X-Med MCP. Volcano, PCA, enrichment, survival, correl… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`xmind`](./connectors/xmind/) | 使用 Xmind 官方 MCP 管理团队空间，并创建、读取、编辑和完善 Xmind 在线思维导图。当用户要求查找在线导图、整理内容为导图、调整主题结构与样式、管理画布、文件夹或任… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
 | [`xq-fund-data`](./connectors/xq-fund-data/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`xrxs`](./connectors/xrxs/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`xt-ai-tool-center-token`](./connectors/xt-ai-tool-center-token/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`MCP_API_KEY` |
 | [`xuan-gu-mo-fang`](./connectors/xuan-gu-mo-fang/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`xuanpian-schedule`](./connectors/xuanpian-schedule/) | 你已连接影楼选片系统，可以帮用户查询拍摄档期，以及完成账号绑定。 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`WB_TOKEN`、`WORKBUDDY_API_KEY` |
+| [`xuanxing`](./connectors/xuanxing/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`yanxu`](./connectors/yanxu/) | 通过言序 MCP 完成微信公众号文章的建稿与发布。适用于查询已绑定的公众号、查询样式主题、创建文章草稿、推送到公众号草稿箱。触发场景：用户提到公众号文章、排版、建稿、草稿箱、言序。 | 需要微信/企微相关凭证或扫码登录；可能需要启用对应 MCP / 连接器 |
+| [`yaozh-drug-search`](./connectors/yaozh-drug-search/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`YAOZH_API_TOKEN` |
+| [`ycbx-mcp`](./connectors/ycbx-mcp/) | 使用有成报销 MCP 查询本人的报销数据：报销单列表与详情、审批进度、预算占用、还没报销的消费、发票夹里没用的发票、差旅费用标准、借款记录、员工档案。用户提到报销单、报销进度、报… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`YCBX_API_KEY` |
 | [`ycrm-mcp`](./connectors/ycrm-mcp/) | 使用有成 CRM MCP 发现业务对象和字段、查询或写入业务记录、查询组织人员、处理 CRM 审批并导入公开文件。用户提到客户、联系人、线索、商机、合同或订单、回款、发票、报价、… | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`YCRM_API_KEY` |
 | [`ydw-buddymcp`](./connectors/ydw-buddymcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`yi-bi-query`](./connectors/yi-bi-query/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -901,9 +953,12 @@
 | [`yiya-dental`](./connectors/yiya-dental/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`yj-fin-data`](./connectors/yj-fin-data/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`yonyou-haokuaiji-finance`](./connectors/yonyou-haokuaiji-finance/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`yonyou-haoshengyi-inventory`](./connectors/yonyou-haoshengyi-inventory/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`yonyou-haoyecai-erp`](./connectors/yonyou-haoyecai-erp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`youcai-ai`](./connectors/youcai-ai/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`youhaoyun-restaurant-mcp`](./connectors/youhaoyun-restaurant-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`youshu-bd-mate`](./connectors/youshu-bd-mate/) | 对公营销助手是基于企业全维数据构建的对公营销智能助手，提供从生成访前一页纸、访前客情报告、产品找客、关键人画像、营销话术及按企荐品的完整展业闭环能力。所有报告生成工具为异步模式，… | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器 |
+| [`youzan-content-search`](./connectors/youzan-content-search/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`youzan-workbuddy`](./connectors/youzan-workbuddy/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要环境变量：`SERVICE_TOKEN` |
 | [`yuanbei-hub`](./connectors/yuanbei-hub/) | 连接器配置与技能 | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`YUANBEI_ACCESS_TOKEN`、`YUANBEI_LOGIN_TOKEN` |
 | [`yuandian-mcp`](./connectors/yuandian-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
@@ -916,7 +971,9 @@
 | [`yunzhi-mcp`](./connectors/yunzhi-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`MCP_TOKEN` |
 | [`yuwell-health-data-prod`](./connectors/yuwell-health-data-prod/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`yzf-general-mcp-server`](./connectors/yzf-general-mcp-server/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`yztx-mcp`](./connectors/yztx-mcp/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`zbwsoft-market-ops`](./connectors/zbwsoft-market-ops/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
+| [`zcj-knowledge-base`](./connectors/zcj-knowledge-base/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ZCJ_KB_TOKEN` |
 | [`zenava`](./connectors/zenava/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`zerone-mcp`](./connectors/zerone-mcp/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ZERONE_API_KEY` |
 | [`zfs-fssc-ai`](./connectors/zfs-fssc-ai/) | 用途：AI reimbursement assistant for ZTE FSSC | 需要登录 / OAuth / 扫码授权；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ZFS_LOGIN_KEY`、`ZFS_PASSWORD` |
@@ -932,6 +989,8 @@
 | [`zijizhang`](./connectors/zijizhang/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`ziniao`](./connectors/ziniao/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |
 | [`ziru-business-travel`](./connectors/ziru-business-travel/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`SERVICE_TOKEN` |
+| [`zlbx-bidding-mcp`](./connectors/zlbx-bidding-mcp/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ZLBX_API_KEY` |
+| [`zmla-datalink`](./connectors/zmla-datalink/) | 使用数脉通 ZMLA DataLink MCP 查询企业工商、司法及风险数据，支持企业研究、合作风险排查和供应链尽调。适用于用户要求查询具体企业或基于企业数据进行分析时；实际可用… | 可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`ZMLA_APP_KEY` |
 | [`zocf-ai-tools`](./connectors/zocf-ai-tools/) | 连接器配置与技能 | 需要大模型 API Key（OpenAI/Anthropic 等）；可能需要启用对应 MCP / 连接器；需要按 token-schema 配置凭证；需要环境变量：`AITOOLS_API_KEY` |
 | [`zspace-nas`](./connectors/zspace-nas/) | 连接器配置与技能 | 可能需要启用对应 MCP / 连接器 |
 | [`zsxq`](./connectors/zsxq/) | 连接器配置与技能 | 需要在 App 内完成 OAuth / 扫码或配置 Token |

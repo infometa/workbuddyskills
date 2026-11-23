@@ -3,7 +3,7 @@ name: fenbeitong-workbuddy
 description: "分贝通 WorkBuddy Connector。用于账号与企业、差旅、申请单、订单、消费规则、发票报销、消费洞察、合规、降本及客服。"
 description_zh: "通过分贝通 Connector 处理企业差旅、消费规则、发票报销、消费洞察、合规风险、降本机会和客服需求。"
 description_en: "Use the Fenbeitong Connector for business travel, policies, invoices, reimbursement, consumption insights, compliance, cost reduction, and support."
-version: "1.1.0"
+version: "1.2.0"
 author: "分贝通 Fenbeitong"
 ---
 
@@ -138,37 +138,36 @@ author: "分贝通 Fenbeitong"
 - 用 echo / ls 检查 `CODEBUDDY_SESSION_ID`、会话记录目录等运行环境；
 - 用 Grep / Read 检查生成出来的 HTML 内容。
 
-脚本能否取到载荷由脚本自己判断，取不到会明确报错——**不需要你预先验证任何机制**。报错时直接按降级步骤处理，不要排查原因。
+脚本会使用工具返回的短 `preview_id` 从 Redis 取回完整 JSON；不要扫描会话记录或复制大载荷。取不到会明确报错，此时直接按降级步骤处理，不要排查 Redis。
 
-`fbt_trip_planner` 规划成功时，其模型可见 `content` 会要求「生成并呈现行程预览页面」。**在 WorkBuddy 渠道，「呈现」一律指按下面两步跑出本地 HTML 再用 `present_files` 在侧边栏打开，只在正文转述行程、不生成预览页属于流程未完成。** 其 `content` 末尾包含一组完整标记：
+`fbt_trip_planner` 规划成功时，其模型可见 `content` 会要求「生成并呈现行程预览页面」。**在 WorkBuddy 渠道，「呈现」一律指用 Redis `preview_id` 跑出本地 HTML，再用 `present_files` 在侧边栏打开；只在正文转述行程、不生成预览页属于流程未完成。** Redis 成功时，其 `content` 末尾包含：
 
 ```text
-[TRIP_PLAN_PAYLOAD_V1]
-<URL-safe Base64>
-[/TRIP_PLAN_PAYLOAD_V1]
+[TRIP_PLAN_REDIS_V1]
+{"version":1,"preview_id":"<preview_id>","env":"prod|fat","expires_in":900}
+[/TRIP_PLAN_REDIS_V1]
 ```
 
-1. **直接执行下面这条命令**，把 `<conversation_id>` 换成工具返回结果中的该字段值，其余原样：
+1. **直接执行下面这条命令**，把 `<preview_id>`、`<env>` 换成标记内的真实值，其余原样：
 
    ```bash
    SCRIPT_PATH="$HOME/.workbuddy/connectors-marketplace/connectors/fenbeitong/skills/scripts/render_trip_plan.py"
    [ -f "$SCRIPT_PATH" ] || SCRIPT_PATH=$(find "$HOME/.workbuddy" -type f -name render_trip_plan.py 2>/dev/null | head -1)
    [ -f "$SCRIPT_PATH" ] || { echo "未找到 render_trip_plan.py，无法生成行程预览" >&2; exit 1; }
-   python3 "$SCRIPT_PATH" --conversation-id "<conversation_id>" --output-dir outputs
+   python3 "$SCRIPT_PATH" --preview-id "<preview_id>" --env "<env>" --output-dir outputs
    ```
 
-   脚本会自行从当前 WorkBuddy 会话记录中取回完整载荷，因此**无需提取、也不要复制 Base64 载荷**——长 Base64 逐字转录极易损坏。排查时可加 `--diagnose`，会把查找过程打到 stderr。
-   **仅当**上一步报「未能从会话记录中找到」时才降级为传载荷：提取两个标记之间的 Base64 字符串原样传入，不改写、不向用户展示该载荷，也不将其拼接成未转义的 shell 命令：
+   模型只复制短 `preview_id`，不得调用 `write_to_file`，不得读取或改写 Redis 中的 JSON。脚本成功后，读取 stdout JSON 中的 `trip_html_path`，立即调用 `present_files([trip_html_path])`。
+
+   只有工具明确返回 `[TRIP_PLAN_PAYLOAD_V1]`（代表 Redis 写入失败）时，才允许使用旧 Base64 回退：
 
    ```bash
-   python3 "$SCRIPT_PATH" --payload-base64 "<Base64>" --output-dir outputs   # 同一次 shell 会话中 SCRIPT_PATH 已设好
+   python3 "$SCRIPT_PATH" --payload-base64 "<Base64>" --output-dir outputs
    ```
-
-   读取成功脚本 stdout 中的 JSON，取 `trip_html_path`，立即调用 `present_files([trip_html_path])` 在侧边栏打开。
 
    同一行程修改后重复执行；脚本按 `conversation_id` 覆盖 `outputs/trip-plan-<conversation_id>.html`，不堆积历史文件。
 
-   脚本失败时不重试规划或修改行程，也不影响已成功的业务结果；降级为用 `content` 中的行程参考信息逐项转述，并保留每个预订链接。
+   Redis key 过期、读取失败或脚本失败时不重试规划或修改行程，也不尝试猜测 key；降级为用 `content` 中的行程参考信息逐项转述，并保留每个预订链接。
 
 未列出的工具需要本地加工时，由该工具开发者把脚本随 Skill 一起提交，并写明唯一脚本路径、输入输出、失败处理和展示步骤。
 

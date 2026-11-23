@@ -1,0 +1,26 @@
+{
+  "title": "连接沪小游数据服务",
+  "title_en": "Connect to Huxiaoyou",
+  "description": "填写接口平台分配的租户凭据。WorkBuddy 在本机保存，并通过 HTTPS 发送给沪小游服务完成认证。可查询范围由平台管理员配置。",
+  "description_en": "Credentials are stored locally by WorkBuddy and sent to Huxiaoyou over HTTPS. Your administrator controls access.",
+  "docUrl": "https://hxyopenapi.bawutech.com/",
+  "docLabel": "查看开放接口文档",
+  "fields": [
+    {
+      "key": "TENANT_KEY",
+      "label": "租户 Key（tenantKey）",
+      "type": "text",
+      "required": true,
+      "placeholder": "填写平台分配的 tenantKey",
+      "description": "沿用现有开放接口账号。"
+    },
+    {
+      "key": "TENANT_SECRET",
+      "label": "租户密钥（tenantSecret）",
+      "type": "password",
+      "required": true,
+      "placeholder": "填写 tenantSecret，不是临时 Token",
+      "description": "密钥重置后，请在这里更新并重新连接；不要把密钥发到对话中。"
+    }
+  ]
+}

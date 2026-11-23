@@ -1,7 +1,7 @@
 ---
 name: cloud-api-operations
 description: "Operate Tencent Cloud control-plane resources (monitoring/alarms, CLB, CAM roles, COS, MySQL, SCF) via cloud APIs when no dedicated MCP tool covers the task. Use when a task needs control-plane operations beyond CloudBase's own tooling, or when a callCloudApi call failed and needs classifying. Also covers enterprise platform integration: wrapping CloudBase MCP into an organization-specific MCP (tool trimming, dangerous-action interception, per-user API Key distribution, audit) — use when the user mentions 企业接入 / 封装 MCP / 企业专属 MCP / 多租户凭证下发 / platform MCP wrapping. See recipes/enterprise-mcp-wrapper.md."
-version: 2.36.2
+version: 2.37.6
 license: MIT
 ---
 
@@ -77,6 +77,8 @@ Recipes encode the exact call sequence, required parameters, and empirically dis
 - **Wiring that credential into a user's agent, one env per project**: `./references/recipes/platform-agent-connect.md`
 - **Closing down the agent's tool surface — plugin trimming, gateway wrap for audit, expert-enforced constraints**: `./references/recipes/platform-agent-guardrails.md`
 - **Platform edition usage, billing cycle, and environment recycling**: `./references/recipes/platform-usage-and-recycle.md`
+
+**No recipe for this scenario?** A single public Action with no multi-step orchestration does not need a new recipe: resolve it from the API index, then call it through `callCloudApi` (or `tcb api` in a script). Recipes exist for call sequences, prerequisite checks and cleanup obligations — not for one-shot switches.
 
 **Done when**: every parameter value in the call sequence traces to a recipe value marked as verified (实测) or to official docs.
 

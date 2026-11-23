@@ -62,6 +62,7 @@ Any of the 3 tools can legitimately return zero rows for reasons that have nothi
 2. **Check `effectiveProfileIds`.** An unauthorized profile can no longer cause a silent empty result — that fails as `invalid_params` with `Requested profileIds contain unauthorized values` (see profileIds Authorization above), so it shows up in step 1, not here. What this field is still good for: confirming you queried the store the user actually meant. If the user asked about "the JP store" and `effectiveProfileIds` holds the US profile, the empty result is a targeting mistake on your side — fix the profile and retry before concluding anything about the data.
 3. **Check the date range for T+2 delay effects (`get_ads_perf` only) — but note this is different from a range violation.** If `dateStart`/`dateEnd` genuinely exceed the 90-day span or 15-month lookback, that's a request-construction mistake that should surface as `isError:true` (`errorType: invalid_params`) per the error-handling rules above — it should not come back as a silent empty success. If you're instead seeing `isError:false` with empty/incomplete rows for a *valid* range that includes "today" or very recent days, that's the T+2 delay: recent data genuinely hasn't finished processing yet, which is a legitimate (if unhelpful) empty-but-correct result — not a bug and not "no data exists," just "not processed yet."
 4. **Confirm the requested fields/metrics are actually valid for the `factEntity`/`entity` in use** (see the Metrics × Entity Support Matrix). Requesting an unsupported combination is documented as a common source of `invalid_params` errors — so this should also come back as `isError:true`, not a silent empty result. If you're getting empty-but-non-error rows, an invalid metric/entity combination is an unlikely explanation; look at filters and data existence instead (steps 5-6).
+   ⚠️ **This does not apply to `select` on `get_entity_metadata`.** An unknown name there is **dropped, not rejected**: the call succeeds, the field is simply missing from every row, and the only trace is `meta.hint` (`Unknown select fields ignored: [...]`). So a field that reads as empty everywhere is a spelling mistake until you have checked `meta.hint`, and "the call returned 200" proves nothing about the names you asked for. The `invalid_params` behaviour above is about **filters and metrics**, not about `select`.
 5. **If you filtered by an id, check that the field and the value belong to the same id space.** Both spaces are filterable: `campaignId` / `adGroupId` / `targetId` / `keywordId` / `productAdId` take the internal id, `amazonCampaignId` / `amazonAdGroupId` / `amazonKeywordId` / `amazonTargetId` take the Amazon one. The mistake is the **mismatch** - e.g. passing an `amazonCampaignId` taken off a performance or log row as `campaignId`. That is a valid filter whose value matches nothing, so it returns zero rows **without an error**. **Judge by the field name the value came out of**, not by its length and not by which tool returned it: a `get_operation_log` row carries `entityId` (internal) and `amazonEntityId` / `amazonCampaignId` (Amazon) at the same time, and `portfolioId` is Amazon-side on `campaign` but internal on `portfolio`. The entity field tables are the source of truth.
 6. **Remove your business filters (`filters`) and retry.** If removing filters (state=enabled, spend thresholds, etc.) suddenly returns rows, the entity/data exists but didn't match your filter conditions — the honest answer to the user is "nothing matches your filter criteria," not "you have no data at all." These are different statements — don't conflate them.
 7. **If you still get zero rows after 1-6, confirm the entity itself exists** via `get_entity_metadata` (e.g. does this campaign ID actually exist for this profile?). A nonexistent entity and an existing-but-inactive-in-this-window entity warrant different answers to the user.
@@ -69,6 +70,36 @@ Any of the 3 tools can legitimately return zero rows for reasons that have nothi
 **Only after working through this sequence** can you responsibly tell the user "there's genuinely no data/activity in that range" — and even then, be specific about what you checked (e.g. "no spend recorded for campaign X between these dates, and the campaign does exist and is enabled") rather than a bare "no data found."
 
 ## Diagnosing inflated or non-reconciling numbers
+
+> **Before diagnosing anything: are the two numbers even from the same source?** "Cross-source"
+> does not only mean different MCP tools. It includes any of these:
+>
+> - the same period queried through different `get_ads_perf` fact entities or aggregation
+>   levels, such as a campaign row versus summed ad-group, target, search-term, product-ad or ASIN
+>   rows;
+> - performance facts from `get_ads_perf` compared with current configuration from
+>   `get_entity_metadata`, or with historical events from `get_operation_log`;
+> - the same logical report run at different times while late-attributed orders, report rows or
+>   operation-log backfill are still arriving.
+>
+> **Common cases.** Use campaign facts for a campaign total; do not force that total to equal the
+> sum of ASIN, product-ad, target or search-term detail. A campaign containing one requested ASIN
+> still reports the whole campaign's spend, including its other products. Use ASIN/product-ad
+> facts for product attribution instead. A metadata `dailyBudget`, a logged `currentBudget`
+> change and performance `Spend` are three different concepts, not three readings of one
+> number. Likewise, today's metadata describes what can act now; it does not prove what was
+> configured when an older log event occurred.
+>
+> Different sources can refresh on different schedules and continue accepting late data, so two
+> figures for the same dates can differ slightly. A few cents, a click or two, or a fraction of a
+> percent is normally timing, not a defect. Record the tool, fact entity, aggregation level and
+> run time before comparing results.
+>
+> **The rule: one judgement, one source.** Pick the source and entity level that answer the
+> question, and compute every number for that judgement from it. When two sources must be shown,
+> label both and explain whether the gap is expected semantics or refresh timing. Escalate only
+> when like-for-like results from the same source, scope, dates and snapshot still differ by an
+> amount material to the conclusion.
 
 The opposite failure of the one above: the call succeeds, the rows look reasonable, and the
 totals are several times the truth. It happens when a dimension from another entity doesn't
@@ -166,8 +197,10 @@ larger than the unfiltered one**, which is never possible.
 | `profile_out_of_range` | Auth failure (403) | Requested profile outside the token's grant |
 | `business_error` | Backend / query-execution error (most common) | Read the semantic `message` and branch (unknown field, filter value type mismatch, result set too large, execution timeout, server busy); downstream service errors carry a `service` field (e.g. `Amazon_SA_Service`) |
 | `timeout` | Query timeout | Narrow the range and retry |
-| `service_unavailable` | Backend data source unavailable | ClickHouse connection pool exhausted — transient, retry shortly |
-| `auth_service_unavailable` | Auth service unavailable | Auth check failed closed (503) — transient, retry shortly |
+| `service_unavailable` | Backend data source unavailable | ClickHouse connection pool exhausted — transient, retry shortly. With `service: td-api` (sdCategory / categoryBrand) the platform credential for the category service was rejected — a server-side configuration issue; retrying will not help |
+| `auth_service_unavailable` | Auth service unavailable | Auth check failed closed (503) — transient, retry shortly. **An invalid or expired token is not this**: the auth service answers 4xx and the gateway now returns **401 / 403**, which is permanent — re-authenticate instead of retrying |
+| `capability_unavailable` | Capability check unavailable | A dependent capability lookup failed; the request was **not executed** — retry the same call unchanged later (`service: Auth_Service`, message `能力查询暂不可用，请稍后重试`) |
+| `query_shape_unsupported` | The entity combination cannot be joined | **Not retryable — change the query, not the timing.** The requested `factEntity` and dimensions cannot be connected: either a granularity rule blocked the path or the entities are unrelated. Messages read `Cannot connect CTEs: [...]` or `Cannot connect all terminal nodes, remaining: [...]`. Drop the dimension that doesn't belong to the fact entity's own hierarchy, or query it separately and join the results yourself. Previously this came back as `business_error`, so older advice to "retry" does not apply |
 
 **The configured rate-limit policy** (token-bucket, per 60s window). Whether limiting is switched on is an environment setting, so you may never hit these — but plan against them rather than assuming they're off:
 
@@ -186,7 +219,7 @@ The `dimension` field on a `rate_limited` error tells you which bucket you hit: 
 - `rate_limit_service_unavailable` → not your query's fault and not retryable immediately; the platform is failing closed. Tell the user the service is temporarily rejecting requests.
 - `token_invalid` / `permission_denied` / `scope_missing` / `profile_out_of_range` → an auth/permission problem, not a query bug. Name the scope the tool needs (see Permission Scopes) and tell the user to have their token/role updated. Retrying the same call won't help.
 - `business_error` → **read the `message` and branch — it is semantically translated, do NOT blindly retry**: `unknown field 'X'` → fix the field name against field_reference and retry; `filter value type mismatch` → fix the filter value's type and retry; `result set too large` → narrow the date range / add filters; `execution timeout` → narrow and retry; `server is busy` → wait a few seconds and retry; any other internal error → report as a transient failure and quote `requestId`.
-- `timeout` / `service_unavailable` / `auth_service_unavailable` → backend/dependency temporarily unavailable, not a param problem. Retry once; if it persists, tell the user the data source is temporarily unavailable (quote `requestId`).
+- `timeout` / `service_unavailable` / `auth_service_unavailable` → backend/dependency temporarily unavailable, not a param problem. (**A bad or expired token is not in this group** — it comes back as **401 / 403** and retrying never fixes it.) Retry once; if it persists, tell the user the data source is temporarily unavailable (quote `requestId`). Exception: `service_unavailable` with `service: td-api` (sdCategory / categoryBrand) means the platform credential was rejected — do not retry and never invent category or brand IDs; tell the user category lookup is currently unavailable.
 - `serialization_error` → rare edge case; report as a transient tool error, retry once.
 
 Messages are sanitized server-side: SQL, tokens, signed URLs, internal hostnames, stack traces, and raw table names are redacted (you may see `[SQL_REDACTED]`, `[redacted_token]`, `[internal]`, `[table]`). Don't treat a redaction marker as corruption, and don't try to reconstruct what was removed.
@@ -270,7 +303,8 @@ date values and compare those, rather than comparing the strings.
 
 | Entity in `entities` | profileIds count | `createdDate` timezone | Example |
 |---|---|---|---|
-| `aiGroup` | one or many | **UTC** | `2026-08-24 05:58:50` |
+| `aiGroup` (SP/SB) | one or many | **UTC** | `2026-08-24 05:58:50` |
+| `aiGroup` (SD) | one or many | **downstream DB timezone — undocumented** | `2026-08-24 05:58:50` |
 | `campaign` / `adGroup` / `target` / `placement` | **one** | **Store-local time** | `2026-08-24 00:01:06` (LA time) |
 | `campaign` / `adGroup` / `target` / `placement` | **many** | **UTC** | `2026-08-24 07:01:06` (UTC) |
 
@@ -281,10 +315,11 @@ Verified against a single pause record on a US (`America/Los_Angeles`, UTC-7) pr
 - **The same log entry can carry two different timestamps** depending on how many stores you queried. Adding a second store to a query silently shifts every ad-entity timestamp in the result by that store's UTC offset.
 - **Never compare or merge timestamps across a single-profile result and a multi-profile result.** They're in different clocks. If you already pulled single-store data and then widen to all stores, re-pull rather than stitching.
 - **Never present `createdDate` as "the store's time" without knowing which branch you're in.** In a multi-profile call, a `2026-08-24 07:01:06` on a US store is 00:01 local — reporting it as "7am" is wrong by a business day's worth of interpretation near midnight.
-- **Mixed `entities` mean mixed clocks in one response.** A query with `entities: ["campaign", "aiGroup"]` returns UTC for the aiGroup rows and (if single-profile) store-local for the campaign rows, in one time-sorted list. The sort itself is done on the raw string, so a mixed-clock result is not reliably chronological.
+- **Mixed `entities` mean mixed clocks in one response.** A query with `entities: ["campaign", "aiGroup"]` returns UTC for **SP/SB** aiGroup rows (and the downstream DB's timezone for **SD** aiGroup rows) alongside (if single-profile) store-local campaign rows, in one time-sorted list. The sort itself is done on the raw string, so a mixed-clock result is not reliably chronological.
+- **There are three clocks, not two.** Ad-entity rows are store-local for a single profile and **UTC for multiple profiles**; **SP/SB** managed-group rows are UTC; **SD** managed-group rows follow the **downstream database's** timezone, which is not stated anywhere. So an SP/SB-only managed-group query is safe to call UTC, while a query that can return SD managed-group rows cannot be given a single zone label at all — say which rows you could not place.
 - **Choose deliberately:**
   - Want store-local times the user can match against their own console? Query **one profile at a time** and restrict `entities` to ad entities.
-  - Want a comparable cross-store timeline? Query **multiple profiles** (everything comes back UTC) or convert client-side using each row's `countryCode`, and label the output as UTC.
+  - Want a comparable cross-store timeline? Query **multiple profiles**, which puts **ad-entity rows** in UTC, or convert client-side using each row's `countryCode`, and label the output as UTC. **This does not normalise managed-group rows** — SP/SB aiGroup is UTC either way, and SD aiGroup stays on the downstream DB's clock no matter how many profiles you query.
 - **When you show a timestamp, label the zone** ("2026-08-24 07:01 UTC" / "2026-08-24 00:01 store time"). An unlabeled timestamp from this tool is ambiguous by construction.
 
 Note this is a property of the log data itself; the MCP layer passes `createdDate` through unchanged and does no conversion.
@@ -339,10 +374,12 @@ This tool *may* also emit an outer `currency`, inferred from the rows: if every 
 ### Confirmed ×100 percentage metrics
 
 Checked one by one against the SQL the server builds: `ACOS`, `CTR`, `CVR`, `AdsCVR`, `TACOS`,
-`ShippedTACOS`, `OrderedTACOS`, `NTBOrdersRate`, `NTBUnitsRate`, `NTBSalesRate`,
+`ShippedTACOS`, `OrderedTACOS`, `AIACOS`, `DPVR`, `NTBOrdersRate`, `NTBUnitsRate`, `NTBSalesRate`,
 `ViewableImpressionsRate`, `AdsSalesRate`, `AdsOrdersRate`, `AdsUnitsRate`,
-`AdsSalesSameSKURate`, `AdsOrdersSameSKURate`, `Video5SecondViewRate` and
-`UnitSessionPercentage` all end in `* 100`. `aiGroup.targetAcos_` on
+`AdsSalesSameSKURate`, `AdsOrdersSameSKURate`, `Video5SecondViewRate`,
+`UnitSessionPercentage` and `UnavailabilityRate` all end in `* 100`. `BuyBoxPercentage` comes
+out on the same scale: its source column is already 0–100, and the expression divides by 100
+only to weight by page views, then multiplies back (prod source median 96.4). `aiGroup.targetAcos_` on
 `get_entity_metadata` is on the same scale.
 
 For the fields listed above:
@@ -353,14 +390,39 @@ For the fields listed above:
 - **Filters take the same ×100 number, with no `%` in the JSON**: `{"ACOS": {"<": 20}}` means
   "under 20%". `{"ACOS": {"<": 0.2}}` means "under 0.2%", which is almost never intended.
 
-Do not expand this rule to every ratio-shaped name. `VTR`, `vCTR`, `TopOfSearchIS`,
-`BuyBoxPercentage`, and `UnavailabilityRate`, for example, are read or aggregated from
-source values rather than calculated with `* 100` in the same metric-expression block.
-Follow their field-specific contract; do not rescale them merely because their names imply
-a rate or percentage.
+**`UnavailabilityRate` changed scale.** It used to come back as a 0–1 ratio rounded to two
+decimals (`0.99`); it is now on the same ×100 scale as the fields above (`99.29` = 99.29%), and
+its filters take the ×100 number too (`{"UnavailabilityRate": {">": 20}}` = over 20%). A figure
+pulled before the change is a hundredth of today's - convert it before comparing.
 
-`ROAS`, `CPC`, `CPA` are **not percentages** — plain ratios or currency-per-unit (e.g.
-`ROAS: 5.68`).
+### Passed through from the source, already 0–100
+
+`VTR` and `TopOfSearchIS` get no `* 100` here, but their source columns are themselves on a
+0–100 scale (prod samples: `VTR` median 22.5; `TopOfSearchIS` 5.09 / 44.82 / 69.98, max 100).
+Show them with `%` and don't rescale them, exactly like the list above.
+
+- **`VTR` is summed across rows**, not averaged. One entity on one day stays within 0–100;
+  a query that rolls several days or entities into one row can return more than 100, which is
+  no longer a rate. Break it down by day and entity, and don't present a rolled-up value above
+  100 as a percentage.
+
+### `vCTR` - don't use it as a percentage
+
+`vCTR` is also passed through, but its source values are out of range for any rate (prod raw
+rows: 99th percentile around 4696, max 80000). That is an upstream calculation problem, not a
+scale this service applies. Don't show it as a percentage, don't apply thresholds to it, and
+don't rescale or clip it to make it look plausible. If the user asks for it, give the raw number
+and say the field's calculation is under review.
+
+### Everything else
+
+Do not infer a field's scale from its name. A field not covered above has no confirmed scale -
+follow its field-specific contract, and do not rescale it merely because its name implies a
+rate or percentage.
+
+`ROAS`, `AIROAS`, `CPC`, `CPA`, `CPO` are **not percentages** — plain ratios or currency-per-unit (e.g.
+`ROAS: 5.68`). Neither is `vCPM`: its expression multiplies by 1000, because it is a cost per
+thousand viewable impressions - never append `%` to it.
 
 ## Multi-Profile Row Attribution
 
@@ -477,7 +539,7 @@ See the dedicated Period-over-Period and Top Movers example for the full procedu
 - **One unauthorized `profileId` fails the whole call** — no silent dropping any more. Always take IDs verbatim from `get_user_authorized_context`.
 - **`pageSize` out of range is an error on `get_ads_perf`/`get_entity_metadata`** (clamped only on `get_operation_log`) — floor any computed `pageSize` at 1 and cap it at the tool's max yourself.
 - **Hourly/AMS queries cap at 7 days, not 90** — applies to `timeGranularity: hourly` (campaign only) and `factEntity: keywordPlacement` (SP only). `hourly` on any other entity errors rather than falling back to daily, and `keywordPlacement` requests use bare field names while its responses come back `_`-suffixed.
-- **`get_operation_log`'s `createdDate` timezone shifts with the request** (`aiGroup` = UTC; ad entities = store-local for one profile, UTC for many) — always label the zone, never merge single- and multi-profile results. See the timezone section above.
+- **`get_operation_log`'s `createdDate` timezone shifts with the request** (SP/SB `aiGroup` = UTC, SD `aiGroup` = downstream DB timezone / unknown; ad entities = store-local for one profile, UTC for many) — always label the zone, never merge single- and multi-profile results. See the timezone section above.
 - **`currency: "mixed"` on `get_operation_log` is not a currency** — read each row's `currencyCode` instead of formatting or summing.
 - **`get_entity_metadata`'s `aiGroup` response is a projection of what's *currently effective*** — fields belonging to a disabled switch, and rules running in AI mode, are omitted rather than returned with stale values. A missing field means "not in effect", not "not configured" and not "write failed". See that skill for the full rules.
 

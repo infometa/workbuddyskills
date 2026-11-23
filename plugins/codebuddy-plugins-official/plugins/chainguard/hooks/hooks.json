@@ -2,7 +2,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Write|Edit|MultiEdit|Bash",
+        "matcher": "Write|Edit|MultiEdit|Bash|REPL|Code|write_to_file|replace_in_file|execute_command",
         "hooks": [
           {
             "type": "command",
@@ -15,12 +15,24 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "write_to_file|Write|replace_in_file|Edit|MultiEdit",
+        "matcher": "write_to_file|Write|replace_in_file|Edit|MultiEdit|Bash|REPL|Code|execute_command",
         "hooks": [
           {
             "type": "command",
             "command": "node ${CODEBUDDY_PLUGIN_ROOT}/dist/security-guard.cjs",
             "description": "安全修复通知 Hook，向 AI 模型提供修复上下文",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CODEBUDDY_PLUGIN_ROOT}/dist/security-guard.cjs",
+            "description": "会话终止 Hook，归档未闭环采纳状态",
             "timeout": 10
           }
         ]

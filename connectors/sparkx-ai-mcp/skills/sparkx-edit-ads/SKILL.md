@@ -4,13 +4,14 @@ description: >-
   Edit live Amazon Sponsored ad entities in bulk through the single tool
   `batch_update_ads` - campaign daily budget / state / bidding strategy, keyword and target
   status and bids, promoted products (product ads), negative keywords and negative product
-  targets. 20 entity+action routes; 11 of them run a two-phase platform confirmation. Use when the user wants to change / pause / enable / archive / raise / lower
+  targets, campaign portfolio membership, portfolio budgets/dates, and ad group state. 25
+  entity+action routes; 12 of them can run a two-phase platform confirmation. Use when the user wants to change / pause / enable / archive / raise / lower
   / add / copy something on the ads themselves - 改预算 / 暂停广告 / 调价 / 加词 / 加否定词 /
   投放商品 / 复制否定词. Not for AI managed groups (托管组) - creating, editing or deleting
   those uses sparkx-create-ai-group / sparkx-edit-ai-group / sparkx-delete-ai-group. Not for
   reading data (use sparkx-query-ads-performance / sparkx-query-entity-metadata).
 metadata:
-  version: 1.1.2
+  version: 1.1.6
 ---
 
 # Edit Ads
@@ -20,7 +21,7 @@ Use the exact camelCase `budget.type` and `bid.type` values from the tool schema
 (for example, `setTo` or `increasePercent`), without spaces. Percent modes use
 `amount: 10` for 10%, not `0.1`. Legacy space-separated inputs are accepted for
 compatibility; use camelCase when constructing new requests.
-`entity` + `action` select one of **20 registered routes**; an unregistered pair is refused.
+`entity` + `action` select one of **25 registered routes**; an unregistered pair is refused.
 
 Read [`references/platform-notes.md`](references/platform-notes.md) once first - scope,
 the response envelope, the full `errorType` list, rate limits, and how to tell
@@ -37,9 +38,10 @@ targets just as much as to campaigns.
 
 Do not confuse "irreversible" with "always confirms" - they are different sets:
 
-- **Always confirms, on every call** (6 routes): `campaign + updateBudget`,
+- **Always confirms, on every call** (7 routes): `campaign + updateBudget`,
   `campaign + updateAudienceBid`, `campaign + updatePlacementBid`,
-  `keyword + updateBid`, `target + updateBid`, `productAd + archive`.
+  `keyword + updateBid`, `target + updateBid`, `productAd + archive`,
+  `portfolio + updateBudget`.
 - **Confirms only when the payload contains `archived`** (5 routes): the `updateStatus`
   routes of `campaign`, `keyword`, `target`, `negativeKeyword`, `negativeTarget`.
 
@@ -139,10 +141,16 @@ distinct rejection messages: [`references/archived-guard.md`](references/archive
 | copy negative targets | `negativeTarget` + `copy` | - |
 | change an audience bid uplift | `campaign` + `updateAudienceBid` | always |
 | change placement bid adjustments | `campaign` + `updatePlacementBid` | always |
+| add / move a campaign into a portfolio | `campaign` + `addPortfolio` | - |
+| remove a campaign from its portfolio | `campaign` + `removePortfolio` | - |
+| set, change or remove a portfolio budget cap | `portfolio` + `updateBudget` | always |
+| change portfolio budget dates | `portfolio` + `updateDates` | - |
+| enable / pause / archive an ad group | `adGroup` + `updateStatus` | - |
 
-Per-route payloads, enums and limits live in the four write references:
+Per-route payloads, enums and limits live in the write references:
 [campaign](references/write-campaign.md) - [keyword & negative keyword](references/write-keyword.md) -
-[target & negative target](references/write-target.md) - [product ad](references/write-product-ad.md).
+[target & negative target](references/write-target.md) - [product ad](references/write-product-ad.md) -
+[portfolio operations](references/write-portfolio.md) - [ad group state](references/write-ad-group.md).
 The payload **array name differs per route** (`data` / `updates` / `campaigns`+`asins` /
 `businessType`+`target`) and a wrong name is silently dropped, then reported as
 "required array missing" - check [`references/route-matrix.md`](references/route-matrix.md)
@@ -171,7 +179,7 @@ Step 8 is not optional for anything irreversible or bid/budget related.
 
 ## Two-phase confirmation
 
-Eleven routes return a preview instead of writing. Full protocol, preview field meanings and
+Twelve routes can return a preview instead of writing. Full protocol, preview field meanings and
 failure modes: [`references/confirmation.md`](references/confirmation.md). The parts you
 cannot get wrong:
 
@@ -321,13 +329,15 @@ the id, and the lookup is fuzzier than it looks:
 
 ## Confirm it yourself when the platform does not
 
-Eleven entity+action pairs **can** require a preview - six always, five only when the
-payload contains `archived`. The other nine write **immediately**, with no preview and
+Twelve entity+action pairs **can** require a preview - seven always, five only when the
+payload contains `archived`. The other thirteen write **immediately**, with no preview and
 no undo:
 
 `campaign + updateBiddingStrategy` - `keyword + create` - `target + create` -
 `negativeKeyword + create` - `negativeKeyword + copy` - `negativeTarget + create` -
-`negativeTarget + copy` - `productAd + create` - `productAd + updateStatus`.
+`negativeTarget + copy` - `productAd + create` - `productAd + updateStatus` -
+`campaign + addPortfolio` - `campaign + removePortfolio` - `portfolio + updateDates` -
+`adGroup + updateStatus`.
 
 **Do not add the `updateStatus` routes of `keyword` / `negativeKeyword` / `target` /
 `negativeTarget` to that list.** Those write immediately **only for `enabled` / `paused`**;
@@ -373,6 +383,40 @@ These words map to different routes, and choosing wrong changes live spend:
   **neither is idempotent** - running "increaseAmount 10" twice adds 20.
 
 If a request could mean more than one of these, **stop and ask**.
+
+## Competitor-ASIN targeting, end to end
+
+"Target my competitors" is three steps across three tools, and the middle one is the step people
+skip. Each tool lives in a different skill, so say which you are using.
+
+**1. Find candidates** - `get_entity_metadata(entity='suggestedTarget')` with `filters.asin`
+set to the products being advertised (`sparkx-query-entity-metadata`). Rows come back in two
+kinds: `targetType: "product"` carries an `asin` you can target, `targetType: "category"`
+carries a category and is only usable when `canBeTargeted` is true. Keep both kinds in front of
+the user unless they asked for one - the product rows *are* the competitor suggestions.
+
+The suggestions are Amazon's, not a competitor analysis: they are products Amazon considers
+adjacent, which usually includes the user's own ASINs. Drop their own products before calling
+anything a competitor.
+
+**2. Evaluate what is already running** before adding more -
+`get_ads_perf(factEntity: "target", queryType: "product")` gives spend, sales and ACOS per
+product target. A competitor target that has spent without converting is the argument for
+lowering or pausing it; one converting below target ACOS is the argument for raising its bid.
+Adding new targets while existing ones are bleeding just spreads the budget thinner.
+
+**3. Adjust** through `batch_update_ads`' target routes - bid changes and status changes, with
+the usual two-phase confirmation. See `references/write-target.md` for the exact route and
+fields.
+
+⚠️ **Targeting a competitor is not free traffic.** Product targeting generally converts worse
+than brand or category keywords, so show the user the expected cost before the write: what the
+bid is, roughly what it will spend, and what it is displacing. "Add 20 competitor ASINs" with no
+bid discussion is how a budget disappears overnight.
+
+⚠️ **New targets need a bid.** `suggestedBid` on manual product targeting is not available
+before the campaign exists, so for targets added to a *new* campaign there is no suggestion to
+fall back on - use the ad group's default bid or ask, and say which you did.
 
 ## What these files do not tell you
 
@@ -433,9 +477,11 @@ read the entities back first and tell the user what you found.
 | [`references/platform-notes.md`](references/platform-notes.md) | Always, first. Scope, envelope, `errorType`, rate limits, three-state results |
 | [`references/route-matrix.md`](references/route-matrix.md) | Building any request - which array name, which ad types, which routes confirm |
 | [`references/id-and-identity.md`](references/id-and-identity.md) | Always, before the first write. Internal ids, discriminator fields, metadata gotchas |
-| [`references/confirmation.md`](references/confirmation.md) | Any of the 9 confirmation routes |
+| [`references/confirmation.md`](references/confirmation.md) | Any of the 12 confirmation routes |
 | [`references/archived-guard.md`](references/archived-guard.md) | A batch was refused and you need to know why |
 | [`references/write-campaign.md`](references/write-campaign.md) | Budget, state, bidding strategy |
 | [`references/write-keyword.md`](references/write-keyword.md) | Keywords and negative keywords |
 | [`references/write-target.md`](references/write-target.md) | Targets and negative targets |
+| [`references/write-portfolio.md`](references/write-portfolio.md) | Campaign membership, portfolio budget caps and dates |
+| [`references/write-ad-group.md`](references/write-ad-group.md) | Ad group state changes |
 | [`references/write-product-ad.md`](references/write-product-ad.md) | Promoted products |

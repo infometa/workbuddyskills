@@ -1,12 +1,12 @@
 ---
 name: lovrabet
 displayName: Lovrabet 运行态 CLI
-version: 2.3.7
-description: "Lovrabet 运行态 CLI — 面向业务场景的 AI 操作套件，通过 lovrabet 命令管理应用目录、业务角色与权限、用户级外部账号、Service Tree 业务命令、API 文档发现、数据集查询、Instant API 数据操作、可恢复 Excel 导入、Custom SQL/Backend Function、Personal Backend Function、文件上传、面向票证类业务材料文字与结构化字段提取的 OCR、审批待办与任务办理、定时任务、Skill、知识库与运行态 app-config key 状态检查。触发词：云图、lovrabet、lovrabet-cli、业务角色、角色成员、页面权限、菜单权限、数据集权限、user-account bind、provider 外部账号绑定、钉钉 userId 绑定、service tree、业务服务树、api-doc、dataset、data filter、Excel 导入、data import-excel、file upload、file query-url、ocr recognize、OCR 识别、票证文字提取、票证字段提取、发票识别、票据识别、证照识别、附件上传、personal-bff、approval、审批、待办、approve、reject、transfer、schedule、定时任务、cron、kb、skill、sql exec、bff exec、app-config、accessKey、compress、jq。"
+version: 2.3.11
+description: "Lovrabet 运行态 CLI — 面向业务场景的 AI 操作套件，通过 lovrabet 命令管理应用目录、业务角色与权限、用户级外部账号、API 文档发现、数据集查询、Instant API 数据操作、可恢复 Excel 导入、Custom SQL/Backend Function、Personal Backend Function、文件上传、面向票证类业务材料文字与结构化字段提取的 OCR、审批待办与任务办理、定时任务、Skill、知识库与运行态 app-config key 状态检查。触发词：云图、lovrabet、lovrabet-cli、业务角色、角色成员、页面权限、菜单权限、数据集权限、user-account bind、provider 外部账号绑定、钉钉 userId 绑定、api-doc、dataset、data filter、Excel 导入、data import-excel、file upload、file query-url、ocr recognize、OCR 识别、票证文字提取、票证字段提取、发票识别、票据识别、证照识别、附件上传、personal-bff、approval、审批、待办、approve、reject、transfer、schedule、定时任务、cron、kb、skill、sql exec、bff exec、app-config、accessKey、compress、jq。"
 metadata:
   requires:
     bins: ["lovrabet"]
-    node: ">=22.20.0"
+    node: ">=24.0.0"
   cliHelp: "lovrabet --help"
 ---
 
@@ -17,6 +17,12 @@ metadata:
 它不是让团队重新学习一套后台路径，而是把企业系统里的数据、规则、接口和历史经验整理成 AI 可以理解、调用、审计和复用的业务操作入口。
 
 > **结构化输出与 jq**：需要机器可读 JSON 时优先 **`--format compress`**（单行信封）；需缩进时用 **`--format json`**。二者均可叠加全局 **`--jq '<expr>'`** 缩小输出，详见 [输出格式与 --jq](references/lovrabet-output-format-jq.md)。
+
+## 开发能力交接
+
+先按操作对象与目的区分应用开发和运行态操作，再选择下面的执行流程。用户要创建、修改或发布 Lovrabet 应用级开发资产时，先读 [开发能力交接](guides/development-intent-handoff.md)，例如应用、页面、数据集结构、应用级 BFF/SQL、菜单结构或流程定义；按需引导安装 rabetbase CLI 并交给其 Skill，不先进入运行态能力发现流程。
+
+业务数据操作、执行已绑定 BFF/SQL、Personal BFF、角色菜单权限和已有审批任务办理仍由本 Skill 处理；不能仅凭“创建”“修改”判定为应用开发。纯开发任务无需先完成 lovrabet 的 AK 认证；两个 CLI 分别认证，不复制凭证。
 
 ## 使用顺序
 
@@ -44,9 +50,9 @@ npm 包会自动安装同版本 Built-in Skill。若 `lovrabet doctor` 报告缺
 
 ## 认证
 
-只支持 **User Access Key（client-ak）**。优先级：**CLI flags > 环境变量 > 配置文件**。
+只支持 **User Access Key（client-ak）**。AK 属于用户，应用访问范围由平台权限决定；选择其他应用不切换用户身份或连接环境。凭证优先级：**项目顶层 accessKey > LOVRABET_ACCESS_KEY > 全局顶层 accessKey**。`auth login --access-key` 用于保存用户凭证。
 
-`.lovrabet.json` 或 `LOVRABET_ACCESS_KEY` 配置 **`accessKey`**（适合 CI）；所有需要认证的运行态命令均使用该身份。
+项目未配置 AK 时，可通过 `LOVRABET_ACCESS_KEY` 注入凭证（适合 CI）；项目与环境变量均未提供 AK 时，才使用全局配置。所有需要认证的运行态命令均使用最终选中的身份。
 
 详见 [认证参考](references/lovrabet-auth.md)。
 
@@ -61,8 +67,8 @@ npm 包会自动安装同版本 Built-in Skill。若 `lovrabet doctor` 报告缺
 
 ## 本地配置原则
 
-- Lovrabet 运行态 CLI **不要求预先创建项目或初始化工作目录配置**。Agent 常规上手路径是 `auth login --non-interactive` 提示用户取 AK → 用户提供 AccessKey → `auth login --access-key <ACCESS_KEY>` → `app list` → `dataset/data/sql/bff`。
-- `.lovrabet.json` 只是可选的本地用户意图配置，不代表平台项目，也不保存平台应用目录。
+- Lovrabet 运行态 CLI **不要求预先创建项目或初始化工作目录配置**。已有认证与默认 AppCode 时，直接从默认应用发现业务能力；没有默认目标或需要扩大查找时，再用 `app list` 查看当前用户可访问的应用。缺少认证时才使用 `auth login --non-interactive` 提示用户取 AK。
+- `.lovrabet.json` 保存当前用户凭证、默认应用偏好和连接设置，不代表平台权限边界。常用顶层 `appcode`；需要多个应用名称时可用 `apps + defaultApp`，共享同一用户身份与连接配置，不保存远端应用目录。普通业务使用无需配置环境，沿用当前连接设置。
 - **不要**在用户未要求时主动修改本地配置或加 `--global`；优先用显式 `--app` / `--appcode` 满足本次操作。
 - **`workspace init`**：仅当用户明确要求给尚未绑定应用的当前工作目录建立默认应用上下文时使用；已有绑定时停止并改用 `workspace use`。
 - **`workspace use`**：仅当用户明确要求修改当前工作目录已有的应用绑定时使用；尚未绑定时停止并先用 `workspace init`。两者只写当前目录 `.lovrabet.json`，`--app` 与 `--appcode` 必须二选一，不写 AccessKey。详见 [工作目录配置](references/lovrabet-workspace.md)。
@@ -100,7 +106,7 @@ npm 包会自动安装同版本 Built-in Skill。若 `lovrabet doctor` 报告缺
 
 四个阶段不能合并：
 
-1. **发现**：从用户或业务 Skill 给出的显式标识、Service Tree 或 KB 找到候选入口。
+1. **发现**：优先复用用户、业务 Skill 或前序已确认上下文给出的能力标识；没有标识时，按下面的发现顺序定位候选入口。
 2. **契约验证**：使用能力支持的可信契约验证通道，只核对该通道实际返回的字段。验证通道可以是 Detail、schema、manifest 或平台已确认契约；没有名为 `detail` 的命令本身不是拒绝理由。缺失字段仍视为未知；部分契约验证成功不代表完整契约已验证，也不代表已经获得执行授权。
 3. **风险与授权判断**：同时判断业务结论风险和操作副作用；CLI 显示的 risk 不能替代真实业务语义。
 4. **执行**：只有目标、参数、真实副作用、权限和用户授权都明确时，才执行绑定命令。
@@ -111,7 +117,7 @@ npm 包会自动安装同版本 Built-in Skill。若 `lovrabet doctor` 报告缺
 
 当前能力适配器的真实边界：
 
-- `service detail` 只读取本地 registry 中的 manifest 和绑定，不是服务端实时契约。对本地文件来源，`version`、`importedAt`、`source.path` 和 `source.hash` 是可用线索；其他来源使用与来源类型匹配的来源、新鲜度和兼容性证据，字段缺失本身不是拒绝理由。如果动作绑定 Dataset、Custom SQL 或 Backend Function，还要继续使用目标能力支持的可信契约验证通道。
+- 已明确指定 Service Tree 时，`service detail` 只读取本地 registry 中的 manifest 和绑定，不是服务端实时契约。对本地文件来源，`version`、`importedAt`、`source.path` 和 `source.hash` 是可用线索；其他来源使用与来源类型匹配的来源、新鲜度和兼容性证据，字段缺失本身不是拒绝理由。如果动作绑定 Dataset、Custom SQL 或 Backend Function，还要继续使用目标能力支持的可信契约验证通道。
 - `dataset detail` 核对当前数据集字段、关联和操作信息。
 - `sql detail` 核对当前应用下的 Custom SQL 名称、数据库和 SQL 内容。它不单独证明业务口径、参数约束或副作用。
 - `bff detail` 按当前 `appCode + functionName` 解析运行态 Backend Function ENDPOINT，只返回名称、描述、版本和更新时间等元数据，不返回输入输出、函数类型或副作用契约。
@@ -122,20 +128,18 @@ npm 包会自动安装同版本 Built-in Skill。若 `lovrabet doctor` 报告缺
 
 ### 发现与复用顺序
 
-1. 用户或业务 Skill 已给出可信标识或 Service Tree 命令时，跳过 KB 和重复发现，先使用该能力支持的契约验证通道；当前 Dataset、Custom SQL 和 Backend Function 分别使用对应 Detail。
-2. 用户只有业务语义时，先查 Service Tree。精确命中只形成候选路由；确认 manifest 来自当前可信业务 Skill 或平台已确认契约，并核对适用版本后，才复用已绑定入口，不绕过映射从 Dataset 字段重新推导同一规则。
-3. Service Tree 未命中、弱命中或存在多个候选时，仅在术语、同义词、适用边界或候选能力需要消歧时执行 `lovrabet kb search`。
-4. **KB 召回只生成候选**，不得当作命令或实时事实；候选必须按上一段的真实边界通过目标能力的契约验证通道核对。公司知识与个人知识冲突时不得自动选边。
-5. 运行态不枚举 Custom SQL/Backend Function。未知标识只能来自用户、业务 Skill 固定契约、可信 Service Tree、前序已确认上下文或可信 KB 候选；仍无法唯一定位时停止，不猜测。
-
-Service Tree 只负责定位并绑定执行入口，不是稳定规则的权威来源。本地精确命中本身不等于当前可信：必须取得与来源类型匹配的来源、新鲜度和兼容性证据，并确认没有与当前业务 Skill 或平台契约冲突；本地文件来源可使用 `version`、`importedAt` 和 `source.hash`，其他来源使用其适配器提供的证据，单个字段缺失本身不是拒绝理由。无法确认时只作为候选路由。它指向 Dataset 时，稳定规则还必须由业务 Skill、已治理 Dataset 契约或其他平台已确认契约承载；缺少规则契约时，该入口只能用于简单低风险事实查询。
+1. 用户、业务 Skill 或前序已确认上下文已给出可信标识或具体命令时，跳过重复发现，先使用该能力支持的契约验证通道；当前 Dataset、Custom SQL 和 Backend Function 分别使用对应 Detail。
+2. 用户只有业务语义时，先区分简单低风险事实、稳定规则和高风险确定性判断。简单低风险事实优先在默认应用做 Dataset 发现，使用 `dataset detail` 核对字段与操作，再使用只读 Instant API。
+3. 仅在术语、同义词、适用边界或候选能力需要消歧时执行 `lovrabet kb search`。**KB 召回只生成候选**，不得当作命令或实时事实；候选必须通过目标能力的可信契约验证通道核对。公司知识与个人知识冲突时不得自动选边。
+4. 稳定规则或高风险判断复用可信业务 Skill 或平台已确认契约绑定的已发布入口，不从原始字段重新推导同一规则。运行态不枚举 Custom SQL/Backend Function；仍无法唯一定位或补齐契约时，对受影响范围输出“不判定”，并说明缺少的证据。现有上下文、KB 和常规只读发现仍无法收敛时，再向用户询问一个最关键的补充信息。
+5. 只有用户或可信业务 Skill 明确指定 Service Tree 命令、要求使用或管理 Service Tree 时，才按 [Service Tree 参考](references/lovrabet-service-tree.md) 处理。普通业务诉求不以 `service list/detail` 为前置步骤；本地精确命中仍只形成候选路由，不替代目标契约、风险与授权校验。
 
 ### 双维度风险判断
 
 | 维度 | 分类 | 处理 |
 | --- | --- | --- |
 | 业务结论风险 | 简单低风险事实 | Dataset Detail 足以确认字段时，可直接使用只读 Instant API |
-| 业务结论风险 | 稳定规则 | 优先复用已发布且契约可信的确定性能力；当前类型包括但不限于业务 Skill、已治理 Dataset / Instant API（含 `filter`、`getOne`、`aggregate`）、Custom SQL 和 Backend Function。Service Tree 只负责定位入口，不从原始字段重写规则 |
+| 业务结论风险 | 稳定规则 | 优先复用已发布且契约可信的确定性能力；当前类型包括但不限于业务 Skill、已治理 Dataset / Instant API（含 `filter`、`getOne`、`aggregate`）、Custom SQL 和 Backend Function，不从原始字段重写规则 |
 | 业务结论风险 | 高风险确定性判断 | 必须使用契约可信的确定性能力；没有匹配能力时不生成确定性结论 |
 | 操作副作用 | 只读 | 仍需确认应用、目标、参数和数据可见范围 |
 | 操作副作用 | 业务写入 / 外部调用 / 不可逆动作 | 必须满足权限、用户授权及对应确认语义 |
@@ -162,114 +166,20 @@ Service Tree 只负责定位并绑定执行入口，不是稳定规则的权威�
 
 当规则冲突、候选目标无法核对或证据不足时，只对受影响范围输出“不判定”，同时说明缺少的证据、已确认事实和下一步；不要把局部不确定性扩大成整个任务失败。Personal KB create/update 后的 `ragStatus` 只用于判断该知识条目的检索同步是否就绪，不作为 `kb search` 候选的通用版本门禁。
 
-## Agent 决策：何时先查 Service Tree
+## Agent 决策：默认应用优先，按需发现其他应用
 
-当用户用业务语义提出需求，且没有显式给出底层 `datasetCode`、`sqlCode`、Backend Function 标识或具体 `data/sql/bff` 命令时，先把本地 Service Tree 当作业务命令发现层。
+用户只需表达业务目标，不要求先提供应用名或 AppCode。应用选择由 Agent 根据默认配置、对话上下文与实际可访问能力处理。
 
-典型触发语义包括：“查我的需求”“看这个项目的评论”“列出待处理订单”“客户详情”“库存预警”“工单跟进”等。此时优先执行本地只读命令：
+1. **明确目标优先，否则默认应用先查**：遵循用户指定或对话已确认的范围；没有明确目标时使用配置的默认 AppCode，不先要求用户选择应用或机械执行 `app list`。
+2. **按需发现其他应用**：默认应用成功查询但无合理匹配时，先核对筛选条件；仍未匹配且用户未限制范围，才扩大只读查找。没有默认应用或用户明确要求跨应用查询时，也可直接发现当前用户有权限的已发布应用。
+3. **连续操作保留目标**：`--app` / `--appcode` 只对本次命令生效；使用其他应用发现的资源时，后续每条命令仍显式携带该应用，资源标识与所属 AppCode 配对。查询结果注明来源。
+4. **执行前核对范围与授权**：多个候选无法区分时再询问用户；写入前明确目标应用、对象及授权范围，不能将只读发现视为跨应用写入授权。
 
-```bash
-lovrabet service list --format compress
-```
+默认 AppCode 是优先查找位置，不是“只能访问该应用”的限制。跨应用发现使用当前用户权限，不通过修改配置、换 AK 或换环境扩大权限。认证失败、权限拒绝或连接错误应报告真实问题，不视为“未命中”而自动重试其他目标。
 
-用返回里的服务编码、名称、说明、命令路径、命令说明和 flags 语义匹配用户意图。匹配明确时，先查看详情；完成上一节的契约、风险与授权判断后，才执行对应动态命令：
+需要扩大查找范围或处理目标歧义时，读取[默认应用与应用发现](guides/app-resolution.md)；数据集筛选与查询步骤见[数据集发现](references/dataset-discovery-workflow.md)，目录命令与缓存选项见[应用目录](references/lovrabet-app.md)。
 
-```bash
-lovrabet service detail --service <service> --format compress
-lovrabet <service> [...resourcePath] <action> [flags] --format compress
-```
-
-Service Tree 未命中不是失败条件，也不代表业务能力不存在。本地 registry 可能只注册了少量高频服务；没有合理匹配时，保留用户原始业务关键词，按上一节主决策矩阵继续收敛：
-
-1. 先判断这是简单低风险事实、稳定规则还是高风险确定性判断。
-2. 存在术语歧义、弱命中或多个候选时，先用 KB 做语义消歧；KB 候选仍需使用目标能力支持的可信契约验证通道，并遵守该通道的实际验证边界。
-3. 简单低风险事实可以做应用和 Dataset 决议，随后用 `dataset detail` 与只读 `data filter/getOne/aggregate` 查询。
-4. 稳定规则或高风险判断不得直接退化为 Dataset 字段拼装；没有可信能力时，对受影响范围输出“不判定”，并说明缺少的能力契约。
-5. 只有现有上下文、Service Tree、KB 候选和常规只读发现仍无法收敛时，才向用户询问一个最关键的补充信息。
-
-如果 KB 消歧后仍存在多个候选服务或命令，列出候选并向用户确认。不要为了每个底层请求都跑 `service list`：用户已明确指定数据集、Custom SQL、Backend Function，或明确要求使用底层命令时，直接进入对应 Detail。`--appcode` / `--app` 只是应用上下文，不应单独阻止 Service Tree 发现。
-
-## Agent 决策：何时获取应用信息
-
-在执行 `dataset` / `data` / `sql` / `bff` 前，不要一律先跑 `app list`。先判断当前需求是否真的需要做“应用决议”。
-
-### 可以直接使用当前应用的场景
-
-满足以下任一条件时，优先直接用当前应用执行，不先打 `app list`：
-
-1. 用户已经显式给了 `--appcode`
-2. 用户已经显式给了 `--app <name>`
-3. 问题明显是在上文已经确认过的同一 app 上继续操作
-4. 用户明确说“当前应用”“默认应用”，且没有新的业务域线索
-
-这种情况下，直接进入：
-
-1. 按数据集名称用 `dataset list --name ...`；已知物理表名时用 `dataset list --table-name ...`
-2. `dataset detail --code ...`
-3. `data filter/getOne/create/batchCreate/update/delete`
-
-不要先多打一轮应用发现命令制造噪音。
-
-下面的名称关键词示例也适用于默认候选和其他候选 app 的验证：用户提供物理表名时，将 `--name <关键词>` 换成 `--table-name <表名前缀>`，不要把物理表名当作数据集名称搜索。筛选参数均可单独使用；同时传入时按 AND 组合，不要求补齐其他筛选条件。匹配规则见 [数据集发现](references/dataset-discovery-workflow.md)。
-
-`defaultApp` 只是弱候选，不是强上下文。未显式指定 app 时，如果本地已有 `defaultApp`，应先在默认候选里按需求关键词做数据集验证；无命中、弱命中或语义不合理时，再扩大到 `app list` 里查找其他应用。
-
-### 需要进一步应用决议的场景
-
-出现以下情况时，应先做应用决议；有 `defaultApp` 时先验证默认候选，必要时再跑 `lovrabet app list`：
-
-1. 用户只给了业务需求，没有给 app 线索  
-   例如：“帮我查订单数据集”“看一下 CRM 里的客户表”
-2. 当前没有显式 `--appcode` / `--app`，且需求中有业务域、对象名或数据集线索
-3. 当前配置中存在多个候选 app，且需求描述不足以直接锁定一个
-4. 用户明确说“先看看我有哪些应用”或“这个需求应该在哪个应用里”
-5. 已经在 `defaultApp` 下按关键词验证过，但没有合理数据集命中
-
-### `app list` 的使用方式
-
-- 默认：`lovrabet app list`
-  - 远端优先，必要时自动刷新 cache；默认只展示已发布、可运行态访问的应用
-- 只想复用本地目录时：`lovrabet app list --local`
-- 明确要强制刷新时：`lovrabet app list --no-cache`
-- 仅排查未发布应用是否在远端目录中时：`lovrabet app list --include-unpublished`
-
-`app list` 的应用条目中，应用支持语种以 `languages` 或 `i18nInfo.langs` 为准。本地可用 `config set locale` 写入应用本地化偏好，这不是 CLI 语言，目前命令尚未消费；`data.items[].locale` 来自本地配置覆盖，可能为 `null`，不代表平台语种。
-
-### 如何根据需求判断使用哪个应用
-
-优先级按下面做，不要随意跳步：
-
-1. **显式指定优先**
-   - 用户给了 app 名、appcode 或已确认的当前应用语境，直接采用
-2. **上下文确认优先**
-   - 上文刚确认过目标 app，且本次没有引入新的业务域，继续使用该 app
-3. **默认候选先验证**
-   - 有 `defaultApp` 时，先执行 `dataset list --name <关键词>` 验证默认候选是否匹配
-   - 命中的数据集名称、字段、描述明显贴合需求时，继续用默认候选
-   - 无命中、弱命中或语义不合理时，再进入 `app list`
-4. **需求关键词映射**
-   - 需求里出现业务域关键词时，用 `app list` 输出的 `name` 先做语义匹配  
-   - 例如：`CRM`、`订单`、`电商`、`证照`、`需求管理`
-5. **验证式收敛**
-   - 对候选应用执行 `dataset list --app <name> --name <关键词>`
-   - 哪个返回的数据集更匹配，就收敛到哪个 app
-
-### 推荐决策流程
-
-当用户说“帮我查某个业务数据”时，推荐流程是：
-
-1. 先判断当前是否已有明确 app 上下文
-2. 若有 `defaultApp`，先 `lovrabet dataset list --name <关键词>` 验证默认候选
-3. 默认候选命中合理时，继续 `dataset detail` 或 `data filter`
-4. 默认候选无命中或不合理时，再 `lovrabet app list`
-5. 按业务关键词挑 1-2 个候选 app，并执行 `dataset list --app <name> --name <关键词>` 验证
-
-### 不要这样做
-
-- 不要每次都先 `app list`
-- 不要只看 app 名就武断决定，不做 `dataset list` 验证
-- 不要把平台应用目录再写回 `.lovrabet.json`
-- 不要因为本地配置里没有某个 app 就判定它不存在，先看 cache/remote 目录
+应用支持语种以 `languages` 或 `i18nInfo.langs` 为准。本地 `config set locale` 保存应用本地化偏好，不是 CLI 界面语言，不能用于推断平台语种。
 
 | 服务 | 命令 | 说明 | 风险等级 | 认证 |
 |------|------|------|----------|------|
@@ -345,6 +255,7 @@ Service Tree 未命中不是失败条件，也不代表业务能力不存在。�
 | **schedule** | `detail` | 查看定时任务详情 | read | AK |
 | **schedule** | `run` | 立即触发一次 Task（需确认） | high-risk-write | AK |
 | **schedule** | `delete` | 删除计划并停止未来触发（需确认） | high-risk-write | AK |
+| **issue** | `report` | 提交问题日志，使用当前身份，应用可选 | write | [问题上报](references/lovrabet-issue-report.md) |
 | **logs** | `show` | 查看命令执行历史 | read | 本地 |
 
 ## 意图 → 命令索引
@@ -384,8 +295,8 @@ Service Tree 未命中不是失败条件，也不代表业务能力不存在。�
 | 强制刷新线上应用列表 | `lovrabet app list --no-cache` |
 | 排查未发布应用是否可见 | `lovrabet app list --include-unpublished` |
 | 手动刷新应用缓存 | `lovrabet app pull` |
-| 尚未绑定时初始化当前工作目录应用 | `lovrabet workspace init --appcode <appcode> [--env daily]` |
-| 已有绑定时修改当前工作目录默认应用 | `lovrabet workspace use --app <name> [--env daily]` |
+| 尚未绑定时初始化当前工作目录应用 | `lovrabet workspace init --appcode <appcode>` |
+| 已有绑定时修改当前工作目录默认应用 | `lovrabet workspace use --app <name>` |
 | 更新 CLI 到 npm latest | `lovrabet update --latest` |
 | 更新 CLI 到 npm beta | `lovrabet update --beta` |
 | 更新 CLI 到指定版本 | `lovrabet update --version <version>` |
@@ -468,7 +379,7 @@ Service Tree 未命中不是失败条件，也不代表业务能力不存在。�
 | 删除计划 | `lovrabet schedule delete --schedule-id <SCHEDULE_ID> --dry-run`，确认后加 `--yes` |
 
 创建、立即运行和删除前，读取
-[定时任务工作流](references/lovrabet-schedule-workflow.md)。
+[定时任务工作流](references/lovrabet-schedule-workflow.md)。创建前必须先完成其中的「检查任务能否无人值守完整执行」：从 `lovrabet schema` 导出 `risk == "read"` 的完整命令集合，确认 prompt 的完整执行流程（含条件分支、清理和自停步骤）不依赖 `write`/`high-risk-write` 命令或人工交互。
 
 ### 文件上传
 
@@ -552,7 +463,7 @@ lovrabet data delete --code <datasetCode> --params '{"id":123}' --yes
 
 ## 定时任务工作流
 
-`lovrabet schedule` 用于校验、创建、查询、立即运行和删除当前应用下的 UTC 定时任务。创建前必须核对应用、执行时间、重复规则、标题、完整 prompt 和 model；创建、立即运行和删除都先执行 `--dry-run`，取得用户明确确认后再执行。详见 [定时任务工作流](references/lovrabet-schedule-workflow.md)。
+`lovrabet schedule` 用于校验、创建、查询、立即运行和删除当前应用下的 UTC 定时任务。定时任务无人值守自动执行：创建前必须先完成任务能力检查——从 `lovrabet schema` 导出 `risk == "read"` 的完整命令集合，确认完整执行流程（含条件分支、异常处理、通知、清理和自停步骤）不依赖 `write`/`high-risk-write` 命令或人工交互；`schedule validate` 只校验字段、时间、模型和 prompt 格式，不检查能力依赖。随后核对应用、执行时间、重复规则、标题、完整 prompt 和 model；创建、立即运行和删除都先执行 `--dry-run`，取得用户明确确认后再执行。详见 [定时任务工作流](references/lovrabet-schedule-workflow.md)。
 
 ## 应用级通知配置查询
 
@@ -580,9 +491,9 @@ personal `skill push --dry-run` 使用 `visibility=PRIVATE` 调用 SkillHub publ
 
 personal KB 使用文件型 create/update。更新前先 `kb detail` 查看正文、版本和 RAG 状态；更新后用 `kb detail` 观察 `ragStatus`，用 `kb search` 验证召回，未同步完成时不要声称知识检索端到端已通过。KB 删除由产品界面管理，CLI 不提供删除命令。
 
-## Service Tree 业务命令
+## Service Tree（显式使用时）
 
-`lovrabet service validate/import/export/list/detail/remove` 管理本地 Service Tree registry。首期 JSON 文件通常由 Git 管理，导入后写入 `~/.lovrabet/service.json`；`validate/import --file` 也能直接识别这个本地 registry，并逐个处理其中保存的原始 manifest。动态业务命令形态为 `lovrabet <service> [...resourcePath] <action> [flags]`，例如 `lovrabet crm customer list --status active`，由 manifest 映射到底层 `data` / `sql` / `bff` 执行。`service list/detail` 是 Agent 根据业务意图主动发现本机动态服务的首选入口，均为本地只读命令。导入后的服务会出现在 `lovrabet --help`、`lovrabet schema` 和 `lovrabet doctor` 的发现/诊断输出中。动态命令仍走统一认证、appcode 决议、已发布应用访问限制、risk、dry-run、`--format` 和 `--jq` 管道。详见 [lovrabet-service-tree.md](references/lovrabet-service-tree.md)。
+用户或可信业务 Skill 明确指定 Service Tree 命令、要求使用或管理 Service Tree 时，读取 [Service Tree 参考](references/lovrabet-service-tree.md)。`service list/detail` 只读取本地 registry；执行动态命令前仍须核对来源、适用范围、绑定目标契约、真实副作用与用户授权。
 
 `data batchCreate` 每次只提交一个已准备的 JSON 批次；DB_TABLE 的 Excel 转换、字段/唯一键检查、批次台账、回读和异常对账按 [专项指引](references/lovrabet-db-table-excel-import.md) 执行。它没有内建检查点或 `--resume`，`--dry-run` 只预览请求。需要跨数据集、upsert、统一事务或服务端幂等恢复时，使用已有且契约可信的业务入口；符合专用契约的单数据集 METADATA Excel 导入直接用 `data import-excel`，不因其支持恢复而额外要求 BFF。Backend Function 写入仍须满足真实副作用、权限和授权要求，`bff exec` 的 read 标签不代表免审批写入。
 
@@ -655,22 +566,20 @@ personal KB 使用文件型 create/update。更新前先 `kb detail` 查看正�
 | 选项 | 说明 |
 |------|------|
 | `--appcode <code>` | 覆盖 appcode |
-| `--env <env>` | 环境: production / development / daily |
 | `--format <fmt>` | 输出: **json** / **pretty** / **compress**（默认偏好见配置与 `--help`） |
 | `--jq '<expr>'` | 对 **json / compress** 最终打印的 JSON 做 jq 过滤，详见 [lovrabet-output-format-jq.md](references/lovrabet-output-format-jq.md) |
-| `--app <name>` | 多应用模式下指定应用 |
+| `--app <name>` | 为本次操作选择目标应用，保持当前用户身份 |
 | `--dry-run` | 预览不执行（支持该选项的命令） |
 | `--yes` | 跳过确认（high-risk-write） |
 | `--non-interactive` | 非交互模式（CI） |
 
 ## 配置文件
 
-可选本地配置文件 `.lovrabet.json`（完整字段、优先级、环境变量见 [配置参考](references/lovrabet-config.md)）：
+可选本地配置文件 `.lovrabet.json`，顶层 appcode 表示默认查询应用（完整字段、优先级、环境变量见 [配置参考](references/lovrabet-config.md)）：
 
 ```json
 {
   "appcode": "app-xxxxxxxx",
-  "env": "daily",
   "accessKey": "<redacted>"
 }
 ```
@@ -681,12 +590,11 @@ personal KB 使用文件型 create/update。更新前先 `kb detail` 查看正�
 ~/.lovrabet/cache/<env>/<ak-fingerprint>/my-apps.json
 ```
 
-多应用意图配置示例：
+可选的应用名称绑定：
 
 ```json
 {
   "accessKey": "<redacted>",
-  "env": "daily",
   "defaultApp": "crm"
 }
 ```
@@ -729,6 +637,7 @@ personal KB 使用文件型 create/update。更新前先 `kb detail` 查看正�
 | Personal Backend Function 工作流 | [lovrabet-personal-bff-workflow.md](references/lovrabet-personal-bff-workflow.md) |
 | 知识库工作流 | [lovrabet-kb-workflow.md](references/lovrabet-kb-workflow.md) |
 | 定时任务工作流 | [lovrabet-schedule-workflow.md](references/lovrabet-schedule-workflow.md) |
+| 问题日志上报 | [lovrabet-issue-report.md](references/lovrabet-issue-report.md) |
 | 日志 | [lovrabet-logs.md](references/lovrabet-logs.md) |
 
 METADATA 原生 Excel 图片导入支持浮动图片、Microsoft Excel 单元格 richData 和独立 WPS DISPIMG。图片列映射到 IMAGE 字段；先 `--dry-run` 核验服务端能力，恢复时保留主检查点与 `.rows.json`，详见[可恢复 Excel 导入](references/lovrabet-excel-import.md)。

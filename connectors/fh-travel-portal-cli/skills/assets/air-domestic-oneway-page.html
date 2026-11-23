@@ -1,0 +1,454 @@
+<!-- 能力摘要见 references/air-domestic-oneway-page.md「默认页能力摘要」。改本文件须同步更新该摘要；出页不要读本文件判断能力。 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<style>
+:root{--bg:#f5f6f8;--card:#ffffff;--line:#e4e7ec;--txt:#1f2329;--txt2:#646a73;--txt3:#8f959e;--blue:#185FA5;--red:#d93025;--redb:#a50e0e;--green:#0f6e56;--greenbg:#e1f5ee;--bluebg:#e6f1fb;--redbg:#fdecea;--amberbg:#fff4e0;--amber:#8a5300;--book:#AFD3E2;--bookh:#9CC5D6;--booktext:#0C447C;--moreblue:#14508c;--bookb:#0d4f9e;--bookc:#e3eefb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);font-size:13px;line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 90px}
+header h1{font-size:19px;font-weight:600}
+header .sub{color:var(--txt2);font-size:12.5px;margin-top:2px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.kpi .v{font-size:20px;font-weight:600;line-height:1.3}
+.kpi .l{font-size:12px;color:var(--txt2)}
+.kpi .v em{font-style:normal;font-size:12px;color:var(--txt3);font-weight:400;margin-left:4px}
+.dist{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.panel h3{font-size:12.5px;font-weight:600;color:var(--txt2);margin-bottom:8px}
+.bar-row{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px}
+.bar-row .bl{width:52px;color:var(--txt2);flex:none}
+.bar-row .bt{flex:1;background:#eef0f3;border-radius:4px;height:14px;overflow:hidden}
+.bar-row .bf{background:var(--blue);height:100%;border-radius:4px}
+.bar-row .bv{width:34px;text-align:right;color:var(--txt2);flex:none}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;position:sticky;top:8px;z-index:5}
+.toolbar select,.toolbar input{font-size:12.5px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--txt);outline:none}
+.toolbar .ck{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--txt2);white-space:nowrap}
+.cnt{margin-left:auto;font-size:12px;color:var(--txt2);white-space:nowrap}
+.pager{display:none;align-items:center;justify-content:center;gap:12px;margin:14px 0 6px;flex-wrap:wrap}
+.pager button{font-size:12.5px;padding:6px 14px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--txt);cursor:pointer}
+.pager button:hover:not(:disabled){background:var(--bluebg);border-color:var(--blue);color:var(--blue)}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+.pager .pg-info{font-size:12.5px;color:var(--txt2)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:14px;padding:12px 14px;cursor:pointer;flex-wrap:wrap}
+summary.card-head{list-style:none}
+summary.card-head::-webkit-details-marker{display:none}
+.card-head:hover{background:#fafbfc}
+.fl-info{flex:1 1 0;min-width:0;padding-left:4px}
+.fl-no{font-size:15px;font-weight:600}
+.tag-share{display:inline-block;background:#ff8a00;color:#fff;border:1px solid #ff8a00;border-radius:4px;padding:0 6px;font-size:11px;line-height:17px;font-weight:600;white-space:nowrap;margin-left:6px;vertical-align:2px}
+.fl-air{font-size:11.5px;color:var(--txt2);margin-top:-2px}
+.fl-sub{font-size:11.5px;color:var(--txt3);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap}
+.tg{display:inline-block;border-radius:4px;padding:0 6px;font-size:11px;line-height:18px}
+.tg-a{background:var(--greenbg);color:var(--green)}
+.tg-b{background:var(--bluebg);color:var(--blue)}
+.fl-time{display:flex;align-items:center;gap:10px;font-weight:500;width:350px;flex:none}
+.fl-time .big{font-size:16px;flex:1}
+.fl-time .big.dep{text-align:center}
+.fl-time .big.arr{text-align:center}
+.fl-time .p1{font-size:11px;color:var(--txt3);font-weight:400;margin-left:2px}
+.fl-time .mid{font-size:11px;color:var(--txt3);text-align:center;font-weight:400;flex:none;line-height:1.5}
+.fl-time .rt-line{font-size:12px;color:var(--txt2);font-weight:400;white-space:nowrap}
+.fl-price{text-align:right;min-width:86px;margin-left:auto}
+.fl-price .lp{font-size:17px;font-weight:600;color:var(--red)}
+.fl-price .cap{font-size:11px;color:var(--txt3)}
+.more-btn{flex:none;border:1px solid var(--blue);color:var(--blue);background:#fff;border-radius:999px;padding:5px 14px;font-size:12.5px;cursor:pointer;font-weight:500}
+.more-btn:hover{background:var(--bluebg)}
+.more-btn .mc{display:none}
+/* 展开态=「收起」：用更沉的 --moreblue，与主行动「去下单」(--book 较亮) 拉开明度层次。
+   不要改回 var(--blue)——那会让两个蓝色按钮明度差仅 0.056，视觉上无法区分主次。 */
+details[open] .more-btn{background:var(--moreblue);border-color:var(--moreblue);color:#fff}
+details[open] .more-btn:hover{background:var(--moreblue);border-color:var(--moreblue)}
+details[open] .more-btn .mo{display:none}
+details[open] .more-btn .mc{display:inline}
+.cab-wrap{border-top:1px dashed var(--line)}
+.cab-table{width:100%;border-collapse:collapse}
+.cab-table th{font-size:11.5px;color:var(--txt3);font-weight:400;text-align:right;padding:7px 12px;background:#fafbfc;border-bottom:1px solid var(--line)}
+.cab-table th:first-child,.cab-table td:first-child{text-align:left}
+.cab-table td{font-size:12.5px;padding:8px 12px;border-bottom:0.5px solid var(--line);vertical-align:middle}
+.cab-table tr:last-child td{border-bottom:none}
+.cab-code{font-weight:600;white-space:nowrap}
+.cab-name{color:var(--txt2);font-size:11.5px;white-space:nowrap}
+.tag-ent{display:inline-block;background:var(--red);color:#fff;border-radius:4px;padding:0 6px;font-size:11px;line-height:18px;font-weight:500;white-space:nowrap;margin-left:5px}
+.tag-buy{display:inline-block;background:#7c3aed;color:#fff;border-radius:4px;padding:0 6px;font-size:11px;line-height:17px;font-weight:500;white-space:nowrap;margin-left:5px}
+.price-n{font-weight:600}
+.price-ent{color:var(--red);font-weight:600;font-size:14px}
+.price-old{color:var(--txt3);text-decoration:line-through;font-size:11.5px;margin-right:5px}
+.prcell{text-align:right;line-height:1.45}
+.pr-fare{white-space:nowrap}
+.pr-tax{font-size:11px;color:var(--txt2);white-space:nowrap}
+.pr-sub{font-size:11px;color:var(--txt3);white-space:nowrap}
+.pr-old{text-decoration:line-through;white-space:nowrap}
+.pr-disc{white-space:nowrap}
+.fl-fee{font-size:11px;color:var(--amber)}
+.fl-ot{font-size:11px;color:var(--green);font-weight:500}
+.btn-book{display:inline-block;border:none;background:var(--book);color:var(--booktext);border-radius:999px;padding:5px 16px;font-size:12.5px;cursor:pointer;font-weight:500;user-select:none;text-decoration:none;text-align:center}
+.btn-book:hover{background:var(--bookh);color:var(--booktext)}
+.empty{text-align:center;color:var(--txt3);padding:40px 0;display:none}
+.note{color:var(--txt3);font-size:11.5px;margin-top:12px;text-align:center}
+.cab-qty{display:inline-block;color:var(--blue);background:var(--bluebg);border-radius:4px;padding:0 6px;font-size:11px;line-height:17px;font-weight:500;white-space:nowrap}
+.cab-dim{color:var(--txt3)}
+
+.cab-link{color:var(--blue);font-size:12px;font-weight:500;cursor:pointer;text-decoration:underline;text-underline-offset:2px;white-space:nowrap;user-select:none;background:none;border:none;padding:0}
+.cab-link:hover{color:var(--bookb,#c04a1e);text-decoration:underline}
+.cab-acts-sep{color:var(--line2,#c9d4e0);margin:0 4px;user-select:none}
+.cab-bar{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f7fafd;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.cab-bar .cb-load{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--blue)}
+.cab-bar .cb-err{font-size:11.5px;color:var(--red)}
+.cab-bar .btn-retry{border:1px solid var(--blue);color:var(--blue);background:#fff;border-radius:999px;padding:2px 12px;font-size:11.5px;cursor:pointer;font-weight:500;white-space:nowrap}
+.cab-bar .btn-retry:hover{background:var(--bluebg)}
+.btn-cab-more{border:1px solid var(--line2,#c9d4e0);color:var(--txt2);background:#fff;border-radius:999px;padding:4px 14px;font-size:12px;cursor:pointer}
+.spin{width:12px;height:12px;border:2px solid var(--bluebg);border-top-color:var(--blue);border-radius:50%;display:inline-block;animation:cbspin .7s linear infinite;flex:none}
+@keyframes cbspin{to{transform:rotate(360deg)}}
+.rt-tag{display:inline-block;background:var(--greenbg);color:var(--green);border-radius:4px;padding:0 6px;font-size:11px;line-height:17px;font-weight:500;white-space:nowrap;cursor:help}
+.rt-tag.no{background:#fdecea;color:var(--red)}
+.hint-top{background:var(--bluebg);border:1px solid #cfe1f3;color:#17456e;border-radius:10px;padding:8px 14px;font-size:12.5px;margin:14px 0 0}
+.cab-lazy{color:var(--txt3);font-size:12.5px;text-align:center;padding:14px 8px;background:#fafbfc}
+.rt{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:60;pointer-events:none}
+.rt .rchk{display:none}
+.rt .rmask{position:absolute;inset:0;background:rgba(17,24,32,.46);opacity:0;transition:opacity .15s}
+.rt .rpop{position:relative;background:#fff;border-radius:14px;max-width:600px;width:min(600px,92vw);max-height:82vh;overflow:auto;padding:20px 22px;box-shadow:0 18px 50px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .15s,transform .15s;pointer-events:none}
+.rt .rchk:checked ~ .rmask{opacity:1;pointer-events:auto}
+.rt .rchk:checked ~ .rpop{opacity:1;transform:none;pointer-events:auto}
+.rtitle{font-size:15px;font-weight:600;color:#1f2329;margin-bottom:4px}
+.rsub{font-size:11.5px;color:#8a94a3;margin-bottom:12px}
+.rsec{margin-bottom:14px}
+.rh{font-size:12px;font-weight:600;color:var(--red);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.rh::before{content:'';width:3px;height:11px;background:var(--red);border-radius:2px;display:inline-block}
+.rtx{font-size:12px;color:#3c4652;line-height:1.9;white-space:pre-wrap;background:#f7f9fb;border-radius:8px;padding:10px 12px;border:1px solid #e6ebf1}
+.rtx.empty{color:#8a94a3;background:#fbfcfd}
+.rclose{margin-top:4px;background:var(--blue);color:#fff;border:none;border-radius:999px;padding:7px 26px;font-size:13px;cursor:pointer;font-weight:500;display:block;margin-left:auto;text-decoration:none;text-align:center}
+.rclose:hover{background:var(--bookb)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>{{H1}}</h1>
+  <div class="sub">{{SUB}}</div>
+</header>
+<div class="hint-top">✈️ 前 {{TOP_OPEN}} 个推荐航班已展开舱位 · 每个舱位可点「去下单」免登跳转飞鹤下单页 · 其余航班点「更多」展开本次查询已返回的舱位（可再「展开全部」）</div>
+<div class="kpis" id="kpis">{{STATIC_KPIS}}</div>
+<div class="dist">
+  <div class="panel"><h3 id="aptTitle">{{APT_TITLE}}</h3><div id="aptDist">{{STATIC_APT_DIST}}</div></div>
+  <div class="panel"><h3>出发时段分布</h3><div id="prdDist">{{STATIC_PRD_DIST}}</div></div>
+</div>
+<div class="toolbar">
+  <select id="fApt">{{STATIC_APT_OPTS}}</select>
+  <select id="fPrd"><option value="">全部时段</option><option value="am">上午(12:00前)</option><option value="pm">下午(12:00-18:00)</option><option value="nt">夜间(18:00后)</option></select>
+  <select id="fAir">{{STATIC_AIR_OPTS}}</select>
+  <select id="fCs"><option value="own">非共享</option><option value="cs">共享</option><option value="">全部</option></select>
+  <label class="ck"><input type="checkbox" id="fEnt"> 仅看含协议价舱位</label>
+  <input id="fKw" placeholder="航班号/航司" style="width:130px">
+  <select id="fSort">
+    <option value="dep">出发最早</option>
+    <option value="price">价格最低</option>
+    <option value="dur">飞行最短</option>
+  </select>
+  <span class="cnt" id="cnt">{{STATIC_CNT}}</span>
+</div>
+<div id="list">{{STATIC_LIST}}</div>
+<div class="pager" id="pager">
+  <button type="button" id="pgPrev">上一页</button>
+  <span class="pg-info" id="pgInfo"></span>
+  <button type="button" id="pgNext">下一页</button>
+</div>
+<div class="empty" id="empty">没有符合条件的航班</div>
+<div class="note">票价为不含税票面价 · 含税总价=票价+机场建设费+燃油附加费 · 协议价舱位带红色标签 · 「去下单」经免登 forward 跳转飞鹤 portal 下单页（价格以 portal 实时为准）· 授权码 30 分钟有效，过期后重新查询即可</div>
+{{SEQ_FOOT}}
+</div>
+{{STATIC_RULES}}
+<script>
+var FL=[]; //@@FL@@
+var RR=[]; //@@RR@@
+var CC=[]; //@@CC@@
+var QUERY_SN=""; //@@SN@@
+var CFG=__PAGE_CFG__; /* 免登：host/infoCode/forwardCode/forwardBase/busiRule */
+/*@@AIR_DOMESTIC_PAGE_BUSI@@*/
+function buildForwardUrl(route){
+  var base=(CFG&&CFG.forwardBase)?CFG.forwardBase:((CFG&&CFG.host)?('https://'+CFG.host+'/api/portal/mcp/oauth2/forward'):'');
+  if(!base||!CFG||!CFG.forwardCode)return "";
+  return base+'?redirectPage='+qAll(route)+'&authCode='+qAll(CFG.forwardCode);
+}
+function buildOrderUrl(sn,fid,cabId){
+  if(!CFG||!CFG.host||!CFG.forwardCode||!cabId||!fid)return "";
+  var route='/VuePage/domestic/index.html#/bookingPricing?serialNumber='+qAll(sn)
+    +'&flightId='+qAll(fid)+'&cabId='+qAll(cabId)
+    +'&flyType=1&adultCount='+(CFG.order&&CFG.order.adult||1)+'&payType=1&agent=1';
+  return buildForwardUrl(route);
+}
+var TGQ_CACHE={};
+function pickRule(data,keys,listKey){
+  for(var i=0;i<keys.length;i++){
+    var v=data&&data[keys[i]];
+    if(typeof v==='string'&&v.trim())return v.trim();
+  }
+  var list=data&&data[listKey];
+  if(Array.isArray(list)&&list.length){
+    return list.map(function(it){
+      if(!it||typeof it!=='object')return '';
+      var range=[it.timeStart,it.timeEnd].filter(function(x){return x!=null;}).join('-');
+      var pct=(it.percent||'')+'';
+      var price=it.price?('¥'+it.price):'';
+      return [range?range+'小时':'',pct,price].filter(Boolean).join(' ');
+    }).filter(Boolean).join('\\n');
+  }
+  return '';
+}
+function openTgqLive(sub,rf,cf,loading){
+  var chk=document.getElementById('rchkLive');
+  var subEl=document.getElementById('rtLiveSub');
+  var rfEl=document.getElementById('rtLiveRefund');
+  var cfEl=document.getElementById('rtLiveChange');
+  if(!chk||!rfEl||!cfEl)return;
+  if(subEl)subEl.textContent=sub||'票价不含机建燃油 · 规则以实际下单为准';
+  rfEl.className='rtx'+(rf?'':' empty');
+  cfEl.className='rtx'+(cf?'':' empty');
+  rfEl.textContent=rf||(loading?'查询中…':'未返回退票规则文本');
+  cfEl.textContent=cf||(loading?'查询中…':'未返回改签规则文本');
+  chk.checked=true;
+}
+var TOP_OPEN=__TOP_OPEN__; /* 默认展开舱位的推荐航班数；其余航班点「更多」只展开本地已有舱位 */
+var KPI=__KPI__; /* 全量统计（渲染前 Python 按未裁剪数据计算） */
+var APT_SIDE='{{APT_SIDE}}'; /* 'dep'=多变侧在出发,'arr'=多变侧在到达 */
+var APT_ALL='{{APT_ALL}}'; /* 机场下拉首项文案 */
+var APT_TITLE='{{APT_TITLE}}'; /* 机场分布面板标题 */
+var tM=function(t){var p=t.split(":");return +p[0]*60+ +p[1]};
+function dur(f){var d=tM(f.dep),a=tM(f.arr);return a<d?a+1440-d:a-d}
+function fmtDur(m){var h=Math.floor(m/60),mm=m%60;return h?h+'h'+mm+'m':mm+'m'}
+function findCabin(key){
+  for(var i=0;i<FL.length;i++){
+    for(var j=0;j<FL[i].cabins.length;j++){
+      var c=FL[i].cabins[j];
+      if(c.k===key||c.cabId===key)return {f:FL[i],c:c};
+    }
+  }
+  var p=String(key||"").split("_"),no=p[0],cab=p.slice(1).join("_");
+  for(var i=0;i<FL.length;i++){
+    if(FL[i].no===no){
+      for(var j=0;j<FL[i].cabins.length;j++){
+        if(FL[i].cabins[j].cab===cab)return {f:FL[i],c:FL[i].cabins[j]};
+      }
+      break;
+    }
+  }
+  return null;
+}
+function minCab(f){var c=f.cabins[0];return c}
+function displayCabins(f){return f.displayCabins||f.cabins}
+function allCabins(f){return f.cabins||[]}
+function qtyN(n){return n==="A"?9:(/^\d+$/.test(n)?+n:9)}
+function aptTerm(apt,term){apt=(apt||"").trim();term=(term||"").trim();if(!apt)return term;return apt+(term?"("+term+")":"")}
+(function(){
+  var airs=[];FL.forEach(function(f){if(airs.indexOf(f.air)<0)airs.push(f.air)});airs.sort();
+  var sa=document.getElementById("fAir");sa.innerHTML="";var oaAir=document.createElement("option");oaAir.value="";oaAir.textContent="全部航司";sa.appendChild(oaAir);airs.forEach(function(a){var o=document.createElement("option");o.textContent=a;sa.appendChild(o)});
+    var apts=[];FL.forEach(function(f){if(apts.indexOf(f.apt)<0)apts.push(f.apt)});apts.sort();
+    var sa2=document.getElementById("fApt");sa2.innerHTML="";var oa=document.createElement("option");oa.value="";oa.textContent=APT_ALL;sa2.appendChild(oa);
+    apts.forEach(function(a){var o=document.createElement("option");o.value=a;o.textContent=a;sa2.appendChild(o)});
+  function kpis(){
+    var tot=KPI.fl,totCab=KPI.cab,entCab=KPI.ent;
+    var min=99999,minF=null;
+    FL.forEach(function(f){var c=minCab(f);var t=c.price+(f.acf||0)+(f.baf||0);if(t<min){min=t;minF=f}});
+    document.getElementById("kpis").innerHTML=
+      '<div class="kpi"><div class="v">'+tot+'<em>班</em></div><div class="l">全部直飞 无经停</div></div>'+
+      '<div class="kpi"><div class="v">¥'+min+'<em>起</em></div><div class="l">最低含税价 '+minF.no+' '+(minCab(minF).ent?'(协议价)':'')+'</div></div>'+
+      '<div class="kpi"><div class="v">'+entCab+'<em>/'+totCab+'</em></div><div class="l">协议价舱位(enterpriseId 非空)</div></div>'+
+      '<div class="kpi"><div class="v">'+airs.length+'<em>家</em></div><div class="l">执飞航司</div></div>';
+  }
+  function dists(){
+    var ap={};
+    var prd=[["06-09",0],["09-12",0],["12-15",0],["15-18",0],["18-21",0],["21-24",0]];
+    FL.forEach(function(f){ap[f.apt]=(ap[f.apt]||0)+1;var h=+f.dep.slice(0,2);var i=h<9?0:h<12?1:h<15?2:h<18?3:h<21?4:5;prd[i][1]++});
+    var ks=Object.keys(ap);
+    var ma=Math.max.apply(null,ks.map(function(k){return ap[k]}).concat([1])),mp=Math.max.apply(null,prd.map(function(p){return p[1]}));
+    document.getElementById('aptTitle').textContent=APT_TITLE;
+    document.getElementById("aptDist").innerHTML=ks.map(function(k){
+      var lb=(APT_SIDE==='dep'?k+'出发':'抵'+k);
+      return '<div class="bar-row"><span class="bl">'+lb+'</span><div class="bt"><div class="bf" style="width:'+(ap[k]/ma*100)+'%"></div></div><span class="bv">'+ap[k]+'班</span></div>'
+    }).join("");
+    document.getElementById("prdDist").innerHTML=prd.map(function(p){
+      return '<div class="bar-row"><span class="bl">'+p[0]+'</span><div class="bt"><div class="bf" style="width:'+(p[1]/mp*100)+'%"></div></div><span class="bv">'+p[1]+'班</span></div>'
+    }).join("");
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+  function escAttr(s){return esc(s).replace(/"/g,"&quot;")}
+  function tagHTML(f){
+    var share=(f.share?'<span class="tag-share" title="实际承运 '+f.share+'">共享 '+f.share+'</span>':'');
+    var ot=(f.ot?'<span class="fl-ot">准点率'+f.ot+'%</span>':'');
+    var h='<span class="fl-no">'+f.no+'</span>'+share+'<div class="fl-air">'+f.air+'</div>';
+    h+='<div class="fl-sub"><span>'+f.ac+'</span><span>餐食 '+f.meal+'</span>'+ot+'<span class="fl-fee">机建¥'+(f.acf||0)+' 燃油¥'+(f.baf||0)+'</span></div>';
+    return h;
+  }
+  function cabActs(f,c){
+    var a=[];
+    if(c.needTgq){
+      var sn=f.sn||QUERY_SN, cabId=c.cabId||'';
+      if(sn&&cabId){
+        a.push('<button type="button" class="cab-link cab-tgq" data-sn="'+escAttr(sn)+'" data-cabid="'+escAttr(cabId)+'" data-flight="'+escAttr(f.no||'')+'" data-cab="'+escAttr(c.cab||'')+'" title="退改文案不完整，点击现场查询">退改签</button>');
+      }else if(c.rp!=null){
+        a.push('<label class="cab-link" for="rchk'+c.rp+'">退改签</label>');
+      }
+    }else if(c.rp!=null){
+      a.push('<label class="cab-link" for="rchk'+c.rp+'">退改签</label>');
+    }
+    if(c.bp!=null&&c.bp>=0)a.push('<label class="cab-link" for="chk_lg'+c.bp+'">行李</label>');
+    return a.join('<span class="cab-acts-sep">·</span>');
+  }
+  function cabRowHTML(f,c,ri){
+    var ent=c.ent;
+    var acf=f.acf||0, baf=f.baf||0, total=c.price+acf+baf;
+    var fp=f.fp||0, disc=(fp>0?(Math.round(c.price/fp*100)/10)+'折':'—');
+    var fareHtml=(ent?'<span class="price-ent">¥'+c.price+'</span>':'<span class="price-n">¥'+c.price+'</span>');
+    var oldHtml=(c.np>c.price?'<span class="pr-old">门市¥'+c.np+'</span> ':'');
+    var priceHtml='<div class="prcell"><div class="pr-fare">'+fareHtml+' <span class="pr-tax">(含税 ¥'+total+')</span></div><div class="pr-sub">'+oldHtml+'<span class="pr-disc">'+disc+'</span></div></div>';
+    var buy=(c.buy?'<span class="tag-buy">代购</span>':'');
+    return '<tr><td><span class="cab-code">'+esc(c.cab)+'</span>'+buy+'</td>'+
+      '<td><span class="cab-name">'+esc(c.cn)+'</span>'+(ent?'<span class="tag-ent">协议价</span>':'')+'</td>'+
+      '<td>'+(c.n?'<span class="cab-qty" title="剩余座位数">余 '+qtyN(c.n)+' 位</span>':'<span class="cab-dim">—</span>')+'</td>'+
+      '<td style="text-align:right">'+(c.w?c.w+'kg':'—')+'</td>'+
+      '<td style="text-align:right">'+priceHtml+'</td>'+
+      '<td style="text-align:right">'+cabActs(f,c)+'</td>'+
+      '<td style="text-align:right;width:110px">'+orderCell(f,c)+'</td></tr>';
+  }
+  /* 「展开全部」跨 script 块调用 */
+  window.cabRowHTML=cabRowHTML;
+  window.allCabins=allCabins;
+  function extraRows(f){
+    var shown=displayCabins(f);
+    if(shown.length>=allCabins(f).length)return '';
+    return '<tr><td colspan="7" style="text-align:center"><button type="button" class="btn-cab-more" data-more-idx="'+
+      (FL.indexOf(f))+'">展开全部 '+allCabins(f).length+' 个舱位</button></td></tr>';
+  }
+  function orderCell(f,c){
+    /* 所有舱位(含代购 source 2/3/7)同一条免登 forward；代购身份由舱位码旁 .tag-buy 标注 */
+    var url=buildOrderUrl(f.sn||QUERY_SN,f.no,c.cabId);
+    return url?'<a class="btn-book" href="'+escAttr(url)+'" target="_blank" rel="noopener">去下单</a>':'<span class="cab-dim">链接未生成</span>';
+  }
+  function flightHTML(f,idx){
+    var c=minCab(f);
+    var total=c.price+(f.acf||0)+(f.baf||0);
+    var route=aptTerm(f.dep_apt,f.dep_term)+'-'+aptTerm(f.arr_apt,f.arr_term);
+    return '<details class="card" id="card'+idx+'"'+((openSet[idx]||idx<TOP_OPEN)?' open':'')+'>'+
+      '<summary class="card-head">'+
+        '<div class="fl-time"><span class="big dep">'+f.dep+'</span><span class="mid">'+fmtDur(dur(f))+'<br><span class="rt-line">'+esc(route)+'</span></span><span class="big arr">'+f.arr+(tM(f.arr)<tM(f.dep)?'<span class="p1">+1</span>':"")+'</span></div>'+
+        '<div class="fl-info">'+tagHTML(f)+'</div>'+
+        '<div class="fl-price"><div class="lp">¥'+total+'</div><div class="cap" id="cap'+idx+'">'+capTxt(f,c)+'</div></div>'+
+        '<span class="more-btn" id="mb'+idx+'"><span class="mo">更多</span><span class="mc">收起</span></span>'+
+      '</summary>'+
+      '<div class="cab-wrap" id="cw'+idx+'">'+cabBarHTML(f,idx)+'<table class="cab-table"><thead><tr><th style="text-align:left">舱位</th><th style="text-align:left">等级</th><th style="text-align:left">余量</th><th style="text-align:right">免费托运</th><th style="text-align:right">票价·含税总价</th><th style="text-align:right">退改/行李</th><th style="text-align:right">去下单</th></tr></thead><tbody>'+
+        cabinRows(f,idx)+
+      '</tbody></table></div></details>';
+  }
+  function capTxt(f,c){
+    return (c.ent?'含协议价舱 · ':'')+'含税总价起 · '+f.cabins.length+'个舱位';
+  }
+  /* shopping 已返回全量舱位：首屏只渲 displayCabins，其余点「展开全部」 */
+  function cabinRows(f,idx){
+    return displayCabins(f).map(function(cb,ri){return cabRowHTML(f,cb,ri)}).join("")+extraRows(f);
+  }
+  function cabBarHTML(f,idx){
+    return '';
+  }
+  var PAGE_SIZE=20;
+  var state={apt:"",prd:"",air:"",cs:"own",ent:false,kw:"",sort:"dep",page:1};
+  var openSet={};
+  document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.id&&d.id.indexOf('card')===0){openSet[+d.id.slice(4)]=d.open}},true);
+  function render(){
+    var rows=FL.map(function(f,i){return {f:f,i:i}}).filter(function(o){
+      var f=o.f;
+      if(state.apt&&f.apt!==state.apt)return false;
+      var h=tM(f.dep);
+      if(state.prd==="am"&&h>=720)return false;
+      if(state.prd==="pm"&&(h<720||h>=1080))return false;
+      if(state.prd==="nt"&&h<1080)return false;
+      if(state.air&&f.air!==state.air)return false;
+      var cCs=!!f.share;
+      if(state.cs&&(state.cs==="cs")!==cCs)return false;
+      if(state.ent&&!f.entAny)return false;
+      var kw=state.kw.toLowerCase();
+      if(kw&&f.no.toLowerCase().indexOf(kw)<0&&f.air.toLowerCase().indexOf(kw)<0)return false;
+      return true;
+    });
+    if(state.sort==="price")rows.sort(function(a,b){return (minCab(a.f).price+(a.f.acf||0)+(a.f.baf||0))-(minCab(b.f).price+(b.f.acf||0)+(b.f.baf||0))});
+    else if(state.sort==="dur")rows.sort(function(a,b){return dur(a.f)-dur(b.f)});
+    else rows.sort(function(a,b){return tM(a.f.dep)-tM(b.f.dep)});
+    var total=rows.length;
+    var pages=Math.max(1,Math.ceil(total/PAGE_SIZE)||1);
+    if(state.page>pages)state.page=pages;
+    if(state.page<1)state.page=1;
+    var start=(state.page-1)*PAGE_SIZE;
+    var pageRows=rows.slice(start,start+PAGE_SIZE);
+    document.getElementById("list").innerHTML=pageRows.map(function(o){return flightHTML(o.f,o.i)}).join("");
+    document.getElementById("empty").style.display=total?"none":"block";
+    var lo=total?start+1:0,hi=total?Math.min(start+pageRows.length,total):0;
+    document.getElementById("cnt").textContent="共 "+total+" / "+FL.length+" 班 · 显示 "+lo+"–"+hi;
+    var pager=document.getElementById("pager");
+    if(total<=PAGE_SIZE){pager.style.display="none";}
+    else{
+      pager.style.display="flex";
+      document.getElementById("pgInfo").textContent="第 "+state.page+" / "+pages+" 页";
+      document.getElementById("pgPrev").disabled=state.page<=1;
+      document.getElementById("pgNext").disabled=state.page>=pages;
+    }
+  }
+  function resetPageAndRender(){state.page=1;render();}
+  function bindFilter(id,key){document.getElementById(id).addEventListener("change",function(){state[key]=this.value;resetPageAndRender()});}
+  bindFilter("fApt","apt");bindFilter("fPrd","prd");bindFilter("fAir","air");bindFilter("fCs","cs");bindFilter("fSort","sort");
+  document.getElementById("fEnt").addEventListener("change",function(){state.ent=this.checked;resetPageAndRender()});
+  document.getElementById("fKw").addEventListener("input",function(){state.kw=this.value;resetPageAndRender()});
+  document.getElementById("pgPrev").addEventListener("click",function(){if(state.page>1){state.page--;render()}});
+  document.getElementById("pgNext").addEventListener("click",function(){state.page++;render()});
+  kpis();dists();render();
+})();
+</script>
+<script>
+/* shopping 已返回全量舱位：「展开全部」只读本地 FL；缺退改政策文案时退改政策补查（页内直调 domestic_rule） */
+(function(){
+document.addEventListener('click',function(e){
+  var tgq=e.target.closest?e.target.closest('.cab-tgq'):null;
+  if(tgq){
+    e.preventDefault();
+    if(tgq.dataset.busy)return;
+    var sn=tgq.getAttribute('data-sn')||'',cabId=tgq.getAttribute('data-cabid')||'';
+    if(!sn||!cabId){openTgqLive('缺少标识','缺少 serialNumber/cabId，请重新查询','',false);return;}
+    tgq.dataset.busy='1';
+    var old=tgq.textContent;tgq.textContent='查询中…';
+    var key=sn+'|'+cabId;
+    var done=function(){tgq.dataset.busy='';tgq.textContent=old;};
+    if(TGQ_CACHE[key]){
+      var c=TGQ_CACHE[key];
+      openTgqLive((tgq.getAttribute('data-flight')||'')+(tgq.getAttribute('data-cab')?(' · '+tgq.getAttribute('data-cab')+'舱'):''),c.rf,c.cf,false);
+      done();return;
+    }
+    openTgqLive((tgq.getAttribute('data-flight')||'')+' · 查询中…','','',true);
+    busiRule(sn,cabId).then(function(data){
+      var rf=pickRule(data,['refundRules','refund','refundGo'],'refundRulesGo');
+      var cf=pickRule(data,['changeRules','change','changeGo'],'changeRulesGo');
+      TGQ_CACHE[key]={rf:rf,cf:cf};
+      openTgqLive((tgq.getAttribute('data-flight')||'')+(tgq.getAttribute('data-cab')?(' · '+tgq.getAttribute('data-cab')+'舱'):''),rf,cf,false);
+      done();
+    }).catch(function(err){
+      openTgqLive('查询失败','查询退改规则失败：'+((err&&err.message)||err),'',false);
+      done();
+    });
+    return;
+  }
+  var more=e.target.closest?e.target.closest('.btn-cab-more'):null;
+  if(more){
+    var f=FL[+more.getAttribute('data-more-idx')];
+    if(f){
+      var body=more.closest('tbody');
+      body.innerHTML=allCabins(f).map(function(cb,ri){return cabRowHTML(f,cb,ri)}).join("");
+    }
+    return;
+  }
+});
+})();
+</script>
+</body>
+</html>

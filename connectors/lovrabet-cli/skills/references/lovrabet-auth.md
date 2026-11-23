@@ -1,6 +1,6 @@
 # auth — 认证管理
 
-Lovrabet CLI 只使用 User Access Key（client-ak）认证。
+Lovrabet CLI 只使用 User Access Key（client-ak）认证。AK 属于当前用户；同一环境下选择不同应用仍使用同一身份，访问范围由平台权限决定。
 
 ## auth login — 保存 accessKey
 
@@ -13,6 +13,7 @@ lovrabet auth login --global
 
 **行为**：
 - 默认写入全局配置 `~/.lovrabet.json`
+- 只保存所选作用域的顶层用户 accessKey；项目配置或显式环境变量可能覆盖全局存储值
 - 兼容场景可用 `--project` 写入当前目录本地配置；常规使用不需要
 - 交互模式下，不传 `--access-key` 会提示输入 AK，并给出当前 `userDomain` 下的 `/user/ak` 自助创建地址
 - `--non-interactive` 表示无打扰模式：不进入 stdin prompt；如果缺少 AccessKey，会立即提示创建链接和 `--access-key` 命令
@@ -44,6 +45,8 @@ lovrabet auth login --global
 lovrabet auth logout
 ```
 
+只清除所选作用域的顶层 accessKey；另一作用域或显式环境变量中的凭证不受影响，可能继续用于请求。
+
 ## auth status — 查看当前认证状态
 
 ```bash
@@ -52,14 +55,16 @@ lovrabet auth status
 
 会显示：
 - 当前是否已配置 accessKey
-- accessKey 来源（global / project / env）
-- 当前 env
+- 实际请求凭证的来源（环境变量或合并后的顶层 accessKey）
+- 非默认环境提示；默认不显示 `Environment` 行，实际服务地址通过 `lovrabet doctor` 核对
+- 所选 global / project 作用域存储的顶层 AK，与实际请求凭证分别标注并脱敏
+
+应用选择不改变用户凭证。已有有效 AK 时，`--check` 只检查是否已配置，不校验远端权限；远端身份使用 `auth info` 查询。没有有效 AK 但存在未过期的设备授权码时，`--check` 会查询授权结果，成功后将 AK 保存到该授权指定作用域的顶层配置；仅需查看本地状态时不加 `--check`。
 
 ## auth info — 查看当前 AK 对应的登录用户
 
 ```bash
 lovrabet auth info
-lovrabet auth info --env daily
 ```
 
 会调用：
@@ -73,7 +78,7 @@ X-User-AK: <redacted>
 
 - 当前 AccessKey 对应的登录用户信息
 - 常见字段如 `id`、`userName`、`loginName`
-- `meta.env`，方便确认当前请求落在哪个环境
+- `meta.env`：实际环境标识，用于排障；该标识不能替代最终服务地址，地址通过 `lovrabet doctor` 核对
 
 **适用场景**：
 
@@ -91,14 +96,16 @@ X-User-AK: <redacted>
 ## 认证优先级
 
 ```
-CLI flag (--access-key)
+项目顶层 accessKey
   ↓
 环境变量 LOVRABET_ACCESS_KEY
   ↓
-当前目录 .lovrabet.json（兼容本地配置）
-  ↓
-全局级 ~/.lovrabet.json
+全局顶层 accessKey
 ```
+
+项目已配置 AK 时，环境变量不会覆盖它。CI 需要注入 AK 时，执行目录应省略项目 AK。`auth status` 和 `doctor` 可查看实际来源。
+
+`auth login --access-key` 是保存参数，不是通用请求参数。默认应用与配置规则见 [配置参考](lovrabet-config.md)。已选中的 AK 认证失败时不自动重试其他 AK。
 
 ## 与 app cache 的关系
 

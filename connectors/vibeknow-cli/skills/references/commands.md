@@ -25,8 +25,8 @@ Resolve the source to a document, then generate a video via the figlens pipeline
 
 `--from` accepts:
 - A `doc_id` (e.g. `doc_abc12345`) — used directly
-- A URL (`http://` or `https://`) — uploaded to vectoria first
-- A local file path — uploaded to vectoria first
+- A URL (`http://` or `https://`) — uploaded to a new knowledge base first
+- A local file path — uploaded to a new knowledge base first
 - `-` — read the source text from stdin
 
 `--text` supplies the text itself, for the case where the user pasted a
@@ -45,7 +45,8 @@ EOF
 
 The text is uploaded as a document named after its opening line, and
 everything downstream behaves exactly as it would for a file — `--script-lock`
-included, which is how "照着我这段话念" is expressed.
+included, which is how "照着我这段话念" is expressed when the pasted text is
+narration the user wrote (not a request like "帮我做个…的视频").
 
 **This is not a way to generate a video from a topic.** The content has to be
 the user's; nothing here invents any, and `--prompt` only steers how the
@@ -61,19 +62,22 @@ vibeknow create [flags]
 | `--from string` | doc_id, URL, local file path, or `-` for stdin. Required unless `--text` is given |
 | `--text string` | Use this text as the source document. Mutually exclusive with `--from`; refused when empty or over 512 KB |
 | `--preset string` | Saved bundle of style options: a name under `<config>/presets/` or a path to a `.yaml` file. Supplies defaults only — anything also given on the command line wins. See **Presets** below. |
-| `--mode string` | `replica` (PPT 讲解, page-by-page; PDF/PPT sources only), `image` (图解视频, AI illustration per page), `handdraw` (手绘动画). Omit for 灵活创作 (the default line). |
-| `--script-lock` | 原稿锁定: narrate the document verbatim instead of writing a script. Orthogonal to `--mode` — combines with any of them. |
-| `--engine string` | `pipeline` (default, v=3) or `agent` (v=2, 一键成片). The agent engine has no mode/theme/language branches; combining them exits 2. |
-| `--theme string` | Style ID from `vibeknow theme list --mode <mode>` (must match the mode's catalog; default auto-select) |
-| `--language string` | Output language for script + narration: `zh-CN`, `en-US`, `es-ES`, `fr-FR`, `pt-BR`, `ja-JP`, `ko-KR` (default: account locale) |
+| `--mode string` | `freeform` (灵活创作, the default; `default` and omitting it mean the same), `replica` (PPT 讲解, page-by-page; PDF/PPT sources only, up to 100 pages), `image` (图解视频, AI illustration per page), `handdraw` (手绘动画), `canvas` (画布创作, components laid out on a grid; vertical unless `--aspect` says otherwise). Same values as `theme list --mode`. |
+| `--script-lock` | 原稿锁定: the source *is* the narration — it is voiced word for word and visuals are matched to it; no script is written. Only for narration the user wrote themselves (several complete sentences). Never for a request, a topic or production notes ("帮我生成一段视频，关于…", "60 秒黑金极简"): those are not narration, and a one-sentence source cannot be split into the 2 scenes the pipeline requires. Orthogonal to `--mode` — combines with any of them. With `--mode replica` it means **the speaker notes are the script**, page by page, and the source must be a PPT file (a PDF has no notes). |
+| `--engine string` | `pipeline` (default, v=3) or `agent` (v=2, the legacy 一键成片 engine; no longer offered on the web, prints a warning). The agent engine has no mode/theme/language branches; combining them exits 2. |
+| `--density string` | Freeform only: how many scenes, `sparse`, `balanced` (default) or `dense`. Exit 2 with any `--mode` or `--engine agent`, which ignore it. |
+| `--theme-scene string` | `--mode image` only, with `--theme`: one of that style's scenes, as listed under it by `theme list --mode image`. All it changes is the reference image the illustrations are drawn from — and only for a scene that has one of its own; most do not yet, and those use the style's own image. Do not promise the user a visible difference |
+| `--ip-asset string` | `--mode image` only: the IP character to feature, a `ref` from `vibeknow ip list`, or `none` to leave out the account default. Checked before upload |
+| `--theme string` | Theme / style / template ID from `vibeknow theme list --mode <mode>`: an official id or the user's own `ua_<id>`. Checked against that mode's list before anything is uploaded (exit 2 if it is not there); default auto-select |
+| `--language string` | Output language for script + narration: `zh-CN`, `en-US`, `es-ES`, `fr-FR`, `pt-BR`, `ja-JP`, `ko-KR` (default: `zh-CN` on the built-in endpoint; a custom endpoint keeps its deployment's default) |
 | `--voice string` | Voice: a `#` or `speech_voice_id` from `vibeknow voice list`; pick one matching `--language` |
 | `--avatar string` | Talking-head presenter: `sys_<id>` (public, `vibeknow avatar list`) or `ua_<id>` (your own activated avatar). Not with `--mode handdraw` or `--engine agent` (exit 2). |
 | `--avatar-position string` | Corner: `top-left`, `top-right`, `bottom-left`, `bottom-right` (default: saved preference, else top-left) |
 | `--avatar-size float` | Circle diameter in px at 1080p base, 120–480 (default: saved preference, else 240) |
-| `--aspect string` | `horizontal` (16:9, default) or `vertical` (9:16); `16:9` / `9:16` accepted as aliases |
+| `--aspect string` | `horizontal` (16:9) or `vertical` (9:16); `16:9` / `9:16` accepted as aliases. Default horizontal, except `--mode canvas`, which the backend defaults to vertical |
 | `--bgm` | Enable background music (default off) |
 | `--pages int` | `--mode image` only: exact page count, 1–20 (image-gen cost scales with it; omit for auto) |
-| `--images string` | Mandatory image_index picks from `vibeknow doc images`, e.g. `1,3,5` (not for `--mode replica`) |
+| `--images string` | image_index picks from `vibeknow doc images` to feature, e.g. `1,3,5` (not for `--mode replica`). `--mode image` places each one on a page. Freeform and canvas only ask the director to prefer them: one that does not fit the storyboard is left out, and the backend does not force it in. Do not promise the user every picked image will appear |
 | `--kb-id string` | Knowledge base owning `--from <doc_id>` (printed by `vibeknow doc upload`) |
 | `--async` | Print task_id/session_id and exit without waiting |
 | `--preview-dir string` | Write cover/MP4 artifacts here and announce each as a `resource_ready` event |
@@ -163,6 +167,11 @@ the cover exists from the moment the preview does, and the MP4 from the
 moment an export has produced one, but only the process that started the run
 ever held them. Taken mid-render it delivers nothing and costs nothing.
 
+The snapshot carries `mode`, the `create --mode` name of the line the work ran
+on (a backend value for lines this CLI does not expose; absent for
+agent-engine works). `create`'s own snapshot additionally carries
+`requested_theme` when `--theme` was passed.
+
 ## video wait
 
 Stream progress for a video task, blocking until terminal state (succeeded/failed/cancelled).
@@ -241,10 +250,11 @@ Which nodes actually arrive, per line:
 
 | `--mode` | Reported nodes |
 |---|---|
-| *(default)* and `--script-lock` | `big_director` `script_writing` `storyboard_plan` `tts_generate` `scene_filling` `bg_images` `cover` `bgm` `video_package` |
+| *(default)* and `--script-lock` | `knowledge_prepare` `goal_setting` `beat_director` `beat_script` `cover` `storyboard_plan` `tts_generate` `bg_images` `scene_filling` `bgm` `video_package` |
 | `image` | `style_select` `image_storyboard` `image_gen`, plus `script_writing` `tts_generate` `bgm` `video_package` |
-| `replica` | `doc_dissect` `doc_replica_plan` `doc_replica_shoot`, plus `tts_generate` `bgm` `video_package` |
+| `replica` | `doc_dissect` `doc_replica_director` `doc_replica_plan` `doc_replica_shoot`, plus `tts_generate` `bgm` `video_package` |
 | `handdraw` | `script_writing` `tts_generate` `bgm` `video_package` only. The middle — style, storyboard, drawing, vectorising — emits nothing, and that is where most of the time goes |
+| `canvas` | `knowledge_prepare` `goal_setting` `beat_director` `beat_script` `grid_director` `grid_image_gen` `tts_generate` `cover` `bgm` `video_package` |
 | `--engine agent` | No node names at all; free-form progress lines only |
 
 ## video export
@@ -321,21 +331,104 @@ either a listed `id` or a `speech_voice_id` to `create --voice`.
 
 ## theme list
 
-List visual themes/styles for one creation mode. Theme IDs feed
-`create --theme` and must come from the catalog of the mode you create
-with (the backend rejects cross-mode themes).
+List every value `create --theme` accepts in one creation mode: the user's
+own themes first, then the official catalog. 主题, 风格 and 模板 (theme,
+style, template) all mean this.
 
 ```
-vibeknow theme list [--mode default|image|handdraw|replica] [flags]
+vibeknow theme list [--mode freeform|replica|image|handdraw|canvas] [flags]
+vibeknow theme list --mine [flags]
 ```
 
-`default` and `replica` share one catalog (the design suite); `image` and
-`handdraw` each have their own. Hand-drawn themes include `preview` URLs
-(webp/poster, horizontal + vertical).
+`--mode` takes the same values as `create --mode`, and this list is exactly
+what `create` validates `--theme` against. Validation exists because the
+backend does **not** reject a theme it does not recognise for the run's
+mode — it renders in a substitute and bills normally — so an id that is not
+on this list never leaves the CLI.
+
+| Mode | Official catalog | Own themes (`source: "custom"`) |
+|---|---|---|
+| `freeform` | design suite, minus 4 themes the backend reserves for another line | 我的主题 made on the web |
+| `replica` | design suite | 我的主题 |
+| `image` | image suite | trained 图解 styles |
+| `handdraw` | hand-drawn suite (with `preview` URLs) | — |
+| `canvas` | art directions, each with its palettes as `variants` | — |
+
+Two modes have a second level, listed under each theme rather than in a
+command of its own:
+
+- **canvas** — every art direction carries `variants: [{id, name}]`, its
+  palettes. A variant id is a `--theme` value in its own right: `riso` lets
+  the backend pick the colours, `riso-aqua` fixes them too.
+- **image** — every style carries `scenes: [{slug, name}]`, for
+  `--theme-scene`. Only official styles have scenes.
+
+An image-mode IP character is **not** a theme — who appears, not how it is
+drawn. Those are listed by `vibeknow ip list` and passed as `--ip-asset`; a
+character's `ua_` passed as `--theme` is refused pointing there.
+
+Own themes are listed as `ua_<id>`. Pass that token: the web shows the bare
+number, and a bare number is refused — with the matching theme named, when
+the user has one by that id. Only usable themes are listed — deleted or
+still-training ones are left out.
+
+**`--mine`** lists only the user's own themes, across every mode, each with
+the `modes` it is accepted in. A user names a theme ("用我的国风模板"), not
+the mode it was made for, so start here and pass one of its `modes` as
+`--mode`. It cannot be combined with `--mode` (exit 2).
+
+```json
+{"themes": [
+  {"id": "ua_1234567", "name": "红薄荷", "source": "custom", "base": "mint", "desc": "", "modes": ["freeform", "replica"]},
+  {"id": "ua_77", "name": "my style", "source": "custom", "desc": "", "modes": ["image"]}
+]}
+```
 
 **JSON output shape:**
 ```json
-{"mode": "image", "themes": [{"id": "…", "name": "…", "desc": "…", "tags": ["…"]}]}
+{"mode": "freeform", "themes": [
+  {"id": "ua_1234567", "name": "红薄荷", "source": "custom", "base": "mint", "desc": "", "tags": []},
+  {"id": "mint", "name": "纯白薄荷", "source": "official", "desc": "…", "tags": ["…"]}
+]}
+```
+
+`base` is the official theme a custom one was derived from.
+
+**What `create --theme` refuses** (all exit 2, before any upload):
+
+| Value | Error names |
+|---|---|
+| a bare number | the theme it matches and its `ua_<id>` spelling, or why there is none |
+| an id from another mode's list | the mode it belongs to |
+| a `ua_` that is not one of the user's usable themes | `theme list --mine` |
+| in freeform, one of the 4 reserved themes, or a custom theme built on one | the theme it is built on |
+| anything else not on the list | `theme list` for this mode |
+
+If the catalog itself cannot be fetched, `create` stops with that failure's
+own exit code (4 for network/server trouble, 3 for auth) — an unchecked
+theme is never sent on the chance it is right.
+
+The result reports what was asked for as `requested_theme: {id, name,
+source}`. It is a request, not a reading: the backend does not report back
+which theme rendered.
+
+## ip list
+
+List the IP characters an image-mode video can feature, for
+`create --mode image --ip-asset <ref>`. Free.
+
+```
+vibeknow ip list [--output json]
+```
+
+Public characters (`sys_<id>`) come first, then the user's own trained ones
+(`ua_<id>`). The one marked `account_default` is featured when a run names
+none; `--ip-asset none` leaves it out for one run.
+
+**JSON output shape:**
+```json
+{"ips": [{"ref": "sys_5", "name": "…", "image_url": "…", "source": "public"},
+         {"ref": "ua_9", "name": "…", "image_url": "…", "source": "custom", "account_default": true}]}
 ```
 
 ## subtitle fonts
@@ -555,6 +648,28 @@ The `action_id` is bound to that exact diff, plus `script_only`. So:
 
 Re-run without `--confirm` to get current terms and a current token.
 
+**The free quota.** Each work has a rolling 24-hour free speech quota
+(doubled on a subscription). Within it an edit's voice-over is free; beyond
+it, it is billed when the edit saves. Text generation, and every image a
+full regeneration draws, are billed either way. The blocked action carries
+the reading next to the payload:
+
+```json
+"context": {
+  "free_quota": {"tts": {"used_sec": 30, "total_sec": 120, "remaining_sec": 90, "exhausted": false, "resets_at": "…"}},
+  "billed_outside_quota": ["text_generation", "image_generation"]}
+```
+
+**On a canvas work** (`--mode canvas`) the full regeneration re-plans the
+page's elements and draws their illustrations — there is no background
+image — and the confirmation says so. `--script-only` keeps the page as it is.
+
+Tell the user what is left. `context` is not hashed into the `action_id`:
+the quota is a reading that other edits — including ones on the web — move,
+not a term of this edit, so a token survives it changing. When the quota
+cannot be read the context says `"free_quota": "unavailable"`; treat the
+edit as fully billed.
+
 **The rendered MP4 is not withdrawn.** Unlike `video set`, the backend
 leaves the old file in place, so `video download` keeps returning a video of
 the *previous* narration until the next `video export`. The JSON response
@@ -575,7 +690,99 @@ identical to what the shot already says, empty narration, and a missing
 
 **Not covered by this command.** Changing images, swapping a layout,
 deleting a shot, and editing several shots in one charge all exist on the
-backend and are not wired up yet.
+backend and are not wired up yet. Neither is the canvas editor — moving an
+element on the grid, or swapping one element's picture: it is a drag-and-drop
+tool on the web.
+
+## video quota
+
+Read a work's free post-edit quota. Free and read-only.
+
+```
+vibeknow video quota [task_id] [--session-id <sid>] [--output json]
+```
+
+All three parts of the quota, plus `task_id` and `session_id`. Units are in
+the key names: `tts` counts seconds of speech (`*_sec`), `layout` and
+`background` count generated results. Only `tts` applies to `video edit`
+(`video_edit_uses: ["tts"]`); layout and background are the web editor's
+preview quotas. `billed_outside_quota_by_edit` names what an edit bills
+regardless. The figures are a reading, not a reservation.
+
+## video revoice
+
+Make a new version of a finished video narrated by another voice. Script,
+storyboard and visuals are kept. **Costs credits.**
+
+```
+vibeknow video revoice [task_id] --voice <# | speech_voice_id> [flags]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--voice string` | The new voice, a `#` or `speech_voice_id` from `voice list`. Must speak the video's language |
+| `--yes`, `-y` / `--confirm string` | Authority for the spend, as for `video export` |
+| `--async` | Return once the run has started; `next_actions` is the command that watches it |
+| `--for duration` | Watch for at most this long, then exit 6 with `reason: "wait_budget_expired"`, the `stage` reached and the command that keeps watching — the same contract as `video wait --for`. Use `--for 90s` under a 2-minute tool timeout |
+| `--session-id string` | The work to re-voice (default: resolved from the local run ledger) |
+| `--preview-dir string` | Write the new work's cover here |
+
+The result is a **new work** in a new session under the same task:
+
+```json
+{"task_id": 42, "session_id": "s_new", "work_id": 99, "preview": {…}, "export": {…},
+ "revoice": {"source_session_id": "s_src", "source_work_id": 77, "voice_id": "…", "voice_name": "…",
+             "language": "zh-CN", "status": "completed"}}
+```
+
+The new pair is recorded in the run ledger, so afterwards `video status 42`
+with no `--session-id` resolves to the new version. Address the original
+with its `--session-id`.
+
+**Billing.** By actual use — speech for the whole narration, plus lip-sync
+again when the video has a presenter (`payload.has_avatar`). Nothing is
+quoted in advance; `context.duration_sec` shows the narration length the
+speech is billed against.
+
+**Re-running is safe.** The request is keyed on the work, its current
+version and the voice. Running the same command again attaches to that run:
+still going → watched; finished → reported; neither starts or bills
+anything, and neither asks. Failed, paused or out of credits → retried,
+which bills again and therefore goes through the gate.
+
+**Exit codes.** `0` new version ready; `8` blocked on the spend; `5` failed,
+out of credits (`needs_budget`), or not possible for this work (the message
+is the backend's reason); `6` still running when `--for` ran out
+(`reason: "wait_budget_expired"` — run `next_actions` again), paused, or the
+job stopped being listed; `2` the command line is wrong — no `--voice`, the
+voice it already has, or `--async` with `--for`.
+
+## video cover
+
+Generate an AI cover for a finished video and apply it. **Costs credits.**
+
+```
+vibeknow video cover [task_id] [--title "…"] [--subtitle "…"] [flags]
+```
+
+`--title` is the text drawn on the cover (default: the video's title).
+Earlier covers stay on the work as candidates (`cover_urls`).
+
+**Billing.** One image generation, charged only after the cover is saved; a
+generation that fails costs nothing. The payload names the billed item
+(`billed: "image_generation x1"`) because the backend does not expose the
+unit price.
+
+**The exported MP4 is withdrawn.** It shows the old cover, so the backend
+clears it; the result says `export_cleared: true` with a `next_actions`
+entry for `video export`, and the confirmation warns about it first.
+
+**Exit 6 means "unknown", not "failed".** Generation takes 30–60 s and the
+backend finishes and bills it even if the client has gone. If the stream
+ends without a result the command exits 6 with `resend_safe: false`: check
+`video status` for a new `cover_url` before generating again. An explicit
+failure from the backend exits non-zero with its reason, and nothing was
+billed.
 
 ## video set
 

@@ -24,48 +24,28 @@
 
 ## 已登录，但业务命令仍失败
 
-优先检查：
+先只读核对，不通过切换身份或环境试探：
 
-1. `lovrabet doctor` 显示的国家/地区和最终 Domain 是否正确
-2. 当前 AK 对应的是否是预期用户：`lovrabet auth info`
-3. `defaultApp` 是否能在 cache 中解析到 appcode
-4. 是否需要先刷新 app cache
+1. 用 `lovrabet doctor` 核对最终 Domain、默认 AppCode 及配置来源；项目默认选择优先于全局。
+2. 用 `lovrabet auth info` 核对当前用户。
+3. 对照[默认应用与应用发现](app-resolution.md)，核对本次目标及命令中的 `--app` / `--appcode`；上一条命令的临时目标不会自动沿用。
+4. 区分认证失败、权限拒绝、连接错误与查询成功但没有匹配；只在最后一种情况且任务范围允许时扩大只读发现。
 
-```bash
-lovrabet app list --no-cache
-```
+应用目标不对时，在本次命令中显式指定正确目标，不重设路由或 AccessKey。只有用户明确要求记住默认应用时才执行 `workspace init/use`。连接配置或用户身份确需调整时，按用户确认的目标分别配置；不要把应用选择问题当成登录问题。
 
-如果你怀疑连接配置或认证信息不符合预期，比如：
+`config init` 只替换全局 region/Domain 路由字段，`auth login` 只替换目标作用域的 AccessKey；两者都保留其他配置。企业独立部署使用 `lovrabet config init --domain-config <file>`；调整后用 `lovrabet doctor` 核对最终生效值。
 
-- `defaultApp` 明显不对
-- `auth info` 返回的用户不是你预期的账号
-- `lovrabet doctor` 显示的 region 或 Domain 不符合预期
+## 默认应用无法解析
 
-分别重设全局连接配置和 AccessKey：
+顶层 `appcode` 或本地 `apps` 名称中的 `appcode` 可直接提供目标，不依赖远端名称缓存。先检查配置结构和名称是否匹配。
 
-```bash
-lovrabet config init --region cn
-lovrabet auth login --access-key <ACCESS_KEY>
-```
-
-如果业务节点在印尼，把第一条改成 `lovrabet config init --region id`。企业独立部署使用 `lovrabet config init --domain-config <file>`。
-
-`config init` 只替换全局 region/Domain 路由字段，`auth login` 只替换目标作用域的 AccessKey；两者都保留其他配置。最后执行 `lovrabet doctor` 核对最终生效的国家/地区和 Domain。
-
-## `defaultApp` 已有，但仍然找不到 appcode
-
-说明当前 `defaultApp` 对应的远端 app 目录还没建立或已经失效。
-
-先执行：
+`defaultApp` 使用远端名称、且本地没有对应名称映射时，才检查当前身份的应用目录：
 
 ```bash
 lovrabet app list --no-cache
 ```
 
-如果仍不行，说明：
-
-- 当前 `accessKey` 看不到这个 app
-- 或 `defaultApp` 名称本身已过时
+仍无法解析时，核对名称是否变化、应用是否已发布及当前用户是否有访问权限；保留真实错误，不换 AK 或环境绕过。
 
 ## `app list --local` 没数据
 

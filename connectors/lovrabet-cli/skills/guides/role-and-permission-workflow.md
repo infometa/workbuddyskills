@@ -54,11 +54,12 @@ lovrabet role user-remove --role <roleId|exactName> --user <userId> --expect-use
 lovrabet role user-remove --role <roleId|exactName> --user <userId> --expect-user-count <count> --yes --format compress
 ```
 
-- `--user` 使用数字用户 ID；添加时该人员必须已经属于目标应用。
+- `--user` 使用用户 ID（字符串）；添加时该人员必须已经属于目标应用。
+- `selector.userId` 和 `before/after.userIds` 均输出字符串。
 - `--expect-user-count` 用于防止读取后成员数量已变化，建议每次写入都提供。
 - 重复添加已有成员或移出不存在的成员不会重复写入。
 - OWNER 成员不能用这些命令调整。
-- 如果人员身份不明确，停止写入并要求用户确认数字用户 ID。
+- 如果人员身份不明确，停止写入并要求用户确认用户 ID。
 
 ## 页面权限
 

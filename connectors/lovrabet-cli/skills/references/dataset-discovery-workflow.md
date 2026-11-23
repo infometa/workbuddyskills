@@ -6,49 +6,11 @@
 
 按已知线索选择筛选参数：数据集名称用 `--name`，物理表名用 `--table-name`，数据集 code 用 `--code`。下面按名称验证应用的示例，在已知物理表名时可将 `--name "<关键词>"` 换成 `--table-name "<表名前缀>"`。
 
-## 先不要默认查 app
+## 应用选择
 
-`dataset` 工作流的第一步不是固定的 `app list`，而是先判断当前是否已经有明确 app 上下文。
+应用选择统一遵循[默认应用与应用发现](../guides/app-resolution.md)：未指定目标时先查默认 AppCode（顶层 `appcode` 或 `defaultApp` 解析结果）；仅在成功查询无合理匹配、核对筛选条件且用户未限定范围后，才扩大只读发现。认证、权限或连接错误不触发跨应用重试。
 
-### 直接进入数据集发现
-
-以下情况可以直接执行 `dataset list`：
-
-- 用户已经给了 `--appcode`
-- 用户已经给了 `--app <name>`
-- 当前问题明显是在上文已确认的同一 app 里继续操作
-- 用户明确说“当前应用”“默认应用”，且没有新的业务域线索
-
-`defaultApp` 只是默认候选。用户提到订单、商品、库存、客户、证照等业务对象且未显式指定 app 时，先在默认候选里按关键词查数据集；命中合理再继续，无命中或不合理再扩大到 app 目录。
-
-### 需要先做应用决议
-
-以下情况应先获取应用信息，再决定目标 app：
-
-- 用户只说了业务需求，没有给 app 线索
-- 当前没有显式 `--appcode` / `--app`，且需求包含业务域或数据对象线索
-- 需求描述可能对应多个业务应用
-- 已经在 `defaultApp` 下按关键词验证过，但没有合理数据集命中
-
-若当前有 `defaultApp`，推荐先执行：
-
-```bash
-lovrabet dataset list --name "<关键词>"
-```
-
-默认候选无命中、弱命中或语义不合理时，再执行：
-
-```bash
-lovrabet app list
-```
-
-再根据业务关键词挑 1-2 个候选应用，执行：
-
-```bash
-lovrabet dataset list --app <name> --name "<关键词>"
-```
-
-通过数据集命中结果反向确认 app，而不是只看 app 名称猜测。
+`--app` / `--appcode` 只对本次命令生效。临时选择其他应用后，后续每条 `detail`、`data` 或执行命令都必须显式携带该目标；资源标识必须与发现它的 AppCode 配对，不能依靠上一条命令改变默认值。
 
 ## 命令
 
@@ -134,21 +96,21 @@ lovrabet dataset sdk-doc --code <datasetCode>
 ## 典型工作流
 
 ```bash
-# 0. 如果默认候选验证不成立，再看应用目录
+# 0. 仅当满足上述扩大只读发现的条件时，查看应用目录
 lovrabet app list
 
 # 1. 在候选 app 中搜索数据集
 lovrabet dataset list --app crm --name "公司"
 
-# 2. 命中后查看字段结构
-lovrabet dataset detail --code 2874b19935c240659e8872e9e2416ae3
+# 2. 命中后在同一应用查看字段结构
+lovrabet dataset detail --app crm --code 2874b19935c240659e8872e9e2416ae3
 
-# 3. 确认字段名后，开始 Instant API 数据操作
-lovrabet data filter --code 2874b19935c240659e8872e9e2416ae3 \
+# 3. 确认字段名后，在同一应用执行 Instant API 数据操作
+lovrabet data filter --app crm --code 2874b19935c240659e8872e9e2416ae3 \
   --params '{"where":{"name":{"$contain":"test"}},"currentPage":1,"pageSize":20}'
 ```
 
-如果当前 app 已明确，则直接：
+如果使用配置中的默认应用，则直接：
 
 ```bash
 # 1. 搜索数据集
@@ -169,5 +131,5 @@ lovrabet data filter --code 2874b19935c240659e8872e9e2416ae3 \
 2. `dataset list` 返回的 `fields` 数组包含所有字段名，多数场景下无需额外调 `detail`
 3. `dataset detail` 返回的字段兼容 v1（properties）和 v2（fields）两种数据集格式；运行态接口未给完整字段时会兜底字段名
 4. 数据集的 code 是 32 位 hex UUID，是所有 `data *` 命令的必填参数
-5. 当业务需求不明确落在哪个 app 时，先验证 `defaultApp`；验证不成立再 `app list`，并用 `dataset list --app <name> --name <关键词>` 做验证式收敛
+5. 已明确目标但它不是配置中的默认应用时，在每条命令中显式指定 `--appcode` 或 `--app`
 6. 写 Personal Backend Function 或其他数据访问源码前，除非用户已经提供明确数据，否则先用 `api-doc`、`dataset detail`、`dataset sdk-doc` 和只读 `data` 命令确认真实结构

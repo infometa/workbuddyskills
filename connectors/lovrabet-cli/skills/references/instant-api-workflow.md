@@ -13,20 +13,13 @@ lovrabet data <command> --code <datasetCode> --params '<json>'
 
 ## data 之前如何确定 app
 
-`data` 子命令本身只依赖 `dataset code`，但这个 `dataset code` 总是来自某个具体 app。
+`data` 命令需要目标 AppCode 和该应用下的 `datasetCode`；不能只拿数据集标识而忽略应用上下文。
 
-因此决策顺序应该是：
+应用选择统一遵循[默认应用与应用发现](../guides/app-resolution.md)：未指定目标时先查默认 AppCode（顶层 `appcode` 或 `defaultApp` 解析结果）；仅在成功查询无合理匹配、核对筛选条件且用户未限定范围后，才扩大只读发现。认证、权限或连接错误不触发跨应用重试。
 
-以下 `--name` 示例用于数据集名称关键词；已知物理表名时改用 `--table-name <表名前缀>`，无需同时提供名称。多个筛选条件按 AND 组合，详见 [数据集发现](dataset-discovery-workflow.md)。
+`--app` / `--appcode` 只对本次命令生效。临时选择其他应用后，后续每条 `detail`、`data` 或执行命令都必须显式携带该目标；资源标识必须与发现它的 AppCode 配对，不能依靠上一条命令改变默认值。
 
-1. 先判断当前 app 是否已明确
-2. 当前 app 明确时，直接 `dataset list --name ...`
-3. 当前 app 不明确但有 `defaultApp` 时，先 `dataset list --name <关键词>` 验证默认候选
-4. 默认候选无命中、弱命中或语义不合理时，再 `app list`
-5. 再用 `dataset list --app <name> --name <关键词>` 收敛到正确 app
-6. 拿到 `dataset code` 后，再执行 `data filter/getOne/create/batchCreate/update/delete`
-
-不要直接在 app 未决议的情况下盲目构造 `data` 命令。
+按数据集名称用 `--name`，已知物理表名用 `--table-name <表名前缀>`，多个筛选条件按 AND 组合，详见[数据集发现](dataset-discovery-workflow.md)。拿到数据集后，核对字段、动作权限和任务授权再操作。
 
 ## 架构说明
 

@@ -10,7 +10,7 @@ metadata:
 
 通过 yunke 的 yunke-crm 插件操作云客 CRM。凭证（`~/.yunke/crm.json`）由 WorkBuddy 连接器经 OAuth 登录流程自动写入，无需手动登录。
 
-> **前置条件**：连接器已安装 yunke 并完成 OAuth 登录（`crm.auth.login-web`）。首次使用前，用户须先在云枢完成「AI 助手登录」生成 agentapp 凭证，否则登录会返回 `access_denied`。
+> **前置条件**：连接器已安装 yunke 并完成 OAuth 登录（`crm.auth.login-web`）。
 
 所有业务命令输出统一为 JSON 信封：
 
@@ -25,12 +25,15 @@ metadata:
 | 类别 | 命令前缀 | 用途 |
 |---|---|---|
 | 组织架构 | `crm.org.*` | 部门树、员工搜索 |
+| 客户 | `crm.customer.*` | 客户列表查询：`list` 取数据行、`default-head` 取列定义，两者成对使用（自定义字段 id 的含义以 default-head 为准） |
 | 用户信息 | `crm.user.*` | 当前登录用户详情 |
 | 报表统计 | `crm.report.*` | 员工/客户/设备统计 |
 | 通话 | `crm.call.*` | 通话记录、ASR 转写 |
 | AI 分析 | `crm.ai.*` | SOP、情绪、意向、痛点等智能分析 |
 | 定位 | `crm.location.*` | 部门/员工定位轨迹 |
-| 其他 | `crm.misc.*` | 飞单预警、短信、管控日志 |
+| 订单风控 | `crm.order.*` | 飞单预警分析（疑似漏单检测） |
+| 短信 | `crm.sms.*` | 短信历史记录 |
+| 录音 | `crm.voice.*` | 现场/工牌录音列表 |
 
 ## ⚠️ 参数命名陷阱（必读）
 
@@ -38,11 +41,12 @@ metadata:
 
 | 命令族 | 部门参数 | 时间参数 | 时间格式 |
 |---|---|---|---|
-| `report.employee-statistics` | `depart_id`（空=全公司） | `start_time` / `end_time` | `YYYY-MM-DD`，空=近7天 |
-| `report.customer-statistics` | `department_ids`（JSON 数组，必填） | `time_range`（枚举） | — |
+| `report.custom-report-list` | `depart_id`（空=全公司） | `start_time` / `end_time` | `YYYY-MM-DD`，空=近7天 |
+| `customer.list` | `dept_id`（空=不过滤；另有 `dept_ids` 数组） | `create_time_start` / `create_time_end`（或 `modify_time_*`，可选） | `YYYY-MM-DD HH:mm:ss` |
+| `report.customer-metrics` | `department_ids`（JSON 数组，必填） | `time_range`（枚举） | — |
 | `call.log-list` | `department_id`（空=默认部门） | `start_voice_time` / `end_voice_time` | `YYYY-MM-DD HH:mm:ss` |
-| `ai.*`（分析类） | `dept_id`（空=默认部门） | `start_time` / `end_time`（**必填**；例外：`employee-emotion`、`communication-keywords` 可选，`customer-intention` 无时间参数） | `YYYY-MM-DD HH:mm:ss` |
-| `location.*` | `department_id` / `user_id` | `start_time` / `end_time`（仅 `by-user`） | `YYYY-MM-DD HH:mm:ss` |
+| `ai.*`（分析类） | `dept_id`（空=默认部门） | `start_time` / `end_time`（**必填**；例外：`communication-keywords-list` 可选，`customer-intention-list` 无时间参数） | `YYYY-MM-DD HH:mm:ss` |
+| `location.*` | `department_id` / `user_id` | `start_time` / `end_time`（仅 `record-list`） | `YYYY-MM-DD HH:mm:ss` |
 
 ## 常用示例
 
@@ -60,12 +64,32 @@ yunke crm.org.department-tree
 yunke crm.org.search --keyword "张伟"
 ```
 
-### 报表统计
+### 客户列表
 
-查询员工统计（`--option department`=部门维度汇总，`--option employee`=员工维度明细）：
+查询客户（分页 + 多条件过滤；行内 `customFieldValues` 为自定义字段值，列定义与字段类型对照 `crm.customer.default-head`）：
 
 ```bash
-yunke crm.report.employee-statistics --option employee --depart_id "d001" --start_time "2026-07-01" --end_time "2026-07-31"
+yunke crm.customer.list --keyword "张" --page_index 1 --page_size 20
+```
+
+仅取总数：
+
+```bash
+yunke crm.customer.list --only_fetch_count
+```
+
+取列定义（筛选/解读自定义字段前先调，`fieldCode` ↔ `list` 行内 `fieldId`）：
+
+```bash
+yunke crm.customer.default-head
+```
+
+### 报表统计
+
+查询员工自定义报表（`--option department`=部门维度汇总，`--option employee`=员工维度明细）：
+
+```bash
+yunke crm.report.custom-report-list --option employee --depart_id "d001" --start_time "2026-07-01" --end_time "2026-07-31"
 ```
 
 设备统计：
@@ -93,19 +117,19 @@ yunke crm.call.asr-result --call_action_id "call_xxx"
 员工 SOP 分析（`start_time`/`end_time` 必填，含时分秒）：
 
 ```bash
-yunke crm.ai.sop-analysis --dept_id "d001" --start_time "2026-07-01 00:00:00" --end_time "2026-07-31 23:59:59"
+yunke crm.ai.employee-sop-analyse-list --dept_id "d001" --start_time "2026-07-01 00:00:00" --end_time "2026-07-31 23:59:59"
 ```
 
 客户情绪分析（同样必填时间范围）：
 
 ```bash
-yunke crm.ai.customer-emotion --start_time "2026-07-01 00:00:00" --end_time "2026-07-31 23:59:59"
+yunke crm.ai.customer-mood-list --start_time "2026-07-01 00:00:00" --end_time "2026-07-31 23:59:59"
 ```
 
 客户意向分析（不接收时间参数，用 `intension_levels` / 分页筛选）：
 
 ```bash
-yunke crm.ai.customer-intention --dept_id "d001" --page_index 1
+yunke crm.ai.customer-intention-list --dept_id "d001" --page_index 1
 ```
 
 ### 定位
@@ -113,7 +137,7 @@ yunke crm.ai.customer-intention --dept_id "d001" --page_index 1
 部门定位（建议先用 `org.search` 缩小部门范围）：
 
 ```bash
-yunke crm.location.by-department --department_id "d001"
+yunke crm.location.everyone-last-location --department_id "d001"
 ```
 
 ## 调用规范
@@ -130,7 +154,7 @@ yunke crm.location.by-department --department_id "d001"
 
 Operate Yunke CRM via the yunke `yunke-crm` plugin. Credentials (`~/.yunke/crm.json`) are written automatically by the WorkBuddy connector through the OAuth login flow — no manual login required.
 
-> **Prerequisite**: The connector has installed yunke and completed OAuth login (`crm.auth.login-web`). Before first use, the user must complete "AI Assistant login" in Yunshu to generate the agentapp credential, otherwise login returns `access_denied`.
+> **Prerequisite**: The connector has installed yunke and completed OAuth login (`crm.auth.login-web`).
 
 All business commands output a JSON envelope:
 
@@ -146,11 +170,12 @@ On failure: `success: false`, `error: { "code", "message", "details" }`. Check t
 
 | Family | Department param | Time params | Time format |
 |---|---|---|---|
-| `report.employee-statistics` | `depart_id` (empty = whole company) | `start_time` / `end_time` | `YYYY-MM-DD`, empty = last 7 days |
-| `report.customer-statistics` | `department_ids` (JSON array, required) | `time_range` (enum) | — |
+| `report.custom-report-list` | `depart_id` (empty = whole company) | `start_time` / `end_time` | `YYYY-MM-DD`, empty = last 7 days |
+| `customer.list` | `dept_id` (empty = no filter; also `dept_ids` array) | `create_time_start` / `create_time_end` (or `modify_time_*`, optional) | `YYYY-MM-DD HH:mm:ss` |
+| `report.customer-metrics` | `department_ids` (JSON array, required) | `time_range` (enum) | — |
 | `call.log-list` | `department_id` (empty = default dept) | `start_voice_time` / `end_voice_time` | `YYYY-MM-DD HH:mm:ss` |
-| `ai.*` (analysis) | `dept_id` (empty = default dept) | `start_time` / `end_time` (**required**; exceptions: `employee-emotion`, `communication-keywords` optional, `customer-intention` takes no time params) | `YYYY-MM-DD HH:mm:ss` |
-| `location.*` | `department_id` / `user_id` | `start_time` / `end_time`（仅 `by-user`） | `YYYY-MM-DD HH:mm:ss` |
+| `ai.*` (analysis) | `dept_id` (empty = default dept) | `start_time` / `end_time` (**required**; exceptions: `communication-keywords-list` optional, `customer-intention-list` takes no time params) | `YYYY-MM-DD HH:mm:ss` |
+| `location.*` | `department_id` / `user_id` | `start_time` / `end_time` (only `record-list`) | `YYYY-MM-DD HH:mm:ss` |
 
 ## Common Examples
 
@@ -163,7 +188,13 @@ yunke crm.org.search --keyword "Zhang Wei"
 Employee statistics for a department:
 
 ```bash
-yunke crm.report.employee-statistics --option employee --depart_id "d001" --start_time "2026-07-01" --end_time "2026-07-31"
+yunke crm.report.custom-report-list --option employee --depart_id "d001" --start_time "2026-07-01" --end_time "2026-07-31"
+```
+
+Customer list (paginated; row-level `customFieldValues` hold custom-field values — resolve field names/types against `crm.customer.default-head`):
+
+```bash
+yunke crm.customer.list --keyword "Zhang" --page_index 1 --page_size 20
 ```
 
 Call records:
@@ -181,7 +212,7 @@ yunke crm.call.asr-result --call_action_id "call_xxx"
 Customer emotion analysis (time range required, with HH:mm:ss):
 
 ```bash
-yunke crm.ai.customer-emotion --start_time "2026-07-01 00:00:00" --end_time "2026-07-31 23:59:59"
+yunke crm.ai.customer-mood-list --start_time "2026-07-01 00:00:00" --end_time "2026-07-31 23:59:59"
 ```
 
 ## Conventions

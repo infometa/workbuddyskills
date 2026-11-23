@@ -1,0 +1,38 @@
+{
+  "env": {
+    "PATH": "$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin;$HOME\\AppData\\Local\\Microsoft\\WindowsApps;$HOME\\AppData\\Local\\Programs\\Breeze\\bin;$HOME\\.local\\bin;C:\\Windows\\System32;C:\\Windows;C:\\Windows\\System32\\WindowsPowerShell\\v1.0"
+  },
+  "init": {
+    "darwin": "curl -fsSL https://breezeblue.ai/cli/install.sh | sh",
+    "linux": "curl -fsSL https://breezeblue.ai/cli/install.sh | sh",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"irm https://breezeblue.ai/cli/install.ps1 | iex\""
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "breeze version --output json",
+      "linux": "breeze version --output json",
+      "win32": "breeze version --output json"
+    },
+    "minVersion": "0.23.1",
+    "versionPattern": "\"version\":\\s*\"(\\d+\\.\\d+\\.\\d+)\""
+  },
+  "auth": {
+    "darwin": "breeze login --no-browser",
+    "linux": "breeze login --no-browser",
+    "win32": "breeze login --no-browser"
+  },
+  "unAuth": {
+    "darwin": "breeze logout --agent",
+    "linux": "breeze logout --agent",
+    "win32": "breeze logout --agent"
+  },
+  "status": {
+    "darwin": "breeze whoami --agent",
+    "linux": "breeze whoami --agent",
+    "win32": "breeze whoami --agent"
+  },
+  "statusMatch": "\"present\"\\s*:\\s*true",
+  "authUrlDomain": "breezeblue.ai",
+  "authSuppressBrowser": false,
+  "authWaitForExit": true
+}

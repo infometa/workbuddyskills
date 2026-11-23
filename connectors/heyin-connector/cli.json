@@ -1,0 +1,47 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=22.20.0"
+  },
+  "init": {
+    "darwin": "npm install -g @heyinkeji/cli",
+    "linux": "npm install -g @heyinkeji/cli",
+    "win32": "npm install -g @heyinkeji/cli"
+  },
+  "auth": {
+    "darwin": "heyincli auth login --json=false",
+    "linux": "heyincli auth login --json=false",
+    "win32": "heyincli.cmd auth login --json=false"
+  },
+  "status": {
+    "darwin": "heyincli auth status --json",
+    "linux": "heyincli auth status --json",
+    "win32": "heyincli.cmd auth status --json"
+  },
+  "unAuth": {
+    "darwin": "heyincli auth logout",
+    "linux": "heyincli auth logout",
+    "win32": "heyincli.cmd auth logout"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "heyincli -v",
+      "linux": "heyincli -v",
+      "win32": "heyincli.cmd -v"
+    },
+    "minVersion": "1.0.0"
+  },
+  "env": {
+    "SOURCE": "WorkBuddy",
+    "OAUTH_CLIENT_ID": "xcDQQ31Q8ibs85KViTWItIVOsbzwgk7j"
+  },
+  "authDeviceFlow": {
+    "uriPattern": "(?:^|\\r?\\n)(https?://[^\\s]+)(?:\\r?\\n|$)",
+    "codePattern": "核对验证码：[ \\t]*([^\\s]+)",
+    "defaultExpiresInSeconds": 240
+  },
+  "authSuppressBrowser": true,
+  "statusMatchJson": {
+    "logged_in": "true"
+  }
+}

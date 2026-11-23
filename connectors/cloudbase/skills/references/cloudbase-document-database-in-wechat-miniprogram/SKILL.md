@@ -1,7 +1,7 @@
 ---
 name: cloudbase-document-database-in-wechat-miniprogram
 description: Use CloudBase document database WeChat MiniProgram SDK to query, create, update, and delete data. Supports complex queries, pagination, aggregation, and geolocation queries.
-version: 2.36.2
+version: 2.37.6
 license: MIT
 alwaysApply: false
 ---
@@ -20,6 +20,7 @@ If a referenced sibling skill file is missing from this environment, ask the use
 
 - A WeChat Mini Program must access CloudBase document database through `wx.cloud.database()`.
 - The request mentions Mini Program collection CRUD, pagination, aggregation, or geolocation queries.
+- Moving that Mini Program app's data onto CloudBase PG while keeping `wx.cloud.database()` is pgdoc — read `../postgresql-development-cloudbase/references/pgdoc.md` before changing any SDK call. CUSTOM security rules do not apply after pgdoc takes over.
 
 ### Read before writing code if
 

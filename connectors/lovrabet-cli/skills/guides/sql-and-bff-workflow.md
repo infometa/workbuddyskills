@@ -14,8 +14,8 @@
 
 运行时复用既有能力的标准顺序：
 
-1. 先判断 app 是否明确
-2. 不明确时，先做应用决议
+1. 按[默认应用与应用发现](app-resolution.md) 选择本次目标，未指定时优先默认 AppCode
+2. 已有可信能力绑定时，核对所属应用与本次任务范围
 3. 从用户明确输入、业务 Skill 固定契约、可信 Service Tree、前序已确认上下文或可信 KB 候选确认 `sqlCode` / Backend Function ENDPOINT `functionName`
 4. 先执行 `detail`，只核对该命令实际返回的字段；缺失契约继续视为未知
 5. 判断真实副作用、权限和用户授权，条件满足时才执行 `exec`
@@ -28,48 +28,38 @@ Detail 成功只证明能力存在，不代表可以自动执行。副作用、�
 
 ## Custom SQL 工作流
 
-1. app 不明确时，按 [app-resolution.md](app-resolution.md) 决议：有 `defaultApp` 先验证默认候选，验证不成立再扩大到应用列表：
-
-```bash
-# 默认候选验证不成立时
-lovrabet app list
-```
+1. 按 [app-resolution.md](app-resolution.md) 确认目标 AppCode；下列 `<appcode>` 均指同一目标
 
 2. 如果没有 `sqlCode`，从业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选定位；仍无法唯一定位时停止，不猜测
 3. 先看详情：
 
 ```bash
-lovrabet sql detail --sqlcode <code>
+lovrabet sql detail --appcode <appcode> --sqlcode <code>
 ```
 
 4. 核对应用、查询口径、参数和数据范围；条件满足时才执行：
 
 ```bash
-lovrabet sql exec --sqlcode <code> --params '<json>'
+lovrabet sql exec --appcode <appcode> --sqlcode <code> --params '<json>'
 ```
 
 普通只读查询在平台 `sqlCode` 权限满足且不需要额外业务授权时，可按可信契约直接执行对应的 Custom SQL。可信业务契约明确要求按当前用户、角色、数据范围或业务规则额外控制时，使用已有 Backend Function，由 Backend Function 完成业务校验后，按可信契约执行对应的 `sqlCode`。
 
 ## Backend Function 工作流
 
-1. app 不明确时，按 [app-resolution.md](app-resolution.md) 决议：有 `defaultApp` 先验证默认候选，验证不成立再扩大到应用列表：
-
-```bash
-# 默认候选验证不成立时
-lovrabet app list
-```
+1. 按 [app-resolution.md](app-resolution.md) 确认目标 AppCode；下列 `<appcode>` 均指同一目标
 
 2. 如果没有函数信息，从业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选定位；仍无法唯一定位时停止，不猜测
 3. 先看详情：
 
 ```bash
-lovrabet bff detail --name <functionName>
+lovrabet bff detail --appcode <appcode> --name <functionName>
 ```
 
 4. `bff detail` 成功可确认当前应用能按名称解析该运行态 Backend Function ENDPOINT，但不会返回输入输出、函数类型或副作用契约；参数结构、输入输出和真实副作用由可信业务 Skill 或平台已确认契约补齐，参数值、执行意图和执行授权可由用户明确提供；条件满足时才执行：
 
 ```bash
-lovrabet bff exec --name <functionName> --params '<json>'
+lovrabet bff exec --appcode <appcode> --name <functionName> --params '<json>'
 ```
 
 运行态只主动发现和直接调用 ENDPOINT。HOOK 绑定到 Dataset 的一个具体 Instant API operation 及 BEFORE/AFTER 节点；Agent 不直接调用 HOOK，而是在可信契约确认绑定关系后执行对应 `data` 命令。基础访问权限由平台 RBAC 控制；HOOK 仅用于补充个性化校验和处理。服务端成功解析并加载绑定脚本时，HOOK 在同一请求管线中执行；已执行的 BEFORE HOOK 失败会阻止主操作。绑定查询或脚本加载异常会记录日志并跳过 HOOK，补充逻辑可能被跳过，因此不得把 HOOK 作为必须强制执行的合规或业务校验唯一保障。AFTER HOOK 失败时不能据此断言主操作已回滚或直接重试，应先按业务唯一键只读回查。
@@ -113,16 +103,11 @@ lovrabet personal-bff exec --id <id> --params '{"status":"active"}' --format com
 
 Backend Function 返回值应包含 handoff 所需结果：已创建记录、已复用记录、失败步骤、是否可重试和 traceId。这样 Agent 拿到的是业务结果，而不是一串低层写接口的临场拼装结果。
 
-## 什么时候可以跳过 app 决议
+## 应用上下文
 
-以下情况可以直接进入 `sql detail` 或 `bff detail`，但不能跳过执行前的风险与授权判断：
+应用选择统一遵循[默认应用与应用发现](app-resolution.md)：未指定目标时先查默认 AppCode（顶层 `appcode` 或 `defaultApp` 解析结果）；仅在成功查询无合理匹配、核对筛选条件且用户未限定范围后，才扩大只读发现。认证、权限或连接错误不触发跨应用重试。
 
-- 用户已经给了 `--appcode`
-- 用户已经给了 `--app <name>`
-- 当前对话已经明确在某个 app 上下文中继续
-- 用户明确说“当前应用”“默认应用”，且没有新的业务域线索
-
-`defaultApp` 只是默认候选，不是强上下文。Custom SQL 和 Backend Function 经常按业务域分布在不同 app 中；用户提到新的业务域或业务对象且未指定 app 时，先把 `defaultApp` 当第一个候选验证，验证不成立再扩大到应用列表。
+`--app` / `--appcode` 只对本次命令生效。临时选择其他应用后，后续每条 `detail`、`data` 或执行命令都必须显式携带该目标；资源标识必须与发现它的 AppCode 配对，不能依靠上一条命令改变默认值。
 
 ## 不要这样做
 
@@ -133,7 +118,7 @@ Backend Function 返回值应包含 handoff 所需结果：已创建记录、已
 
 ## 推荐配合命令
 
-- app 决议：`lovrabet app list`
+- 按需发现其他应用：`lovrabet app list`
 - Custom SQL 标识来源：用户明确输入、业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选
 - Backend Function 标识来源：用户明确输入、业务 Skill、可信 Service Tree、前序已确认上下文或可信 KB 候选
 - Personal Backend Function：`lovrabet personal-bff list/detail/create/update/exec`

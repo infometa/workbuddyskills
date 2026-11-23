@@ -11,17 +11,19 @@ description: 连接 Beluga 生产环境 MCP 网关（https://beluga-server-cn.he
 
 ## 接入方式
 
-### 方式一：WorkBuddy 原生授权（服务端修复后可用）
+### 方式一（推荐）：WorkBuddy 原生授权 / 平台托管
 
-用户点击「信任/连接」，WorkBuddy 自动打开授权页面完成登录，
-令牌自动携带与静默刷新，无需手动配置。
+本连接器已声明 `auth_mode: "server-side"`，凭据由 WorkBuddy 平台托管。
+用户在「插件 → MCP 服务器」点击「信任/连接」即可自动拉起授权页完成登录，
+令牌由平台自动携带与静默刷新，**桌面端与手机端行为一致**，无需手动配置。
 
-> ⚠️ 已知问题（截至 2026-09-08）：Beluga OAuth 服务端的动态客户端注册
-> 仅接受 http/https 回调地址，而 WorkBuddy 原生授权使用自定义协议回调，
-> 会报「客户端元数据无效」且无法弹出浏览器。服务端放开该限制前，
-> 请使用方式二接入。
+> 使用新字段需 WorkBuddy ≥ 4.22.12（见 `connector-meta.json` 的
+> `minWorkbuddyVersion`）。
 
-### 方式二：一键接入脚本 connect.py（当前推荐）
+### 方式二（仅调试备用）：一键接入脚本 connect.py
+
+> 该方式把 Bearer Token 写入**本机** `~/.workbuddy/mcp.json`，仅在本地桌面端
+> 有效、手机端无法复现，现已降级为调试/排障备用，不再作为常规接入方式。
 
 在连接器包目录下运行（仅需 Python 3.9+，无第三方依赖）：
 

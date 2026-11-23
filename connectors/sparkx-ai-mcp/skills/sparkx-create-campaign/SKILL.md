@@ -1,20 +1,22 @@
 ---
 name: sparkx-create-campaign
 description: >-
-  Create new Amazon Sponsored Products campaigns in bulk through `create_sp_sb_campaign` -
-  campaign, ad groups, promoted products, and either auto targeting, keywords, or product
-  targets, plus negatives, placement adjustments and an optional audience. Use when the
+  Create new Amazon Sponsored Products campaigns in bulk through `create_sp_sb_campaign`, or add
+  ad groups to an existing SP campaign through `create_sp_ad_group` -
+  promoted products, negatives, and either auto targeting, keywords, or product targets.
+  New-campaign creation also supports placement adjustments and an optional audience. Use when the
   user wants to build / launch / set up a new campaign - 新建广告活动 / 建一个自动广告 /
-  开个手动词的活动 / 按这批 ASIN 建活动. Creates the campaign itself; it is NOT for editing
-  existing ones (use sparkx-edit-ads), for AI managed groups (use sparkx-create-ai-group), or
+  开个手动词的活动 / 按这批 ASIN 建活动 - or add ad groups under an existing SP campaign.
+  It is not for editing existing objects (use sparkx-edit-ads), for AI managed groups (use sparkx-create-ai-group), or
   for reading data (use sparkx-query-ads-performance / sparkx-query-entity-metadata).
 metadata:
-  version: 1.0.2
+  version: 1.0.5
 ---
 
-# Create Sponsored Products campaigns
+# Create Sponsored Products campaigns and ad groups
 
-One tool: `create_sp_sb_campaign`. Scope `amazon_sa_campaign_create:write`, separate from the
+Two tools: `create_sp_sb_campaign` and `create_sp_ad_group`. Both use scope
+`amazon_sa_campaign_create:write`, separate from the
 edit scope - a token that can edit campaigns cannot necessarily create them.
 
 ## Sponsored Products only, right now
@@ -29,18 +31,18 @@ The tool is named `create_sp_sb_campaign`, but this server currently enables **S
 - The enabled set is server configuration and can widen later without a code change. **Trust
   the error over this document**: if a type is refused, it is off; if it succeeds, it is on.
 
-Everything below describes the SP path.
+Everything below describes the SP path. Sections that apply only to
+`create_sp_sb_campaign` or only to `create_sp_ad_group` say so explicitly.
 
-## These writes create real campaigns
+## These writes create live configuration
 
-A created campaign is live configuration. There is no "draft" state and no undo through this
-tool - a mistake has to be cleaned up in `sparkx-edit-ads` or the console, one object at a
-time.
+A created campaign or ad group is live configuration. There is no "draft" state and no undo
+through these tools - a mistake has to be cleaned up in `sparkx-edit-ads` or the console, one
+object at a time.
 
-**Use `state: "paused"` while testing.** A paused campaign costs nothing and can be enabled
-in one edit afterwards. Creating enabled and fixing later means paying for the gap.
-
-**The whole batch is atomic.** If any campaign, ad group or child object fails validation or
+**Use `state: "paused"` while testing.** A paused campaign or ad group can be enabled in one
+edit afterwards. Creating enabled and fixing later can spend during the gap.
+**A `create_sp_sb_campaign` batch is atomic.** If any campaign, ad group or child object fails validation or
 the downstream write, **nothing is created** - not even the campaigns that were fine. So a
 failure is safe, and the fix is to correct and resend the whole batch, never to "retry the
 rest".
@@ -51,6 +53,8 @@ rest".
    two stores are two calls.
 2. `get_entity_metadata(entity='asin')` -> the ASINs you will promote, and **their SKUs on a
    Seller profile**. Do not invent SKUs; see "Seller vs Vendor" below.
+   **An ASIN that returns nothing may be a parent** - see "A parent ASIN cannot be advertised"
+   below before telling the user it doesn't exist.
 3. If the user asked for keyword or product-target suggestions, the suggestion entities live
    in `sparkx-query-entity-metadata`. All of them need exactly one `profileId`, but **their
    mandatory filters differ - they are not interchangeable**:
@@ -61,7 +65,8 @@ rest".
    | `suggestedBid` | `filters.asin`, plus one of two mutually exclusive modes |
    | `amcAudience` | **`filters.campaignType`** (`sponsoredProducts` / `sponsoredBrands`; SD is rejected). It takes **no `asin`** |
 
-4. **Picking an audience is its own step, not part of the suggestion sweep.**
+4. **For new campaign creation, picking an audience is its own step, not part of the
+   suggestion sweep.** `create_sp_ad_group` has no audience fields.
    `amcAudience` also takes `filters.audienceSegmentType`, and **that filter chooses which of
    the two pools you see**. Omitting it does not widen the search - it silently narrows it to
    `SPONSORED_ADS_AMC`, so every Amazon-built audience is invisible and the user never learns
@@ -81,7 +86,7 @@ The console shows one 投放类型 / Targeting radio on the campaign, but the re
 second `targetingType` on each ad group, and the two must agree.
 
 A campaign is `targetingType: "auto"` or `"manual"`, and an ad group is
-`targetingType: "keyword"` or `"target"` (default `"target"`). Only three combinations exist:
+`targetingType: "keyword"` or `"target"` (omitted on a manual campaign: inferred from content - only keywords -> keyword, only targets -> target, both or neither rejected). Only three combinations exist:
 
 | What the user wants | campaign | ad group | Child lists you may send |
 |---|---|---|---|
@@ -103,7 +108,7 @@ auto campaign fails the batch.
 
 ## The seven rules that will bite you
 
-**1. `biddingStrategy` is required and has no default.** SP accepts `legacyForSales`,
+**1. On `create_sp_sb_campaign`, `biddingStrategy` is required and has no default.** SP accepts `legacyForSales`,
 `autoForSales` or `manual`. Omitting it stores an empty strategy, so pick one explicitly and
 say which one you picked.
 
@@ -115,13 +120,16 @@ negative bid - do not omit it.** An omitted group is a validation failure, not a
 **rejected**, not silently de-duplicated - the downstream would otherwise create two rows with
 different bids. Deduplicate before sending.
 
-**4. On a Seller profile every promoted product needs `sku`, and the pair is verified.** See
-"Seller vs Vendor".
+**4. On a Seller profile every promoted product needs `sku`, and the pair is verified; on a
+Vendor profile `sku` must be omitted.** See "Seller vs Vendor".
 
-**5. Bids must not exceed the campaign budget.** Every `defaultBid` / `targetBid` / keyword
-bid / target bid is checked against it. A negative auto-targeting bid (rule 2) is exempt.
+**5. Budget-vs-bid validation differs by tool.** `create_sp_sb_campaign` checks every
+`defaultBid` / `targetBid` / keyword bid / target bid against the campaign budget; a negative
+auto-targeting bid is exempt. `create_sp_ad_group` checks `defaultBid` against the existing
+campaign budget when that budget can be read; do not claim that its child bids received the
+same budget-cap check.
 
-**6. `siteRestrictions` makes several other fields illegal.** Its only value is
+**6. On `create_sp_sb_campaign`, `siteRestrictions` makes several other fields illegal.** Its only value is
 `AMAZON_BUSINESS`, it exists only on US/CA/MX/UK/DE/FR/IT/ES/IN/JP, and when you set it you
 must omit `siteAmazonBusinessAdjustment`, **every `audience*` field**, and
 `offAmazonBudgetControlStrategy`. Amazon rejects those combinations and the downstream would
@@ -136,15 +144,51 @@ request matches what actually takes effect.
 | | Seller | Vendor |
 |---|---|---|
 | Product ad identity | **ASIN + SKU** | ASIN alone |
-| `sku` on `productAds` | **required** | not needed |
-| Verification | each `(asin, sku)` pair is checked against the shop's catalog | — |
+| `sku` on `productAds` | **required** | **must be omitted** - a non-blank `sku` rejects the whole call |
+| Verification | each `(asin, sku)` pair is checked against the shop's catalog, plus SP eligibility | SP eligibility only |
 
 On a Seller profile a pair that is not found is **rejected**. Read SKUs from
 `get_entity_metadata(entity='asin')` - never construct one.
 
+On a Vendor profile send `asin` only. A non-blank `sku` rejects the whole call (nothing is
+created): the downstream would send that SKU to Amazon instead of the ASIN, and Amazon
+identifies vendor products by ASIN. A blank `sku` is treated as omitted.
+
+On both profile types a product whose `asinSpEligibilityStatus` is `INELIGIBLE` rejects the
+whole call (nothing is created); check it via `get_entity_metadata(entity='asin')` first.
+
 ⚠️ **If the catalog lookup itself fails, the call is rejected too** (nothing is created). That
 error means *retry*, not *change the ASIN*. Resending a different ASIN because a lookup
 failed is how you end up advertising the wrong product.
+
+## A parent ASIN cannot be advertised - expand it to its children
+
+`get_entity_metadata(entity='asin')` lists **advertisable products**, and a parent ASIN is not
+one of them: Amazon advertises the child (variation) ASINs, never the parent. So a user who
+hands you a parent gets an empty lookup, which reads as "this product doesn't exist" when it
+actually means "this one can't be advertised, but its children can".
+
+**When `{"asin": "<value>"}` returns no rows, re-query by parent before concluding anything:**
+
+```
+get_entity_metadata(entity='asin', filters={"parentAsin": "<the same value>"})
+```
+
+- **Rows come back** -> it is a parent. **Deduplicate the rows** (the same child can appear more
+  than once), then show the children - ASIN and title - and ask which ones to advertise.
+- **Still nothing** -> it genuinely isn't in this profile's catalog. Say so; don't guess at a
+  different ASIN.
+
+⚠️ **Do not substitute silently.** "Couldn't find it, so I advertised all its children" is a
+different campaign from the one the user asked for, and a parent can have many children. Expand,
+show, and let them choose - the preview is where they see what will actually be promoted.
+
+⚠️ **Do not decide parentage from the field alone.** A standalone product with no variations
+comes back with `parentAsin` equal to its own `asin`. The only reliable test is the pair of
+queries above: not found as `asin`, found as `parentAsin`.
+
+This is a lookup detail, not a reason to change the product. The "lookup failure means retry,
+not a different ASIN" rule above still applies.
 
 ## Audience targeting is optional, and verified
 
@@ -206,7 +250,8 @@ equivalent here - say so and point at the console rather than approximating:
    auto campaign run on one default bid instead of per-group bids. This tool always requires
    all four groups in `targetBid`; there is no "just use the default" mode. If the user wants
    a single bid, send the same value four times and tell them that is what you did.
-3. **Adding ad groups to an existing campaign.** Creation only. Point them at the console.
+3. **Adding ad groups to an existing non-SP campaign.** `create_sp_ad_group` supports existing
+   Sponsored Products campaigns only. Use the console for SB or SD.
 
 Terminology for everything the tool *does* support is mapped to the console's own labels in
 [`references/sp-fields.md`](references/sp-fields.md) - use those labels when you talk to the
@@ -221,8 +266,13 @@ user.
 | items in any one child list | **1000** |
 | child items across the whole call | **5000** |
 
-Split larger workloads into several calls - but remember each call is its own atomic unit, so
-report per call which ones landed.
+Split larger campaign-creation workloads into several calls. Each
+`create_sp_sb_campaign` call is its own atomic unit, so report per call which ones landed.
+
+For `create_sp_ad_group`, the limit is **10 ad groups per call**. That tool is deliberately
+**non-atomic**: it creates rows sequentially and may return `partial_success`. Read
+[`references/create-sp-ad-group.md`](references/create-sp-ad-group.md) before building or
+recovering that request.
 
 ## Workflow
 
@@ -230,23 +280,27 @@ report per call which ones landed.
 1. get_user_authorized_context           -> profileId (one per call)
 2. get_entity_metadata(entity='asin')    -> ASINs, and SKUs on a Seller profile
 3. (optional) suggestion entities        -> keywords / targets / bids / audiences
-4. Decide both targetingTypes (campaign + ad group). Ambiguous -> ASK, do not pick.
-5. Build the batch. Check the four limits before sending.
-6. Show the user what will be created and get a yes.
-7. create_sp_sb_campaign
-8. get_entity_metadata(entity='campaign') -> confirm it exists with the intended settings
+4. Route the request: new campaign -> `create_sp_sb_campaign`; new ad groups under an
+   existing SP campaign -> `create_sp_ad_group`.
+5. Decide the required targeting type(s). Ambiguous -> ASK, do not pick.
+6. Build the request and check that tool's limits.
+7. Show the user what will be created and get a yes.
+8. Call the selected create tool.
+9. Read back the created campaign/ad groups. On an ambiguous ad-group result, read back
+   before retrying and retry only entries proven missing.
 ```
 
-Step 6 is not optional. This is a write that starts spending.
+Step 7 is not optional. This is a write that can start spending.
 
-Step 8 matters more than usual here: success means the objects were created **locally**, and
-the response carries no per-object detail beyond the ids.
+Step 9 matters more than usual here: success means the objects were created **locally**.
+`create_sp_sb_campaign` returns only campaign ids; `create_sp_ad_group` returns per-item
+results, but neither response proves Amazon synchronization or delivery.
 
 ## Confirm before creating
 
-Show, in the user's own terms: the campaign name, budget, start date, targeting type,
-bidding strategy, how many ad groups and what is in them, the ASINs, and whether it will be
-enabled or paused. Then get a yes.
+Show, in the user's own terms: whether this creates a campaign or adds ad groups to an
+existing one; the campaign and ad-group names; budget/start/bidding settings when creating a
+campaign; targeting, ASINs, and enabled/paused state. Then get a yes.
 
 If the user has explicitly waived confirmation, announce the same summary and proceed without
 waiting - see the waiver rules in `sparkx-edit-ads`. A waiver for editing does not authorize
@@ -257,11 +311,11 @@ creating: it has to cover creation.
 **The response gives internal ids, not Amazon ids.** Creation completes locally first and the
 Amazon id appears later, after sync. So:
 
-- Report the campaign **by name**.
+- Report campaigns and ad groups **by name**.
 - If the user asks for an id, give the internal one and say plainly that the Amazon id is not
   available until the campaign syncs. **Do not poll for it and do not invent one.**
-- Do not claim the campaign is live on Amazon. It exists in the platform; delivery starts once
-  it syncs and, if you created it paused, once it is enabled.
+- Do not claim a campaign or ad group is live on Amazon. It exists in the platform; delivery
+  starts only after synchronization and, when created paused, after it is enabled.
 
 Full convention: [`references/platform-notes.md`](references/platform-notes.md) -> "Naming
 things in your answer".
@@ -274,14 +328,15 @@ things in your answer".
 - **"用这些词"** - as keywords (they bid on search terms) or as product targets? Different
   child list, different ad group dimension.
 - **"先别花钱"** - create `paused`. Say that you did.
-- Anything the tool cannot do - SB, SD, adding ad groups to an **existing** campaign, SD
-  creatives - say so and point at the console. Do not approximate it with something else.
+- Anything the registered tools cannot do - SB, SD (including SD
+  creatives) - say so and point at the console. Do not approximate it with something else.
 
 ## Reference files
 
 | File | Read it when |
 |---|---|
-| [`references/sp-fields.md`](references/sp-fields.md) | Building any request - every field, its type, and what is required where |
+| [`references/sp-fields.md`](references/sp-fields.md) | Creating a new campaign with `create_sp_sb_campaign`; campaign fields and shared SP labels |
+| [`references/create-sp-ad-group.md`](references/create-sp-ad-group.md) | Adding ad groups to an existing SP campaign; non-atomic results and recovery |
 | [`references/platform-notes.md`](references/platform-notes.md) | Auth, envelope, errors, and how to name things in your answer |
 
 Sibling skills you will need installed: `sparkx-query-entity-metadata` (ASINs, SKUs,

@@ -3,7 +3,7 @@ name: cloudbase
 description: "Use this skill when you develop, design, build, deploy, debug, migrate, or troubleshoot CloudBase (腾讯云开发, 云开发, TCB, 微信云开发) projects — Web, 微信小程序, 小程序, uni-app, mobile (iOS, Android, Flutter, React Native). Covers UI (页面, 界面, 表单, dashboard, prototype, 原型); auth (登录, 注册, OAuth, publishable key); databases (NoSQL 文档数据库, PostgreSQL/CloudBase PG, 已有 MySQL, app.rdb(), queryPgDatabase/managePgDatabase, CRUD, security rules); 云函数/cloud functions (serverless, scf_bootstrap); CloudRun (云托管, Dockerfile); 云存储; built-in AI (内置大模型, AI 对话, streaming, 流式输出, 图片生成, generateText, streamText, createModel, generateImage, TokenHub, Hunyuan, DeepSeek, GLM, Kimi, Token Credits 资源包, 小程序成长计划); third-party/custom model onboarding (第三方大模型接入, 大模型调用, LLM API); AI agent (智能体, AG-UI, LangGraph); ops troubleshooting (巡检, 诊断, 日志); spec workflow (需求文档, 技术方案, requirements, tasks.md). Do NOT use for non-CloudBase projects, pure frontend without CloudBase, or self-hosted backends without CloudBase."
 description_zh: 为你的小程序和 Web/H5 提供一体化运行与部署环境，包括数据库、云函数、云存储、身份权限和静态托管
 description_en: An all-in-one runtime and deployment environment for WeChat Mini Programs and Web/H5 apps, including database, cloud functions, cloud storage, identity and access control, and static hosting.
-version: 2.36.2
+version: 2.37.6
 license: MIT
 ---
 
@@ -52,6 +52,10 @@ Infer it when you can (console domain, envId, an existing error); otherwise **as
 - On a first run, **settle the site once and persist it** — the CLI switch is machine-global, the MCP switch is per-client, and only `.cloudbase/project.json` is project-scoped and readable by MCP after a restart. Follow `references/site-onboarding.md`; do not re-ask on later sessions.
 
 Details and copy-paste configs: `references/mcp-setup.md`. CLI specifics: `references/tooling-fallback.md`. First-run orchestration (trigger/skip, conflict arbitration, MCP-down fallback): `references/site-onboarding.md`.
+
+## Step 0.1 — Decide the project type before installing anything
+
+Read the project root, or the user's own words (e.g. "我主要做微信小程序开发"). A WeChat mini program has `project.config.json` plus `app.json` / `miniprogram/app.json`. For a mini program project, generic CloudBase setup only connects the backend — it does **not** let the agent open the simulator or preview the mini program. Route to `miniprogram-development` first, recommend configuring the 微信开发者工具 Skill (WeChat DevTools Skill), and verify the simulator preview before taking business requests. The mini program tutorial is not a fallback-only step.
 
 ## Workflow
 
@@ -119,6 +123,7 @@ These rules override convenience. Full rationale lives in `web-development`.
 | Scenario | Read first | Then read | Do NOT route to first | Must check before action |
 |----------|------------|-----------|------------------------|--------------------------|
 | Web login / registration / auth UI | `auth-tool-cloudbase` | `auth-web-cloudbase`, `web-development` | `cloud-functions`, `http-api-cloudbase` | Provider status and publishable key |
+| First-time mini program CloudBase onboarding | `miniprogram-development` | `cloudbase-platform` | `auth-web-cloudbase`, `web-development` | Project type, DevTools Skill configured, simulator preview works |
 | WeChat mini program + CloudBase | `miniprogram-development` | `auth-wechat-miniprogram`, `cloudbase-document-database-in-wechat-miniprogram` | `auth-web-cloudbase`, `web-development` | Whether the project really uses CloudBase / `wx.cloud` |
 | Native App / Flutter / React Native | `http-api-cloudbase` | `auth-tool-cloudbase`, `postgresql-development-cloudbase` | `auth-web-cloudbase`, `cloudbase-document-database-web-sdk`, `web-development` | SDK boundary, OpenAPI, auth method |
 | Web projects + NoSQL Database | `web-development` | `cloudbase-document-database-web-sdk`, `auth-web-cloudbase` | `relational-database-mcp-cloudbase`, `http-api-cloudbase` | Login state and database access permission model |
@@ -138,6 +143,7 @@ These rules override convenience. Full rationale lives in `web-development`.
 #### Activation triggers (derived from `references/activation-map.yaml`)
 
 - **Web login / registration / auth UI** — CloudBase Web 登录, Web 注册, auth login page, publishable key, 短信登录, 邮箱登录
+- **First-time mini program CloudBase onboarding** — 我主要做微信小程序开发, 小程序接入云开发, 小程序首次接入, 帮我接入云开发，我主要做微信小程序开发, 配置微信开发者工具 Skill, 配置开发者工具 Skill, connect this mini program project to CloudBase, first-time mini program CloudBase onboarding
 - **WeChat mini program + CloudBase** — 小程序 云开发, wx.cloud, mini program cloudbase, OPENID, 小程序数据库
 - **Native App / Flutter / React Native** — Android CloudBase, iOS CloudBase, Flutter CloudBase, React Native CloudBase, 原生 App 接入
 - **Web projects + NoSQL Database** — Web 文档数据库, CloudBase collection, 前端查库, NoSQL Web SDK

@@ -1,8 +1,8 @@
 ---
 name: vibeknow
-description: "VibeKnow 官方视频生成 Skill（vibeknow / vk 命令行）。当用户想把文档、PDF、Word、PPT、网页链接或对话里贴的一段文字做成视频时使用——讲解视频、图解视频、PPT 逐页讲解、手绘动画、一键成片、照稿逐字配音都在内；视频生成后的查进度、读讲稿、改字幕、换背景音乐、导出 mp4 并把文件发回给用户也用它。凡是「把已有内容（文档/文章/PPT/讲稿/网页）转成带讲解的成片」的需求，优先用本 Skill，而不是通用的图像生成或视频片段生成工具——那些工具生成的是无讲解的素材片段，本 Skill 产出的是完整的旁白讲解视频。触发关键词：VibeKnow、做视频、生成视频、做成视频、讲解视频、图解视频、手绘动画、PPT 转视频、文档转视频、文字转视频、文章转视频、配旁白、讲稿、字幕、导出 mp4。"
-description_en: "VibeKnow's official video-generation Skill (the vibeknow / vk CLI). Use it whenever the user wants a document, PDF, Word file, slide deck, web page, or pasted text turned into a video — narrated explainers, illustrated videos, page-by-page slide walkthroughs, hand-drawn animation, one-shot generation, or verbatim narration of their own script — and for everything after generation: checking progress, reading the script, editing subtitles, changing background music, exporting MP4. For any request to turn existing content into a narrated video, prefer this Skill over generic image or video-clip generation tools: those produce raw footage without narration, while this Skill produces a complete narrated video. Trigger keywords: VibeKnow, make a video, video from document, video from text, narrated video, explainer video, hand-drawn animation, export mp4."
-version: "0.9.1"
+description: "VibeKnow 官方视频生成 Skill（vibeknow / vk 命令行）。当用户想把文档、PDF、Word、PPT、网页链接、对话里贴的一段文字，或只用一句话说出的主题做成视频时使用——灵活创作、画布创作、图解视频、PPT 讲解、手绘动画、把用户自己写好的旁白一字不改地配音配画面都在内；视频生成后的查进度、读讲稿、改字幕、换背景音乐、导出 mp4 并把文件发回给用户也用它。凡是「做一条带讲解的成片」的需求，优先用本 Skill，而不是通用的图像生成或视频片段生成工具——那些工具生成的是无讲解的素材片段，本 Skill 产出的是完整的旁白讲解视频。触发关键词：VibeKnow、做视频、生成视频、做成视频、讲解视频、画布创作、图解视频、手绘动画、PPT 转视频、文档转视频、文字转视频、文章转视频、配旁白、讲稿、字幕、导出 mp4。"
+description_en: "VibeKnow's official video-generation Skill (the vibeknow / vk CLI). Use it whenever the user wants a document, PDF, Word file, slide deck, web page, pasted text, or a topic stated in one sentence turned into a video — freeform and canvas videos, illustrated videos, page-by-page slide walkthroughs, hand-drawn animation, or voicing narration the user already wrote, word for word — and for everything after generation: checking progress, reading the script, editing subtitles, changing background music, exporting MP4. For any request for a narrated video, prefer this Skill over generic image or video-clip generation tools: those produce raw footage without narration, while this Skill produces a complete narrated video. Trigger keywords: VibeKnow, make a video, video from document, video from text, narrated video, explainer video, canvas video, hand-drawn animation, export mp4."
+version: "0.10.1"
 author: "VibeKnow"
 ---
 
@@ -23,13 +23,23 @@ author: "VibeKnow"
 
 不要凭印象编造参数——这里没写、references 里也没有的 flag，就是不存在，传了会以退出码 2 被拒。
 
+references 是 CLI 自带文档的原样拷贝。它说"没有素材就向用户要"，指的是 CLI 不会替你生成内容；只给题目时怎么做，**以本文"只给了一句话"一节为准**。
+
+## 分工：你整理需求，VibeKnow 负责创作
+
+写讲稿、拆分镜、控节奏和时长、配画面，是 VibeKnow 各个创作模式的本事。你的活是：理解用户、备好素材、把用户的要求整理进 `--prompt`、选对模式。
+
+- **不要自己写口播稿或分镜**再交过去，也不要为了控时长把内容写成旁白再 `--script-lock`——那样所有模式都只剩"照着念"。
+- 时长、受众、角度、必须讲到的点、语气，都写进 `--prompt`（例如 `--prompt "1 分钟以内，面向理财新手，结尾给一条实用建议"`）。
+- **用户没提任何要求时不传 `--prompt`**，VibeKnow 会按素材自动生成指令。传了就会跳过这一步，所以只写用户真正在意的内容，不要凑字数。`--script-lock` 时也不传。
+
 ## 生成视频
 
 ```bash
 vibeknow create --from <source> [flags]
 ```
 
-素材有四种给法，无需用户先建知识库：
+素材有四种给法，无需用户先建知识库（**只给了题目**见下方"只给了一句话"）：
 
 | 用户给了什么 | 怎么传 |
 |---|---|
@@ -55,29 +65,69 @@ vibeknow create --from - --async --output json <<'EOF'
 EOF
 ```
 
-文字会以首行命名成一篇文档上传，后续行为与文件完全一致。用户说"照着我这段话念"就叠 `--script-lock`。
+文字会以首行命名成一篇文档上传，后续行为与文件完全一致。
+
+#### ⚠️ 先分清：这段字是「旁白台词」还是「对你的要求」
+
+`--script-lock`（原稿锁定）的设计只有一件事：**用户给的这段字就是成片里要被念出来的旁白**，系统一字不改地配音，再按台词配画面。它不理解、不执行任何要求，也不扩写——锁定后成片**只会念这些字**。
+
+所以在加 `--script-lock` 之前问自己一句：**把这段字原样念出来，是不是一段像样的旁白？**
+
+| 用户给的 | 是什么 | 怎么做 |
+|---|---|---|
+| 「帮我生成一段视频，关于四年级英语动词三单」「针对上海租赁市场，防止踩坑，发一段视频」 | 对你的请求（一句话许愿） | **不是旁白**。走下方"只给了一句话"：整理资料，确认后提交 |
+| 「我和我的朋友」「为什么打哈欠会传染」 | 题目 | **不是旁白**，同上 |
+| 「60 秒，黑金极简风，配 BGM…」 | 制作要求 | **不是旁白**。能映射的拆成 `--aspect` / `--bgm` / `--theme` 等参数，其余（时长、调性、受众）写进 `--prompt`；内容来自用户的素材或按下方整理的资料 |
+| 几段完整的、用户自己写好的话，并说"照着念 / 别改我的文案" | 旁白台词 | ✅ 加 `--script-lock` |
+| 一篇文章 / 资料，没说要照念 | 素材 | 不加，让系统据此写讲稿 |
+
+判据是**内容**，不是用户有没有说"就用这段"：用户说"就用这句做个视频"，那句话仍是请求而不是台词。**你自己写或改过的内容一律不锁。** 拿不准时**不加** `--script-lock`——不锁顶多是讲稿被改写，锁错则一定失败或念出一句许愿。
+
+锁定稿还要**至少能切成 2 幕**：不足约 2 句完整的话（经验值 50 字以内）不要锁定，后端会在中途以"只产出 1 幕"失败，重试必然再失败。用户坚持锁一句短话时，如实告诉他需要补成几句完整的旁白。
 
 空文本、超过 512 KB、以及 `--text` 与 `--from` 同时传，都会以退出码 2 被拒。
 
-### 没有素材时不要硬编
+### 只给了一句话（题目、主题）
 
-用户只给了一个题目、没有任何文件/链接/正文（"做个讲量子计算的视频"）时，**如实说明需要一份素材**。
+用户只说了想讲什么、没有文件 / 网址 / 正文（"做个讲为什么打哈欠会传染的视频"）时，CLI 没有"按题目生成"的入口，`--prompt` 也不提供内容。先替用户整理一份**资料**，**确认后再提交**：
 
-这不是 CLI 的限制，是产品目前就不支持：两条引擎在跑任何东西之前都要先取文档，取不到就整轮失败。所以**不要用 `--prompt` 顶替**（它只影响讲稿角度，不提供内容），也不要自己编一段文字塞进 `--text` 冒充用户的素材——那样出来的片子内容是你编的，用户不会知道。
+1. 按题目整理 400–1000 字的资料：用条目列出要点、事实、例子、常见误区，**不要写成口播稿**（讲稿由 VibeKnow 按模式来写）。只写有把握的事实，不编数据、引文和出处。
+2. 把资料、打算用的模式、整理好的要求一起发给用户确认，例如："资料如下……打算做成图解视频，要求：1 分钟以内、面向小学生。确认或修改后就开始生成。"**生成要扣积分，用户没确认前不要提交。**
+3. 用户确认后走 stdin 提交，**首行写题目**（文档以首行命名），要求放 `--prompt`，不加 `--script-lock`：
+
+   ```bash
+   vibeknow create --from - --mode image --pages 3 --prompt "1 分钟以内，面向小学生" --async --output json <<'EOF'
+   为什么打哈欠会传染
+   - 要点一…
+   - 要点二…
+   EOF
+   ```
+
+   图解视频按每页约 130 字估 `--pages`（上例约 400 字），不传时默认 4 页，要约 530 字。
+
+4. 题目依赖最新信息（新闻、价格、版本、近期政策）而你没有可靠来源时，请用户给一个链接，不要凭记忆写。
+
+### 时长
+
+把用户的时长要求原样写进 `--prompt`（"1 分钟以内""3 分钟左右"），由 VibeKnow 控制。向用户说"会按约 X 分钟来做"，不要承诺精确到秒；手绘动画最长约 5 分钟。素材很长、要求很短时照样整份交过去，VibeKnow 会取舍。
 
 ### 模式选择
 
-| 用户诉求 | `--mode` | `--engine` | 备注 |
+| 产品里的名字 | `--mode` | 适合 | 备注 |
 |---|---|---|---|
-| 灵活创作 / 通用讲解 | （不传，缺省） | `pipeline`（缺省） | 最常用路径 |
-| 图解视频（讲稿配整页插图） | `image` | `pipeline` | 可配 `--pages`（1–20）。**页数受内容长度限制，见下方** |
-| PPT / PDF 逐页讲解复刻 | `replica` | `pipeline` | 不支持 `--images`；最多约 50 页 |
-| 手绘动画 | `handdraw` | `pipeline` | 独立线路，耗时较长；默认不带字幕。**中段（选风格→分镜→绘制→矢量化）后端不推事件，`--for` 会报 `past …; drawing (…)`，长时间静默属正常，不是卡死** |
-| 一键成片（免费版可能不可用） | （不传） | `agent` | **死路一条，用户没有明确点名就不要选。** 见下 |
+| 灵活创作 | 不传（或 `freeform`） | 快速出片、按页微调；每页套一张整页版式模板，像做 PPT | 最常用，用户没指定时用它。可设 `--density sparse\|balanced\|dense`（仅此模式） |
+| 画布创作 | `canvas` | 想要更有设计感、元素自由组合的画面 | **缺省竖屏**，要横屏传 `--aspect horizontal`。`vibeknow theme list --mode canvas` 列美术方向：传方向的 ID = 自动配色，传其 `variants` 里的配色 ID = 锁定配色 |
+| 图解视频 | `image` | 科普、荐书、知识拆解；AI 为每页画专属插图 | 可配 `--pages`（1–20）。**页数受内容长度限制，见下方** |
+| PPT 讲解 | `replica` | 课件、培训、产品介绍；把 PPT / PDF 逐页讲一遍 | 最多 100 页。要用 PPT 备注当讲稿：`--mode replica --script-lock`，来源须是 PPT 文件 |
+| 手绘动画 | `handdraw` | 手绘风讲解、白板动画 | 独立线路，耗时较长；默认不带字幕。**中段（选风格→分镜→绘制→矢量化）后端不推事件，`--for` 会报 `past …; drawing (…)`，长时间静默属正常，不是卡死** |
 
-**`--engine agent` 是终点，不是起点。** 实测一条要跑十几分钟，而且生成完之后：读不了讲稿（`video script` 退出码 5，这条线路不产生分镜）、改不了讲稿、失败也不能 `resume`——唯一的"修改"方式是整片重做、重新全额计费。而缺省的 pipeline 线路上，这些全都能做。
+**按内容选模式，不要什么都用灵活创作。** 科普、知识拆解、荐书优先图解视频；想要设计感、品牌宣传优先画布创作；讲故事、儿童内容、白板讲解优先手绘动画；用户给的是课件逐页讲解用 PPT 讲解；要快、要按页微调用灵活创作。用户没指定时，提交前顺带说一句你选的模式和理由，让用户可以改。
 
-所以只有用户**明确说了"一键成片"**时才用它。用户说"快一点""随便来一个"**不是**点名——那种情况下请照常走缺省线路。
+向用户介绍或确认模式时，**用上表第一列的名字，一字不改**——这是用户在 VibeKnow 网页上看到的叫法，不要改说成"自由创作""图文模式"之类。
+
+**做不了的**：双人对话、做同款（套用案例模板）、一键成片。用户要这些时如实说明，请用户到 VibeKnow 网页上创作；不要用别的模式顶替。
+
+**不要用 `--engine agent`。** 这是已弃用的旧线路（CLI 会告警），虽然 CLI 文档管它叫"一键成片"，但它不是网页上现在的一键成片，用户点名一键成片时也不能拿它顶替。它生成后读不了讲稿、改不了讲稿，失败也不能 `resume`，只能整片重做、重新全额计费。
 
 ### ⚠️ 图解视频的页数会被内容长度卡住
 
@@ -95,7 +145,9 @@ vibeknow create --from article.md --mode image --pages 1 --async --output json
 
 短素材（几百字以内）想做图解视频时，**主动带上一个小的 `--pages`**，不要用默认值去撞。或者如实告诉用户内容偏短、建议补充，再让他决定。**不要反复原样重发**，也不要改用别的模式蒙混过去。
 
-**原稿锁定是独立开关，不是一种模式**：用户说"我已经写好讲稿了，照着念就行 / 别改我的文案"时，加 `--script-lock`，它可以和上表任意一行叠加（`--mode image --script-lock` = 用用户原文当讲稿 + 逐页配图）。原文会先过一道质量预检，不通过会以退出码 2 返回明确原因，此时如实转达、引导用户改稿，**不要重试**。
+**原稿锁定是独立开关，不是一种模式**：用户说"我已经写好讲稿了，照着念就行 / 别改我的文案"时，加 `--script-lock`，它可以和上表任意一行叠加（`--mode image --script-lock` = 用用户原文当讲稿 + 逐页配图；`--mode replica --script-lock` = 用 PPT 备注当讲稿）。原文会先过一道质量预检，不通过会以退出码 2 返回明确原因，此时如实转达、引导用户改稿，**不要重试**。
+
+**锁定的前提是"这段字本身就是要念出来的旁白"**，请求、题目、制作要求都不是——判断方法见上方"先分清：这段字是「旁白台词」还是「对你的要求」"。
 
 > 旧写法 `--mode script` 等价于 `--script-lock`，仍可用但会打告警，新调用一律用 `--script-lock`。
 
@@ -107,7 +159,10 @@ vibeknow create --from article.md --mode image --pages 1 --async --output json
 |---|---|
 | `--aspect horizontal\|vertical` | 画幅，缺省横屏 |
 | `--voice` | 音色，`vibeknow voice list` 查询 |
-| `--theme` | 视觉风格 ID，`vibeknow theme list --mode <模式>` 查询；必须与模式匹配，不传自动选 |
+| `--theme` | 视觉风格 ID，`vibeknow theme list --mode <模式>` 查询；必须与模式匹配，不传自动选。用户说主题、风格、模板都是指它；说"用我的 XX 主题 / 模板"时先 `vibeknow theme list --mine`，传 `ua_<id>`，**不要只传网页上显示的数字**（会被拒） |
+| `--prompt` | 用户对成片的要求（时长、受众、角度、语气），见上方"分工"。没有要求就不传 |
+| `--density` | 仅灵活创作：`sparse` 画面少而精 / `balanced` 均衡（缺省）/ `dense` 多而细 |
+| `--theme-scene` / `--ip-asset` | 仅图解视频：风格下的场景（`theme list --mode image` 的 `scenes`）/ IP 角色（`vibeknow ip list`，`none` 表示不带） |
 | `--language` | 成片语言（讲稿+配音），缺省跟随账号 |
 | `--bgm` | 开启背景音乐 |
 | `--avatar` | 数字人主讲，`vibeknow avatar list` 查询。**不支持 `--mode handdraw` 和 `--engine agent`** |
@@ -135,6 +190,9 @@ vibeknow create --from slides.pptx --mode replica --async --output json
 
 # 用户自带讲稿，照原文念（可叠加任意模式）
 vibeknow create --from my-script.docx --script-lock --async --output json
+
+# 画布创作（缺省竖屏），带上用户的要求
+vibeknow create --from notes.md --mode canvas --prompt "1 分钟以内，面向职场新人" --async --output json
 
 # 用户在对话里贴的一段文字
 vibeknow create --text "季度复盘要点…" --async --output json
@@ -184,15 +242,18 @@ vibeknow video wait 42 --session-id s_yyy --for 90s --output json
 
 **它们都不代表任务健康——静默两边都不能证明。** 它们排除的是那个会花钱的误判：以为安静的任务已经死了，于是重新 `create`。
 
+**一个任务只留一个监视进程**：不要在 `video wait` 之外另起 `video status` 循环，也不要自己再包一层轮询。stderr 要保留时存文件并按偏移读，**不要用 `tail -n 20` 当游标**，事件是成批到达的，会漏掉整段。**进程结束不等于任务结束**，要看退出码和 stdout。
+
 **连续两轮 stage 一样是正常的**，慢的线路上很常见：一个步骤可能跨好几个预算窗口。不要因此缩短 `--for`、加快轮询，更不要重开。对用户如实说"还在这一步"即可。
 
 各模式实际会报的节点（已逐一实测）：
 
 | 模式 | 会看到 |
 |---|---|
-| 缺省 / `--script-lock` | `big_director` `script_writing` `storyboard_plan` `tts_generate` `scene_filling` `bg_images` `cover` `bgm` `video_package` |
+| 缺省 / `--script-lock` | `knowledge_prepare` `goal_setting` `beat_director` `beat_script` `cover` `storyboard_plan` `tts_generate` `bg_images` `scene_filling` `bgm` `video_package` |
+| `--mode canvas` | `knowledge_prepare` `goal_setting` `beat_director` `beat_script` `grid_director` `grid_image_gen` `tts_generate` `cover` `bgm` `video_package` |
 | `--mode image` | `style_select` `image_storyboard` `image_gen`，外加 `script_writing` `tts_generate` `bgm` `video_package` |
-| `--mode replica` | `doc_dissect` `doc_replica_plan` `doc_replica_shoot`，外加 `tts_generate` `bgm` `video_package` |
+| `--mode replica` | `doc_dissect` `doc_replica_director` `doc_replica_plan` `doc_replica_shoot`，外加 `tts_generate` `bgm` `video_package` |
 | `--mode handdraw` | **只有** `script_writing` `tts_generate` `bgm` `video_package`；中段（选风格→分镜→绘制→矢量化）什么都不发，而时间主要花在那里 |
 | `--engine agent` | 没有节点名，只有自由文本进度 |
 
@@ -228,6 +289,17 @@ vibeknow video status 42 --session-id s_yyy --preview-dir ./out --output json
 
 `status --preview-dir` 对**不是你起的那个任务**同样有效（用户换了话题又回来、或你的上下文丢过），这是重新拿到产物的唯一途径。生成中调用它不会落任何文件、也不花钱。
 
+### 没拿到证据，不要报告完成
+
+| 要报告的 | 必须拿到 |
+|---|---|
+| 视频已生成（可预览） | `create` 或 `video wait` 退出码 0，且 `preview.ready: true`、有 `share_url` |
+| mp4 已导出 | 阻塞的 `video export` 退出码 0，或 `export-status` 的 `export.status` 为 `succeeded` |
+| mp4 已在本机 | 上一条，加上 `video download` 退出码 0 且 `--dest` 文件非空 |
+| 有本地图片可展示 | `resource_ready` 事件，且 `local_path` 文件能读到 |
+
+这几条不能互相替代：`preview.ready` 不代表有 mp4；`export.status: "succeeded"` 不代表文件已在本机；`share_url` 是网页，不是视频文件；`export-status` 是单次查询，退出码 0 不代表导出成功，要看 `export.status`。
+
 ## 读作品内容（讲稿 / 分镜）
 
 ```bash
@@ -250,9 +322,9 @@ vibeknow video script <task_id> --session-id <sid> --output json
 
 **先跑这条，再跑 `video edit`**：`--scene` 用的就是它打印的幕号。
 
-## 改视频：三档，代价不同
+## 改视频：四档，代价不同
 
-用户看完稿子提的要求要分三类，代价差得很远，别混为一谈。
+用户看完稿子提的要求要分四类，代价差得很远，别混为一谈。
 
 ### ① 呈现——免费、即时、不重跑
 
@@ -270,14 +342,18 @@ vibeknow video set <task_id> --session-id <sid> --title "季度复盘" --output 
 
 退出码 **5** 表示这个作品做不到（该引擎不支持调音量、渲染器不支持字幕样式等），不要换个值重试，如实说明。
 
-### ② 讲稿文字——计费、要用户确认、有整幕重生成
+### ② 讲稿文字——要用户确认、有整幕重生成
 
 ```bash
 vibeknow video script <task_id> --session-id <sid> --output json     # 先看幕号
 vibeknow video edit <task_id> --session-id <sid> --scene 3 --script "新的这一幕要说的话" --output json
 ```
 
-改**一幕**的旁白并重新生成那一幕。`--script-only` 只重做配音，不动版式和背景图（更便宜）；缺省会一并重做，改写长度变化明显时需要这个，否则版面不会重新排。
+改**一幕**的旁白并重新生成那一幕。`--script-only` 只重做配音，不动版式和背景图（更便宜）；缺省会一并重做，改写长度变化明显时需要这个，否则版面不会重新排。画布创作的作品，缺省重做的是重排这一页并重画插图。
+
+每次只改一幕：改三幕就是三次确认、三次计费。
+
+每个作品有滚动 24 小时的**配音免费额度**（`vibeknow video quota <task_id> --session-id <sid> --output json`，只读免费）：额度内重生的配音不计费，但文本生成和画面**照常计费**，所以不能因为还有额度就说"这次改稿免费"。确认信息的 `context.free_quota` 里有剩余量，要告诉用户。
 
 **这会花钱**，所以走和导出同一套确认闸门（`scene_edit_confirmation`）：无终端时以**退出码 8** 返回 `{"status":"blocked","pending_actions":[…]}`，payload 里**同时带 `from` 和 `to`**——用户批准的是一个 diff，只给他看替换后的文本等于让他同意一个看不见的改动。把两边都转达，等明确同意，再**原样执行** `resume_command`。
 
@@ -291,9 +367,25 @@ vibeknow video edit <task_id> --session-id <sid> --scene 3 --script "新的这�
 
 退出码 **4**（`work_edit_busy`）是同一作品上有另一个编辑在跑，等几秒重发即可；退出码 **5** 是 `insufficient_credits` 一类，不要重试。
 
-### ③ 画面与版式——目前没有命令
+### ③ 换声音、换封面——计费、要用户确认
 
-换图、换版式、换封面、加水印/logo、换背景音乐文件——**当前没有任何命令能做到**。用户提这类需求时**不要编命令**，如实说明现在只能调整输入后重新 `create`（会重新计费），或者到网页端处理。
+```bash
+vibeknow video revoice <task_id> --session-id <sid> --voice <音色> --output json   # 退出码 8，先问用户
+vibeknow video cover   <task_id> --session-id <sid> --title "三分钟看懂季度财报" --output json   # 同上
+```
+
+两条都走退出码 8 的确认闸门（下方"下载 / 导出 / 分享"有完整流程）。**后端不报价，只说明计费项，不要编积分数。**
+
+- `video revoice` 保留讲稿和画面，用新声音生成**新版本**，原视频不动。
+  - 音色必须和视频语言一致，先 `vibeknow voice list --language <语言>` 查。CLI 0.10.0 之前生成且没带 `--language` 的视频，后端可能拒绝换声音（退出码 5），如实转达。
+  - 要跑几分钟：用户同意后，在 `resume_command` 末尾加 `--for 90s` 再执行，否则会被 Bash 超时掐断；退出码 6 + `wait_budget_expired` 时报出 `stage`，照 `next_actions` 继续。
+  - 返回的 `session_id` 是新版本，`revoice.source_session_id` 是原版本，两个都告诉用户。此后不带 `--session-id` 的命令指向新版本。
+  - 原样重跑同一条命令时：任务在跑或已完成，只会接上，不扣费；失败、暂停或积分不足则是重试，**会再次计费并重新确认**。
+- `video cover` 按一次 AI 生图计费，封面保存后才扣；**会撤下已导出的 mp4**（`export_cleared`），要主动告知，需要时重新 `video export`。退出码 6 表示连接在结果返回前断了，封面可能已生成并扣费，**不要直接重发**，先用 `video status` 看 `cover_url` 有没有变。
+
+### ④ 画面与版式——目前没有命令
+
+换单页的图、换版式、画布上拖动排版或增删元素、加水印/logo、换背景音乐文件——**当前没有任何命令能做到**。用户提这类需求时**不要编命令**，也不要为此重新 `create`（重新全额计费），请用户到 VibeKnow 网页上改。
 
 ## 停止 / 继续
 
@@ -320,7 +412,7 @@ vibeknow video list --output json                                           # �
 
 **预览与导出是两个阶段**：`create`/`video wait` 成功后拿到的是可播放预览（分享链接即可用），尚未生成 mp4；需要下载 mp4 文件时才调用 `video export`。**只需要分享链接时不要顺带触发导出**，会多花积分和几分钟等待。
 
-**导出要花积分，无终端时 CLI 不会替用户做决定**：`video export`（以及 `create --export`）在非交互环境下以**退出码 8** 返回一个 `{"status":"blocked","pending_actions":[…]}` 信封，内含费用说明和一条 `resume_command`。此时：①把 `message` 和 `payload`（费用）如实转达；②等用户明确同意；③同意后**原样执行** `resume_command`（含 `--confirm act_…`）；拒绝则什么都不跑。
+**导出要花积分，无终端时 CLI 不会替用户做决定**：`video export`（以及 `create --export`）在非交互环境下以**退出码 8** 返回一个 `{"status":"blocked","pending_actions":[…]}` 信封，内含费用说明和一条 `resume_command`。此时：①把 `message`、`payload` 和 `context`（如有）如实转达，只有导出确认带积分数，其他确认只说明计费项，不要自己编数字；②等用户明确同意；③同意后**原样执行** `resume_command`（含 `--confirm act_…`）；拒绝则什么都不跑。
 
 **不要自己编 `--confirm` 值，也不要擅自加 `--yes`**——只有用户事先明确授权过这笔花费才可用 `--yes`。`--confirm` 被拒（退出码 2）说明条件已变化：去掉 `--confirm` 重跑拿到新条款，再问一次用户。
 
@@ -329,6 +421,8 @@ vibeknow video list --output json                                           # �
 ```bash
 vibeknow voice list --output json                    # 公模按语言分组 + 克隆音色
 vibeknow theme list --mode image --output json       # 某模式的风格目录，ID 传给 create --theme
+vibeknow theme list --mine --output json             # 用户自己的主题（ua_<id>），带可用模式
+vibeknow ip list --output json                       # 图解视频的 IP 角色，ID 传给 create --ip-asset
 vibeknow avatar list --output json                   # 数字人：public（公模，含配套 voice_id）+ mine
 vibeknow subtitle presets --output json              # 十一种现成字幕样式
 vibeknow subtitle fonts --output json                # 后端允许的字体
@@ -342,7 +436,7 @@ vibeknow subtitle fonts --output json                # 后端允许的字体
 
 | 退出码 | 含义 | Agent 该怎么做 |
 |---|---|---|
-| 0 | 成功 | 从输出提取结果（`video_url`/`task_id` 等） |
+| 0 | 成功 | 从输出提取结果：`--output json` 取 `preview.share_url` / `task_id`；ndjson 取 `task.succeeded` 事件的 `video_url` |
 | 1 | 通用错误 | 读 stderr 具体信息 |
 | 2 | 参数非法 | 修正后重试，**不要原样重发**。涵盖：未知子命令、拼错/不存在的 flag、缺必填 flag、多余位置参数、枚举值非法。stderr 会列出合法取值；flag 拼错时还会提示最接近的那个 |
 | 3 | 认证错误（凭据缺失/过期/被顶号）——**所有命令**都会这样退出 | 正常情况不该出现（连接器已代管认证）；如出现，提示用户在 WorkBuddy 里重新连接本 Connector |
@@ -350,10 +444,14 @@ vibeknow subtitle fonts --output json                # 后端允许的字体
 | 5 | 任务失败或**状态不允许**，不可重试 | 如实告知失败原因。也涵盖"额度用尽"一类：积分不足、项目数达上限、试听配额用完——请求本身没错，重发只会再失败一次，要做的是把"用完的是什么"讲清楚 |
 | 6 | **未到终态**，三种情况，先看 stderr `detail.reason` | 一律**不要**重新 `create`。`wait_budget_expired` = `--for` 预算到了、任务正常，报出 `stage` 后照 `next_actions` 再等一轮；无 reason 的流中断按 `resend_safe` 判断；任务被暂停用 `video resume` |
 | 7 | **部分成功**：预览已生成，但 mp4 导出失败 | 把预览分享链接如实交付；只重试 `video export`，不要重新 `create` |
-| 8 | **卡在只有用户能做的决定上**（付费导出确认、改稿确认） | 停下来。把 stdout 里 `pending_actions` 的说明转达用户，等答复后原样执行 `resume_command` |
+| 8 | **卡在只有用户能做的决定上**（付费导出、改稿、换声音、换封面的确认） | 停下来。把 stdout 里 `pending_actions` 的说明转达用户，等答复后原样执行 `resume_command` |
 | 130 | 用户中断 | — |
 
 完整错误码表见 `references/errors.md`。
+
+**退出码 6 且不是 `wait_budget_expired` 时，看 `detail.resend_safe`**：`delivery: submitted`（`false`）照 `next_actions` 接回；`delivery: not_submitted`（`true`）后端没有记录、没有扣费，可以重新提交；`delivery: indeterminate`（`false`）先 `video list` 查清。字段缺失或为 `false` 都不要重新 `create`。
+
+**找不到 `vibeknow` 命令时（`command not found`），如实报告后停止。** 告诉用户"VibeKnow 连接器当前不可用"，请用户在 WorkBuddy 的连接器页确认已连接 VibeKnow，必要时断开后重连。不要自己 `npm install`、不要猜命令名反复试，也不要改用其他视频、图片工具或自己写脚本顶替。
 
 ## 输出格式说明
 

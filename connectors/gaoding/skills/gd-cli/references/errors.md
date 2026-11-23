@@ -6,11 +6,15 @@
 - 退出码 `1` 表示运行、服务或状态失败；只执行错误中 `error.details.next_steps` 明确给出的恢复步骤，缺失时停止并报告。
 - 退出码 `2` 表示命令或参数错误；执行对应命令的 `--help` 后修正调用。
 - 退出码 `130` 表示用户中断；立即停止，不自动重试。
-- `INSUFFICIENT_CREDITS` 表示当前组织稿豆不足；按 `error.details.next_steps` 引导用户前往 https://www.gaoding.art/pricing 购买稿豆，或执行 `gd-cli org switch` 切换到有可用稿豆的组织，处理后再重新发起创作。
+- `INSUFFICIENT_CREDITS` 只表示当前可用额度不足，不能据此区分账户余额、成员限额或其他扣费限制；不自动引导充值，不从余额查询或报价推断扣费一定成功。
+
+## 千问办公桌面连接器
+
+千问入口失败时，整个 stderr 是单个 `{code,message}` JSON，退出码含义保持不变。原生 CLI 的错误码、trace_id、任务 ID 和恢复步骤保留在 `message` 中，不读取不存在的 `error.details`。成功警告仍在 stderr。连接器的 `--version` 是上传包版本，底层 npm CLI 版本通过 `gd-cli --help` 查看；底层升级后重新读取 help 和 Schema。桌面登录使用 `gd-cli auth init`，自动打开浏览器失败会结束并报错，不使用 `--no-browser` 或等待聊天里出现授权链接。
 
 ## 创作输出丢失
 
-Agent 或 Tool 请求可能已经提交时，不因结果为空、耗时长或宿主显示执行结束就重新生成。原命令会在 stderr 提示任务 ID；执行会话仍可等待时继续等待，否则查询原调用：
+Agent 或 Tool 请求可能已经提交时，不因结果为空、耗时长或宿主显示执行结束就重新生成。原生 CLI 会在 stderr 提示任务 ID，失败时已知 ID 也保留在错误恢复信息中；执行会话仍可等待时继续等待，否则查询原调用：
 
 ```bash
 gd-cli task list
@@ -23,6 +27,8 @@ gd-cli task get <id>
 - `running`：原执行仍在更新或远端任务尚未完成；隔数秒再次查询同一 ID，不发新创作。
 - `unknown`：暂时无法确认终态；可复查同一 ID，仍未知就向用户说明。`partialResult` 是消息快照，不当成完整交付。
 - `failed`：向用户说明 `note` 和原错误；不自动重提。
+
+查询接口报错（包括未找到任务）不代表原生成失败；保留原任务 ID，不重新生成。
 
 `task get` 退出码 0 只表示查询成功，原调用是否完成由 `state` 表示。重复读取同一 ID 的 usage 是同一份费用，不相加。用户主动中断后不自动继续等待或重提。
 

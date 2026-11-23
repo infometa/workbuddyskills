@@ -2,10 +2,10 @@
 name: product-video-clone
 description: 提供本地参考视频或视频链接及商品素材，展示原参考分析并确认结构和费用后，批量生成9:16、15秒商品改编视频，查询原任务并逐条交付。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: 爆款商品视频克隆与改编
 display_name_en: Viral Product Video Adaptation
 description_zh: 提供本地参考视频或视频链接及商品素材，展示原参考分析并确认结构和费用后，批量生成9:16、15秒商品改编视频，查询原任务并逐条交付。
@@ -21,7 +21,9 @@ author: yihook
 
 商品链接解析仅支持 TikTok Shop 美国站。其他站点请提供商品名称和1—16张商品图，商品描述选填，按手动素材路线继续；不自动提交其他站点的链接解析。
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 按下方渠道运行契约执行所有工具操作；使用已连接的主站账号，首次操作可免费调用 `get_current_user` 核对身份。素材、参数、分析、授权和任务标识均保留在本次对话，由宿主维护。
@@ -40,7 +42,7 @@ author: yihook
 
 ### 素材与商品
 
-首次上传前必须读取 [公共上传指引](references/upload.md)，使用随包注入的 `scripts/upload.mjs`：本地原始字节 → `create_agent_file_upload` → 保存完整原始工具响应 → `node scripts/upload.mjs response.json /absolute/path/file` → `complete_agent_file_upload`；仅使用已完成的本人上传 ID。上传未知时按公共协议查询，不重新拼写票据、不绕过上传脚本。
+首次上传前必须读取 [公共上传指引](references/upload.md)，使用随包注入的 `scripts/upload.mjs`：本地原始字节 → `create_agent_file_upload` → 传delivery="script"取得transfer.code → `node scripts/upload.mjs --transfer "本次transfer.code" /absolute/path/file --ticket-url "本次transfer.ticket_url"` → `complete_agent_file_upload`；仅使用已完成的本人上传 ID。上传未知时按公共协议查询，不重新拼写票据、不绕过上传脚本。
 
 - 本地参考视频接受 MP4/MOV/WEBM，最大 300 MiB（300×1024×1024 字节）；使用 `purpose: "video"`。先核对文件实际类型、大小和可读取性，再上传。
 - 视频链接或含单个视频链接的分享文案走主站正常的视频链接解析与分析链路，直接传给 `preview_viral_analysis` 的 URL 路线，不要求先下载到本地再上传，不自行另建下载或解析流程。以主站实际预检核实支持范围；不支持、失效、非视频或解析失败时说明实际原因，请用户更换链接或上传本地视频。多个候选先选定一条，不静默取首条。不能用历史分析报告替代原视频。

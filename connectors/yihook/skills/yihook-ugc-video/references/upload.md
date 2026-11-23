@@ -1,6 +1,6 @@
-# 原样上传 MCP 票据
+# WorkBuddy 公共文件上传
 
-附件上传需要 Node.js 22.x。此辅助脚本只把文件直传 OSS；创建会话、完成确认和业务调用仍使用宿主原生 MCP，不处理 OAuth。
+附件上传需要 Node.js 22.x。新流程由公共脚本领取原始票据并把文件直传OSS；创建会话、完成确认和业务调用仍使用宿主原生MCP，不向脚本提供OAuth。
 
 ## 素材来源：附件与远端文件直链
 
@@ -12,19 +12,24 @@
 - 文件已托管且所属Skill支持本人资产引用时，按原归属校验规则复用；成功配音tts:<id>不下载重传。多个素材仍遵守选择与顺序规则，不自动批量创建。
 - 上传完成或明确放弃后清理本次下载的临时副本；不能删除用户原始附件。清理不替代对响应未知上传会话的查询与确认。
 
-## 原样上传票据
+## 新流程：短码领取，票据不经过模型转写
 
-1. 调用 `create_agent_file_upload` 后，使用宿主的工具结果保存/导出能力，把**这一次调用的完整原始 JSON 响应**直接保存为临时 `response.json`（仅当前用户可读）。支持业务响应、MCP `structuredContent`、单个 JSON text 内容和 JSON-RPC `result` 包装。只保存创建上传会话的结果，不导出整个会话或其他凭据。
-2. 不让模型重新拼写 policy、签名或 Token，不重新组织条件、格式化/重新编码 policy，也不混用不同调用的字段。即使条件含义相同，改变顺序也会让旧签名失效。不能通过原样保存/可靠复制得到响应文件时停止并说明宿主能力限制，不能靠重新生成长串字段绕过。
-3. 在 Skill 目录运行以下命令；路径由宿主确定，不把票据值放入命令参数或脚本源码：
+1. 用真实文件名、MIME、字节数、SHA-256与稳定的 `upload_request_id` 调用 `create_agent_file_upload`，**必须额外传 `delivery: "script"`**。返回completed时直接复用结果；pending时返回 `transfer.code`、`transfer.ticket_url` 和其 `expires_at`，不返回OSS长票据。领取地址由当前MCP服务按既有OAuth资源配置生成，自动对应本地或线上环境，不由Agent推测。短码有效期最多10分钟，绑定本账号本次文件会话，不授予读取其他文件或付费创建权限。
+2. 无需写response.json、复制policy或检查Token。直接使用本次 `transfer.code`、`transfer.ticket_url` 和真实本地路径运行公共脚本，替换下例中的说明文字：
 
    ```bash
-   node scripts/upload.mjs /absolute/private/response.json /absolute/path/video.mp4
+   node scripts/upload.mjs --transfer "本次返回的transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"
    ```
 
-4. 脚本原样提交 `upload.fields`，文件放最后，不携带 OAuth，不跟随跳转。仅接受标准 HTTPS OSS bucket 地址；自定义域名会明确拒绝，不自行放宽目标。支持 MP4 等类型取决于 MCP 会话，不靠改 Content-Type 绕过限制。
-5. HTTP 200 后调用 `complete_agent_file_upload`，只有完成状态才交给后续业务。脚本不代替服务端的文件哈希、格式和归属校验。
-6. 失败时记录脚本输出的 HTTP 状态、Code、RequestId、EC；不输出原始 OSS XML。网络响应未知或 409 时按原 `upload_request_id` 查询并尝试完成确认，不把 409 当成功。`SignatureDoesNotMatch` 时停止自动重试，检查是否原样保存及混用票据；不切换 curl/Python 反复尝试、不重新编码 policy。只有票据过期且服务端明确对象不存在时，才沿用原 ID 续签并保存新响应。
-7. 使用结束后删除本次临时响应文件，不提交到仓库、不作为对话附件、不写入长期日志。
+   短码是临时上传凭证，只交给随包脚本；不作为对话附件、长期记录或诊断输出，不复制到源码。不要读取或解码签名字段，也不要用Write／Modify重建完整工具响应。必须原样使用本次MCP返回的领取地址：仅接受标准HTTPS的app.yihook.cn／app.yihook.ai，或HTTP(S)的localhost／127.0.0.1及其端口，路径固定为 `/api/mcp/file-upload-tickets`，拒绝用户名密码、查询参数、其他内网地址和重定向。不能自行改地址、设置任意base-url或在失败后切换环境；原生OAuth仍由宿主管理，不索要Token或改用另一平台Key。同一个包支持本地和线上，无需另装本地版。
+3. 脚本在代码内部接收完整票据，检查会话ID、实际文件大小和SHA-256，原样提交所有OSS表单字段、最后添加完整file字节，不携带OAuth、不跟随跳转。脚本只接受标准HTTPS OSS bucket地址，不接受自定义上传域名、不转码或截断文件。
+4. stderr输出ticket／file_validation／transfer阶段进度，等待中每5秒输出耗时；stdout只输出最终JSON，包含 `timings_ms`。传输请求最长180秒，领取票据最长30秒，这些是上限而非固定等待时间。输出不包含短码、签名、policy、Token、OSS XML或带凭证的地址，不需要Agent反复读脚本判断是否仍在执行。
+5. HTTP 200只表示OSS接受上传，随后仍须按原 `upload_request_id` 调用 `complete_agent_file_upload`。服务端完整读取、检查哈希／格式及归属，通过后才使用upload_id或file_url。MCP结果的 `timings_ms`记录创建／查询／完成确认的实际耗时；不能将上传成功当业务任务完成，也不凭输入规格声称文件合格。
+6. 任一步失败立即停止后续业务创建，保留原上传请求标识。领取失败、超时或网络结果未知，不自动更换短码重试；先 `get_agent_file_upload` 查询。已completed直接复用；仍pending时可调用complete核对原对象。仅在明确返回TRANSFER_PENDING、对象不存在时，才允许以原请求ID和相同文件参数再次创建 `delivery: "script"` 会话，取得新短码；新短码会废止旧短码，不建立另一个上传请求。实际文件与声明不符应修正输入，不修签名；签名错误也不得从policy提取Token补写或切换curl／Python重试。OSS 409必须经complete校验，不能当成功。
+7. 后端不支持delivery或新端点、缺少transfer.code或transfer.ticket_url时，说明需要部署配套后端／安装新版包并停止；不猜测领取地址，**不能退回模型转写票据**。完成或明确放弃后仅清理本次私有临时副本，保留用户原附件，不在日志或仓库记录凭证。
 
-脚本会检查有效期、文件大小和 policy 条件与表单的一致性，但没有服务端密钥，不能验证签名或识别所有人工转写错误。原始响应直接落盘是必要前提。不要声称脚本本地检查通过就等于 OSS 上传或服务端完成确认成功。
+## 旧包兼容边界
+
+未传delivery的旧MCP调用仍返回原 `upload` 票据；旧命令 `node scripts/upload.mjs response.json /absolute/path/file`继续受支持，以免已安装包立刻失效。这个入口只接受通过宿主可靠导出得到的原始响应，不代表模型手抄长字符串已被修复。新包一律采用上面的短码模式，不创建票据JSON，也不因旧入口仍可运行而自动降级。
+
+附件和远端文件的下载、格式与大小限制、账号隔离规则沿用所属Skill。上传只传文件，不产生生成费用；后续业务创建仍需当前Skill要求的报价和授权。新链路不自动重试付费任务。

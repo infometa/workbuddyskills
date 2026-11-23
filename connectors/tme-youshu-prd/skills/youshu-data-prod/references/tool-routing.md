@@ -36,6 +36,7 @@
 | 用户要做 | 工具或技能 | 关键区分 |
 | --- | --- | --- |
 | 按结算量、搜播差值、指数或峰值筛选/排序选歌；查看每日来源 | `pageQuerySongOperationDataForMcp` | 仅返回 `tmeTrackId`、`qmPlaySources`、`kgPlaySources`；指标不是返回字段；见 @song-operation.md。 |
+| 按付款日期导出明细、发票和回执 | `youshu-daily-expense-export-prod` | 使用增强后的 `pageQueryExpenseFlow`，按流水 key 累计付款、按文件 key 去重发票。 |
 | 查询/新建宣推计划、轮次、追加抖音视频、BGM、话题 | `youshu-promotion-followup-prod` | 14项计划及资源入口，确认后写入，不承担付费投放和费用申请。 |
 | PDF版权费/宣推对公合同导入，取得核对归档入口 | `youshu-expense-application-prod` | `prepareFileUpload` → 实际COS PUT → `importCopyrightContractFile`。 |
 | 查询开户银行、支行 | `queryFeeBanks` / `youshu-expense-application-prod` | 两级keyword均必填；level=1查银行，选定完整bankName后以level=2和支行keyword查支行。公共字典仍需登录，不要求费用、连接器菜单或数据权限；不查全量，key不是支付字段。 |

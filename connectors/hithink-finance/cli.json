@@ -1,0 +1,37 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=24"
+  },
+  "npmRegistry": "https://registry.npmjs.org",
+  "init": {
+    "darwin": "npm install -g @hithink-tech/hithink-finance-cli@0.2.0",
+    "linux": "npm install -g @hithink-tech/hithink-finance-cli@0.2.0",
+    "win32": "npm install -g @hithink-tech/hithink-finance-cli@0.2.0"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "hithink-finance --version",
+      "linux": "hithink-finance --version",
+      "win32": "hithink-finance.cmd --version"
+    },
+    "minVersion": "0.2.0"
+  },
+  "auth": {
+    "darwin": "hithink-finance auth login --method oauth --background --no-browser",
+    "linux": "hithink-finance auth login --method oauth --background --no-browser",
+    "win32": "hithink-finance.cmd auth login --method oauth --background --no-browser"
+  },
+  "status": {
+    "darwin": "hithink-finance auth status --format json",
+    "linux": "hithink-finance auth status --format json",
+    "win32": "hithink-finance.cmd auth status --format json"
+  },
+  "unAuth": {
+    "darwin": "hithink-finance auth logout --all --format json",
+    "linux": "hithink-finance auth logout --all --format json",
+    "win32": "hithink-finance.cmd auth logout --all --format json"
+  },
+  "statusMatch": "\"connected\"\\s*:\\s*true",
+  "authUrlDomain": "upass.10jqka.com.cn"
+}

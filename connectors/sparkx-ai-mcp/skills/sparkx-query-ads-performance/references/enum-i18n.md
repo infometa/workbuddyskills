@@ -180,18 +180,13 @@ Same values as campaignServingStatus above, plus:
 | `SP-Detail Page on-Amazon` | Product pages | 商品页面 | 商品ページ |
 | `SP-Other on-Amazon` | Rest of search | 搜索结果的其余位置 | 検索結果ページのその他の位置 |
 | `SB-Top of Search on-Amazon` | Top of search | 搜索结果顶部 | 検索結果上部 |
+| `SB-Homepage on-Amazon` | Home | 首页 | ホーム |
 | `SB-Detail Page on-Amazon` | Product page | 商品页面 | 商品ページ |
 | `SB-Other on-Amazon` | Rest of search | 搜索结果的其余位置 | 検索結果ページのその他の位置 |
 
 The EN/ZH columns are what the customer sees on screen — report those, not the API values.
 There is no `SD-` row: Sponsored Display is outside placement reporting. `placementText` echoes
 the raw API value here, so don't rely on it for a localized label.
-
-⚠️ **`SB-Top of Search on-Amazon` is mislabelled at the source.** The bid adjustment on that
-row is SB's **首页 / Home** value, and SB's real top-of-search adjustment is missing from this
-entity entirely (SB has four placements in the console, this entity returns three). The row's
-**metrics** are fine; its `multiplier_` is not. Read SB placement adjustments from
-`get_entity_metadata(entity='placement')`, which returns all four with the right values.
 
 ⚠️ **首页 means two different things.** SP's 搜索结果顶部（**首页**） is the first *page* of
 search results (EN "Top of search (first page)"); SB's **首页** is the Amazon *homepage* (EN

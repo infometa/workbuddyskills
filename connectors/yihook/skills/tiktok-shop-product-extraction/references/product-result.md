@@ -16,7 +16,7 @@
 | 物流摘要   | `product.metadata.tiktok_shop.logistics.shipFrom` / `.freeShipping` / `.deliveryMinDays` / `.deliveryMaxDays` / `.shippingFeeText`                                                                           | 对应发货地、免邮、预计送达、运费；只展示有值项。                                                                            |
 | 关联视频   | `hookReelJobs[]`                                                                                                                                                                                             | 有值时展示每项名称、状态和创建时间，可附上对应 ID；无值时省略该区域。                                                       |
 
-解析失败时按 `product.errorZh` / `product.errorEn` 展示服务端错误。其他空字段与主站一样省略对应项或区域；不要把空值写成肯定陈述。展示区块顺序为：顶部信息与图片、商品描述、核心卖点、商品概览、商品规格、店铺与口碑、物流摘要、关联视频。
+解析失败时按 `product.errorZh` / `product.errorEn` 展示服务端错误。其他空字段与主站一样省略对应项或区域；不要把空值写成肯定陈述。展示优先顺序为：名称与原链接、商品描述、核心卖点、图片预览与数量、下载或导出入口；商品概览、规格、店铺、物流及关联视频有值时补充。跨平台商品优先使用product.facts的currentPrice、originalPrice、currency、salesCount、salesText、rating、reviewCount、shopName与stockStatus；TikTok字段仅用于其对应平台，不为其他平台补造该结构。
 
 ## 本次解析费用与结算
 

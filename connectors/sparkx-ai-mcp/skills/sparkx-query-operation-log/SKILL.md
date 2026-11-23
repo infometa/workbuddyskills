@@ -7,7 +7,7 @@ description: >-
   budget adjustment, AI auto-adjustment, pause/enable records, operation audit,
   modification timeline, ad adjustment log
 metadata:
-  version: 1.3.2
+  version: 1.3.7
 ---
 
 # Query Operation Log Skill
@@ -35,7 +35,21 @@ Profile, tenant, and user scope are resolved from the authenticated bearer token
 - **To get the complete history, loop `page` (incrementing each call) while `hasNextPage=true`.** This is the preferred way to retrieve a complete change history for one entity type — no date-splitting needed. (`hasNextPage` is the real-pagination equivalent of `truncated`.)
 
 **Mode B — limit-only** (when `entities` is empty/omitted, has **multiple** entities, or is **only `aiGroup`**):
-- `page` is ignored. A single call returns at most `pageSize` rows (default 100, max 1,000; **`aiGroup`-only max 10,000**), time-descending. Response includes `limit` and `truncated`.
+- `page` is ignored. A single call returns at most `pageSize` rows (default 100, max 1,000; **`aiGroup`-only max 10,000**), sorted on the raw timestamp string (newest-first only when every row shares one clock — see Shared Rules). Response includes `limit` and `truncated`.
+⚠️ **The cap is small relative to how fast the log grows.** In an account where AI is
+active, machine rows alone can run into the hundreds per hour (measured: ~530/h in one
+store), so **a full day of AI activity does not fit in one call and often not in a day's worth
+of sub-windows either**. Before promising a customer "every change in the last N days", check
+the volume first with a narrow probe window and say plainly what period can actually be
+enumerated. For an AI-activity question, prefer narrowing by `resourceIds` (`aiGroup` is the one
+filter that reliably narrows) over trying to page the whole account.
+
+⚠️ **Rows keep arriving for about two days after the fact.** The log backfills, so the same
+query for "yesterday" can return more rows tomorrow than it does today. A count is a count **as
+of when you ran it** — say so when the number is the answer ("47 changes as of 10:20 today"),
+and never present a recent-day count as settled. Re-running an older window is the way to
+confirm it has stopped moving.
+
 - `truncated=true` means more matched than could be returned. **You cannot page.** Handle it in this order:
   1. **Prefer steering the user to a single entity.** If they really only care about one kind of change ("just budget changes", "just campaign pause/enable"), guide them to narrow `entities` to a single non-`aiGroup` entity → this switches to Mode A, where you can page through the complete set. Only do this when it matches the user's actual intent; if they genuinely want the full cross-entity history, don't silently narrow — say the result is a partial view.
   2. **Split the date range** into non-overlapping sub-windows and recurse (see "Getting a Complete Count" below).
@@ -55,6 +69,33 @@ Use this tool when the user needs any of the following:
 
 See the Tool Selection Decision Tree above if the user's ask might belong to `get_ads_perf` or `get_entity_metadata` instead.
 
+## Explaining a Historical Automated Change
+
+For questions such as "why did AI change this bid?" or "which mechanism changed this budget?",
+separate historical evidence from current configuration:
+
+1. Resolve the named entity first with `get_entity_metadata` and preserve the correct internal
+   and Amazon ids. `resourceIds` for campaign/ad group use Amazon ids; `aiGroup` uses its internal id.
+2. Query the narrowest single entity and date window that contains the event. Fully paginate Mode A;
+   for Mode B, split non-overlapping windows until `truncated=false` or disclose the lower bound.
+3. Report the log facts exactly: timestamp with its real timezone, previous/new value,
+   `changedBy`, `operationSource`, `operationType`, and `aiGroupScheduleId` when present.
+4. If the row belongs to an AI-managed campaign, read the campaign's **current** controller inventory
+   using `sparkx-query-entity-metadata` (campaign, `aiGroup`, `aiGroup_schedule`, and campaign
+   `automationRule`). This answers what can still act now, not what was necessarily configured at
+   the historical timestamp.
+5. Use three evidence levels in the answer:
+   - **Confirmed historical fact**: fields present on the matching log row;
+   - **Current configuration context**: mechanisms and configured limits effective now;
+   - **Not available from MCP**: the model inputs/reasoning used for that historical AI decision,
+     a historical point-in-time config snapshot, an exact hidden trigger threshold, or a guaranteed
+     next execution time unless a returned rule/schedule explicitly supplies it.
+
+An `aiGroupScheduleId` links an operation to a schedule. A null value does not prove there was no
+scheduled influence unless the operation contract for that row guarantees the field. Likewise,
+`changedBy=AI` identifies the actor class, not the model's causal explanation. Never use today's
+bid range or rule configuration as proof of the ceiling or trigger that applied on the event date.
+
 ## DSL Parameter Format
 
 ```json
@@ -65,7 +106,7 @@ See the Tool Selection Decision Tree above if the user's ask might belong to `ge
   "profileIds": [1234567890123456],
   "entities": ["entity_type_list"],
   "resourceIds": [{"idEntity": "campaign", "ids": [123456]}],
-  "changeBy": {"operator": "IN", "values": ["ai", "manual"]},
+  "changeBy": {"operator": "IN", "values": ["ai", "automation"]},
   "actionType": {"operator": "IN", "values": ["Bid Increased"]},
   "operationType": {"operator": "IN", "values": ["Campaign Paused"]},
   "campaignTypes": ["campaign_type_list"],
@@ -93,7 +134,7 @@ See the Tool Selection Decision Tree above if the user's ask might belong to `ge
 | targetTypes | array[string] | No | — | Targeting type filter (see below) |
 | placementTypes | array[string] | No | — | Placement type filter (see below) |
 | page | int | No | 1 | Page number (1-based). **Only effective when `entities` is exactly one non-`aiGroup` entity** (Mode A); ignored for multi-entity or `aiGroup`-only queries (Mode B) |
-| pageSize | int | No | 100 | Max rows per page (Mode A) / per call (Mode B). Non-`aiGroup` max **1,000**; **`aiGroup`-only max 10,000**. Results are time-descending |
+| pageSize | int | No | 100 | Max rows per page (Mode A) / per call (Mode B). Non-`aiGroup` max **1,000**; **`aiGroup`-only max 10,000**. Results are sorted on the raw timestamp string, which is newest-first only within one clock |
 
 ## Parameter Details, ChangeLogVO Field Reference
 
@@ -126,7 +167,7 @@ See the Tool Selection Decision Tree above if the user's ask might belong to `ge
         "countryCode": "US",
         "currencyCode": "USD",
         "createdDate": "2024-06-15 14:30:00",
-        "changedBy": "ai"
+        "changedBy": "AI"
       }
     ],
     "rowCount": 1
@@ -134,7 +175,8 @@ See the Tool Selection Decision Tree above if the user's ask might belong to `ge
   "meta": {
     "limit": 100,
     "truncated": false,
-    "effectiveProfileIds": [4404871489220462]
+    "effectiveProfileIds": [4404871489220462],
+    "hint": "Limit conclusions to this query's scope. Missing fields are not zero, and empty results do not prove that no matching business data exists. Do not present partial or paginated results as complete. Distinguish returned facts from analytical inferences; state limitations or query further when evidence is insufficient."
   },
   "requestId": "a1b2c3d4e5f6"
 }
@@ -143,7 +185,8 @@ See the Tool Selection Decision Tree above if the user's ask might belong to `ge
 **Everything is nested.** `rows` and `rowCount` live under **`data`**; pagination, currency and
 hints live under **`meta`**. Only `isError`, `toolName` and `requestId` are top level. Reading
 `response.rows` returns nothing - it is `response.data.rows`. `meta` keys are **omitted when
-they do not apply** (not set to null), and `meta` itself is omitted when entirely empty.
+they do not apply** (not set to null). A successful read always has `meta.hint`: any
+query-specific warning comes first, followed by the shared interpretation boundary.
 
 The pagination fields differ by mode, and they all live under **`meta`**: **Mode A (real pagination)** gives `meta.page`, `meta.pageSize`, `meta.hasNextPage`; **Mode B (limit-only)** gives `meta.limit`, `meta.truncated` (as shown above). Rows are always `data.rows` and `data.rowCount`.
 
@@ -153,7 +196,8 @@ The pagination fields differ by mode, and they all live under **`meta`**: **Mode
 
 | Entity | profileIds count | `createdDate` timezone | Example |
 |---|---|---|---|
-| `aiGroup` | one or many | **UTC** | `2026-08-24 05:58:50` |
+| `aiGroup` (SP/SB) | one or many | **UTC** | `2026-08-24 05:58:50` |
+| `aiGroup` (SD) | one or many | **downstream DB timezone — undocumented** | `2026-08-24 05:58:50` |
 | `campaign` / `adGroup` / `target` / `placement` | **one** | **Store-local** | `2026-08-24 00:01:06` (LA time) |
 | `campaign` / `adGroup` / `target` / `placement` | **many** | **UTC** | `2026-08-24 07:01:06` (UTC) |
 
@@ -167,10 +211,10 @@ Same event, 7 hours apart — exactly the LA daylight-saving offset.
 
 1. **Always label the timezone when you show a timestamp.** "2026-08-24 07:01 UTC" or "2026-08-24 00:01 store time". An unlabeled timestamp from this tool is ambiguous by construction, and the ambiguity is a whole business day near midnight.
 2. **Never merge or compare a single-profile result with a multi-profile result.** They're on different clocks. If you already pulled one store and then widen the scope, **re-pull** — don't stitch.
-3. **Watch for mixed clocks inside one response.** `entities: ["campaign", "aiGroup"]` on a single profile returns store-local campaign rows *and* UTC aiGroup rows in the same list. Rows are sorted on the raw timestamp string, so a mixed-clock result is **not reliably chronological** — don't present it as an ordered timeline, and don't compute "X happened before Y" across entity types.
+3. **Watch for mixed clocks inside one response.** `entities: ["campaign", "aiGroup"]` on a single profile returns store-local campaign rows *and* UTC SP/SB aiGroup rows in the same list — and SD aiGroup rows in the downstream DB's own timezone, which is documented nowhere. Rows are sorted on the raw timestamp string, so a mixed-clock result is **not reliably chronological** — don't present it as an ordered timeline, and don't compute "X happened before Y" across entity types.
 4. **Pick the mode deliberately:**
    - The user wants times they can match against their Amazon console → query **one profile at a time**, restrict `entities` to ad entities (`campaign`/`adGroup`/`target`/`placement`), and label the output store-local.
-   - The user wants a comparable cross-store timeline → query **multiple profiles** (everything comes back UTC) or convert client-side using each row's `countryCode`, and label the output UTC.
+   - The user wants a comparable cross-store timeline → query **multiple profiles**, which puts **ad-entity rows** in UTC, or convert client-side using each row's `countryCode`, and label the output UTC. **Querying more profiles does not normalise managed-group rows**: SP/SB `aiGroup` rows are already UTC regardless, and SD `aiGroup` rows stay in the downstream DB's timezone and are still unplaceable. If the timeline must include SD managed-group history, say those rows could not be put on the same clock.
 5. **Don't equate `createdDate` with the `dateStart`/`dateEnd` boundary.** Which zone the request-level filter uses is not documented, so a row can sit near the edge of your requested window in one clock and outside it in another. For boundary-sensitive questions ("what changed yesterday" on a non-UTC store), say results at the edges are approximate.
 6. **Don't derive "AI acts at night" style conclusions from raw timestamps** without first pinning down which clock you're in — an hour-of-day pattern computed on UTC rows for a US store is shifted by 7-8 hours.
 
@@ -180,13 +224,13 @@ The MCP layer does no conversion; this is how the log data itself is returned.
 |---|---|---|
 | `isError` | boolean | Top level. Whether the call errored — check this before reading `rows` |
 | `toolName` | string | Top level |
-| `data.rows` | array[ChangeLogVO] | Log entries, time-descending |
+| `data.rows` | array[ChangeLogVO] | Log entries, sorted on the **raw timestamp string**. With one clock that is newest-first; across mixed clocks it is **not** a reliable chronology — see platform-notes |
 | `data.rowCount` | int | Number of rows returned on this page/call |
 | `meta.page` / `meta.pageSize` | int | **Mode A only.** Current page and page size |
 | `meta.hasNextPage` | boolean | **Mode A only.** `true` → fetch `page+1` to continue; loop until `false` for the complete set. (Semantically equivalent to Mode B's `truncated`) |
 | `meta.limit` | int | **Mode B only.** The `pageSize` cap actually applied |
 | `meta.truncated` | boolean | **Mode B only. `true` means more matched than `limit` could return.** You cannot page — steer the user to a single entity (→ Mode A), else split the date range into non-overlapping sub-windows, else add filters as a last resort (flagging the result as partial) |
-| `meta.hint` | string | Guidance message, present when `truncated=true` |
+| `meta.hint` | string | Always present on success. Truncation guidance, when applicable, precedes the shared interpretation boundary |
 | `meta.effectiveProfileIds` | array[long] | Profile IDs the query ran against — an echo of your request (unauthorized IDs fail the call outright) |
 | `requestId` | string | **Top level.** Trace ID — quote it when reporting a failure to the user. May be absent locally |
 | `meta.currency` | string | Optional roll-up of the rows' currencies: a single code if all rows agree, the literal **`"mixed"`** if they don't, absent if no row carries one. **`"mixed"` is not a currency** — fall back to each row's `currencyCode`, and never sum or format amounts across a mixed result |
@@ -232,23 +276,28 @@ There is no server-side `groupBy` for this tool — to answer "how many budget c
 }
 ```
 
-**Budget increases made manually by users (not AI/automation):**
+**Budget increases made by people (not AI/automation):**
 ```json
 {
   "profileIds": [4404871489220462],
   "dateStart": "2026-06-01",
   "dateEnd": "2026-06-30",
+  "entities": ["campaign"],
   "actionType": {"operator": "IN", "values": ["Budget Increased"]},
-  "changeBy": {"operator": "IN", "values": ["manual"]},
-  "pageSize": 100,
-  "userContext": "Manual budget increases this month"
+  "pageSize": 1000,
+  "userContext": "Budget increases made by people this month"
 }
 ```
+No `changeBy` filter: `manual` is **rejected by the server**, and it never covered changes
+recorded under a user's email anyway (see [`field-reference.md`](references/field-reference.md) ->
+changeBy). Keep rows whose `changedBy`
+is an email or `Manual` (`Amazon Console` is a source, not a person), and whose `changeField` is `dailyBudget` - in AI
+managed groups, AI's hourly `currentBudget` rows also land under `Budget Increased`.
 
 ## Notes
 
 - **`operationType` and `actionType` are closed enums** — you MUST only use values listed in [`references/field-reference.md`](references/field-reference.md). Never invent, guess, or interpolate values. If unsure whether a value exists, consult the reference table before sending the request. Values are English display strings (e.g. `"DailyBudget Increased"`, `"Campaign Paused"`) — pass them exactly as listed, case-sensitive
-- `dateStart`/`dateEnd` request params use `YYYY-MM-DD`; `createdDate` in returned rows is a full timestamp — **but its timezone varies** (`aiGroup` = UTC; ad entities = store-local for one `profileId`, UTC for several). Always label the zone, never merge single- and multi-profile results, and treat a mixed-entity result as not reliably chronological. See "createdDate Timezone" above
+- `dateStart`/`dateEnd` request params use `YYYY-MM-DD`; `createdDate` in returned rows is a full timestamp — **but its timezone varies** (SP/SB `aiGroup` = UTC, SD `aiGroup` = the downstream DB's timezone and therefore unknown; ad entities = store-local for one `profileId`, UTC for several). Always label the zone, never merge single- and multi-profile results, and treat a mixed-entity result as not reliably chronological. See "createdDate Timezone" above
 - `dateEnd` must be equal to or later than `dateStart`
 - Max date span is 90 days, max lookback is 15 months — these are hard limits, not auto-truncation. Split longer windows into multiple calls
 - **Pagination has two modes (decided by `entities`)**: a single non-`aiGroup` entity → real pagination (`page` + `pageSize`, loop until `hasNextPage=false`); multi-entity or `aiGroup`-only → limit-only (`pageSize` caps the call, max 1,000 / `aiGroup` 10,000, check `truncated`). For a complete count in limit-only mode, prefer steering to a single entity, otherwise use the non-overlapping date-split procedure above

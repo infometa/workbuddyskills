@@ -2,10 +2,10 @@
 name: yihook-streamer-holding-image
 description: 上传主播与商品图片，制作一张绿幕或直播间持品商拍图；确认真实费用后编辑并查询结果。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: Yihook 万能带货手·AI主播持品商拍
 display_name_en: Yihook Streamer Holding Image
 description_zh: 上传主播与商品图片，制作一张绿幕或直播间持品商拍图；确认真实费用后编辑并查询结果。
@@ -16,7 +16,9 @@ author: yihook
 
 # Yihook 万能带货手·AI主播持品商拍
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 生成静态写实图片，供商品展示或后续数字人口播使用。默认使用 Yi Image 2.5 Pro、2K、9:16，编辑固定构图底图，输出一张最终图。实际模型标识、参数、上传和费用核验遵循下方所属渠道运行契约；指定模型或必要编辑能力不可用时说明并停止，不静默换模型或改为整图重绘。
@@ -65,7 +67,7 @@ author: yihook
 
 ### 上传与底图
 
-首次编辑底图为[远端固定构图模板](https://hzmaxtrawberry.oss-cn-hangzhou.aliyuncs.com/maxtrawberry/skill-assets/composition-reference.jpg)，安装包不包含图片。按公共上传指引安全下载完整字节到本次私有临时目录，核对图片后再申请主站上传；原始模板 URL 不能直接传给 `preview_image` 或 `generate_image`。用户指定其他底图时替换。底图、商品图及有指定主播时的人物图都要实际上传：按 [共用上传指引](references/upload.md) 和随包 `scripts/upload.mjs` 复用 `create_agent_file_upload` / `complete_agent_file_upload` / `get_agent_file_upload`，用途为 `image`。直接使用本次工具的完整原始响应作为脚本输入，不由模型手写票据 JSON、摘抄签名或重建 policy，不另写 curl/Python 上传命令。签名失败按公共指引处理，不手工修正票据重试。只使用完成返回的 `file_url`；远端文件直链先安全取得完整字节。上传响应未知查询原会话，不忽略失败图片。
+首次编辑底图为[远端固定构图模板](https://hzmaxtrawberry.oss-cn-hangzhou.aliyuncs.com/maxtrawberry/skill-assets/composition-reference.jpg)，安装包不包含图片。按公共上传指引安全下载完整字节到本次私有临时目录，核对图片后再申请主站上传；原始模板 URL 不能直接传给 `preview_image` 或 `generate_image`。用户指定其他底图时替换。底图、商品图及有指定主播时的人物图都要实际上传：按 [共用上传指引](references/upload.md) 和随包 `scripts/upload.mjs` 复用 `create_agent_file_upload` / `complete_agent_file_upload` / `get_agent_file_upload`，用途为 `image`。创建时传 `delivery: "script"`，只将短期 `transfer.code` 交给公共脚本，不由模型手写票据 JSON、摘抄签名或重建 policy，不另写 curl/Python 上传命令。签名失败按公共指引处理，不手工修正票据重试。只使用完成返回的 `file_url`；远端文件直链先安全取得完整字节。上传响应未知查询原会话，不忽略失败图片。
 
 共用图片上传最多 30 MiB/张；本模型最多 16 张输入图，单图宽、高均不超过 10000 像素，格式与实际图片校验遵循共用上传及模型预检。本人同渠道生成资产经归属校验可复用。无法下载远端底图或无法实际上传时停止，不能用文字描述冒充底图。
 

@@ -11,6 +11,7 @@
 - **`examPaper`**：`scenario` 可选；未传时不限考试场景。
 - **`studyGuide` / `assignment` / `resource`**：不用 `scenario`；用 `keywords` + 结构化筛选。
 - 通用上限：`size` 单次最多 **20**，未指定时传 **5**。
+- **`keywords` 不要写「中考」**：和 `area` 一起用时结果会清零，改由 `scenario=1` 表达。`keywords` 只放学科和主题（`数学`、`勾股定理`）。
 
 ## 调用格式
 
@@ -77,7 +78,7 @@
 查期中、期末、单元等试卷候选，或未限定中高考真题、模拟卷时使用：
 
 ```json
-{"name":"examPaper","arguments":{"requestDto":{"keywords":"期末 数学","grade":"八年级","size":5}}}
+{"name":"examPaper","arguments":{"requestDto":{"keywords":"期末 数学","grade":"八年级","subjectId":2,"size":5}}}
 ```
 
 不传 `scenario` 时，本工具固定为「试卷」类型（不排除真题和模拟卷）。新增版本支持 `scenario=1` 中考场景、`2` 高考场景、`3` 两者；未传或其他值时保持原查询范围。仅增加场景过滤，不设置真题工具的统考条件，也不包含模拟卷场景集合。当前没有 `paperType`；要真题、模拟卷仍使用对应专用工具。“期末”“单元”等词在此只是标题关键词。
@@ -97,6 +98,14 @@
 ```json
 {"name":"pastExamPaper","arguments":{"requestDto":{"keywords":"数学","scenario":1,"size":5}}}
 ```
+
+带地区时同理，场景只由 `scenario` 表达，`keywords` 不重复写「中考」：
+
+```json
+{"name":"pastExamPaper","arguments":{"requestDto":{"keywords":"数学","scenario":1,"area":"长沙市","size":5}}}
+```
+
+`keywords="中考数学"` + `area="长沙市"` 会返回 **0 条**（参数写法问题，不是库里没有）。
 
 `scenario=1` 为中考、`2` 为高考、`3` 为两者。未指定中考或高考时传 `3`，不要省略；省略或传其他值时下游不附加考试场景条件。
 
@@ -141,15 +150,17 @@
 接着说“改找高一数学课件”，新的年级和资料类型已经明确，应使用课件工具的场景含义：
 
 ```json
-{"name":"courseware","arguments":{"requestDto":{"keywords":"数学","grade":"高一","scenario":1,"size":5}}}
+{"name":"courseware","arguments":{"requestDto":{"keywords":"数学","grade":"高一","subjectId":2,"scenario":1,"size":5}}}
 ```
 
 再说“换成教案”，保留高一、数学和数量，调整课件工具的场景：
 
 ```json
-{"name":"courseware","arguments":{"requestDto":{"keywords":"数学","grade":"高一","scenario":2,"size":5}}}
+{"name":"courseware","arguments":{"requestDto":{"keywords":"数学","grade":"高一","subjectId":2,"scenario":2,"size":5}}}
 ```
 
 如果又改为其他学科，更新关键词，并重新核对此前选择的学科、课程、教材、章节及知识点 ID。用户仍要求的版本等限定需要继续满足；不能为避免参数冲突而静默丢弃。学案和作业通常省略 `typeId`、`includeSubtypes`，不照搬前一个工具的分类参数。
 
-用户要求“再来几份”时，可将同条件 `size` 增加到最多 20，再按 `documentId` 排除已展示项；不足就说明实际数量。已经查过 20 条时，不重复同一请求冒充下一页，也不自行添加 `page`、`offset` 等资源工具不支持的字段。
+用户要求“再来几份”时，按两步走：① 先把同条件的 `size` 加到最多 20，按 `documentId` 排除已展示项；② 仍不够就传 `page=2`、`page=3` 翻页（**`page` 是有效参数**，`searchInfo.page` 会回显）。
+
+`page` 的上限约为 `total / size`，超过会返回 500「服务器异常」（不是参数错误，重试也不会成功）。资源工具不支持 `offset`，别用。

@@ -21,7 +21,7 @@
 
 `queryPromotionPlanDetail` 和 `getPromotionEntry` 使用 `planTrackId`；视频/BGM/话题列表的 `taskId` 必须取详情返回的 `monitorTaskId`。真实字段与类型仍以实时Schema为准。
 
-链接解析保留msg/url，并返回与输入等长的items，key为1开始的输入序号；按SUCCESS、DUPLICATE、UNRESOLVED对应来源行，保留原始与归一化URL，不猜测未提供的失败原因。请求超时后先回查计划、轮次和资源，不自动重新创建/追加。写入后调用getPromotionEntry；READY时展示miniProgramCodeUrl图片及有效期，FAILED/UNAVAILABLE时保留PC/小程序链接。本包需配套后端和小程序scene解析版本；READY图片不等于已经真机验收。
+链接解析保留msg/url，并返回与输入等长的items，key为1开始的输入序号；按SUCCESS、DUPLICATE、UNRESOLVED对应来源行，保留原始与归一化URL，不猜测未提供的失败原因。请求超时后先回查计划、轮次和资源，不自动重新创建/追加。写入后调用getPromotionEntry；READY 且图片地址有效时，在最终回复的正文中单独嵌入图片，例如 `![微信扫码查看宣推计划](<MINI_PROGRAM_CODE_URL>)`（替换为完整地址并移除反引号）；按计划分别展示。FAILED/UNAVAILABLE 时保留 PC/小程序链接。本包需配套后端和小程序scene解析版本；READY图片不等于已经真机验收。
 
 用户明确确认撤销视频后，调用 `removePromotionLinks`：`{"planTrackId":123,"monitorId":789}`。monitorId来自视频列表的trackMonitorId，不是platVideoId。仅撤销计划关联，不删除抖音源视频，不用于BGM/话题级联删除。
 

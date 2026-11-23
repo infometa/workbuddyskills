@@ -2,8 +2,11 @@
   "mcpServers": {
     "yihook": {
       "type": "streamableHttp",
-      "url": "https://app.yihook.cn/api/mcp",
-      "timeout": 180000
+      "url": "https://app.yihook.cn/api/mcp/channels/workbuddy",
+      "timeout": 180000,
+      "headers": {
+        "X-Invocation-Source": "workbuddy"
+      }
     }
   }
 }

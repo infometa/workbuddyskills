@@ -1,0 +1,48 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=20.12"
+  },
+  "init": {
+    "darwin": "npm install -g @cueai/cue-cli",
+    "linux": "npm install -g @cueai/cue-cli",
+    "win32": "npm install -g @cueai/cue-cli"
+  },
+  "npmRegistries": [
+    "https://registry.npmmirror.com",
+    "https://registry.npmjs.org"
+  ],
+  "versionCheck": {
+    "command": {
+      "darwin": "cue --version",
+      "linux": "cue --version",
+      "win32": "cue.cmd --version"
+    },
+    "minVersion": "1.1.0",
+    "versionPattern": "(\\d+\\.\\d+\\.\\d+)"
+  },
+  "auth": {
+    "darwin": "cue auth login",
+    "linux": "cue auth login",
+    "win32": "cue.cmd auth login"
+  },
+  "unAuth": {
+    "darwin": "cue auth logout",
+    "linux": "cue auth logout",
+    "win32": "cue.cmd auth logout"
+  },
+  "status": {
+    "darwin": "cue auth status",
+    "linux": "cue auth status",
+    "win32": "cue.cmd auth status"
+  },
+  "statusMatch": "已登录|logged in|loggedIn|authenticated",
+  "authUrlDomain": "cuecue.cn",
+  "authWaitForExit": true,
+  "authDeviceFlow": {
+    "uriPattern": "(https://[^\\s]*cuecue\\.cn[^\\s]*)",
+    "codePattern": "user_code=([^&\\s]+)",
+    "defaultExpiresInSeconds": 600,
+    "codeEmbeddedInUri": true
+  }
+}

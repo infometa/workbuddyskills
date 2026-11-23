@@ -24,7 +24,7 @@ visibility: stdout carries exactly one document (the final snapshot) while
 stderr carries the run as it happens. With `--output ndjson` the stream
 stays on stdout as before and nothing is duplicated onto stderr.
 
-Six event types appear **only** on the stderr channel.
+Seven event types appear **only** on the stderr channel.
 
 ### edit.started / edit.progress / edit.succeeded
 
@@ -43,6 +43,20 @@ code as the verdict, never a mid-stream step. When a step does fail the
 backend restores the pre-edit version, so the shot is normally unchanged —
 but that is compensation rather than a transaction, so confirm with
 `video script` rather than assuming.
+
+### revoice.progress
+
+The progress of a `video revoice` run, emitted whenever the backend job
+moves to a new step. Its result is the single JSON document on stdout.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `status` | string | The job's state: `queued` or `running` while it goes |
+| `stage` | string | The backend's step name, e.g. `copying`, `tts` |
+| `session_id` | string | The **new** work's session |
+
+As with every progress event, the exit code is the verdict, not the last
+`stage` seen.
 
 ### preset.applied
 

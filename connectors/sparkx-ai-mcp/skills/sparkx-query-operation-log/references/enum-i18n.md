@@ -4,10 +4,15 @@ Display labels for enum values in operation log fields. Used when presenting log
 
 ### changeBy (changedBy)
 
+> ⚠️ **`manual` is a read-side display value, not a filter value.** It can come back in
+> `changedBy`, but passing it in `changeBy.values` is **rejected** (case-insensitive, including
+> `IN`, `NOT_IN` and mixed values) — see `field-reference.md` -> changeBy. Every other row in
+> this table is valid on both sides.
+
 | API value | EN | ZH | JA |
 |---|---|---|---|
 | `ai` | AI | AI | AI |
-| `manual` | Manual (User) | 手动（用户） | 手動（ユーザー） |
+| `Manual` (read side only) | Manual (User) | 手动（用户） | 手動（ユーザー） |
 | `automation` | Automation Rule | 自动化规则 | 自動化ルール |
 | `aiCustomRule` | AI Custom Rule | AI自定义规则 | AIカスタムルール |
 | `budgetManagement` | Budget Management | 预算管理 | 予算管理 |

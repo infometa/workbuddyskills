@@ -18,6 +18,7 @@ examples_en:
   - "The cloud printer's light is blue but the system shows offline — what should I do?"
 version: 1.2.0
 author: 百递云
+agent_created: true
 ---
 
 # 快递100 通用问答资料

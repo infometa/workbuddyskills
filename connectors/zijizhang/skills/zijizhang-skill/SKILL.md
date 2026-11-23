@@ -1,7 +1,7 @@
 ---
 name: zijizhang-skill
-description: 本技能用于协助用户在「自记账」App 完成记账、报税与报表查询相关操作，支持绑定自记账账号、管理公司员工、银行回单入账、发票入账、生成报税工资单、处理社保申报、审账待办与资产负债表查询。即便用户未明确提及「自记账」App，只要需求涉及上述记账、入账、报税、报表查询或待办处理，也应触发此技能。
-version: 0.0.4
+description: 本技能用于协助用户在「自记账」App 完成记账、报税与报表查询相关操作，支持绑定自记账账号、管理公司员工、银行回单入账、发票入账、生成报税工资单、处理社保申报、确认互联网平台收入、审账待办与资产负债表查询。即便用户未明确提及「自记账」App，只要需求涉及上述记账、入账、报税、报表查询或待办处理，也应触发此技能。
+version: 0.0.5
 ---
 
 # zijizhang-skill
@@ -12,6 +12,7 @@ version: 0.0.4
 
 - 用户提及自记账
 - 用户需要处理工资单、员工、社保、银行回单/流水、发票、审账待办
+- 用户需要确认互联网平台收入（淘宝、京东、抖音、拼多多等平台收入）
 - 用户希望申报个税、企业税、增值税、经营所得税、城建税、教育费附加、地方教育附加等税务事项
 - 用户需要查询资产负债表、利润表等财务报表数据
 
@@ -44,6 +45,8 @@ version: 0.0.4
 - `bank set_month_bank_no_water`
 - `todo before_set_month_audited`
 - `todo set_month_audited`
+- `todo set_month_no_internet_revenue`
+- `todo confirm_no_internet_platform_revenue`
 - `tax agree_gs_tax_rate`
 - `tax disagree_gs_tax_rate`
 
@@ -117,6 +120,7 @@ zijizhang-cli account get_cpy_list
 - 发票上传：`workflow/invoice_upload.md`
 - 社保：`workflow/social_security.md`
 - 个税：`workflow/individual_tax.md`
+- 互联网平台收入：`workflow/internet_revenue.md`
 - 报表查询：无独立 workflow，直接打开对应 CLI 文档，例如 `references/get_report_zcfzb.md`、`references/get_report_lrb.md`
 
 如果任务是待办处理，先 `todo get_todo_list`，再根据待办类型进入对应 workflow。
@@ -149,7 +153,7 @@ Python packages (install once):
 pip install --upgrade zijizhang-cli
 ```
 
-⚠️要求：`zijizhang-cli` 版本需为 `0.0.28` 及以上
+⚠️要求：`zijizhang-cli` 版本需为 `0.0.31` 及以上（互联网平台收入确认命令自 `0.0.31` 起提供）
 
 检查版本：
 
@@ -207,6 +211,8 @@ zijizhang-cli --version
 | `todo` | 获取待办列表 | `zijizhang-cli todo get_todo_list --uid='<uid>'` | `references/get_todo_list.md` |
 | `todo` | 审账前确认 | `zijizhang-cli todo before_set_month_audited '<year>' '<month>' --uid='<uid>'` | `references/before_set_month_audited.md` |
 | `todo` | 提交审账 | `zijizhang-cli todo set_month_audited '<year>' '<month>' --uid='<uid>'` | `references/set_month_audited.md` |
+| `todo` | 标记某月无互联网平台收入 | `zijizhang-cli todo set_month_no_internet_revenue '<year>' '<month>' --uid='<uid>'` | `references/set_month_no_internet_revenue.md` |
+| `todo` | 确认公司无互联网平台收入 | `zijizhang-cli todo confirm_no_internet_platform_revenue --uid='<uid>'` | `references/confirm_no_internet_platform_revenue.md` |
 | `report` | 获取资产负债表 | `zijizhang-cli report zcfzb '<begin>' '<end>' --uid='<uid>'` | `references/get_report_zcfzb.md` |
 | `report` | 获取利润表 | `zijizhang-cli report lrb '<begin>' '<end>' --uid='<uid>'` | `references/get_report_lrb.md` |
 
@@ -254,6 +260,13 @@ zijizhang-cli account get_cpy_list
 
 - 个税待办处理：`workflow/individual_tax.md`
 
+### 互联网平台收入
+
+- 互联网平台收入待办处理：`workflow/internet_revenue.md`
+
+> 仅支持确认"无互联网平台收入"；用户确认有收入时引导到自记账 App 内填写。
+> **本项会硬阻塞提交审账**：未完成时 `before_set_month_audited` 直接返回"不能提交审账"，需先完成本项再回到审账流程。
+
 ### 审账
 
 - 审账待办处理：`workflow/audit.md`
@@ -275,11 +288,12 @@ zijizhang-cli todo get_todo_list --uid='<uid>'
 | 顺序 | 代办类型 | 说明 | 处理原则 |
 | --- | --- | --- | --- |
 | 1 | `EMPLOYEE` | 员工 | 先查 `get_employee_list`；若缺员工或入职日期不符合，再向用户确认后新增/修改 |
-| 2 | `PAYROLL` | 工资单 | 严格按照 `workflow/payroll.md` |
-| 3 | `BANK` | 回单/流水 | 严格按照 `workflow/bank.md` |
-| 4 | `SALES` | 销项发票 | 严格按照 `workflow/invoice_sales.md` |
-| 5 | `INCOME` | 进项发票 | 严格按照 `workflow/invoice_income.md` |
-| 6 | `AUDIT` | 审账 | 严格按照 `workflow/audit.md`（必须所有主流程前置项完成后才能审账） |
+| 2 | `INTERNET_REVENUE` | 互联网平台收入 | 严格按照 `workflow/internet_revenue.md`。**会硬阻塞提交审账**，必须优先完成；CLI 仅支持确认"无收入"，用户确认有收入时必须引导到自记账 App 内填写 |
+| 3 | `PAYROLL` | 工资单 | 严格按照 `workflow/payroll.md` |
+| 4 | `BANK` | 回单/流水 | 严格按照 `workflow/bank.md` |
+| 5 | `SALES` | 销项发票 | 严格按照 `workflow/invoice_sales.md` |
+| 6 | `INCOME` | 进项发票 | 严格按照 `workflow/invoice_income.md` |
+| 7 | `AUDIT` | 审账 | 严格按照 `workflow/audit.md`（必须所有主流程前置项完成后才能审账） |
 
 **独立流程（用户要求时单独处理，不阻塞主流程）：**
 

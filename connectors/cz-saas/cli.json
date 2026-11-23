@@ -1,0 +1,38 @@
+{
+  "runtime": {
+    "type": "node",
+    "version": ">=18.0.0"
+  },
+  "init": {
+    "darwin": "npm install -g cz-saas-cli@1.0.8",
+    "linux": "npm install -g cz-saas-cli@1.0.8",
+    "win32": "npm install -g cz-saas-cli@1.0.8"
+  },
+  "auth": {
+    "darwin": "cz-saas auth login",
+    "linux": "cz-saas auth login",
+    "win32": "cz-saas.cmd auth login"
+  },
+  "status": {
+    "darwin": "cz-saas auth status",
+    "linux": "cz-saas auth status",
+    "win32": "cz-saas.cmd auth status"
+  },
+  "unAuth": {
+    "darwin": "cz-saas auth logout",
+    "linux": "cz-saas auth logout",
+    "win32": "cz-saas.cmd auth logout"
+  },
+  "statusMatch": "^Logged in",
+  "authWaitForExit": true,
+  "authSuppressBrowser": true,
+  "env": {
+    "CZ_SAAS_BASE_URL": "https://ai-api.ichizai.com",
+    "CZ_SAAS_CONSOLE_URL": "https://console.ichizai.com"
+  },
+  "npmRegistries": [
+    "https://registry.npmjs.org",
+    "https://registry.npmmirror.com"
+  ],
+  "authUrlDomain": "console.ichizai.com"
+}

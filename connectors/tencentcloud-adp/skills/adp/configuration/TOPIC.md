@@ -32,6 +32,9 @@ adp schema --command dev --format json
 | Plugin tools | `agent.tools` (`plugin_id` + `tool_id`) |
 | Plugins / connectors | `agent.plugin_ids` / `agent.plugins` / `connector_ids` |
 | Skill mounts | `agent.skill_ids` (Claw only) |
+| Claw main agent | `agent` (`agent.profile.role` 0) plus top-level `agent_id` |
+| Claw sub-agents | not a second `agent` block; `adp agent create --role 1` |
+| Claw team collaboration | `mode.claw.team_enabled`, `mode.claw.team_prompt` |
 | Multi-agent collab | `mode.multi_agent.collaboration_mode` |
 | Bind an existing workflow | `mode.single_workflow.workflow_id` |
 

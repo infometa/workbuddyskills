@@ -2,10 +2,10 @@
 name: amazon-ad-resizer
 description: 将用户提供的已完成广告图适配为六种Amazon尺寸中的一种或多种，识别并编辑文案，确认费用后生成。不用于从零制作商品图或广告图。仅支持WorkBuddy。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: Amazon 广告图片多尺寸适配
 display_name_en: Amazon Ad Image Resizer
 description_zh: 将用户提供的已完成广告图适配为六种Amazon尺寸中的一种或多种，识别并编辑文案，确认费用后生成。不用于从零制作商品图或广告图。仅支持WorkBuddy。
@@ -17,7 +17,9 @@ author: yihook
 
 # Amazon 广告图片多尺寸适配
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 ## 使用范围与输入
@@ -74,7 +76,7 @@ author: yihook
 ### 素材与免费检查
 
 1. 新建任务前调用 get_current_user 检查主站身份和积分。本人完成的 image_upload_id 可直接复用；本工具没有生成资产ID入口，不能猜测上传ID或使用其他渠道素材。
-2. 附件或远端图片文件直链按 references/upload.md：安全取得本地完整原始字节 → create_agent_file_upload（purpose="image"）→ 将完整原始响应保存至私有临时文件 → `node scripts/upload.mjs response.json /absolute/path/file` → complete_agent_file_upload。失败用get_agent_file_upload按原上传标识查询，不重写签名或复制上传客户端。
+2. 附件或远端图片文件直链按 references/upload.md：安全取得本地完整原始字节 → create_agent_file_upload（purpose="image"）→ 传入delivery="script"取得transfer.code → `node scripts/upload.mjs --transfer "本次transfer.code" /absolute/path/file --ticket-url "本次transfer.ticket_url"` → complete_agent_file_upload。失败用get_agent_file_upload按原上传标识查询，不重写签名或复制上传客户端。
 3. 通用上传格式范围不代表业务都支持。此入口接收JPG/PNG/WebP，≤10MB且≤2000万像素；素材须符合原图要求。不忽略失败输入进入收费生成。不要传原始URL、路径、base64或未经确认的引用。
 4. recognize_ad_resizer_text：`{"image_upload_id":"本人完成上传的UUID"}`。调用领域识别服务，返回真实 `textInventory: {brand, headline, subline, features}` 及实际provider/modelId；该操作不扣用户积分。无卖点不自行补写。
 

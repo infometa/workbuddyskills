@@ -73,11 +73,18 @@ group reads back as `2` once turned off.
 
 常见说法:收割/自动收词/挖词 -> 开;"收割并否掉源头" -> `2`。
 
-## numType / bidRangeType / budgetNumType - 值类型
+## numType / budgetNumType - 值类型
 
 | code | 中文 | English |
 |---|---|---|
 | `1` | 百分比 | percentage |
+| `2` | 固定值 | fixed value |
+
+## bidRangeType - 值类型（`1` 待确认）
+
+| code | 中文 | English |
+|---|---|---|
+| `1` | 单位待确认（页面疑似竞价系数） | unit unconfirmed — UI looks coefficient-like |
 | `2` | 固定值 | fixed value |
 
 ## 匹配 / 名单类型（action space）

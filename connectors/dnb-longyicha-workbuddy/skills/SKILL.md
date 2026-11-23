@@ -1,32 +1,294 @@
 ---
-name: dnb-company-verification
-description: 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档案 Server（/v1/company）全部 14 个 Tool，对单一企业开展工商登记、简易注销、变更、股东与控股治理、主要人员、受益所有人、实际控制人、对外投资、分支机构、ICP 备案与企业年报的尽调式核验，输出结构化核查底稿与事实包。当用户要求做企业信息核验、工商底稿、主体真实性核查、股权与治理结构核查、UBO/实控人核验、年报与变更追溯、仅查企业档案不下钻风险/评分时触发此 skill。本 skill 只使用企业档案 Server，不输出评级与准入结论。
+name: D&B Global Search - Long Yicha
+description: 使用邓白氏查全球-龙易查 MCP 企业档案 Server（https://mcp.dnbservice.com.cn/v1/company）全部 16 个 Tool——3 个企业检索（中国内地 / 中国香港 / 海外）与 13 个中国内地专项档案——对单一主体开展检索锚定、工商登记、简易注销、变更、股东与控股治理、主要人员、受益所有人、实际控制人、对外投资、分支机构、ICP 备案与企业年报的尽调式核验，输出结构化核查底稿与事实包。当用户要求查龙易查、企业信息核验、工商底稿、主体识别、股权与治理结构、UBO/实控人、年报与变更、查海外或香港企业档案检索时触发。不输出评级与准入结论。
+version: "2.0.0"
+author: Dun & Bradstreet
 ---
 
-> 企业信息核验 SKILL · D&B China Data MCP（CDT 主题化中国数据）· v1.0.0
-> 面向**单一主体工商与股权治理底稿**场景：输入企业名称或统一社会信用代码，锚定后并发调用**企业档案 Server 全部 14 个 Tool**（对齐《主题化中国数据-MCP 服务 0901》数据字典），输出可直接归档的**十二类核查模块底稿**。
->
-> **Server 边界（硬性）**：本 SKILL **只能**调用**企业档案 Server**（MCP 基址 `https://mcp.dnbservice.com.cn/v1/company`）。**禁止**调用风险雷达、企业评分、商情洞察、知产智库、关联图谱或任何其他 Server——即使客户要求「顺便查风险 / 评级 / 诉讼 / 专利 / 两企业关联」，须说明超出本 SKILL 范围并转对应 SKILL。
->
-> 核心能力：
->
-> - **14 Tool 全覆盖（0901 字典 · 企业档案 Server 全集）**：`search_company` · `search_company_registration` · `search_simple_deregistration` · `search_company_changes` · `search_shareholders` · `search_controlling_shareholders` · `search_key_personnel` · `search_beneficial_owners` · `search_actual_controllers` · `search_company_investments` · `search_branches` · `search_branches_headquarters` · `search_icp_filing` · `search_annual_reports`——`--module all` 时**每个 Tool 各调用 1 次**，典型 **14 次**（无额外下钻）
-> - **客商尽调工商子集**：覆盖 `dnb-counterparty-dd` 中企业档案域的**全部 14 Tool**，但不计分、不评级、不扩证司法/知产/跨境
-> - **二要素硬闸**：名称与 USCC 不一致立即终止，不输出任何核查结论
-> - **治理链完整呈现**：股东 → 控股股东 → 实控人 → 受益所有人 → 主要人员，逐表原值列示；`final_shareholding_ratio_percent` / `holding_path` **只引用接口字段**，**禁止**自行穿透相乘
->
-> 适用场景：开户 / 准入前的工商底稿 · KYC 主体真实性核验 · 合同签约主体核查 · 供应商档案建档 · 投前工商与股权治理快核 · 年报与变更轨迹留档 · 仅购买企业档案模块的客户场景。
->
-> 使用方式：
-> `/dnb-company-verification 企业名称 [--uscc 18位] [--years 3] [--module all|registration|simple_dereg|changes|shareholders|controlling|personnel|ubo|controller|investments|branches|branches_hq|icp|annual] [--format md|json|html]`
->
-> **⚠ 本 SKILL 是事实层工具**：只输出企业档案可核验字段与清单计数，**不输出** A/B/C/D 评级、红/橙/黄/绿分流、授信意见、准入否决或「空壳 / 高风险」等定性结论。发现异常事实时只能写「存在 X 记录，建议转 dnb-risk-screening / dnb-counterparty-dd 进一步评估」，并绑定具体字段证据。
+# 邓白氏查全球-龙易查
 
-**命令**：`/dnb-company-verification` · **MCP 工具集**：`企业档案 Server（唯一 · 14 Tool · https://mcp.dnbservice.com.cn/v1/company）`
+本 Skill 提供**邓白氏查全球-龙易查**企业档案 MCP 服务。数据端点 `https://mcp.dnbservice.com.cn/v1/company`。**Server 共 16 个 Tool**：**3 个检索 Tool**（中国内地 / 中国香港 / 海外）+ **13 个中国内地专项 Tool**（工商、变更、股东、人员、分支、投资、年报、简易注销、受益人、实控人、控股、ICP 等）。专项 Tool 以**精准企业名称、统一社会信用代码（USCC）或邓白氏编码（D-U-N-S）**为主入参；中国内地须**先检索锚定主体**，再查专项档案。
+
+## 使用流程概览
+
+1. **先检索、定地域**：根据主体所在地区选择检索 Tool——中国内地 `search_company`、香港 `search_company_hk`、海外 `search_company_global`。用户给出知名企业时，可结合上下文推断地域（如「华为技术有限公司」→ 中国内地；「Tencent Holdings Limited」注册地不明时优先香港检索或海外检索并说明依据）。
+2. **再取档案（中国内地）**：锚定 USCC 后，按需调用专项 Tool；全量底稿场景下 **13 个专项 Tool 各调用 1 次**（与检索合计 **14 次**），可并发请求。
+3. **确认后输出**：多条检索命中须向用户确认目标主体；名称与用户提供的 USCC 不一致时**停止后续查询**；按下方报告约定输出事实字段，不做准入或风险评级。
+
+## 适用场景
+
+开户 / 准入前的工商底稿 · KYC 主体真实性核验 · 合同签约主体核查 · 供应商档案建档 · 投前工商与股权治理快核 · 年报与变更轨迹留档 · 香港主体注册信息检索 · 海外主体识别与概况检索。
+
+## 输出边界
+
+本 Skill 为**事实层**：只输出接口可核验字段与记录条数。**不输出** A/B/C/D 评级、红/橙/黄/绿分流、授信意见、准入否决或「空壳 / 高风险」等定性结论。发现异常事实时须绑定具体字段说明「存在 X 记录」，如需风险、评分或关联图谱等扩展能力，须使用邓白氏其他已授权产品。
+
+## 核心工具
+
+### search_company — 企业检索（中国内地）
+
+检索中国内地企业，支持企业名称、USCC、法人、地址、经营范围等关键词，返回统一社会信用代码、登记名、状态、匹配度等，是**中国内地一切专项查询的第一步**。
+
+**参数**：
+
+
+| 参数         | 类型      | 必填  | 说明                                                                 |
+| ---------- | ------- | --- | ------------------------------------------------------------------ |
+| searchKey  | string  | ✅   | 企业名称（≥3 字）、USCC（≥8 位）、法人（≥2 字）、地址（≥6 字）、经营范围（≥6 字）等 |
+| searchType | integer | ✅   | `1` 精准搜索 · `2` 模糊搜索                                                |
+| pageNum    | integer | -   | 页码，默认 `1`                                                          |
+| pageSize   | integer | -   | 每页条数，默认 `50`                                                       |
+
+
+**使用示例**：
+
+- 查小米科技工商锚定：调用 `search_company`，`searchKey="小米科技"`，`searchType=2`。
+- 用户已提供 USCC：调用 `search_company`，`searchKey="91110108551385082Q"`，`searchType=1`。
+
+```json
+{
+  "searchKey": "小米科技",
+  "searchType": 2
+}
+```
+
+**提示**：命中多条时展示 `company_chinese_name`、`unified_social_credit_code`、`match_score` 供用户确认；后续专项 Tool 的 `searchKey` **优先传 USCC**。
+
+### search_company_hk — 企业检索（中国香港）
+
+检索中国香港企业，通过企业名称或公司注册号匹配，返回企业名称、注册号、状态、类型。
+
+**参数**：
+
+
+| 参数         | 类型      | 必填  | 说明                          |
+| ---------- | ------- | --- | --------------------------- |
+| searchKey  | string  | ✅   | 企业名称或注册号                    |
+| searchType | integer | ✅   | `1` 精准 · `2` 左匹配模糊           |
+| pageNum    | integer | -   | 默认 `1`                      |
+| pageSize   | integer | -   | 默认 `50`                     |
+
+
+**使用示例**：
+
+- 按名称查香港公司：调用 `search_company_hk`，`searchKey="腾讯控股"`，`searchType=1`。
+
+```json
+{
+  "searchKey": "腾讯控股",
+  "searchType": 1
+}
+```
+
+**提示**：本 Tool **不提供**内地式 13 类专项档案；结果仅含检索字段，勿调用 `search_company_registration` 等内地专项 Tool。
+
+### search_company_global — 企业检索（海外）
+
+检索海外企业，支持企业名称、当地注册号或 D-U-N-S，返回候选列表及组织详情（地址、行业、族谱、财务摘要等）。
+
+**参数**：
+
+
+| 参数                        | 类型      | 必填  | 说明              |
+| ------------------------- | ------- | --- | --------------- |
+| searchKey                 | string  | ✅   | 企业名称 / 注册号 / D-U-N-S |
+| countryISO                | string  | -   | 国家或地区 ISO 代码    |
+| industryCode              | string  | -   | 行业代码            |
+| isOutOfBusiness           | boolean | -   | 是否停业            |
+| isPubliclyTradedCompany   | boolean | -   | 是否上市公司          |
+| isImporter                | boolean | -   | 是否进口商           |
+| isExporter                | boolean | -   | 是否出口商           |
+| pageNum                   | integer | -   | 默认 `1`          |
+| pageSize                  | integer | -   | 默认 `50`         |
+
+
+**使用示例**：
+
+- 查苹果公司：调用 `search_company_global`，`searchKey="Apple Inc."`，`countryISO="US"`。
+- 已知 D-U-N-S：调用 `search_company_global`，`searchKey="060704780"`。
+
+```json
+{
+  "searchKey": "Apple Inc.",
+  "countryISO": "US"
+}
+```
+
+**提示**：按 `search_candidates[].display_sequence` 展示候选；字段须沿 `search_candidates[].organization` **原路径引用**，勿自行扁平化或改名。已知国家时尽量传入 `countryISO` 以提高命中率。
+
+## 专项工具（中国内地）
+
+锚定中国内地主体后使用；**`searchKey`（精准企业名称 / USCC / D-U-N-S）** 均为必传，无需传 `searchType`。
+
+### search_company_registration — 企业工商信息
+
+查询工商核心登记信息：企业类型、注册资本、成立日期、登记状态、行政区划、地址、经营范围、联系方式等。
+
+| 参数        | 类型     | 必填  | 说明                    |
+| --------- | ------ | --- | --------------------- |
+| searchKey | string | ✅   | 精准企业名称 / USCC / DUNS |
+
+
+### search_simple_deregistration — 简易注销
+
+查询简易注销公告期、审核结果、注销日期等退出相关公开信息。
+
+| 参数        | 类型     | 必填  | 说明                    |
+| --------- | ------ | --- | --------------------- |
+| searchKey | string | ✅   | 精准企业名称 / USCC / DUNS |
+
+
+**提示**：存在简易注销公告时，须与工商登记状态一并呈现，勿单独下结论。
+
+### search_company_changes — 变更记录
+
+查询工商变更事项、变更前后内容、变更日期等历史轨迹。
+
+| 参数        | 类型      | 必填  | 说明                    |
+| --------- | ------- | --- | --------------------- |
+| searchKey | string  | ✅   | 精准企业名称 / USCC / DUNS |
+| pageNum   | integer | -   | 默认 `1`                |
+| pageSize  | integer | -   | 默认 `50`               |
+
+
+**提示**：报告按 `change_date` 降序；条数多时分页取尽后再汇总。
+
+### search_shareholders — 股东信息
+
+查询股东名称、类型、持股比例、认缴与实缴出资等股东名册信息。
+
+| 参数        | 类型     | 必填  | 说明                    |
+| --------- | ------ | --- | --------------------- |
+| searchKey | string | ✅   | 精准企业名称 / USCC / DUNS |
+
+
+### search_controlling_shareholders — 控股股东
+
+查询控股股东识别结果、控制类别、直接持股与合计持股、识别路径等。
+
+| 参数        | 类型      | 必填  | 说明                    |
+| --------- | ------- | --- | --------------------- |
+| searchKey | string  | ✅   | 精准企业名称 / USCC / DUNS |
+| pageNum   | integer | -   | 默认 `1`                |
+| pageSize  | integer | -   | 默认 `50`               |
+
+
+**提示**：`result_status=NONE` 时表述为「未识别到控股股东记录」，勿与「接口失败」混淆。
+
+### search_actual_controllers — 实际控制人
+
+查询实际控制人姓名、类型、合计持股比例及穿透路径。
+
+| 参数        | 类型     | 必填  | 说明                    |
+| --------- | ------ | --- | --------------------- |
+| searchKey | string | ✅   | 精准企业名称 / USCC / DUNS |
+
+
+### search_beneficial_owners — 受益所有人
+
+查询受益所有人姓名、识别模式与方式、合计持股、识别路径及识别事实等。
+
+| 参数        | 类型      | 必填  | 说明                    |
+| --------- | ------- | --- | --------------------- |
+| searchKey | string  | ✅   | 精准企业名称 / USCC / DUNS |
+| pageNum   | integer | -   | 默认 `1`                |
+| pageSize  | integer | -   | 默认 `50`               |
+
+
+**提示**：`bo_identification_mode` / `bo_identification_method` 按接口枚举原值展示。
+
+### search_key_personnel — 主要人员信息
+
+查询主要人员姓名、职务、是否法定代表人、是否在任等。
+
+| 参数        | 类型      | 必填  | 说明                    |
+| --------- | ------- | --- | --------------------- |
+| searchKey | string  | ✅   | 精准企业名称 / USCC / DUNS |
+| pageNum   | integer | -   | 默认 `1`                |
+| pageSize  | integer | -   | 默认 `50`               |
+
+
+**提示**：汇报法定代表人时，优先与 `is_legal_representative` 且在任记录交叉核对。
+
+### search_company_investments — 对外投资
+
+查询被投资企业、投资比例、认缴/实缴金额、出资日期及被投企业状态等。
+
+| 参数        | 类型      | 必填  | 说明                    |
+| --------- | ------- | --- | --------------------- |
+| searchKey | string  | ✅   | 精准企业名称 / USCC / DUNS |
+| pageNum   | integer | -   | 默认 `1`                |
+| pageSize  | integer | -   | 默认 `50`               |
+
+
+### search_branches — 分支机构
+
+查询分支机构名称、负责人、经营信息、状态及是否历史分支等。
+
+| 参数        | 类型     | 必填  | 说明                    |
+| --------- | ------ | --- | --------------------- |
+| searchKey | string | ✅   | 精准企业名称 / USCC / DUNS |
+
+
+**提示**：区分 `is_historical`，当前与历史分支分开展示条数。
+
+### search_branches_headquarters — 分支机构与总公司
+
+查询与本公司相关的分支机构或总公司关联（名称、负责人等）。数据来源：国家企业信用信息公示系统。
+
+| 参数               | 类型      | 必填  | 说明                              |
+| ---------------- | ------- | --- | ------------------------------- |
+| searchKey        | string  | ✅   | 精准企业名称 / USCC / DUNS           |
+| relationshipType | integer | -   | `1` 查分支关联（默认）· `2` 查总公司方向      |
+| pageNum          | integer | -   | 默认 `1`                          |
+| pageSize         | integer | -   | 默认 `50`                         |
+
+
+**提示**：两种关系方向需各调一次时，须向用户说明共计 2 次调用。
+
+### search_icp_filing — 企业网站 ICP 备案
+
+查询网站名称、域名、ICP 备案号及是否历史备案等。
+
+| 参数        | 类型      | 必填  | 说明                    |
+| --------- | ------- | --- | --------------------- |
+| searchKey | string  | ✅   | 精准企业名称 / USCC / DUNS |
+| pageNum   | integer | -   | 默认 `1`                |
+| pageSize  | integer | -   | 默认 `50`               |
+
+
+### search_annual_reports — 企业年报
+
+按指定财务年度查询年报基础信息、股东出资、对外投资、资产状况、社保、网站等披露内容。
+
+| 参数            | 类型       | 必填  | 说明                          |
+| ------------- | -------- | --- | --------------------------- |
+| searchKey     | string   | ✅   | 精准企业名称 / USCC / DUNS       |
+| financialYear | array 等 | ✅   | 财务年度列表，**单次最多 10 个**，一次传齐 |
+
+
+**使用示例**（近三年一次请求）：
+
+```json
+{
+  "searchKey": "91110108551385082Q",
+  "financialYear": [2023, 2024, 2025]
+}
+```
+
+**提示**：禁止对每个年度单独循环调用；嵌套对象（如 `annual_report_basic_info`）按接口结构原样呈现。
+
+**专项 Tool 通用示例**（仅 `searchKey` 时）：
+
+```json
+{
+  "searchKey": "91110108551385082Q"
+}
+```
 
 ---
 
-## 数据原值纪律（全报告强制 · 对齐 BRD §7.2 · 0901 字段字典）
+## 数据原值纪律（全报告强制）
 
 - 注册资本、持股比例（含 `shareholding_ratio` / `direct_holding_ratio` / `final_shareholding_ratio_percent` / `ratio`）、认缴/实缴金额、出资日期、年报财务字段等**一律逐字引用接口原始字符串**，保留全部小数位（`Decimal(32,6)` 字段含 6 位小数）。
 - 同一指标在摘要、模块正文与事实包中重复出现时，**每一次复用同一原始字符串**。
@@ -36,106 +298,112 @@ description: 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档�
 
 ## 实体锚定纪律（Entity Anchoring）
 
-1. 先调 `search_company`（`searchType=1` 精准 → `=2` 模糊）；`searchKey` 支持企业名称（≥3 字）、USCC（≥8 位）、法人名称（≥2 字）、地址（≥6 字）、经营范围（≥6 字）等（见 0901 字典）。
-2. 多条结果**必须向用户确认**；取 `unified_social_credit_code` 后，**后续 13 个 Tool 的 `searchKey` 一律传 USCC**。
-3. 用户同时给出名称与 USCC 时执行**二要素一致性核验**；不一致 → **立即终止**。
-4. 简称 / 品牌名不得直接进入流程，必须先完成锚定。
-5. 集团场景须在首页说明：本次锚定主体、与总公司/分支机构关系（来自 `search_branches_headquarters`）；`relationshipType` 默认不传（字典默认 `1`）；若需同时查总公司方向，**额外**再调一次 `relationshipType=2`（计第 15 次调用，须向用户说明）。
+1. **中国内地**：先调 `search_company`（`searchType=1` 精准 → `=2` 模糊）；`searchKey` 支持企业名称（≥3 字）、USCC（≥8 位）、法人名称（≥2 字）、地址（≥6 字）、经营范围（≥6 字）等。
+2. **中国香港**：调 `search_company_hk`；`searchKey` 为企业名称或注册号；`searchType=1` 精准 · `=2` **左匹配模糊**；输出 `company_name` · `company_number` · `active_status` · `company_type`。
+3. **海外**：调 `search_company_global`；`searchKey` 为企业名称、注册号或邓白氏编码（D-U-N-S）；可选 `countryISO` · `industryCode` · `isOutOfBusiness` · `isPubliclyTradedCompany` · `isImporter` · `isExporter` · 分页；输出以 `search_candidates[].organization` 树为准，**逐字段原值列示**，禁止扁平化臆造字段名。
+4. 中国内地多条检索结果**必须向用户确认**；取 `unified_social_credit_code` 后，**后续 13 个专项 Tool 的 `searchKey` 优先传 USCC**（亦支持精准的名称 / DUNS）。
+5. 用户同时给出名称与 USCC 时执行**二要素一致性核验**；不一致 → **立即终止**（仅中国内地流程）。
+6. 简称 / 品牌名不得直接进入流程，必须先完成锚定。
+7. 集团场景须在首页说明：本次锚定主体、与总公司/分支机构关系（来自 `search_branches_headquarters`）；`relationshipType` 默认不传（接口默认 `1`）；若需同时查总公司方向，**额外**再调一次 `relationshipType=2`（计第 15 次调用，须向用户说明）。
 
 ---
 
-## 🔍 取数方法论 · 锚定 → 十四 Tool 并发
+## 🔍 取数方法论 · 检索锚定 → 中国内地专项并发
 
-### 步骤 0 · 主体锚定（Tool 1/14 · 必调）
+### 步骤 0 · 主体检索（三选一 · 必调）
 
-| Tool | 规范名 | 关键入参 |
-| --- | --- | --- |
-| `search_company` | 企业检索 | `searchKey` · `searchType`（1 精准 / 2 模糊）· 可选 `pageNum` / `pageSize`（默认 1 / 50） |
+| Tool                     | 规范名          | 关键入参                                                                                                                                 |
+| ------------------------ | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_company`         | 企业检索（中国内地）   | `searchKey` · `searchType`（1 精准 / 2 模糊）· 可选 `pageNum` / `pageSize`（默认 1 / 50）                                                              |
+| `search_company_hk`      | 企业检索（中国香港）   | `searchKey`（企业名称或注册号）· `searchType`（1 精准 / 2 左匹配模糊）· 可选 `pageNum` / `pageSize`                                                         |
+| `search_company_global`  | 企业检索（海外）     | `searchKey`（企业名称 / 注册号 / D-U-N-S）· 可选 `countryISO` · `industryCode` · `isOutOfBusiness` · `isPubliclyTradedCompany` · `isImporter` · `isExporter` · `pageNum` / `pageSize` |
 
-### 步骤 1 · 十二类核查（Tool 2–14/14 · `--module all` 时全部并发）
+### 步骤 1 · 十二类核查（中国内地 · `--module all` 时 13 个专项 Tool 全部并发）
 
-| Tool | 规范名 | 核查模块 | 关键入参（0901） |
-| --- | --- | --- | --- |
-| `search_company_registration` | 企业工商信息 | 工商登记 | `searchKey`=USCC |
-| `search_simple_deregistration` | 简易注销 | 简易注销 | `searchKey`=USCC |
-| `search_company_changes` | 变更记录 | 变更 | `searchKey` · 可选 `pageNum` / `pageSize`（默认 50） |
-| `search_shareholders` | 股东信息 | 股东 | `searchKey` |
-| `search_controlling_shareholders` | 控股股东 | 控股股东 | `searchKey` · 可选 `pageNum` / `pageSize` |
-| `search_key_personnel` | 主要人员信息 | 主要人员 | `searchKey` · 可选 `pageNum` / `pageSize` |
-| `search_beneficial_owners` | 受益所有人 | 受益所有人 | `searchKey` · 可选 `pageNum` / `pageSize` |
-| `search_actual_controllers` | 实际控制人 | 实际控制人 | `searchKey` |
-| `search_company_investments` | 对外投资 | 对外投资 | `searchKey` · 可选 `pageNum` / `pageSize` |
-| `search_branches` | 分支机构 | 分支机构清单 | `searchKey` |
-| `search_branches_headquarters` | 分支机构与总公司 | 分支/总公司关系 | `searchKey` · 可选 `relationshipType`（1 分支 / 2 总公司，**默认 1**）· `pageNum` / `pageSize` |
-| `search_icp_filing` | 企业网站 ICP 备案 | ICP 备案 | `searchKey` · 可选 `pageNum` / `pageSize` |
-| `search_annual_reports` | 企业年报 | 年报 | `searchKey` · **`financialYear` 必传**（一次传 `--years` 个年度，最多 10 个，**禁止按年循环**） |
+| Tool                              | 规范名         | 核查模块     | 关键入参                                                                      |
+| --------------------------------- | ----------- | -------- | ------------------------------------------------------------------------- |
+| `search_company_registration`     | 企业工商信息      | 工商登记     | `searchKey`（精准企业名称 / USCC / DUNS）                                         |
+| `search_simple_deregistration`    | 简易注销        | 简易注销     | 同上                                                                        |
+| `search_company_changes`          | 变更记录        | 变更       | 同上 · 可选 `pageNum` / `pageSize`（默认 1 / 50）                                 |
+| `search_shareholders`             | 股东信息        | 股东       | 同上                                                                        |
+| `search_controlling_shareholders` | 控股股东        | 控股股东     | 同上 · 可选 `pageNum` / `pageSize`                                            |
+| `search_key_personnel`            | 主要人员信息      | 主要人员     | 同上 · 可选 `pageNum` / `pageSize`                                            |
+| `search_beneficial_owners`        | 受益所有人       | 受益所有人    | 同上 · 可选 `pageNum` / `pageSize`                                            |
+| `search_actual_controllers`       | 实际控制人       | 实际控制人    | 同上                                                                        |
+| `search_company_investments`      | 对外投资        | 对外投资     | 同上 · 可选 `pageNum` / `pageSize`                                            |
+| `search_branches`                 | 分支机构        | 分支机构清单   | 同上                                                                        |
+| `search_branches_headquarters`    | 分支机构与总公司    | 分支/总公司关系 | 同上 · 可选 `relationshipType`（1 分支 / 2 总公司，**默认 1**）· `pageNum` / `pageSize` |
+| `search_icp_filing`               | 企业网站 ICP 备案 | ICP 备案   | 同上 · 可选 `pageNum` / `pageSize`                                            |
+| `search_annual_reports`           | 企业年报        | 年报       | 同上 · `**financialYear` 必传**（一次传 `--years` 个年度，最多 10 个，**禁止按年循环**）         |
 
-> **`--module` 非 `all` 时**：只调用对应 Tool，其余模块在报告中写「本次未调用」，**不得写「无记录」**。
-> **`--module all` 纪律**：上述 13 个 Tool **各调用恰好 1 次**，与 `search_company` 合计 **14 次**，覆盖企业档案 Server 全集。
+> `**--module` 非 `all` 时**：只调用对应 Tool，其余模块在报告中写「本次未调用」，**不得写「无记录」**。
+> `**--module all` 纪律（中国内地）**：上述 13 个专项 Tool **各调用恰好 1 次**，与 `search_company` 合计 **14 次**。
+> **香港 / 海外**：`--module hk_search` 或 `global_search`（或 `--region hk|global`）时**仅**调用步骤 0 对应检索 Tool，**不调用**步骤 1 专项 Tool。
 
-**调用预算**：`standard` = **14 次**（0901 企业档案 14 Tool 各 1 次）；集团双方向 `branches_headquarters` = **15 次**（额外 1 次，须声明）。
+**调用预算**：中国内地 `standard` = **14 次**（1 检索 + 13 专项）；集团双方向 `branches_headquarters` = **15 次**（额外 1 次，须声明）。香港 / 海外单次检索 = **1 次**（分页另计）。
 
-**并发纪律**：`search_company` 完成后，步骤 1 全部 Tool **同时发出**；失败不循环重试，该模块标「本次未核验」。
+**并发纪律**：中国内地 `search_company` 锚定完成后，步骤 1 全部 Tool **同时发出**；失败不循环重试，该模块标「本次未核验」。
 
 ---
 
-## 📖 企业档案 Server · 十四 Tool 全表（0901 字典 · 本 SKILL 唯一合法工具集）
+## 📖 企业档案 Server · 十六 Tool 全表
 
-| # | CDT MCP 工具 | 规范名 | 必传 `searchKey` | 主要输出字段（报告须覆盖） |
-| --- | --- | --- | --- | --- |
-| 1 | `search_company` | 企业检索 | 多类型关键词 | `unified_social_credit_code` · `company_chinese_name` · `company_status_chinese` · `match_score` |
-| 2 | `search_company_registration` | 企业工商信息 | USCC/名称 | 登记状态 · 资本 · 期限 · 地址 · 经营范围 · 行业代码 · 联系方式 |
-| 3 | `search_simple_deregistration` | 简易注销 | USCC/名称 | `announcement_period_start/end` · `review_result` · `deregistration_date` |
-| 4 | `search_company_changes` | 变更记录 | USCC/名称 | `change_item` · `change_date` · 变更前后内容 |
-| 5 | `search_shareholders` | 股东信息 | USCC/名称 | `shareholder_*` · `shareholding_ratio` · 认缴/实缴 |
-| 6 | `search_controlling_shareholders` | 控股股东 | USCC/名称 | `result_status` · `control_category` · `direct_holding_ratio` · `final_shareholding_ratio_percent` · `holding_path` |
-| 7 | `search_key_personnel` | 主要人员 | USCC/名称 | `key_person_*` · `position` · `is_legal_representative` · `is_in_office` |
-| 8 | `search_beneficial_owners` | 受益所有人 | USCC/名称 | `beneficial_owner_name` · `bo_identification_mode/method` · `final_shareholding_ratio_percent` · `holding_path` · `identification_facts` |
-| 9 | `search_actual_controllers` | 实际控制人 | USCC/名称 | `actual_controllers_name` · `actual_controllers_type` · `final_shareholding_ratio_percent` · `holding_path` |
-| 10 | `search_company_investments` | 对外投资 | USCC/名称 | `invested_company_*` · `shareholding_ratio` · 认缴/实缴 · `contribution_date` |
-| 11 | `search_branches` | 分支机构 | USCC/名称 | `branch_name` · `branch_credit_code` · `branch_status` · `is_historical` |
-| 12 | `search_branches_headquarters` | 分支机构与总公司 | USCC/名称 | `relation_type` · 关联企业名称 · USCC · 负责人 |
-| 13 | `search_icp_filing` | 企业网站 ICP 备案 | USCC/名称 | `website_name` · `domain_name` · `icp_filing_number` · `is_historical_filing` |
-| 14 | `search_annual_reports` | 企业年报 | USCC/名称 + **`financialYear`** | `report_year` · 资产/负债/收入/利润 · 从业人数 · 股东出资摘要 |
+| #   | MCP 工具                            | 规范名         | 必传入参                       | 主要输出字段（报告须覆盖）                                                                                                                                                                                                                                                                |
+| --- | --------------------------------- | ----------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `search_company`                  | 企业检索（中国内地）  | `searchKey` + `searchType` | `unified_social_credit_code` · `company_chinese_name` · `legal_rep_chinese_name` · `establishment_date` · `company_type_chinese` · `company_status_chinese` · `company_address_chinese` · `business_scope` · `former_company_chinese_name` · `match_score` · `update_time` 等 |
+| 2   | `search_company_registration`     | 企业工商信息      | 精准名称 / USCC / DUNS         | 登记状态 · 资本 · 期限 · 地址 · 经营范围 · 行业代码 · 联系方式                                                                                                                                                                                                                                     |
+| 3   | `search_simple_deregistration`    | 简易注销        | 同上                         | `announcement_period_start/end` · `review_result` · `deregistration_date`                                                                                                                                                                                                    |
+| 4   | `search_company_changes`          | 变更记录        | 同上                         | `change_item` · `change_date` · 变更前后内容                                                                                                                                                                                                                                       |
+| 5   | `search_shareholders`             | 股东信息        | 同上                         | `shareholder_*` · `shareholding_ratio` · 认缴/实缴                                                                                                                                                                                                                               |
+| 6   | `search_controlling_shareholders` | 控股股东        | 同上                         | `result_status` · `control_category` · `direct_holding_ratio` · `final_shareholding_ratio_percent` · `holding_path`                                                                                                                                                          |
+| 7   | `search_key_personnel`            | 主要人员信息      | 同上                         | `key_person_*` · `position` · `is_legal_representative` · `is_in_office`                                                                                                                                                                                                     |
+| 8   | `search_beneficial_owners`        | 受益所有人       | 同上                         | `beneficial_owner_name` · `bo_identification_mode/method` · `final_shareholding_ratio_percent` · `holding_path` · `identification_facts`                                                                                                                                     |
+| 9   | `search_actual_controllers`       | 实际控制人       | 同上                         | `actual_controllers_name` · `actual_controllers_type` · `final_shareholding_ratio_percent` · `holding_path`                                                                                                                                                                  |
+| 10  | `search_company_investments`      | 对外投资        | 同上                         | `invested_company_*` · `shareholding_ratio` · 认缴/实缴 · `contribution_date`                                                                                                                                                                                                    |
+| 11  | `search_branches`                 | 分支机构        | 同上                         | `branch_name` · `branch_credit_code` · `branch_status` · `is_historical`                                                                                                                                                                                                     |
+| 12  | `search_branches_headquarters`    | 分支机构与总公司    | 同上                         | `relation_type` · 关联企业名称 · USCC · 负责人                                                                                                                                                                                                                                        |
+| 13  | `search_icp_filing`               | 企业网站 ICP 备案 | 同上                         | `website_name` · `domain_name` · `icp_filing_number` · `is_historical_filing`                                                                                                                                                                                                |
+| 14  | `search_annual_reports`           | 企业年报        | 同上 + `**financialYear**`   | `report_year` · 资产/负债/收入/利润 · 从业人数 · 股东出资摘要 · 嵌套 `annual_report_*` 对象                                                                                                                                                                                                        |
+| 15  | `search_company_hk`               | 企业检索（中国香港）  | `searchKey` + `searchType` | `company_name` · `company_number` · `active_status` · `company_type`                                                                                                                                                                                                         |
+| 16  | `search_company_global`           | 企业检索（海外）    | `searchKey`                | `candidates_matched_quantity` · `candidates_returned_quantity` · `search_candidates[]`（含 `organization.duns` · `primary_name` · 地址 · 行业 · 族谱 · 财务摘要等，**按接口返回路径原值输出**）                                                                                                        |
 
 > **禁止事项**：
-> ❌ 不得调用上表以外的任何 CDT 工具——企业档案 Server **仅有以上 14 个 Tool**，本 SKILL 须**全部使用**（`--module all`）。
-> ❌ 不得用其他 Server 工具「补充」本报告。
-> ❌ **CDT 不提供批量查询**；多主体须循环本 SKILL，**N>5 时须报预估调用量**（约 `N×14` 次）。
+> ❌ 不得调用上表以外的任何 MCP 工具——企业档案 Server **仅有以上 16 个 Tool**。
+> ❌ 中国内地 `--module all` 须覆盖 **#1 + #2–#14** 各 1 次；**不得**对非中国内地主体调用 #2–#14。
+> ❌ **不提供批量查询**；多主体须分别执行完整流程，**N>5 时须报预估调用量**（中国内地约 `N×14` 次）。
 > ❌ 不得输出评级、分流、准入结论或风险等级。
 
 ### 枚举速查（报告原值引用）
 
-| 工具 | 枚举字段 | 常用值（0901） |
-| --- | --- | --- |
-| `search_beneficial_owners` | `bo_identification_mode` | STANDARD / SIMPLIFIED / ENHANCED / EXEMPTION |
-| `search_beneficial_owners` | `bo_identification_method` | EQUITY / VOTING_CONTROL / ACTUAL_CONTROL / LEGAL_REPRESENTATIVE / … |
-| `search_actual_controllers` | `actual_controllers_type` | AC_NATURAL_PERSON / AC_LEGAL_ENTITY / AC_OTHER / AC_NONE |
-| `search_controlling_shareholders` | `result_status` | FOUND / NONE |
-| `search_controlling_shareholders` | `control_category` | ABSOLUTE / RELATIVE / JOINT / NONE |
-| `search_controlling_shareholders` | `shareholder_type` | NATURAL / LEGAL / PARTNERSHIP / OTHER / PASS_THROUGH |
-| `search_branches_headquarters` | `relationshipType`（入参） | 1 查分支关联（默认）· 2 查总公司 |
+| 工具                                | 枚举字段                       | 常用值                                                           |
+| --------------------------------- | -------------------------- | ------------------------------------------------------------------- |
+| `search_beneficial_owners`        | `bo_identification_mode`   | STANDARD / SIMPLIFIED / ENHANCED / EXEMPTION                        |
+| `search_beneficial_owners`        | `bo_identification_method` | EQUITY / VOTING_CONTROL / ACTUAL_CONTROL / LEGAL_REPRESENTATIVE / … |
+| `search_actual_controllers`       | `actual_controllers_type`  | AC_NATURAL_PERSON / AC_LEGAL_ENTITY / AC_OTHER / AC_NONE            |
+| `search_controlling_shareholders` | `result_status`            | FOUND / NONE                                                        |
+| `search_controlling_shareholders` | `control_category`         | ABSOLUTE / RELATIVE / JOINT / NONE                                  |
+| `search_controlling_shareholders` | `shareholder_type`         | NATURAL / LEGAL / PARTNERSHIP / OTHER / PASS_THROUGH                |
+| `search_branches_headquarters`    | `relationshipType`（入参）     | 1 查分支关联（默认）· 2 查总公司                                                 |
 
 ---
 
-# 企业信息核验 · D&B China Data MCP
+# 报告与交付
 
-## SKILL 定位
+## 能力定位
 
-本 SKILL 回答：**这家企业在企业档案 Server 十四类公开记录中，登记、治理、投资、分支、备案与年报事实是什么。**
+本 Skill 回答：**这家企业（中国内地 / 香港 / 海外）在企业档案 Server 可返回的公开记录与检索事实是什么。** 中国内地可进一步输出十二类专项核查底稿（见下文报告骨架）。
 
-| 需求 | 使用 |
+| 需求 | 本 Skill 覆盖 |
 | --- | --- |
-| 企业档案 14 Tool 全量底稿 | **本 SKILL** |
-| 还要四维评估、司法、知产、D&B 评级 | → `dnb-counterparty-dd` |
-| 还要准入红线与清单筛选 | → `dnb-risk-screening` |
-| 还要两企业关联路径 | → `dnb-companies-relations` |
+| 中国内地检索 + 13 类专项档案 | ✅ |
+| 香港 / 海外企业检索与主体识别 | ✅（仅检索 Tool） |
+| 风险评分、全球家族树、Paydex、ESG 等企业版能力 | ❌ 须邓白氏查全球-企业版等已授权产品 |
 
 ## MCP 依赖与配置
 
 **唯一必选**
 
-- `企业档案 Server` —— `https://mcp.dnbservice.com.cn/v1/company` · **14 Tool 全覆盖**
+- `企业档案 Server` —— `https://mcp.dnbservice.com.cn/v1/company` · **16 Tool**（OAuth：`https://openapi.dnbcha.com/agent/`）
 
 **降级策略**：单 Tool 失败 → 该模块写「本次未核验」；锚定失败 → **不输出任何核查结论**。
 
@@ -145,9 +413,11 @@ description: 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档�
 
 ```json
 {
-  "policy_version": "DNB_COMPANY_VERIFY_FACT_v1.0.0",
+  "policy_version": "DNB_LONGYICHA_FACT_v2.0.0",
   "server": "企业档案",
+  "region": "cn|hk|global",
   "tools_expected": 14,
+  "tools_on_server": 16,
   "entity": { "uscc": "<18位>", "name": "<登记名>", "anchor_match_score": "<原值|null>" },
   "coverage": {
     "modules_requested": ["registration","simple_deregistration","changes","shareholders","controlling_shareholders","key_personnel","beneficial_owners","actual_controllers","investments","branches","branches_headquarters","icp_filing","annual_reports"],
@@ -175,13 +445,15 @@ description: 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档�
 }
 ```
 
-**契约约束**：`tools_called.length` 在 `--module all` 成功时须为 **14**；不得出现 `grade` / `score` / `risk_level` / `decision`。
+**契约约束**：中国内地 `--module all` 成功时 `tools_called.length` 须为 **14**；香港 / 海外检索为 **1**（`search_company_hk` 或 `search_company_global`）。不得出现 `grade` / `score` / `risk_level` / `decision`。
+
+**香港 / 海外简要输出（非 §2–§10 全量骨架）**：标题「企业检索报告（{香港|海外}）」→ 检索入参表 → 候选数量 → 按 `display_sequence` 列出每条 `search_candidates`（海外）或香港四字段表 → 审计轨迹。**禁止**套用中国内地十二类专项章节。
 
 ---
 
-## 报告输出格式（严格填空骨架 · 模型只填值、不造结构）
+## 报告输出格式（严格填空骨架 · 模型只填值、不造结构 · `--region cn`）
 
-> **使用约定**：以下是企业信息核验报告的**完整骨架**——标题层级、表头与列、章节顺序**全部固定**，模型只把 `{}` 占位替换为工具返回值，**禁止新增 / 删除章节、禁止改表列、禁止虚构接口未返回的字段**。报告正文用**业务语言**标注数据来源（如「邓白氏中国企业档案数据 · 工商登记」），**不写 MCP 工具代码名**（附录 A/B 除外）。**`--format html` 时章节与本骨架一致，见「HTML 交付规范」。**
+> **使用约定**：以下是企业信息核验报告的**完整骨架**——标题层级、表头与列、章节顺序**全部固定**，模型只把 `{}` 占位替换为工具返回值，**禁止新增 / 删除章节、禁止改表列、禁止虚构接口未返回的字段**。报告正文用**业务语言**标注数据来源（如「邓白氏中国企业档案数据 · 工商登记」），**不写 MCP 工具代码名**（附录 A/B 除外）。`**--format html` 时章节与本骨架一致，见「HTML 交付规范」。**
 >
 > **核验逻辑顺序（市场惯例）**：主体锚定 → 工商登记与存续 → 治理链（股东→控股→实控→受益所有人→主要人员）→ 对外投资与分支网络 → 变更轨迹 → 年报披露 → 线上备案 → 跨模块互证 → 审计轨迹。
 >
@@ -204,7 +476,7 @@ description: 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档�
 | **数据覆盖** | {14/14 已核验 / N/14 · 未核验模块逐项列名} |
 | **报告生成时间** | YYYY-MM-DD HH:MM:SS |
 | **审计留档编号** | COVF-{USCC}-{YYYYMMDD} |
-| **事实版本** | DNB_COMPANY_VERIFY_FACT_v1.0.0 |
+| **事实版本** | DNB_LONGYICHA_FACT_v2.0.0 |
 
 ---
 
@@ -254,7 +526,7 @@ description: 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档�
 
 **档案层观察（事实绑定 · 非定性结论）：** {仅列可核对事实，如「存在简易注销公告且 review_result 为…」「法定代表人于变更记录中出现 N 次变更」「年报披露从业人数与…不一致」等；禁止写「高风险 / 建议拒绝」}
 
-**建议后续动作（事实触发 · 非准入结论）：** {如「简易注销公告存在 → 建议转 dnb-risk-screening 核查退出信号」「互证不一致项 → 建议人工核对客户申报材料」/ 无}
+**建议后续动作（事实触发 · 非准入结论）：** {如「简易注销公告存在 → 建议结合邓白氏风险类扩展产品进一步核查」「互证不一致项 → 建议人工核对客户申报材料」/ 无}
 
 ---
 
@@ -271,7 +543,7 @@ description: 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档�
 | 企业年报 | 邓白氏中国企业档案数据 · 年报类 | YYYY-MM-DD | 按 `--years` 年度 |
 | ICP 备案 | 邓白氏中国企业档案数据 · 备案类 | YYYY-MM-DD | 一般 T+3 |
 
-**本次未覆盖（须其他 SKILL）：** 司法 / 监管处罚 / 信用评级 / 知产 / 两主体关联路径 / 跨境事实 —— 本报告**不包含**上述数据域。
+**本次未覆盖（须其他邓白氏产品）：** 司法 / 监管处罚 / 信用评级 / 知产 / 两主体关联路径 / 跨境事实 —— 本报告**不包含**上述数据域。
 
 ### 1.2 主体锚定与二要素核验
 
@@ -599,38 +871,43 @@ description: 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档�
 | 序号 | MCP Tool | Server | 入参摘要 | 状态 |
 | --- | --- | --- | --- | --- |
 | 1 | search_company | 企业档案 | searchKey={} · searchType={} | {} |
-| 2–14 | {各 Tool 名} | 企业档案 | searchKey={USCC} · {其他入参} | {} |
+| 2–14 | {各中国内地专项 Tool 名} | 企业档案 | searchKey={USCC/名称/DUNS} · {其他入参} | {} |
+| 15 | search_company_hk | 企业档案 | searchKey={} · searchType={} | {} |
+| 16 | search_company_global | 企业档案 | searchKey={} · {countryISO 等} | {} |
 
 ## 附录 B · 机器可读事实包
 
-{`--format json` 时输出完整 JSON；md/html 模式下嵌入或折叠输出 DNB_COMPANY_VERIFY_FACT_v1.0.0 事实包}
+{`--format json` 时输出完整 JSON；md/html 模式下嵌入或折叠输出 DNB_LONGYICHA_FACT_v2.0.0 事实包}
 
 ---
 
 ## 数据来源与免责声明
 
-**数据来源：** D&B China Data · 企业档案 Server（0901 字典 · 14 Tool 全覆盖）。  
+**数据来源：** 邓白氏查全球-龙易查 · 企业档案 Server（16 Tool）。  
 **报告性质：** 本报告为基于公开工商登记与企业档案数据的**事实核验材料**，不构成任何形式的准入审批、授信建议、投资意见或「无风险」保证。  
 **局限说明：** 受益所有人与实际控制人识别基于公开股权信息；未披露的代持、协议控制、一致行动安排无法穿透。互证「不一致」仅表示数据源之间字段差异，需结合客户申报材料人工复核。  
-**升级路径：** 需司法 / 监管 / 评级 / 关联路径 → 请使用 `dnb-risk-screening` · `dnb-counterparty-dd` · `dnb-companies-relations` 等决策层 SKILL。
+**扩展说明：** 司法、监管、评级、关联图谱等超出本企业档案 Server 范围，须另行开通邓白氏相应数据产品。
 ```
 
 ---
 
 ## 参数
 
-| 参数 | 说明 | 默认值 |
-| --- | --- | --- |
-| `--uscc <18 位>` | 二要素一致性核验 | 无 |
-| `--years <N>` | `search_annual_reports.financialYear` 年度个数（≤10） | `3` |
-| `--module` | `all` = 14 Tool 全调；或 `registration` · `simple_dereg` · `changes` · `shareholders` · `controlling` · `personnel` · `ubo` · `controller` · `investments` · `branches` · `branches_hq` · `icp` · `annual` | `all` |
-| `--format <md\|json\|html>` | `json` 仅输出事实包 | `md` |
+可选命令行式参数（自动化场景）；对话场景下等效为自然语言意图 + 上述 Tool 调用。
+
+| 参数              | 说明                                                                                                                                                                                                     | 默认值    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| `--region`      | `cn` 中国内地 · `hk` 中国香港 · `global` 海外（决定步骤 0 检索 Tool）                                                                                                                                                    | `cn`   |
+| `--uscc <18 位>` | 二要素一致性核验（仅 `--region cn`）                                                                                                                                                                            | 无      |
+| `--years <N>`   | `search_annual_reports.financialYear` 年度个数（≤10）                                                                                                                                                        | `3`    |
+| `--module`      | 中国内地：`all` = 1 检索 + 13 专项；或 `registration` · `simple_dereg` · `changes` · `shareholders` · `controlling` · `personnel` · `ubo` · `controller` · `investments` · `branches` · `branches_hq` · `icp` · `annual`；香港 / 海外：`hk_search` · `global_search` | `all`  |
+| `--format`      | `md` · `json` · `html`                                                                                                                                                                                 | `md`   |
 
 ---
 
 ## HTML 交付规范（`--format html`）
 
-通用规则见 `README-dnb-skills.md` §3.8。本 SKILL 补充：
+HTML 交付补充：
 
 1. **完整渲染**「企业信息核验报告」骨架：§ 执行摘要 → §10 数据覆盖，**14 行数据源清单不得省略**；附录 A/B 按需折叠。
 2. **版式（自包含 CSS · 无外链）**：
@@ -642,25 +919,25 @@ description: 使用 D&B China Data（主题化中国数据 CDT）MCP 企业档�
    - **治理链**：§3 顶部可选 `<div class="chain-flow">` 横向步骤条（股东 → 控股 → 实控 → 受益 → 人员），仅展示模块名与条数，不手绘股权图。
    - **互证矩阵**：§9 中「不一致」行用 `.row-warn` 浅黄底 `#fffbeb` 高亮，**不得**写「高风险」字样。
    - **页脚**：免责声明 + 事实版本 + 页码（CSS `@page` 或 footer 固定）。
-3. **`--format html` 与 `json` 互斥**；事实包见附录 B，默认不重复嵌入 HTML 正文。
+3. `**--format html` 与 `json` 互斥**；事实包见附录 B，默认不重复嵌入 HTML 正文。
 4. HTML 与 md **同源同值**：不得因美化而省略 0 条模块、未核验行或互证「无法比对」行。
 
 ---
 
-## 报告输出纪律（内部规则 · 严禁抄入报告）
+## 注意事项
 
-1. **`--module all` 必须 14 Tool 各 1 次**，不得遗漏 ICP 备案 / 简易注销。
-2. **一律业务语言**：正文不写 MCP 工具名 / Server 名 / 字段名；附录 A 为唯一工具名例外。
-3. **禁止**调用企业档案以外 Tool；**禁止**评级、分流、准入、空壳认定等定性结论。
-4. `final_shareholding_ratio_percent` / `holding_path` **只引原值**，禁止逐层相乘。
-5. 未调用模块写「本次未核验」，成功 0 条写「本次未发现公开记录」，**二者不得混用**。
-6. 互证矩阵只输出一致 / 不一致 / 无法比对，**不得**将不一致自动升级为风险等级。
-7. 禁止过程独白（「我将调用…」「第一步…」），直接输出报告正文。
-8. 本节及全部内部执行规则**严禁抄入报告**。
+- **地域**：`search_company_registration` 等 13 个专项 Tool **仅适用于中国内地主体**；香港、海外勿调用专项 Tool。
+- **三态表述**：接口失败 →「本次未核验」；成功 0 条 →「本次未发现公开记录」；字段缺失 →「未披露」——不得混用。
+- **数值与比例**：注册资本、持股比例、年报金额等**逐字引用**接口字符串；禁止自行加总、相乘穿透或混用 `ratio`（0~1）与百分比字段。
+- **历史态**：`is_historical` / `is_historical_filing` / `is_in_office` 等须按原文区分历史与当前，不得把历史记录表述为现状。
+- **年报**：`financialYear` 必须在**单次请求**中传入所需全部年度（最多 10 个），禁止对每个年度单独循环调用。
+- **批量主体**：Server 不支持一次请求查多家企业；多主体须分别走检索与专项流程，**超过 5 家**时宜先说明预估调用次数（中国内地全量约每家 14 次）。
+- **分页**：变更、股东、投资等列表若未一次返回全部数据，按 `pageNum` / `pageSize` 分页取尽后再汇总，并在报告中说明是否分页。
+
+## 认证说明
+
+- 使用 **OAuth** 登录龙易查账号，在 [D&B 智能开放平台](https://openapi.dnbcha.com/agent/) 完成授权后，由连接器携带 Access Token 访问 MCP。
+- 请求头须为 `Authorization: Bearer <token>`；**不可省略 `Bearer` 前缀**，否则返回 HTTP 401（`www-authenticate: Bearer error="invalid_token"`），客户端会显示「需要认证」。
+- Token 默认有效期 **24 小时**，过期后重新授权或刷新 Token，并重新信任连接器后再调用。
 
 ---
-
-**SKILL 版本**：v1.0.0  
-**所需 Server**：企业档案（唯一 · 14 Tool · `https://mcp.dnbservice.com.cn/v1/company`）  
-**事实版本**：`DNB_COMPANY_VERIFY_FACT_v1.0.0`  
-**对齐规范**：D&B China Data MCP Skills BRD v1.0 · 《主题化中国数据-MCP 服务 0901》企业档案 Server 全表

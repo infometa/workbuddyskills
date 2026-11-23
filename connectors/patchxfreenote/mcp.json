@@ -1,8 +1,26 @@
 {
+  "preAuth": "cli",
   "mcpServers": {
     "patchxnote": {
-      "type": "streamableHttp",
-      "url": "https://freenote.patch-x.cn/mcp",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "--yes",
+        "patchxnote-agent@0.2.16",
+        "mcp",
+        "serve",
+        "--profile",
+        "workbuddy",
+        "--server-base-url",
+        "https://freenote.patch-x.cn"
+      ],
+      "runtime": {
+        "type": "node",
+        "version": ">=20"
+      },
+      "env": {
+        "PATCHXNOTE_MCP_MODE": "remote"
+      },
       "timeout": 30000
     }
   }

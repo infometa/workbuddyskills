@@ -3,14 +3,14 @@
 # 由 WorkBuddy 连接器的 `init` 命令下载后执行（见 connector/workbuddy/cli.json）。
 # 非交互、幂等：已是目标版本则跳过下载；每次都会校验并补齐 WorkBuddy 会话钩子。
 #
-# 占位符 https://ai-drivecli-1251316161.cos.ap-guangzhou.myqcloud.com / 1.1.1-beta 由 scripts/package-connector.sh 在打包时替换。
+# 占位符 https://ai-drivecli-1251316161.cos.ap-guangzhou.myqcloud.com / 1.2.0 由 scripts/package-connector.sh 在打包时替换。
 #
 # 安全约定与 install.sh 一致：只访问白名单域、必须通过 .sha256 校验、失败即中止。
 
 $ErrorActionPreference = "Stop"
 
 $DownloadBaseUrl = "https://ai-drivecli-1251316161.cos.ap-guangzhou.myqcloud.com"
-$Version         = "1.1.1-beta"
+$Version         = "1.2.0"
 $InstallDir      = Join-Path $env:LOCALAPPDATA "Programs\tdrive"
 $ExePath         = Join-Path $InstallDir "tdrive.exe"
 

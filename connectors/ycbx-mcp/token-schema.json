@@ -1,0 +1,18 @@
+{
+  "title": "有成报销 MCP 对接配置",
+  "title_en": "YCBX MCP Configuration",
+  "description": "连接您的有成报销，用于查询本人的报销单、审批进度、费用标准、未报销的消费和发票。API Key 仅存储在本机 ~/.workbuddy 下，不会上传云端。",
+  "description_en": "Connect your YCBX account to query your own expense reports, approval progress, cost standards, unreimbursed expenses and invoices. Your API Key is stored locally in ~/.workbuddy only.",
+  "fields": [
+    {
+      "key": "YCBX_API_KEY",
+      "label": "API Key",
+      "type": "password",
+      "required": true,
+      "placeholder": "在有成报销 App 打开 AI 助手 → 右上角「⋯」→ 连接外部 AI 助手 → WorkBuddy 生成",
+      "placeholder_en": "In the YCBX app, open the AI assistant → ⋯ → Connect external AI assistants → WorkBuddy",
+      "description": "员工本人的身份密钥，以 X-Api-Key 请求头发送给有成报销 MCP 服务。只能查询你自己的数据；不用时可在同一位置停用或重新生成。",
+      "description_en": "Your personal key, sent as the X-Api-Key header to the YCBX MCP service. It only grants access to your own data; you can revoke or regenerate it in the same place."
+    }
+  ]
+}

@@ -5,7 +5,7 @@ display_name_en: 音为有数 Data Query
 description: Use the Production (PROD) environment to answer authorized music catalog, contract, finance, performance, singer, catalog-event and song play-source questions through the youshu MCP tools.
 description_zh: 生产环境：通过 youshu 查询有权限访问的歌曲、合同、收支、业绩、歌手指标和曲库事件。
 description_en: Query authorized music catalog, contract, finance, performance, singer, and catalog-event data with youshu.
-version: 1.3.10
+version: 1.3.13
 author: youshu
 ---
 
@@ -15,6 +15,7 @@ author: youshu
 
 | 用户目的 | 处理路径 |
 | --- | --- |
+| 按付款日期导出费用明细、发票和回执，识别专普票和税额 | 同包 `youshu-daily-expense-export-prod` |
 | 查询、比较和分析授权业务数据 | 本技能及 @references/tool-routing.md、@references/query-playbook.md |
 | 为歌曲创建宣推计划或轮次、追加抖音资源、查看跟进结果 | 同包 `youshu-promotion-followup-prod` |
 | 查询开户银行、支行 | 同包 `youshu-expense-application-prod` 的银行查询规则；`queryFeeBanks` 两级均必填keyword，先level=1查银行，再按需携带已选bankName以level=2查支行；无需先确定费用类型或准备申请资料 |
@@ -31,6 +32,8 @@ author: youshu
 上述调用约定不限制 WorkBuddy 宿主的原生交互式提问能力。费用申请需要补充资料或选择候选时，交接费用专家并遵循其[弹窗优先规则](../youshu-expense-application-prod/SKILL.md#提问与候选选择弹窗优先)，使用当前实际可用的 `AskUserQuestion` 等原生工具；不把原 Agent 的 `ui_renderer` 当作弹窗前置条件。
 
 使用实际运行时间按北京时间解析相对时间，不照抄示例月份。“我部门”通常省略部门ID，无需先查部门树；用户点名其他部门时才解析部门；月度收支传 `depId`，绩效传 `departmentId`。只给人员姓名时先查 `conditionList(statDimension=PERSON)`，使用唯一匹配项的 `conditionId`。
+
+每日付款导出转 `youshu-daily-expense-export-prod`，按该技能完整分页，不受下文日常查询的累计 1,000 条限制。
 
 工具 Schema 的分页上限是服务端能力；日常明细从 `pageSize=10` 开始。完整查询最多取 1000 条，超过时说明限制并请用户缩小范围，不把部分结果作为完整统计或全量导出。服务端歌曲月收支 Top N 可使用 `limit=N`（最多 1000），不可把它改成客户端先取 10 行再排序。服务端非分页业绩排行保留原始名次。公共银行字典 `queryFeeBanks` 按非空白keyword分级查询，无分页或数量参数，不能传空对象或查全量。level=1查银行；选定完整bankName后才按需以level=2及支行keyword查询；展示实际匹配项。
 

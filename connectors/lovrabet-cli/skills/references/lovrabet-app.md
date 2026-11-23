@@ -15,13 +15,11 @@
 lovrabet app list
 lovrabet app list --local
 lovrabet app list --no-cache
-lovrabet app list --env daily
 lovrabet app list --include-unpublished
 ```
 
 | Flag | 说明 |
 |------|------|
-| `--env <env>` | 指定环境，默认当前环境 |
 | `--local` | 只读本地 cache，不打远端 |
 | `--no-cache` | 强制打远端并刷新 cache |
 | `--include-unpublished` | 排查用：包含未发布应用 |
@@ -45,7 +43,7 @@ lovrabet app list --include-unpublished
 - `data.items[].languages`：应用支持的语种列表，来自平台真实 `i18nInfo.langs`
 - `data.items[].i18nInfo`：平台返回的应用国际化配置
 - `data.items[].locale`：本地应用本地化设置覆盖，可能为 `null`；不是 CLI 语言，也不代表平台支持语种
-- `data.meta.env`：环境
+- `data.meta.env`：实际环境标识，用于排障；最终服务地址以 `doctor` 为准
 - `data.meta.source`：来源
 - `data.meta.fetchedAt`：最近同步时间
 - `data.meta.cachePath`：cache 文件路径
@@ -54,51 +52,26 @@ lovrabet app list --include-unpublished
 - `data.meta.hiddenUnpublishedCount`：默认列表中因未发布被隐藏的应用数量
 - `data.meta.includeUnpublished`：本次是否包含未发布应用
 
-## 何时应该先跑 app list
+## 何时使用 app list
 
-应该先跑 `app list` 的场景：
+应用选择统一遵循[默认应用与应用发现](../guides/app-resolution.md)：未指定目标时先查默认 AppCode（顶层 `appcode` 或 `defaultApp` 解析结果）；仅在成功查询无合理匹配、核对筛选条件且用户未限定范围后，才扩大只读发现。认证、权限或连接错误不触发跨应用重试。
 
-- 用户只说了业务域，没有给 app 线索
-- 当前没有显式 `--appcode` / `--app`，且需求包含业务域、对象名或数据集线索
-- 你怀疑需求可能落在多个 app 中
-- 你需要先确认当前 AK 在该环境下有哪些可运行态访问的应用
-- 已经在 `defaultApp` 下按关键词验证过，但没有合理数据集命中
+没有默认应用、用户明确要求跨应用查找或查看可访问应用目录时，可直接 `app list`。已有明确目标或尚未查询默认应用时，不因用户只说业务需求就要求先选应用。
 
-不需要先跑 `app list` 的场景：
+目录返回的名称与描述只用于筛选候选，仍需在目标应用内验证数据集或可信业务能力。数据集名称用 `--name`，物理表名用 `--table-name`，详见[数据集发现](dataset-discovery-workflow.md)。
 
-- 用户已经给了 `--appcode`
-- 用户已经给了 `--app <name>`
-- 问题明显沿用上文已确认的同一 app 上下文
-- 用户明确说“当前应用”“默认应用”，且没有新的业务域线索
-
-`defaultApp` 只是默认候选，不是强上下文。未显式指定 app 且存在 `defaultApp` 时，应先用 `dataset list --name <关键词>` 验证默认候选；命中不合理时，再通过 `app list` 扩大搜索。
-
-## 如何选择使用哪个应用
-
-以下 `--name <关键词>` 用于数据集名称搜索；用户给的是物理表名时，改用 `--table-name <表名前缀>` 验证默认候选或其他候选 app，无需补齐名称。匹配规则见 [数据集发现](dataset-discovery-workflow.md)。
-
-推荐方法不是只看 app 名，而是：
-
-1. 有 `defaultApp` 时，先在默认候选下执行 `dataset list --name <关键词>`
-2. 默认候选命中合理时直接继续
-3. 默认候选无命中、弱命中或语义不合理时，再用 `app list` 拿到候选 app
-4. 按需求关键词挑 1-2 个候选，对每个候选执行 `dataset list --app <name> --name <关键词>`
-5. 用数据集命中情况反向确认正确 app
-
-这样比纯靠 app 名猜测更稳。
+`--app` / `--appcode` 只对本次命令生效。临时选择其他应用后，后续每条 `detail`、`data` 或执行命令都必须显式携带该目标；资源标识必须与发现它的 AppCode 配对，不能依靠上一条命令改变默认值。
 
 ## app pull — 手动刷新本地 app cache
 
 ```bash
 lovrabet app pull
-lovrabet app pull --env daily
 lovrabet app pull --local
 lovrabet app pull --no-cache
 ```
 
 | Flag | 说明 |
 |------|------|
-| `--env <env>` | 指定环境，默认当前环境 |
 | `--local` | 只读 cache，不请求远端 |
 | `--no-cache` | 强制打远端并刷新 cache |
 

@@ -2,10 +2,10 @@
 name: yihook-streamer-avatar-image
 description: 根据人像或文字制作一张单人写实绿幕或品类直播间主播形象图，固定9:16、2K，确认真实费用后生成并查询结果。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: Yihook 百万销冠·AI主播形象定制
 display_name_en: Yihook Streamer Avatar Image
 description_zh: 根据人像或文字制作一张单人写实绿幕或品类直播间主播形象图，固定9:16、2K，确认真实费用后生成并查询结果。
@@ -17,7 +17,9 @@ author: yihook
 
 # Yihook 百万销冠·AI主播形象定制
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 ## 概述与范围
@@ -117,7 +119,7 @@ author: yihook
 
 纯文字新人物不要求上传图片，`reference_image_urls` 传空数组。指定人物照片必须实际作为身份参考提交；后续修改使用已选定成图，按需要保留其他参考。仅作风格参考的图片在提示词中明确用途，不保留原身份。商品图只用于理解品类和配色，不作为商品复现参考提交。没有随包固定底图，也不额外要求构图参考图。
 
-有参考图时，准备素材前读取 [共用上传指引](references/upload.md)。使用本地附件或将文件直链安全下载为完整本地文件，调用 `create_agent_file_upload`（`purpose: "image"`），将完整原始工具响应保存到私有临时文件，执行 `node scripts/upload.mjs response.json /absolute/path/portrait.jpg`，再调用 `complete_agent_file_upload`。只使用完成返回的 `file_url`；未知上传用 `get_agent_file_upload` 查询原会话。票据不由模型手写、转录签名或重建 policy，不另写 curl/Python 上传命令。失败时按公共说明停止，不忽略必要素材继续付费。本人已有同渠道资产经归属校验可直接复用。
+有参考图时，准备素材前读取 [共用上传指引](references/upload.md)。使用本地附件或将文件直链安全下载为完整本地文件，调用 `create_agent_file_upload`（`purpose: "image"`），传 `delivery: "script"` 取得短期 `transfer.code`，执行 `node scripts/upload.mjs --transfer "本次transfer.code" /absolute/path/portrait.jpg --ticket-url "本次transfer.ticket_url"`，再调用 `complete_agent_file_upload`。只使用完成返回的 `file_url`；未知上传用 `get_agent_file_upload` 查询原会话。票据不由模型手写、转录签名或重建 policy，不另写 curl/Python 上传命令。失败时按公共说明停止，不忽略必要素材继续付费。本人已有同渠道资产经归属校验可直接复用。
 
 最多 16 张输入图，每张不超过 30 MiB，单图宽、高均不超过 10000 像素；实际格式与内容仍须通过公共上传及模型校验。多图按实际顺序标明人物身份、服装、造型或场景用途；顺序本身不保证身份锁定。超限请用户选择必要素材，不擅自删图。
 

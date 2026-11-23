@@ -1,7 +1,7 @@
 ---
 name: adp
 description: 使用 @tencentcloudadp/cli 在终端或 CI 管理腾讯云 ADP 的空间、应用、智能体、草稿、发布、对话、知识库、渠道和工作流。用户明确提到 ADP、adp 命令或腾讯云智能体开发平台时使用；不用于一般 Agent 开发、其他厂商平台或 CLI 源码开发。
-version: 0.1.3
+version: 0.1.5
 metadata:
   requires:
     bins: ["adp"]
@@ -59,7 +59,7 @@ adp schema --command "channel" --compact --format json
 
 | 当前任务 | 读取 |
 | --- | --- |
-| 创建应用（含从模板创建）、选模式、知识库导入、工作流与异步试跑、应用/工作流包导入导出 | [create/TOPIC.md](create/TOPIC.md) |
+| 创建应用、添加 Claw 子 Agent、选模式、知识库导入、工作流与异步试跑、应用/工作流包导入导出 | [create/TOPIC.md](create/TOPIC.md) |
 | 修改 adp.jsonc、环境覆盖、同步草稿 | [configuration/TOPIC.md](configuration/TOPIC.md) |
 | 发布、模式限制、挂载插件或 Skill | [gotchas/TOPIC.md](gotchas/TOPIC.md) |
 | 平台 Skill 发布、引用方、分类、共享到企业技能中心 | [references/platform-skills.md](references/platform-skills.md) |
@@ -67,7 +67,8 @@ adp schema --command "channel" --compact --format json
 | 盘点应用、翻页、统计会话 | [references/inventory.md](references/inventory.md) |
 | 绑定或发布报错、全量覆盖字段 | [references/pitfalls.md](references/pitfalls.md) |
 | 记忆库、记忆条目、用户摘要、应用绑定记忆库 | [references/memory.md](references/memory.md) |
-| 插件/连接器凭证、API Key、OAuth 授权、插件工具详情、插件跨空间共享 | [references/credentials.md](references/credentials.md) |
+| 插件/连接器凭证、OAuth 授权、工具密钥（ADP API Key：创建/启停/删除）、插件工具详情与跨空间共享 | [references/credentials.md](references/credentials.md) |
+| MCP 插件：直接调用平台 MCP 插件（如可灵）、实时工具列表、将导出的 MCP 插件装入 Coding Agent、注册外部 MCP Server | [references/mcp.md](references/mcp.md) |
 | 工作台定时任务（按调度跑 prompt）、运行日志 | [references/timers.md](references/timers.md) |
 | 云盘：上传下载文件、目录、挂载给应用 | [references/volumes.md](references/volumes.md) |
 | 取 AppKey（对话/分享用的应用密钥）、启停和删除 key、分享链接、分享会话、企业共享应用、A2A 地址 | [references/app-keys.md](references/app-keys.md) |

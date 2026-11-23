@@ -3,9 +3,9 @@ name: product-video
 description: 复用商品资料，确认解析与成片整单费用后，逐条制作通用、开箱、口播或钩子视频并恢复原请求。
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
-version: 0.8.1
+version: 0.8.5
 display_name: TikTok Shop 商品链接智能成片
 display_name_en: TikTok Shop Product Video
 description_zh: 复用商品资料，确认解析与成片整单费用后，逐条制作通用、开箱、口播或钩子视频并恢复原请求。
@@ -16,7 +16,9 @@ author: yihook
 
 # TikTok Shop 商品链接智能成片
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 ## 参数与创意
@@ -63,7 +65,7 @@ author: yihook
 
 附件或文件直链由宿主取得实际字节，不读取或解析 Excel 内容。远端文件下载逐次检查重定向、目标、类型和大小，不转发 Cookie/Token；无法取得直链字节时请用户上传附件，附件也无法传输则说明阻塞。业务商品页面链接不作为文件下载。
 
-生成并保存 upload_request_id，计算完整文件 SHA-256，使用 `create_agent_file_upload`（purpose=product-excel，文件名、MIME、实际大小及摘要）。按返回 upload.url、全部 upload.fields 构造 multipart/form-data，将完整 file 字节作为最后字段 POST 到 OSS，不携带 OAuth、不跟随重定向、不手设 multipart Content-Type。调用 `complete_agent_file_upload` 确认后才使用 upload_id；响应未知用 `get_agent_file_upload` 恢复，不将原始 URL 直接提交。Excel 无效行会拒绝整份文件，按原行号请用户修正，不暗中跳行。
+生成并保存 upload_request_id，计算完整文件 SHA-256，使用 `create_agent_file_upload`（purpose=product-excel，文件名、MIME、实际大小及摘要）。创建上传时额外传 `delivery: "script"`，按[公共上传说明](references/upload.md)使用返回的transfer.code运行公共脚本，由代码领取完整票据并OSS直传，不保存或转写OSS票据JSON，不携带OAuth传输字节。调用 `complete_agent_file_upload` 确认后才使用 upload_id；响应未知用 `get_agent_file_upload` 恢复，不将原始 URL 直接提交。Excel 无效行会拒绝整份文件，按原行号请用户修正，不暗中跳行。
 
 示例：“这个链接做两条开箱，美国人物、英语”先补声音设置，展示解析费 + 两条成片费并一次确认，再解析一次、分别创建两条；“上次第二条下载失效”只读取原任务并刷新下载链接。
 

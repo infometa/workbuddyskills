@@ -2,10 +2,10 @@
 name: video-translation
 description: 将一条本地 MP4/WebM 视频翻译配音，可选快速配音、快速口型或高精口型；免费预检并确认费用后创建，按任务 ID 查询实际结果。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: AI 视频翻译配音与口型同步
 display_name_en: AI Video Translation and Lip Sync
 description_zh: 将一条本地 MP4/WebM 视频翻译配音，可选快速配音、快速口型或高精口型；免费预检并确认费用后创建，按任务 ID 查询实际结果。
@@ -16,7 +16,9 @@ author: yihook
 
 # AI 视频翻译配音与口型同步
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 ## 适用场景与输入
@@ -89,7 +91,7 @@ author: yihook
 
 1. 首次执行调用`get_current_user {}`检查连接；权限不够或工具不可见时停止，不换渠道。
 2. 上传前必须读取公共[上传指引](references/upload.md)，只复用本地文件。附件由宿主提供可读取的本地文件后直接使用；路径已明确则直接读取，不先生成选片问卷，也不搜集无关文件作为候选。**该公共指引覆盖其他Skill的直链场景，本Skill按已确认需求不接受直链、分享页或资产库，不执行其下载分支。** 根据实际文件名、MIME、字节数与SHA-256调用`create_agent_file_upload`，`purpose="video"`，沿用公共`upload_request_id`协议。业务规格为MP4/WebM、最大209715200字节，不能因为通用上传允许更大文件而绕过此限制。
-3. 原始完整上传工具响应保存到私有临时文件，执行`node scripts/upload.mjs response.json /absolute/path/source.mp4`原样OSS POST；然后调用`complete_agent_file_upload`。只有完成后才使用`upload_id`；不传本地路径、任意URL或自行构造objectKey。未知上传按公共协议调用`get_agent_file_upload`查询；不要重新拼签名或另写传输脚本。
+3. 创建时传delivery="script"取得transfer.code，执行`node scripts/upload.mjs --transfer "本次transfer.code" /absolute/path/source.mp4 --ticket-url "本次transfer.ticket_url"`原样OSS POST；然后调用`complete_agent_file_upload`。只有完成后才使用`upload_id`；不传本地路径、任意URL或自行构造objectKey。未知上传按公共协议调用`get_agent_file_upload`查询；不要重新拼签名或另写传输脚本。
 4. 调用`list_video_translation_languages {}`读取`targetItems[].value`（可原样提交的精确名称）。返回`syncedAt`和`stale`；stale表示最后成功目录较旧，应如实说明，不伪装成实时同步。无成功快照则停止，不能用参考清单冒充服务目录。源目录的`sourceItems`不是本Skill选择步骤，源语言固定自动识别。
 
 ### 免费预检与付费创建

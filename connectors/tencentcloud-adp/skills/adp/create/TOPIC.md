@@ -45,7 +45,7 @@ adp init --name "<name>" --space-id "<space_id>" --model-id "<model_id>" \
   --app-mode <1|2|3|4> --create-remote --format json
 ```
 
-`--create-remote` calls `CreateApp`. **Claw (`4`)** then `CreateAgent` and writes `agent_id`. A Claw app has exactly one config-side agent: a second `adp agent create` fails with `AgentAlreadyExists` (ADP returns the existing id); edit it with `adp agent update` instead. Standard (`1`) / single-workflow (`3`) have no agent (`CreateAgent` is rejected). Multi-Agent (`2`) binds the first listed agent if the platform created one; a fresh Multi-Agent app usually has none, so `agent_id` stays empty and that is expected. Then `ModifyApp` (and `ModifyAgent` only when `agent_id` is set). For Standard, put the role in `role_description`, not only `instructions.md`: `adp init --app-mode 1` (and `3`) copies the instructions (an existing `instructions.md` included) into top-level `role_description`; edit that key afterwards. Creation consumes quota and is not easily undone from this CLI without `adp delete --yes`.
+`--create-remote` calls `CreateApp`. **Claw (`4`)** then `CreateAgent` for the main agent (`Role=0`) and writes `agent_id`. A Claw app has **1 main agent (`Role=0`) and up to 19 sub-agents (`Role=1`)**, 20 agents in total. Creating a second main agent fails with `AgentAlreadyExists` (ADP returns the existing id); edit that agent with `adp agent update`. Add a sub-agent with `adp agent create --role 1` (see [Agents after init](#agents-after-init)). Standard (`1`) / single-workflow (`3`) have no agent (`CreateAgent` is rejected). Multi-Agent (`2`) binds the first listed agent if the platform created one; a fresh Multi-Agent app usually has none, so `agent_id` stays empty and that is expected. Then `ModifyApp` (and `ModifyAgent` only when `agent_id` is set). For Standard, put the role in `role_description`, not only `instructions.md`: `adp init --app-mode 1` (and `3`) copies the instructions (an existing `instructions.md` included) into top-level `role_description`; edit that key afterwards. Creation consumes quota and is not easily undone from this CLI without `adp delete --yes`.
 
 Then publish only if they asked to 上线 / 发布:
 
@@ -73,7 +73,7 @@ Right after `adp deploy` the first call of a tool can fail on the runtime side (
 
 ## Knowledge-base documents
 
-Default KB id equals `app_id`. Same CAM keys; no extra COS or AppKey. Read it with `adp kb get --kb-id "<app_id>" --space-id "<space_id>"` (the platform's `DescribeKB` only serves shared KBs, so the CLI reads the default KB from the space's KB list and needs the space).
+Default KB id equals `app_id`. Same profile keys on the public cloud and the independent site; no extra COS or AppKey. Read it with `adp kb get --kb-id "<app_id>" --space-id "<space_id>"` (the platform's `DescribeKB` only serves shared KBs, so the CLI reads the default KB from the space's KB list and needs the space).
 
 ```bash
 adp kb doc import --file ./faq.md --format json --cwd "<project>"
@@ -96,13 +96,45 @@ A Claw agent only searches knowledge through the `KnowledgeRetrievalAnswer` tool
 
 ## Agents after init
 
-`adp agent create` is **Claw-only** (`app_mode 4`), and a Claw app holds exactly one config-side agent, so in practice it only re-creates the agent of a Claw app that has none:
+`adp agent create` is **Claw-only** (`app_mode 4`). A Claw app has **1 main agent (`Role=0`)** and up to **19 sub-agents (`Role=1`)** (20 agents total). `adp.jsonc` `agent` is the main agent. `adp dev` / `adp deploy` call `ModifyAgent` only for that `agent_id`; they do not overwrite sub-agents.
+
+`CreateAgent` with `Role=0` is idempotent once a main agent exists: a second `adp agent create` without `--role 1` returns `AgentAlreadyExists` (including `--dry-run`). The error `next_actions` include a runnable `adp agent create --role 1` preview. Edit the main agent with `adp agent update`.
+
+Add a sub-agent (this is how to handle “给这个应用添加子 agent，名字叫 …”):
+
+```bash
+adp schema --command "agent create" --format json
+adp agent create --app-id "<claw_app_id>" --role 1 --name "<name>" \
+  --description "<when the main agent should delegate>" \
+  --instructions "<how this sub-agent works>" \
+  [--model-id "<model_id>"] --dry-run --format json
+adp agent create --app-id "<claw_app_id>" --role 1 --name "<name>" \
+  --description "<when the main agent should delegate>" \
+  --instructions "<how this sub-agent works>" \
+  [--model-id "<model_id>"] --format json
+```
+
+`--sub-agent` is the same as `--role 1`. `--description` is the routing text the main agent uses to decide when to delegate. `--name` is required for a sub-agent (do not reuse the main agent's name from `adp.jsonc`). The same flags work with no `adp.jsonc` as long as `--app-id` is set. With `--role 1`, the CLI does **not** copy the main agent's `instructions.md`, `skill_ids`, or `plugin_ids`. Pass `--instructions` or `--instructions-file` for the sub-agent prompt; if you pass neither, the prompt is a short default from the name. Pass `--skill-id` only for skills this sub-agent should mount (default: none). Omit `--model-id` to inherit a real `adp.jsonc` model, else the main agent's model, else the first `ModelScene=18` model, else `Auto/auto`.
+
+Change a sub-agent without rewriting `adp.jsonc` by passing only the fields that change. The CLI reads the current agent and keeps the rest (including `Role`):
+
+```bash
+adp agent update --app-id "<claw_app_id>" --agent-id "<sub_agent_id>" \
+  --name "<name>" --description "<when to delegate>" --dry-run --format json
+```
+
+With no field flags, `adp agent update` still syncs `adp.jsonc` plus `instructions.md` onto `--agent-id`.
+
+Claw multi-agent collaboration (doc 134193) has two mechanisms:
+
+1. **单向委派 (default).** The main agent routes work to sub-agents from each sub-agent's `name` and `description`. Each sub-agent runs with its own `instructions`, model, skills, and tools.
+2. **团队协作 (optional).** Set `mode.claw.team_enabled` and `mode.claw.team_prompt` in `adp.jsonc` (`ClawAgentConfig.AgentTeamConfig`). Teammates can report back and talk to each other according to `team_prompt`. That is app config, not a substitute for creating the sub-agent.
+
+On Standard (`1`), Multi-Agent (`2`) or single-workflow (`3`) apps the CLI reads the app mode first and refuses with a usage error, also under `--dry-run` (upstream would answer `560001`). Edit an existing agent with `adp agent update`; for another Claw agent, create a Claw app with `adp init --app-mode 4`. Re-create a missing main agent (role 0) only when `adp agent list` shows no role 0 agent:
 
 ```bash
 adp agent create --app-id "<claw_app_id>" --dry-run --format json
 ```
-
-On Standard (`1`), Multi-Agent (`2`) or single-workflow (`3`) apps the CLI reads the app mode first and refuses with a usage error, also under `--dry-run` (upstream would answer `560001`). Edit an existing agent with `adp agent update --app-id <id> --agent-id <id>`; for a separate agent, create another Claw app with `adp init --app-mode 4`.
 
 This CLI does **not** generate canvas JSON — copy a template from
 [../references/workflows.md](../references/workflows.md), export one, or pull one from an existing app. It can bind an existing id in `adp.jsonc`
@@ -112,8 +144,8 @@ This CLI does **not** generate canvas JSON — copy a template from
 
 ## Workflows
 
-`adp workflow` uses the same CAM keys as every other command (it calls LKE canvas
-actions). It is cloud-site only.
+`adp workflow` uses the same profile keys as every other command (it calls LKE canvas
+actions). Public cloud sends them to `lke.tencentcloudapi.com`; an independent or custom profile sends them to its ADP host.
 
 ```bash
 adp workflow list --app-id "<app_id>" --format json --fields workflowId,name,status,isEnable
@@ -124,11 +156,15 @@ adp workflow enable --app-id "<app_id>" --workflow-id "<wf_id>" --format json
 adp workflow export --app-id "<app_id>" --workflow-id "<wf_id>" --output ./wf.zip --format json
 # Same-name workflow in the target app → WorkflowImportDuplicate
 adp workflow import --app-id "<app_id>" --file ./wf.zip --enable --format json
-# Whole app (released apps only; run adp deploy first)
+# Whole app (released apps only; run adp deploy first). Default scope is app settings plus
+# every workflow, connector, knowledge base, agent, and skill. --include workflow,kb narrows it.
+# A pipe, CI, agent, or --yes does not prompt. A selected workflow keeps referenced connectors and knowledge bases.
 adp app export --app-id "<app_id>" --output ./app.zip --format json
 # Import that ZIP as a new unreleased app (copy; name gets 的副本NN)
 adp app import --space-id "<space_id>" --file ./app.zip --format json
-# The package holds app config only, never workflows. A mode 3 copy is NOT runnable until you
+# A full package already contains workflows (app/workflow/workflow_<id>.json inside app.zip)
+# and knowledge bases (knowledge_bases.zip and metadata.json Components.KnowledgeBases).
+# A settings-only package does not. A mode 3 copy of a settings-only package is NOT runnable until you
 # copy the entry workflow (500304 otherwise); import prints a warning plus these next_actions,
 # with the source app ID (from the package) and entry workflow ID (from the source draft) filled
 # in when the CLI can read them; otherwise it adds app list / app get lookups first:

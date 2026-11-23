@@ -8,7 +8,7 @@
 | 视频规格 | `analysisResult.videoInfo` 的 `duration`、`resolution`、`coverUrl`、`videoUrl`；可补充任务实际 `videoDuration` / `videoResolution` |
 | 内容策略 | `analysisResult.analysis` 的 `hookType`、`hookStrategy`、`visualPacing`、`productDemoMethod`、`ctaStyle`、`successFactors`、`detectedLanguage` |
 | 逐镜拆解 | `analysisResult.scriptBreakdown.scenes` 原顺序：`startSeconds`、`endSeconds`、`sceneType`、`visualDirection`、`voiceover`、`textOverlay`、`notes` |
-| 生成提示词（必展示） | 响应顶层 `generated_prompt`；主站共享 `buildVideoPromptFromAnalysis` 组装的文本，独立代码块完整原样展示，不重写、不翻译；空值说明未提供 |
+| 生成提示词（有值时展示） | 响应顶层 `generated_prompt`；主站共享 `buildVideoPromptFromAnalysis` 组装的文本，独立代码块完整原样展示，不重写、不翻译；空值可省略，用户询问时说明未提供 |
 | 音乐方向 | `analysisResult.scriptBreakdown.musicDirection` |
 | 平台公开数据 | `analysisResult.platformMeta` 或任务 `platformMeta` 中的作者、发布时间、标签与 `statistics`；TikTok 专用字段在 `analysisResult.tiktokMeta` |
 | 费用与结算 | `estimatedCredits`、`consumedCredits`、`entitlement`、`refundedAt`；未知状态不能推断已退款 |

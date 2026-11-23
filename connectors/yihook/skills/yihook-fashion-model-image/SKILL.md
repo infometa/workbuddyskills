@@ -2,10 +2,10 @@
 name: yihook-fashion-model-image
 description: 通过文字与可选风格参考定制电商模特，首轮四候选自动选一张，制作一张9:16、2K模卡四宫格；完整费用确认后执行并查询结果。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: Yihook 顶流外模·AI电商模特形象定制
 display_name_en: Yihook Fashion Model Image
 description_zh: 通过文字与可选风格参考定制电商模特，首轮四候选自动选一张，制作一张9:16、2K模卡四宫格；完整费用确认后执行并查询结果。
@@ -17,7 +17,9 @@ author: yihook
 
 # Yihook 顶流外模·AI电商模特形象定制
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 ## 范围与默认交付
@@ -95,7 +97,7 @@ author: yihook
 
 不静默更换模型或规格。正常默认首批零参考、模卡一张独立身份图，没有固定构图底图。用户明确提供外观或造型视觉参考时按实际用途提交，悠船最多4张参考、Pro最多16张；第二阶段图1始终为选中身份，其他图仅按明确用途提供造型、构图或旧模卡延续，不参与混脸。参考顺序不是身份锁定保证，提示词须逐一说明职责。任一阶段超限先请用户选择必要素材，不静默删图。
 
-有外部参考时，准备素材前读取[公共上传说明](references/upload.md)。附件或远端文件直链先取得完整本地字节，按实际文件名、MIME、大小和SHA-256调用 `create_agent_file_upload`（`purpose: "image"`），将完整原始工具响应保存到私有临时文件，执行 `node scripts/upload.mjs response.json /absolute/path/reference.jpg`，再用 `complete_agent_file_upload` 确认，只使用完成返回的 `file_url`。未知上传用 `get_agent_file_upload` 查原会话。不手写票据或转录签名，不另用curl/Python上传。远端下载安全及失败处理遵循公共说明，必要素材失败时停止，不忽略后继续付费。
+有外部参考时，准备素材前读取[公共上传说明](references/upload.md)。附件或远端文件直链先取得完整本地字节，按实际文件名、MIME、大小和SHA-256调用 `create_agent_file_upload`（`purpose: "image"`），传 `delivery: "script"` 取得短期 `transfer.code`，执行 `node scripts/upload.mjs --transfer "本次transfer.code" /absolute/path/reference.jpg --ticket-url "本次transfer.ticket_url"`，再用 `complete_agent_file_upload` 确认，只使用完成返回的 `file_url`。未知上传用 `get_agent_file_upload` 查原会话。不手写票据或转录签名，不另用curl/Python上传。远端下载安全及失败处理遵循公共说明，必要素材失败时停止，不忽略后继续付费。
 
 公共上传单图最多30 MiB；Pro参考宽、高均不超过10000像素，格式与内容仍须通过上传和模型校验。选中的本人同渠道生成图可经归属校验直接复用 `images[].url`，不必下载重传。第一阶段返回独立输出，按数组顺序保留选中位置与URL；异常只返回拼图时，本契约没有抽图或放大工具，无法取得可用单张则停止，不将拼图作为身份图或另行付费取图。
 

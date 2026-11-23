@@ -142,7 +142,7 @@ all three to create without an audience; there is no separate off switch here. S
 |---|---|---|---|
 | `name` | string | yes | max **255** characters |
 | `defaultBid` | number | yes | must not exceed the campaign budget |
-| `targetingType` | enum | no | `keyword` / `target`, **default `target`**. Must be `target` on an auto campaign |
+| `targetingType` | enum | no | `keyword` / `target`. Must be `target` on an auto campaign. On a manual campaign, if omitted it is inferred: only keywords -> keyword, only targets -> target; both or neither is rejected |
 | `state` | enum | no | `enabled` / `paused` |
 | `productAds` | array | **yes for SP** | non-empty |
 | `targetBid` | array | auto only | all four groups - see below |
@@ -159,7 +159,7 @@ Every child list is capped at **1000** items, and all child items across the who
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `asin` | string | yes | real ASIN format: `B` + 9 alphanumerics, or 9 digits + X/digit. Placeholders are rejected |
-| `sku` | string | Seller: **yes** | verified as the SKU actually bound to that ASIN in this shop. Vendor profiles omit it |
+| `sku` | string | Seller: **yes**; Vendor: **must be omitted** | Seller: verified as the SKU actually bound to that ASIN in this shop. Vendor: a non-blank sku rejects the whole call; a blank one is treated as omitted |
 
 ## `targetBid` (auto campaigns)
 
@@ -189,17 +189,27 @@ de-duplicated.
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `expression` | array | one-of | with `resolvedExpression`, **same number of elements** |
-| `resolvedExpression` | array | with `expression` | required whenever `expression` is used |
+| `expression` | array | one-of | with `resolvedExpression`, **same number of elements**; starts with `asinCategorySameAs`, each type at most once |
+| `resolvedExpression` | array | with `expression` | required whenever `expression` is used; same type sequence as `expression` |
 | `asin` | string | one-of | real ASIN format |
-| `categoryName` | string | one-of | |
-| `type` | string | no | |
+| `categoryName` | string | - | **rejected for sponsoredProducts**; use `expression` + `resolvedExpression` instead |
+| `type` | string | **yes with `asin`** | `asinSameAs` / `asinExpandedFrom`; missing is rejected. Not used with `expression` |
 | `bid` | number | yes | |
 
-**Exactly one** of `expression` / `asin` / `categoryName` - the tool checks this and
-**rejects** an entry carrying more than one. The guard exists because the downstream would
-not: it silently keeps the highest-priority form and drops the rest, so a batch that got
-through would be targeting something other than what you sent.
+**Exactly one** of `expression` / `asin` - the tool checks this and **rejects** an entry
+carrying more than one. `categoryName` is **NOT supported for sponsoredProducts** (the
+downstream would store the category NAME instead of the category ID); use `expression` with
+`resolvedExpression`.
+
+For category targeting, `expression` must start with the category item `asinCategorySameAs`;
+brand / price / rating / prime refinements follow it and each type may appear at most once per
+target. `asinCategorySameAs` / `asinBrandSameAs` values must be strings (ID in `expression`,
+display name in `resolvedExpression`), and `resolvedExpression` must list the same types in
+the same order. A target holds at most ONE brand: for several brands create several targets,
+each starting with the same category item. Category IDs come from
+`get_entity_metadata(entity='sdCategory', filters.keyword=<name>, filters.targetableOnly=true)`
+and brand IDs from `get_entity_metadata(entity='categoryBrand', filters.categoryId=<categoryId>)`;
+never invent IDs.
 
 ## `negativeKeywords`
 

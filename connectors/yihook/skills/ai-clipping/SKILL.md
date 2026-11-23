@@ -2,10 +2,10 @@
 name: ai-clipping
 description: 从一个本地3—60分钟长视频提取一条高光短片，确认设置与当前费用后创建，按任务ID查询实际结果。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: 长视频高光提取与短视频剪辑
 display_name_en: Long Video Highlights and Short Clips
 description_zh: 从一个本地3—60分钟长视频提取一条高光短片，确认设置与当前费用后创建，按任务ID查询实际结果。
@@ -17,7 +17,9 @@ author: yihook
 
 # 长视频高光提取与短视频剪辑
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 ## 输入与能力边界
@@ -70,7 +72,7 @@ author: yihook
 
 先调用 `get_current_user({})` 核对本渠道身份；此工具不返回余额，不虚构余额。只接收本地MP4/WebM、3—60分钟、最大200MiB视频。读取 [公共上传指引](references/upload.md)，本Skill只使用其中本地文件链路，不采用外部链接或资产库输入。
 
-宿主计算真实字节数和SHA-256，以用途 `video`、真实文件名/MIME、`size_bytes`、`sha256` 和稳定 `upload_request_id` 调用 `create_agent_file_upload`。保存完整原始工具响应到私有临时文件，执行 `node scripts/upload.mjs response.json /absolute/path/source.mp4` 原样OSS POST；调用 `complete_agent_file_upload` 确认完成后才使用 `upload_id`。上传响应未知时调用 `get_agent_file_upload` 查询，不把票据成功当成素材完成，不自行重写签名。
+宿主计算真实字节数和SHA-256，以用途 `video`、真实文件名/MIME、`size_bytes`、`sha256` 和稳定 `upload_request_id` 调用 `create_agent_file_upload`。传入 `delivery: "script"` 取得短期 `transfer.code`，执行 `node scripts/upload.mjs --transfer "本次transfer.code" /absolute/path/source.mp4 --ticket-url "本次transfer.ticket_url"` 原样OSS POST；调用 `complete_agent_file_upload` 确认完成后才使用 `upload_id`。上传响应未知时调用 `get_agent_file_upload` 查询，不把票据成功当成素材完成，不自行重写签名。
 
 调用：
 

@@ -13,6 +13,11 @@ zijizhang-cli todo before_set_month_audited '<year>' '<month>' --uid='<uid>'
 - 向用户展示返回的 `reason`，告知当前无法提交审账
 - 流程终止，不执行任何写操作
 
+> **若 `reason` 与互联网平台收入有关**（如"请先确认N月份互联网平台收入"
+> "是否有互联网平台收入""互联网平台收入审核中"）：
+> 说明 `INTERNET_REVENUE` 待办未完成导致硬阻塞，跳转到 `workflow/internet_revenue.md`
+> 先完成该项，再回到本流程重新执行 Step 1。
+
 ### state=需要确认
 
 📌 **需要用户确认**：

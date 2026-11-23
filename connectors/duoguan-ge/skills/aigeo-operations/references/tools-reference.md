@@ -4,7 +4,7 @@
 
 # MCP Tool 参考
 
-本文件列出连接器当前注册的全部 73 个 Tool 及其参数，用于在对话中确认该调哪个 Tool、怎么传参。
+本文件列出连接器当前注册的全部 77 个 Tool 及其参数，用于在对话中确认该调哪个 Tool、怎么传参。
 
 > **诊断类请求除外。** 生成 GEO 诊断报告前必须先调用 `geo_brand_diagnosis_report` 取回服务端维护的最新交付规范（章节结构、逐章取数口径、合规红线），不要凭本文件或记忆自行组织章节。
 
@@ -27,10 +27,13 @@
 | `brand_monitor_list` | 查询品牌监控列表 |
 | `brand_monitor_manage` | 管理品牌监控与诊断 |
 | `brand_monitor_statistics` | 查询品牌监控统计 |
+| `client_pair` | 绑定发布助手客户端 |
 | `content_manage` | 管理 GEO 内容资产 |
 | `creation_manage` | 管理 GEO 创作任务 |
 | `creation_task_get` | 获取创作任务详情 |
 | `creation_task_list` | 查询创作任务 |
+| `external_hub_catalog` | 读取客户端能力目录 |
+| `external_hub_execute` | 调用客户端能力 |
 | `geo_brand_diagnosis_report` | GEO 诊断报告交付规范 |
 | `geo_content_get` | 获取 GEO 文章详情 |
 | `geo_content_search` | 搜索 GEO 文章 |
@@ -86,6 +89,7 @@
 | `site_template_list` | 查询模板列表 |
 | `site_template_pages` | 查询模板页面 |
 | `site_website_get` | 获取网站信息 |
+| `tenant_account_balance` | 查询账户余额（非算力） |
 | `tenant_config_get` | 获取租户配置 |
 | `tenant_profile_get` | 获取当前租户信息 |
 
@@ -220,6 +224,14 @@
 | `startDate` | string | 否 |
 | `endDate` | string | 否 |
 
+### `client_pair` — 绑定发布助手客户端
+
+输入发布助手客户端显示的配对码，将当前 WorkBuddy 授权租户的 API Key 安全下发并保存到该客户端。切换到新租户时可再次调用。
+
+| 参数 | 类型 | 必填 |
+| --- | --- | --- |
+| `pairingCode` | string | 是 |
+
 ### `content_manage` — 管理 GEO 内容资产
 
 新增、编辑、启停或删除 GEO 文章栏目、文章和图片库记录。删除动作必须提供 confirm: true；请求字段仅映射到固定上游接口。
@@ -304,6 +316,28 @@
 | --- | --- | --- |
 | `pageNo` | integer | 是 |
 | `pageSize` | integer | 是 |
+
+### `external_hub_catalog` — 读取客户端能力目录
+
+读取本机「AI智能发布助手」客户端当前发布的实时能力目录。当用户提出客户端侧操作时，先调用本工具获取语义工具名与对应 command，再立即调用 external_hub_execute 执行；不要凭记忆猜测 command。
+
+典型说法（用户口语，不限于此）：
+- 账号：绑定了哪些账号 / 账号列表 / 哪个号掉线了 / 登录状态 / 重新登录 / 账号授权 / 授权到哪一步了 / 这个号还能不能发
+- 检索账号：绑定了哪些检索账号 / 豆包账号 / deepseek 账号 / 检索账号掉线了
+- AI 检索：执行一次检索 / 帮我搜一下某个词 / 用某个平台查这个关键词 / 批量检索 / 检索任务跑完没 / 停止检索 / 检索记录
+- 发布：发布模式 / 静默发布 / 发布任务列表 / 任务跑到哪了 / 发布日志 / 取消计划发布 / 暂停发布 / 执行远程发布任务
+
+无入参。
+
+### `external_hub_execute` — 调用客户端能力
+
+按 external_hub_catalog 返回的定义执行本机「AI智能发布助手」客户端能力。command 必须直接取自目录项的 hub.command，业务字段放在 params，租户认证上下文放在 auth。若尚未获取目录，先调用 external_hub_catalog；不要自行编造 command。
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `command` | string | 是 | 从 external_hub_catalog 对应语义工具项读取的 command |
+| `params` | object | 是 | 目标能力的业务参数 |
+| `auth` | object | 否 | 租户认证上下文，例如 ownerUserId、ownerAccountName、apiKey、apiBaseUrl |
 
 ### `geo_brand_diagnosis_report` — GEO 诊断报告交付规范
 
@@ -880,6 +914,12 @@
 ### `site_website_get` — 获取网站信息
 
 查询当前租户的网站基础信息。
+
+无入参。
+
+### `tenant_account_balance` — 查询账户余额（非算力）
+
+查询当前租户通用账户余额，以及累计充值和累计消费金额；金额单位为元。
 
 无入参。
 

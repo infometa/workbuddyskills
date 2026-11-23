@@ -1,0 +1,26 @@
+{
+  "runtime": { "type": "node", "version": ">=20" },
+  "init": {
+    "darwin": "npx --yes patchxnote-agent@0.2.16 install",
+    "linux": "npx --yes patchxnote-agent@0.2.16 install",
+    "win32": "npx.cmd --yes patchxnote-agent@0.2.16 install"
+  },
+  "auth": {
+    "darwin": "npx --yes patchxnote-agent@0.2.16 mcp login --no-browser --force --profile workbuddy --server-base-url https://freenote.patch-x.cn --callback-timeout 5m",
+    "linux": "npx --yes patchxnote-agent@0.2.16 mcp login --no-browser --force --profile workbuddy --server-base-url https://freenote.patch-x.cn --callback-timeout 5m",
+    "win32": "npx.cmd --yes patchxnote-agent@0.2.16 mcp login --no-browser --force --profile workbuddy --server-base-url https://freenote.patch-x.cn --callback-timeout 5m"
+  },
+  "status": {
+    "darwin": "npx --yes patchxnote-agent@0.2.16 mcp status --output json --profile workbuddy --server-base-url https://freenote.patch-x.cn",
+    "linux": "npx --yes patchxnote-agent@0.2.16 mcp status --output json --profile workbuddy --server-base-url https://freenote.patch-x.cn",
+    "win32": "npx.cmd --yes patchxnote-agent@0.2.16 mcp status --output json --profile workbuddy --server-base-url https://freenote.patch-x.cn"
+  },
+  "unAuth": {
+    "darwin": "npx --yes patchxnote-agent@0.2.16 mcp logout --profile workbuddy --server-base-url https://freenote.patch-x.cn",
+    "linux": "npx --yes patchxnote-agent@0.2.16 mcp logout --profile workbuddy --server-base-url https://freenote.patch-x.cn",
+    "win32": "npx.cmd --yes patchxnote-agent@0.2.16 mcp logout --profile workbuddy --server-base-url https://freenote.patch-x.cn"
+  },
+  "statusMatch": "\"authenticated\"\\s*:\\s*true",
+  "authUrlDomain": "freenote.patch-x.cn",
+  "authWaitForExit": true
+}

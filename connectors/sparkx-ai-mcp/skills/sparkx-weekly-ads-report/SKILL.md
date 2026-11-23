@@ -7,7 +7,7 @@ description: >-
   Not for monthly/quarterly reports (use sparkx-monthly-ads-report / quarterly-ads-report, not yet built),
   nor for deep-dive analysis on a specific question (use the relevant analysis skill instead).
 metadata:
-  version: 1.0.6
+  version: 1.1.4
 ---
 
 # Weekly Ads Report
@@ -20,7 +20,7 @@ This skill does **not** map to a single MCP tool of its own — it orchestrates 
 - `get_operation_log` → [sparkx-query-operation-log](../sparkx-query-operation-log/SKILL.md)
 - `get_entity_metadata` → [sparkx-query-entity-metadata](../sparkx-query-entity-metadata/SKILL.md)
 
-> **Dependency — install these three base skills alongside this one:** `sparkx-query-ads-performance`, `sparkx-query-entity-metadata`, `sparkx-query-operation-log`. Skills install as sibling directories under your current agent's skills root (`.claude/skills/<name>/` for Claude Code; the equivalent root for other agents — see the [supported-agents table](../../README.md)), which is exactly what the `../query-.../…` links above (and elsewhere in this doc) resolve against — if a base skill isn't installed there, those links won't resolve and this skill can't run. Install all three first.
+> **Dependency — install these three base skills alongside this one:** `sparkx-query-ads-performance`, `sparkx-query-entity-metadata`, `sparkx-query-operation-log`. Skills install as sibling directories under your current agent's skills root (`.claude/skills/<name>/` for Claude Code; the equivalent root for other agents — see the installation notes in [README](../README.md)), which is exactly what the `../query-.../…` links above (and elsewhere in this doc) resolve against — if a base skill isn't installed there, those links won't resolve and this skill can't run. Install all three first.
 
 **Read those three SKILL.md files first** (parameter formats, field-naming rules, the Ratio Metric Display Rule) plus [`references/platform-notes.md`](references/platform-notes.md) (auth flow, error handling, pagination, date-range limits, currency rules — shared by all three underlying tools). This document only covers logic specific to the weekly-report use case; it doesn't repeat what the three base skills already document.
 
@@ -66,7 +66,52 @@ Always call `get_user_authorized_context` first to get the authorized `profiles`
 
 Case 4's threshold exists because this is a customer-facing report, not an internal dashboard: a silent multi-store aggregate can hide a single store's problem behind a healthy-looking blended number, and it forces an unannounced USD conversion (see "Multi-Store and Currency" below) the customer didn't ask for.
 
-**Determining `includeAiSection=auto`**: call `get_entity_metadata` (`entity: aiGroup`, filtered to the relevant `profileIds`; **add `filters: {"aiStatus": 1}`, or fully paginate — default page size is 100, so an account with more managed groups than one page could otherwise have its only running group sitting past page 1 and be missed**). If any returned row has `aiStatus: 1` (running), include the full AI-managed summary section. If none are currently running but Step 2f's AI/automation action summary still turns up rows for the week (a group may have been toggled off partway through), include a brief one-line mention instead of a full section — the activity is still worth surfacing, just not as prominently as an actively-running group.
+**Determining `includeAiSection=auto`**: call `get_entity_metadata` (`entity: aiGroup`, filtered to the relevant `profileIds`; **add `filters: {"aiStatus": 1}`, or fully paginate — default page size is 100, so an account with more managed groups than one page could otherwise have its only running group sitting past page 1 and be missed**). If any returned row has `aiStatus: 1` (running), include the full AI-managed summary section. If none are currently running but Step 2f's change summary still shows managed-group (AI) activity for the week (a group may have been toggled off partway through), include a brief one-line mention instead of a full section — the activity is still worth surfacing, just not as prominently as an actively-running group.
+
+## Shared Rules: Target ACOS, Thresholds, Managed Groups, Promotions
+
+These rules match `sparkx-search-term-diagnosis` and `sparkx-promo-reset`, so the same store
+gets the same numbers whichever skill answers. Those two skills are separate installs: mention
+them as "if installed", and when the user doesn't have them, say what to look at instead -
+never promise to run a skill that may not be there.
+
+- **One target ACOS.** Use the store-wide target the user gives (ask "整店希望 ACOS 控制在多少"
+  when a threshold depends on it); without one, use the store's own ACOS for the period and say
+  so where the threshold is first used. Never use managed groups' `targetAcos` as thresholds -
+  one store can have dozens, from single digits to over 200%, and rank-push or launch groups set
+  it high on purpose.
+- **"High spend, zero orders" means spend >= `T`**, where `T` = average order value x target
+  ACOS = `(Sales / Conversions) x target ACOS` over the report's scope and period (target ACOS as
+  a fraction: `get_ads_perf`'s `ACOS` value `35` is `0.35`). `T` is one order's allowed spend -
+  the entity already spent what an order may cost and got none. It works in every currency and
+  price range, so there is no fixed money floor. No orders or no sales in the period -> `T`
+  can't be derived; say so instead of flagging.
+- **Campaigns in a running managed group get group-level advice.** A campaign's group is
+  `campaign.aiGroupId_` in `get_ads_perf` (or `aiGroupId` on `get_entity_metadata`'s `campaign`
+  entity; an unmanaged campaign has `0`); the group's `aiStatus` comes from
+  `get_entity_metadata` (`entity: aiGroup`). The AI sets those campaigns' bids and budgets, so a
+  manual bid or budget change gets overwritten: recommend the group's levers instead (target
+  ACOS, group budget, an action-space switch) or say the AI is handling it. **No bid advice with
+  numbers anywhere**; for an unmanaged campaign give at most a direction ("consider lowering
+  bids on ..."). Keyword-level actions (pausing a zero-order exact keyword, negatives) need
+  keyword and search-term data - point to `sparkx-search-term-diagnosis` (if installed).
+- **People vs machines in the operation log.** Query without `changeBy` and classify
+  `changedBy` client-side: an email or `Manual` is a person. **`Amazon Console` says where a change came from, not who made it** - Amazon's side. Report it as an Amazon-side change, not as a person. Everything else
+  (`AI`, `Automation`, `AI-Custom Rule`, `Budget Management`, `Lock Ranking`, `API`, `Labels`,
+  `System`) is a machine. **`changeBy=manual` is rejected by the server** (case-insensitive, in `IN`, `NOT_IN` or mixed) — it was a UI category, not an operator, and never covered changes recorded under a user's email. Inside
+  managed groups the AI moves `currentBudget` every hour and those rows are also
+  `Budget Increased` - leave them out of counts and "what changed" lists (a person's budget
+  change is on `dailyBudget`). Group setting changes (target ACOS, personality, switches) are
+  `aiGroup` rows, not campaign rows; their timestamps are UTC, while campaign rows are
+  store-local when one profile is queried - label the clock.
+- **Promotions distort period comparisons - but only the user confirms one.** Signals that
+  one may be involved: the period or its baseline overlaps a major event (Prime Day, Prime Big
+  Deal Days, Black Friday / Cyber Monday), or the operation log shows a burst of human budget /
+  bid increases in or shortly before it. A signal is not a verdict: still report every anomaly
+  and decline, label the affected ones "possibly promotion-related", and ask the user. Only
+  after the user confirms, say so at the top and treat the swing as promo-driven. After a
+  confirmed promotion whose human increases haven't been reversed, mention that
+  `sparkx-promo-reset` (if installed) restores them.
 
 ## Workflow
 
@@ -110,13 +155,13 @@ No campaign dimension in `select` — just `["date"]` — gives account-level da
   "factEntity": "campaign",
   "dateStart": "{this Monday}",
   "dateEnd": "{weekEnding}",
-  "select": ["campaign.campaignId_", "campaign.campaignName_"],
+  "select": ["campaign.campaignId_", "campaign.campaignName_", "campaign.aiGroupId_"],
   "metrics": ["Impressions", "Clicks", "Spend", "Sales", "Conversions"],
   "pageSize": 500,
   "userContext": "Weekly report - this week's campaign performance for WoW comparison"
 }
 ```
-**`select` must include `campaign.campaignId_`** (not just the name) — Step 5 joins by ID, not name.
+**`select` must include `campaign.campaignId_`** (not just the name) — Step 5 joins by ID, not name. `campaign.aiGroupId_` tells Step 6 which campaigns sit in a managed group. Response keys drop the prefix and the trailing `_` (`campaign.campaignId_` comes back as `campaignId`) - normalize with `key.rsplit('.', 1)[-1].rstrip('_')` before joining.
 
 **d. Last week, campaign-level** — same shape as c, `dateStart`/`dateEnd` shifted back a week; everything else (`select`/`metrics`/filters) must match c exactly, or the two periods aren't comparable.
 
@@ -141,20 +186,22 @@ No campaign dimension in `select` — just `["date"]` — gives account-level da
 
 Don't reach for `profile.profileId_` by default "for attribution" here — decide which of the two questions above the customer actually asked first.
 
-**f. This week's AI/automation action summary** (using `get_operation_log`, which is real — not a subscription alert feed)
+**f. This week's change summary** (using `get_operation_log`, which is real — not a subscription alert feed)
 ```json
 {
   "profileIds": [4404871489220462],
-  "dateStart": "{this Monday}",
+  "dateStart": "{weekEnding − 20d}",
   "dateEnd": "{weekEnding}",
-  "changeBy": {"operator": "IN", "values": ["ai", "automation"]},
   "pageSize": 200,
-  "userContext": "Weekly report - AI/automation actions this week"
+  "userContext": "Weekly report - changes this week, last week and the week before"
 }
 ```
-**Check `truncated`**: if `true`, this week had more than 200 matching AI/automation ops — follow `sparkx-query-operation-log`'s "Getting a Complete Count" procedure (split into non-overlapping sub-windows and recurse) before summing; don't treat this one page as the full week.
+The window covers this week, last week (the baseline) and 7 days before it, so a promotion
+signal in the baseline or its lead-in is visible. The change summary in Step 4b shows **this
+week's** rows only; the earlier rows are used only for the promotion signal.
+No `changeBy`: classify `changedBy` client-side into people and machines, and drop the AI's hourly `currentBudget` rows, per "Shared Rules" above. **Check `truncated`**: if `true`, the queried operation-log window (21 days) had more than 200 ops — follow `sparkx-query-operation-log`'s "Getting a Complete Count" procedure (split into non-overlapping sub-windows and recurse) before summing; don't treat this one page as the full window.
 
-**Step 2f as a whole is best-effort, not a hard dependency for the rest of the report.** If splitting into sub-windows is still timing out, or the call keeps erroring, don't let it block Steps 3/5/6 (KPI overview, Top Changes, action recommendations) from completing. Produce the rest of the report normally and mark this section explicitly as "AI/automation activity data incomplete this week" (or similar, in the report's own language) rather than failing the entire report over one section.
+**Step 2f as a whole is best-effort, not a hard dependency for the rest of the report.** If splitting into sub-windows is still timing out, or the call keeps erroring, don't let it block Steps 3/5/6 (KPI overview, Top Changes, action recommendations) from completing. Produce the rest of the report normally and mark this section explicitly as "change history incomplete for the queried window" (or similar, in the report's own language) rather than failing the entire report over one section.
 
 **g. 4-week average baseline** (only when `compareBaseline=wow+4w_avg`)
 ```json
@@ -197,11 +244,11 @@ Skip this call entirely when `compareBaseline=wow` (the default) — don't issue
 **There is no independent alert/subscription data source** — `get_operation_log` is a change-history query tool, not a subscription-based alerting system; there is no `log_type=alert` parameter. Anomaly identification is entirely built from these two pieces:
 
 **a. Built-in rule scan over this week's campaign data** (using Step 2c's result):
-- High spend, zero orders: `Spend` exceeds a meaningful floor for the row's currency **and** `Conversions = 0`. **Don't hardcode a bare "100" and assume it's USD.** For a multi-profile report (aggregated to USD per "Multi-Store and Currency" below), `Spend > 100` (USD) is a reasonable floor. For a single-profile report in a non-USD currency, a raw "100" is meaningless in some currencies (e.g. JPY has no cents, and typical campaign spend is often in the thousands of yen) — use a floor that's actually meaningful in that store's local currency, and if you're not sure what "high spend" means for that store, say so rather than silently applying the USD figure to a different currency.
+- High spend, zero orders: `Conversions = 0` **and** `Spend >= T` (one order's allowed spend - see "Shared Rules"; `T` comes from this week's account totals and the target ACOS). No fixed money floor.
 - `This week's ACOS > last week's ACOS × 1.5 AND this week's ACOS > 30%` → ACOS spike. **Step 2c/2d's `metrics` list doesn't include `ACOS` directly** — compute it per campaign as `Spend/Sales×100` from each period's own `Spend`/`Sales`. **When a campaign's `Sales = 0`**, its ACOS is undefined (division by zero), not "infinite" — exclude that campaign from the ACOS-spike rule entirely rather than computing a fabricated huge number (a zero-Sales, nonzero-Spend campaign is already caught by the high-spend/zero-orders rule above, so it isn't silently missed).
 - `This week's Impressions < last week's Impressions × 0.5` → impression collapse
 
-**b. Step 2f's AI/automation action summary**: tally the top 3 most-frequent action categories this week (`actionType`/`operationType` distribution) + the top 3 highest-spend-impact records (needs cross-referencing that campaign's spend from Step 2c). This is a real change record, not an anomaly verdict — present it as "what AI/automation did this week," not conflated with "anomaly detected."
+**b. Step 2f's change summary**, in two parts: **people** - every human change on budgets, bids, status and managed-group settings this week (these are what Step 6 correlates with); **machines** - the top 3 action categories (`actionType`/`operationType`, hourly `currentBudget` rows excluded) + the top 3 highest-spend-impact records (cross-reference that campaign's spend from Step 2c). This is a change record, not an anomaly verdict — present it as "what changed this week," not conflated with "anomaly detected."
 
 If neither part turns up anything notable, write "no significant anomalies this week."
 
@@ -224,9 +271,11 @@ If neither part turns up anything notable, write "no significant anomalies this 
 ### Step 6 · Generate Next-Week Action Recommendations (3-5 items)
 
 Auto-derive "what to do" from the data above, e.g.:
-- Found "high spend, zero orders" → recommend "pause or lower bids on Campaign X (spent $Y with zero orders this week)"
-- Found "ACOS spike" → recommend "investigate Campaign X's keyword bids — cross-reference with `get_operation_log` for bid/budget changes in this window"
+- Found "high spend, zero orders" on an unmanaged campaign → recommend reviewing it (spent $Y, zero orders, `T` = $Z); if it is an auto / broad / phrase campaign, recommend running `sparkx-search-term-diagnosis` (if installed) to find the terms to negate. In a running managed group → name the group and its lever (target ACOS, negative-targeting switch) instead
+- Found "ACOS spike" → recommend investigating Campaign X, citing any human bid / budget / group-setting change from Step 4b in the same window (as correlation)
 - Found "sales-growth standout" → recommend "scale Campaign X's structure to similar campaigns"
+
+Follow "Shared Rules" for managed groups: no bid advice with numbers, group-level levers for managed campaigns.
 
 **Every recommendation must have**: action + target (specific campaign/ASIN name) + evidence (data). **Correlation, not causation** — if a recommendation is based on something like "ACOS rose + there was a bid change in the same window," say explicitly that it's a correlation, not "caused by," unless `get_operation_log` has pinpointed the exact change and the timing lines up precisely.
 
@@ -300,7 +349,7 @@ Remember: **the section headers and labels below are structural placeholders (sh
 - 🔴 **{event type}**: {target} - {specific evidence}
 - 🟡 **{event type}**: ...
 
-AI/automation made {N} operations this week: {brief breakdown by actionType}
+Changes this week: people {M} ({brief list}); AI/automation {N}, hourly budget adjustments excluded ({brief breakdown by actionType})
 
 ## 4. Top Changes
 
@@ -385,7 +434,7 @@ Follows the shared error envelope used by all three underlying tools (`isError`/
 | Any call returns `isError: true` | Handle per `errorType` (`invalid_params` is usually a construction bug in this skill's own call — check parameter names and date ranges first; `rate_limited` → wait `retryAfterSeconds` before retrying, don't retry immediately) — don't treat a tool error as "no data for this period" |
 | `effectiveProfileIds` doesn't match the requested `profileIds` | Explain that the actual scope differs from expected — check the token's authorized scope first, don't just treat it as "this store has no data" |
 | A time window is genuinely missing data (not an error) | State clearly "data for X-Y is missing," and still produce the report with what's available |
-| `get_operation_log` returns `truncated: true` | Follow its "Getting a Complete Count" procedure (split into sub-windows) rather than treating one page as the full week; note in the report that the AI/automation op count is a partial/lower-bound figure |
+| `get_operation_log` returns `truncated: true` | Follow its "Getting a Complete Count" procedure (split into sub-windows) rather than treating one page as the full queried window; note in the report that the change history for the queried window is incomplete (counts are lower bounds) |
 | All KPIs show WoW change < 5% | Change the one-line summary to "stable week, no significant swings"; merge the Top Changes section into a brief note |
 
 ## Not Covered by This Skill
@@ -394,4 +443,5 @@ Don't do these in the weekly report — point the user to the corresponding capa
 - Deep root-cause attribution ("why did ACOS go up") → see `sparkx-query-ads-performance`'s [ACOS root-cause investigation example](../sparkx-query-ads-performance/references/example-acos-root-cause-investigation.md)
 - Full product-level diagnosis → `sparkx-product-diagnosis`
 - Structural/share-of-spend analysis → `sparkx-ads-structure-analysis`
-- Search-term mining → a future dedicated skill
+- Search-term mining (negatives, terms to target as exact) → `sparkx-search-term-diagnosis` (if installed)
+- Restoring bids / budgets / managed-group settings after a promotion → `sparkx-promo-reset` (if installed)

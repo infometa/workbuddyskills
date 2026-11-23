@@ -2,10 +2,10 @@
 name: video-enhancement
 description: 提升一条视频附件、文件直链或本人资产的画质，按原请求恢复并交付实际输出规格。
 metadata:
-  version: 0.8.1
+  version: 0.8.5
   author: yihook
 compatibility: WorkBuddy 已连接 yihook MCP，并通过原生 OAuth 授权。
-version: 0.8.1
+version: 0.8.5
 display_name: AI 视频画质增强与清晰度提升
 display_name_en: AI Video Enhancement
 description_zh: 提升一条视频附件、文件直链或本人资产的画质，按原请求恢复并交付实际输出规格。
@@ -16,7 +16,9 @@ author: yihook
 
 # AI 视频画质增强与清晰度提升
 
-此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 Token。业务均调用主站 MCP。附件上传使用包内 `scripts/upload.mjs`，先阅读 [原样上传指引](references/upload.md)。通过宿主能力保存工具原始 JSON 响应后交给脚本，不重新拼写或编码签名字段，不临时编写 curl/Python 上传命令；脚本只负责 OSS 字节传输。
+网站入口：[Yihook 主站](https://app.yihook.cn?source=workbuddy)，可注册或登录、查看积分和管理服务。需要引导用户打开主站时使用此地址；提供具体页面链接时也须保留 `source=workbuddy` 参数。
+
+此 WorkBuddy Skill 使用已连接的 yihook MCP，通过宿主原生 OAuth 授权。缺少业务工具或权限时，请用户在 WorkBuddy 重新连接并授权；不要索要或输出 OAuth Token。业务均调用主站 MCP。附件上传先阅读[公共上传指引](references/upload.md)：调用create_agent_file_upload时传delivery="script"，取得transfer.code后运行 `node scripts/upload.mjs --transfer "本次transfer.code" "/absolute/path/file" --ticket-url "本次transfer.ticket_url"`；公共脚本自行领取原始票据并OSS直传，再通过MCP完成确认。不保存或转写OSS票据JSON、policy、签名或Token，不改用curl/Python；后端不支持新模式时停止并说明需更新，不回退手抄。
 
 
 ## 确认需求与视频
@@ -53,7 +55,7 @@ author: yihook
 
 视频附件或可下载文件直链先由宿主取得完整原始字节。读取 [公共上传指引](references/upload.md)，检查下载前及每次重定向的协议、实际目标、类型、大小，不转发 Cookie、Token。无法安全取得文件时请提供可访问直链或附件；附件传输也不可用时说明阻塞并停止。不得把原始 URL 直接交给增强工具。
 
-宿主生成并保存 `upload_request_id`，计算 SHA-256，以用途 `video`、真实文件名、MIME、大小调用 `create_agent_file_upload`。保存本次完整原始票据响应到私有临时文件，使用包内 `node scripts/upload.mjs response.json /absolute/path/video.mp4` 原样受控 OSS POST；不手写签名、不带 OAuth 传字节、不跟随重定向。通用入口支持 MP4、MOV、WebM、AVI；不要把增强领域支持的 FLV/MKV 当成通用上传已支持。
+宿主生成并保存 `upload_request_id`，计算 SHA-256，以用途 `video`、真实文件名、MIME、大小调用 `create_agent_file_upload`。传 `delivery: "script"` 取得本次 `transfer.code`，使用包内 `node scripts/upload.mjs --transfer "本次transfer.code" /absolute/path/video.mp4 --ticket-url "本次transfer.ticket_url"` 原样受控 OSS POST；不手写签名、不带 OAuth 传字节、不跟随重定向。通用入口支持 MP4、MOV、WebM、AVI；不要把增强领域支持的 FLV/MKV 当成通用上传已支持。
 
 调用 `complete_agent_file_upload`，确认成功后才使用 `upload_id`。响应未知时按原 ID 调用 `get_agent_file_upload` 并完成确认；OSS 409 不表示校验成功。仅在票据过期且明确对象不存在时续签，不展示票据或凭据。
 

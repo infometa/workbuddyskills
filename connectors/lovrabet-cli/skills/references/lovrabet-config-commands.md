@@ -15,56 +15,40 @@ lovrabet config init --region id
 lovrabet config init --domain-config ./lovrabet-domains.json
 ```
 
-官方节点与独立部署 Domain 互斥：不能同时传 `--region` 和任一 Domain 输入。
+官方 Region 与企业 Domain 是互斥的初始化入口，不能同时传入。企业服务地址示例：
 
-### 官方节点模式
+```bash
+lovrabet config init --runtime-domain https://runtime.customer.example.com
+```
 
-- `--region` 接受当前生成快照启用的 `cn` / `id` / `global`
-- 选择 `cn` 时省略冗余的 `region` 字段，以默认值保持向前兼容；选择 `id` 时写入 `"region": "id"`
-- 切回官方节点会删除全局配置里的显式 Domain，以及兼容读取的旧 Domain 字段
+- `--region` 接受当前启用的 `cn` / `id` / `global`；默认 `cn` 不保存冗余字段。
+- 提供企业 Domain 或企业清单会清除全局 `region` 和旧 Domain/routing，再保存本次企业配置；无需先选择地区。
+- 选择 `--region` 会清除全局旧 Domain/routing，并使用地区默认地址。
+- AccessKey、env、format、locale 和应用绑定保持不变。
 
-### 独立部署模式
+### 可选 Domain 覆盖值
 
-推荐使用两个 CLI 共用的版本化企业路由清单：
+支持 `userDomain`、`apiDomain`、`runtimeDomain`、`skillDomain`、`kbServiceDomain` 和 `harnessDomain`，均可省略。没有配置的字段使用当前地区及环境的内置地址，独立部署也遵循同一规则。Personal KB 管理和搜索使用 `kbServiceDomain`，定时接口使用 `harnessDomain`。
+
+版本化企业路由清单可只包含需要覆盖的字段，`domains` 也可以为空：
 
 ```json
 {
   "protocol": "lovrabet-routing/v1",
   "kind": "enterprise",
-  "cdn": {
-    "libraries": "https://cdnjs.cloudflare.com/ajax/libs",
-    "lovrabet": "https://g.lovrabet.com"
-  },
   "domains": {
-    "userDomain": "https://user.customer.example.com",
-    "apiDomain": "https://api.customer.example.com",
-    "runtimeDomain": "https://runtime.customer.example.com",
-    "skillDomain": "https://skills.customer.example.com",
-    "kbServiceDomain": "https://kb.customer.example.com",
-    "kbDomain": "https://kb-admin.customer.example.com",
-    "appDomain": "https://app.customer.example.com"
+    "runtimeDomain": "https://runtime.customer.example.com"
   }
 }
 ```
 
-同一份清单可以包含其他消费者所需的 Domain、CDN 或数据库访问提示。Lovrabet CLI 校验并保存 `userDomain`、`apiDomain`、`runtimeDomain`、`skillDomain` 与可选的 `kbServiceDomain`；`kbDomain` 和其余消费者字段会被忽略。Personal KB 管理使用 `runtimeDomain`，搜索使用 `kbServiceDomain`。Domain 可写成共用 HTTPS 字符串；确有差异时写成带 `default` 或当前消费者键的对象。对象优先使用 `lovrabet-cli`，其次使用 `default`，两者都没有时命令报错。清单不能叠加单独的 Domain flags。旧扁平 JSON 继续兼容，并允许上述五个字段，且至少提供一个：
+其他工具可能要求完整清单中的其他字段；Lovrabet CLI 仅校验并保存自己使用的六个 Domain，忽略其他消费者的 Domain、CDN 或数据库字段。各值可写为 HTTPS 字符串，或带 `lovrabet-cli` / `default` 的对象；当前消费者专属值优先；该值未提供或为 null 时使用 `default`。字段省略时使用内置默认值；字段已提供但最终没有可用的消费者地址，或地址为空、格式错误时会报错。
 
-```json
-{
-  "userDomain": "https://user.customer.example.com",
-  "apiDomain": "https://api.customer.example.com",
-  "runtimeDomain": "https://runtime.customer.example.com",
-  "skillDomain": "https://skills.customer.example.com"
-}
-```
+支持扁平 JSON 配置。也可使用 `--user-domain`、`--api-domain`、`--runtime-domain`、`--skill-domain`、`--kb-service-domain`、`--harness-domain`。显式 flag 覆盖扁平文件的同名字段；版本化企业清单不能叠加单独的 Domain flags，也不能搭配 `--region`。
 
-也可以用 `--user-domain`、`--api-domain`、`--runtime-domain`、`--skill-domain`、`--kb-service-domain` 逐项传入；显式 flag 只覆盖旧扁平文件里的同名字段。所有值必须是无账号、路径、query 和 fragment 的 HTTPS origin。
+企业清单保存为 `routing` 对象。初始化只修改全局配置，项目配置仍参与运行时解析，具体顺序见 [配置解析优先级](lovrabet-config.md#解析优先级)。初始化后可用 `lovrabet doctor` 核对实际生效的 Domain。
 
-新版企业清单会保存为带协议标识的 `routing` 对象，并整体优先于旧顶层 Domain；旧扁平配置继续保持既有回退行为。
-
-进入旧扁平独立部署模式会删除全局 `region` 和旧 Domain 字段，再写入本次提供的 Domain。企业部署需要所有请求进入私有服务时，应提供所需 Domain；Personal KB 管理使用 `runtimeDomain`，知识搜索缺少 `kbServiceDomain` 时失败关闭。`--kb-service-url` 仅覆盖单次搜索且不写入配置。
-
-两种模式都保留 AccessKey、env、format、locale、应用绑定等其他全局配置。当前目录 `.lovrabet.json` 的旧扁平同名字段仍会覆盖全局旧扁平配置；初始化后用 `lovrabet doctor` 核对最终生效的国家/地区和 Domain。
+通过 `config init` 或企业清单提供的地址必须是不含凭据、路径、查询参数或片段的 HTTPS origin。只有所选地区没有该服务内置地址且未配置覆盖值时，对应操作才要求提供地址；请求失败不会切换服务地址。`--kb-service-url` 仅覆盖单次搜索，不写入配置。
 
 ## config list — 查看完整配置
 

@@ -3,6 +3,12 @@
 Symptom → cause → fix. Each one constrains an API this CLI already calls. Verify the
 platform side with `adp docs search "<action>" --format json` when in doubt.
 
+## Windows 启动与本地文件
+
+- Windows 连接器使用 `adp.cmd`。若连 `--version` 都抛 `ERR_UNSUPPORTED_ESM_URL_SCHEME`，是旧版入口加载故障，不是账号/网络失败；登录或重复连接无法修复。需更新实际安装副本到含修复的发布版，WorkBuddy 托管前缀可能不同于普通 npm 全局前缀。
+- 本地文件路径按宿主系统解析，中文/空格需作为一个参数传递，`..` 与 UNC/盘符使用原生语义；远端 COS/ZIP 路径仍按远端规则。不要把用户名或路径当作资源 ID。
+- POSIX 私密文件为0600；Windows依赖用户目录ACL，不要声称chmod提供仅本人访问，也不要把凭据写进共享目录或聊天。
+
 ## Single-workflow `WorkflowId` must be written through the bind path
 
 - **Symptom**: the workflow is deployed and enabled, but `adp app get` still shows an

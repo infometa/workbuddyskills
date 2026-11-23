@@ -53,8 +53,8 @@ adp auth status --format json
 
 ## 只有一套凭据
 
-所有命令（含 `adp workflow`、`adp kb doc`）都共用同一套 CAM SecretId/SecretKey（或独立站 API 密钥）。
-`adp workflow` 和 `adp kb doc import` 会调用 LKE 2023-11-30 接口，只支持公有云站点；
-鉴权失败时先看 `auth status` 的 `source`，再让用户确认 CAM 策略含 ADP 与 LKE 权限。
+所有命令（含 `adp workflow`、`adp kb doc`）都共用同一套 SecretId/SecretKey，公有云和独立站走同一套命令。
+`adp workflow` 和 `adp kb doc import` 里尚未迁到 ADP 的步骤调用 LKE 2023-11-30：公有云发到 `lke.tencentcloudapi.com`，独立站或自定义站点发到该 profile 的 ADP 主机。
+鉴权失败时先看 `auth status` 的 `source` 和站点。公有云再确认 CAM 策略含 ADP 与 LKE 权限；独立站确认密钥来自独立站密钥管理，而不是 CAM。
 不要反复登录，不要换应用绕过权限。
 `adp env list --format json` 只列环境变量名称和敏感标记，不返回值。

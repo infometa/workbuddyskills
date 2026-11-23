@@ -76,3 +76,5 @@
 - [获取代办列表](get_todo_list.md)
 - [提交审账前确认](before_set_month_audited.md)
 - [提交审账](set_month_audited.md)
+- [标记某个月份无互联网平台收入](set_month_no_internet_revenue.md)
+- [确认公司无互联网平台收入](confirm_no_internet_platform_revenue.md)

@@ -6,11 +6,12 @@ description: >-
   required); SP/SB via
   save_sp_sb_ai_managed_group (create mode). Use when the user wants to create / set up /
   新建 / 建一个 a managed group, or put campaigns under AI management for the first time,
-  even without the exact words "managed group". This creates the group itself - it is NOT
-  for enabling or editing an existing group (use sparkx-edit-ai-group) or deleting one (use
-  sparkx-delete-ai-group).
+  even without the exact words "managed group". When the user isn't sure how to set the group
+  up, recommends a matching platform template (推荐托管组模板) - optional, never forced. This
+  creates the group itself - it is NOT for enabling or editing an existing group (use
+  sparkx-edit-ai-group) or deleting one (use sparkx-delete-ai-group).
 metadata:
-  version: 1.1.4
+  version: 1.2.4
 ---
 
 # Create AI Managed Group
@@ -85,11 +86,14 @@ confirm the meaning first, then use the ad-type reference to pick the field.
   ask whether they want to set the promotion target or convert it to a target ACOS. Also:
   "ACOS 优先模式 / ACOS priority" is the strict-ACOS switch (see the ACOS-priority item
   below), **not** setting a target ACOS value - don't confuse them.
-- **AI on/off at creation**: see "AI on vs off at creation" below - only start AI if the
-  user explicitly asked to create-and-start.
+- **AI on/off at creation**: AI starts on unless the user asks otherwise (staged flows
+  excepted) - see "AI on vs off at creation" below and the preview step.
 - **"ACOS 优先模式 / strict ACOS / ACOS priority"** (`bidPerformanceStrictAcosStatus`) - a
   sub-switch of 按表现调价, **SP only**, and only triggers with `targetType=2` +
-  `bidPerformanceStatus=1` + `aiPersonality>=3`. It's a tradeoff (may underspend / reduce
+  `bidPerformanceStatus=1` + an AI personality of at least `3` on 按表现调价 - which
+  field that is depends on the account: group-level `aiPersonality` on legacy
+  accounts, `bidPerformanceAiPersonality` where personality is set per action space
+  ([`references/ai-personality.md`](references/ai-personality.md)). It's a tradeoff (may underspend / reduce
   orders) - confirm with the user before enabling. See
   [`references/coupling-rules.md`](references/coupling-rules.md).
 
@@ -115,6 +119,9 @@ confirm the meaning first, then use the ad-type reference to pick the field.
      "保持订单稳定", "激进人格") to the right field + code via
      [`references/enum-i18n.md`](references/enum-i18n.md) before building the call,
      and translate back when you confirm/report.
+   - **The user gave campaigns but not how to set the group up?** Offer a matching platform
+     template - see "Recommending a template" below. Optional: if they decline or already
+     know what they want, carry on without it.
 2. **Map the request to a single business meaning** (see "Disambiguate before writing").
    Especially for budget/target wording, decide exactly what the user wants set and which
    field it is (after ad type is known). **If more than one meaning is plausible, STOP and
@@ -125,10 +132,11 @@ confirm the meaning first, then use the ad-type reference to pick the field.
      filters={"aiGroupName": {"like": "%<name>%"}}, userContext='...')`, then compare names
      **exactly** in the returned rows. If an exact match exists, ask for a different
      name rather than letting the create fail.
-   - **Name not blank, and ≤ 200 characters.** Reject a pure-whitespace / trims-to-empty
-     name yourself - the UI blocks it, MCP doesn't. The UI also caps the name at **200
-     characters**; the API doesn't state a limit, so treat 200 as the safe ceiling and
-     shorten with the user's agreement rather than sending something longer. A duplicate
+   - **Name not blank, and ≤ 200 characters.** The tool now enforces both **before any
+     downstream call**: the name is trimmed and rejected past 200 characters on create,
+     edit and template mode, and a blank name is rejected on edit. Still check it
+     yourself - a name the user has to shorten is better discussed before the write than
+     relayed back as an error. A duplicate
      name comes back from the backend as `aiGroupName is exist` (code `124025`) - the
      pre-flight check above is what keeps you from hitting it.
    - **Already-managed campaigns (checkable).** A campaign already in another managed
@@ -144,7 +152,9 @@ confirm the meaning first, then use the ad-type reference to pick the field.
    without waiting for a reply - what you show does not shrink, only the wait goes away.
    Echo the
    **complete** config, not just the basics: ad type, group name, the campaigns (by
-   name), `targetType`/`optimizeType`, target ACOS, budget settings, `aiPersonality`,
+   name), `targetType`/`optimizeType`, target ACOS, budget settings, **the AI
+   personality in whichever form this account uses** (the group-level `aiPersonality`,
+   or the per-action-space values - see [`references/ai-personality.md`](references/ai-personality.md)),
    `campaignNameSign`, and **every supported action-space switch you're enabling**
    (bid / budget / target / struct optimization). For anything you're not
    setting, say it will use the platform default - but **don't invent specific default
@@ -156,10 +166,26 @@ confirm the meaning first, then use the ad-type reference to pick the field.
    live delivery and spend.
    - **AI starts ON unless the user asked for it not to.** Creating a managed group is
      taken as intent to use it, so leave `aiStatus` out (SP/SB) or send `status = 1`
-     (SD) and **say plainly in the preview that AI will begin adjusting bids and budgets
-     immediately**. Only when the user asks to set it up without starting - "先别开",
+     (SD) and **say plainly in the preview what AI will start doing immediately**. For
+     SP that is more than bids and budgets: the default action space also lets AI
+     **pause products and pause campaigns** (see "What AI is allowed to do by default"
+     in `references/action-space-matrix.md`). Name the delivery-affecting ones, not
+     just "adjust bids and budgets" - that sentence understates it, and the preview
+     is the user's only chance to decline. Only when the user asks to set it up without starting - "先别开",
      "create but don't start", "先不要启动" - send `0`, and confirm that back to them.
      The preview is where they get to decline, so the sentence has to be there.
+     **One exception you initiate yourself - staged flows (SP/SB only):** when the final
+     configuration needs a create followed by an edit (an SP/SB template with a switch
+     changed), create with `aiStatus=0` and turn
+     it on only after the edit is done, read back, and the user confirms - say so in the
+     preview. The default-on rule applies only to a create that one call fully configures. SD
+     never needs a staged flow: pass the changed switch together with `templateId` in one
+     create. See [`references/template-guide.md`](references/template-guide.md) -> "Staged
+     create -> edit flows".
+   - **From a template**: name the template, its description and why it's set that way,
+     the target ACOS agreed with the user, and the switches and any Rule-mode rules read from
+     the template detail (see "Creating from a template"). See
+     [`references/template-guide.md`](references/template-guide.md).
 5. **Build and call the routed tool** using the exact **write** field names + enum
    values (ad-type reference + `field-reference.md`; write names != read names).
    > **Create is non-idempotent - never blind-retry.** On any failure, timeout, or
@@ -179,7 +205,15 @@ confirm the meaning first, then use the ad-type reference to pick the field.
      are only partly known and the backend may enforce them, so relay backend range
      errors rather than hard-blocking on an incomplete table
      ([`references/budget-limits.md`](references/budget-limits.md)).
-   - **aiPersonality** `1`-`5`, and **>=3 when `targetType=3` (volume / 冲量)**.
+   - **AI personality** `1`-`5`. Which field carries it depends on the account:
+     group-level `aiPersonality` (**>=3 when `targetType=3` volume / 冲量**) on legacy
+     accounts, or the per-action-space `*AiPersonality` fields inside
+     `aiActionSettings` where those are in use - sending the wrong one is rejected
+     before any write. **On a legacy account, send nothing if the user didn't ask to change
+     it. On an intensity-enabled account you cannot skip it on a create** - at least one
+     applicable `*AiPersonality` must hold a `1`-`5` after any template is merged in, so ask,
+     or take the recommendation, or use a template that carries them.
+     See [`references/ai-personality.md`](references/ai-personality.md).
    - **Coupled fields** - enabling a switch requires its companion fields, and any
      range must have min <= max (see [`references/coupling-rules.md`](references/coupling-rules.md)).
    - **Invalid values are rejected by the backend now - but pre-validate anyway** so the
@@ -216,6 +250,13 @@ confirm the meaning first, then use the ad-type reference to pick the field.
      config. If the projection cannot prove a requested setting, say "created, but this
      setting couldn't be independently confirmed" rather than treating omission as a
      failed write.
+   - **Created from a template: show what is actually in effect** - goal, target ACOS,
+     AI status, each action-space switch, and the AI personality **in the form the
+     read-back actually returned**: one number for a group-level `aiPersonality`
+     ("AI 人格：4"), or action space by action space when the row carries the
+     per-action-space fields ("按表现调价：4、定向收割：2 …"). There is no single
+     effective personality on those accounts, so do not collapse them into one number.
+     Point out anything that differs from the preview.
    - If operation-log read access is available, query `get_operation_log` and confirm
      the create is recorded against an identifiable token user. The server supplies
      `changedBy`; never send or fabricate it. If logs cannot be read, state that audit
@@ -239,17 +280,47 @@ Two things to state up front rather than discovering mid-flow: schedules are **S
 `optimizeType` / `acos` / `aiPersonality` from the group - passing those on a weekly
 schedule is rejected. A fixed-window schedule (`timeType=1`) carries its own values.
 
+## Recommending a template (optional, never forced)
+
+Many users don't know how to set up a managed group. The platform's system templates already
+encode the right settings for common purposes (推关键词排名, 品牌防守, 低成本捡漏...), so when the
+user hasn't said how to set the group up, work out what the campaigns are for and recommend
+the matching template. Full rules: [`references/template-guide.md`](references/template-guide.md).
+
+- **Only when it helps**: not when the user already gave a full configuration, named a
+  template, or said not to use one - and not again after they've declined once.
+- **Purpose first**: what the user says > their naming convention > inference from campaign
+  structure, which must be confirmed with the user. Can't tell -> ask. Campaigns with
+  different purposes -> suggest one group per purpose.
+- **Explain, from fixed sources only**: the evidence for the purpose, the template's own
+  description, and the "why" the guide gives for that template. Don't invent reasons.
+- **Always offer three choices**: use this template / pick another / set it up myself.
+- **Applying**: look the id up by exact name, read the detail (`isSystemTemplate=1` for a
+  system preset), pass the agreed `acos` explicitly, don't send `aiActionSettings`, and read
+  the group back afterwards. On a new **SB** group the template's SP-only switches are turned
+  off - see below.
+
 ## Creating from a template
 
 A managed group **can** now be created from a platform template via `templateId`.
 
 - **Read templates with `get_ai_group_template`** - no args returns the list (`searchName`
-  for a fuzzy name match, `createdBy`, `page`, `pageLimit` default 50, `applyFlag=1` to
+  for a fuzzy name match, `createdBy`, `page`, `pageLimit` default 50 / **max 200**, `applyFlag=1` to
   include system presets); pass `templateId` to get one template's full detail. Note this
   read sits behind the **write** scope.
+- **System presets need `isSystemTemplate=1`.** Each list item carries `isSystemTemplate`
+  (1 = system preset, 0 = user template). Carry that value along: pass `isSystemTemplate=1`
+  together with `templateId` both when reading the detail and when applying it. Without it a
+  system template ID returns `Template_Not_Exist` (the error tells you to retry with
+  `isSystemTemplate=1`). Omit it (or send 0) for user templates. Values other than 0/1 are
+  rejected.
+- **Archived templates can't be applied.** A template whose detail `status` is `2`
+  (archived) can still be read, but applying it is rejected - pick an active one.
+  `status` here is the template's own state (0 active / 1 paused / 2 archived), not an AI
+  on/off value.
 - **Apply it** by passing `templateId` (>0) to `create_sd_ai_managed_group` or
   `save_sp_sb_ai_managed_group`. The template supplies defaults for `acos`, `optimizeType`,
-  `status`, `campaignNameSign`, `targetHarvestStatus`, `budgetRedistributeStatus`,
+  `campaignNameSign`, `targetHarvestStatus`, `budgetRedistributeStatus`,
   `aiPersonality`, plus the action-space and automation config. For SP/SB it may also
   supply dynamic-budget settings. For SD, a template whose `budgetDynamicStatus` is
   non-zero is incompatible and the tool rejects it; choose another template or update
@@ -265,24 +336,44 @@ A managed group **can** now be created from a platform template via `templateId`
   (`isSelf=2` with the rule enabled), the call is rejected - this tool can't carry those
   bindings. The error names the offending rules. Tell the user to either apply that template
   in the platform UI, or pick a template whose rules use "current object" scope.
-- **Templates are not tied to an ad type, and a cross-type apply is handled for you.**
-  Applying an SP template to an SB group works: the server zeroes the SP-only fields the
-  template carries (`bidAmazonBusinessStatus`, `btbRangeStatus`/`btbMin`/`btbMax`,
-  `bidDaypartStatus`, `bidPerformanceStrictAcosStatus`,
-  `bidAdPlaceStatus`/`bidAdPlaceRangeStatus`, `tos`/`pdp`/`ros` bounds,
-  `structPauseProductStatus`/`structPauseCampaignStatus`) instead of erroring.
-  **But this only happens when you leave `aiActionSettings` out of your call.** If you send
-  `aiActionSettings` yourself, the template's action-space config is skipped entirely (yours
-  wins, it is not merged) and the normal SB compatibility check applies - an SP-only field
-  with a non-zero value then fails the whole request. So when applying a template
-  cross-type, don't also hand-build `aiActionSettings`; and tell the user those SP-only
-  parts of the template won't take effect on an SB group.
+- **SP/SB template create carries the template's automation rules as-is, Rule mode
+  included.** If you don't pass `aiAutomation`, every rule in the template's `aiAutomation`
+  is applied unchanged - a rule with `status=1` lands as a **Rule-mode** rule with its
+  condition/action (e.g. the Budget Daypart rule 13 in system templates 12 and 13). This is
+  the only way this tool creates Rule-mode config. Say so in the preview ("this template
+  sets Budget Daypart to Rule mode"). If you pass `aiAutomation` yourself, the template's
+  rules are ignored entirely and only `0` (AI mode) is accepted. SD has no automation
+  rules; a template's `aiAutomation` is ignored on SD. Applying such a template to an
+  **existing** group later is rejected (see `sparkx-edit-ai-group`), so Rule-mode templates
+  are a create-only route through MCP.
+- **Templates are not tied to an ad type; on an SB group the SP-only switches are turned off.**
+  If the template has any SP-only switch on (`bidAmazonBusinessStatus`, `btbRangeStatus`,
+  `bidPerformanceStrictAcosStatus`, `bidAdPlaceStatus`/`bidAdPlaceRangeStatus`,
+  `structPauseProductStatus`/`structPauseCampaignStatus`), the SB create still succeeds: the
+  server turns those switches off and the response summary lists them (`... template switches
+  not supported for sponsoredBrands were turned off: <fields>`). Most system templates are
+  built around SP, so expect this - tell the user which parts of the template won't take
+  effect. Switching an SP-only switch on yourself in `aiActionSettings` for an SB group is
+  still rejected.
+- **On create, `aiActionSettings` replaces the template's action space.** If you send it with
+  `templateId`, the template's action-space config is skipped entirely (yours wins, it is not
+  merged). To change one switch from a template: create from the template **with AI off**,
+  edit that switch, read back, then turn AI on once the user confirms - a staged flow (see
+  step 4's exception).
 - **Templates are read-only through MCP.** You cannot create, edit, or delete a template,
   and you cannot save a group's settings back as one - that's platform-only. Say so rather
   than attempting a workaround.
 
-Before applying a template, it's worth reading its detail and telling the user what it will
-set - especially the AI on/off (`status`) value, since a template can start AI immediately.
+Before applying a template, **read its detail and tell the user what it will set** - user
+and system templates alike (`isSystemTemplate=1` for a system preset): goal, target ACOS,
+personality, the action-space switches, and especially any Rule-mode automation rules. AI
+on/off is **not** taken from the template: template create defaults AI to on for SD, SP and
+SB alike (template `status` is not inherited); send `0` explicitly if the user wants it off.
+
+**Target ACOS with a template.** Show the template's `acos` in the preview and ask whether to
+keep it or use the user's own target - a template's value is a generic starting point and may
+not fit the user's margin. Pass the agreed value as `acos` explicitly. This holds whether you
+recommended the template or the user named it.
 
 ## AI on vs off at creation
 
@@ -295,18 +386,21 @@ those terms; it is the user's one chance to decline before anything moves.
 Send `0` only when they ask for the group without starting it ("先别开" / "create but
 don't start"), and confirm that back to them.
 
-**The two ad types get there differently, so be explicit rather than clever:**
+**The field name differs by ad type; the default does not:**
 
 | | Omit the field | What to send |
 |---|---|---|
-| SP/SB (`aiStatus`) | server fills in `1` | omit for on, `0` for off |
-| SD (`status`) | **no default** - falls back to a template value, or nothing | **always send it**: `1` for on, `0` for off |
+| SP/SB (`aiStatus`) | server fills in `1` - also with `templateId` (never taken from a template) | omit for on, `0` for off |
+| SD (`status`) | server fills in `1` (with or without a template; never inherited from the template) | omit for on, `0` for off |
 
-SD did not get the server-side default, so omitting `status` there does not mean "on" -
-it means "undefined". Send the value explicitly on SD either way.
+Both ad types now default to on, so the only call that needs the field is "create but
+don't start": send `0` (`aiStatus` on SP/SB, `status` on SD).
 
-> Note: an "off" group reads back as `aiStatus=2` ("AI Turned Off"), not `0`. Don't
-> treat a non-zero `aiStatus` on read as "it's on" - `1` = running, `2` = off.
+> Note: on read, `1` = running while **both `0` and `2` mean AI is not running** -
+> `0` is "never turned on", `2` is "turned off". A group created with `0` reads back
+> as `0` until it is edited; any edit stores it as `2`, even one that never mentions
+> `aiStatus`. Never read a non-zero `aiStatus` as "it is on", and never infer from `2`
+> that someone deliberately turned it off.
 
 ## Enum discipline
 
@@ -399,6 +493,8 @@ come back generic - so still map the common ones yourself:
 - [`references/field-reference.md`](references/field-reference.md) - exact **write** field names + enum values (write names != read names)
 - [`references/action-space-matrix.md`](references/action-space-matrix.md) - which action-space capabilities are supported (AI / Rule / none) per SP / SB / SD
 - [`references/coupling-rules.md`](references/coupling-rules.md) - companion-field couplings, the 按表现调预算 / 预算重新分配 scope relationship, and group-total-budget rescale behavior
+- [`references/ai-personality.md`](references/ai-personality.md) - per-action-space AI personality vs the legacy group-level field, the 12 fields and SB's subset, and `get_sp_sb_ai_personality_recommendation`
 - [`references/budget-limits.md`](references/budget-limits.md) - site/account-type budget ranges (front-end rules MCP bypasses)
 - [`references/enum-i18n.md`](references/enum-i18n.md) - 中文 <-> English <-> code mapping (parse Chinese requests -> codes; render codes -> Chinese)
 - [`references/platform-notes.md`](references/platform-notes.md) - shared write-tool behavior (auth, response envelope, timeout, error shape)
+- [`references/template-guide.md`](references/template-guide.md) - recommending a system template by campaign purpose: when to offer it, purpose -> template table with reasons, identifying the purpose, what to say, and how to apply it

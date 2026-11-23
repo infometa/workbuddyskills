@@ -1,0 +1,317 @@
+<!-- 能力摘要见 references/air-domestic-roundtrip-page.md。改本文件须同步更新该摘要；出页不要读本文件判断能力。 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<style>
+:root{--bg:#f5f6f8;--card:#ffffff;--line:#e4e7ec;--txt:#1f2329;--txt2:#646a73;--txt3:#8f959e;--blue:#185FA5;--red:#d93025;--redb:#a50e0e;--green:#0f6e56;--greenbg:#e1f5ee;--bluebg:#e6f1fb;--redbg:#fdecea;--amberbg:#fff4e0;--amber:#8a5300;--book:#AFD3E2;--bookh:#9CC5D6;--booktext:#0C447C;--bookb:#0d4f9e;--bookc:#e3eefb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);font-size:13px;line-height:1.6}
+.wrap{max-width:1500px;margin:0 auto;padding:20px 16px 90px}
+header h1{font-size:19px;font-weight:600}
+header .sub{color:var(--txt2);font-size:12.5px;margin-top:2px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.kpi .v{font-size:20px;font-weight:600;line-height:1.3}
+.kpi .l{font-size:12px;color:var(--txt2)}
+.kpi .v em{font-style:normal;font-size:12px;color:var(--txt3);font-weight:400;margin-left:4px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;position:sticky;top:8px;z-index:5}
+.toolbar select,.toolbar input{font-size:12.5px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--txt);outline:none}
+.toolbar .ck{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--txt2);white-space:nowrap}
+.cnt{margin-left:auto;font-size:12px;color:var(--txt2);white-space:nowrap}
+/* ---- 往返组合卡: 纵向 去/返 两段(每段单行), 右侧中列总价+预订 ---- */
+.rt-row{display:flex;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;overflow:hidden;content-visibility:auto;contain-intrinsic-height:128px;contain-intrinsic-height:auto 128px}
+.legs{flex:1 1 auto;min-width:0}
+.seg{display:flex;align-items:center;gap:8px;padding:9px 14px;min-width:0;flex-wrap:wrap;row-gap:4px}
+.seg+.seg{border-top:1px dashed var(--line)}
+.s-badge{flex:none;width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:600;line-height:20px;text-align:center}
+.s-date{flex:none;font-size:11.5px;color:var(--txt2);white-space:nowrap;margin-right:2px}
+.s-tm{font-size:17px;font-weight:600;white-space:nowrap}
+.s-tm .s-p1{font-size:10px;color:var(--amber);font-weight:500;margin-left:2px}
+.s-ap{font-size:11px;color:var(--txt3);white-space:nowrap;margin-right:2px}
+.s-fly{display:flex;align-items:center;flex:none;min-width:86px;margin:0 4px}
+.s-fly i{flex:1;border-top:1px solid var(--line);height:0}
+.s-fly em{font-size:10.5px;color:var(--txt2);padding:0 7px;white-space:nowrap;text-align:center}
+.s-info{display:flex;align-items:center;flex:1 1 100%;margin-left:28px;min-width:0;font-size:11.5px;color:var(--txt2);white-space:normal;flex-wrap:wrap;overflow:visible;row-gap:2px}
+.s-info .fno{font-size:12.5px;font-weight:600;color:var(--txt)}
+.s-info .air{color:var(--txt2);margin-right:1px}
+.s-info .dot{font-style:normal;color:#c9cdd4;margin:0 6px}
+.s-info .cab-chip{font-weight:600;color:var(--txt)}
+.s-info .cab-chip.ent{color:var(--red)}
+.lnk{color:var(--blue);cursor:pointer;user-select:none;white-space:nowrap;font-weight:500;background:none;border:none;padding:0;font:inherit}
+.lnk:hover{text-decoration:underline}
+.lnk.lk-first{margin-left:20px}
+.lk-sep{color:#c9cdd4;font-style:normal;margin:0 12px;user-select:none}
+.tg{display:inline-block;border-radius:4px;padding:0 6px;font-size:11px;line-height:18px}
+.tg-a{background:var(--greenbg);color:var(--green)}
+.tg-b{background:var(--bluebg);color:var(--blue)}
+.tg-stop{background:var(--amberbg);color:var(--amber)}
+.tag-share{display:inline-block;background:#ff8a00;color:#fff;border-radius:4px;padding:0 6px;font-size:11px;line-height:17px;font-weight:600;white-space:nowrap}
+.tag-ent{display:inline-block;background:var(--red);color:#fff;border-radius:4px;padding:0 6px;font-size:10.5px;line-height:16px;font-weight:500;white-space:nowrap}
+.tag-buy{display:inline-block;background:#7c3aed;color:#fff;border-radius:4px;padding:0 6px;font-size:10.5px;line-height:16px;font-weight:500;white-space:nowrap}
+/* 右侧独立价格单元: 总价+预订整组垂直居中(总价略高于中线, 按钮在中线附近, 不裁切); 虚线到单元前截止 */
+.ops{flex:none;width:190px;display:flex;align-items:center;justify-content:center;text-align:center;padding:6px 8px}
+.pu{display:flex;flex-direction:column;align-items:center;gap:6px}
+.op-price{display:flex;flex-direction:column;align-items:center}
+.op-total{font-size:22px;font-weight:700;color:var(--red);white-space:nowrap}
+.op-tl{font-size:10.5px;color:var(--txt3);white-space:nowrap}
+.op-ent{font-size:10.5px;color:var(--red);font-weight:600;line-height:1.2}
+.btn-book{display:inline-block;border:none;background:var(--book);color:var(--booktext);border-radius:999px;padding:5px 20px;font-size:12.5px;cursor:pointer;font-weight:500;user-select:none;text-decoration:none}
+.btn-book:hover{background:var(--bookh)}
+/* 每程退改政策弹层 */
+.rt{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:60;pointer-events:none}
+.rt .rchk{display:none}
+.rt .rmask{position:absolute;inset:0;background:rgba(17,24,32,.46);opacity:0;transition:opacity .15s}
+.rt .rpop{position:relative;background:#fff;border-radius:14px;max-width:620px;width:min(620px,94vw);max-height:84vh;overflow:auto;padding:20px 22px;box-shadow:0 18px 50px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .15s,transform .15s;pointer-events:none}
+.rt .rchk:checked ~ .rmask{opacity:1;pointer-events:auto}
+.rt .rchk:checked ~ .rpop{opacity:1;transform:none;pointer-events:auto}
+.rtitle{font-size:15px;font-weight:600;color:#1f2329;margin-bottom:4px}
+.rsub{font-size:11.5px;color:#8a94a3;margin-bottom:12px}
+.rsec{margin-bottom:14px}
+.rh{font-size:12px;font-weight:600;color:var(--red);margin:4px 0;display:flex;align-items:center;gap:6px}
+.rh::before{content:'';width:3px;height:11px;background:var(--red);border-radius:2px;display:inline-block}
+.rtx{font-size:12px;color:#3c4652;line-height:1.9;white-space:pre-wrap;background:#f7f9fb;border-radius:8px;padding:8px 12px;border:1px solid #e6ebf1}
+.rtx.empty{color:#8a94a3;background:#fbfcfd}
+.rclose{margin-top:4px;background:var(--blue);color:#fff;border:none;border-radius:999px;padding:7px 26px;font-size:13px;cursor:pointer;font-weight:500;display:block;margin-left:auto;text-decoration:none;text-align:center}
+.rclose:hover{background:var(--bookb)}
+.empty{text-align:center;color:var(--txt3);padding:40px 0;display:none}
+.note{color:var(--txt3);font-size:11.5px;margin-top:12px;text-align:center}
+.fl-ot{color:var(--green);font-weight:500}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>{{H1}}</h1>
+  <div class="sub">{{SUB}}</div>
+</header>
+<div class="kpis" id="kpis">{{STATIC_KPIS}}</div>
+<div class="toolbar">
+  <select id="fGoPrd"><option value="">去程任意时段</option><option value="am">去程上午(12:00前)</option><option value="pm">去程下午(12:00-18:00)</option><option value="nt">去程夜间(18:00后)</option></select>
+  <select id="fRetPrd"><option value="">返程任意时段</option><option value="am">返程上午(12:00前)</option><option value="pm">返程下午(12:00-18:00)</option><option value="nt">返程夜间(18:00后)</option></select>
+  <select id="fAir">{{STATIC_AIR_OPTS}}</select>
+  <select id="fCs"><option value="own">非共享</option><option value="cs">共享</option><option value="">全部</option></select>
+  <label class="ck"><input type="checkbox" id="fEnt"> 仅看含协议价组合</label>
+  <input id="fKw" placeholder="航班号/航司" style="width:130px">
+  <select id="fSort">
+    <option value="total">总价最低</option>
+    <option value="godep">去程最早</option>
+    <option value="retdep">返程最早</option>
+  </select>
+  <span class="cnt" id="cnt">{{STATIC_CNT}}</span>
+</div>
+<div id="list">{{STATIC_LIST}}</div>
+<div class="empty" id="empty">没有符合条件的往返组合</div>
+<div class="note">往返合计含税 = 去程票面含税 + 返程票面含税(票面价含机建·燃油) · 「行李政策」为预烘焙弹层；「退改政策」文案齐全时弹层展示，缺退/改任一则退改政策补查（页内直调 domestic_rule，同国际查舱位） · 「去下单」经免登跳转飞鹤下单页(#/bookingPricing,往返 flyType=2),价格以 portal 实时为准</div>
+{{SEQ_FOOT}}
+</div>
+{{STATIC_RULES}}
+<script>
+var RT=[]; //@@RT@@
+var RR=[]; //@@RR@@
+var CC=[]; //@@CC@@
+var QUERY_SN=""; //@@SN@@
+var CFG=null; //@@CFG@@
+/*@@AIR_DOMESTIC_PAGE_BUSI@@*/
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function escAttr(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;")}
+function tM(t){var p=t.split(":");return +p[0]*60+ +p[1]}
+function dur(f){var d=tM(f.dep),a=tM(f.arr);return a<d?a+1440-d:a-d}
+function fmtDur(m){var h=Math.floor(m/60),mm=m%60;return (h?h+'小时':'')+mm+'分钟'}
+function qtyN(n){return n==="A"?9:(/^\d+$/.test(n)?+n:9)}
+function aptTerm(apt,term){apt=(apt||"").trim();term=(term||"").trim();if(!apt)return term;return apt+(term?"("+term+")":"")}
+function shareTxt(s){return s?'<span class="tag-share" title="实际承运 '+esc(s)+'">共享 '+esc(s)+'</span>':''}
+function findRow(key){for(var i=0;i<RT.length;i++){if(String(RT[i].k)===String(key))return RT[i];}return null;}
+/* ---- 预订 = 免登跳转下单页 #/bookingPricing(flyType=2；最外层 serialNumber/flightId/cabId，不要 flightList) ---- */
+function orderUrl(r){
+  if(!CFG||!CFG.forwardCode)return "";
+  var sn=r.sn||QUERY_SN;
+  var fid=(r.go&&r.go.no)||"";
+  var cab=(r.go&&r.go.cab&&r.go.cab.cabId)||"";
+  if(!sn||!fid||!cab)return "";
+  var route='/VuePage/domestic/index.html#/bookingPricing?serialNumber='+qAll(sn)
+    +'&flightId='+qAll(fid)+'&cabId='+qAll(cab)
+    +'&flyType=2&adultCount='+(CFG.order&&CFG.order.adult||1)+'&payType=1&agent=1';
+  var base=CFG.forwardBase||(CFG.host?('https://'+CFG.host+'/api/portal/mcp/oauth2/forward'):'');
+  if(!base)return "";
+  return base+'?redirectPage='+encodeURIComponent(route)
+    +'&authCode='+encodeURIComponent(CFG.forwardCode);
+}
+function bookCell(r){
+  var url=orderUrl(r);
+  return url?'<a class="btn-book" href="'+escAttr(url)+'" target="_blank" rel="noopener">去下单</a>':'<span class="cab-dim">链接未生成</span>';
+}
+/* ---- 每程单行渲染 ---- */
+function metaBits(f){
+  var bits=[];
+  bits.push('<b class="fno">'+esc(f.no)+'</b>'+(f.air?'<span class="air">'+esc(f.air)+'</span>':''));
+  if(f.share)bits.push(shareTxt(f.share));
+  bits.push((f.stop&&f.stop>0)?'<span class="tg tg-stop">经停'+(f.stop||'')+'</span>':'<span class="tg tg-a">直飞</span>');
+  if(f.ac)bits.push('<span>'+esc(f.ac)+'</span>');
+  bits.push('<span>'+esc(f.meal?('餐食 '+f.meal):'无餐食')+'</span>');
+  if(f.ot)bits.push('<span class="fl-ot">准点率'+esc(f.ot)+'%</span>');
+  if(f.cab&&(f.cab.cab||f.cab.cn)){
+    bits.push('<span class="cab-chip'+(f.cab.ent?' ent':'')+'">'+esc(((f.cab.cab?f.cab.cab+' ':'')+(f.cab.cn||'经济舱')).trim())+'</span>');
+    if(f.cab.ent)bits.push('<span class="tag-ent">协议价</span>');
+    if(f.cab.buy)bits.push('<span class="tag-buy">代购</span>');
+    if(f.cab.n)bits.push('<span>余 '+qtyN(f.cab.n)+' 位</span>');
+    if(f.cab.w)bits.push('<span>'+esc(f.cab.w)+'kg</span>');
+  }
+  var bag='<label class="lnk lk-first" for="bchk'+(f.bpid==null?-1:f.bpid)+'">行李政策</label>';
+  var rule='';
+  var cabId=f.cab&&f.cab.cabId?f.cab.cabId:'';
+  if(f.needTgq&&cabId&&f.sn){
+    rule='<button type="button" class="lnk cab-tgq" data-sn="'+escAttr(f.sn)+'" data-cabid="'+escAttr(cabId)+'" data-flight="'+escAttr(f.no||'')+'" data-cab="'+escAttr((f.cab&&f.cab.cab)||'')+'" title="退改文案不完整，点击现场查询">退改政策</button>';
+  }else if(f.rpid!=null){
+    rule='<label class="lnk" for="rchk'+f.rpid+'">退改政策</label>';
+  }
+  return bits.join('<i class="dot">·</i>')+bag+(rule?'<span class="lk-sep">|</span>'+rule:'');
+}
+function segHtml(f,badge){
+  var depApt=aptTerm(f.dep_apt,f.dep_term),arrApt=aptTerm(f.arr_apt,f.arr_term);
+  var p1=(tM(f.arr)<tM(f.dep)?'<em class="s-p1">+1</em>':'');
+  return '<div class="seg"><span class="s-badge">'+badge+'</span>'+
+    '<span class="s-date">'+esc(f.ds||'')+'</span>'+
+    '<span class="s-tm">'+esc(f.dep)+'</span><span class="s-ap">'+esc(depApt)+'</span>'+
+    '<span class="s-fly"><i></i><em>'+fmtDur(dur(f))+'</em><i></i></span>'+
+    '<span class="s-tm">'+esc(f.arr)+p1+'</span><span class="s-ap">'+esc(arrApt)+'</span>'+
+    '<div class="s-info">'+metaBits(f)+'</div></div>';
+}
+function rowHTML(r,idx){
+  var ent=r.anyEnt;
+  var book=bookCell(r);
+  return '<div class="rt-row" data-i="'+idx+'">'+
+    '<div class="legs">'+segHtml(r.go,'去')+segHtml(r.ret,'返')+'</div>'+
+    '<div class="ops"><div class="pu">'+
+      '<div class="op-price"><div class="op-total">¥'+r.total+'</div><div class="op-tl">往返含税合计</div></div>'+
+      (ent?'<div class="op-ent">含协议价</div>':'')+
+      book+
+    '</div></div></div>';
+}
+(function(){
+  var airs=[];RT.forEach(function(r){[r.go.air,r.ret.air].forEach(function(a){if(a&&airs.indexOf(a)<0)airs.push(a)})});airs.sort();
+  var sa=document.getElementById("fAir");sa.innerHTML="";var oa=document.createElement("option");oa.value="";oa.textContent="全部航司";sa.appendChild(oa);airs.forEach(function(a){var o=document.createElement("option");o.textContent=a;sa.appendChild(o)});
+  function kpis(){
+    var tot=RT.length,min=1e9,minR=null,entR=0;
+    RT.forEach(function(r){if(r.total<min){min=r.total;minR=r}if(r.anyEnt)entR++});
+    var goA={},retA={};
+    RT.forEach(function(r){goA[r.go.no]=1;retA[r.ret.no]=1});
+    var gN=Object.keys(goA).length,rN=Object.keys(retA).length;
+    document.getElementById("kpis").innerHTML=
+      '<div class="kpi"><div class="v">'+tot+'<em>组</em></div><div class="l">去程'+gN+'班 × 返程'+rN+'班组合</div></div>'+
+      '<div class="kpi"><div class="v">¥'+min+'<em>起</em></div><div class="l">最低往返合计 '+minR.go.no+'→'+minR.ret.no+'</div></div>'+
+      '<div class="kpi"><div class="v">'+entR+'<em>/'+tot+'</em></div><div class="l">含协议价组合</div></div>'+
+      '<div class="kpi"><div class="v">'+airs.length+'<em>家</em></div><div class="l">执飞航司</div></div>';
+  }
+  var CHUNK=32,paintTok=0;
+  var state={goprd:"",retprd:"",air:"",cs:"own",ent:false,kw:"",sort:"total"};
+  function render(){
+    var rows=RT.map(function(r,i){return {r:r,i:i}}).filter(function(o){
+      var r=o.r,gh=tM(r.go.dep),rh=tM(r.ret.dep);
+      if(state.goprd==="am"&&gh>=720)return false;
+      if(state.goprd==="pm"&&(gh<720||gh>=1080))return false;
+      if(state.goprd==="nt"&&gh<1080)return false;
+      if(state.retprd==="am"&&rh>=720)return false;
+      if(state.retprd==="pm"&&(rh<720||rh>=1080))return false;
+      if(state.retprd==="nt"&&rh<1080)return false;
+      if(state.air&&r.go.air!==state.air&&r.ret.air!==state.air)return false;
+      var cCs=!!(r.go.share||r.ret.share);
+      if(state.cs&&(state.cs==="cs")!==cCs)return false;
+      if(state.ent&&!r.anyEnt)return false;
+      var kw=state.kw.toLowerCase();
+      if(kw&&r.go.no.toLowerCase().indexOf(kw)<0&&r.ret.no.toLowerCase().indexOf(kw)<0&&r.go.air.toLowerCase().indexOf(kw)<0&&r.ret.air.toLowerCase().indexOf(kw)<0)return false;
+      return true;
+    });
+    if(state.sort==="godep")rows.sort(function(a,b){return tM(a.r.go.dep)-tM(b.r.go.dep)});
+    else if(state.sort==="retdep")rows.sort(function(a,b){return tM(a.r.ret.dep)-tM(b.r.ret.dep)});
+    else rows.sort(function(a,b){return a.r.total-b.r.total});
+    var tok=++paintTok,list=document.getElementById("list"),i=0;
+    list.innerHTML="";
+    list.style.minHeight=rows.length?(rows.length*128)+"px":"";
+    document.getElementById("empty").style.display=rows.length?"none":"block";
+    document.getElementById("cnt").textContent="共 "+rows.length+" / "+RT.length+" 组往返";
+    function paint(){
+      if(tok!==paintTok)return;
+      var buf=[],n=0;
+      for(;n<CHUNK&&i<rows.length;n++,i++)buf.push(rowHTML(rows[i].r,rows[i].i));
+      if(buf.length)list.insertAdjacentHTML("beforeend",buf.join(""));
+      if(i<rows.length)requestAnimationFrame(paint);
+      else list.style.minHeight="";
+    }
+    paint();
+  }
+  function bind(id,key){document.getElementById(id).addEventListener("change",function(){state[key]=this.value;render()})}
+  bind("fGoPrd","goprd");bind("fRetPrd","retprd");bind("fAir","air");bind("fCs","cs");bind("fSort","sort");
+  document.getElementById("fEnt").addEventListener("change",function(){state.ent=this.checked;render()});
+  document.getElementById("fKw").addEventListener("input",function(){state.kw=this.value;render()});
+  kpis();render();
+})();
+</script>
+<script>
+/* 缺退改政策文案：退改政策补查，页内直调 busi rule（infoCode，不走 MCP tools/call） */
+(function(){
+var TGQ_CACHE={};
+function pickRule(data,keys,listKey){
+  for(var i=0;i<keys.length;i++){
+    var v=data&&data[keys[i]];
+    if(typeof v==='string'&&v.trim())return v.trim();
+  }
+  var list=data&&data[listKey];
+  if(Array.isArray(list)&&list.length){
+    return list.map(function(it){
+      if(!it||typeof it!=='object')return '';
+      var range=[it.timeStart,it.timeEnd].filter(function(x){return x!=null;}).join('-');
+      var pct=(it.percent||'')+'';
+      var price=it.price?('¥'+it.price):'';
+      return [range?range+'小时':'',pct,price].filter(Boolean).join('\n');
+    }).filter(Boolean).join('\n');
+  }
+  return '';
+}
+function openTgqLive(sub,rf,cf,loading){
+  var chk=document.getElementById('rchkLive');
+  var subEl=document.getElementById('rtLiveSub');
+  var rfEl=document.getElementById('rtLiveRefund');
+  var cfEl=document.getElementById('rtLiveChange');
+  if(!chk||!rfEl||!cfEl)return;
+  if(subEl)subEl.textContent=sub||'票价不含机建燃油 · 规则以实际下单为准';
+  rfEl.className='rtx'+(rf?'':' empty');
+  cfEl.className='rtx'+(cf?'':' empty');
+  rfEl.textContent=rf||(loading?'查询中…':'未返回退票规则文本');
+  cfEl.textContent=cf||(loading?'查询中…':'未返回改签规则文本');
+  chk.checked=true;
+}
+document.addEventListener('click',function(e){
+  var tgq=e.target.closest?e.target.closest('.cab-tgq'):null;
+  if(!tgq)return;
+  e.preventDefault();
+  if(tgq.dataset.busy)return;
+  var sn=tgq.getAttribute('data-sn')||'',cabId=tgq.getAttribute('data-cabid')||'';
+  if(!sn||!cabId){openTgqLive('缺少标识','缺少 serialNumber/cabId，请重新查询','',false);return;}
+  tgq.dataset.busy='1';
+  var old=tgq.textContent;tgq.textContent='查询中…';
+  var done=function(){tgq.dataset.busy='';tgq.textContent=old;};
+  var key=sn+'|'+cabId;
+  if(TGQ_CACHE[key]){
+    var c=TGQ_CACHE[key];
+    openTgqLive((tgq.getAttribute('data-flight')||'')+(tgq.getAttribute('data-cab')?(' · '+tgq.getAttribute('data-cab')+'舱'):''),c.rf,c.cf,false);
+    done();return;
+  }
+  openTgqLive((tgq.getAttribute('data-flight')||'')+' · 查询中…','','',true);
+  busiRule(sn,cabId).then(function(data){
+    var rf=pickRule(data,['refundRules','refund','refundGo'],'refundRulesGo');
+    var cf=pickRule(data,['changeRules','change','changeGo'],'changeRulesGo');
+    TGQ_CACHE[key]={rf:rf,cf:cf};
+    openTgqLive((tgq.getAttribute('data-flight')||'')+(tgq.getAttribute('data-cab')?(' · '+tgq.getAttribute('data-cab')+'舱'):''),rf,cf,false);
+    done();
+  }).catch(function(err){
+    openTgqLive('查询失败','查询退改规则失败：'+((err&&err.message)||err),'',false);
+    done();
+  });
+});
+})();
+</script>
+</body>
+</html>

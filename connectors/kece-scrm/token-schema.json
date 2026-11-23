@@ -1,0 +1,42 @@
+{
+  "title": "连接科策 SCRM",
+  "title_en": "Connect to Kece SCRM",
+  "description": "填入科策后台的 AppKey 与 AppSecret。凭证仅保存在本机 ~/.workbuddy 目录，不会上传云端。",
+  "description_en": "Enter your Kece AppKey and AppSecret. Credentials are stored only on this device under ~/.workbuddy and are never uploaded to the cloud.",
+  "fields": [
+    {
+      "key": "KECE_APP_KEY",
+      "label": "AppKey",
+      "label_en": "AppKey",
+      "type": "text",
+      "required": true,
+      "placeholder": "科策后台 → 设置 → 系统对接 → API对接",
+      "placeholder_en": "Kece Console → Settings → System Integration → API Integration",
+      "description": "企业 API 凭证中的 AppKey",
+      "description_en": "The AppKey from your enterprise API credentials."
+    },
+    {
+      "key": "KECE_APP_SECRET",
+      "label": "AppSecret",
+      "label_en": "AppSecret",
+      "type": "password",
+      "required": true,
+      "placeholder": "与 AppKey 在同一页面，点击可复制",
+      "placeholder_en": "On the same page as the AppKey; click to copy",
+      "description": "敏感凭证，仅保存在本机，请勿分享给他人",
+      "description_en": "Sensitive credential. Stored locally only; do not share it."
+    },
+    {
+      "key": "KECE_BASE_URL",
+      "label": "服务地址",
+      "label_en": "Service URL",
+      "type": "text",
+      "required": false,
+      "defaultValue": "https://huke.163.com",
+      "placeholder": "https://huke.163.com",
+      "placeholder_en": "https://huke.163.com",
+      "description": "正式环境保持默认；内部测试环境填测试域名",
+      "description_en": "Keep the default for production. Use your test domain for internal test environments."
+    }
+  ]
+}

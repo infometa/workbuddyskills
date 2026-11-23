@@ -1,0 +1,37 @@
+{
+  "init": {
+    "darwin": "sh -c 'set -eu; case \"${UNC_ENV:-prod}\" in prod) base=\"https://file1-cn.ugnas.com/nas-cli\" ;; dev|test) base=\"https://file-cn-test.ugnas.com/nas-cli\" ;; *) echo \"Invalid UNC_ENV; expected prod, dev or test\" >&2; exit 1 ;; esac; if [ -z \"${UNC_ENV:-}\" ]; then base=\"${UNC_UPGRADE_URL:-$base}\"; fi; tmp=\"$(mktemp)\"; trap '\"'\"'rm -f \"$tmp\"'\"'\"' EXIT; insecure=; if [ \"${UNC_INSECURE:-0}\" = \"1\" ]; then insecure=-k; fi; curl -fsSL $insecure -o \"$tmp\" \"$base/install.sh\"; UNC_UPDATE_SHELL_RC=1 sh \"$tmp\"'",
+    "linux": "sh -c 'set -eu; case \"${UNC_ENV:-prod}\" in prod) base=\"https://file1-cn.ugnas.com/nas-cli\" ;; dev|test) base=\"https://file-cn-test.ugnas.com/nas-cli\" ;; *) echo \"Invalid UNC_ENV; expected prod, dev or test\" >&2; exit 1 ;; esac; if [ -z \"${UNC_ENV:-}\" ]; then base=\"${UNC_UPGRADE_URL:-$base}\"; fi; tmp=\"$(mktemp)\"; trap '\"'\"'rm -f \"$tmp\"'\"'\"' EXIT; insecure=; if [ \"${UNC_INSECURE:-0}\" = \"1\" ]; then insecure=-k; fi; curl -fsSL $insecure -o \"$tmp\" \"$base/install.sh\"; UNC_UPDATE_SHELL_RC=1 sh \"$tmp\"'",
+    "win32": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$ErrorActionPreference='Stop'; $releaseEnv=if($env:UNC_ENV){$env:UNC_ENV}else{'prod'}; if(@('prod','dev','test') -cnotcontains $releaseEnv){throw 'Invalid UNC_ENV; expected prod, dev or test'}; $defaultBase=if($releaseEnv -cin @('dev','test')){'https://file-cn-test.ugnas.com/nas-cli'}else{'https://file1-cn.ugnas.com/nas-cli'}; $base=if(!$env:UNC_ENV -and $env:UNC_UPGRADE_URL){$env:UNC_UPGRADE_URL.TrimEnd('/')}else{$defaultBase}; $uri=$base+'/install.ps1'; $f=Join-Path $env:TEMP ('unc-install-'+[guid]::NewGuid().ToString('N')+'.ps1'); Invoke-RestMethod -Uri $uri -OutFile $f; & $f\""
+  },
+  "auth": {
+    "darwin": "unc auth workbuddy --wait-timeout 5m",
+    "linux": "unc auth workbuddy --wait-timeout 5m",
+    "win32": "unc.exe auth workbuddy --wait-timeout 5m"
+  },
+  "unAuth": {
+    "darwin": "unc auth logout",
+    "linux": "unc auth logout",
+    "win32": "unc.exe auth logout"
+  },
+  "status": {
+    "darwin": "unc auth status --format json",
+    "linux": "unc auth status --format json",
+    "win32": "unc.exe auth status --format json"
+  },
+  "statusMatch": "\"authenticated\"\\s*:\\s*true",
+  "authUrlDomain": "127.0.0.1",
+  "authWaitForExit": true,
+  "env": {
+    "PATH": "$HOME\\.local\\bin;$HOME\\..\\..\\Windows\\System32;$HOME\\..\\..\\Windows\\System32\\WindowsPowerShell\\v1.0;:$HOME/.local/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+  },
+  "versionCheck": {
+    "command": {
+      "darwin": "unc version --format json",
+      "linux": "unc version --format json",
+      "win32": "unc.exe version --format json"
+    },
+    "minVersion": "0.1.56",
+    "versionPattern": "\\\"version\\\"\\s*:\\s*\\\"v?(\\d+\\.\\d+\\.\\d+)"
+  }
+}

@@ -1,7 +1,7 @@
 ---
 name: miniprogram-development
 description: WeChat Mini Program development skill for building, debugging, previewing, testing, publishing, and optimizing mini program projects (小程序开发、调试、预览、发布). Covers project structure and config (`project.config.json`, `appid`, `miniprogramRoot`, `tabBar`, routing/navigation, icon assets), WeChat Developer Tools Nightly workflows (`wechatide` CLI, WeChat IDE Skills/MCP), `miniprogram-ci` preview/upload, console/network debugging, message push (消息推送) and customer-service auto-reply (客服消息), mini program SEO / search indexing (小程序搜索优化、页面收录、搜索推广、mpcrawler), and CloudBase integration (`wx.cloud`, 腾讯云开发, 云开发) when explicitly used. Use when users create, develop, modify, debug, preview, deploy, publish, or promote WeChat Mini Programs. NOT for Web frontend (use web-development), pure backend services (use cloudrun-development / cloud-functions), or UI-design-only tasks (use ui-design).
-version: 2.36.2
+version: 2.37.6
 license: MIT
 alwaysApply: false
 ---
@@ -24,6 +24,7 @@ If a referenced sibling skill file is missing from this environment, ask the use
 
 - The request is about WeChat Mini Program structure, pages, preview, publishing, or CloudBase mini program integration.
 - The user asks about mini program account registration or subject type (个人 / 个体工商户 / 企业主体, 快速注册并认证小程序, 小程序主体变更), or reports that the DevTools 云开发 entry is grayed out or their environment cannot be found.
+- The user asks to connect / onboard a mini program project to CloudBase for the first time (帮我接入云开发，我主要做微信小程序开发、配置微信开发者工具 Skill), including when the workspace has no application code yet.
 
 ### Read before writing code if
 
@@ -37,6 +38,7 @@ If a referenced sibling skill file is missing from this environment, ask the use
 - CloudBase document DB -> `../cloudbase-document-database-in-wechat-miniprogram/SKILL.md`
 - Mini Program WeChat Pay, 虚拟支付 (virtual payment, `wx.requestVirtualPayment`), or Integration Center generated payment functions -> `../cloudbase-wechat-integration/SKILL.md` (official docs: `https://docs.cloudbase.net/integration/wechat-pay-miniprogram.md`)
 - UI generation -> `../ui-design/SKILL.md` first
+- First-time CloudBase onboarding -> [CloudBase integration reference](references/cloudbase-integration.md) §0.2 (公众平台登录 / 开通环境) and [WeChat DevTools Debug and Preview](references/devtools-debug-preview.md) (DevTools Skill + preview acceptance)
 
 ### Do NOT use for
 
@@ -96,6 +98,7 @@ Use this skill for **WeChat Mini Program development** when you need to:
    - If the task involves mini program SEO / WeChat search optimization / page indexing / search promotion (小程序搜索优化、页面收录、搜索推广、关键词排名), read [Mini Program SEO & WeChat Search Optimization](references/seo-search-optimization.md) first
    - If the task involves message push (消息推送), customer-service auto-reply (客服消息自动回复), MsgType/Event → cloud function binding, or push-related function logs, read [Message Push & Customer Service Auto-Reply](references/message-push-customer-service.md) first
    - If the task involves `tabBar`, icon assets, or label spacing, prefer the text-only custom `tabBar` default below unless the user explicitly requires icons
+  - If the user asks to connect / onboard a mini program project to CloudBase (帮我接入云开发，我主要做微信小程序开发、首次接入), read [CloudBase integration reference](references/cloudbase-integration.md) §0.2 and [debug and preview reference](references/devtools-debug-preview.md) first. Recommend configuring the WeChat DevTools Skill and verify the simulator preview before taking business requests — a backend-only setup cannot open the simulator.
 
 4. **Use CloudBase rules only when applicable**
    - CloudBase / 微信云开发 is an important mini program integration path, but not a universal requirement

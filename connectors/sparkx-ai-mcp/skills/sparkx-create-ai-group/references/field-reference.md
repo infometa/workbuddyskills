@@ -5,21 +5,30 @@ error and no field-level hint, so validate here before sending. Field **names** 
 matter: the tools set `additionalProperties: false`, so a wrong or extra field name is
 rejected outright.
 
-> **Read names != write names.** The names `get_entity_metadata` *returns* are not
-> always the names the write tools *accept*. E.g. the read side shows
-> `budgetDaypartStatus`, but SP/SB writes require **`budgetDaypartActionStatus`**.
-> The "Action" suffix is present on some action-space switches and absent on others,
-> and SD-create fields differ from SP/SB fields. **When building a write call, use the
-> exact names in this file (which mirror the tool inputSchemas), never the read-side
-> field names.**
+> **⚠️ No action-space switch has an `Action` suffix.** Earlier versions of this file
+> claimed SP/SB writes needed `budgetDaypartActionStatus`, `budgetDynamicActionStatus`,
+> `budgetRedistributeActionStatus`, `targetHarvestActionStatus` or `negativeTargetActionStatus`.
+> **Those names do not exist** — not in the tool inputSchema, not in the payload sent
+> downstream, not on the read side. The real names are `budgetDaypartStatus`,
+> `budgetDynamicStatus`, `budgetRedistributeStatus`, `targetHarvestStatus`,
+> `negativeTargetStatus` — the same names the read side returns.
+>
+> **Why this mattered:** an unknown field is dropped, not rejected, so a write built on the
+> old names answered `success` while the switch never moved. If you have call templates
+> saved from an earlier version of this file, check them.
+>
+> What **does** differ is **SD-create fields vs SP/SB fields** — those are genuinely
+> different field sets. When building a write call, use the exact names in this file and
+> check the ad type's column.
 
 ## Shared enums
 
 | Field | Values |
 |---|---|
-| `aiPersonality` | `1`=非常保守, `2`=保守, `3`=平衡, `4`=激进, `5`=非常激进. **>=3 required when `targetType=3` (volume/冲量)** - front-end rule, not backend-enforced |
+| `aiPersonality` | `1`=非常保守, `2`=保守, `3`=平衡, `4`=激进, `5`=非常激进. **>=3 required when `targetType=3` (volume/冲量)** - front-end rule, not backend-enforced. ⚠️ **Group-level only, and rejected outright on accounts that set personality per action space** - check [`ai-personality.md`](ai-personality.md) before sending it |
 | `campaignNameSign` | `0`=off, `1`=on |
-| `budgetNumType` / `bidRangeType` | `1`=percentage, `2`=fixed value |
+| `budgetNumType` | `1`=percentage, `2`=fixed value |
+| `bidRangeType` | `2`=fixed value. `1` = **unit unconfirmed** — documented here as "percentage" historically, but the platform UI looks coefficient-like (`0.5`-`1.13`). Do not validate, convert or restate the unit; see [`coupling-rules.md`](coupling-rules.md) |
 | `*MatchType` (branded/competitor/harvest/negative) | `1`=exact(等于/精确), `2`=phrase(包含/词组) |
 | `*ListType` (harvest/negative) | `1`=include/whitelist, `2`=exclude/blacklist |
 
@@ -60,13 +69,13 @@ Bid: `bidDaypartStatus`, `bidPerformanceStatus`, `bidPerformanceStrictAcosStatus
 
 Struct (**SP only**): `structPauseProductStatus`, `structPauseCampaignStatus`.
 
-Budget: **`budgetDaypartActionStatus`**, **`budgetDynamicActionStatus`**,
-**`budgetRedistributeActionStatus`**, `budgetNum`, `budgetNumType`.
+Budget: **`budgetDaypartStatus`**, **`budgetDynamicStatus`**,
+**`budgetRedistributeStatus`**, `budgetNum`, `budgetNumType`.
 
 Target (**NOT writable via MCP - read-only / platform UI only**):
-`targetHarvestActionStatus`, `targetHarvestBlackListStatus`,
+`targetHarvestStatus`, `targetHarvestBlackListStatus`,
 `targetHarvestBlackList` (IDs), `targetHarvestListType`, `targetHarvestMatchType`,
-`negativeTargetActionStatus`, `negativeTargetBlackListStatus`,
+`negativeTargetStatus`, `negativeTargetBlackListStatus`,
 `negativeTargetBlackList` (IDs), `negativeTargetListType`, `negativeTargetMatchType`,
 `targetPausedAddStatus` (`0`=off, `1`=on, `2`=on with supplement). The SP/SB tool
 **hard-rejects** this entire `targetOptimization` module (target harvest / negative
@@ -100,10 +109,10 @@ to one automation rule number:
 | `aiAutomation` field | Rule | Paired `aiActionSettings` switch |
 |---|---|---|
 | `bidDaypartStatus` | 2 - bid dayparting | `bidDaypartStatus` |
-| `targetHarvestRuleStatus` | 4 - target harvest (**read-only context; not settable at create**) | `targetHarvestActionStatus` |
-| `negativeTargetRuleStatus` | 5 - negative target (**read-only context; not settable at create**) | `negativeTargetActionStatus` |
-| `budgetDaypartRuleStatus` | 13 - budget dayparting | `budgetDaypartActionStatus` |
-| `budgetPerformanceRuleStatus` | 17 - budget by performance | `budgetDynamicActionStatus` |
+| `targetHarvestRuleStatus` | 4 - target harvest (**read-only context; not settable at create**) | `targetHarvestStatus` |
+| `negativeTargetRuleStatus` | 5 - negative target (**read-only context; not settable at create**) | `negativeTargetStatus` |
+| `budgetDaypartRuleStatus` | 13 - budget dayparting | `budgetDaypartStatus` |
+| `budgetPerformanceRuleStatus` | 17 - budget by performance | `budgetDynamicStatus` |
 | `placementAdjustmentRuleStatus` | 19 - placement adjustment | `bidAdPlaceStatus` |
 | `pauseCampaignRuleStatus` | 20 - pause campaign | `structPauseCampaignStatus` |
 | `bidPerformanceRuleStatus` | 181 - bid by performance | `bidPerformanceStatus` |
@@ -115,7 +124,7 @@ One extra field, only meaningful with rule 13:
 |---|---|---|
 | `budgetDaypartExcuteDays` | string | Comma-separated days for budget dayparting. **`1`-`6` = Mon-Sat, `0` = Sunday.** Default `"1,2,3,4,5,6,0"` (every day). Note the spelling - `Excute`, not `Execute` |
 
-`budgetRedistributeActionStatus` and `bidAmazonBusinessStatus` have no Rule mode; only
+`budgetRedistributeStatus` and `bidAmazonBusinessStatus` have no Rule mode; only
 their `aiActionSettings` on/off switch applies.
 
 **On read**, `aiAutomation` comes back keyed by rule number (`"2"`, `"4"`, `"181"`, …) rather

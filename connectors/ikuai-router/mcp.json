@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "ikuai-router": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "--input-type=module",
+        "--eval",
+        "const { homedir } = await import('node:os'); const { join } = await import('node:path'); const { pathToFileURL } = await import('node:url'); const { readdir, stat } = await import('node:fs/promises'); const configRoot = process.env.WORKBUDDY_CONFIG_DIR || process.env.CODEBUDDY_CONFIG_DIR || join(homedir(), '.workbuddy'); const relativeEntry = ['connectors', 'ikuai-router', 'mcp-server', 'index.js']; const marketsRoot = join(configRoot, 'plugins', 'marketplaces'); const isFile = async (file) => { try { return (await stat(file)).isFile(); } catch (error) { if (['ENOENT', 'ENOTDIR'].includes(error.code)) return false; throw error; } }; let markets = []; try { markets = await readdir(marketsRoot); } catch (error) { if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error; } const entries = []; for (const market of markets.sort()) { const candidate = join(marketsRoot, market, ...relativeEntry); if (await isFile(candidate)) entries.push(candidate); } if (entries.length > 1) throw new Error('iKuai Connector found in multiple WorkBuddy marketplaces; keep only one installed copy: ' + entries.join(', ')); let entry = entries[0]; if (!entry) { const legacy = join(configRoot, 'connectors-marketplace', ...relativeEntry); if (await isFile(legacy)) entry = legacy; } if (!entry) throw new Error('iKuai Connector server not found. Reinstall the Connector. Searched ' + marketsRoot + '/<marketplace>/' + relativeEntry.join('/') + ' and ' + join(configRoot, 'connectors-marketplace')); await import(pathToFileURL(entry).href);"
+      ],
+      "env": {
+        "IKUAI_CLI_BASE_URL": "${IKUAI_BASE_URL}",
+        "IKUAI_CLI_TOKEN": "${IKUAI_TOKEN}"
+      },
+      "runtime": {
+        "type": "node",
+        "version": ">=20"
+      },
+      "timeout": 30000
+    }
+  }
+}

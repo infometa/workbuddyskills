@@ -24,7 +24,7 @@ Response:
     ],
     "rowCount": 3
   },
-  "meta": {"effectiveProfileIds": [4404871489220462]}
+  "meta": {"effectiveProfileIds": [4404871489220462], "hint": "Limit conclusions to this query's scope. Missing fields are not zero, and empty results do not prove that no matching business data exists. Do not present partial or paginated results as complete. Distinguish returned facts from analytical inferences; state limitations or query further when evidence is insufficient."}
 }
 ```
 
